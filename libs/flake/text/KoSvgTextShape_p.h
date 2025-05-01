@@ -452,7 +452,6 @@ public:
 
             shapesSubtract.append(clonedShape);
         }
-        textRendering = rhs.textRendering;
         yRes = rhs.yRes;
         xRes = rhs.xRes;
         result = rhs.result;
@@ -468,7 +467,6 @@ public:
         disableFontMatching = rhs.disableFontMatching;
     }
 
-    TextRendering textRendering = Auto;
     int xRes = 72;
     int yRes = 72;
     QList<KoShape*> shapesInside;
@@ -491,19 +489,20 @@ public:
 
     void relayout();
 
-    bool loadGlyph(const QTransform &ftTF,
-                   FT_Int32 faceLoadFlags,
-                   bool isHorizontal,
-                   char32_t firstCodepoint,
+    static bool loadGlyph(const QTransform &ftTF,
+                   const FT_Int32 faceLoadFlags,
+                   const bool isHorizontal,
+                   const char32_t firstCodepoint,
+                   const KoSvgText::TextRendering rendering,
                    raqm_glyph_t &currentGlyph,
                    CharacterResult &charResult,
-                   QPointF &totalAdvanceFTFontCoordinates) const;
+                   QPointF &totalAdvanceFTFontCoordinates);
 
-    std::pair<QTransform, qreal> loadGlyphOnly(const QTransform &ftTF,
+    static std::pair<QTransform, qreal> loadGlyphOnly(const QTransform &ftTF,
                                                FT_Int32 faceLoadFlags,
                                                bool isHorizontal,
                                                raqm_glyph_t &currentGlyph,
-                                               CharacterResult &charResult) const;
+                                               CharacterResult &charResult, const KoSvgText::TextRendering rendering);
 
     void clearAssociatedOutlines();
     void resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
@@ -576,12 +575,13 @@ public:
     void paintTextDecoration(QPainter &painter,
                              const QPainterPath &outlineRect,
                              const KoShape *rootShape,
-                             const KoSvgText::TextDecoration type
-                             );
+                             const KoSvgText::TextDecoration type,
+                             const KoSvgText::TextRendering rendering);
     void paintPaths(QPainter &painter,
                     const QPainterPath &outlineRect,
                     const KoShape *rootShape,
                     const QVector<CharacterResult> &result,
+                    const KoSvgText::TextRendering rendering,
                     QPainterPath &chunk,
                     int &currentIndex);
     QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);

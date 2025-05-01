@@ -33,13 +33,6 @@ public:
 
     static const QString &defaultPlaceholderText();
 
-    enum TextRendering {
-        Auto,
-        OptimizeSpeed,
-        OptimizeLegibility,
-        GeometricPrecision
-    };
-
     KoShape* cloneShape() const override;
 
     void paint(QPainter &painter) const override;
@@ -64,29 +57,6 @@ public:
     void relayout() const;
 
     QList<KoShape *> textOutline() const;
-
-    /**
-     * @brief setTextRenderingFromString
-     * Set the quality of the text rendering.
-     *
-     * Based on: https://www.w3.org/TR/SVG11/painting.html#TextRenderingProperty
-     *
-     * "auto" is the default.
-     * "optimizeSpeed" will turn off anti-aliasing.
-     * "optimizeLegibility" will have us load the hinting metrics.
-     * "geometricPrecision" will not load the hinting metrics.
-     *
-     * @param textRendering the textRendering to use.
-     */
-    void setTextRenderingFromString(const QString &textRendering);
-
-    /**
-     * @brief textRenderingString
-     * @see setTextRenderingFromString
-     * @return the Text Rendering type as a string.
-     */
-
-    QString textRenderingString() const;
 
     /**
      * @brief setShapesInside

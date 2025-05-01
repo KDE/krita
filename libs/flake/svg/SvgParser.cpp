@@ -1893,10 +1893,6 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     m_context.popGraphicsContext();
 
-    if (e.hasAttribute("text-rendering")) {
-        rootTextShape->setTextRenderingFromString(e.attribute("text-rendering"));
-    }
-
     m_isInsideTextSubtree = false;
 
     //rootTextShape->debugParsing();

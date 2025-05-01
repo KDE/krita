@@ -588,6 +588,8 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(FontSynthesisSmallCapsId, (value == "auto"));
     } else if (command == "font-synthesis-position") {
         setProperty(FontSynthesisSuperSubId, (value == "auto"));
+    } else if (command == "text-rendering") {
+        setProperty(TextRenderingId, KoSvgText::parseTextRendering(value));
     } else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }
@@ -941,6 +943,10 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
 
+    if (hasProperty(TextRenderingId)) {
+        result.insert("text-rendering", KoSvgText::writeTextRendering(TextRendering(property(TextRenderingId).toInt())));
+    }
+
     return result;
 }
 
@@ -1169,7 +1175,8 @@ QStringList KoSvgTextProperties::supportedXmlAttributes()
                << "letter-spacing"
                << "word-spacing"
                << "xml:space"
-               << "xml:lang";
+               << "xml:lang"
+               << "text-rendering";
     return attributes;
 }
 
@@ -1208,6 +1215,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(FontSynthesisSuperSubId, true);
 
         s_defaultProperties->setProperty(FontOpticalSizingId, true);
+        s_defaultProperties->setProperty(TextRenderingId, RenderingAuto);
         {
             using namespace KoSvgText;
             TextDecorations deco = DecorationNone;
@@ -1241,7 +1249,8 @@ bool KoSvgTextProperties::propertyIsBlockOnly(PropertyId id)
             id == TextAlignAllId ||
             id == TextAlignLastId ||
             id == TextIndentId ||
-            id == HangingPunctuationId;
+            id == HangingPunctuationId ||
+            id == TextRenderingId;
 }
 
 bool KoSvgTextProperties::propertyIsInheritable(PropertyId id) const

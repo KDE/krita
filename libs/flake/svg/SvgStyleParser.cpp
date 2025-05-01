@@ -341,7 +341,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "word-break" || command == "line-break" || command == "hanging-punctuation" || command == "text-align"
                || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
                || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align"
-               || command ==  "shape-padding" || command ==   "shape-margin" || command ==   "text-orientation") {
+               || command ==  "shape-padding" || command ==   "shape-margin" || command == "text-orientation" || command == "text-rendering") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";

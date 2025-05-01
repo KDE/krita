@@ -129,12 +129,13 @@ void KoSvgTextShape::Private::relayout()
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(rootProperties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     KoSvgText::Direction direction = KoSvgText::Direction(rootProperties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     KoSvgText::AutoValue inlineSize = rootProperties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    const KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(rootProperties.propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
     QString lang = rootProperties.property(KoSvgTextProperties::TextLanguage).toString();
 
     const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
     FT_Int32 loadFlags = 0;
-    if (this->textRendering == GeometricPrecision || this->textRendering == Auto) {
+    if (textRendering == KoSvgText::RenderingGeometricPrecision || textRendering == KoSvgText::RenderingAuto) {
         // without load_no_hinting, the advance and offset will be rounded
         // to nearest pixel, which we don't want as we're using the vector
         // outline.
@@ -575,6 +576,7 @@ void KoSvgTextShape::Private::relayout()
                              faceLoadFlags,
                              isHorizontal,
                              codepoint,
+                             textRendering,
                              currentGlyph,
                              charResult,
                              totalAdvanceFTFontCoordinates)) {

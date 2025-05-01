@@ -1182,8 +1182,6 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                 if (!context.strippedTextMode()) {
                     context.shapeWriter().addAttribute("id", context.getID(this));
 
-                    context.shapeWriter().addAttribute("text-rendering", textRenderingString());
-
                     // save the version to distinguish from the buggy Krita version
                     // 2: Wrong font-size.
                     // 3: Wrong font-size-adjust.
@@ -1192,7 +1190,6 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                     SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
                     SvgStyleWriter::saveSvgStyle(this, context);
                 } else {
-                    context.shapeWriter().addAttribute("text-rendering", textRenderingString());
                     SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
                     SvgStyleWriter::saveSvgStroke(this->stroke(), context);
                     SvgStyleWriter::saveSvgBasicStyle(true, 0, paintOrder(),
@@ -1404,7 +1401,8 @@ bool KoSvgTextShape::fontMatchingDisabled() const
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
-    if (d->textRendering == OptimizeSpeed || !painter.testRenderHint(QPainter::Antialiasing)) {
+    KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(textProperties().propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
+    if (textRendering == KoSvgText::RenderingOptimizeSpeed || !painter.testRenderHint(QPainter::Antialiasing)) {
         // also apply antialiasing only if antialiasing is active on provided target QPainter
         painter.setRenderHint(QPainter::Antialiasing, false);
         painter.setRenderHint(QPainter::SmoothPixmapTransform, false);
@@ -1418,10 +1416,10 @@ void KoSvgTextShape::paint(QPainter &painter) const
     if (!d->result.isEmpty()) {
         QPainterPath rootBounds;
         rootBounds.addRect(this->outline().boundingRect());
-        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationUnderline);
-        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationOverline);
-        d->paintPaths(painter, rootBounds, this, d->result, chunk, currentIndex);
-        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationLineThrough);
+        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationUnderline, textRendering);
+        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationOverline, textRendering);
+        d->paintPaths(painter, rootBounds, this, d->result, textRendering, chunk, currentIndex);
+        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationLineThrough, textRendering);
     }
 #if 0 // Debug
     Q_FOREACH (KoShape *child, this->shapes()) {
@@ -1561,32 +1559,6 @@ QList<KoShape *> KoSvgTextShape::textOutline() const
     }
 
     return shapes;
-}
-
-void KoSvgTextShape::setTextRenderingFromString(const QString &textRendering)
-{
-    if (textRendering == "optimizeSpeed") {
-        d->textRendering = OptimizeSpeed;
-    } else if (textRendering == "optimizeLegibility") {
-        d->textRendering = OptimizeLegibility;
-    } else if (textRendering == "geometricPrecision") {
-        d->textRendering = GeometricPrecision;
-    } else {
-        d->textRendering = Auto;
-    }
-}
-
-QString KoSvgTextShape::textRenderingString() const
-{
-    if (d->textRendering == OptimizeSpeed) {
-        return "optimizeSpeed";
-    } else if (d->textRendering == OptimizeLegibility) {
-        return "optimizeLegibility";
-    } else if (d->textRendering == GeometricPrecision) {
-        return "geometricPrecision";
-    } else {
-        return "auto";
-    }
 }
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)

@@ -52,8 +52,8 @@ void inheritPaintProperties(KisForest<KoSvgTextContentElement>::composition_iter
     }
 }
 
-void setRenderHints(QPainter &painter, const KoSvgTextShape::TextRendering textRendering, const bool testAntialiasing) {
-    if (textRendering != KoSvgTextShape::OptimizeSpeed && testAntialiasing) {
+void setRenderHints(QPainter &painter, const KoSvgText::TextRendering textRendering, const bool testAntialiasing) {
+    if (textRendering != KoSvgText::RenderingOptimizeSpeed && testAntialiasing) {
         // also apply antialiasing only if antialiasing is active on provided target QPainter
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
@@ -63,7 +63,11 @@ void setRenderHints(QPainter &painter, const KoSvgTextShape::TextRendering textR
     }
 }
 
-void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter, const QPainterPath &rootOutline, const KoShape *rootShape, const KoSvgText::TextDecoration type)
+void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter,
+                                                  const QPainterPath &rootOutline,
+                                                  const KoShape *rootShape,
+                                                  const KoSvgText::TextDecoration type,
+                                                  const KoSvgText::TextRendering rendering)
 {
     KoShapeStrokeModelSP stroke = rootShape->stroke();
     QSharedPointer<KoShapeBackground> background = rootShape->background();
@@ -99,7 +103,7 @@ void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter, const QPain
 
                 if (background && !colorValid) {
                     KoClipMaskPainter fillPainter(&painter, shapeGlobalClipRect);
-                    setRenderHints(*fillPainter.maskPainter(), textRendering, painter.testRenderHint(QPainter::Antialiasing));
+                    setRenderHints(*fillPainter.maskPainter(), rendering, painter.testRenderHint(QPainter::Antialiasing));
                     background->paint(*fillPainter.shapePainter(), rootOutline);
                     fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
                     fillPainter.maskPainter()->fillPath(decorPath, Qt::white);
@@ -124,7 +128,7 @@ void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter, const QPain
                             maskStroke->setLineBrush(Qt::white);
 
 
-                            setRenderHints(*strokePainter.maskPainter(), textRendering, painter.testRenderHint(QPainter::Antialiasing));
+                            setRenderHints(*strokePainter.maskPainter(), rendering, painter.testRenderHint(QPainter::Antialiasing));
                             {
                                 QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(decorPath));
                                 maskStroke->paint(shape.data(), *strokePainter.maskPainter());
@@ -148,7 +152,7 @@ void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter, const QPain
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                          const QPainterPath &rootOutline,
                                          const KoShape *rootShape,
-                                         const QVector<CharacterResult> &result,
+                                         const QVector<CharacterResult> &result, const KoSvgText::TextRendering rendering,
                                          QPainterPath &chunk,
                                          int &currentIndex)
 {
@@ -177,7 +181,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                     if (background) {
                         background->paint(*fillPainter.shapePainter(), rootOutline);
                         fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
-                        setRenderHints(*fillPainter.maskPainter(), textRendering, painter.testRenderHint(QPainter::Antialiasing));
+                        setRenderHints(*fillPainter.maskPainter(), rendering, painter.testRenderHint(QPainter::Antialiasing));
                     }
                     QPainterPath textDecorationsRest;
                     textDecorationsRest.setFillRule(Qt::WindingFill);
@@ -268,7 +272,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                         maskStroke = KoShapeStrokeSP(new KoShapeStroke(*strokeSP.data()));
                                         maskStroke->setColor(Qt::white);
                                         maskStroke->setLineBrush(Qt::white);
-                                        setRenderHints(*strokePainter.maskPainter(), textRendering, painter.testRenderHint(QPainter::Antialiasing));
+                                        setRenderHints(*strokePainter.maskPainter(), rendering, painter.testRenderHint(QPainter::Antialiasing));
                                         {
                                             QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
                                             maskStroke->paint(shape.data(), *strokePainter.maskPainter());

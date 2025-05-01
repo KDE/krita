@@ -1659,4 +1659,29 @@ QDebug operator<<(QDebug dbg, const KoSvgText::TextUnderlinePosition &value)
     return dbg.space();
 }
 
+TextRendering parseTextRendering(const QString &value)
+{
+    if (value == "optimizeSpeed") {
+        return RenderingOptimizeSpeed;
+    } else if (value == "optimizeLegibility") {
+        return RenderingOptimizeLegibility;
+    } else if (value == "geometricPrecision") {
+        return RenderingGeometricPrecision;
+    }
+    return RenderingAuto;
+}
+
+QString writeTextRendering(TextRendering value)
+{
+    if (value == RenderingOptimizeSpeed) {
+        return "optimizeSpeed";
+    } else if (value == RenderingOptimizeLegibility) {
+        return "optimizeLegibility";
+    } else if (value == RenderingGeometricPrecision) {
+        return "geometricPrecision";
+    } else {
+        return "auto";
+    }
+}
+
 } // namespace KoSvgText

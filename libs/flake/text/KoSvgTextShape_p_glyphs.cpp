@@ -279,7 +279,8 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
                                                                     const FT_Int32 faceLoadFlags,
                                                                     const bool isHorizontal,
                                                                     raqm_glyph_t &currentGlyph,
-                                                                    CharacterResult &charResult) const
+                                                                    CharacterResult &charResult,
+                                                                    const KoSvgText::TextRendering rendering)
 {
     /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
     /// adjusting the bounding box of bitmap glyphs.
@@ -454,7 +455,7 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
                 const QSize srcSize = image.size();
                 bitmapGlyph->images.replace(bitmapGlyph->images.size()-1, std::move(image).transformed(
                     bitmapTf,
-                    this->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation));
+                    rendering == KoSvgText::RenderingOptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation));
 
                 // This does the same as `QImage::trueMatrix` to get the image
                 // offset after transforming.
@@ -477,9 +478,10 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                                         const FT_Int32 faceLoadFlags,
                                         const bool isHorizontal,
                                         const char32_t firstCodepoint,
+                                        const KoSvgText::TextRendering rendering,
                                         raqm_glyph_t &currentGlyph,
                                         CharacterResult &charResult,
-                                        QPointF &totalAdvanceFTFontCoordinates) const
+                                        QPointF &totalAdvanceFTFontCoordinates)
 {
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
@@ -493,7 +495,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     qreal bitmapScale = 1.0;
 
     // Try to load the glyph
-    std::tie(glyphObliqueTf, bitmapScale) = loadGlyphOnly(ftTF, faceLoadFlags, isHorizontal, currentGlyph, charResult);
+    std::tie(glyphObliqueTf, bitmapScale) = loadGlyphOnly(ftTF, faceLoadFlags, isHorizontal, currentGlyph, charResult, rendering);
 
     if (charResult.visualIndex == -1) {
         hb_font_t_sp font(hb_ft_font_create_referenced(currentGlyph.ftface));

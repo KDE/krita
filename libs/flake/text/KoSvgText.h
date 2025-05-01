@@ -311,6 +311,14 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TextSpaceTrims)
 Q_DECLARE_FLAGS(HangingPunctuations, HangingPunctuation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(HangingPunctuations)
 
+enum TextRendering {
+    RenderingAuto,
+    RenderingOptimizeSpeed,
+    RenderingOptimizeLegibility,
+    RenderingGeometricPrecision
+};
+Q_ENUM_NS(TextRendering)
+
 /**
  * @brief The FontMetrics class
  * A class to keep track of a variety of font metrics.
@@ -500,6 +508,8 @@ TextOrientation parseTextOrientation(const QString &value);
 TextOrientation parseTextOrientationFromGlyphOrientation(AutoValue value);
 TextAnchor parseTextAnchor(const QString &value);
 
+TextRendering parseTextRendering(const QString &value);
+
 /**
  * @brief whiteSpaceValueToLongHands
  * CSS-Text-4 takes CSS-Text-3 whitespace values and treats them as a shorthand
@@ -579,6 +589,8 @@ QString writeLineBreak(LineBreak value);
 QString writeTextAlign(TextAlign value);
 
 QString writeFontStyle(CssFontStyleData value);
+
+QString writeTextRendering(TextRendering value);
 
 /**
  * @brief writeWhiteSpaceValue

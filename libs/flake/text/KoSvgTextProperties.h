@@ -114,6 +114,8 @@ public:
         FontSynthesisSmallCapsId, ///< Bool
         FontSynthesisSuperSubId, ///< Bool
 
+        TextRenderingId, ///< Enum
+
         KraTextVersionId ///< Int, used for handling incorrectly saved files.
     };
 

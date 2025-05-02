@@ -1713,6 +1713,38 @@ QPointF ResolutionHandler::adjust(const QPointF point) const {
     return pixelToPoint().map(pix);
 }
 
+QPointF ResolutionHandler::adjustFloor(const QPointF point) const
+{
+    if (!roundToPixelHorizontal && !roundToPixelVertical) return point;
+    QPointF pix = pointToPixel().map(point);
+    if (roundToPixelHorizontal) {
+        pix.setX(floor(pix.x()));
+    }
+    if (roundToPixelVertical) {
+        pix.setY(floor(pix.y()));
+    }
+    return pixelToPoint().map(pix);
+}
+
+QPointF ResolutionHandler::adjustCeil(const QPointF point) const
+{
+    if (!roundToPixelHorizontal && !roundToPixelVertical) return point;
+    QPointF pix = pointToPixel().map(point);
+    if (roundToPixelHorizontal) {
+        pix.setX(ceil(pix.x()));
+    }
+    if (roundToPixelVertical) {
+        pix.setY(ceil(pix.y()));
+    }
+    return pixelToPoint().map(pix);
+}
+
+QPointF ResolutionHandler::adjustWithOffset(const QPointF point, const QPointF offset) const
+{
+    if (!roundToPixelHorizontal && !roundToPixelVertical) return point;
+    return adjust(point+offset)-offset;
+}
+
 QRectF ResolutionHandler::adjust(const QRectF rect) const {
     return QRectF(adjust(rect.topLeft()), adjust(rect.bottomRight()));
 }

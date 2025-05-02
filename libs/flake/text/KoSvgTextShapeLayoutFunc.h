@@ -26,16 +26,17 @@ void finalizeLine(QVector<CharacterResult> &result,
                   QPointF &currentPos,
                   LineBox &currentLine,
                   QPointF &lineOffset,
-                  KoSvgText::TextAnchor anchor,
-                  KoSvgText::WritingMode writingMode,
-                  bool ltr,
-                  bool inlineSize,
-                  bool textInShape);
+                  const KoSvgText::TextAnchor anchor,
+                  const KoSvgText::WritingMode writingMode,
+                  const bool ltr,
+                  const bool inlineSize,
+                  const bool textInShape,
+                  const KoSvgText::ResolutionHandler &resHandler);
 
 QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                             const QMap<int, int> &logicalToVisual,
                             QVector<CharacterResult> &result,
-                            QPointF startPos);
+                            QPointF startPos, const KoSvgText::ResolutionHandler &resHandler);
 
 QList<QPainterPath>
 getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const KoSvgTextProperties &properties);
@@ -43,7 +44,7 @@ getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const 
 QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                                   const QMap<int, int> &logicalToVisual,
                                   QVector<CharacterResult> &result,
-                                  QList<QPainterPath> shapes, QPointF &startPos);
+                                  QList<QPainterPath> shapes, QPointF &startPos, const KoSvgText::ResolutionHandler &resHandler);
 
 } // namespace KoSvgTextShapeLayoutFunc
 

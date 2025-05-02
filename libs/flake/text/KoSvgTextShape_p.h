@@ -128,15 +128,13 @@ struct CharacterResult {
 
     std::optional<qreal> tabSize; ///< If present, this is a tab and it should align to multiples of this tabSize value.
 
-    void calculateAndApplyTabsize(QPointF currentPos, bool isHorizontal) {
+    void calculateAndApplyTabsize(QPointF currentPos, bool isHorizontal, const KoSvgText::ResolutionHandler &resHandler) {
         if (!tabSize) return;
         if (*tabSize == qInf() || qIsNaN(*tabSize)) return;
 
         if (*tabSize > 0) {
             qreal remainder = *tabSize - (isHorizontal? fmod(currentPos.x(), *tabSize): fmod(currentPos.y(), *tabSize));
-            advance = isHorizontal? QPointF(remainder, advance.y()): QPointF(advance.x(), remainder);
-        } else {
-            advance = isHorizontal? QPointF(0, advance.y()): QPointF(advance.x(), 0);
+            advance = resHandler.adjust(isHorizontal? QPointF(remainder, advance.y()): QPointF(advance.x(), remainder));
         }
     }
 
@@ -300,26 +298,26 @@ struct LineBox {
     LineBox() {
     }
 
-    LineBox(QPointF start, QPointF end) {
+    LineBox(QPointF start, QPointF end, const KoSvgText::ResolutionHandler &resHandler) {
         LineChunk chunk;
-        chunk.length =  QLineF(start, end);
+        chunk.length =  QLineF(resHandler.adjustCeil(start), resHandler.adjustFloor(end));
         chunks.append(chunk);
         currentChunk = 0;
     }
 
-    LineBox(QVector<QLineF> lineWidths, bool ltr, QPointF indent) {
+    LineBox(QVector<QLineF> lineWidths, bool ltr, QPointF indent, const KoSvgText::ResolutionHandler &resHandler) {
         textIndent = indent;
         if (ltr) {
             Q_FOREACH(QLineF line, lineWidths) {
                 LineChunk chunk;
-                chunk.length = line;
+                chunk.length = QLineF(resHandler.adjustCeil(line.p1()), resHandler.adjustFloor(line.p2()));
                 chunks.append(chunk);
                 currentChunk = 0;
             }
         } else {
             Q_FOREACH(QLineF line, lineWidths) {
                 LineChunk chunk;
-                chunk.length = QLineF(line.p2(), line.p1());
+                chunk.length = QLineF(resHandler.adjustFloor(line.p2()), resHandler.adjustCeil(line.p1()));
                 chunks.insert(0, chunk);
                 currentChunk = 0;
             }
@@ -511,8 +509,8 @@ public:
                            QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps);
 
     void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal,
-                         const KoSvgTextProperties resolvedProps);
-    static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
+                         const KoSvgTextProperties resolvedProps, const KoSvgText::ResolutionHandler &resHandler);
+    static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal, const KoSvgText::ResolutionHandler resHandler);
     static qreal
     characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
     static QPainterPath stretchGlyphOnPath(const QPainterPath &glyph,

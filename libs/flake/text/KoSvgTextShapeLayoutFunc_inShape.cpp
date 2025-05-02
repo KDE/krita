@@ -442,7 +442,8 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                                   const QMap<int, int> &logicalToVisual,
                                   QVector<CharacterResult> &result,
                                   QList<QPainterPath> shapes,
-                                  QPointF &startPos)
+                                  QPointF &startPos,
+                                  const KoSvgText::ResolutionHandler &resHandler)
 {
     QVector<LineBox> lineBoxes;
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
@@ -484,7 +485,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
     QPainterPath currentShape;
     while (it.hasNext()) {
         int index = it.next();
-        result[index].calculateAndApplyTabsize(wordAdvance + currentPos, isHorizontal);
+        result[index].calculateAndApplyTabsize(wordAdvance + currentPos, isHorizontal, resHandler);
         CharacterResult charResult = result.at(index);
         if (!charResult.addressable) {
             continue;
@@ -545,7 +546,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
 
         if (softBreak) {
             if (!currentLine.isEmpty()) {
-                finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
+                finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true, resHandler);
                 lineBoxes.append(currentLine);
                 firstLine = false;
                 indentLine = false;
@@ -564,7 +565,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
                 currentPos -= writingMode == KoSvgText::VerticalRL? wordBox.topRight(): wordBox.topLeft();
 
-                currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
+                currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent, resHandler);
                 qreal length = isHorizontal? wordBox.width(): wordBox.height();
                 for (int i = 0; i < currentLine.chunks.size(); i++) {
                     if (currentLine.chunks.at(i).length.length() > length) {
@@ -593,14 +594,14 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 qreal textIdentValue = textIndentInfo.length.value;
                 if (isHorizontal) {
                     if (indentPercent) {
-                        textIndent *= currentShape.boundingRect().width();
+                        textIdentValue *= currentShape.boundingRect().width();
                     }
-                    textIndent = QPointF(textIdentValue, 0);
+                    textIndent = resHandler.adjust(QPointF(textIdentValue, 0));
                 } else {
                     if (indentPercent) {
-                        textIndent *= currentShape.boundingRect().height();
+                        textIdentValue *= currentShape.boundingRect().height();
                     }
-                    textIndent = QPointF(0, textIdentValue);
+                    textIndent = resHandler.adjust(QPointF(0, textIdentValue));
                 }
                 bool ind = textIndentInfo.hanging? !indentLine: indentLine;
                 indent = ind? textIndent: QPointF();
@@ -620,7 +621,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             if (foundFirst) {
 
                 if (needNewLine) {
-                    currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
+                    currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent, resHandler);
                     // We could set this to find the first fitting width, but it's better to try and improve the precision of the firstpos algorithm,
                     // as this gives more stable results.
                     currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
@@ -661,13 +662,13 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
         }
 
         if (charResult.breakType == BreakType::HardBreak) {
-            finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
+            finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true, resHandler);
             lineBoxes.append(currentLine);
             currentLine = LineBox();
             indentLine = textIndentInfo.hanging? false: textIndentInfo.eachLine;
         }
     }
-    finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
+    finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true, resHandler);
     lineBoxes.append(currentLine);
     return lineBoxes;
 }

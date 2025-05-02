@@ -1083,7 +1083,6 @@ struct TextUnderlinePosition : public boost::equality_comparable<TextUnderlinePo
  */
 struct ResolutionHandler {
 
-    ResolutionHandler() {}
     ResolutionHandler(qreal _xRes = 72.0, qreal _yRes = 72.0, bool _roundToPixelHorizontal = false, bool _roundToPixelVertical = false)
         : xRes(_xRes), yRes(_yRes), roundToPixelHorizontal(_roundToPixelHorizontal), roundToPixelVertical(_roundToPixelVertical) {}
 
@@ -1109,6 +1108,15 @@ struct ResolutionHandler {
 
     /// Adjusts the point to rounded pixel values, based on whether roundToPixelHorizontal or roundToPixelVertical are true.
     QPointF adjust(const QPointF point) const;
+
+    /// Adjusts the point to floored pixel values. @see adjust(QPointF);
+    QPointF adjustFloor(const QPointF point) const;
+    /// Adjusts the point to ceiled pixel values. @see adjust(QPointF);
+    QPointF adjustCeil(const QPointF point) const;
+
+    /// For text decoration, we need to ensure that the whole thing, including width and height is aligned to the pixel.
+    /// So this adds the offset (half the total width) and uses that to round to.
+    QPointF adjustWithOffset(const QPointF point, const QPointF offset) const;
 
     /// Adjusts the rect to rounded pixel values, based on whether roundToPixelHorizontal or roundToPixelVertical are true.
     QRectF adjust(const QRectF rect) const;

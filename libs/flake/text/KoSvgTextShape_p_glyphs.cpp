@@ -579,6 +579,7 @@ bool KoSvgTextShape::Private::loadGlyph(const KoSvgText::ResolutionHandler &resH
             QRect bboxPixel(left, top, width, height);
             if (!isHorizontal) {
                 bboxPixel.moveLeft(-(bboxPixel.width() / 2));
+                bboxPixel.moveTop(-bboxPixel.height());
             }
             QRectF drawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * resHandler.freeTypePixel, bboxPixel.size() * resHandler.freeTypePixel));
             drawRect.translate(charResult.advance - ftTF.map(advance));

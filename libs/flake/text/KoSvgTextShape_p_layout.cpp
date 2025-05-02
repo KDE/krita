@@ -152,8 +152,8 @@ void KoSvgTextShape::Private::relayout()
     };
 
     // Setup the resolution handler.
-    const bool horzSnapping = textRendering != KoSvgText::RenderingGeometricPrecision || textRendering != KoSvgText::RenderingAuto;
-    const bool vertSnapping = (textRendering == KoSvgText::RenderingOptimizeLegibility && isHorizontal) || textRendering == KoSvgText::RenderingOptimizeSpeed;
+    const bool horzSnapping = textRendering == KoSvgText::RenderingOptimizeSpeed || (textRendering == KoSvgText::RenderingOptimizeLegibility && !isHorizontal);
+    const bool vertSnapping = textRendering != KoSvgText::RenderingGeometricPrecision && textRendering != KoSvgText::RenderingAuto;
     const KoSvgText::ResolutionHandler resHandler(this->xRes, this->yRes, horzSnapping, vertSnapping);
 
     // First, get text. We use the subChunks because that handles bidi-insertion for us.
@@ -646,9 +646,9 @@ void KoSvgTextShape::Private::relayout()
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
     if (!this->shapesInside.isEmpty()) {
         QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, rootProperties);
-        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos);
+        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos, resHandler);
     } else {
-        this->lineBoxes = breakLines(rootProperties, logicalToVisual, result, startPos);
+        this->lineBoxes = breakLines(rootProperties, logicalToVisual, result, startPos, resHandler);
     }
 
     // Handle baseline alignment.
@@ -693,7 +693,7 @@ void KoSvgTextShape::Private::relayout()
         debugFlake << "5. Apply ‘textLength’ attribute";
         globalIndex = 0;
         int resolved = 0;
-        this->applyTextLength(textData.childBegin(), result, globalIndex, resolved, isHorizontal, KoSvgTextProperties::defaultProperties());
+        this->applyTextLength(textData.childBegin(), result, globalIndex, resolved, isHorizontal, KoSvgTextProperties::defaultProperties(), resHandler);
 
         // 6. Adjust positions: x, y
         debugFlake << "6. Adjust positions: x, y";
@@ -722,7 +722,7 @@ void KoSvgTextShape::Private::relayout()
 
         // 7. Apply anchoring
         debugFlake << "7. Apply anchoring";
-        applyAnchoring(result, isHorizontal);
+        applyAnchoring(result, isHorizontal, resHandler);
 
         // Computing the textDecorations needs to happen before applying the
         // textPath to the results, as we need the unapplied result vector for
@@ -942,7 +942,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
                                               int &currentIndex,
                                               int &resolvedDescendentNodes,
                                               bool isHorizontal,
-                                              const KoSvgTextProperties resolvedProps)
+                                              const KoSvgTextProperties resolvedProps, const KoSvgText::ResolutionHandler &resHandler)
 {
 
     int i = currentIndex;
@@ -952,7 +952,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
     KoSvgTextProperties props;
     props.inheritFrom(resolvedProps, true);
     for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
-        applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal, props);
+        applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal, props, resHandler);
     }
     // Raqm handles bidi reordering for us, but this algorithm does not
     // anticipate that, so we need to keep track of which typographic item
@@ -1009,7 +1009,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
                 bool last = spacingAndGlyphs ? false : k == visualToLogical.keys().last();
 
                 if (!(cr.textLengthApplied && secondTextLengthApplied) && !last) {
-                    shift += d;
+                    shift = resHandler.adjust(shift+d);
                 }
                 secondTextLengthApplied = cr.textLengthApplied;
                 cr.textLengthApplied = true;
@@ -1585,6 +1585,11 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
         DecorationBox box = decorationBoxes.at(i);
         if (box.underlineOffsets.size() > 0) {
             stroker.setWidth(qMax(minimumDecorationThickness, (box.thickness/(box.underlineOffsets.size()))*freetypePixelsToPt));
+            if (isHorizontal) {
+                stroker.setWidth(resHandler.adjust(QPointF(0, stroker.width())).y());
+            } else {
+                stroker.setWidth(resHandler.adjust(QPointF(stroker.width(), 0)).x());
+            }
         } else {
             stroker.setWidth(minimumDecorationThickness);
         }
@@ -1604,26 +1609,24 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
         QMap<TextDecoration, QPointF> decorationOffsets;
         if (isHorizontal) {
             const qreal startX = rect.left();
-            decorationOffsets[DecorationOverline] = QPointF(startX, box.decorationRect.top()) + pathWidth;
-            decorationOffsets[DecorationUnderline] = QPointF(startX, box.decorationRect.bottom());
+            decorationOffsets[DecorationOverline] = resHandler.adjustWithOffset(QPointF(startX, box.decorationRect.top()) + pathWidth, pathWidth*0.5);
+            decorationOffsets[DecorationUnderline] = resHandler.adjustWithOffset(QPointF(startX, box.decorationRect.bottom()), pathWidth*0.5);
             if (underlinePosH == UnderlineAuto) {
                 qreal average = 0;
                 for (int j = 0; j < box.underlineOffsets.size(); j++) {
                     average += box.underlineOffsets.at(j);
                 }
                 average = average > 0? (average/box.underlineOffsets.size()): 0;
-                decorationOffsets[DecorationUnderline] += QPointF(0, average);
+                decorationOffsets[DecorationUnderline] += resHandler.adjustWithOffset(QPointF(0, average), pathWidth*0.5);
             }
         } else {
             const qreal startY = rect.top();
             if (underlinePosV == UnderlineRight) {
-                decorationOffsets[DecorationOverline] = QPointF(box.decorationRect.left(), startY);
-                decorationOffsets[DecorationUnderline] = QPointF(box.decorationRect.right(), startY);
-                decorationOffsets[DecorationUnderline] += pathWidth;
+                decorationOffsets[DecorationOverline] = resHandler.adjustWithOffset(QPointF(box.decorationRect.left(), startY), pathWidth*0.5);
+                decorationOffsets[DecorationUnderline] = resHandler.adjustWithOffset(QPointF(box.decorationRect.right(), startY) +pathWidth, pathWidth*0.5);
             } else {
-                decorationOffsets[DecorationOverline] = QPointF(box.decorationRect.right(), startY);
-                decorationOffsets[DecorationUnderline] = QPointF(box.decorationRect.left(), startY);
-                decorationOffsets[DecorationOverline] += pathWidth;
+                decorationOffsets[DecorationOverline] = resHandler.adjustWithOffset(QPointF(box.decorationRect.right(), startY) +pathWidth, pathWidth*0.5);
+                decorationOffsets[DecorationUnderline] = resHandler.adjustWithOffset(QPointF(box.decorationRect.left(), startY), pathWidth*0.5);
             }
         }
 
@@ -1640,6 +1643,14 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
             QPolygonF poly = l.line;
             if (poly.isEmpty()) continue;
             stroker.setWidth(qMax(minimumDecorationThickness, (l.thickness/(poly.size()))*freetypePixelsToPt));
+            QPointF pathWidth;
+            if (isHorizontal) {
+                pathWidth = resHandler.adjust(QPointF(0, stroker.width()));
+                stroker.setWidth(pathWidth.y());
+            } else {
+                pathWidth = resHandler.adjust(QPointF(stroker.width(), 0));
+                stroker.setWidth(pathWidth.x());
+            }
             qreal average = 0.0;
             for (int j = 0; j < poly.size(); j++) {
                 average += isHorizontal? poly.at(j).y(): poly.at(j).x();
@@ -1647,6 +1658,8 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
             average /= poly.size();
             QLineF line = isHorizontal? QLineF(poly.first().x(), average, poly.last().x(), average)
                                       : QLineF(average, poly.first().y(), average, poly.last().y());
+            line.setP1(resHandler.adjustWithOffset(line.p1(), pathWidth*0.5));
+            line.setP2(resHandler.adjustWithOffset(line.p2(), pathWidth*0.5));
             QPair<QPainterPath, QPointF> generatedPath = generateDecorationPath(line, stroker.width(), style, isHorizontal, textOnPath, minimumDecorationThickness);
             QPainterPath p = generatedPath.first;
             finalizeDecoration(p, line.p1() + (generatedPath.second * 0.5), stroker, DecorationLineThrough, decorationPaths, currentTextPath, isHorizontal, currentTextPathOffset, textPathSide);
@@ -1657,7 +1670,7 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal)
+void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal, const KoSvgText::ResolutionHandler resHandler)
 {
     int i = 0;
     int start = 0;
@@ -1697,7 +1710,7 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
             shift = shift - (a + b) * 0.5;
         }
 
-        const QPointF shiftP = isHorizontal ? QPointF(shift, 0) : QPointF(0, shift);
+        const QPointF shiftP = resHandler.adjust(isHorizontal ? QPointF(shift, 0) : QPointF(0, shift));
 
         for (int j = start; j < i; j++) {
             result[j].finalPosition += shiftP;

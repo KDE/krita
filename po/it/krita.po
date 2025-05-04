@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-01 01:56+0000\n"
-"PO-Revision-Date: 2025-04-15 21:14+0200\n"
+"PO-Revision-Date: 2025-04-27 20:09+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27085,11 +27085,9 @@ msgstr[0] "Smussatura velocità del pennello: {n} campione"
 msgstr[1] "Smussatura velocità del pennello: {n} campioni"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1450
-#, fuzzy, kde-format
-#| msgid "Pen tilt direction offset: {n}°"
-#| msgid_plural "Pen tilt direction offset: {n}°"
+#, kde-format
 msgid "Pen tilt direction offset: "
-msgstr "Scostamento direzione di inclinazione della penna: {n}°"
+msgstr "Scostamento direzione di inclinazione della penna: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1547

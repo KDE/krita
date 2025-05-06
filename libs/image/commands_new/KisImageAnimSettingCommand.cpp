@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2025 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #include "KisImageAnimSettingCommand.h"
 
 #include "kis_command_ids.h"

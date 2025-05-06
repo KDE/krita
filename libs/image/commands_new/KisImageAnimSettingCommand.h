@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2025 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISIMAGEANIMSETTINGCOMMAND_H
 #define KISIMAGEANIMSETTINGCOMMAND_H
 

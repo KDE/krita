@@ -640,7 +640,7 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     }
 
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / qMin(d->xRes, d->yRes));
-    const qreal width = qMax(qreal(strokeWidth/(end-(start+1)))*freetypePixelsToPt, minimum);
+    const qreal width = strokeWidth > 0 ? qMax(qreal(strokeWidth/qMax(0, end-(start+1)))*freetypePixelsToPt, minimum): minimum;
 
     stroker.setWidth(thick? width*2: width);
 

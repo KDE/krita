@@ -496,17 +496,16 @@ void KisAnimTimelineDocker::setImageAnimSettings()
         m_d->titlebar->sbEndFrame->value()
     };
 
-    QScopedPointer<KUndo2Command> parentUndoCommand(new KUndo2Command(kundo2_i18n("Update Animation Settings")));
+    KisImageAnimSettingCommand *undoCommand = new KisImageAnimSettingCommand(m_d->canvas->image()->animationInterface(), settings);
 
-    KisImageAnimSettingCommand *undoCommand = new KisImageAnimSettingCommand(m_d->canvas->image()->animationInterface(),
-                                                                             settings,
-                                                                             parentUndoCommand.data());
-    Q_UNUSED(undoCommand);
-
-    KisProcessingApplicator::runSingleCommandStroke(m_d->canvas->image(),
-                                                    parentUndoCommand.take(),
-                                                    KisStrokeJobData::BARRIER,
-                                                    KisStrokeJobData::EXCLUSIVE);
+    //KisProcessingApplicator::applyCommand(undoCommand);
+    QScopedPointer<KisProcessingApplicator> applicator(
+        new KisProcessingApplicator(m_d->canvas->image(), 0, KisProcessingApplicator::NONE,
+                                    KisImageSignalVector(),
+                                    undoCommand->text(),
+                                    0, undoCommand->id()));
+    applicator->applyCommand(undoCommand);
+    applicator->end();
 }
 
 void KisAnimTimelineDocker::updateFrameCache()

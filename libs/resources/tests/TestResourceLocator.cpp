@@ -157,11 +157,12 @@ void TestResourceLocator::testDocumentStorage()
     QVERIFY(model.rowCount() == rowcount);
 }
 
-int countMetaDataForResource(int resourceId)
+int countMetaDataForResourceImpl(int resourceId, const QString &tableName)
 {
     try {
         KisSqlQueryLoader loader("inline://count_metadata_for_resource",
-                                 "SELECT COUNT(*) FROM metadata WHERE foreign_id = :resource_id",
+                                 QString("SELECT COUNT(*) FROM metadata\n"
+                                 "WHERE foreign_id = :resource_id AND table_name = \"%1\"").arg(tableName),
                                  KisSqlQueryLoader::prepare_only);
         loader.query().bindValue(":resource_id", resourceId);
         loader.exec();
@@ -176,6 +177,16 @@ int countMetaDataForResource(int resourceId)
         qWarning().noquote() << "       error:" << e.sqlError.text();
         return -1;
     }
+}
+
+int countMetaDataForResource(int resourceId)
+{
+    return countMetaDataForResourceImpl(resourceId, "resources");
+}
+
+int countMetaDataForStorage(int  storageId)
+{
+    return countMetaDataForResourceImpl(storageId, "storages");
 }
 
 int countCurrentResourcesForResourceId(int resourceId)
@@ -219,6 +230,28 @@ int countVersionedResourcesForResourceId(int resourceId)
         return -1;
     }
 }
+
+int countStorageRecordsForStorageId(int storageId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_storage_records_for_storage_id",
+                                 "SELECT COUNT(*) FROM storages WHERE id = :storage_id",
+                                 KisSqlQueryLoader::prepare_only);
+        loader.query().bindValue(":storage_id", storageId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
 
 enum MetaDataTestFlag
 {
@@ -268,6 +301,8 @@ void TestResourceLocator::testLoadResourceMetadataFromStorage()
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
     QVERIFY(documentStorage->valid());
 
+    documentStorage->setMetaData("test_metadata", "test_storage_metadata_value");
+
     QSharedPointer<DummyResource> resource(new DummyResource("metadata_test.kpp", ResourceType::PaintOpPresets));
     resource->setSomething("123456789012345678901234567890");
 
@@ -277,6 +312,11 @@ void TestResourceLocator::testLoadResourceMetadataFromStorage()
 
     QVERIFY(m_locator->hasStorage(documentName));
     QCOMPARE(model.rowCount(), initialRowCount + 1);
+
+    // the storage was added, so verify its metadata is present
+    const int documentStorageId = documentStorage->storageId();
+    QCOMPARE(countStorageRecordsForStorageId(documentStorageId), 1);
+    QCOMPARE(countMetaDataForStorage(documentStorageId), 1);
 
     QSharedPointer<DummyResource> loadedResource;
     int loadedResourceId = -1;
@@ -393,10 +433,15 @@ void TestResourceLocator::testLoadResourceMetadataFromStorage()
 
     if (loadedResourceId >= 0 && flags & (DeleteStorageNormally | DeleteAllTemporaryStorages)) {
         QVERIFY(!metadataModel->metaDataValue(loadedResourceId, "test_metadata").isValid());
-        
+
         QCOMPARE(countMetaDataForResource(loadedResourceId), 0);
         QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 0);
         QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 0);
+    }
+
+    if (flags & (DeleteStorageNormally | DeleteAllTemporaryStorages)) {
+        QCOMPARE(countStorageRecordsForStorageId(documentStorageId), 0);
+        QCOMPARE(countMetaDataForStorage(documentStorageId), 0);
     }
 
     /**
@@ -712,6 +757,81 @@ void TestResourceLocator::testImportDuplicatedResource()
     QCOMPARE(res5->filename(), fileName.toUpper());
 
 #endif
+}
+
+void TestResourceLocator::testOrphanedMetadataRemoval_data()
+{
+    QTest::addColumn<bool>("useMigrationScript");
+
+    QTest::newRow("migration") << true;
+    QTest::newRow("explicit") << false;
+}
+
+void TestResourceLocator::testOrphanedMetadataRemoval()
+{
+    QFETCH(bool, useMigrationScript);
+
+    QCOMPARE(countCurrentResourcesForResourceId(5), 1);
+    QCOMPARE(countVersionedResourcesForResourceId(5), 1);
+    QCOMPARE(countMetaDataForResource(5), 1);
+
+    try {
+        KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
+
+        /**
+         * Slightly break the database consistency by removing the resource
+         * records but "forgetting" to remove its metadata.
+         */
+        KisSqlQueryLoader loader("inline://make_resource_orphaned",
+                                 "PRAGMA foreign_keys=off;"
+                                 "DELETE FROM resources WHERE id = 5;"
+                                 "DELETE FROM versioned_resources WHERE resource_id = 5;"
+                                 "PRAGMA foreign_keys=on;");
+        loader.exec();
+
+        transactionLock.commit();
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+
+        QFAIL("SQL query failed");
+    }
+
+    QCOMPARE(countCurrentResourcesForResourceId(5), 0);
+    QCOMPARE(countVersionedResourcesForResourceId(5), 0);
+    QCOMPARE(countMetaDataForResource(5), 1);
+
+    if (!useMigrationScript) {
+        KisResourceCacheDb::removeOrphanedMetaData();
+    } else {
+        try {
+            KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
+
+            KisSqlQueryLoader loader(":/0_0_18_0001_cleanup_metadata_table.sql");
+            loader.exec();
+
+            transactionLock.commit();
+
+        } catch (const KisSqlQueryLoader::FileException &e) {
+            qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+            qWarning().noquote() << "       file:" << e.filePath;
+            qWarning().noquote() << "       file-error:" << e.fileErrorString;
+            QFAIL("SQL query failed");
+        } catch (const KisSqlQueryLoader::SQLException &e) {
+            qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+            qWarning().noquote() << "       file:" << e.filePath;
+            qWarning().noquote() << "       statement:" << e.statementIndex;
+            qWarning().noquote() << "       error:" << e.sqlError.text();
+            QFAIL("SQL query failed");
+        }
+    }
+
+    QCOMPARE(countCurrentResourcesForResourceId(5), 0);
+    QCOMPARE(countVersionedResourcesForResourceId(5), 0);
+    QCOMPARE(countMetaDataForResource(5), 0);
+
 }
 
 void TestResourceLocator::cleanupTestCase()

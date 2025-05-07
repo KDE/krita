@@ -2114,114 +2114,112 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
 void KisResourceCacheDb::deleteTemporaryResources()
 {
-    QSqlDatabase::database().transaction();
+    try {
+        KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
 
-    QSqlQuery q;
+        /**
+         * Remove all temporary resources
+         */
+        {
+            KisSqlQueryLoader loader(
+                "inline://delete_metadata_for_resources_in_memory_storages",
+                "DELETE FROM metadata\n"
+                "WHERE foreign_id IN (SELECT id\n"
+                "                     FROM resources\n"
+                "                     WHERE storage_id in (SELECT id\n"
+                "                                          FROM storages\n"
+                "                                          WHERE  storage_type_id == :storage_type))\n"
+                "AND   table_name = :table",
+                KisSqlQueryLoader::prepare_only);
+            loader.query().bindValue(":table", METADATA_RESOURCES);
+            loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
+            loader.exec();
+        }
 
-    if (!q.prepare("DELETE FROM metadata\n"
-                   "WHERE foreign_id IN (SELECT id\n"
-                   "                     FROM   resources\n"
-                   "                     WHERE storage_id in (SELECT id\n"
-                   "                                          FROM storages\n"
-                   "                                          WHERE  storage_type_id == :storage_type))\n"
-                   "AND   table_name = :table")) {
-        qWarning() << "Could not prepare delete metadata for temporary resources query." << q.lastError();
+        {
+            KisSqlQueryLoader loader("inline://delete_metadata_for_temporary_resources",
+                                     "DELETE FROM metadata\n"
+                                     "WHERE foreign_id IN (SELECT id\n"
+                                     "                     FROM   resources\n"
+                                     "                     WHERE temporary = 1)\n"
+                                     "AND   table_name = :table",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.query().bindValue(":table", METADATA_RESOURCES);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_versions_of_resources_in_temporary_storages",
+                                     "DELETE FROM versioned_resources\n"
+                                     "WHERE  storage_id in (SELECT id\n"
+                                     "                      FROM   storages\n"
+                                     "                      WHERE  storage_type_id == :storage_type)",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_versions_of_temporary_resources",
+                                     "DELETE FROM versioned_resources\n"
+                                     "WHERE resource_id IN (SELECT id FROM resources\n"
+                                     "                      WHERE  temporary = 1)",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_current_resources_in_temporary_storages",
+                                     "DELETE FROM resources\n"
+                                     "WHERE  storage_id in (SELECT id\n"
+                                     "                      FROM   storages\n"
+                                     "                      WHERE  storage_type_id  == :storage_type)",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_current_temporary_resources",
+                                     "DELETE FROM resources\n"
+                                     "WHERE  temporary = 1",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.exec();
+        }
+
+        /**
+         * Remove all temporary storages
+         */
+
+        {
+            KisSqlQueryLoader loader("inline://delete_metadata_for_temporary_storages",
+                                     "DELETE FROM metadata\n"
+                                     "WHERE foreign_id IN (SELECT id\n"
+                                     "                     FROM   storages\n"
+                                     "                     WHERE  storage_type_id  == :storage_type)\n"
+                                     "AND   table_name = :table;",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
+            loader.query().bindValue(":table", METADATA_STORAGES);
+            loader.exec();
+        }
+
+        {
+            KisSqlQueryLoader loader("inline://delete_temporary_storages",
+                                     "DELETE FROM storages\n"
+                                     "WHERE  storage_type_id  == :storage_type\n",
+                                     KisSqlQueryLoader::prepare_only);
+            loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
+            loader.exec();
+        }
+
+        transactionLock.commit();
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
     }
-    q.bindValue(":table", METADATA_RESOURCES);
-    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete metadata for temporary resources query." << q.lastError();
-    }
-
-    if (!q.prepare("DELETE FROM metadata\n"
-                   "WHERE foreign_id IN (SELECT id\n"
-                   "                     FROM   resources\n"
-                   "                     WHERE temporary = 1)\n"
-                   "AND   table_name = :table")) {
-        qWarning() << "Could not prepare delete metadata for temporary resources query." << q.lastError();
-    }
-    q.bindValue(":table", METADATA_RESOURCES);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete metadata for temporary resources query." << q.lastError();
-    }
-
-    if (!q.prepare("DELETE FROM versioned_resources\n"
-                   "WHERE  storage_id in (SELECT id\n"
-                   "                      FROM   storages\n"
-                   "                      WHERE  storage_type_id == :storage_type)"))
-    {
-        qWarning() << "Could not prepare delete versioned resources from Unknown or Memory storages query." << q.lastError();
-    }
-
-    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete versioned resources from Unknown or Memory storages query." << q.lastError();
-    }
-
-    if (!q.prepare("DELETE FROM resources\n"
-                   "WHERE  storage_id in (SELECT id\n"
-                   "                      FROM   storages\n"
-                   "                      WHERE  storage_type_id  == :storage_type)"))
-    {
-        qWarning() << "Could not prepare delete resources from Unknown or Memory storages query." << q.lastError();
-    }
-
-    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete resources from Unknown or Memory storages query." << q.lastError();
-    }
-
-
-    if (!q.prepare("DELETE FROM versioned_resources\n"
-                   "WHERE resource_id IN (SELECT id FROM resources\n"
-                   "                      WHERE  temporary = 1)")) {
-        qWarning() << "Could not prepare delete temporary versioned resources query." << q.lastError();
-    }
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete temporary versioned resources query." << q.lastError();
-    }
-
-    if (!q.prepare("DELETE FROM metadata\n"
-                   "WHERE foreign_id IN (SELECT id\n"
-                   "                     FROM   storages\n"
-                   "                     WHERE  storage_type_id  == :storage_type)\n"
-                   "AND   table_name = :table;")) {
-        qWarning() << "Could not prepare delete temporary resources query." << q.lastError();
-    }
-    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
-    q.bindValue(":table", METADATA_STORAGES);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete temporary resources query." << q.lastError();
-    }
-
-    if (!q.prepare("DELETE FROM resources\n"
-                   "WHERE  temporary = 1")) {
-        qWarning() << "Could not prepare delete temporary resources query." << q.lastError();
-    }
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete temporary resources query." << q.lastError();
-    }
-
-    if (!q.prepare("DELETE FROM storages\n"
-                   "WHERE  storage_type_id  == :storage_type\n"))
-    {
-        qWarning() << "Could not prepare delete Unknown or Memory storages query." << q.lastError();
-    }
-
-    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute delete Unknown or Memory storages query." << q.lastError();
-    }
-
-    QSqlDatabase::database().commit();
 }
 
 void KisResourceCacheDb::performHouseKeepingOnExit()
@@ -2385,55 +2383,36 @@ bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int
 
 bool KisResourceCacheDb::removeOrphanedMetaData()
 {
-    QSqlDatabase::database().transaction();
+    auto deleteMetadataForType = [] (const QString &tableName) {
+        KisSqlQueryLoader loader("inline://delete_orphaned_records (" + tableName + ")",
+                                 QString("DELETE FROM metadata\n"
+                                         "WHERE  foreign_id NOT IN (SELECT id FROM %1)\n"
+                                         "AND    table_name = \"%1\"\n")
+                                         .arg(tableName));
+        loader.exec();
 
-    {
-        QSqlQuery q;
-        if (!q.prepare("DELETE FROM metadata\n"
-                       "WHERE  foreign_id NOT IN (SELECT id FROM resources)\n"
-                       "AND    table_name = :table\n")) {
-            QSqlDatabase::database().rollback();
-            qWarning() << "Could not prepare delete oprhaned metadata query for resources" << q.lastError();
-            return false;
+        if (loader.query().numRowsAffected() > 0) {
+            qWarning().noquote().nospace() << "WARNING: orphaned metadata records were found for " << tableName << "!";
+            qWarning().noquote().nospace() << "         Num records removed: " << loader.query().numRowsAffected();
         }
+    };
 
-        q.bindValue(":table", METADATA_RESOURCES);
+    try {
+        KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
 
-        if (!q.exec()) {
-            QSqlDatabase::database().rollback();
-            qWarning() << "Could not execute delete oprhaned metadata query for resources" << q.lastError();
-            return false;
+        deleteMetadataForType(METADATA_RESOURCES);
+        deleteMetadataForType(METADATA_STORAGES);
 
-        }
+        transactionLock.commit();
 
-        if (q.numRowsAffected() > 0) {
-            qWarning() << "WARNING: orphaned metadata records were found for the resources! Num records removed:" 
-                       << q.numRowsAffected();
-        }
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+
+        return false;
     }
 
-    {
-        QSqlQuery q;
-        if (!q.prepare("DELETE FROM metadata\n"
-                       "WHERE  foreign_id NOT IN (SELECT id FROM storages)\n"
-                       "AND    table_name = :table\n")) {
-            QSqlDatabase::database().rollback();
-            qWarning() << "Could not prepare delete oprhaned metadata query for storages" << q.lastError();
-            return false;
-        }
-
-        q.bindValue(":table", METADATA_STORAGES);
-
-        if (!q.exec()) {
-            QSqlDatabase::database().rollback();
-            qWarning() << "Could not execute delete oprhaned metadata query for storages" << q.lastError();
-            return false;
-        }
-        if (q.numRowsAffected() > 0) {
-            qWarning() << "WARNING: orphaned metadata records were found for the storages! Num records removed:"
-                       << q.numRowsAffected();
-        }
-    }
-    QSqlDatabase::database().commit();
     return true;
 }

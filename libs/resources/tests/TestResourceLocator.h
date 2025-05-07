@@ -34,6 +34,9 @@ private Q_SLOTS:
     void testImportExportResource();
     void testImportDuplicatedResource();
 
+    void testOrphanedMetadataRemoval_data();
+    void testOrphanedMetadataRemoval();
+
 private:
 
     QString m_srcLocation;

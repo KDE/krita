@@ -48,6 +48,14 @@ struct Struct {
         return id;
     }
 
+    int idNoexceptFunc() noexcept {
+        return id;
+    }
+
+    int idConstNoexceptFunc() const noexcept {
+        return id;
+    }
+
     int overloaded() const {
         return id;
     }
@@ -62,7 +70,16 @@ struct StructExplicit {
     explicit StructExplicit (int _id) : id(_id) {}
 
     int id = -1;
+    int idFunc() {
+        return id;
+    }
     int idConstFunc() const {
+        return id;
+    }
+    int idNoexceptFunc() noexcept {
+        return id;
+    }
+    int idConstNoexceptFunc() const noexcept {
         return id;
     }
 };
@@ -141,7 +158,7 @@ void KisMplTest::testMemberOperatorsEqualTo()
     // compare overloaded member function against value
 
     {
-        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::overloaded, v));
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(qConstOverload<>(&Struct::overloaded), v));
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 1);
     }
@@ -149,7 +166,7 @@ void KisMplTest::testMemberOperatorsEqualTo()
     // compare member function against reference
 
     {
-        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::overloaded, vref));
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(qConstOverload<>(&Struct::overloaded), vref));
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 1);
     }
@@ -157,7 +174,31 @@ void KisMplTest::testMemberOperatorsEqualTo()
     // compare member function against const reference
 
     {
-        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::overloaded, vconstref));
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(qConstOverload<>(&Struct::overloaded), vconstref));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 1);
+    }
+
+    // compare non-const member function against const reference
+
+    {
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::idFunc, vconstref));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 1);
+    }
+
+    // compare non-const noexcept member function against const reference
+
+    {
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::idNoexceptFunc, vconstref));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 1);
+    }
+
+    // compare const noexcept member function against const reference
+
+    {
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::idConstNoexceptFunc, vconstref));
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 1);
     }
@@ -239,6 +280,29 @@ void KisMplTest::testMemberOperatorsLess()
         QCOMPARE(std::distance(vec.begin(), it), 2);
     }
 
+    {
+        std::vector<StructExplicit> vec({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_less(&StructExplicit::idFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 2);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_less(&StructExplicit::idNoexceptFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 2);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_less(&StructExplicit::idConstNoexceptFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 2);
+    }
 
     {
         std::vector<StructExplicit> vec_base({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
@@ -302,6 +366,30 @@ void KisMplTest::testMemberOperatorsLessEqual()
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 3);
     }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_less_equal(&StructExplicit::idFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_less_equal(&StructExplicit::idConstFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(0),StructExplicit(1),StructExplicit(2),StructExplicit(3),StructExplicit(4)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_less_equal(&StructExplicit::idConstNoexceptFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
 }
 
 void KisMplTest::testMemberOperatorsGreater()
@@ -321,6 +409,30 @@ void KisMplTest::testMemberOperatorsGreater()
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 2);
     }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater(&StructExplicit::idFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 2);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater(&StructExplicit::idConstNoexceptFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 2);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater(&StructExplicit::idNoexceptFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 2);
+    }
 }
 
 void KisMplTest::testMemberOperatorsGreaterEqual()
@@ -337,6 +449,30 @@ void KisMplTest::testMemberOperatorsGreaterEqual()
         std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
 
         auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater_equal(&StructExplicit::idConstFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater_equal(&StructExplicit::idFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater_equal(&StructExplicit::idConstNoexceptFunc));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
+
+    {
+        std::vector<StructExplicit> vec({StructExplicit(4),StructExplicit(3),StructExplicit(2),StructExplicit(1),StructExplicit(0)});
+
+        auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater_equal(&StructExplicit::idNoexceptFunc));
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 3);
     }

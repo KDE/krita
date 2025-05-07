@@ -18,13 +18,6 @@
 #include <kis_assert.h>
 #include <KisMpl.h>
 
-namespace kismpl {
-    template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
-    inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
-        return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
-    }
-}
-
 void KisSqlQueryLoader::init(const QString &fileName, QString entireScript, bool singleStatementMode)
 {
     m_singleStatementMode = singleStatementMode;
@@ -50,7 +43,7 @@ void KisSqlQueryLoader::init(const QString &fileName, QString entireScript, bool
 
     // remove empty statements
     m_statements.erase(std::remove_if(m_statements.begin(), m_statements.end(),
-                                        kismpl::mem_equal_to(&QString::isEmpty, true)),
+                                      kismpl::mem_equal_to(&QString::isEmpty, true)),
                         m_statements.end());
 
     if (m_singleStatementMode) {

@@ -234,8 +234,27 @@ inline auto mem_equal_to(MemTypeNoRef Class::*ptr, MemType &&value) {
     return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
+// non-const member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)(), MemType &&value) {
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const member function
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() noexcept, MemType &&value) {
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
     return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
@@ -251,8 +270,27 @@ inline auto mem_less(MemTypeNoRef Class::*ptr, MemType &&value) {
     return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
+// non-const member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less(MemTypeNoRef (Class::*ptr)(), MemType &&value) {
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const member function
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_less(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less(MemTypeNoRef (Class::*ptr)() noexcept, MemType &&value) {
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
     return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
@@ -268,8 +306,27 @@ inline auto mem_less_equal(MemTypeNoRef Class::*ptr, MemType &&value) {
     return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
+// non-const member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)(), MemType &&value) {
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const member function
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)() noexcept, MemType &&value) {
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
     return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
@@ -285,8 +342,27 @@ inline auto mem_greater(MemTypeNoRef Class::*ptr, MemType &&value) {
     return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
+// non-const member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater(MemTypeNoRef (Class::*ptr)(), MemType &&value) {
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const member function
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_greater(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater(MemTypeNoRef (Class::*ptr)() noexcept, MemType &&value) {
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
     return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
@@ -303,8 +379,27 @@ inline auto mem_greater_equal(MemTypeNoRef Class::*ptr, MemType &&value) {
     return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
+// non-const member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)(), MemType &&value) {
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const member function
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() noexcept, MemType &&value) {
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
     return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
@@ -354,8 +449,27 @@ inline auto mem_less(MemType Class::*ptr) {
     return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
+// non-const member function
+template<typename Class, typename MemType>
+inline auto mem_less(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const member function
 template<typename Class, typename MemType>
 inline auto mem_less(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_less(MemType (Class::*ptr)() noexcept) {
+    return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_less(MemType (Class::*ptr)() const noexcept) {
     return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
@@ -370,8 +484,27 @@ inline auto mem_less_equal(MemType Class::*ptr) {
     return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
+// non-const member function
+template<typename Class, typename MemType>
+inline auto mem_less_equal(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const member function
 template<typename Class, typename MemType>
 inline auto mem_less_equal(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_less_equal(MemType (Class::*ptr)() noexcept) {
+    return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_less_equal(MemType (Class::*ptr)() const noexcept) {
     return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
@@ -387,8 +520,27 @@ inline auto mem_greater(MemType Class::*ptr) {
     return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
+// non-const member function
+template<typename Class, typename MemType>
+inline auto mem_greater(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const member function
 template<typename Class, typename MemType>
 inline auto mem_greater(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_greater(MemType (Class::*ptr)() noexcept) {
+    return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_greater(MemType (Class::*ptr)() const noexcept) {
     return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
@@ -404,8 +556,27 @@ inline auto mem_greater_equal(MemType Class::*ptr) {
     return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
+// non-const member function
+template<typename Class, typename MemType>
+inline auto mem_greater_equal(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const member function
 template<typename Class, typename MemType>
 inline auto mem_greater_equal(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// non-const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_greater_equal(MemType (Class::*ptr)() noexcept) {
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+// const noexcept member function
+template<typename Class, typename MemType>
+inline auto mem_greater_equal(MemType (Class::*ptr)() const noexcept) {
     return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 

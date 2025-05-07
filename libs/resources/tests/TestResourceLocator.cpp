@@ -836,8 +836,8 @@ void TestResourceLocator::testOrphanedMetadataRemoval()
 
 void TestResourceLocator::cleanupTestCase()
 {
-    // ResourceTestHelper::rmTestDb();
-    // ResourceTestHelper::cleanDstLocation(m_dstLocation);
+    ResourceTestHelper::rmTestDb();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 SIMPLE_TEST_MAIN(TestResourceLocator)

@@ -333,7 +333,13 @@ void KisMemoryStorage::setMetaData(const QString &key, const QVariant &value)
 
 QStringList KisMemoryStorage::metaDataKeys() const
 {
-    return QStringList() << KisResourceStorage::s_meta_name;
+    QStringList keys = d->metadata.keys();
+
+    if (!keys.contains(KisResourceStorage::s_meta_name)) {
+        keys << KisResourceStorage::s_meta_name;
+    }
+
+    return keys;
 }
 
 QVariant KisMemoryStorage::metaData(const QString &key) const

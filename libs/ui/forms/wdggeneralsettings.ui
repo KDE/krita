@@ -42,9 +42,9 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="Cursor">
       <attribute name="title">
        <string>Cursor</string>
       </attribute>
@@ -319,7 +319,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="Window">
       <attribute name="title">
        <string>Window</string>
       </attribute>
@@ -867,7 +867,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="File">
       <attribute name="title">
        <string>File Handling</string>
       </attribute>
@@ -1059,7 +1059,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_5">
+     <widget class="QWidget" name="Pasting">
       <attribute name="title">
        <string>Pasting</string>
       </attribute>
@@ -1156,8 +1156,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>577</width>
-            <height>554</height>
+            <width>655</width>
+            <height>546</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1547,7 +1547,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="Resources">
       <attribute name="title">
        <string>Resources</string>
       </attribute>
@@ -1620,26 +1620,26 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningBlock</class>
+   <extends>QGroupBox</extends>
+   <header location="global">kis_warning_block.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
    <header>kis_file_name_requester.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisFontComboBoxes</class>
    <extends>QWidget</extends>
    <header location="global">kis_font_family_combo_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisWarningBlock</class>
-   <extends>QGroupBox</extends>
-   <header location="global">kis_warning_block.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

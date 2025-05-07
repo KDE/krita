@@ -1682,9 +1682,9 @@ bool KisResourceCacheDb::deleteStorage(QString location)
 {
     // location is already relative
 
-    // TODO: implement transaction handling
-
     try {
+        KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
+
         {
             KisSqlQueryLoader loader(":/sql/delete_versioned_resources_for_storage_indirect.sql",
                                      KisSqlQueryLoader::prepare_only);
@@ -1772,6 +1772,8 @@ bool KisResourceCacheDb::deleteStorage(QString location)
             loader.exec();
         }
 
+        transactionLock.commit();
+
     } catch (const KisSqlQueryLoader::FileException &e) {
         qWarning().noquote() << "ERROR: deleteStorage:" << e.message;
         qWarning().noquote() << "       file:" << e.filePath;
@@ -1833,8 +1835,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     QElapsedTimer t;
     t.start();
 
-    QSqlDatabase::database().transaction();
-
     if (!s_valid) {
         qWarning() << "KisResourceCacheDb::addResource: The database is not valid";
         return false;
@@ -1864,10 +1864,13 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             qWarning() << "Could not add new storage" << storage->name() << "to the database";
             success = false;
         }
-        return true;
+        return success;
     }
 
     storage->setStorageId(q.value("id").toInt());
+
+    /// Start the transaction that will add all the resources
+    QSqlDatabase::database().transaction();
 
     /// We compare resource versions one-by-one because the storage may have multiple
     /// versions of them
@@ -2312,6 +2315,7 @@ bool KisResourceCacheDb::updateMetaDataForId(const QMap<QString, QVariant> map, 
         if (!q.prepare("DELETE FROM metadata\n"
                        "WHERE  foreign_id = :id\n"
                        "AND    table_name = :table\n")) {
+            QSqlDatabase::database().rollback();
             qWarning() << "Could not prepare delete metadata query" << q.lastError();
             return false;
         }

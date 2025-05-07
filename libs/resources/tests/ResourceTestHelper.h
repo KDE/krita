@@ -251,7 +251,7 @@ bool recreateDatabaseForATest(KisResourceLocator *locator, const QString &srcLoc
         KisSqlQueryLoader loader("inline://list_all_db_tables",
                                  "SELECT name FROM sqlite_master WHERE sql IS NOT NULL and name != \"sqlite_sequence\" "
                                  "and type = :db_resource_type",
-                                 KisSqlQueryLoader::prepare_only);
+                                 KisSqlQueryLoader::single_statement_mode);
         loader.query().bindValue(":db_resource_type", dbResourceType);
         loader.exec();
 

@@ -1693,14 +1693,14 @@ bool KisResourceCacheDb::deleteStorage(QString location)
 
         {
             KisSqlQueryLoader loader(":/sql/delete_versioned_resources_for_storage_indirect.sql",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
         }
 
         {
             KisSqlQueryLoader loader(":/sql/delete_versioned_resources_for_storage_direct.sql",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
             if (loader.query().numRowsAffected() > 0) {
@@ -1712,7 +1712,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
 
         {
             KisSqlQueryLoader loader(":/sql/delete_resource_metadata_for_storage.sql",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.query().bindValue(":table", METADATA_RESOURCES);
             loader.exec();
@@ -1724,7 +1724,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
                                      "WHERE storage_id = (SELECT storages.id\n"
                                      "                    FROM   storages\n"
                                      "                    WHERE storages.location = :location)\n",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
         }
@@ -1739,7 +1739,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
                                      "                    FROM   storages\n"
                                      "                    WHERE  storages.location = :location)\n"
                                      "            )",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
         }
@@ -1751,7 +1751,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
                                      "      (SELECT storages.id\n"
                                      "       FROM   storages\n"
                                      "       WHERE  storages.location = :location)",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
         }
@@ -1763,7 +1763,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
                                      "                    FROM   storages\n"
                                      "                    WHERE  storages.location = :location)"
                                      "AND table_name = :table;",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.query().bindValue(":table", METADATA_STORAGES);
             loader.exec();
@@ -1773,7 +1773,7 @@ bool KisResourceCacheDb::deleteStorage(QString location)
             KisSqlQueryLoader loader("inline://delete_storage",
                                      "DELETE FROM storages\n"
                                      "WHERE location = :location;",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":location", changeToEmptyIfNull(location));
             loader.exec();
         }
@@ -2130,7 +2130,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
                 "                                          FROM storages\n"
                 "                                          WHERE  storage_type_id == :storage_type))\n"
                 "AND   table_name = :table",
-                KisSqlQueryLoader::prepare_only);
+                KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":table", METADATA_RESOURCES);
             loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
             loader.exec();
@@ -2143,7 +2143,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
                                      "                     FROM   resources\n"
                                      "                     WHERE temporary = 1)\n"
                                      "AND   table_name = :table",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":table", METADATA_RESOURCES);
             loader.exec();
         }
@@ -2154,7 +2154,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
                                      "WHERE  storage_id in (SELECT id\n"
                                      "                      FROM   storages\n"
                                      "                      WHERE  storage_type_id == :storage_type)",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
             loader.exec();
         }
@@ -2164,7 +2164,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
                                      "DELETE FROM versioned_resources\n"
                                      "WHERE resource_id IN (SELECT id FROM resources\n"
                                      "                      WHERE  temporary = 1)",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.exec();
         }
 
@@ -2174,7 +2174,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
                                      "WHERE  storage_id in (SELECT id\n"
                                      "                      FROM   storages\n"
                                      "                      WHERE  storage_type_id  == :storage_type)",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
             loader.exec();
         }
@@ -2183,7 +2183,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
             KisSqlQueryLoader loader("inline://delete_current_temporary_resources",
                                      "DELETE FROM resources\n"
                                      "WHERE  temporary = 1",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.exec();
         }
 
@@ -2198,7 +2198,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
                                      "                     FROM   storages\n"
                                      "                     WHERE  storage_type_id  == :storage_type)\n"
                                      "AND   table_name = :table;",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
             loader.query().bindValue(":table", METADATA_STORAGES);
             loader.exec();
@@ -2208,7 +2208,7 @@ void KisResourceCacheDb::deleteTemporaryResources()
             KisSqlQueryLoader loader("inline://delete_temporary_storages",
                                      "DELETE FROM storages\n"
                                      "WHERE  storage_type_id  == :storage_type\n",
-                                     KisSqlQueryLoader::prepare_only);
+                                     KisSqlQueryLoader::single_statement_mode);
             loader.query().bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
             loader.exec();
         }

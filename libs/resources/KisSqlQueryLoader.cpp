@@ -75,7 +75,7 @@ KisSqlQueryLoader::KisSqlQueryLoader(const QString &fileName)
     }
 }
 
-KisSqlQueryLoader::KisSqlQueryLoader(const QString &fileName, prepare_only_t)
+KisSqlQueryLoader::KisSqlQueryLoader(const QString &fileName, single_statement_mode_t)
 {
     QFile file(fileName);
     if (file.open(QFile::ReadOnly)) {
@@ -90,7 +90,7 @@ KisSqlQueryLoader::KisSqlQueryLoader(const QString &scriptName, const QString &s
     init(scriptName, script, false);
 }
 
-KisSqlQueryLoader::KisSqlQueryLoader(const QString &scriptName, const QString &script, prepare_only_t)
+KisSqlQueryLoader::KisSqlQueryLoader(const QString &scriptName, const QString &script, single_statement_mode_t)
 {
     init(scriptName, script, true);
 }

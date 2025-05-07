@@ -163,7 +163,7 @@ int countMetaDataForResourceImpl(int resourceId, const QString &tableName)
         KisSqlQueryLoader loader("inline://count_metadata_for_resource",
                                  QString("SELECT COUNT(*) FROM metadata\n"
                                  "WHERE foreign_id = :resource_id AND table_name = \"%1\"").arg(tableName),
-                                 KisSqlQueryLoader::prepare_only);
+                                 KisSqlQueryLoader::single_statement_mode);
         loader.query().bindValue(":resource_id", resourceId);
         loader.exec();
 
@@ -194,7 +194,7 @@ int countCurrentResourcesForResourceId(int resourceId)
     try {
         KisSqlQueryLoader loader("inline://count_current_resource_for_resource_id",
                                  "SELECT COUNT(*) FROM resources WHERE id = :resource_id",
-                                 KisSqlQueryLoader::prepare_only);
+                                 KisSqlQueryLoader::single_statement_mode);
         loader.query().bindValue(":resource_id", resourceId);
         loader.exec();
 
@@ -215,7 +215,7 @@ int countVersionedResourcesForResourceId(int resourceId)
     try {
         KisSqlQueryLoader loader("inline://count_current_resource_for_resource_id",
                                  "SELECT COUNT(*) FROM versioned_resources WHERE resource_id = :resource_id",
-                                 KisSqlQueryLoader::prepare_only);
+                                 KisSqlQueryLoader::single_statement_mode);
         loader.query().bindValue(":resource_id", resourceId);
         loader.exec();
 
@@ -236,7 +236,7 @@ int countStorageRecordsForStorageId(int storageId)
     try {
         KisSqlQueryLoader loader("inline://count_storage_records_for_storage_id",
                                  "SELECT COUNT(*) FROM storages WHERE id = :storage_id",
-                                 KisSqlQueryLoader::prepare_only);
+                                 KisSqlQueryLoader::single_statement_mode);
         loader.query().bindValue(":storage_id", storageId);
         loader.exec();
 

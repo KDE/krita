@@ -105,8 +105,8 @@
 class KRITARESOURCES_EXPORT KisSqlQueryLoader
 {
 public:
-    struct prepare_only_t {};
-    static constexpr prepare_only_t prepare_only{};
+    struct single_statement_mode_t {};
+    static constexpr single_statement_mode_t single_statement_mode{};
 
     struct FileException : std::exception
     {
@@ -158,7 +158,7 @@ public:
      * mode the loader immediately prepares the query, which means you can bind any
      * values to the query before calling exec().
      */
-    KisSqlQueryLoader(const QString &fileName, prepare_only_t);
+    KisSqlQueryLoader(const QString &fileName, single_statement_mode_t);
 
     /**
      * Load the script from an explicit string \p script. \p scriptName is
@@ -180,7 +180,7 @@ public:
      * This form of the constructor loads the script in a single-statement mode,
      * which prepares the query immediately and allows value binding.
      */
-    KisSqlQueryLoader(const QString &scriptName, const QString &script, prepare_only_t);
+    KisSqlQueryLoader(const QString &scriptName, const QString &script, single_statement_mode_t);
 
     ~KisSqlQueryLoader();
 

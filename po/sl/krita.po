@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2025-04-23 06:48+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20777,6 +20777,11 @@ msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Spremeni klonirane plasti"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Posodobi nastavitve animacije"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -34068,24 +34073,24 @@ msgstr ""
 "OPOZORILO:\tZmanjkalo je pomnilnika! Izmenjava se je začela.\n"
 "\t\tDodelite več RAM-a Kriti v pogovornem oknu Nastavitve"
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "Skrito"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "Mravlje"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34094,17 +34099,17 @@ msgstr ""
 "Izbor: x = %1 y = %2 širina = %3 višina = %4\n"
 "Način prikaza: %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "Brez izbora"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "Brez profila"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -42085,27 +42090,22 @@ msgstr "Prazna samodejna ključna sličica"
 msgid "AutoKey Duplicate"
 msgstr "Podvoji prazno samodejno ključno sličico"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "Posodobi nastavitve animacije"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Omogočite, da ohranite isto dolžino predvajanja."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Dejanske sl/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Realne sl/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Izpuščene sličice:\t%1%"

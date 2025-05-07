@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -21096,6 +21096,13 @@ msgstr ""
 "Изменение клонирующих слоёв\n"
 "изменение клонирующих слоёв"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+#, fuzzy
+#| msgid "Animation settings menu"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Меню параметров анимации"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -34695,7 +34702,7 @@ msgstr ""
 "Внимание!\tЗакончилась оперативная память. Начато использование подкачки.\n"
 "\t\tПопробуйте выделить для Krita больше памяти в диалоге настройки."
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
@@ -34703,18 +34710,18 @@ msgstr "не показывать"
 
 # http://en.wikipedia.org/wiki/Marching_ants --aspotashev
 # "бегущий пунктирный контур" - http://www.multitran.ru/c/m.exe?CL=1&s=marching+ants&l1=1 --aspotashev
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "бегущий пунктир"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "маска"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34723,17 +34730,17 @@ msgstr ""
 "Выделение: x = %1, y = %2, ширина = %3, высота = %4\n"
 "Режим показа: %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "Ничего не выделено"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "Без профиля"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -42777,29 +42784,22 @@ msgstr "Пустой AutoKey"
 msgid "AutoKey Duplicate"
 msgstr "Дубликат AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "Меню параметров анимации"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Включить для сохранения времени воспроизведения."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Эффективная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реальная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Кадров пропущено:\t%1%"

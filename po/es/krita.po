@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2025-04-24 16:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -20881,6 +20881,11 @@ msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Cambiar capas de clonación"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Actualizar preferencias de animación"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -34224,24 +34229,24 @@ msgstr ""
 "Advertencia:\tSe ha quedado sin memoria. Se ha iniciado el intercambio.\n"
 "\t\tReserve más RAM para Krita en el diálogo de preferencias."
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "Oculto"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "Hormigas"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Máscara"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34250,17 +34255,17 @@ msgstr ""
 "Selección: x = %1 y = %2 anchura = %3 altura = %4\n"
 "Modo de pantalla: %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "Sin selección"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "Sin perfil"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -42283,27 +42288,22 @@ msgstr "Limpiar autoclave"
 msgid "AutoKey Duplicate"
 msgstr "Duplicar autoclave"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "Actualizar preferencias de animación"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Actívelo para preservar la sincronización de la reproducción."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "FPS efectivos:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "FPS reales:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Fotogramas descartados:\t%1 %"

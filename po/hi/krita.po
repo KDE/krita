@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -20950,6 +20950,13 @@ msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr " प्रतीरूप परतें बदलें"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+#, fuzzy
+#| msgid "Animated"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "एनिमेटेड"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
@@ -34031,24 +34038,24 @@ msgstr ""
 "चेतावनी :\tमेमोरी समाप्त हुई हैं! स्वैपिंग शुरू कर दी गई है।\n"
 "\t\tसेटिंग्स डायलॉग में क्रिता के लिए कृपया अधिक रेम निर्धारित करें"
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "छिपा हुआ"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "चींटियाँ"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "मास्क"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34057,17 +34064,17 @@ msgstr ""
 "चयन : x = %1 y = %2 चौड़ाई = %3 ऊंचाई = %4\n"
 "प्रदर्शन मोड : %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "कोई चयन नहीं"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "कोई रंग रेखा नहीं"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -41758,29 +41765,22 @@ msgstr ""
 msgid "AutoKey Duplicate"
 msgstr "अनुकृति"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animated"
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "एनिमेटेड"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""

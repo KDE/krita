@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2025-04-25 09:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -20794,6 +20794,11 @@ msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Klon Katmanları Değiştir"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Canlandırma Ayarlarını Güncelle"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -34069,24 +34074,24 @@ msgstr ""
 "UYARI:\tBellek yetersiz! Takas dosyası kullanılmaya başladı.\n"
 "\t\tLütfen Krita Ayarlar penceresinden daha fazla RAM ayırın"
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "Gizli"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "Karıncalar"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maske"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34095,17 +34100,17 @@ msgstr ""
 "Seçim: x = %1 y = %2 genişlik = %3 yükseklik = %4\n"
 "Görüntüleme Kipi: %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "Seçim Yok"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "Profil yok"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -42052,27 +42057,22 @@ msgstr "Boş Kendiliğinden Anahtar"
 msgid "AutoKey Duplicate"
 msgstr "Kendiliğinden Anahtar Yinelemesi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "Canlandırma Ayarlarını Güncelle"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Oynatma zamanlamasını korumak için etkinleştirin."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Etkili FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Gerçek FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Bırakılan kareler:\t%​%1"

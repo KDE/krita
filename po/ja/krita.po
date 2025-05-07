@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -20867,6 +20867,13 @@ msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "クローンレイヤを変更"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+#, fuzzy
+#| msgid "Animation settings menu"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "アニメーション設定メニュー"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -34153,25 +34160,25 @@ msgstr ""
 "警告:\tメモリ不足です!  スワッピングが発生しています。\n"
 "\t\tKrita の設定ダイアログで使用可能メモリを増やしてください"
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "非表示"
 
 # Marching ants (選択領域の境界に表示される点線) の略です
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "点線"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "マスク"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34180,17 +34187,17 @@ msgstr ""
 "選択範囲: X = %1 Y = %2 幅 = %3 高さ = %4\n"
 "表示モード: %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "選択なし"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "プロファイルなし"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -42127,29 +42134,22 @@ msgstr "自動キー打鍵 空白"
 msgid "AutoKey Duplicate"
 msgstr "自動キー打鍵 複製"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "アニメーション設定メニュー"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "再生タイミングの保持を有効にします。"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "設定フレームレート:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "現実のフレームレート:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "フレーム落ち率:\t%1\\%"

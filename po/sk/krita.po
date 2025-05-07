@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-01 01:56+0000\n"
+"POT-Creation-Date: 2025-05-07 01:56+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -20956,6 +20956,13 @@ msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Zmeniť klonované vrstvy"
 
+#: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
+#, fuzzy
+#| msgid "Animation settings menu"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Ponuka nastavení animácie"
+
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -34421,24 +34428,24 @@ msgstr ""
 "priestoru.\n"
 "\t\tProsím, nakonfigurujte viac RAM pre Krita v dialógu Nastavenia"
 
-#: libs/ui/kis_statusbar.cc:373
+#: libs/ui/kis_statusbar.cc:379
 #: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "Skryté"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid "Ants"
 msgstr "Mravce"
 
-#: libs/ui/kis_statusbar.cc:375
+#: libs/ui/kis_statusbar.cc:381
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34447,17 +34454,17 @@ msgstr ""
 "Výber: x = %1 y = %2 šírka = %3 výška = %4\n"
 "Režim zobrazenia: %5"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:389
 #, kde-format
 msgid "No Selection"
 msgstr "Žiadny výber"
 
-#: libs/ui/kis_statusbar.cc:401
+#: libs/ui/kis_statusbar.cc:407
 #, kde-format
 msgid "No profile"
 msgstr "Nedostupný profil"
 
-#: libs/ui/kis_statusbar.cc:403
+#: libs/ui/kis_statusbar.cc:409
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -42486,29 +42493,22 @@ msgstr "AutoKey prázdne"
 msgid "AutoKey Duplicate"
 msgstr "AutoKey duplikát"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
-msgctxt "(qtundo-format)"
-msgid "Update Animation Settings"
-msgstr "Ponuka nastavení animácie"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Umožňuje zachovať časovanie prehrávania"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Efektívne FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Skutočné FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Snímky vypustené:\t%1%"

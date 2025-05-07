@@ -1609,8 +1609,11 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
             return r;
         }
 
+        const QString sanitizedStorageLocation =
+            changeToEmptyIfNull(KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+
         q.bindValue(":storage_type_id", static_cast<int>(storage->type()));
-        q.bindValue(":location", changeToEmptyIfNull(KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())));
+        q.bindValue(":location", sanitizedStorageLocation);
         q.bindValue(":timestamp", storage->timestamp().toSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);
         q.bindValue(":active", !disabledBundles.contains(storage->name()));
@@ -1625,25 +1628,28 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
         if (!r) qWarning() << "Could not execute query" << q.lastError();
 
+        if (!q.prepare("SELECT id\n"
+                       "FROM   storages\n"
+                       "WHERE  location = :location\n")) {
+            qWarning() << "Could not prepare storage id statement" << q.lastError();
+        }
+
+        q.bindValue(":location", sanitizedStorageLocation);
+        if (!q.exec()) {
+            qWarning() << "Could not execute storage id statement" << q.boundValues() << q.lastError();
+        }
+
+        if (!q.first()) {
+            qWarning() << "Could not find id for the newly added storage" << q.lastError();
+        } else {
+            storage->setStorageId(q.value("id").toInt());
+        }
     }
 
     // Insert the metadata
     {
         QStringList keys = storage->metaDataKeys();
-        if (keys.size() > 0) {
-
-            QSqlQuery q;
-            if (!q.prepare("SELECT MAX(id)\n"
-                           "FROM   storages\n")) {
-                qWarning() << "Could not create select storages query for metadata" << q.lastError();
-            }
-
-            if (!q.exec()) {
-                qWarning() << "Could not execute select storages query for metadata" << q.lastError();
-            }
-
-            q.first();
-            int id = q.value(0).toInt();
+        if (keys.size() > 0 && storage->storageId() >= 0) {
 
             QMap<QString, QVariant> metadata;
 
@@ -1651,7 +1657,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
                 metadata[key] = storage->metaData(key);
             }
 
-            updateMetaDataForId(metadata, id, METADATA_STORAGES);
+            updateMetaDataForId(metadata, storage->storageId(), METADATA_STORAGES);
         }
     }
 

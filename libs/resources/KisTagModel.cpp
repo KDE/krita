@@ -515,6 +515,11 @@ bool KisAllTagsModel::resetQuery()
     return r;
 }
 
+void KisAllTagsModel::closeQuery()
+{
+    d->query.clear();
+}
+
 void KisAllTagsModel::addStorage(const QString &location)
 {
     Q_UNUSED(location)

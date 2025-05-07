@@ -71,6 +71,7 @@ QString kisBacktrace()
 }
 
 Q_LOGGING_CATEGORY(_30009, "krita.lib.resources", QtInfoMsg)
+Q_LOGGING_CATEGORY(_30010, "krita.db.migration", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41000, "krita.general", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41001, "krita.core", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41002, "krita.registry", QtInfoMsg)

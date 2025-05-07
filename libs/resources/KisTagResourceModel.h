@@ -89,6 +89,7 @@ private:
 
     QString createQuery(bool onlyAchieve = true, bool returnADbIndexToo = false);
     bool resetQuery();
+    void closeQuery();
 
 
     struct Private;

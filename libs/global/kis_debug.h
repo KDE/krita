@@ -19,6 +19,7 @@
  */
 
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_30009();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_30010();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41000();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41001();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41002();
@@ -40,6 +41,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 
 #define dbgResources qCDebug(_30009)
+#define dbgDbMigration qCDebug(_30010)
 #define dbgKrita qCDebug(_41000)
 #define dbgImage qCDebug(_41001)
 #define dbgRegistry qCDebug(_41002)
@@ -61,6 +63,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 #define dbgLocale qCDebug(_41018)
 
 #define infoResources qCInfo(_30009)
+#define infoDbMigration qCInfo(_30010)
 #define infoKrita qCInfo(_41000)
 #define infoImage qCInfo(_41001)
 #define infoRegistry qCInfo(_41002)
@@ -80,6 +83,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 #define infoMetaData qCDebug(_41016)
 
 #define warnResources qCWarning(_30009)
+#define warnDbMigration qCWarning(_30010)
 #define warnKrita qCWarning(_41000)
 #define warnImage qCWarning(_41001)
 #define warnRegistry qCWarning(_41002)
@@ -99,6 +103,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 #define warnMetaData qCDebug(_41016)
 
 #define errResources qCCritical(_30009)
+#define errDbMigration qCCritical(_30010)
 #define errKrita qCCritical(_41000)
 #define errImage qCCritical(_41001)
 #define errRegistry qCCritical(_41002)

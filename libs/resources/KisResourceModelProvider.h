@@ -31,6 +31,7 @@ public:
     static KisAllTagResourceModel *tagResourceModel(const QString& resourceType);
 
     static void testingResetAllModels();
+    static void testingCloseAllQueries();
     static KisResourceMetaDataModel *resourceMetadataModel();
 private:
 

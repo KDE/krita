@@ -351,7 +351,9 @@ public:
 
 private:
 
+    bool prepareQuery();
     bool resetQuery();
+    void closeQuery();
 
     struct Private;
     Private *const d;

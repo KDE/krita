@@ -17,15 +17,15 @@ class TestResourceLocator : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+    void init();
     void testLocatorInitialization();
-    void testStorageInitialization();
-    void testLocatorSynchronization();
 
     void testResourceLocationBase();
     void testResource();
     void testResourceForId();
     void testDocumentStorage();
     void testLoadResourceMetadataFromStorage();
+    void testLoadResourceMetadataFromStorage_data();
 
     void cleanupTestCase();
 

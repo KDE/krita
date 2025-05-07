@@ -29,6 +29,7 @@
 #include <KisUsageLogger.h>
 
 #include <KisSqlQueryLoader.h>
+#include <KisDatabaseTransactionLock.h>
 #include "KisResourceLocator.h"
 #include "KisResourceLoaderRegistry.h"
 
@@ -75,17 +76,18 @@ bool updateSchemaVersion()
         QString sql = f.readAll();
         QSqlQuery q;
         if (!q.prepare(sql)) {
-            qWarning() << "Could not prepare the schema information query" << q.lastError() << q.boundValues();
+            warnDbMigration << "Could not prepare the schema information query" << q.lastError() << q.boundValues();
             return false;
         }
         q.addBindValue(KisResourceCacheDb::databaseVersion);
         q.addBindValue(KritaVersionWrapper::versionString());
         q.addBindValue(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
         if (!q.exec()) {
-            qWarning() << "Could not insert the current version" << q.lastError() << q.boundValues();
+            warnDbMigration << "Could not insert the current version" << q.lastError() << q.boundValues();
             return false;
         }
-        infoResources << "Filled version table";
+
+        infoDbMigration << "Filled version table";
     }
     return true;
 }
@@ -98,24 +100,24 @@ QSqlError runUpdateScriptFile(const QString &path, const QString &message)
         loader.exec();
 
     } catch (const KisSqlQueryLoader::FileException &e) {
-        qWarning().noquote() << "ERROR: Could not execute DB update step:" << message;
-        qWarning().noquote() << "       error" << e.message;
-        qWarning().noquote() << "       file:" << e.filePath;
-        qWarning().noquote() << "       file-error:" << e.fileErrorString;
+        warnDbMigration.noquote() << "ERROR: Could not execute DB update step:" << message;
+        warnDbMigration.noquote() << "       error" << e.message;
+        warnDbMigration.noquote() << "       file:" << e.filePath;
+        warnDbMigration.noquote() << "       file-error:" << e.fileErrorString;
         return
             QSqlError("Error executing SQL",
                 QString("Could not find SQL file %1").arg(e.filePath),
                 QSqlError::StatementError);
     } catch (const KisSqlQueryLoader::SQLException &e) {
-        qWarning().noquote() << "ERROR: Could not execute DB update step:" << message;
-        qWarning().noquote() << "       error" << e.message;
-        qWarning().noquote() << "       file:" << e.filePath;
-        qWarning().noquote() << "       statement:" << e.statementIndex;
-        qWarning().noquote() << "       sql-error:" << e.sqlError.text();
+        warnDbMigration.noquote() << "ERROR: Could not execute DB update step:" << message;
+        warnDbMigration.noquote() << "       error" << e.message;
+        warnDbMigration.noquote() << "       file:" << e.filePath;
+        warnDbMigration.noquote() << "       statement:" << e.statementIndex;
+        warnDbMigration.noquote() << "       sql-error:" << e.sqlError.text();
         return e.sqlError;
     }
 
-    infoResources << "Completed DB update step:" << message;
+    infoDbMigration << "Completed DB update step:" << message;
     return QSqlError();
 }
 
@@ -127,13 +129,13 @@ QSqlError runUpdateScript(const QString &script, const QString &message)
         loader.exec();
 
     } catch (const KisSqlQueryLoader::SQLException &e) {
-        qWarning().noquote() << "ERROR: Could execute DB update step:" << message;
-        qWarning().noquote() << "       error" << e.message;
-        qWarning().noquote() << "       sql-error:" << e.sqlError.text();
+        warnDbMigration.noquote() << "ERROR: Could execute DB update step:" << message;
+        warnDbMigration.noquote() << "       error" << e.message;
+        warnDbMigration.noquote() << "       sql-error:" << e.sqlError.text();
         return e.sqlError;
     }
 
-    infoResources << "Completed DB update step:" << message;
+    infoDbMigration << "Completed DB update step:" << message;
     return QSqlError();
 }
 
@@ -142,29 +144,44 @@ QSqlError createDatabase(const QString &location)
     // NOTE: if the id's of Unknown and Memory in the database
     //       will change, and that will break the queries that
     //       remove Unknown and Memory storages on start-up.
-    KisResourceCacheDb::storageTypes << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(1))
-                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(2))
-                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(3))
-                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(4))
-                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(5))
-                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(6))
-                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(7));
-
-    if (!QSqlDatabase::connectionNames().isEmpty()) {
-        return QSqlError();
-    }
+    KisResourceCacheDb::storageTypes = QStringList {
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(1)),
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(2)),
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(3)),
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(4)),
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(5)),
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(6)),
+        KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(7))};
 
     QDir dbLocation(location);
     if (!dbLocation.exists()) {
         dbLocation.mkpath(dbLocation.path());
     }
 
-    QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
-    db.setDatabaseName(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
+    std::optional<QSqlDatabase> existingDatabase =
+        QSqlDatabase::database(QSqlDatabase::defaultConnection, false);
 
-    if (!db.open()) {
-        qWarning() << "Could not connect to resource cache database";
-        return db.lastError();
+    const bool databaseConnectionExists = !QSqlDatabase::connectionNames().isEmpty()
+        && existingDatabase->isValid() && existingDatabase->isOpen();
+
+    if (databaseConnectionExists && existingDatabase->tables().contains("version_information")) {
+        return QSqlError();
+    }
+
+    existingDatabase = std::nullopt;
+
+    QSqlDatabase db;
+
+    if (!databaseConnectionExists) {
+        db = QSqlDatabase::addDatabase(dbDriver);
+        db.setDatabaseName(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
+
+        if (!db.open()) {
+            warnDbMigration << "Could not connect to resource cache database";
+            return db.lastError();
+        }
+    } else {
+        db = QSqlDatabase::database();
     }
 
     // will be filled correctly later
@@ -215,7 +232,7 @@ QSqlError createDatabase(const QString &location)
                     "LIMIT 1;\n");
 
                 if (!q.exec()) {
-                    qWarning() << "Could not retrieve version information from the database." << q.lastError();
+                    warnDbMigration << "Could not retrieve version information from the database." << q.lastError();
                     abort();
                 }
                 q.first();
@@ -229,7 +246,7 @@ QSqlError createDatabase(const QString &location)
 
             if (QVersionNumber::compare(oldSchemaVersionNumber, newSchemaVersionNumber) != 0) {
 
-                qWarning() << "Old schema:" << schemaVersion << "New schema:" << newSchemaVersionNumber;
+                infoDbMigration << "Old schema:" << schemaVersion << "New schema:" << newSchemaVersionNumber;
 
                 schemaIsOutDated = true;
                 KisBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
@@ -252,6 +269,8 @@ QSqlError createDatabase(const QString &location)
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.16")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.17");
 
+                    KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
+
                     bool success = true;
                     if (from14to15) {
                         QSqlError error = runUpdateScript(
@@ -263,7 +282,7 @@ QSqlError createDatabase(const QString &location)
                         }
                     }
                     if (success && from15to16) {
-                        qWarning() << "Going to update indices";
+                        infoDbMigration << "Going to update indices";
 
                         QStringList indexes = QStringList() << "tags" << "resources" << "tag_translations" << "resource_tags";
 
@@ -313,6 +332,8 @@ QSqlError createDatabase(const QString &location)
                             success = false;
                         }
 
+                        transactionLock.commit();
+
                         if (success) {
                             QSqlError error = runUpdateScript("VACUUM",
                                                               "Vacuum database after updating schema");
@@ -320,6 +341,8 @@ QSqlError createDatabase(const QString &location)
                                 success = false;
                             }
                         }
+                    } else {
+                        transactionLock.rollback();
                     }
 
                     schemaIsOutDated = !success;
@@ -351,6 +374,8 @@ QSqlError createDatabase(const QString &location)
     KisUsageLogger::log(QString("Creating database from scratch (%1, %2).")
                         .arg(oldSchemaVersionNumber.toString().isEmpty() ? QString("database didn't exist") : ("old schema version: " + oldSchemaVersionNumber.toString()))
                         .arg("new schema version: " + newSchemaVersionNumber.toString()));
+
+    KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
 
     // Create tables
     Q_FOREACH(const QString &table, tables) {
@@ -401,11 +426,11 @@ QSqlError createDatabase(const QString &location)
                 QSqlQuery q(sql);
                 q.addBindValue(originType);
                 if (!q.exec()) {
-                    qWarning() << "Could execute DB update step:" << updateStep << q.lastError();
-                    qWarning() << "    faulty statement:" << sql;
+                    warnDbMigration << "Could execute DB update step:" << updateStep << q.lastError();
+                    warnDbMigration << "    faulty statement:" << sql;
                     return db.lastError();
                 }
-                infoResources << "Completed DB update step:" << updateStep;
+                infoDbMigration << "Completed DB update step:" << updateStep;
             }
         }
         else {
@@ -422,11 +447,11 @@ QSqlError createDatabase(const QString &location)
                 QSqlQuery q(sql);
                 q.addBindValue(resourceType);
                 if (!q.exec()) {
-                    qWarning() << "Could execute DB update step:" << updateStep << q.lastError();
-                    qWarning() << "    faulty statement:" << sql;
+                    warnDbMigration << "Could execute DB update step:" << updateStep << q.lastError();
+                    warnDbMigration << "    faulty statement:" << sql;
                     return db.lastError();
                 }
-                infoResources << "Completed DB update step:" << updateStep;
+                infoDbMigration << "Completed DB update step:" << updateStep;
             }
         }
         else {
@@ -437,6 +462,8 @@ QSqlError createDatabase(const QString &location)
     if (!updateSchemaVersion()) {
        return QSqlError("Error executing SQL", QString("Could not update schema version."), QSqlError::StatementError);
     }
+
+    transactionLock.commit();
 
     return QSqlError();
 }

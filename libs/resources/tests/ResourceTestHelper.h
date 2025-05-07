@@ -14,12 +14,16 @@
 #include <KisMimeDatabase.h>
 #include <KisResourceLoaderRegistry.h>
 
+#include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>
 #include "KisResourceTypes.h"
 #include <DummyResource.h>
 #include <KisStoragePlugin.h>
 #include <simpletest.h>
 #include "kis_debug.h"
+#include <KisSqlQueryLoader.h>
+#include <KisDatabaseTransactionLock.h>
+#include <KisResourceModelProvider.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -240,6 +244,88 @@ void testVersionedStorageIterator(KisStoragePlugin &storage, const QString &reso
     QCOMPARE(count, 1);
     QCOMPARE(numVersions, 4);
 };
+
+bool recreateDatabaseForATest(KisResourceLocator *locator, const QString &srcLocation, const QString &dstLocation)
+{
+    auto listDbResources = [](const QString &dbResourceType) {
+        KisSqlQueryLoader loader("inline://list_all_db_tables",
+                                 "SELECT name FROM sqlite_master WHERE sql IS NOT NULL and name != \"sqlite_sequence\" "
+                                 "and type = :db_resource_type",
+                                 KisSqlQueryLoader::prepare_only);
+        loader.query().bindValue(":db_resource_type", dbResourceType);
+        loader.exec();
+
+        QVector<QString> dbResources;
+        while (loader.query().next()) {
+            dbResources.append(loader.query().value(0).toString());
+        }
+        return dbResources;
+    };
+
+    auto dropDbResource = [](const QString &dbResourceType, const QString &dbResourceName) {
+        KisSqlQueryLoader loader("inline://drop_db_resource_" + dbResourceType,
+                                 QString("DROP %1 %2").arg(dbResourceType.toUpper(), dbResourceName));
+        loader.exec();
+
+        QVector<QString> dbResources;
+        while (loader.query().next()) {
+            dbResources.append(loader.query().value(0).toString());
+        }
+        return dbResources;
+    };
+
+    auto enableForeignKeys = [](bool isEnabled) {
+        KisSqlQueryLoader loader("inline://enable_foreign_keys",
+                                 QString("PRAGMA foreign_keys = %1").arg(isEnabled ? "on" : "off"));
+        loader.exec();
+    };
+
+    if (QSqlDatabase::database(QSqlDatabase::defaultConnection, false).isOpen()) {
+        try {
+            KisResourceModelProvider::testingCloseAllQueries();
+
+            KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
+
+            enableForeignKeys(false);
+
+            Q_FOREACH (const QString &dbResourceType, QStringList({"table", "index", "trigger", "view"})) {
+                auto resources = listDbResources(dbResourceType);
+                Q_FOREACH (const auto &resource, resources) {
+                    // qDebug() << "dropping" << ppVar(dbResourceType) << ppVar(resource);
+                    dropDbResource(dbResourceType, resource);
+                }
+            }
+            enableForeignKeys(true);
+
+            // defuse the lock and save the results
+            transactionLock.commit();
+
+        } catch (const KisSqlQueryLoader::SQLException &e) {
+            qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+            qWarning().noquote() << "       file:" << e.filePath;
+            qWarning().noquote() << "       statement:" << e.statementIndex;
+            qWarning().noquote() << "       error:" << e.sqlError.text();
+
+            return false;
+        }
+    }
+
+    ResourceTestHelper::cleanDstLocation(dstLocation);
+
+    // Reinitialize the database from scratch
+    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+
+    KisResourceLocator::LocatorError r = locator->initialize(srcLocation);
+
+    if (!locator->errorMessages().isEmpty()) {
+        qDebug() << locator->errorMessages();
+    }
+    if (r != KisResourceLocator::LocatorError::Ok) {
+        return false;
+    }
+
+    return true;
+}
 
 }
 

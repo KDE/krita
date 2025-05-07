@@ -51,32 +51,7 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
 
     d->resourceType = resourceType;
 
-    bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
-                                       ",      resources.storage_id\n"
-                                       ",      resources.name\n"
-                                       ",      resources.filename\n"
-                                       ",      resources.tooltip\n"
-                                       ",      resources.status\n"
-                                       ",      resources.md5sum\n"
-                                       ",      storages.location\n"
-                                       ",      resource_types.name as resource_type\n"
-                                       ",      resources.status as resource_active\n"
-                                       ",      storages.active as storage_active\n"
-                                       "FROM   resources\n"
-                                       ",      resource_types\n"
-                                       ",      storages\n"
-                                       "WHERE  resources.resource_type_id = resource_types.id\n"
-                                       "AND    resources.storage_id = storages.id\n"
-                                       "AND    resource_types.name = :resource_type\n"
-                                       "GROUP BY resources.name\n"
-                                       ",        resources.filename\n"
-                                       ",        resources.md5sum\n"
-                                       "ORDER BY resources.id");
-    if (!r) {
-        qWarning() << "Could not prepare KisAllResourcesModel query" << d->resourcesQuery.lastError();
-    }
-    d->resourcesQuery.bindValue(":resource_type", d->resourceType);
-
+    prepareQuery();
     resetQuery();
 }
 
@@ -573,8 +548,56 @@ bool KisAllResourcesModel::setResourceMetaData(KoResourceSP resource, QMap<QStri
     return KisResourceLocator::instance()->setMetaDataForResource(resource->resourceId(), metadata);
 }
 
+bool KisAllResourcesModel::prepareQuery()
+{
+    bool r = d->resourcesQuery.prepare(
+        "SELECT resources.id\n"
+        ",      resources.storage_id\n"
+        ",      resources.name\n"
+        ",      resources.filename\n"
+        ",      resources.tooltip\n"
+        ",      resources.status\n"
+        ",      resources.md5sum\n"
+        ",      storages.location\n"
+        ",      resource_types.name as resource_type\n"
+        ",      resources.status as resource_active\n"
+        ",      storages.active as storage_active\n"
+        "FROM   resources\n"
+        ",      resource_types\n"
+        ",      storages\n"
+        "WHERE  resources.resource_type_id = resource_types.id\n"
+        "AND    resources.storage_id = storages.id\n"
+        "AND    resource_types.name = :resource_type\n"
+        "GROUP BY resources.name\n"
+        ",        resources.filename\n"
+        ",        resources.md5sum\n"
+        "ORDER BY resources.id");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisAllResourcesModel query" << d->resourcesQuery.lastError();
+        return false;
+    }
+
+    d->resourcesQuery.bindValue(":resource_type", d->resourceType);
+    return true;
+}
+
+void KisAllResourcesModel::closeQuery()
+{
+    d->resourcesQuery.clear();
+}
+
 bool KisAllResourcesModel::resetQuery()
 {
+    /**
+     * In case the query has been previously closed, try to restart it
+     * (used in unittests mostly)
+     */
+    if (!d->resourcesQuery.isValid()) {
+        d->resourcesQuery.clear();
+        prepareQuery();
+    }
+
     bool r = d->resourcesQuery.exec();
     if (!r) {
         qWarning() << "Could not select" << d->resourceType << "resources" << d->resourcesQuery.lastError() << d->resourcesQuery.boundValues();

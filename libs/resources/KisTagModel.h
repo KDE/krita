@@ -111,6 +111,7 @@ private:
     void untagAllResources(KisTagSP tag);
 
     bool resetQuery();
+    void closeQuery();
 
     struct Private;
     Private* const d;

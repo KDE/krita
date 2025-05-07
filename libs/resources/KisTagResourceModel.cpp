@@ -688,6 +688,11 @@ QVariant KisAllTagResourceModel::headerData(int section, Qt::Orientation orienta
     return {};
 }
 
+void KisAllTagResourceModel::closeQuery()
+{
+    d->query.clear();
+}
+
 bool KisAllTagResourceModel::resetQuery()
 {
     bool r = d->query.prepare(createQuery(true));

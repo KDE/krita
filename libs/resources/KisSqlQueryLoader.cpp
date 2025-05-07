@@ -29,7 +29,7 @@ void KisSqlQueryLoader::init(const QString &fileName, QString entireScript, bool
 {
     m_singleStatementMode = singleStatementMode;
     m_fileName = fileName;
-    
+
     QTextStream stream(&entireScript);
 
     // remove comments by splitting into lines

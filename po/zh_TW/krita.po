@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-24 03:22+0000\n"
+"POT-Creation-Date: 2025-05-07 03:22+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -29656,24 +29656,24 @@ msgstr ""
 "警告：\t記憶體不足！已啟用記憶體置換。\n"
 "\t\t請在設定對話框中為 Krita 分配更多記憶體"
 
-#: libs/ui/kis_statusbar.cc:376
+#: libs/ui/kis_statusbar.cc:382
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "已隱藏"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid "Ants"
 msgstr "螞蟻線"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "遮罩"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:387
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -29682,17 +29682,17 @@ msgstr ""
 "選取區域：x = %1 y = %2 寬 = %3 高 = %4\n"
 "選取區域顯示模式：%5"
 
-#: libs/ui/kis_statusbar.cc:386
+#: libs/ui/kis_statusbar.cc:392
 #, kde-format
 msgid "No Selection"
 msgstr "無選取區域"
 
-#: libs/ui/kis_statusbar.cc:404
+#: libs/ui/kis_statusbar.cc:410
 #, kde-format
 msgid "No profile"
 msgstr "無色彩特性檔案"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:412
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"

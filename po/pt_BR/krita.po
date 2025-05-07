@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-24 03:22+0000\n"
+"POT-Creation-Date: 2025-05-07 03:22+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -30084,24 +30084,24 @@ msgstr ""
 "ATENÇÃO:\tMemória insuficiente! Foi ativada a paginação da memória virtual.\n"
 "\t\tConfigure mais memória RAM para o Krita na janela de Configurações"
 
-#: libs/ui/kis_statusbar.cc:376
+#: libs/ui/kis_statusbar.cc:382
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Oculto"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid "Ants"
 msgstr "Formigas"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Máscara"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:387
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -30110,17 +30110,17 @@ msgstr ""
 "Seleção: x = %1 y = %2 largura = %3 altura = %4\n"
 "Modo de apresentação: %5"
 
-#: libs/ui/kis_statusbar.cc:386
+#: libs/ui/kis_statusbar.cc:392
 #, kde-format
 msgid "No Selection"
 msgstr "Nenhuma seleção"
 
-#: libs/ui/kis_statusbar.cc:404
+#: libs/ui/kis_statusbar.cc:410
 #, kde-format
 msgid "No profile"
 msgstr "Sem perfil"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:412
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-24 03:22+0000\n"
+"POT-Creation-Date: 2025-05-07 03:22+0000\n"
 "PO-Revision-Date: 2025-03-12 10:01+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -29877,24 +29877,24 @@ msgstr ""
 "OPOZORILO:\tZmanjkalo je pomnilnika! Izmenjava se je začela.\n"
 "\t\tDodelite več RAM-a Kriti v pogovornem oknu Nastavitve"
 
-#: libs/ui/kis_statusbar.cc:376
+#: libs/ui/kis_statusbar.cc:382
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Skrito"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid "Ants"
 msgstr "Mravlje"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:387
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -29903,17 +29903,17 @@ msgstr ""
 "Izbor: x = %1 y = %2 širina = %3 višina = %4\n"
 "Način prikaza: %5"
 
-#: libs/ui/kis_statusbar.cc:386
+#: libs/ui/kis_statusbar.cc:392
 #, kde-format
 msgid "No Selection"
 msgstr "Brez izbora"
 
-#: libs/ui/kis_statusbar.cc:404
+#: libs/ui/kis_statusbar.cc:410
 #, kde-format
 msgid "No profile"
 msgstr "Brez profila"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:412
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"

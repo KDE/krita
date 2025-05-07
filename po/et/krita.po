@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-24 03:22+0000\n"
+"POT-Creation-Date: 2025-05-07 03:22+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -31442,24 +31442,24 @@ msgstr ""
 "HOIATUS:\tMälu napib! Alustati saalimist.\n"
 "\t\tPalun määra Kritale rohkem mälu (RAM) seadistustedialoogis"
 
-#: libs/ui/kis_statusbar.cc:376
+#: libs/ui/kis_statusbar.cc:382
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Peidetud"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid "Ants"
 msgstr "Sipelgad"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Mask"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:387
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -31468,17 +31468,17 @@ msgstr ""
 "Valik: x = %1 y = %2 laius = %3 kõrgus = %4\n"
 "Kuvarežiim: %5"
 
-#: libs/ui/kis_statusbar.cc:386
+#: libs/ui/kis_statusbar.cc:392
 #, kde-format
 msgid "No Selection"
 msgstr "Valik puudub"
 
-#: libs/ui/kis_statusbar.cc:404
+#: libs/ui/kis_statusbar.cc:410
 #, kde-format
 msgid "No profile"
 msgstr "Profiil puudub"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:412
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"

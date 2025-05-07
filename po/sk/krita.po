@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-24 03:22+0000\n"
+"POT-Creation-Date: 2025-05-07 03:22+0000\n"
 "PO-Revision-Date: 2022-07-27 20:32+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -30518,24 +30518,24 @@ msgstr ""
 "priestoru.\n"
 "\t\tProsím, nakonfigurujte viac RAM pre Krita v dialógu Nastavenia"
 
-#: libs/ui/kis_statusbar.cc:376
+#: libs/ui/kis_statusbar.cc:382
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Skryté"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #, kde-format
 msgid "Ants"
 msgstr "Mravce"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:384
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:387
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -30544,17 +30544,17 @@ msgstr ""
 "Výber: x = %1 y = %2 šírka = %3 výška = %4\n"
 "Režim zobrazenia: %5"
 
-#: libs/ui/kis_statusbar.cc:386
+#: libs/ui/kis_statusbar.cc:392
 #, kde-format
 msgid "No Selection"
 msgstr "Žiadny výber"
 
-#: libs/ui/kis_statusbar.cc:404
+#: libs/ui/kis_statusbar.cc:410
 #, kde-format
 msgid "No profile"
 msgstr "Nedostupný profil"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:412
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"

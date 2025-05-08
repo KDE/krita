@@ -149,7 +149,7 @@ void TestTagResourceModel::testData()
 
     // MetaData -- only in role; there is no column like that, the result in QVariant()
     QMap<QString, QVariant> metadata = tagResourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
-    QCOMPARE(metadata.count(), 0);
+    QCOMPARE(metadata.count(), 1);
 
     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::ResourceActive, true));
     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::StorageActive, true));

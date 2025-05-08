@@ -991,7 +991,7 @@ void KisPopupPalette::slotShowTagsPopup()
     if (!tags.isEmpty()) {
         QMenu menu;
         Q_FOREACH (const QString& tag, tags) {
-            menu.addAction(tag);
+            menu.addAction(tag)->setData(tag);
         }
 
         QAction *action = menu.exec(QCursor::pos());
@@ -999,7 +999,7 @@ void KisPopupPalette::slotShowTagsPopup()
 
             for (int i = 0; i < model.rowCount(); ++i) {
                 QModelIndex idx = model.index(i, 0);
-                if (model.data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
+                if (model.data(idx, Qt::DisplayRole).toString() == action->data()) {
                     m_resourceManager->setCurrentTag(model.tagForIndex(idx));
                     reconfigure();
                     break;

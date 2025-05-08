@@ -55,6 +55,22 @@ public:
     /// perform optimize and vacuum when necessary
     static void performHouseKeepingOnExit();
 
+    /// set the foreign_keys feature state of the database
+    /// (the function **may** throw SQL exceptions,
+    /// call in a try-block only!)
+    static void setForeignKeysStateImpl(bool isEnabled);
+
+    /// get the foreign_keys feature state of the database
+    /// (the function **may** throw SQL exceptions,
+    /// call in a try-block only!)
+    static bool getForeignKeysStateImpl();
+
+    /// Called in the end of the database creation step to enable
+    /// or disable the foreign_keys state depending on the release
+    /// status of Krita. Currently, only developer's builds of Krita
+    /// have foreign_keys constraint enabled.
+    static void synchronizeForeignKeysState();
+
 private:
 
     friend class KisResourceLocator;

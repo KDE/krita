@@ -274,19 +274,14 @@ bool recreateDatabaseForATest(KisResourceLocator *locator, const QString &srcLoc
         return dbResources;
     };
 
-    auto enableForeignKeys = [](bool isEnabled) {
-        KisSqlQueryLoader loader("inline://enable_foreign_keys",
-                                 QString("PRAGMA foreign_keys = %1").arg(isEnabled ? "on" : "off"));
-        loader.exec();
-    };
-
     if (QSqlDatabase::database(QSqlDatabase::defaultConnection, false).isOpen()) {
         try {
             KisResourceModelProvider::testingCloseAllQueries();
 
-            KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
+            // foreign keys should be disabled outside the transaction's scope!
+            KisResourceCacheDb::setForeignKeysStateImpl(false);
 
-            enableForeignKeys(false);
+            KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
 
             Q_FOREACH (const QString &dbResourceType, QStringList({"table", "index", "trigger", "view"})) {
                 auto resources = listDbResources(dbResourceType);
@@ -295,10 +290,11 @@ bool recreateDatabaseForATest(KisResourceLocator *locator, const QString &srcLoc
                     dropDbResource(dbResourceType, resource);
                 }
             }
-            enableForeignKeys(true);
 
             // defuse the lock and save the results
             transactionLock.commit();
+
+            KisResourceCacheDb::setForeignKeysStateImpl(true);
 
         } catch (const KisSqlQueryLoader::SQLException &e) {
             qWarning().noquote() << "ERROR: failed to execute query:" << e.message;

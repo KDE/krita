@@ -47,6 +47,7 @@ void TestResourceLocator::initTestCase()
     // disable database migration debug messages to avoid bloating the output
     const_cast<QLoggingCategory&>(_30010()).setEnabled(QtDebugMsg, false);
     const_cast<QLoggingCategory&>(_30010()).setEnabled(QtInfoMsg, false);
+    qputenv("KRITA_OVERRIDE_USE_FOREIGN_KEYS", "1");
 
     ResourceTestHelper::initTestDb();
 
@@ -67,6 +68,25 @@ void TestResourceLocator::initTestCase()
 void TestResourceLocator::init()
 {
     QVERIFY(ResourceTestHelper::recreateDatabaseForATest(m_locator, m_srcLocation, m_dstLocation));
+}
+
+void TestResourceLocator::testForeignKeysAreEnabled()
+{
+    /// in the TestResourceLocator unittest the foreign keys should be enabled
+    /// explicitly by KRITA_OVERRIDE_USE_FOREIGN_KEYS
+
+    try {
+
+        QCOMPARE(KisResourceCacheDb::getForeignKeysStateImpl(), true);
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+
+        QFAIL("SQL Error");
+    }
 }
 
 void TestResourceLocator::testLocatorInitialization()
@@ -776,6 +796,8 @@ void TestResourceLocator::testOrphanedMetadataRemoval()
     QCOMPARE(countMetaDataForResource(5), 1);
 
     try {
+        KisResourceCacheDb::setForeignKeysStateImpl(false);
+
         KisDatabaseTransactionLock transactionLock(QSqlDatabase::database());
 
         /**
@@ -783,13 +805,13 @@ void TestResourceLocator::testOrphanedMetadataRemoval()
          * records but "forgetting" to remove its metadata.
          */
         KisSqlQueryLoader loader("inline://make_resource_orphaned",
-                                 "PRAGMA foreign_keys=off;"
                                  "DELETE FROM resources WHERE id = 5;"
-                                 "DELETE FROM versioned_resources WHERE resource_id = 5;"
-                                 "PRAGMA foreign_keys=on;");
+                                 "DELETE FROM versioned_resources WHERE resource_id = 5;");
         loader.exec();
 
         transactionLock.commit();
+
+        KisResourceCacheDb::setForeignKeysStateImpl(true);
     } catch (const KisSqlQueryLoader::SQLException &e) {
         qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
         qWarning().noquote() << "       file:" << e.filePath;

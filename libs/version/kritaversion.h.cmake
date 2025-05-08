@@ -39,20 +39,6 @@
 #define KRITA_STABLE_VERSION_MAJOR @KRITA_STABLE_VERSION_MAJOR@
 
 /**
- * @def KRITA_VERSION_MAJOR
- * @ingroup KritaMacros
- * @brief Major version of Krita, at compile time
- *
- * Generally it's the same as KRITA_STABLE_VERSION_MAJOR but for unstable x.0
- * x is decreased by one, e.g. 3.0 Beta is 2.99.
-*/
-#if !defined KRITA_STABLE && @KRITA_STABLE_VERSION_MINOR@ == 0
-# define KRITA_VERSION_MAJOR (KRITA_STABLE_VERSION_MAJOR - 1)
-#else
-# define KRITA_VERSION_MAJOR KRITA_STABLE_VERSION_MAJOR
-#endif
-
-/**
  * @def KRITA_STABLE_VERSION_MINOR
  * @ingroup KritaMacros
  * @brief Minor version of stable Krita, at compile time
@@ -61,42 +47,12 @@
 #define KRITA_STABLE_VERSION_MINOR @KRITA_STABLE_VERSION_MINOR@
 
 /**
- * @def KRITA_VERSION_MINOR
- * @ingroup KritaMacros
- * @brief Minor version of Krita, at compile time
- *
- * Generally it's equal to KRITA_STABLE_VERSION_MINOR for stable releases,
- * equal to 99 for x.0 unstable releases (e.g. it's 3.0 Beta has minor version 99),
- * and equal to KRITA_STABLE_VERSION_MINOR-1 for unstable releases other than x.0.
- */
-#ifdef KRITA_STABLE
-# define KRITA_VERSION_MINOR KRITA_STABLE_VERSION_MINOR
-#elif KRITA_STABLE_VERSION_MINOR == 0
-# define KRITA_VERSION_MINOR 99
-#else
-# define KRITA_VERSION_MINOR (KRITA_STABLE_VERSION_MINOR - 1)
-#endif
-
-/**
  * @def KRITA_VERSION_RELEASE
  * @ingroup KritaMacros
  * @brief Release version of Krita, at compile time.
  * 89 for Alpha.
  */
 #define KRITA_VERSION_RELEASE @KRITA_VERSION_RELEASE@
-
-/**
- * @def KRITA_STABLE_VERSION_RELEASE
- * @ingroup KritaMacros
- * @brief Release version of Krita, at compile time.
- *
- * Equal to KRITA_VERSION_RELEASE for stable releases and 0 for unstable ones.
- */
-#ifdef KRITA_STABLE
-# define KRITA_STABLE_VERSION_RELEASE 0
-#else
-# define KRITA_STABLE_VERSION_RELEASE @KRITA_VERSION_RELEASE@
-#endif
 
 /**
  * @def KRITA_ALPHA
@@ -144,6 +100,6 @@
  * the Krita version used at runtime.
  */
 #define KRITA_VERSION \
-    KRITA_MAKE_VERSION(KRITA_VERSION_MAJOR,KRITA_VERSION_MINOR,KRITA_VERSION_RELEASE)
+    KRITA_MAKE_VERSION(KRITA_STABLE_VERSION_MAJOR,KRITA_STABLE_VERSION_MINOR,KRITA_VERSION_RELEASE)
 
 #endif // _KRITA_VERSION_H_

@@ -18,6 +18,9 @@ class TestResourceLocator : public QObject
 private Q_SLOTS:
     void initTestCase();
     void init();
+
+    void testForeignKeysAreEnabled();
+
     void testLocatorInitialization();
 
     void testResourceLocationBase();

@@ -254,9 +254,9 @@ QSqlError createDatabase(const QString &location)
                 if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.18")
                         && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) >= 0
                         && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.18")) < 0) {
-                    
+
                     bool from14to15 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14");
-                    
+
                     bool from15to16 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15");
 
@@ -367,6 +367,11 @@ QSqlError createDatabase(const QString &location)
                                 .arg(schemaVersion)
                                 .arg(kritaVersion)
                                 .arg(QDateTime::fromSecsSinceEpoch(creationDate).toString()));
+
+            /// initialization is completed, transaction is over,
+            /// now enable the foreign_keys constraint if necessary
+            KisResourceCacheDb::synchronizeForeignKeysState();
+
             return QSqlError();
         }
     }
@@ -464,6 +469,10 @@ QSqlError createDatabase(const QString &location)
     }
 
     transactionLock.commit();
+
+    /// initialization is completed, transaction is over,
+    /// now enable the foreign_keys constraint if necessary
+    KisResourceCacheDb::synchronizeForeignKeysState();
 
     return QSqlError();
 }
@@ -2105,7 +2114,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         }
     }
 
-
     QSqlDatabase::database().commit();
     debugResource << "Synchronizing the storages took" << t.elapsed() << "milliseconds for" << storage->location();
 
@@ -2233,6 +2241,64 @@ void KisResourceCacheDb::performHouseKeepingOnExit()
     if (!q.exec()) {
         qWarning() << "Could not execute query" << q.lastQuery() << q.lastError();
     }
+}
+
+void KisResourceCacheDb::setForeignKeysStateImpl(bool isEnabled)
+{
+    KisSqlQueryLoader loader("inline://set_foreign_keys_state",
+                             QString("PRAGMA foreign_keys = %1").arg(isEnabled ? "ON" : "OFF"));
+    loader.exec();
+}
+
+bool KisResourceCacheDb::getForeignKeysStateImpl()
+{
+    KisSqlQueryLoader loader("inline://get_foreign_keys_state",
+                             "PRAGMA foreign_keys");
+
+    loader.exec();
+
+    if (loader.query().first()) {
+        return loader.query().value(0).toInt();
+    }
+
+    return false;
+}
+
+void KisResourceCacheDb::synchronizeForeignKeysState()
+{
+#ifdef KRITA_STABLE
+    bool useForeignKeys = false;
+    KisUsageLogger::log("INFO: detected stable build of Krita, foreign_keys constraint will be disabled");
+#else
+    bool useForeignKeys = true;
+    KisUsageLogger::log("INFO: detected unstable build of Krita, foreign_keys constraint will be enabled");
+#endif
+
+    if (qEnvironmentVariableIsSet("KRITA_OVERRIDE_USE_FOREIGN_KEYS")) {
+        useForeignKeys = qEnvironmentVariableIntValue("KRITA_OVERRIDE_USE_FOREIGN_KEYS") > 0;
+        KisUsageLogger::log("INFO: foreign_keys constraint was overridden by KRITA_OVERRIDE_USE_FOREIGN_KEYS: " + QString::number(useForeignKeys));
+    }
+
+    try {
+        const bool oldForeignKeysState = KisResourceCacheDb::getForeignKeysStateImpl();
+
+        if (oldForeignKeysState != useForeignKeys) {
+            KisUsageLogger::log(
+                "INFO: switch foreign_keys state: " +
+                QString::number(oldForeignKeysState) +
+                " -> " +
+                QString::number(useForeignKeys));
+
+            KisResourceCacheDb::setForeignKeysStateImpl(useForeignKeys);
+        }
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+    }
+
 }
 
 bool KisResourceCacheDb::registerResourceType(const QString &resourceType)

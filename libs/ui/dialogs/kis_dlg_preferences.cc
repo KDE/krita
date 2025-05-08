@@ -408,7 +408,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     QString selectedMimeType = cmbDefaultExportFileType->currentData().toString();
 
     //
-    // Miscellaneous
+    // Animation tab
+    //
+    // -- Reserved for future use --
+
+    //
+    // Miscellaneous tab
     //
     cmbStartupSession->addItem(i18n("Open default window"));
     cmbStartupSession->addItem(i18n("Load previous session"));

@@ -410,7 +410,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     // Animation tab
     //
-    // -- Reserved for future use --
+    m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
+    m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange());
 
     //
     // Miscellaneous tab
@@ -432,9 +433,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cumulativeUndoData = cfg.cumulativeUndoData();
 
     chkShowRootLayer->setChecked(cfg.showRootLayer());
-
-    m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
-    m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange());
 
     chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers());
     chkRenamePastedLayers->setChecked(cfg.renamePastedLayers());

@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>7</number>
+      <number>4</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -950,6 +950,27 @@
          </item>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblCmykBlendingMode">
+         <property name="text">
+          <string>CMYK blending mode (needs restart):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cmbCmykBlendingMode">
+         <item>
+          <property name="text">
+           <string>Subtractive (Krita 5.2+)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Additive (Krita 5.1 and earlier versions)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
        <item row="3" column="1">
         <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
          <property name="text">
@@ -961,6 +982,16 @@
         <widget class="QCheckBox" name="chkEnableTouch">
          <property name="text">
           <string>Enable Touch Painting</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="chkTouchPressureSensitivity">
+         <property name="toolTip">
+          <string>Enable reading of pressure state for touch events. This data may be broken on some platforms, e.g. on some Android devices, where pressure may be reported as 0.0 all the time.</string>
+         </property>
+         <property name="text">
+          <string>Enable Touch Pressure Sensitivity (may be broken)</string>
          </property>
         </widget>
        </item>
@@ -996,85 +1027,6 @@
         </widget>
        </item>
        <item row="9" column="0" colspan="2">
-        <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
-         <property name="title">
-          <string>Kinetic Scrolling (needs restart)</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-         <layout class="QFormLayout" name="formLayout_10">
-          <item row="0" column="0" colspan="2">
-           <widget class="QComboBox" name="m_cmbKineticScrollingGesture"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelKineticScrollingSensitivity">
-            <property name="text">
-             <string>Sensitivity:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider"/>
-          </item>
-          <item row="2" column="1">
-           <widget class="QWidget" name="widget_3" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
-               <property name="text">
-                <string>Hide docker scrollbars if kinetic scrolling is enabled</string>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_14">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>(needs restart)</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="10" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1086,37 +1038,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="cmbCmykBlendingMode">
-         <item>
-          <property name="text">
-           <string>Subtractive (Krita 5.2+)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Additive (Krita 5.1 and earlier versions)</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lblCmykBlendingMode">
-         <property name="text">
-          <string>CMYK blending mode (needs restart):</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="chkTouchPressureSensitivity">
-         <property name="toolTip">
-          <string>Enable reading of pressure state for touch events. This data may be broken on some platforms, e.g. on some Android devices, where pressure may be reported as 0.0 all the time.</string>
-         </property>
-         <property name="text">
-          <string>Enable Touch Pressure Sensitivity (may be broken)</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -1602,6 +1523,85 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
             </widget>
            </item>
            <item row="11" column="0" colspan="2">
+            <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
+             <property name="title">
+              <string>Kinetic Scrolling (needs restart)</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <layout class="QFormLayout" name="formLayout_10">
+              <item row="0" column="0" colspan="2">
+               <widget class="QComboBox" name="m_cmbKineticScrollingGesture"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelKineticScrollingSensitivity">
+                <property name="text">
+                 <string>Sensitivity:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider"/>
+              </item>
+              <item row="2" column="1">
+               <widget class="QWidget" name="widget_3" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
+                   <property name="text">
+                    <string>Hide docker scrollbars if kinetic scrolling is enabled</string>
+                   </property>
+                   <property name="checked">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_14">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="text">
+                    <string>(needs restart)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="12" column="0" colspan="2">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>

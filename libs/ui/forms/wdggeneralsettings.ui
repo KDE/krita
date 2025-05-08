@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -1063,6 +1063,13 @@
            <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
             <property name="text">
              <string>Automatically adapt playback range to keyframes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_chkAutoZoom">
+            <property name="text">
+             <string>Automatically zoom timeline to fit playback range</string>
             </property>
            </widget>
           </item>

@@ -412,6 +412,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
     m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange());
+    m_chkAutoZoom->setChecked(cfg.autoZoomTimelineToPlaybackRange());
 
     //
     // Miscellaneous tab
@@ -933,6 +934,11 @@ bool GeneralTab::autopinLayersToTimeline()
 bool GeneralTab::adaptivePlaybackRange()
 {
     return m_chkAdaptivePlaybackRange->isChecked();
+}
+
+bool GeneralTab::autoZoomTimelineToPlaybackRange()
+{
+    return m_chkAutoZoom->isChecked();
 }
 
 int GeneralTab::forcedFontDpi()
@@ -2502,8 +2508,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());
         cfg.setCumulativeUndoData(m_general->m_cumulativeUndoData);
 
+        // Animation..
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
         cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());
+        cfg.setAutoZoomTimelineToPlaybackRange(m_general->autoZoomTimelineToPlaybackRange());
 
 #ifdef Q_OS_ANDROID
         QFileInfo fi(m_general->m_resourceFolderSelector->currentData(Qt::UserRole).value<QString>());

@@ -91,8 +91,11 @@ public:
     int zoomMarginSize();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
+
     bool autopinLayersToTimeline();
     bool adaptivePlaybackRange();
+    bool autoZoomTimelineToPlaybackRange();
+
     bool renameMergedLayers();
     bool renamePastedLayers();
     bool renameDuplicatedLayers();

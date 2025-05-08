@@ -456,7 +456,11 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->titlebar->sbStartFrame->setValue(start);
             m_d->titlebar->sbEndFrame->setValue(end);
 
-            m_d->framesView->slotFitViewToFrameRange(0, end); // TODO: fit from start to end, instead of 0 to end.
+            //Auto zoom Timeline to new document playback range..
+            KisConfig cfg(true);
+            if (cfg.autoZoomTimelineToPlaybackRange()) {
+                m_d->framesView->slotFitViewToFrameRange(0, end); // TODO: fit from start to end, instead of 0 to end.
+            }
         });
 
         connect(m_d->canvas->animationState(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));

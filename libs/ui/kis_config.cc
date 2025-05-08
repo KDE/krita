@@ -2295,6 +2295,16 @@ void KisConfig::setAdaptivePlaybackRange(bool value)
     m_cfg.writeEntry("adaptivePlaybackRange", value);
 }
 
+bool KisConfig::autoZoomTimelineToPlaybackRange(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("autoZoomTimelineToPlaybackRange", true));
+}
+
+void KisConfig::setAutoZoomTimelineToPlaybackRange(bool value)
+{
+    m_cfg.writeEntry("autoZoomTimelineToPlaybackRange", value);
+}
+
 QString KisConfig::ffmpegLocation(bool defaultValue) const {
     return (defaultValue ? "" : m_cfg.readEntry("ffmpegLocation", ""));
 }

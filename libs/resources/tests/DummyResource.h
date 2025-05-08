@@ -97,13 +97,4 @@ private:
     QString m_resourceType;
 };
 
-class DummyResourceWithMetadata : public DummyResource {
-public:
-    DummyResourceWithMetadata(const QString &f, const QString &resourceType = ResourceType::PaintOpPresets)
-        : DummyResource(f, resourceType)
-    {
-        
-    }
-};
-
 #endif // DUMMYRESOURCE_H

@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>539</height>
+    <width>1693</width>
+    <height>1031</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="Cursor">
       <attribute name="title">
@@ -1117,6 +1117,49 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="Animation">
+      <attribute name="title">
+       <string>Animation</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_11">
+       <item>
+        <widget class="QGroupBox" name="grpAnimation">
+         <property name="title">
+          <string>Animation Settings</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_12">
+          <item>
+           <widget class="QCheckBox" name="m_chkAutoPin">
+            <property name="text">
+             <string>Automatically pin new layers to timeline</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
+            <property name="text">
+             <string>Automatically adapt playback range to keyframes</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="Miscellaneous">
       <attribute name="title">
        <string>Miscellaneous</string>
@@ -1156,8 +1199,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>655</width>
-            <height>546</height>
+            <width>1689</width>
+            <height>1003</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1244,6 +1287,37 @@
               <number>30</number>
              </property>
             </widget>
+           </item>
+           <item row="4" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QCheckBox" name="chkCumulativeUndo">
+               <property name="text">
+                <string>Use cumulative undo</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnAdvancedCumulativeUndo">
+               <property name="text">
+                <string>Advanced...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item row="5" column="1">
             <widget class="QCheckBox" name="chkShowRootLayer">
@@ -1399,35 +1473,6 @@
             </widget>
            </item>
            <item row="9" column="0" colspan="2">
-            <widget class="QGroupBox" name="groupBox_5">
-             <property name="title">
-              <string>Animation</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
-              <item>
-               <widget class="QCheckBox" name="m_chkAutoPin">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Automatically pin new layers to timeline</string>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
-                <property name="text">
-                 <string>Adapt playback range to keyframes</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="10" column="0" colspan="2">
             <widget class="QGroupBox" name="chkForcedFontDPI">
              <property name="title">
               <string>Font DPI Workaround</string>
@@ -1467,7 +1512,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="11" column="0" colspan="2">
+           <item row="10" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_51">
              <property name="title">
               <string>Automatic layer naming</string>
@@ -1497,7 +1542,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="12" column="0" colspan="2">
+           <item row="11" column="0" colspan="2">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1509,37 +1554,6 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="4" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QCheckBox" name="chkCumulativeUndo">
-               <property name="text">
-                <string>Use cumulative undo</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnAdvancedCumulativeUndo">
-               <property name="text">
-                <string>Advanced...</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </item>
           </layout>
          </widget>

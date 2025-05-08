@@ -180,7 +180,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::ToolTipRole:
         Q_FALLTHROUGH();
     case Qt::WhatsThisRole:
-        return query.value("tooltip");
+        return query.value(useResourcePrefix ? "resource_tooltip" : "tooltip");
     case Qt::UserRole + KisAbstractResourceModel::Id:
         return query.value(useResourcePrefix ? "resource_id" : "id");
     case Qt::UserRole + KisAbstractResourceModel::StorageId:

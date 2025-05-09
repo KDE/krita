@@ -22,6 +22,12 @@
     KRITACI_ANDROID_PACKAGE_TYPE: debug
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+
+    # androiddeployqt doesn't support having _install folder with QML deps
+    # in the same directory as the source root itself. It will just skip
+    # all the Qt's QML modules in this case. So switch working directory to
+    # another one outside the source tree
+    KDECI_WORKDIR_PATH: /tmp/wd
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_ANDROID --depth=1
@@ -35,11 +41,13 @@
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build --skip-publishing 2>&1 | tee build-krita.log
     - python3 -u build-tools/ci-scripts/build-android-package.py 2>&1 | tee build-apk.log
-    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config upstream-ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk 2>&1 | tee apk-sign.log ; fi
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config upstream-ci-utilities/signing/signapk.ini $KDECI_WORKDIR_PATH/krita/_packaging/*.apk 2>&1 | tee apk-sign.log ; fi
       # WARNING: we don't actually check if the package is signed or not, since the notary service
       # could "silently" skip signing due to security reasons
-    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u build-tools/ci-scripts/rename-signed-apk-packages.py --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee apk-rename.log; fi
-    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform android-$KDECI_ANDROID_ABI --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee apk-publish.log
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u build-tools/ci-scripts/rename-signed-apk-packages.py --folder $KDECI_WORKDIR_PATH/krita/_packaging 2>&1 | tee apk-rename.log; fi
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform android-$KDECI_ANDROID_ABI --folder $KDECI_WORKDIR_PATH/krita/_packaging 2>&1 | tee apk-publish.log
+      # move the artifacts from the workdir to the ci-root, so that artifacts could be fetched
+    - if [[ "$(realpath $KDECI_WORKDIR_PATH/krita/_packaging)" != "$(realpath $CI_PROJECT_DIR/_packaging)" ]]; then mv $KDECI_WORKDIR_PATH/krita/_packaging $CI_PROJECT_DIR/; fi
 
 .android-nightly-base:
   extends:

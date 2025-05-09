@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-07 01:56+0000\n"
+"POT-Creation-Date: 2025-05-09 01:53+0000\n"
 "PO-Revision-Date: 2025-04-23 06:48+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20357,7 +20357,7 @@ msgstr "O&ddalji"
 #: libs/ui/animation/VideoImportDialog.ui:652
 #: libs/ui/animation/wdg_animationrenderer.ui:77
 #: libs/ui/animation/wdg_animationrenderer.ui:213
-#: libs/ui/forms/wdggeneralsettings.ui:460 libs/ui/forms/wdgnewimage.ui:273
+#: libs/ui/forms/wdggeneralsettings.ui:438 libs/ui/forms/wdgnewimage.ui:273
 #: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:351
@@ -20558,9 +20558,9 @@ msgstr "Velikost"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1578
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
 #: libs/ui/forms/wdgdisplaysettings.ui:368
-#: libs/ui/forms/wdggeneralsettings.ui:383
+#: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
@@ -20603,7 +20603,7 @@ msgstr "Velikost"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:175
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -20872,7 +20872,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (vdelano)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:519
+#: libs/ui/dialogs/kis_dlg_preferences.cc:523
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -21215,8 +21215,8 @@ msgid "Onion Skins"
 msgstr "Folije"
 
 #: libs/image/kis_layer_properties_icons.cpp:30
-#: libs/resources/KisResourceModel.cpp:141
-#: libs/resources/KisStorageModel.cpp:488
+#: libs/resources/KisResourceModel.cpp:116
+#: libs/resources/KisStorageModel.cpp:473
 #: libs/resources/KisTagResourceModel.cpp:647
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #, kde-format
@@ -23421,7 +23421,7 @@ msgstr "Nerazčlenjen blok vira"
 msgid "Local Resources"
 msgstr "Krajevni viri"
 
-#: libs/resources/KisResourceCacheDb.cpp:260
+#: libs/resources/KisResourceCacheDb.cpp:353
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:116
@@ -23438,15 +23438,15 @@ msgstr "Krajevni viri"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:970
+#: libs/ui/dialogs/kis_dlg_preferences.cc:979
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1091
-#: libs/ui/KisApplication.cpp:1094 libs/ui/KisApplication.cpp:1110
-#: libs/ui/KisApplication.cpp:1142 libs/ui/KisApplication.cpp:1156
-#: libs/ui/KisApplication.cpp:1184 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1092
+#: libs/ui/KisApplication.cpp:1095 libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1143 libs/ui/KisApplication.cpp:1157
+#: libs/ui/KisApplication.cpp:1185 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
 #: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
 #: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1042
@@ -23502,7 +23502,7 @@ msgctxt "@title:window"
 msgid "Krita"
 msgstr "Krita"
 
-#: libs/resources/KisResourceCacheDb.cpp:260
+#: libs/resources/KisResourceCacheDb.cpp:353
 #, kde-format
 msgid ""
 "The resource database scheme has changed. Krita will backup your database "
@@ -23521,69 +23521,70 @@ msgstr "1. Mesta vira ni bilo mogoče ustvariti v %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Na mesto vira (%1) ni možno pisati."
 
-#: libs/resources/KisResourceLocator.cpp:821
+#: libs/resources/KisResourceLocator.cpp:816
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1 ni mogoče dodati plasti k zbirki podatkov"
 
-#: libs/resources/KisResourceLocator.cpp:865
-#: libs/resources/KisResourceLocator.cpp:1238
+#: libs/resources/KisResourceLocator.cpp:860
+#: libs/resources/KisResourceLocator.cpp:1221
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Iz zbirke podatkov ni mogoče odstraniti shrambe %1"
 
-#: libs/resources/KisResourceLocator.cpp:978
+#: libs/resources/KisResourceLocator.cpp:973
 #, kde-format
 msgid "Could not synchronize updated font registery with the database"
 msgstr ""
 "Posodobljenega registra pisav ni bilo mogoče uskladiti z zbirko podatkov"
 
-#: libs/resources/KisResourceLocator.cpp:986
+#: libs/resources/KisResourceLocator.cpp:981
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Program Krita ste zagnali prvič. Inicializacija bo trajala malo dlje."
 
-#: libs/resources/KisResourceLocator.cpp:993
+#: libs/resources/KisResourceLocator.cpp:988
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Mesta vira v %1 ni mogoče ustvariti."
 
-#: libs/resources/KisResourceLocator.cpp:1006
-#: libs/resources/KisResourceLocator.cpp:1022
+#: libs/resources/KisResourceLocator.cpp:1001
+#: libs/resources/KisResourceLocator.cpp:1017
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Ni mogoče kopirati %1 v %2"
 
-#: libs/resources/KisResourceLocator.cpp:1018
+#: libs/resources/KisResourceLocator.cpp:1013
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Nameščanje virov iz svežnja %1."
 
-#: libs/resources/KisResourceLocator.cpp:1040
-#, kde-format
-msgid "Initializing the resources."
-msgstr "Inicializacija virov."
-
-#: libs/resources/KisResourceLocator.cpp:1074
+#: libs/resources/KisResourceLocator.cpp:1041
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Začasni viri"
 
-#: libs/resources/KisResourceLocator.cpp:1080
+#: libs/resources/KisResourceLocator.cpp:1047
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "Shramba pisav"
 
-#: libs/resources/KisResourceLocator.cpp:1214
-#: libs/resources/KisResourceLocator.cpp:1220
+#: libs/resources/KisResourceLocator.cpp:1170
+#, fuzzy, kde-format
+#| msgid "Initializing the resources."
+msgid "Synchronizing the resources."
+msgstr "Inicializacija virov."
+
+#: libs/resources/KisResourceLocator.cpp:1183
+#: libs/resources/KisResourceLocator.cpp:1191
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1 ni bilo mogoče uskladiti z zbirko podatkov"
 
-#: libs/resources/KisResourceModel.cpp:123
-#: libs/resources/KisStorageModel.cpp:478
+#: libs/resources/KisResourceModel.cpp:98
+#: libs/resources/KisStorageModel.cpp:463
 #: libs/resources/KisTagResourceModel.cpp:629
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
@@ -23592,15 +23593,15 @@ msgstr "%1 ni bilo mogoče uskladiti z zbirko podatkov"
 msgid "Id"
 msgstr "Id"
 
-#: libs/resources/KisResourceModel.cpp:125
+#: libs/resources/KisResourceModel.cpp:100
 #: libs/resources/KisTagResourceModel.cpp:631
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
 #, kde-format
 msgid "Storage ID"
 msgstr "ID shrambe"
 
-#: libs/resources/KisResourceModel.cpp:127
-#: libs/resources/KisStorageModel.cpp:492
+#: libs/resources/KisResourceModel.cpp:102
+#: libs/resources/KisStorageModel.cpp:477
 #: libs/resources/KisTagResourceModel.cpp:633
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
@@ -23609,13 +23610,13 @@ msgstr "ID shrambe"
 msgid "Name"
 msgstr "Ime"
 
-#: libs/resources/KisResourceModel.cpp:129
+#: libs/resources/KisResourceModel.cpp:104
 #: libs/resources/KisTagResourceModel.cpp:635
 #, kde-format
 msgid "File Name"
 msgstr "Ime datoteke"
 
-#: libs/resources/KisResourceModel.cpp:131
+#: libs/resources/KisResourceModel.cpp:106
 #: libs/resources/KisTagResourceModel.cpp:637
 #, kde-format
 msgid "Tooltip"
@@ -23624,7 +23625,7 @@ msgstr "Namig"
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/resources/KisResourceModel.cpp:133
+#: libs/resources/KisResourceModel.cpp:108
 #: libs/resources/KisTagResourceModel.cpp:639
 #: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
@@ -23637,36 +23638,36 @@ msgstr "Namig"
 msgid "Image"
 msgstr "Slika"
 
-#: libs/resources/KisResourceModel.cpp:135
+#: libs/resources/KisResourceModel.cpp:110
 #: libs/resources/KisTagResourceModel.cpp:641
 #, kde-format
 msgid "Status"
 msgstr "Stanje"
 
-#: libs/resources/KisResourceModel.cpp:137
-#: libs/resources/KisStorageModel.cpp:482
+#: libs/resources/KisResourceModel.cpp:112
+#: libs/resources/KisStorageModel.cpp:467
 #: libs/resources/KisTagResourceModel.cpp:643
-#: libs/resourcewidgets/KisIconToolTip.cpp:108
+#: libs/resourcewidgets/KisIconToolTip.cpp:115
 #, kde-format
 msgid "Location"
 msgstr "Mesto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/resources/KisResourceModel.cpp:139
+#: libs/resources/KisResourceModel.cpp:114
 #: libs/resources/KisTagResourceModel.cpp:645
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, kde-format
 msgid "Resource Type"
 msgstr "Vrsta vira"
 
-#: libs/resources/KisResourceModel.cpp:143
+#: libs/resources/KisResourceModel.cpp:118
 #: libs/resources/KisTagResourceModel.cpp:649
 #: libs/resources/KisTagResourceModel.cpp:679
 #, kde-format
 msgid "Storage Active"
 msgstr "Shramba je dejavna"
 
-#: libs/resources/KisResourceModel.cpp:145
+#: libs/resources/KisResourceModel.cpp:120
 #: libs/resources/KisTagResourceModel.cpp:651
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
@@ -23674,7 +23675,7 @@ msgid "md5sum"
 msgstr "md5sum"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
-#: libs/resources/KisResourceModel.cpp:147
+#: libs/resources/KisResourceModel.cpp:122
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/resourcewidgets/KisIconToolTip.cpp:99
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
@@ -23682,13 +23683,13 @@ msgstr "md5sum"
 msgid "Tags"
 msgstr "Značke"
 
-#: libs/resources/KisResourceModel.cpp:149
+#: libs/resources/KisResourceModel.cpp:124
 #: libs/resources/KisTagResourceModel.cpp:655
 #, kde-format
 msgid "Large Thumbnail"
 msgstr "Velika ogledna sličica"
 
-#: libs/resources/KisResourceModel.cpp:151
+#: libs/resources/KisResourceModel.cpp:126
 #: libs/resources/KisTagResourceModel.cpp:657
 #, kde-format
 msgid "Dirty"
@@ -23697,7 +23698,7 @@ msgstr "Umazano"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/resources/KisResourceModel.cpp:153
+#: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:659
 #: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
@@ -23708,11 +23709,27 @@ msgstr "Umazano"
 msgid "Metadata"
 msgstr "Metapodatki"
 
+#: libs/resources/KisResourceModel.cpp:130
+#, fuzzy, kde-format
+#| msgid "Status"
+msgid "Broken Status"
+msgstr "Stanje"
+
+#: libs/resources/KisResourceModel.cpp:132
+#, kde-format
+msgid "Broken Status Message"
+msgstr ""
+
+#: libs/resources/KisResourceQueryMapper.cpp:288
+#, kde-format
+msgid "Some resources are missing:"
+msgstr ""
+
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -23843,7 +23860,7 @@ msgctxt "resource type"
 msgid "Font Families"
 msgstr "Družine pisav"
 
-#: libs/resources/KisStorageModel.cpp:480
+#: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:105
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
@@ -23853,20 +23870,20 @@ msgstr "Družine pisav"
 msgid "Type"
 msgstr "Vrsta"
 
-#: libs/resources/KisStorageModel.cpp:484
+#: libs/resources/KisStorageModel.cpp:469
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:88
 #, kde-format
 msgid "Creation Date"
 msgstr "Datum nastanka"
 
-#: libs/resources/KisStorageModel.cpp:486
+#: libs/resources/KisStorageModel.cpp:471
 #, kde-format
 msgid "Preinstalled"
 msgstr "Vnaprej nameščeno"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
-#: libs/resources/KisStorageModel.cpp:490
+#: libs/resources/KisStorageModel.cpp:475
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
@@ -23947,7 +23964,14 @@ msgstr "Naziv sredstva"
 msgid "Tag File Name"
 msgstr "Označi ime datoteke"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:105
+#: libs/resourcewidgets/KisIconToolTip.cpp:107
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
+#, fuzzy, kde-format
+#| msgid "Resource View"
+msgid "Resource is broken!"
+msgstr "Pogled virov"
+
+#: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -23977,7 +24001,7 @@ msgstr "Izbriši vir"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2639
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:403
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
@@ -24514,7 +24538,7 @@ msgstr ""
 "zmanjšana na 50 sličic na sekundo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
 #, kde-format
 msgid "Warning(s):"
 msgstr "Opozorila:"
@@ -25481,8 +25505,8 @@ msgstr "Glavni zaslon:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25582,9 +25606,9 @@ msgstr "Uvoz video animacije"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
-#: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
+#: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
 #: plugins/dockers/logdocker/LogDockerDock.cpp:123
@@ -26429,49 +26453,49 @@ msgid "Set color used for warning"
 msgstr "Določi barvo, uporabljeno za opozorila"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Zaznavno"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1166
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativne barvne vrednosti (kolorimetrično)"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Nasičenost"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absolutne barvne vrednosti (kolorimetrično)"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1162
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1171
 #, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
 msgstr "Uporabi globalne nastavitve zaslona"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1172
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr "Simuliraj beli in črni papir"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1164
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
 #, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
@@ -26563,12 +26587,12 @@ msgstr "Lastnosti plasti"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1493
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1497
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1501
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1584
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2060 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1506
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1510
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1593
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2069 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26824,27 +26848,27 @@ msgstr "ob srednjem kliku povleci"
 msgid "All Supported Files"
 msgstr "Vse podprte vrste datotek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:420
 #, kde-format
 msgid "Open default window"
 msgstr "Odpri privzeto okno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:414
+#: libs/ui/dialogs/kis_dlg_preferences.cc:421
 #, kde-format
 msgid "Load previous session"
 msgstr "Naloži prejšnjo sejo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:415
+#: libs/ui/dialogs/kis_dlg_preferences.cc:422
 #, kde-format
 msgid "Show session manager"
 msgstr "Pokaži upravitelja sej"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:484
+#: libs/ui/dialogs/kis_dlg_preferences.cc:488
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Za učinkovanje sprememb je Krito potrebno ponovno zagnati."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:490
+#: libs/ui/dialogs/kis_dlg_preferences.cc:494
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
@@ -26852,22 +26876,22 @@ msgstr ""
 "Shranjevanje na mestu, ki ste ga izbrali prek izbirnika datotek, lahko "
 "upočasni zagon!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:522
+#: libs/ui/dialogs/kis_dlg_preferences.cc:526
 #, kde-format
 msgid "Internal Storage"
 msgstr "Notranja shramba"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:524
+#: libs/ui/dialogs/kis_dlg_preferences.cc:528
 #, kde-format
 msgid "SD-Card"
 msgstr "Kartica SD"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:562
+#: libs/ui/dialogs/kis_dlg_preferences.cc:566
 #, kde-format
 msgid "Choose Manually"
 msgstr "Izberite ročno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:627
+#: libs/ui/dialogs/kis_dlg_preferences.cc:631
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -26892,26 +26916,26 @@ msgstr ""
 ">\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:958
+#: libs/ui/dialogs/kis_dlg_preferences.cc:967
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Izberi sliko za ozadje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:970
+#: libs/ui/dialogs/kis_dlg_preferences.cc:979
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ni veljavna slikovna datoteka!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:990
+#: libs/ui/dialogs/kis_dlg_preferences.cc:999
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Opozorilo:</b> na to mesto ni možno pisati."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1114
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1242
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1123
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1332
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -26919,19 +26943,19 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Zaslon %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1202
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1211
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Namesti barvne profile"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1417
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr "API za vnos tabličnega računalnika (trenutno aktivni API: »%1«)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1422
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -26940,7 +26964,7 @@ msgstr ""
 "Uporabi časovne žige gonilnika tablice za hitrost čopiča (lahko povzroči "
 "opazne artefakte pri uporabi API-ja za tablice WinTab)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Uporabi časovne žige gonilnika tablice za hitrost čopiča"
@@ -26948,7 +26972,7 @@ msgstr "Uporabi časovne žige gonilnika tablice za hitrost čopiča"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -26960,7 +26984,7 @@ msgstr[3] "Največja velikost čopiča: {n} sl.t./ms"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -26969,19 +26993,19 @@ msgstr[1] "Hitrost glajenja čopiča: {n} vzorec"
 msgstr[2] "Hitrost glajenja čopiča: {n} vzorca"
 msgstr[3] "Hitrost glajenja čopiča: {n} vzorci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1459
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "Odmik smeri nagiba peresa: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1547
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1556
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1568
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1577
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -26990,187 +27014,187 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1572
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
 #, kde-format
 msgid " fps"
 msgstr " sl/s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1801
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1810
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1802
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1811
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programski izrisovalnik/upodabljalnik (zelo počasi)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 prek ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL prek ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1809
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1836
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Samodejno (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1913
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ID zaslona: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1923
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Ime zaslona: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Najm. svetilnost: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Najv. svetilnost: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Največja svetilnost sličice polnega formata: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Primarna rdeča: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Primarna zelena: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1920
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Primarna modra: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Bela točka: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2089
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2098
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Opozorilo:</b> trenutni zaslon ne podpira upodabljanja HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2200
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #, kde-format
 msgid "Configure Krita"
 msgstr "Prilagodi Krito"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Tipke za bližnjice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Tipke za bližnjice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Nastavitve vnosa na platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #, kde-format
 msgid "Canvas Input"
 msgstr "Vnos na platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "Upravljanje z barvami"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Barva"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #, kde-format
 msgid "Performance"
 msgstr "Hitrost delovanja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2267
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
 #, kde-format
 msgid "Tablet settings"
 msgstr "Nastavitve tablice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
 #, kde-format
 msgid "Tablet"
 msgstr "Tablica"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2277
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2286
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Nastavitve samo za platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
 #, kde-format
 msgid "Canvas-only"
 msgstr "Samo za platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2287
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2296
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Pojavna paleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2297
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Avtor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2299
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "Avtor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2315
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -28202,8 +28226,7 @@ msgstr "Uporabi privzeti barvni model za nove slike"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteFrom)
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteBehaviour)
-#: libs/ui/forms/wdgcolorsettings.ui:77
-#: libs/ui/forms/wdggeneralsettings.ui:1070
+#: libs/ui/forms/wdgcolorsettings.ui:77 libs/ui/forms/wdggeneralsettings.ui:250
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
 msgstr "Ob lepljenju v Krito iz drugih programov"
@@ -28924,7 +28947,7 @@ msgstr "Prekrivnost prekrivanja:"
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:513
-#: libs/ui/forms/wdggeneralsettings.ui:1122
+#: libs/ui/forms/wdggeneralsettings.ui:1152
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Razno"
@@ -29180,417 +29203,100 @@ msgstr "Preklopi masko gamuta"
 msgid "Select a mask in \"Gamut Masks\" docker"
 msgstr "Izberite masko v zloženem oknu »Maske gamuta«"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: libs/ui/forms/wdggeneralsettings.ui:49
-#, kde-format
-msgid "Cursor"
-msgstr "Kazalec"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel1)
-#: libs/ui/forms/wdggeneralsettings.ui:61
-#, kde-format
-msgid "Brush Cursor Icon:"
-msgstr "Ikona kazalca čopiča:"
-
-#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
-#: libs/ui/forms/wdggeneralsettings.ui:83
-#, kde-format
-msgid "Brush Outline Shape:"
-msgstr "Oblika orisa čopičs:"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdggeneralsettings.ui:111
-#, kde-format
-msgid "While painting..."
-msgstr "Med slikanjem ..."
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
-#. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
-#: libs/ui/forms/wdggeneralsettings.ui:141
-#: libs/ui/forms/wdggeneralsettings.ui:247
-#, kde-format
-msgid "Show outline"
-msgstr "Pokaži oris"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
-#. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
-#: libs/ui/forms/wdggeneralsettings.ui:148
-#: libs/ui/forms/wdggeneralsettings.ui:254
-#, kde-format
-msgid "Use effective outline size"
-msgstr "Uporabi dejansko velikost orisa"
-
-#. i18n: ectx: property (title), widget (QGroupBox, m_chkSeparateEraserCursor)
-#: libs/ui/forms/wdggeneralsettings.ui:161
-#, kde-format
-msgid "Use separate settings for eraser"
-msgstr "Uporabi ločene nastavitve za radirko"
-
-#. i18n: ectx: property (text), widget (QLabel, label_19)
-#: libs/ui/forms/wdggeneralsettings.ui:182
-#, kde-format
-msgid "Eraser Cursor Icon:"
-msgstr "Ikona kazalca radirke:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdggeneralsettings.ui:195
-#, kde-format
-msgid "Eraser Outline Shape:"
-msgstr "Oblika orisa radirke:"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/forms/wdggeneralsettings.ui:232
-#, kde-format
-msgid "While painting with an eraser..."
-msgstr "Pri slikanju z radirko ..."
-
-#. i18n: ectx: property (text), widget (QLabel, label_21)
-#: libs/ui/forms/wdggeneralsettings.ui:267
-#, kde-format
-msgid "Eraser Outline Color:"
-msgstr "Barva obrisa radirke:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/forms/wdggeneralsettings.ui:303
-#, kde-format
-msgid "Brush Outline Color:"
-msgstr "Barva obrisa čopiča:"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdggeneralsettings.ui:324
-#, kde-format
-msgid "Window"
-msgstr "Okno"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdggeneralsettings.ui:339
-#, kde-format
-msgid "Multiple Document Mode:"
-msgstr "Več dokumentni način:"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
-#: libs/ui/forms/wdggeneralsettings.ui:350
-#, kde-format
-msgid "Subwindows"
-msgstr "Podokna"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
-#: libs/ui/forms/wdggeneralsettings.ui:355
-#, kde-format
-msgid "Tabs"
-msgstr "Zavihki"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkCanvasMessages)
-#: libs/ui/forms/wdggeneralsettings.ui:363
-#, kde-format
-msgid "Show on-canvas popup messages"
-msgstr "Pokaži pojavna sporočila na platnu"
-
-#. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
-#: libs/ui/forms/wdggeneralsettings.ui:370
-#, kde-format
-msgid "Zoom Margin Size:"
-msgstr "Velikost povečanih robov:"
-
-#. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
-#: libs/ui/forms/wdggeneralsettings.ui:380
-#, kde-format
-msgid "Spacing between the image and the page when zoomed to fit, in pixels"
-msgstr ""
-"Razmik med sliko in stranjo pri umerjeni povečavi strani, v slikovnih točkah"
-
-#. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
-#: libs/ui/forms/wdggeneralsettings.ui:408
-#, kde-format
-msgid "Subwindow mode"
-msgstr "Način podokna"
-
-#. i18n: ectx: property (text), widget (QPushButton, pushButton)
-#. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
-#. i18n: ectx: property (text), widget (QToolButton, m_bnClearLut)
-#. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#: libs/ui/forms/wdggeneralsettings.ui:467
-#: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
-#: plugins/dockers/lut/wdglut.ui:241
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
-#, kde-format
-msgid "Clear"
-msgstr "Počisti"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdggeneralsettings.ui:483
-#, kde-format
-msgid "Background Image (overrides color):"
-msgstr "Slika ozadja (preglasi barvo):"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdggeneralsettings.ui:490
-#, kde-format
-msgid "Window Background:"
-msgstr "Ozadje okna:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkRubberBand)
-#: libs/ui/forms/wdggeneralsettings.ui:516
-#, kde-format
-msgid "Don't show contents when moving sub-windows"
-msgstr "Ne prikazuj vsebine pri premikanju podoken"
-
-#. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
-#: libs/ui/forms/wdggeneralsettings.ui:526
-#, kde-format
-msgid "Use custom interface font"
-msgstr "Uporabi pisavo vmesnika po meri"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:535
-#: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:29
-#, kde-format
-msgid "Font:"
-msgstr "Pisava:"
-
-#. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:576
-#, kde-format
-msgid "Enable HiDPI support"
-msgstr "Omogoči podporo HiDPI"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
-#: libs/ui/forms/wdggeneralsettings.ui:600
-#, kde-format
-msgid "Enable fractional scale factor"
-msgstr "Omogoči ulomljeni faktor spremembe merila"
-
-#. i18n: ectx: property (text), widget (QLabel, label_16)
-#. i18n: ectx: property (text), widget (QLabel, label_14)
-#: libs/ui/forms/wdggeneralsettings.ui:623
-#: libs/ui/forms/wdggeneralsettings.ui:814
-#, kde-format
-msgid "(needs restart)"
-msgstr "(potreben je ponoven zagon)"
-
-#. i18n: ectx: attribute (title), widget (QWidget, Tools)
-#: libs/ui/forms/wdggeneralsettings.ui:650
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
-#, kde-format
-msgid "Tools"
-msgstr "Orodja"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: libs/ui/forms/wdggeneralsettings.ui:656
-#, kde-format
-msgid "Tool Options Location (needs restart)"
-msgstr "Mesto možnosti orodja (zahteva ponoven zagon)"
-
-#. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
-#: libs/ui/forms/wdggeneralsettings.ui:662
-#, kde-format
-msgid "In Doc&ker"
-msgstr "&Med zloženimi okni"
-
-#. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
-#: libs/ui/forms/wdggeneralsettings.ui:669
-#, kde-format
-msgid "I&n Toolbar"
-msgstr "V &orodni vrstici"
-
-#. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:682
-#, kde-format
-msgid "Brush Flow Mode (needs restart):"
-msgstr "Način pretoka čopiča (potrebuje ponoven zagon):"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:690
-#, kde-format
-msgid "Creamy (Krita 4.2+)"
-msgstr "Kremasto (Krita 4.2+)"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:695
-#, kde-format
-msgid "Hard (Krita 4.1 and earlier versions)"
-msgstr "Trdo (Krita 4.1 in starejše različice)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkSwitchSelectionCtrlAlt)
-#: libs/ui/forms/wdggeneralsettings.ui:703
-#, kde-format
-msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Preklopi spremenilnika izbiranja krmilko/izmenjalko"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
-#: libs/ui/forms/wdggeneralsettings.ui:710
-#, kde-format
-msgid "Enable Touch Painting"
-msgstr "Omogoči slikanje na dotik"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
-#: libs/ui/forms/wdggeneralsettings.ui:717
-#, kde-format
-msgid "Activate transform tool after pasting"
-msgstr "Po lepljenju aktiviraj orodje preoblikovanja"
-
-#. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
-#: libs/ui/forms/wdggeneralsettings.ui:724
-#, kde-format
-msgid "Zoom steps between powers of 2"
-msgstr "Koraki povečave med potencami števila 2"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
-#: libs/ui/forms/wdggeneralsettings.ui:741
-#, kde-format
-msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr "Uporabi vodoravno os za dejanje povečave platna"
-
-#. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:748
-#, kde-format
-msgid "Kinetic Scrolling (needs restart)"
-msgstr "Kinetično drsenje (potrebuje ponoven zagon)"
-
-#. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:763
-#, kde-format
-msgid "Sensitivity:"
-msgstr "Občutljivost:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:788
-#, kde-format
-msgid "Hide docker scrollbars if kinetic scrolling is enabled"
-msgstr "Skrij drsnike zloženih oken, če je omogočeno kinetično drsenje"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:841
-#, kde-format
-msgid "Subtractive (Krita 5.2+)"
-msgstr "Subtraktivno (odštevalno, Krita 5.2+)"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:846
-#, kde-format
-msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Aditivno (prištevalno, Krita 5.1 in starejše različice)"
-
-#. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:854
-#, kde-format
-msgid "CMYK blending mode (needs restart):"
-msgstr "Način mešanja CMYK (potreben je ponoven zagon):"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:861
-#, kde-format
-msgid ""
-"Enable reading of pressure state for touch events. This data may be broken "
-"on some platforms, e.g. on some Android devices, where pressure may be "
-"reported as 0.0 all the time."
-msgstr ""
-"Omogoči branje stanja pritiska za dogodke dotika. Ti podatki so lahko "
-"okvarjeni na nekaterih platformah, npr. na nekaterih napravah Android, kjer "
-"se o pritisku lahko ves čas poroča z vrednostjo 0,0."
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:864
-#, kde-format
-msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr "Omogoči občutljivost na pritisk dotika (morda je pokvarjena)"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/ui/forms/wdggeneralsettings.ui:872
+#. i18n: ectx: attribute (title), widget (QWidget, File)
+#: libs/ui/forms/wdggeneralsettings.ui:52
 #, kde-format
 msgid "File Handling"
 msgstr "Ravnanje z datotekami"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_autosaveCheckBox)
-#: libs/ui/forms/wdggeneralsettings.ui:878
+#: libs/ui/forms/wdggeneralsettings.ui:58
 #, kde-format
 msgid "Enable Autosaving"
 msgstr "Omogoči samodejno shranjevanje"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdggeneralsettings.ui:887
+#: libs/ui/forms/wdggeneralsettings.ui:67
 #, kde-format
 msgid "Autosave Interval:"
 msgstr "Samodejno shranjevanje:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
-#: libs/ui/forms/wdggeneralsettings.ui:894
+#: libs/ui/forms/wdggeneralsettings.ui:74
 #, kde-format
 msgctxt "Suffix: “Every x min”"
 msgid " min"
 msgstr " minut"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
-#: libs/ui/forms/wdggeneralsettings.ui:897
+#: libs/ui/forms/wdggeneralsettings.ui:77
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
 msgstr "Vsakih "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
-#: libs/ui/forms/wdggeneralsettings.ui:916
+#: libs/ui/forms/wdggeneralsettings.ui:96
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
 msgstr "Neimenovane datoteke samodejnega shranjevanja so privzeto skrite"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
-#: libs/ui/forms/wdggeneralsettings.ui:929
+#: libs/ui/forms/wdggeneralsettings.ui:109
 #, kde-format
 msgid "Create a Backup File on Saving"
 msgstr "Ustvari varnostno kopijo ob shranjevanju"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
-#: libs/ui/forms/wdggeneralsettings.ui:938
+#: libs/ui/forms/wdggeneralsettings.ui:118
 #, kde-format
 msgid "Backup File Location"
 msgstr "Mesto datotek varnostnih kopij"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
-#: libs/ui/forms/wdggeneralsettings.ui:946
+#: libs/ui/forms/wdggeneralsettings.ui:126
 #, kde-format
 msgid "Same Folder as Original File"
 msgstr "Mapa izvirne datoteke"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
-#: libs/ui/forms/wdggeneralsettings.ui:951
+#: libs/ui/forms/wdggeneralsettings.ui:131
 #, kde-format
 msgid "User Folder"
 msgstr "Uporabniška mapa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
-#: libs/ui/forms/wdggeneralsettings.ui:956
+#: libs/ui/forms/wdggeneralsettings.ui:136
 #, kde-format
 msgid "Temporary File Location"
 msgstr "Mesto začasnih datotek"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/forms/wdggeneralsettings.ui:964
+#: libs/ui/forms/wdggeneralsettings.ui:144
 #, kde-format
 msgid "Backup File Suffix:"
 msgstr "Končnica datoteke varnostne kopije:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBackupFileSuffix)
-#: libs/ui/forms/wdggeneralsettings.ui:971
+#: libs/ui/forms/wdggeneralsettings.ui:151
 #, kde-format
 msgid "~"
 msgstr "~"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdggeneralsettings.ui:981
+#: libs/ui/forms/wdggeneralsettings.ui:161
 #, kde-format
 msgid "Number of Backup Files Kept:"
 msgstr "Število ohranjenih varnostnih kopij:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdggeneralsettings.ui:1001
+#: libs/ui/forms/wdggeneralsettings.ui:181
 #, kde-format
 msgid "KRA File Compression"
 msgstr "Stiskanje datotek KRA"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkZip64)
-#: libs/ui/forms/wdggeneralsettings.ui:1007
+#: libs/ui/forms/wdggeneralsettings.ui:187
 #, kde-format
 msgid ""
 "<html><head/><body><p>Only use this option for <span style=\" font-"
@@ -29602,7 +29308,7 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
-#: libs/ui/forms/wdggeneralsettings.ui:1010
+#: libs/ui/forms/wdggeneralsettings.ui:190
 #, kde-format
 msgid ""
 "Use Zip64 (for very large files: cannot be opened in versions of Krita older "
@@ -29612,43 +29318,43 @@ msgstr ""
 "Krita, starejših od 4.2.0)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkCompressKra)
-#: libs/ui/forms/wdggeneralsettings.ui:1017
+#: libs/ui/forms/wdggeneralsettings.ui:197
 #, kde-format
 msgid "Compress .kra files more (slows loading/saving)"
 msgstr "Bolj stisni datoteke .kra (upočasni nalaganje/shranjevanje)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimKra)
-#: libs/ui/forms/wdggeneralsettings.ui:1027
+#: libs/ui/forms/wdggeneralsettings.ui:207
 #, kde-format
 msgid "Trim files before saving"
 msgstr "Obreži datoteke pred shranjevanjem"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimFramesImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1037
+#: libs/ui/forms/wdggeneralsettings.ui:217
 #, kde-format
 msgid "Trim frames when importing animations"
 msgstr "Obreži sličice pri uvozu animacij"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
-#: libs/ui/forms/wdggeneralsettings.ui:1050
+#: libs/ui/forms/wdggeneralsettings.ui:230
 #, kde-format
 msgid "Default Export Filetype: "
 msgstr "Privzeta vrsta datotek za izvoz: "
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_5)
-#: libs/ui/forms/wdggeneralsettings.ui:1064
+#. i18n: ectx: attribute (title), widget (QWidget, Pasting)
+#: libs/ui/forms/wdggeneralsettings.ui:244
 #, kde-format
 msgid "Pasting"
 msgstr "Lepljenje"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
-#: libs/ui/forms/wdggeneralsettings.ui:1076
+#: libs/ui/forms/wdggeneralsettings.ui:256
 #, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
 msgstr "Raje prenesi izvirno kodo oz. vir (to zahteva dostop do interneta)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
-#: libs/ui/forms/wdggeneralsettings.ui:1083
+#: libs/ui/forms/wdggeneralsettings.ui:263
 #, kde-format
 msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
@@ -29658,7 +29364,7 @@ msgstr ""
 "lepljenja."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
-#: libs/ui/forms/wdggeneralsettings.ui:1090
+#: libs/ui/forms/wdggeneralsettings.ui:270
 #, kde-format
 msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
@@ -29668,7 +29374,7 @@ msgstr ""
 "zagotavljajo več oblik zapisa."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
-#: libs/ui/forms/wdggeneralsettings.ui:1097
+#: libs/ui/forms/wdggeneralsettings.ui:277
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr ""
@@ -29676,7 +29382,7 @@ msgstr ""
 "izgubljeni)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
-#: libs/ui/forms/wdggeneralsettings.ui:1104
+#: libs/ui/forms/wdggeneralsettings.ui:284
 #, kde-format
 msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
@@ -29686,57 +29392,415 @@ msgstr ""
 "interneta ni potreben, vendar bodo metapodatki izgubljeni)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
-#: libs/ui/forms/wdggeneralsettings.ui:1111
+#: libs/ui/forms/wdggeneralsettings.ui:291
 #, kde-format
 msgid "Ask each time"
 msgstr "Vedno vprašaj"
 
+#. i18n: ectx: attribute (title), widget (QWidget, Window)
+#: libs/ui/forms/wdggeneralsettings.ui:302
+#, kde-format
+msgid "Window"
+msgstr "Okno"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/forms/wdggeneralsettings.ui:317
+#, kde-format
+msgid "Multiple Document Mode:"
+msgstr "Več dokumentni način:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
+#: libs/ui/forms/wdggeneralsettings.ui:328
+#, kde-format
+msgid "Subwindows"
+msgstr "Podokna"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
+#: libs/ui/forms/wdggeneralsettings.ui:333
+#, kde-format
+msgid "Tabs"
+msgstr "Zavihki"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkCanvasMessages)
+#: libs/ui/forms/wdggeneralsettings.ui:341
+#, kde-format
+msgid "Show on-canvas popup messages"
+msgstr "Pokaži pojavna sporočila na platnu"
+
+#. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
+#: libs/ui/forms/wdggeneralsettings.ui:348
+#, kde-format
+msgid "Zoom Margin Size:"
+msgstr "Velikost povečanih robov:"
+
+#. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
+#: libs/ui/forms/wdggeneralsettings.ui:358
+#, kde-format
+msgid "Spacing between the image and the page when zoomed to fit, in pixels"
+msgstr ""
+"Razmik med sliko in stranjo pri umerjeni povečavi strani, v slikovnih točkah"
+
+#. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
+#: libs/ui/forms/wdggeneralsettings.ui:386
+#, kde-format
+msgid "Subwindow mode"
+msgstr "Način podokna"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
+#. i18n: ectx: property (text), widget (QToolButton, m_bnClearLut)
+#. i18n: ectx: property (text), widget (QStatusBar, statusbar)
+#: libs/ui/forms/wdggeneralsettings.ui:445
+#: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
+#: plugins/dockers/lut/wdglut.ui:241
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
+#, kde-format
+msgid "Clear"
+msgstr "Počisti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: libs/ui/forms/wdggeneralsettings.ui:461
+#, kde-format
+msgid "Background Image (overrides color):"
+msgstr "Slika ozadja (preglasi barvo):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: libs/ui/forms/wdggeneralsettings.ui:468
+#, kde-format
+msgid "Window Background:"
+msgstr "Ozadje okna:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkRubberBand)
+#: libs/ui/forms/wdggeneralsettings.ui:494
+#, kde-format
+msgid "Don't show contents when moving sub-windows"
+msgstr "Ne prikazuj vsebine pri premikanju podoken"
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
+#: libs/ui/forms/wdggeneralsettings.ui:504
+#, kde-format
+msgid "Use custom interface font"
+msgstr "Uporabi pisavo vmesnika po meri"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/ui/forms/wdggeneralsettings.ui:513
+#: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:29
+#, kde-format
+msgid "Font:"
+msgstr "Pisava:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
+#: libs/ui/forms/wdggeneralsettings.ui:554
+#, kde-format
+msgid "Enable HiDPI support"
+msgstr "Omogoči podporo HiDPI"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
+#: libs/ui/forms/wdggeneralsettings.ui:578
+#, kde-format
+msgid "Enable fractional scale factor"
+msgstr "Omogoči ulomljeni faktor spremembe merila"
+
+#. i18n: ectx: property (text), widget (QLabel, label_16)
+#. i18n: ectx: property (text), widget (QLabel, label_14)
+#: libs/ui/forms/wdggeneralsettings.ui:601
+#: libs/ui/forms/wdggeneralsettings.ui:1601
+#, kde-format
+msgid "(needs restart)"
+msgstr "(potreben je ponoven zagon)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Cursor)
+#: libs/ui/forms/wdggeneralsettings.ui:628
+#, kde-format
+msgid "Cursor"
+msgstr "Kazalec"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: libs/ui/forms/wdggeneralsettings.ui:640
+#, kde-format
+msgid "Brush Cursor Icon:"
+msgstr "Ikona kazalca čopiča:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: libs/ui/forms/wdggeneralsettings.ui:662
+#, kde-format
+msgid "Brush Outline Shape:"
+msgstr "Oblika orisa čopičs:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: libs/ui/forms/wdggeneralsettings.ui:690
+#, kde-format
+msgid "While painting..."
+msgstr "Med slikanjem ..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
+#. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
+#: libs/ui/forms/wdggeneralsettings.ui:720
+#: libs/ui/forms/wdggeneralsettings.ui:826
+#, kde-format
+msgid "Show outline"
+msgstr "Pokaži oris"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
+#. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
+#: libs/ui/forms/wdggeneralsettings.ui:727
+#: libs/ui/forms/wdggeneralsettings.ui:833
+#, kde-format
+msgid "Use effective outline size"
+msgstr "Uporabi dejansko velikost orisa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_chkSeparateEraserCursor)
+#: libs/ui/forms/wdggeneralsettings.ui:740
+#, kde-format
+msgid "Use separate settings for eraser"
+msgstr "Uporabi ločene nastavitve za radirko"
+
+#. i18n: ectx: property (text), widget (QLabel, label_19)
+#: libs/ui/forms/wdggeneralsettings.ui:761
+#, kde-format
+msgid "Eraser Cursor Icon:"
+msgstr "Ikona kazalca radirke:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_20)
+#: libs/ui/forms/wdggeneralsettings.ui:774
+#, kde-format
+msgid "Eraser Outline Shape:"
+msgstr "Oblika orisa radirke:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
+#: libs/ui/forms/wdggeneralsettings.ui:811
+#, kde-format
+msgid "While painting with an eraser..."
+msgstr "Pri slikanju z radirko ..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_21)
+#: libs/ui/forms/wdggeneralsettings.ui:846
+#, kde-format
+msgid "Eraser Outline Color:"
+msgstr "Barva obrisa radirke:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: libs/ui/forms/wdggeneralsettings.ui:882
+#, kde-format
+msgid "Brush Outline Color:"
+msgstr "Barva obrisa čopiča:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Tools)
+#: libs/ui/forms/wdggeneralsettings.ui:903
+#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#, kde-format
+msgid "Tools"
+msgstr "Orodja"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: libs/ui/forms/wdggeneralsettings.ui:909
+#, kde-format
+msgid "Tool Options Location (needs restart)"
+msgstr "Mesto možnosti orodja (zahteva ponoven zagon)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
+#: libs/ui/forms/wdggeneralsettings.ui:915
+#, kde-format
+msgid "In Doc&ker"
+msgstr "&Med zloženimi okni"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
+#: libs/ui/forms/wdggeneralsettings.ui:922
+#, kde-format
+msgid "I&n Toolbar"
+msgstr "V &orodni vrstici"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
+#: libs/ui/forms/wdggeneralsettings.ui:935
+#, kde-format
+msgid "Brush Flow Mode (needs restart):"
+msgstr "Način pretoka čopiča (potrebuje ponoven zagon):"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
+#: libs/ui/forms/wdggeneralsettings.ui:943
+#, kde-format
+msgid "Creamy (Krita 4.2+)"
+msgstr "Kremasto (Krita 4.2+)"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
+#: libs/ui/forms/wdggeneralsettings.ui:948
+#, kde-format
+msgid "Hard (Krita 4.1 and earlier versions)"
+msgstr "Trdo (Krita 4.1 in starejše različice)"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
+#: libs/ui/forms/wdggeneralsettings.ui:956
+#, kde-format
+msgid "CMYK blending mode (needs restart):"
+msgstr "Način mešanja CMYK (potreben je ponoven zagon):"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
+#: libs/ui/forms/wdggeneralsettings.ui:964
+#, kde-format
+msgid "Subtractive (Krita 5.2+)"
+msgstr "Subtraktivno (odštevalno, Krita 5.2+)"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
+#: libs/ui/forms/wdggeneralsettings.ui:969
+#, kde-format
+msgid "Additive (Krita 5.1 and earlier versions)"
+msgstr "Aditivno (prištevalno, Krita 5.1 in starejše različice)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkSwitchSelectionCtrlAlt)
+#: libs/ui/forms/wdggeneralsettings.ui:977
+#, kde-format
+msgid "Switch Control/Alt Selection Modifiers"
+msgstr "Preklopi spremenilnika izbiranja krmilko/izmenjalko"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
+#: libs/ui/forms/wdggeneralsettings.ui:984
+#, kde-format
+msgid "Enable Touch Painting"
+msgstr "Omogoči slikanje na dotik"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
+#: libs/ui/forms/wdggeneralsettings.ui:991
+#, kde-format
+msgid ""
+"Enable reading of pressure state for touch events. This data may be broken "
+"on some platforms, e.g. on some Android devices, where pressure may be "
+"reported as 0.0 all the time."
+msgstr ""
+"Omogoči branje stanja pritiska za dogodke dotika. Ti podatki so lahko "
+"okvarjeni na nekaterih platformah, npr. na nekaterih napravah Android, kjer "
+"se o pritisku lahko ves čas poroča z vrednostjo 0,0."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
+#: libs/ui/forms/wdggeneralsettings.ui:994
+#, kde-format
+msgid "Enable Touch Pressure Sensitivity (may be broken)"
+msgstr "Omogoči občutljivost na pritisk dotika (morda je pokvarjena)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
+#: libs/ui/forms/wdggeneralsettings.ui:1001
+#, kde-format
+msgid "Activate transform tool after pasting"
+msgstr "Po lepljenju aktiviraj orodje preoblikovanja"
+
+#. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
+#: libs/ui/forms/wdggeneralsettings.ui:1008
+#, kde-format
+msgid "Zoom steps between powers of 2"
+msgstr "Koraki povečave med potencami števila 2"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
+#: libs/ui/forms/wdggeneralsettings.ui:1025
+#, kde-format
+msgid "Use horizontal axis for Canvas Zoom Action"
+msgstr "Uporabi vodoravno os za dejanje povečave platna"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Animation)
+#: libs/ui/forms/wdggeneralsettings.ui:1046
+#, kde-format
+msgid "Animation"
+msgstr "Animacija"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
+#: libs/ui/forms/wdggeneralsettings.ui:1052
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Update Animation Settings"
+msgid "Animation Settings"
+msgstr "Posodobi nastavitve animacije"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
+#: libs/ui/forms/wdggeneralsettings.ui:1058
+#, kde-format
+msgid "Automatically pin new layers to timeline"
+msgstr "Samodejno pripni nove plasti na časovnico"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
+#: libs/ui/forms/wdggeneralsettings.ui:1065
+#, fuzzy, kde-format
+#| msgid "Adapt playback range to keyframes"
+msgid "Automatically adapt playback range to keyframes"
+msgstr "Prilagodi obseg predvajanja na ključne sličice"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
+#: libs/ui/forms/wdggeneralsettings.ui:1072
+#, kde-format
+msgid "Automatically zoom timeline to fit playback range"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, Resources)
+#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
+#: libs/ui/forms/wdggeneralsettings.ui:1096
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
+#, kde-format
+msgid "Resources"
+msgstr "Viri"
+
+#. i18n: ectx: property (text), widget (QLabel, label_15)
+#: libs/ui/forms/wdggeneralsettings.ui:1102
+#, kde-format
+msgid "Resource Folder:"
+msgstr "Mapa z viri:"
+
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1179
+#: libs/ui/forms/wdggeneralsettings.ui:1209
 #, kde-format
 msgid "When Krita starts:"
 msgstr "Ob zagonu Krite:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1199
+#: libs/ui/forms/wdggeneralsettings.ui:1229
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "Shrani sejo ob zaprtju Krite"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1206
+#: libs/ui/forms/wdggeneralsettings.ui:1236
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr "Pri uvozu slik kot plasti jih pretvori v barvni prostor slike"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1219
-#: libs/ui/forms/wdggeneralsettings.ui:1232
+#: libs/ui/forms/wdggeneralsettings.ui:1249
+#: libs/ui/forms/wdggeneralsettings.ui:1262
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "Velja le za nove ali novo odprte slike."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1222
+#: libs/ui/forms/wdggeneralsettings.ui:1252
 #, kde-format
 msgid "Undo stack size:"
 msgstr "Razveljavi velikost sklada:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
+#: libs/ui/forms/wdggeneralsettings.ui:1283
+#, kde-format
+msgid "Use cumulative undo"
+msgstr "Uporabi kumulativno razveljavitev"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
+#: libs/ui/forms/wdggeneralsettings.ui:1303
+#, kde-format
+msgid "Advanced..."
+msgstr "Napredno …"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1251
+#: libs/ui/forms/wdggeneralsettings.ui:1312
 #, kde-format
 msgid "Show root layer"
 msgstr "Prikaži izvirno plast"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1258
+#: libs/ui/forms/wdggeneralsettings.ui:1319
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "Omogoči beleženje v dnevnik za poročila o napakah"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1289
+#: libs/ui/forms/wdggeneralsettings.ui:1350
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -29746,68 +29810,50 @@ msgstr ""
 "čudno, ne poročajte o napaki."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1292
+#: libs/ui/forms/wdggeneralsettings.ui:1353
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr "Omogoči domorodna pogovorna okna datotek"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1315
+#: libs/ui/forms/wdggeneralsettings.ui:1376
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(opozorilo: morda ne bo delovalo pravilno na nekaterih sistemih)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1325
+#: libs/ui/forms/wdggeneralsettings.ui:1386
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "Največja velikost čopiča:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1353
+#: libs/ui/forms/wdggeneralsettings.ui:1414
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "Največji premer čopiča v slikovnih točkah."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1356
+#: libs/ui/forms/wdggeneralsettings.ui:1417
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "sl. točk"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1391
+#: libs/ui/forms/wdggeneralsettings.ui:1452
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(potreben je ponoven zagon)"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/forms/wdggeneralsettings.ui:1404
-#, kde-format
-msgid "Animation"
-msgstr "Animacija"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1413
-#, kde-format
-msgid "Automatically pin new layers to timeline"
-msgstr "Samodejno pripni nove plasti na časovnico"
-
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1423
-#, kde-format
-msgid "Adapt playback range to keyframes"
-msgstr "Prilagodi obseg predvajanja na ključne sličice"
-
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1433
+#: libs/ui/forms/wdggeneralsettings.ui:1465
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "Rešitev DPI za pisave"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1448
+#: libs/ui/forms/wdggeneralsettings.ui:1480
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -29837,7 +29883,7 @@ msgstr ""
 "potrebne."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1451
+#: libs/ui/forms/wdggeneralsettings.ui:1483
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:182
 #, kde-format
@@ -29845,7 +29891,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1460
+#: libs/ui/forms/wdggeneralsettings.ui:1492
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -29863,54 +29909,46 @@ msgstr ""
 "uporablja zaslonsko vrednost DPI, tako da ga vnesete v to polje."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1473
+#: libs/ui/forms/wdggeneralsettings.ui:1505
 #, kde-format
 msgid "Automatic layer naming"
 msgstr "Samodejno poimenovanje plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1479
+#: libs/ui/forms/wdggeneralsettings.ui:1511
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr "Dodaj »Spojeno« k imenu spojenih skupin plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1486
+#: libs/ui/forms/wdggeneralsettings.ui:1518
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1493
+#: libs/ui/forms/wdggeneralsettings.ui:1525
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "Dodaj »Kopija« k imenu podvojenih plasti"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1518
+#. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
+#: libs/ui/forms/wdggeneralsettings.ui:1535
 #, kde-format
-msgid "Use cumulative undo"
-msgstr "Uporabi kumulativno razveljavitev"
+msgid "Kinetic Scrolling (needs restart)"
+msgstr "Kinetično drsenje (potrebuje ponoven zagon)"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1538
+#. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
+#: libs/ui/forms/wdggeneralsettings.ui:1550
 #, kde-format
-msgid "Advanced..."
-msgstr "Napredno …"
+msgid "Sensitivity:"
+msgstr "Občutljivost:"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1552
-#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
+#: libs/ui/forms/wdggeneralsettings.ui:1575
 #, kde-format
-msgid "Resources"
-msgstr "Viri"
-
-#. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1558
-#, kde-format
-msgid "Resource Folder:"
-msgstr "Mapa z viri:"
+msgid "Hide docker scrollbars if kinetic scrolling is enabled"
+msgstr "Skrij drsnike zloženih oken, če je omogočeno kinetično drsenje"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -30484,7 +30522,7 @@ msgstr "Pokončno"
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:320
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, kde-format
 msgid "Clipboard"
 msgstr "Odložišče"
@@ -30688,91 +30726,91 @@ msgid "Current Brush Engine"
 msgstr "Trenutni ustroj čopiča"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
-#: libs/ui/forms/wdgpaintopsettings.ui:340
+#: libs/ui/forms/wdgpaintopsettings.ui:368
 #, kde-format
 msgid "Save New Brush Preset..."
 msgstr "Shrani novo prednastavitev čopiča …"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
-#: libs/ui/forms/wdgpaintopsettings.ui:359
+#: libs/ui/forms/wdgpaintopsettings.ui:387
 #, kde-format
 msgid "Overwrite Brush Preset"
 msgstr "Prepiši prednastavitev čopiča"
 
 #. i18n: ectx: property (text), widget (QLabel, presetsSidebarLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:427
+#: libs/ui/forms/wdgpaintopsettings.ui:455
 #, kde-format
 msgid "Presets"
 msgstr "Prednastavitve"
 
 #. i18n: ectx: property (text), widget (QLabel, engineFilterLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:444
+#: libs/ui/forms/wdgpaintopsettings.ui:472
 #, kde-format
 msgid "Engine:"
 msgstr "Pogon:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushSizeCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:615
+#: libs/ui/forms/wdgpaintopsettings.ui:643
 #, kde-format
 msgid "Erase mode will use a separate brush size"
 msgstr "Način brisanja bo uporabil ločeno velikost čopiča"
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushSizeCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:618
+#: libs/ui/forms/wdgpaintopsettings.ui:646
 #, kde-format
 msgid "Eraser switch size"
 msgstr "Preklopi velikost radirke"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushOpacityCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:634
+#: libs/ui/forms/wdgpaintopsettings.ui:662
 #, kde-format
 msgid "Erase mode will use a separate brush opacity"
 msgstr "Način brisanja bo uporabil ločeno prekrivnost čopiča"
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushOpacityCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:637
+#: libs/ui/forms/wdgpaintopsettings.ui:665
 #, kde-format
 msgid "Eraser switch opacity"
 msgstr "Preklopi prekrivnost radirke"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dirtyPresetCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:653
+#: libs/ui/forms/wdgpaintopsettings.ui:681
 #, kde-format
 msgid "Temporarily Save Tweaks To Presets"
 msgstr "Začasno shrani prilagoditve prednastavitev"
 
 #. i18n: ectx: property (text), widget (QLabel, scratchpadSidebarLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:780
+#: libs/ui/forms/wdgpaintopsettings.ui:808
 #, kde-format
 msgid "Scratchpad"
 msgstr "Skicirka"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
-#: libs/ui/forms/wdgpaintopsettings.ui:843
+#: libs/ui/forms/wdgpaintopsettings.ui:871
 #, kde-format
 msgid "Fill area with brush preset icon"
 msgstr "Zapolni področje s prednastavljeno ikono čopiča"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
-#: libs/ui/forms/wdgpaintopsettings.ui:862
+#: libs/ui/forms/wdgpaintopsettings.ui:890
 #, kde-format
 msgid "Fill area with current image"
 msgstr "Zapolni področje s trenutno sliko"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillGradient)
-#: libs/ui/forms/wdgpaintopsettings.ui:881
+#: libs/ui/forms/wdgpaintopsettings.ui:909
 #, kde-format
 msgid "Fill area with gradient"
 msgstr "Zapolni področje z vzorcem"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillSolid)
-#: libs/ui/forms/wdgpaintopsettings.ui:900
+#: libs/ui/forms/wdgpaintopsettings.ui:928
 #, kde-format
 msgid "Fill area with background color"
 msgstr "Zapolni področje z barvo ozadja"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, eraseScratchPad)
-#: libs/ui/forms/wdgpaintopsettings.ui:919
+#: libs/ui/forms/wdgpaintopsettings.ui:947
 #, kde-format
 msgid "Reset area to white"
 msgstr "Ponastavi območje na belo"
@@ -34260,20 +34298,20 @@ msgstr "Vrste mime ni mogoče najti, poskusite z možnostjo -mimetype"
 msgid "Failed to render animation frames!"
 msgstr "Upodabljanja sličic animacije je spodletelo!"
 
-#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:962
+#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:963
 #, kde-format
 msgid "File layer"
 msgstr "Plast datoteke"
 
 #: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
-#: libs/ui/KisApplication.cpp:956 libs/ui/KisApplication.cpp:970
-#: libs/ui/KisApplication.cpp:975
+#: libs/ui/KisApplication.cpp:957 libs/ui/KisApplication.cpp:971
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: opozorilo"
 
-#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:971
+#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:972
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1 ni mogoče dodati kot plast datoteke: datoteka ne obstaja."
@@ -34310,32 +34348,32 @@ msgstr ""
 "Novo datoteko lahko ustvarite z možnostjo --new-image ali pa odprete "
 "obstoječo datoteko."
 
-#: libs/ui/KisApplication.cpp:957
+#: libs/ui/KisApplication.cpp:958
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Datoteke %1 ni mogoče odpreti"
 
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:977
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Plasti datoteke ni mogoče dodati: noben dokument ni odprt."
 
-#: libs/ui/KisApplication.cpp:1092
+#: libs/ui/KisApplication.cpp:1093
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ni najdene predloge za: %1"
 
-#: libs/ui/KisApplication.cpp:1095
+#: libs/ui/KisApplication.cpp:1096
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Preveč predlog najdenih za %1"
 
-#: libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1112
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Nalaganje predloge %1 je spodletelo."
 
-#: libs/ui/KisApplication.cpp:1143
+#: libs/ui/KisApplication.cpp:1144
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34350,7 +34388,7 @@ msgstr ""
 "\n"
 "Znova zaženite Krito, da spremembe začnejo veljati."
 
-#: libs/ui/KisApplication.cpp:1157
+#: libs/ui/KisApplication.cpp:1158
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34362,7 +34400,7 @@ msgstr ""
 "Prepričajte se, da noben drug program ne uporablja datoteke, in poskusite "
 "znova."
 
-#: libs/ui/KisApplication.cpp:1185
+#: libs/ui/KisApplication.cpp:1186
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ali želite počistiti datoteko z nastavitvami?"
@@ -38380,7 +38418,7 @@ msgstr "Srednje siva raven:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
@@ -38389,7 +38427,7 @@ msgstr "Pokaži"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:185
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
 msgid "Thumbnails"
@@ -38398,7 +38436,7 @@ msgstr "Predogledne sličice"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:191
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
 #, kde-format
@@ -42090,22 +42128,22 @@ msgstr "Prazna samodejna ključna sličica"
 msgid "AutoKey Duplicate"
 msgstr "Podvoji prazno samodejno ključno sličico"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:561
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:565
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Omogočite, da ohranite isto dolžino predvajanja."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:571
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:575
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Dejanske sl/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:576
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Realne sl/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:577
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Izpuščene sličice:\t%1%"
@@ -57265,7 +57303,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, stampButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:303
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
 #, kde-format
 msgid "Stamp"
 msgstr "Ožigosaj"
@@ -57519,7 +57557,7 @@ msgid ""
 " to Clipboard"
 msgstr "Ničesar ni na odložišču."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:225
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
 #, kde-format
 msgid ""
 "Creates a brush tip from the current image selection.\n"
@@ -57528,12 +57566,12 @@ msgstr ""
 "Ustvari konico čopiča iz trenutne izbire slike.\n"
 " Če ni nobenega izbora, bo uporabljena celotna slika."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
 #, kde-format
 msgid "Creates a brush tip from the image in the clipboard."
 msgstr "Ustvari konico čopiča iz slike na odložišču."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:234
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -57544,25 +57582,25 @@ msgstr ""
 "Določi spremembo velikosti na 1,0\n"
 "Določi vrtenje na 0,0"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:240
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Nevtralna točka: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:248
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Svetlost: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:255
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Kontrast: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:258
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""

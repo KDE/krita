@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-09 01:53+0000\n"
+"POT-Creation-Date: 2025-05-10 01:59+0000\n"
 "PO-Revision-Date: 2024-10-10 14:55+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -20091,30 +20091,30 @@ msgid "Character Variant %1"
 msgstr "הבא %1 נוכחי קדימה"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1662
+#: libs/flake/text/KoSvgTextShape.cpp:1634
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "טקסט ממלא מקום"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
+#: libs/flake/text/KoSvgTextShape.cpp:1613
 #, fuzzy, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "תבניות"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1643
-#: libs/flake/text/KoSvgTextShape.cpp:1651
+#: libs/flake/text/KoSvgTextShape.cpp:1615
+#: libs/flake/text/KoSvgTextShape.cpp:1623
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "חדות:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1621
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "תבניות"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1672
+#: libs/flake/text/KoSvgTextShape.cpp:1644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

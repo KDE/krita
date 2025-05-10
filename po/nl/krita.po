@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-09 01:53+0000\n"
-"PO-Revision-Date: 2025-04-23 12:32+0200\n"
+"POT-Creation-Date: 2025-05-10 01:59+0000\n"
+"PO-Revision-Date: 2025-05-09 12:31+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -20252,30 +20252,30 @@ msgid "Character Variant %1"
 msgstr "Tekenvariant (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1662
+#: libs/flake/text/KoSvgTextShape.cpp:1634
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Tekst van plaatshouder"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
+#: libs/flake/text/KoSvgTextShape.cpp:1613
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1643
-#: libs/flake/text/KoSvgTextShape.cpp:1651
+#: libs/flake/text/KoSvgTextShape.cpp:1615
+#: libs/flake/text/KoSvgTextShape.cpp:1623
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1621
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1672
+#: libs/flake/text/KoSvgTextShape.cpp:1644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23688,10 +23688,9 @@ msgid "Font Storage"
 msgstr "Opslag van lettertypen"
 
 #: libs/resources/KisResourceLocator.cpp:1170
-#, fuzzy, kde-format
-#| msgid "Initializing the resources."
+#, kde-format
 msgid "Synchronizing the resources."
-msgstr "De hulpbronnen worden geïnitialiseerd"
+msgstr "De hulpbronnen worden gesynchroniseerd"
 
 #: libs/resources/KisResourceLocator.cpp:1183
 #: libs/resources/KisResourceLocator.cpp:1191
@@ -23826,20 +23825,19 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Broken Status"
-msgstr "Status"
+msgstr "Gebroken status"
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Gebroken statusmelding"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
 msgid "Some resources are missing:"
-msgstr ""
+msgstr "Sommige hulpbronnen ontbreken:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -24082,10 +24080,9 @@ msgstr "Bestandsnaam van tag"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "Hulpbronweergave"
+msgstr "Hulpbron is gebroken!"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -29851,11 +29848,9 @@ msgstr "Animatie"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1052
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Update Animation Settings"
+#, kde-format
 msgid "Animation Settings"
-msgstr "Animatie-instellingen bijwerken"
+msgstr "Animatie-instellingen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
@@ -29865,16 +29860,15 @@ msgstr "Nieuwe lagen automatisch vastzetten op tijdlijn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1065
-#, fuzzy, kde-format
-#| msgid "Adapt playback range to keyframes"
+#, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr "Afspeelreeks aan keyframes aanpassen"
+msgstr "Afspeelreeks automatisch aan keyframes aanpassen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
-msgstr ""
+msgstr "Automatisch tijdlijn zoomen om afspeelreeks te laten passen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)

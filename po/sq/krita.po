@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-09 01:53+0000\n"
+"POT-Creation-Date: 2025-05-10 01:59+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -20074,31 +20074,31 @@ msgid "Character Variant %1"
 msgstr "&Përqindje:"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1662
+#: libs/flake/text/KoSvgTextShape.cpp:1634
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
+#: libs/flake/text/KoSvgTextShape.cpp:1613
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1643
-#: libs/flake/text/KoSvgTextShape.cpp:1651
+#: libs/flake/text/KoSvgTextShape.cpp:1615
+#: libs/flake/text/KoSvgTextShape.cpp:1623
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Teksti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1621
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Teksti:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1672
+#: libs/flake/text/KoSvgTextShape.cpp:1644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-10 01:59+0000\n"
-"PO-Revision-Date: 2025-04-27 13:41+0200\n"
+"PO-Revision-Date: 2025-05-10 08:43+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.1\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -23784,10 +23784,9 @@ msgid "Font Storage"
 msgstr "Enregistrement de polices"
 
 #: libs/resources/KisResourceLocator.cpp:1170
-#, fuzzy, kde-format
-#| msgid "Initializing the resources."
+#, kde-format
 msgid "Synchronizing the resources."
-msgstr "Initialisation des ressources en cours."
+msgstr "Synchronisation des ressources en cours..."
 
 #: libs/resources/KisResourceLocator.cpp:1183
 #: libs/resources/KisResourceLocator.cpp:1191
@@ -23922,20 +23921,19 @@ msgid "Metadata"
 msgstr "Métadonnées"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Broken Status"
-msgstr "État"
+msgstr "État endommagé"
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Message d'état endommagé"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
 msgid "Some resources are missing:"
-msgstr ""
+msgstr "Certaines ressources sont manquantes :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -24178,10 +24176,9 @@ msgstr "Nom de fichier d'étiquette"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "Affichage des ressources"
+msgstr "La ressource est endommagée."
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -29990,11 +29987,9 @@ msgstr "Animation"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1052
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Update Animation Settings"
+#, kde-format
 msgid "Animation Settings"
-msgstr "Mettre à jour la configuration pour l'animation"
+msgstr "Configuration d'animation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
@@ -30004,16 +29999,17 @@ msgstr "Épingler automatiquement mes nouveaux calques à la frise chronologique
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1065
-#, fuzzy, kde-format
-#| msgid "Adapt playback range to keyframes"
+#, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr "Adapter l'intervalle de rejeu aux images clés"
+msgstr "Adapter automatiquement l'intervalle de lecture des trames clé"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
+"Effectuer un zoom automatique de la frise chronologique pour s'adapter à la "
+"plage de lecture"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)

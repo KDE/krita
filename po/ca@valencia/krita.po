@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-10 01:59+0000\n"
-"PO-Revision-Date: 2025-04-23 09:59+0200\n"
+"PO-Revision-Date: 2025-05-09 09:37+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -22013,7 +22013,7 @@ msgstr "Pinzell de mànega d'imatge de Gimp"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Adobe Brush Library"
-msgstr "Biblioteca de pinzells de l'Adobe"
+msgstr "Biblioteca de pinzells d'Adobe"
 
 #: libs/koplugin/KisMimeDatabase.cpp:184
 #, kde-format
@@ -23694,10 +23694,9 @@ msgid "Font Storage"
 msgstr "Emmagatzematge dels tipus de lletra"
 
 #: libs/resources/KisResourceLocator.cpp:1170
-#, fuzzy, kde-format
-#| msgid "Initializing the resources."
+#, kde-format
 msgid "Synchronizing the resources."
-msgstr "S'estan inicialitzant els recursos."
+msgstr "S'estan sincronitzat els recursos."
 
 #: libs/resources/KisResourceLocator.cpp:1183
 #: libs/resources/KisResourceLocator.cpp:1191
@@ -23832,20 +23831,19 @@ msgid "Metadata"
 msgstr "Metadades"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Broken Status"
-msgstr "Estat"
+msgstr "Estat trencat"
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Missatge d'estat trencat"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
 msgid "Some resources are missing:"
-msgstr ""
+msgstr "Falten alguns recursos:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -23873,12 +23871,12 @@ msgstr "Paquet"
 #: libs/resources/KisResourceStorage.h:123
 #, kde-format
 msgid "Adobe Brush Library"
-msgstr "Biblioteca de pinzells de l'Adobe"
+msgstr "Biblioteca de pinzells d'Adobe"
 
 #: libs/resources/KisResourceStorage.h:125
 #, kde-format
 msgid "Adobe Style Library"
-msgstr "Biblioteca d'estil de l'Adobe"
+msgstr "Biblioteca d'estil d'Adobe"
 
 #: libs/resources/KisResourceStorage.h:129
 #, kde-format
@@ -24088,10 +24086,9 @@ msgstr "Nom del fitxer d'etiquetes"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "Vista del recurs"
+msgstr "El recurs està trencat!"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -29858,11 +29855,9 @@ msgstr "Animació"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1052
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Update Animation Settings"
+#, kde-format
 msgid "Animation Settings"
-msgstr "Actualització de la configuració d'animacions"
+msgstr "Configureu animacions"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
@@ -29872,16 +29867,17 @@ msgstr "Fixa automàticament les capes noves en la línia de temps"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1065
-#, fuzzy, kde-format
-#| msgid "Adapt playback range to keyframes"
+#, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr "Adapta l'interval de reproducció als fotogrames clau"
+msgstr "Adapta automàticament l'interval de reproducció als fotogrames clau"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
+"Fa zoom automàticament de la línia de temps per a ajustar-se a l'interval de "
+"reproducció"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -38053,7 +38049,7 @@ msgstr ""
 "«ClayRGB» (seguint ArgyllCMS) com el nom base per a estos perfils. Com "
 "s'utilitza davall, «Compatible amb Adobe RGB 1998» és la terminologia "
 "suggerida en el preàmbul a les especificacions de l'espai de color AdobeRGB "
-"1998.</p><p>La gamma de colors de l'Adobe RGB 1998 cobrix un percentatge més "
+"1998.</p><p>La gamma de colors d'Adobe RGB 1998 cobrix un percentatge més "
 "gran de cians, verds i grocs-verds del món real que sRGB, però encara no "
 "inclou tots els cians, verds i grocs-verds imprimibles, especialment quan "
 "s'imprimix emprant impressores d'injecció de tinta de gamma alta d'hui en "
@@ -40384,7 +40380,7 @@ msgid ""
 msgstr ""
 "<qt><p>Primer llegiu <b><a href=\"https://docs.krita.org/en/"
 "untranslatable_pages/reporting_bugs.html\">esta guia</a></b> per a informar "
-"d'errors!</p><p>Per a enviar un informe d'error, cliqueu en el botó de "
+"d'errors!</p><p>Per a enviar un informe d'error, cliqueu damunt del botó de "
 "davall. Açò obrirà una finestra del navegador web a <a href=\"https://bugs."
 "kde.org\">https://bugs.kde.org</a> on trobareu un formulari per a emplenar. "
 "</p><p><b>Apegueu la informació següent a dins de l'informe d'error!</b></"
@@ -40703,7 +40699,7 @@ msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
-"Cliqueu en el botó, llavors introduïu la drecera com ho faríeu en el "
+"Cliqueu damunt del botó, llavors introduïu la drecera com ho faríeu en el "
 "programa.\n"
 "Exemple per a «Ctrl+A»: manteniu premuda la tecla «Ctrl» mentre premeu la "
 "«A»."
@@ -41841,7 +41837,7 @@ msgstr "Mida del selector de zoom: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
 #, kde-format
 msgid "Hide Popup on click."
-msgstr "Oculta la finestra emergent en clicar."
+msgstr "Oculta la finestra emergent quan es clique."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:351

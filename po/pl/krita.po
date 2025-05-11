@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-09 03:19+0000\n"
-"PO-Revision-Date: 2025-02-15 11:29+0100\n"
+"PO-Revision-Date: 2025-04-12 10:50+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -101,7 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -45562,7 +45562,7 @@ msgstr "Najbliższe barwy"
 #: plugins/filters/palettize/palettize.ui:170
 #, kde-format
 msgid "Alpha Mode"
-msgstr "Tryb alfa"
+msgstr "Tryb alfy"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, alphaModeComboBox)
 #: plugins/filters/palettize/palettize.ui:181

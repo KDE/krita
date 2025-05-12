@@ -7,13 +7,18 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         GENERATE_PLUGIN_SOURCE
     )
 
+target_sources(KritaQmlPlugin
+    PRIVATE
+        SvgTextLabel.cpp
+        SvgTextLabel.h
+)
+
 else ()
     ecm_add_qml_module(KritaQmlPlugin
         URI "org.krita.qml"
         VERSION 1.0
         CLASSNAME KritaQmlPlugin
     )
-endif ()
 
 target_sources(KritaQmlPlugin
     PRIVATE
@@ -22,6 +27,8 @@ target_sources(KritaQmlPlugin
         SvgTextLabel.cpp
         SvgTextLabel.h
 )
+
+endif ()
 
 ecm_target_qml_sources(KritaQmlPlugin SOURCES
     qml/DoubleSpinBox.qml

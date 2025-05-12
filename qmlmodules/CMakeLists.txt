@@ -1,5 +1,1 @@
-#add_subdirectory(types)
-#add_subdirectory(utilities)
-#add_subdirectory(resources)
-#add_subdirectory(widgets)
 add_subdirectory(libqml)

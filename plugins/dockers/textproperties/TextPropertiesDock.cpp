@@ -121,6 +121,8 @@ TextPropertiesDock::TextPropertiesDock()
     setWidget(m_quickWidget);
     setEnabled(true);
 
+    qmlRegisterModule("org.krita.qml", 1, 0);
+
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
     m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
 

@@ -7,7 +7,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 
-// Simple double spinbox based on Qt example implementation, should proly be switched to spinbox slider at some point.
+// Simple double spinbox based on Qt example implementation, should 
+// probably be switched to spinbox slider at some point.
 SpinBox {
     editable: true;
     wheelEnabled: true;

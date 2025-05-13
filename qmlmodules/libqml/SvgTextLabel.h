@@ -21,6 +21,7 @@
 class SvgTextLabel : public QQuickPaintedItem
 {
     Q_OBJECT
+    QML_ELEMENT
     Q_PROPERTY(QStringList fontFamilies READ fontFamilies WRITE setFontFamilies NOTIFY fontFamiliesChanged)
     Q_PROPERTY(qreal fontWeight READ fontWeight WRITE setFontWeight NOTIFY fontWeightChanged)
     Q_PROPERTY(qreal fontWidth READ fontWidth WRITE setFontWidth NOTIFY fontWidthChanged)

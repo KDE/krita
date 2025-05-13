@@ -1,1 +1,1 @@
-add_subdirectory(libqml)
+add_subdirectory(components)

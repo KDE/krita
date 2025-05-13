@@ -663,7 +663,6 @@ target_link_libraries(kritaui
 
         Qt${QT_MAJOR_VERSION}::Network
         Qt${QT_MAJOR_VERSION}::Concurrent
-        Qt${QT_MAJOR_VERSION}::Qml
 
         Eigen3::Eigen
         Boost::boost

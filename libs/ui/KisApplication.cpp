@@ -35,7 +35,6 @@
 #include <QImageReader>
 #include <QImageWriter>
 #include <QThread>
-#include <QQmlEngine>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
@@ -200,8 +199,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #endif
 
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
-
-    qmlRegisterModule("org.krita.qml", 1, 0);
 
     setApplicationDisplayName("Krita");
     setApplicationName("krita");

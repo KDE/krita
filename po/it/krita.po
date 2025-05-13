@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-10 01:59+0000\n"
-"PO-Revision-Date: 2025-04-27 20:09+0200\n"
+"PO-Revision-Date: 2025-05-11 12:08+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -23681,10 +23681,9 @@ msgid "Font Storage"
 msgstr "Archiviazione dei tipi di carattere"
 
 #: libs/resources/KisResourceLocator.cpp:1170
-#, fuzzy, kde-format
-#| msgid "Initializing the resources."
+#, kde-format
 msgid "Synchronizing the resources."
-msgstr "Inizializzazione delle risorse."
+msgstr "Sincronizzazione delle risorse."
 
 #: libs/resources/KisResourceLocator.cpp:1183
 #: libs/resources/KisResourceLocator.cpp:1191
@@ -23819,20 +23818,19 @@ msgid "Metadata"
 msgstr "Metadati"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Broken Status"
-msgstr "Stato"
+msgstr "Stato danneggiato"
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Messaggio di stato danneggiato"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
 msgid "Some resources are missing:"
-msgstr ""
+msgstr "Alcune risorse sono mancanti:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -24075,10 +24073,9 @@ msgstr "Nome file del tag"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "Panoramica sulla risorsa"
+msgstr "La risorsa è danneggiata!"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -29841,11 +29838,9 @@ msgstr "Animazione"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1052
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Update Animation Settings"
+#, kde-format
 msgid "Animation Settings"
-msgstr "Aggiorna le impostazioni di animazione"
+msgstr "Impostazioni di animazione"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
@@ -29855,16 +29850,17 @@ msgstr "Fissa automaticamente i nuovi livelli alla linea temporale"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1065
-#, fuzzy, kde-format
-#| msgid "Adapt playback range to keyframes"
+#, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr "Adatta intervallo riproduzione ai fotogrammi chiave"
+msgstr "Adatta automaticamente intervallo riproduzione ai fotogrammi chiave"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
+"Regola automaticamente la linea temporale in modo da adattarsi "
+"all'intervallo di riproduzione"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)

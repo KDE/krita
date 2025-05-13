@@ -16424,11 +16424,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr "Základní"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
 #, kde-format
@@ -16449,11 +16448,10 @@ msgid "Latin Extended-B"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:25
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "IPA Extensions"
-msgstr "Přípona"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:26
 #, kde-format
@@ -16522,11 +16520,10 @@ msgid "Thaana"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:37
-#, fuzzy, kde-format
-#| msgid "No"
+#, kde-format
 msgctxt "@title"
 msgid "NKo"
-msgstr "Ne"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:38
 #, kde-format
@@ -16577,12 +16574,10 @@ msgid "Gurmukhi"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - category Quadratic"
-#| msgid "Quadratic"
+#, kde-format
 msgctxt "@title"
 msgid "Gujarati"
-msgstr "Kvadratický"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:47
 #, kde-format
@@ -16627,11 +16622,10 @@ msgid "Thai"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:54
-#, fuzzy, kde-format
-#| msgid "Lasso"
+#, kde-format
 msgctxt "@title"
 msgid "Lao"
-msgstr "Laso"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:55
 #, kde-format
@@ -16694,11 +16688,10 @@ msgid "Runic"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:65
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@title"
 msgid "Tagalog"
-msgstr "Dialog"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:66
 #, kde-format
@@ -16749,11 +16742,10 @@ msgid "Tai Le"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:74
-#, fuzzy, kde-format
-#| msgid "New Text"
+#, kde-format
 msgctxt "@title"
 msgid "New Tai Lue"
-msgstr "Nový text"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
 #, kde-format
@@ -16762,12 +16754,10 @@ msgid "Khmer Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "Category of brush engines"
-#| msgid "Brush engines"
+#, kde-format
 msgctxt "@title"
 msgid "Buginese"
-msgstr "Nástroje štětce"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:77
 #, kde-format
@@ -16782,11 +16772,10 @@ msgid "Combining Diacritical Marks Extended"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:79
-#, fuzzy, kde-format
-#| msgid "BSpline"
+#, kde-format
 msgctxt "@title"
 msgid "Balinese"
-msgstr "B-Spline"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:80
 #, kde-format
@@ -16819,12 +16808,10 @@ msgid "Cyrillic Extended-C"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Georgian Extended"
-msgstr "OpenEXR (Rozšířený)"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:86
 #, kde-format
@@ -16833,18 +16820,16 @@ msgid "Sundanese Supplement"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:87
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Vedic Extensions"
-msgstr "Přípona"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr "Přípona"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
 #, kde-format
@@ -16865,19 +16850,16 @@ msgid "Latin Extended Additional"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Greek Extended"
-msgstr "OpenEXR (Rozšířený)"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
-#| msgid "General settings"
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "Obecná nastavení"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
@@ -16886,11 +16868,10 @@ msgid "Superscripts and Subscripts"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:95
-#, fuzzy, kde-format
-#| msgid "Current color model:"
+#, kde-format
 msgctxt "@title"
 msgid "Currency Symbols"
-msgstr "Aktuální barevný model:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
 #, kde-format
@@ -16905,40 +16886,34 @@ msgid "Letterlike Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Number of frames:"
+#, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr "Počet rámců:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgctxt "@title"
 msgid "Arrows"
-msgstr "Šipka"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
-#, fuzzy, kde-format
-#| msgid "Mathematics and calculations"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
-msgstr "Matematika a výpočty"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Technical"
-msgstr "Různé"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:102
-#, fuzzy, kde-format
-#| msgid "Could not load picture."
+#, kde-format
 msgctxt "@title"
 msgid "Control Pictures"
-msgstr "Nelze načíst obrázek."
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
 #, kde-format
@@ -16953,34 +16928,28 @@ msgid "Enclosed Alphanumerics"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "drawing"
+#, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr "kresba"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
-#, fuzzy, kde-format
-#| msgid "- Elements"
+#, kde-format
 msgctxt "@title"
 msgid "Block Elements"
-msgstr "- Prvky"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr "Geometrický průměr"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols"
-msgstr "Různé"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:109
 #, kde-format
@@ -17001,11 +16970,10 @@ msgid "Supplemental Arrows-A"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
-#, fuzzy, kde-format
-#| msgid "Fill Patterns"
+#, kde-format
 msgctxt "@title"
 msgid "Braille Patterns"
-msgstr "Vyplňovací vzory"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:113
 #, kde-format
@@ -17140,12 +17108,10 @@ msgid "Bopomofo Extended"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr "Tah"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
 #, kde-format
@@ -17190,11 +17156,10 @@ msgid "Yi Syllables"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:143
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt "@title"
 msgid "Yi Radicals"
-msgstr "Radiální"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:144
 #, kde-format
@@ -17221,11 +17186,10 @@ msgid "Bamum"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:148
-#, fuzzy, kde-format
-#| msgid "Modifiers"
+#, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr "Modifikátory"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
 #, kde-format
@@ -17330,12 +17294,10 @@ msgid "Latin Extended-E"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr "Změnit prvek"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
@@ -17362,11 +17324,10 @@ msgid "High Surrogates"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
-#, fuzzy, kde-format
-#| msgid "High Pressure"
+#, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr "Vysoký přítlak"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
@@ -17399,26 +17360,22 @@ msgid "Arabic Presentation Forms-A"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
-#, fuzzy, kde-format
-#| msgid "Artistic Color Selector"
+#, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr "Umělecká paleta barev"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "Svislý okraj:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Combine Normal Map"
-#| msgid "Combine Normal Map"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "Kombinovat normálovou mapu"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
@@ -17445,11 +17402,10 @@ msgid "Halfwidth and Fullwidth Forms"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgctxt "@title"
 msgid "Specials"
-msgstr "Speciální výplň"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
 #, kde-format
@@ -17464,11 +17420,10 @@ msgid "Linear B Ideograms"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr "Číslo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
@@ -17495,11 +17450,10 @@ msgid "Lycian"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgid "Caricature"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "Scvrknutí"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
@@ -17508,11 +17462,10 @@ msgid "Coptic Epact Numbers"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "Kurzíva"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
@@ -17527,11 +17480,10 @@ msgid "Old Permic"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "Logaritmický"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
@@ -17540,11 +17492,10 @@ msgid "Old Persian"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
-#, fuzzy, kde-format
-#| msgid "Deselect"
+#, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr "Zrušit výběr"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
@@ -17589,12 +17540,10 @@ msgid "Todhri"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr "Lineární"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
 #, kde-format
@@ -17687,11 +17636,10 @@ msgid "Avestan"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
-#, fuzzy, kde-format
-#| msgid "Initialization"
+#, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr "Inicializace"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
@@ -17808,11 +17756,10 @@ msgid "Mahajani"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
-#, fuzzy, kde-format
-#| msgid "&Shared area"
+#, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr "&Sdílená oblast"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
@@ -17827,12 +17774,10 @@ msgid "Khojki"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Multiply"
-#| msgid "Multiply"
+#, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr "Násobit"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
@@ -17871,11 +17816,10 @@ msgid "Siddham"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr "Změněno:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
@@ -17968,11 +17912,10 @@ msgid "Bhaiksuki"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr "Hledat"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
@@ -18011,12 +17954,10 @@ msgid "Tamil Supplement"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "Uniform distribution in spray engine"
-#| msgid "Uniform"
+#, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr "Uniformní"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
@@ -18073,12 +18014,10 @@ msgid "Bamum Supplement"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus - distance range"
-#| msgid "Macro"
+#, kde-format
 msgctxt "@title"
 msgid "Mro"
-msgstr "Makro"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:287
 #, kde-format
@@ -18129,57 +18068,46 @@ msgid "Tangut"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr "Komponenty:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
-#, fuzzy, kde-format
-#| msgid "Enable Script"
+#, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr "Povolit skript"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr "Změnit prvek"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr "OpenEXR (Rozšířený)"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "Změnit prvek"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr "OpenEXR (Rozšířený)"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr "Přípona"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
@@ -18296,11 +18224,10 @@ msgid "Toto"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "Kotva:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
@@ -18357,11 +18284,10 @@ msgid "Mahjong Tiles"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr "Malé dlaždice"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
 #, kde-format
@@ -18388,12 +18314,10 @@ msgid "Miscellaneous Symbols and Pictographs"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:336
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "icon"
+#, kde-format
 msgctxt "@title"
 msgid "Emoticons"
-msgstr "ikona"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:337
 #, kde-format
@@ -18414,12 +18338,10 @@ msgid "Alchemical Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:340
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr "Geometrický průměr"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
@@ -18530,12 +18452,10 @@ msgid "Supplementary Private Use Area-B"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Block"
+#, kde-format
 msgctxt "@title"
 msgid "No Block"
-msgstr "Zarovnat do bloku"
+msgstr ""
 
 #: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
@@ -18544,11 +18464,10 @@ msgid "%1 glyph variants."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "Alternativní"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
@@ -18557,11 +18476,10 @@ msgid "Access any possible substitutions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "Alternativní"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
@@ -18623,11 +18541,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
-#| msgid "Histogram"
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "Histogram"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18656,12 +18573,10 @@ msgid "Replaces glyphs with their alternates meant for justification."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - light source"
-#| msgid "Standard light A"
+#, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "Standardní světlo A"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
@@ -18670,11 +18585,10 @@ msgid "Replaces sequences glyphs with common ligatures."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr "Odsazení zleva"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
@@ -18695,11 +18609,10 @@ msgid "This replaces glyphs with language specific versions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr "Možnosti"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18710,11 +18623,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
-#, fuzzy, kde-format
-#| msgid "Gradients"
+#, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr "Přechody"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
@@ -18723,11 +18635,10 @@ msgid "Replaces glyphs with ornaments for decorative purposes."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
-#, fuzzy, kde-format
-#| msgid "Randomize"
+#, kde-format
 msgctxt "@title"
 msgid "Randomize"
-msgstr "Zamíchat"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:82
 #, kde-format
@@ -18736,11 +18647,10 @@ msgid "Replaces glyphs with random alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
-#, fuzzy, kde-format
-#| msgid "Right indent"
+#, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr "Odsazení zprava"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
@@ -18749,11 +18659,10 @@ msgid "This adjusts glyphs so there is no space at the right side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "Alternativní"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18790,12 +18699,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
-msgstr "Kerning"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
 #, kde-format
@@ -18805,11 +18712,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr "Pozice"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -18867,11 +18773,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Optimalizovat"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -18882,11 +18787,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "Svislé linky"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, kde-format
@@ -18895,11 +18799,10 @@ msgid "This controls vertical kerning on the font."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "Alternativní vyvolání"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
@@ -18908,12 +18811,10 @@ msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "Pen tilt declination"
-#| msgid "Declination"
+#, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "Deklinace"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -18938,12 +18839,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten Layer"
+#, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "Zploštit vrstvu"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
@@ -18952,11 +18851,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "Činnosti"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -18969,11 +18867,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
-#, fuzzy, kde-format
-#| msgid "Winding Fill"
+#, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "Klikatá výplň"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -18997,11 +18894,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr "Alternativní vyvolání"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
@@ -19010,11 +18906,10 @@ msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
-#| msgid "Generator"
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "Generátor"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -19039,11 +18934,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr "Originál"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
@@ -19052,11 +18946,10 @@ msgid "Replaces letters that follow figures with their ordinal forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "Proporcionální"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
@@ -19091,12 +18984,10 @@ msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subscript"
+#, kde-format
 msgctxt "@title"
 msgid "Subscript"
-msgstr "Dolní index"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
 #, kde-format
@@ -19105,12 +18996,10 @@ msgid "Replaces glyphs with ones more suited for subscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@title"
 msgid "Superscript"
-msgstr "Horní index"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
 #, kde-format
@@ -19159,11 +19048,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
-#, fuzzy, kde-format
-#| msgid "Spacing"
+#, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr "Mezery"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
@@ -19212,11 +19100,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr "Malé dlaždice"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
@@ -19225,11 +19112,10 @@ msgid "Replaces lowercase letters with small capital forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "Název"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -19359,11 +19245,10 @@ msgid "Controls conjunct forms in Indic scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
-#, fuzzy, kde-format
-#| msgid "Distance"
+#, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr "Vzdálenost"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
@@ -19424,12 +19309,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr "Snížit nasycení barev"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
@@ -19477,11 +19360,10 @@ msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr "Formulář"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
 #, kde-format
@@ -19532,11 +19414,10 @@ msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
-#, fuzzy, kde-format
-#| msgid "Expert"
+#, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr "Expert"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
@@ -19545,11 +19426,10 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr "Šířka"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
@@ -19566,11 +19446,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "Vodorovné linky"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19581,11 +19460,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr "Úhlový"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
@@ -19608,11 +19486,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr "Šířka"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19623,11 +19500,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr "Kurzíva"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
@@ -19721,11 +19597,10 @@ msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr "Proporcionální"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
@@ -19734,11 +19609,10 @@ msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr "Proporcionální"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
@@ -19747,11 +19621,10 @@ msgid "Replaces uniform-width glyphs with proportional glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
-#, fuzzy, kde-format
-#| msgid "Quarter"
+#, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr "Čtvrtletí"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
@@ -19814,11 +19687,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
-#, fuzzy, kde-format
-#| msgid "Gradient Colors"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "Barvy přechodu"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -19827,11 +19699,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Thirds"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "Třetiny"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -19840,11 +19711,10 @@ msgid "Replaces glyphs with third-width glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Alternativní vyvolání"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -19853,11 +19723,10 @@ msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Alternativní"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -19872,11 +19741,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "Svislé linky"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -19911,11 +19779,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr "Svislý posun"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -19939,11 +19806,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr "Svislý posun"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
@@ -19952,11 +19818,10 @@ msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr "Alternativní vyvolání"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -19967,11 +19832,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
-#, fuzzy, kde-format
-#| msgid "Text Position"
+#, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "Pozice textu"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
@@ -20023,11 +19887,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
-#, fuzzy, kde-format
-#| msgid "Initials:"
+#, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "Iniciály:"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -20058,12 +19921,10 @@ msgid "Replaces glyphs with their left-to-right alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Left-to-right"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "Z&leva doprava"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
@@ -20126,12 +19987,10 @@ msgid "Replaces glyphs with their right-to-left alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Right-to-left"
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr "Z&prava doleva"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
@@ -20165,11 +20024,10 @@ msgid "Replaces glyphs with alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
-#, fuzzy, kde-format
-#| msgid "Variant (%1)"
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "Varianta (%1)"
+msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
 #: libs/flake/text/KoSvgTextShape.cpp:1634
@@ -20804,11 +20662,9 @@ msgid "Change Clone Layers"
 msgstr ""
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
-#, fuzzy
-#| msgid "Export Animations"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Exportovat animace"
+msgstr ""
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
@@ -23690,10 +23546,9 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Broken Status"
-msgstr "Stav"
+msgstr ""
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
@@ -23946,10 +23801,9 @@ msgstr ""
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "Zdroje"
+msgstr ""
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -26887,12 +26741,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1816
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1818
 #, kde-format
@@ -29458,10 +29310,9 @@ msgstr "Animace"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1052
-#, fuzzy, kde-format
-#| msgid "Export Animations"
+#, kde-format
 msgid "Animation Settings"
-msgstr "Exportovat animace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
@@ -43893,34 +43744,28 @@ msgid "Delete the taskset"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Velikost písma"
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Výška: "
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "R8 Heightmap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "Výšková mapa R8"
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Proporcionální"
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
@@ -43929,11 +43774,10 @@ msgid "Ideographic Advance (ic)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "Tloušťka čáry: "
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
@@ -43942,19 +43786,16 @@ msgid "Spaces (Sp)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "Čáry: "
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
-msgstr "Procent (%)"
+msgstr ""
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, kde-format
@@ -43963,11 +43804,10 @@ msgid "Optical Size"
 msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "<empty>"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "<prázdné>"
+msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
@@ -43976,11 +43816,10 @@ msgid "%1, %2, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clone %1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr "Klonovat %1, %2"
+msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #, kde-format
@@ -43989,18 +43828,16 @@ msgid "%1, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "Otevřít"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "vypnuto"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
@@ -51740,18 +51577,16 @@ msgstr "Silné"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr "Automaticky"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
@@ -59430,31 +59265,25 @@ msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
-#| msgid "Illustrator"
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "Ilustrátor"
+msgstr ""
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
-#| msgid "Rotate"
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "Otočit"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:127
-#, fuzzy
-#| msgid "Getting Started"
 msgid "Settings mutated!"
-msgstr "Začínáme"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:157
-#, fuzzy
-#| msgid "Illustrator"
 msgid "Mutator"
-msgstr "Ilustrátor"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:171
 msgid ""
@@ -59462,10 +59291,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:173
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Size Mutation: "
-msgstr "Nasycení: "
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:180
 msgid ""
@@ -59473,10 +59300,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:182
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Rotation Mutation: "
-msgstr "Nasycení: "
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:189
 msgid ""
@@ -59484,10 +59309,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:191
-#, fuzzy
-#| msgid "Opacity: "
 msgid "Opacity Mutation: "
-msgstr "Krytí:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:198
 msgid ""
@@ -59495,10 +59318,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:200
-#, fuzzy
-#| msgid "Rotation:"
 msgid "Flow Mutation: "
-msgstr "Rotace:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:207
 msgid ""
@@ -59507,10 +59328,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:209
-#, fuzzy
-#| msgid "Fixed rotation:"
 msgid "Hue Mutation: "
-msgstr "Pevná rotace:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:216
 msgid ""
@@ -59519,10 +59338,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:218
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Saturation Mutation: "
-msgstr "Nasycení: "
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:225
 msgid ""
@@ -59531,16 +59348,12 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:227
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Value Mutation: "
-msgstr "Délka videa:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:237
-#, fuzzy
-#| msgid "Rotate"
 msgid "Mutate"
-msgstr "Otočit"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""
@@ -62181,18 +61994,16 @@ msgid "Similar Color Selection Tool"
 msgstr "Nástroj pro výběr podobné barvy"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "Paleta"
+msgstr ""
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
-#, fuzzy, kde-format
-#| msgid "All pa&ges"
+#, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr "Všechny stran&y"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -62876,10 +62687,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgid "Glyph Palette"
-msgstr "Paleta"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -64403,48 +64213,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
-#~ msgstr "Nelze zapsat do souboru palety %1. Možná je jen ke čtení."
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "Kritická chyba"
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1x%2 posun: %3,%4"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Zvolte rozlišení obrazovky"
-
-#~ msgctxt ""
-#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-#~ msgid "Distance:"
-#~ msgstr "Vzdálenost:"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "levé tlačítko"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "prostřední tlačítko"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "pravé tlačítko"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "chybné tlačítko"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "Podržte %1, poté stiskněte %2"

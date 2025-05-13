@@ -1064,6 +1064,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
+            <property name="toolTip">
+             <string>When checked, this option automatically adjusts the document's &quot;start&quot; and &quot;end&quot; frames so that newly created keyframes are always within the animation playback range. This feature is recommended to speed up animation workflow when improvising a scene without a predetermined length.</string>
+            </property>
             <property name="text">
              <string>Automatically adapt playback range to keyframes</string>
             </property>

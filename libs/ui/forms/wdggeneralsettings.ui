@@ -1074,6 +1074,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="m_chkAutoZoom">
+            <property name="toolTip">
+             <string>When checked, this option will automatically scale the Animation Timeline Docker's frames view to best fit the document's playback range. A smaller playback range will cause the timeline to zoom in, while a larger playback range will cause the timeline to zoom out.</string>
+            </property>
             <property name="text">
              <string>Automatically zoom timeline to fit playback range</string>
             </property>

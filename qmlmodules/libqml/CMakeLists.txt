@@ -49,8 +49,8 @@ if (QT_MAJOR_VERSION STREQUAL "5")
     ecm_generate_qmltypes(org.krita.qml 1.0 DESTINATION ${KDE_INSTALL_QMLDIR}/org/krita/qml)
 endif ()
 
-
-install(TARGETS KritaQmlPlugin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+# Note: the ecm documentation prescribes this line but it is not needed...
+#install(TARGETS KritaQmlPlugin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 

@@ -15,7 +15,8 @@ TextPropertyBase {
                    "Specify the position of the underline for text-decoration.");
     searchTerms: i18nc("comma separated search terms for the text-decoration-position property, matching is case-insensitive",
                        "text-decoration-position, underline, left, right, under");
-    propertyType: TextPropertyBase.Mixed;
+    propertyType: TextPropertyConfigModel.Mixed;
+
 
     property int horizontalPos: 0;
     property int verticalPos: 0;
@@ -23,7 +24,9 @@ TextPropertyBase {
         blockSignals = true;
         horizontalPos = properties.textDecorationUnderlinePosHorizontal;
         verticalPos = properties.textDecorationUnderlinePosVertical;
-        visible = properties.textDecorationUnderlinePositionState !== KoSvgTextPropertiesModel.PropertyUnset
+
+        propertyState = [properties.textDecorationUnderlinePositionState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

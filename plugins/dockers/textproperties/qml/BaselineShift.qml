@@ -12,7 +12,7 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Baseline-Shift");
     propertyName: "baseline-shift";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Baseline shift allows moving the text away from the baseline, either by predefined super and subscript values, or by a fixed amount.");
     searchTerms: i18nc("comma separated search terms for the baseline-shift property, matching is case-insensitive",
@@ -28,7 +28,8 @@ TextPropertyBase {
         baselineShiftUnitCmb.dpi = canvasDPI;
         baselineShiftUnitCmb.setTextProperties(properties);
         baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.value, properties.baselineShiftValue.unitType)
-        visible = properties.baselineShiftState !== KoSvgTextPropertiesModel.PropertyUnset
+        propertyState = [properties.baselineShiftState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

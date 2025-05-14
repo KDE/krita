@@ -15,7 +15,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Font Kerning");
     propertyName: "font-kerning";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Turn font kerning on or off. Font kerning enables per-glyph spacing adjustments.");
     searchTerms: i18nc("comma separated search terms for the font-kerning property, matching is case-insensitive",
@@ -25,7 +25,8 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         kerning = properties.fontKerning;
-        visible = properties.fontKerningState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.fontKerningState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

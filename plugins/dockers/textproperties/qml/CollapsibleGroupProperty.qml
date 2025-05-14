@@ -45,13 +45,16 @@ TextPropertyBase {
         Item {
             id: titleItemContainer;
             Layout.fillWidth: true;
-            height: childrenRect.height;
+            implicitHeight: childrenRect.height;
+            height: implicitHeight;
         }
     }
 
     Item {
         id: contentItemContainer;
         width: parent.width;
-        height: visible? childrenRect.height: 0;
+        implicitHeight: childrenRect.height;
+        height: visible? implicitHeight: 0;
+        visible: false;
     }
 }

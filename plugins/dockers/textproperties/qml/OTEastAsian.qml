@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Glyphs: East-Asian");
     propertyName: "ot-east-asian";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable glyph forms related to East Asian text layout.");
     searchTerms: i18nc("comma separated search terms for the font-variant-east-asian property, matching is case-insensitive",
@@ -26,7 +26,9 @@ TextPropertyBase {
         ruby = properties.fontVariantEastAsian.ruby;
         variantType = properties.fontVariantEastAsian.variant;
         widthType = properties.fontVariantEastAsian.width;
-        visible = properties.fontVariantEastAsianState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.fontVariantEastAsianState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

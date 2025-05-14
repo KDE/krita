@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:listbox", "Alignment Baseline");
     propertyName: "alignment-baseline";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Alignment Baseline allows controling how this range of text is aligned to the parent text.");
     searchTerms: i18nc("comma separated search terms for the alignment-baseline property, matching is case-insensitive",
@@ -21,7 +21,8 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         baselineSelection = properties.alignmentBaseline;
-        visible = properties.alignmentBaselineState !== KoSvgTextPropertiesModel.PropertyUnset
+        propertyState = [properties.alignmentBaselineState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

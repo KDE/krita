@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:listbox", "Dominant Baseline");
     propertyName: "dominant-baseline";
-    propertyType: TextPropertyBase.Mixed;
+    propertyType: TextPropertyConfigModel.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "Dominant Baseline specifies how stretches of text of different sizes are aligned, it is also the default for Alignment Baseline.");
     searchTerms: i18nc("comma separated search terms for the dominant-baseline property, matching is case-insensitive",
@@ -21,7 +21,8 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         baselineSelection = properties.dominantBaseline;
-        visible = properties.dominantBaselineState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.dominantBaselineState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

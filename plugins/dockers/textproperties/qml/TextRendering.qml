@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Text Rendering");
     propertyName: "text-rendering";
-    propertyType: TextPropertyBase.Paragraph;
+    propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Text Rendering controls the hinting and rendering style for the property");
     searchTerms: i18nc("comma separated search terms for the text-rendering property, matching is case-insensitive",
@@ -21,7 +21,9 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         textRendering = properties.textRendering;
-        visible = properties.textRenderingState !== KoSvgTextPropertiesModel.PropertyUnset
+
+        propertyState = [properties.textRenderingState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

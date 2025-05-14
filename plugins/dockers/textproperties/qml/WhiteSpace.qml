@@ -15,8 +15,10 @@ TextPropertyBase {
                    "The CSS white space rule controls how multiples of spaces are handled, and whether the text can wrap.");
     searchTerms: i18nc("comma separated search terms for the white-space property, matching is case-insensitive",
                        "white-space, collapse, pre-formatted");
-    propertyType: TextPropertyBase.Mixed;
+    propertyType: TextPropertyConfigModel.Mixed;
     property int whiteSpace: 0;
+
+    visibilityState: TextPropertyConfigModel.NeverVisible;
 
     readonly property int wsNormal: 0;
     readonly property int wsPre: 1;
@@ -44,7 +46,9 @@ TextPropertyBase {
                 whiteSpace = wsNoWrap;
             }
         }
-        visible = properties.textCollapseState !== KoSvgTextPropertiesModel.PropertyUnset
+
+        propertyState = [properties.textCollapseState, properties.textWrap];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

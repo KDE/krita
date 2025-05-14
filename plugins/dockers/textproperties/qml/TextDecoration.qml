@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Text Decoration");
     propertyName: "text-decoration";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Text Decoration allows drawing underlines, overlines and striking through text.");
     searchTerms: i18nc("comma separated search terms for the text-decoration property, matching is case-insensitive",
@@ -31,9 +31,12 @@ TextPropertyBase {
         lineStyle = properties.textDecorationStyle;
         lineColor = properties.textDecorationColor;
 
-        visible = (properties.textDecorationLineState !== KoSvgTextPropertiesModel.PropertyUnset
-                   || properties.textDecorationStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                   || properties.textDecorationColorState !== KoSvgTextPropertiesModel.PropertyUnset);
+        propertyState = [
+            properties.textDecorationLineState,
+            properties.textDecorationStyleState,
+            properties.textDecorationColorState
+        ];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

@@ -11,17 +11,21 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Glyphs: Capitals");
     propertyName: "ot-capitals";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable opentype features related to capitals");
     searchTerms: i18nc("comma separated search terms for the font-variant-caps property, matching is case-insensitive",
                        "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals");
 
     property int capsType;
+
+
     onPropertiesUpdated: {
         blockSignals = true;
         capsType = properties.fontVariantCaps;
-        visible = properties.fontVariantCapsState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.fontVariantCapsState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

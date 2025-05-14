@@ -12,7 +12,7 @@ TextPropertyBase {
     id: root;
     propertyTitle: i18nc("@label", "OpenType Features");
     propertyName: "ot-features";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Configure Open Type features.");
     searchTerms: i18nc("comma separated search terms for the font-feature-settings property, matching is case-insensitive",
@@ -31,7 +31,9 @@ TextPropertyBase {
         blockSignals = true;
         // Setting text properties model will also set the opentype features.
         fontFeatureModel.setFromTextPropertiesModel(properties);
-        visible = properties.fontFeatureSettingsState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.fontFeatureSettingsState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

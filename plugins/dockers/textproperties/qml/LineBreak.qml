@@ -17,12 +17,14 @@ TextPropertyBase {
                    "Line Break allows choosing a strictness for the line breaking algorithm. Mostly used for CJK scripts, requires language being set.");
     searchTerms: i18nc("comma separated search terms for the line-break property, matching is case-insensitive",
                        "line-break, line breaking, strictness, kinsoku");
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
 
     onPropertiesUpdated: {
         blockSignals = true;
         breakType = properties.lineBreak;
-        visible = properties.lineBreakState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.lineBreakState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

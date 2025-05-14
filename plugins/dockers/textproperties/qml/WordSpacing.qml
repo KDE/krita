@@ -12,7 +12,7 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Word Spacing");
     propertyName: "word-spacing";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Word spacing controls the size of word-break characters, such as the space character.");
     searchTerms: i18nc("comma separated search terms for the word-spacing property, matching is case-insensitive",
@@ -20,12 +20,15 @@ TextPropertyBase {
     property alias wordSpacing: wordSpacingUnitCmb.dataValue;
     property alias wordSpacingUnit: wordSpacingUnitCmb.dataUnit;
 
+
     onPropertiesUpdated: {
         blockSignals = true;
         wordSpacingUnitCmb.dpi = canvasDPI;
         wordSpacingUnitCmb.setTextProperties(properties);
         wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
-        visible = properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.wordSpacingState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
     onWordSpacingChanged: {

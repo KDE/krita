@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:listbox", "Word Break");
     propertyName: "word-break";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Word Break allows fine-tuning the line breaking by toggling whether to only break at words or also allow breaking at characters. Useful for Korean or Ethiopian.");
     searchTerms: i18nc("comma separated search terms for the word-break property, matching is case-insensitive",
@@ -22,7 +22,9 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         breakType = properties.wordBreak;
-        visible = properties.wordBreakState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.wordBreakState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

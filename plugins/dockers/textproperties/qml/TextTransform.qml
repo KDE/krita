@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Text Transform");
     propertyName: "text-transform";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Text Transform allows transforming the given range of characters, for example, by setting them uppercase, or switching out half-width forms for full-width forms.");
     searchTerms: i18nc("comma separated search terms for the text-transform property, matching is case-insensitive",
@@ -25,7 +25,9 @@ TextPropertyBase {
         fullWidth = properties.textTransform.fullWidth;
         fullSizeKana = properties.textTransform.fullSizeKana;
         capitals = properties.textTransform.capitals;
-        visible = properties.textTransformState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.textTransformState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

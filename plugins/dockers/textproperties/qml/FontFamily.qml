@@ -11,7 +11,8 @@ import org.krita.flake.text 1.0
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@label", "Font Family");
     propertyName: "font-family";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
+    visibilityState: TextPropertyConfigModel.AlwaysVisible;
     toolTip: i18nc("@info:tooltip",
                    "Font family allows selecting a list of fonts that should be used for the current text. The first font family is the primary font used, while each font family after that is used for fallback.");
     searchTerms: i18nc("comma separated search terms for the font-family property, matching is case-insensitive",
@@ -22,7 +23,8 @@ CollapsibleGroupProperty {
     onPropertiesUpdated: {
         blockSignals = true;
         fontFamilies = properties.fontFamilies;
-        visible = properties.fontFamiliesState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.fontFamiliesState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

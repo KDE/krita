@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Glyphs: Numeric");
     propertyName: "ot-numeric";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable number-related glyph forms on the text.");
     searchTerms: i18nc("comma separated search terms for the font-variant-numeric property, matching is case-insensitive",
@@ -30,7 +30,9 @@ TextPropertyBase {
         fractionType = properties.fontVariantNumeric.fractions;
         ordinals = properties.fontVariantNumeric.ordinals;
         slashedZero = properties.fontVariantNumeric.slashedZero;
-        visible = properties.fontVariantNumericState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.fontVariantNumericState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

@@ -12,7 +12,7 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Line Height");
     propertyName: "line-height";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Line Height controls the line height used for the range of text.");
     searchTerms: i18nc("comma separated search terms for the line-height property, matching is case-insensitive",
@@ -48,7 +48,9 @@ TextPropertyBase {
         converter.setFontMetricsFromTextPropertiesModel(properties, false, true);
         converter.percentageReference = properties.resolvedFontSize(false);
         converter.setDataValueAndUnit(properties.lineHeight.value, properties.lineHeight.unit);
-        visible = properties.lineHeightState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.lineHeightState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

@@ -12,7 +12,7 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:spinbox", "Letter Spacing");
     propertyName: "letter-spacing";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Letter spacing controls the spacing between visible clusters of characters.");
     searchTerms: i18nc("comma separated search terms for the letter-spacing property, matching is case-insensitive",
@@ -25,7 +25,9 @@ TextPropertyBase {
         letterSpacingUnitCmb.dpi = canvasDPI;
         letterSpacingUnitCmb.setTextProperties(properties);
         letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
-        visible = properties.letterSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.letterSpacingState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
     onLetterSpacingChanged: {

@@ -12,7 +12,7 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Tab Size");
     propertyName: "tab-size";
-    propertyType: TextPropertyBase.Paragraph;
+    propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Tab Size allows defining the size of tabulation characters.");
     searchTerms: i18nc("comma separated search terms for the tab-size property, matching is case-insensitive",
@@ -45,7 +45,9 @@ TextPropertyBase {
         converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties);
         converter.setDataValueAndUnit(properties.tabSize.value, properties.tabSize.unit);
-        visible = properties.tabSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.tabSizeState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

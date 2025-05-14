@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Glyphs: Position");
     propertyName: "ot-position";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable super or subscripts on the text.");
     searchTerms: i18nc("comma separated search terms for the font-variant-position property, matching is case-insensitive",
@@ -19,10 +19,13 @@ TextPropertyBase {
 
     property int positionType;
 
+
     onPropertiesUpdated: {
         blockSignals = true;
         positionType = properties.fontVariantPosition;
-        visible = properties.fontVariantPositionState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.fontVariantPositionState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

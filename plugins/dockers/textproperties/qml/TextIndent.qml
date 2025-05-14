@@ -12,7 +12,7 @@ import org.krita.components 1.0
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@title:group", "Text Indent");
     propertyName: "text-indent";
-    propertyType: TextPropertyBase.Paragraph;
+    propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Text Indent allows setting indentation at the line start. Only works when the text is wrapping.");
     searchTerms: i18nc("comma separated search terms for the text-indent property, matching is case-insensitive",
@@ -30,7 +30,9 @@ CollapsibleGroupProperty {
         textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.length.value, properties.textIndent.length.unitType);
         hanging = properties.textIndent.hanging;
         eachLine = properties.textIndent.eachLine;
-        visible = properties.textIndentState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.textIndentState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

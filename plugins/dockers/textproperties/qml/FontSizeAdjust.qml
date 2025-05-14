@@ -12,7 +12,7 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:spinbox", "Font Size Adjust");
     propertyName: "font-size-adjust";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Font size adjust allows setting a ratio that the x-height must be matched by.");
     searchTerms: i18nc("comma separated search terms for the fontsize adjust property, matching is case-insensitive",
@@ -23,7 +23,8 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         fontSizeAdjust = properties.fontSizeAdjust * fontSizeAdjustSpn.multiplier;
-        visible = properties.fontSizeAdjustState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.fontSizeAdjustState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
     onFontSizeAdjustChanged: {

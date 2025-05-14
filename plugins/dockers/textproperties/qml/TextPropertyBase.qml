@@ -15,13 +15,6 @@ Column {
     width: parent && parent !== undefined? parent.width - (padding*2): 100;
     height: visible? childrenRect.height: 0;
 
-    enum PropertyType {
-        Character, ///< This property can be applied on a character level.
-        Paragraph, ///< This property only does something when applied to a paragraph.
-        Mixed ///< This property can be in either.
-    }
-
-
     property KoSvgTextPropertiesModel properties : textPropertiesModel;
     property double dpi: canvasDPI;
     signal propertiesUpdated; ///< Used by each text property panel to update the data on the controls.
@@ -34,6 +27,31 @@ Column {
     property int parentPropertyType; ///< PropertyType of the current property list it is in.
     property string toolTip; ///< Tooltip associated with the property.
     property string searchTerms; ///< Any additional search terms associated with the property.
+
+    property int visibilityState: TextPropertyConfigModel.FollowDefault;
+    property var propertyState: []; /// All property states related to the current property.
+
+    function setVisibleFromProperty() {
+        let visibleState = visibilityState === TextPropertyConfigModel.FollowDefault? textPropertyConfigModel.defaultVisibilityState: visibilityState;
+        if (visibleState === TextPropertyConfigModel.AlwaysVisible) {
+            visible = true;
+        } else if (visibleState === TextPropertyConfigModel.NeverVisible) {
+            visible = false;
+        } else {
+            visible = false;
+            for (let propState of propertyState) {
+                if (propState === KoSvgTextPropertiesModel.PropertySet
+                        || propState === KoSvgTextPropertiesModel.PropertyTriState) {
+                    visible = true;
+                    break;
+                } else if (propState !== KoSvgTextPropertiesModel.PropertyUnset
+                           && visibleState === TextPropertyConfigModel.WhenRelevant) {
+                    visible = true;
+                    break;
+                }
+            }
+        }
+    }
 
     function autoEnable() {
         enabled = true;

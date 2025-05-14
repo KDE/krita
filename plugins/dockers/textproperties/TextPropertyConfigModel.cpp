@@ -28,7 +28,7 @@ const QMap<TextPropertyConfigModel::VisibilityState, QString> visibilityConfigNa
 struct TextPropertyConfigModel::Private {
     QStringList propertyNames;
     QMap<QString, TextPropertyConfigModel::TextPropertyData> propertyData;
-    TextPropertyConfigModel::VisibilityState defaultVisibilityState;
+    TextPropertyConfigModel::VisibilityState defaultVisibilityState: TextPropertyConfigModel::WhenRelevant;
 };
 
 TextPropertyConfigModel::TextPropertyConfigModel(QObject *parent)
@@ -73,9 +73,7 @@ QVariant TextPropertyConfigModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::ToolTipRole) {
         return data.toolTip;
     } else if (role == Visibility) {
-        return data.visibilityState != FollowDefault?
-                    int(data.visibilityState):
-                    d->defaultVisibilityState != FollowDefault? int(d->defaultVisibilityState): int(WhenRelevant);
+        return int(data.visibilityState);
     } else if (role == Collapsed) {
         return data.collapsed;
     } else if (role == SearchTerms) {

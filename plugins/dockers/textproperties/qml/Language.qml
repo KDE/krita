@@ -12,7 +12,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Language");
     propertyName: "locale";
-    propertyType: TextPropertyBase.Mixed;
+    propertyType: TextPropertyConfigModel.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "The language of this text shape. Language affects a number of properties, like glyph shape, upper- and lowercase and line breaking");
     searchTerms: i18nc("comma separated search terms for the language property, matching is case-insensitive",
@@ -33,7 +33,8 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         localeHandler.bcp47Tag = properties.language;
-        visible = properties.languageState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.languageState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

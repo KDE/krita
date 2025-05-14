@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Glyphs: Ligatures");
     propertyName: "ot-ligatures";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable or disable ligatures and contextual alternates on the text.");
     searchTerms: i18nc("comma separated search terms for the font-variant-ligatures property, matching is case-insensitive",
@@ -22,13 +22,16 @@ TextPropertyBase {
     property alias historicalLigatures: historicalLigaCbx.checked;
     property alias contextualAlternates: contextualLigaCbx.checked;
 
+
     onPropertiesUpdated: {
         blockSignals = true;
         commonLigatures = properties.fontVariantLigatures.commonLigatures;
         discretionaryLigatures = properties.fontVariantLigatures.discretionaryLigatures;
         historicalLigatures = properties.fontVariantLigatures.historicalLigatures;
         contextualAlternates = properties.fontVariantLigatures.contextualAlternates;
-        visible = properties.fontVariantLigaturesState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [properties.fontVariantLigaturesState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

@@ -12,7 +12,8 @@ import org.krita.components 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:spinbox", "Font Size");
     propertyName: "font-size";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
+    visibilityState: TextPropertyConfigModel.AlwaysVisible;
     toolTip: i18nc("@info:tooltip",
                    "Font size allows setting the size of the characters.");
     searchTerms: i18nc("comma separated search terms for the fontsize property, matching is case-insensitive",
@@ -26,7 +27,8 @@ TextPropertyBase {
         fontSizeUnitCmb.dpi = canvasDPI;
         fontSizeUnitCmb.setTextProperties(properties);
         fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
-        visible = properties.fontSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.fontSizeState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
     onFontSizeChanged: {

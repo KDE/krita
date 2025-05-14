@@ -11,7 +11,8 @@ import org.krita.flake.text 1.0
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@title:group", "Text Align");
     propertyName: "text-align";
-    propertyType: TextPropertyBase.Paragraph;
+    propertyType: TextPropertyConfigModel.Paragraph;
+    visibilityState: TextPropertyConfigModel.AlwaysVisible;
     toolTip: i18nc("@info:tooltip",
                    "Text Align sets the alignment for the given block of characters.");
     searchTerms: i18nc("comma separated search terms for the text-anchor property, matching is case-insensitive",
@@ -27,9 +28,13 @@ CollapsibleGroupProperty {
         textAlignLast = properties.textAlignLast;
         textAnchor = properties.textAnchor;
         setButtonsChecked();
-        visible = properties.textAlignAllState !== KoSvgTextPropertiesModel.PropertyUnset ||
-                properties.textAlignLastState !== KoSvgTextPropertiesModel.PropertyUnset ||
-                properties.textAnchorState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [
+            properties.textAlignAllState,
+            properties.textAlignLastState,
+            properties.textAnchorState
+        ];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

@@ -12,7 +12,8 @@ import org.krita.components 1.0
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@label", "Font Style");
     propertyName: "font-sub-style";
-    propertyType: TextPropertyBase.Character;
+    propertyType: TextPropertyConfigModel.Character;
+    visibilityState: TextPropertyConfigModel.AlwaysVisible;
     toolTip: i18nc("@info:tooltip",
                    "Font style allows setting the sub style of the given font family, such as italics and bold");
     searchTerms: i18nc("comma separated search terms for the fontsize property, matching is case-insensitive",
@@ -43,13 +44,17 @@ CollapsibleGroupProperty {
         fontSynthesizeSlant = properties.fontSynthesisStyle;
         fontSynthesizeWeight = properties.fontSynthesisWeight;
         styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
-        visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.axisValueState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontSynthesisStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontSynthesisWeightState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+        propertyState = [
+            properties.fontWeightState,
+            properties.fontStyleState,
+            properties.fontWidthState,
+            properties.fontOpticalSizeLinkState,
+            properties.axisValueState,
+            properties.fontSynthesisStyleState,
+            properties.fontSynthesisWeightState
+        ]
+        setVisibleFromProperty();
         blockSignals = false;
     }
     onFontWeightChanged: {

@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label:listbox", "Direction");
     propertyName: "direction";
-    propertyType: TextPropertyBase.Mixed;
+    propertyType: TextPropertyConfigModel.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "Direction sets whether the text is left-to-right or right-to-left.");
     searchTerms: i18nc("comma separated search terms for the direction property, matching is case-insensitive",
@@ -20,13 +20,15 @@ TextPropertyBase {
     property int direction;
     property int unicodeBidi;
 
+
+
     onPropertiesUpdated: {
         blockSignals = true;
         direction = properties.direction;
         unicodeBidi = properties.unicodeBidi;
-        var set = properties.directionState !== KoSvgTextPropertiesModel.PropertyUnset;
         enabled = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
-        visible = set;
+        propertyState = [properties.directionState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

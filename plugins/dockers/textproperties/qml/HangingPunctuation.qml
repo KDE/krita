@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Hanging Punctuation");
     propertyName: "hanging-punctuation";
-    propertyType: TextPropertyBase.Paragraph;
+    propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Hanging punctuation allows hanging opening and closing punctuation as well as commas. This implementation only implements East-Asian style hanging punctuation.");
     searchTerms: i18nc("comma separated search terms for the hanging-punctuation property, matching is case-insensitive",
@@ -25,7 +25,8 @@ TextPropertyBase {
         hangStart = properties.hangingPunctuationFirst;
         hangEnd = properties.hangingPunctuationLast;
         hangComma = properties.hangingPunctuationComma;
-        visible = properties.hangingPunctuationState !== KoSvgTextPropertiesModel.PropertyUnset;
+        propertyState = [properties.hangingPunctuationState];
+        setVisibleFromProperty();
         blockSignals = false;
     }
 

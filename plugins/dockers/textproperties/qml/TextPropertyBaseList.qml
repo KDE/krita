@@ -41,7 +41,6 @@ ColumnLayout {
                                                 prop.searchTerms,
                                                 );
             textPropertyConfigModel.loadFromConfiguration();
-            console.log("property show", filteredConfigModel.showParagraphProperties);
             if (filteredConfigModel.showParagraphProperties && prop.propertyType === TextPropertyConfigModel.Character) {
                 propertyWidgetModel.get(i).visible = false;
             } else if (!filteredConfigModel.showParagraphProperties && prop.propertyType === TextPropertyConfigModel.Paragraph) {

@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:spinbox", "Font Size");
+    propertyTitle: i18nc("@label:spinbox", "Font Size");
+    propertyName: "font-size";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Font size allows setting the size of the characters.");
@@ -51,7 +52,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.fontSizeState === KoSvgTextPropertiesModel.PropertyTriState;

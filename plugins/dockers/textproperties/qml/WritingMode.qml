@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:listbox", "Writing Mode");
+    propertyTitle: i18nc("@label:listbox", "Writing Mode");
+    propertyName: "writing-mode";
     propertyType: TextPropertyBase.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Writing Mode sets whether the text flows horizontally or vertically, and in the latter case, whether the block flows right to left or left to right.");
@@ -43,7 +44,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.writingModeState === KoSvgTextPropertiesModel.PropertyTriState;

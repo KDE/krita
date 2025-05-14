@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:listbox", "Word Break");
+    propertyTitle: i18nc("@label:listbox", "Word Break");
+    propertyName: "word-break";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Word Break allows fine-tuning the line breaking by toggling whether to only break at words or also allow breaking at characters. Useful for Korean or Ethiopian.");
@@ -44,7 +45,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.wordBreakState === KoSvgTextPropertiesModel.PropertyTriState;

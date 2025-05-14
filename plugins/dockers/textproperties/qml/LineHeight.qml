@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Line Height");
+    propertyTitle: i18nc("@label", "Line Height");
+    propertyName: "line-height";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Line Height controls the line height used for the range of text.");
@@ -90,7 +91,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.lineHeightState === KoSvgTextPropertiesModel.PropertyTriState;

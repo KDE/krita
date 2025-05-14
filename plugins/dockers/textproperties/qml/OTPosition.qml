@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Glyphs: Position");
+    propertyTitle: i18nc("@label", "Glyphs: Position");
+    propertyName: "ot-position";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable super or subscripts on the text.");
@@ -44,7 +45,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.fillWidth: true;
         }
 

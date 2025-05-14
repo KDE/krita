@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Baseline-Shift")
+    propertyTitle: i18nc("@label", "Baseline-Shift");
+    propertyName: "baseline-shift";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Baseline shift allows moving the text away from the baseline, either by predefined super and subscript values, or by a fixed amount.");
@@ -67,7 +68,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;

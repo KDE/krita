@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@title:group", "Text Rendering");
+    propertyTitle: i18nc("@title:group", "Text Rendering");
+    propertyName: "text-rendering";
     propertyType: TextPropertyBase.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Text Rendering controls the hinting and rendering style for the property");
@@ -44,7 +45,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.textRenderingState === KoSvgTextPropertiesModel.PropertyTriState;

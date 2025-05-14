@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:spinbox", "Underline Position");
+    propertyTitle: i18nc("@label:spinbox", "Underline Position");
+    propertyName: "decoration-position";
     toolTip: i18nc("@info:tooltip",
                    "Specify the position of the underline for text-decoration.");
     searchTerms: i18nc("comma separated search terms for the text-decoration-position property, matching is case-insensitive",
@@ -51,7 +52,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.textDecorationUnderlinePositionState === KoSvgTextPropertiesModel.PropertyTriState;

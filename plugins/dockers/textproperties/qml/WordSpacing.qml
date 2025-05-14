@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@title:group", "Word Spacing");
+    propertyTitle: i18nc("@title:group", "Word Spacing");
+    propertyName: "word-spacing";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Word spacing controls the size of word-break characters, such as the space character.");
@@ -51,7 +52,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.wordSpacingState === KoSvgTextPropertiesModel.PropertyTriState;

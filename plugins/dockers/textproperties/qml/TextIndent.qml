@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 CollapsibleGroupProperty {
-    propertyName: i18nc("@title:group", "Text Indent");
+    propertyTitle: i18nc("@title:group", "Text Indent");
+    propertyName: "text-indent";
     propertyType: TextPropertyBase.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Text Indent allows setting indentation at the line start. Only works when the text is wrapping.");
@@ -65,8 +66,8 @@ CollapsibleGroupProperty {
         spacing: columnSpacing;
 
         Label {
-            id: propertyTitle;
-            text: propertyName;
+            id: propertyTitleLabel;
+            text: propertyTitle;
             verticalAlignment: Text.AlignVCenter
             color: sysPalette.text;
             elide: Text.ElideRight;

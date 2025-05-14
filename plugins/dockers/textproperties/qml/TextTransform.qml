@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@title:group", "Text Transform");
+    propertyTitle: i18nc("@title:group", "Text Transform");
+    propertyName: "text-transform";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Text Transform allows transforming the given range of characters, for example, by setting them uppercase, or switching out half-width forms for full-width forms.");
@@ -60,7 +61,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.columnSpan: 2;
             elide: Text.ElideRight;
             Layout.fillWidth: true;

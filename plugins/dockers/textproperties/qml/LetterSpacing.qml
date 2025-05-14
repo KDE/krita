@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:spinbox", "Letter Spacing");
+    propertyTitle: i18nc("@label:spinbox", "Letter Spacing");
+    propertyName: "letter-spacing";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Letter spacing controls the spacing between visible clusters of characters.");
@@ -51,7 +52,7 @@ TextPropertyBase {
         }
 
             Label {
-                text: propertyName;
+                text: propertyTitle;
                 elide: Text.ElideRight;
                 Layout.fillWidth: true;
                 font.italic: properties.letterSpacingState === KoSvgTextPropertiesModel.PropertyTriState;

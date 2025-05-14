@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Glyphs: Ligatures");
+    propertyTitle: i18nc("@label", "Glyphs: Ligatures");
+    propertyName: "ot-ligatures";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable or disable ligatures and contextual alternates on the text.");
@@ -68,7 +69,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.fillWidth: true;
         }
 

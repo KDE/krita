@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Hanging-punctuation");
+    propertyTitle: i18nc("@label", "Hanging Punctuation");
+    propertyName: "hanging-punctuation";
     propertyType: TextPropertyBase.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Hanging punctuation allows hanging opening and closing punctuation as well as commas. This implementation only implements East-Asian style hanging punctuation.");
@@ -60,7 +61,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.hangingPunctuationState === KoSvgTextPropertiesModel.PropertyTriState;

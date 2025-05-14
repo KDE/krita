@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
-    propertyName: i18nc("@label", "Font Family");
+    propertyTitle: i18nc("@label", "Font Family");
+    propertyName: "font-family";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Font family allows selecting a list of fonts that should be used for the current text. The first font family is the primary font used, while each font family after that is used for fallback.");
@@ -41,8 +42,8 @@ CollapsibleGroupProperty {
         width: parent.width;
         height: childrenRect.height;
         Label {
-            id: propertyTitle;
-            text: propertyName;
+            id: propertyTitleLabel;
+            text: propertyTitle;
             verticalAlignment: Text.AlignVCenter
             color: sysPalette.text;
             elide: Text.ElideRight;

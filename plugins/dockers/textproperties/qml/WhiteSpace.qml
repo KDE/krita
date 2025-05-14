@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:spinbox", "White Space");
+    propertyTitle: i18nc("@label:spinbox", "White Space");
+    propertyName: "css-white-space";
     toolTip: i18nc("@info:tooltip",
                    "The CSS white space rule controls how multiples of spaces are handled, and whether the text can wrap.");
     searchTerms: i18nc("comma separated search terms for the white-space property, matching is case-insensitive",
@@ -83,7 +84,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.maximumWidth: implicitWidth;
             font.italic: properties.textCollapseState === KoSvgTextPropertiesModel.PropertyTriState;

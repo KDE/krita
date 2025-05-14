@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 CollapsibleGroupProperty {
-    propertyName: i18nc("@label", "Font Style");
+    propertyTitle: i18nc("@label", "Font Style");
+    propertyName: "font-sub-style";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Font style allows setting the sub style of the given font family, such as italics and bold");
@@ -100,8 +101,8 @@ CollapsibleGroupProperty {
         height: implicitHeight;
         spacing: columnSpacing;
         Label {
-            id: propertyTitle;
-            text: propertyName;
+            id: propertyTitleLabel;
+            text: propertyTitle;
             verticalAlignment: Text.AlignVCenter
             color: sysPalette.text;
             elide: Text.ElideRight;

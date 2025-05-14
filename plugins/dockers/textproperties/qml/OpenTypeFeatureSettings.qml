@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     id: root;
-    propertyName: i18nc("@label", "OpenType features");
+    propertyTitle: i18nc("@label", "OpenType Features");
+    propertyName: "ot-features";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Configure Open Type features.");
@@ -47,7 +48,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.fillWidth: true;
         }
 

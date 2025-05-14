@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Glyphs: Numeric");
+    propertyTitle: i18nc("@label", "Glyphs: Numeric");
+    propertyName: "ot-numeric";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable number-related glyph forms on the text.");
@@ -78,7 +79,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
         }

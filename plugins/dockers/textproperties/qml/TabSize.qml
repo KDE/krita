@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@title:group", "Tab Size");
+    propertyTitle: i18nc("@title:group", "Tab Size");
+    propertyName: "tab-size";
     propertyType: TextPropertyBase.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Tab Size allows defining the size of tabulation characters.");
@@ -78,7 +79,7 @@ TextPropertyBase {
             onClicked: properties.tabSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
-            text: propertyName
+            text: propertyTitle
             Layout.columnSpan: 2;
             elide: Text.ElideRight;
             Layout.fillWidth: true;

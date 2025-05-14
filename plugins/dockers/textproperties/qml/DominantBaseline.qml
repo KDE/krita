@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:listbox", "Dominant Baseline")
+    propertyTitle: i18nc("@label:listbox", "Dominant Baseline");
+    propertyName: "dominant-baseline";
     propertyType: TextPropertyBase.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "Dominant Baseline specifies how stretches of text of different sizes are aligned, it is also the default for Alignment Baseline.");
@@ -44,7 +45,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.dominantBaselineState === KoSvgTextPropertiesModel.PropertyTriState;

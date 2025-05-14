@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label", "Glyphs: East-Asian");
+    propertyTitle: i18nc("@label", "Glyphs: East-Asian");
+    propertyName: "ot-east-asian";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Enable glyph forms related to East Asian text layout.");
@@ -61,7 +62,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
         }

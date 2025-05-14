@@ -13,7 +13,8 @@ import org.krita.flake.text 1.0
   auto-length, but this has been deprecated in SVG 2.0. Because of this, we only really support auto and none.
   */
 TextPropertyBase {
-    propertyName: i18nc("@label", "Font Kerning");
+    propertyTitle: i18nc("@label", "Font Kerning");
+    propertyName: "font-kerning";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Turn font kerning on or off. Font kerning enables per-glyph spacing adjustments.");
@@ -47,7 +48,7 @@ TextPropertyBase {
 
         CheckBox {
             id: fontKerningCbx;
-            text: propertyName;
+            text: propertyTitle;
             Layout.fillWidth: true;
         }
     }

@@ -10,7 +10,8 @@ import QtQuick.Window 2.15
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@title:group", "Language");
+    propertyTitle: i18nc("@title:group", "Language");
+    propertyName: "locale";
     propertyType: TextPropertyBase.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "The language of this text shape. Language affects a number of properties, like glyph shape, upper- and lowercase and line breaking");
@@ -48,7 +49,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName + ":";
+            text: propertyTitle + ":";
             elide: Text.ElideRight;
             Layout.alignment: Qt.AlignRight;
             font.italic: properties.lineHeightState === KoSvgTextPropertiesModel.PropertyTriState;

@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@title:group", "Text Decoration");
+    propertyTitle: i18nc("@title:group", "Text Decoration");
+    propertyName: "text-decoration";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Text Decoration allows drawing underlines, overlines and striking through text.");
@@ -83,7 +84,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             Layout.columnSpan: 2;
             elide: Text.ElideRight;
             Layout.fillWidth: true;

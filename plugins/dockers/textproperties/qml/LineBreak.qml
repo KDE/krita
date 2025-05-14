@@ -11,7 +11,8 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     property int breakType;
 
-    propertyName: i18nc("@label:listbox", "Line Break");
+    propertyTitle: i18nc("@label:listbox", "Line Break");
+    propertyName: "line-break";
     toolTip: i18nc("@info:tooltip",
                    "Line Break allows choosing a strictness for the line breaking algorithm. Mostly used for CJK scripts, requires language being set.");
     searchTerms: i18nc("comma separated search terms for the line-break property, matching is case-insensitive",
@@ -44,7 +45,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.maximumWidth: implicitWidth;
             font.italic: properties.lineBreakState === KoSvgTextPropertiesModel.PropertyTriState;

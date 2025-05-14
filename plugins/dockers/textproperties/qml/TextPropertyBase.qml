@@ -28,7 +28,8 @@ Column {
     signal enableProperty; ///< Set the property to a default value.
     property bool blockSignals; ///< When setting the data on the controls, this needs to be enabled and checked while returning data from the controls.
 
-    property string propertyName; ///< Translated name of the property.
+    property string propertyName; ///< name of the property used for config purposes. Needs to be unique!
+    property string propertyTitle; ///< Translated name of the property.
     property int propertyType; ///< PropertyType of the current property.
     property int parentPropertyType; ///< PropertyType of the current property list it is in.
     property string toolTip; ///< Tooltip associated with the property.

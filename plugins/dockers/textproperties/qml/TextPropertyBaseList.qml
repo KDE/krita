@@ -26,7 +26,8 @@ ColumnLayout {
             propertyWidgetModel.get(i).parentPropertyType = propertyType;
             if (propertyWidgetModel.get(i).propertyType === propertyType ||
                     propertyWidgetModel.get(i).propertyType === TextPropertyBase.Mixed) {
-            propertyList.append({"name": propertyWidgetModel.get(i).propertyName,
+            propertyList.append({"title": propertyWidgetModel.get(i).propertyTitle,
+                                    "name": propertyWidgetModel.get(i).propertyName,
                                     "toolTip": propertyWidgetModel.get(i).toolTip,
                                     "searchTerms": propertyWidgetModel.get(i).searchTerms,
                                     "item": propertyWidgetModel.get(i)});
@@ -162,7 +163,7 @@ ColumnLayout {
         Layout.fillWidth: true;
         Layout.minimumHeight: implicitHeight;
         model: filteredPropertyList;
-        textRole: "name";
+        textRole: "title";
         displayText: i18nc("@label:listbox", "Add Property");
         onActivated: {
             model.get(currentIndex).item.enableProperty();
@@ -181,6 +182,7 @@ ColumnLayout {
         delegate: ItemDelegate {
             id: addPropertyDelegate;
             width: addPropertyCmb.width;
+            required property string title;
             required property string name;
             required property int index;
             required property QtObject item;
@@ -193,7 +195,7 @@ ColumnLayout {
                 }
                 palette: addPropertyPalette.palette;
                 color: addPropertyDelegate.highlighted? palette.highlightedText: palette.text;
-                text: addPropertyDelegate.name;
+                text: addPropertyDelegate.title;
                 elide: Text.ElideRight;
                 verticalAlignment: Text.AlignVCenter
             }

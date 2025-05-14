@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:listbox", "Direction")
+    propertyTitle: i18nc("@label:listbox", "Direction");
+    propertyName: "direction";
     propertyType: TextPropertyBase.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "Direction sets whether the text is left-to-right or right-to-left.");
@@ -57,7 +58,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.directionState === KoSvgTextPropertiesModel.PropertyTriState;

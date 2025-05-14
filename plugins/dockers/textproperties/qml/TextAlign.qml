@@ -9,7 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
-    propertyName: i18nc("@title:group", "Text Align");
+    propertyTitle: i18nc("@title:group", "Text Align");
+    propertyName: "text-align";
     propertyType: TextPropertyBase.Paragraph;
     toolTip: i18nc("@info:tooltip",
                    "Text Align sets the alignment for the given block of characters.");
@@ -147,8 +148,8 @@ CollapsibleGroupProperty {
         width: parent.width;
         height: childrenRect.height;
         Label {
-            id: propertyTitle;
-            text: propertyName;
+            id: propertyTitleLabel;
+            text: propertyTitle;
             verticalAlignment: Text.AlignVCenter
             color: sysPalette.text;
             elide: Text.ElideRight;

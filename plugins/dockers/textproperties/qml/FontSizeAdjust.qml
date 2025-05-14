@@ -10,7 +10,8 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:spinbox", "Font Size Adjust");
+    propertyTitle: i18nc("@label:spinbox", "Font Size Adjust");
+    propertyName: "font-size-adjust";
     propertyType: TextPropertyBase.Character;
     toolTip: i18nc("@info:tooltip",
                    "Font size adjust allows setting a ratio that the x-height must be matched by.");
@@ -44,7 +45,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName;
+            text: propertyTitle;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.fontSizeAdjustState === KoSvgTextPropertiesModel.PropertyTriState;

@@ -7,9 +7,11 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.1
+import org.krita.flake.text 1.0
 
 ColumnLayout {
-    property int propertyType: TextPropertyBase.Character;
+    id: propertyBaseList;
+    property int propertyType: TextPropertyConfigModel.Character;
 
     ListModel {
         id: propertyList;
@@ -19,42 +21,31 @@ ColumnLayout {
         id: filteredPropertyList;
     }
 
+    TextPropertyConfigFilterModel {
+        id : filteredConfigModel;
+        sourceModel: textPropertyConfigModel;
+        showParagraphProperties: propertyBaseList.propertyType === TextPropertyConfigModel.Paragraph;
+        onShowParagraphPropertiesChanged: fillPropertyList();
+        filterCaseSensitivity: Qt.CaseInsensitive;
+    }
+
     Component.onCompleted: fillPropertyList();
 
     function fillPropertyList() {
         for (var i = 0; i < propertyWidgetModel.count; i++) {
-            propertyWidgetModel.get(i).parentPropertyType = propertyType;
-            if (propertyWidgetModel.get(i).propertyType === propertyType ||
-                    propertyWidgetModel.get(i).propertyType === TextPropertyBase.Mixed) {
-            propertyList.append({"title": propertyWidgetModel.get(i).propertyTitle,
-                                    "name": propertyWidgetModel.get(i).propertyName,
-                                    "toolTip": propertyWidgetModel.get(i).toolTip,
-                                    "searchTerms": propertyWidgetModel.get(i).searchTerms,
-                                    "item": propertyWidgetModel.get(i)});
-            } else {
+            let prop = propertyWidgetModel.get(i);
+            textPropertyConfigModel.addProperty(prop.propertyName,
+                                                prop.propertyType,
+                                                prop.propertyTitle,
+                                                prop.toolTip,
+                                                prop.searchTerms,
+                                                );
+            textPropertyConfigModel.loadFromConfiguration();
+            console.log("property show", filteredConfigModel.showParagraphProperties);
+            if (filteredConfigModel.showParagraphProperties && prop.propertyType === TextPropertyConfigModel.Character) {
                 propertyWidgetModel.get(i).visible = false;
-            }
-        }
-        updateFilteredPropertyList();
-    }
-
-    signal filterChanged;
-
-    onFilterChanged: {
-        updateFilteredPropertyList();
-    }
-
-    function updateFilteredPropertyList() {
-        filteredPropertyList.clear();
-        for (var i = 0; i < propertyList.count; i++) {
-            var searchText = propertySearch.text;
-            if (searchText.length === 0) {
-                filteredPropertyList.append(propertyList.get(i));
-            } else {
-                var searchTerms = propertyList.get(i).searchTerms.split(",");
-                if (searchTerms.find(term => term.toLowerCase().includes(searchText.toLowerCase()))) {
-                    filteredPropertyList.append(propertyList.get(i));
-                }
+            } else if (!filteredConfigModel.showParagraphProperties && prop.propertyType === TextPropertyConfigModel.Paragraph) {
+                propertyWidgetModel.get(i).visible = false;
             }
         }
     }
@@ -66,6 +57,24 @@ ColumnLayout {
                 propertyWidgetModel.get(i).propertiesUpdated();
             } else {
                 propertyWidgetModel.get(i).visible = false;
+            }
+        }
+    }
+
+    function isVisible(name) {
+        for (var i = 0; i < propertyWidgetModel.count; i++) {
+            let prop = propertyWidgetModel.get(i);
+            if (name === prop.propertyName) {
+                return prop.visible;
+            }
+        }
+    }
+
+    function enableProperty(name) {
+        for (var i = 0; i < propertyWidgetModel.count; i++) {
+            if (name === propertyWidgetModel.get(i).propertyName) {
+                propertyWidgetModel.get(i).enableProperty();
+                break;
             }
         }
     }
@@ -162,16 +171,10 @@ ColumnLayout {
         id: addPropertyCmb;
         Layout.fillWidth: true;
         Layout.minimumHeight: implicitHeight;
-        model: filteredPropertyList;
-        textRole: "title";
+        model: filteredConfigModel;
+        textRole: "display";
         displayText: i18nc("@label:listbox", "Add Property");
-        onActivated: {
-            model.get(currentIndex).item.enableProperty();
-        }
         onPopupChanged: if (!addPropertyCmb.popup.visible) { propertySearch.text = ""; }
-
-        signal searchChanged;
-        onSearchChanged: parent.filterChanged();
 
         PaletteControl {
             id: cmbPalette;
@@ -179,13 +182,18 @@ ColumnLayout {
         }
         palette: cmbPalette.palette;
 
+        function enableProperty(name) {
+            propertyBaseList.enableProperty(name);
+            popup.close();
+        }
+
         delegate: ItemDelegate {
             id: addPropertyDelegate;
             width: addPropertyCmb.width;
+            required property var model;
             required property string title;
             required property string name;
             required property int index;
-            required property QtObject item;
             required property string toolTip;
             contentItem: Label {
                 enabled: addPropertyDelegate.enabled;
@@ -199,13 +207,15 @@ ColumnLayout {
                 elide: Text.ElideRight;
                 verticalAlignment: Text.AlignVCenter
             }
-            enabled: !item.visible;
+            enabled: !isVisible(name);
             highlighted: addPropertyCmb.highlightedIndex === index;
             background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
 
             ToolTip.text: toolTip;
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: highlighted;
+
+            onClicked: addPropertyCmb.enableProperty(name);
         }
 
         popup: Popup {
@@ -239,7 +249,7 @@ ColumnLayout {
                     placeholderText: i18nc("@info:placeholder", "Search...");
                     Layout.fillWidth: true;
                     Layout.preferredHeight: implicitHeight;
-                    onTextChanged: addPropertyCmb.searchChanged();
+                    onTextChanged: filteredConfigModel.setFilterRegularExpression(text);
                 }
             }
         }

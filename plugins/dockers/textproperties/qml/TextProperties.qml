@@ -52,12 +52,12 @@ Rectangle {
 
         TextPropertyBaseList {
             id: characterPropertyList;
-            propertyType: TextPropertyBase.Character;
+            propertyType: TextPropertyConfigModel.Character;
         }
 
         TextPropertyBaseList {
             id: paragraphPropertyList;
-            propertyType: TextPropertyBase.Paragraph;
+            propertyType: TextPropertyConfigModel.Paragraph;
         }
     }
 }

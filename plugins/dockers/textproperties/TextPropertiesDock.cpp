@@ -49,6 +49,7 @@
 #include "TagFilterProxyModelQmlWrapper.h"
 #include "LocaleHandler.h"
 #include "CssQmlUnitConverter.h"
+#include "TextPropertyConfigModel.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -71,6 +72,8 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<CssQmlUnitConverter>("org.krita.flake.text", 1, 0, "CssQmlUnitConverter");
     qmlRegisterType<TagFilterProxyModelQmlWrapper>("org.krita.flake.text", 1, 0, "TagFilterProxyModelQmlWrapper");
     qmlRegisterType<LocaleHandler>("org.krita.flake.text", 1, 0, "LocaleHandler");
+    qmlRegisterType<TextPropertyConfigModel>("org.krita.flake.text", 1, 0, "TextPropertyConfigModel");
+    qmlRegisterType<TextPropertyConfigFilterModel>("org.krita.flake.text", 1, 0, "TextPropertyConfigFilterModel");
 }
 
 
@@ -109,7 +112,7 @@ struct TextPropertiesDock::Private
     FontAxesModel axesModel;
     KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
-
+    TextPropertyConfigModel *textPropertyConfigModel {nullptr};
     qreal currentDpi{72.0};
 };
 
@@ -138,6 +141,7 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setMinimumHeight(100);
 
     d->fontModel = new KisResourceModel(ResourceType::FontFamilies);
+    d->textPropertyConfigModel = new TextPropertyConfigModel(this);
 
     QList<QLocale> locales;
     QStringList wellFormedBCPNames;
@@ -153,6 +157,7 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
+    m_quickWidget->rootContext()->setContextProperty("textPropertyConfigModel", QVariant::fromValue(d->textPropertyConfigModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
     connect(d->textModel, SIGNAL(textPropertyChanged()),

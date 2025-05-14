@@ -426,8 +426,6 @@ include(ECMGenerateHeaders)
 include(GenerateExportHeader)
 include(ECMMarkAsTest)
 include(ECMInstallIcons)
-include(ECMFindQmlModule)
-include(ECMQmlModule)
 
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)

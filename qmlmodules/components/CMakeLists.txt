@@ -1,3 +1,5 @@
+include(ECMQmlModule)
+
 if (QT_MAJOR_VERSION STREQUAL "6")
 
     ecm_add_qml_module(kritaqmlcomponents

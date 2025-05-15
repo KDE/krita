@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-10 01:59+0000\n"
+"POT-Creation-Date: 2025-05-15 02:02+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -29399,7 +29399,7 @@ msgstr "Opacitate global:"
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:513
-#: libs/ui/forms/wdggeneralsettings.ui:1152
+#: libs/ui/forms/wdggeneralsettings.ui:1161
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Miscellanea"
@@ -29965,7 +29965,7 @@ msgstr "Selection"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:601
-#: libs/ui/forms/wdggeneralsettings.ui:1601
+#: libs/ui/forms/wdggeneralsettings.ui:1610
 #, fuzzy, kde-format
 msgid "(needs restart)"
 msgstr "&Re-Initia Krita"
@@ -30168,67 +30168,97 @@ msgstr "Animation"
 msgid "Animation Settings"
 msgstr "Face plan strato (Layer)"
 
-#. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
+#, kde-format
+msgid ""
+"When this option is checked newly created layers will be automatically "
+"pinned to the animation timeline. This is useful when animating with a small "
+"number of layers or when many elements on different animated layers are "
+"interacting with eachother."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
+#: libs/ui/forms/wdggeneralsettings.ui:1061
 #, kde-format
 msgid "Automatically pin new layers to timeline"
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
+#: libs/ui/forms/wdggeneralsettings.ui:1068
+#, kde-format
+msgid ""
+"When checked, this option automatically adjusts the document's \"start\" and "
+"\"end\" frames so that newly created keyframes are always within the "
+"animation playback range. This feature is recommended to speed up animation "
+"workflow when improvising a scene without a predetermined length."
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1065
+#: libs/ui/forms/wdggeneralsettings.ui:1071
 #, fuzzy, kde-format
 msgid "Automatically adapt playback range to keyframes"
 msgstr "Remove strato (layer)"
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
+#: libs/ui/forms/wdggeneralsettings.ui:1078
+#, kde-format
+msgid ""
+"When checked, this option will automatically scale the Animation Timeline "
+"Docker's frames view to best fit the document's playback range. A smaller "
+"playback range will cause the timeline to zoom in, while a larger playback "
+"range will cause the timeline to zoom out."
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1072
+#: libs/ui/forms/wdggeneralsettings.ui:1081
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1096
+#: libs/ui/forms/wdggeneralsettings.ui:1105
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "Ressources"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1102
+#: libs/ui/forms/wdggeneralsettings.ui:1111
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgid "Resource Folder:"
 msgstr "Aperi  dossier de ressource"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1209
+#: libs/ui/forms/wdggeneralsettings.ui:1218
 #, fuzzy, kde-format
 msgid "When Krita starts:"
 msgstr "Assistente pro salveguardar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1229
+#: libs/ui/forms/wdggeneralsettings.ui:1238
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1236
+#: libs/ui/forms/wdggeneralsettings.ui:1245
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1249
-#: libs/ui/forms/wdggeneralsettings.ui:1262
+#: libs/ui/forms/wdggeneralsettings.ui:1258
+#: libs/ui/forms/wdggeneralsettings.ui:1271
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1252
+#: libs/ui/forms/wdggeneralsettings.ui:1261
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Undo last action"
@@ -30236,31 +30266,31 @@ msgid "Undo stack size:"
 msgstr "Annulla ultime action"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1283
+#: libs/ui/forms/wdggeneralsettings.ui:1292
 #, kde-format
 msgid "Use cumulative undo"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1303
+#: libs/ui/forms/wdggeneralsettings.ui:1312
 #, kde-format
 msgid "Advanced..."
 msgstr "Avantiate..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1312
+#: libs/ui/forms/wdggeneralsettings.ui:1321
 #, fuzzy, kde-format
 msgid "Show root layer"
 msgstr "Monstra %1 barra de instrumentos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1319
+#: libs/ui/forms/wdggeneralsettings.ui:1328
 #, fuzzy, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "Habilita Preferentias de pluma"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1350
+#: libs/ui/forms/wdggeneralsettings.ui:1359
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -30268,50 +30298,50 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1353
+#: libs/ui/forms/wdggeneralsettings.ui:1362
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1376
+#: libs/ui/forms/wdggeneralsettings.ui:1385
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1386
+#: libs/ui/forms/wdggeneralsettings.ui:1395
 #, fuzzy, kde-format
 msgid "Maximum brush size:"
 msgstr "Stylo de Pincel"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1414
+#: libs/ui/forms/wdggeneralsettings.ui:1423
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1417
+#: libs/ui/forms/wdggeneralsettings.ui:1426
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "px"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1452
+#: libs/ui/forms/wdggeneralsettings.ui:1461
 #, fuzzy, kde-format
 msgid "(Needs restart)"
 msgstr "&Re-Initia Krita"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1465
+#: libs/ui/forms/wdggeneralsettings.ui:1474
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1480
+#: libs/ui/forms/wdggeneralsettings.ui:1489
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -30329,7 +30359,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1483
+#: libs/ui/forms/wdggeneralsettings.ui:1492
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:182
 #, kde-format
@@ -30337,7 +30367,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1492
+#: libs/ui/forms/wdggeneralsettings.ui:1501
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -30349,44 +30379,44 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1505
+#: libs/ui/forms/wdggeneralsettings.ui:1514
 #, fuzzy, kde-format
 #| msgid "Automatic"
 msgid "Automatic layer naming"
 msgstr "Automatic"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1511
+#: libs/ui/forms/wdggeneralsettings.ui:1520
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1518
+#: libs/ui/forms/wdggeneralsettings.ui:1527
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1525
+#: libs/ui/forms/wdggeneralsettings.ui:1534
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1535
+#: libs/ui/forms/wdggeneralsettings.ui:1544
 #, fuzzy, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "&Re-Initia Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1550
+#: libs/ui/forms/wdggeneralsettings.ui:1559
 #, kde-format
 msgid "Sensitivity:"
 msgstr "Sensibilitate:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1575
+#: libs/ui/forms/wdggeneralsettings.ui:1584
 #, fuzzy, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "&Re-Initia Krita"

@@ -241,26 +241,6 @@ if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
   rm -rf $APPDIR/usr/lib/$TRIPLET/
 fi
 
-# A safeguard for the case when KDE_INSTALL_USE_QT_SYS_PATHS is not properly 
-# activated and the QML modules are installed into a default KDE's location instead
-# of the one returned by qtpath. If you see this error you should either recreate 
-# your build tree, or pass -DKDE_INSTALL_USE_QT_SYS_PATHS=ON to the build or check
-# if you have non-standard qt.conf in your installation root.
-
-if [ -d $APPDIR/usr/lib/qml ] ; then
-    echo "ERROR: some of Krita's QML modules were installed in an incorrect location"
-    echo "    actual path: ${APPDIR}/lib/qml"
-    echo "    expected path: ${APPDIR}/qml"
-    exit 103
-fi
-
-if [ -d $DEPS_INSTALL_PREFIX/usr/lib/qml ] ; then
-    echo "ERROR: some of Deps' QML modules were installed in an incorrect location"
-    echo "    actual path: ${DEPS_INSTALL_PREFIX}/lib/qml"
-    echo "    expected path: ${DEPS_INSTALL_PREFIX}/qml"
-    exit 103
-fi
-
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib;

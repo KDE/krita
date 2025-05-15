@@ -535,19 +535,41 @@ shutil.copy(
 shutil.copy(
     f"{KRITA_SRC_DIR}\\packaging\\windows\\krita-animation.lnk", pkg_root)
 
-QMLDIR_ARGS = ["--qmldir", f"{DEPS_INSTALL_DIR}\\qml"]
-if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\qml"):
-    subprocess.run(["xcopy", "/S", "/Y", "/I",
-                   f"{KRITA_INSTALL_DIR}\\lib\\qml", f"{pkg_root}\\bin\\"], check=True)
-    # This doesn't really seem to do anything
-    QMLDIR_ARGS.extend(["--qmldir", f"{KRITA_INSTALL_DIR}\\lib\\qml"])
+# QML deployment:
+#
+# When deploying QML modules we should pass windeployqt all the folders
+# **in the source tree** where our resource-embedded .qml files are situated.
+# Every such folder should be declared with --qmldir option. These files will
+# **not** be deployed (because they are expected to be stored as binary resources),
+# but all their dependencies will be deployed to the package folder.
+#
+# Multiple QML dependencies search paths can be provided by --qmlimport switch,
+# we don't pass it explicitly and let it be deduced by windeployqt using qtpath
+# executable.
 
-# For some reason windowsdeployqt skips installing Layouts QML plugin,
-# so we need to copy it manually
-if os.path.isdir(fr"{DEPS_INSTALL_DIR}\qml\QtQuick\Layouts"):
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\qml\\QtQuick\\Layouts".format(
-        DEPS_INSTALL_DIR), fr"{pkg_root}\bin\QtQuick\Layouts"], check=True)
+# Here we should list all the folders/plugins in Krita that have
+# .qml files inside. Theoretically, we can just pass the entire Krita's
+# source tree, but I'm not sure it is a good idea.
+QMLDIR_ARGS = ["--qmldir", fr"{KRITA_SRC_DIR}\plugins\dockers\textproperties"]
 
+# A safeguard for the case when KDE_INSTALL_USE_QT_SYS_PATHS is not properly 
+# activated on Windows and the QML modules are installed into a default KDE's
+# location instead of the one returned by qtpath. If you see this error you 
+# should either recreate your build tree, or pass -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
+# to the build or check if you have non-standard qt.conf in your installation 
+# root.
+
+if os.path.isdir(fr"{KRITA_INSTALL_DIR}\lib\qml"):
+    print("ERROR: some of Krita's QML modules were installed in an incorrect location")
+    print(fr"    actual path: {KRITA_INSTALL_DIR}\lib\qml")
+    print(fr"    expected path: {KRITA_INSTALL_DIR}\qml")
+    exit(103)
+
+if os.path.isdir(fr"{DEPS_INSTALL_DIR}\lib\qml"):
+    print("ERROR: some of Deps' QML modules were installed in an incorrect location")
+    print(fr"    actual path: {DEPS_INSTALL_DIR}\lib\qml")
+    print(fr"    expected path: {DEPS_INSTALL_DIR}\qml")
+    exit(103)
 
 # windeployqt
 if useQt6Build:

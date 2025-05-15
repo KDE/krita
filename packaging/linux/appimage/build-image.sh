@@ -195,18 +195,6 @@ cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libharfbuzz.so.0* $APPDIR/usr/l
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfribidi.so.0* $APPDIR/usr/lib/
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfreetype.so.6* $APPDIR/usr/lib/
 
-## For some reason linuxdeployqt fails to deploy QtQuick.Layouts library into
-## the AppImage, so just copy it manually for now
-##
-## See the following related bugs for details:
-##     * https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues/1
-##     * https://github.com/probonopd/linuxdeployqt/issues/25
-
-if [ -d $DEPS_INSTALL_PREFIX/qml/QtQuick/Layouts ]; then
-    mkdir -p $APPDIR/usr/qml/QtQuick/Layouts
-    rsync -prul $DEPS_INSTALL_PREFIX/qml/QtQuick/Layouts $APPDIR/usr/qml/QtQuick/
-fi
-
 ## == MLT Dependencies and Resources ==
 cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt-7
 cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt-7
@@ -253,12 +241,24 @@ if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
   rm -rf $APPDIR/usr/lib/$TRIPLET/
 fi
 
-# Depending on the status of qt.conf file, qml destination path might be different,
-# fix that
+# A safeguard for the case when KDE_INSTALL_USE_QT_SYS_PATHS is not properly 
+# activated and the QML modules are installed into a default KDE's location instead
+# of the one returned by qtpath. If you see this error you should either recreate 
+# your build tree, or pass -DKDE_INSTALL_USE_QT_SYS_PATHS=ON to the build or check
+# if you have non-standard qt.conf in your installation root.
+
 if [ -d $APPDIR/usr/lib/qml ] ; then
-    mkdir -p $APPDIR/usr/qml
-    rsync -prul $APPDIR/usr/lib/qml/ $APPDIR/usr/qml/
-    rm -rf $APPDIR/usr/lib/qml
+    echo "ERROR: some of Krita's QML modules were installed in an incorrect location"
+    echo "    actual path: ${APPDIR}/lib/qml"
+    echo "    expected path: ${APPDIR}/qml"
+    exit 103
+fi
+
+if [ -d $DEPS_INSTALL_PREFIX/usr/lib/qml ] ; then
+    echo "ERROR: some of Deps' QML modules were installed in an incorrect location"
+    echo "    actual path: ${DEPS_INSTALL_PREFIX}/lib/qml"
+    echo "    expected path: ${DEPS_INSTALL_PREFIX}/qml"
+    exit 103
 fi
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
@@ -369,7 +369,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
   ${MLT_BINARIES} \
   ${FFMPEG_BINARIES} \
-  -qmldir=$DEPS_INSTALL_PREFIX/qml \
+  -qmldir=$KRITA_SOURCES/plugins/dockers/textproperties \
   -verbose=2 \
   -bundle-non-qt-libs \
   -extra-plugins=$EXTRA_PLUGINS_LIST \

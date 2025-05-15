@@ -598,7 +598,7 @@ run_macdeployqt() {
         -verbose=0 \
         -executable=${KRITA_DMG}/krita.app/Contents/MacOS/krita \
         -libpath=${KIS_INSTALL_DIR}/lib \
-        -qmldir=${KIS_INSTALL_DIR}/qml \
+        -qmldir=${KIS_SRC_DIR}/plugins/dockers/textproperties \
         -appstore-compliant
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/kritaplugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/plugins \
@@ -684,9 +684,6 @@ krita_deploy () {
 
     echo "Copying mandatory libs..."
     rsync -priul ${KIS_INSTALL_DIR}/lib/libKF5* ${KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
-
-    echo "Copying qml..."
-    rsync -prul ${KIS_INSTALL_DIR}/qml/ Resources/qml
 
     echo "Copying plugins..."
     local KRITA_DMG_PLUGIN_DIR="${KRITA_DMG}/krita.app/Contents/PlugIns"

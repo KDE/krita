@@ -15,15 +15,15 @@
 class TextPropertyConfigModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(int defaultVisibilityState READ defaultVisibilityState WRITE setDefaultVisibilityState NOTIFY defaultVisibilityStateChanged)
+    Q_PROPERTY(VisibilityState defaultVisibilityState READ defaultVisibilityState WRITE setDefaultVisibilityState NOTIFY defaultVisibilityStateChanged)
 public:
 
     enum VisibilityState {
         FollowDefault = 0, ///< Follow the default property.
-        WhenRelevant, ///< Show when either set or inherited.
-        WhenSet, ///< Show only when set.
-        AlwaysVisible, ///< Always show property.
-        NeverVisible, ///< Never show property.
+        WhenRelevant = 1, ///< Show when either set or inherited.
+        WhenSet = 2, ///< Show only when set.
+        AlwaysVisible = 3, ///< Always show property.
+        NeverVisible = 4, ///< Never show property.
     };
     Q_ENUM(VisibilityState)
 
@@ -45,13 +45,13 @@ public:
     explicit TextPropertyConfigModel(QObject *parent = nullptr);
     ~TextPropertyConfigModel();
 
-    int defaultVisibilityState() const;
-    void setDefaultVisibilityState(const int state);
+    VisibilityState defaultVisibilityState() const;
+    void setDefaultVisibilityState(const VisibilityState state);
 
     // Call this after adding all the properties.
     Q_INVOKABLE void loadFromConfiguration();
 
-    Q_INVOKABLE void addProperty(const QString name,
+    Q_INVOKABLE void addProperty(const QString &name,
                      const int propertyType = 0,
                      const QString title = QString(),
                      const QString toolTip = QString(),
@@ -59,6 +59,9 @@ public:
                      const int visibilityState = -1,
                      const bool collapsed = false);
 
+    Q_INVOKABLE int visibilityStateForName(const QString &name) const;
+
+    void saveConfiguration();
     // QAbstractItemModel interface
 public:
     int rowCount(const QModelIndex &parent) const override;
@@ -69,8 +72,6 @@ public:
 
 Q_SIGNALS:
     void defaultVisibilityStateChanged();
-private Q_SLOTS:
-    void saveConfiguration();
 private:
 
     struct Private;

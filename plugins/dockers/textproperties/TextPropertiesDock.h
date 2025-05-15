@@ -37,6 +37,8 @@ public Q_SLOTS:
 
     QColor modalColorDialog(QColor oldColor);
 
+    void callModalTextPropertyConfigDialog();
+
 private:
     QPointer<KisCanvas2> m_canvas;
     QQuickWidget *m_quickWidget {0};

@@ -12,6 +12,7 @@ import org.krita.flake.text 1.0
 ColumnLayout {
     id: propertyBaseList;
     property int propertyType: TextPropertyConfigModel.Character;
+    property TextPropertyConfigModel configModel;
 
     ListModel {
         id: propertyList;
@@ -23,37 +24,61 @@ ColumnLayout {
 
     TextPropertyConfigFilterModel {
         id : filteredConfigModel;
-        sourceModel: textPropertyConfigModel;
+        sourceModel: configModel;
         showParagraphProperties: propertyBaseList.propertyType === TextPropertyConfigModel.Paragraph;
         onShowParagraphPropertiesChanged: fillPropertyList();
         filterCaseSensitivity: Qt.CaseInsensitive;
     }
 
-    Component.onCompleted: fillPropertyList();
+    onConfigModelChanged: {if (configModel != null) fillPropertyList();}
 
     function fillPropertyList() {
         for (var i = 0; i < propertyWidgetModel.count; i++) {
             let prop = propertyWidgetModel.get(i);
-            textPropertyConfigModel.addProperty(prop.propertyName,
-                                                prop.propertyType,
-                                                prop.propertyTitle,
-                                                prop.toolTip,
-                                                prop.searchTerms,
-                                                );
-            textPropertyConfigModel.loadFromConfiguration();
-            if (filteredConfigModel.showParagraphProperties && prop.propertyType === TextPropertyConfigModel.Character) {
-                propertyWidgetModel.get(i).visible = false;
-            } else if (!filteredConfigModel.showParagraphProperties && prop.propertyType === TextPropertyConfigModel.Paragraph) {
+            configModel.addProperty(prop.propertyName,
+                                    prop.propertyType,
+                                    prop.propertyTitle,
+                                    prop.toolTip,
+                                    prop.searchTerms,
+                                    prop.visibilityState
+                                    );
+
+            if (testShowProperty(prop.propertyType)) {
+                prop.setVisibleFromProperty();
+            } else {
+                prop.visible = false;
+            }
+        }
+        textPropertyConfigModel.loadFromConfiguration();
+        updatePropertyVisibilityState();
+    }
+
+    function testShowProperty(propertyType) {
+        if (filteredConfigModel.showParagraphProperties && propertyType === TextPropertyConfigModel.Character) {
+            return false;
+        } else if (!filteredConfigModel.showParagraphProperties && propertyType === TextPropertyConfigModel.Paragraph) {
+            return false;
+        }
+        return true;
+    }
+
+    function updateProperties() {
+        for (var i = 0; i < propertyWidgetModel.count; i++) {
+            if (testShowProperty(propertyWidgetModel.get(i).propertyType)) {
+                propertyWidgetModel.get(i).propertiesUpdated();
+            } else {
                 propertyWidgetModel.get(i).visible = false;
             }
         }
     }
 
-    function updateProperties() {
+    function updatePropertyVisibilityState() {
         for (var i = 0; i < propertyWidgetModel.count; i++) {
-            if (propertyWidgetModel.get(i).propertyType === propertyType ||
-                    propertyWidgetModel.get(i).propertyType === TextPropertyBase.Mixed) {
-                propertyWidgetModel.get(i).propertiesUpdated();
+            let name = propertyWidgetModel.get(i).propertyName;
+            propertyWidgetModel.get(i).defaultVisibilityState = configModel.defaultVisibilityState;
+            propertyWidgetModel.get(i).visibilityState = configModel.visibilityStateForName(name);
+            if (testShowProperty(propertyWidgetModel.get(i).propertyType)) {
+                propertyWidgetModel.get(i).setVisibleFromProperty();
             } else {
                 propertyWidgetModel.get(i).visible = false;
             }

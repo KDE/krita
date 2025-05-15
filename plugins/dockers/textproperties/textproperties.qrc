@@ -59,5 +59,6 @@
         <file alias="16_light_format-text-overline.svg">icons/16_light_format-text-overline.svg</file>
         <file alias="FontSizeAdjust.qml">qml/FontSizeAdjust.qml</file>
         <file alias="TextRendering.qml">qml/TextRendering.qml</file>
+        <file alias="TextPropertyConfigDialog.qml">qml/TextPropertyConfigDialog.qml</file>
     </qresource>
 </RCC>

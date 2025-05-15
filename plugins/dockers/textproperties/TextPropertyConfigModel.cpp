@@ -9,9 +9,9 @@
 #include "TextPropertyConfigModel.h"
 
 struct TextPropertyConfigModel::TextPropertyData {
-    TextPropertyConfigModel::VisibilityState visibilityState;
-    TextPropertyConfigModel::PropertyType propertyType;
-    bool collapsed;
+    TextPropertyConfigModel::VisibilityState visibilityState = TextPropertyConfigModel::FollowDefault;
+    TextPropertyConfigModel::PropertyType propertyType = TextPropertyConfigModel::Mixed;
+    bool collapsed = false;
     QStringList searchTerms;
     QString toolTip;
     QString title;
@@ -25,10 +25,12 @@ const QMap<TextPropertyConfigModel::VisibilityState, QString> visibilityConfigNa
     {TextPropertyConfigModel::WhenSet, "whenSet"},
 };
 
+const QString DEFAULT_VISIBILITY_STATE = "defaultVisibilityState";
+
 struct TextPropertyConfigModel::Private {
     QStringList propertyNames;
     QMap<QString, TextPropertyConfigModel::TextPropertyData> propertyData;
-    TextPropertyConfigModel::VisibilityState defaultVisibilityState: TextPropertyConfigModel::WhenRelevant;
+    TextPropertyConfigModel::VisibilityState defaultVisibilityState = TextPropertyConfigModel::WhenRelevant;
 };
 
 TextPropertyConfigModel::TextPropertyConfigModel(QObject *parent)
@@ -41,14 +43,14 @@ TextPropertyConfigModel::~TextPropertyConfigModel()
 {
 }
 
-int TextPropertyConfigModel::defaultVisibilityState() const {
-    return int(d->defaultVisibilityState);
+TextPropertyConfigModel::VisibilityState TextPropertyConfigModel::defaultVisibilityState() const {
+    return d->defaultVisibilityState;
 }
 
-void TextPropertyConfigModel::setDefaultVisibilityState(const int state) {
-    if (state == int(d->defaultVisibilityState))
+void TextPropertyConfigModel::setDefaultVisibilityState(const VisibilityState state) {
+    if (state == d->defaultVisibilityState)
         return;
-    d->defaultVisibilityState = VisibilityState(state);
+    d->defaultVisibilityState = state;
     emit defaultVisibilityStateChanged();
 }
 
@@ -73,7 +75,7 @@ QVariant TextPropertyConfigModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::ToolTipRole) {
         return data.toolTip;
     } else if (role == Visibility) {
-        return int(data.visibilityState);
+        return data.visibilityState;
     } else if (role == Collapsed) {
         return data.collapsed;
     } else if (role == SearchTerms) {
@@ -86,14 +88,17 @@ QVariant TextPropertyConfigModel::data(const QModelIndex &index, int role) const
 
 bool TextPropertyConfigModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (!index.isValid()) return false;
+    if (!index.isValid() || !value.isValid()) return false;
     if (index.row() < 0 || index.row() >= d->propertyNames.size()) return false;
 
     if (role == Visibility) {
+        VisibilityState newState = VisibilityState(value.toInt());
         const QString name = d->propertyNames.at(index.row());
-        d->propertyData[name].visibilityState = VisibilityState(value.toInt());
-        emit dataChanged(index, index, {role});
-        return true;
+        if (d->propertyData[name].visibilityState != newState) {
+            d->propertyData[name].visibilityState = VisibilityState(value.toInt());
+            emit dataChanged(index, index, {role});
+            return true;
+        }
     } else if (role == Collapsed) {
         const QString name = d->propertyNames.at(index.row());
         d->propertyData[name].collapsed = value.toBool();
@@ -117,7 +122,7 @@ bool TextPropertyConfigModel::moveRows(const QModelIndex &sourceParent, int sour
 QHash<int, QByteArray> TextPropertyConfigModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
-    roles[Visibility] = "visibilityState";
+    roles[Visibility] = "visibility";
     roles[SearchTerms] = "searchTerms";
     roles[Collapsed] = "collapsed";
     roles[Type] = "type";
@@ -128,7 +133,8 @@ QHash<int, QByteArray> TextPropertyConfigModel::roleNames() const
 
 void TextPropertyConfigModel::saveConfiguration()
 {
-    KConfigGroup configGroup = KSharedConfig::openConfig()->group("TextPropertiesDock");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("TextProperties");
+    configGroup.writeEntry(DEFAULT_VISIBILITY_STATE, visibilityConfigNames.value(d->defaultVisibilityState));
     Q_FOREACH (const QString name, d->propertyNames) {
         const TextPropertyData data = d->propertyData.value(name);
         configGroup.writeEntry(name, visibilityConfigNames.value(data.visibilityState));
@@ -136,13 +142,14 @@ void TextPropertyConfigModel::saveConfiguration()
 }
 
 void TextPropertyConfigModel::loadFromConfiguration() {
-    KConfigGroup configGroup = KSharedConfig::openConfig()->group("TextPropertiesDock");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("TextProperties");
+    d->defaultVisibilityState = visibilityConfigNames.key(configGroup.readEntry(DEFAULT_VISIBILITY_STATE, visibilityConfigNames.value(d->defaultVisibilityState)));
     Q_FOREACH (const QString name, d->propertyNames) {
-        d->propertyData[name].visibilityState = visibilityConfigNames.key(configGroup.readEntry(name));
+        d->propertyData[name].visibilityState = visibilityConfigNames.key(configGroup.readEntry(name, visibilityConfigNames.value(d->propertyData[name].visibilityState)));
     }
 }
 
-void TextPropertyConfigModel::addProperty(const QString name, const int propertyType, const QString title, const QString toolTip, const QString searchTerms, const int visibilityState, const bool collapsed)
+void TextPropertyConfigModel::addProperty(const QString &name, const int propertyType, const QString title, const QString toolTip, const QString searchTerms, const int visibilityState, const bool collapsed)
 {
     if (d->propertyNames.contains(name)) return;
     beginInsertRows(QModelIndex(), d->propertyNames.size(), d->propertyNames.size());
@@ -151,11 +158,18 @@ void TextPropertyConfigModel::addProperty(const QString name, const int property
     data.propertyType = PropertyType(propertyType);
     data.toolTip = toolTip;
     data.searchTerms = searchTerms.split(",");
-    data.visibilityState = visibilityState < 0? FollowDefault: VisibilityState(visibilityState);
+
+    data.visibilityState = VisibilityState(qMax(visibilityState, 0));
     data.collapsed = collapsed;
     d->propertyData.insert(name, data);
     d->propertyNames.append(name);
     endInsertRows();
+}
+
+int TextPropertyConfigModel::visibilityStateForName(const QString &name) const
+{
+    TextPropertyData data = d->propertyData.value(name, TextPropertyData());
+    return int(data.visibilityState);
 }
 
 TextPropertyConfigFilterModel::TextPropertyConfigFilterModel(QObject *parent)
@@ -188,6 +202,8 @@ bool TextPropertyConfigFilterModel::filterAcceptsRow(int source_row, const QMode
     const QString name = sourceModel()->data(idx, Qt::DisplayRole).toString();
     const QStringList searchTerms = sourceModel()->data(idx, TextPropertyConfigModel::SearchTerms).toStringList();
     const TextPropertyConfigModel::PropertyType type = TextPropertyConfigModel::PropertyType(sourceModel()->data(idx, TextPropertyConfigModel::Type).toInt());
+    const TextPropertyConfigModel::VisibilityState state = TextPropertyConfigModel::VisibilityState(sourceModel()->data(idx, TextPropertyConfigModel::Visibility).toInt());
+    if (state == TextPropertyConfigModel::NeverVisible) return false;
     if (type == TextPropertyConfigModel::Paragraph && !m_showParagraphProperties) {
         return false;
     } else if (type == TextPropertyConfigModel::Character && m_showParagraphProperties) {

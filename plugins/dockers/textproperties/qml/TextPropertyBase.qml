@@ -16,6 +16,7 @@ Column {
     height: visible? childrenRect.height: 0;
 
     property KoSvgTextPropertiesModel properties : textPropertiesModel;
+    property int defaultVisibilityState : TextPropertyConfigModel.FollowDefault;
     property double dpi: canvasDPI;
     signal propertiesUpdated; ///< Used by each text property panel to update the data on the controls.
     signal enableProperty; ///< Set the property to a default value.
@@ -32,7 +33,7 @@ Column {
     property var propertyState: []; /// All property states related to the current property.
 
     function setVisibleFromProperty() {
-        let visibleState = visibilityState === TextPropertyConfigModel.FollowDefault? textPropertyConfigModel.defaultVisibilityState: visibilityState;
+        let visibleState = visibilityState === TextPropertyConfigModel.FollowDefault? defaultVisibilityState: visibilityState;
         if (visibleState === TextPropertyConfigModel.AlwaysVisible) {
             visible = true;
         } else if (visibleState === TextPropertyConfigModel.NeverVisible) {

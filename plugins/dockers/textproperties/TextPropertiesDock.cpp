@@ -51,6 +51,8 @@
 #include "CssQmlUnitConverter.h"
 #include "TextPropertyConfigModel.h"
 
+#include "TextPropertyConfigDialog.h"
+
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<KoSvgTextPropertiesModel>("org.krita.flake.text", 1, 0, "KoSvgTextPropertiesModel");
@@ -225,6 +227,16 @@ QColor TextPropertiesDock::modalColorDialog(QColor oldColor)
 {
     QColor c = QColorDialog::getColor(oldColor);
     return c.isValid()? c: oldColor;
+}
+
+void TextPropertiesDock::callModalTextPropertyConfigDialog()
+{
+    TextPropertyConfigDialog dialog(this);
+    dialog.setTextPropertyConfigModel(d->textPropertyConfigModel);
+    if (dialog.exec() == QDialog::Accepted) {
+        dialog.model()->saveConfiguration();
+        QMetaObject::invokeMethod(m_quickWidget->rootObject(), "updatePropertyVisibilityState");
+    }
 }
 
 void TextPropertiesDock::slotCanvasTextPropertiesChanged()

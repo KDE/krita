@@ -9,6 +9,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     LocaleHandler.cpp
     CssQmlUnitConverter.cpp
     TextPropertyConfigModel.cpp
+    TextPropertyConfigDialog.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

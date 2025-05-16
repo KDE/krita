@@ -186,6 +186,11 @@ void TextPropertiesDock::setViewManager(KisViewManager *kisview)
     if (d->provider) {
         connect(d->provider, SIGNAL(sigTextPropertiesChanged()),
                 this, SLOT(slotCanvasTextPropertiesChanged()));
+
+        // This initializes the docker to an empty entry;
+        KoSvgTextPropertyData textData;
+        textData.inheritedProperties = KoSvgTextProperties();
+        d->provider->setTextPropertyData(textData);
     }
 }
 

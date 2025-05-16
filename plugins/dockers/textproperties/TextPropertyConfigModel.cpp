@@ -165,6 +165,9 @@ int TextPropertyConfigModel::visibilityStateForName(const QString &name) const
 
 TextPropertyConfigFilterModel::TextPropertyConfigFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent) {
+
+    connect(this, &QAbstractItemModel::rowsRemoved, this, &TextPropertyConfigFilterModel::filteredNamesChanged);
+    connect(this, &QAbstractItemModel::rowsInserted, this, &TextPropertyConfigFilterModel::filteredNamesChanged);
 }
 
 bool TextPropertyConfigFilterModel::showParagraphProperties() const {
@@ -182,6 +185,17 @@ void TextPropertyConfigFilterModel::setProxySourceModel(QAbstractItemModel *mode
     if (sourceModel() == model) return;
     setSourceModel(model);
     emit proxySourceModelChanged();
+}
+
+QStringList TextPropertyConfigFilterModel::filteredNames() const
+{
+    QStringList names;
+
+    for (int i = 0; i < rowCount(); i++) {
+        QModelIndex idx = index(i, 0);
+        names.append(data(idx, TextPropertyConfigModel::Name).toString());
+    }
+    return names;
 }
 
 bool TextPropertyConfigFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

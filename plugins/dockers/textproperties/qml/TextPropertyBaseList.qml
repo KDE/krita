@@ -207,8 +207,46 @@ ColumnLayout {
         palette: cmbPalette.palette;
 
         function enableProperty(name) {
+            propertySearch.blockSignals = true;
+            propertySearch.text = "";
             propertyBaseList.enableProperty(name);
             popup.close();
+            propertySearch.blockSignals = false;
+        }
+
+        contentItem: TextField {
+            id: propertySearch;
+            placeholderText: i18nc("@info:placeholder", "Add Property...");
+
+            verticalAlignment: Text.AlignVCenter
+            font: addPropertyCmb.font
+            color: addPropertyCmb.palette.text
+            selectionColor: addPropertyCmb.palette.highlight
+            selectedTextColor: addPropertyCmb.palette.highlightedText;
+
+            property bool blockSignals: false;
+
+            selectByMouse: true;
+
+            onTextChanged: {
+                if (text !== "") {
+                    filteredConfigModel.setFilterRegularExpression(text);
+                    addPropertyCmb.popup.open();
+                } else {
+                    addPropertyCmb.popup.close();
+                    filteredConfigModel.setFilterRegularExpression(text);
+                }
+            }
+
+            onAccepted: {
+                blockSignals = true;
+                let name = filteredConfigModel.filteredNames[addPropertyCmb.highlightedIndex]
+                if (typeof name != 'undefined') {
+                    addPropertyCmb.enableProperty(name);
+                }
+                text = "";
+                blockSignals = false;
+            }
         }
 
         delegate: ItemDelegate {
@@ -241,41 +279,7 @@ ColumnLayout {
 
             onClicked: addPropertyCmb.enableProperty(name);
         }
-
-        popup: Popup {
-            y: addPropertyCmb.height - 1;
-            width: addPropertyCmb.width;
-            height: contentHeight;
-            padding: 2;
-
-            palette: cmbPalette.palette;
-
-            contentItem: ColumnLayout {
-                clip: true;
-                width: parent.width;
-                ListView {
-                    clip: true;
-                    Layout.preferredHeight: contentHeight;
-                    Layout.maximumHeight: 300;
-                    Layout.fillWidth: true;
-                    model: addPropertyCmb.popup.visible ? addPropertyCmb.delegateModel : null
-                    currentIndex: addPropertyCmb.highlightedIndex;
-
-                    ScrollBar.vertical: ScrollBar {
-                    }
-                }
-                MenuSeparator {
-                    Layout.fillWidth: true;
-                    Layout.preferredHeight: implicitHeight;
-                }
-                TextField {
-                    id: propertySearch;
-                    placeholderText: i18nc("@info:placeholder", "Search...");
-                    Layout.fillWidth: true;
-                    Layout.preferredHeight: implicitHeight;
-                    onTextChanged: filteredConfigModel.setFilterRegularExpression(text);
-                }
-            }
-        }
+        popup.y: addPropertyCmb.height - 1;
+        popup.palette: cmbPalette.palette;
     }
 }

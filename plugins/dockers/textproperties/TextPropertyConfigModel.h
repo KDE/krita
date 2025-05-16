@@ -82,6 +82,7 @@ class TextPropertyConfigFilterModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(bool showParagraphProperties READ showParagraphProperties WRITE setShowParagraphProperties NOTIFY showParagraphPropertiesChanged)
     Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setProxySourceModel NOTIFY proxySourceModelChanged)
+    Q_PROPERTY(QStringList filteredNames READ filteredNames NOTIFY filteredNamesChanged)
 public:
     TextPropertyConfigFilterModel(QObject *parent = nullptr);
     // QSortFilterProxyModel interface
@@ -92,9 +93,12 @@ public:
 
     void setProxySourceModel(QAbstractItemModel *model);
 
+    QStringList filteredNames() const;
+
 Q_SIGNALS:
     void showParagraphPropertiesChanged();
     void proxySourceModelChanged();
+    void filteredNamesChanged();
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 

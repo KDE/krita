@@ -46,6 +46,8 @@ set(kritalibkis_LIB_SRCS
 
     GuidesConfig.cpp
     GridConfig.cpp
+
+    FileDialog.cpp
 )
 
 kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})

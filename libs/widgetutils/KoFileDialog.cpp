@@ -115,6 +115,16 @@ void KoFileDialog::setImageFilters()
     setMimeTypeFilters(imageFilters);
 }
 
+void KoFileDialog::setNameFilter(const QString &filter)
+{
+    d->filterList = filter.split(";;");
+}
+
+void KoFileDialog::selectNameFilter(const QString &filter)
+{
+    d->defaultFilter = filter;
+}
+
 QString KoFileDialog::selectedNameFilter() const
 {
     return d->fileDialog->selectedNameFilter();

@@ -64,3 +64,5 @@
 
 %Include GuidesConfig.sip
 %Include GridConfig.sip
+
+%Include FileDialog.sip

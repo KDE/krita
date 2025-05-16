@@ -453,14 +453,12 @@ class PhotobashDocker(DockWidget):
             self.addImageLayer(self.foundImages[position + len(self.imagesButtons) * self.currPage])
 
     def changePath(self):
-        fileDialog = QFileDialog(QWidget(self));
-        fileDialog.setFileMode(QFileDialog.FileMode.DirectoryOnly);
-
         if self.directoryPath == "":
             dialogDirectory = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.PicturesLocation)
         else:
             dialogDirectory = self.directoryPath
-        self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, i18n("Change Directory for Images"), dialogDirectory)
+        self.directoryPath = FileDialog.getExistingDirectory(self.mainWidget, i18n("Change Directory for Images"), dialogDirectory)
+        if not self.directoryPath: return
         Application.writeSetting(self.applicationName, self.referencesSetting, self.directoryPath)
 
         self.favouriteImages = []

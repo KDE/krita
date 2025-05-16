@@ -10,17 +10,18 @@
 
 # Importing the relevant dependencies:
 try:
-    from PyQt6.QtWidgets import QFileDialog, QMessageBox
+    from PyQt6.QtWidgets import QMessageBox
 except:
-    from PyQt5.QtWidgets import QFileDialog, QMessageBox
-from krita import Palette
+    from PyQt5.QtWidgets import QMessageBox
+from krita import Palette, FileDialog
 
 
 class gimpPaletteExporter:
 
     def __init__(self, name):
         # We want people to select a palette and a location to save to...
-        self.fileName = QFileDialog.getExistingDirectory()
+        self.fileName = FileDialog.getExistingDirectory()
+        if not self.fileName: return
         allPalettes = Application.resources("palette")
         self.paletteName = name
         self.currentPalette = Palette(allPalettes[self.paletteName])

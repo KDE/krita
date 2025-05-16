@@ -8,20 +8,20 @@ import html
 import os
 import tempfile
 
-import krita
+from krita import Krita, Extension, FileDialog
 
 try:
     from PyQt6.QtCore import QStandardPaths
-    from PyQt6.QtWidgets import QFileDialog, QMessageBox, QInputDialog
+    from PyQt6.QtWidgets import QMessageBox, QInputDialog
 except:
     from PyQt5.QtCore import QStandardPaths
-    from PyQt5.QtWidgets import QFileDialog, QMessageBox, QInputDialog
+    from PyQt5.QtWidgets import QMessageBox, QInputDialog
 
 from .plugin_importer import PluginImporter, PluginImportError
 from .plugin_downloader import download_plugin, PluginDownloadError
 
 
-class PluginImporterExtension(krita.Extension):
+class PluginImporterExtension(Extension):
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -115,12 +115,12 @@ class PluginImporterExtension(krita.Extension):
                 self.do_import(zipfile)
 
     def import_plugin_from_file(self):
-        zipfile = QFileDialog.getOpenFileName(
+        zipfile = FileDialog.getOpenFileName(
             self.parent.activeWindow().qwindow(),
             i18n('Import Plugin'),
             os.path.expanduser('~'),
-            '%s (*.zip)' % i18n('Zip Archives'),
-        )[0]
+            '%s (*.zip)' % i18n('Zip Archives')
+        )
 
         if not zipfile:
             return

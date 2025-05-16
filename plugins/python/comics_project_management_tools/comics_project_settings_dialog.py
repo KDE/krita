@@ -11,11 +11,11 @@ A dialog for editing the general project settings.
 """
 import os
 try:
-    from PyQt6.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QFileDialog, QComboBox, QSizePolicy
+    from PyQt6.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QComboBox, QSizePolicy
     from PyQt6.QtCore import QDir, Qt, pyqtSignal
     from PyQt6.QtGui import QAction
 except:
-    from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QAction, QFileDialog, QComboBox, QSizePolicy
+    from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QAction, QComboBox, QSizePolicy
     from PyQt5.QtCore import QDir, Qt, pyqtSignal
 from krita import *
 
@@ -67,7 +67,7 @@ class path_select(QWidget):
     """
 
     def slot_change_location(self):
-        location = QFileDialog.getExistingDirectory(caption=self.question, directory=self.projectUrl)
+        location = FileDialog.getExistingDirectory(caption=self.question, directory=self.projectUrl)
         if location is not None and location.isspace() is False and len(location) > 0:
             location = os.path.relpath(location, self.projectUrl)
             self.location.setText(location)

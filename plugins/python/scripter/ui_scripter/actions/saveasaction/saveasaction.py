@@ -4,14 +4,13 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 try:
-    from PyQt6.QtWidgets import QFileDialog
     from PyQt6.QtGui import QKeySequence, QAction
     from PyQt6.QtCore import Qt
 except:
-    from PyQt5.QtWidgets import QAction, QFileDialog
+    from PyQt5.QtWidgets import QAction
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
-import krita
+from krita import FileDialog
 
 
 class SaveAsAction(QAction):
@@ -33,10 +32,9 @@ class SaveAsAction(QAction):
 
     def save(self):
         text = self.editor.toPlainText()
-
-        fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
-                                               i18n("Save Python File"), '',
-                                               i18n("Python File (*.py)"))[0]
+        fileName = FileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
+                                              i18n("Save Python File"), '',
+                                              (i18n("Python Files") + " (*.py)"))
         if not fileName:
             return
 

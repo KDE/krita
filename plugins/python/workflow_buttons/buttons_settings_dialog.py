@@ -5,17 +5,17 @@
 
 try:
     from PyQt6.QtCore import QSize, Qt
-    from PyQt6.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter, QImageReader
+    from PyQt6.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter
     from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                                  QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
-                                 QFileDialog, QFrame, QWidget, QSizePolicy)
+                                 QFrame, QWidget, QSizePolicy)
 except:
     from PyQt5.QtCore import QSize, Qt
-    from PyQt5.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter, QImageReader
+    from PyQt5.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter
     from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                                  QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
-                                 QFileDialog, QFrame, QWidget, QSizePolicy)
-from krita import Krita, PresetChooser, ManagedColor
+                                  QFrame, QWidget, QSizePolicy)
+from krita import Krita, PresetChooser, ManagedColor, FileDialog
 from .flow_layout import FlowLayout
 import copy
 
@@ -451,16 +451,11 @@ class ButtonsSettingsDialog(QDialog):
         # print("select icon dialog started")
         if self.selectedButtonID < 1:
             return
-        dialog = QFileDialog(self)
-        formatList = []
-        for formatBytes in QImageReader.supportedImageFormats():
-            formatList.append(f"*.{str(formatBytes, 'utf-8')}")
-        formatsString = " ".join(formatList)
-        # The format string cannot be translated, only the description
-        dialog.setNameFilter(i18n("Icon files ") + "(" + formatsString + ")")
 
-        if dialog.exec():
-            selectedFile = dialog.selectedFiles()[0]
+        dialog = FileDialog(self)
+        dialog.setImageFilters() # all supported image formats
+        selectedFile = dialog.filename()
+        if selectedFile:
             self.iconPathInput.setText(selectedFile)
             self.iconPathChanged()
 
@@ -582,11 +577,11 @@ class ButtonsSettingsDialog(QDialog):
         # print("select script dialog started")
         if self.selectedButtonID < 1:
             return
-        dialog = QFileDialog(self)
+        dialog = FileDialog(self)
         dialog.setNameFilter(i18n("Script files ") + "(*.py)")
+        selectedFile = dialog.filename()
 
-        if dialog.exec():
-            selectedFile = dialog.selectedFiles()[0]
+        if selectedFile:
             self.scriptPathInput.setText(selectedFile)
             self.scriptPathChanged()
 

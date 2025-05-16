@@ -15,10 +15,10 @@ import os  # For finding the script location.
 from pathlib import Path  # For reading all the files in a directory.
 import random  # For selecting two random words from a list.
 try:
-    from PyQt6.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QFileDialog, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
+    from PyQt6.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
     from PyQt6.QtCore import QDate, QLocale, QUuid
 except:
-    from PyQt5.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QFileDialog, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
+    from PyQt5.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
     from PyQt5.QtCore import QDate, QLocale, QUuid
 from krita import *
 from . import comics_metadata_dialog
@@ -55,7 +55,7 @@ class ComicsProjectSetupWizard():
         self.projectDirectory = None
         
         while self.projectDirectory == None:
-            self.projectDirectory = QFileDialog.getExistingDirectory(caption=i18n("Where should the comic project go?"), options=QFileDialog.Option.ShowDirsOnly)
+            self.projectDirectory = FileDialog.getExistingDirectory(caption=i18n("Where should the comic project go?"))
             if os.path.exists(self.projectDirectory) is False:
                 return
             if os.access(self.projectDirectory, os.W_OK) is False:

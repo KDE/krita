@@ -3,23 +3,22 @@
 try:
     from PyQt6.QtCore import Qt
     from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
-                                 QLineEdit, QScrollArea, QGridLayout, QFileDialog,
+                                 QLineEdit, QScrollArea, QGridLayout,
                                  QLabel, QDialogButtonBox)
     from PyQt6.QtGui import QKeySequence
 except:
     from PyQt5.QtCore import Qt
     from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
-                                 QLineEdit, QScrollArea, QGridLayout, QFileDialog,
+                                 QLineEdit, QScrollArea, QGridLayout,
                                  QLabel, QDialogButtonBox)
     from PyQt5.QtGui import QKeySequence
 from . import tenscriptsdialog
-import krita
-
+from krita import Krita, FileDialog
 
 class UITenScripts(object):
 
     def __init__(self):
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.mainDialog = tenscriptsdialog.TenScriptsDialog(
             self, self.kritaInstance.activeWindow().qwindow())
 
@@ -102,11 +101,11 @@ class UITenScripts(object):
         textField.setText("")
 
     def _selectScript(self):
-        dialog = QFileDialog(self.mainDialog)
+        dialog = FileDialog(self.mainDialog)
         dialog.setNameFilter(i18n("Python files (*.py)"))
+        selectedFile = dialog.filename()
 
-        if dialog.exec():
-            selectedFile = dialog.selectedFiles()[0]
+        if selectedFile:
             obj = self.mainDialog.sender()
             textField = self.scriptsLayout.itemAt(
                 self.scriptsLayout.indexOf(obj) - 2).widget()

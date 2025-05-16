@@ -6,17 +6,17 @@ try:
     from PyQt6.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
                                  QDialogButtonBox, QVBoxLayout, QFrame,
                                  QPushButton, QAbstractScrollArea, QLineEdit,
-                                 QMessageBox, QFileDialog, QCheckBox, QSpinBox,
+                                 QMessageBox, QCheckBox, QSpinBox,
                                  QComboBox, QListWidgetItem)
 except:
     from PyQt5.QtCore import (Qt, QRect)
     from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
                                  QDialogButtonBox, QVBoxLayout, QFrame,
                                  QPushButton, QAbstractScrollArea, QLineEdit,
-                                 QMessageBox, QFileDialog, QCheckBox, QSpinBox,
+                                 QMessageBox, QCheckBox, QSpinBox,
                                  QComboBox, QListWidgetItem)
 import os
-import krita
+from krita import Krita, InfoObject, FileDialog
 
 
 class UIExportLayers(object):
@@ -54,7 +54,7 @@ class UIExportLayers(object):
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.documentsList = []
 
         self.directoryTextField.setReadOnly(True)
@@ -232,18 +232,18 @@ class UIExportLayers(object):
                     self.directoryTextField.text(),
                     parentDir, nodeName, _fileFormat)
                 node.save(layerFileName, self.resSpinBox.value() / 72.,
-                          self.resSpinBox.value() / 72., krita.InfoObject(), bounds)
+                          self.resSpinBox.value() / 72., InfoObject(), bounds)
             prefixNum += 1
             if node.childNodes() and not self.groupAsLayer.isChecked():
                 self._exportLayers(node, fileFormat, newDir)
 
     def _selectDir(self):
-        directory = QFileDialog.getExistingDirectory(
+        directory = FileDialog.getExistingDirectory(
             self.mainDialog,
             i18n("Select a Folder"),
-            os.path.expanduser("~"),
-            QFileDialog.Option.ShowDirsOnly)
-        self.directoryTextField.setText(directory)
+            os.path.expanduser("~"))
+        if directory:
+            self.directoryTextField.setText(directory)
 
     def _setResolution(self, index):
         document = self.documentsList[index]

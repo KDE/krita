@@ -20,12 +20,12 @@ import xml.etree.ElementTree as ET
 try:
     from PyQt6.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
     from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont, QAction
-    from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
+    from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 
 except:
     from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
     from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
-    from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
+    from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
@@ -345,7 +345,9 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_open_config(self):
-        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))[0]
+        selectedFile = FileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))
+        if not selectedFile: return
+        self.path_to_config = selectedFile
         if os.path.exists(self.path_to_config) is True:
             if os.access(self.path_to_config, os.W_OK) is False:
                 QMessageBox.warning(None, i18n("Config cannot be used"), i18n("Krita doesn't have write access to this folder, so new files cannot be made. Please configure the folder access or move the project to a folder that can be written to."), QMessageBox.StandardButton.Ok)
@@ -535,7 +537,8 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_add_page_from_url(self):
         # get the pages.
-        urlList = QFileDialog.getOpenFileNames(caption=i18n("Which existing pages to add?"), directory=self.projecturl, filter=str(i18n("Krita files") + "(*.kra)"))[0]
+        urlList = FileDialog.getOpenFileNames(caption=i18n("Which existing pages to add?"), directory=self.projecturl, filter=str(i18n("Krita files") + "(*.kra)"))
+        if not urlList: return
 
         # get the existing pages list.
         pagesList = []
@@ -595,7 +598,9 @@ class comics_project_manager_docker(DockWidget):
 
         if templateExists is False:
             if "templateLocation" not in self.setupDictionary.keys():
-                self.setupDictionary["templateLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"), options=QFileDialog.Option.ShowDirsOnly), self.projecturl)
+                path = FileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"))
+                if not path: return
+                self.setupDictionary["templateLocation"] = os.path.relpath(path, self.projecturl)
 
             templateDir = os.path.join(self.projecturl, self.setupDictionary["templateLocation"])
             template = comics_template_dialog.comics_template_dialog(templateDir)
@@ -614,7 +619,9 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_add_new_page_from_template(self):
         if "templateLocation" not in self.setupDictionary.keys():
-            self.setupDictionary["templateLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"), options=QFileDialog.Option.ShowDirsOnly), self.projecturl)
+            path = FileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"))
+            if not path: return
+            self.setupDictionary["templateLocation"] = os.path.relpath(path, self.projecturl)
 
         templateDir = os.path.join(self.projecturl, self.setupDictionary["templateLocation"])
         template = comics_template_dialog.comics_template_dialog(templateDir)
@@ -638,7 +645,9 @@ class comics_project_manager_docker(DockWidget):
             self.setupDictionary['pageNumber'] = 0
 
         if (str(self.setupDictionary["pagesLocation"]).isspace()):
-            self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.Option.ShowDirsOnly), self.projecturl)
+            path = FileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"))
+            if not path: return
+            self.setupDictionary["pagesLocation"] = os.path.relpath(path, self.projecturl)
 
         # Search for the possible name.
         extraUnderscore = str()
@@ -653,9 +662,11 @@ class comics_project_manager_docker(DockWidget):
         if (os.path.exists(absoluteUrl)):
             newPage = Application.openDocument(absoluteUrl)
         else:
-            booltemplateExists = os.path.exists(os.path.join(self.projecturl, templateUrl))
+            booltemplateExists = os.path.isfile(os.path.join(self.projecturl, templateUrl))
             if booltemplateExists is False:
-                templateUrl = os.path.relpath(QFileDialog.getOpenFileName(caption=i18n("Which image should be the basis the new page?"), directory=self.projecturl, filter=str(i18n("Krita files") + "(*.kra)"))[0], self.projecturl)
+                path = FileDialog.getOpenFileName(caption=i18n("Which image should be the basis for the new page?"), directory=self.projecturl, filter=str(i18n("Krita files") + "(*.kra)"))
+                if not path: return
+                templateUrl = os.path.relpath(path, self.projecturl)
             newPage = Application.openDocument(os.path.join(self.projecturl, templateUrl))
             newPage.waitForDone()
             newPage.setFileName(absoluteUrl)

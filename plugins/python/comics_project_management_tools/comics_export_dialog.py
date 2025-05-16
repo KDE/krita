@@ -134,7 +134,7 @@ class labelSelector(QComboBox):
     def __init__(self):
         super(labelSelector, self).__init__()
         lisOfColors = []
-        lisOfColors.append(Qt.transparent)
+        lisOfColors.append(Qt.GlobalColor.transparent)
         lisOfColors.append(QColor(91, 173, 220))
         lisOfColors.append(QColor(151, 202, 63))
         lisOfColors.append(QColor(247, 229, 61))
@@ -150,7 +150,7 @@ class labelSelector(QComboBox):
             item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
             item.setCheckState(Qt.CheckState.Unchecked)
             item.setText(" ")
-            item.setData(color, Qt.ItemDataRole.BackgroundColorRole)
+            item.setData(color, Qt.ItemDataRole.BackgroundRole)
             self.itemModel.appendRow(item)
         self.setModel(self.itemModel)
 

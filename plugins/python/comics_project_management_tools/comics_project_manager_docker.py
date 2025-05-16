@@ -135,7 +135,7 @@ class comic_page_delegate(QStyledItemDelegate):
                     if (index.data(CPE.LASTEDIT) is None) and (index.data(CPE.EDITOR) is None):
                         painter.setOpacity(0.3)
                         painter.setFont(italics)
-                    textLastEdit = metrics.elidedText(textLastEdit, Qt.TextElideFlag.ElideRight, labelWidth)
+                    textLastEdit = metrics.elidedText(textLastEdit, Qt.TextElideMode.ElideRight, labelWidth)
                     painter.drawText(textRect, Qt.TextFlag.TextWordWrap, textLastEdit)
             
             painter.setFont(regular)
@@ -154,7 +154,7 @@ class comic_page_delegate(QStyledItemDelegate):
                     painter.setFont(italics)
                 linesTotal = floor(descRect.height()/metrics.lineSpacing())
                 if linesTotal == 1:
-                    textDescription = metrics.elidedText(textDescription, Qt.TextElideFlag.ElideRight, labelWidth)
+                    textDescription = metrics.elidedText(textDescription, Qt.TextElideMode.ElideRight, labelWidth)
                     painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                 else:
                     descRect.setHeight(linesTotal*metrics.lineSpacing())
@@ -844,7 +844,7 @@ class comics_project_manager_docker(DockWidget):
         #   of `slot_check_for_page_update` would not know which files to update now.
         # https://bugs.kde.org/show_bug.cgi?id=426701
         self.updateurls.append(url)
-        QTimer.singleShot(200, Qt.PreciseTimer, self.slot_check_for_page_update)
+        QTimer.singleShot(200, Qt.TimerType.PreciseTimer, self.slot_check_for_page_update)
          
 
     def slot_check_for_page_update(self):
@@ -897,7 +897,7 @@ class comics_project_manager_docker(DockWidget):
         dialog.layout().addWidget(sizesBox)
         dialog.layout().addWidget(buttons)
 
-        if dialog.exec() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             progress = QProgressDialog(i18n("Resizing pages..."), str(), 0, len(self.setupDictionary["pages"]))
             progress.setWindowTitle(i18n("Resizing Pages"))
             progress.setCancelButton(None)

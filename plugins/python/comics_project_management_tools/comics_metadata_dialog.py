@@ -18,11 +18,11 @@ from pathlib import Path  # For reading all the files in a directory.
 try:
     from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
     from PyQt6.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-    from PyQt6.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
+    from PyQt6.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid, QLibraryInfo
 except:
     from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
     from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-    from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
+    from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid, QLibraryInfo
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -88,8 +88,8 @@ class language_combo_box(QComboBox):
             codeIcon = QImage(self.iconSize(), QImage.Format.Format_ARGB32)
             painter = QPainter(codeIcon)
             painter.setBrush(Qt.GlobalColor.transparent)
-            codeIcon.fill(Qt.transparent)
-            font = QFontDatabase().systemFont(QFontDatabase.SystemFont.FixedFont)
+            codeIcon.fill(Qt.GlobalColor.transparent)
+            font = QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont)
             painter.setFont(font)
             painter.setPen(self.palette().color(QPalette.ColorRole.Text))
             painter.drawText(codeIcon.rect(), Qt.AlignmentFlag.AlignCenter,lang)
@@ -136,9 +136,9 @@ class country_combo_box(QComboBox):
                 self.setIconSize(QSize(32, 22))
                 codeIcon = QImage(self.iconSize(), QImage.Format.Format_ARGB32)
                 painter = QPainter(codeIcon)
-                painter.setBrush(Qt.transparent)
-                codeIcon.fill(Qt.transparent)
-                font = QFontDatabase().systemFont(QFontDatabase.SystemFont.FixedFont)
+                painter.setBrush(Qt.GlobalColor.transparent)
+                codeIcon.fill(Qt.GlobalColor.transparent)
+                font = QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont)
                 painter.setFont(font)
                 painter.setPen(self.palette().color(QPalette.ColorRole.Text))
                 painter.drawText(codeIcon.rect(), Qt.AlignmentFlag.AlignCenter,country)
@@ -216,7 +216,7 @@ class author_delegate(QStyledItemDelegate):
 
         if index.column() == self.completerColumn:
             editor.setCompleter(QCompleter(self.completerStrings))
-            editor.completer().setCaseSensitivity(False)
+            editor.completer().setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
 
         return editor
 
@@ -278,13 +278,13 @@ class comic_meta_data_editor(QDialog):
         genreCompletion = multi_entry_completer()
         genreCompletion.setModel(QStringListModel(self.genreKeysList))
         self.lnGenre.setCompleter(genreCompletion)
-        genreCompletion.setCaseSensitivity(False)
+        genreCompletion.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.lnGenre.setToolTip(i18n("The genre of the work. Prefilled values are from the ACBF, but you can fill in your own. Separate genres with commas. Try to limit the amount to about two or three."))
 
         self.lnCharacters = QLineEdit()
         characterCompletion = multi_entry_completer()
         characterCompletion.setModel(QStringListModel(self.characterKeysList))
-        characterCompletion.setCaseSensitivity(False)
+        characterCompletion.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         characterCompletion.setFilterMode(Qt.MatchFlag.MatchContains)  # So that if there is a list of names with last names, people can type in a last name.
         self.lnCharacters.setCompleter(characterCompletion)
         self.lnCharacters.setToolTip(i18n("The names of the characters that this comic revolves around. Comma-separated."))
@@ -292,7 +292,7 @@ class comic_meta_data_editor(QDialog):
         self.lnFormat = QLineEdit()
         formatCompletion = multi_entry_completer()
         formatCompletion.setModel(QStringListModel(self.formatKeysList))
-        formatCompletion.setCaseSensitivity(False)
+        formatCompletion.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.lnFormat.setCompleter(formatCompletion)
 
         ratingLayout = QHBoxLayout()
@@ -318,7 +318,7 @@ class comic_meta_data_editor(QDialog):
 
         otherCompletion = multi_entry_completer()
         otherCompletion.setModel(QStringListModel(self.otherKeysList))
-        otherCompletion.setCaseSensitivity(False)
+        otherCompletion.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         otherCompletion.setFilterMode(Qt.MatchFlag.MatchContains)
         self.lnOtherKeywords = QLineEdit()
         self.lnOtherKeywords.setCompleter(otherCompletion)
@@ -623,12 +623,21 @@ class comic_meta_data_editor(QDialog):
             else:
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
-            if config["readingDirection"] == "leftToRight":
-                self.cmbReadingMode.setCurrentIndex(int(Qt.LayoutDirection.LeftToRight))
-            else:
-                self.cmbReadingMode.setCurrentIndex(int(Qt.LayoutDirection.RightToLeft))
+            if QLibraryInfo.version().majorVersion() == 6: # PyQt6
+                if config["readingDirection"] == "leftToRight":
+                    self.cmbReadingMode.setCurrentIndex(Qt.LayoutDirection.LeftToRight.value)
+                else:
+                    self.cmbReadingMode.setCurrentIndex(Qt.LayoutDirection.RightToLeft.value)
+            else: #PyQt5
+                if config["readingDirection"] == "leftToRight":
+                    self.cmbReadingMode.setCurrentIndex(Qt.LayoutDirection.LeftToRight)
+                else:
+                    self.cmbReadingMode.setCurrentIndex(Qt.LayoutDirection.RightToLeft)
         else:
-            self.cmbReadingMode.setCurrentIndex(QLocale(self.cmbLanguage.codeForCurrentEntry()).textDirection())
+            if QLibraryInfo.version().majorVersion() == 6: # PyQt6
+                self.cmbReadingMode.setCurrentIndex(QLocale(self.cmbLanguage.codeForCurrentEntry()).textDirection().value)
+            else:
+                self.cmbReadingMode.setCurrentIndex(QLocale(self.cmbLanguage.codeForCurrentEntry()).textDirection())
         if "publisherName" in config.keys():
             self.publisherName.setText(config["publisherName"])
         if "publisherCity" in config.keys():

@@ -16,11 +16,11 @@ http://acbf.wikia.com/wiki/ACBF_Specifications
 import os
 import re
 try:
-    from PyQt6.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
+    from PyQt6.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer, QLocale
     from PyQt6.QtGui import QImage, QColor, QFont, QRawFont
     from PyQt6.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 except:
-    from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
+    from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer, QLocale
     from PyQt5.QtGui import QImage, QColor, QFont, QRawFont
     from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from . import CPMT_po_parser as po_parser
@@ -351,7 +351,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     acbfDate = document.createElement("creation-date")
     now = QDate.currentDate()
     acbfDate.setAttribute("value", now.toString(Qt.DateFormat.ISODate))
-    acbfDate.appendChild(document.createTextNode(str(now.toString(Qt.DateFormat.SystemLocaleLongDate))))
+    acbfDate.appendChild(document.createTextNode(QLocale().toString(now, QLocale.FormatType.LongFormat)))
     documentInfo.appendChild(acbfDate)
 
     if "acbfSource" in configDictionary.keys():

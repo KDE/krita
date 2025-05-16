@@ -50,6 +50,8 @@
 # Copyright (C) 2015 This_file_is_part_of_KDE
 # This file is distributed under the same license as the krita package.
 #
+# Automatically generated, 2015.
+#
 # SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006, 2007 Juan Manuel Garcia Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2006 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
@@ -59,20 +61,19 @@
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018. 2019. 2020, 2021, 2024, 2025 Sofía Priego <spriego@darksylvania.net>
-# Automatically generated, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-15 02:02+0000\n"
-"PO-Revision-Date: 2025-05-10 00:14+0100\n"
+"PO-Revision-Date: 2025-05-15 17:32+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -29863,6 +29864,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"Cuando está marcada esta opción, las capas recién creadas se fijarán "
+"automáticamente en la línea de tiempo de la animación. Esto resulta útil al "
+"hacer una animación con pocas capas o cuando muchos elementos de diferentes "
+"capas animadas interactúan entre sí."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29879,6 +29884,11 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Cuando está marcada, esta opción ajusta automáticamente los fotogramas de "
+"inicio y fin del documento para que los fotogramas clave recién creados "
+"estén siempre dentro del intervalo de reproducción de la animación. Se "
+"recomienda esta función para agilizar el flujo de trabajo de animación al "
+"improvisar una escena sin una duración predeterminada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29896,6 +29906,11 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Cuando está activada esta opción, la vista de fotogramas del panel de «Línea "
+"de tiempo de la animación» se ajustará automáticamente al intervalo de "
+"reproducción del documento. Un intervalo de reproducción pequeño hará que la "
+"línea de tiempo se amplíe, mientras que un intervalo de reproducción mayor "
+"la reducirá."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081

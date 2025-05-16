@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-15 02:02+0000\n"
-"PO-Revision-Date: 2025-05-09 09:37+0200\n"
+"PO-Revision-Date: 2025-05-15 09:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -29867,6 +29867,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"Quan aquesta opció està marcada, les capes creades noves es fixaran "
+"automàticament a la línia de temps de l'animació. Això és útil quan s'anima "
+"amb un nombre petit de capes o quan molts elements de capes animades "
+"diferents estan interactuant entre si."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29883,6 +29887,11 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Quan està marcada, aquesta opció ajusta automàticament els fotogrames "
+"d'«inici» i «final» del document de manera que els fotogrames clau creats "
+"nous sempre estiguin dins de l'interval de reproducció de l'animació. "
+"Aquesta característica es recomana per a accelerar el flux de treball "
+"d'animació quan s'improvisa una escena sense una longitud predeterminada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29899,6 +29908,11 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Quan està marcada, aquesta opció escalarà automàticament la vista de "
+"fotogrames de l'acoblador de la línia de temps d'animació per a ajustar-se "
+"millor a l'interval de reproducció del document. Un interval de reproducció "
+"més petit farà que la línia de temps s'ampliï, mentre que un interval de "
+"reproducció més gran farà que la línia de temps es redueixi."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081

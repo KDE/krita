@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-15 02:02+0000\n"
-"PO-Revision-Date: 2025-05-09 23:47+0300\n"
+"PO-Revision-Date: 2025-05-15 13:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -29731,6 +29731,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"Bu seçenek işaretlendiğinde, yeni oluşturulan katmanlar kendiliğinden "
+"canlandırma zaman akışına sabitlenirler. Bu, az sayıda katmanla "
+"canlandırırken veya farklı canlandırılmış katmanlardaki çok sayıda öge "
+"birbirleriyle etkileşime giriyorlarsa yararlıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29747,6 +29751,11 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Bu seçenek işaretlendiğinde, belgenin başlangıç ve bitiş kareleri, yeni "
+"oluşturulan anahtar kareler her zaman canlandırma oynatımı eriminde olacak "
+"biçimde kendiliğinden ayarlanırlar. B özellik, önceden belirlenmiş bir "
+"uzunluğu olmayan bir sahneyi içeren canlandırma iş akışlarını hızlandırmak "
+"için önerilir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29763,6 +29772,10 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Bu seçenek işaretlendiğinde, canlandırma zaman akışı panelinin kareleri, "
+"belgenin oynatım erimine kendiliğinden ölçeklenir. Daha küçük bir oynatım "
+"erimi zaman akışının yakınlaşmasına, daha büyük bir erim ise zaman akışının "
+"uzaklaşmasına neden olur."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081

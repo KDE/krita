@@ -422,8 +422,33 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
      * may be subscribed to sigSizeChanged() signal (e.g. KisSelectionBasedLayer). So the
      * old layers should be fully detached before we actually Q_EMIT this signal.
      *
+     * We should also change all the dimensional properties of the image before setting
+     * the image on the nodes, because some nodes may emit signals if something changes
+     * internally (e.g. resolution).
+     *
      * See bug 447599 for more details.
      */
+
+    const bool sizeChanged = m_d->width != rhs.width() || m_d->height != rhs.height();
+    const bool colorSpaceChanged = *m_d->colorSpace != *rhs.colorSpace();
+    const bool resolutionChanged = m_d->xres != rhs.m_d->xres || m_d->yres != rhs.m_d->yres;
+
+    if (sizeChanged) {
+        m_d->width = rhs.width();
+        m_d->height = rhs.height();
+    }
+
+    if (colorSpaceChanged) {
+        m_d->colorSpace = rhs.colorSpace();
+    }
+
+    if (resolutionChanged) {
+        m_d->xres = rhs.m_d->xres;
+        m_d->yres = rhs.m_d->yres;
+    }
+
+    // from KisImage::KisImage(const KisImage &, KisUndoStore *, bool)
+    setObjectName(rhs.objectName());
 
     KisNodeSP oldRoot = this->root();
     KisNodeSP newRoot = rhs.root()->clone();
@@ -439,28 +464,16 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
         oldRoot->disconnect();
     }
 
-
     // only when replacing do we need to Q_EMIT signals
 #define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else emit
 
-    if (policy & REPLACE) { // if we are constructing the image, these are already set
-        if (m_d->width != rhs.width() || m_d->height != rhs.height()) {
-            m_d->width = rhs.width();
-            m_d->height = rhs.height();
-            Q_EMIT sigSizeChanged(QPointF(), QPointF());
-        }
-        if (m_d->colorSpace != rhs.colorSpace()) {
-            m_d->colorSpace = rhs.colorSpace();
-            Q_EMIT sigColorSpaceChanged(m_d->colorSpace);
-        }
+    if (sizeChanged) {
+        EMIT_IF_NEEDED sigSizeChanged(QPointF(), QPointF());
     }
-
-    // from KisImage::KisImage(const KisImage &, KisUndoStore *, bool)
-    setObjectName(rhs.objectName());
-
-    if (m_d->xres != rhs.m_d->xres || m_d->yres != rhs.m_d->yres) {
-        m_d->xres = rhs.m_d->xres;
-        m_d->yres = rhs.m_d->yres;
+    if (colorSpaceChanged) {
+        EMIT_IF_NEEDED sigColorSpaceChanged(m_d->colorSpace);
+    }
+    if (resolutionChanged) {
         EMIT_IF_NEEDED sigResolutionChanged(m_d->xres, m_d->yres);
     }
 

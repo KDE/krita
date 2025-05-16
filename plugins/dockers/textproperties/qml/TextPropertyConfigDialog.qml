@@ -63,49 +63,64 @@ Control {
 
         }
 
-        ListView {
-            id: configListView;
-            model: configModel;
+        Frame {
             Layout.fillWidth: true;
             Layout.fillHeight: true;
-            clip: true;
-
-            ScrollBar.vertical: ScrollBar {
+            padding: 0;
+            background: Rectangle {
+                color: palette.base;
             }
 
-            delegate: ItemDelegate {
-                id: configDelegate;
-                width: configListView.width;
-                height: implicitHeight;
-                required property var model;
-                required property int index;
+            ListView {
+                id: configListView;
+                model: configModel;
+                anchors.fill: parent;
+                clip: true;
 
-                palette: control.palette;
-                contentItem: RowLayout {
-                    Label {
-                        text: configDelegate.model.title;
-                        Layout.fillWidth: true;
-                        palette: control.palette;
+                ScrollBar.vertical: ScrollBar {
+                }
+
+                delegate: ItemDelegate {
+                    id: configDelegate;
+                    width: configListView.width;
+                    height: implicitHeight;
+                    required property var model;
+                    required property int index;
+
+                    palette: control.palette;
+
+                    background: Rectangle {
+                        color: "transparent";
                     }
-                    ComboBox {
-                        id: visibilityCmb;
-                        Layout.preferredWidth: implicitWidth;
-                        model: [
-                            {text: i18nc("@label:inlistbox", "Follow Default"), value: TextPropertyConfigModel.FollowDefault},
-                            {text: i18nc("@label:inlistbox", "When Relevant"), value: TextPropertyConfigModel.WhenRelevant},
-                            {text: i18nc("@label:inlistbox", "When Set"), value: TextPropertyConfigModel.WhenSet},
-                            {text: i18nc("@label:inlistbox", "Always Show"), value: TextPropertyConfigModel.AlwaysVisible},
-                            {text: i18nc("@label:inlistbox", "Never Show"), value: TextPropertyConfigModel.NeverVisible}
-                        ]
 
-                        palette: control.palette;
-                        textRole: "text";
-                        valueRole: "value";
-                        Component.onCompleted: {
-                            currentIndex = indexOfValue(configDelegate.model.visibility);
+                    contentItem: RowLayout {
+                        Label {
+                            text: configDelegate.model.title;
+                            Layout.fillWidth: true;
+                            palette: control.palette;
                         }
+                        ComboBox {
+                            id: visibilityCmb;
+                            Layout.minimumWidth: implicitWidth;
+                            Layout.preferredWidth: implicitWidth * 1.1;
+                            Layout.maximumWidth: configDelegate.width * 0.5;
+                            model: [
+                                {text: i18nc("@label:inlistbox", "Follow Default"), value: TextPropertyConfigModel.FollowDefault},
+                                {text: i18nc("@label:inlistbox", "When Relevant"), value: TextPropertyConfigModel.WhenRelevant},
+                                {text: i18nc("@label:inlistbox", "When Set"), value: TextPropertyConfigModel.WhenSet},
+                                {text: i18nc("@label:inlistbox", "Always Show"), value: TextPropertyConfigModel.AlwaysVisible},
+                                {text: i18nc("@label:inlistbox", "Never Show"), value: TextPropertyConfigModel.NeverVisible}
+                            ]
 
-                        onActivated: configDelegate.model.visibility = currentValue;
+                            palette: control.palette;
+                            textRole: "text";
+                            valueRole: "value";
+                            Component.onCompleted: {
+                                currentIndex = indexOfValue(configDelegate.model.visibility);
+                            }
+
+                            onActivated: configDelegate.model.visibility = currentValue;
+                        }
                     }
                 }
             }

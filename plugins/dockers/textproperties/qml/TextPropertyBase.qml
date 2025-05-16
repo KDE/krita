@@ -12,8 +12,8 @@ Column {
     property int firstColumnWidth: 32;
     property int columnSpacing: 5;
     padding: columnSpacing;
-    width: parent && parent !== undefined? parent.width - (padding*2): 100;
-    height: visible? childrenRect.height: 0;
+    width: parent && typeof parent !== 'undefined'? parent.width - (padding * 2): 100;
+    height: visible? implicitHeight: 0;
 
     property KoSvgTextPropertiesModel properties : textPropertiesModel;
     property int defaultVisibilityState : TextPropertyConfigModel.FollowDefault;
@@ -69,6 +69,5 @@ Column {
         id: seperator;
         width: parent.width;
         topPadding: parent.padding;
-        bottomPadding:parent.padding;
     }
 }

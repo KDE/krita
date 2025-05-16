@@ -51,6 +51,22 @@ void TextPropertyConfigModel::setDefaultVisibilityState(const VisibilityState st
         return;
     d->defaultVisibilityState = state;
     emit defaultVisibilityStateChanged();
+    emit shouldFilterChanged();
+}
+
+bool TextPropertyConfigModel::shouldFilter() const
+{
+    bool shouldFilter = d->defaultVisibilityState == AlwaysVisible;
+    if (!shouldFilter) return false;
+
+    for (int i = 0; i < d->propertyData.size(); i++) {
+        VisibilityState state = d->propertyData.values().at(i).visibilityState;
+        if (state == WhenRelevant || state == WhenSet) {
+            return false;
+            break;
+        }
+    }
+    return shouldFilter;
 }
 
 int TextPropertyConfigModel::rowCount(const QModelIndex &parent) const
@@ -94,6 +110,7 @@ bool TextPropertyConfigModel::setData(const QModelIndex &index, const QVariant &
         if (d->propertyData[name].visibilityState != newState) {
             d->propertyData[name].visibilityState = VisibilityState(value.toInt());
             emit dataChanged(index, index, {role});
+            emit shouldFilterChanged();
             return true;
         }
     }

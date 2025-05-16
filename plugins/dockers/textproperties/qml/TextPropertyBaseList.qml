@@ -29,7 +29,7 @@ ColumnLayout {
         onShowParagraphPropertiesChanged: fillPropertyList();
         filterCaseSensitivity: Qt.CaseInsensitive;
 
-        property bool isFiltering: configModel.defaultVisibilityState === TextPropertyConfigModel.AlwaysVisible;
+        property bool isFiltering: configModel.shouldFilter;
 
         onFilteredNamesChanged: {
             if (isFiltering) {

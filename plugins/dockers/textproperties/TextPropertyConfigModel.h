@@ -16,6 +16,7 @@ class TextPropertyConfigModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(VisibilityState defaultVisibilityState READ defaultVisibilityState WRITE setDefaultVisibilityState NOTIFY defaultVisibilityStateChanged)
+    Q_PROPERTY(bool shouldFilter READ shouldFilter NOTIFY shouldFilterChanged)
 public:
 
     enum VisibilityState {
@@ -47,6 +48,8 @@ public:
     VisibilityState defaultVisibilityState() const;
     void setDefaultVisibilityState(const VisibilityState state);
 
+    bool shouldFilter() const;
+
     // Call this after adding all the properties.
     Q_INVOKABLE void loadFromConfiguration();
 
@@ -70,6 +73,7 @@ public:
 
 Q_SIGNALS:
     void defaultVisibilityStateChanged();
+    void shouldFilterChanged();
 private:
 
     struct Private;

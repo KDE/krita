@@ -11,7 +11,6 @@
 struct TextPropertyConfigModel::TextPropertyData {
     TextPropertyConfigModel::VisibilityState visibilityState = TextPropertyConfigModel::FollowDefault;
     TextPropertyConfigModel::PropertyType propertyType = TextPropertyConfigModel::Mixed;
-    bool collapsed = false;
     QStringList searchTerms;
     QString toolTip;
     QString title;
@@ -76,8 +75,6 @@ QVariant TextPropertyConfigModel::data(const QModelIndex &index, int role) const
         return data.toolTip;
     } else if (role == Visibility) {
         return data.visibilityState;
-    } else if (role == Collapsed) {
-        return data.collapsed;
     } else if (role == SearchTerms) {
         return data.searchTerms;
     } else if (role == Type) {
@@ -99,11 +96,6 @@ bool TextPropertyConfigModel::setData(const QModelIndex &index, const QVariant &
             emit dataChanged(index, index, {role});
             return true;
         }
-    } else if (role == Collapsed) {
-        const QString name = d->propertyNames.at(index.row());
-        d->propertyData[name].collapsed = value.toBool();
-        emit dataChanged(index, index, {role});
-        return true;
     }
     return false;
 }
@@ -124,7 +116,6 @@ QHash<int, QByteArray> TextPropertyConfigModel::roleNames() const
     QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
     roles[Visibility] = "visibility";
     roles[SearchTerms] = "searchTerms";
-    roles[Collapsed] = "collapsed";
     roles[Type] = "type";
     roles[Name] = "name";
     roles[Qt::DisplayRole] = "title";
@@ -149,18 +140,18 @@ void TextPropertyConfigModel::loadFromConfiguration() {
     }
 }
 
-void TextPropertyConfigModel::addProperty(const QString &name, const int propertyType, const QString title, const QString toolTip, const QString searchTerms, const int visibilityState, const bool collapsed)
+void TextPropertyConfigModel::addProperty(const QString &name, const int propertyType, const QString title, const QString toolTip, const QString searchTerms, const int visibilityState)
 {
     if (d->propertyNames.contains(name)) return;
     beginInsertRows(QModelIndex(), d->propertyNames.size(), d->propertyNames.size());
     TextPropertyData data = d->propertyData.value(name, TextPropertyData());
+
     data.title = title;
     data.propertyType = PropertyType(propertyType);
     data.toolTip = toolTip;
     data.searchTerms = searchTerms.split(",");
-
     data.visibilityState = VisibilityState(qMax(visibilityState, 0));
-    data.collapsed = collapsed;
+
     d->propertyData.insert(name, data);
     d->propertyNames.append(name);
     endInsertRows();
@@ -174,7 +165,6 @@ int TextPropertyConfigModel::visibilityStateForName(const QString &name) const
 
 TextPropertyConfigFilterModel::TextPropertyConfigFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent) {
-    setFilterCaseSensitivity(Qt::CaseInsensitive);
 }
 
 bool TextPropertyConfigFilterModel::showParagraphProperties() const {
@@ -199,16 +189,18 @@ bool TextPropertyConfigFilterModel::filterAcceptsRow(int source_row, const QMode
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
     if (!idx.isValid()) return false;
 
-    const QString name = sourceModel()->data(idx, Qt::DisplayRole).toString();
-    const QStringList searchTerms = sourceModel()->data(idx, TextPropertyConfigModel::SearchTerms).toStringList();
-    const TextPropertyConfigModel::PropertyType type = TextPropertyConfigModel::PropertyType(sourceModel()->data(idx, TextPropertyConfigModel::Type).toInt());
     const TextPropertyConfigModel::VisibilityState state = TextPropertyConfigModel::VisibilityState(sourceModel()->data(idx, TextPropertyConfigModel::Visibility).toInt());
     if (state == TextPropertyConfigModel::NeverVisible) return false;
+
+    const TextPropertyConfigModel::PropertyType type = TextPropertyConfigModel::PropertyType(sourceModel()->data(idx, TextPropertyConfigModel::Type).toInt());
     if (type == TextPropertyConfigModel::Paragraph && !m_showParagraphProperties) {
         return false;
     } else if (type == TextPropertyConfigModel::Character && m_showParagraphProperties) {
         return false;
     }
+
+    const QString name = sourceModel()->data(idx, Qt::DisplayRole).toString();
+    const QStringList searchTerms = sourceModel()->data(idx, TextPropertyConfigModel::SearchTerms).toStringList();
 
     return (name.contains(filterRegularExpression()) || searchTerms.filter(filterRegularExpression()).size()>0);
 }

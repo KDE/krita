@@ -36,7 +36,6 @@ public:
 
     enum Roles {
         Visibility = Qt::UserRole + 1,
-        Collapsed,
         SearchTerms,
         Type,
         Name,
@@ -56,8 +55,7 @@ public:
                      const QString title = QString(),
                      const QString toolTip = QString(),
                      const QString searchTerms = QString(),
-                     const int visibilityState = -1,
-                     const bool collapsed = false);
+                     const int visibilityState = -1);
 
     Q_INVOKABLE int visibilityStateForName(const QString &name) const;
 

@@ -1,4 +1,5 @@
-%Module PyKrita.krita
+%Module(name=PyKrita.krita,
+        keyword_arguments="Optional")
 
 %ModuleHeaderCode
 #pragma GCC visibility push(default)

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-09 03:19+0000\n"
+"POT-Creation-Date: 2025-05-17 03:29+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -16871,7 +16871,7 @@ msgid "Node Rename"
 msgstr "節點重新命名"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:857
+#: libs/image/kis_image.cc:870
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "調整影像大小"
@@ -17095,100 +17095,100 @@ msgstr "穿透"
 msgid "Imported Image"
 msgstr "匯入的影像"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_image.cc:706 libs/image/kis_layer_utils.cpp:2052
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "選取區域遮罩"
 
-#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2631
+#: libs/image/kis_image.cc:766 libs/ui/KisDocument.cpp:2631
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:770 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "顏料圖層"
 
-#: libs/image/kis_image.cc:856
+#: libs/image/kis_image.cc:869
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "裁切影像"
 
-#: libs/image/kis_image.cc:952
+#: libs/image/kis_image.cc:965
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "裁切圖層"
 
-#: libs/image/kis_image.cc:953
+#: libs/image/kis_image.cc:966
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "裁切遮罩"
 
-#: libs/image/kis_image.cc:990
+#: libs/image/kis_image.cc:1003
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "縮放影像"
 
-#: libs/image/kis_image.cc:991
+#: libs/image/kis_image.cc:1004
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "修改影像解析度"
 
-#: libs/image/kis_image.cc:1038
+#: libs/image/kis_image.cc:1051
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "縮放圖層"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "旋轉影像"
 
-#: libs/image/kis_image.cc:1169
+#: libs/image/kis_image.cc:1182
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "旋轉遮罩"
 
-#: libs/image/kis_image.cc:1171
+#: libs/image/kis_image.cc:1184
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "旋轉圖層"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1265
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "切變遮罩"
 
-#: libs/image/kis_image.cc:1255
+#: libs/image/kis_image.cc:1268
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "切變圖層"
 
-#: libs/image/kis_image.cc:1262
+#: libs/image/kis_image.cc:1275
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "切變影像"
 
-#: libs/image/kis_image.cc:1280
+#: libs/image/kis_image.cc:1293
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "轉換圖層色彩空間"
 
-#: libs/image/kis_image.cc:1331
+#: libs/image/kis_image.cc:1344
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "轉換影像色彩空間"
 
-#: libs/image/kis_image.cc:1332
+#: libs/image/kis_image.cc:1345
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "轉換投影色彩空間"
 
-#: libs/image/kis_image.cc:1384
+#: libs/image/kis_image.cc:1397
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -17196,17 +17196,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "轉換圖層色彩空間"
 
-#: libs/image/kis_image.cc:1414
+#: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "為影像指定特性檔案"
 
-#: libs/image/kis_image.cc:1455
+#: libs/image/kis_image.cc:1468
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "指定特性檔案"
 
-#: libs/image/kis_image.cc:2493
+#: libs/image/kis_image.cc:2506
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁切選取區域"

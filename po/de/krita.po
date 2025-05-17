@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2024-08-27 14:17+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -21645,7 +21645,7 @@ msgid "Node Rename"
 msgstr "Neuer Name:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Bildgröße ändern"
@@ -21905,7 +21905,7 @@ msgid "Imported Image"
 msgstr "Importiertes Bild"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -21913,37 +21913,37 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Hintergrund"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr "Malebene"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Ebene zuschneiden"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maske zuschneiden"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Bild skalieren"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Bildauflösung ändern"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -21953,17 +21953,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Ebene skalieren"
 msgstr[1] "Ebene skalieren"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Bild drehen"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maske drehen"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -21973,12 +21973,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Ebene drehen"
 msgstr[1] "Ebene drehen"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maske neigen"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -21988,27 +21988,27 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Ebene neigen"
 msgstr[1] "Ebene neigen"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Bild neigen"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Ebenenfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Bildfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Projektionsfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -22016,19 +22016,19 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Ebenenfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 #| msgid "Assign Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profil zuordnen"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil zuordnen"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Auswahl zuschneiden"

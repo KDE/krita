@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -21358,7 +21358,7 @@ msgid "Node Rename"
 msgstr "Nyt navn:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Justér billedstørrelse"
@@ -21624,7 +21624,7 @@ msgid "Imported Image"
 msgstr "Importér billede"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -21632,37 +21632,37 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Baggrund"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Mal lag"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Beskær billede"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Beskær lag"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Beskær maske"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skalér billede"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Skift billedopløsning"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -21672,19 +21672,19 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Skalér lag"
 msgstr[1] "Skalér lag"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotér billede"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Hæv maske"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -21694,7 +21694,7 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Rotér lag"
 msgstr[1] "Rotér lag"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -21702,7 +21702,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Forskyd former"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -21712,46 +21712,46 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Vrid lag"
 msgstr[1] "Vrid lag"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Vrid billede"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "&Konvertér lagets farverum..."
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konvertér billedets farverum"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertér projektionens farverum"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "&Konvertér lagets farverum..."
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 #| msgid "Assign Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Tildel profil"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tildel profil"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Beskær markeringer"

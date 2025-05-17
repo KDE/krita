@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -21976,7 +21976,7 @@ msgid "Node Rename"
 msgstr "Sõlme nime muutmine"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Muuda pildi suurust"
@@ -22240,7 +22240,7 @@ msgid "Imported Image"
 msgstr "Imporditud pilt"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -22248,39 +22248,39 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Taust"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Paint Layer"
 msgid "Paint Layer"
 msgstr "Joonistuskiht"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Pildi kärpimine"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Kihi kärpimine"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maski kärpimine"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Pildi skaleerimine"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Pildi lahutuse muutmine"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -22290,17 +22290,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Kihi skaleerimine"
 msgstr[1] "Kihi skaleerimine"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Pildi pööramine"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maski pööramine"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -22310,12 +22310,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Kihi pööramine"
 msgstr[1] "Kihi pööramine"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maski kallutamine"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -22325,27 +22325,27 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Kihi kallutamine"
 msgstr[1] "Kihi kallutamine"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Pildi kallutamine"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Kihi värviruumi teisendamine"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pildi värviruumi teisendamine"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Projektsiooni värviruumi teisendamine"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -22353,17 +22353,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Kihi värviruumi teisendamine"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Kihile profiili omistamine"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profiili omistamine"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Valikute kärpimine"

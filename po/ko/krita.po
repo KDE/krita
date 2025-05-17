@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -21762,7 +21762,7 @@ msgid "Node Rename"
 msgstr "노드 이름 바꾸기"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "이미지 크기 조정"
@@ -22013,7 +22013,7 @@ msgid "Imported Image"
 msgstr "가져온 이미지"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -22021,37 +22021,37 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "배경"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr "칠하기 레이어"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "이미지 자르기"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "레이어 자르기"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "마스크 자르기"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "이미지 크기 조정"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "이미지 해상도 변경"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -22060,17 +22060,17 @@ msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "레이어 크기 조정"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "이미지 회전"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "마스크 회전"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -22079,12 +22079,12 @@ msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "레이어 회전"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "마스크 기울이기"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -22093,27 +22093,27 @@ msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "레이어 기울이기"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "이미지 기울이기"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "레이어 색 공간 변환"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "이미지 색 공간 변환"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "투영 색 공간 변환"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -22121,17 +22121,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "레이어 색 공간 변환"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "레이어에 프로필 할당"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "프로필 할당"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "선택 자르기"

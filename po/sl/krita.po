@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2025-05-11 09:41+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20745,7 +20745,7 @@ msgid "Node Rename"
 msgstr "Preimenuj vozlišče"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Spremeni velikost slike"
@@ -20993,44 +20993,44 @@ msgid "Imported Image"
 msgstr "Uvožena slika"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Ozadje"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr "Plast slikanja"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Obreži sliko"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Obreži plast"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Obreži masko"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Spremeni merilo slike"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Spremeni ločljivost slike"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21040,17 +21040,17 @@ msgstr[1] "Spremeni merilo %1 plasti"
 msgstr[2] "Spremeni merilo %1 plasti"
 msgstr[3] "Spremeni merilo %1 plasti"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Zavrti sliko"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Zavrti masko"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21060,12 +21060,12 @@ msgstr[1] "Zavrti %1 plast"
 msgstr[2] "Zavrti %1 plasti"
 msgstr[3] "Zavrti %1 plasti"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Ostriži masko"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21075,42 +21075,42 @@ msgstr[1] "Ostriži %1 plast"
 msgstr[2] "Ostriži %1 plasti"
 msgstr[3] "Ostriži %1 plasti"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Ostriži sliko"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Pretvori barvni prostor plasti"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pretvori barvni prostor slike"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Pretvori barvni prostor projekcije"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Poenoti barvni prostor plasti"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Dodeli profil plasti"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obreži izbore"

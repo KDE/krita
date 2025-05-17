@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -22074,7 +22074,7 @@ msgid "Node Rename"
 msgstr "ਨਾਂ"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
@@ -22345,7 +22345,7 @@ msgid "Imported Image"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 #| msgid "Set background"
@@ -22353,48 +22353,48 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 #, fuzzy
 #| msgid "Show master shapes"
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 #, fuzzy
 #| msgid "Change page layout"
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "ਸਫ਼ਾ ਲੇਆਉਟ ਬਦਲੋ"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "(qtundo-format)"
@@ -22403,21 +22403,21 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "ਨਵੀਂ ਲੇਅਰ"
 msgstr[1] "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
@@ -22426,14 +22426,14 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "ਲੇਅਰ ਬਣਾਓ"
 msgstr[1] "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 #, fuzzy
 #| msgid "Show master shapes"
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "(qtundo-format)"
@@ -22442,56 +22442,56 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "ਨਵੀਂ ਲੇਅਰ"
 msgstr[1] "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 #, fuzzy
 #| msgid "Show master shapes"
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 #, fuzzy
 #| msgid "Line Color"
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 #, fuzzy
 #| msgid "Active tool: %1"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"

@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -21094,7 +21094,7 @@ msgid "Node Rename"
 msgstr "Pavadinimas:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Keisti paveikslėlio dydį"
@@ -21350,7 +21350,7 @@ msgid "Imported Image"
 msgstr "Paveikslėliams"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -21358,42 +21358,42 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fonas"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Piešimo sluoksnis"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Apkirpti paveikslėlį"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "&Grupuoti sluoksnį"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Atryškinimo kaukė"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Keisti paveikslėlio dydį"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Keisti paveikslėlio raišką"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21403,20 +21403,20 @@ msgstr[1] "Keisti sluoksnio dydį"
 msgstr[2] "Keisti sluoksnio dydį"
 msgstr[3] "Keisti sluoksnio dydį"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Pasukti paveikslėlį"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 #, fuzzy
 #| msgid "Rotate Canvas"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Sukti drobę"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21426,14 +21426,14 @@ msgstr[1] "Pasukti sluoksnį"
 msgstr[2] "Pasukti sluoksnį"
 msgstr[3] "Pasukti sluoksnį"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 #, fuzzy
 #| msgid "Unsharp Mask"
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Atryškinimo kaukė"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -21444,51 +21444,51 @@ msgstr[1] "Kirpti sluoksnį"
 msgstr[2] "Kirpti sluoksnį"
 msgstr[3] "Kirpti sluoksnį"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Keisti paveikslėlio dydį"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Konvertuoti paveikslėlio spalvų erdvę"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konvertuoti paveikslėlio spalvų erdvę"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertuoti paveikslėlio spalvų erdvę"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Konvertuoti paveikslėlio spalvų erdvę"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 #| msgid "Rotate Image"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Pasukti paveikslėlį"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 #, fuzzy
 #| msgid "Open Color Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Atverti spalvų profilį"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

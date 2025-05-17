@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -20871,7 +20871,7 @@ msgid "Node Rename"
 msgstr "Denumire:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21122,49 +21122,49 @@ msgid "Imported Image"
 msgstr "Importă imagine"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fundal"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Plan"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Salvează planul ca imagine..."
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Alfa"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Imagine nouă"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Rezoluția imaginii"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21173,19 +21173,19 @@ msgstr[0] "&Adaugă plan..."
 msgstr[1] "&Adaugă plan..."
 msgstr[2] "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotește imaginea"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Modele"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21194,7 +21194,7 @@ msgstr[0] "Șterge plan"
 msgstr[1] "Șterge plan"
 msgstr[2] "Șterge plan"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -21202,7 +21202,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Taie forme"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21211,51 +21211,51 @@ msgstr[0] "&Adaugă plan..."
 msgstr[1] "&Adaugă plan..."
 msgstr[2] "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Imagine nouă"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 #| msgid "Profile:"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 #, fuzzy
 #| msgid "Profile:"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

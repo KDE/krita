@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-15 02:02+0000\n"
+"POT-Creation-Date: 2025-05-17 01:58+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -20991,7 +20991,7 @@ msgid "Node Rename"
 msgstr "Namme:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:840
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -21249,49 +21249,49 @@ msgid "Imported Image"
 msgstr "Ofbylding ymportearje"
 
 #. i18n.
-#: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "eftergrûn"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Laach"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:839
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Ofbylding bysnije"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:935
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Nije lagen&groep..."
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:936
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Unskerp masker"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:973
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Ofbylding skealje"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:974
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Ofbyldingsresolúsje"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1024
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21299,20 +21299,20 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Laach skealje"
 msgstr[1] "Laach skealje"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Ofbylding rotearje"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1173
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Masker nei foaren"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1176
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21320,13 +21320,13 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Laach rotearje"
 msgstr[1] "Laach rotearje"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1277
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Foarmen skeanlûke"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1281
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -21335,51 +21335,51 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Laach skeanlûke"
 msgstr[1] "Laach skeanlûke"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1288
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Ofbylding skeanlûke"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1306
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Ofbyldingstype konverteare"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1357
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Ofbyldingstype konverteare"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1358
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Ofbyldingstype konverteare"
 
-#: libs/image/kis_image.cc:1397
+#: libs/image/kis_image.cc:1410
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Ofbyldingstype konverteare"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1440
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profyl tapasse"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1481
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profyl tapasse"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2517
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

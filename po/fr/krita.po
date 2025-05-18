@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-17 01:58+0000\n"
-"PO-Revision-Date: 2025-05-10 08:43+0200\n"
+"PO-Revision-Date: 2025-05-16 10:06+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -30000,6 +30000,11 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"Lorsque cette option est sélectionnée, les calques nouvellement créés seront "
+"automatiquement épinglés à la frise chronologique de l'animation. Ceci est "
+"utile lorsque vous réalisez une animation avec un petit nombre de calques ou "
+"lorsque de nombreux éléments de différents calques animés interagissent les "
+"uns avec les autres."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -30016,6 +30021,11 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Lorsqu cette option est cochée, elle ajuste automatiquement les trames de "
+"« début » et de « fin » du document afin que les trames clé nouvellement "
+"créées soient toujours dans la plage de lecture de l'animation. Cette "
+"fonctionnalité est recommandée pour accélérer le flux de travail d'animation "
+"lors de l'improvisation d'une scène sans longueur prédéterminée."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071

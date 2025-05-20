@@ -106,7 +106,7 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     KIS_ASSERT_RECOVER_RETURN_VALUE(kisimage, ImportExportCodes::InternalError);
 
     QFile file(filename());
-    if (!file.open(QFile::ReadWrite)) {
+    if (!file.open(QFile::ReadWrite | QFile::Truncate)) {
         return {KisImportExportErrorCannotRead(file.error())};
     }
 

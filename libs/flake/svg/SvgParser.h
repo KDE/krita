@@ -34,6 +34,7 @@ class KoMarker;
 class KoPathShape;
 class KoSvgTextShape;
 class KoSvgTextLoader;
+class QDomText;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
@@ -90,7 +91,7 @@ protected:
     void parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader);
     
     /// Parses a container element, returning a list of child shapes
-    QList<KoShape*> parseContainer(const QDomElement &, bool parseTextNodes = false);
+    QList<KoShape*> parseContainer(const QDomElement &);
 
     /// XXX
     QList<KoShape*> parseSingleElement(const QDomElement &b, DeferredUseStore* deferredUseStore = 0);
@@ -122,6 +123,9 @@ protected:
     bool parseMarker(const QDomElement &e);
 
     bool parseSymbol(const QDomElement &e);
+
+    /// This parses the SVG native title and desc elements and adds them into additional attributes.
+    void parseMetadataApplyToShape(const QDomElement &e, KoShape *shape);
 
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
@@ -208,6 +212,8 @@ protected:
     /// Applies viewBox transformation to the current graphical context
     /// NOTE: after applying the function currentBoundingBox can become null!
     void applyViewBoxTransform(const QDomElement &element);
+
+    QDomText getTheOnlyTextChild(const QDomElement &e);
 
 private:
     SvgLoadingContext m_context;

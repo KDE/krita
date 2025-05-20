@@ -178,6 +178,8 @@ private Q_SLOTS:
 
     void testRenderPaintOrderProperty_data();
     void testRenderPaintOrderProperty();
+
+    void testDescAndTitleParsing();
 private:
 
 };

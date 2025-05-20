@@ -234,6 +234,22 @@ QString SvgStyleWriter::embedShape(const KoShape *shape, SvgSavingContext &conte
     return uid;
 }
 
+void SvgStyleWriter::saveMetadata(const KoShape *shape, SvgSavingContext &context)
+{
+    const QString title = shape->additionalAttribute("title");
+    if (!title.trimmed().isEmpty()) {
+        context.shapeWriter().startElement("title");
+        context.shapeWriter().addTextNode(title);
+        context.shapeWriter().endElement();
+    }
+    const QString desc = shape->additionalAttribute("desc");
+    if (!desc.trimmed().isEmpty()) {
+        context.shapeWriter().startElement("desc");
+        context.shapeWriter().addTextNode(desc);
+        context.shapeWriter().endElement();
+    }
+}
+
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {
     KoClipPath *clipPath = shape->clipPath();

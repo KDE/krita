@@ -13,6 +13,7 @@
 #include <SvgLoadingContext.h>
 #include <SvgSavingContext.h>
 #include <SvgUtil.h>
+#include <SvgStyleWriter.h>
 #include <QBuffer>
 #include <KisMimeDatabase.h>
 #include <KoXmlWriter.h>
@@ -96,6 +97,7 @@ bool ImageShape::saveSvg(SvgSavingContext &context)
         const QString mimeType = KisMimeDatabase::mimeTypeForSuffix("*.png");
         context.shapeWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + buffer.data().toBase64());
     }
+    SvgStyleWriter::saveMetadata(this, context);
 
     context.shapeWriter().endElement(); // image
 

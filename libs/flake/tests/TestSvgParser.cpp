@@ -4226,4 +4226,33 @@ void TestSvgParser::testSodipodiChordShape()
 }
 
 
+
+
+void TestSvgParser::testDescAndTitleParsing()
+{
+    const QString title = "Test Rectangle";
+    const QString description = "A description for the test rect";
+    const QString dataBefore =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\""
+            "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
+            ">"
+            "<path"
+            "    fill=\"red\" stroke=\"black\""
+            "    id=\"testRect\""
+            "    d=\"M5,15 C5,5 25,5 25,15 L15,25\">";
+    const QString dataAfter = "</path></svg>";
+
+    const QString data = dataBefore + "<title>"+title+"</title>" + "<desc>"+description+"</desc>" + dataAfter;
+
+    SvgTester t (data);
+    t.parser().setResolution(QRectF(0, 0, 380, 380) /* px */, 72 /* ppi */);
+    t.run();
+    KoShape *shape = t.findShape("testRect");
+
+    QVERIFY(shape);
+    QVERIFY(shape->additionalAttribute("title") == title);
+    QVERIFY(shape->additionalAttribute("desc") == description);
+}
+
 KISTEST_MAIN(TestSvgParser)

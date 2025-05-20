@@ -273,6 +273,7 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
 
     SvgStyleWriter::saveSvgStyle(this, context);
+    SvgStyleWriter::saveMetadata(this, context);
 
     const QSizeF size = this->size();
     context.shapeWriter().addAttribute("width", size.width());

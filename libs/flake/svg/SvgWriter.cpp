@@ -190,6 +190,9 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 
     SvgUtil::writeTransformAttributeLazy("transform", group->transformation(), context.shapeWriter());
 
+
+    SvgStyleWriter::saveMetadata(group, context);
+
     SvgStyleWriter::saveSvgStyle(group, context);
 
     QList<KoShape*> sortedShapes = group->shapes();
@@ -227,6 +230,7 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
     context.shapeWriter().addAttribute("id", context.getID(path));
 
     SvgUtil::writeTransformAttributeLazy("transform", path->transformation(), context.shapeWriter());
+    SvgStyleWriter::saveMetadata(path, context);
 
     SvgStyleWriter::saveSvgStyle(path, context);
 

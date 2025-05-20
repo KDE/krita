@@ -1178,6 +1178,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
             }
             if (it == d->textData.compositionBegin()) {
                 context.shapeWriter().startElement("text", false);
+                SvgStyleWriter::saveMetadata(this, context);
 
                 if (!context.strippedTextMode()) {
                     context.shapeWriter().addAttribute("id", context.getID(this));

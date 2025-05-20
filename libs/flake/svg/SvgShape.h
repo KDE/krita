@@ -24,6 +24,8 @@ public:
 
     /// Loads data from specified svg element
     virtual bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
+
+    void saveMetadata(SvgSavingContext &context);
 };
 
 #endif // SVGSHAPE_H

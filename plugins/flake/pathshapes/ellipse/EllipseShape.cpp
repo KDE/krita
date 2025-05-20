@@ -328,6 +328,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
         context.shapeWriter().addAttribute("id", context.getID(this));
         SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+        SvgStyleWriter::saveMetadata(this, context);
 
         if (isCircle) {
             context.shapeWriter().addAttribute("r", 0.5 * size.width());

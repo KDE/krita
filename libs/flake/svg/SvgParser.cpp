@@ -844,6 +844,26 @@ bool SvgParser::parseSymbol(const QDomElement &e)
     return true;
 }
 
+void SvgParser::parseMetadataApplyToShape(const QDomElement &e, KoShape *shape)
+{
+    const QString titleTag = "title";
+    const QString descriptionTag = "desc";
+    QDomElement title = e.firstChildElement(titleTag);
+    if (!title.isNull()) {
+        QDomText text = getTheOnlyTextChild(title);
+        if (!text.data().isEmpty()) {
+            shape->setAdditionalAttribute(titleTag, text.data());
+        }
+    }
+    QDomElement description = e.firstChildElement(descriptionTag);
+    if (!description.isNull()) {
+        QDomText text = getTheOnlyTextChild(description);
+        if (!text.data().isEmpty()) {
+            shape->setAdditionalAttribute(descriptionTag, text.data());
+        }
+    }
+}
+
 bool SvgParser::parseClipPath(const QDomElement &e)
 {
     SvgClipPathHelper clipPath;
@@ -1729,6 +1749,8 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
 
     applyCurrentStyle(group, extraOffset); // apply style to this group after size is set
 
+    parseMetadataApplyToShape(b, group);
+
     if (createContext) {
         m_context.popGraphicsContext();
     }
@@ -1736,7 +1758,7 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
     return group;
 }
 
-QDomText getTheOnlyTextChild(const QDomElement &e)
+QDomText SvgParser::getTheOnlyTextChild(const QDomElement &e)
 {
     QDomNode firstChild = e.firstChild();
     return !firstChild.isNull() && firstChild == e.lastChild() && firstChild.isText() ?
@@ -1777,6 +1799,7 @@ void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoa
         textLoader.enterNodeSubtree();
         for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
             QDomElement b = n.toElement();
+            if (b.tagName() == "title" || b.tagName() == "desc") continue; /// TODO: we should skip dublin core metadata too...
             textLoader.nextNode();
             if (b.isNull()) {
                 textLoader.loadSvgText(n.toText(), m_context);
@@ -1844,6 +1867,8 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
+    parseMetadataApplyToShape(e, rootTextShape);
+
     if (!mergeIntoShape) {
         rootTextShape->setZIndex(m_context.nextZIndex());
     }
@@ -1902,7 +1927,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     return rootTextShape;
 }
 
-QList<KoShape*> SvgParser::parseContainer(const QDomElement &e, bool parseTextNodes)
+QList<KoShape*> SvgParser::parseContainer(const QDomElement &e)
 {
     QList<KoShape*> shapes;
 
@@ -2123,6 +2148,7 @@ KoShape * SvgParser::createObjectDirect(const QDomElement &b)
         // handle id
         applyId(b.attribute("id"), obj);
         obj->setZIndex(m_context.nextZIndex());
+        parseMetadataApplyToShape(b, obj);
     }
 
     m_context.popGraphicsContext();
@@ -2149,6 +2175,7 @@ KoShape * SvgParser::createObject(const QDomElement &b, const SvgStyles &style)
         // handle id
         applyId(b.attribute("id"), obj);
         obj->setZIndex(m_context.nextZIndex());
+        parseMetadataApplyToShape(b, obj);
     }
 
     m_context.popGraphicsContext();

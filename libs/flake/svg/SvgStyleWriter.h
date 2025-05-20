@@ -49,6 +49,9 @@ public:
     // embed the given shape, returns an id to refer to.
     static QString embedShape(const KoShape *shape, SvgSavingContext &context);
 
+    // Save title and desc elements.
+    static void saveMetadata(const KoShape *shape, SvgSavingContext &context);
+
 protected:
     /// Saves effects of specified shape
     static void saveSvgEffects(KoShape *shape, SvgSavingContext &context);

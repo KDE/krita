@@ -739,6 +739,23 @@ public:
             }
         }
     }
+
+    static KisForest<KoSvgTextContentElement>::child_iterator iteratorForTreeIndex(const QVector<int> treeIndex, KisForest<KoSvgTextContentElement>::child_iterator parent) {
+        if (treeIndex.isEmpty()) return parent;
+        QVector<int> idx = treeIndex;
+        int count = idx.takeFirst();
+        for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
+            if (count == 0) {
+                if ((KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child))) {
+                    return iteratorForTreeIndex(idx, child);
+                } else {
+                    return child;
+                }
+            }
+            count -= 1;
+        }
+        return KisForestDetail::childEnd(parent);
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

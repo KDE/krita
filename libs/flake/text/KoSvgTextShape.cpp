@@ -1049,6 +1049,80 @@ void KoSvgTextShape::cleanUp()
     shapeChangedPriv(ContentChanged);
 }
 
+QVector<int> findTreeIndexForPropertyIdImpl(KisForest<KoSvgTextContentElement>::child_iterator parent, KoSvgTextProperties::PropertyId propertyId) {
+    int count = 0;
+    for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
+        if (child->properties.hasProperty(propertyId)) {
+            return QVector<int>({count});
+        } else if (KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child)) {
+            QVector current = QVector<int>({count});
+            QVector childIndex = findTreeIndexForPropertyIdImpl(child, propertyId);
+            if (!childIndex.isEmpty()) {
+                current.append(childIndex);
+                return current;
+            }
+        }
+        count += 1;
+    }
+    return QVector<int>();
+}
+
+QVector<int> KoSvgTextShape::findTreeIndexForPropertyId(KoSvgTextProperties::PropertyId propertyId)
+{
+    QVector<int> treeIndex;
+
+    for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
+        treeIndex = findTreeIndexForPropertyIdImpl(it, propertyId);
+        treeIndex.insert(0, 0);
+    }
+
+    return treeIndex;
+}
+
+KoSvgTextProperties KoSvgTextShape::propertiesForTreeIndex(const QVector<int> &treeIndex) const
+{
+    if (treeIndex.isEmpty()) return KoSvgTextProperties();
+    QVector<int> idx = treeIndex;
+    idx.removeFirst();
+    for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
+        if (idx.isEmpty()) {
+            if (it != d->textData.childEnd()) {
+                return it->properties;
+            } else {
+                return KoSvgTextProperties();
+            }
+        }
+        auto child = d->iteratorForTreeIndex(idx, it);
+        if (child != d->textData.childEnd()) {
+            return child->properties;
+        }
+    }
+    return KoSvgTextProperties();
+}
+
+bool KoSvgTextShape::setPropertiesAtTreeIndex(const QVector<int> treeIndex, const KoSvgTextProperties props)
+{
+    QVector<int> idx = treeIndex;
+    if (treeIndex.isEmpty()) return false;
+    idx.removeFirst();
+    for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
+        if (idx.isEmpty()) {
+            if (it != d->textData.childEnd()) {
+                it->properties = props;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        auto child = d->iteratorForTreeIndex(idx, it);
+        if (child != d->textData.childEnd()) {
+            child->properties = props;
+            return true;
+        }
+    }
+    return false;
+}
+
 KoSvgTextProperties KoSvgTextShape::textProperties() const
 {
     return KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties();

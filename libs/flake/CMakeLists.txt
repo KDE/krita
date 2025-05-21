@@ -251,6 +251,7 @@ set(kritaflake_SRCS
     resources/KoGamutMask.cpp
     resources/KoFontFamily.cpp
     resources/KoFontStorage.cpp
+    resources/KoCssStylePreset.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp

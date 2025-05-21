@@ -157,6 +157,8 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
 
 }
 
+const QString TEXT_STYLE_TYPE = "krita:style-type";
+
 bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context, bool rootNode)
 {
     SvgGraphicsContext *gc = context.currentGC();
@@ -227,6 +229,10 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
                 textPathInfo.startOffset = SvgUtil::parseUnit(context.currentGC(), context.resolvedProperties(), offset);
             }
         }
+    }
+
+    if (e.hasAttribute(TEXT_STYLE_TYPE.toLatin1().data())) {
+        properties.setProperty(KoSvgTextProperties::KraTextStyleType, e.attribute(TEXT_STYLE_TYPE.toLatin1().data()));
     }
 
     return true;
@@ -349,6 +355,10 @@ bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
     }
     if (!styleString.isEmpty()) {
         context.shapeWriter().addAttribute("style", styleString);
+    }
+
+    if (properties.hasProperty(KoSvgTextProperties::KraTextStyleType)) {
+        context.shapeWriter().addAttribute(TEXT_STYLE_TYPE.toLatin1().data(), properties.property(KoSvgTextProperties::KraTextStyleType).toString());
     }
 
     if (saveText) {

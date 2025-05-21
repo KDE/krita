@@ -104,6 +104,7 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
     KoResourceServer<KoColorSet> *paletteServer;
     KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
     KoResourceServer<KoGamutMask> *gamutMaskServer;
+    KoResourceServer<KoCssStylePreset> *stylePresetServer;
 #if defined HAVE_SEEXPR
     KoResourceServer<KisSeExprScript>* seExprScriptServer;
 #endif
@@ -116,6 +117,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->paletteServer = new KoResourceServer<KoColorSet>(ResourceType::Palettes);
     d->svgSymbolCollectionServer = new KoResourceServer<KoSvgSymbolCollectionResource>(ResourceType::Symbols);
     d->gamutMaskServer = new KoResourceServer<KoGamutMask>(ResourceType::GamutMasks);
+    d->stylePresetServer = new KoResourceServer<KoCssStylePreset>(ResourceType::CssStyles);
 #if defined HAVE_SEEXPR
     d->seExprScriptServer = new KoResourceServer<KisSeExprScript>(ResourceType::SeExprScripts);
 #endif
@@ -128,6 +130,7 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->paletteServer;
     delete d->svgSymbolCollectionServer;
     delete d->gamutMaskServer;
+    delete d->stylePresetServer;
 #if defined HAVE_SEEXPR
     delete d->seExprScriptServer;
 #endif    
@@ -165,6 +168,11 @@ KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSy
 KoResourceServer<KoGamutMask> *KoResourceServerProvider::gamutMaskServer()
 {
     return KoResourceServerProvider::instance()->d->gamutMaskServer;
+}
+
+KoResourceServer<KoCssStylePreset> *KoResourceServerProvider::stylePresetServer()
+{
+    return KoResourceServerProvider::instance()->d->stylePresetServer;
 }
 
 #if defined HAVE_SEEXPR

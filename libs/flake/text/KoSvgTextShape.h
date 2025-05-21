@@ -352,6 +352,28 @@ public:
     /// Cleans up the internal text data. Used by undo commands.
     void cleanUp();
 
+    /**
+     * @brief findTreeIndexForPropertyId
+     * @return the tree index of the first content element found with a given property id.
+     *     Empty vector means none was found.
+     * @propertyId -- id to search for.
+     */
+    QVector<int> findTreeIndexForPropertyId(KoSvgTextProperties::PropertyId propertyId);
+
+    /**
+     * @brief propertiesForTreeIndex
+     * @param treeIndex -- vector representing the tree index.
+     * @return properties at the given tree index. If the tree index is wrong, empty properties will be returned.
+     */
+    KoSvgTextProperties propertiesForTreeIndex(const QVector<int> &treeIndex) const;
+
+    /**
+     * @brief setPropertiesAtTreeIndex
+     * @param treeIndex -- set text properties at given tree index.
+     * @return if successful.
+     */
+    bool setPropertiesAtTreeIndex(const QVector<int> treeIndex, const KoSvgTextProperties props);
+
     /*--------------- Properties ---------------*/
 
     KoSvgTextProperties textProperties() const;
@@ -361,6 +383,7 @@ public:
     void setStroke(KoShapeStrokeModelSP stroke) override;
     QVector<PaintOrder> paintOrder() const override;
     void setPaintOrder(PaintOrder first, PaintOrder second) override;
+
 
     /**
      * @brief plainText

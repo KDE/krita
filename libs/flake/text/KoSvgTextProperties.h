@@ -116,7 +116,8 @@ public:
 
         TextRenderingId, ///< Enum
 
-        KraTextVersionId ///< Int, used for handling incorrectly saved files.
+        KraTextVersionId, ///< Int, used for handling incorrectly saved files.
+        KraTextStyleType, ///< string, used to identify the style preset type (character or paragraph).
     };
 
     KoSvgTextProperties();

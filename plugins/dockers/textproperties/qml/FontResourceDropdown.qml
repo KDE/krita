@@ -175,19 +175,13 @@ Button {
                 hoverEnabled: true;
                 onClicked: {
                     if (mouse.button === Qt.RightButton) {
-                        openContextMenu(mouse.x, mouse.y);
+                        resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
                     } else {
-                        familyCmb.modelWrapper.currentIndex = fontDelegateItem.model.index;
+                        familyCmb.modelWrapper.currentIndex = parent.model.index;
                         familyCmb.activated();
                     }
                 }
-                onHoveredChanged: familyCmb.highlightedIndex = fontDelegateItem.model.index;
-
-                function openContextMenu(x, y) {
-                    tagActionsContextMenu.resourceName = fontDelegateItem.model.name;
-                    tagActionsContextMenu.resourceIndex = fontDelegateItem.model.index;
-                    tagActionsContextMenu.popup()
-                }
+                onHoveredChanged: familyCmb.highlightedIndex = parent.model.index;
 
                 ToolTip.text: fontDelegateItem.fontName;
                 ToolTip.visible: containsMouse;

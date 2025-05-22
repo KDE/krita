@@ -85,11 +85,52 @@ Rectangle {
             }
 
             resourceDelegate: ItemDelegate {
+                id: presetDelegate;
                 required property var model;
+                property var meta: presetView.modelWrapper.metadataForIndex(model.index);
                 width: ListView.view.width;
-                text: model.name;
+                highlighted: delegateMouseArea.containsMouse;
+                contentItem: KoShapeQtQuickLabel {
+                    width: parent.width;
+                    height: nameLabel.height * 5;
+                    imageScale: 3;
+                    imagePadding: nameLabel.height;
 
-                onClicked: presetView.currentIndex = model.index;
+                    svgData: presetDelegate.meta.sample_svg;
+                    foregroundColor: presetDelegate.highlighted? palette.highlightedText: palette.text;
+
+                    Label {
+                        id: nameLabel;
+                        palette: presetDelegate.palette;
+                        text: presetDelegate.model.name;
+                        anchors.top: parent.top;
+                        anchors.left: parent.left;
+                        elide: Text.ElideRight;
+                        width: parent.width;
+                        color: presetDelegate.highlighted? palette.highlightedText: palette.text;
+                    }
+                }
+                background: Rectangle {
+                    color: presetDelegate.highlighted? presetDelegate.palette.highlight: "transparent";
+                }
+
+                MouseArea {
+                    id: delegateMouseArea;
+                    acceptedButtons: Qt.RightButton | Qt.LeftButton;
+                    anchors.fill: parent;
+                    hoverEnabled: true;
+                    onClicked: {
+                        if (mouse.button === Qt.RightButton) {
+                            presetView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
+                        } else {
+                            presetView.modelWrapper.currentIndex = parent.model.index;
+                        }
+                    }
+                    ToolTip.text: presetDelegate.model.name + "\n" + presetDelegate.meta.description;
+                    ToolTip.visible: containsMouse;
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+
+                }
             }
         }
     }

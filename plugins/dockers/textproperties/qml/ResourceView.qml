@@ -19,6 +19,11 @@ Control {
 
     property alias resourceDelegate : view.delegate;
 
+    function openContextMenu(x, y, resourceName, resourceIndex) {
+        tagActionsContextMenu.resourceName = resourceName;
+        tagActionsContextMenu.resourceIndex = resourceIndex;
+        tagActionsContextMenu.popup(x, y);
+    }
 
     contentItem: ColumnLayout {
         id: resourceView;
@@ -50,7 +55,7 @@ Control {
                 palette: control.palette;
                 function hideShowMenu() {
                     if (!tagActionsContextMenu.visible) {
-                        tagActionsContextMenu.resourceIndex = familyCmb.highlightedIndex;
+                        tagActionsContextMenu.resourceIndex = control.highlightedIndex;
                         tagActionsContextMenu.popup(tagMenuButton,
                                                     tagActionsContextMenu.width - tagMenuButton.width,
                                                     tagMenuButton.height - 1);
@@ -84,6 +89,7 @@ Control {
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                     Label {
                         id: resourceLabel;
+                        padding: parent.padding;
                     }
 
                     Menu {
@@ -127,23 +133,30 @@ Control {
                         }
                     }
                     MenuSeparator {}
-                    Action {
+                    MenuItem {
                         enabled: modelWrapper.showResourceTagged(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
                         id: removeFromThisTag;
                         text: i18nc("@action:inmenu", "Remove from this tag");
                         icon.source: "qrc:///16_light_list-remove.svg";
                         icon.color: palette.text;
+                        PaletteControl {
+                            id: pal;
+                            colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
+                        }
+                        palette: pal.palette;
                         onTriggered: modelWrapper.untagResource(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
                     }
 
                     Menu {
                         id: removeFromTag;
                         title: i18nc("@title:menu", "Remove from other tag");
+
                         ListView {
                             id: tagRemoveView;
                             model: tagActionsContextMenu.resourceTaggedModel;
                             height: contentHeight;
                             width: parent.width;
+
                             delegate: ItemDelegate {
                                 width: tagRemoveView.width;
                                 text: modelData.name;
@@ -186,7 +199,7 @@ Control {
                 palette: control.palette;
             }
             CheckBox {
-                id: opticalSizeCbx
+                id: searchInTagCbx
                 text: i18nc("@option:check", "Search in tag")
                 onCheckedChanged: modelWrapper.searchInTag = checked;
                 checked: modelWrapper.searchInTag;

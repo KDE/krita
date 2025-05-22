@@ -22,11 +22,14 @@ class TagFilterProxyModelQmlWrapper : public QObject
     Q_PROPERTY(QAbstractItemModel *model READ model NOTIFY modelChanged)
     Q_PROPERTY(QAbstractItemModel *tagModel READ tagModel NOTIFY tagModelChanged)
 
+    Q_PROPERTY(QString resourceType READ resourceType WRITE setResourceType NOTIFY resourceTypeChanged)
+
     Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
     Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
     Q_PROPERTY(bool searchInTag READ searchInTag WRITE setSearchInTag NOTIFY searchInTagChanged)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentResourceChanged)
     Q_PROPERTY(QString resourceFilename READ resourceFilename NOTIFY currentResourceChanged)
+    Q_PROPERTY(KoResourceSP currentResource READ currentResource NOTIFY currentResourceChanged)
 public:
     TagFilterProxyModelQmlWrapper(QObject *parent = nullptr);
     ~TagFilterProxyModelQmlWrapper();
@@ -37,6 +40,9 @@ public:
 
     /// Associated tagmodel
     QAbstractItemModel *tagModel() const;
+
+    QString resourceType() const;
+    void setResourceType(const QString &type);
 
     /// Select tag at row in tag model.
     void tagActivated(const int &row);
@@ -86,6 +92,8 @@ public:
 
     QString resourceFilename();
 
+    KoResourceSP currentResource() const;
+
 Q_SIGNALS:
     void modelChanged();
     void searchTextChanged();
@@ -94,6 +102,7 @@ Q_SIGNALS:
     void modelSortUpdated();
     void currentResourceChanged();
     void tagModelChanged();
+    void resourceTypeChanged();
 
 private Q_SLOTS:
     /// Slot to set the search text on the model via a signal compressor.

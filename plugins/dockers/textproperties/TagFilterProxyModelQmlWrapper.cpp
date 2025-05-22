@@ -18,20 +18,28 @@
 
 struct TagFilterProxyModelQmlWrapper::Private {
     Private(QObject *parent = nullptr)
-        : tagFilterProxyModel(new FontFamilyTagFilterModel(parent))
-        , tagModel(new KisTagModel(ResourceType::FontFamilies, parent))
+        : parent(parent)
         , compressor(KisSignalCompressor(100, KisSignalCompressor::POSTPONE, parent))
     {
-        allResourceModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
+    }
+
+    void setupNewResourceType() {
+        tagFilterProxyModel = resourceType == ResourceType::FontFamilies? new FontFamilyTagFilterModel(parent)
+                                                                        : new KisTagFilterResourceProxyModel(resourceType, parent);
+        tagModel = new KisTagModel(resourceType, parent);
+        allResourceModel = KisResourceModelProvider::resourceModel(resourceType);
         tagFilterProxyModel->sort(KisAbstractResourceModel::Name);
         tagFilterProxyModel->setTagFilter(tagModel->tagForIndex(tagModel->index(0, 0)));
     }
-    FontFamilyTagFilterModel *tagFilterProxyModel {nullptr};
+
+    QObject *parent;
+    KisTagFilterResourceProxyModel *tagFilterProxyModel {nullptr};
     KisAllResourcesModel *allResourceModel {nullptr};
     KisTagModel *tagModel {nullptr};
     KisSignalCompressor compressor;
     QString currentSearchText;
     KoResourceSP currentResource;
+    QString resourceType;
 };
 
 TagFilterProxyModelQmlWrapper::TagFilterProxyModelQmlWrapper(QObject *parent)
@@ -56,8 +64,33 @@ QAbstractItemModel *TagFilterProxyModelQmlWrapper::tagModel() const
     return d->tagModel;
 }
 
+QString TagFilterProxyModelQmlWrapper::resourceType() const
+{
+    return d->resourceType;
+}
+
+void TagFilterProxyModelQmlWrapper::setResourceType(const QString &type)
+{
+    if (d->resourceType == type) return;
+
+    d->resourceType = type;
+    d->setupNewResourceType();
+    d->currentSearchText = "";
+    d->currentResource.reset();
+
+    emit resourceTypeChanged();
+    emit tagModelChanged();
+    emit modelChanged();
+    emit searchTextChanged();
+    emit searchInTagChanged();
+    emit activeTagChanged();
+    emit modelSortUpdated();
+    emit currentResourceChanged();
+}
+
 void TagFilterProxyModelQmlWrapper::tagActivated(const int &row)
 {
+    if (!d->tagModel || !d->tagFilterProxyModel) return;
     QModelIndex idx = d->tagModel->index(row, 0);
     if (idx.isValid()) {
         KisTagSP tag = d->tagModel->tagForIndex(idx);
@@ -69,6 +102,7 @@ void TagFilterProxyModelQmlWrapper::tagActivated(const int &row)
 
 int TagFilterProxyModelQmlWrapper::currentTag() const
 {
+    if (!d->tagModel) return 0;
     return d->tagModel->indexForTag(d->tagFilterProxyModel->currentTagFilter()).row();
 }
 
@@ -89,6 +123,7 @@ void TagFilterProxyModelQmlWrapper::setSearchText(const QString &text)
 
 void TagFilterProxyModelQmlWrapper::setSearchInTag(const bool &newSearchInTag)
 {
+    if (!d->tagFilterProxyModel) return;
     if (d->tagFilterProxyModel->filterInCurrentTag() != newSearchInTag) {
         d->tagFilterProxyModel->setFilterInCurrentTag(newSearchInTag);
         emit searchInTagChanged();
@@ -97,11 +132,13 @@ void TagFilterProxyModelQmlWrapper::setSearchInTag(const bool &newSearchInTag)
 
 bool TagFilterProxyModelQmlWrapper::searchInTag()
 {
+    if (! d->tagFilterProxyModel) return false;
     return d->tagFilterProxyModel->filterInCurrentTag();
 }
 
 void TagFilterProxyModelQmlWrapper::addNewTag(const QString &newTagName, const int &resourceIndex)
 {
+    if (!d->tagModel || !d->tagFilterProxyModel) return;
     KisTagSP tagsp = d->tagModel->tagForUrl(newTagName);
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     if (tagsp.isNull()) {
@@ -119,6 +156,7 @@ void TagFilterProxyModelQmlWrapper::addNewTag(const QString &newTagName, const i
 
 void TagFilterProxyModelQmlWrapper::tagResource(const int &tagIndex, const int &resourceIndex)
 {
+    if (!d->tagModel || !d->tagFilterProxyModel) return;
     QModelIndex idx = d->tagModel->index(tagIndex, 0);
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     KisTagSP tagsp;
@@ -133,6 +171,7 @@ void TagFilterProxyModelQmlWrapper::tagResource(const int &tagIndex, const int &
 
 void TagFilterProxyModelQmlWrapper::untagResource(const int &tagIndex, const int &resourceIndex)
 {
+    if (!d->tagModel || !d->tagFilterProxyModel) return;
     QModelIndex idx = d->tagModel->index(tagIndex, 0);
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     KisTagSP tagsp;
@@ -170,6 +209,7 @@ QString TagFilterProxyModelQmlWrapper::localizedNameFromMetadata(
 
 QVariantMap TagFilterProxyModelQmlWrapper::metadataForIndex(const int &resourceIndex) const
 {
+    if (!d->tagFilterProxyModel) return QVariantMap();
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     // NOTE: KisTagFilterProxyModel has this weird thing where it switches between source models depending
     // on whether filtering by tag happens. This somehow causes index() to not always work.
@@ -197,6 +237,7 @@ QString TagFilterProxyModelQmlWrapper::localizedSampleFromMetadata(const QMap<QS
 QVariantList TagFilterProxyModelQmlWrapper::taggedResourceModel (const int &resourceIndex) const
 {
     QVariantList taggedResourceModel;
+    if (!d->tagModel || !d->tagFilterProxyModel) return taggedResourceModel;
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     KisTagSP tagsp;
     for (int i = 0; i< d->tagModel->rowCount(); i++) {
@@ -216,6 +257,7 @@ QVariantList TagFilterProxyModelQmlWrapper::taggedResourceModel (const int &reso
 
 bool TagFilterProxyModelQmlWrapper::showResourceTagged(const int &tagIndex, const int &resourceIndex) const
 {
+    if (!d->tagModel || !d->tagFilterProxyModel) return false;
     QModelIndex idx = d->tagModel->index(tagIndex, 0);
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     KisTagSP tagsp;
@@ -235,11 +277,13 @@ bool TagFilterProxyModelQmlWrapper::showResourceTagged(const int &tagIndex, cons
 
 int TagFilterProxyModelQmlWrapper::currentIndex() const
 {
+    if (!d->tagFilterProxyModel) return -1;
     return d->tagFilterProxyModel->indexForResource(d->currentResource).row();
 }
 
 void TagFilterProxyModelQmlWrapper::setCurrentIndex(const int &index)
 {
+    if (!d->tagFilterProxyModel) return;
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(index, 0);
     if (!resourceIdx.isValid()) return;
     KoResourceSP newResource = d->tagFilterProxyModel->resourceForIndex(resourceIdx);
@@ -251,6 +295,7 @@ void TagFilterProxyModelQmlWrapper::setCurrentIndex(const int &index)
 
 void TagFilterProxyModelQmlWrapper::setResourceToFileName(const QString &filename)
 {
+    if (!d->allResourceModel) return;
     KoResourceSP resource = d->currentResource;
     QVector<KoResourceSP> resources = d->allResourceModel->resourcesForFilename(filename);
     if (!resources.isEmpty()) {
@@ -267,8 +312,14 @@ QString TagFilterProxyModelQmlWrapper::resourceFilename()
     return d->currentResource? d->currentResource->filename(): "";
 }
 
+KoResourceSP TagFilterProxyModelQmlWrapper::currentResource() const
+{
+    return d->currentResource;
+}
+
 void TagFilterProxyModelQmlWrapper::setSearchTextOnModel()
 {
+    if (!d->tagFilterProxyModel) return;
     d->tagFilterProxyModel->setSearchText(d->currentSearchText);
     emit modelSortUpdated();
 }

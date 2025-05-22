@@ -49,6 +49,9 @@ Rectangle {
         TabButton {
             text: i18nc("@title:tab", "Paragraph")
         }
+        TabButton {
+            text: i18nc("@title:tab", "Preset")
+        }
     }
 
     StackLayout {
@@ -68,6 +71,26 @@ Rectangle {
             id: paragraphPropertyList;
             propertyType: TextPropertyConfigModel.Paragraph;
             configModel: root.configModel;
+        }
+
+        ResourceView {
+            id: presetView;
+            resourceType: "css_styles";
+            Layout.fillHeight: true;
+            Layout.fillWidth: true;
+            palette: paletteControl.palette;
+
+            onCurrentResourceChanged: {
+                mainWindow.applyPreset(currentResource);
+            }
+
+            resourceDelegate: ItemDelegate {
+                required property var model;
+                width: ListView.view.width;
+                text: model.name;
+
+                onClicked: presetView.currentIndex = model.index;
+            }
         }
     }
 }

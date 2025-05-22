@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
+import QtQuick.Window 2.15
 import org.krita.flake.text 1.0
 
 Button {
@@ -16,7 +17,14 @@ Button {
 
     property TagFilterProxyModelQmlWrapper modelWrapper : TagFilterProxyModelQmlWrapper{
         id: modelWrapperId;
+        resourceType: "fontfamilies";
     };
+
+    /// Ideally we'd have the max popup height be Window-height - y-pos-of-item-to-window.
+    /// But that's pretty hard to calculate (map to global is screen relative, but there's
+    /// no way to get window.y relative to screen), so we'll just use 300 as the maximum.
+    property int maxPopupHeight: Math.min(Window.height, 300) - height*3;
+
     text: modelWrapper.resourceFilename;
     property int highlightedIndex;
     onClicked: {
@@ -43,7 +51,7 @@ Button {
             property string sample: familyCmb.modelWrapper.localizedSampleFromMetadata(meta, locales, "");
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
             /// the metadata from the modelwrapper.
-            width: fontResourceView.listWidth;
+            width: ListView.view.width;
             highlighted: familyCmb.highlightedIndex === model.index;
 
             Component.onCompleted: {
@@ -195,180 +203,16 @@ Button {
         y: familyCmb.height - 1;
         x: familyCmb.width - width;
         width: contentWidth;
-        height: contentHeight;
+        height: Math.min(contentItem.implicitHeight, familyCmb.maxPopupHeight - topMargin - bottomMargin)
         padding: 2;
 
         palette: familyCmb.palette;
 
-        contentItem:
-            ColumnLayout {
-            id: fontResourceView;
-            clip:true;
-            property alias fontModel : view.model;
-            property alias tagModel: tagFilter.model;
-            property alias listWidth : view.width;
-            fontModel: familyCmb.modelWrapper.model;
-            tagModel: familyCmb.modelWrapper.tagModel;
-
-            RowLayout {
-                id: tagAndConfig;
-
-                ComboBox {
-                    id: tagFilter;
-                    textRole: "display";
-                    Layout.fillWidth: true;
-                    currentIndex: familyCmb.modelWrapper.currentTag;
-                    onActivated: familyCmb.modelWrapper.currentTag = currentIndex;
-                }
-
-                Button {
-                    id: tagMenuButton;
-                    icon.source: "qrc:///light_bookmarks.svg";
-                    text: i18nc("@label:button", "Tag");
-                    onClicked: hideShowMenu();
-                    function hideShowMenu() {
-                        if (!tagActionsContextMenu.visible) {
-                            tagActionsContextMenu.resourceIndex = familyCmb.highlightedIndex;
-                            tagActionsContextMenu.popup(tagMenuButton,
-                                                        tagActionsContextMenu.width - tagMenuButton.width,
-                                                        tagMenuButton.height - 1);
-                        } else {
-                            tagActionsContextMenu.dismiss();
-                        }
-                    }
-
-                    //--- Tag Setup ---//
-                    Menu {
-                        id: tagActionsContextMenu;
-
-                        palette: familyCmb.palette;
-                        property int resourceIndex: -1;
-                        property alias resourceName: resourceLabel.text;
-                        property var resourceTaggedModel : [];
-                        enabled: resourceIndex >= 0;
-                        onResourceIndexChanged: {
-                            resourceName = modelWrapper.localizedNameFromMetadata(modelWrapper.metadataForIndex(tagActionsContextMenu.resourceIndex), locales, resourceName);
-                            updateResourceTaggedModel();
-                        }
-                        function updateResourceTaggedModel() {
-                            resourceTaggedModel = modelWrapper.taggedResourceModel(tagActionsContextMenu.resourceIndex);
-                        }
-                        function updateAndDismiss() {
-                            updateResourceTaggedModel();
-                            dismiss();
-                        }
-
-                        modal: true;
-                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                        Label {
-                            id: resourceLabel;
-                        }
-
-                        Menu {
-                            id: assignToTag;
-                            title: i18nc("@title:menu", "Assign to Tag");
-                            height: contentChildren.height;
-                            ListView {
-                                id: tagAddView;
-                                model: tagActionsContextMenu.resourceTaggedModel;
-                                height: contentHeight;
-                                width: parent.width;
-
-                                delegate: ItemDelegate {
-                                    width: tagAddView.width;
-                                    text: modelData.name;
-                                    visible: modelData.visible && !modelData.enabled;
-                                    height: visible? implicitContentHeight: 0;
-
-                                    onClicked: {
-                                        modelWrapper.tagResource(modelData.value, tagActionsContextMenu.resourceIndex);
-                                        tagActionsContextMenu.updateAndDismiss();
-                                    }
-                                }
-                            }
-                            MenuSeparator {}
-                            RowLayout {
-                                TextField {
-                                    id: newTagName;
-                                    placeholderText: i18nc("@info:placeholder", "New Tag Name...");
-                                    Layout.fillWidth: true;
-                                }
-                                ToolButton {
-                                    icon.source: "qrc:///light_list-add.svg";
-                                    icon.color: palette.text;
-                                    onClicked:  {
-                                        modelWrapper.addNewTag(newTagName.text, tagActionsContextMenu.resourceIndex);
-                                        newTagName.text = "";
-                                        tagActionsContextMenu.updateAndDismiss();
-                                    }
-                                }
-                            }
-
-                        }
-                        MenuSeparator {}
-                        Action {
-                            enabled: modelWrapper.showResourceTagged(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
-                            id: removeFromThisTag;
-                            text: i18nc("@action:inmenu", "Remove from this tag");
-                            icon.source: "qrc:///16_light_list-remove.svg";
-                            onTriggered: modelWrapper.untagResource(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
-                        }
-
-                        Menu {
-                            id: removeFromTag;
-                            title: i18nc("@title:menu", "Remove from other tag");
-                            ListView {
-                                id: tagRemoveView;
-                                model: tagActionsContextMenu.resourceTaggedModel;
-                                height: contentHeight;
-                                width: parent.width;
-                                delegate: ItemDelegate {
-                                    width: tagRemoveView.width;
-                                    text: modelData.name;
-                                    visible: modelData.visible && modelData.enabled;
-                                    height: visible? implicitContentHeight: 0;
-                                    onClicked: {
-                                        modelWrapper.untagResource(modelData.value, tagActionsContextMenu.resourceIndex);
-                                        tagActionsContextMenu.updateAndDismiss()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            Frame {
-                Layout.minimumHeight: font.pixelSize*3;
-                Layout.preferredHeight: 300;
-                Layout.maximumHeight: 500;
-                Layout.fillWidth: true;
-                clip: true;
-                ListView {
-                    anchors.fill: parent;
-                    id: view;
-                    currentIndex: familyCmb.modelWrapper.currentIndex;
-                    delegate: fontDelegate;
-                    ScrollBar.vertical: ScrollBar {
-                    }
-                }
-            }
-            RowLayout {
-                Layout.preferredHeight: childrenRect.height;
-                TextField {
-                    id: search;
-                    placeholderText: i18nc("@info:placeholder", "Search...");
-                    Layout.fillWidth: true;
-                    text: modelWrapper.searchText;
-                    onTextEdited: modelWrapper.searchText = text;
-                }
-                CheckBox {
-                    id: opticalSizeCbx
-                    text: i18nc("@option:check", "Search in tag")
-                    onCheckedChanged: modelWrapper.searchInTag = checked;
-                    checked: modelWrapper.searchInTag;
-                }
-            }
+        contentItem: ResourceView {
+            id: resourceView;
+            modelWrapper: familyCmb.modelWrapper;
+            resourceDelegate: fontDelegate;
+            palette: familyCmbPopup.palette;
         }
-
     }
 }

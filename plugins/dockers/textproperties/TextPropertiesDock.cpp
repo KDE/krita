@@ -41,6 +41,7 @@
 #include <text/lager/FontVariantNumericModel.h>
 #include <text/lager/FontVariantEastAsianModel.h>
 #include <resources/KoFontFamily.h>
+#include <resources/KoCssStylePreset.h>
 #include <lager/state.hpp>
 
 #include "FontStyleModel.h"
@@ -334,4 +335,17 @@ QString TextPropertiesDock::wwsFontFamilyName(QString familyName)
     }
     return name.value();
 }
+
+void TextPropertiesDock::applyPreset(KoResourceSP resource)
+{
+    KoCssStylePresetSP preset = resource.staticCast<KoCssStylePreset>();
+    if (!preset) return;
+    KoSvgTextPropertyData textData = d->textModel->textData.get();
+    KoSvgTextProperties properties = preset->properties();
+    Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
+        textData.commonProperties.setProperty(p, properties.property(p));
+    }
+    d->textModel->textData.set(textData);
+}
+
 #include "TextPropertiesDock.moc"

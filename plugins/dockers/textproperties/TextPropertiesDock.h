@@ -12,6 +12,7 @@
 #include <QPointer>
 
 #include <kis_canvas2.h>
+#include <KoResource.h>
 
 class KoDialog;
 class QQuickWidget;
@@ -38,6 +39,8 @@ public Q_SLOTS:
     QColor modalColorDialog(QColor oldColor);
 
     void callModalTextPropertyConfigDialog();
+
+    void applyPreset(KoResourceSP resource);
 
 private:
     QPointer<KisCanvas2> m_canvas;

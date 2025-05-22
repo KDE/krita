@@ -158,7 +158,7 @@ bool KoCssStylePreset::saveToDevice(QIODevice *dev) const
 {
     if (!d->shape) return false;
     SvgWriter writer({d->shape.data()});
-    return writer.save(dev, d->shape->boundingRect().size());
+    return writer.save(*dev, d->shape->boundingRect().size());
 }
 
 QString KoCssStylePreset::defaultFileExtension() const

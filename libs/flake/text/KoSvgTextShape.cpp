@@ -1072,8 +1072,12 @@ QVector<int> KoSvgTextShape::findTreeIndexForPropertyId(KoSvgTextProperties::Pro
     QVector<int> treeIndex;
 
     for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
-        treeIndex = findTreeIndexForPropertyIdImpl(it, propertyId);
-        treeIndex.insert(0, 0);
+        if (it->properties.hasProperty(propertyId)) {
+            return QVector<int>({0});
+        } else {
+            treeIndex = findTreeIndexForPropertyIdImpl(it, propertyId);
+            treeIndex.insert(0, 0);
+        }
     }
 
     return treeIndex;

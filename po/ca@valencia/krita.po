@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-17 01:58+0000\n"
-"PO-Revision-Date: 2025-05-09 09:37+0200\n"
+"PO-Revision-Date: 2025-05-15 09:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -22037,19 +22037,19 @@ msgstr "Assistent de Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "R32 Heightmap"
-msgstr "Mapa d'alçades R32"
+msgstr "Mapa d'alçàries R32"
 
 #: libs/koplugin/KisMimeDatabase.cpp:204
 #, kde-format
 msgctxt "description of a file type"
 msgid "R16 Heightmap"
-msgstr "Mapa d'alçades R16"
+msgstr "Mapa d'alçàries R16"
 
 #: libs/koplugin/KisMimeDatabase.cpp:209
 #, kde-format
 msgctxt "description of a file type"
 msgid "R8 Heightmap"
-msgstr "Mapa d'alçades R8"
+msgstr "Mapa d'alçàries R8"
 
 #: libs/koplugin/KisMimeDatabase.cpp:214
 #, kde-format
@@ -24124,7 +24124,7 @@ msgstr "Suprimix el recurs"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
-msgstr "Trieu el fitxer que s'ha d'afegir"
+msgstr "Tria el fitxer que s'ha d'afegir"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
 #: libs/widgets/KisTagSelectionWidget.cpp:120
@@ -25789,7 +25789,7 @@ msgstr "0"
 #: libs/ui/animation/VideoImportDialog.ui:167
 #, kde-format
 msgid "Please choose a file."
-msgstr "Escolliu un fitxer."
+msgstr "Trieu un fitxer."
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportOptionsGroup)
 #: libs/ui/animation/VideoImportDialog.ui:264
@@ -26974,7 +26974,7 @@ msgstr "Arrossega en tocar"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:336
 #, kde-format
 msgid "On Click Drag"
-msgstr "Arrossega en fer clic"
+msgstr "Arrossega quan es clique"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
@@ -29868,6 +29868,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"Quan es marca esta opció, les capes creades noves es fixaran automàticament "
+"en la línia de temps de l'animació. Açò és útil quan s'anima amb un nombre "
+"xicotet de capes o quan molts elements de capes animades diferents estan "
+"interactuant entre si."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29884,6 +29888,11 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Quan es marca, esta opció ajusta automàticament els fotogrames d'«inici» i "
+"«final» del document de manera que els fotogrames clau creats nous sempre "
+"estiguen dins de l'interval de reproducció de l'animació. Esta "
+"característica es recomana per a accelerar el flux de treball d'animació "
+"quan s'improvisa una escena sense una llargària predeterminada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29900,6 +29909,11 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Quan es marca, esta opció escalarà automàticament la vista de fotogrames de "
+"l'acoblador de la línia de temps d'animació per a ajustar-se millor a "
+"l'interval de reproducció del document. Un interval de reproducció més "
+"xicotet farà que la línia de temps s'amplie, mentre que un interval de "
+"reproducció més gran farà que la línia de temps es reduïsca."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081
@@ -33940,7 +33954,7 @@ msgstr "Edita la configuració del pinzell"
 #: libs/ui/kis_paintop_box.cc:127
 #, kde-format
 msgid "Choose brush preset"
-msgstr "Trieu el pinzell predefinit"
+msgstr "Tria el pinzell predefinit"
 
 #: libs/ui/kis_paintop_box.cc:265
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
@@ -34006,7 +34020,7 @@ msgstr "Flux:"
 #: libs/ui/kis_paintop_box.cc:336
 #, kde-format
 msgid "Choose workspace"
-msgstr "Trieu l'espai de treball"
+msgstr "Tria l'espai de treball"
 
 #: libs/ui/kis_paintop_box.cc:379
 #, kde-format
@@ -34095,7 +34109,7 @@ msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr ""
-"Feu clic per a intercanviar els colors de primer pla i de fons.\n"
+"Cliqueu per a intercanviar els colors de primer pla i de fons.\n"
 "Feu clic dret per a establir-ho a blanc i negre."
 
 #: libs/ui/kis_popup_palette.cpp:1011
@@ -35670,7 +35684,7 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 "Voleu baixar la imatge des de %1?\n"
-"Feu clic en «Mostra els detalls» per a veure l'enllaç complet cap a la "
+"Cliqueu damunt «Mostra els detalls» per a veure l'enllaç complet cap a la "
 "imatge."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
@@ -37306,7 +37320,7 @@ msgstr ""
 #, kde-format
 msgctxt "Choose a preset gradient from the button popup"
 msgid "Choose Gradient Preset"
-msgstr "Trieu un degradat del predefinit"
+msgstr "Tria un degradat del predefinit"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:152
 #, kde-format
@@ -37578,7 +37592,7 @@ msgstr "Editeu l'ansa"
 #: libs/widgets/kis_color_button.cpp:317
 #, kde-format
 msgid "Choose a color"
-msgstr "Escolliu un color"
+msgstr "Trieu un color"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:36
 #, kde-format
@@ -38570,7 +38584,7 @@ msgid ""
 "li><li>Threshold: %2</li></ul></p>"
 msgstr ""
 "<p>El mode de vista prèvia instantània està desactivat pel llindar de la "
-"vista prèvia instantània. Feu clic ací amb el botó dret per a canviar el "
+"vista prèvia instantània. Cliqueu ací amb el botó dret per a canviar el "
 "llindar<ul><li>Mida del pinzell %1</li><li>Llindar: %2</li></ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:157
@@ -38598,7 +38612,7 @@ msgstr "(vista prèvia instantània)*"
 #: libs/ui/widgets/kis_meta_data_merge_strategy_chooser_widget.cc:62
 #, kde-format
 msgid "Choose meta data merge strategy"
-msgstr "Trieu l'estratègia de fusió de metadades"
+msgstr "Tria l'estratègia de fusió de metadades"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelHue)
@@ -47661,7 +47675,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:209
 #, kde-format
 msgid "Choose the resource library to import"
-msgstr "Escolliu la biblioteca de recursos que s'ha d'importar"
+msgstr "Trieu la biblioteca de recursos que s'ha d'importar"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:213
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:280
@@ -48734,7 +48748,7 @@ msgstr "Angle:"
 #: plugins/paintops/libpaintop/sensors/SensorFadeConfiguration.ui:54
 #, kde-format
 msgid "Length:"
-msgstr "Longitud:"
+msgstr "Llargària:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShape)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbShape)
@@ -49175,7 +49189,7 @@ msgstr "Controlador del canal"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "Filtre de mapa d'alçades a normal"
+msgstr "Filtre de mapa d'alçàries a normal"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
@@ -49185,12 +49199,12 @@ msgstr "Mapa d'a&lçades a normal…"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
 msgid "Height to Normal Map"
-msgstr "Mapa d'alçades a normal"
+msgstr "Mapa d'alçàries a normal"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:20
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "El mapa d'alçades a normal no funciona en este espai de color."
+msgstr "El mapa d'alçàries a normal no funciona en este espai de color."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
@@ -50045,7 +50059,7 @@ msgstr "Ambient"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:334
 #, kde-format
 msgid "Heightmap channel:"
-msgstr "Canal de mapa d'alçades:"
+msgstr "Canal de mapa d'alçàries:"
 
 #. i18n: Whether or not this filter should only use a given channel or use all channels and treat them as a normal map
 #. i18n: ectx: property (text), widget (QCheckBox, useNormalMap)
@@ -52041,7 +52055,7 @@ msgstr "Tipus de fitxer desconegut"
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:89
 #, kde-format
 msgid "Heightmap Import Options"
-msgstr "Opcions d'importació dels mapes d'alçades"
+msgstr "Opcions d'importació dels mapes d'alçàries"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:27
 #, kde-format
@@ -61971,7 +61985,7 @@ msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr ""
-"Seleccioneu el pinzell predefinit, després feu clic en el botó que voleu "
+"Seleccioneu el pinzell predefinit, després cliqueu damunt del botó que voleu "
 "utilitzar per a seleccionar el predefinit."
 
 #: plugins/python/tenbrushes/uitenbrushes.py:60

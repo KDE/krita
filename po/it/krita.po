@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-17 01:58+0000\n"
-"PO-Revision-Date: 2025-05-11 12:08+0200\n"
+"PO-Revision-Date: 2025-05-16 19:59+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -29851,6 +29851,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"Quando questa opzione è selezionata, i livelli creati di recente saranno "
+"fissati nella linea temporale dell'animazione. Utile quando crei animazioni "
+"con un numero limitato di livelli o quando molti elementi interagiscono tra "
+"loro su livelli animati differenti."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29867,6 +29871,12 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"Se selezionata, questa opzione regola automaticamente i fotogrammi di "
+"«inizio» e «fine» del documento, in modo che i fotogrammi chiave creati di "
+"recente stiano sempre all'interno dell'intervallo di riproduzione "
+"dell'animazione. Si consiglia questa funzionalità per velocizzare il flusso "
+"di lavoro dell'animazione quando si improvvisa una scena senza una lunghezza "
+"predeterminata."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29883,6 +29893,11 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"Se selezionata, questa opzione ridimensiona automaticamente i fotogrammi "
+"dell'area di aggancio Linea temporale dell'animazione in modo da ottimizzare "
+"la vista dell'intervallo di riproduzione. Un intervallo più piccolo "
+"ingrandirà la linea temporale, mentre un intervallo più esteso la "
+"rimpicciolirà."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081

@@ -24,11 +24,15 @@ const QString DESC = "desc";
 const QString SAMPLE_SVG = "sample_svg";
 const QString STYLE_TYPE = "style_type";
 
+const QString STYLE_TYPE_PARAGRAPH = "paragraph";
+const QString STYLE_TYPE_CHARACTER = "character";
+
 struct KoCssStylePreset::Private {
 
     Private()
         : shape(new KoSvgTextShape())
     {
+        shape->insertText(0, i18nc("info:placeholder", "Style Sample"));
     }
     ~Private() {}
 
@@ -51,7 +55,6 @@ KoCssStylePreset::KoCssStylePreset(const KoCssStylePreset &rhs)
     , d(new Private())
 {
     d->shape.reset(dynamic_cast<KoSvgTextShape*>(rhs.d->shape.data()->cloneShape()));
-    setTitle(rhs.title());
     setDescription(rhs.description());
     setValid(true);
 }
@@ -64,24 +67,24 @@ KoCssStylePreset::~KoCssStylePreset()
 KoSvgTextProperties KoCssStylePreset::properties()
 {
     const QVector<int> treeIndex = d->shape->findTreeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
+    qDebug() << "searching properties" << treeIndex;
+    if (treeIndex.isEmpty()) return KoSvgTextProperties();
     return d->shape->propertiesForTreeIndex(treeIndex);
 }
 
 void KoCssStylePreset::setProperties(const KoSvgTextProperties &properties)
 {
     const QVector<int> treeIndex = d->shape->findTreeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
-    if (d->shape->propertiesForTreeIndex(treeIndex) == properties) return;
-    d->shape->setPropertiesAtTreeIndex(treeIndex, properties);
-}
-
-QString KoCssStylePreset::title() const
-{
-    return d->shape->additionalAttribute(TITLE);
-}
-
-void KoCssStylePreset::setTitle(QString title)
-{
-    d->shape->setAdditionalAttribute(TITLE, title);
+    if (!treeIndex.isEmpty() && d->shape->propertiesForTreeIndex(treeIndex) == properties) return;
+    if (treeIndex.isEmpty()) {
+        KoSvgTextProperties modifiedProps = properties;
+        modifiedProps.setProperty(KoSvgTextProperties::KraTextStyleType, STYLE_TYPE_PARAGRAPH);
+        d->shape->setPropertiesAtPos(-1, modifiedProps);
+    } else {
+        d->shape->setPropertiesAtTreeIndex(treeIndex, properties);
+    }
+    updateThumbnail();
+    setValid(true);
 }
 
 QString KoCssStylePreset::description() const
@@ -94,6 +97,17 @@ void KoCssStylePreset::setDescription(QString description)
 {
     d->shape->setAdditionalAttribute(DESC, description);
     addMetaData(DESCRIPTION, description);
+}
+
+QString KoCssStylePreset::styleType() const
+{
+    QMap<QString, QVariant> m = metadata();
+    return m[STYLE_TYPE].toString();
+}
+
+void KoCssStylePreset::setStyleType(const QString &type)
+{
+    addMetaData(STYLE_TYPE, type);
 }
 
 KoResourceSP KoCssStylePreset::clone() const
@@ -135,7 +149,7 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
             addMetaData(DESCRIPTION, d->shape->additionalAttribute(DESC));
             QVector<int> treeIndex = d->shape->findTreeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
             qDebug() << "style found at..." << treeIndex;
-            QString styleType = "paragraph";
+            QString styleType = STYLE_TYPE_PARAGRAPH;
             if (!treeIndex.isEmpty()) {
                 KoSvgTextProperties props = d->shape->propertiesForTreeIndex(treeIndex);
                 styleType = props.propertyOrDefault(KoSvgTextProperties::KraTextStyleType).toString();
@@ -157,6 +171,33 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 bool KoCssStylePreset::saveToDevice(QIODevice *dev) const
 {
     if (!d->shape) return false;
+
+    QMap<QString, QVariant> m = metadata();
+    d->shape->setAdditionalAttribute(DESC, m[DESCRIPTION].toString());
+    d->shape->setAdditionalAttribute(TITLE, name());
+
+    const QVector<int> treeIndex = d->shape->findTreeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
+    if (!treeIndex.isEmpty()) {
+        KoSvgTextProperties props = d->shape->propertiesForTreeIndex(treeIndex);
+        bool removeParagraph = styleType() == STYLE_TYPE_CHARACTER;
+
+        // Remove properties that cannot be edited.
+        Q_FOREACH(KoSvgTextProperties::PropertyId p, props.properties()) {
+            if (KoSvgTextProperties::propertyIsBlockOnly(p)) {
+                if (removeParagraph) {
+                    props.removeProperty(p);
+                }
+            } else {
+                if (!removeParagraph) {
+                    props.removeProperty(p);
+                }
+            }
+        }
+
+        props.setProperty(KoSvgTextProperties::KraTextStyleType, styleType());
+        d->shape->setPropertiesAtTreeIndex(treeIndex, props);
+    }
+
     SvgWriter writer({d->shape.data()});
     return writer.save(*dev, d->shape->boundingRect().size());
 }

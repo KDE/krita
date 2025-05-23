@@ -10,6 +10,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     CssQmlUnitConverter.cpp
     TextPropertyConfigModel.cpp
     TextPropertyConfigDialog.cpp
+    CssStylePresetEditDialog.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

@@ -42,6 +42,10 @@ public Q_SLOTS:
 
     void applyPreset(KoResourceSP resource);
 
+    bool createNewPresetFromSettings();
+    void editPreset(KoResourceSP resource);
+
+
 private:
     QPointer<KisCanvas2> m_canvas;
     QQuickWidget *m_quickWidget {0};

@@ -16,14 +16,12 @@ Rectangle {
 
     property TextPropertyConfigModel configModel : textPropertyConfigModel;
 
-    SystemPalette {
-        id: sysPalette;
-        colorGroup: SystemPalette.Active
-    }
-
     PaletteControl {
         id: paletteControl;
-        colorGroup: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
+    }
+    SystemPalette {
+        id: sysPalette;
+        colorGroup: paletteControl.colorGroup;
     }
 
     function setProperties() {
@@ -81,7 +79,9 @@ Rectangle {
             palette: paletteControl.palette;
 
             signal applyPreset;
-            onApplyPreset: mainWindow.applyPreset(currentResource);
+            onApplyPreset: {
+                mainWindow.applyPreset(currentResource);
+            }
 
             resourceDelegate: ItemDelegate {
                 id: presetDelegate;
@@ -130,13 +130,30 @@ Rectangle {
                     }
                     onDoubleClicked: {
                         presetView.modelWrapper.currentIndex = parent.model.index;
-                        presetView.applyPreset;
+                        presetView.applyPreset();
                     }
 
                     ToolTip.text: presetDelegate.model.name + "\n" + presetDelegate.meta.description;
                     ToolTip.visible: containsMouse;
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 
+                }
+            }
+            additionalAddResourceRow: RowLayout {
+                ToolButton {
+                    text:  i18nc("@label:button", "Add Style Preset");
+                    icon.source: "qrc:///light_list-add.svg";
+                    icon.color: palette.text;
+                    icon.width: 16;
+                    icon.height: 16;
+                    onClicked: mainWindow.createNewPresetFromSettings();
+                }
+                ToolButton {
+                    icon.source: "qrc:///16_light_edit-rename.svg";
+                    icon.color: palette.text;
+                    icon.width: 16;
+                    icon.height: 16;
+                    onClicked: mainWindow.editPreset(presetView.currentResource);
                 }
             }
         }

@@ -1076,7 +1076,9 @@ QVector<int> KoSvgTextShape::findTreeIndexForPropertyId(KoSvgTextProperties::Pro
             return QVector<int>({0});
         } else {
             treeIndex = findTreeIndexForPropertyIdImpl(it, propertyId);
-            treeIndex.insert(0, 0);
+            if (!treeIndex.isEmpty()) {
+                treeIndex.insert(0, 0);
+            }
         }
     }
 
@@ -1256,7 +1258,6 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
             }
             if (it == d->textData.compositionBegin()) {
                 context.shapeWriter().startElement("text", false);
-                SvgStyleWriter::saveMetadata(this, context);
 
                 if (!context.strippedTextMode()) {
                     context.shapeWriter().addAttribute("id", context.getID(this));
@@ -1295,6 +1296,9 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                                   d->childCount(siblingCurrent(it)) == 0,
                                   shapeSpecificStyles);
         } else {
+            if (it == d->textData.compositionBegin()) {
+                SvgStyleWriter::saveMetadata(this, context);
+            }
             context.shapeWriter().endElement();
         }
     }

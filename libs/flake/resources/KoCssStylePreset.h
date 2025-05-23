@@ -31,13 +31,12 @@ public:
     KoSvgTextProperties properties();
     void setProperties(const KoSvgTextProperties &properties);
 
-    /// The proper title of the style.
-    QString title() const;
-    void setTitle(QString title);
-
     /// The description associated with this style.
     QString description() const;
     void setDescription(QString description);
+
+    QString styleType() const;
+    void setStyleType(const QString &type);
 
     // KoResource interface
 public:
@@ -50,7 +49,6 @@ public:
 private:
     struct Private;
     QScopedPointer<Private> d;
-
 };
 
 #endif // KOCSSSTYLEPRESET_H

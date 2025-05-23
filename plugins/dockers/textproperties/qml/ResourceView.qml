@@ -20,6 +20,7 @@ Control {
     property alias resourceDelegate : view.delegate;
 
     property alias addResourceRow: addResourceRow;
+    property alias additionalAddResourceRow: addResourceRowExtra.data;
 
     function openContextMenu(x, y, resourceName, resourceIndex) {
         tagActionsContextMenu.resourceName = resourceName;
@@ -241,6 +242,12 @@ Control {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 
                 onClicked: modelWrapper.removeResource();
+            }
+
+            Item {
+                id: addResourceRowExtra;
+                Layout.fillWidth: true;
+                Layout.fillHeight: true;
             }
         }
     }

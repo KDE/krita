@@ -17,7 +17,12 @@ import QtQuick.Controls 2.15
 Control {
     id: paletteControl;
 
-    property alias colorGroup: activePalette.colorGroup
+    property alias colorGroup: activePalette.colorGroup;
+    colorGroup: parent && typeof parent != 'undefined'?
+                    parent.enabled?
+                        parent.activeFocus? SystemPalette.Active: SystemPalette.Inactive:
+                                            SystemPalette.Disabled:
+                                                SystemPalette.Active;
 
     SystemPalette {
         id: activePalette;

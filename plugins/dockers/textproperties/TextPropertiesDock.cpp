@@ -27,6 +27,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagModel.h>
 #include <kis_signal_compressor.h>
+#include <KisResourceUserOperations.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -55,6 +56,7 @@
 #include <KisSurfaceColorSpaceWrapper.h>
 
 #include "TextPropertyConfigDialog.h"
+#include "CssStylePresetEditDialog.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -345,7 +347,37 @@ void TextPropertiesDock::applyPreset(KoResourceSP resource)
     Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
         textData.commonProperties.setProperty(p, properties.property(p));
     }
+    qDebug() << "applied preset" << resource->name();
     d->textModel->textData.set(textData);
+}
+
+bool TextPropertiesDock::createNewPresetFromSettings()
+{
+    KoCssStylePresetSP preset(new KoCssStylePreset(QString()));
+    KoSvgTextPropertyData textData = d->textModel->textData.get();
+    preset->setProperties(textData.commonProperties);
+
+    CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(this);
+    dialog->setCurrentResource(preset);
+
+    if (dialog->exec() == QDialog::Accepted) {
+        return KisResourceUserOperations::addResourceWithUserInput(this, dialog->currentResource());
+    }
+
+    return false;
+}
+
+void TextPropertiesDock::editPreset(KoResourceSP resource)
+{
+    KoCssStylePresetSP preset = resource.staticCast<KoCssStylePreset>();
+    if (!preset) return;
+
+    CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(this);
+    dialog->setCurrentResource(preset);
+
+    if (dialog->exec() == QDialog::Accepted) {
+        KisResourceUserOperations::updateResourceWithUserInput(this, dialog->currentResource());
+    }
 }
 
 #include "TextPropertiesDock.moc"

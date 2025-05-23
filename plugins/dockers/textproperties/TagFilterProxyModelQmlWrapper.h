@@ -88,11 +88,20 @@ public:
     /// Set the resource index in tagfilterproxy.
     void setCurrentIndex(const int &index);
 
+    /// Set resource to resource file name.
     Q_INVOKABLE void setResourceToFileName(const QString &filename);
 
+    /// File name of the current resource.
     QString resourceFilename();
 
+    /// current resource.
     KoResourceSP currentResource() const;
+
+    /// Import a resource with file picker.
+    Q_INVOKABLE void importResource();
+
+    /// Disable the currently selected resource.
+    Q_INVOKABLE void removeResource();
 
 Q_SIGNALS:
     void modelChanged();

@@ -80,9 +80,8 @@ Rectangle {
             Layout.fillWidth: true;
             palette: paletteControl.palette;
 
-            onCurrentResourceChanged: {
-                mainWindow.applyPreset(currentResource);
-            }
+            signal applyPreset;
+            onApplyPreset: mainWindow.applyPreset(currentResource);
 
             resourceDelegate: ItemDelegate {
                 id: presetDelegate;
@@ -90,6 +89,7 @@ Rectangle {
                 property var meta: presetView.modelWrapper.metadataForIndex(model.index);
                 width: ListView.view.width;
                 highlighted: delegateMouseArea.containsMouse;
+                property bool selected: presetView.currentIndex === model.index;
                 contentItem: KoShapeQtQuickLabel {
                     width: parent.width;
                     height: nameLabel.height * 5;
@@ -112,6 +112,8 @@ Rectangle {
                 }
                 background: Rectangle {
                     color: presetDelegate.highlighted? presetDelegate.palette.highlight: "transparent";
+                    border.color: presetDelegate.selected? presetDelegate.palette.highlight: presetDelegate.palette.base;
+                    border.width: presetDelegate.selected? 2: 1;
                 }
 
                 MouseArea {
@@ -126,6 +128,11 @@ Rectangle {
                             presetView.modelWrapper.currentIndex = parent.model.index;
                         }
                     }
+                    onDoubleClicked: {
+                        presetView.modelWrapper.currentIndex = parent.model.index;
+                        presetView.applyPreset;
+                    }
+
                     ToolTip.text: presetDelegate.model.name + "\n" + presetDelegate.meta.description;
                     ToolTip.visible: containsMouse;
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;

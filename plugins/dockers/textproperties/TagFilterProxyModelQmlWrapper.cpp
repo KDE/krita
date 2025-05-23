@@ -13,6 +13,12 @@
 #include <KisTagResourceModel.h>
 #include <kis_signal_compressor.h>
 #include <KisResourceSearchBoxFilter.h>
+#include <KisResourceUserOperations.h>
+#include <KisResourceLoaderRegistry.h>
+
+#include <KoFileDialog.h>
+#include <QStandardPaths>
+#include <QApplication>
 
 #include <resources/KoFontFamily.h>
 
@@ -315,6 +321,43 @@ QString TagFilterProxyModelQmlWrapper::resourceFilename()
 KoResourceSP TagFilterProxyModelQmlWrapper::currentResource() const
 {
     return d->currentResource;
+}
+
+void TagFilterProxyModelQmlWrapper::importResource()
+{
+    // Below copied from KisResourceItemChooser::slotButtonClicked
+    QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(d->resourceType);
+    KoFileDialog dialog(QApplication::activeWindow(), KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setMimeTypeFilters(mimeTypes);
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
+    Q_FOREACH(const QString &filename, dialog.filenames()) {
+        if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
+
+            KoResourceSP previousResource = this->currentResource();
+            KoResourceSP newResource = KisResourceUserOperations::importResourceFileWithUserInput(QApplication::activeWindow(), "", d->resourceType, filename);
+
+            if (previousResource && newResource && !currentResource()) {
+                /// We have overridden the currently selected resource and
+                /// nothing is selected now
+                QModelIndex index = d->tagFilterProxyModel->indexForResource(newResource);
+                setCurrentIndex(index.row());
+            }
+        }
+    }
+}
+
+void TagFilterProxyModelQmlWrapper::removeResource()
+{
+    // Below copied from KisResourceItemChooser::slotButtonClicked
+    QModelIndex index = d->tagFilterProxyModel->indexForResource(d->currentResource);
+    if (index.isValid()) {
+        d->tagFilterProxyModel->setResourceInactive(index);
+    }
+    int row = index.row();
+    int rowMin = --row;
+    row = qBound(0, rowMin, row);
+    setCurrentIndex(row);
 }
 
 void TagFilterProxyModelQmlWrapper::setSearchTextOnModel()

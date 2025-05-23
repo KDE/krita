@@ -207,6 +207,7 @@ Button {
             modelWrapper: familyCmb.modelWrapper;
             resourceDelegate: fontDelegate;
             palette: familyCmbPopup.palette;
+            addResourceRow.visible: false;
         }
     }
 }

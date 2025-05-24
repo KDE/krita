@@ -8,6 +8,7 @@
 # --- krita_shape_artistictext
 # --- krita_shape_paths
 # --- krita_shape_vector
+# SPDX-FileCopyrightText: 2021, 2024, 2025 tobi <onewayme001@posteo.de>
 # Thomas Diehl <thd@kde.org>, 2002, 2003.
 # Stephan Johach <hunsum@gmx.de>, 2005.
 # Patrick Trettenbrein <patrick.trettenbrein@kdemail.net>, 2005.
@@ -53,15 +54,15 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-17 03:29+0000\n"
-"PO-Revision-Date: 2024-08-27 14:17+0200\n"
-"Last-Translator: tobi <onewayme001@posteo.de>\n"
+"PO-Revision-Date: 2025-02-16 11:21+0100\n"
+"Last-Translator: oneway <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3300,65 +3301,56 @@ msgid "Canvas 03"
 msgstr "Leinwand 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross01.pat"
 msgid "Cross01"
-msgstr "Kreuz"
+msgstr "Kreuz01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross02.pat"
 msgid "Cross02"
-msgstr "Kreuz"
+msgstr "Kreuz02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross03.pat"
 msgid "Cross03"
-msgstr "Kreuz"
+msgstr "Kreuz03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross04.pat"
 msgid "Cross04"
-msgstr "Kreuz"
+msgstr "Kreuz04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross05.pat"
 msgid "Cross05"
-msgstr "Kreuz"
+msgstr "Kreuz05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross06.pat"
 msgid "Cross06"
-msgstr "Kreuz"
+msgstr "Kreuz06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross07.pat"
 msgid "Cross07"
-msgstr "Kreuz"
+msgstr "Kreuz07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Crumpled_Paper.pat"
-#| msgid "Canvas 04"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
@@ -3366,44 +3358,39 @@ msgid "Canvas 04"
 msgstr "Leinwand 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid01.pat"
 msgid "Grid01"
-msgstr "Gitter"
+msgstr "Gitter01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid02.pat"
 msgid "Grid02"
-msgstr "Gitter"
+msgstr "Gitter02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid03.pat"
 msgid "Grid03"
-msgstr "Gitter"
+msgstr "Gitter03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid04.pat"
 msgid "Grid04"
-msgstr "Gitter"
+msgstr "Gitter04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid05.pat"
 msgid "Grid05"
-msgstr "Gitter"
+msgstr "Gitter05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -3424,52 +3411,46 @@ msgid "HR Wall Paper"
 msgstr "Tapete"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern01.pat"
 msgid "Pattern01"
-msgstr "Muster"
+msgstr "Muster01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern02.pat"
 msgid "Pattern02"
-msgstr "Muster"
+msgstr "Muster02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern03.pat"
 msgid "Pattern03"
-msgstr "Muster"
+msgstr "Muster03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern04.pat"
 msgid "Pattern04"
-msgstr "Muster"
+msgstr "Muster04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern05.pat"
 msgid "Pattern05"
-msgstr "Muster"
+msgstr "Muster05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern06.pat"
 msgid "Pattern06"
-msgstr "Muster"
+msgstr "Muster06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -11720,9 +11701,7 @@ msgstr "Ebene in Zwischenablage ausschneiden"
 
 #. i18n: context: text @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2377
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Insert Keyframes"
+#, kde-format
 msgctxt "action"
 msgid "Paste Keyframes"
 msgstr "Keyframes einfügen"
@@ -23796,12 +23775,12 @@ msgstr "Bei Ziehen per Fingereingabe"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, kde-format
 msgid "On Click Drag"
-msgstr ""
+msgstr "Bei Ziehen per Klick"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, kde-format
 msgid "On Middle-Click Drag"
-msgstr ""
+msgstr "Bei Ziehen per Mittel-Klick"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
@@ -23819,8 +23798,7 @@ msgid "Show session manager"
 msgstr "Sitzungsverwaltung anzeigen"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:432
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 "Hinweis: Krita muss neu gestartet werden, bevor die Änderungen in Kraft "
@@ -24222,11 +24200,13 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"Die Zeitspanne während der die Striche unverbunden bleiben. Wenn ein Strich "
+"alt genug wird, wird Krita versuchen, sie zu verbinden"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Wartezeit vor dem Verbinden von Strichen:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
 #, kde-format
@@ -24235,11 +24215,13 @@ msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
 msgstr ""
+"Die Anzahl der letzten Striche die Krita nicht verbindet (auch wenn "
+"ausreichend Zeit vergangen ist)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Letzte Striche vom Verbinden ausnehmen:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -24248,11 +24230,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Wenn zwei Striche einen kurzen Zeitabstand haben, werden sie als zu der "
+"gleichen Gruppe gehörend angesehen und verbunden"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Max. Zeitabstand für Strichgruppierung:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -24262,12 +24246,14 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Maximal erlaubte Zeitdauer der Gruppe nach der Verbindung. Würde eine Gruppe "
+"durch eine Verbindung länger als diese Begrenzung, dann wird die Verbindung "
+"nicht durchgeführt."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video Location:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Video-Ort:"
+msgstr "Max. Gruppen-Zeitdauer:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -24280,6 +24266,15 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"Kumulatives „Rückgängig“ erlaubt es Krita, Rückgängig-Aktionen zu verbinden, "
+"um den Rückgängig-Verlauf übersichtlicher zu machen. Krita behält einige der "
+"letzten Aktionen gemäß den Optionen „Wartezeit vor dem Verbinden von "
+"Strichen“ und „Letzte Striche vom Verbinden ausnehmen“ unverbunden. Immer "
+"wenn für eine Aktion die Wartezeit abgelaufen und sie nicht über „Letzte "
+"Striche vom Verbinden ausnehmen“ ausgeschlossen ist, wird Krita versuchen, "
+"diese Aktion in eine Gruppe zu verbinden. Die Gruppen werden über die "
+"Optionen „Max. Zeitabstand für Strichgruppierung“ und „Max. Gruppen-"
+"Zeitdauer“ gebildet."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -24720,19 +24715,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-#| "weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">Warning</span>: Cleanup will remove resource files "
-#| "permanently.</p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -24753,12 +24736,15 @@ msgstr ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
 "\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
-"weight:400; font-style:normal;\">\n"
+"</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">Warnung</span>: Aufräumen entfernt die Ressourcendateien "
-"unwiderruflich.</p></body></html>"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita ist ein quelloffenes "
+"und von der Gemeinschaft vorangetriebenes Werkzeug für Digital-Künstler "
+"weltweit.<br />Die Weiterentwicklung wird durch die fortlaufende "
+"Unterstützung unserer Gemeinschaft von <a href=\"https://docs.krita.org/en/"
+"contributors_manual.html\">Mitwirkenden</a>, Sponsoren und Mitgliedern des "
+"<a href=\"https://fund.krita.org/\">Entwicklungsfonds</a> ermöglicht.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -26270,10 +26256,9 @@ msgstr "Beim Verschieben von Unterfenstern Inhalt nicht anzeigen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
 #: libs/ui/forms/wdggeneralsettings.ui:526
-#, fuzzy, kde-format
-#| msgid "Use Custom Interface Font:"
+#, kde-format
 msgid "Use custom interface font"
-msgstr "Benutzerdefinierte Schriftart für die Benutzeroberfläche"
+msgstr "Benutzerdefinierte Schriftart für die Benutzeroberfläche verwenden"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -26285,10 +26270,9 @@ msgstr "Schriftart:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:576
-#, fuzzy, kde-format
-#| msgid "Enable Hi-DPI support"
+#, kde-format
 msgid "Enable HiDPI support"
-msgstr "Unterstützung für HI-DPI aktivieren"
+msgstr "Unterstützung für HiDPI aktivieren"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
 #: libs/ui/forms/wdggeneralsettings.ui:600
@@ -26301,10 +26285,9 @@ msgstr "Sobel senkrecht"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
-msgstr "Erfordert Neustart"
+msgstr "(Erfordert Neustart)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -26372,13 +26355,13 @@ msgstr "Transformieren nach Einfügen aktivieren"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr ""
+msgstr "Vergrößerungsschritte zwischen Potenzen von 2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
-msgstr "Kinetischer Bildlauf (erfordert einen Neustart)"
+msgstr "Kinetischer Bildlauf (erforde Neustart)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:756
@@ -26388,13 +26371,10 @@ msgstr "Empfindlichkeit:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
-"Bildlaufleisten der Dialoge ausblenden wenn kinetischer Bildlauf "
-"eingeschaltet ist (erfordert einen Neustart)"
+"Dialog-Bildlaufleisten ausblenden wenn kinetischer Bildlauf eingeschaltet ist"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -26411,10 +26391,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Erfordert Neustart"
+msgstr "CMYK-Mischungsmodus (erfordert Neustart):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -26453,6 +26432,8 @@ msgstr "alle "
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
 msgstr ""
+"Unbenannte Dateien der automatischen Sicherung sind standardmäßig "
+"ausgeblendet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:912
@@ -26553,17 +26534,17 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1044
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Malen"
+msgstr "Einfügen"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1056
 #, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
 msgstr ""
+"Herunterladen der Originalquelle bervorzugen (hierfür wird eine "
+"Internetverbindung benötigt)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
 #: libs/ui/forms/wdggeneralsettings.ui:1063
@@ -26572,6 +26553,8 @@ msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
+"Hinweis: Dies wird beim Ablegen in das Infofenster, die Leinwand und beim "
+"Einfügen angewendet."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:1070
@@ -26580,12 +26563,15 @@ msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
 "or dropping an image."
 msgstr ""
+"Einige Anwendungen, wie Google Chrome, bieten beim Einfügen oder Ablegen von "
+"Bildern verschiedene Formate."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
 #: libs/ui/forms/wdggeneralsettings.ui:1077
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr ""
+"Lokale Kopie bevorzugen (falls verfügbar; Medadaten können verloren gehen)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1084
@@ -26594,12 +26580,12 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
+"Die angehängte sRGB-Bitmap einfügen (kein Zugriff auf das Dateisystem oder "
+"das Internet erforderlich, aber Metadaten gehen verloren)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1091
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ask each time"
+#, kde-format
 msgid "Ask each time"
 msgstr "Jedes Mal fragen"
 
@@ -26657,22 +26643,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
 #: libs/ui/forms/wdggeneralsettings.ui:1272
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Disable automatic checking"
+#, kde-format
 msgid "Enable native file dialogs"
-msgstr "Automatische Prüfung deaktivieren"
+msgstr "Native Datei-Dialoge einschalten"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: libs/ui/forms/wdggeneralsettings.ui:1295
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enable native file dialogs (warning: may not work correctly on some "
-#| "systems)"
+#, kde-format
 msgid "(Warning: may not work correctly on some systems)"
-msgstr ""
-"Native Dateidialoge verwenden (Hinweis: funktioniert unter Umständen auf "
-"einigen Systemen nicht)"
+msgstr "(Hinweis: funktioniert unter Umständen auf einigen Systemen nicht)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1305
@@ -26711,21 +26690,19 @@ msgstr "Animation"
 #: libs/ui/forms/wdggeneralsettings.ui:1393
 #, kde-format
 msgid "Automatically pin new layers to timeline"
-msgstr ""
+msgstr "Neue Ebenen automatisch an die Zeitleiste anpinnen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1403
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Keyframe"
+#, kde-format
 msgid "Adapt playback range to keyframes"
-msgstr "Keyframe hinzufügen"
+msgstr "Wiedergabebereich an Keyframes anpassen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:1413
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr ""
+msgstr "Workaround für Schrift-DPI"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1428
@@ -26769,7 +26746,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1453
 #, kde-format
 msgid "Automatic layer suffixes"
-msgstr ""
+msgstr "Automatische Ebenen-Suffixe"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1459
@@ -26785,11 +26762,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1491
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Disable automatic checking"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Automatische Prüfung deaktivieren"
+msgstr "Kumulatives „Rückgängig“ verwenden"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
@@ -27714,7 +27689,7 @@ msgstr ""
 #: libs/ui/forms/wdgPasteFormat.ui:118
 #, kde-format
 msgid "Paste the attached &bitmap"
-msgstr ""
+msgstr "Die angehängte &Bitmap einfügen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgPasteFormat.ui:131
@@ -28191,7 +28166,7 @@ msgstr "Maximale Anzahl an Pinselvoreinstellungen:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:49
 #, kde-format
 msgid "Dynamically Adjust Slot Count"
-msgstr ""
+msgstr "Slot-Anzahl dynamisch anpassen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:59
@@ -46538,16 +46513,14 @@ msgid "Index:"
 msgstr "Index:"
 
 #: plugins/filters/palettize/palettize.cpp:190
-#, fuzzy, kde-format
-#| msgid "&Palette"
+#, kde-format
 msgid "&Palettize..."
-msgstr "&Palette"
+msgstr "&Palettieren ..."
 
 #: plugins/filters/palettize/palettize.h:67
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgid "Palettize"
-msgstr "Farbpalette"
+msgstr "Palettieren"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorspaceComboBox)
 #: plugins/filters/palettize/palettize.ui:67
@@ -51571,15 +51544,13 @@ msgid "None"
 msgstr "Keine"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:44
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "Lossless"
 msgstr "Verlustfrei"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:47
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "None"
 msgstr "Keine"
@@ -51600,18 +51571,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to an animated layer"
+#, kde-format
 msgid "Save as animated WebP"
-msgstr "In animierte Ebene umwandeln"
+msgstr "Als animiertes WebP speichern"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
-#, fuzzy, kde-format
-#| msgid "Preset:"
+#, kde-format
 msgid "Preset"
-msgstr "Voreinstellungen:"
+msgstr "Voreinstellung"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:60
@@ -51655,17 +51623,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:205
-#, fuzzy, kde-format
-#| msgid "Image Size"
+#, kde-format
 msgid "Target Size"
-msgstr "Bildgröße"
+msgstr "Zielgröße"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, targetSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:221
-#, fuzzy, kde-format
-#| msgid "0 s"
+#, kde-format
 msgid " B"
-msgstr "0 s"
+msgstr " B"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
@@ -51784,7 +51750,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:664
 #: plugins/impex/webp/kis_wdg_options_webp.ui:710
 #: plugins/impex/webp/kis_wdg_options_webp.ui:730
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enabled"
 msgstr "Aktiviert"
 
@@ -52022,10 +51988,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:740
-#, fuzzy, kde-format
-#| msgid "Quality"
+#, kde-format
 msgid "Minimum Quality"
-msgstr "Qualität"
+msgstr "Minimale Qualität"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
@@ -52037,10 +52002,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:763
-#, fuzzy, kde-format
-#| msgid "Maximum Width"
+#, kde-format
 msgid "Maximum Quality"
-msgstr "Maximale Breite"
+msgstr "Maximale Qualität"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
@@ -52220,23 +52184,16 @@ msgid "Overlay Mode"
 msgstr "Überlagerungsmodus"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "Paints on the current layer\n"
-#| "            but uses all layers that are currently visible for smudge "
-#| "input\n"
-#| "            NOTE: This mode is only able to work correctly with a fully "
-#| "opaque background"
+#, kde-format
 msgid ""
 "Paints on the current layer\n"
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
 "Malt auf der aktiven Ebene\n"
-"            aber nutzt alle Ebenen die momentan für die Wisch-Eingabe "
-"sichtbar sind\n"
-"            Hinweis: Dieser Modus kann nur korrekt mit einem voll "
-"durchlässigen Hintergrund funktionieren"
+"aber nutzt alle aktuell sichtbaren Ebenen als Eingabe für das Verwischen\n"
+" Hinweis: Dieser Modus funktioniert nur mit einem voll deckenden Hintergrund "
+"korrekt"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format

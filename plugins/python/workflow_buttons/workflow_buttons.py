@@ -163,7 +163,7 @@ class CustomButton(QToolButton):
         # select given tool
         if self.values["toolIndex"] != "":
             toolIndex = int(self.values["toolIndex"])
-            if(toolIndex > 0 and toolIndex < len(LISTOFTOOLS) - 1):
+            if(toolIndex > 0 and toolIndex < len(LISTOFTOOLS)):
                 INSTANCE.action(LISTOFTOOLS[int(self.values["toolIndex"])]["toolName"]).trigger()
 
         # get list of all presets

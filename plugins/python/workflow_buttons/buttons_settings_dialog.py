@@ -24,7 +24,7 @@ INSTANCE = Krita.instance()
 LISTOFTOOLS = [
     { "toolName": "", "toolIcon": "", "toolString": "" },
     { "toolName": "InteractionTool", "toolIcon": "select", "toolString": "Select Shapes Tool" },
-    { "toolName": "SvgTextToo", "toolIcon": "draw-text", "toolString": "Text Tool" },
+    { "toolName": "SvgTextTool", "toolIcon": "draw-text", "toolString": "Text Tool" },
     { "toolName": "PathTool", "toolIcon": "shape_handling", "toolString": "Edit Shapes Tool" },
     { "toolName": "KarbonCalligraphyTool", "toolIcon": "calligraphy", "toolString": "Calligraphy" },
     { "toolName": "KritaShape/KisToolBrush", "toolIcon": "krita_tool_freehand", "toolString": "Freehand Brush Tool" },

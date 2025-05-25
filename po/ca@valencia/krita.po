@@ -13038,7 +13038,7 @@ msgstr "Scripts"
 #: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
-msgstr "Arranjame&nt"
+msgstr "Co&nfiguració"
 
 #: krita/krita5.xmlgui:408 libs/widgetutils/xmlgui/khelpmenu.cpp:131
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
@@ -23293,7 +23293,7 @@ msgstr "Disminuïx la lluminositat"
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
-msgstr "Augmenta la brillantor"
+msgstr "Augmenta la lluminositat"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:157
 #, kde-format
@@ -34579,7 +34579,7 @@ msgstr "S'ha trobat massa plantilles per a: %1"
 #: libs/ui/KisApplication.cpp:1112
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr "S'ha produït un error en carregar la plantilla %1."
+msgstr "S'ha produït un error mentre es carregava la plantilla %1."
 
 #: libs/ui/KisApplication.cpp:1144
 #, kde-format
@@ -49194,7 +49194,7 @@ msgstr "Filtre de mapa d'alçàries a normal"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "Mapa d'a&lçades a normal…"
+msgstr "Mapa d'a&lçàries a normal…"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format

@@ -1,55 +1,6 @@
 # Spanish translations for krita.po package.
-#
-# --- kritalibs
-# Spanish translations for kritalibs.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
+# Copyright (C) 2015-2025 This file is copyright:
 # This file is distributed under the same license as the krita package.
-#
-# --- krita_shape_text
-# Spanish translations for krita_shape_text.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- kritacolorspaces
-# Spanish translations for kritacolorspaces.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- krita-dockers
-# Spanish translations for krita-dockers.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- kritafiltereffects
-# Spanish translations for kritafiltereffects.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- krita_flaketools
-# Spanish translations for krita_flaketools.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- krita_karbontools
-# Spanish translations for krita_karbontools.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- krita_shape_artistictext
-# Spanish translations for krita_shape_artistictext.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- krita_shape_paths
-# Spanish translations for krita_shape_paths.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
-# --- krita_shape_vector
-# Spanish translations for krita_shape_vector.po package.
-# Copyright (C) 2015 This_file_is_part_of_KDE
-# This file is distributed under the same license as the krita package.
-#
 # Automatically generated, 2015.
 #
 # SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006, 2007 Juan Manuel Garcia Molina <juanma@superiodico.net>
@@ -57,7 +8,6 @@
 # SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
 # SPDX-FileCopyrightText: 2008, 2011, 2014, 2015 Eloy Cuadra <ecuadra@eloihr.net>
-# SPDX-FileCopyrightText: 2009 Enrique Matias Sanchez (Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018. 2019. 2020, 2021, 2024, 2025 Sofía Priego <spriego@darksylvania.net>
@@ -66,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-24 01:59+0000\n"
-"PO-Revision-Date: 2025-05-15 17:32+0100\n"
+"PO-Revision-Date: 2025-05-24 18:50+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"

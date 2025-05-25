@@ -12911,7 +12911,7 @@ msgstr "Scripts"
 #: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, kde-format
 msgid "Setti&ngs"
-msgstr "Arranjame&nt"
+msgstr "Co&nfiguració"
 
 #: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
@@ -18019,7 +18019,7 @@ msgstr "Pinzell de mànega d'imatge de Gimp"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Adobe Brush Library"
-msgstr "Biblioteca de pinzells de l'Adobe"
+msgstr "Biblioteca de pinzells d'Adobe"
 
 #: libs/koplugin/KisMimeDatabase.cpp:184
 #, kde-format
@@ -18043,19 +18043,19 @@ msgstr "Assistent de Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "R32 Heightmap"
-msgstr "Mapa d'alçades R32"
+msgstr "Mapa d'alçàries R32"
 
 #: libs/koplugin/KisMimeDatabase.cpp:204
 #, kde-format
 msgctxt "description of a file type"
 msgid "R16 Heightmap"
-msgstr "Mapa d'alçades R16"
+msgstr "Mapa d'alçàries R16"
 
 #: libs/koplugin/KisMimeDatabase.cpp:209
 #, kde-format
 msgctxt "description of a file type"
 msgid "R8 Heightmap"
-msgstr "Mapa d'alçades R8"
+msgstr "Mapa d'alçàries R8"
 
 #: libs/koplugin/KisMimeDatabase.cpp:214
 #, kde-format
@@ -19258,7 +19258,7 @@ msgstr "Disminuïx la lluminositat"
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
-msgstr "Augmenta la brillantor"
+msgstr "Augmenta la lluminositat"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
@@ -19807,12 +19807,12 @@ msgstr "Paquet"
 #: libs/resources/KisResourceStorage.h:122
 #, kde-format
 msgid "Adobe Brush Library"
-msgstr "Biblioteca de pinzells de l'Adobe"
+msgstr "Biblioteca de pinzells d'Adobe"
 
 #: libs/resources/KisResourceStorage.h:124
 #, kde-format
 msgid "Adobe Style Library"
-msgstr "Biblioteca d'estil de l'Adobe"
+msgstr "Biblioteca d'estil d'Adobe"
 
 #: libs/resources/KisResourceStorage.h:126
 #, kde-format
@@ -20048,7 +20048,7 @@ msgstr "Suprimix el recurs"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
-msgstr "Trieu el fitxer que s'ha d'afegir"
+msgstr "Tria el fitxer que s'ha d'afegir"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:76
 #: libs/widgets/KisTagSelectionWidget.cpp:121
@@ -21695,7 +21695,7 @@ msgstr "0"
 #: libs/ui/animation/VideoImportDialog.ui:167
 #, kde-format
 msgid "Please choose a file."
-msgstr "Escolliu un fitxer."
+msgstr "Trieu un fitxer."
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportOptionsGroup)
 #: libs/ui/animation/VideoImportDialog.ui:264
@@ -22933,7 +22933,7 @@ msgstr "Arrossega en tocar"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, kde-format
 msgid "On Click Drag"
-msgstr "Arrossega en fer clic"
+msgstr "Arrossega quan es clique"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, kde-format
@@ -24832,7 +24832,7 @@ msgstr "Renderitzador actual:"
 #: libs/ui/forms/wdgdisplaysettings.ui:250
 #, kde-format
 msgid "HDR Settings"
-msgstr "Configureu l'HDR"
+msgstr "Configureu HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:256
@@ -27168,7 +27168,7 @@ msgstr ""
 "dur a la mateixa carpeta com a fitxer de memòria d'intercanvi. La memòria "
 "cau s'emmagatzema de manera comprimida. És necessària poca memòria extra de "
 "RAM.</p><p>Com que la velocitat de transferència de dades del disc dur és "
-"baixa, segurament voldreu limitar la mida dels fotogrames a la memòria cau "
+"baixa, segurament voldreu limitar la mida dels fotogrames en la memòria cau "
 "per a poder reproduir el vídeo a 25 fps. El límit de 2500 px normalment és "
 "una bona elecció.</p></body></html>"
 
@@ -27200,7 +27200,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:471
 #, kde-format
 msgid "Limit cached frame size:"
-msgstr "Límit de la mida dels fotogrames a la memòria cau:"
+msgstr "Límit de la mida dels fotogrames en la memòria cau:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:484
@@ -28627,7 +28627,7 @@ msgctxt ""
 "number of buttons in that list."
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
-msgstr[0] "Botó %1"
+msgstr[0] "Botó «%1»"
 msgstr[1] "%1 botons"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:370
@@ -29612,7 +29612,7 @@ msgstr "Edita la configuració del pinzell"
 #: libs/ui/kis_paintop_box.cc:127
 #, kde-format
 msgid "Choose brush preset"
-msgstr "Trieu el pinzell predefinit"
+msgstr "Tria el pinzell predefinit"
 
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -29656,7 +29656,7 @@ msgstr "Escala del patró:"
 #: libs/ui/kis_paintop_box.cc:328
 #, kde-format
 msgid "Choose workspace"
-msgstr "Trieu l'espai de treball"
+msgstr "Tria l'espai de treball"
 
 #: libs/ui/kis_paintop_box.cc:371
 #, kde-format
@@ -29740,7 +29740,7 @@ msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr ""
-"Feu clic per a intercanviar els colors de primer pla i de fons.\n"
+"Cliqueu per a intercanviar els colors de primer pla i de fons.\n"
 "Feu clic dret per a establir-ho a blanc i negre."
 
 #: libs/ui/kis_popup_palette.cpp:1015
@@ -30203,7 +30203,7 @@ msgstr "S'ha trobat massa plantilles per a: %1"
 #: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr "S'ha produït un error en carregar la plantilla %1."
+msgstr "S'ha produït un error mentre es carregava la plantilla %1."
 
 #: libs/ui/KisApplication.cpp:1064
 #, kde-format
@@ -31309,7 +31309,7 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 "Voleu baixar la imatge des de %1?\n"
-"Feu clic en «Mostra els detalls» per a veure l'enllaç complet cap a la "
+"Cliqueu damunt «Mostra els detalls» per a veure l'enllaç complet cap a la "
 "imatge."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
@@ -32950,7 +32950,7 @@ msgstr ""
 #, kde-format
 msgctxt "Choose a preset gradient from the button popup"
 msgid "Choose Gradient Preset"
-msgstr "Trieu un degradat del predefinit"
+msgstr "Tria un degradat del predefinit"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:152
 #, kde-format
@@ -33236,7 +33236,7 @@ msgstr "Editeu l'ansa"
 #: libs/widgets/kis_color_button.cpp:317
 #, kde-format
 msgid "Choose a color"
-msgstr "Escolliu un color"
+msgstr "Trieu un color"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:36
 #, kde-format
@@ -33737,7 +33737,7 @@ msgstr ""
 "«ClayRGB» (seguint ArgyllCMS) com el nom base per a estos perfils. Com "
 "s'utilitza davall, «Compatible amb Adobe RGB 1998» és la terminologia "
 "suggerida en el preàmbul a les especificacions de l'espai de color AdobeRGB "
-"1998.</p><p>La gamma de colors de l'Adobe RGB 1998 cobrix un percentatge més "
+"1998.</p><p>La gamma de colors d'Adobe RGB 1998 cobrix un percentatge més "
 "gran de cians, verds i grocs-verds del món real que sRGB, però encara no "
 "inclou tots els cians, verds i grocs-verds imprimibles, especialment quan "
 "s'imprimix emprant impressores d'injecció de tinta de gamma alta d'hui en "
@@ -34228,7 +34228,7 @@ msgid ""
 "li><li>Threshold: %2</li></ul></p>"
 msgstr ""
 "<p>El mode de vista prèvia instantània està desactivat pel llindar de la "
-"vista prèvia instantània. Feu clic ací amb el botó dret per a canviar el "
+"vista prèvia instantània. Cliqueu ací amb el botó dret per a canviar el "
 "llindar<ul><li>Mida del pinzell %1</li><li>Llindar: %2</li></ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:157
@@ -34256,7 +34256,7 @@ msgstr "(vista prèvia instantània)*"
 #: libs/ui/widgets/kis_meta_data_merge_strategy_chooser_widget.cc:62
 #, kde-format
 msgid "Choose meta data merge strategy"
-msgstr "Trieu l'estratègia de fusió de metadades"
+msgstr "Tria l'estratègia de fusió de metadades"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelHue)
@@ -36492,11 +36492,11 @@ msgid ""
 msgstr ""
 "<qt><p>Primer llegiu <b><a href=\"https://docs.krita.org/en/"
 "untranslatable_pages/reporting_bugs.html\">esta guia</a></b> per a informar "
-"d'errors!</p><p>Per a enviar un informe d'error, cliqueu en el botó de "
+"d'errors!</p><p>Per a enviar un informe d'error, cliqueu damunt del botó de "
 "davall. Açò obrirà una finestra del navegador web a <a href=\"https://bugs."
 "kde.org\">https://bugs.kde.org</a> on trobareu un formulari per a emplenar. "
-"</p><p><b>Apegueu la informació següent dins de l'informe d'error!</b></p></"
-"qt>"
+"</p><p><b>Apegueu la informació següent a dins de l'informe d'error!</b></"
+"p></qt>"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:207
 #, kde-format
@@ -36847,7 +36847,7 @@ msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
-"Cliqueu en el botó, llavors introduïu la drecera com ho faríeu en el "
+"Cliqueu damunt del botó, llavors introduïu la drecera com ho faríeu en el "
 "programa.\n"
 "Exemple per a «Ctrl+A»: manteniu premuda la tecla «Ctrl» mentre premeu la "
 "«A»."
@@ -37932,7 +37932,7 @@ msgstr "Mida del selector de zoom: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
 #, kde-format
 msgid "Hide Popup on click."
-msgstr "Oculta la finestra emergent en clicar."
+msgstr "Oculta la finestra emergent quan es clique."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:351
@@ -43390,7 +43390,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:207
 #, kde-format
 msgid "Choose the resource library to import"
-msgstr "Escolliu la biblioteca de recursos que s'ha d'importar"
+msgstr "Trieu la biblioteca de recursos que s'ha d'importar"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #, kde-format
@@ -44368,7 +44368,7 @@ msgstr "Angle:"
 #: plugins/paintops/libpaintop/sensors/SensorFadeConfiguration.ui:54
 #, kde-format
 msgid "Length:"
-msgstr "Longitud:"
+msgstr "Llargària:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShape)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbShape)
@@ -44771,22 +44771,22 @@ msgstr "Controlador del canal"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "Filtre de mapa d'alçades a normal"
+msgstr "Filtre de mapa d'alçàries a normal"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "Mapa d'a&lçades a normal…"
+msgstr "Mapa d'a&lçàries a normal…"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
 msgid "Height to Normal Map"
-msgstr "Mapa d'alçades a normal"
+msgstr "Mapa d'alçàries a normal"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "El mapa d'alçades a normal no funciona en este espai de color."
+msgstr "El mapa d'alçàries a normal no funciona en este espai de color."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -45635,7 +45635,7 @@ msgstr "Ambient"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:334
 #, kde-format
 msgid "Heightmap channel:"
-msgstr "Canal de mapa d'alçades:"
+msgstr "Canal de mapa d'alçàries:"
 
 #. i18n: Whether or not this filter should only use a given channel or use all channels and treat them as a normal map
 #. i18n: ectx: property (text), widget (QCheckBox, useNormalMap)
@@ -46750,12 +46750,12 @@ msgstr "Contrast:"
 #: plugins/generators/screentone/KisScreentoneGenerator.cpp:30
 #, kde-format
 msgid "&Screentone..."
-msgstr "&Tons a la pantalla…"
+msgstr "&Tons en la pantalla…"
 
 #: plugins/generators/screentone/KisScreentoneGenerator.h:52
 #, kde-format
 msgid "Screentone"
-msgstr "Tons a la pantalla"
+msgstr "Tons en la pantalla"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:21
 #, kde-format
@@ -47455,7 +47455,7 @@ msgstr "Tipus de fitxer desconegut"
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:89
 #, kde-format
 msgid "Heightmap Import Options"
-msgstr "Opcions d'importació dels mapes d'alçades"
+msgstr "Opcions d'importació dels mapes d'alçàries"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:27
 #, kde-format
@@ -52632,7 +52632,7 @@ msgstr "Segell"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
 #, kde-format
 msgid "Current Brush Tip"
-msgstr "Punta del pinzell actual"
+msgstr "Punta de pinzell actual"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
@@ -52756,7 +52756,7 @@ msgstr "Espaiat automàtic"
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
-msgstr "Punta del pinzell"
+msgstr "Punta de pinzell"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:50
 #, kde-format
@@ -53291,7 +53291,7 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
-"La lluminositat de la imatge de la punta de pinzell que s'utilitza com a "
+"La lluminositat de la imatge de la punta del pinzell que s'utilitza com a "
 "correcció de la claredat per al color del pintat. El canal alfa de la imatge "
 "de la punta del pinzell s'utilitza com a l'alfa del traç final."
 
@@ -53302,9 +53302,9 @@ msgid ""
 "The brush tip maps its value to the currently selected gradient. Alpha "
 "channel of the brush tip image is used as alpha for the final stroke"
 msgstr ""
-"La punta de pinzell mapa el seu valor al degradat actualment seleccionat. El "
-"canal alfa de la imatge de la punta del pinzell s'utilitza com a l'alfa del "
-"traç final."
+"La punta del pinzell mapa el seu valor al degradat actualment seleccionat. "
+"El canal alfa de la imatge de la punta del pinzell s'utilitza com a l'alfa "
+"del traç final."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, kde-format
@@ -56416,7 +56416,7 @@ msgstr "Nombre de línies del control lliscant:"
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
-msgstr "Acoblador Paleta en Python"
+msgstr "Acoblador Paletes en Python"
 
 #: plugins/python/palette_docker/palette_docker.py:63
 msgid "Set"
@@ -56861,7 +56861,7 @@ msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr ""
-"Seleccioneu el pinzell predefinit, després feu clic en el botó que voleu "
+"Seleccioneu el pinzell predefinit, després cliqueu damunt del botó que voleu "
 "utilitzar per a seleccionar el predefinit."
 
 #: plugins/python/tenbrushes/uitenbrushes.py:50

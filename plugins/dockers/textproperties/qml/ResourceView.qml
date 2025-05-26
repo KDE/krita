@@ -20,7 +20,7 @@ Control {
     property alias resourceDelegate : view.delegate;
 
     property alias addResourceRow: addResourceRow;
-    property alias additionalAddResourceRow: addResourceRowExtra.data;
+    property alias additionalAddResourceRow: addResourceRow.data;
 
     function openContextMenu(x, y, resourceName, resourceIndex) {
         tagActionsContextMenu.resourceName = resourceName;
@@ -212,17 +212,18 @@ Control {
         RowLayout {
             id: addResourceRow;
 
-            height: visible? implicitContentHeight: 0;
+            height: visible? implicitHeight: 0;
 
             ToolButton {
                 id: importResource;
                 palette: control.palette;
                 icon.source: "qrc:///light_document-import-16.svg";
                 icon.width: 16;
-                icon.height: 16;
                 icon.color: palette.text;
                 hoverEnabled: true;
                 ToolTip.text: i18nc("@info:tooltip", "Import Resource");
+                display: AbstractButton.IconOnly;
+                text: ToolTip.text;
                 ToolTip.visible: hovered;
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 
@@ -234,20 +235,15 @@ Control {
                 palette: control.palette;
                 icon.source: "qrc:///light_edit-delete.svg";
                 icon.width: 16;
-                icon.height: 16;
                 icon.color: palette.text;
                 hoverEnabled: true;
                 ToolTip.text: i18nc("@info:tooltip", "Remove Resource");
+                display: AbstractButton.IconOnly;
+                text: ToolTip.text;
                 ToolTip.visible: hovered;
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 
                 onClicked: modelWrapper.removeResource();
-            }
-
-            Item {
-                id: addResourceRowExtra;
-                Layout.fillWidth: true;
-                Layout.fillHeight: true;
             }
         }
     }

@@ -143,20 +143,39 @@ Rectangle {
                 }
             }
             additionalAddResourceRow: RowLayout {
+                height: implicitHeight;
+                width: parent.width;
+                Layout.alignment: Qt.AlignRight;
+
+                Item {
+                    Layout.fillWidth: true;
+                }
+
                 ToolButton {
                     text:  i18nc("@label:button", "Add Style Preset");
+                    display: AbstractButton.IconOnly;
                     icon.source: "qrc:///light_list-add.svg";
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
                     onClicked: mainWindow.createNewPresetFromSettings();
+                    hoverEnabled: true;
+                    ToolTip.text: text;
+                    ToolTip.visible: hovered;
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                 }
                 ToolButton {
+                    text:  i18nc("@label:button", "Edit Style Preset");
+                    display: AbstractButton.IconOnly;
                     icon.source: "qrc:///16_light_edit-rename.svg";
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
                     onClicked: mainWindow.editPreset(presetView.currentResource);
+                    hoverEnabled: true;
+                    ToolTip.visible: hovered;
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                    ToolTip.text: text;
                 }
             }
         }

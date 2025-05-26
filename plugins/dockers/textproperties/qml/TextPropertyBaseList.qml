@@ -346,5 +346,22 @@ ColumnLayout {
             popup.y: addPropertyCmb.height - 1;
             popup.palette: cmbPalette.palette;
         }
+
+        ToolButton {
+            id: configButton;
+            icon.source: "qrc:///light_configure.svg"
+            icon.color: palette.text;
+            icon.width: 16;
+            icon.height: 16;
+            text: i18nc("@label:button", "Configure");
+            display: AbstractButton.IconOnly;
+            ToolTip.text: text;
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: highlighted;
+
+            palette: paletteControl.palette;
+
+            onClicked: mainWindow.callModalTextPropertyConfigDialog();
+        }
     }
 }

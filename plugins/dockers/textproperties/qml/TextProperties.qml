@@ -37,34 +37,11 @@ Rectangle {
         paragraphPropertyList.updatePropertyVisibilityState();
     }
 
-    RowLayout {
-        id: configLayout;
-        height: implicitHeight;
-        anchors.right: parent.right;
-        anchors.left: parent.left;
-        anchors.top: parent.top;
-        Item {
-            Layout.fillWidth: true;
-        }
-        ToolButton {
-            id: configButton;
-            icon.source: "qrc:///light_configure.svg"
-            icon.color: palette.text;
-            icon.width: 16;
-            icon.height: 16;
-            text: i18nc("@label:button", "Configure");
-
-            palette: paletteControl.palette;
-
-            onClicked: mainWindow.callModalTextPropertyConfigDialog();
-        }
-    }
-
     TabBar {
         id: tabs
         anchors.right: parent.right;
         anchors.left: parent.left;
-        anchors.top: configLayout.bottom;
+        anchors.top: parent.top;
         palette: paletteControl.palette;
         TabButton {
             text: i18nc("@title:tab", "Character")

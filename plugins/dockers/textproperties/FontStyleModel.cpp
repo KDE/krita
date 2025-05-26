@@ -5,6 +5,10 @@
  */
 #include "FontStyleModel.h"
 #include <QDebug>
+#include <resources/KoFontFamily.h>
+#include <KisResourceModel.h>
+#include <KoFontRegistry.h>
+#include <lager/KoSvgTextPropertiesModel.h>
 
 const QString WEIGHT_TAG = "wght";
 const QString WIDTH_TAG = "wdth";
@@ -15,13 +19,19 @@ const QString OPTICAL_TAG = "opsz";
 struct FontStyleModel::Private {
     QList<KoSvgText::FontFamilyStyleInfo> styles;
     QList<QLocale> locales;
+    KisResourceModel *fontModel = {nullptr};
 };
 
 FontStyleModel::FontStyleModel(QObject *parent)
     : QAbstractItemModel(parent)
     , d(new Private)
 {
-
+    d->fontModel = new KisResourceModel(ResourceType::FontFamilies);
+    QList<QLocale> locales;
+    Q_FOREACH (const QString langCode, KLocalizedString::languages()) {
+        locales.append(QLocale(langCode));
+    }
+    d->locales = locales;
 }
 
 FontStyleModel::~FontStyleModel()
@@ -47,11 +57,6 @@ void FontStyleModel::setStylesInfo(QList<KoSvgText::FontFamilyStyleInfo> styles)
     std::sort(styles.begin(), styles.end(), styleLowerThan);
     d->styles = styles;
     endResetModel();
-}
-
-void FontStyleModel::setLocales(QList<QLocale> locales)
-{
-    d->locales = locales;
 }
 
 qreal FontStyleModel::weightValue(int row)
@@ -174,6 +179,27 @@ int FontStyleModel::rowForStyle(const qreal &weight, const qreal &width, const i
         }
     }
     return styles.isEmpty()? 0: styles.keys().first();
+}
+
+void FontStyleModel::setFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel)
+{
+    QStringList families = textPropertiesModel->fontFamilies();
+    QList<KoSvgText::FontFamilyStyleInfo> styles;
+
+    if (!families.isEmpty() && d->fontModel) {
+
+        std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(families.first());
+        QString familyName = !name? families.first(): name.value();
+
+        QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(familyName);
+        if (!res.isEmpty()) {
+            KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
+            if (family) {
+                styles = family->styles();
+            }
+        }
+    }
+    setStylesInfo(styles);
 }
 
 QModelIndex FontStyleModel::index(int row, int column, const QModelIndex &parent) const

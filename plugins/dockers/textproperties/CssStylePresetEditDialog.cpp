@@ -11,6 +11,7 @@
 #include <KoResourcePaths.h>
 #include <KLocalizedContext>
 #include <KLocalizedString>
+#include <KoFontRegistry.h>
 #include "FontAxesModel.h"
 #include "FontStyleModel.h"
 
@@ -37,17 +38,11 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
     m_quickWidget->setPalette(this->palette());
     this->setWindowTitle(i18nc("@title:window", "Edit Style Preset"));
 
-    QList<QLocale> locales;
     QStringList wellFormedBCPNames;
     Q_FOREACH (const QString langCode, KLocalizedString::languages()) {
-        locales.append(QLocale(langCode));
         wellFormedBCPNames.append(langCode.split("_").join("-"));
     }
 
-    FontStyleModel stylesModel;
-    FontAxesModel axesModel;
-    m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&stylesModel));
-    m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&axesModel));
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", m_model);
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(72));
@@ -98,16 +93,6 @@ KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
     return m_currentResource;
 }
 
-void CssStylePresetEditDialog::slotUpdateStylesModel()
-{
-
-}
-
-void CssStylePresetEditDialog::slotUpdateAxesValues()
-{
-
-}
-
 void CssStylePresetEditDialog::slotUpdateTextProperties()
 {
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
@@ -121,7 +106,11 @@ QColor CssStylePresetEditDialog::modalColorDialog(QColor oldColor)
 
 QString CssStylePresetEditDialog::wwsFontFamilyName(QString familyName)
 {
-    return familyName;
+    std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName);
+    if (!name) {
+        return familyName;
+    }
+    return name.value();
 }
 
 void CssStylePresetEditDialog::connectAutoEnabler(QObject *watched)

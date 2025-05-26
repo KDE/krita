@@ -10,6 +10,7 @@
 #include <KoSvgText.h>
 #include <QLocale>
 
+class KoSvgTextPropertiesModel;
 /**
  * @brief The FontStyleModel class
  *
@@ -33,9 +34,6 @@ public:
     /// Set the base style info;
     void setStylesInfo(QList<KoSvgText::FontFamilyStyleInfo> styles);
 
-    /// This sets which translated labels (if available) are returned.
-    void setLocales(QList<QLocale> locales);
-
     Q_INVOKABLE qreal weightValue(int row);
     Q_INVOKABLE qreal widthValue(int row);
     Q_INVOKABLE int styleModeValue(int row);
@@ -44,6 +42,9 @@ public:
 
     /// Find the closest style that represents the current width, weight and stylemode.
     Q_INVOKABLE int rowForStyle(const qreal &weight, const qreal &width, const int &styleMode, const qreal &styleValue);
+
+    /// Update styles model from current text properties.
+    Q_INVOKABLE void setFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel);
 
     // QAbstractItemModel interface
 public:

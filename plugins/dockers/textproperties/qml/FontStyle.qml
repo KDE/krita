@@ -24,6 +24,14 @@ CollapsibleGroupProperty {
     property alias fontSlantSlope: fontSlantSpn.value;
     property int fontSlant: CssFontStyleModel.StyleNormal;
 
+    property FontAxesModel axesModel: FontAxesModel {
+        // TODO: handle locales.
+        onAxisValuesChanged: properties.axisValues = axisValues;
+    }
+    property FontStyleModel stylesModel: FontStyleModel {
+
+    }
+
     onFontSlantChanged: {
         fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
         if (!blockSignals) {
@@ -43,17 +51,16 @@ CollapsibleGroupProperty {
         fontSlantSlope = properties.fontStyle.value;
         fontSynthesizeSlant = properties.fontSynthesisStyle;
         fontSynthesizeWeight = properties.fontSynthesisWeight;
-        styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
-
-        propertyState = [
-            properties.fontWeightState,
-            properties.fontStyleState,
-            properties.fontWidthState,
-            properties.fontOpticalSizeLinkState,
-            properties.axisValueState,
-            properties.fontSynthesisStyleState,
-            properties.fontSynthesisWeightState
-        ]
+        axesModel.setFromTextPropertiesModel(properties);
+        stylesModel.setFromTextPropertiesModel(properties);
+        styleCmb.currentIndex = stylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
+        visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.axisValueState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontSynthesisStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontSynthesisWeightState !== KoSvgTextPropertiesModel.PropertyUnset;
         setVisibleFromProperty();
         blockSignals = false;
     }
@@ -117,7 +124,7 @@ CollapsibleGroupProperty {
 
         SqueezedComboBox {
         id: styleCmb;
-        model: fontStylesModel;
+        model: stylesModel;
         textRole: "display";
         Layout.fillWidth: true;
         Layout.preferredHeight: implicitHeight;
@@ -125,11 +132,11 @@ CollapsibleGroupProperty {
             if (!blockSignals) {
                 // Because each change to propertiesModel causes signals to fire,
                 // we need to first store the vars and then apply them.
-                var weight = fontStylesModel.weightValue(currentIndex);
-                var width = fontStylesModel.widthValue(currentIndex);
-                var styleMode = fontStylesModel.styleModeValue(currentIndex);
-                var styleVal = fontStylesModel.slantValue(currentIndex);
-                var axesValues = fontStylesModel.axesValues(currentIndex);
+                var weight = stylesModel.weightValue(currentIndex);
+                var width = stylesModel.widthValue(currentIndex);
+                var styleMode = stylesModel.styleModeValue(currentIndex);
+                var styleVal = stylesModel.slantValue(currentIndex);
+                var axesValues = stylesModel.axesValues(currentIndex);
                 properties.fontWeight = weight;
                 properties.fontWidth = width;
                 properties.fontStyle.style = styleMode;
@@ -290,7 +297,7 @@ CollapsibleGroupProperty {
         }
         ListView {
             id: axesView;
-            model: fontAxesModel;
+            model: axesModel;
             Layout.columnSpan: 2;
             Layout.fillWidth: true;
             Layout.preferredHeight: contentHeight;

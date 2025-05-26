@@ -31,8 +31,6 @@ public:
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
-    void slotUpdateStylesModel();
-    void slotUpdateAxesValues();
     QString wwsFontFamilyName(QString familyName);
     void connectAutoEnabler(QObject *watched);
 

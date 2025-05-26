@@ -23,8 +23,6 @@ public:
     KoCssStylePresetSP currentResource();
 
 public Q_SLOTS:
-    void slotUpdateStylesModel();
-    void slotUpdateAxesValues();
     void slotUpdateTextProperties();
     QColor modalColorDialog(QColor oldColor);
     QString wwsFontFamilyName(QString familyName);

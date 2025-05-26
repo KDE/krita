@@ -121,8 +121,6 @@ struct TextPropertiesDock::Private
 
     }
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
-    FontStyleModel stylesModel;
-    FontAxesModel axesModel;
     KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
     TextPropertyConfigModel *textPropertyConfigModel {nullptr};
@@ -175,7 +173,6 @@ TextPropertiesDock::TextPropertiesDock()
 
     m_quickWidget->setMinimumHeight(100);
 
-    d->fontModel = new KisResourceModel(ResourceType::FontFamilies);
     d->textPropertyConfigModel = new TextPropertyConfigModel(this);
 
     QList<QLocale> locales;
@@ -184,14 +181,9 @@ TextPropertiesDock::TextPropertiesDock()
         locales.append(QLocale(langCode));
         wellFormedBCPNames.append(langCode.split("_").join("-"));
     }
-    d->axesModel.setLocales(locales);
-    d->stylesModel.setLocales(locales);
 
-    connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
-    m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
-    m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
     m_quickWidget->rootContext()->setContextProperty("textPropertyConfigModel", QVariant::fromValue(d->textPropertyConfigModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
@@ -294,38 +286,6 @@ void TextPropertiesDock::slotTextPropertiesChanged()
         d->provider->setTextPropertyData(textData);
     }
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
-}
-
-void TextPropertiesDock::slotUpdateStylesModel()
-{
-    QStringList families = d->textModel->fontFamilies();
-    QList<KoSvgText::FontFamilyStyleInfo> styles;
-    QList<KoSvgText::FontFamilyAxis> axes;
-
-    if (!families.isEmpty() && d->fontModel) {
-        QString familyName = wwsFontFamilyName(families.first());
-        QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(familyName);
-        if (!res.isEmpty()) {
-            KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
-            if (family) {
-                styles = family->styles();
-                axes = family->axes();
-            }
-        }
-    }
-    d->axesModel.setBlockAxesValuesSignal(true);
-    d->axesModel.setAxesData(axes);
-    d->axesModel.setAxisValues(d->textModel->axisValues());
-    d->axesModel.setBlockAxesValuesSignal(false);
-    d->stylesModel.setStylesInfo(styles);
-}
-
-void TextPropertiesDock::slotUpdateAxesValues()
-{
-    if (d->axesModel.axesValueSignalBlocked()) return;
-    if (d->axesModel.axisValues() == d->textModel->axisValues())
-        return;
-    d->textModel->setaxisValues(d->axesModel.axisValues());
 }
 
 #include <KoFontRegistry.h>

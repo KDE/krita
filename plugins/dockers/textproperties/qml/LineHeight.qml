@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: lineHeightBase;
     propertyTitle: i18nc("@label", "Line Height");
     propertyName: "line-height";
     propertyType: TextPropertyConfigModel.Character;
@@ -34,7 +35,7 @@ TextPropertyBase {
 
     CssQmlUnitConverter {
         id: converter;
-        dpi: dpi;
+        dpi: lineHeightBase.dpi;
 
         onUserValueChanged: lineHeightSpn.dValue = userValue;
         onUserUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(userUnit);
@@ -43,7 +44,6 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         isNormal = properties.lineHeight.isNormal;
-        converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties, false, true);
         converter.percentageReference = properties.resolvedFontSize(false);
         converter.setDataValueAndUnit(properties.lineHeight.value, properties.lineHeight.unit);

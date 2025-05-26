@@ -13,6 +13,7 @@ Control {
 
     property alias presetTitle: presetTitleField.text;
     property string styleType: "paragraph";
+    property double canvasDPI: 72.0;
     onStyleTypeChanged: {
         styleTypeCmb.currentIndex = styleTypeCmb.indexOfValue(styleType === "paragraph"? TextPropertyBase.Paragraph: TextPropertyBase.Character);
     }
@@ -70,6 +71,7 @@ Control {
         TextPropertyBaseList {
             Layout.fillWidth: true;
             Layout.fillHeight: true;
+            canvasDPI: styleEdit.canvasDPI;
             id: presetProperties;
             propertyType: styleType == "character"? TextPropertyBase.Character: TextPropertyBase.Paragraph;
             onPropertyTypeChanged: {

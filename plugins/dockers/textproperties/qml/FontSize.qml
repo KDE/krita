@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: fontSizeBase;
     propertyTitle: i18nc("@label:spinbox", "Font Size");
     propertyName: "font-size";
     propertyType: TextPropertyConfigModel.Character;
@@ -24,7 +25,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        fontSizeUnitCmb.dpi = canvasDPI;
         fontSizeUnitCmb.setTextProperties(properties);
         fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
         propertyState = [properties.fontSizeState];
@@ -71,6 +71,7 @@ TextPropertyBase {
         UnitComboBox {
             id: fontSizeUnitCmb;
             spinBoxControl: fontSizeSpn;
+            dpi: fontSizeBase.dpi;
             isFontSize: true;
             isLineHeight: false;
             percentageReference: properties.resolvedFontSize(true);

@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: tabSizeBase;
     propertyTitle: i18nc("@title:group", "Tab Size");
     propertyName: "tab-size";
     propertyType: TextPropertyConfigModel.Paragraph;
@@ -33,7 +34,7 @@ TextPropertyBase {
 
     CssQmlUnitConverter {
         id: converter;
-        dpi: dpi;
+        dpi: tabSizeBase.dpi;
 
         onUserValueChanged: tabSizeSpn.dValue = userValue;
         onUserUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(userUnit);
@@ -41,7 +42,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties);
         converter.setDataValueAndUnit(properties.tabSize.value, properties.tabSize.unit);
 

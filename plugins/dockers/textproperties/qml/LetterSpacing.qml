@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: letterSpacingBase;
     propertyTitle: i18nc("@label:spinbox", "Letter Spacing");
     propertyName: "letter-spacing";
     propertyType: TextPropertyConfigModel.Character;
@@ -22,7 +23,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        letterSpacingUnitCmb.dpi = canvasDPI;
         letterSpacingUnitCmb.setTextProperties(properties);
         letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
 
@@ -76,7 +76,7 @@ TextPropertyBase {
             id: letterSpacingUnitCmb
             spinBoxControl: letterSpacingSpn;
             isFontSize: false;
-            dpi:dpi;
+            dpi:letterSpacingBase.dpi;
             onUserValueChanged: letterSpacingSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;

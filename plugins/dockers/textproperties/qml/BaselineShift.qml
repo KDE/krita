@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: baselineShiftBase;
     propertyTitle: i18nc("@label", "Baseline-Shift");
     propertyName: "baseline-shift";
     propertyType: TextPropertyConfigModel.Character;
@@ -25,7 +26,6 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         baselineShiftMode = properties.baselineShiftMode;
-        baselineShiftUnitCmb.dpi = canvasDPI;
         baselineShiftUnitCmb.setTextProperties(properties);
         baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.value, properties.baselineShiftValue.unitType)
         propertyState = [properties.baselineShiftState];
@@ -135,7 +135,7 @@ TextPropertyBase {
             Layout.maximumWidth: implicitWidth;
             isFontSize: false;
             enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
-            dpi:dpi;
+            dpi:baselineShiftBase.dpi;
             onUserValueChanged: baselineShiftSpn.dValue = userValue;
         }
     }

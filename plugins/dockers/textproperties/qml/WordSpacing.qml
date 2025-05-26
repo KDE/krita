@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: wordSpacingBase;
     propertyTitle: i18nc("@title:group", "Word Spacing");
     propertyName: "word-spacing";
     propertyType: TextPropertyConfigModel.Character;
@@ -23,7 +24,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        wordSpacingUnitCmb.dpi = canvasDPI;
         wordSpacingUnitCmb.setTextProperties(properties);
         wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
 
@@ -74,7 +74,7 @@ TextPropertyBase {
             id: wordSpacingUnitCmb
             spinBoxControl: wordSpacingSpn;
             isFontSize: false;
-            dpi: dpi;
+            dpi: wordSpacingBase.dpi;
             onUserValueChanged: wordSpacingSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;

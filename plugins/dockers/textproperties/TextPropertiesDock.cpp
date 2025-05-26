@@ -157,7 +157,6 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("textPropertyConfigModel", QVariant::fromValue(d->textPropertyConfigModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
-    m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             &d->modelToProviderCompressor, SLOT(start()));
     connect(&d->modelToProviderCompressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
@@ -208,7 +207,7 @@ void TextPropertiesDock::setCanvas(KoCanvasBase *canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->currentImage()) {
         d->currentDpi = m_canvas->currentImage()->xRes() * 72.0;
-        m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
+        m_quickWidget->rootObject()->setProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
     }
 }
 
@@ -282,6 +281,7 @@ bool TextPropertiesDock::createNewPresetFromSettings()
     preset->setProperties(textData.commonProperties);
 
     CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(this);
+    dialog->setDpi(d->currentDpi);
     dialog->setCurrentResource(preset);
 
     if (dialog->exec() == QDialog::Accepted) {

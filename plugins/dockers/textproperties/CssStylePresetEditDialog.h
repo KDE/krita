@@ -22,6 +22,8 @@ public:
     void setCurrentResource(KoCssStylePresetSP resource);
     KoCssStylePresetSP currentResource();
 
+    void setDpi(const double dpi);
+
 public Q_SLOTS:
     void slotUpdateTextProperties();
     QColor modalColorDialog(QColor oldColor);

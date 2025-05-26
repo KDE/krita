@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
+    id: textIndentBase;
     propertyTitle: i18nc("@title:group", "Text Indent");
     propertyName: "text-indent";
     propertyType: TextPropertyConfigModel.Paragraph;
@@ -25,7 +26,6 @@ CollapsibleGroupProperty {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        textIndentUnitCmb.dpi = canvasDPI;
         textIndentUnitCmb.setTextProperties(properties);
         textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.length.value, properties.textIndent.length.unitType);
         hanging = properties.textIndent.hanging;
@@ -80,6 +80,7 @@ CollapsibleGroupProperty {
         /// While spec-wise, it's the inline length that defines percentage.
         UnitComboBox {
             id: textIndentUnitCmb;
+            dpi: textIndentBase.dpi;
             spinBoxControl: textIndentSpn;
             onUserValueChanged: textIndentSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;

@@ -17,7 +17,7 @@ Column {
 
     property KoSvgTextPropertiesModel properties : textPropertiesModel;
     property int defaultVisibilityState : TextPropertyConfigModel.FollowDefault;
-    property double dpi: canvasDPI;
+    property double dpi: 72.0;
     signal propertiesUpdated; ///< Used by each text property panel to update the data on the controls.
     signal enableProperty; ///< Set the property to a default value.
     property bool blockSignals; ///< When setting the data on the controls, this needs to be enabled and checked while returning data from the controls.

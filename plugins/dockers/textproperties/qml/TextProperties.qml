@@ -15,6 +15,7 @@ Rectangle {
     anchors.fill: parent;
 
     property TextPropertyConfigModel configModel : textPropertyConfigModel;
+    property double canvasDPI: 72.0;
 
     PaletteControl {
         id: paletteControl;
@@ -63,12 +64,14 @@ Rectangle {
             id: characterPropertyList;
             propertyType: TextPropertyConfigModel.Character;
             configModel: root.configModel;
+            canvasDPI: root.canvasDPI;
         }
 
         TextPropertyBaseList {
             id: paragraphPropertyList;
             propertyType: TextPropertyConfigModel.Paragraph;
             configModel: root.configModel;
+            canvasDPI: root.canvasDPI;
         }
 
         ResourceView {

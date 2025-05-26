@@ -93,6 +93,11 @@ KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
     return m_currentResource;
 }
 
+void CssStylePresetEditDialog::setDpi(const double dpi)
+{
+    m_quickWidget->rootObject()->setProperty("canvasDPI", dpi);
+}
+
 void CssStylePresetEditDialog::slotUpdateTextProperties()
 {
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");

@@ -104,10 +104,6 @@ CollapsibleGroupProperty {
         properties.fontWeightState = KoSvgTextPropertiesModel.PropertySet;
     }
 
-    Component.onCompleted: {
-        mainWindow.connectAutoEnabler(fontSlantSpnArea);
-    }
-
     titleItem: RowLayout{
         width: parent.width;
         height: implicitHeight;
@@ -235,9 +231,7 @@ CollapsibleGroupProperty {
         }
         MouseArea {
             id: fontSlantSpnArea;
-            function autoEnable() {
-                fontSlant = CssFontStyleModel.StyleOblique;
-            }
+
             Layout.fillWidth: true;
             Layout.preferredHeight: fontSlantSpn.implicitHeight;
             Kis.IntSliderSpinBox {
@@ -248,11 +242,19 @@ CollapsibleGroupProperty {
                 enabled: fontSlant == CssFontStyleModel.StyleOblique;
                 PaletteControl {
                     id: slantSpnPal;
-                    colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
                 }
                 blockUpdateSignalOnDrag: true;
                 anchors.fill: parent;
                 palette: slantSpnPal.palette;
+
+                wheelEnabled: true;
+            }
+
+            onClicked: {
+                if (!fontSlantSpn.enabled) {
+                    fontSlant = CssFontStyleModel.StyleOblique;
+                    fontSlantSpn.forceActiveFocus();
+                }
             }
         }
 

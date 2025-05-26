@@ -84,35 +84,6 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<TextPropertyConfigFilterModel>("org.krita.flake.text", 1, 0, "TextPropertyConfigFilterModel");
 }
 
-
-/// This will call the 'autoEnable' function on any "watched" QObject.
-/// Within QML, this should be used with a MouseArea that holds the disabled QtQuickControl
-/// The autoEnable function on this MouseArea should enable the QtQuick control.
-/// This is because disabled QtQuickControls never receive mouse events.
-struct TextPropertyAutoEnabler : public QObject {
-    Q_OBJECT
-public:
-    TextPropertyAutoEnabler (QObject *watched, QObject *parent)
-        : QObject(parent), m_watched(watched) {
-        watched->installEventFilter(this);
-    }
-
-    bool eventFilter(QObject *watched, QEvent *event) override {
-        if (watched != m_watched) return false;
-
-        if (event->type() == QEvent::MouseButtonPress ||
-            event->type() == QEvent::TabletPress ||
-            event->type() == QEvent::TouchBegin) {
-
-            QMetaObject::invokeMethod(m_watched, "autoEnable");
-        }
-
-        return false;
-    }
-private:
-    QObject *m_watched;
-};
-
 struct TextPropertiesDock::Private
 {
     Private(QObject *parent = nullptr)
@@ -247,13 +218,6 @@ void TextPropertiesDock::unsetCanvas()
     m_canvas = 0;
 }
 
-void TextPropertiesDock::connectAutoEnabler(QObject *watched)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(watched);
-
-    new TextPropertyAutoEnabler(watched, watched);
-}
-
 QColor TextPropertiesDock::modalColorDialog(QColor oldColor)
 {
     QColor c = QColorDialog::getColor(oldColor);
@@ -339,5 +303,3 @@ void TextPropertiesDock::editPreset(KoResourceSP resource)
         KisResourceUserOperations::updateResourceWithUserInput(this, dialog->currentResource());
     }
 }
-
-#include "TextPropertiesDock.moc"

@@ -76,7 +76,6 @@ TextPropertyBase {
     onEnableProperty: properties.lineHeightState = KoSvgTextPropertiesModel.PropertySet;
 
     Component.onCompleted: {
-        mainWindow.connectAutoEnabler(lineHeightSpnArea);
         converter.setDataUnitMap(unitMap);
         converter.setDataValueAndUnit(0, 0);
     }
@@ -116,9 +115,6 @@ TextPropertyBase {
             Layout.columnSpan: 2;
             MouseArea {
                 id: lineHeightSpnArea;
-                function autoEnable() {
-                    lineHeightNormalCbx.checked = false;
-                }
                 Layout.fillWidth: true;
                 Layout.fillHeight: true;
                 Kis.DoubleSliderSpinBox {
@@ -131,6 +127,12 @@ TextPropertyBase {
                     onDValueChanged:if (enabled)  converter.userValue = dValue;
                     palette: lineHeightPalette.palette;
                     blockUpdateSignalOnDrag: true;
+                }
+                onClicked: {
+                    if (!lineHeightSpn.enabled) {
+                        lineHeightNormalCbx.checked = false;
+                        lineHeightSpn.forceActiveFocus();
+                    }
                 }
             }
 

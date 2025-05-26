@@ -112,8 +112,3 @@ QString CssStylePresetEditDialog::wwsFontFamilyName(QString familyName)
     }
     return name.value();
 }
-
-void CssStylePresetEditDialog::connectAutoEnabler(QObject *watched)
-{
-
-}

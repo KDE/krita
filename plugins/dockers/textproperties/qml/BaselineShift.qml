@@ -55,9 +55,6 @@ TextPropertyBase {
 
     onEnableProperty: properties.baselineShiftState = KoSvgTextPropertiesModel.PropertySet;
 
-    Component.onCompleted: {
-        mainWindow.connectAutoEnabler(baselineShiftSpnArea);
-    }
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -107,15 +104,8 @@ TextPropertyBase {
 
         MouseArea {
             id: baselineShiftSpnArea;
-            function autoEnable() {
-                baselineShiftMode = 3;
-            }
             Layout.fillWidth: true;
             Layout.fillHeight: true;
-            PaletteControl {
-                id: baselinePalette;
-                colorGroup: baselineShiftSpn.enabled? SystemPalette.Active: SystemPalette.Disabled;
-            }
             Kis.DoubleSliderSpinBox {
                 id: baselineShiftSpn
                 width: parent.width;
@@ -125,6 +115,15 @@ TextPropertyBase {
                 onDValueChanged: if (enabled) baselineShiftUnitCmb.userValue = dValue;
                 palette: baselinePalette.palette;
                 blockUpdateSignalOnDrag: true;
+                PaletteControl {
+                    id: baselinePalette;
+                }
+            }
+            onClicked: {
+                if (!baselineShiftSpn.enabled) {
+                    baselineShiftMode = 3;
+                    baselineShiftSpn.forceActiveFocus();
+                }
             }
         }
 

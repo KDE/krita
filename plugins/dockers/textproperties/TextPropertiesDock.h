@@ -32,7 +32,6 @@ public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
     QString wwsFontFamilyName(QString familyName);
-    void connectAutoEnabler(QObject *watched);
 
     QColor modalColorDialog(QColor oldColor);
 

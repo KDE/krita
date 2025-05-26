@@ -97,6 +97,12 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #endif
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+    
+    if (qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
+        infoOpenGL << "Using native surface for the canvas widget";
+        setAttribute(Qt::WA_NativeWindow, true);
+    }
+
     setUpdateBehavior(PartialUpdate);
 
     // we should make sure the texture doesn't have alpha channel,

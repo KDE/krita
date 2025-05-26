@@ -229,7 +229,7 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
 
                 if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
                     info.colorSpace = KisSurfaceColorSpaceWrapper::sRGBColorSpace;
-                } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
+                } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709) {
 #ifdef HAVE_HDR
                     info.colorSpace = KisSurfaceColorSpaceWrapper::scRGBColorSpace;
 #else

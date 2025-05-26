@@ -1081,16 +1081,6 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
 int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_t loadFlags, const KoSvgText::TextRendering rendering)
 {
     FT_Int32 faceLoadFlags = loadFlags;
-    if (FT_HAS_COLOR(face)) {
-        faceLoadFlags |= FT_LOAD_COLOR;
-    }
-    if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-        faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-    }
-    if (!FT_IS_SCALABLE(face)) {
-        // This is needed for the CBDT version of Noto Color Emoji
-        faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
-    }
 
     if (rendering == KoSvgText::RenderingGeometricPrecision || rendering == KoSvgText::RenderingAuto) {
         // without load_no_hinting, the advance and offset will be rounded
@@ -1112,6 +1102,16 @@ int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_
         if (isHorizontal) {
             faceLoadFlags |= FT_LOAD_TARGET_LIGHT;
         }
+    }
+    if (FT_HAS_COLOR(face)) {
+        faceLoadFlags |= FT_LOAD_COLOR;
+    }
+    if (!isHorizontal && FT_HAS_VERTICAL(face)) {
+        faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+    }
+    if (!FT_IS_SCALABLE(face)) {
+        // This is needed for the CBDT version of Noto Color Emoji
+        faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
     }
     return faceLoadFlags;
 }

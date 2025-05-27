@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -44678,10 +44678,16 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "ویژگیهای شیء"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "پیکربندی"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
@@ -66269,10 +66275,6 @@ msgstr "تصویر مرجع:"
 #, fuzzy
 #~ msgid "Configure &Notifications..."
 #~ msgstr "تأیید ذخیره"
-
-#, fuzzy
-#~ msgid "Reset Configurations"
-#~ msgstr "پیکربندی"
 
 #, fuzzy
 #~ msgid "&Report Bug..."

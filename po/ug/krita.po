@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -45311,10 +45311,17 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, kde-format
 msgid "Text Properties"
 msgstr "تېكىست خاسلىقى"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+#| msgid "Configuration:"
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "سەپلىمە:"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
@@ -67405,11 +67412,6 @@ msgstr "نەقىل"
 #, fuzzy
 #~ msgid "Configure &Notifications..."
 #~ msgstr "سەپلە…"
-
-#, fuzzy
-#~| msgid "Configuration:"
-#~ msgid "Reset Configurations"
-#~ msgstr "سەپلىمە:"
 
 #, fuzzy
 #~ msgid "&Report Bug..."

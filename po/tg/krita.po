@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -43946,9 +43946,15 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, kde-format
 msgid "Text Properties"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, kde-format
+msgctxt "@title:window"
+msgid "Text Property Configuration"
 msgstr ""
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12

@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -47077,10 +47077,17 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksti omadused"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+#| msgid "Reset Configurations"
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "Lähtesta seadistused"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -69316,9 +69323,6 @@ msgstr "Kõrvutuspiltide tööriist"
 
 #~ msgid "Configure &Notifications..."
 #~ msgstr "Märgua&nnete seadistamine..."
-
-#~ msgid "Reset Configurations"
-#~ msgstr "Lähtesta seadistused"
 
 #~ msgid "%1 &Handbook"
 #~ msgstr "%1 &käsiraamat"

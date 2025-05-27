@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2025-05-16 19:59+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -45195,10 +45195,17 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Tag funzionalità OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, kde-format
 msgid "Text Properties"
 msgstr "Proprietà del testo"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+#| msgid "Reset Configurations"
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "Azzera le configurazioni"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -66925,9 +66932,6 @@ msgstr "Strumento Immagini di riferimento"
 
 #~ msgid "Configure &Notifications..."
 #~ msgstr "Configura &notifiche..."
-
-#~ msgid "Reset Configurations"
-#~ msgstr "Azzera le configurazioni"
 
 #~ msgid "%1 &Handbook"
 #~ msgstr "&Manuale di %1"

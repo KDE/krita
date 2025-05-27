@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -44566,10 +44566,16 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "विशेषतासभ..."
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "संतृप्ति:"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
@@ -66046,10 +66052,6 @@ msgstr "वरीयतासभ"
 #, fuzzy
 #~ msgid "Configure &Notifications..."
 #~ msgstr "सहेजनाइ संपुष्ट करू"
-
-#, fuzzy
-#~ msgid "Reset Configurations"
-#~ msgstr "संतृप्ति:"
 
 #, fuzzy
 #~ msgid "&Report Bug..."

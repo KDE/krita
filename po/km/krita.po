@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -44678,10 +44678,16 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "លក្ខណៈ​សម្បត្តិ..."
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ្មី %1"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
@@ -66412,10 +66418,6 @@ msgstr "រូបភាព​យោង ៖"
 #, fuzzy
 #~ msgid "Configure &Notifications..."
 #~ msgstr "កា​របង្ហាញ"
-
-#, fuzzy
-#~ msgid "Reset Configurations"
-#~ msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ្មី %1"
 
 #, fuzzy
 #~ msgid "&Report Bug..."

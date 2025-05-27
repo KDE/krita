@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -44008,10 +44008,16 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Izinto zobumnini Zenjongo"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "Iikona:"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
@@ -65117,10 +65123,6 @@ msgstr "Umfanekiso Onikwe igama kwakhona"
 #, fuzzy
 #~ msgid "Configure &Notifications..."
 #~ msgstr "umfanekiso %1"
-
-#, fuzzy
-#~ msgid "Reset Configurations"
-#~ msgstr "Iikona:"
 
 #, fuzzy
 #~ msgid "&Report Bug..."

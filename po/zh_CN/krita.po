@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-24 01:59+0000\n"
+"POT-Creation-Date: 2025-05-27 01:57+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -44389,10 +44389,17 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "OpenType 功能标签"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, kde-format
 msgid "Text Properties"
 msgstr "文字属性"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, fuzzy, kde-format
+#| msgid "Select OpenColorIO Configuration"
+msgctxt "@title:window"
+msgid "Text Property Configuration"
+msgstr "选择 OpenColorIO 配置"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

@@ -11,11 +11,12 @@ import org.krita.flake.text 1.0;
 Control {
     id: styleEdit;
 
+    property TextPropertyConfigModel configModel: TextPropertyConfigModel {};
     property alias presetTitle: presetTitleField.text;
     property string styleType: "paragraph";
     property double canvasDPI: 72.0;
     onStyleTypeChanged: {
-        styleTypeCmb.currentIndex = styleTypeCmb.indexOfValue(styleType === "paragraph"? TextPropertyBase.Paragraph: TextPropertyBase.Character);
+        styleTypeCmb.currentIndex = styleTypeCmb.indexOfValue(styleType === "paragraph"? TextPropertyConfigModel.Paragraph: TextPropertyConfigModel.Character);
     }
 
     PaletteControl {
@@ -60,20 +61,21 @@ Control {
                 id: styleTypeCmb;
                 Layout.fillWidth: true;
                 model: [
-                    {text: i18nc("listbox", "Character"), value: TextPropertyBase.Character},
-                    {text: i18nc("listbox", "Paragraph"), value: TextPropertyBase.Paragraph}
+                    {text: i18nc("listbox", "Character"), value: TextPropertyConfigModel.Character},
+                    {text: i18nc("listbox", "Paragraph"), value: TextPropertyConfigModel.Paragraph}
                 ];
                 valueRole: "value";
                 textRole: "text";
-                onActivated: styleEdit.styleType = currentValue === TextPropertyBase.Character? "character": "paragraph";
+                onActivated: styleEdit.styleType = currentValue === TextPropertyConfigModel.Character? "character": "paragraph";
             }
         }
         TextPropertyBaseList {
             Layout.fillWidth: true;
             Layout.fillHeight: true;
             canvasDPI: styleEdit.canvasDPI;
+            configModel: styleEdit.configModel;
             id: presetProperties;
-            propertyType: styleType == "character"? TextPropertyBase.Character: TextPropertyBase.Paragraph;
+            propertyType: styleType == "character"? TextPropertyConfigModel.Character: TextPropertyConfigModel.Paragraph;
             onPropertyTypeChanged: {
                 fillPropertyList();
                 updateProperties();

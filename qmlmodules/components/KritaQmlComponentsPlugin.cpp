@@ -8,6 +8,7 @@
 
 #include <QObject>
 #include <KisStaticInitializer.h>
+#include <SvgTextLabel.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #error "This plugin implementation is to be used with Qt5 only!\n"
@@ -31,7 +32,7 @@ void KritaQmlComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *
 
 void KritaQmlComponentsPlugin::registerTypes(const char *uri)
 {
-    Q_UNUSED(uri);
+    qmlRegisterType<SvgTextLabel>(uri, 1, 0, "SvgTextLabel");
 }
 
 #include "KritaQmlComponentsPlugin.moc"

@@ -7,23 +7,35 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
+import org.krita.components 1.0
 
 Control {
     id: root;
 
     height: visible? implicitHeight: 0;
     implicitHeight: layout.height + padding*2;
+    clip: true;
     property string display;
     property string tag;
     property string sample;
     property string toolTip;
+    property int featureValue: 0;
+
+    property var fontFamilies: [];
+    property double fontSize: 12.0;
+    property double fontWeight: 400;
+    property double fontWidth: 100;
+    property int fontStyle: 0;
+    property double fontSlant: 0.0;
+    property var fontAxesValues: ({});
+    property string language: "";
 
     property bool enableMouseEvents: true;
 
     property alias containsMouse: mouseArea.containsMouse;
 
     background: Rectangle {
-        color: containsMouse? sysPalette.highlight: "transparent";
+        color: containsMouse? palette.highlight: "transparent";
     }
 
     signal featureClicked (QtObject mouse);
@@ -54,6 +66,7 @@ Control {
             Layout.rightMargin: layout.spacing;
             Layout.bottomMargin: layout.spacing;
             Label {
+                id: displayLabel;
                 text: root.display;
                 elide: Text.ElideRight;
                 Layout.fillWidth: true;
@@ -61,12 +74,28 @@ Control {
                 color: root.containsMouse? palette.highlightedText: palette.text;
             }
 
-            Label {
+            SvgTextLabel {
                 text: root.sample;
-                elide: Text.ElideRight;
-                Layout.fillWidth: true;
-                Layout.preferredHeight: implicitHeight
-                color: root.containsMouse? palette.highlightedText: palette.text;
+                id: svgTextLabel;
+                Layout.preferredHeight: displayLabel.height * 2;
+                Layout.preferredWidth: (displayLabel.height * 2) * (implicitWidth/implicitHeight);
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter;
+                textColor: root.containsMouse? root.palette.highlightedText: root.palette.text;
+                fillColor: "transparent";
+                fontFamilies: root.fontFamilies;
+                fontSize: root.fontSize;
+                fontStyle: root.fontStyle;
+                fontWeight: root.fontWeight;
+                fontWidth: root.fontWidth;
+                fontSlant: root.fontSlant;
+                fontAxesValues: root.fontAxesValues;
+                language: root.language;
+
+                Component.onCompleted: {
+                    var newFeatures = {};
+                    newFeatures[root.tag] = root.featureValue;
+                    openTypeFeatures = newFeatures;
+                }
             }
         }
     }

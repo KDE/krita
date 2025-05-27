@@ -102,6 +102,13 @@ TextPropertyBase {
                         toolTip: activeFeatureDelegate.toolTip;
                         sample: activeFeatureDelegate.sample;
                         tag: activeFeatureDelegate.tag;
+                        fontFamilies: properties.fontFamilies;
+                        fontWeight: properties.fontWeight;
+                        fontStyle: properties.fontStyle.style;
+                        fontSlant: properties.fontStyle.value;
+                        fontWidth: properties.fontWidth;
+                        fontAxesValues: properties.axisValues;
+                        featureValue: activeFeatureControl.currentIndex;
                         enableMouseEvents: false;
                     }
 
@@ -115,6 +122,13 @@ TextPropertyBase {
                         toolTip: display;
                         sample: activeFeatureDelegate.sample;
                         tag: activeFeatureDelegate.tag;
+                        fontFamilies: properties.fontFamilies;
+                        fontWeight: properties.fontWeight;
+                        fontStyle: properties.fontStyle.style;
+                        fontSlant: properties.fontStyle.value;
+                        fontWidth: properties.fontWidth;
+                        fontAxesValues: properties.axisValues;
+                        featureValue: modelData.value;
                         onFeatureClicked: {
                             activeFeatureControl.currentIndex = index;
                             activeFeatureControl.popup.close();
@@ -168,6 +182,13 @@ TextPropertyBase {
                 tag: model.tag;
                 width: cmbAvailableFeatures.width;
                 visible: model.available;
+                fontFamilies: properties.fontFamilies;
+                fontWeight: properties.fontWeight;
+                fontStyle: properties.fontStyle.style;
+                fontSlant: properties.fontStyle.value;
+                fontWidth: properties.fontWidth;
+                fontAxesValues: properties.axisValues;
+                featureValue: 0;
                 onFeatureClicked: (mouse) => {
                     cmbAvailableFeatures.currentIndex = index;
                     fontFeatureModel.addFeature(tag);

@@ -32,8 +32,11 @@ struct Q_DECL_HIDDEN SvgTextLabel::Private {
     QScopedPointer<KoShapePainter> shapePainter;
 
     KoSvgTextProperties props;
-    bool textHasChanged = false;
-    int padding = 2;
+
+    int topPadding = 2;
+    int bottomPadding = 2;
+    int leftPadding = 2;
+    int rightPadding = 2;
 };
 
 SvgTextLabel::SvgTextLabel(QQuickItem *parent)
@@ -41,8 +44,8 @@ SvgTextLabel::SvgTextLabel(QQuickItem *parent)
     , d(new Private())
 {
     setImplicitSize(10, 10);
-    setOpaquePainting(true);
     setAntialiasing(true);
+    setOpaquePainting(true);
 }
 
 SvgTextLabel::~SvgTextLabel()
@@ -54,12 +57,12 @@ void SvgTextLabel::paint(QPainter *painter)
     // the QML item must be finalized before paint() is called
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->shapePainter);
 
+    if (width() == 0 || height() == 0) return;
     if (d->shape->textProperties() != d->props) {
         updateShape();
     }
     if (!painter->isActive()) return;
     painter->save();
-    painter->fillRect(0, 0, width(), height(), fillColor());
     if (d->shape->boundingRect().isEmpty()) {
         painter->restore();
         return;
@@ -68,9 +71,17 @@ void SvgTextLabel::paint(QPainter *painter)
     QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
     bbox = bbox.isEmpty()? d->shape->boundingRect(): bbox;
 
+    // Scale padding so that it is relative to the width and height.
+    const double newWidth = width()-(d->leftPadding+d->rightPadding);
+    const double newLeftPadding = (d->leftPadding / newWidth) * bbox.width();
+    const double newRightPadding = (d->rightPadding / newWidth) * bbox.width();
+    const double newHeight = height()-(d->topPadding+d->bottomPadding);
+    const double newTopPadding = (d->topPadding / newHeight) * bbox.height();
+    const double newBottomPadding = (d->bottomPadding / newHeight) * bbox.height();
+
     d->shapePainter->paint(*painter,
-                           QRectF(d->padding, d->padding, width()-(d->padding*2), height()-(d->padding*2)).toAlignedRect(),
-                           bbox);
+                           QRectF(0, 0, width(), height()).toAlignedRect(),
+                           bbox.adjusted(-newLeftPadding, -newTopPadding, newRightPadding, newBottomPadding));
     painter->restore();
 }
 
@@ -131,7 +142,7 @@ QString SvgTextLabel::text() const
 
 int SvgTextLabel::padding() const
 {
-    return d->padding;
+    return (d->leftPadding+d->rightPadding+d->topPadding+d->bottomPadding)/4;
 }
 
 QString SvgTextLabel::language() const
@@ -227,11 +238,10 @@ void SvgTextLabel::setTextColor(QColor textColor)
 
     d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(textColor)));
     d->props.setProperty(KoSvgTextProperties::FillId, d->shape->textProperties().property(KoSvgTextProperties::FillId));
-    if (this->window()) {
-        const qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
-        d->shape->setResolution(pixelRatio*72, pixelRatio*72);
-    }
     emit textColorChanged(textColor);
+    if (!opaquePainting() && isComponentComplete()) {
+        update(boundingRect().toAlignedRect());
+    }
 }
 
 void SvgTextLabel::setOpenTypeFeatures(QVariantMap openTypeFeatures)
@@ -258,11 +268,17 @@ void SvgTextLabel::setText(QString text)
 
 void SvgTextLabel::setPadding(int padding)
 {
-    if (d->padding == padding)
+    const int currentPadding = (d->leftPadding+d->rightPadding+d->topPadding+d->bottomPadding)/4;
+    if (currentPadding == padding)
         return;
 
-    d->padding = padding;
-    emit paddingChanged(d->padding);
+    d->leftPadding = padding;
+    d->rightPadding = padding;
+    d->topPadding = padding;
+    d->bottomPadding = padding;
+    setImplicitSize(d->shape->boundingRect().width() + d->leftPadding + d->rightPadding,
+                    d->shape->boundingRect().height() + d->topPadding + d->bottomPadding);
+    emit paddingChanged(padding);
 }
 
 void SvgTextLabel::setLanguage(QString language)
@@ -279,17 +295,25 @@ void SvgTextLabel::componentComplete()
 {
     QQuickPaintedItem::componentComplete();
 
+    if (this->window()) {
+        const qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
+        d->shape->setResolution(pixelRatio*72, pixelRatio*72);
+    }
+    setOpaquePainting(fillColor().alpha() == 255);
     updateShape();
     if (!d->shapePainter) {
         d->shapePainter.reset(new KoShapePainter());
-        d->shapePainter->setShapes({d->shape.data()});
+        if (!d->shape->boundingRect().isEmpty()) {
+            d->shapePainter->setShapes({d->shape.data()});
+        }
     }
-
 }
 
 void SvgTextLabel::updateShape()
 {
     d->shape->setPropertiesAtPos(-1, d->props);
     d->shape->relayout();
-    setImplicitSize(d->shape->boundingRect().width(), d->shape->boundingRect().height());
+    const QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
+    setImplicitSize(bbox.width() + d->leftPadding + d->rightPadding,
+                    bbox.height() + d->topPadding + d->bottomPadding);
 }

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-27 01:57+0000\n"
-"PO-Revision-Date: 2025-05-15 09:03+0200\n"
+"PO-Revision-Date: 2025-05-27 16:43+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -45192,11 +45192,10 @@ msgid "Text Properties"
 msgstr "Propietats del text"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Select OpenColorIO Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "Selecció de la configuració de l'OpenColorIO"
+msgstr "Configuració de les propietats del text"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

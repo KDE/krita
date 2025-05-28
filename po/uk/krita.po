@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-27 01:57+0000\n"
-"PO-Revision-Date: 2025-05-15 17:21+0300\n"
+"PO-Revision-Date: 2025-05-27 09:10+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -45636,11 +45636,10 @@ msgid "Text Properties"
 msgstr "Властивості тексту"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Reset Configurations"
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "Скинути налаштування"
+msgstr "Налаштовування властивостей тексту"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

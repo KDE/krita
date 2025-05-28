@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-27 01:57+0000\n"
-"PO-Revision-Date: 2025-05-15 12:11+0200\n"
+"PO-Revision-Date: 2025-05-27 18:20+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -45181,11 +45181,10 @@ msgid "Text Properties"
 msgstr "Teksteigenschappen"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Reset Configurations"
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "Configuraties resetten"
+msgstr "Configuraties van teksteigenschap"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

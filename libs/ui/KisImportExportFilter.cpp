@@ -283,7 +283,7 @@ QString KisImportExportFilter::verifyZiPBasedFiles(const QString &fileName, cons
 
     Q_FOREACH(const QString &file, filesToCheck) {
         if (!store->hasFile(file)) {
-            return i18n("File %1 is missing in %2 and is broken. Please try to save again in a different location.", file, fileName);
+            return i18n("Component %1 is missing in %2. Please try to save again in a different location.", file, fileName);
         }
     }
 

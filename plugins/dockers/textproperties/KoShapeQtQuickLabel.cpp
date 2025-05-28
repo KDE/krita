@@ -10,23 +10,79 @@
 #include <KoDocumentResourceManager.h>
 #include <QQuickWindow>
 #include <KoShapeGroupCommand.h>
+#include <KoShapeUngroupCommand.h>
 #include <KoShapePainter.h>
+#include <kis_assert.h>
 
 struct KoShapeQtQuickLabel::Private {
-    QScopedPointer<KoShapeGroup> shape;
-    QString svgData;
-    int imagePadding = 5;
-    qreal imageScale = 1;
-    bool fullColor = false;
 
-    bool firstPaint = false;
+    Private(): shape(new KoShapeGroup()) {
+
+    }
+
+    ~Private(){}
+
+    QScopedPointer<KoShapeGroup> shape;
+    QScopedPointer<KoShapePainter> shapePainter;
+    QString svgData;
+    bool fullColor = false;
+    KoShapeQtQuickLabel::ScalingType scalingType = KoShapeQtQuickLabel::Fit;
+    Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignVCenter;
+
+    QRectF documentRect;
+
+    int leftPadding = 0;
+    int rightPadding = 0;
+    int topPadding = 0;
+    int bottomPadding = 0;
+
+    QRectF adjustBBoxToScaling(const QRectF &bbox, const QRectF &widgetBounds) {
+        const double newWidth = widgetBounds.width() - (leftPadding + rightPadding);
+        const double newHeight = widgetBounds.height() - (topPadding + bottomPadding);
+
+        QRectF newBox = bbox; ///< "Fit" behaviour.
+        if (scalingType == KoShapeQtQuickLabel::FitWidth) {
+            const double docWidth = bbox.width();
+            const double docHeight = bbox.width() * (newHeight / newWidth);
+            double docY = bbox.top();
+            if (alignment.testFlag(Qt::AlignBottom)) {
+                docY = bbox.bottom() - docHeight;
+            } else if (alignment.testFlag(Qt::AlignVCenter)) {
+                docY = (bbox.bottom()*0.5) - (docHeight*0.5);
+            }
+            newBox = QRectF(bbox.left(), docY, docWidth, docHeight);
+        } else if (scalingType == KoShapeQtQuickLabel::FitHeight) {
+            const double docWidth = bbox.height() * (newWidth / newHeight);
+            const double docHeight = bbox.height();
+            double docX = bbox.left();
+            if (alignment.testFlag(Qt::AlignRight)) {
+                docX = bbox.right() - docWidth;
+            } else if (alignment.testFlag(Qt::AlignHCenter)) {
+                docX = (bbox.right()*0.5) - (docWidth*0.5);
+            }
+            newBox = QRectF(docX, bbox.top(), docWidth, docHeight);
+        }
+        const double newTop = (topPadding/newHeight) * newBox.height();
+        const double newBottom = (bottomPadding/newHeight) * newBox.height();
+        const double newLeft = (leftPadding/newWidth) * newBox.width();
+        const double newRight = (rightPadding/newWidth) * newBox.width();
+        return newBox.adjusted(-newLeft, -newTop, newRight, newBottom);
+    }
+
+    QRectF addPaddingToBounds(QRectF bounds) {
+        return bounds.adjusted(-leftPadding, -topPadding, rightPadding, bottomPadding);
+    }
+
 };
 
 KoShapeQtQuickLabel::KoShapeQtQuickLabel(QQuickItem *parent)
     : QQuickPaintedItem(parent)
-    , d(new Private)
+    , d(new Private())
 {
+    setAntialiasing(true);
+    setOpaquePainting(true);
 
+    connect(this, SIGNAL(minimumRectChanged()), this, SLOT(callUpdateIfComplete()));
 }
 
 KoShapeQtQuickLabel::~KoShapeQtQuickLabel()
@@ -35,38 +91,20 @@ KoShapeQtQuickLabel::~KoShapeQtQuickLabel()
 
 void KoShapeQtQuickLabel::paint(QPainter *painter)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->shapePainter);
     if (!painter->isActive()) return;
-    if (!d->firstPaint) {
-        updateShapes();
-        d->firstPaint = true;
-    }
+
+    const QRectF bbox = d->documentRect.isValid()? d->documentRect: d->shapePainter->contentRect();
+    const QRectF bounds = QRectF(0, 0, width(), height());
     painter->save();
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->fillRect(0, 0, width(), height(), fillColor());
     if (!d->shape) {
         painter->restore();
         return;
     }
 
-    QRectF bbox = d->shape->boundingRect();
-    qreal scale = (height()- d->imagePadding*2) / bbox.height();
-
-    painter->translate(boundingRect().center());
-    painter->scale(scale, scale);
-    painter->translate(-bbox.center());
-
-    qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
-    QRectF scaledBounds = QRectF(0, 0, this->boundingRect().width()*pixelRatio, this->boundingRect().height()*pixelRatio);
-
-    painter->setClipRect(painter->transform().inverted().mapRect(scaledBounds));
-    painter->setPen(Qt::transparent);
-
-    Q_FOREACH(const KoShape *shape, d->shape->shapes()) {
-        painter->save();
-        painter->setTransform(shape->transformation() * painter->transform());
-        shape->paint(*painter);
-        painter->restore();
-    }
+    d->shapePainter->paint(*painter,
+                           bounds.toAlignedRect(),
+                           d->adjustBBoxToScaling(bbox, bounds));
 
     painter->restore();
 
@@ -79,8 +117,6 @@ QString KoShapeQtQuickLabel::svgData() const
 
 void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 {
-    qreal max = qMax(20.0*imageScale(), qMin(width()-(d->imagePadding*2), height()-(d->imagePadding*2)));
-    setImplicitHeight(max);
     if (d->svgData == newSvgData)
         return;
     d->svgData = newSvgData;
@@ -94,11 +130,15 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 
     QList<KoShape*> shapes = p.parseSvg(doc.documentElement(), &sz);
     if (shapes.isEmpty()) return;
-    d->shape.reset(new KoShapeGroup());
-    KoShapeGroupCommand cmd(d->shape.data(), shapes, false);
-    cmd.redo();
+    if (!d->shape->shapes().isEmpty()) {
+        KoShapeUngroupCommand unGroup(d->shape.data(), d->shape->shapes());
+        unGroup.redo();
+    }
+    KoShapeGroupCommand group(d->shape.data(), shapes, false);
+    group.redo();
 
     emit svgDataChanged();
+    emit minimumRectChanged();
 }
 
 QColor KoShapeQtQuickLabel::foregroundColor() const
@@ -124,34 +164,27 @@ void KoShapeQtQuickLabel::setForegroundColor(const QColor &newForegroundColor)
     }
 
     d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(newForegroundColor)));
-    update(this->boundingRect().toAlignedRect());
+    callUpdateIfComplete();
     emit foregroundColorChanged();
 }
 
-int KoShapeQtQuickLabel::imagePadding() const
+int KoShapeQtQuickLabel::padding() const
 {
-    return d->imagePadding;
+    return (d->leftPadding + d->rightPadding + d->topPadding + d->bottomPadding) / 4;
 }
 
-void KoShapeQtQuickLabel::setImagePadding(int newPadding)
+void KoShapeQtQuickLabel::setPadding(int newPadding)
 {
-    if (d->imagePadding == newPadding)
+    const int currentPadding = (d->leftPadding + d->rightPadding + d->topPadding + d->bottomPadding) / 4;
+    if (currentPadding == newPadding)
         return;
-    d->imagePadding = newPadding;
-    emit imagePaddingChanged();
-}
+    d->leftPadding = newPadding;
+    d->rightPadding = newPadding;
+    d->topPadding = newPadding;
+    d->bottomPadding = newPadding;
 
-qreal KoShapeQtQuickLabel::imageScale() const
-{
-    return d->imageScale;
-}
-
-void KoShapeQtQuickLabel::setImageScale(qreal newImageScale)
-{
-    if (qFuzzyCompare(d->imageScale, newImageScale))
-        return;
-    d->imageScale = newImageScale;
-    emit imageScaleChanged();
+    emit paddingChanged();
+    emit minimumRectChanged();
 }
 
 bool KoShapeQtQuickLabel::fullColor() const
@@ -168,6 +201,42 @@ void KoShapeQtQuickLabel::setFullColor(bool newFullColor)
     emit fullColorChanged();
 }
 
+KoShapeQtQuickLabel::ScalingType KoShapeQtQuickLabel::scalingType() const
+{
+    return d->scalingType;
+}
+
+void KoShapeQtQuickLabel::setScalingType(const ScalingType type)
+{
+    if (d->scalingType == type) return;
+    d->scalingType = type;
+    emit scalingTypeChanged();
+}
+
+Qt::Alignment KoShapeQtQuickLabel::alignment() const
+{
+    return d->alignment;
+}
+
+void KoShapeQtQuickLabel::setAlignment(const Qt::Alignment align)
+{
+    if (d->alignment == align) return;
+    d->alignment = align;
+    emit alignmentChanged();
+}
+
+void KoShapeQtQuickLabel::componentComplete()
+{
+    QQuickPaintedItem::componentComplete();
+    updateShapes();
+    if (!d->shapePainter) {
+        d->shapePainter.reset(new KoShapePainter());
+        d->shapePainter->setShapes({d->shape.data()});
+        emit minimumRectChanged();
+    }
+    setOpaquePainting(fillColor().alpha() == 255);
+}
+
 void KoShapeQtQuickLabel::updateShapes()
 {
     if (d->shape) {
@@ -175,4 +244,30 @@ void KoShapeQtQuickLabel::updateShapes()
             d->shape->shapes().at(i)->setInheritBackground(!d->fullColor);
         }
     }
+}
+
+void KoShapeQtQuickLabel::callUpdateIfComplete()
+{
+    if (isComponentComplete()) {
+        update(boundingRect().toAlignedRect());
+    }
+}
+
+QRectF KoShapeQtQuickLabel::documentRect() const
+{
+    return d->documentRect;
+}
+
+void KoShapeQtQuickLabel::setDocumentRect(const QRectF &rect)
+{
+    if (d->documentRect == rect) return;
+    d->documentRect = rect;
+    emit documentRectChanged();
+    emit minimumRectChanged();
+}
+
+QRectF KoShapeQtQuickLabel::minimumRect() const
+{
+    const QRectF bounds = d->documentRect.isValid()? d->documentRect: d->shapePainter? d->shapePainter->contentRect(): QRectF();
+    return d->addPaddingToBounds(bounds);
 }

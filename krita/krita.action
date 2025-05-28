@@ -3663,5 +3663,17 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="force_palette_colors">
+      <icon>palette-library</icon>
+      <text>Force Palette Colors</text>
+      <whatsThis>Force the color selector to only select colors in the currently selected palette.</whatsThis>
+      <toolTip>Force the color selector to only select colors in the currently selected palette.</toolTip>
+      <iconText>Force Palette</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

@@ -9,6 +9,8 @@
 #include <QApplication>
 #include <QKeyEvent>
 
+#include <config-wayland.h>
+
 #ifdef Q_OS_MACOS
 
 #include "kis_extended_modifiers_mapper_osx.h"
@@ -60,7 +62,16 @@ QVector<Qt::Key> queryPressedKeysWin()
     return result;
 }
 
-#elif defined HAVE_X11
+#endif /* Q_OS_WIN */
+
+#if HAVE_WAYLAND
+
+#include <KisApplication.h>
+#include <KisWaylandKeyboardWatcher.h>
+
+#endif /* HAVE_WAYLAND */
+
+#ifdef HAVE_X11
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QX11Info>
 #else
@@ -187,9 +198,31 @@ void KisExtendedModifiersMapper::setLocalMonitor(bool activate, KisShortcutMatch
 KisExtendedModifiersMapper::ExtendedModifiers
 KisExtendedModifiersMapper::queryExtendedModifiers()
 {
+    auto qtModifiersToQtKeys = [] (Qt::KeyboardModifiers standardModifiers) {
+        ExtendedModifiers modifiers;
+
+        if (standardModifiers & Qt::ShiftModifier) {
+            modifiers << Qt::Key_Shift;
+        }
+
+        if (standardModifiers & Qt::ControlModifier) {
+            modifiers << Qt::Key_Control;
+        }
+
+        if (standardModifiers & Qt::AltModifier) {
+            modifiers << Qt::Key_Alt;
+        }
+
+        if (standardModifiers & Qt::MetaModifier) {
+            modifiers << Qt::Key_Meta;
+        }
+
+        return modifiers;
+    };
+
     ExtendedModifiers modifiers;
 
-#ifdef HAVE_X11
+#if defined HAVE_X11
 
     if (QGuiApplication::platformName() == QLatin1String("xcb")) {
         for (int keyCode = m_d->minKeyCode; keyCode <= m_d->maxKeyCode; keyCode++) {
@@ -208,38 +241,39 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
                 }
             }
         }
+
+        // in X11 some keys may have multiple keysyms,
+        // (Alt Key == XK_Meta_{L,R}, XK_Meta_{L,R})
+        KritaUtils::makeContainerUnique(modifiers);
+        return modifiers;
     }
 
-    // in X11 some keys may have multiple keysyms,
-    // (Alt Key == XK_Meta_{L,R}, XK_Meta_{L,R})
-    KritaUtils::makeContainerUnique(modifiers);
+#endif /* HAVE_X11 */
 
-#elif defined Q_OS_WIN
+#if HAVE_WAYLAND
 
+    if (QGuiApplication::platformName() == QLatin1String("wayland")) {
+        KisWaylandKeyboardWatcher *watcher =
+            static_cast<KisApplication*>(qApp)->waylandKeyboardWatcher();
+
+        if (watcher->hasKeyboardFocus()) {
+            modifiers = watcher->pressedKeys();
+            KritaUtils::makeContainerUnique(modifiers);
+        } else {
+            modifiers = qtModifiersToQtKeys(watcher->modifiers());
+        }
+
+        return modifiers;
+    }
+
+#endif /* HAVE_WAYLAND */
+
+#if defined Q_OS_WIN
     modifiers = queryPressedKeysWin();
-
 #elif defined Q_OS_MACOS
     modifiers = queryPressedKeysMac();
 #else
-
-    Qt::KeyboardModifiers standardModifiers = queryStandardModifiers();
-
-    if (standardModifiers & Qt::ShiftModifier) {
-        modifiers << Qt::Key_Shift;
-    }
-
-    if (standardModifiers & Qt::ControlModifier) {
-        modifiers << Qt::Key_Control;
-    }
-
-    if (standardModifiers & Qt::AltModifier) {
-        modifiers << Qt::Key_Alt;
-    }
-
-    if (standardModifiers & Qt::MetaModifier) {
-        modifiers << Qt::Key_Meta;
-    }
-
+    modifiers = qtModifiersToQtKeys(queryStandardModifiers());
 #endif
 
     return modifiers;

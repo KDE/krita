@@ -527,11 +527,23 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         SvgWidgets
     )
 
+    find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
+        OPTIONAL_COMPONENTS
+        WaylandClient
+    )
+
     find_package(KF6 ${MIN_FRAMEWORKS_VERSION}
         REQUIRED COMPONENTS
         ColorScheme
     )
 endif()
+
+set(HAVE_WAYLAND FALSE)
+if (TARGET Qt::WaylandClient)
+    message(STATUS "Found Qt::WaylandClient, enabling kritawayland library")
+    set(HAVE_WAYLAND TRUE)
+endif()
+configure_file(config-wayland.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-wayland.h)
 
 #
 # Check for the presence of custom patches in Qt

@@ -117,6 +117,10 @@
 #include <config-seexpr.h>
 #include <config-safe-asserts.h>
 
+#if HAVE_WAYLAND
+#include <KisWaylandKeyboardWatcher.h>
+#endif /* HAVE_WAYLAND */
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -167,6 +171,9 @@ public:
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
     QVector<QString> earlyFileOpenEvents;
+#if HAVE_WAYLAND
+    QScopedPointer<KisWaylandKeyboardWatcher> waylandKeyboardWatcher;
+#endif /* HAVE_WAYLAND */
 };
 
 class KisApplication::ResetStarting
@@ -254,6 +261,12 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     // store the style name
     qApp->setProperty(currentUnderlyingStyleNameProperty, style()->objectName());
     KisSynchronizedConnectionBase::registerSynchronizedEventBarrier(std::bind(&KisApplication::processPostponedSynchronizationEvents, this));
+
+#if HAVE_WAYLAND
+    if (QGuiApplication::platformName() == QLatin1String("wayland")) {
+        d->waylandKeyboardWatcher.reset(new KisWaylandKeyboardWatcher());
+    }
+#endif /* HAVE_WAYLAND */
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -1189,3 +1202,10 @@ void KisApplication::askResetConfig()
         resetConfig();
     }
 }
+
+#if HAVE_WAYLAND
+KisWaylandKeyboardWatcher *KisApplication::waylandKeyboardWatcher()
+{
+    return d->waylandKeyboardWatcher.data();
+}
+#endif /* HAVE_WAYLAND */

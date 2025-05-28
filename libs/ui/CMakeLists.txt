@@ -736,6 +736,10 @@ if(OpenEXR_FOUND)
   target_link_libraries(kritaui PUBLIC ${LINK_OPENEXR_LIB})
 endif()
 
+if (HAVE_WAYLAND)
+    target_link_libraries(kritaui PRIVATE kritawayland)
+endif()
+
 # Add VSync disable workaround
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU AND QT_MAJOR_VERSION STREQUAL "5")
     target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt${QT_MAJOR_VERSION}::X11Extras)

@@ -48,6 +48,8 @@ private Q_SLOTS:
     void decreaseFade();
     void increaseScatter();
     void decreaseScatter();
+
+    void forcePaletteColors(bool force);
 private:
     void transformColor(int step);
     void transformSaturation(int step);

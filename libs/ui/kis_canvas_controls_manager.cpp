@@ -42,6 +42,11 @@ KisCanvasControlsManager::~KisCanvasControlsManager()
 
 void KisCanvasControlsManager::setup(KisActionManager *actionManager)
 {
+    KisAction *forcePaletteColors = actionManager->createAction("force_palette_colors");
+    forcePaletteColors->setCheckable(true);
+    forcePaletteColors->setChecked(KisConfig(true).forcePaletteColors());
+    connect(forcePaletteColors, SIGNAL(toggled(bool)), SLOT(forcePaletteColors(bool)));
+
     KisAction *lighterColor = actionManager->createAction("make_brush_color_lighter");
     connect(lighterColor, SIGNAL(triggered()), SLOT(makeColorLighter()));
 
@@ -384,4 +389,9 @@ void KisCanvasControlsManager::increaseScatter()
 void KisCanvasControlsManager::decreaseScatter()
 {
     stepScatter(-0.1f);
+}
+
+void KisCanvasControlsManager::forcePaletteColors(bool force)
+{
+    KisConfig(false).setForcePaletteColors(force);
 }

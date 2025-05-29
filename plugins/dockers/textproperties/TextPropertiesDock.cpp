@@ -69,6 +69,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
     qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");
     qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
+    qmlRegisterType<OpenTypeFeatureFilterModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureFilterModel");
     qmlRegisterType<OpenTypeFeatureModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureModel");
     qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
     qmlRegisterType<CssQmlUnitConverter>("org.krita.flake.text", 1, 0, "CssQmlUnitConverter");

@@ -236,11 +236,10 @@ void OpenTypeFeatureModel::removeFeature(const QString &tag)
     emit openTypeFeaturesChanged();
 }
 
-QAbstractItemModel *OpenTypeFeatureModel::featureFilterModel() const
+QAbstractItemModel *OpenTypeFeatureModel::allFeatureModel() const
 {
     return d->allFeatures;
 }
-
 
 void OpenTypeFeatureModel::setFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel)
 {
@@ -334,6 +333,7 @@ QVariant AllOpenTypeFeaturesModel::data(const QModelIndex &index, int role) cons
 
 int AllOpenTypeFeaturesModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return d->allTags.size();
 }
 
@@ -356,3 +356,55 @@ QHash<int, QByteArray> AllOpenTypeFeaturesModel::roleNames() const
     return roles;
 }
 
+OpenTypeFeatureFilterModel::OpenTypeFeatureFilterModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+
+}
+
+QString OpenTypeFeatureFilterModel::firstValidTag() const
+{
+    const QModelIndex idx = index(0, 0, QModelIndex());
+    if (!idx.isValid()) return QString();
+    return data(idx, AllOpenTypeFeaturesModel::Tag).toString();
+}
+
+#include <QDebug>
+bool OpenTypeFeatureFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    const QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+    if (!idx.isValid()) return false;
+    const bool available = sourceModel()->data(idx, AllOpenTypeFeaturesModel::Available).toBool();
+    if (m_filterAvailable && !available) return false;
+    if (filterRegularExpression().pattern().isEmpty()) return true;
+    const QString tag = sourceModel()->data(idx, AllOpenTypeFeaturesModel::Tag).toString();
+    const QString name = sourceModel()->data(idx, Qt::DisplayRole).toString();
+    return (tag.contains(filterRegularExpression()) || name.contains(filterRegularExpression()));
+}
+
+bool OpenTypeFeatureFilterModel::filterAvailable() const
+{
+    return m_filterAvailable;
+}
+
+void OpenTypeFeatureFilterModel::setFilterAvailable(bool newFilterAvailable)
+{
+    if (m_filterAvailable == newFilterAvailable)
+        return;
+    m_filterAvailable = newFilterAvailable;
+    invalidateFilter();
+    emit filterAvailableChanged();
+}
+
+QString OpenTypeFeatureFilterModel::searchText() const
+{
+    return filterRegularExpression().pattern();
+}
+
+void OpenTypeFeatureFilterModel::setSearchText(const QString &newSearchText)
+{
+    if (filterRegularExpression().pattern() == newSearchText)
+        return;
+    setFilterRegularExpression(newSearchText);
+    emit searchTextChanged();
+}

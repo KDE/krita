@@ -160,18 +160,16 @@ TextPropertyBase {
         }
         ComboBox {
             id: cmbAvailableFeatures;
-            model: fontFeatureModel.featureFilterModel();
+
+            property OpenTypeFeatureFilterModel availableFilter: OpenTypeFeatureFilterModel {
+                sourceModel: fontFeatureModel.allFeatureModel();
+                filterAvailable: true;
+            }
+
+            model: availableFilter;
             textRole: "display";
             valueRole: "tag";
             Layout.fillWidth: true;
-
-            editable: true;
-            selectTextByMouse: true;
-
-            onAccepted: {
-                fontFeatureModel.addFeature(currentValue);
-            }
-
 
             delegate: OpenTypeFeatureDelegate {
                 required property var model;
@@ -181,7 +179,6 @@ TextPropertyBase {
                 sample: model.sample;
                 tag: model.tag;
                 width: cmbAvailableFeatures.width;
-                visible: model.available;
                 fontFamilies: properties.fontFamilies;
                 fontWeight: properties.fontWeight;
                 fontStyle: properties.fontStyle.style;
@@ -193,6 +190,87 @@ TextPropertyBase {
                     cmbAvailableFeatures.currentIndex = index;
                     fontFeatureModel.addFeature(tag);
                     cmbAvailableFeatures.popup.close();
+                }
+            }
+
+            contentItem: TextField {
+                id: featureTxtEdit;
+                verticalAlignment: Text.AlignVCenter
+                font: cmbAvailableFeatures.font
+                color: cmbAvailableFeatures.palette.text
+                selectionColor: cmbAvailableFeatures.palette.highlight
+                selectedTextColor: cmbAvailableFeatures.palette.highlightedText;
+
+                property bool blockSignals: false;
+
+                property OpenTypeFeatureFilterModel filterModel: OpenTypeFeatureFilterModel {
+                    sourceModel: fontFeatureModel.allFeatureModel();
+                }
+
+                selectByMouse: true;
+
+                onTextChanged: {
+                    if (text !== "") {
+                        filterModel.setFilterRegularExpression(text);
+                        completerPopup.open();
+                    } else {
+                        completerPopup.close();
+                        filterModel.setFilterRegularExpression(text);
+                    }
+                }
+
+                onAccepted: {
+                    blockSignals = true;
+                    let name = filterModel.firstValidTag();
+                    if (typeof name != 'undefined') {
+                        fontFeatureModel.addFeature(name);
+                    }
+                    finalize();
+                    blockSignals = false;
+                }
+
+                function finalize() {
+                    text = "";
+                }
+
+                Popup {
+                    id: completerPopup;
+                    y: -height;
+                    x: 0;
+                    padding: 0;
+                    width: featureTxtEdit.width;
+                    height: Math.min(contentItem.implicitHeight, 300);
+                    property string highlightedTag;
+                    contentItem: ListView {
+                        model: featureTxtEdit.filterModel;
+                        implicitHeight: contentHeight;
+                        clip: true;
+
+                        ScrollBar.vertical: ScrollBar {
+                        }
+
+                        delegate: OpenTypeFeatureDelegate {
+                            required property var model;
+                            required property int index;
+                            display: model.display;
+                            toolTip: model.toolTip;
+                            sample: model.sample;
+                            tag: model.tag;
+                            height: implicitHeight;
+                            width: featureTxtEdit.width;
+                            fontFamilies: properties.fontFamilies;
+                            fontWeight: properties.fontWeight;
+                            fontStyle: properties.fontStyle.style;
+                            fontSlant: properties.fontStyle.value;
+                            fontWidth: properties.fontWidth;
+                            fontAxesValues: properties.axisValues;
+                            featureValue: 0;
+                            onFeatureClicked: (mouse) => {
+                                                  fontFeatureModel.addFeature(tag);
+                                                  featureTxtEdit.finalize();
+                                              }
+                        }
+                    }
                 }
             }
         }

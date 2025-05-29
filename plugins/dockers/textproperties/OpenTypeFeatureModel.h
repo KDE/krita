@@ -13,6 +13,34 @@ class KoSvgTextProperties;
 class KoOpenTypeFeatureInfo;
 class KoSvgTextPropertiesModel;
 
+// Filter SortProxy that filters by both name and tag.
+class OpenTypeFeatureFilterModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+    Q_PROPERTY (bool filterAvailable READ filterAvailable WRITE setFilterAvailable NOTIFY filterAvailableChanged)
+    Q_PROPERTY (QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
+public:
+    OpenTypeFeatureFilterModel(QObject *parent = nullptr);
+
+    Q_INVOKABLE QString firstValidTag() const;
+    // QSortFilterProxyModel interface
+    bool filterAvailable() const;
+    void setFilterAvailable(bool newFilterAvailable);
+
+    QString searchText() const;
+    void setSearchText(const QString &newSearchText);
+
+Q_SIGNALS:
+    void filterAvailableChanged();
+
+    void searchTextChanged();
+
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+private:
+    bool m_filterAvailable;
+};
+
 /**
  * @brief The OpenTypeFeatureModel class
  * This model keeps track of the currently set font-feature-settings property on a given piece of text,
@@ -74,7 +102,7 @@ public:
      * searching and sorting on all opentype features, whether available in the font
      * or part of the standard.
      */
-    Q_INVOKABLE QAbstractItemModel *featureFilterModel() const;
+    Q_INVOKABLE QAbstractItemModel *allFeatureModel() const;
 
     /**
      * @brief setFromTextPropertiesModel
@@ -102,7 +130,7 @@ public:
     enum Roles {
         Tag = Qt::UserRole + 1,
         Sample,
-        Available // bool, represents whether the current feature is also present in the font.
+        Available
     };
     ~AllOpenTypeFeaturesModel();
 

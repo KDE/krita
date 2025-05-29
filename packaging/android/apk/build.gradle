@@ -68,6 +68,7 @@ tasks.register('copyLibs', Copy) {
     dependsOn('configure')
     from "$installPrefix/lib"
     into "libs/$abi"
+    exclude "mlt-7/**"
     rename('^krita(.*).so$', 'lib_krita$1.so')
 }
 

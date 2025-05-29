@@ -12,18 +12,12 @@
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "kritaui_export.h"
 
-#include <config-wayland.h>
-
 class KisMainWindow;
 class KisApplicationPrivate;
 class QWidget;
 class KisApplicationArguments;
 class KisAutoSaveRecoveryDialog;
 class KisExtendedModifiersMapperPluginInterface;
-
-#if HAVE_WAYLAND
-class KisWaylandKeyboardWatcher;
-#endif
 
 #include <KisImportExportManager.h>
 
@@ -98,10 +92,6 @@ public:
     bool isStoreApplication();
 
     static void verifyMetatypeRegistration();
-
-#if HAVE_WAYLAND
-    KisWaylandKeyboardWatcher *waylandKeyboardWatcher();
-#endif
 
     KisExtendedModifiersMapperPluginInterface* extendedModifiersPluginInterface();
 

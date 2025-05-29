@@ -12,8 +12,6 @@
 
 #include <krita_container_utils.h>
 
-#include <config-wayland.h>
-
 #ifdef Q_OS_MACOS
 
 #include "kis_extended_modifiers_mapper_osx.h"
@@ -67,12 +65,6 @@ QVector<Qt::Key> queryPressedKeysWin()
 
 #endif /* Q_OS_WIN */
 
-#if HAVE_WAYLAND
-
-#include <KisWaylandKeyboardWatcher.h>
-
-#endif /* HAVE_WAYLAND */
-
 struct KisExtendedModifiersMapper::Private
 {
 };
@@ -105,24 +97,6 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
     }
 
     ExtendedModifiers modifiers;
-
-#if HAVE_WAYLAND
-
-    if (QGuiApplication::platformName() == QLatin1String("wayland")) {
-        KisWaylandKeyboardWatcher *watcher =
-            static_cast<KisApplication*>(qApp)->waylandKeyboardWatcher();
-
-        if (watcher->hasKeyboardFocus()) {
-            modifiers = watcher->pressedKeys();
-            KritaUtils::makeContainerUnique(modifiers);
-        } else {
-            modifiers = qtModifiersToQtKeys(watcher->modifiers());
-        }
-
-        return modifiers;
-    }
-
-#endif /* HAVE_WAYLAND */
 
 #if defined Q_OS_WIN
     modifiers = queryPressedKeysWin();

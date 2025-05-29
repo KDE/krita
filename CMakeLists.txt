@@ -540,10 +540,9 @@ endif()
 
 set(HAVE_WAYLAND FALSE)
 if (TARGET Qt::WaylandClient)
-    message(STATUS "Found Qt::WaylandClient, enabling kritawayland library")
+    message(STATUS "Found Qt::WaylandClient, enabling kritawayland platform")
     set(HAVE_WAYLAND TRUE)
 endif()
-configure_file(config-wayland.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-wayland.h)
 
 #
 # Check for the presence of custom patches in Qt

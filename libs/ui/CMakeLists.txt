@@ -732,10 +732,6 @@ if(OpenEXR_FOUND)
   target_link_libraries(kritaui PUBLIC ${LINK_OPENEXR_LIB})
 endif()
 
-if (HAVE_WAYLAND)
-    target_link_libraries(kritaui PRIVATE kritawayland)
-endif()
-
 target_include_directories(kritaui
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/canvas>

@@ -1,6 +1,8 @@
 if (NOT QT_MAJOR_VERSION STREQUAL "6")
-    message(FATAL_ERROR "kritawayland library is supported with Qt6 only")
+    message(FATAL_ERROR "kritaplatformpluginwayland library is supported with Qt6 only")
 endif()
+
+project( kritaplatformpluginwayland )
 
 ##
 ## Check for the presence of custom Wayland patches in Qt
@@ -29,16 +31,18 @@ unset(CMAKE_REQUIRED_LIBRARIES)
 configure_file(config-qt-wayland-patches-present.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qt-wayland-patches-present.h)
 
 ##
-## Define the kritawayland library
+## Define the kritaplatformpluginwayland library
 ##
 
-set(kritawayland_LIB_SRCS
+set(kritaplatformpluginwayland_LIB_SRCS
     KisWaylandKeyboardWatcher.cpp
+    KisExtendedModifiersMapperWayland.cpp
+    KritaPlatformPluginWayland.cpp
 )
 
-kis_add_library(kritawayland SHARED ${kritawayland_LIB_SRCS})
+kis_add_library(kritaplatformpluginwayland MODULE ${kritaplatformpluginwayland_LIB_SRCS})
 
-qt6_generate_wayland_protocol_client_sources(kritawayland
+qt6_generate_wayland_protocol_client_sources(kritaplatformpluginwayland
     FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/protocols/wayland.xml"
 )
@@ -50,19 +54,14 @@ set_source_files_properties(
     "${Qt6WaylandGlobalPrivate_INCLUDE_DIRS};${Qt6WaylandClient_PRIVATE_INCLUDE_DIRS};${Qt6Gui_PRIVATE_INCLUDE_DIRS}"
     )
 
-target_link_libraries(kritawayland
+target_link_libraries(kritaplatformpluginwayland
     PRIVATE
         Qt::Gui
         Qt::GuiPrivate
         Qt::WaylandClient
         kritaglobal
+        kritaui
     )
 
-generate_export_header(kritawayland BASE_NAME kritawayland)
-
-set_target_properties(kritawayland PROPERTIES
-    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
-)
-
-install(TARGETS kritawayland ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kritaplatformpluginwayland DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

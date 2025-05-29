@@ -1,0 +1,11 @@
+{
+    "Id": "kritaplatformwayland",
+    "Type": "Service",
+    "X-KDE-Library": "kritaplatformwayland",
+    "X-KDE-PluginInfo-Name": "Krita Platform Plugin for Wayland",
+    "X-KDE-ServiceTypes": [
+        "Krita/PlatformPlugin"
+    ],
+    "X-Krita-Version": "28",
+    "X-Krita-PlatformId": "wayland"
+}

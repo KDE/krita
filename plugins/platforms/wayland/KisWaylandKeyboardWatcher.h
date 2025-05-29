@@ -7,12 +7,10 @@
 #ifndef KISWAYLANDKEYBOARDWATCHER_H
 #define KISWAYLANDKEYBOARDWATCHER_H
 
-#include <kritawayland_export.h>
-
 #include <memory>
 #include <QList>
 
-class KRITAWAYLAND_EXPORT KisWaylandKeyboardWatcher
+class KisWaylandKeyboardWatcher
 {
 public:
     KisWaylandKeyboardWatcher();

@@ -6448,7 +6448,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "z_study_pencil_2Hb.gih"
 msgid "2B pencil Grain 2 b"
-msgstr "2B Gra de llapis 2 b"
+msgstr "2B Gra de llapis 2b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/z_study_pencil_H.gih:1

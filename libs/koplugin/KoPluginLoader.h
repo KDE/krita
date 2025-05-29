@@ -12,6 +12,8 @@
 
 #include "kritaplugin_export.h"
 
+class KPluginFactory;
+
 #ifndef Q_MOC_RUN
 /**
  * The pluginloader singleton is responsible for loading the plugins
@@ -102,6 +104,10 @@ public:
      * @return a list of services (by library name) that were not know in the config
      */
     void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0, bool cache = true);
+
+    KPluginFactory* loadSinglePlugin(const std::vector<std::pair<QString, QString>> &predicates, const QString & serviceType);
+    KPluginFactory* loadSinglePlugin(const std::pair<QString, QString> &predicates, const QString & serviceType);
+    KPluginFactory* loadSinglePlugin(const QString &id, const QString & serviceType);
 
 public:
     /// DO NOT USE! Use instance() instead

@@ -331,6 +331,7 @@ set(kritaui_LIB_SRCS
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
+    input/KisExtendedModifiersMapperPluginInterface.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
@@ -712,11 +713,6 @@ if (ANDROID)
     target_link_libraries(kritaui PRIVATE Qt${QT_MAJOR_VERSION}::AndroidExtras)
 endif()
 
-if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
-  target_link_libraries(kritaui PRIVATE ${X11_X11_LIB}
-                                ${X11_Xinput_LIB})
-endif()
-
 if (HAIKU)
   target_link_libraries(kritaui PRIVATE network expat iconv intl)
 endif()
@@ -738,15 +734,6 @@ endif()
 
 if (HAVE_WAYLAND)
     target_link_libraries(kritaui PRIVATE kritawayland)
-endif()
-
-# Add VSync disable workaround
-if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU AND QT_MAJOR_VERSION STREQUAL "5")
-    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt${QT_MAJOR_VERSION}::X11Extras)
-endif()
-
-if (X11_FOUND AND (QT_MAJOR_VERSION STREQUAL "5"))
-    target_link_libraries(kritaui PRIVATE Qt${QT_MAJOR_VERSION}::X11Extras ${X11_LIBRARIES})
 endif()
 
 target_include_directories(kritaui

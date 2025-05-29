@@ -19,6 +19,7 @@ class KisApplicationPrivate;
 class QWidget;
 class KisApplicationArguments;
 class KisAutoSaveRecoveryDialog;
+class KisExtendedModifiersMapperPluginInterface;
 
 #if HAVE_WAYLAND
 class KisWaylandKeyboardWatcher;
@@ -102,6 +103,7 @@ public:
     KisWaylandKeyboardWatcher *waylandKeyboardWatcher();
 #endif
 
+    KisExtendedModifiersMapperPluginInterface* extendedModifiersPluginInterface();
 
 public Q_SLOTS:
 

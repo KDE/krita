@@ -37,6 +37,7 @@ public:
     Qt::KeyboardModifiers queryStandardModifiers();
 
     static Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
+    static ExtendedModifiers qtModifiersToQtKeys(Qt::KeyboardModifiers standardModifiers);
 
 #ifdef Q_OS_MACOS
     static void setLocalMonitor(bool activate, KisShortcutMatcher *matcher = 0);

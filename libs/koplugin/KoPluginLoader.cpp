@@ -148,3 +148,50 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         configGroup.writeEntry(config.blacklist, blacklist);
     }
 }
+
+KPluginFactory* KoPluginLoader::loadSinglePlugin(const std::vector<std::pair<QString, QString>> &predicates, const QString &serviceType)
+{
+    QList<KoJsonTrader::Plugin> offers = KoJsonTrader::instance()->query(serviceType, QString());
+
+    offers.erase(std::remove_if(offers.begin(),
+                                offers.end(),
+                                [&](const KoJsonTrader::Plugin &plugin) {
+                                    QJsonObject json = plugin.metaData().value("MetaData").toObject();
+                                    Q_FOREACH(const auto &predicate, predicates) {
+                                        if (json.value(predicate.first).toString() != predicate.second) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                }),
+                 offers.end());
+
+    auto versionFromPlugin = [] (const KoJsonTrader::Plugin &plugin) {
+        QJsonObject json = plugin.metaData().value("MetaData").toObject();
+        QVariant version = json.value("X-Krita-Version");
+        return version.toString().toInt();
+    };
+
+    auto versionCompareLess = [&] (const KoJsonTrader::Plugin &lhs, const KoJsonTrader::Plugin &rhs) {
+        return versionFromPlugin(lhs) < versionFromPlugin(rhs);
+    };
+
+    auto it = std::max_element(offers.begin(), offers.end(), versionCompareLess);
+
+    if (it != offers.end()) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(it->instance());
+        return factory;
+    }
+
+    return nullptr;
+}
+
+KPluginFactory* KoPluginLoader::loadSinglePlugin(const std::pair<QString, QString> &predicates, const QString & serviceType)
+{
+    return loadSinglePlugin(std::vector<std::pair<QString, QString>>{predicates}, serviceType);
+}
+
+KPluginFactory* KoPluginLoader::loadSinglePlugin(const QString &id, const QString &serviceType)
+{
+    return loadSinglePlugin({"Id", id}, serviceType);
+}

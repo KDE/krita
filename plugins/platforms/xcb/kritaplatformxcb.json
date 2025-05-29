@@ -1,0 +1,11 @@
+{
+    "Id": "kritaplatformxcb",
+    "Type": "Service",
+    "X-KDE-Library": "kritaplatformxcb",
+    "X-KDE-PluginInfo-Name": "Krita Platform Plugin for X11/XCB",
+    "X-KDE-ServiceTypes": [
+        "Krita/PlatformPlugin"
+    ],
+    "X-Krita-Version": "28",
+    "X-Krita-PlatformId": "xcb"
+}

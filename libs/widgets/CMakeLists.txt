@@ -113,10 +113,6 @@ target_link_libraries(kritawidgets
     KF${KF_MAJOR}::Completion
 )
 
-if(X11_FOUND AND QT_MAJOR_VERSION STREQUAL "5")
-    target_link_libraries(kritawidgets Qt${QT_MAJOR_VERSION}::X11Extras ${X11_LIBRARIES})
-endif()
-
 set_target_properties(kritawidgets PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )

@@ -120,6 +120,9 @@
 #if HAVE_WAYLAND
 #include <KisWaylandKeyboardWatcher.h>
 #endif /* HAVE_WAYLAND */
+#include <kpluginfactory.h>
+#include <input/KisExtendedModifiersMapperPluginInterface.h>
+
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -174,6 +177,7 @@ public:
 #if HAVE_WAYLAND
     QScopedPointer<KisWaylandKeyboardWatcher> waylandKeyboardWatcher;
 #endif /* HAVE_WAYLAND */
+    QScopedPointer<KisExtendedModifiersMapperPluginInterface> extendedModifiersPluginInterface;
 };
 
 class KisApplication::ResetStarting
@@ -256,6 +260,19 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     }
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
+    }
+
+    /**
+     * Load platform plugin for modifiers fetching
+     */
+    {
+        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
+            std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
+            "Krita/PlatformPlugin");
+
+        if (factory) {
+            d->extendedModifiersPluginInterface.reset(factory->create<KisExtendedModifiersMapperPluginInterface>());
+        }
     }
 
     // store the style name
@@ -1209,3 +1226,8 @@ KisWaylandKeyboardWatcher *KisApplication::waylandKeyboardWatcher()
     return d->waylandKeyboardWatcher.data();
 }
 #endif /* HAVE_WAYLAND */
+
+KisExtendedModifiersMapperPluginInterface* KisApplication::extendedModifiersPluginInterface()
+{
+    return d->extendedModifiersPluginInterface.data();
+}

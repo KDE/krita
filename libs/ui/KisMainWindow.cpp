@@ -503,8 +503,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->recentFiles->setRecentFilesModel(&KisRecentDocumentsModelWrapper::instance()->model());
 
-    applyMainWindowSettings(d->windowStateConfig);
-
     subWindowActivated();
     updateWindowMenu();
 
@@ -656,6 +654,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         tabBar->setChangeCurrentOnDrag(true);
     }
 
+    applyMainWindowSettings(d->windowStateConfig);
 
 }
 

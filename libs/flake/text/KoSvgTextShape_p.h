@@ -580,7 +580,7 @@ public:
                     const KoSvgText::TextRendering rendering,
                     QPainterPath &chunk,
                     int &currentIndex);
-    QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
+    KoShape* collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
     void paintDebug(QPainter &painter,
                     const QVector<CharacterResult> &result,
                     int &currentIndex);

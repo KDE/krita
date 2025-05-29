@@ -1262,9 +1262,18 @@ void TestSvgText::testTextOutline()
     gc.setPen(Qt::NoPen);
     gc.setBrush(Qt::black);
     gc.setRenderHint(QPainter::Antialiasing, true);
-    for (KoShape *shape : textShape->textOutline()) {
-        KoPathShape *outline = dynamic_cast<KoPathShape *>(shape);
-        if (shape) {
+    KoShape *textOutline = textShape->textOutline();
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(textOutline);
+    if (group) {
+        Q_FOREACH (KoShape *child, group->shapes()) {
+            KoPathShape *outline = dynamic_cast<KoPathShape *>(child);
+            if (outline) {
+                gc.drawPath(outline->outline());
+            }
+        }
+    } else {
+        KoPathShape *outline = dynamic_cast<KoPathShape *>(textOutline);
+        if (outline) {
             gc.drawPath(outline->outline());
         }
     }

@@ -1551,15 +1551,15 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
     }
 }
 
-QList<KoShape *> KoSvgTextShape::textOutline() const
+KoShape * KoSvgTextShape::textOutline() const
 {
-    QList<KoShape *> shapes;
+    KoShape *shape;
     int currentIndex = 0;
     if (!d->result.empty()) {
-        shapes = d->collectPaths(this, d->result, currentIndex);
+        shape = d->collectPaths(this, d->result, currentIndex);
     }
 
-    return shapes;
+    return shape;
 }
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)

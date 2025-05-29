@@ -56,7 +56,14 @@ public:
      */
     void relayout() const;
 
-    QList<KoShape *> textOutline() const;
+    /**
+     * @brief textOutline
+     * This turns the text object into non-text KoShape(s) to the best of its abilities.
+     * @return a single KoPathShape if only a single path is necessary,
+     * or multiple KoShapes (Paths, Images, and Rectangles with Masks are all possible)
+     * inside a KoShapeGroup.
+     */
+    KoShape * textOutline() const;
 
     /**
      * @brief setShapesInside

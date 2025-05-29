@@ -317,17 +317,12 @@ void KoPathTool::convertToPath()
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
-            KoShapeGroup *groupShape = new KoShapeGroup();
-            KoShapeGroupCommand groupCmd(groupShape, shape->textOutline(), false);
-            groupCmd.redo();
-
-            groupShape->setZIndex(shape->zIndex());
-            groupShape->setTransformation(shape->absoluteTransformation());
+            KoShape *outlineShape = shape->textOutline();
 
             KoShapeContainer *parent = shape->parent();
-            canvas()->shapeController()->addShapeDirect(groupShape, parent, cmd);
+            canvas()->shapeController()->addShapeDirect(outlineShape, parent, cmd);
 
-            newSelectedShapes << groupShape;
+            newSelectedShapes << outlineShape;
         }
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);

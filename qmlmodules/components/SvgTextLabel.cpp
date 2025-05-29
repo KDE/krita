@@ -37,6 +37,8 @@ struct Q_DECL_HIDDEN SvgTextLabel::Private {
     int bottomPadding = 2;
     int leftPadding = 2;
     int rightPadding = 2;
+
+    bool addedShapeToPainter = false; //Tests if the shape has been added to the painter yet.
 };
 
 SvgTextLabel::SvgTextLabel(QQuickItem *parent)
@@ -276,9 +278,8 @@ void SvgTextLabel::setPadding(int padding)
     d->rightPadding = padding;
     d->topPadding = padding;
     d->bottomPadding = padding;
-    setImplicitSize(d->shape->boundingRect().width() + d->leftPadding + d->rightPadding,
-                    d->shape->boundingRect().height() + d->topPadding + d->bottomPadding);
     emit paddingChanged(padding);
+    emit minimumRectChanged();
 }
 
 void SvgTextLabel::setLanguage(QString language)
@@ -305,15 +306,27 @@ void SvgTextLabel::componentComplete()
         d->shapePainter.reset(new KoShapePainter());
         if (!d->shape->boundingRect().isEmpty()) {
             d->shapePainter->setShapes({d->shape.data()});
+            d->addedShapeToPainter = true;
         }
     }
+}
+
+QRectF SvgTextLabel::minimumRect() const
+{
+    if (d->shape) {
+        const QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
+        return bbox.adjusted(-d->leftPadding, -d->topPadding, d->rightPadding, d->bottomPadding);
+    }
+    return QRectF();
 }
 
 void SvgTextLabel::updateShape()
 {
     d->shape->setPropertiesAtPos(-1, d->props);
     d->shape->relayout();
-    const QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
-    setImplicitSize(bbox.width() + d->leftPadding + d->rightPadding,
-                    bbox.height() + d->topPadding + d->bottomPadding);
+    if (!d->addedShapeToPainter && d->shapePainter && !d->shape->boundingRect().isEmpty()) {
+        d->shapePainter->setShapes({d->shape.data()});
+        d->addedShapeToPainter = true;
+    }
+    emit minimumRectChanged();
 }

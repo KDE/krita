@@ -77,6 +77,8 @@ Control {
             SvgTextLabel {
                 text: root.sample;
                 id: svgTextLabel;
+                implicitWidth: minimumRect.width;
+                implicitHeight: minimumRect.height;
                 Layout.preferredHeight: displayLabel.height * 2;
                 Layout.preferredWidth: (displayLabel.height * 2) * (implicitWidth/implicitHeight);
                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter;

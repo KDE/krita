@@ -48,6 +48,8 @@ SvgTextLabel::SvgTextLabel(QQuickItem *parent)
     setImplicitSize(10, 10);
     setAntialiasing(true);
     setOpaquePainting(true);
+
+    connect(this, SIGNAL(openTypeFeaturesChanged(QVariantMap)), this, SLOT(updateShape()));
 }
 
 SvgTextLabel::~SvgTextLabel()
@@ -60,9 +62,6 @@ void SvgTextLabel::paint(QPainter *painter)
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->shapePainter);
 
     if (width() == 0 || height() == 0) return;
-    if (d->shape->textProperties() != d->props) {
-        updateShape();
-    }
     if (!painter->isActive()) return;
     painter->save();
     if (d->shape->boundingRect().isEmpty()) {
@@ -322,11 +321,15 @@ QRectF SvgTextLabel::minimumRect() const
 
 void SvgTextLabel::updateShape()
 {
+    if (d->shape->textProperties() == d->props) {
+        return;
+    }
     d->shape->setPropertiesAtPos(-1, d->props);
     d->shape->relayout();
     if (!d->addedShapeToPainter && d->shapePainter && !d->shape->boundingRect().isEmpty()) {
         d->shapePainter->setShapes({d->shape.data()});
         d->addedShapeToPainter = true;
     }
+    update(boundingRect().toAlignedRect());
     emit minimumRectChanged();
 }

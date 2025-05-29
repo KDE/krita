@@ -21,6 +21,8 @@ Control {
     property string toolTip;
     property int featureValue: 0;
 
+    onFeatureValueChanged: svgTextLabel.updateFeatureValue();
+
     property var fontFamilies: [];
     property double fontSize: 12.0;
     property double fontWeight: 400;
@@ -94,6 +96,10 @@ Control {
                 language: root.language;
 
                 Component.onCompleted: {
+                    updateFeatureValue();
+                }
+
+                function updateFeatureValue() {
                     var newFeatures = {};
                     newFeatures[root.tag] = root.featureValue;
                     openTypeFeatures = newFeatures;

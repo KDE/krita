@@ -108,7 +108,7 @@ TextPropertyBase {
                         fontSlant: properties.fontStyle.value;
                         fontWidth: properties.fontWidth;
                         fontAxesValues: properties.axisValues;
-                        featureValue: activeFeatureControl.currentIndex;
+                        featureValue: activeFeatureDelegate.model.edit;
                         enableMouseEvents: false;
                     }
 
@@ -200,11 +200,13 @@ TextPropertyBase {
                 color: cmbAvailableFeatures.palette.text
                 selectionColor: cmbAvailableFeatures.palette.highlight
                 selectedTextColor: cmbAvailableFeatures.palette.highlightedText;
+                placeholderText: i18nc("@info:placeholder", "Search...");
 
                 property bool blockSignals: false;
 
                 property OpenTypeFeatureFilterModel filterModel: OpenTypeFeatureFilterModel {
                     sourceModel: fontFeatureModel.allFeatureModel();
+                    filterCaseSensitivity: Qt.CaseInsensitive;
                 }
 
                 selectByMouse: true;

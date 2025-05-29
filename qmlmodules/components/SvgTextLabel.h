@@ -126,10 +126,11 @@ protected:
      * used to avoid relayout being called time and time again when the properties change.
      */
     void componentComplete() override;
-
+private Q_SLOTS:
+    void updateShape();
 private:
 
-    void updateShape();
+
 
     struct Private;
     const QScopedPointer<Private> d;

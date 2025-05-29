@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-27 01:57+0000\n"
-"PO-Revision-Date: 2025-05-15 09:03+0200\n"
+"POT-Creation-Date: 2025-05-29 02:03+0000\n"
+"PO-Revision-Date: 2025-05-27 16:43+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -6448,7 +6448,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "z_study_pencil_2Hb.gih"
 msgid "2B pencil Grain 2 b"
-msgstr "2B Gra de llapis 2 b"
+msgstr "2B Gra de llapis 2b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/z_study_pencil_H.gih:1
@@ -35157,10 +35157,13 @@ msgstr ""
 "vegada a una altra ubicació."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "File %1 is missing in %2 and is broken. Please try to save again in a "
+#| "different location."
 msgid ""
-"File %1 is missing in %2 and is broken. Please try to save again in a "
-"different location."
+"Component %1 is missing in %2. Please try to save again in a different "
+"location."
 msgstr ""
 "Falta el fitxer %1 a %2 i està trencat. Intenteu guardar-lo una altra vegada "
 "a una altra ubicació."
@@ -45192,11 +45195,10 @@ msgid "Text Properties"
 msgstr "Propietats del text"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Select OpenColorIO Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "Seleccioneu la configuració d'OpenColorIO"
+msgstr "Configureu les propietats del text"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-27 01:57+0000\n"
+"POT-Creation-Date: 2025-05-29 02:03+0000\n"
 "PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -34926,8 +34926,8 @@ msgstr ""
 #: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
-"File %1 is missing in %2 and is broken. Please try to save again in a "
-"different location."
+"Component %1 is missing in %2. Please try to save again in a different "
+"location."
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:302

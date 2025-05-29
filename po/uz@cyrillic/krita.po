@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-27 01:57+0000\n"
+"POT-Creation-Date: 2025-05-29 02:03+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -36037,8 +36037,8 @@ msgstr ""
 #: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
-"File %1 is missing in %2 and is broken. Please try to save again in a "
-"different location."
+"Component %1 is missing in %2. Please try to save again in a different "
+"location."
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:302

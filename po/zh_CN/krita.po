@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-27 01:57+0000\n"
+"POT-Creation-Date: 2025-05-29 02:03+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -34625,10 +34625,13 @@ msgid ""
 msgstr "无法打开已保存的文件 %1。请在其他位置重新保存。"
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "File %1 is missing in %2 and is broken. Please try to save again in a "
+#| "different location."
 msgid ""
-"File %1 is missing in %2 and is broken. Please try to save again in a "
-"different location."
+"Component %1 is missing in %2. Please try to save again in a different "
+"location."
 msgstr "文件 %1 在 %2 中丢失且已经损坏。请在其他位置重新保存。"
 
 #: libs/ui/KisImportExportManager.cpp:302

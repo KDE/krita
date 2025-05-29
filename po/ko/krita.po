@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-27 01:57+0000\n"
+"POT-Creation-Date: 2025-05-29 02:03+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -36215,10 +36215,13 @@ msgid ""
 msgstr "저장된 파일 %1을(를) 열 수 없습니다. 다른 위치에 다시 저장하십시오."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "File %1 is missing in %2 and is broken. Please try to save again in a "
+#| "different location."
 msgid ""
-"File %1 is missing in %2 and is broken. Please try to save again in a "
-"different location."
+"Component %1 is missing in %2. Please try to save again in a different "
+"location."
 msgstr "%1 파일이 %2에 없으며 깨졌습니다. 다른 위치에 다시 저장하십시오."
 
 #: libs/ui/KisImportExportManager.cpp:302

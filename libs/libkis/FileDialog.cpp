@@ -25,7 +25,6 @@ FileDialog::FileDialog(QWidget *parent,
 
 FileDialog::~FileDialog()
 {
-    delete d;
 }
 
 void FileDialog::setCaption(const QString &caption)

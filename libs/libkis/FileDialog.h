@@ -165,7 +165,7 @@ private:
     //static KoFileDialog* createDialog(QWidget *parent, QString caption, QString defaultDir, QString filter, QString selectedFilter, QString dialogName, KoFileDialog::DialogType type);
 
     struct Private;
-    Private * const d;
+    QScopedPointer<Private> const d;
 };
 
 #endif /* LIBKIS_FILEDIALOG_H */

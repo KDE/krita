@@ -38,6 +38,9 @@ public:
     QString styleType() const;
     void setStyleType(const QString &type);
 
+    /// Returns the sample svg metadata. Use updateThumbnail to update it.
+    QString sampleSvg() const;
+
     // KoResource interface
 public:
     KoResourceSP clone() const override;

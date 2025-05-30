@@ -79,17 +79,23 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     textData.commonProperties = properties;
     m_model->textData.set(textData);
     m_quickWidget->rootObject()->setProperty("presetTitle", m_currentResource->name());
+    m_quickWidget->rootObject()->setProperty("presetDescription", m_currentResource->description());
+    m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
     m_quickWidget->rootObject()->setProperty("styleType", m_currentResource->styleType());
 }
 
 KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
 {
-    KoSvgTextPropertyData textData = m_model->textData.get();
-    m_currentResource->setProperties(textData.commonProperties);
-    const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();
-    const QString styleType = m_quickWidget->rootObject()->property("styleType").toString();
-    m_currentResource->setName(title);
-    m_currentResource->setStyleType(styleType);
+    if (m_currentResource) {
+        KoSvgTextPropertyData textData = m_model->textData.get();
+        m_currentResource->setProperties(textData.commonProperties);
+        const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();
+        const QString description = m_quickWidget->rootObject()->property("presetDescription").toString();
+        const QString styleType = m_quickWidget->rootObject()->property("styleType").toString();
+        m_currentResource->setName(title);
+        m_currentResource->setDescription(description);
+        m_currentResource->setStyleType(styleType);
+    }
     return m_currentResource;
 }
 
@@ -100,6 +106,11 @@ void CssStylePresetEditDialog::setDpi(const double dpi)
 
 void CssStylePresetEditDialog::slotUpdateTextProperties()
 {
+    if (m_currentResource) {
+        KoSvgTextPropertyData textData = m_model->textData.get();
+        m_currentResource->setProperties(textData.commonProperties);
+        m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
+    }
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
 }
 

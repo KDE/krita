@@ -110,6 +110,12 @@ void KoCssStylePreset::setStyleType(const QString &type)
     addMetaData(STYLE_TYPE, type);
 }
 
+QString KoCssStylePreset::sampleSvg() const
+{
+    QMap<QString, QVariant> m = metadata();
+    return m[SAMPLE_SVG].toString();
+}
+
 KoResourceSP KoCssStylePreset::clone() const
 {
     return KoResourceSP(new KoCssStylePreset(*this));

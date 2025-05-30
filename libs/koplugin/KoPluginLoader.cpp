@@ -100,7 +100,12 @@ void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &conf
         while ((it = std::adjacent_find(it, plugins.end(), &idCompareEqual)) != plugins.end()) {
             warnPlugins << "Skipping duplicated plugin, id:" << idFromPlugin(*it)
                         << "version:" << versionFromPlugin(*it) << "filename:" << it->fileName();
-            plugins.erase(std::next(it));
+            /**
+             * Erasing an element in QList in Qt5 may invalidate the existing
+             * iterator, so we should derive the new position from the iterator
+             * returned by erase() method
+             */
+            it = std::prev(plugins.erase(std::next(it)));
         }
     }
 

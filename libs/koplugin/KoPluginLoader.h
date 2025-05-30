@@ -104,8 +104,41 @@ public:
      */
     void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0, bool cache = true);
 
+    /**
+     * Load a single plugin from the plugins directory
+     *
+     * One can pass a set of \p predicates that should be satisfied for the plugin to
+     * be selected. The loader will compare metadata of the plugin against those
+     * predicates and choose only the one satisfying **all** of them.
+     *
+     * If multiple plugins are found, then the one with highest version number is used.
+     * If two plugins with the same maximum version number exist, then a random one is
+     * selected.
+     *
+     * Usage:
+     *        \code{.cpp}
+     *
+     *        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
+     *            std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
+     *            "Krita/PlatformPlugin");
+     *
+     *        if (factory) {
+     *            interface = factory->create<KisExtendedModifiersMapperPluginInterface>();
+     *        }
+     *
+     *        \endcode
+     *
+     */
     KPluginFactory* loadSinglePlugin(const std::vector<std::pair<QString, QString>> &predicates, const QString & serviceType);
+
+    /*
+     * A conveniency override for \ref loadSinglePlugin() that accepts only one predicate
+     */
     KPluginFactory* loadSinglePlugin(const std::pair<QString, QString> &predicates, const QString & serviceType);
+
+    /*
+     * A conveniency override for \ref loadSinglePlugin() that checks of Id of the plugin
+     */
     KPluginFactory* loadSinglePlugin(const QString &id, const QString & serviceType);
 
 public:

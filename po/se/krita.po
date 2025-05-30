@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-17 01:58+0000\n"
+"POT-Creation-Date: 2025-05-29 02:03+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -16372,7 +16372,7 @@ msgstr "%1-molssaeavttut"
 msgid "Active tool: %1"
 msgstr ""
 
-#: libs/flake/svg/SvgParser.cpp:1857
+#: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -19988,30 +19988,30 @@ msgid "Character Variant %1"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1614
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1616
+#: libs/flake/text/KoSvgTextShape.cpp:1624
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1622
 #, kde-format
 msgid "SVG Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1645
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -34196,8 +34196,8 @@ msgstr ""
 #: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
-"File %1 is missing in %2 and is broken. Please try to save again in a "
-"different location."
+"Component %1 is missing in %2. Please try to save again in a different "
+"location."
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:302
@@ -43683,9 +43683,15 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
 #, kde-format
 msgid "Text Properties"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#, kde-format
+msgctxt "@title:window"
+msgid "Text Property Configuration"
 msgstr ""
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12

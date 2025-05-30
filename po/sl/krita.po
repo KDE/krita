@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 02:03+0000\n"
-"PO-Revision-Date: 2025-05-27 06:45+0200\n"
+"PO-Revision-Date: 2025-05-29 06:16+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -34979,16 +34979,11 @@ msgstr ""
 "drugo mesto."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, fuzzy, kde-format
-#| msgid ""
-#| "File %1 is missing in %2 and is broken. Please try to save again in a "
-#| "different location."
+#, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
 "location."
-msgstr ""
-"Datoteka %1 manjka v %2 in je okvarjena. Poskusite jo znova shraniti na "
-"drugo mesto."
+msgstr "Datoteka %1 manjka v %2. Poskusite jo znova shraniti na drugo mesto."
 
 #: libs/ui/KisImportExportManager.cpp:302
 #, kde-format

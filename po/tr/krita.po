@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 02:03+0000\n"
-"PO-Revision-Date: 2025-05-27 13:43+0300\n"
+"PO-Revision-Date: 2025-05-29 21:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34982,16 +34982,13 @@ msgstr ""
 "deneyin."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, fuzzy, kde-format
-#| msgid ""
-#| "File %1 is missing in %2 and is broken. Please try to save again in a "
-#| "different location."
+#, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
 "location."
 msgstr ""
-"%1 dosyası %2 içinde kayıp ve bozulmuş. Lütfen başka bir konuma yeniden "
-"kaydetmeyi deneyin."
+"%2 içinde %1 bileşeni kayıp. Lütfen başka bir konuma yeniden kaydetmeyi "
+"deneyin."
 
 #: libs/ui/KisImportExportManager.cpp:302
 #, kde-format

@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 02:03+0000\n"
-"PO-Revision-Date: 2025-05-27 18:20+0200\n"
+"PO-Revision-Date: 2025-05-29 10:17+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -35147,16 +35147,13 @@ msgstr ""
 "andere locatie."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, fuzzy, kde-format
-#| msgid ""
-#| "File %1 is missing in %2 and is broken. Please try to save again in a "
-#| "different location."
+#, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
 "location."
 msgstr ""
-"Bestand %1 ontbreekt in %2 en is gebroken. Probeer opnieuw op te slaan in "
-"een andere locatie."
+"Component %1 ontbreekt in %2. Probeer opnieuw op te slaan op een andere "
+"locatie."
 
 #: libs/ui/KisImportExportManager.cpp:302
 #, kde-format

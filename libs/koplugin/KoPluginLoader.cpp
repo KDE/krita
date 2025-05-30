@@ -77,10 +77,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         Q_FOREACH (const KoJsonTrader::Plugin &loader, offers) {
             QJsonObject json = loader.metaData().value("MetaData").toObject();
-            if (json.contains("KPlugin")) {
-                json = json.value("KPlugin").toObject();
-            }
-            const QString pluginName = json.value("Id").toString();
+                        const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
                 qWarning() << "Loading plugin" << loader.fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
@@ -130,8 +127,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         if (plugin) {
             QJsonObject json = loader.metaData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
-            const QString pluginName = json.value("Id").toString();
+                        const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
             dbgPlugins << "\tLoaded plugin" << loader.fileName() << owner;
             if (!owner) {

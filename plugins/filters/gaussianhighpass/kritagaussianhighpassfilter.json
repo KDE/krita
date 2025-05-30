@@ -1,5 +1,5 @@
 {
-    "Id": "Edge Detection Filter",
+    "Id": "Gaussian High Pass Filter",
     "Type": "Service",
     "X-KDE-Library": "kritagaussianhighpass",
     "X-KDE-ServiceTypes": [

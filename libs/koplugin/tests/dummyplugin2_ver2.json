@@ -1,0 +1,10 @@
+{
+    "Id": "dummyplugin2",
+    "Type": "Service",
+    "X-KDE-Library": "dummyplugin",
+    "X-KDE-PluginInfo-Name": "DummyPlugin",
+    "X-KDE-ServiceTypes": [
+        "Krita/DummyPlugin"
+    ],
+    "X-Krita-Version": "2"
+}

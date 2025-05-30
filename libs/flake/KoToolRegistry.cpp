@@ -30,7 +30,6 @@ void KoToolRegistry::init()
 {
     KoPluginLoader::PluginsConfig config;
     config.group = "krita";
-    config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      config);

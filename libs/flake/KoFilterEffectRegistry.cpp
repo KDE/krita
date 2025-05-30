@@ -24,7 +24,7 @@ KoFilterEffectRegistry::KoFilterEffectRegistry()
 void KoFilterEffectRegistry::init()
 {
     KoPluginLoader::PluginsConfig config;
-    config.whiteList = "FilterEffectPlugins";
+    config.group = "krita";
     config.blacklist = "FilterEffectPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/FilterEffect"),
                                      config);

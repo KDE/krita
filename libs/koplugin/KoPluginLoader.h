@@ -62,7 +62,7 @@ public:
      * stating explicitly which plugins are wanted.
      */
     struct PluginsConfig {
-        PluginsConfig() : group(0), whiteList(0), blacklist(0) {}
+        PluginsConfig() : group(nullptr), blacklist(nullptr) {}
         /**
          * The properties are retrieved from the config using the following construct;
          * /code
@@ -70,14 +70,13 @@ public:
          * /endcode
          * For most cases you can pass the string "krita" into this variable.
          */
-        const char * group;
-        /// This contains the variable name for the list of plugins (by library name) the user wants to load
-        const char * whiteList;
+        const char * group {nullptr };
         /// This contains the variable name for the list of plugins (by library name) that will not be loaded
-        const char * blacklist;
-        /// A registry can state it wants to load a default set of plugins instead of all plugins
-        /// when the application starts the first time.  Append all such plugin (library) names to this list.
-        QStringList defaults;
+        const char * blacklist {nullptr};
+
+        inline bool isValid() const {
+            return group && blacklist;
+        }
     };
 
     ~KoPluginLoader() override;
@@ -89,9 +88,8 @@ public:
     static KoPluginLoader * instance();
 
     /**
-     * Load all plugins that conform to the versiontype and versionstring,
-     * for instance:
-     * KoPluginLoader::instance()->load("Krita/Flake", "([X-Flake-PluginVersion] == 28)");
+     * Load all plugins that conform to the versiontype, for instance:
+     * KoPluginLoader::instance()->load("Krita/Flake");
      * This method allows you to optionally limit the plugins that are loaded by version, but also
      * using a user configurable set of config options.
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the

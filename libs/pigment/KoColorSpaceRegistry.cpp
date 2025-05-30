@@ -180,13 +180,11 @@ void KoColorSpaceRegistry::init()
     }
 
     KoPluginLoader::PluginsConfig config;
-    config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
     config.group = "krita";
     KoPluginLoader::instance()->load("Krita/ColorSpace", config);
 
     KoPluginLoader::PluginsConfig configExtensions;
-    configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
     configExtensions.group = "krita";
     KoPluginLoader::instance()->load("Krita/ColorSpaceExtension", configExtensions);

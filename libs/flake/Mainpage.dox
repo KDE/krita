@@ -63,8 +63,7 @@ ServiceTypes=Krita/Shape
 Type=Service
 X-KDE-PluginInfo-Name=myflakeshapes
 X-KDE-Library=myflakeshapesplugin
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-Krita-Version=27
 @endverbatim
  *
  */

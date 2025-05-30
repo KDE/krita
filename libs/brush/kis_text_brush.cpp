@@ -294,6 +294,11 @@ void KisTextBrush::updateBrush()
 
     if (brushType() == PIPE_MASK) {
         m_brushesPipe->setText(m_text, m_font);
+        if (m_text.isEmpty()) {
+            // Dummy brushtip to avoid a crash...
+            setBrushTipImage(KisTextBrushesPipe::renderChar(m_text, m_font));
+            return;
+        }
         setBrushTipImage(m_brushesPipe->firstBrush()->brushTipImage());
     }
     else { /* if (brushType() == MASK)*/

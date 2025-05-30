@@ -97,13 +97,12 @@ public:
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
      * application config file.  New plugins found since last start will be automatically loaded.
      * @param serviceType The string used to identify the plugins.
-     * @param versionString A string match that allows you to check for a specific version
      * @param config when passing a valid config only the wanted plugins are actually loaded
      * #param owner if 0, the plugin will be deleted after instantiation, if not, the given qobject will own the plugin in its qobject hierarchy
      * @param cache: if true, the plugin will only be loaded once
      * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0, bool cache = true);
+    void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0, bool cache = true);
 
     KPluginFactory* loadSinglePlugin(const std::vector<std::pair<QString, QString>> &predicates, const QString & serviceType);
     KPluginFactory* loadSinglePlugin(const std::pair<QString, QString> &predicates, const QString & serviceType);

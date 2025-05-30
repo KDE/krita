@@ -27,7 +27,6 @@ void KoFilterEffectRegistry::init()
     config.whiteList = "FilterEffectPlugins";
     config.blacklist = "FilterEffectPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/FilterEffect"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 }
 

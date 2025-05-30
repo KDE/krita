@@ -29,7 +29,6 @@ void KoDockRegistry::init()
     config.blacklist = "DockerPluginsDisabled";
     config.group = "krita";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 }
 

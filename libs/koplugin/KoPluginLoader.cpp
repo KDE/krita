@@ -44,7 +44,7 @@ KoPluginLoader* KoPluginLoader::instance()
     return pluginLoaderInstance();
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner, bool cache)
+void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &config, QObject* owner, bool cache)
 {
 
     // Don't load the same plugins again
@@ -52,10 +52,6 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         return;
     }
     d->loadedServiceTypes << serviceType;
-    QString query = QString::fromLatin1("(Type == 'Service')");
-    if (!versionString.isEmpty()) {
-        query += QString::fromLatin1(" and (%1)").arg(versionString);
-    }
 
     QList<KoJsonTrader::Plugin> offers = KoJsonTrader::instance()->query(serviceType, QString());
 
@@ -77,7 +73,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         Q_FOREACH (const KoJsonTrader::Plugin &loader, offers) {
             QJsonObject json = loader.metaData().value("MetaData").toObject();
-                        const QString pluginName = json.value("Id").toString();
+            const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
                 qWarning() << "Loading plugin" << loader.fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
@@ -127,7 +123,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         if (plugin) {
             QJsonObject json = loader.metaData().value("MetaData").toObject();
-                        const QString pluginName = json.value("Id").toString();
+            const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
             dbgPlugins << "\tLoaded plugin" << loader.fileName() << owner;
             if (!owner) {

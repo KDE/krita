@@ -42,7 +42,7 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
 
 void KisPaintOpRegistry::initRegistry()
 {
-    KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
+    KoPluginLoader::instance()->load("Krita/Paintop");
 }
 
 KisPaintOpRegistry* KisPaintOpRegistry::instance()

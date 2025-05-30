@@ -29,7 +29,7 @@ KisMetadataBackendRegistry::~KisMetadataBackendRegistry()
 
 void KisMetadataBackendRegistry::init()
 {
-    KoPluginLoader::instance()->load("Krita/Metadata", "(Type == 'Service') and ([X-Krita-Version] == 28)");
+    KoPluginLoader::instance()->load("Krita/Metadata");
 }
 
 KisMetadataBackendRegistry *KisMetadataBackendRegistry::instance()

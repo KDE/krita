@@ -33,7 +33,6 @@ void KoToolRegistry::init()
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 
     // register generic tools

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-29 02:03+0000\n"
+"POT-Creation-Date: 2025-05-31 02:01+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12839,6 +12839,38 @@ msgctxt "action"
 msgid "Reference Image from Visible"
 msgstr "创建参考图像 (来自可见图层)"
 
+#. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3668
+#, fuzzy, kde-format
+#| msgid "Nearest Colors"
+msgctxt "action"
+msgid "Force Palette Colors"
+msgstr "最接近颜色"
+
+#. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3669 krita/krita.action:3670
+#, fuzzy, kde-format
+#| msgid ""
+#| "Enforce palette colors: always select the nearest color from the active "
+#| "palette."
+msgctxt "action"
+msgid ""
+"Force the color selector to only select colors in the currently selected "
+"palette."
+msgstr "强制拾取色板颜色：始终拾取与当前色板最接近的颜色。"
+
+#. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3671
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "Color Palette"
+msgctxt "action"
+msgid "Force Palette"
+msgstr "色板"
+
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:32
@@ -20283,7 +20315,7 @@ msgstr "缩小(&M)"
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:65
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
@@ -21202,8 +21234,8 @@ msgid "Processing"
 msgstr "正在处理"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1390
-#: libs/ui/KisMainWindow.cpp:1760 libs/ui/KisMainWindow.cpp:1773
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1389
+#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -21938,8 +21970,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE 图像"
 
-#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2131
-#: libs/ui/KisMainWindow.cpp:2210
+#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2130
+#: libs/ui/KisMainWindow.cpp:2209
 #, kde-format
 msgid "Import frames"
 msgstr "导入帧"
@@ -23280,11 +23312,11 @@ msgstr "本地资源"
 #: libs/ui/KisApplication.cpp:1185 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
 #: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
-#: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1042
-#: libs/ui/KisMainWindow.cpp:1171 libs/ui/KisMainWindow.cpp:1268
-#: libs/ui/KisMainWindow.cpp:1991 libs/ui/KisMainWindow.cpp:2000
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2198
-#: libs/ui/KisMainWindow.cpp:2217 libs/ui/KisMainWindow.cpp:2842
+#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1170 libs/ui/KisMainWindow.cpp:1267
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2216 libs/ui/KisMainWindow.cpp:2841
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
@@ -23827,7 +23859,7 @@ msgid "Delete resource"
 msgstr "删除资源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2638
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -24297,7 +24329,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "渲染动画帧失败。输出文件不完整。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2239
+#: libs/ui/KisMainWindow.cpp:2238
 #, kde-format
 msgid "Render Animation"
 msgstr "导出动画"
@@ -25585,7 +25617,7 @@ msgstr "新建文档选项"
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:98
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:73
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:186
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:187
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:38
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:44
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
@@ -25624,7 +25656,7 @@ msgstr "宽度："
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:74
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:190
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:191
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:39
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:45
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
@@ -26343,7 +26375,7 @@ msgid "Numerical"
 msgstr "按数字顺序"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1136
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Import Images"
 msgstr "导入图像"
@@ -26460,7 +26492,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "输入新样式名称"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2650
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -29650,7 +29682,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1492
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:182
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
 msgid "DPI:"
 msgstr "DPI："
@@ -30456,7 +30488,7 @@ msgstr "当前笔刷预设"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1017
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30464,7 +30496,7 @@ msgstr "当前笔刷预设"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:25
 #, kde-format
 msgid "Save"
 msgstr "保存"
@@ -32839,24 +32871,24 @@ msgstr "正在等待操作完成..."
 msgid "New configuration %1"
 msgstr "新建配置 %1"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:287
+#: libs/ui/kis_canvas_controls_manager.cpp:292
 #, kde-format
 msgid "Brush Opacity: %1%"
 msgstr "笔刷不透明度：%1%"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:319
+#: libs/ui/kis_canvas_controls_manager.cpp:324
 #, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
 msgstr "流量：%1%"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:347
+#: libs/ui/kis_canvas_controls_manager.cpp:352
 #, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
 msgstr "硬度：%1"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:375
+#: libs/ui/kis_canvas_controls_manager.cpp:380
 #, kde-format
 msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
@@ -34812,34 +34844,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "工作区(&K)"
 
-#: libs/ui/KisMainWindow.cpp:588
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:318
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "显示%1工具栏"
 
-#: libs/ui/KisMainWindow.cpp:590
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隐藏%1工具栏"
 
-#: libs/ui/KisMainWindow.cpp:1014
+#: libs/ui/KisMainWindow.cpp:1013
 #, kde-format
 msgid "Save as %1"
 msgstr "另存为 %1"
 
-#: libs/ui/KisMainWindow.cpp:1042
+#: libs/ui/KisMainWindow.cpp:1041
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "文件 %1 不存在。"
 
-#: libs/ui/KisMainWindow.cpp:1136
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Open Images"
 msgstr "打开图像"
 
-#: libs/ui/KisMainWindow.cpp:1269
+#: libs/ui/KisMainWindow.cpp:1268
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -34851,44 +34883,44 @@ msgstr ""
 "\n"
 "为保险起见，请将图像另存到不会覆盖原始图像的位置。"
 
-#: libs/ui/KisMainWindow.cpp:1325
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Exporting"
 msgstr "正在导出"
 
-#: libs/ui/KisMainWindow.cpp:1325
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Saving As"
 msgstr "正在保存为"
 
-#: libs/ui/KisMainWindow.cpp:1739
+#: libs/ui/KisMainWindow.cpp:1738
 #, kde-format
 msgid "Create new document"
 msgstr "新建图像"
 
-#: libs/ui/KisMainWindow.cpp:1763
+#: libs/ui/KisMainWindow.cpp:1762
 #, kde-format
 msgid "Custom Document"
 msgstr "新建图像 - 自定义"
 
-#: libs/ui/KisMainWindow.cpp:1775
+#: libs/ui/KisMainWindow.cpp:1774
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "新建图像 - 剪贴板"
 
-#: libs/ui/KisMainWindow.cpp:1960
+#: libs/ui/KisMainWindow.cpp:1959
 #, kde-format
 msgid "Layers/Masks"
 msgstr "图层/蒙版"
 
-#: libs/ui/KisMainWindow.cpp:1986
+#: libs/ui/KisMainWindow.cpp:1985
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "尚未启用任何资源包"
 
-#: libs/ui/KisMainWindow.cpp:1990
+#: libs/ui/KisMainWindow.cpp:1989
 #, kde-format
 msgid ""
 "\n"
@@ -34898,7 +34930,7 @@ msgstr ""
 "\n"
 "没有可用的笔刷预设。请在继续操作之前重新启用一些资源包。\n"
 
-#: libs/ui/KisMainWindow.cpp:2000
+#: libs/ui/KisMainWindow.cpp:1999
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -34909,7 +34941,7 @@ msgstr ""
 "\n"
 "仅本地资源可用。"
 
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -34918,59 +34950,59 @@ msgstr ""
 "无法完成导入动画：\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2198
+#: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "创建新图像失败。动画导入已中止。"
 
-#: libs/ui/KisMainWindow.cpp:2630
+#: libs/ui/KisMainWindow.cpp:2629
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "导入工作区(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2645
+#: libs/ui/KisMainWindow.cpp:2644
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新建工作区(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2648
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新建工作区..."
 
-#: libs/ui/KisMainWindow.cpp:2693
+#: libs/ui/KisMainWindow.cpp:2692
 #, kde-format
 msgid "&%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2696
+#: libs/ui/KisMainWindow.cpp:2695
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2865
+#: libs/ui/KisMainWindow.cpp:2864
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "未安装 Krita 的 LittleCMS 色彩管理插件。Krita 将立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:2881
+#: libs/ui/KisMainWindow.cpp:2880
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安装错误"
 
-#: libs/ui/KisMainWindow.cpp:2991
+#: libs/ui/KisMainWindow.cpp:2990
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "界面颜色(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3050
+#: libs/ui/KisMainWindow.cpp:3049
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "<<--- 空白占位符 (自动伸展) --->>"
@@ -39512,12 +39544,12 @@ msgstr "减少(&D)"
 msgid "Toggle Preview"
 msgstr "打开/关闭预览图"
 
-#: libs/widgetutils/KoFileDialog.cpp:260
+#: libs/widgetutils/KoFileDialog.cpp:270
 #, kde-format
 msgid "Save As:"
 msgstr "另存为："
 
-#: libs/widgetutils/KoFileDialog.cpp:343
+#: libs/widgetutils/KoFileDialog.cpp:353
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -39527,7 +39559,7 @@ msgstr ""
 "选中的文件名没有包含 Krita 能解析的扩展名。\n"
 "请确保文件名以“.%1”结尾。"
 
-#: libs/widgetutils/KoFileDialog.cpp:529
+#: libs/widgetutils/KoFileDialog.cpp:539
 #, kde-format
 msgid "All supported formats"
 msgstr "所有支持的格式"
@@ -43078,7 +43110,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "导出缩时视频..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:92
+#: plugins/dockers/recorder/recorder_export.cpp:93
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -43086,93 +43118,93 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[没有找到]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:93
+#: plugins/dockers/recorder/recorder_export.cpp:94
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
 "its location manually"
 msgstr "无法检测到 FFmpeg 可执行文件位置。请安装该软件包，或手动选择它的位置。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:176
+#: plugins/dockers/recorder/recorder_export.cpp:177
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "中止编码缩时视频吗？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:247
+#: plugins/dockers/recorder/recorder_export.cpp:248
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "正在启动 FFmpeg..."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:372
+#: plugins/dockers/recorder/recorder_export.cpp:373
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "导出"
 
-#: plugins/dockers/recorder/recorder_export.cpp:387
+#: plugins/dockers/recorder/recorder_export.cpp:388
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "没有可以导出的帧"
 
-#: plugins/dockers/recorder/recorder_export.cpp:391
+#: plugins/dockers/recorder/recorder_export.cpp:392
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "录像信息"
 
-#: plugins/dockers/recorder/recorder_export.cpp:394
+#: plugins/dockers/recorder/recorder_export.cpp:395
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "像素"
 
-#: plugins/dockers/recorder/recorder_export.cpp:396
+#: plugins/dockers/recorder/recorder_export.cpp:397
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "帧"
 
-#: plugins/dockers/recorder/recorder_export.cpp:442
+#: plugins/dockers/recorder/recorder_export.cpp:443
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "没有可供浏览的帧。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:553
+#: plugins/dockers/recorder/recorder_export.cpp:549
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "选择 FFmpeg 可执行程序位置"
 
-#: plugins/dockers/recorder/recorder_export.cpp:600
+#: plugins/dockers/recorder/recorder_export.cpp:594
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "导出缩时视频为"
 
-#: plugins/dockers/recorder/recorder_export.cpp:616
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "该视频文件已经存在。您想要覆盖它吗？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:621
+#: plugins/dockers/recorder/recorder_export.cpp:618
 #, kde-format
 msgid "No frames to export."
 msgstr "没有可供导出的帧。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:648
+#: plugins/dockers/recorder/recorder_export.cpp:645
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "正在编码缩时视频..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:663
+#: plugins/dockers/recorder/recorder_export.cpp:660
 #, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "导出失败。FFmpeg 错误消息："
 
-#: plugins/dockers/recorder/recorder_export.cpp:684
+#: plugins/dockers/recorder/recorder_export.cpp:681
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -43186,7 +43218,7 @@ msgstr ""
 "您将无法再次导出它的缩时视频 (已经导出的视频会被保留)。\n"
 "您确定要删除它吗？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:691
+#: plugins/dockers/recorder/recorder_export.cpp:688
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -43794,19 +43826,19 @@ msgstr "录像工具"
 msgid "Your system is not efficient enough for this feature"
 msgstr "本机性能不足，无法使用此功能"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:586
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "选择录像数据保存位置"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:707
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:713
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "录像工具"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:708
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -43815,13 +43847,13 @@ msgstr ""
 "由于无法写入帧，录像工具已停止录制。请检查并确保存储设备有足够的可用空间，然"
 "后重新开始录制。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:714
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr "Krita 无法停止录像。请尝试重启 Krita。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -43832,7 +43864,7 @@ msgstr ""
 "低性能警告。录像程序无法在实时捕获模式下及时写入所有帧。\n"
 "请尝试降低 FFmpeg 导出的输出帧速率，或者降低画布加速设置中的缩放算法。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:721
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -44392,7 +44424,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "OpenType 功能标签"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
 #, kde-format
 msgid "Text Properties"
 msgstr "文字属性"
@@ -57870,7 +57902,7 @@ msgid "Density"
 msgstr "密度"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:340
 #, kde-format
 msgid "Sketch"
 msgstr "草图"
@@ -58628,26 +58660,26 @@ msgid "Set Margins from Active Selection"
 msgstr "按活动选区设置页面边距"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:241
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:212
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:241
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:213
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:242
 msgid "Left:"
 msgstr "左侧："
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:245
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:215
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:244
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:216
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:245
 msgid "Top:"
 msgstr "顶端："
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:218
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:247
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:219
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:248
 msgid "Right:"
 msgstr "右侧："
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:253
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:221
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:250
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:222
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:251
 msgid "Bottom:"
 msgstr "底端："
 
@@ -59389,11 +59421,11 @@ msgstr "请选择 JSON 漫画配置文件。"
 msgid "JSON files"
 msgstr "JSON 文件"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
 msgid "Config cannot be used"
 msgstr "配置无法使用"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -59402,55 +59434,57 @@ msgstr ""
 "Krita 没有此文件夹的写入权限，因此无法创建新文件。请配置文件夹的访问权限或者"
 "把漫画项目移动到一个可以写入的文件夹。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:385
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:387
 msgid "Loading Pages..."
 msgstr "正在加载页面..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Krita files"
 msgstr "Krita 文件"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
 msgid "Which existing pages to add?"
 msgstr "要添加哪张已有页面？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:598
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:617
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:601
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:622
 msgid "Where are the templates located?"
 msgstr "模板位于哪个文件夹？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:641
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:648
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
 msgid "Where should the pages go?"
 msgstr "页面应该保存在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
-msgid "Which image should be the basis the new page?"
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#, fuzzy
+#| msgid "Which image should be the basis the new page?"
+msgid "Which image should be the basis for the new page?"
 msgstr "哪张图像应该成为新页面的基础？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
 msgid "Export success"
 msgstr "导出成功"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
 msgid "The files have been written to the export folder."
 msgstr "文件已写入导出文件夹。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:890
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
 msgid "Resize all Pages"
 msgstr "调整所有页面的大小"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
 msgid "Resizing pages..."
 msgstr "正在调整页面大小..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:902
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:913
 msgid "Resizing Pages"
 msgstr "正在调整页面大小"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:916
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:927
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -59461,11 +59495,11 @@ msgstr ""
 "已用时间：{passedString}\n"
 "预计时间：{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
 msgid "Scraping success"
 msgstr "清除成功"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "已将 POT 文件写入：{file}"
@@ -59688,11 +59722,11 @@ msgstr "导入模板"
 msgid "Which files should be added to the template folder?"
 msgstr "应将哪些文件添加到模板文件夹中？"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:140
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
 msgid "Create new Template"
 msgstr "新建模板"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:146
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:147
 msgid ""
 "This allows you to make a template document with guides.\n"
 "The width and height are the size of the live-area, the safe area is the "
@@ -59703,23 +59737,23 @@ msgstr ""
 "宽度和高度用于定义内容区域，安全区域是内容区域减去页边距，完整图像是内容区域"
 "加上出血区域。"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:166
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:167
 msgid "Select background color"
 msgstr "选择背景色"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:224
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:225
 msgid "Margins"
 msgstr "页边距"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:254
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:255
 msgid "Bleeds"
 msgstr "出血"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:307
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:308
 msgid "Background"
 msgstr "背景"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:326
 msgid "Creating template"
 msgstr "正在创建模板"
 
@@ -60364,12 +60398,12 @@ msgstr "编辑色板数据"
 msgid "Palette Data"
 msgstr "色板数据"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:29
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:30
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
 msgid "Export Successful"
 msgstr "导出成功"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:32
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
 #, python-brace-format
 msgid "{input} has been exported to {output}."
@@ -60381,7 +60415,7 @@ msgid "Photobash Images"
 msgstr "罩染画法图像调用面板"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:144
-#: plugins/python/photobash_images/photobash_images_docker.py:474
+#: plugins/python/photobash_images/photobash_images_docker.py:472
 msgid "Change References Folder"
 msgstr "更改参考图像文件夹"
 
@@ -60396,12 +60430,12 @@ msgstr "图像缩放：{0}%"
 msgid "Page: {0}/{1}"
 msgstr "页面：{0}/{1}"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:463
+#: plugins/python/photobash_images/photobash_images_docker.py:460
 msgid "Change Directory for Images"
 msgstr "更改图像目录"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:472
+#: plugins/python/photobash_images/photobash_images_docker.py:470
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, kde-format
 msgid "Set References Folder"
@@ -60562,14 +60596,18 @@ msgid "Open"
 msgstr "打开"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
-msgid "Python Files (*.py)"
-msgstr "Python 文件 (*.py)"
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#, fuzzy
+#| msgid "Save Python File"
+msgid "Python Files"
+msgstr "保存 Python 文件"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:50
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"
 msgstr "无效文件"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Open files with .py extension"
 msgstr "打开 .py 扩展名的文件"
 
@@ -60603,17 +60641,12 @@ msgstr "执行"
 msgid "Run Ctrl+R"
 msgstr "运行 Ctrl+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:36
 msgid "Save Python File"
 msgstr "保存 Python 文件"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
-msgid "Python File (*.py)"
-msgstr "Python 文件 (*.py)"
-
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:25
 msgid "Save As"
 msgstr "另存为"
 
@@ -60775,7 +60808,7 @@ msgid ""
 msgstr "首先在下面列表选中一个笔刷预设，然后点击上方快捷键槽位。"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:60
-#: plugins/python/tenscripts/uitenscripts.py:53
+#: plugins/python/tenscripts/uitenscripts.py:52
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -60876,16 +60909,16 @@ msgstr "执行脚本 {num}"
 msgid "Script {0} executed"
 msgstr "脚本 {0} 执行完毕"
 
-#: plugins/python/tenscripts/uitenscripts.py:73
+#: plugins/python/tenscripts/uitenscripts.py:72
 msgid "Selected path"
 msgstr "选定路径"
 
-#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/tenscripts/uitenscripts.py:73
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 msgid "Select the script"
 msgstr "选择脚本"
 
-#: plugins/python/tenscripts/uitenscripts.py:106
+#: plugins/python/tenscripts/uitenscripts.py:105
 msgid "Python files (*.py)"
 msgstr "Python 文件 (*.py)"
 
@@ -61017,16 +61050,12 @@ msgstr "底栏"
 msgid "Inline"
 msgstr "同行显示"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:460
-msgid "Icon files "
-msgstr "图标文件 "
-
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:516
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:549
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:511
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:544
 msgid "Color info: "
 msgstr "颜色信息："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:586
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:581
 msgid "Script files "
 msgstr "脚本文件 "
 
@@ -65213,3 +65242,12 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Python Files (*.py)"
+#~ msgstr "Python 文件 (*.py)"
+
+#~ msgid "Python File (*.py)"
+#~ msgstr "Python 文件 (*.py)"
+
+#~ msgid "Icon files "
+#~ msgstr "图标文件 "

@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-29 02:03+0000\n"
+"POT-Creation-Date: 2025-05-31 02:01+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -13242,6 +13242,35 @@ msgctxt "action"
 msgid "Reference Image from Visible"
 msgstr "Hivatkozási képek"
 
+#. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3668
+#, fuzzy, kde-format
+#| msgid "Named Colors"
+msgctxt "action"
+msgid "Force Palette Colors"
+msgstr "Nevesített színek"
+
+#. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3669 krita/krita.action:3670
+#, kde-format
+msgctxt "action"
+msgid ""
+"Force the color selector to only select colors in the currently selected "
+"palette."
+msgstr ""
+
+#. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3671
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "Color Palette"
+msgctxt "action"
+msgid "Force Palette"
+msgstr "Színpaletta"
+
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:32
@@ -20882,7 +20911,7 @@ msgstr "Ki&csinyítés"
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:65
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
@@ -21866,8 +21895,8 @@ msgid "Processing"
 msgstr "Feldolgozás"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1390
-#: libs/ui/KisMainWindow.cpp:1760 libs/ui/KisMainWindow.cpp:1773
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1389
+#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22642,8 +22671,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "A kép átnevezése"
 
-#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2131
-#: libs/ui/KisMainWindow.cpp:2210
+#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2130
+#: libs/ui/KisMainWindow.cpp:2209
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Kép importálása"
@@ -24114,11 +24143,11 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/KisApplication.cpp:1185 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
 #: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
-#: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1042
-#: libs/ui/KisMainWindow.cpp:1171 libs/ui/KisMainWindow.cpp:1268
-#: libs/ui/KisMainWindow.cpp:1991 libs/ui/KisMainWindow.cpp:2000
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2198
-#: libs/ui/KisMainWindow.cpp:2217 libs/ui/KisMainWindow.cpp:2842
+#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1170 libs/ui/KisMainWindow.cpp:1267
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2216 libs/ui/KisMainWindow.cpp:2841
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
@@ -24680,7 +24709,7 @@ msgid "Delete resource"
 msgstr "Erőforrás törlése"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2638
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -25163,7 +25192,7 @@ msgstr ""
 "Az animációs képkocka renderelése sikertelen. A kimeneti fájlok hiányosak."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2239
+#: libs/ui/KisMainWindow.cpp:2238
 #, kde-format
 msgid "Render Animation"
 msgstr "Animáció renderelése"
@@ -26486,7 +26515,7 @@ msgstr "Dokumentum"
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:98
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:73
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:186
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:187
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:38
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:44
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
@@ -26525,7 +26554,7 @@ msgstr "Szélesség:"
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:74
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:190
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:191
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:39
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:45
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
@@ -27217,7 +27246,7 @@ msgid "Numerical"
 msgstr "Függőleges"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1136
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Import Images"
 msgstr "Képek importálása"
@@ -27335,7 +27364,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Adja meg az új stílus nevét"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2650
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30607,7 +30636,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1492
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:182
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
 msgid "DPI:"
 msgstr ""
@@ -31409,7 +31438,7 @@ msgstr "Jelenlegi előre beállított"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1017
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -31417,7 +31446,7 @@ msgstr "Jelenlegi előre beállított"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:25
 #, kde-format
 msgid "Save"
 msgstr "Mentés"
@@ -33824,27 +33853,27 @@ msgstr "Képhelyreállító szűrő alkalmazása..."
 msgid "New configuration %1"
 msgstr "Új beállítás %1"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:287
+#: libs/ui/kis_canvas_controls_manager.cpp:292
 #, fuzzy, kde-format
 #| msgid "Opacity: "
 msgid "Brush Opacity: %1%"
 msgstr "Átlátszatlanság: "
 
-#: libs/ui/kis_canvas_controls_manager.cpp:319
+#: libs/ui/kis_canvas_controls_manager.cpp:324
 #, fuzzy, kde-format
 #| msgid "Flow:"
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
 msgstr "Folyam:"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:347
+#: libs/ui/kis_canvas_controls_manager.cpp:352
 #, fuzzy, kde-format
 #| msgid "Caramel"
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
 msgstr "Karamell"
 
-#: libs/ui/kis_canvas_controls_manager.cpp:375
+#: libs/ui/kis_canvas_controls_manager.cpp:380
 #, fuzzy, kde-format
 #| msgid "Scatter"
 msgctxt "Brush Option Scatter"
@@ -35826,34 +35855,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Mun&katerület"
 
-#: libs/ui/KisMainWindow.cpp:588
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:318
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Alapréteg megjelenítése"
 
-#: libs/ui/KisMainWindow.cpp:590
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gördítősávok elrejtése"
 
-#: libs/ui/KisMainWindow.cpp:1014
+#: libs/ui/KisMainWindow.cpp:1013
 #, kde-format
 msgid "Save as %1"
 msgstr "Mentés mint %1"
 
-#: libs/ui/KisMainWindow.cpp:1042
+#: libs/ui/KisMainWindow.cpp:1041
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Nem létezik %1 nevű fájl."
 
-#: libs/ui/KisMainWindow.cpp:1136
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Open Images"
 msgstr "Képek megnyitása"
 
-#: libs/ui/KisMainWindow.cpp:1269
+#: libs/ui/KisMainWindow.cpp:1268
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35862,45 +35891,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1325
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Exporting"
 msgstr "Exportálás"
 
-#: libs/ui/KisMainWindow.cpp:1325
+#: libs/ui/KisMainWindow.cpp:1324
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Mentés formátuma"
 
-#: libs/ui/KisMainWindow.cpp:1739
+#: libs/ui/KisMainWindow.cpp:1738
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Nemrég használt dokumentumok"
 
-#: libs/ui/KisMainWindow.cpp:1763
+#: libs/ui/KisMainWindow.cpp:1762
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Egyéni színátmenet"
 
-#: libs/ui/KisMainWindow.cpp:1775
+#: libs/ui/KisMainWindow.cpp:1774
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Létrehozás a vágólapról"
 
-#: libs/ui/KisMainWindow.cpp:1960
+#: libs/ui/KisMainWindow.cpp:1959
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Réteg/maszk mentése…"
 
-#: libs/ui/KisMainWindow.cpp:1986
+#: libs/ui/KisMainWindow.cpp:1985
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisMainWindow.cpp:1990
+#: libs/ui/KisMainWindow.cpp:1989
 #, kde-format
 msgid ""
 "\n"
@@ -35908,7 +35937,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2000
+#: libs/ui/KisMainWindow.cpp:1999
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35917,7 +35946,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35926,43 +35955,43 @@ msgstr ""
 "Nem sikerült befejezni az animáció importálását:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2198
+#: libs/ui/KisMainWindow.cpp:2197
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisMainWindow.cpp:2630
+#: libs/ui/KisMainWindow.cpp:2629
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Munkaterület &importálása…"
 
-#: libs/ui/KisMainWindow.cpp:2645
+#: libs/ui/KisMainWindow.cpp:2644
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Ú&j munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2648
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Új munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2693
+#: libs/ui/KisMainWindow.cpp:2692
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2696
+#: libs/ui/KisMainWindow.cpp:2695
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2865
+#: libs/ui/KisMainWindow.cpp:2864
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35971,19 +36000,19 @@ msgstr ""
 "A Krita LittleCMS színkezelő bővítmény nincs telepítve. A Krita most ki fog "
 "lépni."
 
-#: libs/ui/KisMainWindow.cpp:2881
+#: libs/ui/KisMainWindow.cpp:2880
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Telepítési hiba"
 
-#: libs/ui/KisMainWindow.cpp:2991
+#: libs/ui/KisMainWindow.cpp:2990
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3050
+#: libs/ui/KisMainWindow.cpp:3049
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -40560,12 +40589,12 @@ msgstr "Elmozgatás"
 msgid "Toggle Preview"
 msgstr "Előnézet"
 
-#: libs/widgetutils/KoFileDialog.cpp:260
+#: libs/widgetutils/KoFileDialog.cpp:270
 #, kde-format
 msgid "Save As:"
 msgstr "Mentés másként:"
 
-#: libs/widgetutils/KoFileDialog.cpp:343
+#: libs/widgetutils/KoFileDialog.cpp:353
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -40573,7 +40602,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:529
+#: libs/widgetutils/KoFileDialog.cpp:539
 #, kde-format
 msgid "All supported formats"
 msgstr "Minden támogatott formátum"
@@ -44265,7 +44294,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "Réteg exportálása"
 
-#: plugins/dockers/recorder/recorder_export.cpp:92
+#: plugins/dockers/recorder/recorder_export.cpp:93
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -44273,76 +44302,76 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:93
+#: plugins/dockers/recorder/recorder_export.cpp:94
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
 "its location manually"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:176
+#: plugins/dockers/recorder/recorder_export.cpp:177
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:247
+#: plugins/dockers/recorder/recorder_export.cpp:248
 #, fuzzy, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "Beállítások"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:372
+#: plugins/dockers/recorder/recorder_export.cpp:373
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, fuzzy, kde-format
 msgid "Export"
 msgstr "Exportálás"
 
-#: plugins/dockers/recorder/recorder_export.cpp:387
+#: plugins/dockers/recorder/recorder_export.cpp:388
 #, fuzzy, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Kijelölés másolása új rétegbe"
 
-#: plugins/dockers/recorder/recorder_export.cpp:391
+#: plugins/dockers/recorder/recorder_export.cpp:392
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Felvétel"
 
-#: plugins/dockers/recorder/recorder_export.cpp:394
+#: plugins/dockers/recorder/recorder_export.cpp:395
 #, fuzzy, kde-format
 #| msgid "px"
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "képpont"
 
-#: plugins/dockers/recorder/recorder_export.cpp:396
+#: plugins/dockers/recorder/recorder_export.cpp:397
 #, fuzzy, kde-format
 #| msgid "Caramel"
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "Karamell"
 
-#: plugins/dockers/recorder/recorder_export.cpp:442
+#: plugins/dockers/recorder/recorder_export.cpp:443
 #, fuzzy, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Kijelölés másolása új rétegbe"
 
-#: plugins/dockers/recorder/recorder_export.cpp:553
+#: plugins/dockers/recorder/recorder_export.cpp:549
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:600
+#: plugins/dockers/recorder/recorder_export.cpp:594
 #, fuzzy, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Összetétel exportálása"
 
-#: plugins/dockers/recorder/recorder_export.cpp:616
+#: plugins/dockers/recorder/recorder_export.cpp:613
 #, fuzzy, kde-format
 #| msgid ""
 #| "A profile with that name already exists.\n"
@@ -44352,22 +44381,22 @@ msgstr ""
 "Már létezik ilyen nevű profil.\n"
 "Felül szeretné írni?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:621
+#: plugins/dockers/recorder/recorder_export.cpp:618
 #, fuzzy, kde-format
 msgid "No frames to export."
 msgstr "Kijelölés másolása új rétegbe"
 
-#: plugins/dockers/recorder/recorder_export.cpp:648
+#: plugins/dockers/recorder/recorder_export.cpp:645
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:663
+#: plugins/dockers/recorder/recorder_export.cpp:660
 #, fuzzy, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "Kép importálása"
 
-#: plugins/dockers/recorder/recorder_export.cpp:684
+#: plugins/dockers/recorder/recorder_export.cpp:681
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -44377,7 +44406,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: plugins/dockers/recorder/recorder_export.cpp:691
+#: plugins/dockers/recorder/recorder_export.cpp:688
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:236
 #, fuzzy, kde-format
 #| msgid "Cerulean Blue"
@@ -45010,34 +45039,34 @@ msgstr "Felvétel"
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:586
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:584
 #, fuzzy, kde-format
 #| msgid "Select similar colors"
 msgid "Select a Directory for Recordings"
 msgstr "Hasonló színek kijelölése"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:707
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:713
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:705
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:711
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Felvétel"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:708
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:706
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:714
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:712
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45046,7 +45075,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:721
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:719
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45645,7 +45674,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:122
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
 #, kde-format
 msgid "Text Properties"
 msgstr "Szövegtulajdonságok"
@@ -59456,7 +59485,7 @@ msgid "Density"
 msgstr "Sűrűség"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:340
 #, kde-format
 msgid "Sketch"
 msgstr "Vázlat"
@@ -60274,26 +60303,26 @@ msgid "Set Margins from Active Selection"
 msgstr "Az aktuális kijelölés vonalvastagságának beállítása"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:241
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:212
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:241
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:213
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:242
 msgid "Left:"
 msgstr "Bal:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:245
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:215
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:244
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:216
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:245
 msgid "Top:"
 msgstr "Fent:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:218
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:247
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:219
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:248
 msgid "Right:"
 msgstr "Jobb:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:253
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:221
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:250
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:222
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:251
 #, fuzzy
 #| msgid "Bottom:"
 msgid "Bottom:"
@@ -61175,78 +61204,78 @@ msgstr ""
 msgid "JSON files"
 msgstr "&Profilok:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
 msgid "Config cannot be used"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
 "be written to."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:385
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:387
 #, fuzzy
 msgid "Loading Pages..."
 msgstr "Paletta szerkesztése..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 #, fuzzy
 #| msgid "Edit Profiles"
 msgid "Krita files"
 msgstr "Profilok szerkesztése"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
 msgid "Which existing pages to add?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:598
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:617
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:601
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:622
 #, fuzzy
 msgid "Where are the templates located?"
 msgstr "&Létrehozás"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:641
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:648
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
 #, fuzzy
 msgid "Where should the pages go?"
 msgstr "&Létrehozás"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
-msgid "Which image should be the basis the new page?"
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+msgid "Which image should be the basis for the new page?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
 #, fuzzy
 msgid "Export success"
 msgstr "Csomópont exportálása"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
 msgid "The files have been written to the export folder."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:890
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize shapes"
 msgid "Resize all Pages"
 msgstr "Alakzatok átméretezése"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
 #, fuzzy
 msgid "Resizing pages..."
 msgstr "Vászon mérete…"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:902
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:913
 #, fuzzy
 #| msgid "Facing pages"
 msgid "Resizing Pages"
 msgstr "Szemközti oldalak"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:916
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:927
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -61254,13 +61283,13 @@ msgid ""
 " Estimated:{estimated}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
 #, fuzzy
 #| msgid "Success"
 msgid "Scraping success"
 msgstr "Sikeres"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr ""
@@ -61538,12 +61567,12 @@ msgstr "Kép importálása"
 msgid "Which files should be added to the template folder?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:140
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
 #, fuzzy
 msgid "Create new Template"
 msgstr "&Létrehozás"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:146
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:147
 msgid ""
 "This allows you to make a template document with guides.\n"
 "The width and height are the size of the live-area, the safe area is the "
@@ -61551,26 +61580,26 @@ msgid ""
 "bleeds."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:166
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:167
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "Select background color"
 msgstr "Háttérszín beállítása"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:224
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:225
 msgid "Margins"
 msgstr "Szegélyek"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:254
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:255
 msgid "Bleeds"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:307
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:308
 msgid "Background"
 msgstr "Háttér"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:326
 #, fuzzy
 msgid "Creating template"
 msgstr "&Létrehozás"
@@ -62353,13 +62382,13 @@ msgstr "&Metaadatok szerkesztése…"
 msgid "Palette Data"
 msgstr "Palettakezelő"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:29
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:30
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
 #, fuzzy
 msgid "Export Successful"
 msgstr "Csomópont exportálása"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:32
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
 #, python-brace-format
 msgid "{input} has been exported to {output}."
@@ -62371,7 +62400,7 @@ msgid "Photobash Images"
 msgstr "Photobash képek"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:144
-#: plugins/python/photobash_images/photobash_images_docker.py:474
+#: plugins/python/photobash_images/photobash_images_docker.py:472
 #, fuzzy
 msgid "Change References Folder"
 msgstr "Beállítások"
@@ -62388,7 +62417,7 @@ msgstr "Minta"
 msgid "Page: {0}/{1}"
 msgstr "%1. oldal"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:463
+#: plugins/python/photobash_images/photobash_images_docker.py:460
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change rectangle"
@@ -62396,7 +62425,7 @@ msgid "Change Directory for Images"
 msgstr "Téglalap megváltoztatása"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:472
+#: plugins/python/photobash_images/photobash_images_docker.py:470
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, fuzzy, kde-format
 msgid "Set References Folder"
@@ -62571,14 +62600,18 @@ msgid "Open"
 msgstr "Megnyitás"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
-msgid "Python Files (*.py)"
-msgstr "Python fájlok (*.py)"
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#, fuzzy
+#| msgid "Save to Palette"
+msgid "Python Files"
+msgstr "Mentés a palettába"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:50
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"
 msgstr "Érvénytelen fájl"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Open files with .py extension"
 msgstr ".py kiterjesztésű fájlok megnyitása"
 
@@ -62620,19 +62653,14 @@ msgstr ""
 msgid "Run Ctrl+R"
 msgstr "Ctrl"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:36
 #, fuzzy
 #| msgid "Save to Palette"
 msgid "Save Python File"
 msgstr "Mentés a palettába"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
-msgid "Python File (*.py)"
-msgstr "Python-fájl (*.py)"
-
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:25
 msgid "Save As"
 msgstr "Mentés másként"
 
@@ -62803,7 +62831,7 @@ msgid ""
 msgstr ""
 
 #: plugins/python/tenbrushes/uitenbrushes.py:60
-#: plugins/python/tenscripts/uitenscripts.py:53
+#: plugins/python/tenscripts/uitenscripts.py:52
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -62919,19 +62947,19 @@ msgstr "Objektum létrehozása"
 msgid "Script {0} executed"
 msgstr "Alsó index"
 
-#: plugins/python/tenscripts/uitenscripts.py:73
+#: plugins/python/tenscripts/uitenscripts.py:72
 #, fuzzy
 msgid "Selected path"
 msgstr "Nem átlátszó kiválasztása"
 
-#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/tenscripts/uitenscripts.py:73
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, fuzzy
 #| msgid "Save the current flipbook"
 msgid "Select the script"
 msgstr "A jelenlegi flipbook mentése"
 
-#: plugins/python/tenscripts/uitenscripts.py:106
+#: plugins/python/tenscripts/uitenscripts.py:105
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
@@ -63127,20 +63155,14 @@ msgstr "Alulra"
 msgid "Inline"
 msgstr "görbe"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:460
-#, fuzzy
-#| msgid "Icon Size"
-msgid "Icon files "
-msgstr "Ikonméret"
-
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:516
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:549
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:511
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:544
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "Szín:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:586
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:581
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Script files "
@@ -67530,6 +67552,17 @@ msgstr "Nagyító eszköz"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenciaképek eszköz"
+
+#~ msgid "Python Files (*.py)"
+#~ msgstr "Python fájlok (*.py)"
+
+#~ msgid "Python File (*.py)"
+#~ msgstr "Python-fájl (*.py)"
+
+#, fuzzy
+#~| msgid "Icon Size"
+#~ msgid "Icon files "
+#~ msgstr "Ikonméret"
 
 #~ msgid "Cannot write to palette file %1. Maybe it is read-only."
 #~ msgstr ""

@@ -107,6 +107,12 @@ void KoPluginLoaderTest::testLoadAll()
         KSharedConfig::openConfig()->deleteGroup(config.group);
     }
 
+    if (childrenIds != expectedIds) {
+        qDebug() << ppVar(childrenIds);
+        qDebug() << ppVar(expectedIds);
+    }
+
+
     QCOMPARE(childrenIds, expectedIds);
 }
 

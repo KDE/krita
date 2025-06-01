@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-31 02:01+0000\n"
-"PO-Revision-Date: 2025-05-27 12:38+0100\n"
+"PO-Revision-Date: 2025-05-31 17:27+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -12886,37 +12886,31 @@ msgstr "Imagen de referencia del lienzo visible"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Nearest Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "Colores más cercanos"
+msgstr "Forzar colores de la paleta"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3669 krita/krita.action:3670
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enforce palette colors: always select the nearest color from the active "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
-"Forzar los colores de la paleta: seleccionar siempre el color más próximo de "
-"la paleta activa."
+"Forzar que el selector de color solo pueda seleccionar los colores de la "
+"paleta seleccionada actualmente."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "Paleta de colores"
+msgstr "Forzar paleta"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -35134,16 +35128,12 @@ msgstr ""
 "otro lugar."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, fuzzy, kde-format
-#| msgid ""
-#| "File %1 is missing in %2 and is broken. Please try to save again in a "
-#| "different location."
+#, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
 "location."
 msgstr ""
-"Falta el archivo %1 en %2 y está dañado. Pruebe a guardarlo de nuevo en otro "
-"lugar."
+"Falta el componente %1 en %2. Pruebe a guardarlo de nuevo en otro lugar."
 
 #: libs/ui/KisImportExportManager.cpp:302
 #, kde-format
@@ -60601,8 +60591,6 @@ msgid "Where should the pages go?"
 msgstr "¿Dónde deben ir las páginas?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "¿Qué imagen debe ser la base para la nueva página?"
 
@@ -61780,10 +61768,8 @@ msgstr "Abrir"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
-#| msgid "Save Python File"
 msgid "Python Files"
-msgstr "Guardar archivo de Python"
+msgstr "Archivos de Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"
@@ -66525,12 +66511,3 @@ msgstr "Herramienta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
-
-#~ msgid "Python Files (*.py)"
-#~ msgstr "Archivos de Python (*.py)"
-
-#~ msgid "Python File (*.py)"
-#~ msgstr "Archivos de Python (*.py)"
-
-#~ msgid "Icon files "
-#~ msgstr "Archivos de iconos"

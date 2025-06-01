@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-31 02:01+0000\n"
-"PO-Revision-Date: 2025-05-29 21:55+0300\n"
+"PO-Revision-Date: 2025-05-31 20:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12866,36 +12866,31 @@ msgstr "Görünür Tuvalden Görsele Başvur"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Nearest Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "En Yakın Renkler"
+msgstr "Palet Renklerini Zorla"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3669 krita/krita.action:3670
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enforce palette colors: always select the nearest color from the active "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
-"Palet renklerini güçlendir: her zaman etkin paletten en yakın rengi seç."
+"Renk seçicisini, yalnızca şu anda seçili paletteki renkleri seçmesi için "
+"zorlayın."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "Renk Paleti"
+msgstr "Paleti Zorla"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -60283,8 +60278,6 @@ msgid "Where should the pages go?"
 msgstr "Sayfalar nereye gitmeli?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "Yeni sayfa için hangi görsel temel alınmalı?"
 
@@ -61451,10 +61444,8 @@ msgstr "Aç"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
-#| msgid "Save Python File"
 msgid "Python Files"
-msgstr "Python Dosyası Kaydet"
+msgstr "Python Dosyaları"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"

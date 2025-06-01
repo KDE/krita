@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-31 02:01+0000\n"
-"PO-Revision-Date: 2025-05-29 16:04+0300\n"
+"PO-Revision-Date: 2025-05-31 08:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -12871,37 +12871,31 @@ msgstr "Еталонне зображення з видимого"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Nearest Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "Найближчі кольори"
+msgstr "Примусові кольори палітри"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3669 krita/krita.action:3670
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enforce palette colors: always select the nearest color from the active "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
-"Примусово застосувати кольори палітри: завжди вибирати найближчий колір з "
-"активної палітри."
+"Примусово встановлювати у засобі вибору кольорів лише кольори у поточній "
+"вибраній палітрі."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "палітра кольорів"
+msgstr "Примусова палітра"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -61115,8 +61109,6 @@ msgid "Where should the pages go?"
 msgstr "Де зберігаються сторінки?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "Яке зображення має бути основою для нової сторінки?"
 
@@ -62289,10 +62281,8 @@ msgstr "Відкрити"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
-#| msgid "Save Python File"
 msgid "Python Files"
-msgstr "Зберегти файл Python"
+msgstr "Файли Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-31 02:01+0000\n"
-"PO-Revision-Date: 2025-05-29 08:47+0200\n"
+"PO-Revision-Date: 2025-05-31 18:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -12893,37 +12893,31 @@ msgstr "Imatge de referència des del visible"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Nearest Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "Colors més propers"
+msgstr "Força els colors de la paleta"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3669 krita/krita.action:3670
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enforce palette colors: always select the nearest color from the active "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
-"Força els colors de la paleta: sempre selecciona el color més proper de la "
-"paleta activa."
+"Força el selector de color a seleccionar només els colors en la paleta "
+"actualment seleccionada."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "Paleta de colors"
+msgstr "Força la paleta"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -60638,8 +60632,6 @@ msgid "Where should the pages go?"
 msgstr "A on han d'anar les pàgines?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "Quina imatge ha de ser la base de la pàgina nova?"
 
@@ -61812,10 +61804,8 @@ msgstr "Obre"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
-#| msgid "Save Python File"
 msgid "Python Files"
-msgstr "Desa el fitxer en Python"
+msgstr "Fitxers en Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"
@@ -66539,19 +66529,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Python Files (*.py)"
-#~ msgstr "Fitxers en Python (*.py)"
-
-#~ msgid "Python File (*.py)"
-#~ msgstr "Fitxer en Python (*.py)"
-
-#~ msgid "Icon files "
-#~ msgstr "Fitxers d'icona"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
-#~ msgstr ""
-#~ "No es pot escriure al fitxer de paleta %1. Potser només és de lectura."
-
-#~ msgid "Maximum strength"
-#~ msgstr "Intensitat màxima"

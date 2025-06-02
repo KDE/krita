@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-31 02:01+0000\n"
-"PO-Revision-Date: 2025-02-26 18:25+0100\n"
+"PO-Revision-Date: 2025-06-01 14:01+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 25.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12910,36 +12910,31 @@ msgstr "Referensbild från synligt"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Nearest Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "Närmaste färger"
+msgstr "Tvinga palettfärger"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3669 krita/krita.action:3670
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enforce palette colors: always select the nearest color from the active "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
-"Tvinga palettfärger: Välj alltid närmaste färg från den aktiva paletten."
+"Tvinga färgväljaren att endast välja färger i paletten som för närvarande är "
+"vald."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "Färgpalett"
+msgstr "Tvinga palett"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -17647,13 +17642,13 @@ msgstr "Palmyriska"
 #, kde-format
 msgctxt "@title"
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabataean"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:213
 #, kde-format
 msgctxt "@title"
 msgid "Hatran"
-msgstr ""
+msgstr "Hatran"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:214
 #, kde-format
@@ -17665,37 +17660,37 @@ msgstr "Feniciska"
 #, kde-format
 msgctxt "@title"
 msgid "Lydian"
-msgstr ""
+msgstr "Lydiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:216
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Meroitiska hieroglyfer"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:217
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Meroitisk kursiv"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:218
 #, kde-format
 msgctxt "@title"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Kharoshthi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Gammal sydarabisk"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:220
 #, kde-format
 msgctxt "@title"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Gammal nordarabisk"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:221
 #, kde-format
@@ -17731,7 +17726,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Gammalturkiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
@@ -18529,7 +18524,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "No Block"
-msgstr ""
+msgstr "Inget block"
 
 #: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
@@ -19910,13 +19905,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Kursiv positionering"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts the position of glyphs so they cursively connect."
-msgstr ""
+msgstr "Justerar glyfernas position så att de blir rätt kursiva"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
 #, kde-format
@@ -20739,11 +20734,9 @@ msgid "Change Clone Layers"
 msgstr "Ändra dupliceringslager"
 
 #: libs/image/commands_new/KisImageAnimSettingCommand.cpp:13
-#, fuzzy
-#| msgid "Animation settings menu"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Animeringsinställningsmeny"
+msgstr "Uppdatera animeringsinställningar"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
@@ -23534,10 +23527,9 @@ msgid "Font Storage"
 msgstr "Teckensnittslagring"
 
 #: libs/resources/KisResourceLocator.cpp:1170
-#, fuzzy, kde-format
-#| msgid "Initializing the resources."
+#, kde-format
 msgid "Synchronizing the resources."
-msgstr "Initierar resurserna."
+msgstr "Synkronisera resurserna."
 
 #: libs/resources/KisResourceLocator.cpp:1183
 #: libs/resources/KisResourceLocator.cpp:1191
@@ -23672,10 +23664,9 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Broken Status"
-msgstr "Status"
+msgstr "Felaktig status"
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
@@ -23928,10 +23919,9 @@ msgstr "Etikettfilnamn"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "Resursvy"
+msgstr "Resursen  är felaktig."
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -26950,11 +26940,9 @@ msgstr[0] "Penselhastighetsutjämning: {n} sampling"
 msgstr[1] "Penselhastighetsutjämning: {n} samplingar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1459
-#, fuzzy, kde-format
-#| msgctxt "Context: dynamic sensors"
-#| msgid "Tilt direction"
+#, kde-format
 msgid "Pen tilt direction offset: "
-msgstr "Lutningsriktning"
+msgstr "Pennlutningsriktning:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1556
@@ -26996,12 +26984,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr "Direkt3D 11 via ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1816
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr "OpenGL via ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1818
 #, kde-format
@@ -29665,10 +29651,9 @@ msgstr "Animering"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1052
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation Settings"
-msgstr "Animeringsinställningsmeny"
+msgstr "Animeringsinställningar"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1058
@@ -29698,10 +29683,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
-#, fuzzy, kde-format
-#| msgid "Adapt playback range to keyframes"
+#, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr "Anpassa uppspelningsintervall till nyckelbilder"
+msgstr "Anpassa uppspelningsintervall automatiskt till nyckelbilder"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1078
@@ -34918,16 +34902,11 @@ msgstr ""
 "plats."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, fuzzy, kde-format
-#| msgid ""
-#| "File %1 is missing in %2 and is broken. Please try to save again in a "
-#| "different location."
+#, kde-format
 msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
 "location."
-msgstr ""
-"Filen %1 saknas i %2 och är felaktig. Försök att spara igen på en annan "
-"plats."
+msgstr "Komponenten %1 saknas i %2. Försök att spara igen på en annan plats."
 
 #: libs/ui/KisImportExportManager.cpp:302
 #, kde-format
@@ -44786,34 +44765,28 @@ msgid "Delete the taskset"
 msgstr "Ta bort aktivitetsuppsättningen"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Teckenstorlek"
+msgstr "Teckenstorlek (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Höjd: "
+msgstr "X-höjd (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "R8 Heightmap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "R8-höjdavbildning"
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Proportionell"
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
@@ -44822,34 +44795,28 @@ msgid "Ideographic Advance (ic)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "Radhöjd:"
+msgstr "Radhöjd (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) Space"
-#| msgid "Space"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Spaces (Sp)"
-msgstr "Mellanslag"
+msgstr "Mellanslag (Sp)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "Linjer:"
+msgstr "Linjer (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
-msgstr "Procent (%)"
+msgstr "Procentvärde (%)"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, kde-format
@@ -44858,11 +44825,10 @@ msgid "Optical Size"
 msgstr "Optisk storlek"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "Empty slot"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "Tom plats"
+msgstr "Tom"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
@@ -44871,9 +44837,7 @@ msgid "%1, %2, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "@info mouse position (x, y)"
-#| msgid "%1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
 msgstr "%1, %2"
@@ -44885,18 +44849,16 @@ msgid "%1, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "Öppna"
+msgstr "På"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "av"
+msgstr "Av"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
@@ -44910,11 +44872,10 @@ msgid "Text Properties"
 msgstr "Textegenskaper"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Reset Configurations"
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "Återställ inställningar"
+msgstr "Inställning av textegenskaper"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -52678,19 +52639,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
 "files. Only recommended for low quality or when precise transparency edges "
 "aren't critical.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Om aktiverat, ställer det in alfakanalen (transparens) "
-"till förlustfri. Användbart för att minska transparensförvrängning vid "
-"förstörande export.</p></body></html>"
+"<html><head/><body><p>Minskar upplösningen för genomskinlighetskanalen för "
+"mindre filer. Rekommenderas bara för låg kvalitet eller när exakta "
+"genomskinlighetskanter inte är avgörande.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
@@ -52795,10 +52752,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
-#, fuzzy, kde-format
-#| msgid "Edge preserving filter"
+#, kde-format
 msgid "Edge preserving filter strength"
-msgstr "Kantbevarande filter"
+msgstr "Kantbevarande filterstyrka"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:538
@@ -52810,18 +52766,16 @@ msgstr "Stark"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Åtgärdsbeskrivning</p></body></html>"
+msgstr "<html><head/><body><p>Standardvärde (kodaren väljer)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr "Automatiskt"
+msgstr "Automatisk"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
@@ -52895,19 +52849,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Preserves color information in fully transparent "
 "areas. Disable to reduce file size when colors under transparency aren't "
 "needed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Om aktiverat, ställer det in alfakanalen (transparens) "
-"till förlustfri. Användbart för att minska transparensförvrängning vid "
-"förstörande export.</p></body></html>"
+"<html><head/><body><p>Bevarar färginformation i helt genomskinliga områden. "
+"Inaktivera för att minska filstorleken när färger under genomskinlighet inte "
+"behövs.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:633
@@ -52917,19 +52867,15 @@ msgstr "Behåll färg på osynliga bildpunkter"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:640
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Add the author nickname and the first contact of "
-#| "the author profile. This is overridden by the anonymizer.</p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Determines the order in which image tiles are encoded. "
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Lägg till författarens smeknamn och den första "
-"kontakten i upphovsmannaprofilen. Det överskrids av anonymisering.</p></"
-"body></html>"
+"<html><head/><body><p>Bestämmer i vilken ordning bildrutorna kodas. "
+"\"Centrera först\" prioriterar bildens mittpunkt för progressiv inläsning, "
+"vilket är användbart för webbinnehåll.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:643
@@ -53164,16 +53110,13 @@ msgstr "Aktiverar eller inaktiverar deltapalett. Används i modulärt läge."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:911
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Använd ritplattans lutning för att bestämma "
-"normalvektorer.</p></body></html>"
+"<html><head/><body><p>Ställer in rutstorleken för komprimering. Större "
+"grupper kan förbättra komprimeringen men kräver mer minne.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -60162,8 +60105,6 @@ msgid "Where should the pages go?"
 msgstr "Var ska sidorna hamna?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "Vilken bild ska den nya sidan baseras på?"
 
@@ -61323,10 +61264,8 @@ msgstr "Öppna"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
-#| msgid "Save Python File"
 msgid "Python Files"
-msgstr "Spara Python-fil"
+msgstr "Python-filer"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"
@@ -61525,10 +61464,8 @@ msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Välj frihandspenselverktyget när en genväg används"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:38
-#, fuzzy
-#| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Visa meddelanden på duken"
+msgstr "Visa meddelanden på duken när penselförinställning aktiveras"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""

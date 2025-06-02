@@ -49,7 +49,7 @@ bool idCompareEqual(const KoJsonTrader::Plugin &lhs, const KoJsonTrader::Plugin 
 bool sortByIdAndReversedVersion(const KoJsonTrader::Plugin &lhs, const KoJsonTrader::Plugin &rhs)
 {
     const QString lhsId = idFromPlugin(lhs);
-    const QString rhsId = idFromPlugin(lhs);
+    const QString rhsId = idFromPlugin(rhs);
     return lhsId < rhsId ||
         (lhsId == rhsId && versionCompareLess(rhs, lhs));
 };

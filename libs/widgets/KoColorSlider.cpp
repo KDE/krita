@@ -14,17 +14,25 @@
 #include <QTimer>
 #include <QStyleOption>
 #include <QPointer>
+#include <kis_signal_compressor.h>
 
 #define ARROWSIZE 8
 
 struct Q_DECL_HIDDEN KoColorSlider::Private
 {
-    Private() : upToDate(false), displayRenderer(0) {}
+    Private()
+        : upToDate(false)
+        , displayRenderer(0)
+        , updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+    {
+    }
+
     KoColor minColor;
     KoColor maxColor;
     QPixmap pixmap;
     bool upToDate;
     QPointer<KoColorDisplayRendererInterface> displayRenderer;
+    KisSignalCompressor updateCompressor;
 };
 
 KoColorSlider::KoColorSlider(QWidget* parent, KoColorDisplayRendererInterface *displayRenderer)
@@ -34,6 +42,7 @@ KoColorSlider::KoColorSlider(QWidget* parent, KoColorDisplayRendererInterface *d
     setMaximum(255);
     d->displayRenderer = displayRenderer;
     connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()), Qt::UniqueConnection);
+    connect(&d->updateCompressor, SIGNAL(timeout()), SLOT(update()), Qt::UniqueConnection);
 }
 
 KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent, KoColorDisplayRendererInterface *displayRenderer)
@@ -42,6 +51,7 @@ KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent, KoColorDisplayR
     setMaximum(255);
     d->displayRenderer = displayRenderer;
     connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()), Qt::UniqueConnection);
+    connect(&d->updateCompressor, SIGNAL(timeout()), SLOT(update()), Qt::UniqueConnection);
 }
 
 KoColorSlider::~KoColorSlider()
@@ -54,7 +64,7 @@ void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)
     d->minColor = mincolor;
     d->maxColor = maxcolor;
     d->upToDate = false;
-    QTimer::singleShot(1, this, SLOT(update()));
+    d->updateCompressor.start();
 }
 
 void KoColorSlider::drawContents( QPainter *painter )

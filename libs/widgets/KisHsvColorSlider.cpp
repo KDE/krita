@@ -18,6 +18,7 @@
 #include <memory>
 
 #include "KoColorDisplayRendererInterface.h"
+#include <kis_signal_compressor.h>
 
 namespace {
 
@@ -192,6 +193,7 @@ struct Q_DECL_HIDDEN KisHsvColorSlider::Private
         , pixmap()
         , upToDate(false)
         , displayRenderer(nullptr)
+        , updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
         , circularHue(false)
         , mixMode(KisHsvColorSlider::MIX_MODE::HSV)
     {
@@ -205,6 +207,7 @@ struct Q_DECL_HIDDEN KisHsvColorSlider::Private
     QPixmap pixmap;
     bool upToDate;
     QPointer<KoColorDisplayRendererInterface> displayRenderer;
+    KisSignalCompressor updateCompressor;
 
     // If the min and max color has the same hue, should the widget display the entire gamut of hues.
     bool circularHue;
@@ -223,6 +226,7 @@ KisHsvColorSlider::KisHsvColorSlider(Qt::Orientation orientation, QWidget *paren
     setMaximum(255);
     d->displayRenderer = displayRenderer;
     connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()), Qt::UniqueConnection);
+    connect(&d->updateCompressor, SIGNAL(timeout()), SLOT(update()), Qt::UniqueConnection);
 }
 
 KisHsvColorSlider::~KisHsvColorSlider()
@@ -236,7 +240,7 @@ void KisHsvColorSlider::setColors(const KoColor min, const KoColor max)
     d->minKoColor = min;
     d->maxKoColor = max;
     d->upToDate = false;
-    QTimer::singleShot(1, this, SLOT(update()));
+    d->updateCompressor.start();
 }
 
 void KisHsvColorSlider::setColors(const QColor min, const QColor max)
@@ -245,7 +249,7 @@ void KisHsvColorSlider::setColors(const QColor min, const QColor max)
     d->minKoColor.fromQColor(min);
     d->maxKoColor.fromQColor(max);
     d->upToDate = false;
-    QTimer::singleShot(1, this, SLOT(update()));
+    d->updateCompressor.start();
 }
 
 void KisHsvColorSlider::setColors(qreal minH, qreal minS, qreal minV, qreal maxH, qreal maxS, qreal maxV)
@@ -260,19 +264,19 @@ void KisHsvColorSlider::setColors(qreal minH, qreal minS, qreal minV, qreal maxH
     d->maxKoColor.fromQColor(maxQ);
     d->upToDate = false;
 
-    QTimer::singleShot(1, this, SLOT(update()));
+    d->updateCompressor.start();
 }
 
 void KisHsvColorSlider::setCircularHue(bool value) {
     d->circularHue = value;
     d->upToDate = false;
-    QTimer::singleShot(1, this, SLOT(update()));
+    d->updateCompressor.start();
 }
 
 void KisHsvColorSlider::setMixMode(MIX_MODE mode) {
     d->mixMode = mode;
     d->upToDate = false;
-    QTimer::singleShot(1, this, SLOT(update()));
+    d->updateCompressor.start();
 }
 
 void KisHsvColorSlider::drawContents(QPainter *painter)

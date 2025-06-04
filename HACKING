@@ -237,6 +237,40 @@ Static initializers
     CMake feature, but it is available only since CMake 3.24, so for now
     just avoid using initializers in plugins.
 
+The usage of timers, compressors and QTimer::singleShot()
+
+    We should be carefult about allocation of timers in Krita. The number of precision
+    timers is limited on some platforms (e.g. Windows). When Qt runs out of precision
+    timers it silently degrades all newly created timers into non-precision ones. That
+    can affect timers that are used for the canvas framerate stabilization and cause
+    tearing and FPS drops.
+
+    Rules of thumb:
+
+    1) When using QTimer::singleShot(), either use **null** timeout to just push the
+       event through the queue, or pass Qt::CoarseTimer as the second argument:
+
+       QTimer::singleShot(0, ...);
+
+       or
+
+       QTimer::singleShot(<some non-zero value>, Qt::CoarseTimer, ...);
+
+       If you really-really-really need a precise single-shot event, then pass
+       Qt::PreciseTimer explicitly.
+
+       The problem is that QTimer::singleShot() creates a precise timer by default,
+       which can consume all the available precise timers in the system for the app.
+
+    2) When creating timers or using KisSignalCompressor, set timeout to values
+       strictly higher than 20 ms (unless you really know what you are doing). Value
+       `25 ms` is a good default to compress updates for the lightweight widgets,
+        and value `100 ms` is a good default to compress updates for heavy widgets.
+
+       The problem is that Qt internally converts all the timers into precise
+       ones, if their timeout is less or equal 20. Which can also consume all
+       the available precise timers.
+
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.
 

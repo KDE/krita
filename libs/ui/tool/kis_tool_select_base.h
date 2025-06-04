@@ -516,7 +516,7 @@ public:
 
     void updateCursorDelayed() {
         setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
-        QTimer::singleShot(100,
+        QTimer::singleShot(100, Qt::CoarseTimer,
             this,
             [this]()
             {

@@ -145,7 +145,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
 
     using namespace std::placeholders; // For _1 placeholder
     auto function = std::bind(&KisColorSelectorBase::slotUpdateColorAndPreview, this, _1);
-    m_updateColorCompressor.reset(new ColorCompressorType(20 /* ms */, function));
+    m_updateColorCompressor.reset(new ColorCompressorType(25 /* ms */, function));
 }
 
 KisColorSelectorBase::~KisColorSelectorBase()

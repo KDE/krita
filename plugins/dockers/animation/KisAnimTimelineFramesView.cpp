@@ -837,7 +837,7 @@ void KisAnimTimelineFramesView::slotEnsureRowVisible(int row)
     // Delay's UI scrolling by 1/60 of a second to compensate for
     // inconsistent dummy indexing caused by a brief period where
     // two unpinned dummies exist on the timeline simultaneously.
-    QTimer::singleShot(16, this, [this, index](){
+    QTimer::singleShot(16, Qt::PreciseTimer, this, [this, index](){
         scrollTo(index);
     });
 }

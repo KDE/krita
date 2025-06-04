@@ -96,7 +96,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->saturation = 0;
     d->updateAllowed = true;
 
-    d->repaintCompressor = new KisSignalCompressor(20, KisSignalCompressor::FIRST_ACTIVE, this);
+    d->repaintCompressor = new KisSignalCompressor(25, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->repaintCompressor, SIGNAL(timeout()), SLOT(update()));
 
     d->resizeUpdateCompressor = new KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, this);
@@ -105,7 +105,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->valueSliderUpdateCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->valueSliderUpdateCompressor, SIGNAL(timeout()), SLOT(updateSVPalette()));
 
-    d->colorChangedSignalCompressor = new KisSignalCompressor(20, KisSignalCompressor::FIRST_ACTIVE, this);
+    d->colorChangedSignalCompressor = new KisSignalCompressor(25, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->colorChangedSignalCompressor, SIGNAL(timeout()), SLOT(slotTellColorChanged()));
 
     {

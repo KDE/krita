@@ -855,8 +855,7 @@ class comics_project_manager_docker(DockWidget):
         #   of `slot_check_for_page_update` would not know which files to update now.
         # https://bugs.kde.org/show_bug.cgi?id=426701
         self.updateurls.append(url)
-        QTimer.singleShot(200, Qt.TimerType.PreciseTimer, self.slot_check_for_page_update)
-         
+        QTimer.singleShot(200, Qt.TimerType.CoarseTimer, self.slot_check_for_page_update)
 
     def slot_check_for_page_update(self):
         url = self.updateurls.pop(0)

@@ -18,12 +18,12 @@ public:
     explicit Private()
         : QSharedData()
         , activeLayer(0)
-        , selectionChangedCompressor(new KisThreadSafeSignalCompressor(1, KisSignalCompressor::FIRST_INACTIVE))
+        , selectionChangedCompressor(new KisThreadSafeSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE))
     {}
     explicit Private(const Private &)
         : QSharedData()
         , activeLayer(0)
-        , selectionChangedCompressor(new KisThreadSafeSignalCompressor(1, KisSignalCompressor::FIRST_INACTIVE))
+        , selectionChangedCompressor(new KisThreadSafeSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE))
     {
     }
 

@@ -447,7 +447,7 @@ void KoDialog::keyPressEvent(QKeyEvent *event)
 void KoDialog::showEvent(QShowEvent *e)
 {
     QDialog::showEvent(e);
-    QTimer::singleShot(5, [&]() {
+    QTimer::singleShot(5, Qt::CoarseTimer, [&]() {
         adjustPosition(parentWidget());
     });
 }

@@ -183,7 +183,7 @@ bool WGSelectorConfigGrid::event(QEvent *event)
     if (event->type() == QEvent::PaletteChange) {
         // For some reason, Qt doesn't like if we recreate the icons from this
         // even handler and randomly crashes somewhere after this function returns
-        QTimer::singleShot(10, this, &WGSelectorConfigGrid::updateIcons);
+        QTimer::singleShot(0, this, &WGSelectorConfigGrid::updateIcons);
         event->accept();
         handled = true;
     }

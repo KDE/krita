@@ -307,7 +307,7 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
 
 
     if (!sync) {
-        QTimer::singleShot(100, this, SLOT(delayedLoadStart()));
+        QTimer::singleShot(100, Qt::CoarseTimer, this, SLOT(delayedLoadStart()));
     } else {
         QApplication::processEvents();
         delayedLoadStart();

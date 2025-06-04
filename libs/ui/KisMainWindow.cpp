@@ -602,7 +602,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
 
-    QTimer::singleShot(1000, this, SLOT(checkSanity()));
+    QTimer::singleShot(1000, Qt::CoarseTimer, this, SLOT(checkSanity()));
 
     {
         using namespace std::placeholders; // For _1 placeholder

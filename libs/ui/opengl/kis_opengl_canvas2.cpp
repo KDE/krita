@@ -23,6 +23,8 @@
 #include "KisOpenGLModeProber.h"
 #include "KisOpenGLContextSwitchLock.h"
 
+#include "config-qt-patches-present.h"
+
 static bool OPENGL_SUCCESS = false;
 
 class KisOpenGLCanvas2::CanvasBridge
@@ -61,6 +63,9 @@ public:
     }
 
     boost::optional<QRect> updateRect;
+#if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+    bool shouldSkipRenderingPass = false;
+#endif
     QRect canvasImageDirtyRect;
     KisOpenGLCanvasRenderer *renderer;
     QScopedPointer<KisOpenGLSync> glSyncObject;
@@ -197,6 +202,12 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintGL()
 {
+#if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+    if (d->shouldSkipRenderingPass) {
+        return;
+    }
+#endif
+
     const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
 
     if (!OPENGL_SUCCESS) {
@@ -256,7 +267,31 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
         d->updateRect = this->rect();
     }
 
-    QOpenGLWidget::paintEvent(e);
+#if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+    /**
+     * When using Qt with a proper update paint event compression, then we don't
+     * need to implement our own one in KisCanvas2, instead we should just skip
+     * frames in paintEvent(), when the previous frame hasn't completed yet.
+     */
+    if (isBusy()) {
+        //qWarning() << "WARNING: paint event delivered with the canvas non-ready, rescheduling...";
+        d->shouldSkipRenderingPass = true;
+        QOpenGLWidget::paintEvent(e);
+        d->shouldSkipRenderingPass = false;
+        QTimer::singleShot(0, this,
+            [this, updateRect = *d->updateRect] () {
+                if (updateRect.isEmpty()) {
+                    this->update();
+                } else {
+                    this->update(updateRect);
+                }
+            });
+    } else
+#endif
+    {
+        QOpenGLWidget::paintEvent(e);
+    }
+
     d->updateRect = boost::none;
 }
 

@@ -76,6 +76,8 @@ void KisWdgOptionsWebP::setConfiguration(const KisPropertiesConfigurationSP cfg)
     KisSpinBoxI18nHelper::setText(quality, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     tradeoff->setValue(cfg->getInt("method", 4));
     dithering->setChecked(cfg->getBool("dithering", true));
+    chkForceSRGB->setChecked(cfg->getBool("force_srgb", false));
+    chkSaveProfile->setChecked(cfg->getBool("save_profile", true));
 
     targetSize->setValue(cfg->getInt("target_size", 0));
     targetPSNR->setValue(cfg->getDouble("target_PSNR", 0.0));
@@ -178,6 +180,8 @@ KisPropertiesConfigurationSP KisWdgOptionsWebP::configuration() const
     cfg->setProperty("quality", quality->value());
     cfg->setProperty("method", tradeoff->value());
     cfg->setProperty("dithering", dithering->isChecked());
+    cfg->setProperty("force_srgb", chkForceSRGB->isChecked());
+    cfg->setProperty("save_profile", chkSaveProfile->isChecked());
 
     cfg->setProperty("target_size", targetSize->value());
     cfg->setProperty("target_PSNR", targetPSNR->value());

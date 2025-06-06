@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testFiles();
     void testHDR();
     void testCmykWithLayers();
+    void testMultipage();
     void testSaveRgbaColorSpace();
     void testSaveGreyAColorSpace();
     void testSaveCmykAColorSpace();

@@ -212,6 +212,68 @@ void KisJPEGXLTest::testCmykWithLayers()
     }
 }
 
+void KisJPEGXLTest::testMultipage()
+{
+    const QString inputFileName = TestUtil::fetchDataFileLazy("/sources/multipage/jxl-multipage.jxl");
+
+    QScopedPointer<KisDocument> doc1(qobject_cast<KisDocument *>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc1.data());
+    doc1->setFileBatchMode(true);
+
+    const KisImportExportErrorCode status = manager.importDocument(inputFileName, {});
+    QVERIFY(status.isOk());
+
+    KisImageSP image = doc1->image();
+
+    KisNodeSP page1 = KisLayerUtils::findNodeByName(image->root(), "Page1");
+    KisNodeSP page2 = KisLayerUtils::findNodeByName(image->root(), "Page2");
+    KisNodeSP page3 = KisLayerUtils::findNodeByName(image->root(), "Page3");
+
+    QVERIFY(page1);
+    QVERIFY(page2);
+    QVERIFY(page3);
+
+    {
+        const QString outputFileName = TestUtil::fetchDataFileLazy("/results/jxl-multipage.kra");
+
+        KisDocument *doc2 = KisPart::instance()->createDocument();
+        doc2->setFileBatchMode(true);
+        const bool r = doc2->importDocument(outputFileName);
+
+        QVERIFY(r);
+        QVERIFY(doc2->errorMessage().isEmpty());
+        QVERIFY(doc2->image());
+
+        {
+            KisImageSP imageOut = doc2->image();
+
+            KisNodeSP page1Out = KisLayerUtils::findNodeByName(imageOut->root(), "Page1");
+            KisNodeSP page2Out = KisLayerUtils::findNodeByName(imageOut->root(), "Page2");
+            KisNodeSP page3Out = KisLayerUtils::findNodeByName(imageOut->root(), "Page3");
+
+            QVERIFY(page1Out);
+            QVERIFY(page2Out);
+            QVERIFY(page3Out);
+
+            QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(doc1->image()->root()->firstChild()->paintDevice(),
+                                                                 doc2->image()->root()->firstChild()->paintDevice(),
+                                                                 0));
+
+            QVERIFY(
+                TestUtil::comparePaintDevicesClever<uint8_t>(page1->paintDevice(), page1Out->paintDevice(), 0));
+
+            QVERIFY(
+                TestUtil::comparePaintDevicesClever<uint8_t>(page2->paintDevice(), page2Out->paintDevice(), 0));
+
+            QVERIFY(
+                TestUtil::comparePaintDevicesClever<uint8_t>(page3->paintDevice(), page3Out->paintDevice(), 0));
+        }
+
+        delete doc2;
+    }
+}
+
 inline void testSaveColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);

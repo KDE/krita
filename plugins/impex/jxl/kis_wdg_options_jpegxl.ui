@@ -27,24 +27,54 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; text-decoration: underline;&quot;&gt;Advanced&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The option &amp;quot;Default (encoder chooses)&amp;quot; is common. It means that the encoder automatically selects optimal settings based on your quality/speed tradeoff selection. This option is recommended for most users.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;Encoder Parameters:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;general settings that apply to the overall JPEG XL encoding process, regardless of which compression method is used.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;VarDCT parameters:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Variable Discrete Cosine Transform (Optimized for photographic content)&lt;/p&gt;&lt;p&gt;This one is in the same family of compression techniques as used by the original JPEG, and thus best for ‘Natural’ images, such as photographs and images with a lot of gradients and textures.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;Modular Parameters:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Settings for Modular mode - optimized for graphical content, illustrations, and lossless compression.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="general">
       <attribute name="title">
        <string>General</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_10">
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="haveAnimation">
-         <property name="toolTip">
-          <string>If this is not enabled, only the first frame will be saved.</string>
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Save as:</string>
          </property>
-         <property name="text">
-          <string>Save as animated JPEG-XL</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QRadioButton" name="flattenLayers">
+            <property name="text">
+             <string>Flattened image</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="haveAnimation">
+            <property name="text">
+             <string>Animated image</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="multiLayer">
+            <property name="text">
+             <string>Multi-layered image</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="multiPage">
+            <property name="text">
+             <string>Multi-paged image</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
+       <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Encoding options</string>
@@ -243,19 +273,6 @@ Default is 0.</string>
          </property>
         </spacer>
        </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="flattenLayers">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this is not enabled, the layers will be rasterized and saved. However, animated exports are always flattened regardless of this setting.&lt;/p&gt;&lt;p&gt;It is advised to leave this option checked for web delivery and general compatibility with other applications.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string>Flatten the image</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab">
@@ -402,7 +419,7 @@ Default is 0.</string>
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="encoderParameters">
           <attribute name="title">

@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-17 03:29+0000\n"
-"PO-Revision-Date: 2025-03-15 12:07+0100\n"
+"PO-Revision-Date: 2025-06-06 12:42+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -56580,7 +56580,7 @@ msgstr "Plug-ins nu inschakelen? (Heeft opnieuw starten nodig)"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:68
 msgid "Activate Plugins?"
-msgstr "PLug-ins activeren?"
+msgstr "Plug-ins activeren?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:75
 msgid "Error during import:"

@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-31 02:01+0000\n"
-"PO-Revision-Date: 2025-06-01 14:28+0200\n"
+"PO-Revision-Date: 2025-06-06 12:42+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -61685,7 +61685,7 @@ msgstr "Plug-ins nu inschakelen? (Heeft opnieuw starten nodig)"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:72
 msgid "Activate Plugins?"
-msgstr "PLug-ins activeren?"
+msgstr "Plug-ins activeren?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:79
 msgid "Error during import:"

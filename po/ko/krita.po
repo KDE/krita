@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-31 02:01+0000\n"
+"POT-Creation-Date: 2025-06-08 02:00+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17035,7 +17035,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "브러시 임의성 권장 값 0.0"
 
-#: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:758 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"

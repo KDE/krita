@@ -50,6 +50,7 @@
 #include "KisUiFont.h"
 #include "input/KisQtWidgetsTweaker.h"
 #include "kis_splash_screen.h"
+#include "config-qt-patches-present.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -437,6 +438,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     qputenv("QT_WIDGETS_RHI", "1");
     qputenv("QT_WIDGETS_RHI_BACKEND", "opengl");
     qputenv("QSG_RHI_BACKEND", "opengl");
+#endif
+
+#if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+    qputenv("QT_BACKING_STORE_USE_FAST_QIMAGE_TRANSFER", "1");
 #endif
 
 #ifdef Q_OS_WIN

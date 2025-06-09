@@ -102,6 +102,22 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #endif
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+
+    static int useNativeSurfaceForCanvas = -1;
+    if (useNativeSurfaceForCanvas < 0) {
+        if (!qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
+            // currently, the default value is "non-native"
+            useNativeSurfaceForCanvas = 0;
+        } else {
+            useNativeSurfaceForCanvas = qEnvironmentVariableIntValue("KRITA_USE_NATIVE_CANVAS_SURFACE");
+        }
+        qDebug() << "FPS-DEBUG: Krita canvas mode:" << (useNativeSurfaceForCanvas ? "native surface" : "legacy mode") << useNativeSurfaceForCanvas << qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE");
+    }
+
+    if (useNativeSurfaceForCanvas) {
+        setAttribute(Qt::WA_NativeWindow, true);
+    }
+
     setUpdateBehavior(PartialUpdate);
 
     // we should make sure the texture doesn't have alpha channel,

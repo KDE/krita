@@ -36,75 +36,75 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2005, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-08 02:00+0000\n"
-"PO-Revision-Date: 2024-10-10 14:55+0300\n"
+"PO-Revision-Date: 2025-06-08 21:23+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 25.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/brushes/triangle.svg"
 msgid "triangle"
-msgstr "מלבן"
+msgstr "משולש"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross01.pat"
 msgid "Cross01"
-msgstr "צבעים"
+msgstr "צלב01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross02.pat"
 msgid "Cross02"
-msgstr "צבעים"
+msgstr "צלב02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross03.pat"
 msgid "Cross03"
-msgstr "צבעים"
+msgstr "צלב03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross04.pat"
 msgid "Cross04"
-msgstr "צבעים"
+msgstr "צלב04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross05.pat"
 msgid "Cross05"
-msgstr "צבעים"
+msgstr "צלב05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross06.pat"
 msgid "Cross06"
-msgstr "צבעים"
+msgstr "צלב06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Cross07.pat"
 msgid "Cross07"
-msgstr "צבעים"
+msgstr "צלב07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Crumpled_Paper.pat"
 msgid "Canvas 04"
-msgstr "משטח ציור"
+msgstr "משטח ציור 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
@@ -324,52 +324,52 @@ msgid "DITH 3232 CURVED STRIPES"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "תבניות"
+msgstr "תבנית פרקטל"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "כללי"
+msgstr "דף כללי 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "כללי"
+msgstr "דף כללי 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid01.pat"
 msgid "Grid01"
-msgstr "כחול"
+msgstr "רשת01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid02.pat"
 msgid "Grid02"
-msgstr "כחול"
+msgstr "רשת02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid03.pat"
 msgid "Grid03"
-msgstr "כחול"
+msgstr "רשת03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid04.pat"
 msgid "Grid04"
-msgstr "כחול"
+msgstr "רשת04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid05.pat"
 msgid "Grid05"
-msgstr "כחול"
+msgstr "רשת05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -390,100 +390,100 @@ msgid "HR Wall Paper"
 msgstr "&שכבה"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern01.pat"
 msgid "Pattern01"
-msgstr "תבניות"
+msgstr "תבנית01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern02.pat"
 msgid "Pattern02"
-msgstr "תבניות"
+msgstr "תבנית02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern03.pat"
 msgid "Pattern03"
-msgstr "תבניות"
+msgstr "תבנית03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern04.pat"
 msgid "Pattern04"
-msgstr "תבניות"
+msgstr "תבנית04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern05.pat"
 msgid "Pattern05"
-msgstr "תבניות"
+msgstr "תבנית05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Pattern06.pat"
 msgid "Pattern06"
-msgstr "תבניות"
+msgstr "תבנית06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares01.pat"
 msgid "Squares01"
-msgstr "חדות:"
+msgstr "ריבועים01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares02.pat"
 msgid "Squares02"
-msgstr "חדות:"
+msgstr "ריבועים02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares03.pat"
 msgid "Squares03"
-msgstr "חדות:"
+msgstr "ריבועים03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares04.pat"
 msgid "Squares04"
-msgstr "חדות:"
+msgstr "ריבועים04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares05.pat"
 msgid "Squares05"
-msgstr "חדות:"
+msgstr "ריבועים05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares06.pat"
 msgid "Squares06"
-msgstr "חדות:"
+msgstr "ריבועים06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares07.pat"
 msgid "Squares07"
-msgstr "חדות:"
+msgstr "ריבועים07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares08.pat"
 msgid "Squares08"
-msgstr "חדות:"
+msgstr "ריבועים08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares09.pat"
 msgid "Squares09"
-msgstr "חדות:"
+msgstr "ריבועים09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Squares10.pat"
 msgid "Squares10"
-msgstr "חדות:"
+msgstr "ריבועים10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -558,10 +558,10 @@ msgid "Zigzag04"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "&תבנית"
+msgstr "01 משטח ציור"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -732,10 +732,10 @@ msgid "Abstract lines"
 msgstr "&מברשת"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Maze_lines.png"
 msgid "Maze lines"
-msgstr "השתמש בתבנית הנוכחית"
+msgstr "קווי מבוך"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -63706,9 +63706,9 @@ msgid "Colorize Mask Editing Tool"
 msgstr "עירובים"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edge detection: "
-msgstr "הזז בחירה"
+msgstr "זיהוי קצוות: "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:110
 #, kde-format
@@ -63747,15 +63747,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto updates"
-msgstr "חזרה:"
+msgstr "עדכונים אוטומטיים"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Update"
-msgstr "חזרה:"
+msgstr "עדכון"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
@@ -63765,9 +63765,9 @@ msgstr "מאפייני שכבה..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowOutput)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show output"
-msgstr "לוחות צבעים"
+msgstr "הצגת פלט"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLimitToDevice)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:53
@@ -63823,10 +63823,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_polyline/KisToolPolyline.action:7
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Polyline Tool"
-msgstr "כלי מ&צולע"
+msgstr "כלי מצולעים"
 
 #. i18n: context: toolTip @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)

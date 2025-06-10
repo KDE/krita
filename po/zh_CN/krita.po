@@ -29487,7 +29487,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1061
 #, kde-format
 msgid "Automatically pin new layers to timeline"
-msgstr "自动固定新图层到动画时间轴"
+msgstr "自动将新图层固定至动画时间轴"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1068
@@ -29506,7 +29506,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1071
 #, kde-format
 msgid "Automatically adapt playback range to keyframes"
-msgstr "自动将播放范围调整到关键帧范围"
+msgstr "自动按照关键帧调整播放范围"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1078

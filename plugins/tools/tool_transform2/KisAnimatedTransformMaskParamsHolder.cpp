@@ -360,8 +360,6 @@ void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransfo
         if (channel->keyframeAt(time)){
             KisScalarKeyframeSP keyframe = channel->keyframeAt<KisScalarKeyframe>(time);
             keyframe->setValue(value, parentCommand);
-        } else {
-            channel->addScalarKeyframe(time, value, parentCommand);
         }
     };
 

@@ -1556,7 +1556,7 @@ recently opened documents</string>
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Krita is an open source and community-driven tool for digital artists everywhere.&lt;br /&gt;Progress is made possible thanks to ongoing support from our community of &lt;a href=&quot;https://docs.krita.org/en/contributors_manual.html&quot;&gt;contributors&lt;/a&gt;, sponsors, and &lt;a href=&quot;https://fund.krita.org/&quot;&gt;development fund &lt;/a&gt;members.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Krita is an open source and community-driven tool for digital artists everywhere.&lt;br /&gt;Progress is made possible thanks to ongoing support from our community of &lt;a href=&quot;https://docs.krita.org/en/contributors_manual.html&quot;&gt;contributors&lt;/a&gt;, &lt;a href=&quot;https://krita.org/en/sponsors/&quot;&gt;sponsors&lt;/a&gt;, and &lt;a href=&quot;https://fund.krita.org/&quot;&gt;development fund&lt;/a&gt; members.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

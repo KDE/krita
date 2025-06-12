@@ -155,7 +155,7 @@ KisExtendedModifiersMapperPluginInterface::ExtendedModifiers KisExtendedModifier
 #endif
                                             0,
                                             0);
-            for (size_t i = 0; i < sizeof(s_mapping); i++) {
+            for (size_t i = 0; i < sizeof(s_mapping) / sizeof(s_mapping[0]); i++) {
                 const KeyMapping &map = s_mapping[i];
                 if (map.x11KeySym == sym) {
                     modifiers << map.qtKey;

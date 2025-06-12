@@ -76,6 +76,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisCumulativeUndoModel.cpp
     dialogs/KisColorSpaceConversionDialog.cpp
     dialogs/KisProofingConfigModel.cpp
+    dialogs/KisFrameRateLimitModel.cpp
 
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp

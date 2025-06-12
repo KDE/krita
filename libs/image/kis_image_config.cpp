@@ -620,6 +620,16 @@ void KisImageConfig::setFpsLimit(int value)
     m_config.writeEntry("fpsLimit", value);
 }
 
+bool KisImageConfig::detectFpsLimit(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("detectFpsLimit", true);
+}
+
+void KisImageConfig::setDetectFpsLimit(bool value)
+{
+    m_config.writeEntry("detectFpsLimit", value);
+}
+
 bool KisImageConfig::useOnDiskAnimationCacheSwapping(bool defaultValue) const
 {
     return defaultValue ? true : m_config.readEntry("useOnDiskAnimationCacheSwapping", true);

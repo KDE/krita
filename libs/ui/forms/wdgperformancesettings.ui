@@ -31,7 +31,6 @@
     <widget class="QLabel" name="label_10">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -43,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -92,7 +91,7 @@
           <item row="1" column="1">
            <layout class="QGridLayout" name="gridLayout" columnstretch="4,1">
             <item row="0" column="0">
-             <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -123,7 +122,7 @@
           <item row="2" column="1">
            <layout class="QGridLayout" name="gridLayout_2" columnstretch="4,1">
             <item row="0" column="0">
-             <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -154,7 +153,7 @@
           <item row="3" column="1">
            <layout class="QGridLayout" name="gridLayout_3" columnstretch="4,1">
             <item row="0" column="0">
-             <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -197,7 +196,7 @@
           <item row="0" column="1">
            <layout class="QGridLayout" name="gridLayout_4" columnstretch="4,1">
             <item row="0" column="0">
-             <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
+             <widget class="KisSliderSpinBox" name="sliderSwapSize">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -265,7 +264,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="KisSliderSpinBox" name="sliderThreadsLimit" native="true">
+           <widget class="KisSliderSpinBox" name="sliderThreadsLimit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -285,7 +284,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="KisSliderSpinBox" name="sliderFrameClonesLimit" native="true">
+           <widget class="KisSliderSpinBox" name="sliderFrameClonesLimit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -305,7 +304,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="KisSliderSpinBox" name="sliderFrameTimeout" native="true">
+           <widget class="KisSliderSpinBox" name="sliderFrameTimeout">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -320,24 +319,40 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_fps">
-         <property name="text">
-          <string>Limit frames per second while painting:</string>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="fpsGroup">
+         <property name="title">
+          <string>Frame rate</string>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="KisSliderSpinBox" name="sliderFpsLimit" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will try to limit the number of screen updates per second to the given number. A lower number will decrease visual responsiveness but increase stylus precision on some systems like macOS.&lt;p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_fps">
+            <property name="text">
+             <string>Frame rate limit:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="KisSliderSpinBox" name="sliderFpsLimit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will try to limit the number of screen updates per second to the given number. A lower number will decrease visual responsiveness but increase stylus precision on some systems like macOS.&lt;p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkDetectFps">
+            <property name="text">
+             <string>Detect from screen</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
@@ -473,7 +488,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="KisSliderSpinBox" name="intCachedFramesSizeLimit" native="true">
+           <widget class="KisSliderSpinBox" name="intCachedFramesSizeLimit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -496,7 +511,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="KisSliderSpinBox" name="intRegionOfInterestMargin" native="true">
+           <widget class="KisSliderSpinBox" name="intRegionOfInterestMargin">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>

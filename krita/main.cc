@@ -442,6 +442,12 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 #if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
     qputenv("QT_BACKING_STORE_USE_FAST_QIMAGE_TRANSFER", "1");
+    if (!qEnvironmentVariableIsSet("QT_FRAME_RATE_OVERRIDE")) {
+        KisImageConfig cfg(true);
+        if (!cfg.detectFpsLimit()) {
+            qputenv("QT_FRAME_RATE_OVERRIDE", QString::number(cfg.fpsLimit()).toLatin1());
+        }
+    }
 #endif
 
 #ifdef Q_OS_WIN

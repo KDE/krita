@@ -121,6 +121,9 @@ public:
     int fpsLimit(bool defaultValue = false) const;
     void setFpsLimit(int value);
 
+    bool detectFpsLimit(bool defaultValue = false) const;
+    void setDetectFpsLimit(bool value);
+
     bool useOnDiskAnimationCacheSwapping(bool defaultValue = false) const;
     void setUseOnDiskAnimationCacheSwapping(bool value);
 

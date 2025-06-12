@@ -35,6 +35,7 @@ class KoID;
 class KisInputConfigurationPage;
 class KoConfigAuthorPage;
 class KisProofingConfigModel;
+class KisFrameRateLimitModel;
 
 /**
  *  "General"-tab for preferences dialog
@@ -269,6 +270,7 @@ private:
     QVector<SliderAndSpinBoxSync*> m_syncs;
     int m_lastUsedThreadsLimit;
     int m_lastUsedClonesLimit;
+    QScopedPointer<KisFrameRateLimitModel> m_frameRateModel;
 };
 
 //=======================

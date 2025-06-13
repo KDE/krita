@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-08 02:00+0000\n"
+"POT-Creation-Date: 2025-06-13 01:59+0000\n"
 "PO-Revision-Date: 2025-01-18 16:50+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -16656,14 +16656,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "مساحات العمل"
 
-#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:709
+#: krita/main.cc:724 libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:727
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "كريتا: تحذير"
 
-#: krita/main.cc:711
+#: krita/main.cc:725
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -21333,7 +21333,7 @@ msgstr "المقاس"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1592
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21660,7 +21660,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (مضمّنة)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:523
+#: libs/ui/dialogs/kis_dlg_preferences.cc:525
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -24345,15 +24345,15 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:981
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1092
-#: libs/ui/KisApplication.cpp:1095 libs/ui/KisApplication.cpp:1111
-#: libs/ui/KisApplication.cpp:1143 libs/ui/KisApplication.cpp:1157
-#: libs/ui/KisApplication.cpp:1185 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
+#: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
+#: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
 #: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
@@ -24649,8 +24649,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25521,7 +25521,7 @@ msgstr ""
 "استخدم ”حوّل فضاء الصّورة اللونيّ“.</b>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
 #, fuzzy, kde-format
 msgid "Warning(s):"
 msgstr "التّحذيرات:"
@@ -26501,8 +26501,8 @@ msgstr "اعرض:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -26606,10 +26606,10 @@ msgstr "تصيير الحركة"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
-#: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
+#: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
 #: plugins/dockers/logdocker/LogDockerDock.cpp:123
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
@@ -26736,7 +26736,7 @@ msgstr "المدّة:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
-#: libs/ui/forms/wdgperformancesettings.ui:251
+#: libs/ui/forms/wdgperformancesettings.ui:250
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:389
 #: plugins/impex/webp/kis_wdg_options_webp.ui:147
 #, kde-format
@@ -27454,7 +27454,7 @@ msgid "Set color used for warning"
 msgstr "اضبط اللون المستخدم للتّحذيرات"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
 #, fuzzy, kde-format
 #| msgid "Perceptual"
 msgctxt "Color conversion intent"
@@ -27462,7 +27462,7 @@ msgid "Perceptual"
 msgstr "حسي"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1166
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
 #, fuzzy, kde-format
 #| msgid "Relative Colorimetric"
 msgctxt "Color conversion intent"
@@ -27470,7 +27470,7 @@ msgid "Relative Colorimetric"
 msgstr "قياس الألوان النسبي"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1169
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "Color conversion intent"
@@ -27478,7 +27478,7 @@ msgid "Saturation"
 msgstr "التّشبّع"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1170
 #, fuzzy, kde-format
 #| msgid "Absolute Colorimetric"
 msgctxt "Color conversion intent"
@@ -27486,7 +27486,7 @@ msgid "Absolute Colorimetric"
 msgstr "قياس الألوان المطلق"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1171
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Display Selection"
@@ -27495,14 +27495,14 @@ msgid "Use global display settings"
 msgstr "اعرض التحديد"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1172
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1175
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Display Mode"
@@ -27591,12 +27591,12 @@ msgstr "خصائص الطّبقة"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1506
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1510
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1593
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2069 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1505
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1509
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1513
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1598
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2023
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2081 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27755,17 +27755,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "كرّر الطّبقة أو القناع"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "No Cursor"
 msgstr "لا مؤشّر"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "Tool Icon"
 msgstr "أيقونة الأداء"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -27774,57 +27774,57 @@ msgstr "أيقونة الأداء"
 msgid "Arrow"
 msgstr "سهم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgid "Small Circle"
 msgstr "دائرة صغيرة"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, kde-format
 msgid "Black Pixel"
 msgstr "بكسل أسود"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "White Pixel"
 msgstr "بكسل أبيض"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "بلا مخطط تفصيلي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, fuzzy, kde-format
 #| msgid "Circle Bullet"
 msgid "Circle Outline"
 msgstr "نقطة دائريّة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, fuzzy, kde-format
 #| msgid "&Preview"
 msgid "Preview Outline"
 msgstr "&عاين"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, fuzzy, kde-format
 #| msgid "Timeline"
 msgid "Tilt Outline"
@@ -27832,81 +27832,81 @@ msgstr "الخطّ الزّمنيّ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "ممحاة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
 msgid "On Touch Drag"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Click Drag"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:387
 #, fuzzy, kde-format
 #| msgid "All supported formats"
 msgid "All Supported Files"
 msgstr "كلّ النُّسق المدعومة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:422
 #, kde-format
 msgid "Open default window"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:423
 #, fuzzy, kde-format
 #| msgid "Go to previous page"
 msgid "Load previous session"
 msgstr "انتقل إلى الصّفحة السّابقة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:422
+#: libs/ui/dialogs/kis_dlg_preferences.cc:424
 #, fuzzy, kde-format
 #| msgid "Show in Timeline"
 msgid "Show session manager"
 msgstr "اعرض في الخطّ الزّمنيّ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:488
+#: libs/ui/dialogs/kis_dlg_preferences.cc:490
 #, fuzzy, kde-format
 #| msgid "Note: Krita will need to be restarted for changes to take effect"
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "لاحظ أنّه عليك إعادة تشغيل «كريتا» لتأخذ التّغييرات مفعولها"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:494
+#: libs/ui/dialogs/kis_dlg_preferences.cc:496
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:528
 #, fuzzy, kde-format
 #| msgid "Internal error"
 msgid "Internal Storage"
 msgstr "خطأ داخليّ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:528
+#: libs/ui/dialogs/kis_dlg_preferences.cc:530
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:568
 #, fuzzy, kde-format
 #| msgid "User Manual"
 msgid "Choose Manually"
 msgstr "دليل المستخدم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:631
+#: libs/ui/dialogs/kis_dlg_preferences.cc:633
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -27921,26 +27921,26 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:967
+#: libs/ui/dialogs/kis_dlg_preferences.cc:969
 #, kde-format
 msgid "Select a Background Image"
 msgstr "اختر صورة خلفية"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:981
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ليست صورة صالحة!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:999
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1001
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1123
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1253
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1334
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27948,26 +27948,26 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "الشّاشة %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1213
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, fuzzy, kde-format
 msgid "Install Color Profiles"
 msgstr "تثبيت لاحات ألوان"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1417
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1419
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -27975,7 +27975,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #, fuzzy, kde-format
 #| msgid "Maximum brush size:"
 msgid "Maximum brush speed: {n} px/ms"
@@ -27990,7 +27990,7 @@ msgstr[5] "أقصى مقاس للفرشاة:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Brush Smoothing: Disabled"
@@ -28003,20 +28003,20 @@ msgstr[3] "تنعيم الفرشاة: معطّل"
 msgstr[4] "تنعيم الفرشاة: معطّل"
 msgstr[5] "تنعيم الفرشاة: معطّل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1459
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
 #, fuzzy, kde-format
 #| msgid "&Text direction:"
 msgid "Pen tilt direction offset: "
 msgstr "اتّجاه ال&نّصّ:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1556
-#: libs/ui/forms/wdgperformancesettings.ui:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1559
+#: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " غ.بايت"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1580
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -28027,30 +28027,30 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " ث"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1583
 #, kde-format
 msgid " fps"
 msgstr "  إطار/ثا"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1810
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1822
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "أوبن‌جي‌إل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1811
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1828
 #, fuzzy, kde-format
 #| msgctxt "canvas renderer"
 #| msgid "OpenGL"
@@ -28058,7 +28058,7 @@ msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "أوبن‌جي‌إل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1830
 #, fuzzy, kde-format
 #| msgctxt "canvas renderer"
 #| msgid "OpenGL"
@@ -28066,156 +28066,156 @@ msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "أوبن‌جي‌إل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "آليّ (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
 #, fuzzy, kde-format
 #| msgid "Display:"
 msgid "Display Id: %1"
 msgstr "اعرض:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1923
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "اسم العرض: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, fuzzy, kde-format
 #| msgid "Distance:"
 msgid "Min Luminance: %1"
 msgstr "المسافة:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
 #, fuzzy, kde-format
 #| msgid "Distance:"
 msgid "Max Luminance: %1"
 msgstr "المسافة:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "النّقطة البيضاء: %1، %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2098
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Configure Krita"
 msgstr "اضبط كريتا"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "اختصارات لوحة المفاتيح"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "الاختصارات"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2250
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "إعدادات دخل رقعة الرسم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #, kde-format
 msgid "Canvas Input"
 msgstr "دخل رقعة الرسم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "إدارة الألوان"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2270
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "اللون"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2280
 #, kde-format
 msgid "Performance"
 msgstr "الأداء"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
 #, kde-format
 msgid "Tablet settings"
 msgstr "إعدادات اللوحي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2290
 #, kde-format
 msgid "Tablet"
 msgstr "اللوحي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2286
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "إعدادات ”رقعة الرّسم فقط“"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2300
 #, kde-format
 msgid "Canvas-only"
 msgstr "رقعة الرسم فقط"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2296
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2310
 #, fuzzy, kde-format
 #| msgid "Save palette"
 msgid "Pop-up Palette"
 msgstr "احفظ اللوحة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2318
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "المؤلف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "المؤلف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2315
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2327
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -28829,7 +28829,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#| "REC-html40/strict.dtd\">\n"
+#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#| "css\">\n"
+#| "p, li { white-space: pre-wrap; }\n"
+#| "</style></head><body>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
+#| "and community-driven tool for digital artists everywhere.<br />Progress "
+#| "is made possible thanks to ongoing support from our community of <a href="
+#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
+#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
+#| "a>members.</p></body></html>"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -28841,9 +28855,9 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
 "and community-driven tool for digital artists everywhere.<br />Progress is "
 "made possible thanks to ongoing support from our community of <a href="
-"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-"sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-"a>members.</p></body></html>"
+"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, <a "
+"href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a href=\"https://"
+"fund.krita.org/\">development fund</a> members.</p></body></html>"
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -31958,39 +31972,39 @@ msgid "&Remember"
 msgstr "&تذكّر"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgperformancesettings.ui:39
+#: libs/ui/forms/wdgperformancesettings.ui:38
 #, kde-format
 msgid "Note: Krita will need to be restarted for changes to take effect"
 msgstr "لاحظ أنّه عليك إعادة تشغيل «كريتا» لتأخذ التّغييرات مفعولها"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgperformancesettings.ui:56
+#: libs/ui/forms/wdgperformancesettings.ui:55
 #, kde-format
 msgid "RAM"
 msgstr "الذّاكرة العشوائيّة"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgperformancesettings.ui:62
+#: libs/ui/forms/wdgperformancesettings.ui:61
 #, kde-format
 msgid "Memory available:"
 msgstr "الذاكرة المتوفرة:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTotalMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:75
+#: libs/ui/forms/wdgperformancesettings.ui:74
 #, kde-format
 msgid "XXX MiB"
 msgstr "كذا من الذّاكرة"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderMemoryLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:85
-#: libs/ui/forms/wdgperformancesettings.ui:103
+#: libs/ui/forms/wdgperformancesettings.ui:84
+#: libs/ui/forms/wdgperformancesettings.ui:102
 #, kde-format
 msgid "Krita will not use more memory than this limit."
 msgstr "لن يستخدم كريتا ذاكرة أكثر ممّا هو محدّد هنا."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgperformancesettings.ui:88
+#: libs/ui/forms/wdgperformancesettings.ui:87
 #, kde-format
 msgid "Memory Limit:"
 msgstr "حدّ الذّاكرة:"
@@ -31998,23 +32012,23 @@ msgstr "حدّ الذّاكرة:"
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intMemoryLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intPoolLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intUndoLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:110
-#: libs/ui/forms/wdgperformancesettings.ui:138
-#: libs/ui/forms/wdgperformancesettings.ui:172
+#: libs/ui/forms/wdgperformancesettings.ui:109
+#: libs/ui/forms/wdgperformancesettings.ui:137
+#: libs/ui/forms/wdgperformancesettings.ui:171
 #, kde-format
 msgid " MiB"
 msgstr " ميبي.بايت"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgperformancesettings.ui:119
+#: libs/ui/forms/wdgperformancesettings.ui:118
 #, fuzzy, kde-format
 msgid "Internal Pool:"
 msgstr "الحوض الدّاخليّ:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:147
-#: libs/ui/forms/wdgperformancesettings.ui:165
+#: libs/ui/forms/wdgperformancesettings.ui:146
+#: libs/ui/forms/wdgperformancesettings.ui:164
 #, kde-format
 msgid ""
 "When undo information reaches this limit, it will be stored in a temporary "
@@ -32024,13 +32038,13 @@ msgstr ""
 "هذا الإعادة أبطأ."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgperformancesettings.ui:150
+#: libs/ui/forms/wdgperformancesettings.ui:149
 #, kde-format
 msgid "Swap Undo After:"
 msgstr "بدّل الإعادة بعد:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgperformancesettings.ui:184
+#: libs/ui/forms/wdgperformancesettings.ui:183
 #, fuzzy, kde-format
 #| msgid "Swap File Size"
 msgid "Swap File"
@@ -32038,14 +32052,14 @@ msgstr "ملفّ التّبديل:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderSwapSize)
-#: libs/ui/forms/wdgperformancesettings.ui:190
-#: libs/ui/forms/wdgperformancesettings.ui:208
+#: libs/ui/forms/wdgperformancesettings.ui:189
+#: libs/ui/forms/wdgperformancesettings.ui:207
 #, kde-format
 msgid "The swap file will not be bigger than this limit."
 msgstr "لن يكون حجم التّبديل أكبر من هذه القيمة."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgperformancesettings.ui:193
+#: libs/ui/forms/wdgperformancesettings.ui:192
 #, fuzzy, kde-format
 #| msgid "File Size Limit:"
 msgid "Size Limit:"
@@ -32053,7 +32067,7 @@ msgstr "حدّ حجم الملفّ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgperformancesettings.ui:224
+#: libs/ui/forms/wdgperformancesettings.ui:223
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:247
 #, fuzzy, kde-format
 #| msgid "Video Location:"
@@ -32061,19 +32075,19 @@ msgid "Location:"
 msgstr "المكان:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: libs/ui/forms/wdgperformancesettings.ui:257
+#: libs/ui/forms/wdgperformancesettings.ui:256
 #, kde-format
 msgid "Multithreading"
 msgstr "تعدّد الخيوط"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/forms/wdgperformancesettings.ui:263
+#: libs/ui/forms/wdgperformancesettings.ui:262
 #, kde-format
 msgid "CPU Limit:"
 msgstr "حدّ المعالج:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderThreadsLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:276
+#: libs/ui/forms/wdgperformancesettings.ui:275
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Background color to replace transparent pixels with."
@@ -32084,13 +32098,13 @@ msgid ""
 msgstr "لون الخلفيّة لاستبدال البكسلات المخفيّة به."
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgperformancesettings.ui:283
+#: libs/ui/forms/wdgperformancesettings.ui:282
 #, kde-format
 msgid "Frame Rendering Clones Limit"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:296
+#: libs/ui/forms/wdgperformancesettings.ui:295
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>When rendering animation frames (into files or during "
@@ -32104,14 +32118,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/forms/wdgperformancesettings.ui:303
+#: libs/ui/forms/wdgperformancesettings.ui:302
 #, fuzzy, kde-format
 #| msgid "Direction:"
 msgid "Frame Rendering Timeout"
 msgstr "الاتّجاه:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameTimeout)
-#: libs/ui/forms/wdgperformancesettings.ui:316
+#: libs/ui/forms/wdgperformancesettings.ui:315
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
@@ -32125,14 +32139,22 @@ msgstr ""
 "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">آخر "
 "الملفات</span></p></body></html>"
 
+#. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
+#: libs/ui/forms/wdgperformancesettings.ui:325
+#, fuzzy, kde-format
+#| msgid "Frame Rate:"
+msgid "Frame rate"
+msgstr "معدّل الإطارات:"
+
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
-#: libs/ui/forms/wdgperformancesettings.ui:326
-#, kde-format
-msgid "Limit frames per second while painting:"
-msgstr "اقصر الإطارات كلّ ثانية أثناء الطّلاء"
+#: libs/ui/forms/wdgperformancesettings.ui:331
+#, fuzzy, kde-format
+#| msgid "Frame Rate:"
+msgid "Frame rate limit:"
+msgstr "معدّل الإطارات:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:339
+#: libs/ui/forms/wdgperformancesettings.ui:344
 #, kde-format
 msgid ""
 "<html><head/><body><p>Krita will try to limit the number of screen updates "
@@ -32141,52 +32163,58 @@ msgid ""
 "body></html>"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkDetectFps)
+#: libs/ui/forms/wdgperformancesettings.ui:351
+#, kde-format
+msgid "Detect from screen"
+msgstr ""
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
-#: libs/ui/forms/wdgperformancesettings.ui:346
+#: libs/ui/forms/wdgperformancesettings.ui:361
 #, kde-format
 msgid "Debug options"
 msgstr "خيارات التّنقيح"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOpenGLFramerateLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:352
+#: libs/ui/forms/wdgperformancesettings.ui:367
 #, kde-format
 msgid "Debug logging of OpenGL framerate"
 msgstr "نقّح تسجيل معدّل إطارات «أوبن‌جي‌إل»"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBrushSpeedLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:359
+#: libs/ui/forms/wdgperformancesettings.ui:374
 #, kde-format
 msgid "Debug logging for brush rendering speed"
 msgstr "نقّح تسجيل سرعة تصيير الفرشاة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableAVXOptimizations)
-#: libs/ui/forms/wdgperformancesettings.ui:366
+#: libs/ui/forms/wdgperformancesettings.ui:381
 #, fuzzy, kde-format
 #| msgid "Disable vector optimizations (for AMD CPUs)"
 msgid "Disable AVX vector optimizations"
 msgstr "عطّل تحسينات المتّجهات (لمعالجات AMD)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableVectorOptimizations)
-#: libs/ui/forms/wdgperformancesettings.ui:373
+#: libs/ui/forms/wdgperformancesettings.ui:388
 #, fuzzy, kde-format
 #| msgid "Disable vector optimizations (for AMD CPUs)"
 msgid "Disable all vector optimizations"
 msgstr "عطّل تحسينات المتّجهات (لمعالجات AMD)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProgressReporting)
-#: libs/ui/forms/wdgperformancesettings.ui:380
+#: libs/ui/forms/wdgperformancesettings.ui:395
 #, kde-format
 msgid "Progress reporting (might affect performance)"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerformanceLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:387
+#: libs/ui/forms/wdgperformancesettings.ui:402
 #, kde-format
 msgid "Performance logging"
 msgstr "تسجيل الأداء"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgperformancesettings.ui:400
+#: libs/ui/forms/wdgperformancesettings.ui:415
 #, kde-format
 msgid ""
 "<html><head/><body><p>When performance logging is enabled Krita saves timing "
@@ -32196,21 +32224,21 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgperformancesettings.ui:427
+#: libs/ui/forms/wdgperformancesettings.ui:442
 #, fuzzy, kde-format
 #| msgid "Animation"
 msgid "Animation Cache"
 msgstr "الحركة"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgperformancesettings.ui:433
+#: libs/ui/forms/wdgperformancesettings.ui:448
 #, fuzzy, kde-format
 #| msgid "No store backend"
 msgid "Cache Storage Backend"
 msgstr "لا سَند تخزين"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optInMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:439
+#: libs/ui/forms/wdgperformancesettings.ui:454
 #, kde-format
 msgid ""
 "<html><head/><body><p>Animation frame cache will be stored in RAM completely "
@@ -32223,13 +32251,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optInMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:442
+#: libs/ui/forms/wdgperformancesettings.ui:457
 #, kde-format
 msgid "In-memory"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optOnDisk)
-#: libs/ui/forms/wdgperformancesettings.ui:449
+#: libs/ui/forms/wdgperformancesettings.ui:464
 #, kde-format
 msgid ""
 "<html><head/><body><p>Animation frames are stored on hard disk in the same "
@@ -32240,20 +32268,20 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optOnDisk)
-#: libs/ui/forms/wdgperformancesettings.ui:452
+#: libs/ui/forms/wdgperformancesettings.ui:467
 #, kde-format
 msgid "On-disk"
 msgstr "على القرص"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/forms/wdgperformancesettings.ui:462
+#: libs/ui/forms/wdgperformancesettings.ui:477
 #, fuzzy, kde-format
 #| msgid "Change Tracking Options"
 msgid "Cache Generation Options"
 msgstr "تغيير خيارات التّعقّب"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:468
+#: libs/ui/forms/wdgperformancesettings.ui:483
 #, kde-format
 msgid ""
 "<html><head/><body><p>Render scaled down version of the frame if the image "
@@ -32262,13 +32290,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:471
+#: libs/ui/forms/wdgperformancesettings.ui:486
 #, kde-format
 msgid "Limit cached frame size:"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:484
+#: libs/ui/forms/wdgperformancesettings.ui:499
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
@@ -32282,7 +32310,7 @@ msgstr ""
 "الملفات</span></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
-#: libs/ui/forms/wdgperformancesettings.ui:491
+#: libs/ui/forms/wdgperformancesettings.ui:506
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Background color to replace transparent pixels with."
@@ -32293,13 +32321,13 @@ msgid ""
 msgstr "لون الخلفيّة لاستبدال البكسلات المخفيّة به."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRegionOfInterest)
-#: libs/ui/forms/wdgperformancesettings.ui:494
+#: libs/ui/forms/wdgperformancesettings.ui:509
 #, kde-format
 msgid "Use region of interest"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intRegionOfInterestMargin)
-#: libs/ui/forms/wdgperformancesettings.ui:507
+#: libs/ui/forms/wdgperformancesettings.ui:522
 #, fuzzy, no-c-format, kde-format
 #| msgid ""
 #| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
@@ -32314,7 +32342,7 @@ msgstr ""
 "الملفات</span></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
-#: libs/ui/forms/wdgperformancesettings.ui:514
+#: libs/ui/forms/wdgperformancesettings.ui:529
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Store information like keywords, title and subject "
@@ -32326,33 +32354,33 @@ msgstr ""
 "خزّن المعلومات مثل الكلمات المفتاحيّة والعنوان والموضوع والرّخصة، إن أمكن."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
-#: libs/ui/forms/wdgperformancesettings.ui:517
+#: libs/ui/forms/wdgperformancesettings.ui:532
 #, kde-format
 msgid "Enable background cache generation"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgperformancesettings.ui:541
+#: libs/ui/forms/wdgperformancesettings.ui:556
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:166
 #, kde-format
 msgid "Instant Preview"
 msgstr "المعاينة اللحظيّة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolUseInStackPreview)
-#: libs/ui/forms/wdgperformancesettings.ui:550
+#: libs/ui/forms/wdgperformancesettings.ui:565
 #, kde-format
 msgid "Use in-stack preview in Transform Tool"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/forms/wdgperformancesettings.ui:557
+#: libs/ui/forms/wdgperformancesettings.ui:572
 #, fuzzy, kde-format
 #| msgid "Instant Preview"
 msgid "Force Instant Preview"
 msgstr "المعاينة اللحظيّة"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:563
+#: libs/ui/forms/wdgperformancesettings.ui:578
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Background color to replace transparent pixels with."
@@ -32364,7 +32392,7 @@ msgid ""
 msgstr "لون الخلفيّة لاستبدال البكسلات المخفيّة به."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:566
+#: libs/ui/forms/wdgperformancesettings.ui:581
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Filters"
@@ -32372,7 +32400,7 @@ msgid "in Filters"
 msgstr "مرشحات"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:573
+#: libs/ui/forms/wdgperformancesettings.ui:588
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Background color to replace transparent pixels with."
@@ -32384,7 +32412,7 @@ msgid ""
 msgstr "لون الخلفيّة لاستبدال البكسلات المخفيّة به."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:576
+#: libs/ui/forms/wdgperformancesettings.ui:591
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Transform Tool"
@@ -32392,7 +32420,7 @@ msgid "in Transform Tool"
 msgstr "أداة التّحويل"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:583
+#: libs/ui/forms/wdgperformancesettings.ui:598
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Background color to replace transparent pixels with."
@@ -32404,7 +32432,7 @@ msgid ""
 msgstr "لون الخلفيّة لاستبدال البكسلات المخفيّة به."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:586
+#: libs/ui/forms/wdgperformancesettings.ui:601
 #, fuzzy, kde-format
 #| msgid "Move Tool"
 msgid "in Move Tool"
@@ -32789,7 +32817,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:371
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:389
 #, kde-format
 msgid "Sessions"
 msgstr "الجلسات"
@@ -34355,7 +34383,7 @@ msgstr "لون الخلفيّة"
 msgid "&Docker Box"
 msgstr "الر&صيف"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:367
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:385
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34369,8 +34397,8 @@ msgstr "النّقوش"
 msgid "Custom Pattern"
 msgstr "اللوحة الحاليّة"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:352
-#: libs/ui/KisApplication.cpp:353
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:370
+#: libs/ui/KisApplication.cpp:371
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -35355,21 +35383,21 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "مستوى التّقريب: %1 ٪"
 
-#: libs/ui/KisApplication.cpp:344
+#: libs/ui/KisApplication.cpp:362
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "الفُرش مسبقة الضّبط"
 
-#: libs/ui/KisApplication.cpp:347 libs/ui/KisApplication.cpp:348
-#: libs/ui/KisApplication.cpp:349 libs/ui/KisApplication.cpp:350
+#: libs/ui/KisApplication.cpp:365 libs/ui/KisApplication.cpp:366
+#: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush tips"
 msgstr "حجم الفرشاة"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:373
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -35377,7 +35405,7 @@ msgstr "حجم الفرشاة"
 msgid "Palettes"
 msgstr "اللوحات"
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:386 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -35385,19 +35413,19 @@ msgstr "اللوحات"
 msgid "Workspaces"
 msgstr "مساحات العمل"
 
-#: libs/ui/KisApplication.cpp:369
+#: libs/ui/KisApplication.cpp:387
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "طبقة متجهيّة"
 
-#: libs/ui/KisApplication.cpp:370 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 #| msgid "Window Background:"
 msgid "Window layouts"
 msgstr "خلفية النافذة:"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:390
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -35405,26 +35433,26 @@ msgstr "خلفية النافذة:"
 msgid "Gamut masks"
 msgstr "تدوير القناع"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:392
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Ten Scripts"
 msgid "SeExpr Scripts"
 msgstr "عشرُ سكربتات"
 
-#: libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:397
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "أنماط الطّبقة"
 
-#: libs/ui/KisApplication.cpp:382
+#: libs/ui/KisApplication.cpp:400
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "عائلة الخطّ"
 
-#: libs/ui/KisApplication.cpp:394
+#: libs/ui/KisApplication.cpp:412
 #, kde-format
 msgid ""
 "%1\n"
@@ -35432,7 +35460,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:394 libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:418
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Krita: Internal Error"
@@ -35440,7 +35468,7 @@ msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "كريتا: خطأ داخلي"
 
-#: libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:418
 #, kde-format
 msgid ""
 "\n"
@@ -35448,7 +35476,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:450
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35459,70 +35487,70 @@ msgstr ""
 "هذا غير مستحسن.\n"
 "رجاءً نزّل إصدارة 64 بتّ وثبّتها."
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:467
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Initializing Globals..."
 msgstr "أدر الموارد..."
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:499
 #, fuzzy, kde-format
 #| msgid "Loading Resource Bundles..."
 msgid "Adding resource types..."
 msgstr "يحمّل حزم الموارد..."
 
-#: libs/ui/KisApplication.cpp:485
+#: libs/ui/KisApplication.cpp:503
 #, fuzzy, kde-format
 #| msgid "Loading Brushes..."
 msgid "Loading plugins..."
 msgstr "يحمل الفُرش..."
 
-#: libs/ui/KisApplication.cpp:491
+#: libs/ui/KisApplication.cpp:509
 #, fuzzy, kde-format
 #| msgid "Loading Brushes..."
 msgid "Loading resources..."
 msgstr "يحمل الفُرش..."
 
-#: libs/ui/KisApplication.cpp:500
+#: libs/ui/KisApplication.cpp:518
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "يحمّل النّافذة الرّئيسيّة..."
 
-#: libs/ui/KisApplication.cpp:532
+#: libs/ui/KisApplication.cpp:550
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "يكتشف..."
 
-#: libs/ui/KisApplication.cpp:601
+#: libs/ui/KisApplication.cpp:619
 #, fuzzy, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "لم يُعثر على نوع MIME، جرّب استخدام خيار -mimetype"
 
-#: libs/ui/KisApplication.cpp:662
+#: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "فشل تصيير إطارات الحركة!"
 
-#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:963
+#: libs/ui/KisApplication.cpp:708 libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "File layer"
 msgstr "طبقة ملفّ"
 
-#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
-#: libs/ui/KisApplication.cpp:957 libs/ui/KisApplication.cpp:971
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:716 libs/ui/KisApplication.cpp:721
+#: libs/ui/KisApplication.cpp:975 libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "كريتا: تحذير"
 
-#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:972
+#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:990
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:722
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35535,7 +35563,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:710
+#: libs/ui/KisApplication.cpp:728
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35543,33 +35571,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:958
+#: libs/ui/KisApplication.cpp:976
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Couldn't open file %1"
 msgstr "تعذر العثور على %1"
 
-#: libs/ui/KisApplication.cpp:977
+#: libs/ui/KisApplication.cpp:995
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1093
+#: libs/ui/KisApplication.cpp:1111
 #, kde-format
 msgid "No template found for: %1"
 msgstr "لم يُعثر على قالب ل‍: %1"
 
-#: libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:1114
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "عُُثر على العديد من القوالب ل‍: %1"
 
-#: libs/ui/KisApplication.cpp:1112
+#: libs/ui/KisApplication.cpp:1130
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "فشل تحميل القالب %1."
 
-#: libs/ui/KisApplication.cpp:1144
+#: libs/ui/KisApplication.cpp:1162
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35579,7 +35607,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1158
+#: libs/ui/KisApplication.cpp:1176
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35590,7 +35618,7 @@ msgstr ""
 "\n"
 "رجاءً تحقّق من عدم استخدام أيّ برنامج آخر للملفّ وجرّب مجدّدًا."
 
-#: libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1204
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "أتريد مسح ملفّ الإعدادات؟"
@@ -61731,28 +61759,28 @@ msgstr "إعدادات الأداة"
 msgid "The files have been written to the export folder."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:900
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize shapes"
 msgid "Resize all Pages"
 msgstr "تغيير مقاس الأشكال"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 #, fuzzy
 #| msgctxt "action"
 #| msgid "R&esize Canvas..."
 msgid "Resizing pages..."
 msgstr "&غيّر مقاس رقعة الرسم..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:913
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize Image"
 msgid "Resizing Pages"
 msgstr "تغيير مقاس الصّورة"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:927
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:926
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -61760,13 +61788,13 @@ msgid ""
 " Estimated:{estimated}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
 #, fuzzy
 #| msgid "Tool Settings"
 msgid "Scraping success"
 msgstr "إعدادات الأداة"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr ""
@@ -68050,6 +68078,9 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "الصّور المرجع"
 
+#~ msgid "Limit frames per second while painting:"
+#~ msgstr "اقصر الإطارات كلّ ثانية أثناء الطّلاء"
+
 #, fuzzy
 #~| msgid "Save ICC Profile"
 #~ msgid "Python Files (*.py)"
@@ -70978,9 +71009,6 @@ msgstr "الصّور المرجع"
 
 #~ msgid "Play Speed:"
 #~ msgstr "سرعة التّشغيل:"
-
-#~ msgid "Frame Rate:"
-#~ msgstr "معدّل الإطارات:"
 
 #~ msgid "Preview modified layer"
 #~ msgstr "عاين الطّبقة المعدّلة"

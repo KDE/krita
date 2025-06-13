@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-08 02:00+0000\n"
+"POT-Creation-Date: 2025-06-13 01:59+0000\n"
 "PO-Revision-Date: 2025-06-01 14:01+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -16028,14 +16028,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:709
+#: krita/main.cc:724 libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:727
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varning"
 
-#: krita/main.cc:711
+#: krita/main.cc:725
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20514,7 +20514,7 @@ msgstr "Storlek"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1592
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -20828,7 +20828,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (inbäddad)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:523
+#: libs/ui/dialogs/kis_dlg_preferences.cc:525
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -23394,15 +23394,15 @@ msgstr "Lokala resurser"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:981
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1092
-#: libs/ui/KisApplication.cpp:1095 libs/ui/KisApplication.cpp:1111
-#: libs/ui/KisApplication.cpp:1143 libs/ui/KisApplication.cpp:1157
-#: libs/ui/KisApplication.cpp:1185 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
+#: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
+#: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
 #: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
@@ -23681,8 +23681,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24490,7 +24490,7 @@ msgstr ""
 "Bildfrekvensen kommer att minskas till 50 bilder per sekund."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
 #, kde-format
 msgid "Warning(s):"
 msgstr "Varning(ar):"
@@ -25456,8 +25456,8 @@ msgstr "Huvudskärm:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25557,10 +25557,10 @@ msgstr "Import av videoanimering"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
-#: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
+#: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
 #: plugins/dockers/logdocker/LogDockerDock.cpp:123
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
@@ -25687,7 +25687,7 @@ msgstr "Längd:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
-#: libs/ui/forms/wdgperformancesettings.ui:251
+#: libs/ui/forms/wdgperformancesettings.ui:250
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:389
 #: plugins/impex/webp/kis_wdg_options_webp.ui:147
 #, kde-format
@@ -26402,49 +26402,49 @@ msgid "Set color used for warning"
 msgstr "Ange färg använd för varning"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Perceptuell"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1166
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativt färgläge"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1169
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Färgmättnad"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1170
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absolut färgläge"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1171
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
 #, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
 msgstr "Använd globala visningsinställningar"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1172
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr "Simulera pappersvitt och svart"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1175
 #, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
@@ -26536,12 +26536,12 @@ msgstr "Lageregenskaper"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1506
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1510
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1593
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2069 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1505
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1509
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1513
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1598
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2023
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2081 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26696,17 +26696,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Flera inklistringskällor detekterade"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "No Cursor"
 msgstr "Ingen markör"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "Tool Icon"
 msgstr "Verktygsikon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -26715,131 +26715,131 @@ msgstr "Verktygsikon"
 msgid "Arrow"
 msgstr "Pil"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgid "Small Circle"
 msgstr "Liten cirkel"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Hårkors"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Högerriktad triangel"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Vänsterriktad triangel"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, kde-format
 msgid "Black Pixel"
 msgstr "Svart bildpunkt"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "White Pixel"
 msgstr "Vit bildpunkt"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Ingen kontur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, kde-format
 msgid "Circle Outline"
 msgstr "Cirkelkontur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Preview Outline"
 msgstr "Granskningskontur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Lutningskontur"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Radering"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Vid dragberöring"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Click Drag"
 msgstr "Vid klickberöring"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Vid mittenklickberöring"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:387
 #, kde-format
 msgid "All Supported Files"
 msgstr "Alla filer som stöds"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:422
 #, kde-format
 msgid "Open default window"
 msgstr "Öppna standardfönster"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:423
 #, kde-format
 msgid "Load previous session"
 msgstr "Läs in föregående session"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:422
+#: libs/ui/dialogs/kis_dlg_preferences.cc:424
 #, kde-format
 msgid "Show session manager"
 msgstr "Visa sessionshanterare"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:488
+#: libs/ui/dialogs/kis_dlg_preferences.cc:490
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Krita måste startas om för att ändringarna ska få effekt."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:494
+#: libs/ui/dialogs/kis_dlg_preferences.cc:496
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "Att spara på en plats hämtad från filväljaren kan göra start långsammare."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:528
 #, kde-format
 msgid "Internal Storage"
 msgstr "Intern lagring"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:528
+#: libs/ui/dialogs/kis_dlg_preferences.cc:530
 #, kde-format
 msgid "SD-Card"
 msgstr "SD-kort"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:568
 #, kde-format
 msgid "Choose Manually"
 msgstr "Välj manuellt"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:631
+#: libs/ui/dialogs/kis_dlg_preferences.cc:633
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -26865,26 +26865,26 @@ msgstr ""
 "<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:967
+#: libs/ui/dialogs/kis_dlg_preferences.cc:969
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Välj en bakgrundsbild"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:981
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 är inte en giltig bildfil."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:999
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1001
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Varning:</b> Platsen är inte skrivbar."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1123
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1253
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1334
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -26892,19 +26892,19 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Skärm %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1213
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Installera färgprofiler"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1417
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1419
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -26914,7 +26914,7 @@ msgstr ""
 "orsaka grava förvrängningar när WinTab programmeringsgränssnittet för "
 "ritplattor används)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Använd tidsstämplar från ritplattans drivrutin för penselhastighet"
@@ -26922,7 +26922,7 @@ msgstr "Använd tidsstämplar från ritplattans drivrutin för penselhastighet"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -26932,26 +26932,26 @@ msgstr[1] "Maximal penselhastighet: {n} bildpunkter/ms"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "Penselhastighetsutjämning: {n} sampling"
 msgstr[1] "Penselhastighetsutjämning: {n} samplingar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1459
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "Pennlutningsriktning:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1556
-#: libs/ui/forms/wdgperformancesettings.ui:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1559
+#: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " Gibyte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1580
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -26960,187 +26960,187 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " sek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1583
 #, kde-format
 msgid " fps"
 msgstr " bilder/s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1810
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1822
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1811
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programvaruåtergivning (mycket långsam)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direkt3D 11 via ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1828
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL via ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1830
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Automatisk (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Skärm-id: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1923
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Namn som visas: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Minimal luminans: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Maximal luminans: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Maximal helbildsluminans: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Röd grundfärg: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Grön grundfärg: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Blå grundfärg: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Vitpunkt: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2098
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Varning:</b> Nuvarande skärm stöder inte HDR-återgivning"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Configure Krita"
 msgstr "Anpassa Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Snabbtangenter"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Genvägar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2250
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Inställningar för dukinmatning"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #, kde-format
 msgid "Canvas Input"
 msgstr "Dukinmatning"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "Färghantering"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2270
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Färg"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2280
 #, kde-format
 msgid "Performance"
 msgstr "Prestanda"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
 #, kde-format
 msgid "Tablet settings"
 msgstr "Inställningar av ritplatta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2290
 #, kde-format
 msgid "Tablet"
 msgstr "Ritplatta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2286
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Inställningar för enbart duk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2300
 #, kde-format
 msgid "Canvas-only"
 msgstr "Enbart duk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2296
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2310
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Palettruta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2318
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Upphovsman"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "Upphovsman"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2315
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2327
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27741,7 +27741,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#| "REC-html40/strict.dtd\">\n"
+#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#| "css\">\n"
+#| "p, li { white-space: pre-wrap; }\n"
+#| "</style></head><body>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
+#| "and community-driven tool for digital artists everywhere.<br />Progress "
+#| "is made possible thanks to ongoing support from our community of <a href="
+#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
+#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
+#| "a>members.</p></body></html>"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -27753,9 +27767,9 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
 "and community-driven tool for digital artists everywhere.<br />Progress is "
 "made possible thanks to ongoing support from our community of <a href="
-"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-"sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-"a>members.</p></body></html>"
+"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, <a "
+"href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a href=\"https://"
+"fund.krita.org/\">development fund</a> members.</p></body></html>"
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -30854,39 +30868,39 @@ msgid "&Remember"
 msgstr "&Kom ihåg"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgperformancesettings.ui:39
+#: libs/ui/forms/wdgperformancesettings.ui:38
 #, kde-format
 msgid "Note: Krita will need to be restarted for changes to take effect"
 msgstr "Observera: Krita måste startas om för att ändringarna ska få effekt"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgperformancesettings.ui:56
+#: libs/ui/forms/wdgperformancesettings.ui:55
 #, kde-format
 msgid "RAM"
 msgstr "RAM"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgperformancesettings.ui:62
+#: libs/ui/forms/wdgperformancesettings.ui:61
 #, kde-format
 msgid "Memory available:"
 msgstr "Tillgängligt minne:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTotalMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:75
+#: libs/ui/forms/wdgperformancesettings.ui:74
 #, kde-format
 msgid "XXX MiB"
 msgstr "XXX MiByte"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderMemoryLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:85
-#: libs/ui/forms/wdgperformancesettings.ui:103
+#: libs/ui/forms/wdgperformancesettings.ui:84
+#: libs/ui/forms/wdgperformancesettings.ui:102
 #, kde-format
 msgid "Krita will not use more memory than this limit."
 msgstr "Krita kommer inte att använda mer minne än den här begränsningen."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgperformancesettings.ui:88
+#: libs/ui/forms/wdgperformancesettings.ui:87
 #, kde-format
 msgid "Memory Limit:"
 msgstr "Minnesbegränsning:"
@@ -30894,23 +30908,23 @@ msgstr "Minnesbegränsning:"
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intMemoryLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intPoolLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intUndoLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:110
-#: libs/ui/forms/wdgperformancesettings.ui:138
-#: libs/ui/forms/wdgperformancesettings.ui:172
+#: libs/ui/forms/wdgperformancesettings.ui:109
+#: libs/ui/forms/wdgperformancesettings.ui:137
+#: libs/ui/forms/wdgperformancesettings.ui:171
 #, kde-format
 msgid " MiB"
 msgstr " MiB"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgperformancesettings.ui:119
+#: libs/ui/forms/wdgperformancesettings.ui:118
 #, kde-format
 msgid "Internal Pool:"
 msgstr "Intern pool:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:147
-#: libs/ui/forms/wdgperformancesettings.ui:165
+#: libs/ui/forms/wdgperformancesettings.ui:146
+#: libs/ui/forms/wdgperformancesettings.ui:164
 #, kde-format
 msgid ""
 "When undo information reaches this limit, it will be stored in a temporary "
@@ -30920,53 +30934,53 @@ msgstr ""
 "tillfällig fil och minne frigörs. Det går långsammare att ångra."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgperformancesettings.ui:150
+#: libs/ui/forms/wdgperformancesettings.ui:149
 #, kde-format
 msgid "Swap Undo After:"
 msgstr "Växla ångring efter:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgperformancesettings.ui:184
+#: libs/ui/forms/wdgperformancesettings.ui:183
 #, kde-format
 msgid "Swap File"
 msgstr "Växlingsfil"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderSwapSize)
-#: libs/ui/forms/wdgperformancesettings.ui:190
-#: libs/ui/forms/wdgperformancesettings.ui:208
+#: libs/ui/forms/wdgperformancesettings.ui:189
+#: libs/ui/forms/wdgperformancesettings.ui:207
 #, kde-format
 msgid "The swap file will not be bigger than this limit."
 msgstr "Växlingsfilen kommer inte att bli större än den här begränsningen."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgperformancesettings.ui:193
+#: libs/ui/forms/wdgperformancesettings.ui:192
 #, kde-format
 msgid "Size Limit:"
 msgstr "Storleksgräns:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgperformancesettings.ui:224
+#: libs/ui/forms/wdgperformancesettings.ui:223
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:247
 #, kde-format
 msgid "Location:"
 msgstr "Plats:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: libs/ui/forms/wdgperformancesettings.ui:257
+#: libs/ui/forms/wdgperformancesettings.ui:256
 #, kde-format
 msgid "Multithreading"
 msgstr "Parallellbearbetning"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/forms/wdgperformancesettings.ui:263
+#: libs/ui/forms/wdgperformancesettings.ui:262
 #, kde-format
 msgid "CPU Limit:"
 msgstr "Processorbegränsning:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderThreadsLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:276
+#: libs/ui/forms/wdgperformancesettings.ui:275
 #, kde-format
 msgid ""
 "<html><head/><body><p>Krita will not use more CPU cores than selected by "
@@ -30976,13 +30990,13 @@ msgstr ""
 "av den här begränsningen</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgperformancesettings.ui:283
+#: libs/ui/forms/wdgperformancesettings.ui:282
 #, kde-format
 msgid "Frame Rendering Clones Limit"
 msgstr "Begränsning av antal dubbletter vid bildåtergivning"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:296
+#: libs/ui/forms/wdgperformancesettings.ui:295
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>When rendering animation frames (into files or during "
@@ -31004,13 +31018,13 @@ msgstr ""
 "hypertrådade) kärnor som processorn har</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/forms/wdgperformancesettings.ui:303
+#: libs/ui/forms/wdgperformancesettings.ui:302
 #, kde-format
 msgid "Frame Rendering Timeout"
 msgstr "Tidsgräns överskriden vid bildåtergivning"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameTimeout)
-#: libs/ui/forms/wdgperformancesettings.ui:316
+#: libs/ui/forms/wdgperformancesettings.ui:315
 #, kde-format
 msgid ""
 "<html><head/><body><p>The timeout for rendering one frame. If your animation "
@@ -31023,14 +31037,23 @@ msgstr ""
 "här värdet</p><p><br/></p><p><span style=\" font-weight:600;\">Rekommenderat "
 "värde:</span> 30 - 60 sekunder</p></body></html>"
 
+#. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
+#: libs/ui/forms/wdgperformancesettings.ui:325
+#, fuzzy, kde-format
+#| msgid "Frame Rate:"
+msgid "Frame rate"
+msgstr "Bildfrekvens:"
+
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
-#: libs/ui/forms/wdgperformancesettings.ui:326
-#, kde-format
-msgid "Limit frames per second while painting:"
-msgstr "Begränsa bilder per sekund vid uppritning:"
+#: libs/ui/forms/wdgperformancesettings.ui:331
+#, fuzzy, kde-format
+#| msgctxt "@label:spinbox"
+#| msgid "Frame timing:"
+msgid "Frame rate limit:"
+msgstr "Bildtiming:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:339
+#: libs/ui/forms/wdgperformancesettings.ui:344
 #, kde-format
 msgid ""
 "<html><head/><body><p>Krita will try to limit the number of screen updates "
@@ -31042,50 +31065,56 @@ msgstr ""
 "sekund till den angivna värdet. Ett lägre värde minskar visuell svarstid, "
 "men ökar pennprecision på vissa system såsom MacOS.<p></body></html>"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkDetectFps)
+#: libs/ui/forms/wdgperformancesettings.ui:351
+#, kde-format
+msgid "Detect from screen"
+msgstr ""
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
-#: libs/ui/forms/wdgperformancesettings.ui:346
+#: libs/ui/forms/wdgperformancesettings.ui:361
 #, kde-format
 msgid "Debug options"
 msgstr "Felsökningsalternativ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOpenGLFramerateLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:352
+#: libs/ui/forms/wdgperformancesettings.ui:367
 #, kde-format
 msgid "Debug logging of OpenGL framerate"
 msgstr "Felsökningsloggning av OpenGL bildhastighet"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBrushSpeedLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:359
+#: libs/ui/forms/wdgperformancesettings.ui:374
 #, kde-format
 msgid "Debug logging for brush rendering speed"
 msgstr "Felsökningsloggning för penselåtergivningshastighet"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableAVXOptimizations)
-#: libs/ui/forms/wdgperformancesettings.ui:366
+#: libs/ui/forms/wdgperformancesettings.ui:381
 #, kde-format
 msgid "Disable AVX vector optimizations"
 msgstr "Inaktivera AVX vektoroptimeringar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableVectorOptimizations)
-#: libs/ui/forms/wdgperformancesettings.ui:373
+#: libs/ui/forms/wdgperformancesettings.ui:388
 #, kde-format
 msgid "Disable all vector optimizations"
 msgstr "Inaktivera alla vektoroptimeringar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProgressReporting)
-#: libs/ui/forms/wdgperformancesettings.ui:380
+#: libs/ui/forms/wdgperformancesettings.ui:395
 #, kde-format
 msgid "Progress reporting (might affect performance)"
 msgstr "Förloppsrapportering (kan påverka prestanda)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerformanceLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:387
+#: libs/ui/forms/wdgperformancesettings.ui:402
 #, kde-format
 msgid "Performance logging"
 msgstr "Prestandaloggning"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgperformancesettings.ui:400
+#: libs/ui/forms/wdgperformancesettings.ui:415
 #, kde-format
 msgid ""
 "<html><head/><body><p>When performance logging is enabled Krita saves timing "
@@ -31099,19 +31128,19 @@ msgstr ""
 "lägg till katalogens innehåll i en felrapport.</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgperformancesettings.ui:427
+#: libs/ui/forms/wdgperformancesettings.ui:442
 #, kde-format
 msgid "Animation Cache"
 msgstr "Animeringscache"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgperformancesettings.ui:433
+#: libs/ui/forms/wdgperformancesettings.ui:448
 #, kde-format
 msgid "Cache Storage Backend"
 msgstr "Lagringsgränssnitt för cache"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optInMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:439
+#: libs/ui/forms/wdgperformancesettings.ui:454
 #, kde-format
 msgid ""
 "<html><head/><body><p>Animation frame cache will be stored in RAM completely "
@@ -31131,13 +31160,13 @@ msgstr ""
 "Ultra-HD med 25 bilder/s behövs 800 MiB extra minne</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optInMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:442
+#: libs/ui/forms/wdgperformancesettings.ui:457
 #, kde-format
 msgid "In-memory"
 msgstr "I minne"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optOnDisk)
-#: libs/ui/forms/wdgperformancesettings.ui:449
+#: libs/ui/forms/wdgperformancesettings.ui:464
 #, kde-format
 msgid ""
 "<html><head/><body><p>Animation frames are stored on hard disk in the same "
@@ -31154,19 +31183,19 @@ msgstr ""
 "</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optOnDisk)
-#: libs/ui/forms/wdgperformancesettings.ui:452
+#: libs/ui/forms/wdgperformancesettings.ui:467
 #, kde-format
 msgid "On-disk"
 msgstr "På disk"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/forms/wdgperformancesettings.ui:462
+#: libs/ui/forms/wdgperformancesettings.ui:477
 #, kde-format
 msgid "Cache Generation Options"
 msgstr "Genereringsalternativ för cache"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:468
+#: libs/ui/forms/wdgperformancesettings.ui:483
 #, kde-format
 msgid ""
 "<html><head/><body><p>Render scaled down version of the frame if the image "
@@ -31178,13 +31207,13 @@ msgstr ""
 "gränssnittet för lagring på disk används.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:471
+#: libs/ui/forms/wdgperformancesettings.ui:486
 #, kde-format
 msgid "Limit cached frame size:"
 msgstr "Begränsa bildstorlek lagrad i cache:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:484
+#: libs/ui/forms/wdgperformancesettings.ui:499
 #, kde-format
 msgid ""
 "<html><head/><body><p>Size limit after which the frames will be scaled down</"
@@ -31196,7 +31225,7 @@ msgstr ""
 "bildpunkter</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
-#: libs/ui/forms/wdgperformancesettings.ui:491
+#: libs/ui/forms/wdgperformancesettings.ui:506
 #, kde-format
 msgid ""
 "<html><head/><body><p>When the image is too big, render only currently "
@@ -31206,13 +31235,13 @@ msgstr ""
 "den är för stor</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRegionOfInterest)
-#: libs/ui/forms/wdgperformancesettings.ui:494
+#: libs/ui/forms/wdgperformancesettings.ui:509
 #, kde-format
 msgid "Use region of interest"
 msgstr "Använd intresseområde"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intRegionOfInterestMargin)
-#: libs/ui/forms/wdgperformancesettings.ui:507
+#: libs/ui/forms/wdgperformancesettings.ui:522
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>Add extra area to the region of interest to each side "
@@ -31225,7 +31254,7 @@ msgstr ""
 "span> 25 %. Intresseområdet utökas 25 % på varje sida.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
-#: libs/ui/forms/wdgperformancesettings.ui:514
+#: libs/ui/forms/wdgperformancesettings.ui:529
 #, kde-format
 msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
@@ -31235,32 +31264,32 @@ msgstr ""
 "användaren är overksam</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
-#: libs/ui/forms/wdgperformancesettings.ui:517
+#: libs/ui/forms/wdgperformancesettings.ui:532
 #, kde-format
 msgid "Enable background cache generation"
 msgstr "Aktivera cachegenerering i bakgrunden"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgperformancesettings.ui:541
+#: libs/ui/forms/wdgperformancesettings.ui:556
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:166
 #, kde-format
 msgid "Instant Preview"
 msgstr "Direkt förhandsgranskning"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolUseInStackPreview)
-#: libs/ui/forms/wdgperformancesettings.ui:550
+#: libs/ui/forms/wdgperformancesettings.ui:565
 #, kde-format
 msgid "Use in-stack preview in Transform Tool"
 msgstr "Använd förhandsgranskning på plats i transformeringsverktyget"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/forms/wdgperformancesettings.ui:557
+#: libs/ui/forms/wdgperformancesettings.ui:572
 #, kde-format
 msgid "Force Instant Preview"
 msgstr "Tvinga direkt förhandsgranskning"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:563
+#: libs/ui/forms/wdgperformancesettings.ui:578
 #, kde-format
 msgid ""
 "<html><head/><body><p>The filter dialog will always use instant preview, "
@@ -31272,13 +31301,13 @@ msgstr ""
 "&quot;Visa&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:566
+#: libs/ui/forms/wdgperformancesettings.ui:581
 #, kde-format
 msgid "in Filters"
 msgstr "i filter"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:573
+#: libs/ui/forms/wdgperformancesettings.ui:588
 #, kde-format
 msgid ""
 "<html><head/><body><p>The transform tool preview will always use instant "
@@ -31290,13 +31319,13 @@ msgstr ""
 "&quot;Visa&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:576
+#: libs/ui/forms/wdgperformancesettings.ui:591
 #, kde-format
 msgid "in Transform Tool"
 msgstr "i transformeringsverktyg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:583
+#: libs/ui/forms/wdgperformancesettings.ui:598
 #, kde-format
 msgid ""
 "<html><head/><body><p>The move tool preview will always use instant preview, "
@@ -31308,7 +31337,7 @@ msgstr ""
 "&quot;Visa&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:586
+#: libs/ui/forms/wdgperformancesettings.ui:601
 #, kde-format
 msgid "in Move Tool"
 msgstr "i förflyttningsverktyg"
@@ -31681,7 +31710,7 @@ msgid "HSV CCW"
 msgstr "HSV moturs"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:371
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:389
 #, kde-format
 msgid "Sessions"
 msgstr "Sessioner"
@@ -33184,7 +33213,7 @@ msgstr "Ö&ppna bakgrundsfärgväljare"
 msgid "&Docker Box"
 msgstr "&Panelruta"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:367
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:385
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33198,8 +33227,8 @@ msgstr "Mönster"
 msgid "Custom Pattern"
 msgstr "Egna mönster"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:352
-#: libs/ui/KisApplication.cpp:353
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:370
+#: libs/ui/KisApplication.cpp:371
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34117,20 +34146,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zoom: %1 %"
 
-#: libs/ui/KisApplication.cpp:344
+#: libs/ui/KisApplication.cpp:362
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Penselförinställningar"
 
-#: libs/ui/KisApplication.cpp:347 libs/ui/KisApplication.cpp:348
-#: libs/ui/KisApplication.cpp:349 libs/ui/KisApplication.cpp:350
+#: libs/ui/KisApplication.cpp:365 libs/ui/KisApplication.cpp:366
+#: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Penselspetsar"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:373
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34138,7 +34167,7 @@ msgstr "Penselspetsar"
 msgid "Palettes"
 msgstr "Paletter"
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:386 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34146,39 +34175,39 @@ msgstr "Paletter"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: libs/ui/KisApplication.cpp:369
+#: libs/ui/KisApplication.cpp:387
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG-symbolbibliotek"
 
-#: libs/ui/KisApplication.cpp:370 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Fönsterlayouter"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:390
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Färgomfångsmasker"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:392
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr-skript"
 
-#: libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:397
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Lagerstilar"
 
-#: libs/ui/KisApplication.cpp:382
+#: libs/ui/KisApplication.cpp:400
 #, kde-format
 msgid "Font Families"
 msgstr "Teckenfamiljer"
 
-#: libs/ui/KisApplication.cpp:394
+#: libs/ui/KisApplication.cpp:412
 #, kde-format
 msgid ""
 "%1\n"
@@ -34189,13 +34218,13 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:394 libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:418
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Allvarligt fel"
 
-#: libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:418
 #, kde-format
 msgid ""
 "\n"
@@ -34206,7 +34235,7 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:450
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34217,65 +34246,65 @@ msgstr ""
 "Det rekommenderas inte.\n"
 "Ladda ner och installera x64-programmet istället."
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:467
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Initierar globala värden..."
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:499
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Lägger till resurstyper..."
 
-#: libs/ui/KisApplication.cpp:485
+#: libs/ui/KisApplication.cpp:503
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Läser in insticksmoduler..."
 
-#: libs/ui/KisApplication.cpp:491
+#: libs/ui/KisApplication.cpp:509
 #, kde-format
 msgid "Loading resources..."
 msgstr "Läser in resurser..."
 
-#: libs/ui/KisApplication.cpp:500
+#: libs/ui/KisApplication.cpp:518
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Laddar huvudfönster..."
 
-#: libs/ui/KisApplication.cpp:532
+#: libs/ui/KisApplication.cpp:550
 #, kde-format
 msgid "Launching..."
 msgstr "Startar..."
 
-#: libs/ui/KisApplication.cpp:601
+#: libs/ui/KisApplication.cpp:619
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mime-typ hittades inte, försök använda väljaren -mimetyp"
 
-#: libs/ui/KisApplication.cpp:662
+#: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Misslyckades återge animeringsbildrutor."
 
-#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:963
+#: libs/ui/KisApplication.cpp:708 libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "File layer"
 msgstr "Arkivlager"
 
-#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
-#: libs/ui/KisApplication.cpp:957 libs/ui/KisApplication.cpp:971
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:716 libs/ui/KisApplication.cpp:721
+#: libs/ui/KisApplication.cpp:975 libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Varning"
 
-#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:972
+#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:990
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Kan inte lägga till %1 som ett arkivlager: filen finns inte."
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:722
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34296,7 +34325,7 @@ msgstr ""
 "instans av Krita som redan kör, markera kryssrutan \"Tillåt bara en instans "
 "av Krita\" i inställningarna (Inställningar -> Allmänt -> Fönster)."
 
-#: libs/ui/KisApplication.cpp:710
+#: libs/ui/KisApplication.cpp:728
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34307,32 +34336,32 @@ msgstr ""
 "Du kan antingen skapa en ny fil genom att använda väljaren --new-image, "
 "eller öppna en befintlig fil."
 
-#: libs/ui/KisApplication.cpp:958
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Kunde inte öppna filen %1"
 
-#: libs/ui/KisApplication.cpp:977
+#: libs/ui/KisApplication.cpp:995
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Kan inte lägga till arkivlagret: inget dokument är öppet."
 
-#: libs/ui/KisApplication.cpp:1093
+#: libs/ui/KisApplication.cpp:1111
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ingen mall hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:1114
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "För många mallar hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:1112
+#: libs/ui/KisApplication.cpp:1130
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallen %1 kunde inte läsas in."
 
-#: libs/ui/KisApplication.cpp:1144
+#: libs/ui/KisApplication.cpp:1162
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34347,7 +34376,7 @@ msgstr ""
 "\n"
 "Starta om Krita för att ändringarna ska få effekt."
 
-#: libs/ui/KisApplication.cpp:1158
+#: libs/ui/KisApplication.cpp:1176
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34358,7 +34387,7 @@ msgstr ""
 "\n"
 "Försäkra dig om att inget annat program använder filen och försök igen."
 
-#: libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1204
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Vill du verkligen tömma inställningsfilen?"
@@ -60116,19 +60145,19 @@ msgstr "Export lyckades"
 msgid "The files have been written to the export folder."
 msgstr "Filerna har skrivits till exportkatalogen."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:900
 msgid "Resize all Pages"
 msgstr "Ändra storlek på alla sidor"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 msgid "Resizing pages..."
 msgstr "Ändrar storlek på sidor..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:913
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
 msgid "Resizing Pages"
 msgstr "Ändrar storlek på sidor"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:927
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:926
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -60139,11 +60168,11 @@ msgstr ""
 "Förfluten tid: {passedString}:\n"
 " Uppskattad: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
 msgid "Scraping success"
 msgstr "Eftersökning lyckades"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT-filen har skrivits till: {file}"
@@ -65972,6 +66001,9 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
 
+#~ msgid "Limit frames per second while painting:"
+#~ msgstr "Begränsa bilder per sekund vid uppritning:"
+
 #~ msgid "Python Files (*.py)"
 #~ msgstr "Python-filer (*.py)"
 
@@ -68851,9 +68883,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Play Speed:"
 #~ msgstr "Uppspelningshastighet:"
-
-#~ msgid "Frame Rate:"
-#~ msgstr "Bildfrekvens:"
 
 #~ msgid "Preview modified layer"
 #~ msgstr "Förhandsgranska ändrat lager"

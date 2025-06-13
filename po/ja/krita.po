@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-08 02:00+0000\n"
+"POT-Creation-Date: 2025-06-13 01:59+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16031,14 +16031,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:709
+#: krita/main.cc:724 libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:727
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:711
+#: krita/main.cc:725
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20680,7 +20680,7 @@ msgstr "サイズ"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1592
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -20996,7 +20996,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (埋め込み)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:523
+#: libs/ui/dialogs/kis_dlg_preferences.cc:525
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -23568,15 +23568,15 @@ msgstr "ローカルリソース"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:981
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1092
-#: libs/ui/KisApplication.cpp:1095 libs/ui/KisApplication.cpp:1111
-#: libs/ui/KisApplication.cpp:1143 libs/ui/KisApplication.cpp:1157
-#: libs/ui/KisApplication.cpp:1185 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
+#: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
+#: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
 #: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
@@ -23859,8 +23859,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24674,7 +24674,7 @@ msgstr ""
 "ムレートは 50 フレーム/秒に減少します。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
 #, kde-format
 msgid "Warning(s):"
 msgstr "警告:"
@@ -25639,8 +25639,8 @@ msgstr "表示:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25740,10 +25740,10 @@ msgstr "動画アニメーションインポート"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
-#: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
+#: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
 #: plugins/dockers/logdocker/LogDockerDock.cpp:123
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
@@ -25871,7 +25871,7 @@ msgstr "回数:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
-#: libs/ui/forms/wdgperformancesettings.ui:251
+#: libs/ui/forms/wdgperformancesettings.ui:250
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:389
 #: plugins/impex/webp/kis_wdg_options_webp.ui:147
 #, kde-format
@@ -26590,7 +26590,7 @@ msgid "Set color used for warning"
 msgstr "警告に使用する色を設定"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
 #, fuzzy, kde-format
 #| msgid "Perceptual"
 msgctxt "Color conversion intent"
@@ -26598,7 +26598,7 @@ msgid "Perceptual"
 msgstr "知覚"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1166
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
 #, fuzzy, kde-format
 #| msgid "Relative Colorimetric"
 msgctxt "Color conversion intent"
@@ -26606,7 +26606,7 @@ msgid "Relative Colorimetric"
 msgstr "相対的な色彩を保持"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1169
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "Color conversion intent"
@@ -26614,7 +26614,7 @@ msgid "Saturation"
 msgstr "彩度"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1170
 #, fuzzy, kde-format
 #| msgid "Absolute Colorimetric"
 msgctxt "Color conversion intent"
@@ -26622,7 +26622,7 @@ msgid "Absolute Colorimetric"
 msgstr "絶対的な色彩を保持"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1171
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
 #, fuzzy, kde-format
 #| msgid "Display settings"
 msgctxt "Display Mode"
@@ -26630,14 +26630,14 @@ msgid "Use global display settings"
 msgstr "表示設定"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1172
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1175
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Display Mode"
@@ -26726,12 +26726,12 @@ msgstr "レイヤーのプロパティ"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1506
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1510
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1593
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2069 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1505
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1509
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1513
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1598
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2023
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2081 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26886,17 +26886,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "複数のリソース貼り付けを検出"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "No Cursor"
 msgstr "カーソルなし"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "Tool Icon"
 msgstr "ツールアイコン"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -26905,132 +26905,132 @@ msgstr "ツールアイコン"
 msgid "Arrow"
 msgstr "矢印"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgid "Small Circle"
 msgstr "小型の円"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "十字形"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "三角形 (右利き用)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "三角形 (左利き用)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, kde-format
 msgid "Black Pixel"
 msgstr "黒ドット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "White Pixel"
 msgstr "白ドット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "輪郭線なし"
 
 # マウスカーソル形状の名称です
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, kde-format
 msgid "Circle Outline"
 msgstr "ブラシ輪郭を円で表示"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Preview Outline"
 msgstr "ブラシ輪郭をその形状で表示"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "Tilt Outline"
 msgstr "ブラシ輪郭にペンタブペンの傾きを表示"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "消しゴム"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
 msgid "On Touch Drag"
 msgstr "タッチ・ドラッグ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Click Drag"
 msgstr "クリック・ドラッグ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "ミドルクリック・ドラッグ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:387
 #, kde-format
 msgid "All Supported Files"
 msgstr "サポートされているすべてのフォーマット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:422
 #, kde-format
 msgid "Open default window"
 msgstr "標準ウィンドウを開く"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:423
 #, kde-format
 msgid "Load previous session"
 msgstr "直前のセッションを読み込む"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:422
+#: libs/ui/dialogs/kis_dlg_preferences.cc:424
 #, kde-format
 msgid "Show session manager"
 msgstr "セッションマネージャを表示"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:488
+#: libs/ui/dialogs/kis_dlg_preferences.cc:490
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "変更を反映するには、Krita の再起動が必要です"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:494
+#: libs/ui/dialogs/kis_dlg_preferences.cc:496
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "ファイルピッカーで選択した場所に保存すると、起動が遅くなることがあります!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:528
 #, kde-format
 msgid "Internal Storage"
 msgstr "内部ストレージ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:528
+#: libs/ui/dialogs/kis_dlg_preferences.cc:530
 #, kde-format
 msgid "SD-Card"
 msgstr "SD カード"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:568
 #, kde-format
 msgid "Choose Manually"
 msgstr "手動で選択"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:631
+#: libs/ui/dialogs/kis_dlg_preferences.cc:633
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -27055,26 +27055,26 @@ msgstr ""
 ">\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:967
+#: libs/ui/dialogs/kis_dlg_preferences.cc:969
 #, kde-format
 msgid "Select a Background Image"
 msgstr "背景画像を選択"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:981
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 は有効な画像ファイルではありません!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:999
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1001
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>警告:</b> この場所には書き込み権限がありません。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1123
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1253
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1334
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27082,19 +27082,19 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "スクリーン %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1213
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "色プロファイルをインストール"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1417
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1419
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27103,7 +27103,7 @@ msgstr ""
 "ブラシの速度計算にタブレットドライバのタイムスタンプを使用する (WinTab タブ"
 "レット API を使用している場合、かなり不自然な結果になる恐れがあります)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "ブラシの速度計算にタブレットドライバのタイムスタンプを使用する"
@@ -27111,7 +27111,7 @@ msgstr "ブラシの速度計算にタブレットドライバのタイムスタ
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27120,13 +27120,13 @@ msgstr[0] "ブラシの最大サイズ: {n} ピクセル/ミリ秒"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "ブラシ速度の平滑化: サンプル数{n}"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1459
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
 #, fuzzy, kde-format
 #| msgctxt "Context: dynamic sensors"
 #| msgid "Tilt direction"
@@ -27134,13 +27134,13 @@ msgid "Pen tilt direction offset: "
 msgstr "傾きの方向"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1556
-#: libs/ui/forms/wdgperformancesettings.ui:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1559
+#: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1580
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27149,30 +27149,30 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "秒"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1583
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1810
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1822
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1811
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "ソフトウェアレンダリング (とても遅い)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "ANGLE による Direct3D 11"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1828
 #, fuzzy, kde-format
 #| msgctxt "canvas renderer"
 #| msgid "OpenGL ES"
@@ -27180,159 +27180,159 @@ msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1830
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "不明"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "自動 (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Display Id: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1923
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Display Name: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "最小輝度: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "最大輝度: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "最大全フレーム輝度: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "三原色 (赤): %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "三原色 (緑): %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "三原色 (青): %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "白色点: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2098
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 "<b>警告:</b> 現在のディスプレイは HDR レンダリングをサポートしていません"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita の設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "ショートカット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2250
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "キャンバス入力の設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #, kde-format
 msgid "Canvas Input"
 msgstr "キャンバス入力"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "カラーマネジメント"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2270
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "色"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2280
 #, kde-format
 msgid "Performance"
 msgstr "パフォーマンス"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
 #, kde-format
 msgid "Tablet settings"
 msgstr "タブレットの設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2290
 #, kde-format
 msgid "Tablet"
 msgstr "タブレット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2286
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "キャンバスのみ表示の設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2300
 #, kde-format
 msgid "Canvas-only"
 msgstr "キャンバスのみ表示"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2296
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2310
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "ポップアップパレット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2318
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2315
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2327
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27930,7 +27930,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#| "REC-html40/strict.dtd\">\n"
+#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#| "css\">\n"
+#| "p, li { white-space: pre-wrap; }\n"
+#| "</style></head><body>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
+#| "and community-driven tool for digital artists everywhere.<br />Progress "
+#| "is made possible thanks to ongoing support from our community of <a href="
+#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
+#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
+#| "a>members.</p></body></html>"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -27942,9 +27956,9 @@ msgid ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
 "and community-driven tool for digital artists everywhere.<br />Progress is "
 "made possible thanks to ongoing support from our community of <a href="
-"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-"sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-"a>members.</p></body></html>"
+"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, <a "
+"href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a href=\"https://"
+"fund.krita.org/\">development fund</a> members.</p></body></html>"
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -31048,39 +31062,39 @@ msgid "&Remember"
 msgstr "記憶(&R)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgperformancesettings.ui:39
+#: libs/ui/forms/wdgperformancesettings.ui:38
 #, kde-format
 msgid "Note: Krita will need to be restarted for changes to take effect"
 msgstr "ノート: 変更を反映するには、Krita の再起動が必要です"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgperformancesettings.ui:56
+#: libs/ui/forms/wdgperformancesettings.ui:55
 #, kde-format
 msgid "RAM"
 msgstr "メモリ容量"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgperformancesettings.ui:62
+#: libs/ui/forms/wdgperformancesettings.ui:61
 #, kde-format
 msgid "Memory available:"
 msgstr "利用可能なメモリ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTotalMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:75
+#: libs/ui/forms/wdgperformancesettings.ui:74
 #, kde-format
 msgid "XXX MiB"
 msgstr "XXX MiB"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderMemoryLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:85
-#: libs/ui/forms/wdgperformancesettings.ui:103
+#: libs/ui/forms/wdgperformancesettings.ui:84
+#: libs/ui/forms/wdgperformancesettings.ui:102
 #, kde-format
 msgid "Krita will not use more memory than this limit."
 msgstr "Krita はこの限界以上のメモリを使用できません"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgperformancesettings.ui:88
+#: libs/ui/forms/wdgperformancesettings.ui:87
 #, kde-format
 msgid "Memory Limit:"
 msgstr "メモリの上限:"
@@ -31088,23 +31102,23 @@ msgstr "メモリの上限:"
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intMemoryLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intPoolLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intUndoLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:110
-#: libs/ui/forms/wdgperformancesettings.ui:138
-#: libs/ui/forms/wdgperformancesettings.ui:172
+#: libs/ui/forms/wdgperformancesettings.ui:109
+#: libs/ui/forms/wdgperformancesettings.ui:137
+#: libs/ui/forms/wdgperformancesettings.ui:171
 #, kde-format
 msgid " MiB"
 msgstr " MiB"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgperformancesettings.ui:119
+#: libs/ui/forms/wdgperformancesettings.ui:118
 #, kde-format
 msgid "Internal Pool:"
 msgstr "キャンバス向け内部メモリプール:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:147
-#: libs/ui/forms/wdgperformancesettings.ui:165
+#: libs/ui/forms/wdgperformancesettings.ui:146
+#: libs/ui/forms/wdgperformancesettings.ui:164
 #, kde-format
 msgid ""
 "When undo information reaches this limit, it will be stored in a temporary "
@@ -31114,53 +31128,53 @@ msgstr ""
 "やりなおしは遅くなります。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgperformancesettings.ui:150
+#: libs/ui/forms/wdgperformancesettings.ui:149
 #, kde-format
 msgid "Swap Undo After:"
 msgstr "メモリ上に持つ編集履歴容量:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgperformancesettings.ui:184
+#: libs/ui/forms/wdgperformancesettings.ui:183
 #, kde-format
 msgid "Swap File"
 msgstr "スワップファイル"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderSwapSize)
-#: libs/ui/forms/wdgperformancesettings.ui:190
-#: libs/ui/forms/wdgperformancesettings.ui:208
+#: libs/ui/forms/wdgperformancesettings.ui:189
+#: libs/ui/forms/wdgperformancesettings.ui:207
 #, kde-format
 msgid "The swap file will not be bigger than this limit."
 msgstr "スワップファイルは上限以上の容量は持てません"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgperformancesettings.ui:193
+#: libs/ui/forms/wdgperformancesettings.ui:192
 #, kde-format
 msgid "Size Limit:"
 msgstr "上限サイズ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgperformancesettings.ui:224
+#: libs/ui/forms/wdgperformancesettings.ui:223
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:247
 #, kde-format
 msgid "Location:"
 msgstr "場所:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: libs/ui/forms/wdgperformancesettings.ui:257
+#: libs/ui/forms/wdgperformancesettings.ui:256
 #, kde-format
 msgid "Multithreading"
 msgstr "マルチスレッド"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/forms/wdgperformancesettings.ui:263
+#: libs/ui/forms/wdgperformancesettings.ui:262
 #, kde-format
 msgid "CPU Limit:"
 msgstr "CPU の上限:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderThreadsLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:276
+#: libs/ui/forms/wdgperformancesettings.ui:275
 #, kde-format
 msgid ""
 "<html><head/><body><p>Krita will not use more CPU cores than selected by "
@@ -31170,13 +31184,13 @@ msgstr ""
 "せん。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgperformancesettings.ui:283
+#: libs/ui/forms/wdgperformancesettings.ui:282
 #, kde-format
 msgid "Frame Rendering Clones Limit"
 msgstr "フレームレンダリングの複製制限"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:296
+#: libs/ui/forms/wdgperformancesettings.ui:295
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>When rendering animation frames (into files or during "
@@ -31198,13 +31212,13 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/forms/wdgperformancesettings.ui:303
+#: libs/ui/forms/wdgperformancesettings.ui:302
 #, kde-format
 msgid "Frame Rendering Timeout"
 msgstr "フレームレンダリングの中断"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameTimeout)
-#: libs/ui/forms/wdgperformancesettings.ui:316
+#: libs/ui/forms/wdgperformancesettings.ui:315
 #, kde-format
 msgid ""
 "<html><head/><body><p>The timeout for rendering one frame. If your animation "
@@ -31217,14 +31231,23 @@ msgstr ""
 "してみてください。</p><p><br/></p><p><span style=\" font-weight:600;\">推奨"
 "値:</span> 30...60 秒</p></body></html>"
 
+#. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
+#: libs/ui/forms/wdgperformancesettings.ui:325
+#, fuzzy, kde-format
+#| msgid "Frame Rate: "
+msgid "Frame rate"
+msgstr "フレームレート: "
+
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
-#: libs/ui/forms/wdgperformancesettings.ui:326
-#, kde-format
-msgid "Limit frames per second while painting:"
-msgstr "描画中のフレームレートを制限:"
+#: libs/ui/forms/wdgperformancesettings.ui:331
+#, fuzzy, kde-format
+#| msgctxt "@label:spinbox"
+#| msgid "Frame timing:"
+msgid "Frame rate limit:"
+msgstr "フレームタイミング:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:339
+#: libs/ui/forms/wdgperformancesettings.ui:344
 #, kde-format
 msgid ""
 "<html><head/><body><p>Krita will try to limit the number of screen updates "
@@ -31236,50 +31259,56 @@ msgstr ""
 "ようとします。数値を小さくすると視覚的なレスポンスは低下しますが、macOS など"
 "の一部のシステムではスタイラスの精度が向上します。<p></body></html>"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkDetectFps)
+#: libs/ui/forms/wdgperformancesettings.ui:351
+#, kde-format
+msgid "Detect from screen"
+msgstr ""
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
-#: libs/ui/forms/wdgperformancesettings.ui:346
+#: libs/ui/forms/wdgperformancesettings.ui:361
 #, kde-format
 msgid "Debug options"
 msgstr "デバッグオプション"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOpenGLFramerateLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:352
+#: libs/ui/forms/wdgperformancesettings.ui:367
 #, kde-format
 msgid "Debug logging of OpenGL framerate"
 msgstr "OpenGL のフレームレートのログ出力をデバッグ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBrushSpeedLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:359
+#: libs/ui/forms/wdgperformancesettings.ui:374
 #, kde-format
 msgid "Debug logging for brush rendering speed"
 msgstr "ブラシのレンダリング速度のログ出力をデバッグ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableAVXOptimizations)
-#: libs/ui/forms/wdgperformancesettings.ui:366
+#: libs/ui/forms/wdgperformancesettings.ui:381
 #, kde-format
 msgid "Disable AVX vector optimizations"
 msgstr "AVX ベクターの最適化を無効にする"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableVectorOptimizations)
-#: libs/ui/forms/wdgperformancesettings.ui:373
+#: libs/ui/forms/wdgperformancesettings.ui:388
 #, kde-format
 msgid "Disable all vector optimizations"
 msgstr "すべてのベクターの最適化を無効にする"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProgressReporting)
-#: libs/ui/forms/wdgperformancesettings.ui:380
+#: libs/ui/forms/wdgperformancesettings.ui:395
 #, kde-format
 msgid "Progress reporting (might affect performance)"
 msgstr "進捗レポート (パフォーマンスに影響を与えるかもしれません)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerformanceLogging)
-#: libs/ui/forms/wdgperformancesettings.ui:387
+#: libs/ui/forms/wdgperformancesettings.ui:402
 #, kde-format
 msgid "Performance logging"
 msgstr "パフォーマンスログ出力"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgperformancesettings.ui:400
+#: libs/ui/forms/wdgperformancesettings.ui:415
 #, kde-format
 msgid ""
 "<html><head/><body><p>When performance logging is enabled Krita saves timing "
@@ -31294,19 +31323,19 @@ msgstr ""
 "中の文字列をバグ報告に添付してください。</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgperformancesettings.ui:427
+#: libs/ui/forms/wdgperformancesettings.ui:442
 #, kde-format
 msgid "Animation Cache"
 msgstr "アニメーションキャッシュ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgperformancesettings.ui:433
+#: libs/ui/forms/wdgperformancesettings.ui:448
 #, kde-format
 msgid "Cache Storage Backend"
 msgstr "キャッシュ領域バックエンド"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optInMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:439
+#: libs/ui/forms/wdgperformancesettings.ui:454
 #, kde-format
 msgid ""
 "<html><head/><body><p>Animation frame cache will be stored in RAM completely "
@@ -31326,13 +31355,13 @@ msgstr ""
 "800MiB のメモリが追加で必要です。</p> </body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optInMemory)
-#: libs/ui/forms/wdgperformancesettings.ui:442
+#: libs/ui/forms/wdgperformancesettings.ui:457
 #, kde-format
 msgid "In-memory"
 msgstr "メモリ内"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optOnDisk)
-#: libs/ui/forms/wdgperformancesettings.ui:449
+#: libs/ui/forms/wdgperformancesettings.ui:464
 #, kde-format
 msgid ""
 "<html><head/><body><p>Animation frames are stored on hard disk in the same "
@@ -31349,19 +31378,19 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optOnDisk)
-#: libs/ui/forms/wdgperformancesettings.ui:452
+#: libs/ui/forms/wdgperformancesettings.ui:467
 #, kde-format
 msgid "On-disk"
 msgstr "ディスク上"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/forms/wdgperformancesettings.ui:462
+#: libs/ui/forms/wdgperformancesettings.ui:477
 #, kde-format
 msgid "Cache Generation Options"
 msgstr "キャッシュ生成のオプション"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:468
+#: libs/ui/forms/wdgperformancesettings.ui:483
 #, kde-format
 msgid ""
 "<html><head/><body><p>Render scaled down version of the frame if the image "
@@ -31373,13 +31402,13 @@ msgstr ""
 "ずこのオプションを有効にしてください。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:471
+#: libs/ui/forms/wdgperformancesettings.ui:486
 #, kde-format
 msgid "Limit cached frame size:"
 msgstr "フレームのキャッシュサイズを制限:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
-#: libs/ui/forms/wdgperformancesettings.ui:484
+#: libs/ui/forms/wdgperformancesettings.ui:499
 #, kde-format
 msgid ""
 "<html><head/><body><p>Size limit after which the frames will be scaled down</"
@@ -31390,7 +31419,7 @@ msgstr ""
 "\" font-weight:600;\">推奨値:</span>2500&nbsp;px</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
-#: libs/ui/forms/wdgperformancesettings.ui:491
+#: libs/ui/forms/wdgperformancesettings.ui:506
 #, kde-format
 msgid ""
 "<html><head/><body><p>When the image is too big, render only currently "
@@ -31400,13 +31429,13 @@ msgstr ""
 "ンダリングします。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRegionOfInterest)
-#: libs/ui/forms/wdgperformancesettings.ui:494
+#: libs/ui/forms/wdgperformancesettings.ui:509
 #, kde-format
 msgid "Use region of interest"
 msgstr "関心領域 (ROI) を使用"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intRegionOfInterestMargin)
-#: libs/ui/forms/wdgperformancesettings.ui:507
+#: libs/ui/forms/wdgperformancesettings.ui:522
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>Add extra area to the region of interest to each side "
@@ -31419,7 +31448,7 @@ msgstr ""
 "す。</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
-#: libs/ui/forms/wdgperformancesettings.ui:514
+#: libs/ui/forms/wdgperformancesettings.ui:529
 #, kde-format
 msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
@@ -31429,32 +31458,32 @@ msgstr ""
 "シュをバックグラウンドで自動的にプリレンダリングします</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
-#: libs/ui/forms/wdgperformancesettings.ui:517
+#: libs/ui/forms/wdgperformancesettings.ui:532
 #, kde-format
 msgid "Enable background cache generation"
 msgstr "バックグラウンドでのキャッシュ生成を有効化"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgperformancesettings.ui:541
+#: libs/ui/forms/wdgperformancesettings.ui:556
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:166
 #, kde-format
 msgid "Instant Preview"
 msgstr "高速プレビュー"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolUseInStackPreview)
-#: libs/ui/forms/wdgperformancesettings.ui:550
+#: libs/ui/forms/wdgperformancesettings.ui:565
 #, kde-format
 msgid "Use in-stack preview in Transform Tool"
 msgstr "変形ツールのプレビューに in-stack を使用する"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/forms/wdgperformancesettings.ui:557
+#: libs/ui/forms/wdgperformancesettings.ui:572
 #, kde-format
 msgid "Force Instant Preview"
 msgstr "高速プレビューを強制"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:563
+#: libs/ui/forms/wdgperformancesettings.ui:578
 #, kde-format
 msgid ""
 "<html><head/><body><p>The filter dialog will always use instant preview, "
@@ -31466,13 +31495,13 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:566
+#: libs/ui/forms/wdgperformancesettings.ui:581
 #, kde-format
 msgid "in Filters"
 msgstr "フィルタに"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:573
+#: libs/ui/forms/wdgperformancesettings.ui:588
 #, kde-format
 msgid ""
 "<html><head/><body><p>The transform tool preview will always use instant "
@@ -31484,13 +31513,13 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:576
+#: libs/ui/forms/wdgperformancesettings.ui:591
 #, kde-format
 msgid "in Transform Tool"
 msgstr "変形ツールに"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:583
+#: libs/ui/forms/wdgperformancesettings.ui:598
 #, kde-format
 msgid ""
 "<html><head/><body><p>The move tool preview will always use instant preview, "
@@ -31502,7 +31531,7 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
-#: libs/ui/forms/wdgperformancesettings.ui:586
+#: libs/ui/forms/wdgperformancesettings.ui:601
 #, kde-format
 msgid "in Move Tool"
 msgstr "移動ツールに"
@@ -31876,7 +31905,7 @@ msgid "HSV CCW"
 msgstr "HSV (反時計回り)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:371
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:389
 #, kde-format
 msgid "Sessions"
 msgstr "セッション"
@@ -33375,7 +33404,7 @@ msgstr "背景色セレクターを開く(&O)"
 msgid "&Docker Box"
 msgstr "ドッキングボックス(&D)"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:367
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:385
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33389,8 +33418,8 @@ msgstr "パターン"
 msgid "Custom Pattern"
 msgstr "カスタムパターン"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:352
-#: libs/ui/KisApplication.cpp:353
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:370
+#: libs/ui/KisApplication.cpp:371
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34308,21 +34337,21 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "倍率: %1 %"
 
-#: libs/ui/KisApplication.cpp:344
+#: libs/ui/KisApplication.cpp:362
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "ブラシプリセット"
 
 # tip は筆記具の先端 (Krita では描線のセグメントとなる画像データ) を指します
-#: libs/ui/KisApplication.cpp:347 libs/ui/KisApplication.cpp:348
-#: libs/ui/KisApplication.cpp:349 libs/ui/KisApplication.cpp:350
+#: libs/ui/KisApplication.cpp:365 libs/ui/KisApplication.cpp:366
+#: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "ブラシ形状"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:373
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34330,7 +34359,7 @@ msgstr "ブラシ形状"
 msgid "Palettes"
 msgstr "パレット"
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:386 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34338,40 +34367,40 @@ msgstr "パレット"
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: libs/ui/KisApplication.cpp:369
+#: libs/ui/KisApplication.cpp:387
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG シンボルライブラリ"
 
-#: libs/ui/KisApplication.cpp:370 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "画面レイアウト"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:390
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域マスク"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:392
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExp スクリプト"
 
-#: libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:397
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "レイヤースタイル"
 
-#: libs/ui/KisApplication.cpp:382
+#: libs/ui/KisApplication.cpp:400
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "フォントファミリー"
 
-#: libs/ui/KisApplication.cpp:394
+#: libs/ui/KisApplication.cpp:412
 #, kde-format
 msgid ""
 "%1\n"
@@ -34382,13 +34411,13 @@ msgstr ""
 "\n"
 "Krita はすぐに終了します。"
 
-#: libs/ui/KisApplication.cpp:394 libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:418
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: 重大なエラー"
 
-#: libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:418
 #, kde-format
 msgid ""
 "\n"
@@ -34399,7 +34428,7 @@ msgstr ""
 "\n"
 "Krita はすぐに終了します。"
 
-#: libs/ui/KisApplication.cpp:432
+#: libs/ui/KisApplication.cpp:450
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34410,66 +34439,66 @@ msgstr ""
 "これは推奨されません。\n"
 "代わりに 64 ビット版をダウンロード・インストールしてください。"
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:467
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "グローバルを初期化..."
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:499
 #, kde-format
 msgid "Adding resource types..."
 msgstr "リソースの種類を追加..."
 
-#: libs/ui/KisApplication.cpp:485
+#: libs/ui/KisApplication.cpp:503
 #, kde-format
 msgid "Loading plugins..."
 msgstr "プラグインを読み込み中..."
 
-#: libs/ui/KisApplication.cpp:491
+#: libs/ui/KisApplication.cpp:509
 #, kde-format
 msgid "Loading resources..."
 msgstr "リソースを読み込み中..."
 
-#: libs/ui/KisApplication.cpp:500
+#: libs/ui/KisApplication.cpp:518
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "メインウィンドウを読み込み中..."
 
-#: libs/ui/KisApplication.cpp:532
+#: libs/ui/KisApplication.cpp:550
 #, kde-format
 msgid "Launching..."
 msgstr "開始中..."
 
-#: libs/ui/KisApplication.cpp:601
+#: libs/ui/KisApplication.cpp:619
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME タイプが見つかりません、-mimetype オプションを試してください"
 
-#: libs/ui/KisApplication.cpp:662
+#: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "アニメーションフレームのレンダリングに失敗しました!"
 
-#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:963
+#: libs/ui/KisApplication.cpp:708 libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "File layer"
 msgstr "ファイル参照レイヤー"
 
-#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
-#: libs/ui/KisApplication.cpp:957 libs/ui/KisApplication.cpp:971
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:716 libs/ui/KisApplication.cpp:721
+#: libs/ui/KisApplication.cpp:975 libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: 警告"
 
-#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:972
+#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:990
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 "%1 をファイル参照レイヤーとして追加できません: ファイルが存在しません。"
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:722
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34490,7 +34519,7 @@ msgstr ""
 "場合は、設定 ([設定]->[全般]->[ウィンドウ]) の「Krita のインスタンスを一つに"
 "制限」チェックボックスをオンにしてください。"
 
-#: libs/ui/KisApplication.cpp:710
+#: libs/ui/KisApplication.cpp:728
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34501,33 +34530,33 @@ msgstr ""
 "--new-image オプションを使用して新しいファイルを作成するか、既存のファイルを"
 "開いてください。"
 
-#: libs/ui/KisApplication.cpp:958
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "ファイルを開けませんでした。%1"
 
-#: libs/ui/KisApplication.cpp:977
+#: libs/ui/KisApplication.cpp:995
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "ファイル参照レイヤーを追加できません。開いているドキュメントがありません。"
 
-#: libs/ui/KisApplication.cpp:1093
+#: libs/ui/KisApplication.cpp:1111
 #, kde-format
 msgid "No template found for: %1"
 msgstr "以下の場所にテンプレートは存在しません: %1"
 
-#: libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:1114
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "以下の場所にはテンプレートが多過ぎます: %1"
 
-#: libs/ui/KisApplication.cpp:1112
+#: libs/ui/KisApplication.cpp:1130
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "テンプレート %1 は読み込みに失敗しました。"
 
-#: libs/ui/KisApplication.cpp:1144
+#: libs/ui/KisApplication.cpp:1162
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34542,7 +34571,7 @@ msgstr ""
 "\n"
 "変更を有効にするには、Krita を再起動します。"
 
-#: libs/ui/KisApplication.cpp:1158
+#: libs/ui/KisApplication.cpp:1176
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34554,7 +34583,7 @@ msgstr ""
 "他のプログラムがこのファイルを使用中でないか確認した後もう一度お試しくださ"
 "い。"
 
-#: libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1204
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "設定ファイルをクリアしますか？"
@@ -60286,19 +60315,19 @@ msgstr "エクスポート成功"
 msgid "The files have been written to the export folder."
 msgstr "ファイルはエクスポートフォルダに書き込まれました。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:900
 msgid "Resize all Pages"
 msgstr "すべてのページをサイズ変更"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 msgid "Resizing pages..."
 msgstr "ページサイズを変更中..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:913
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
 msgid "Resizing Pages"
 msgstr "ページサイズを変更中"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:927
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:926
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -60309,11 +60338,11 @@ msgstr ""
 "経過時間: {passedString}\n"
 " 残り: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
 msgid "Scraping success"
 msgstr "取得成功"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:975
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT ファイルは {file} に書き込まれました"
@@ -66254,6 +66283,9 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgid "Limit frames per second while painting:"
+#~ msgstr "描画中のフレームレートを制限:"
 
 #~ msgid "Python Files (*.py)"
 #~ msgstr "Python ファイル (*.py)"

@@ -514,6 +514,11 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
 
     std::vector<FT_FaceSP> faces;
 
+    KIS_ASSERT_X(lengths.size() == fonts.size(),
+                 "KoFontRegistry",
+                 QString("Fonts and lengths don't have the same size. Fonts: %1. Length: %2")
+                 .arg(fonts.size(), lengths.size()).toLatin1());
+
     for (int i = 0; i < lengths.size(); i++) {
         KoFFWWSConverter::FontFileEntry font = fonts.at(i);
         // For some reason, FontConfig will sometimes return the wrong file index.

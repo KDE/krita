@@ -1,7 +1,7 @@
 {
-    "Id": "Grid Docker",
+    "Id": "Arrange Docker",
     "Type": "Service",
-    "X-KDE-Library": "kritagriddocker",
+    "X-KDE-Library": "kritaarrangedocker",
     "X-KDE-ServiceTypes": [
         "Krita/Dock"
     ],

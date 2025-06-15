@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-05-31 18:38+0200\n"
+"PO-Revision-Date: 2025-06-13 14:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -27963,21 +27963,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
-#| "and community-driven tool for digital artists everywhere.<br />Progress "
-#| "is made possible thanks to ongoing support from our community of <a href="
-#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-#| "a>members.</p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -28004,8 +27990,9 @@ msgstr ""
 "obert impulsada per la comunitat per a artistes digitals de tot el món.<br /"
 ">El progrés és possible gràcies al suport continu de la nostra comunitat de "
 "<a href=\"https://docs.krita.org/ca/contributors_manual.html"
-"\">col·laboradors</a>, mecenes i membres del <a href=\"https://fund.krita."
-"org/\">patrocini de desenvolupament</a>.</p></body></html>"
+"\">col·laboradors</a>, <a href=\"https://krita.org/en/sponsors/\">mecenes</"
+"a> i membres del <a href=\"https://fund.krita. org/\">patrocini de "
+"desenvolupament</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -31298,18 +31285,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate: "
+#, kde-format
 msgid "Frame rate"
-msgstr "Velocitat dels fotogrames: "
+msgstr "Velocitat dels fotogrames"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Frame timing:"
+#, kde-format
 msgid "Frame rate limit:"
-msgstr "Temporització dels fotogrames:"
+msgstr "Límit de velocitat dels fotogrames:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -31329,7 +31313,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Detecta a partir de la pantalla"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361
@@ -51526,16 +51510,16 @@ msgstr "Torna a carregar el predefinit"
 msgctxt "SeExpr variable"
 msgid "Normalized X axis coordinate of the image from its top-left corner"
 msgstr ""
-"Coordenades normalitzades de l'eix X de la imatge des de la seua cantó "
-"superior esquerre"
+"Coordenades normalitzades de l'eix X de la imatge des del seu cantó superior "
+"esquerre"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:54
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Normalized Y axis coordinate of the image from its top-left corner"
 msgstr ""
-"Coordenades normalitzades de l'eix Y de la imatge des de la seua cantó "
-"superior esquerre"
+"Coordenades normalitzades de l'eix Y de la imatge des del seu cantó superior "
+"esquerre"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:55
 #, kde-format
@@ -52506,28 +52490,28 @@ msgstr "Predeterminat (només per a baixa qualitat)"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "No downsampling"
-msgstr "Sense reducció de mostreig"
+msgstr "Sense reducció del mostreig"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Reducció de mostreig 2x2"
+msgstr "Reducció del mostreig 2x2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Reducció de mostreig 4x4"
+msgstr "Reducció del mostreig 4x4"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Reducció de mostreig 8x8"
+msgstr "Reducció del mostreig 8x8"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
 #. i18n: ectx: property (text), widget (QLabel, lblNone2)
@@ -66560,6 +66544,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Limit frames per second while painting:"
-#~ msgstr "Límit de fotogrames per segon en pintar:"

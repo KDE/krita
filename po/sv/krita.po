@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-06-01 14:01+0200\n"
+"PO-Revision-Date: 2025-06-14 07:29+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -27741,21 +27741,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
-#| "and community-driven tool for digital artists everywhere.<br />Progress "
-#| "is made possible thanks to ongoing support from our community of <a href="
-#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-#| "a>members.</p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -27782,8 +27768,9 @@ msgstr ""
 "gemenskapsdrivet verktyg med öppen källkod för digitala konstnärer överallt."
 "<br />Framsteg är möjliga tack vare kontinuerligt stöd från vår gemenskap av "
 "<a href=\"https://docs.krita.org/en/contributors_manual.html"
-"\">bidragsgivare</a>, sponsorer, och medlemmar i vår <a href=\"https://fund."
-"krita.org/\">utvecklingsfond</a>.</p></body></html>"
+"\">bidragsgivare</a>, <a href=\"https://krita.org/en/sponsors/\">sponsorer</"
+"a>, och medlemmar i vår <a href=\"https://fund.krita.org/\">utvecklingsfond</"
+"a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -31039,18 +31026,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate:"
+#, kde-format
 msgid "Frame rate"
-msgstr "Bildfrekvens:"
+msgstr "Bildfrekvens"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Frame timing:"
+#, kde-format
 msgid "Frame rate limit:"
-msgstr "Bildtiming:"
+msgstr "Bildfrekvensgräns:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -53191,6 +53175,10 @@ msgid ""
 "pixel. Higher values may improve compression but take longer.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Bestämmer hur många bildpunkter som analyseras för att "
+"bygga det metaadaptiva beslutsträdet som väljer den optimala prediktorn för "
+"varje bildpunkt. Högre värden kan förbättra komprimeringen men tar längre "
+"tid.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:948

@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-05-31 17:48+0200\n"
+"PO-Revision-Date: 2025-06-13 22:33+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27943,21 +27943,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
-#| "and community-driven tool for digital artists everywhere.<br />Progress "
-#| "is made possible thanks to ongoing support from our community of <a href="
-#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-#| "a>members.</p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -27984,8 +27970,9 @@ msgstr ""
 "source e gestito dalla comunità per gli artisti digitali di qualsiasi parte "
 "del mondo.<br />Il suo progresso è reso possibile grazie al continuo "
 "supporto della nostra comunità di <a href=\"https://docs.krita.org/it/"
-"contributors_manual.html\">collaboratori</a>, sponsor e membri <a href="
-"\"https://fund.krita.org/\">fondo di sviluppo</a>.</p></body></html>"
+"contributors_manual.html\">collaboratori</a>, <a href=\"https://krita.org/it/"
+"sponsors/\">sponsor</a> e membri del <a href=\"https://fund.krita.org/"
+"\">fondo di sviluppo</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -31288,18 +31275,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate:"
+#, kde-format
 msgid "Frame rate"
-msgstr "Velocità fotogrammi:"
+msgstr "Velocità fotogrammi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Frame timing:"
+#, kde-format
 msgid "Frame rate limit:"
-msgstr "Tempo dei fotogrammi:"
+msgstr "Limite velocità fotogrammi:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -31319,7 +31303,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Rileva da schermo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361

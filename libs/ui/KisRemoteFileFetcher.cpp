@@ -9,10 +9,12 @@
 #include <QApplication>
 #include <QDebug>
 #include <QMessageBox>
+#include <QCheckBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QProgressDialog>
+#include <kis_config.h>
 
 #include <klocalizedstring.h>
 
@@ -34,20 +36,30 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     Q_ASSERT(!remote.isLocalFile());
 
     if (remote.scheme() != "data") {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
-        msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText(i18nc("Fetching remote image",
-                             "Do you want to download the image from %1?\nClick \"Show Details\" to view the full link "
-                             "to the image.")
-                           .arg(remote.host()));
-        msgBox.setDetailedText(remote.toDisplayString());
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
-        const int res = msgBox.exec();
 
-        if (res != QMessageBox::Yes) {
-            return false;
+        bool showMessage = KisConfig(true).readEntry("FetchingRemoteImage/ShowMessagebox", true);
+        if (showMessage) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setText(i18nc("Fetching remote image",
+                                 "Do you want to download the image from %1?\nClick \"Show Details\" to view the full link "
+                                 "to the image.")
+                               .arg(remote.host()));
+            msgBox.setDetailedText(remote.toDisplayString());
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::No);
+
+            QCheckBox *cb = new QCheckBox(i18n("Don't aks this again."));
+            msgBox.setCheckBox(cb);
+
+            const int res = msgBox.exec();
+
+            KisConfig(false).writeEntry("FetchingRemoteImage/ShowMessagebox", cb->checkState() == Qt::CheckState::Unchecked);
+
+            if (res != QMessageBox::Yes) {
+                return false;
+            }
         }
     }
 
@@ -81,7 +93,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
 
     progress.exec();
 
-    // avoid double free on manager destruction
+           // avoid double free on manager destruction
     m_reply->setParent(nullptr);
 
     if (m_reply->error() != QNetworkReply::NoError) {

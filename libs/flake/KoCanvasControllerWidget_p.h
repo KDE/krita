@@ -31,7 +31,6 @@ public:
         , canvas(0)
         , viewportWidget(0)
         , ignoreScrollSignals(false)
-        , zoomWithWheel(false)
         , vastScrollingFactor(0)
     {
     }
@@ -52,7 +51,6 @@ public:
     QPointer<KoCanvasBase> canvas;
     Viewport *viewportWidget;
     bool ignoreScrollSignals;
-    bool zoomWithWheel;
     qreal vastScrollingFactor;
 };
 

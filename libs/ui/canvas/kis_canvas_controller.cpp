@@ -154,6 +154,41 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
+void KisCanvasController::ensureVisibleDoc(const QRectF &docRect, bool smooth)
+{
+    const QRect currentVisible = viewport()->rect();
+    const QRect viewRect = m_d->coordinatesConverter->documentToWidget(docRect).toAlignedRect();
+
+    if (!viewRect.isValid() || currentVisible.contains(viewRect))
+        return; // its visible. Nothing to do.
+
+    // if we move, we move a little more so the amount of times we have to move is less.
+    int jumpWidth = smooth ? 0 : currentVisible.width() / 5;
+    int jumpHeight = smooth ? 0 : currentVisible.height() / 5;
+    if (!smooth && viewRect.width() + jumpWidth > currentVisible.width())
+        jumpWidth = 0;
+    if (!smooth && viewRect.height() + jumpHeight > currentVisible.height())
+        jumpHeight = 0;
+
+    int horizontalMove = 0;
+    if (currentVisible.width() <= viewRect.width())      // center view
+        horizontalMove = viewRect.center().x() - currentVisible.center().x();
+    else if (currentVisible.x() > viewRect.x())          // move left
+        horizontalMove = viewRect.x() - currentVisible.x() - jumpWidth;
+    else if (currentVisible.right() < viewRect.right())  // move right
+        horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - jumpWidth);
+
+    int verticalMove = 0;
+    if (currentVisible.height() <= viewRect.height())       // center view
+        verticalMove = viewRect.center().y() - currentVisible.center().y();
+    if (currentVisible.y() > viewRect.y())               // move up
+        verticalMove = viewRect.y() - currentVisible.y() - jumpHeight;
+    else if (currentVisible.bottom() < viewRect.bottom()) // move down
+        verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
+
+    pan(QPoint(horizontalMove, verticalMove));
+}
+
 void KisCanvasController::updateDocumentSize(const QSizeF &sz, bool recalculateCenter)
 {
     KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
@@ -206,19 +241,9 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
 
 void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
 {
-    int docWidth = KoCanvasControllerWidget::documentSize().width();
-    int docOffsetX = KoCanvasControllerWidget::canvasOffsetX();
-        
-    QPoint center = QPoint(docOffsetX + (docWidth / 2), 0);
+    const QPointF center = m_d->coordinatesConverter->imageCenterInWidgetPixel();
     QPoint newOffset = m_d->coordinatesConverter->mirror(center, enable, false);
-    
     setScrollBarValue(newOffset);
-    
-    // When the width is odd one side will be 1 pixel bigger, mirroring will 
-    // make the canvas move left by 1 pixel hence we pan it back to place.
-    if (docWidth % 2 == 1) 
-        KoCanvasControllerWidget::pan(QPoint(-1, 0));
-    
     m_d->updateDocumentSizeAfterTransform();
     m_d->showMirrorStateOnCanvas();
 

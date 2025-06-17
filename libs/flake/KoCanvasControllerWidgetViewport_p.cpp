@@ -40,7 +40,6 @@ Viewport::Viewport(KoCanvasControllerWidget *parent)
     , m_draggedShape(0)
     , m_canvas(0)
     , m_documentOffset(QPoint(0, 0))
-    , m_margin(0)
 {
     setAutoFillBackground(true);
     setAcceptDrops(true);

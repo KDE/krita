@@ -70,22 +70,6 @@ public:
 
 public:
     /**
-     * Returns the current margin that is used to pad the canvas with.
-     * This value is read from the KConfig property "canvasmargin"
-     */
-    virtual int margin() const;
-
-    /**
-     * Set the new margin to pad the canvas with.
-     */
-    virtual void setMargin(int margin);
-
-    /**
-     * compatibility with QAbstractScrollArea
-     */
-    virtual void scrollContentsBy(int dx, int dy) = 0;
-
-    /**
      * @return the size of the viewport
      */
     virtual QSizeF viewportSize() const = 0;
@@ -106,49 +90,15 @@ public:
     virtual KoCanvasBase *canvas() const;
 
     /**
-     * return the amount of pixels vertically visible of the child canvas.
-     * @return the amount of pixels vertically visible of the child canvas.
-     */
-    virtual int visibleHeight() const = 0;
-
-    /**
-     * return the amount of pixels horizontally visible of the child canvas.
-     * @return the amount of pixels horizontally visible of the child canvas.
-     */
-    virtual int visibleWidth() const = 0;
-
-    /**
-     * return the amount of pixels that are not visible on the left side of the canvas.
-     * The leftmost pixel that is shown is returned.
-     */
-    virtual int canvasOffsetX() const = 0;
-
-    /**
-     * return the amount of pixels that are not visible on the top side of the canvas.
-     * The topmost pixel that is shown is returned.
-     */
-    virtual int canvasOffsetY() const = 0;
-
-    /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
      *
-     * The rect is to be specified in view coordinates (pixels). The scrollbar positions
+     * The rect is to be specified in document coordinates (points). The scrollbar positions
      * are changed so that the centerpoint of the rectangle is centered if possible.
      *
      * @param rect the rectangle to make visible
      * @param smooth if true the viewport translation will make be just enough to ensure visibility, no more.
-     * @see KoViewConverter::documentToView()
      */
-    virtual void ensureVisible(const QRectF &rect, bool smooth = false) = 0;
-
-    /**
-     * @brief Scrolls the content of the canvas so that the given shape is visible.
-     *
-     * This is just a wrapper function of the above function.
-     *
-     * @param shape the shape to make visible
-     */
-    virtual void ensureVisible(KoShape *shape) = 0;
+    virtual void ensureVisibleDoc(const QRectF &docRect, bool smooth) = 0;
 
     /**
      * @brief zooms in around the center.
@@ -263,12 +213,6 @@ public:
     virtual void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) = 0;
 
     /**
-     * Set mouse wheel to zoom behaviour
-     * @param zoom if true wheel will zoom instead of scroll, control modifier will scroll
-     */
-    virtual void setZoomWithWheel(bool zoom) = 0;
-
-    /**
      * Set scroll area to be bigger than actual document.
      * It allows the user to move the corner of the document
      * to e.g. the center of the screen
@@ -331,8 +275,7 @@ public:
 
     void emitCanvasRemoved(KoCanvasController *canvasController) { Q_EMIT canvasRemoved(canvasController); }
     void emitCanvasSet(KoCanvasController *canvasController) { Q_EMIT canvasSet(canvasController); }
-    void emitCanvasOffsetXChanged(int offset) { Q_EMIT canvasOffsetXChanged(offset); }
-    void emitCanvasOffsetYChanged(int offset) { Q_EMIT canvasOffsetYChanged(offset); }
+    void emitCanvasOffsetChanged() { Q_EMIT canvasOffsetChanged(); }
     void emitCanvasMousePositionChanged(const QPoint &position) { Q_EMIT canvasMousePositionChanged(position); }
     void emitDocumentMousePositionChanged(const QPointF &position) { Q_EMIT documentMousePositionChanged(position); }
     void emitSizeChanged(const QSize &size) { Q_EMIT sizeChanged(size); }
@@ -356,16 +299,9 @@ Q_SIGNALS:
     void canvasSet(KoCanvasController *canvasController);
 
     /**
-     * Emitted when canvasOffsetX() changes
-     * @param offset the new canvas offset
+     * Emitted when canvasOffset() changes
      */
-    void canvasOffsetXChanged(int offset);
-
-    /**
-     * Emitted when canvasOffsetY() changes
-     * @param offset the new canvas offset
-     */
-    void canvasOffsetYChanged(int offset);
+    void canvasOffsetChanged();
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
@@ -435,16 +371,10 @@ public:
     {}
 
 
-    void scrollContentsBy(int /*dx*/, int /*dy*/) override {}
     QSizeF viewportSize() const override { return QSizeF(); }
     void setCanvas(KoCanvasBase *canvas) override {Q_UNUSED(canvas)}
     KoCanvasBase *canvas() const override {return 0;}
-    int visibleHeight() const override {return 0;}
-    int visibleWidth() const override {return 0;}
-    int canvasOffsetX() const override {return 0;}
-    int canvasOffsetY() const override {return 0;}
-    void ensureVisible(const QRectF &/*rect*/, bool /*smooth */ = false) override {}
-    void ensureVisible(KoShape *shape) override {Q_UNUSED(shape)}
+    void ensureVisibleDoc(const QRectF &, bool ) override {}
     void zoomIn(const QPoint &/*center*/) override {}
     void zoomOut(const QPoint &/*center*/) override {}
     void zoomBy(const QPoint &/*center*/, qreal /*zoom*/) override {}
@@ -461,7 +391,6 @@ public:
     void setScrollBarValue(const QPoint &/*value*/) override {}
     void resetScrollBars() override {}
     void updateDocumentSize(const QSizeF &/*sz*/, bool /*recalculateCenter*/) override {}
-    void setZoomWithWheel(bool /*zoom*/) override {}
     void setVastScrolling(qreal /*factor*/) override {}
     QPointF currentCursorPosition() const override { return QPointF(); }
 };

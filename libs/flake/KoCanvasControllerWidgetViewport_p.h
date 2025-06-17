@@ -43,7 +43,6 @@ public:
     void handleDragMoveEvent(QDragMoveEvent *event);
     void handleDragLeaveEvent(QDragLeaveEvent *event);
     void handlePaintEvent(QPainter &gc, QPaintEvent *event);
-    void setMargin(int margin) { m_margin = margin; resetLayout(); }
 
 private:
 
@@ -66,7 +65,6 @@ private:
     QWidget *m_canvas;
     QSizeF m_documentSize; // Size in pixels of the document
     QPoint m_documentOffset; // Place where the canvas widget should
-    int m_margin; // The viewport margin around the document
 };
 
 #endif

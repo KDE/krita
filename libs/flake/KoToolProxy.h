@@ -182,7 +182,8 @@ Q_SIGNALS:
     void toolChanged(const QString &toolId);
 
 protected:
-    virtual QPointF widgetToDocument(const QPointF &widgetPoint) const;
+    virtual QPointF widgetToDocument(const QPointF &widgetPoint) const = 0;
+    virtual QPointF documentToWidget(const QPointF &documentPoint) const = 0;
     KoCanvasBase* canvas() const;
 
 

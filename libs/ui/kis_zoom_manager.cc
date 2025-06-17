@@ -163,10 +163,7 @@ void KisZoomManager::setup(KisKActionCollection * actionCollection)
     layout->addWidget(m_verticalRuler, 1, 0);
     layout->addWidget(static_cast<KoCanvasControllerWidget*>(m_canvasController), 1, 1);
 
-    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
-            this, SLOT(pageOffsetChanged()));
-
-    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)),
+    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetChanged()),
             this, SLOT(pageOffsetChanged()));
 
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),

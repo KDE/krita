@@ -62,15 +62,6 @@ public:
      */
     virtual void changeCanvasWidget(QWidget *widget);
 
-    int visibleHeight() const override;
-    int visibleWidth() const override;
-    int canvasOffsetX() const override;
-    int canvasOffsetY() const override;
-
-    void ensureVisible(const QRectF &rect, bool smooth = false) override;
-
-    void ensureVisible(KoShape *shape) override;
-
     /**
      * will cause the toolOptionWidgetsChanged to be emitted and all
      * listeners to be updated to the new widget.
@@ -111,8 +102,6 @@ public:
     virtual void panLeft() override;
     virtual void panRight() override;
 
-    void setMargin(int margin) override;
-
     QPoint scrollBarValue() const override;
 
     /**
@@ -123,17 +112,9 @@ public:
 
     void updateDocumentSize(const QSizeF &sz, bool recalculateCenter = true) override;
 
-    /**
-     * Set mouse wheel to zoom behaviour
-     * @param zoom if true wheel will zoom instead of scroll, control modifier will scroll
-     */
-    void setZoomWithWheel(bool zoom) override;
-
     void setVastScrolling(qreal factor) override;
 
     QPointF currentCursorPosition() const override;
-
-    void resetScrollBars() override;
 
     /**
      * \internal
@@ -166,8 +147,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     /// reimplemented from QWidget
     void dragLeaveEvent(QDragLeaveEvent *event) override;
-    /// reimplemented from QWidget
-    void wheelEvent(QWheelEvent *event) override;
     /// reimplemented from QWidget
     bool focusNextPrevChild(bool next) override;
     /// reimplemented from QAbstractScrollArea

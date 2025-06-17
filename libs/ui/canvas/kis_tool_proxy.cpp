@@ -40,6 +40,14 @@ QPointF KisToolProxy::widgetToDocument(const QPointF &widgetPoint) const
     return kritaCanvas->coordinatesConverter()->widgetToDocument(widgetPoint);
 }
 
+QPointF KisToolProxy::documentToWidget(const QPointF &documentPoint) const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->coordinatesConverter()->documentToWidget(documentPoint);
+}
+
 KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result)
 {
     switch (event->type()) {

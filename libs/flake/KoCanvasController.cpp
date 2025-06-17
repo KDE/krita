@@ -15,14 +15,12 @@ class Q_DECL_HIDDEN KoCanvasController::Private
 {
 public:
     Private()
-        : margin(0)
-        , preferredCenterFractionX(0.5)
+        : preferredCenterFractionX(0.5)
         , preferredCenterFractionY(0.5)
         , actionCollection(0)
     {
     }
 
-    int margin;
     QSizeF documentSize;
     QPoint documentOffset;
     qreal preferredCenterFractionX;
@@ -42,16 +40,6 @@ KoCanvasController::~KoCanvasController()
     KoToolManager::instance()->removeCanvasController(this);
     delete d;
     delete proxyObject;
-}
-
-void KoCanvasController::setMargin(int margin)
-{
-    d->margin = margin;
-}
-
-int KoCanvasController::margin() const
-{
-    return d->margin;
 }
 
 KoCanvasBase* KoCanvasController::canvas() const

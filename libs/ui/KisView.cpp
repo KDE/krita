@@ -346,17 +346,12 @@ void KisView::setViewManager(KisViewManager *view)
     KisShapeController* shapeController = dynamic_cast<KisShapeController*>(d->document->shapeController());
     shapeController->setInitialShapeForCanvas(&d->canvas);
 
-    if (resourceProvider()) {
-        resourceProvider()->slotImageSizeChanged();
-    }
-
     if (d->viewManager && d->viewManager->nodeManager()) {
         d->viewManager->nodeManager()->nodesUpdated();
     }
 
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged(QPointF,QPointF)));
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
-
 
     d->addNodeConnection.connectSync(image(), &KisImage::sigNodeAddedAsync,
                                      this, &KisView::slotContinueAddNode);
@@ -1505,12 +1500,6 @@ void KisView::slotImageResolutionChanged()
     resetImageSizeAndScroll(false);
     zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGuiAfterDocumentSize();
-
-    // update KoUnit value for the document
-    if (resourceProvider()) {
-        resourceProvider()->resourceManager()->
-                setResource(KoCanvasResource::Unit, d->canvas.unit());
-    }
 }
 
 void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)

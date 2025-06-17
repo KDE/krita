@@ -25,6 +25,7 @@ public:
     KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KisKActionCollection * actionCollection);
     ~KisCanvasController() override;
 
+    void ensureVisibleDoc(const QRectF &docRect, bool smooth) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;

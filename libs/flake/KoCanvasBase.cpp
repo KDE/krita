@@ -91,13 +91,6 @@ KoCanvasResourceProvider *KoCanvasBase::resourceManager() const
     return d->resourceManager;
 }
 
-void KoCanvasBase::ensureVisible(const QRectF &rect)
-{
-    if (d->controller && d->controller->canvas())
-        d->controller->ensureVisible(
-                d->controller->canvas()->viewConverter()->documentToView(rect));
-}
-
 void KoCanvasBase::setCanvasController(KoCanvasController *controller)
 {
     d->controller = controller;

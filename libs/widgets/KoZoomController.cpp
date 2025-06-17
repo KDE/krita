@@ -25,7 +25,7 @@ void KoZoomController::Private::init(KoCanvasController *co,
                                      KisKActionCollection *actionCollection)
 {
     canvasController = co;
-    fitMargin = co->margin();
+    fitMargin = 0; // TODO: remove
     zoomHandler = zh;
     connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
             parent, SLOT(setZoom(KoZoomMode::Mode,qreal)));

@@ -1240,7 +1240,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
     }
     if (d->shape && !firstUpdate) {
         QRectF rect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
-        d->canvas->canvasController()->ensureVisible(d->canvas->viewConverter()->documentToView(rect).adjusted(-1, -1, 1, 1));
+        d->canvas->canvasController()->ensureVisibleDoc(rect, false);
     }
     if (d->canvas->canvasWidget()->hasFocus()) {
         d->cursorFlash.start();

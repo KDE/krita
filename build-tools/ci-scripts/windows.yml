@@ -22,6 +22,7 @@ windows-build:
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_WINDOWS_SIGN_CONFIG: upstream-ci-utilities/signing/signwindowsbinaries.ini
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+    PYTHONUTF8: 1
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_WINDOWS --depth=1

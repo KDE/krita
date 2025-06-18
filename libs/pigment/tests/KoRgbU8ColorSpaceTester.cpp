@@ -295,7 +295,6 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 
 // for posix_memalign()
 #include <stdlib.h>
-#include <config-xsimd.h>
 
 #if defined Q_OS_WIN
 #define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)

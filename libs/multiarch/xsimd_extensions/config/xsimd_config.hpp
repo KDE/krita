@@ -7,8 +7,6 @@
 #ifndef KIS_XSIMD_CONFIG_HPP
 #define KIS_XSIMD_CONFIG_HPP
 
-#include <config-xsimd.h>
-
 // MSVC patching.
 #if defined(_MSC_VER)
 #if defined(_M_ARM64)

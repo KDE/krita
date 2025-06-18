@@ -55,7 +55,6 @@ target_link_libraries(KisLowMemoryBenchmark  kritaimage  kritatestsdk)
 target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  kritatestsdk)
 target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  kritatestsdk)
 
-if(HAVE_XSIMD)
 ko_compile_for_all_implementations_no_scalar(__per_arch_composition_objects kis_composition_benchmark.cpp)
 message("Following objects are generated for the composition benchmark")
 foreach(_obj IN LISTS __per_arch_composition_objects)
@@ -80,7 +79,6 @@ foreach(_obj IN LISTS __per_arch_composition_objects)
 
     target_link_libraries(${_target} kritaimage kritatestsdk kritamultiarch)
 endforeach()
-endif()
 
 target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  kritatestsdk)
 target_link_libraries(KisThumbnailBenchmark  kritaimage  kritatestsdk)

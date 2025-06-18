@@ -10,7 +10,7 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
-#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 class VcExtraMath
 {
@@ -49,7 +49,7 @@ public:
         return sign * y;
     }
 };
-#endif /* defined HAVE_XSIMD */
+#endif /* !defined XSIMD_NO_SUPPORTED_ARCHITECTURE */
 
 
 #endif // VC_ADDITIONAL_MATH_H

@@ -41,7 +41,7 @@
 
 namespace xsimd
 {
-#if !defined(HAVE_XSIMD) || defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
+#if defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
 using current_arch = generic;
 #elif !defined(XSIMD_IMPL)
 using current_arch = default_arch;
@@ -93,7 +93,7 @@ using current_arch = neon64;
 // If the defined instruction sets don't match what's expected
 // from the build flags, zonk out the included file.
 
-#if !defined(HAVE_XSIMD) || !defined(XSIMD_IMPL) || defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
+#if !defined(XSIMD_IMPL) || defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
 #define XSIMD_UNIVERSAL_BUILD_PASS 3
 #elif XSIMD_WITH_SSE2 && (XSIMD_IMPL & PLATFORM_MASK) == Intel_Architecture
 #define XSIMD_UNIVERSAL_BUILD_PASS 2

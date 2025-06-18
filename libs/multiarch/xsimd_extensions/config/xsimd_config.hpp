@@ -9,8 +9,6 @@
 
 #include <config-xsimd.h>
 
-#ifdef HAVE_XSIMD
-
 // MSVC patching.
 #if defined(_MSC_VER)
 #if defined(_M_ARM64)
@@ -32,19 +30,5 @@
 #endif
 
 #include <xsimd/xsimd.hpp>
-
-#else /* HAVE_XSIMD */
-
-namespace xsimd
-{
-struct generic
-{
-    static constexpr bool supported() noexcept { return true; }
-    static constexpr bool available() noexcept { return true; }
-    static constexpr char const* name() noexcept { return "xsimd not available, unvectorized"; }
-};
-}; // namespace xsimd
-
-#endif /* HAVE_XSIMD */
 
 #endif // KIS_XSIMD_CONFIG_HPP

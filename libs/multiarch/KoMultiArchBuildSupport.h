@@ -21,7 +21,6 @@ std::tuple<bool, bool> vectorizationConfiguration();
 template<class FactoryType, class... Args>
 auto createOptimizedClass(Args &&...param)
 {
-#ifdef HAVE_XSIMD
     bool useVectorization = true;
     bool disableAVXOptimizations = false;
 
@@ -77,7 +76,6 @@ auto createOptimizedClass(Args &&...param)
             std::forward<Args>(param)...);
     }
 #endif // XSIMD_WITH_SSE2
-#endif // HAVE_XSIMD
 
     return FactoryType::template create<xsimd::generic>(
         std::forward<Args>(param)...);

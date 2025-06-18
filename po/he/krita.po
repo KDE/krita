@@ -59476,11 +59476,6 @@ msgid "Reference Images Tool"
 msgstr "שינוי שם התמונה"
 
 #, fuzzy
-#~ msgctxt "action"
-#~ msgid "Brush Smoothing: Pixel"
-#~ msgstr "הגדרות"
-
-#, fuzzy
 #~ msgid "Support Krita!"
 #~ msgstr "Krita"
 

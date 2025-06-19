@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-17 03:29+0000\n"
+"POT-Creation-Date: 2025-06-19 03:22+0000\n"
 "PO-Revision-Date: 2025-03-12 10:01+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19485,7 +19485,7 @@ msgstr "Krajevni viri"
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -20453,7 +20453,7 @@ msgstr ""
 "velikost slike ali jo obrežite."
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -20462,14 +20462,30 @@ msgstr ""
 "Animacije ni bilo mogoče upodobiti:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:135
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:89
+#, fuzzy, kde-format
+#| msgctxt "Dialog title"
+#| msgid "Overwrite the file?"
+msgid "Overwrite existing video?"
+msgstr "Ali želite prepisati datoteko?"
+
+#: libs/ui/animation/KisAnimationRender.cpp:90
+#, kde-format
+msgid ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
+msgstr ""
+
+#: libs/ui/animation/KisAnimationRender.cpp:150
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Napaka upodabljanja"
 
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
@@ -38076,6 +38092,13 @@ msgstr "Bolj rdeče/zeleno: "
 #, kde-format
 msgid "Bluer/Yellower: "
 msgstr "Bolj modro/rumeno: "
+
+#: plugins/dockers/animation/kis_equalizer_widget.cpp:144
+#, fuzzy, kde-format
+#| msgid "Reset"
+msgctxt "Reset to default"
+msgid "Reset"
+msgstr "Ponastavi"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261

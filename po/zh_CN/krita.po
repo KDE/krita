@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-17 03:29+0000\n"
+"POT-Creation-Date: 2025-06-19 03:22+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -19423,7 +19423,7 @@ msgstr "本地资源"
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -20387,7 +20387,7 @@ msgid ""
 msgstr "%1 要求宽度和高度数值为偶数。在导出之前请裁剪或调整该图像的大小。"
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -20396,14 +20396,30 @@ msgstr ""
 "无法处理动画：\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:135
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:89
+#, fuzzy, kde-format
+#| msgctxt "Dialog title"
+#| msgid "Overwrite the file?"
+msgid "Overwrite existing video?"
+msgstr "覆盖文件？"
+
+#: libs/ui/animation/KisAnimationRender.cpp:90
+#, kde-format
+msgid ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
+msgstr ""
+
+#: libs/ui/animation/KisAnimationRender.cpp:150
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "渲染错误"
 
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "渲染动画帧失败。输出文件不完整。"
@@ -37663,6 +37679,13 @@ msgstr "红/绿："
 #, kde-format
 msgid "Bluer/Yellower: "
 msgstr "蓝/黄："
+
+#: plugins/dockers/animation/kis_equalizer_widget.cpp:144
+#, fuzzy, kde-format
+#| msgid "Reset"
+msgctxt "Reset to default"
+msgid "Reset"
+msgstr "重置"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261

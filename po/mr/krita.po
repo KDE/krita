@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-17 03:29+0000\n"
+"POT-Creation-Date: 2025-06-19 03:22+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20077,7 +20077,7 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -21090,22 +21090,37 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #, fuzzy, kde-format
 msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr "नवीन संयोजना %1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:135
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:89
+#, fuzzy, kde-format
+#| msgid "Overwrite Preset"
+msgid "Overwrite existing video?"
+msgstr "प्रीसेट खोडून पुन्हा लिहा"
+
+#: libs/ui/animation/KisAnimationRender.cpp:90
+#, kde-format
+msgid ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
+msgstr ""
+
+#: libs/ui/animation/KisAnimationRender.cpp:150
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, fuzzy, kde-format
 #| msgid "Parsing error"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "व्याख्या वाचताना त्रुटी"
 
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames! Output files are incomplete."
@@ -38469,6 +38484,13 @@ msgstr "हिरवा :"
 #, fuzzy, kde-format
 msgid "Bluer/Yellower: "
 msgstr "यलोज"
+
+#: plugins/dockers/animation/kis_equalizer_widget.cpp:144
+#, fuzzy, kde-format
+#| msgid "Reset"
+msgctxt "Reset to default"
+msgid "Reset"
+msgstr "पुन्हस्थापित करा"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261

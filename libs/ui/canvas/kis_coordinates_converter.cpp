@@ -287,18 +287,25 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
 
     const int cfgMargin = zoomMarginSize();
 
-    // TODO: add resolution change
+    auto updateDisplayResolution = [&]() {
+        if (!qFuzzyCompare(resolutionX, this->resolutionX()) || !qFuzzyCompare(resolutionY, this->resolutionY())) {
+            setResolution(resolutionX, resolutionY);
+        }
+    };
 
     if(mode == KoZoomMode::ZOOM_CONSTANT) {
         if(qFuzzyIsNull(zoom)) return;
         const QPointF oldStillPointInImagePixels =
             widgetToImage(stillPoint);
 
+        updateDisplayResolution();
         KoZoomHandler::setZoom(zoom);
+        KoZoomHandler::setZoomMode(mode);
         recalculateTransformations();
 
         const QPointF newStillPoint = imageToWidget(oldStillPointInImagePixels);
-        setDocumentOffset(-newStillPoint + oldStillPointInImagePixels);
+        const QPointF offset = newStillPoint - stillPoint;
+        setDocumentOffset(m_d->documentOffset + offset);
     } else if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_HEIGHT) {
         // clang-format off
         struct DimensionWrapperHorizontal {
@@ -354,11 +361,15 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
                 }
             }
 
+            updateDisplayResolution();
+            recalculateTransformations();
+
             const QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
             const qreal zoomCoeff =
                 (dim.primaryLength(m_d->canvasWidgetSize) - 2 * cfgMargin) / dim.primaryLength(documentSize);
 
             KoZoomHandler::setZoom(this->zoom() * zoomCoeff);
+            KoZoomHandler::setZoomMode(mode);
             recalculateTransformations();
 
             const QPointF stillPointInNewWidgetPixels = imageToWidget(stillPointInImagePixels);
@@ -378,28 +389,30 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
         }
 
     } else if (mode == KoZoomMode::ZOOM_PAGE) {
-            const QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
-            const qreal zoomCoeffX =
-                (m_d->canvasWidgetSize.width() - 2 * cfgMargin) / documentSize.width();
-            const qreal zoomCoeffY =
-                (m_d->canvasWidgetSize.height() - 2 * cfgMargin) / documentSize.height();
+        updateDisplayResolution();
+        recalculateTransformations();
 
-            KoZoomHandler::setZoom(this->zoom() * qMin(zoomCoeffX, zoomCoeffY));
-            recalculateTransformations();
+        const QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
+        const qreal zoomCoeffX = (m_d->canvasWidgetSize.width() - 2 * cfgMargin) / documentSize.width();
+        const qreal zoomCoeffY = (m_d->canvasWidgetSize.height() - 2 * cfgMargin) / documentSize.height();
 
-            const QPointF offset = imageCenterInWidgetPixel() - widgetCenterPoint();
+        KoZoomHandler::setZoom(this->zoom() * qMin(zoomCoeffX, zoomCoeffY));
+        KoZoomHandler::setZoomMode(mode);
+        recalculateTransformations();
 
-            QPointF newDocumentOffset = m_d->documentOffset + offset;
+        const QPointF offset = imageCenterInWidgetPixel() - widgetCenterPoint();
 
-            // just explicitly set minimal axis offset to zero to
-            // avoid imperfections of floating point numbers
-            if (zoomCoeffX < zoomCoeffY) {
-                newDocumentOffset.setX(-cfgMargin);
-            } else {
-                newDocumentOffset.setY(-cfgMargin);
-            }
+        QPointF newDocumentOffset = m_d->documentOffset + offset;
 
-            setDocumentOffset(newDocumentOffset);
+        // just explicitly set minimal axis offset to zero to
+        // avoid imperfections of floating point numbers
+        if (zoomCoeffX < zoomCoeffY) {
+            newDocumentOffset.setX(-cfgMargin);
+        } else {
+            newDocumentOffset.setY(-cfgMargin);
+        }
+
+        setDocumentOffset(newDocumentOffset);
     }
 }
 

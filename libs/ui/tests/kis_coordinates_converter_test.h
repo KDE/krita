@@ -21,6 +21,15 @@ private Q_SLOTS:
     void testRotation();
     void testMirroring();
     void testMirroringCanvasBiggerThanImage();
+    void testCanvasOffset();
+    void testImageSmallerThanCanvas();
+    void testImageSizeChange();
+    void testImageResolutionChange();
+    void testOffsetLimits();
+    void testOffsetLimitsCropping();
+    void testZoomConstant();
+    void testZoomMode_data();
+    void testZoomMode();
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_TEST_H */

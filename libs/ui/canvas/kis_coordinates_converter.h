@@ -52,6 +52,8 @@ public:
     void setCanvasWidgetSize(QSizeF size);
     void setDevicePixelRatio(qreal value);
     void setImage(KisImageWSP image);
+    void setImageBounds(const QRect &rect);
+    void setImageResolution(qreal xRes, qreal yRes);
     void setDocumentOffset(const QPointF &offset);
 
     qreal devicePixelRatio() const;
@@ -72,6 +74,8 @@ public:
     QPoint resetRotation(QPointF center);
 
     void setZoom(qreal zoom) override;
+
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
 
     /**
      * A composition of to scale methods: zoom level + image resolution
@@ -151,6 +155,9 @@ public:
 
     QPointF snapToDevicePixel(const QPointF &point) const;
 
+    QPoint minimumOffset() const;
+    QPoint maximumOffset() const;
+
 public:
     // overrides from KoViewConverter
     QTransform viewToWidget() const override;
@@ -158,11 +165,13 @@ public:
 
 private:
     friend class KisZoomAndPanTest;
+    friend class KisCoordinatesConverterTest;
 
     QPointF centeringCorrection() const;
     void correctOffsetToTransformation();
     void correctTransformationToOffset();
     void recalculateTransformations();
+    void recalculateOffsetBoundsAndCrop();
 
 private:
     struct Private;

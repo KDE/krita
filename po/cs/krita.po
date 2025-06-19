@@ -30644,10 +30644,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate: "
+#, kde-format
 msgid "Frame rate"
-msgstr "Vzorkovací frekvence: "
+msgstr "Vzorkovací frekvence"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331

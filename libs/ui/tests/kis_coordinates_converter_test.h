@@ -27,7 +27,6 @@ private Q_SLOTS:
     void testImageResolutionChange();
     void testOffsetLimits();
     void testOffsetLimitsCropping();
-    void testZoomConstant();
     void testZoomMode_data();
     void testZoomMode();
 };

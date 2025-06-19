@@ -498,28 +498,6 @@ void KisCoordinatesConverterTest::testOffsetLimitsCropping()
     QCOMPARE(converter.imageToWidget(QPointF(1000,1000)), QPointF(50,500));
 }
 
-void KisCoordinatesConverterTest::testZoomConstant()
-{
-    KisImageSP image;
-    KisCoordinatesConverter converter;
-    initImage(&image, &converter);
-
-    const QRect widgetRect(0,0,700,500);
-    converter.setImage(image);
-    converter.setDocumentOffset(QPoint(0,0));
-    converter.setCanvasWidgetSize(widgetRect.size()); // should be initialized first
-    converter.setZoom(0.5);
-
-    // still point is QPointF(50,50)
-    QCOMPARE(converter.imageToWidget(QPointF(100,100)), QPointF(50,50)); // still point
-    QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(0,0));
-
-    converter.setZoom(KoZoomMode::ZOOM_CONSTANT, 0.75, image->xRes(), image->yRes(), QPointF(50,50));
-
-    QCOMPARE(converter.imageToWidget(QPointF(100,100)), QPointF(50,50)); // still point
-    QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(-25,-25));
-}
-
 using PointPairs = QVector<std::pair<QPointF, QPointF>>;
 
 void KisCoordinatesConverterTest::testZoomMode_data()

@@ -11,16 +11,16 @@ Template dialog
 """
 import os
 import shutil
-#from PyQt5.QtGui import *
 try:
-    from PyQt6.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
+    from PyQt6.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog, QApplication
     from PyQt6.QtCore import QLocale, Qt, QByteArray, QRectF
-    from PyQt6.QtGui import QImage, QPainter, QPixmap
+    from PyQt6.QtGui import QImage, QPainter, QPixmap, QColor
 except:
-    from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
+    from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog, QApplication
     from PyQt5.QtCore import QLocale, Qt, QByteArray, QRectF
-    from PyQt5.QtGui import QImage, QPainter, QPixmap
-from krita import *
+    from PyQt5.QtGui import QImage, QPainter, QPixmap, QColor
+from krita import FileDialog, InfoObject
+from builtins import i18n, Application
 """
 Quick and dirty QComboBox subclassing that handles unitconversion for us.
 """

@@ -9,7 +9,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
 """
 This is a docker that helps you organise your comics project.
 """
-import sys
 import json
 import os
 import zipfile  # quick reading of documents
@@ -18,16 +17,16 @@ import enum
 from math import floor
 import xml.etree.ElementTree as ET
 try:
-    from PyQt6.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
-    from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont, QAction
+    from PyQt6.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer, QUuid
+    from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QFont, QAction
     from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 
 except:
-    from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
-    from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
+    from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer, QUuid
+    from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QFont
     from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
-import math
-from krita import *
+from krita import DockWidget, DockWidgetFactory, DockWidgetFactoryBase, FileDialog
+from builtins import i18n, Application
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
 
 """

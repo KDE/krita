@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
-import krita
+from krita import Krita, Extension
+from builtins import i18n, Application
 try:
     from PyQt6.QtGui import QPixmap, QIcon
 except:
@@ -8,7 +9,7 @@ except:
 from . import uitenbrushes
 
 
-class TenBrushesExtension(krita.Extension):
+class TenBrushesExtension(Extension):
 
     def __init__(self, parent):
         super(TenBrushesExtension, self).__init__(parent)

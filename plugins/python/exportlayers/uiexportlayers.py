@@ -17,6 +17,7 @@ except:
                                  QComboBox, QListWidgetItem)
 import os
 from krita import Krita, InfoObject, FileDialog
+from builtins import i18n, Application
 
 
 class UIExportLayers(object):

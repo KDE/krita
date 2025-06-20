@@ -7,7 +7,7 @@ try:
     from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem
 except:
     from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
-
+from builtins import i18n, i18nc
 
 class DebuggerTable(QTableWidget):
 

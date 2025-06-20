@@ -12,6 +12,7 @@ except:
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
 from krita import FileDialog
+from builtins import i18n
 
 import os.path
 

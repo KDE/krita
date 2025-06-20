@@ -4,12 +4,11 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 try:
-    from PyQt6.QtWidgets import QWidget, QVBoxLayout, QToolBar, QTableWidget
-    #from PyQt6.QtGui import QAction
+    from PyQt6.QtWidgets import QWidget, QVBoxLayout, QToolBar
 except:
-    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QTableWidget, QAction
+    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar
+from builtins import i18n
 from . import stepaction, stopaction, debuggertable
-
 
 class DebuggerWidget(QWidget):
 

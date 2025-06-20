@@ -8,8 +8,7 @@ try:
 except:
     from PyQt5.QtWidgets import QAction
     from PyQt5.QtGui import QIcon
-from scripter import resources_rc
-import krita
+from builtins import i18n
 
 
 class StopAction(QAction):

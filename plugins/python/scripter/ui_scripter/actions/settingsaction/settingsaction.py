@@ -10,7 +10,7 @@ except:
     from PyQt5.QtWidgets import QAction
     from PyQt5.QtCore import Qt
 from . import settingsdialog
-import krita
+from builtins import i18n
 
 
 class SettingsAction(QAction):

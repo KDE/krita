@@ -6,7 +6,7 @@ try:
 except:
     from PyQt5.QtCore import QAbstractListModel, Qt, QSize
     from PyQt5.QtGui import QImage
-import krita
+from krita import Krita
 import zipfile
 from pathlib import Path
 
@@ -17,7 +17,7 @@ class LastDocumentsListModel(QAbstractListModel):
         super(LastDocumentsListModel, self).__init__(parent)
 
         self.rootItem = ('Path',)
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.recentDocuments = []
         self.devicePixelRatioF = devicePixelRatioF
 

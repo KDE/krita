@@ -12,6 +12,7 @@ except:
     from PyQt5.QtGui import QIcon, QPixmap
     from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QToolButton, QPushButton, QToolBar, QAction, QSizePolicy
 from krita import Krita, DockWidget, DockWidgetFactory, DockWidgetFactoryBase, ManagedColor
+from builtins import i18n, i18nc, Application
 from .flow_layout import FlowLayout
 from .buttons_settings_dialog import LISTOFTOOLS, LISTOFSIZES, ButtonsSettingsDialog
 import ast

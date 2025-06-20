@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 
-import krita
+from krita import Extension
+from builtins import i18n
 from . import uidocumenttools
 
 
-class DocumentToolsExtension(krita.Extension):
+class DocumentToolsExtension(Extension):
 
     def __init__(self, parent):
         super(DocumentToolsExtension, self).__init__(parent)

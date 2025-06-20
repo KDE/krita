@@ -6,7 +6,7 @@ try:
 except:
     from PyQt5.QtWidgets import (QWidget, QSpinBox,
                                  QVBoxLayout, QFormLayout)
-
+from builtins import i18n
 
 class CanvasSizeTool(QWidget):
 

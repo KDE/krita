@@ -6,13 +6,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
 # editor.py
 
 try:
-    from PyQt6.QtCore import *
-    from PyQt6.QtGui import *
-    from PyQt6.QtWidgets import *
+    from PyQt6.QtCore import QApplication
+    from PyQt6.QtGui import QFont
+    from PyQt6.QtWidgets import QPlainTextEdit
 except:
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
-    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import QApplication
+    from PyQt5.QtGui import QFont
+    from PyQt5.QtWidgets import QPlainTextEdit
 
 import syntax
 

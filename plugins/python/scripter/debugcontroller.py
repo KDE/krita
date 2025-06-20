@@ -5,6 +5,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 from .debugger_scripter import debugger
 import asyncio
+from builtins import i18n
 
 class DebugController (object):
 

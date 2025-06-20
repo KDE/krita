@@ -25,6 +25,7 @@ except:
         QPlainTextEdit, QCompleter, QMenu)
     from PyQt5.Qt import Qt, pyqtSlot
 from krita import DockWidget, Palette, PaletteView
+from builtins import i18n, i18nc, Application
 
 # import the exporters
 from . import (

@@ -18,6 +18,7 @@ except:
 from krita import Krita, PresetChooser, ManagedColor, FileDialog
 from .flow_layout import FlowLayout
 import copy
+from builtins import i18n
 
 INSTANCE = Krita.instance()
 

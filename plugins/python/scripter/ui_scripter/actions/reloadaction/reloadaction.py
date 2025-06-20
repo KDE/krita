@@ -5,14 +5,14 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 try:
     from PyQt6.QtWidgets import QMessageBox
-    from PyQt6.QtGui import QIcon, QKeySequence, QAction
+    from PyQt6.QtGui import QKeySequence, QAction
     from PyQt6.QtCore import Qt
 except:
     from PyQt5.QtWidgets import QAction, QMessageBox
-    from PyQt5.QtGui import QIcon, QKeySequence
+    from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
 from .... import utils
-import krita
+from builtins import i18n
 
 
 class ReloadAction(QAction):

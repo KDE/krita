@@ -5,7 +5,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 import bdb
 import multiprocessing
-import sys
 import asyncio
 from . import debuggerformatter
 

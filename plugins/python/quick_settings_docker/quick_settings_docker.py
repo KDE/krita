@@ -21,6 +21,7 @@ except:
                             QPixmap, QImage, QBrush, QPen, QIcon)
     from PyQt5.QtWidgets import QWidget, QTabWidget, QListView, QVBoxLayout
 from krita import DockWidget
+from builtins import i18n, Application
 
 
 class QuickSettingsDocker(DockWidget):

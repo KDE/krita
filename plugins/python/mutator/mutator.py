@@ -24,7 +24,7 @@ SOFTWARE.
 '''
 
 
-import sys, math, random, colorsys
+import math, random
 try:
     from PyQt6.QtGui import QIcon
     from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QPushButton
@@ -32,8 +32,8 @@ try:
 except:
     from PyQt5.QtGui import QIcon
     from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QPushButton
-from krita import Extension, DockWidget, DockWidgetFactory, SliderSpinBox, ManagedColor
-
+from krita import Krita, Extension, DockWidget, DockWidgetFactory, SliderSpinBox, ManagedColor
+from builtins import i18n
 
 # Global mutation settings... 
 # (Typically normalized within 0.0-1.0 range.

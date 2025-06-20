@@ -13,6 +13,7 @@ except:
     from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 
 from krita import Krita, DockWidget, ManagedColor, DockWidgetFactory, DockWidgetFactoryBase
+from builtins import i18n, Application
 
 from .slider_line import SliderLine
 from .ui_mixer_slider_docker import UIMixerSliderDocker

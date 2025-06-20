@@ -6,7 +6,7 @@ try:
 except:
     from PyQt5.QtWidgets import (QWidget, QSpinBox,
                                  QVBoxLayout, QFormLayout, QComboBox)
-
+from builtins import i18n, i18nc
 
 class ScaleTool(QWidget):
 

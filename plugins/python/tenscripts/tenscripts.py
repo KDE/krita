@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 from krita import Extension
-import krita
+from builtins import i18n, Application
 try:
     from PyQt6.QtGui import QIcon
 except:
@@ -11,7 +11,7 @@ from . import uitenscripts
 import importlib
 
 
-class TenScriptsExtension(krita.Extension):
+class TenScriptsExtension(Extension):
 
     def __init__(self, parent):
         super(TenScriptsExtension, self).__init__(parent)

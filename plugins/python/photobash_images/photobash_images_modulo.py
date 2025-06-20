@@ -15,11 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from krita import *
+from krita import Krita
 try:
-    from PyQt6 import QtWidgets, QtCore
+    from PyQt6.QtGui import QPolygon, QPainter, QPen, QBrush, QImage, QPixmap, QDrag, QPalette
+    from PyQt6.QtCore import Qt, QPoint, QMimeData, QUrl, QSize, pyqtSignal
+    from PyQt6.QtWidgets import QApplication, QWidget, QMenu
 except:
-    from PyQt5 import QtWidgets, QtCore
+    from PyQt5.QtGui import QPolygon, QPainter, QPen, QBrush, QImage, QPixmap, QDrag, QPalette
+    from PyQt5.QtCore import Qt, QPoint, QMimeData, QUrl, QSize, pyqtSignal
+    from PyQt5.QtWidgets import QApplication, QWidget, QMenu
 
 DRAG_DELTA = 30
 TRIANGLE_SIZE = 20
@@ -32,7 +36,7 @@ FAVOURITE_TRIANGLE = QPolygon([
 
 def customPaintEvent(instance, event):
     painter = QPainter(instance)
-    painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
     painter.setPen(QPen(Qt.GlobalColor.black, 2, Qt.PenStyle.SolidLine))
     painter.setBrush(QBrush(Qt.GlobalColor.white, Qt.BrushStyle.SolidPattern))
 
@@ -87,12 +91,12 @@ def customSetImage(instance, image):
     instance.update()
 
 def customMouseMoveEvent(self, event):
-    if event.modifiers() != QtCore.Qt.KeyboardModifier.ShiftModifier and event.modifiers() != QtCore.Qt.KeyboardModifier.AltModifier:
+    if event.modifiers() != Qt.KeyboardModifier.ShiftModifier and event.modifiers() != Qt.KeyboardModifier.AltModifier:
         self.PREVIOUS_DRAG_X = None
         return 
 
     # alt modifier is reserved for scrolling through
-    if self.PREVIOUS_DRAG_X and event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
+    if self.PREVIOUS_DRAG_X and event.modifiers() == Qt.KeyboardModifier.AltModifier:
         if self.PREVIOUS_DRAG_X < event.x() - DRAG_DELTA:
             self.SIGNAL_WUP.emit(0)
             self.PREVIOUS_DRAG_X = event.x()
@@ -138,8 +142,8 @@ def customMouseMoveEvent(self, event):
     drag.exec(Qt.DropAction.CopyAction)
 
 class Photobash_Display(QWidget):
-    SIGNAL_HOVER = QtCore.pyqtSignal(str)
-    SIGNAL_CLOSE = QtCore.pyqtSignal(int)
+    SIGNAL_HOVER = pyqtSignal(str)
+    SIGNAL_CLOSE = pyqtSignal(int)
     fitCanvasChecked = False
     scale = 100
 
@@ -148,7 +152,7 @@ class Photobash_Display(QWidget):
         customSetImage(self, None)
 
     def sizeHint(self):
-        return QtCore.QSize(5000,5000)
+        return QSize(5000,5000)
 
     def enterEvent(self, event):
         self.SIGNAL_HOVER.emit("D")
@@ -157,7 +161,7 @@ class Photobash_Display(QWidget):
         self.SIGNAL_HOVER.emit("None")
 
     def mousePressEvent(self, event):
-        if (event.modifiers() == QtCore.Qt.KeyboardModifier.NoModifier and event.buttons() == QtCore.Qt.MouseButton.LeftButton):
+        if (event.modifiers() == Qt.KeyboardModifier.NoModifier and event.buttons() == Qt.MouseButton.LeftButton):
             self.SIGNAL_CLOSE.emit(0)
 
     def mouseMoveEvent(self, event):
@@ -177,16 +181,16 @@ class Photobash_Display(QWidget):
         customPaintEvent(self, event)
 
 class Photobash_Button(QWidget):
-    SIGNAL_HOVER = QtCore.pyqtSignal(str)
-    SIGNAL_LMB = QtCore.pyqtSignal(int)
-    SIGNAL_WUP = QtCore.pyqtSignal(int)
-    SIGNAL_WDN = QtCore.pyqtSignal(int)
-    SIGNAL_PREVIEW = QtCore.pyqtSignal(str)
-    SIGNAL_FAVOURITE = QtCore.pyqtSignal(str)
-    SIGNAL_UN_FAVOURITE = QtCore.pyqtSignal(str)
-    SIGNAL_OPEN_NEW = QtCore.pyqtSignal(str)
-    SIGNAL_REFERENCE = QtCore.pyqtSignal(str)
-    SIGNAL_DRAG = QtCore.pyqtSignal(int)
+    SIGNAL_HOVER = pyqtSignal(str)
+    SIGNAL_LMB = pyqtSignal(int)
+    SIGNAL_WUP = pyqtSignal(int)
+    SIGNAL_WDN = pyqtSignal(int)
+    SIGNAL_PREVIEW = pyqtSignal(str)
+    SIGNAL_FAVOURITE = pyqtSignal(str)
+    SIGNAL_UN_FAVOURITE = pyqtSignal(str)
+    SIGNAL_OPEN_NEW = pyqtSignal(str)
+    SIGNAL_REFERENCE = pyqtSignal(str)
+    SIGNAL_DRAG = pyqtSignal(int)
     PREVIOUS_DRAG_X = None
     fitCanvasChecked = False
     scale = 100
@@ -215,7 +219,7 @@ class Photobash_Button(QWidget):
         self.number = number
 
     def sizeHint(self):
-        return QtCore.QSize(2000,2000)
+        return QSize(2000,2000)
 
     def enterEvent(self, event):
         self.SIGNAL_HOVER.emit(str(self.number))
@@ -224,9 +228,9 @@ class Photobash_Button(QWidget):
         self.SIGNAL_HOVER.emit("None")
 
     def mousePressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.KeyboardModifier.NoModifier and event.buttons() == QtCore.Qt.MouseButton.LeftButton:
+        if event.modifiers() == Qt.KeyboardModifier.NoModifier and event.buttons() == Qt.MouseButton.LeftButton:
             self.SIGNAL_LMB.emit(self.number)
-        if event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
+        if event.modifiers() == Qt.KeyboardModifier.AltModifier:
             self.PREVIOUS_DRAG_X = event.x()
 
     def mouseDoubleClickEvent(self, event):

@@ -5,7 +5,7 @@ try:
 except:
     from PyQt5.QtWidgets import QWidget, QSpinBox, QFormLayout
 import math
-
+from builtins import i18n
 
 class RotateTool(QWidget):
 

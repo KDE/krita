@@ -20,6 +20,7 @@ except:
     from PyQt5.QtXml import QDomDocument
     from PyQt5.QtWidgets import QMessageBox
 from krita import Palette, FileDialog
+from builtins import Application, i18n
 
 class inkscapeSVGExporter:
 

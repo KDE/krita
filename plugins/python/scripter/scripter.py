@@ -8,6 +8,7 @@ try:
 except:
     from PyQt5.QtCore import QSettings, QStandardPaths
 from krita import Krita, Extension
+from builtins import i18n
 from . import uicontroller, documentcontroller, debugcontroller
 
 

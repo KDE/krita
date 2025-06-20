@@ -9,22 +9,17 @@ SPDX-License-Identifier: GPL-3.0-or-later
 """
 An exporter that take the comicsConfig and uses it to generate several files.
 """
-import sys
 from pathlib import Path
 import zipfile
-from xml.dom import minidom
 from xml.etree import ElementTree as ET
-import types
-import re
 try:
-    from PyQt6.QtWidgets import QLabel, QProgressDialog, QMessageBox, QApplication  # For the progress dialog.
-    from PyQt6.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
-    from PyQt6.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
+    from PyQt6.QtWidgets import QProgressDialog, QMessageBox, QApplication  # For the progress dialog.
+    from PyQt6.QtCore import QElapsedTimer
 except:
-    from PyQt5.QtWidgets import QLabel, QProgressDialog, QMessageBox, QApplication  # For the progress dialog.
-    from PyQt5.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
-    from PyQt5.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
-from krita import *
+    from PyQt5.QtWidgets import QProgressDialog, QMessageBox, QApplication  # For the progress dialog.
+    from PyQt5.QtCore import QElapsedTimer
+from krita import InfoObject
+from builtins import i18n, Application
 from . import exporters
 
 """

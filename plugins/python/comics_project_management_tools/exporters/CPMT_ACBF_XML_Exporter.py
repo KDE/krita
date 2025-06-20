@@ -17,12 +17,12 @@ import os
 import re
 try:
     from PyQt6.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer, QLocale
-    from PyQt6.QtGui import QImage, QColor, QFont, QRawFont
-    from PyQt6.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+    from PyQt6.QtGui import QImage, QColor
+    from PyQt6.QtXml import QDomDocument, QDomElement
 except:
     from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer, QLocale
-    from PyQt5.QtGui import QImage, QColor, QFont, QRawFont
-    from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+    from PyQt5.QtGui import QImage, QColor
+    from PyQt5.QtXml import QDomDocument, QDomElement
 from . import CPMT_po_parser as po_parser
 
 def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], locationBasic = str(), locationStandAlone = str(), projectUrl = str()):

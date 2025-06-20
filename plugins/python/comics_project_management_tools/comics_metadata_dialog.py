@@ -9,11 +9,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
 """
 This is a metadata editor that helps out setting the proper metadata
 """
-import sys
 import os  # For finding the script location.
 import csv
 import re
-import types
 from pathlib import Path  # For reading all the files in a directory.
 try:
     from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
@@ -23,6 +21,7 @@ except:
     from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
     from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
     from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid, QLibraryInfo
+from builtins import i18n, Application
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 

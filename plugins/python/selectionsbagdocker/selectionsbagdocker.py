@@ -9,6 +9,7 @@ except:
 
     from PyQt5 import uic
 from krita import DockWidget
+from builtins import i18n
 import os
 
 

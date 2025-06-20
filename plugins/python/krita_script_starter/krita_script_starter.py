@@ -33,11 +33,9 @@ BBD
 import os
 import sys
 try:
-    from PyQt6.QtCore import QStandardPaths, QSettings
     from PyQt6.QtWidgets import QApplication, QWidget, QMessageBox
     import PyQt6.uic as uic
 except:
-    from PyQt5.QtCore import QStandardPaths, QSettings
     from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
     import PyQt5.uic as uic
 
@@ -96,7 +94,6 @@ DESKTOP_TEMPLATE = """[Desktop Entry]
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library={library_name}
-X-Python-2-Compatible=false
 X-Krita-Manual=Manual.html
 Name={script_name}
 Comment={script_comment}

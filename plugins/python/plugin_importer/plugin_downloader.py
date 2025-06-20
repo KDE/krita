@@ -20,6 +20,8 @@ import os
 import urllib
 import urllib.request
 
+from builtins import i18n
+
 
 class PluginDownloadError(Exception):
     """Base class for all exceptions of this module."""

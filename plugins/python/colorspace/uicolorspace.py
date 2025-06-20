@@ -18,7 +18,8 @@ except:
                                 QAbstractItemView, QDialogButtonBox,
                                 QVBoxLayout, QFrame, QMessageBox, QPushButton,
                                 QAbstractScrollArea)
-import krita
+from krita import Krita
+from builtins import i18n
 from scripter import utils
 
 from . import resources_rc # Loads the icon qrc
@@ -42,7 +43,7 @@ class UIColorSpace(object):
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.documentsList = []
         self.colorModelsList = []
         self.colorDepthsList = []

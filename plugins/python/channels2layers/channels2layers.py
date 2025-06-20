@@ -1134,9 +1134,9 @@ class ChannelsToLayers(Extension):
 
         imgThumbSrc = self.toQImage(self.__sourceLayer, rect)
 
-        previewBaSrc.resize(imgThumbSrc.byteCount())
+        previewBaSrc.resize(imgThumbSrc.sizeInBytes())
         ptr = imgThumbSrc.bits()
-        ptr.setsize(imgThumbSrc.byteCount())
+        ptr.setsize(imgThumbSrc.sizeInBytes())
         previewBaSrc = QByteArray(ptr.asstring())
 
 

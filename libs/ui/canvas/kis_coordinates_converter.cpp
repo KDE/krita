@@ -16,6 +16,7 @@
 #include <kis_config.h>
 #include <kis_image.h>
 #include <kis_algebra_2d.h>
+#include <kis_assert.h>
 
 
 struct KisCoordinatesConverter::Private {
@@ -215,12 +216,33 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
 
     m_d->imageBounds = image->bounds();
     recalculateTransformations();
+
+    if (m_d->canvasWidgetSize.isEmpty()) {
+        // if setImage() comes before setCanvasWidgetSize(), then just remember the
+        // proposed mode and postpone the actual recentering of the image
+        // (this case is supposed to happen in unittests only)
+        KoZoomHandler::setZoomMode(KoZoomMode::ZOOM_PAGE);
+    } else {
+        // the default mode after initialization is "Zoom Page"
+        setZoom(KoZoomMode::ZOOM_PAGE, 777.7, resolutionX(), resolutionY(), QPointF(8888.8, 9999.9));
+    }
 }
 
-void KisCoordinatesConverter::setImageBounds(const QRect &rect)
+void KisCoordinatesConverter::setImageBounds(const QRect &rect, const QPointF oldImageStillPoint, const QPointF newImageStillPoint)
 {
     if (rect == m_d->imageBounds) return;
+
+    const QPointF oldWidgetStillPoint = imageToWidget(oldImageStillPoint);
+
+    // we reset zoom mode to constant to make sure that
+    // the image changes visually for the user
+    setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+
     m_d->imageBounds = rect;
+    recalculateTransformations();
+
+    const QPointF newWidgetStillPoint = imageToWidget(newImageStillPoint);
+    m_d->documentOffset += newWidgetStillPoint - oldWidgetStillPoint;
     recalculateTransformations();
 }
 
@@ -237,6 +259,10 @@ void KisCoordinatesConverter::setImageResolution(qreal xRes, qreal yRes)
     // it is a different kind of resolution that is used
     // to convert the image to the physical size of the display
 
+    // we reset zoom mode to constant to make sure that
+    // the image changes visually for the user
+    setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+
     m_d->imageXRes = xRes;
     m_d->imageYRes = yRes;
     recalculateTransformations();
@@ -248,10 +274,11 @@ void KisCoordinatesConverter::setImageResolution(qreal xRes, qreal yRes)
 
 void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
 {
-    QPointF diff = m_d->documentOffset - offset;
+    // when changing the offset manually, the mode is explicitly
+    // reset to constant
+    setZoomMode(KoZoomMode::ZOOM_CONSTANT);
 
     m_d->documentOffset = offset;
-    m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
 }
 
@@ -272,19 +299,35 @@ qreal KisCoordinatesConverter::rotationAngle() const
 
 void KisCoordinatesConverter::setZoom(qreal zoom)
 {
+    // when changing the offset manually, the mode is explicitly
+    // reset to constant, this method is used in unittests mostly
+    setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+
     KoZoomHandler::setZoom(zoom);
     recalculateTransformations();
 }
 
+void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoom(const QSizeF &size)
+{
+    setCanvasWidgetSize(size);
+
+    if (zoomMode() == KoZoomMode::ZOOM_CONSTANT) {
+        // in constant mode we just preserve the document offset
+        // (as much as we can in relation to the vast scroll factor)
+    } else {
+        /**
+         * WARNING: we can safely call setZoom() after changing widget size **only**
+         * for non-constant modes, becasue they have no still points, they always
+         * align to the center of the widget. Constant mode, reads the state of the
+         * canvas before transformation to calculate the position of the still point,
+         * hence we cannot change the state separately.
+         */
+        setZoom(zoomMode(), 777.0, resolutionX(), resolutionY(), QPointF(8888.8, 9999.9));
+    }
+}
+
 void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
 {
-    if (this->zoomMode() == mode &&
-            qFuzzyCompare(this->zoom(), zoom) &&
-            qFuzzyCompare(m_d->imageXRes, resolutionX) &&
-            qFuzzyCompare(m_d->imageYRes, resolutionY)) {
-        return; // no change
-    }
-
     const int cfgMargin = zoomMarginSize();
 
     auto updateDisplayResolution = [&]() {
@@ -305,98 +348,30 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
 
         const QPointF newStillPoint = imageToWidget(oldStillPointInImagePixels);
         const QPointF offset = newStillPoint - stillPoint;
-        setDocumentOffset(m_d->documentOffset + offset);
-    } else if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_HEIGHT) {
-        // clang-format off
-        struct DimensionWrapperHorizontal {
-            qreal primaryLength(const QRectF &obj) { return obj.width(); }
-            qreal primaryLength(const QSizeF &obj) { return obj.width(); }
-            qreal primaryStart(const QRectF &obj) { return obj.left(); }
-            qreal primaryEnd(const QRectF &obj) { return obj.right(); }
-            qreal secondaryStart(const QRectF &obj) { return obj.top(); }
-            qreal secondaryEnd(const QRectF &obj) { return obj.bottom(); }
-            qreal& primaryRef(QPointF &pt) { return pt.rx(); }
-            qreal& secondaryRef(QPointF &pt) { return pt.ry(); }
-            qreal primary(const QPointF &pt) { return pt.x(); }
-            qreal secondary(const QPointF &pt) { return pt.y(); }
-        };
-
-        struct DimensionWrapperVertical {
-            qreal primaryLength(const QRectF &obj) { return obj.height(); }
-            qreal primaryLength(const QSizeF &obj) { return obj.height(); }
-            qreal primaryStart(const QRectF &obj) { return obj.top(); }
-            qreal primaryEnd(const QRectF &obj) { return obj.bottom(); }
-            qreal secondaryStart(const QRectF &obj) { return obj.left(); }
-            qreal secondaryEnd(const QRectF &obj) { return obj.right(); }
-            qreal& primaryRef(QPointF &pt) { return pt.ry(); }
-            qreal& secondaryRef(QPointF &pt) { return pt.rx(); }
-            qreal primary(const QPointF &pt) { return pt.y(); }
-            qreal secondary(const QPointF &pt) { return pt.x(); }
-        };
-        // clang-format on
-
-        auto zoomToDimension = [&](auto dim) {
-            /**
-             * We try not to move the image alond the secondary axis, we cleverly choose
-             * a still point and pin it along the transformation
-             */
-            QPointF stillPointInImagePixels;
-            QPointF stillPointInOldWidgetPixels;
-
-            {
-                /**
-                 * Depending on whether the image covers the center of the widget,
-                 * we either scale relative to the center of the widget or the center
-                 * of the image.
-                 */
-                const QPointF widgetCenterInImagePixels = widgetToImage(widgetCenterPoint());
-
-                if (dim.secondary(widgetCenterInImagePixels) >= dim.secondaryStart(imageRectInImagePixels())
-                    && dim.secondary(widgetCenterInImagePixels) <= dim.secondaryEnd(imageRectInImagePixels())) {
-                    stillPointInImagePixels = widgetCenterInImagePixels;
-                    stillPointInOldWidgetPixels = widgetCenterPoint();
-                } else {
-                    stillPointInImagePixels = QRectF(imageRectInImagePixels()).center();
-                    stillPointInOldWidgetPixels = imageToWidget(stillPointInImagePixels);
-                }
-            }
-
-            updateDisplayResolution();
-            recalculateTransformations();
-
-            const QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
-            const qreal zoomCoeff =
-                (dim.primaryLength(m_d->canvasWidgetSize) - 2 * cfgMargin) / dim.primaryLength(documentSize);
-
-            KoZoomHandler::setZoom(this->zoom() * zoomCoeff);
-            KoZoomHandler::setZoomMode(mode);
-            recalculateTransformations();
-
-            const QPointF stillPointInNewWidgetPixels = imageToWidget(stillPointInImagePixels);
-            const qreal verticalOffset =
-                -dim.secondary(stillPointInOldWidgetPixels) + dim.secondary(stillPointInNewWidgetPixels);
-            QPointF newDocumentOffset;
-            dim.primaryRef(newDocumentOffset) = -cfgMargin;
-            dim.secondaryRef(newDocumentOffset) = dim.secondary(m_d->documentOffset) + verticalOffset;
-
-            setDocumentOffset(newDocumentOffset);
-        };
-
-        if (mode == KoZoomMode::ZOOM_WIDTH) {
-            zoomToDimension(DimensionWrapperHorizontal{});
-        } else {
-            zoomToDimension(DimensionWrapperVertical{});
-        }
-
-    } else if (mode == KoZoomMode::ZOOM_PAGE) {
+        m_d->documentOffset += offset;
+        recalculateTransformations();
+    } else if (mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_HEIGHT) {
         updateDisplayResolution();
         recalculateTransformations();
 
-        const QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->canvasWidgetSize.isEmpty());
+
+        const QSizeF documentSize = imageRectInWidgetPixels().size();
         const qreal zoomCoeffX = (m_d->canvasWidgetSize.width() - 2 * cfgMargin) / documentSize.width();
         const qreal zoomCoeffY = (m_d->canvasWidgetSize.height() - 2 * cfgMargin) / documentSize.height();
 
-        KoZoomHandler::setZoom(this->zoom() * qMin(zoomCoeffX, zoomCoeffY));
+        const bool fitToWidth = [&]() {
+            if (mode == KoZoomMode::ZOOM_PAGE) {
+                return zoomCoeffX < zoomCoeffY;
+            } else if (mode == KoZoomMode::ZOOM_HEIGHT) {
+                return false;
+            } else if (mode == KoZoomMode::ZOOM_WIDTH) {
+                return true;
+            }
+            Q_UNREACHABLE_RETURN(true);
+        }();
+
+        KoZoomHandler::setZoom(this->zoom() * (fitToWidth ? zoomCoeffX : zoomCoeffY));
         KoZoomHandler::setZoomMode(mode);
         recalculateTransformations();
 
@@ -406,13 +381,14 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
 
         // just explicitly set minimal axis offset to zero to
         // avoid imperfections of floating point numbers
-        if (zoomCoeffX < zoomCoeffY) {
+        if (fitToWidth) {
             newDocumentOffset.setX(-cfgMargin);
         } else {
             newDocumentOffset.setY(-cfgMargin);
         }
 
-        setDocumentOffset(newDocumentOffset);
+        m_d->documentOffset = newDocumentOffset;
+        recalculateTransformations();
     }
 }
 

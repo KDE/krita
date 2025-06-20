@@ -52,7 +52,7 @@ public:
     void setCanvasWidgetSize(QSizeF size);
     void setDevicePixelRatio(qreal value);
     void setImage(KisImageWSP image);
-    void setImageBounds(const QRect &rect);
+    void setImageBounds(const QRect &rect, const QPointF oldImageStillPoint, const QPointF newImageStillPoint);
     void setImageResolution(qreal xRes, qreal yRes);
     void setDocumentOffset(const QPointF &offset);
 
@@ -76,6 +76,7 @@ public:
     void setZoom(qreal zoom) override;
 
     void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
+    void setCanvasWidgetSizeKeepZoom(const QSizeF &size);
 
     /**
      * A composition of to scale methods: zoom level + image resolution

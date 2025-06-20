@@ -112,7 +112,6 @@ void Imagesplit::slotImagesplit()
 
     Q_ASSERT(listMimeFilter.size() == listFileType.size());
 
-    KisCoordinatesConverter converter;
     QList <qreal> xGuides = viewManager()->document()->guidesConfig().verticalGuideLines();
     QList <qreal> yGuides = viewManager()->document()->guidesConfig().horizontalGuideLines();
 
@@ -120,17 +119,16 @@ void Imagesplit::slotImagesplit()
     std::sort(yGuides.begin(), yGuides.end());
 
     KisImageWSP image = viewManager()->image();
-
-    converter.setImage(image);
-    QTransform transform = converter.imageToDocumentTransform().inverted();
+    const QTransform documentToImage =
+        QTransform::fromScale(image->xRes(), image->yRes());
 
     for (int i = 0; i< xGuides.size(); i++) {
         qreal line = xGuides[i];
-        xGuides[i] = transform.map(QPointF(line, line)).x();
+        xGuides[i] = documentToImage.map(QPointF(line, line)).x();
     }
     for (int i = 0; i< yGuides.size(); i++) {
         qreal line = yGuides[i];
-        yGuides[i] = transform.map(QPointF(line, line)).y();
+        yGuides[i] = documentToImage.map(QPointF(line, line)).y();
     }
 
     qreal thumbnailRatio = qreal(200)/qMax(image->width(), image->height());

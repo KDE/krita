@@ -21,6 +21,8 @@ from . import scripterdialog, utils
 import importlib
 import krita
 
+from scripter import resources_rc # Loads the icons qrc
+
 KEY_GEOMETRY = "geometry"
 DEFAULT_GEOMETRY = QRect(600, 200, 400, 500)
 # essentially randomly placed

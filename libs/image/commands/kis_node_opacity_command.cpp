@@ -14,6 +14,7 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_scalar_keyframe_channel.h"
+#include "kis_time_span.h"
 
 using namespace KisCommandUtils;
 
@@ -47,6 +48,11 @@ void KisNodeOpacityCommand::redo()
 
     m_node->setOpacity(m_newOpacity);
     m_node->setDirty();
+
+    // BUG:499389 workaround.
+    // Unlike drawing, non-animated opacity changes need to be recached across all raster frames.
+    // It's probably better to change KisNode::setDirty, KisImage::requestProjectionUpdate, and/or KisProjectionUpdateFlags.
+    m_node->invalidateFrames(KisTimeSpan::infinite(0), QRect());
 }
 
 void KisNodeOpacityCommand::undo()

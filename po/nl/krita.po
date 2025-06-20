@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-19 03:22+0000\n"
-"PO-Revision-Date: 2025-06-06 12:42+0200\n"
+"PO-Revision-Date: 2025-06-19 14:07+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: \n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20534,11 +20534,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Het bestand overschrijven?"
+msgstr "Bestaande video overschrijven?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20548,6 +20546,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Er bestaat al een bestand in het pad waarin u uw video [%1] wilt "
+"renderen... \n"
+"                                                              Wilt u het "
+"bestaande bestand overschrijven?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -38238,8 +38240,7 @@ msgid "Bluer/Yellower: "
 msgstr "Blauwer/geler: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Reset"

@@ -2,7 +2,6 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=scriptdocker
-X-Python-2-Compatible=false
 Name=Script Docker
 Name[ar]=رصيف سكربتات
 Name[ca]=Acoblador Script

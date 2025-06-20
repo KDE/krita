@@ -79,7 +79,6 @@ private:
 
     PythonPlugin() {
         m_properties["X-Python-Dependencies"] = QStringList();
-        m_properties["X-Python-2-Dependencies"] = QStringList();
     }
 
     QString m_errorReason;

@@ -3,7 +3,6 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=exportlayers
 X-Krita-Manual=Manual.html
-X-Python-2-Compatible=true
 Name=Export Layers
 Name[ar]=تصدير الطبقات
 Name[bg]=Експортиране на слоеве

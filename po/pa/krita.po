@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-19 03:22+0000\n"
+"POT-Creation-Date: 2025-06-21 03:30+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18179,7 +18179,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "ਸਥਿਤੀ"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 #, fuzzy
 #| msgid "Set background"
 msgctxt "(qtundo-format)"

@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>1693</width>
-    <height>1031</height>
+    <height>499</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>4</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -1034,10 +1034,27 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lblSelectionActionBar">
+         <property name="text">
+          <string>Selection Action Bar</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QCheckBox" name="chkEnableSelectionActionBarCheckBox">
+         <property name="text">
+          <string>Enable Selection Action Bar</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1082,21 +1099,21 @@
             </property>
            </widget>
           </item>
+          <item>
+           <spacer name="verticalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -1195,8 +1212,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1689</width>
-            <height>1003</height>
+            <width>1675</width>
+            <height>634</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1644,7 +1661,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QSpinBox</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

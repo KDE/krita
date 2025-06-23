@@ -20548,11 +20548,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Zastąpić plik?"
+msgstr "Zastąpić istniejące nagranie?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20562,6 +20560,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"W ścieżce, do której chcesz zapisać swoje nagranie istnieje już plik "
+"[%1]... \n"
+"                                                              Czy na pewno "
+"go zastąpić?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -38214,8 +38216,7 @@ msgid "Bluer/Yellower: "
 msgstr "Bardziej Niebieski/Żółty: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Wyzeruj"

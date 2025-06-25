@@ -162,4 +162,7 @@ public:
     };
 
     KisSharedPtr<TabletLatencyTracker> tabletLatencyTracker;
+#ifdef Q_OS_WIN
+    bool ignoreHighFunctionKeys = false;
+#endif
 };

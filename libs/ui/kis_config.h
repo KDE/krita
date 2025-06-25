@@ -527,6 +527,9 @@ public:
     bool trackTabletEventLatency(bool defaultValue = false) const;
     void setTrackTabletEventLatency(bool value);
 
+    bool ignoreHighFunctionKeys(bool defaultValue = false) const;
+    void setIgnoreHighFunctionKeys(bool value);
+
     bool testingAcceptCompressedTabletEvents(bool defaultValue = false) const;
     void setTestingAcceptCompressedTabletEvents(bool value);
 

@@ -21795,6 +21795,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Sijainnissa, johon haluat videon hahmonnettavan, on jo tiedosto [%1]…\n"
+"                                                              Haluatko "
+"varmasti korvata olemassa olevan tiedoston?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152

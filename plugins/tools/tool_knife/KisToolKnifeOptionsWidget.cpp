@@ -290,10 +290,11 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
     //    KisIconUtils::loadIcon("tool_comic_panel_move_point"));
 
     m_d->buttonModeAddGutter->setChecked(true);
-    m_d->buttonModeAddGutter->setMinimumSize(QSize(36, 36));
-    m_d->buttonModeRemoveGutter->setMinimumSize(QSize(36, 36));
-    m_d->buttonModeAddGutter->setIconSize(QSize(28, 28));
-    m_d->buttonModeRemoveGutter->setIconSize(QSize(28, 28));
+    m_d->buttonModeAddGutter->setMinimumSize(QSize(20, 20));
+    m_d->buttonModeRemoveGutter->setMinimumSize(QSize(20, 20));
+    m_d->buttonModeAddGutter->setIconSize(QSize(16, 16));
+    m_d->buttonModeRemoveGutter->setIconSize(QSize(16, 16));
+
     //m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
     //m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
 

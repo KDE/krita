@@ -69,7 +69,7 @@ public:
         setToolTip(i18n("Knife Tool"));
 
         setSection(ToolBoxSection::Main);
-        setIconName(koIconNameCStr("tool_comic_panel_editing"));
+        setIconName(koIconNameCStr("tool_comic_panel"));
         setPriority(7);
         setActivationShapeId("flake/always,KoPathShape");
     }

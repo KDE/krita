@@ -283,9 +283,9 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
     //KisOptionButtonStrip *optionButtonStripToolMode =
     //    new KisOptionButtonStrip;
     m_d->buttonModeAddGutter = m_d->ui->optionButtonStripToolMode->addButton(
-        KisIconUtils::loadIcon("tool_comic_panel_scissors"));
+        KisIconUtils::loadIcon("tool_comic_panel_cut"));
     m_d->buttonModeRemoveGutter = m_d->ui->optionButtonStripToolMode->addButton(
-        KisIconUtils::loadIcon("tool_comic_panel_zipper"));
+        KisIconUtils::loadIcon("tool_comic_panel_merge"));
     //m_d->buttonModeMoveGutterEndPoint = m_d->ui->optionButtonStripToolMode->addButton(
     //    KisIconUtils::loadIcon("tool_comic_panel_move_point"));
 

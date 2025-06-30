@@ -44,6 +44,7 @@ set(kritaglobal_LIB_SRCS
     KisSampleRectIterator.cpp
     KisCursorOverrideLock.cpp
     kis_random_source.cpp
+    KisMessageBoxWrapper.cpp
 )
 
 if(WIN32)
@@ -67,6 +68,12 @@ endif()
 
 kis_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS}
    )
+
+target_sources(kritaglobal
+  PRIVATE
+    KisMessageBoxWrapper.h
+    KisMessageBoxWrapper.cpp
+)
 generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
 target_link_libraries(kritaglobal 
@@ -77,6 +84,7 @@ target_link_libraries(kritaglobal
         Qt${QT_MAJOR_VERSION}::Widgets 
         Qt${QT_MAJOR_VERSION}::Xml 
         KF${KF_MAJOR}::I18n
+        KF${KF_MAJOR}::ConfigCore
         Boost::boost
         zug
         lager

@@ -16,6 +16,8 @@
 
 #include <klocalizedstring.h>
 
+#include <KisMessageBoxWrapper.h>
+
 KisRemoteFileFetcher::KisRemoteFileFetcher(QObject *parent)
     : QObject(parent)
     , m_request(nullptr)
@@ -44,7 +46,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
         msgBox.setDetailedText(remote.toDisplayString());
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
-        const int res = msgBox.exec();
+        const int res = KisMessageBoxWrapper::doNotAskAgainMessageBoxWrapper(&msgBox, "KisRemoteFileFetcher");
 
         if (res != QMessageBox::Yes) {
             return false;

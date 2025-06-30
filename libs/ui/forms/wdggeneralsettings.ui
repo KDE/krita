@@ -1633,7 +1633,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
            <item row="9" column="1">
             <widget class="QCheckBox" name="chkIgnoreHighFunctionKeys">
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Some input method applications may use emulated F-keys (e.g. F22) to bring themselves to the top of the desktop. This may break Krita's shortcuts system. If you see that some application breaks Krita's shortcuts, try enabling this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>Some applications may emulate presses of function keys with high numbers (e.g. F22) to bring themselves to the foreground. This may break Krita's shortcuts and actions system. If you have a keyboard with F13 or higher function keys, and you wish to use them, try disabling this option, but take this potential problem into account.</string>
              </property>
              <property name="text">
               <string>Ignore high function keys (F13-F24)</string>

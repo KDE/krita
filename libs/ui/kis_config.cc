@@ -2029,7 +2029,7 @@ void KisConfig::setTrackTabletEventLatency(bool value)
 
 bool KisConfig::ignoreHighFunctionKeys(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("ignoreHighFunctionKeys", false));
+    return (defaultValue ? true : m_cfg.readEntry("ignoreHighFunctionKeys", true));
 }
 
 void KisConfig::setIgnoreHighFunctionKeys(bool value)

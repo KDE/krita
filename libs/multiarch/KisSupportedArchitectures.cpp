@@ -54,24 +54,15 @@ struct ArchToStringFactory {
 
 QString KisSupportedArchitectures::bestArchName()
 {
-    QString bestArchName = "<unavailable>";
-
-#ifdef HAVE_XSIMD
-    detail::ArchToStringBase *archDetector =
-        createOptimizedClass<detail::ArchToStringFactory>();
-    bestArchName = archDetector->name();
-#endif
-
-    return bestArchName;
+    detail::ArchToStringBase *archDetector = createOptimizedClass<detail::ArchToStringFactory>();
+    return archDetector->name();
 }
 
-#ifdef HAVE_XSIMD
 #if (XSIMD_VERSION_MAJOR >= 13 && XSIMD_VERSION_MINOR >=1) \
     || defined(XSIMD_HAS_ARCH_LIST_FIX_PR1032)
 #define XSIMD_SUPPORTS_NEW_ARCH_DETECTION
 #elif XSIMD_VERSION_MAJOR < 13
 #define XSIMD_SUPPORTS_OLD_ARCH_DETECTION
-#endif
 #endif
 
 template<typename S>

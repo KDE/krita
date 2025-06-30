@@ -77,7 +77,7 @@ public:
         return false;
     }
 
-#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
     template<typename A>
     xsimd::batch_bool<float, A> needFade(xsimd::batch<float, A> &dist)
     {
@@ -106,7 +106,7 @@ public:
         return (outsideMask | fadeStartMask);
     }
 
-#endif /* defined HAVE_XSIMD */
+#endif /* !defined XSIMD_NO_SUPPORTED_ARCHITECTURE */
 
 private:
     qreal m_radius;
@@ -201,7 +201,7 @@ public:
         return false;
     }
 
-#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
     template<typename A>
     xsimd::batch_bool<float, A> needFade(xsimd::batch<float, A> &xr, xsimd::batch<float, A> &yr) const
     {
@@ -262,7 +262,7 @@ public:
         }
     }
 
-#endif /* defined HAVE_XSIMD */
+#endif /* !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) */
 
 private:
     qreal m_xLimit;

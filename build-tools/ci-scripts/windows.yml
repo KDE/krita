@@ -23,6 +23,7 @@ windows-build:
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_WINDOWS
     EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_WINDOWS
+    PYTHONUTF8: 1
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $EFFECTIVE_DEPS_REPO_BRANCH_NAME --depth=1

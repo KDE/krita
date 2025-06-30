@@ -5,16 +5,12 @@ set(kritaheifimport_SOURCES
     HeifError.cpp
 )
 
-if(HAVE_XSIMD)
-    ko_compile_for_all_implementations(__per_arch_heif kis_heif_import_tools.cpp)
+ko_compile_for_all_implementations(__per_arch_heif kis_heif_import_tools.cpp)
 
-    message("Following objects are generated from the per-arch lib")
-    foreach(_obj IN LISTS __per_arch_heif)
-        message("    * ${_obj}")
-    endforeach()
-else()
-    set(__per_arch_heif kis_heif_import_tools.cpp)
-endif()
+message("Following objects are generated from the per-arch lib")
+foreach(_obj IN LISTS __per_arch_heif)
+    message("    * ${_obj}")
+endforeach()
 
 kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES} ${__per_arch_heif})
 

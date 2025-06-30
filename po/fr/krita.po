@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-06-01 19:30+0200\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"PO-Revision-Date: 2025-06-16 11:15+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20949,7 +20949,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "Changement de mode de composition"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Changement d'opacité"
@@ -28080,21 +28080,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
-#| "and community-driven tool for digital artists everywhere.<br />Progress "
-#| "is made possible thanks to ongoing support from our community of <a href="
-#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-#| "a>members.</p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -28110,19 +28096,20 @@ msgid ""
 "href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a href=\"https://"
 "fund.krita.org/\">development fund</a> members.</p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0/EN\" \"http://www.w3.org/TR/REC-"
-"html40/strict.dtd\">\n"
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
 "\">\n"
-"p, li { white-space : pre-wrap ; }\n"
+"p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita est un outil "
-"communautaire open-source destiné aux artistes numériques du monde entier."
-"<br />Son développement est possible grâce au soutien continu de notre "
-"communauté de <a href=\"https://docs.krita.org/en/contributors_manual.html"
-"\">contributeurs</a>, de sponsors et des participants au <a href=\"https://"
-"fund.krita.org/\">fonds de développement </a>.</p></body></html>"
+"communautaire et « Open source » destiné aux artistes numériques du monde "
+"entier.<br />Son développement est possible grâce au soutien continu de "
+"notre communauté de <a href=\"https://docs.krita.org/en/contributors_manual."
+"html\">personnes contributrices</a>, de <a href=\"https://krita.org/en/"
+"sponsors/\">mécènes</a> et de membres du <a href=\"https://fund.krita.org/"
+"\">fond de développement</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -31440,18 +31427,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate:"
+#, kde-format
 msgid "Frame rate"
-msgstr "Fréquence d'images :"
+msgstr "Fréquence des trames"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Frame timing:"
+#, kde-format
 msgid "Frame rate limit:"
-msgstr "Chronologie des trames :"
+msgstr "Limite à la fréquence des trames :"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -31471,7 +31455,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Détecter à partir de l'écran"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361

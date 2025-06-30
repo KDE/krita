@@ -11,7 +11,7 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
-#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) && XSIMD_UNIVERSAL_BUILD_PASS
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) && XSIMD_UNIVERSAL_BUILD_PASS
 
 #include "kis_brush_mask_scalar_applicator.h"
 
@@ -138,6 +138,6 @@ void KisBrushMaskVectorApplicator<MaskGenerator, impl>::processVector(const QRec
     xsimd::vector_aligned_free(buffer);
 }
 
-#endif /* defined HAVE_XSIMD */
+#endif /* !defined XSIMD_NO_SUPPORTED_ARCHITECTURE */
 
 #endif /* KIS_BRUSH_VECTOR_APPLICATOR_H */

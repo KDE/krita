@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-05-29 06:16+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"PO-Revision-Date: 2025-06-15 08:34+0200\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12875,35 +12875,29 @@ msgstr "Referenčna slika iz vidnega"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Nearest Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "Najbližje barve"
+msgstr "Vsili barve palete"
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3669 krita/krita.action:3670
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enforce palette colors: always select the nearest color from the active "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
-msgstr "Vsili barve palete: vedno izberi najbližjo barvo iz dejavne palete."
+msgstr "Izbirniku barv vsili, da izbere samo barve v trenutno izbrani paleti."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "Barvna paleta"
+msgstr "Vsili paleto"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -20749,7 +20743,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "Sprememba načina sestave"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Sprememba prekrivnosti"
@@ -27821,21 +27815,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
-#| "and community-driven tool for digital artists everywhere.<br />Progress "
-#| "is made possible thanks to ongoing support from our community of <a href="
-#| "\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-#| "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
-#| "a>members.</p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -27859,10 +27839,11 @@ msgstr ""
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita je odprto-kodno "
-"orodje za vse digitalne likovnike.<br />Napredek omogoča stalna podpora naše "
-"skupnosti <a href=\"https://docs.krita.org/en/contributors_manual.html"
-"\">avtorjev prispevkov</a>,&nbsp;sponzorjev in članov <a href=\"https://fund."
-"krita.org/\">razvojnega sklada</a>.</p></body></html>"
+"orodje za vse digitalne likovnike, ki mu življenje vdihuje široka skupnost."
+"<br />Napredek omogoča stalna podpora naše skupnosti <a href=\"https://docs."
+"krita.org/en/contributors_manual.html\">avtorjev prispevkov</a>, <a href="
+"\"https://krita.org/en/sponsors/\">sponzorjev</a> in članov <a href="
+"\"https://fund.krita.org/\">razvojnega sklada</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -31134,18 +31115,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate: "
+#, kde-format
 msgid "Frame rate"
-msgstr "Hitrost v sličicah: "
+msgstr "Hitrost v sličicah"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Frame timing:"
+#, kde-format
 msgid "Frame rate limit:"
-msgstr "Časovna usklajenost sličic:"
+msgstr "Omejitev hitrosti v sličicah:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -31165,7 +31143,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Zaznaj z zaslona"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361
@@ -60369,8 +60347,6 @@ msgid "Where should the pages go?"
 msgstr "Kam naj gredo strani?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
-#, fuzzy
-#| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "Katera slika naj bo osnova nove strani?"
 
@@ -61535,10 +61511,8 @@ msgstr "Odpri"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
-#, fuzzy
-#| msgid "Save Python File"
 msgid "Python Files"
-msgstr "Shrani datoteko Python"
+msgstr "Datoteke Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Invalid File"
@@ -66245,15 +66219,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Limit frames per second while painting:"
-#~ msgstr "Omeji sličice na sekundo med slikanjem:"
-
-#~ msgid "Python Files (*.py)"
-#~ msgstr "Datoteke Python (*.py)"
-
-#~ msgid "Python File (*.py)"
-#~ msgstr "Datoteka Python (*.py)"
-
-#~ msgid "Icon files "
-#~ msgstr "Datoteke ikon "

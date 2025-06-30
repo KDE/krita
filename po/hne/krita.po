@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -20954,7 +20954,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "कम्पोजिट मोड"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"

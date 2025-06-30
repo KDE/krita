@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -20630,7 +20630,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "Změna kompozitního režimu"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Změna krytí"
@@ -30644,10 +30644,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fpsGroup)
 #: libs/ui/forms/wdgperformancesettings.ui:325
-#, fuzzy, kde-format
-#| msgid "Frame Rate: "
+#, kde-format
 msgid "Frame rate"
-msgstr "Vzorkovací frekvence: "
+msgstr "Vzorkovací frekvence"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331

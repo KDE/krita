@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-03-19 13:21+0100\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20865,7 +20865,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "Cambio de modo de composición"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Cambio de opacidade"
@@ -45161,9 +45161,7 @@ msgid "%1, %2, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "@info mouse position (x, y)"
-#| msgid "%1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
 msgstr "%1, %2"
@@ -53125,8 +53123,7 @@ msgstr "<html><head/><body><p>Descrición da acción</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
 msgstr "Pincel automático"

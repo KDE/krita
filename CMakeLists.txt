@@ -1295,7 +1295,11 @@ endif()
 ## write a version range in the find_package call. Instead we
 ## should try all the supported versions manually
 ##
-foreach(xsimd_version 8.1.0 9 10 11 12 13)
+## We're trying out more recent versions first to make
+## set_package_properties report the lowest one if no
+## xsimd is found
+##
+foreach(xsimd_version 13 12 11 10 9 8.1.0)
     if(NOT xsimd_FOUND)
         find_package(xsimd ${xsimd_version})
     endif()
@@ -1304,12 +1308,10 @@ endforeach()
 set_package_properties(xsimd PROPERTIES
     DESCRIPTION "C++ wrappers for SIMD intrinsics"
     URL "https://github.com/xtensor-stack/xsimd"
-    TYPE OPTIONAL
+    TYPE REQUIRED
     PURPOSE "Required by Krita for vectorization")
-macro_bool_to_01(xsimd_FOUND HAVE_XSIMD)
-configure_file(config-xsimd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xsimd.h )
 
-if(HAVE_XSIMD)
+if (xsimd_FOUND)
     macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if("aarch64" IN_LIST XSIMD_ARCH)
             xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${xsimd_ARCHITECTURE_FLAGS} ONLY NEON64)
@@ -1327,6 +1329,14 @@ if(HAVE_XSIMD)
     macro(ko_compile_for_all_implementations _objs _src)
         xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${xsimd_ARCHITECTURE_FLAGS} ONLY Scalar)
         ko_compile_for_all_implementations_no_scalar(${_objs} ${_src})
+    endmacro()
+else()
+    # Make noop functions as they are used in nested cmake files
+    # without guards
+    macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+    endmacro()
+
+    macro(ko_compile_for_all_implementations _objs _src)
     endmacro()
 endif()
 

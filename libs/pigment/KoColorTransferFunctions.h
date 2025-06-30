@@ -142,7 +142,7 @@ ALWAYS_INLINE float removeSMPTE_ST_428Curve(float x) noexcept
 
 #include <KoMultiArchBuildSupport.h>
 
-#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 #include <KoStreamedMath.h>
 
@@ -183,6 +183,6 @@ struct KoColorTransferFunctions {
     }
 };
 
-#endif // HAVE_XSIMD
+#endif // !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 #endif // KOCOLORTRANSFERFUNCTIONS_H

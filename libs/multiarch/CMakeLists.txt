@@ -7,9 +7,7 @@ kis_add_library(kritamultiarch SHARED ${kritamultiarch_SRCS})
 
 generate_export_header(kritamultiarch)
 
-if (HAVE_XSIMD)
-    target_link_libraries(kritamultiarch PUBLIC xsimd)
-endif()
+target_link_libraries(kritamultiarch PUBLIC xsimd)
 
 target_link_libraries(kritamultiarch
     PUBLIC

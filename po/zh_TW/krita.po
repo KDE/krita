@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -20788,7 +20788,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "變更合成模式"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "調整不透明度"

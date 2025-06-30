@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
-"PO-Revision-Date: 2025-06-13 13:11+0300\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"PO-Revision-Date: 2025-06-29 18:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20762,7 +20762,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "Kompozisyon Kipini Değiştir"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Matlık Değişimi"
@@ -26507,7 +26507,7 @@ msgstr "Algısal"
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
-msgstr "Göreceli renkölçer"
+msgstr "Bağıl renkölçüm"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1169
@@ -26521,7 +26521,7 @@ msgstr "Doygunluk"
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
-msgstr "Mutlak renkölçer"
+msgstr "Mutlak renkölçüm"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1173
@@ -26562,7 +26562,7 @@ msgid ""
 "adaptation and blackpoint compensation."
 msgstr ""
 "Siyah nokta telafisi ve beyaz nokta uyumunu devre dışı bırakıp mutlak "
-"renkölçer kullanarak kâğıda benzetin."
+"renkölçüm kullanarak kâğıda benzetin."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:126
 #, kde-format
@@ -28168,7 +28168,7 @@ msgid ""
 "Within and outside gamut; same as Absolute Colorimetric. White point changed "
 "to result in neutral grays."
 msgstr ""
-"Gam içi veya dışı; Mutlak Renkölçer ile aynı. Beyaz nokta, nötr gri ortaya "
+"Gam içi veya dışı; mutlak renkölçüm ile aynı. Beyaz nokta, nötr gri ortaya "
 "çıkarmak için değiştirildi."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
@@ -28176,7 +28176,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:76
 #, kde-format
 msgid "Relative colorimetric"
-msgstr "Göreli renkölçer"
+msgstr "Bağıl renkölçüm"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:117
@@ -28219,7 +28219,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:120
 #, kde-format
 msgid "Absolute colorimetric"
-msgstr "Mutlak renkölçer"
+msgstr "Mutlak renkölçüm"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgBookmarkedConfigurationsEditor)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:24
@@ -28355,14 +28355,14 @@ msgstr "&Sunum amacı:"
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
 msgid "Relative Colorimetric"
-msgstr "Göreli Renkölçer"
+msgstr "Bağıl renkölçüm"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:223
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
-msgstr "Mutlak Renkölçer"
+msgstr "Mutlak renkölçüm"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAddColorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:247
@@ -28562,12 +28562,11 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"Gam içinde ve dışında; Mutlak\n"
-"Renkölçer ile aynı. Beyaz nokta, nötr griye\n"
-"dönüşecek şekilde değişti.\n"
-"Eğer yeterli tablo profilde gösterilirse\n"
-"bu kullanılır. Diğer türlü algısal amaca\n"
-"dönüştürülür."
+"Gam içinde ve dışında; mutlak renkölçüm\n"
+"ile aynı. Beyaz nokta, nötr griye dönüşecek\n"
+"şekilde değişti. Eğer yeterli tablo profilde\n"
+"gösterilirse bu kullanılır. Diğer türlü algısal\n"
+"amaca dönüştürülür."
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:86
@@ -29069,7 +29068,7 @@ msgid ""
 "file layer may be broken.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Uyarı: Krita, dosyanın konumunu depolamak için .kra "
-"içinde bir göreceli yol kullanır. .kra’yı taşır; ancak dosyayı taşımazsanız "
+"içinde bir bağıl yol kullanır. .kra’yı taşır; ancak dosyayı taşımazsanız "
 "dosya katman bozulabilir.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpScalingOptions)
@@ -30218,8 +30217,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Siyah Nokta telafisi, kaynak aygıtın en koyu rengini "
 "hedef aygıtın en koyu rengiyle eşleştirir. Siyah Nokta Telafisi olmayan "
-"Bağıl Renk Bilgisi, en karanlık değerler arasındaki farkı gösterecektir. "
-"Siyah nokta telafisi ile siyah siyahtır.</p></body></html>"
+"bağıl renkölçüm, en karanlık değerler arasındaki farkı gösterecektir. Siyah "
+"nokta telafisi ile siyah siyahtır.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, sldAdaptationState)
 #: libs/ui/forms/wdgimageproperties.ui:361
@@ -30233,10 +30232,10 @@ msgid ""
 "Colorimetric</span>?</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Uyum durumunu ne kadar doğrulamayı istediğinizi seçin. "
-"Bu <span style=\" font-style:italic;\">Mutlak Renkölçer</span>’in "
+"Bu, <span style=\" font-style:italic;\">Mutlak Renkölçer</span>’in "
 "görselinizin beyazlarını nasıl değiştireceğini etkiler. Herkesin "
 "anlayabileceği biçimde: <span style=\" font-style:italic;\">Mutlak "
-"Renkölçer</span> kullanırken renk yönetiminin kağıt rengini beyaza "
+"renkölçüm</span> kullanırken renk yönetiminin kağıt rengini beyaza "
 "çevirmesini ne kadar istiyorsunuz?</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -53270,10 +53269,9 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Tahmin edilen ve aslında olan renkler arasındaki "
-"göreceli renk kodlamasını etkinleştirir. Bant kalıntıları olmayan neredeyse "
-"kayıpsız pürüzsüz gradyanların sıkıştırılması için mükemmeldir.</p></body></"
-"html>"
+"<html><head/><body><p>Tahmin edilen ve aslında olan renkler arasındaki bağıl "
+"renk kodlamasını etkinleştirir. Bant kalıntıları olmayan neredeyse kayıpsız "
+"pürüzsüz gradyanların sıkıştırılması için mükemmeldir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897

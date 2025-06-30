@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-13 01:59+0000\n"
+"POT-Creation-Date: 2025-06-21 02:02+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -21182,7 +21182,7 @@ msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "एकत्रित पध्दत"
 
-#: libs/image/commands/kis_node_opacity_command.cpp:21
+#: libs/image/commands/kis_node_opacity_command.cpp:22
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"

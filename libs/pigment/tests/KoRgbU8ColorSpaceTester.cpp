@@ -295,7 +295,6 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 
 // for posix_memalign()
 #include <stdlib.h>
-#include <config-xsimd.h>
 
 #if defined Q_OS_WIN
 #define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)
@@ -362,7 +361,7 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
             qDebug() << "oriD" << badDst[0] << badDst[1] << badDst[2] << badDst[3];
             qDebug() << "expD" << expectedDst[0] << expectedDst[1] << expectedDst[2] << expectedDst[3];
             qDebug() << "dst1" << badPixelDstPtr[0] << badPixelDstPtr[1] << badPixelDstPtr[2] << badPixelDstPtr[3];
-#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
             QFAIL("Failed to compose pixels");
 #else
             qWarning() << "Skipping failed test when xsimd library is not used";

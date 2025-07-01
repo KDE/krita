@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"POT-Creation-Date: 2025-07-01 02:01+0000\n"
 "PO-Revision-Date: 2025-06-15 08:34+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -13054,7 +13054,7 @@ msgid "&Help"
 msgstr "Po&moč"
 
 #: krita/krita5.xmlgui:426 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:102
+#: plugins/python/scripter/uicontroller.py:104
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
@@ -20445,14 +20445,14 @@ msgstr "O&ddalji"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
-#: plugins/python/exportlayers/uiexportlayers.py:37
+#: plugins/python/exportlayers/uiexportlayers.py:38
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:65
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
+#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -20540,7 +20540,7 @@ msgstr "privzeto"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:59
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
 #, kde-format
 msgid "Size"
@@ -20673,14 +20673,14 @@ msgstr " sl. točk"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
 #, kde-format
 msgid "Opacity"
 msgstr "Prekrivnost"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
 #, kde-format
 msgid "Flow"
 msgstr "Potek"
@@ -21212,7 +21212,7 @@ msgid "Locked"
 msgstr "Zaklenjen"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: plugins/python/channels2layers/channels2layers.py:110
+#: plugins/python/channels2layers/channels2layers.py:104
 #, kde-format
 msgid "Visible"
 msgstr "Vidno"
@@ -21284,7 +21284,7 @@ msgid "Open File"
 msgstr "Odpri datoteko"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#: plugins/python/plugin_importer/plugin_importer_extension.py:83
+#: plugins/python/plugin_importer/plugin_importer_extension.py:82
 #, kde-format
 msgid "Error"
 msgstr "Napaka"
@@ -22340,7 +22340,7 @@ msgstr "RGB (8-bitno celoštevilsko/kanal, neupravljano)"
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:30
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:352
-#: plugins/python/channels2layers/channels2layers.py:1406
+#: plugins/python/channels2layers/channels2layers.py:1400
 #, kde-format
 msgid "Blue"
 msgstr "Modra"
@@ -22356,7 +22356,7 @@ msgstr "Modra"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:113
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:235
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:406
-#: plugins/python/channels2layers/channels2layers.py:1404
+#: plugins/python/channels2layers/channels2layers.py:1398
 #, kde-format
 msgid "Green"
 msgstr "Zelena"
@@ -22366,7 +22366,7 @@ msgstr "Zelena"
 #: plugins/color/lcms2engine/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:26
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:32
-#: plugins/python/channels2layers/channels2layers.py:1402
+#: plugins/python/channels2layers/channels2layers.py:1396
 #, kde-format
 msgid "Red"
 msgstr "Rdeča"
@@ -23629,7 +23629,7 @@ msgstr "ID shrambe"
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/resources/KisTagResourceModel.cpp:633
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Name"
@@ -23729,7 +23729,7 @@ msgstr "Umazano"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1002
-#: plugins/impex/webp/kis_wdg_options_webp.ui:791
+#: plugins/impex/webp/kis_wdg_options_webp.ui:818
 #, kde-format
 msgid "Metadata"
 msgstr "Metapodatki"
@@ -23757,7 +23757,7 @@ msgstr "Manjkajo nekateri viri:"
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
-#: plugins/python/channels2layers/channels2layers.py:885
+#: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
 msgid "Unknown"
 msgstr "Neznano"
@@ -23888,7 +23888,7 @@ msgstr "Družine pisav"
 #: libs/widgets/KoConfigAuthorPage.cpp:89
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:105
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Type"
@@ -23911,7 +23911,7 @@ msgstr "Vnaprej nameščeno"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #, kde-format
 msgid "Thumbnail"
 msgstr "Ogledna sličica"
@@ -25761,7 +25761,7 @@ msgstr "Trajanje:"
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:250
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:389
-#: plugins/impex/webp/kis_wdg_options_webp.ui:147
+#: plugins/impex/webp/kis_wdg_options_webp.ui:174
 #, kde-format
 msgid "Advanced"
 msgstr "Napredno"
@@ -26029,7 +26029,7 @@ msgstr "Različica FFMpeg:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:631
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
-#: plugins/impex/webp/kis_wdg_options_webp.ui:424
+#: plugins/impex/webp/kis_wdg_options_webp.ui:451
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
 msgid "None"
@@ -26629,13 +26629,13 @@ msgstr "Lastnosti plasti"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:265
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:267
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:76
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:84
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:86
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:93
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:99
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:104
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:109
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:88
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:95
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:101
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:106
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:111
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:113
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
@@ -27212,7 +27212,7 @@ msgstr "Avtor"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2320
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "Avtor"
@@ -27992,7 +27992,7 @@ msgstr "Začetnice:"
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:336
 #, kde-format
 msgid "Title:"
 msgstr "Naziv:"
@@ -28621,7 +28621,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
 #, kde-format
 msgid "Source:"
 msgstr "Vir:"
@@ -28915,13 +28915,13 @@ msgstr "Začni prikazovanje pri:"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:979
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
-#: plugins/impex/webp/kis_wdg_options_webp.ui:305
-#: plugins/impex/webp/kis_wdg_options_webp.ui:328
-#: plugins/impex/webp/kis_wdg_options_webp.ui:466
-#: plugins/impex/webp/kis_wdg_options_webp.ui:596
-#: plugins/impex/webp/kis_wdg_options_webp.ui:684
-#: plugins/impex/webp/kis_wdg_options_webp.ui:750
-#: plugins/impex/webp/kis_wdg_options_webp.ui:773
+#: plugins/impex/webp/kis_wdg_options_webp.ui:332
+#: plugins/impex/webp/kis_wdg_options_webp.ui:355
+#: plugins/impex/webp/kis_wdg_options_webp.ui:493
+#: plugins/impex/webp/kis_wdg_options_webp.ui:623
+#: plugins/impex/webp/kis_wdg_options_webp.ui:711
+#: plugins/impex/webp/kis_wdg_options_webp.ui:777
+#: plugins/impex/webp/kis_wdg_options_webp.ui:800
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
@@ -29478,7 +29478,7 @@ msgstr "Način podokna"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
 #: plugins/dockers/lut/wdglut.ui:241
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:23
 #, kde-format
 msgid "Clear"
 msgstr "Počisti"
@@ -30248,7 +30248,7 @@ msgstr "Dodaj slike ..."
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
-#: plugins/python/channels2layers/channels2layers.py:112
+#: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
 msgid "Remove"
@@ -30725,7 +30725,7 @@ msgstr "Shrani novo postavitev okna"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
 msgstr "Ime:"
@@ -30776,7 +30776,7 @@ msgstr "Trenutna prednastavitev čopiča"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
 msgstr "Shrani"
@@ -34186,7 +34186,7 @@ msgstr ""
 "\t\tDodelite več RAM-a Kriti v pogovornem oknu Nastavitve"
 
 #: libs/ui/kis_statusbar.cc:379
-#: plugins/python/channels2layers/channels2layers.py:111
+#: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "Skrito"
@@ -35858,7 +35858,7 @@ msgstr ""
 "s spletišča krita.org"
 
 #: libs/ui/KisWelcomePageWidget.cpp:163
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Language"
 msgstr "Jezik"
@@ -38734,7 +38734,7 @@ msgid "Back"
 msgstr "Nazaj"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:45
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:24
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:23
 #, kde-format
 msgid "Stop"
 msgstr "Ustavi"
@@ -39626,7 +39626,7 @@ msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Email"
 msgstr "E-pošta"
@@ -39638,7 +39638,7 @@ msgstr "Faks"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Homepage"
 msgstr "Domača stran"
@@ -41301,7 +41301,7 @@ msgstr "Točka izginotja"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:147
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:249
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:372
-#: plugins/python/channels2layers/channels2layers.py:1394
+#: plugins/python/channels2layers/channels2layers.py:1388
 #, kde-format
 msgid "Cyan"
 msgstr "Cijan"
@@ -41315,7 +41315,7 @@ msgstr "Cijan"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:96
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:273
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:430
-#: plugins/python/channels2layers/channels2layers.py:1396
+#: plugins/python/channels2layers/channels2layers.py:1390
 #, kde-format
 msgid "Magenta"
 msgstr "Magenta"
@@ -41329,7 +41329,7 @@ msgstr "Magenta"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:123
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:283
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:382
-#: plugins/python/channels2layers/channels2layers.py:1398
+#: plugins/python/channels2layers/channels2layers.py:1392
 #, kde-format
 msgid "Yellow"
 msgstr "Rumena"
@@ -41337,7 +41337,7 @@ msgstr "Rumena"
 #: plugins/color/lcms2engine/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:26
-#: plugins/python/channels2layers/channels2layers.py:1400
+#: plugins/python/channels2layers/channels2layers.py:1394
 #, kde-format
 msgid "Black"
 msgstr "Črna"
@@ -41733,7 +41733,7 @@ msgstr "Izbirnik senc"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
-#: plugins/python/colorspace/uicolorspace.py:68
+#: plugins/python/colorspace/uicolorspace.py:71
 #, kde-format
 msgid "Color model:"
 msgstr "Barvni model:"
@@ -42424,7 +42424,7 @@ msgstr "Filtriraj folije po barvi sličice"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:78
+#: plugins/python/palette_docker/palette_docker.py:79
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -42548,8 +42548,8 @@ msgstr "Pokaži oštevilčeno merilo z vrednostmi"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:44
 #: plugins/filters/palettize/palettize.ui:56
-#: plugins/python/colorspace/colorspace.py:16
-#: plugins/python/colorspace/uicolorspace.py:82
+#: plugins/python/colorspace/colorspace.py:17
+#: plugins/python/colorspace/uicolorspace.py:85
 #, kde-format
 msgid "Color Space"
 msgstr "Barvni prostor"
@@ -44867,7 +44867,7 @@ msgstr "Komentarji"
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1108
+#: plugins/python/channels2layers/channels2layers.py:1102
 #, kde-format
 msgid "Mode"
 msgstr "Način"
@@ -46076,7 +46076,7 @@ msgstr "Pravice:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 #, kde-format
 msgid "Date:"
 msgstr "Datum:"
@@ -46900,7 +46900,7 @@ msgstr "Dublinsko jedro"
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
-#: plugins/impex/webp/kis_wdg_options_webp.ui:812
+#: plugins/impex/webp/kis_wdg_options_webp.ui:839
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
 msgid "Exif"
@@ -47366,13 +47366,13 @@ msgstr ""
 msgid "Python Plugin Manager"
 msgstr "Upravitelj vstavkov Python"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:124
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
 msgstr "Ni mogoče najti navedenega modula <application>%1</application>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:154
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47382,13 +47382,13 @@ msgstr ""
 "<p>Navedena različica ima neveljavno obliko za odvisnost <application>%1</"
 "application>: <icode>%2.</icode> Preskočeno</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:181
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
 msgstr "<title>Preverjanje odvisnosti</title>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:212
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47400,14 +47400,14 @@ msgstr ""
 "modul nima atributa PEP396. <code>__version__</code>. Ne bo onemogočen, je "
 "pa vedenje nepredvidljivo ...</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:226
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
 msgstr ""
 "<p><application>%1</application>: nepričakovana oblika različice modula"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:239
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47417,7 +47417,7 @@ msgstr ""
 "<p><application>%1</application>: ni mogoče najti ustrezne različice. "
 "Zahtevana je različica %2 %3, vendar je najdena %4</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:254
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47426,13 +47426,13 @@ msgstr ""
 "<p>Napaka pri nalaganju modula <application>%1</application>:</p><pre>%2</"
 "pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:365
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "Odpoved notranjega pogona"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:369
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
@@ -47750,7 +47750,7 @@ msgstr "Shrani v:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 #, kde-format
 msgid "Summary:"
 msgstr "Povzetek:"
@@ -47795,7 +47795,7 @@ msgstr "http://"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
 #, kde-format
 msgid "License:"
 msgstr "Dovoljenje:"
@@ -49417,7 +49417,7 @@ msgstr "Neodvisni kanali"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
-#: plugins/python/highpass/highpass.py:66
+#: plugins/python/highpass/highpass.py:67
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
@@ -49553,9 +49553,9 @@ msgstr "Faktorji indeksacije"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Other"
 msgstr "Drugo"
@@ -52064,6 +52064,7 @@ msgstr "Progresivno"
 #. i18n: ectx: property (text), widget (QCheckBox, chkForceSRGB)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:38
 #: plugins/impex/png/kis_wdg_options_png.ui:105
+#: plugins/impex/webp/kis_wdg_options_webp.ui:146
 #, kde-format
 msgid "Force convert to sRGB"
 msgstr "Vsili pretvorbo v sRGB"
@@ -52091,6 +52092,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProfile)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:132
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:157
+#: plugins/impex/webp/kis_wdg_options_webp.ui:153
 #, kde-format
 msgid "Save ICC Profile"
 msgstr "Shrani profil ICC"
@@ -52155,7 +52157,7 @@ msgstr "Optimiziraj"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
-#: plugins/impex/webp/kis_wdg_options_webp.ui:806
+#: plugins/impex/webp/kis_wdg_options_webp.ui:833
 #, kde-format
 msgid "Formats:"
 msgstr "Vrste:"
@@ -52170,7 +52172,7 @@ msgstr "IPTC"
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1039
-#: plugins/impex/webp/kis_wdg_options_webp.ui:819
+#: plugins/impex/webp/kis_wdg_options_webp.ui:846
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
 msgid "XMP"
@@ -52190,7 +52192,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1008
-#: plugins/impex/webp/kis_wdg_options_webp.ui:797
+#: plugins/impex/webp/kis_wdg_options_webp.ui:824
 #, kde-format
 msgid "Store Document Metadata"
 msgstr "Shrani metapodatke dokumenta"
@@ -55378,7 +55380,7 @@ msgstr "Najmanjša"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:261
-#: plugins/impex/webp/kis_wdg_options_webp.ui:431
+#: plugins/impex/webp/kis_wdg_options_webp.ui:458
 #, kde-format
 msgid "Best"
 msgstr "Najboljše"
@@ -55563,8 +55565,8 @@ msgstr "Stresanje"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, targetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:202
-#: plugins/impex/webp/kis_wdg_options_webp.ui:218
+#: plugins/impex/webp/kis_wdg_options_webp.ui:229
+#: plugins/impex/webp/kis_wdg_options_webp.ui:245
 #, kde-format
 msgid ""
 "If non-zero, sets the desired target size in bytes. Takes precedence over "
@@ -55574,21 +55576,21 @@ msgstr ""
 "parametri stiskanja."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:205
+#: plugins/impex/webp/kis_wdg_options_webp.ui:232
 #, kde-format
 msgid "Target Size"
 msgstr "Ciljna velikost"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, targetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:221
+#: plugins/impex/webp/kis_wdg_options_webp.ui:248
 #, kde-format
 msgid " B"
 msgstr " B"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:231
-#: plugins/impex/webp/kis_wdg_options_webp.ui:247
+#: plugins/impex/webp/kis_wdg_options_webp.ui:258
+#: plugins/impex/webp/kis_wdg_options_webp.ui:274
 #, kde-format
 msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
@@ -55598,49 +55600,49 @@ msgstr ""
 "pred ciljno velikostjo."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:234
+#: plugins/impex/webp/kis_wdg_options_webp.ui:261
 #, kde-format
 msgid "Target PSNR"
 msgstr "Ciljna PSNR"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSegments)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:260
-#: plugins/impex/webp/kis_wdg_options_webp.ui:276
+#: plugins/impex/webp/kis_wdg_options_webp.ui:287
+#: plugins/impex/webp/kis_wdg_options_webp.ui:303
 #, kde-format
 msgid "Maximum number of segments (1 to 4)."
 msgstr "Največje število odsekov oz. segmentov (od 1 do 4)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:263
+#: plugins/impex/webp/kis_wdg_options_webp.ui:290
 #, kde-format
 msgid "Segments"
 msgstr "Odseki"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSNSStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, snsStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:292
-#: plugins/impex/webp/kis_wdg_options_webp.ui:302
+#: plugins/impex/webp/kis_wdg_options_webp.ui:319
+#: plugins/impex/webp/kis_wdg_options_webp.ui:329
 #, kde-format
 msgid "Spatial Noise Shaping: 0 = off, 100 = maximum."
 msgstr "Oblikovanje prostorskega hrupa: 0 = izklopljeno, 100 = največ."
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:295
+#: plugins/impex/webp/kis_wdg_options_webp.ui:322
 #, kde-format
 msgid "SNS Strength"
 msgstr "Jakost SNS"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:315
-#: plugins/impex/webp/kis_wdg_options_webp.ui:325
+#: plugins/impex/webp/kis_wdg_options_webp.ui:342
+#: plugins/impex/webp/kis_wdg_options_webp.ui:352
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
 msgstr "Jakost filtra: 0 = izklop, 100 = najmočnejša."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:318
+#: plugins/impex/webp/kis_wdg_options_webp.ui:345
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Strength"
@@ -55648,14 +55650,14 @@ msgstr "Moč filtra"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:338
-#: plugins/impex/webp/kis_wdg_options_webp.ui:348
+#: plugins/impex/webp/kis_wdg_options_webp.ui:365
+#: plugins/impex/webp/kis_wdg_options_webp.ui:375
 #, kde-format
 msgid "Filter sharpness: 0 = off, 7 = least sharp."
 msgstr "Ostrina filtra: 0 = izklopljeno, 7 = najmanj ostro."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterSharpness)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:341
+#: plugins/impex/webp/kis_wdg_options_webp.ui:368
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Sharpness"
@@ -55663,8 +55665,8 @@ msgstr "Ostrina filtra"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterType)
 #. i18n: ectx: property (toolTip), widget (QComboBox, filterType)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:361
-#: plugins/impex/webp/kis_wdg_options_webp.ui:371
+#: plugins/impex/webp/kis_wdg_options_webp.ui:388
+#: plugins/impex/webp/kis_wdg_options_webp.ui:398
 #, kde-format
 msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
@@ -55674,14 +55676,14 @@ msgstr ""
 "ali če je omogočeno samodejno prilagajanje filtra."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:364
+#: plugins/impex/webp/kis_wdg_options_webp.ui:391
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Type"
 msgstr "Vrsta filtra"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAutofilter)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:378
+#: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Auto Adjust Filter Strength"
 msgstr "Samodejno prilagodi jakost filtra"
@@ -55693,19 +55695,19 @@ msgstr "Samodejno prilagodi jakost filtra"
 #. i18n: ectx: property (text), widget (QCheckBox, lowMemory)
 #. i18n: ectx: property (text), widget (QCheckBox, exact)
 #. i18n: ectx: property (text), widget (QCheckBox, useSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:385
-#: plugins/impex/webp/kis_wdg_options_webp.ui:527
-#: plugins/impex/webp/kis_wdg_options_webp.ui:624
-#: plugins/impex/webp/kis_wdg_options_webp.ui:644
-#: plugins/impex/webp/kis_wdg_options_webp.ui:664
-#: plugins/impex/webp/kis_wdg_options_webp.ui:710
-#: plugins/impex/webp/kis_wdg_options_webp.ui:730
+#: plugins/impex/webp/kis_wdg_options_webp.ui:412
+#: plugins/impex/webp/kis_wdg_options_webp.ui:554
+#: plugins/impex/webp/kis_wdg_options_webp.ui:651
+#: plugins/impex/webp/kis_wdg_options_webp.ui:671
+#: plugins/impex/webp/kis_wdg_options_webp.ui:691
+#: plugins/impex/webp/kis_wdg_options_webp.ui:737
+#: plugins/impex/webp/kis_wdg_options_webp.ui:757
 #, kde-format
 msgid "Enabled"
 msgstr "Omogočeno"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaCompression)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:392
+#: plugins/impex/webp/kis_wdg_options_webp.ui:419
 #, kde-format
 msgid ""
 "Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP "
@@ -55715,20 +55717,20 @@ msgstr ""
 "izgube). Privzeto je 1."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:395
+#: plugins/impex/webp/kis_wdg_options_webp.ui:422
 #, kde-format
 msgid "Alpha Plane Compression"
 msgstr "Stiskanje ravnine alfa"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:405
+#: plugins/impex/webp/kis_wdg_options_webp.ui:432
 #, kde-format
 msgid "Predictive Filtering for Alpha Plane"
 msgstr "Filtriranje s predvidevanjem za alfa-ravnino"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:414
+#: plugins/impex/webp/kis_wdg_options_webp.ui:441
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:86
 #, kde-format
@@ -55737,36 +55739,36 @@ msgstr "Hitro"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaQuality)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, alphaQuality)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:453
-#: plugins/impex/webp/kis_wdg_options_webp.ui:463
+#: plugins/impex/webp/kis_wdg_options_webp.ui:480
+#: plugins/impex/webp/kis_wdg_options_webp.ui:490
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
 msgstr "0 = najmanjša velikost, 100 = brez izgub. Privzeto je 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:456
+#: plugins/impex/webp/kis_wdg_options_webp.ui:483
 #, kde-format
 msgid "Alpha Plane Quality"
 msgstr "Kakovost ravnine alfa"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:479
-#: plugins/impex/webp/kis_wdg_options_webp.ui:495
+#: plugins/impex/webp/kis_wdg_options_webp.ui:506
+#: plugins/impex/webp/kis_wdg_options_webp.ui:522
 #, kde-format
 msgid "Number of entropy-analysis passes (1 to 10)."
 msgstr "Število prehodov za analizo entropije (od 1 do 10)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPass)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:482
+#: plugins/impex/webp/kis_wdg_options_webp.ui:509
 #, kde-format
 msgid "Entropy Passes"
 msgstr "Prehodi entropije"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblShowCompressed)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showCompressed)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:514
-#: plugins/impex/webp/kis_wdg_options_webp.ui:524
+#: plugins/impex/webp/kis_wdg_options_webp.ui:541
+#: plugins/impex/webp/kis_wdg_options_webp.ui:551
 #, kde-format
 msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
@@ -55776,13 +55778,13 @@ msgstr ""
 "uporabljeno."
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:517
+#: plugins/impex/webp/kis_wdg_options_webp.ui:544
 #, kde-format
 msgid "Show Compressed"
 msgstr "Pokaži stisnjeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:534
+#: plugins/impex/webp/kis_wdg_options_webp.ui:561
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
@@ -55790,8 +55792,8 @@ msgstr "Filter za pred-obdelavo"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:544
-#: plugins/impex/webp/kis_wdg_options_webp.ui:554
+#: plugins/impex/webp/kis_wdg_options_webp.ui:571
+#: plugins/impex/webp/kis_wdg_options_webp.ui:581
 #, kde-format
 msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
@@ -55801,15 +55803,15 @@ msgstr ""
 "progresivno dekodiranje."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:547
+#: plugins/impex/webp/kis_wdg_options_webp.ui:574
 #, kde-format
 msgid "Partitions"
 msgstr "Razdelki"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitionLimit)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitionLimit)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:564
-#: plugins/impex/webp/kis_wdg_options_webp.ui:593
+#: plugins/impex/webp/kis_wdg_options_webp.ui:591
+#: plugins/impex/webp/kis_wdg_options_webp.ui:620
 #, kde-format
 msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
@@ -55819,27 +55821,27 @@ msgstr ""
 "načinov predvidevanja (0 = brez razkroja, 100 = največja možna degradacija)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:567
+#: plugins/impex/webp/kis_wdg_options_webp.ui:594
 #, kde-format
 msgid "Partition Limit"
 msgstr "Omejitev razdelka"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:576
+#: plugins/impex/webp/kis_wdg_options_webp.ui:603
 #, kde-format
 msgid "Maximum degradation"
 msgstr "Največje poslabšanje"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:586
+#: plugins/impex/webp/kis_wdg_options_webp.ui:613
 #, kde-format
 msgid "No degradation"
 msgstr "Brez poslabšanja"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:611
-#: plugins/impex/webp/kis_wdg_options_webp.ui:621
+#: plugins/impex/webp/kis_wdg_options_webp.ui:638
+#: plugins/impex/webp/kis_wdg_options_webp.ui:648
 #, kde-format
 msgid ""
 "If enabled, compression parameters will be remapped to better match the "
@@ -55851,29 +55853,29 @@ msgstr ""
 "izhodna velikost podobna, vendar bo degradacija manjša."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmulateJPEGSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:614
+#: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "Emulate JPEG Size"
 msgstr "Posnemaj velikost JPEG"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblThreadLevel)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, threadLevel)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:631
-#: plugins/impex/webp/kis_wdg_options_webp.ui:641
+#: plugins/impex/webp/kis_wdg_options_webp.ui:658
+#: plugins/impex/webp/kis_wdg_options_webp.ui:668
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
 msgstr "Če je omogočeno, poskusite uporabiti večnitno kodiranje."
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:634
+#: plugins/impex/webp/kis_wdg_options_webp.ui:661
 #, kde-format
 msgid "Multithreaded Encoding"
 msgstr "Večnitno kodiranje"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:651
-#: plugins/impex/webp/kis_wdg_options_webp.ui:661
+#: plugins/impex/webp/kis_wdg_options_webp.ui:678
+#: plugins/impex/webp/kis_wdg_options_webp.ui:688
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
@@ -55881,15 +55883,15 @@ msgstr ""
 "procesorja)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:654
+#: plugins/impex/webp/kis_wdg_options_webp.ui:681
 #, kde-format
 msgid "Reduce Memory Usage"
 msgstr "Zmanjšaj uporabo pomnilnika"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNearLossless)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, nearLossless)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:671
-#: plugins/impex/webp/kis_wdg_options_webp.ui:681
+#: plugins/impex/webp/kis_wdg_options_webp.ui:698
+#: plugins/impex/webp/kis_wdg_options_webp.ui:708
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
@@ -55897,15 +55899,15 @@ msgstr ""
 "Privzeta vrednost je 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:674
+#: plugins/impex/webp/kis_wdg_options_webp.ui:701
 #, kde-format
 msgid "Near Lossless"
 msgstr "Skoraj brez izgub"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:697
-#: plugins/impex/webp/kis_wdg_options_webp.ui:707
+#: plugins/impex/webp/kis_wdg_options_webp.ui:724
+#: plugins/impex/webp/kis_wdg_options_webp.ui:734
 #, kde-format
 msgid ""
 "If enabled, preserve the exact RGB values under transparent areas. "
@@ -55917,56 +55919,56 @@ msgstr ""
 "stiskanje. Privzeto je onemogočeno."
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:700
+#: plugins/impex/webp/kis_wdg_options_webp.ui:727
 #, kde-format
 msgid "Exact"
 msgstr "Natanko"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblUseSharpYUV)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, useSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:717
-#: plugins/impex/webp/kis_wdg_options_webp.ui:727
+#: plugins/impex/webp/kis_wdg_options_webp.ui:744
+#: plugins/impex/webp/kis_wdg_options_webp.ui:754
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
 "Če je omogočeno, omogoča uporabo ostre (in počasne) pretvorbe RGB v YUV."
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:720
+#: plugins/impex/webp/kis_wdg_options_webp.ui:747
 #, kde-format
 msgid "Use Sharp YUV"
 msgstr "Uporabi ostri YUV"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMin)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMin)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:737
-#: plugins/impex/webp/kis_wdg_options_webp.ui:747
+#: plugins/impex/webp/kis_wdg_options_webp.ui:764
+#: plugins/impex/webp/kis_wdg_options_webp.ui:774
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
 msgstr "Najmanjši dopustni faktor kakovosti. Privzeto je 0."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:740
+#: plugins/impex/webp/kis_wdg_options_webp.ui:767
 #, kde-format
 msgid "Minimum Quality"
 msgstr "Najnižja kakovost"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:760
-#: plugins/impex/webp/kis_wdg_options_webp.ui:770
+#: plugins/impex/webp/kis_wdg_options_webp.ui:787
+#: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
 msgstr "Največji dopustni faktor kakovosti. Privzeto je 100."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:763
+#: plugins/impex/webp/kis_wdg_options_webp.ui:790
 #, kde-format
 msgid "Maximum Quality"
 msgstr "Najvišja kakovost"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:829
+#: plugins/impex/webp/kis_wdg_options_webp.ui:856
 #, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
@@ -59344,123 +59346,123 @@ msgstr "Občutljivost na dvig"
 msgid "Direction/Tilt Mix Value"
 msgstr "Vrednost mešanice smeri/nagiba"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:24
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:26
 msgid "There is no active document."
 msgstr "Ni aktivnega dokumenta."
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:58
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:59
 msgid "Assign Profile to Image"
 msgstr "Dodeli profil sliki"
 
-#: plugins/python/channels2layers/channels2layers.py:90
-#: plugins/python/channels2layers/channels2layers.py:91
+#: plugins/python/channels2layers/channels2layers.py:84
+#: plugins/python/channels2layers/channels2layers.py:85
 msgid "Channels to layers"
 msgstr "Kanali v plasti"
 
-#: plugins/python/channels2layers/channels2layers.py:99
+#: plugins/python/channels2layers/channels2layers.py:93
 msgid "RGB Colors"
 msgstr "Barve RGB"
 
-#: plugins/python/channels2layers/channels2layers.py:100
+#: plugins/python/channels2layers/channels2layers.py:94
 msgid "CMY Colors"
 msgstr "Barve CMY"
 
-#: plugins/python/channels2layers/channels2layers.py:101
+#: plugins/python/channels2layers/channels2layers.py:95
 msgid "CMYK Colors"
 msgstr "Barve CMYK"
 
-#: plugins/python/channels2layers/channels2layers.py:102
+#: plugins/python/channels2layers/channels2layers.py:96
 msgid "RGB Grayscale levels"
 msgstr "Sivinske ravni RGB"
 
-#: plugins/python/channels2layers/channels2layers.py:103
+#: plugins/python/channels2layers/channels2layers.py:97
 msgid "CMY Grayscale levels"
 msgstr "Sivinske ravni CMY"
 
-#: plugins/python/channels2layers/channels2layers.py:104
+#: plugins/python/channels2layers/channels2layers.py:98
 msgid "CMYK Grayscale levels"
 msgstr "Sivinske ravni CMYK"
 
-#: plugins/python/channels2layers/channels2layers.py:109
+#: plugins/python/channels2layers/channels2layers.py:103
 msgid "Unchanged"
 msgstr "Nespremenjeno"
 
-#: plugins/python/channels2layers/channels2layers.py:1044
+#: plugins/python/channels2layers/channels2layers.py:1038
 msgid "Processing layer"
 msgstr "Obdelovanje plasti"
 
-#: plugins/python/channels2layers/channels2layers.py:1074
+#: plugins/python/channels2layers/channels2layers.py:1068
 msgctxt ""
 "The name for a new group layer; the generated layers will be placed in this "
 "group."
 msgid "New layer group name"
 msgstr "Ime nove skupine plasti"
 
-#: plugins/python/channels2layers/channels2layers.py:1079
+#: plugins/python/channels2layers/channels2layers.py:1073
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
 msgstr "Ime barve novih plasti"
 
-#: plugins/python/channels2layers/channels2layers.py:1090
+#: plugins/python/channels2layers/channels2layers.py:1084
 msgid "Original layer"
 msgstr "Izvirna plast"
 
-#: plugins/python/channels2layers/channels2layers.py:1149
+#: plugins/python/channels2layers/channels2layers.py:1143
 msgctxt "the original layer"
 msgid "Original"
 msgstr "Izvirnik"
 
-#: plugins/python/channels2layers/channels2layers.py:1162
+#: plugins/python/channels2layers/channels2layers.py:1156
 msgid "<i>Cyan</i>"
 msgstr "<i>Cijan</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1174
+#: plugins/python/channels2layers/channels2layers.py:1168
 msgid "<i>Magenta</i>"
 msgstr "<i>Magenta</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1186
+#: plugins/python/channels2layers/channels2layers.py:1180
 msgid "<i>Yellow</i>"
 msgstr "<i>Rumena</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1198
+#: plugins/python/channels2layers/channels2layers.py:1192
 msgid "<i>Black</i>"
 msgstr "<i>Črna</i>"
 
-#: plugins/python/colorspace/colorspace.py:18
+#: plugins/python/colorspace/colorspace.py:19
 msgid "Plugin to change color space of selected documents."
 msgstr "Vstavek za zamenjavo barvnega prostora v izbranih dokumentih."
 
-#: plugins/python/colorspace/uicolorspace.py:34
+#: plugins/python/colorspace/uicolorspace.py:37
 #: plugins/python/documenttools/uidocumenttools.py:25
-#: plugins/python/exportlayers/uiexportlayers.py:34
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:19
+#: plugins/python/exportlayers/uiexportlayers.py:35
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:20
 msgid "Refresh"
 msgstr "Osveži"
 
-#: plugins/python/colorspace/uicolorspace.py:67
+#: plugins/python/colorspace/uicolorspace.py:70
 #: plugins/python/documenttools/uidocumenttools.py:50
-#: plugins/python/exportlayers/uiexportlayers.py:104
+#: plugins/python/exportlayers/uiexportlayers.py:105
 msgid "Documents:"
 msgstr "Dokumenti:"
 
-#: plugins/python/colorspace/uicolorspace.py:69
+#: plugins/python/colorspace/uicolorspace.py:72
 msgid "Color depth:"
 msgstr "Barvna globina:"
 
-#: plugins/python/colorspace/uicolorspace.py:70
+#: plugins/python/colorspace/uicolorspace.py:73
 msgid "Color profile:"
 msgstr "Barvni profil:"
 
-#: plugins/python/colorspace/uicolorspace.py:137
+#: plugins/python/colorspace/uicolorspace.py:140
 msgid "The selected documents have been converted."
 msgstr "Izbrani dokumenti so bili pretvorjeni."
 
-#: plugins/python/colorspace/uicolorspace.py:139
+#: plugins/python/colorspace/uicolorspace.py:142
 #: plugins/python/documenttools/uidocumenttools.py:112
 msgid "Select at least one document."
 msgstr "Izberite vsaj en dokument."
@@ -59502,7 +59504,7 @@ msgid "Percentage:"
 msgstr "Odstotek:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:214
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:272
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:271
 msgid "Export Settings"
 msgstr "Nastavitve izvoza"
 
@@ -59599,7 +59601,7 @@ msgid "ACBF Document Info"
 msgstr "Informacije o dokumentu ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:412
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -59646,32 +59648,32 @@ msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr "Ljudje, odgovorni za generacijo datotek CBZ/ACBF."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Nick Name"
 msgstr "Vzdevek"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Given Name"
 msgstr "Ime"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Middle Name"
 msgstr "Srednje ime"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Family Name"
 msgstr "Priimek"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:372
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:371
 msgid "Add Author"
 msgstr "Dodaj avtorja"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:374
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid "Remove Author"
 msgstr "Odstrani avtorja"
 
@@ -59759,29 +59761,29 @@ msgid "v{version}-in this version..."
 msgstr "v{version} - v tej različici ..."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:451
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:539
 msgid "Anon"
 msgstr "Anonimno"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:452
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:541
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
 msgid "John"
 msgstr "Janez"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:454
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:543
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:542
 msgid "Doe"
 msgstr "Novak"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:143
+#: plugins/python/comics_project_management_tools/comics_exporter.py:138
 msgid "Preparing export."
 msgstr "Pripravljanje izvoza."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:144
+#: plugins/python/comics_project_management_tools/comics_exporter.py:139
 msgid "Exporting Comic..."
 msgstr "Izvažanje stripa …"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:162
+#: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -59789,21 +59791,21 @@ msgstr ""
 "Samostojno shranjevanje\n"
 "ACBF in ACBF"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:168
 msgid "Saving out EPUB"
 msgstr "Shranjevanje EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:178
-#: plugins/python/comics_project_management_tools/comics_exporter.py:212
-#: plugins/python/comics_project_management_tools/comics_exporter.py:371
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not Possible"
 msgstr "Izvoz ni možen"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:178
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
 msgstr "Ničesar ni za izvoz, URL ni določen."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -59811,7 +59813,7 @@ msgstr ""
 "Shranjevanje CoMet\n"
 "(datoteke metapodatkov)"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:196
+#: plugins/python/comics_project_management_tools/comics_exporter.py:191
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -59819,11 +59821,11 @@ msgstr ""
 "Shranjevanje Comicrack\n"
 "(datoteke metapodatkov)"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:212
+#: plugins/python/comics_project_management_tools/comics_exporter.py:207
 msgid "Export failed because there's no export settings configured."
 msgstr "Izvoz ni uspel, ker nastavitve izvoza niso prilagojene."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:229
+#: plugins/python/comics_project_management_tools/comics_exporter.py:224
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -59832,29 +59834,29 @@ msgstr ""
 "Pretečeni čas : {passedString}\n"
 " Ocenjeno: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_exporter.py:227
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pages} od {pagesTotal} dokončano."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:243
+#: plugins/python/comics_project_management_tools/comics_exporter.py:238
 msgid "Opening next page"
 msgstr "Odpiranje naslednje strani"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:251
+#: plugins/python/comics_project_management_tools/comics_exporter.py:246
 msgid "Cleaning up page"
 msgstr "Čiščenje strani"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:285
+#: plugins/python/comics_project_management_tools/comics_exporter.py:280
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "Izvoz za {key}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:371
+#: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not happening because there are no pages."
 msgstr "Izvoz se ne izvaja, ker ni strani."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:636
+#: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -59862,185 +59864,185 @@ msgstr ""
 "Shranjevanje Comicbook\n"
 "(datoteke z metapodatki)"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:646
+#: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
 msgstr "Pakiranje CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Science Fiction"
 msgstr "Znanstvena fantastika"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Fantasy"
 msgstr "Fantazijski"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Adventure"
 msgstr "Avantura"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Horror"
 msgstr "Grozljivka"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Mystery"
 msgstr "Skrivnost"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Crime"
 msgstr "Kriminalka"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Military"
 msgstr "Vojaško"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Real Life"
 msgstr "Resnično življenje"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Superhero"
 msgstr "Super junak"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Humor"
 msgstr "Humor"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Western"
 msgstr "Vestern"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Manga"
 msgstr "Manga"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Politics"
 msgstr "Politika"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Caricature"
 msgstr "Karikatura"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Sports"
 msgstr "Šport"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "History"
 msgstr "Zgodovina"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Biography"
 msgstr "Biografija"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Education"
 msgstr "Izobraževanje"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Computer"
 msgstr "Računalništvo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Religion"
 msgstr "Verstva"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Romance"
 msgstr "Ljubezenski"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Children"
 msgstr "Za otroke"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Non Fiction"
 msgstr "Neumišljeno"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Adult"
 msgstr "Za odrasle"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Alternative"
 msgstr "Alternativno"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Artbook"
 msgstr "Slikovna knjiga"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Writer"
 msgstr "Pisec"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Adapter"
 msgstr "Avtor adaptacije"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Artist"
 msgstr "Risar"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Penciller"
 msgstr "Risar s svinčnikom"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Inker"
 msgstr "Risar s črnilom"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Colorist"
 msgstr "Kolorist"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Letterer"
 msgstr "Stavec črk"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Cover Artist"
 msgstr "Avtor naslovnice"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Photographer"
 msgstr "Fotograf"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Editor"
 msgstr "Urednik"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Assistant Editor"
 msgstr "Pomočnik urednika"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Designer"
 msgstr "Oblikovalec"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Translator"
 msgstr "Prevajalec"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:259
 msgid "Comic Metadata"
 msgstr "Metapodatki stripa"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:272
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:271
 msgid "The proper title of the comic."
 msgstr "Pravi naslov stripa."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:274
 msgid "What will you tell others to entice them to read your comic?"
 msgstr "Kaj boste sporočili drugim, da jih privabite k branju vašega stripa?"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:282
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:281
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
@@ -60050,25 +60052,25 @@ msgstr ""
 "svoje. Ločite zvrsti z vejicami. Poskusite omejiti njihovo število na "
 "približno dva ali tri."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:290
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:289
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr "Imena likov, okoli katerih se vrti ta strip. Ločena z vejicami."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:309
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "Če je to del serije, vnesite ime serije in številko."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:311
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
 msgid "No. "
 msgstr "Št. "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:313
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:312
 msgid "Vol. "
 msgstr "Vol. "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
@@ -60076,59 +60078,59 @@ msgstr ""
 "Druge ključne besede, ki ne sodijo v prej omenjene nabore. Kot vedno, ločene "
 "z vejicami."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 msgid "Left to Right"
 msgstr "Z leve proti densni"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
 msgid "Right to Left"
 msgstr "Z desne proti levi"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr "Katera stran je naslovnica? To bo prazno, če ni strani."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 msgid "Cover page:"
 msgstr "Naslovna stran:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 msgid "Language:"
 msgstr "Jezik:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
 msgid "Reading direction:"
 msgstr "Smer branja:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Genre:"
 msgstr "Žanr:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Characters:"
 msgstr "Liki:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
 msgid "Format:"
 msgstr "Zapis:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 msgid "Rating:"
 msgstr "Ocena:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
 msgid "Series:"
 msgstr "Zaporedje:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:348
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
 msgid "Other:"
 msgstr "Drugo:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:349
 msgid "Work"
 msgstr "Delo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:355
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:354
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
@@ -60138,15 +60140,15 @@ msgstr ""
 "njihov vzdevek, pravo ime (ime, srednje ime, priimek), vlogo (risar, slikar "
 "s črnilom itn.), e-pošto in domačo stran."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Role"
 msgstr "Vloga"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:381
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:380
 msgid "Authors"
 msgstr "Avtorji"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
@@ -60154,15 +60156,15 @@ msgstr ""
 "Ime podjetja, skupine ali osebe, ki je odgovorna za končno različico, ki jo "
 "prejme bralec."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:391
 msgid "Set Today"
 msgstr "Nastavite na današnji dan"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Sets the publish date to the current date."
 msgstr "Nastavi datum objave na trenutni datum."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:398
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
@@ -60170,7 +60172,7 @@ msgstr ""
 "Tradicionalni založniki se vedno navajajo med viri z mestom, kjer se "
 "nahajajo."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
@@ -60180,7 +60182,7 @@ msgstr ""
 "verjetno je, da bo to dejavnik za stripe, ki nastajajo od začetka, vendar je "
 "lahko koristno pri pretvorbi."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
@@ -60190,89 +60192,89 @@ msgstr ""
 "informacije o tem viru. Tako bi tukaj npr. zapisali URL uradne spletne "
 "strani za prilagojen spletni strip."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "City:"
 msgstr "Mesto:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 msgid "ISBN:"
 msgstr "ISBN:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 msgid "UUID:"
 msgstr "UUID:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:426
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
 msgid "Database:"
 msgstr "Zbirka podatkov:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:428
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Publisher"
 msgstr "Založnik"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:117
 msgid "No keywords"
 msgstr "Brez ključnih besed"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:132
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:131
 msgid "No last edit timestamp"
 msgstr "Ni zadnjega časovnega žiga za urejanje"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:152
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:151
 msgid "No description"
 msgstr "Brez opisa"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:197
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:196
 msgid "Comics Manager"
 msgstr "Upravitelj stripov"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:254
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:253
 msgid "New Project"
 msgstr "Nov projekt"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:256
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:255
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:268
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:267
 msgid "Project Settings"
 msgstr "Nastavitve projekta"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:270
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:127
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:269
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
 msgid "Meta Data"
 msgstr "Metapodatki"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
 msgid "Add Page"
 msgstr "Dodaj stran"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
 msgid "Add Page from Template"
 msgstr "Dodaj stran iz predloge"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:291
 msgid "Add Existing Pages"
 msgstr "Dodaj obstoječe strani"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "Remove Page"
 msgstr "Odstrani stran"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Batch Resize"
 msgstr "Paketno spremeni velikost"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:299
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "View Page In Window"
 msgstr "Pokaži stran v oknu"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:300
 msgid "Scrape Author Info"
 msgstr "Napraskaj podatke o avtorju"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:302
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -60280,19 +60282,19 @@ msgstr ""
 "Poiščite informacije o avtorju v dokumentih in jih dodajte na seznam "
 "avtorjev. Funkcija ne preverja obstoja dvojnikov."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:304
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:303
 msgid "Scrape Text for Translation"
 msgstr "Napraskaj besedilo za prevajanje"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Export Comic"
 msgstr "Izvozi strip"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:329
 msgid "Copy Location"
 msgstr "Kopiraj mesto"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:331
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -60300,19 +60302,19 @@ msgstr ""
 "Kopira pot projekta na odložišče. Uporabno za hitro kopiranje v upravitelja "
 "datotek ali podobno."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "Please select the JSON comic config file."
 msgstr "Izberite prilagoditveno datoteko stripa JSON."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "JSON files"
 msgstr "Datoteke JSON"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid "Config cannot be used"
 msgstr "Prilagoditve ni mogoče uporabiti"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -60322,55 +60324,55 @@ msgstr ""
 "Prilagodite dostop do mape ali premaknite projekt v mapo, v kar je možno "
 "pisati."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:387
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:386
 msgid "Loading Pages..."
 msgstr "Nalaganje strani ..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Krita files"
 msgstr "Datoteke Krita"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 msgid "Which existing pages to add?"
 msgstr "Katere obstoječe strani želite dodati?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:601
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:622
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:600
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:621
 msgid "Where are the templates located?"
 msgstr "Kje se nahajajo predloge?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:648
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:647
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
 msgid "Where should the pages go?"
 msgstr "Kam naj gredo strani?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 msgid "Which image should be the basis for the new page?"
 msgstr "Katera slika naj bo osnova nove strani?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "Export success"
 msgstr "Izvoz je uspel"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "The files have been written to the export folder."
 msgstr "Datoteke so bile zapisane v izvozno mapo."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:900
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:899
 msgid "Resize all Pages"
 msgstr "Spreminjanje velikosti vseh strani"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 msgid "Resizing pages..."
 msgstr "Spreminjanje velikosti strani ..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 msgid "Resizing Pages"
 msgstr "Spreminjanje velikosti strani"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:926
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:925
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -60381,44 +60383,44 @@ msgstr ""
 "Pretekli čas: {passedString}:\n"
 " Ocena trajanja:{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 msgid "Scraping success"
 msgstr "Uspešno napraskano"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "Datoteka POT je bila zapisana v: {file}"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:29
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:30
 msgid "Which folder?"
 msgstr "Katera mapa?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:60
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:61
 msgid "Change Folder"
 msgstr "Spremeni mapo"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:109
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:110
 msgid "Comic Project Settings"
 msgstr "Nastavitve projekta stripa"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where should the export go?"
 msgstr "Kam naj gre izvoz?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
 msgid "Where are the templates?"
 msgstr "Kje so predloge?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
 msgid "Where are the translations?"
 msgstr "Kje so prevodi?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
 msgid "Where are the extra auto-completion keys located?"
 msgstr "Kje se nahajajo dodatni ključi za samodejno dokončanje?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
 msgid ""
 "The location for extra autocompletion keys in the metadata editor. Point "
 "this at a folder containing key_characters/key_format/key_genre/key_rating/"
@@ -60432,48 +60434,48 @@ msgstr ""
 "ključe za samodejno dokončanje, vsakega v novi vrstici. Ta pot je shranjena "
 "v prilagoditvi programa Krita in ne v prilagoditvi projekta."
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
 msgid "Project name:"
 msgstr "Ime projekta:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 msgid "Project concept:"
 msgstr "Koncept projekta:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
 msgid "Pages folder:"
 msgstr "Mapa s stranmi:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
 msgid "Export folder:"
 msgstr "Izvozna mapa:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
 msgid "Template folder:"
 msgstr "Mapa predlog:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
 msgid "Translation folder:"
 msgstr "Mapa s prevodi:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 msgid "Default template:"
 msgstr "Privzeta predloga:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:134
 msgid "Extra keys folder:"
 msgstr "Mapa dodatnih ključev:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:59
 msgid "Where should the comic project go?"
 msgstr "Kam naj gre stripovski projekt?"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid "Folder cannot be used"
 msgstr "Mape ni mogoče uporabiti"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
@@ -60481,23 +60483,23 @@ msgstr ""
 "Krita nima pravic pisanja v to mapo, zato datotek ni mogoče izdelati. "
 "Izberite drugo mapo."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:68
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
 msgid "Comic Project Setup"
 msgstr "Nastavitev projekta stripa"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:74
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
 msgid "Basic Comic Project Settings"
 msgstr "Osnovne nastavitve projekta stripa"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:80
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:81
 msgid "A Project name. This can be different from the eventual title"
 msgstr "Ime projekta. To se lahko razlikuje od dejanskega naslova"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:82
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 msgid "Generate"
 msgstr "Generiraj"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -60506,7 +60508,7 @@ msgstr ""
 "projektov poskrbel za to, da projektor poimenuje na imeniten, a še vedno "
 "smiseln način."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:88
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:89
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -60514,15 +60516,15 @@ msgstr ""
 "O čem govori vaš strip? To je večinoma za vašo rabo, zato ne skrbite preveč "
 "o tem, kaj je tu zapisano."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:90
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:91
 msgid "The main language the comic is in"
 msgstr "Glavni jezik stripa je"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:103
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:104
 msgid "Make a new directory with the project name."
 msgstr "Ustvarite novo mapo z imenom projekta."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -60530,67 +60532,67 @@ msgstr ""
 "To vam omogoča, da izberete splošno mapo projektov stripov, v katerem bo "
 "izdelana nova mapa za projekt z uporabo danega imena projekta."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
 msgid "pages"
 msgstr "strani"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr "Ime mape, v kateri so strani. Če ne obstaja, bo ustvarjena."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
 msgid "export"
 msgstr "izvoz"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr "Ime mape, v kateri se postavi izvoz. Če ne obstaja, bo ustvarjena."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 msgid "templates"
 msgstr "predloge"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "The name for the folder where the page templates are sought in."
 msgstr "Ime mape, v kateri se iščejo predloge strani."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:121
 msgid "translations"
 msgstr "prevodi"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Comic concept:"
 msgstr "Koncept stripa:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:125
 msgid "Main language:"
 msgstr "Glavni jezik:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Folder names and other."
 msgstr "Imena map in drugo."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Project directory:"
 msgstr "Mapa projekta:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:138
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
 msgid "Pages directory"
 msgstr "Mapa s stranmi"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
 msgid "Export directory"
 msgstr "Izvozna mapa"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
 msgid "Template directory"
 msgstr "Mapa s predlogami"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:142
 msgid "Translation directory"
 msgstr "Mapa s prevodi"
 
@@ -60653,244 +60655,244 @@ msgstr "Ozadje"
 msgid "Creating template"
 msgstr "Ustvarjanje predloge"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Abridger"
 msgstr "Skrajševalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Art copyist"
 msgstr "Umetniški prerisovalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Actor"
 msgstr "Igralec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Art director"
 msgstr "Umetniški vodja"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Annotator"
 msgstr "Avtor zabeležk"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bibliographic antecedent"
 msgstr "Bibliografski predhodnik"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Architect"
 msgstr "Arhitekt"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Artistic director"
 msgstr "Umetniški vodja"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Associated name"
 msgstr "Povezano ime"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Autographer"
 msgstr "Avtograf"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Attributed name"
 msgstr "Pripisano ime"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Author of dialog"
 msgstr "Avtor dialogov"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Binding designer"
 msgstr "Oblikovalec vezave"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookjacket designer"
 msgstr "Oblikovalec knjižnega ovitka"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Book designer"
 msgstr "Oblikovalec knjige"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Book producer"
 msgstr "Knjižni producent"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Blurb writer"
 msgstr "Pisec promocijskih besedil"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Binder"
 msgstr "Knjigovezec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookplate designer"
 msgstr "Oblikovalec ekslibrisa"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookseller"
 msgstr "Knjigarnar"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Calligrapher"
 msgstr "Kaligraf"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Censor"
 msgstr "Cenzor"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Cover designer"
 msgstr "Oblikovalec naslovnice"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Copyright holder"
 msgstr "Imetnik avtorske pravice"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Creator"
 msgstr "Ustvarjalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Contributor"
 msgstr "Sodelavec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Curator"
 msgstr "Kustos"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Commentator for written text"
 msgstr "Avtor komentarjev k besedilu"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Draftsman"
 msgstr "Pripravljavec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Dubious author"
 msgstr "Vprašljiv avtor"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Etcher"
 msgstr "Jedkalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Expert"
 msgstr "Izvedenec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Funder"
 msgstr "Financer"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Illustrator"
 msgstr "Ilustrator"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Illuminator"
 msgstr "Osvetljevalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Inscriber"
 msgstr "Graver"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Licensee"
 msgstr "Lastnik licence"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Licensor"
 msgstr "Podeljevalec licence"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Lithographer"
 msgstr "Litograf"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Metadata contact"
 msgstr "Stik z metapodatki"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Owner"
 msgstr "Lastnik"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Patron"
 msgstr "Pokrovitelj"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Publishing director"
 msgstr "Direktor založbe"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Printer"
 msgstr "Tiskar"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Scenarist"
 msgstr "Scenarist"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Scribe"
 msgstr "Pisar"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Sponsor"
 msgstr "Sponzor"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Storyteller"
 msgstr "Pripovedovalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Transcriber"
 msgstr "Prepisovalec"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Type designer"
 msgstr "Oblikovalec pisave"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Typographer"
 msgstr "Tipograf"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added commentary"
 msgstr "Pisec dodanega komentarja"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added lyrics"
 msgstr "Pisec dodatnih besedil"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of accompanying material"
 msgstr "Pisec spremljajočega gradiva"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added text"
 msgstr "Pisec dodanega besedila"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of introduction"
 msgstr "Pisec uvoda"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of preface"
 msgstr "Pisec predgovora"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of supplementary textual content"
 msgstr "Pisec dodatnih besedilnih vsebin"
 
-#: plugins/python/documenttools/documenttools.py:16
+#: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
 msgid "Document Tools"
 msgstr "Orodja za dokumente"
 
-#: plugins/python/documenttools/documenttools.py:18
+#: plugins/python/documenttools/documenttools.py:19
 msgid "Plugin to manipulate properties of selected documents."
 msgstr "Vstavek za upravljanje lastnosti izbranih dokumentov."
 
@@ -60922,118 +60924,118 @@ msgstr "Spremeni velikost"
 msgid "The selected documents has been modified."
 msgstr "Izbrani dokumenti so bili spremenjeni."
 
-#: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:121
+#: plugins/python/exportlayers/exportlayers.py:17
+#: plugins/python/exportlayers/uiexportlayers.py:122
 msgid "Export Layers"
 msgstr "Izvozi plasti"
 
-#: plugins/python/exportlayers/exportlayers.py:17
+#: plugins/python/exportlayers/exportlayers.py:18
 msgid "Plugin to export layers from a document."
 msgstr "Vstavek za izvoz plasti iz dokumenta"
 
-#: plugins/python/exportlayers/uiexportlayers.py:39
+#: plugins/python/exportlayers/uiexportlayers.py:40
 msgid "Export filter layers"
 msgstr "Izvozi plasti filtrov"
 
-#: plugins/python/exportlayers/uiexportlayers.py:40
+#: plugins/python/exportlayers/uiexportlayers.py:41
 msgid "Export in batchmode"
 msgstr "Izvozi v paketnem načinu"
 
-#: plugins/python/exportlayers/uiexportlayers.py:41
+#: plugins/python/exportlayers/uiexportlayers.py:42
 msgid "Group as layer"
 msgstr "Združi kot plast"
 
-#: plugins/python/exportlayers/uiexportlayers.py:43
+#: plugins/python/exportlayers/uiexportlayers.py:44
 msgid "Ignore invisible layers"
 msgstr "Prezri nevidne plasti"
 
-#: plugins/python/exportlayers/uiexportlayers.py:45
+#: plugins/python/exportlayers/uiexportlayers.py:46
 msgid "Adjust export size to layer content"
 msgstr "Prilagodi velikost izvoza vsebini plasti"
 
-#: plugins/python/exportlayers/uiexportlayers.py:47
+#: plugins/python/exportlayers/uiexportlayers.py:48
 msgid "Add incrementing prefix"
 msgstr "Dodaj naraščajočo predpono"
 
-#: plugins/python/exportlayers/uiexportlayers.py:82
+#: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:83
+#: plugins/python/exportlayers/uiexportlayers.py:84
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:98
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "dpi:"
 msgstr "DPI:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:106
+#: plugins/python/exportlayers/uiexportlayers.py:107
 msgid "Initial directory:"
 msgstr "Začetna mapa:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:107
+#: plugins/python/exportlayers/uiexportlayers.py:108
 msgid "Export options:"
 msgstr "Možnosti izvoza:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:109
 msgid "Export size:"
 msgstr "Velikost izvoza:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:111
 msgid "Images extensions:"
 msgstr "Končnice slik:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:167
+#: plugins/python/exportlayers/uiexportlayers.py:168
 msgid "Select one document."
 msgstr "Izberite en dokument."
 
-#: plugins/python/exportlayers/uiexportlayers.py:169
+#: plugins/python/exportlayers/uiexportlayers.py:170
 msgid "Select the initial directory."
 msgstr "Izberite začetno mapo."
 
-#: plugins/python/exportlayers/uiexportlayers.py:173
+#: plugins/python/exportlayers/uiexportlayers.py:174
 msgid "All layers have been exported."
 msgstr "Vse plasti so bile izvožene."
 
-#: plugins/python/exportlayers/uiexportlayers.py:243
+#: plugins/python/exportlayers/uiexportlayers.py:244
 msgid "Select a Folder"
 msgstr "Izberite mapo"
 
-#: plugins/python/filtermanager/filtermanager.py:16
-#: plugins/python/filtermanager/uifiltermanager.py:59
+#: plugins/python/filtermanager/filtermanager.py:17
+#: plugins/python/filtermanager/uifiltermanager.py:60
 msgid "Filter Manager"
 msgstr "Upravitelj filtrov"
 
-#: plugins/python/filtermanager/filtermanager.py:17
+#: plugins/python/filtermanager/filtermanager.py:18
 msgid "Plugin to filters management."
 msgstr "Vstavek za upravljanje filtrov."
 
-#: plugins/python/filtermanager/uifiltermanager.py:42
+#: plugins/python/filtermanager/uifiltermanager.py:43
 msgid "Document Tree Model"
 msgstr "Drevesni model dokumenta"
 
-#: plugins/python/filtermanager/uifiltermanager.py:47
+#: plugins/python/filtermanager/uifiltermanager.py:48
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "Filtri:"
 
-#: plugins/python/highpass/highpass.py:39
+#: plugins/python/highpass/highpass.py:40
 msgid "High Pass"
 msgstr "Visokopasovni"
 
-#: plugins/python/highpass/highpass.py:47
+#: plugins/python/highpass/highpass.py:48
 msgid "High Pass Filter"
 msgstr "Visokopasovni filter"
 
-#: plugins/python/highpass/highpass.py:48
+#: plugins/python/highpass/highpass.py:49
 msgid "There is no active image."
 msgstr "Ni dejavne slike."
 
-#: plugins/python/highpass/highpass.py:62
+#: plugins/python/highpass/highpass.py:63
 msgid "Keep original layer"
 msgstr "Ohrani izvirno plast"
 
-#: plugins/python/highpass/highpass.py:65
+#: plugins/python/highpass/highpass.py:66
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
 msgstr "Polmer filtra:"
@@ -61141,19 +61143,19 @@ msgstr "Omogoči skript"
 msgid "Create Script"
 msgstr "Ustvari skript"
 
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:32
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
 msgstr "Nedavni dokumenti"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:45
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
 msgstr "Spremeni nastavitve"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:62
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
 msgstr "Sidrišče drsnika mešalnika"
 
-#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:41
+#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
 msgstr "Število vrstic drsnika: "
 
@@ -61270,85 +61272,85 @@ msgstr ""
 "Prikliče dejanje »Mutiraj«, ki naključno mutira različne globalne nastavitve "
 "čopičev in barv na podlagi zgoraj prilagojenih nastavitev mutacij."
 
-#: plugins/python/palette_docker/palette_docker.py:47
+#: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
 msgstr "Zloženo okno palet Python"
 
-#: plugins/python/palette_docker/palette_docker.py:73
+#: plugins/python/palette_docker/palette_docker.py:74
 msgid "Set"
 msgstr "Določi"
 
-#: plugins/python/palette_docker/palette_docker.py:82
+#: plugins/python/palette_docker/palette_docker.py:83
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Dodaj skupino"
 
-#: plugins/python/palette_docker/palette_docker.py:85
+#: plugins/python/palette_docker/palette_docker.py:86
 msgid "Remove Entry"
 msgstr "Odstrani vnos"
 
-#: plugins/python/palette_docker/palette_docker.py:101
+#: plugins/python/palette_docker/palette_docker.py:102
 msgid "Edit Palette Settings"
 msgstr "Uredi nastavitve palete"
 
-#: plugins/python/palette_docker/palette_docker.py:107
+#: plugins/python/palette_docker/palette_docker.py:108
 msgid "Export as GIMP Palette File"
 msgstr "Izvozi kot datoteko palete GIMP"
 
-#: plugins/python/palette_docker/palette_docker.py:111
+#: plugins/python/palette_docker/palette_docker.py:112
 msgid "Export as Inkscape SVG with Swatches"
 msgstr "Izvozi kot Inkscape SVG s paletami"
 
-#: plugins/python/palette_docker/palette_docker.py:115
+#: plugins/python/palette_docker/palette_docker.py:116
 msgid "Sort Colors"
 msgstr "Razvrsti barve"
 
-#: plugins/python/palette_docker/palette_docker.py:225
+#: plugins/python/palette_docker/palette_docker.py:226
 msgid "Edit Palette Data"
 msgstr "Uredi podatke palete"
 
-#: plugins/python/palette_docker/palette_docker.py:230
+#: plugins/python/palette_docker/palette_docker.py:231
 msgid "Palette Data"
 msgstr "Podatki palete"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:30
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:36
 msgid "Export Successful"
 msgstr "Izvoz je uspel"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:32
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:33
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:38
 #, python-brace-format
 msgid "{input} has been exported to {output}."
 msgstr "{input} je bilo izvoženo v {output}."
 
-#: plugins/python/photobash_images/photobash_images_docker.py:76
+#: plugins/python/photobash_images/photobash_images_docker.py:83
 msgctxt "@title:window"
 msgid "Photobash Images"
 msgstr "Slike Photobash"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:144
-#: plugins/python/photobash_images/photobash_images_docker.py:472
+#: plugins/python/photobash_images/photobash_images_docker.py:151
+#: plugins/python/photobash_images/photobash_images_docker.py:479
 msgid "Change References Folder"
 msgstr "Spremeni mapo sklicev"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:150
-#: plugins/python/photobash_images/photobash_images_docker.py:222
+#: plugins/python/photobash_images/photobash_images_docker.py:157
+#: plugins/python/photobash_images/photobash_images_docker.py:229
 #, python-brace-format
 msgid "Image Scale: {0}%"
 msgstr "Merilo slike: {0} %"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:324
+#: plugins/python/photobash_images/photobash_images_docker.py:331
 #, python-brace-format
 msgid "Page: {0}/{1}"
 msgstr "Stran: {0}/{1}"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:460
+#: plugins/python/photobash_images/photobash_images_docker.py:467
 msgid "Change Directory for Images"
 msgstr "Spremeni mapo za slike"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:470
+#: plugins/python/photobash_images/photobash_images_docker.py:477
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, kde-format
 msgid "Set References Folder"
@@ -61366,7 +61368,7 @@ msgstr "Filtriraj slike po besedah ..."
 msgid "Scale To Canvas"
 msgstr "Umeri na platno"
 
-#: plugins/python/plugin_importer/plugin_downloader.py:70
+#: plugins/python/plugin_importer/plugin_downloader.py:72
 msgid "Could not determine download link from URL"
 msgstr "Povezave za prenos ni mogoče določiti iz URL"
 
@@ -61391,48 +61393,48 @@ msgctxt "action"
 msgid "Import Python Plugin from Web..."
 msgstr "Uvozi vstavek Python s spleta …"
 
-#: plugins/python/plugin_importer/plugin_importer.py:142
+#: plugins/python/plugin_importer/plugin_importer.py:143
 msgid "Desktop file"
 msgstr "Namizna datoteka"
 
-#: plugins/python/plugin_importer/plugin_importer.py:210
+#: plugins/python/plugin_importer/plugin_importer.py:211
 msgid "No plugins found in archive"
 msgstr "V arhivu ni bilo najdenih vstavkov"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:36
+#: plugins/python/plugin_importer/plugin_importer_extension.py:35
 msgid "Import Python Plugin from File..."
 msgstr "Uvozi vstavek Python iz datoteke ..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:41
+#: plugins/python/plugin_importer/plugin_importer_extension.py:40
 msgid "Import Python Plugin from Web..."
 msgstr "Uvozi vstavek Python s spleta …"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:48
+#: plugins/python/plugin_importer/plugin_importer_extension.py:47
 msgid "Overwrite Plugin"
 msgstr "Prepiši vstavek"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:49
+#: plugins/python/plugin_importer/plugin_importer_extension.py:48
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
 msgstr "Vstavek »%s« že obstaja. Ali ga želite prepisati?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:57
+#: plugins/python/plugin_importer/plugin_importer_extension.py:56
 msgid "The following plugins were imported:"
 msgstr "Uvoženi so bili naslednji vstavki:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:67
+#: plugins/python/plugin_importer/plugin_importer_extension.py:66
 msgid "Enable plugins now? (Requires restart)"
 msgstr "Ali želite omogočiti vstavke zdaj (potreben bo ponoven zagon)?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:72
+#: plugins/python/plugin_importer/plugin_importer_extension.py:71
 msgid "Activate Plugins?"
 msgstr "Ali želite aktivirati vstavke?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:79
+#: plugins/python/plugin_importer/plugin_importer_extension.py:78
 msgid "Error during import:"
 msgstr "Napaka med uvozom:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:98
+#: plugins/python/plugin_importer/plugin_importer_extension.py:97
 msgid ""
 "<p><strong>Enter download URL</strong></p><p>For example:<ul><li>Zip "
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
@@ -61442,16 +61444,16 @@ msgstr ""
 "prenos zip (http://example.com/plugin.zip)</li><li>Skladišče Github (https://"
 "github.com/test/plugin)</li></ul>"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:106
-#: plugins/python/plugin_importer/plugin_importer_extension.py:120
+#: plugins/python/plugin_importer/plugin_importer_extension.py:105
+#: plugins/python/plugin_importer/plugin_importer_extension.py:119
 msgid "Import Plugin"
 msgstr "Uvozi vstavek"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:122
+#: plugins/python/plugin_importer/plugin_importer_extension.py:121
 msgid "Zip Archives"
 msgstr "Arhivi zip"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:35
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
 msgid "Quick Settings Docker"
 msgstr "Hitre nastavitve"
 
@@ -61468,15 +61470,15 @@ msgstr "Sidrišče skriptov"
 msgid "Script {0}"
 msgstr "Skript {0}"
 
-#: plugins/python/scripter/debugcontroller.py:63
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:41
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:20
+#: plugins/python/scripter/debugcontroller.py:58
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:38
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:19
 msgid "Debugger"
 msgstr "Razhroščevalnik"
 
-#: plugins/python/scripter/scripter.py:23
-#: plugins/python/scripter/uicontroller.py:94
+#: plugins/python/scripter/scripter.py:24
+#: plugins/python/scripter/uicontroller.py:96
 msgid "Scripter"
 msgstr "Skripterka"
 
@@ -61484,11 +61486,11 @@ msgstr "Skripterka"
 msgid "Do you want to save the current document?"
 msgstr "Ali želite shraniti trenutni dokument?"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:27
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:24
 msgid "Debug"
 msgstr "Razhrošči"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:25
 msgid "Debug Ctrl+D"
 msgstr "Razhrošči Krmilka+D"
 
@@ -61504,21 +61506,21 @@ msgstr "Dokument je bil spremenjen."
 msgid "Do you want to save your changes?"
 msgstr "Ali želite shraniti svoje spremembe?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:27
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
 msgid "Open"
 msgstr "Odpri"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
 msgid "Python Files"
 msgstr "Datoteke Python"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Invalid File"
 msgstr "Neveljavna datoteka"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
 msgid "Open files with .py extension"
 msgstr "Odpri datoteke s končnico .py"
 
@@ -61538,26 +61540,26 @@ msgstr "Ni obstoječega dokumenta"
 msgid "Please specify a document by opening it before reloading"
 msgstr "Navedite dokument tako, da ga odprete pred ponovnim nalaganjem"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:61
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:35
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:57
 #: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:20
 msgid "Output"
 msgstr "Izhod"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
 msgid "Run"
 msgstr "Zaženi"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:44
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:40
 msgid "Run Ctrl+R"
 msgstr "Zaženi Krmilka+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
 msgid "Save Python File"
 msgstr "Shrani datoteko Python"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
 msgid "Save As"
 msgstr "Shrani kot"
 
@@ -61578,15 +61580,15 @@ msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "Vrednost"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:25
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
 msgid "Step Over"
 msgstr "Stopi čez"
 
-#: plugins/python/scripter/uicontroller.py:173
+#: plugins/python/scripter/uicontroller.py:175
 msgid "Error Running Script"
 msgstr "Napaka pri izvajanju skripta"
 
-#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:25
+#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
 msgid "Selections Bag"
 msgstr "Vrečka izbranega"
 
@@ -61677,21 +61679,21 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Aktiviraj prednastavitev čopiča 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:33
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
 msgstr "Deset čopičev"
 
-#: plugins/python/tenbrushes/tenbrushes.py:34
+#: plugins/python/tenbrushes/tenbrushes.py:35
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 "Dodeli deset prednastavitev čopiča desetim kombinacijam tipk za bližnjice."
 
-#: plugins/python/tenbrushes/tenbrushes.py:92
+#: plugins/python/tenbrushes/tenbrushes.py:93
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Aktiviraj prednastavitev čopiča {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:121
+#: plugins/python/tenbrushes/tenbrushes.py:122
 msgid ""
 "{}\n"
 "selected"
@@ -61699,23 +61701,23 @@ msgstr ""
 "{}\n"
 "izbrano"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:29
+#: plugins/python/tenbrushes/uitenbrushes.py:30
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
 msgstr ""
 "&Aktiviraj prejšnjo prednastavitev čopiča, ko drugič pritisnete bližnjico"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:34
+#: plugins/python/tenbrushes/uitenbrushes.py:35
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Izberi orodje prostoročnega čopiča ob pritisku tipk za bližnjico"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:38
+#: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr ""
 "&Pokaži pojavno sporočilo na platnu pri aktiviranju prednastavitve čopiča"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:57
+#: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -61723,8 +61725,8 @@ msgstr ""
 "Izberite prednastavitev čopiča in nato kliknite gumb, ki ga želite uporabiti "
 "za prednastavitev."
 
-#: plugins/python/tenbrushes/uitenbrushes.py:60
-#: plugins/python/tenscripts/uitenscripts.py:52
+#: plugins/python/tenbrushes/uitenbrushes.py:61
+#: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -61809,180 +61811,180 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Izvrši skript 10"
 
-#: plugins/python/tenscripts/tenscripts.py:30
+#: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
 msgstr "Deset skriptov"
 
-#: plugins/python/tenscripts/tenscripts.py:31
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Deset skriptov dodelite desetim bližnjicam."
 
-#: plugins/python/tenscripts/tenscripts.py:57
+#: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Izvrši skript {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:83
+#: plugins/python/tenscripts/tenscripts.py:77
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Skript {0} izvršen"
 
-#: plugins/python/tenscripts/uitenscripts.py:72
+#: plugins/python/tenscripts/uitenscripts.py:73
 msgid "Selected path"
 msgstr "Izbrana pot"
 
-#: plugins/python/tenscripts/uitenscripts.py:73
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 msgid "Select the script"
 msgstr "Izberite skript"
 
-#: plugins/python/tenscripts/uitenscripts.py:105
+#: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Datoteke Python (*.py)"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Custom icon"
 msgstr "Ikona po meri"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Tool icon"
 msgstr "Ikona orodja"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 msgid "Brush preset icon"
 msgstr "Ikona prednastavitve čopiča"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:71
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:72
 msgid "Workflow Buttons settings"
 msgstr "Nastavitve gumbov poteka dela"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:103
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 msgid "Selected button:"
 msgstr "Izbrani gumb:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:116
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Add a workflow button"
 msgstr "Dodaj gumb poteka dela"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:124
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
 msgid "Move selected workflow button to the left"
 msgstr "Premakni izbrani gumb poteka dela na levo"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:130
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Move selected workflow button to the right"
 msgstr "Premakni izbrani gumb poteka dela na desno"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 msgid "Delete selected workflow button"
 msgstr "Izbriši gumb izbranega poteka dela"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:145
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 msgid "Select icon mode:"
 msgstr "Izberite način ikone:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 msgid "Select a custom icon:"
 msgstr "Izberite ikono po meri:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:164
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 msgid "Custom icon path"
 msgstr "Pot ikone po meri"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 msgid "Select the custom icon"
 msgstr "Izberite ikono po meri"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:177
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 msgid "Enter a Tooltip:"
 msgstr "Vnesite namig:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:180
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 msgid "Tooltip text"
 msgstr "Besedilo namiga"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:188
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 msgid "Select a tool:"
 msgstr "Izberite orodje:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 msgid "Select a brush preset:"
 msgstr "Izberite prednastavitev čopiča:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:206
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 msgid "Brush preset name"
 msgstr "Ime prednastavitve čopiča"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 msgid "Select the brush preset"
 msgstr "Izberite prednastavitev čopiča"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:219
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 msgid "Select foreground color:"
 msgstr "Izberite barvo ospredja:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:221
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 msgid "Load current foreground color"
 msgstr "Naloži trenutno barvo ospredja"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:224
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 msgid "Clear foreground color"
 msgstr "Počisti barvo ospredja"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:234
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgid "Color model ; depth ; profile ; components"
 msgstr "Barvni model ; globina; profil; komponente"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:251
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 msgid "Select background color:"
 msgstr "Izberite barvo ozadja:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:253
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 msgid "Load current background color"
 msgstr "Naloži trenutno barvo ozadja"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:256
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 msgid "Clear background color"
 msgstr "Počisti barvo ozadja"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select a script file:"
 msgstr "Izberite datoteko skripta:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:285
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 msgid "Script path"
 msgstr "Pot skripta"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:304
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 msgid "Buttons size:"
 msgstr "Velikost gumbov:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:320
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 msgid "Settings button position:"
 msgstr "Položaj gumba za nastavitve:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:322
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 msgid "Bottom bar"
 msgstr "Spodnja vrstica"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 msgid "Inline"
 msgstr "Znotrajvrstično"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:511
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:544
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 msgid "Color info: "
 msgstr "Barvne informacije: "
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:581
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
 msgid "Script files "
 msgstr "Skriptne datoteke "
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:25
+#: plugins/python/workflow_buttons/workflow_buttons.py:26
 msgctxt "@title:window"
 msgid "Workflow Buttons"
 msgstr "Gumbi poteka dela"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:64
+#: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
 msgstr "Odpri pogovorno okno z nastavitvami gumbov poteka dela"
 

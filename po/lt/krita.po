@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"POT-Creation-Date: 2025-07-01 02:01+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -13334,7 +13334,7 @@ msgid "&Help"
 msgstr ""
 
 #: krita/krita5.xmlgui:426 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:102
+#: plugins/python/scripter/uicontroller.py:104
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
@@ -20786,14 +20786,14 @@ msgstr "Sumažinti"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
-#: plugins/python/exportlayers/uiexportlayers.py:37
+#: plugins/python/exportlayers/uiexportlayers.py:38
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:65
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
+#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -20882,7 +20882,7 @@ msgstr "numatytasis"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:59
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
 #, kde-format
 msgid "Size"
@@ -21015,14 +21015,14 @@ msgstr " piks."
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
 #, kde-format
 msgid "Opacity"
 msgstr "Nepermatomumas"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
 #, fuzzy, kde-format
 msgid "Flow"
 msgstr "Šešėliai"
@@ -21598,7 +21598,7 @@ msgid "Locked"
 msgstr "Užrakinta"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: plugins/python/channels2layers/channels2layers.py:110
+#: plugins/python/channels2layers/channels2layers.py:104
 #, kde-format
 msgid "Visible"
 msgstr "Matomas"
@@ -21672,7 +21672,7 @@ msgid "Open File"
 msgstr "Atverti paletę"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#: plugins/python/plugin_importer/plugin_importer_extension.py:83
+#: plugins/python/plugin_importer/plugin_importer_extension.py:82
 #, fuzzy, kde-format
 #| msgid "Mirror"
 msgid "Error"
@@ -22754,7 +22754,7 @@ msgstr ""
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:30
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:352
-#: plugins/python/channels2layers/channels2layers.py:1406
+#: plugins/python/channels2layers/channels2layers.py:1400
 #, kde-format
 msgid "Blue"
 msgstr "Mėlyna"
@@ -22770,7 +22770,7 @@ msgstr "Mėlyna"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:113
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:235
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:406
-#: plugins/python/channels2layers/channels2layers.py:1404
+#: plugins/python/channels2layers/channels2layers.py:1398
 #, kde-format
 msgid "Green"
 msgstr "Žalia"
@@ -22780,7 +22780,7 @@ msgstr "Žalia"
 #: plugins/color/lcms2engine/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:26
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:32
-#: plugins/python/channels2layers/channels2layers.py:1402
+#: plugins/python/channels2layers/channels2layers.py:1396
 #, kde-format
 msgid "Red"
 msgstr "Raudona"
@@ -24143,7 +24143,7 @@ msgstr ""
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/resources/KisTagResourceModel.cpp:633
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, fuzzy, kde-format
 msgid "Name"
@@ -24248,7 +24248,7 @@ msgstr ""
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1002
-#: plugins/impex/webp/kis_wdg_options_webp.ui:791
+#: plugins/impex/webp/kis_wdg_options_webp.ui:818
 #, kde-format
 msgid "Metadata"
 msgstr "Metaduomenys"
@@ -24277,7 +24277,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
-#: plugins/python/channels2layers/channels2layers.py:885
+#: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
 msgid "Unknown"
 msgstr "Nežinoma"
@@ -24418,7 +24418,7 @@ msgstr "Šriftų šeima"
 #: libs/widgets/KoConfigAuthorPage.cpp:89
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:105
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Type"
@@ -24442,7 +24442,7 @@ msgstr "Lygiagrečiai"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #, fuzzy, kde-format
 #| msgid "Thumbnails"
 msgid "Thumbnail"
@@ -26325,7 +26325,7 @@ msgstr "Trukmė:"
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:250
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:389
-#: plugins/impex/webp/kis_wdg_options_webp.ui:147
+#: plugins/impex/webp/kis_wdg_options_webp.ui:174
 #, fuzzy, kde-format
 msgid "Advanced"
 msgstr "Pažymėjimas"
@@ -26602,7 +26602,7 @@ msgstr "Versija"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:631
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
-#: plugins/impex/webp/kis_wdg_options_webp.ui:424
+#: plugins/impex/webp/kis_wdg_options_webp.ui:451
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
 msgid "None"
@@ -27155,13 +27155,13 @@ msgstr "Sluoksnio savybės"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:265
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:267
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:76
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:84
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:86
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:93
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:99
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:104
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:109
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:88
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:95
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:101
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:106
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:111
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:113
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
@@ -27743,7 +27743,7 @@ msgstr "Autorius"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2320
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy, kde-format
 msgid "Author"
 msgstr "Autorius"
@@ -28494,7 +28494,7 @@ msgstr "Inicialai:"
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:336
 #, kde-format
 msgid "Title:"
 msgstr "Pavadinimas:"
@@ -29083,7 +29083,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
 #, kde-format
 msgid "Source:"
 msgstr "Šaltinis:"
@@ -29382,13 +29382,13 @@ msgstr "Pradėti makro įrašinėjimą"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:979
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
-#: plugins/impex/webp/kis_wdg_options_webp.ui:305
-#: plugins/impex/webp/kis_wdg_options_webp.ui:328
-#: plugins/impex/webp/kis_wdg_options_webp.ui:466
-#: plugins/impex/webp/kis_wdg_options_webp.ui:596
-#: plugins/impex/webp/kis_wdg_options_webp.ui:684
-#: plugins/impex/webp/kis_wdg_options_webp.ui:750
-#: plugins/impex/webp/kis_wdg_options_webp.ui:773
+#: plugins/impex/webp/kis_wdg_options_webp.ui:332
+#: plugins/impex/webp/kis_wdg_options_webp.ui:355
+#: plugins/impex/webp/kis_wdg_options_webp.ui:493
+#: plugins/impex/webp/kis_wdg_options_webp.ui:623
+#: plugins/impex/webp/kis_wdg_options_webp.ui:711
+#: plugins/impex/webp/kis_wdg_options_webp.ui:777
+#: plugins/impex/webp/kis_wdg_options_webp.ui:800
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
@@ -29935,7 +29935,7 @@ msgstr "Palaikytojas"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
 #: plugins/dockers/lut/wdglut.ui:241
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:23
 #, kde-format
 msgid "Clear"
 msgstr "Išvalyti"
@@ -30678,7 +30678,7 @@ msgstr "Į paveikslėlius"
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
-#: plugins/python/channels2layers/channels2layers.py:112
+#: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, fuzzy, kde-format
 msgid "Remove"
@@ -31148,7 +31148,7 @@ msgstr "Lango dydis"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
 msgstr "Pavadinimas:"
@@ -31200,7 +31200,7 @@ msgstr "Dabartinis teptuko ruošinys"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
 msgstr "Išsaugoti"
@@ -34587,7 +34587,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/kis_statusbar.cc:379
-#: plugins/python/channels2layers/channels2layers.py:111
+#: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr ""
@@ -36226,7 +36226,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisWelcomePageWidget.cpp:163
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "Paskutinis puslapis:"
@@ -38903,7 +38903,7 @@ msgid "Back"
 msgstr "Atgal"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:45
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:24
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:23
 #, fuzzy, kde-format
 msgid "Stop"
 msgstr "Tab. pozicija"
@@ -39813,7 +39813,7 @@ msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Email"
 msgstr "El. paštas"
@@ -39826,7 +39826,7 @@ msgstr "Faksas:"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, fuzzy, kde-format
 #| msgid "Home"
 msgid "Homepage"
@@ -41459,7 +41459,7 @@ msgstr "Parinktys"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:147
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:249
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:372
-#: plugins/python/channels2layers/channels2layers.py:1394
+#: plugins/python/channels2layers/channels2layers.py:1388
 #, kde-format
 msgid "Cyan"
 msgstr "Žydra"
@@ -41473,7 +41473,7 @@ msgstr "Žydra"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:96
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:273
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:430
-#: plugins/python/channels2layers/channels2layers.py:1396
+#: plugins/python/channels2layers/channels2layers.py:1390
 #, kde-format
 msgid "Magenta"
 msgstr "Purpurinė"
@@ -41487,7 +41487,7 @@ msgstr "Purpurinė"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:123
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:283
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:382
-#: plugins/python/channels2layers/channels2layers.py:1398
+#: plugins/python/channels2layers/channels2layers.py:1392
 #, kde-format
 msgid "Yellow"
 msgstr "Geltona"
@@ -41495,7 +41495,7 @@ msgstr "Geltona"
 #: plugins/color/lcms2engine/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:26
-#: plugins/python/channels2layers/channels2layers.py:1400
+#: plugins/python/channels2layers/channels2layers.py:1394
 #, kde-format
 msgid "Black"
 msgstr "Juoda"
@@ -41891,7 +41891,7 @@ msgstr "Šešėlio žymeklis"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
-#: plugins/python/colorspace/uicolorspace.py:68
+#: plugins/python/colorspace/uicolorspace.py:71
 #, fuzzy, kde-format
 msgid "Color model:"
 msgstr "Spalvos pavadinimas:"
@@ -42618,7 +42618,7 @@ msgstr "Pašalinti sluoksnį"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:78
+#: plugins/python/palette_docker/palette_docker.py:79
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -42749,8 +42749,8 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:44
 #: plugins/filters/palettize/palettize.ui:56
-#: plugins/python/colorspace/colorspace.py:16
-#: plugins/python/colorspace/uicolorspace.py:82
+#: plugins/python/colorspace/colorspace.py:17
+#: plugins/python/colorspace/uicolorspace.py:85
 #, fuzzy, kde-format
 #| msgid "Color space:"
 msgid "Color Space"
@@ -45118,7 +45118,7 @@ msgstr "Turinys"
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1108
+#: plugins/python/channels2layers/channels2layers.py:1102
 #, kde-format
 msgid "Mode"
 msgstr "Režimas"
@@ -46357,7 +46357,7 @@ msgstr "Teisės:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 #, kde-format
 msgid "Date:"
 msgstr "Data:"
@@ -47265,7 +47265,7 @@ msgstr ""
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
-#: plugins/impex/webp/kis_wdg_options_webp.ui:812
+#: plugins/impex/webp/kis_wdg_options_webp.ui:839
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
 msgid "Exif"
@@ -47725,13 +47725,13 @@ msgstr ""
 msgid "Python Plugin Manager"
 msgstr "Spalvų valdymas"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:124
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:154
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47739,13 +47739,13 @@ msgid ""
 "application>: <icode>%2</icode>. Skipped</p>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:181
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:212
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47754,13 +47754,13 @@ msgid ""
 "disabled, but behaviour is unpredictable...</p>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:226
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:239
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -47768,20 +47768,20 @@ msgid ""
 "version %2 %3, but found %4</p>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:254
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:365
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr ""
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:369
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
@@ -48113,7 +48113,7 @@ msgstr "Išsaugoti makro"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 #, kde-format
 msgid "Summary:"
 msgstr ""
@@ -48158,7 +48158,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
 #, fuzzy, kde-format
 msgid "License:"
 msgstr "eilutės aukštis"
@@ -49827,7 +49827,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
-#: plugins/python/highpass/highpass.py:66
+#: plugins/python/highpass/highpass.py:67
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
@@ -49965,9 +49965,9 @@ msgstr "Spalvos"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Other"
 msgstr "Kita"
@@ -52522,6 +52522,7 @@ msgstr "Papildomas apdorojimas"
 #. i18n: ectx: property (text), widget (QCheckBox, chkForceSRGB)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:38
 #: plugins/impex/png/kis_wdg_options_png.ui:105
+#: plugins/impex/webp/kis_wdg_options_webp.ui:146
 #, kde-format
 msgid "Force convert to sRGB"
 msgstr ""
@@ -52548,6 +52549,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProfile)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:132
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:157
+#: plugins/impex/webp/kis_wdg_options_webp.ui:153
 #, fuzzy, kde-format
 msgid "Save ICC Profile"
 msgstr "Dalintis spalvų profiliu"
@@ -52615,7 +52617,7 @@ msgstr "Optimizuoti"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
-#: plugins/impex/webp/kis_wdg_options_webp.ui:806
+#: plugins/impex/webp/kis_wdg_options_webp.ui:833
 #, kde-format
 msgid "Formats:"
 msgstr "Formatai:"
@@ -52630,7 +52632,7 @@ msgstr "IPTC"
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1039
-#: plugins/impex/webp/kis_wdg_options_webp.ui:819
+#: plugins/impex/webp/kis_wdg_options_webp.ui:846
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
 msgid "XMP"
@@ -52649,7 +52651,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1008
-#: plugins/impex/webp/kis_wdg_options_webp.ui:797
+#: plugins/impex/webp/kis_wdg_options_webp.ui:824
 #, fuzzy, kde-format
 msgid "Store Document Metadata"
 msgstr "Perrašyti esamą dokumentą"
@@ -55502,7 +55504,7 @@ msgstr "Mažiausias"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:261
-#: plugins/impex/webp/kis_wdg_options_webp.ui:431
+#: plugins/impex/webp/kis_wdg_options_webp.ui:458
 #, kde-format
 msgid "Best"
 msgstr "Geriausias"
@@ -55693,8 +55695,8 @@ msgstr "Kita"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, targetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:202
-#: plugins/impex/webp/kis_wdg_options_webp.ui:218
+#: plugins/impex/webp/kis_wdg_options_webp.ui:229
+#: plugins/impex/webp/kis_wdg_options_webp.ui:245
 #, kde-format
 msgid ""
 "If non-zero, sets the desired target size in bytes. Takes precedence over "
@@ -55702,14 +55704,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:205
+#: plugins/impex/webp/kis_wdg_options_webp.ui:232
 #, fuzzy, kde-format
 #| msgid "Image Size"
 msgid "Target Size"
 msgstr "Paveikslėlio dydis"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, targetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:221
+#: plugins/impex/webp/kis_wdg_options_webp.ui:248
 #, fuzzy, kde-format
 #| msgid "0 s"
 msgid " B"
@@ -55717,8 +55719,8 @@ msgstr "0 s"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:231
-#: plugins/impex/webp/kis_wdg_options_webp.ui:247
+#: plugins/impex/webp/kis_wdg_options_webp.ui:258
+#: plugins/impex/webp/kis_wdg_options_webp.ui:274
 #, kde-format
 msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
@@ -55726,35 +55728,35 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:234
+#: plugins/impex/webp/kis_wdg_options_webp.ui:261
 #, fuzzy, kde-format
 msgid "Target PSNR"
 msgstr "Tikslas:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSegments)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:260
-#: plugins/impex/webp/kis_wdg_options_webp.ui:276
+#: plugins/impex/webp/kis_wdg_options_webp.ui:287
+#: plugins/impex/webp/kis_wdg_options_webp.ui:303
 #, fuzzy, kde-format
 msgid "Maximum number of segments (1 to 4)."
 msgstr "Rašmenų:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:263
+#: plugins/impex/webp/kis_wdg_options_webp.ui:290
 #, fuzzy, kde-format
 msgid "Segments"
 msgstr "Išdėstymas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSNSStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, snsStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:292
-#: plugins/impex/webp/kis_wdg_options_webp.ui:302
+#: plugins/impex/webp/kis_wdg_options_webp.ui:319
+#: plugins/impex/webp/kis_wdg_options_webp.ui:329
 #, kde-format
 msgid "Spatial Noise Shaping: 0 = off, 100 = maximum."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:295
+#: plugins/impex/webp/kis_wdg_options_webp.ui:322
 #, fuzzy, kde-format
 #| msgid "Strength"
 msgid "SNS Strength"
@@ -55762,14 +55764,14 @@ msgstr "Stiprumas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:315
-#: plugins/impex/webp/kis_wdg_options_webp.ui:325
+#: plugins/impex/webp/kis_wdg_options_webp.ui:342
+#: plugins/impex/webp/kis_wdg_options_webp.ui:352
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:318
+#: plugins/impex/webp/kis_wdg_options_webp.ui:345
 #, fuzzy, kde-format
 #| msgid "Filter Settings"
 msgctxt "Filter options specifically for WebP"
@@ -55778,14 +55780,14 @@ msgstr "Filtro nuostatos"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:338
-#: plugins/impex/webp/kis_wdg_options_webp.ui:348
+#: plugins/impex/webp/kis_wdg_options_webp.ui:365
+#: plugins/impex/webp/kis_wdg_options_webp.ui:375
 #, kde-format
 msgid "Filter sharpness: 0 = off, 7 = least sharp."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterSharpness)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:341
+#: plugins/impex/webp/kis_wdg_options_webp.ui:368
 #, fuzzy, kde-format
 #| msgid "Filter Settings"
 msgctxt "Filter options specifically for WebP"
@@ -55794,8 +55796,8 @@ msgstr "Filtro nuostatos"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterType)
 #. i18n: ectx: property (toolTip), widget (QComboBox, filterType)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:361
-#: plugins/impex/webp/kis_wdg_options_webp.ui:371
+#: plugins/impex/webp/kis_wdg_options_webp.ui:388
+#: plugins/impex/webp/kis_wdg_options_webp.ui:398
 #, kde-format
 msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
@@ -55803,7 +55805,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:364
+#: plugins/impex/webp/kis_wdg_options_webp.ui:391
 #, fuzzy, kde-format
 #| msgid "File Type"
 msgctxt "Filter options specifically for WebP"
@@ -55811,7 +55813,7 @@ msgid "Filter Type"
 msgstr "Failo tipas"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAutofilter)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:378
+#: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Auto Adjust Filter Strength"
 msgstr ""
@@ -55823,13 +55825,13 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, lowMemory)
 #. i18n: ectx: property (text), widget (QCheckBox, exact)
 #. i18n: ectx: property (text), widget (QCheckBox, useSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:385
-#: plugins/impex/webp/kis_wdg_options_webp.ui:527
-#: plugins/impex/webp/kis_wdg_options_webp.ui:624
-#: plugins/impex/webp/kis_wdg_options_webp.ui:644
-#: plugins/impex/webp/kis_wdg_options_webp.ui:664
-#: plugins/impex/webp/kis_wdg_options_webp.ui:710
-#: plugins/impex/webp/kis_wdg_options_webp.ui:730
+#: plugins/impex/webp/kis_wdg_options_webp.ui:412
+#: plugins/impex/webp/kis_wdg_options_webp.ui:554
+#: plugins/impex/webp/kis_wdg_options_webp.ui:651
+#: plugins/impex/webp/kis_wdg_options_webp.ui:671
+#: plugins/impex/webp/kis_wdg_options_webp.ui:691
+#: plugins/impex/webp/kis_wdg_options_webp.ui:737
+#: plugins/impex/webp/kis_wdg_options_webp.ui:757
 #, fuzzy, kde-format
 #| msgctxt "Enable Shrink To Fit"
 #| msgid "Enable"
@@ -55837,7 +55839,7 @@ msgid "Enabled"
 msgstr "Įjungti"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaCompression)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:392
+#: plugins/impex/webp/kis_wdg_options_webp.ui:419
 #, kde-format
 msgid ""
 "Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP "
@@ -55845,20 +55847,20 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:395
+#: plugins/impex/webp/kis_wdg_options_webp.ui:422
 #, fuzzy, kde-format
 msgid "Alpha Plane Compression"
 msgstr "Suspausti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:405
+#: plugins/impex/webp/kis_wdg_options_webp.ui:432
 #, kde-format
 msgid "Predictive Filtering for Alpha Plane"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:414
+#: plugins/impex/webp/kis_wdg_options_webp.ui:441
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:86
 #, kde-format
@@ -55867,36 +55869,36 @@ msgstr "Greitas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaQuality)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, alphaQuality)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:453
-#: plugins/impex/webp/kis_wdg_options_webp.ui:463
+#: plugins/impex/webp/kis_wdg_options_webp.ui:480
+#: plugins/impex/webp/kis_wdg_options_webp.ui:490
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:456
+#: plugins/impex/webp/kis_wdg_options_webp.ui:483
 #, fuzzy, kde-format
 msgid "Alpha Plane Quality"
 msgstr "Pažymėjimas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:479
-#: plugins/impex/webp/kis_wdg_options_webp.ui:495
+#: plugins/impex/webp/kis_wdg_options_webp.ui:506
+#: plugins/impex/webp/kis_wdg_options_webp.ui:522
 #, kde-format
 msgid "Number of entropy-analysis passes (1 to 10)."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPass)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:482
+#: plugins/impex/webp/kis_wdg_options_webp.ui:509
 #, kde-format
 msgid "Entropy Passes"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblShowCompressed)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showCompressed)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:514
-#: plugins/impex/webp/kis_wdg_options_webp.ui:524
+#: plugins/impex/webp/kis_wdg_options_webp.ui:541
+#: plugins/impex/webp/kis_wdg_options_webp.ui:551
 #, kde-format
 msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
@@ -55904,14 +55906,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:517
+#: plugins/impex/webp/kis_wdg_options_webp.ui:544
 #, fuzzy, kde-format
 #| msgid "Compress:"
 msgid "Show Compressed"
 msgstr "Suspausti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:534
+#: plugins/impex/webp/kis_wdg_options_webp.ui:561
 #, fuzzy, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
@@ -55919,8 +55921,8 @@ msgstr "Papildomas apdorojimas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:544
-#: plugins/impex/webp/kis_wdg_options_webp.ui:554
+#: plugins/impex/webp/kis_wdg_options_webp.ui:571
+#: plugins/impex/webp/kis_wdg_options_webp.ui:581
 #, kde-format
 msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
@@ -55928,15 +55930,15 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:547
+#: plugins/impex/webp/kis_wdg_options_webp.ui:574
 #, fuzzy, kde-format
 msgid "Partitions"
 msgstr "Filtrai"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitionLimit)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitionLimit)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:564
-#: plugins/impex/webp/kis_wdg_options_webp.ui:593
+#: plugins/impex/webp/kis_wdg_options_webp.ui:591
+#: plugins/impex/webp/kis_wdg_options_webp.ui:620
 #, kde-format
 msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
@@ -55944,19 +55946,19 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:567
+#: plugins/impex/webp/kis_wdg_options_webp.ui:594
 #, kde-format
 msgid "Partition Limit"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:576
+#: plugins/impex/webp/kis_wdg_options_webp.ui:603
 #, fuzzy, kde-format
 msgid "Maximum degradation"
 msgstr "eilutės aukštis"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:586
+#: plugins/impex/webp/kis_wdg_options_webp.ui:613
 #, fuzzy, kde-format
 #| msgid "Negative"
 msgid "No degradation"
@@ -55964,8 +55966,8 @@ msgstr "Neigiamas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:611
-#: plugins/impex/webp/kis_wdg_options_webp.ui:621
+#: plugins/impex/webp/kis_wdg_options_webp.ui:638
+#: plugins/impex/webp/kis_wdg_options_webp.ui:648
 #, kde-format
 msgid ""
 "If enabled, compression parameters will be remapped to better match the "
@@ -55974,49 +55976,49 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmulateJPEGSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:614
+#: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "Emulate JPEG Size"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblThreadLevel)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, threadLevel)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:631
-#: plugins/impex/webp/kis_wdg_options_webp.ui:641
+#: plugins/impex/webp/kis_wdg_options_webp.ui:658
+#: plugins/impex/webp/kis_wdg_options_webp.ui:668
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:634
+#: plugins/impex/webp/kis_wdg_options_webp.ui:661
 #, fuzzy, kde-format
 msgid "Multithreaded Encoding"
 msgstr "Daugelio eilučių įvestis"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:651
-#: plugins/impex/webp/kis_wdg_options_webp.ui:661
+#: plugins/impex/webp/kis_wdg_options_webp.ui:678
+#: plugins/impex/webp/kis_wdg_options_webp.ui:688
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:654
+#: plugins/impex/webp/kis_wdg_options_webp.ui:681
 #, kde-format
 msgid "Reduce Memory Usage"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNearLossless)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, nearLossless)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:671
-#: plugins/impex/webp/kis_wdg_options_webp.ui:681
+#: plugins/impex/webp/kis_wdg_options_webp.ui:698
+#: plugins/impex/webp/kis_wdg_options_webp.ui:708
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:674
+#: plugins/impex/webp/kis_wdg_options_webp.ui:701
 #, fuzzy, kde-format
 #| msgid "Near"
 msgid "Near Lossless"
@@ -56024,8 +56026,8 @@ msgstr "Arti"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:697
-#: plugins/impex/webp/kis_wdg_options_webp.ui:707
+#: plugins/impex/webp/kis_wdg_options_webp.ui:724
+#: plugins/impex/webp/kis_wdg_options_webp.ui:734
 #, kde-format
 msgid ""
 "If enabled, preserve the exact RGB values under transparent areas. "
@@ -56034,56 +56036,56 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:700
+#: plugins/impex/webp/kis_wdg_options_webp.ui:727
 #, fuzzy, kde-format
 msgid "Exact"
 msgstr "&Atsitiktinumas:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblUseSharpYUV)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, useSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:717
-#: plugins/impex/webp/kis_wdg_options_webp.ui:727
+#: plugins/impex/webp/kis_wdg_options_webp.ui:744
+#: plugins/impex/webp/kis_wdg_options_webp.ui:754
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:720
+#: plugins/impex/webp/kis_wdg_options_webp.ui:747
 #, kde-format
 msgid "Use Sharp YUV"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMin)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMin)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:737
-#: plugins/impex/webp/kis_wdg_options_webp.ui:747
+#: plugins/impex/webp/kis_wdg_options_webp.ui:764
+#: plugins/impex/webp/kis_wdg_options_webp.ui:774
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:740
+#: plugins/impex/webp/kis_wdg_options_webp.ui:767
 #, fuzzy, kde-format
 msgid "Minimum Quality"
 msgstr "Kokybė:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:760
-#: plugins/impex/webp/kis_wdg_options_webp.ui:770
+#: plugins/impex/webp/kis_wdg_options_webp.ui:787
+#: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:763
+#: plugins/impex/webp/kis_wdg_options_webp.ui:790
 #, fuzzy, kde-format
 #| msgid "Line width"
 msgid "Maximum Quality"
 msgstr "Linijos plotis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:829
+#: plugins/impex/webp/kis_wdg_options_webp.ui:856
 #, fuzzy, kde-format
 #| msgid "Filters:"
 msgctxt "WebP metadata options"
@@ -59456,69 +59458,69 @@ msgstr ""
 msgid "Direction/Tilt Mix Value"
 msgstr "Kryptis:"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:24
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 #, fuzzy
 #| msgid "Open Color Profile"
 msgid "Assign Profile"
 msgstr "Atverti spalvų profilį"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:26
 #, fuzzy
 msgid "There is no active document."
 msgstr "Išsaugoti dokumentą"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:58
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:59
 #, fuzzy
 #| msgid "Rotate Image"
 msgid "Assign Profile to Image"
 msgstr "Pasukti paveikslėlį"
 
-#: plugins/python/channels2layers/channels2layers.py:90
-#: plugins/python/channels2layers/channels2layers.py:91
+#: plugins/python/channels2layers/channels2layers.py:84
+#: plugins/python/channels2layers/channels2layers.py:85
 #, fuzzy
 msgid "Channels to layers"
 msgstr "&Filtro sluoksnis..."
 
-#: plugins/python/channels2layers/channels2layers.py:99
+#: plugins/python/channels2layers/channels2layers.py:93
 #, fuzzy
 #| msgid "Colors"
 msgid "RGB Colors"
 msgstr "Spalvos"
 
-#: plugins/python/channels2layers/channels2layers.py:100
+#: plugins/python/channels2layers/channels2layers.py:94
 #, fuzzy
 #| msgid "Colors"
 msgid "CMY Colors"
 msgstr "Spalvos"
 
-#: plugins/python/channels2layers/channels2layers.py:101
+#: plugins/python/channels2layers/channels2layers.py:95
 #, fuzzy
 #| msgid "Colors"
 msgid "CMYK Colors"
 msgstr "Spalvos"
 
-#: plugins/python/channels2layers/channels2layers.py:102
+#: plugins/python/channels2layers/channels2layers.py:96
 msgid "RGB Grayscale levels"
 msgstr ""
 
-#: plugins/python/channels2layers/channels2layers.py:103
+#: plugins/python/channels2layers/channels2layers.py:97
 msgid "CMY Grayscale levels"
 msgstr ""
 
-#: plugins/python/channels2layers/channels2layers.py:104
+#: plugins/python/channels2layers/channels2layers.py:98
 msgid "CMYK Grayscale levels"
 msgstr ""
 
-#: plugins/python/channels2layers/channels2layers.py:109
+#: plugins/python/channels2layers/channels2layers.py:103
 msgid "Unchanged"
 msgstr ""
 
-#: plugins/python/channels2layers/channels2layers.py:1044
+#: plugins/python/channels2layers/channels2layers.py:1038
 #, fuzzy
 msgid "Processing layer"
 msgstr "Papildomas apdorojimas"
 
-#: plugins/python/channels2layers/channels2layers.py:1074
+#: plugins/python/channels2layers/channels2layers.py:1068
 #, fuzzy
 #| msgid "Enter group name:"
 msgctxt ""
@@ -59527,80 +59529,80 @@ msgctxt ""
 msgid "New layer group name"
 msgstr "Įveskite grupės pavadinimą:"
 
-#: plugins/python/channels2layers/channels2layers.py:1079
+#: plugins/python/channels2layers/channels2layers.py:1073
 #, fuzzy
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
 msgstr "Konvertuoti paveikslėlio spalvų erdvę"
 
-#: plugins/python/channels2layers/channels2layers.py:1090
+#: plugins/python/channels2layers/channels2layers.py:1084
 #, fuzzy
 #| msgid "Show original layer"
 msgid "Original layer"
 msgstr "Rodyti originalų sluoksnį"
 
-#: plugins/python/channels2layers/channels2layers.py:1149
+#: plugins/python/channels2layers/channels2layers.py:1143
 #, fuzzy
 #| msgid "Original"
 msgctxt "the original layer"
 msgid "Original"
 msgstr "Originalas"
 
-#: plugins/python/channels2layers/channels2layers.py:1162
+#: plugins/python/channels2layers/channels2layers.py:1156
 msgid "<i>Cyan</i>"
 msgstr ""
 
-#: plugins/python/channels2layers/channels2layers.py:1174
+#: plugins/python/channels2layers/channels2layers.py:1168
 #, fuzzy
 #| msgid "Magenta"
 msgid "<i>Magenta</i>"
 msgstr "Purpurinė"
 
-#: plugins/python/channels2layers/channels2layers.py:1186
+#: plugins/python/channels2layers/channels2layers.py:1180
 #, fuzzy
 #| msgid "Yellow"
 msgid "<i>Yellow</i>"
 msgstr "Geltona"
 
-#: plugins/python/channels2layers/channels2layers.py:1198
+#: plugins/python/channels2layers/channels2layers.py:1192
 msgid "<i>Black</i>"
 msgstr ""
 
-#: plugins/python/colorspace/colorspace.py:18
+#: plugins/python/colorspace/colorspace.py:19
 msgid "Plugin to change color space of selected documents."
 msgstr ""
 
-#: plugins/python/colorspace/uicolorspace.py:34
+#: plugins/python/colorspace/uicolorspace.py:37
 #: plugins/python/documenttools/uidocumenttools.py:25
-#: plugins/python/exportlayers/uiexportlayers.py:34
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:19
+#: plugins/python/exportlayers/uiexportlayers.py:35
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:20
 msgid "Refresh"
 msgstr ""
 
-#: plugins/python/colorspace/uicolorspace.py:67
+#: plugins/python/colorspace/uicolorspace.py:70
 #: plugins/python/documenttools/uidocumenttools.py:50
-#: plugins/python/exportlayers/uiexportlayers.py:104
+#: plugins/python/exportlayers/uiexportlayers.py:105
 #, fuzzy
 msgid "Documents:"
 msgstr "Perrašyti esamą dokumentą"
 
-#: plugins/python/colorspace/uicolorspace.py:69
+#: plugins/python/colorspace/uicolorspace.py:72
 #, fuzzy
 msgid "Color depth:"
 msgstr "Spalvos pavadinimas:"
 
-#: plugins/python/colorspace/uicolorspace.py:70
+#: plugins/python/colorspace/uicolorspace.py:73
 #, fuzzy
 #| msgid "Open Color Profile"
 msgid "Color profile:"
 msgstr "Atverti spalvų profilį"
 
-#: plugins/python/colorspace/uicolorspace.py:137
+#: plugins/python/colorspace/uicolorspace.py:140
 msgid "The selected documents have been converted."
 msgstr ""
 
-#: plugins/python/colorspace/uicolorspace.py:139
+#: plugins/python/colorspace/uicolorspace.py:142
 #: plugins/python/documenttools/uidocumenttools.py:112
 #, fuzzy
 msgid "Select at least one document."
@@ -59650,7 +59652,7 @@ msgid "Percentage:"
 msgstr "Linija"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:214
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:272
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:271
 #, fuzzy
 msgid "Export Settings"
 msgstr "Paragrafas"
@@ -59754,7 +59756,7 @@ msgid "ACBF Document Info"
 msgstr "Dokumento informacija"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:412
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -59800,38 +59802,38 @@ msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, fuzzy
 #| msgid "Name:"
 msgid "Nick Name"
 msgstr "Pavadinimas:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, fuzzy
 msgid "Given Name"
 msgstr "Pavadinimas"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, fuzzy
 msgid "Middle Name"
 msgstr "Įterpti pavadinimą"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, fuzzy
 msgid "Family Name"
 msgstr "&Sluoksnio pavadinimas:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:372
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:371
 #, fuzzy
 msgid "Add Author"
 msgstr "Autorius"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:374
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 #, fuzzy
 msgid "Remove Author"
 msgstr "Pašalinti"
@@ -59938,7 +59940,7 @@ msgid "v{version}-in this version..."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:451
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:539
 #, fuzzy
 #| msgctxt "choice for author profile"
 #| msgid "Anonymous"
@@ -59946,703 +59948,703 @@ msgid "Anon"
 msgstr "Anonimas"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:452
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:541
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
 msgid "John"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:454
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:543
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:542
 #, fuzzy
 #| msgid "Dodge"
 msgid "Doe"
 msgstr "Blukinimas"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:143
+#: plugins/python/comics_project_management_tools/comics_exporter.py:138
 #, fuzzy
 #| msgid "Parsing error"
 msgid "Preparing export."
 msgstr "Nagrinėjimo klaida"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:144
+#: plugins/python/comics_project_management_tools/comics_exporter.py:139
 #, fuzzy
 msgid "Exporting Comic..."
 msgstr "Dalinis"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:162
+#: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:168
 #, fuzzy
 #| msgid "Saving Format"
 msgid "Saving out EPUB"
 msgstr "Išsaugojimo formatas"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:178
-#: plugins/python/comics_project_management_tools/comics_exporter.py:212
-#: plugins/python/comics_project_management_tools/comics_exporter.py:371
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:366
 #, fuzzy
 msgid "Export not Possible"
 msgstr "Dalinis"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:178
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:196
+#: plugins/python/comics_project_management_tools/comics_exporter.py:191
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:212
+#: plugins/python/comics_project_management_tools/comics_exporter.py:207
 msgid "Export failed because there's no export settings configured."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:229
+#: plugins/python/comics_project_management_tools/comics_exporter.py:224
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
 " Estimated: {estimated}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_exporter.py:227
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:243
+#: plugins/python/comics_project_management_tools/comics_exporter.py:238
 #, fuzzy
 msgid "Opening next page"
 msgstr "Įterpti puslapį"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:251
+#: plugins/python/comics_project_management_tools/comics_exporter.py:246
 #, fuzzy
 #| msgid "Facing pages"
 msgid "Cleaning up page"
 msgstr "Puslapiai greta"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:285
+#: plugins/python/comics_project_management_tools/comics_exporter.py:280
 #, fuzzy, python-brace-format
 msgid "Exporting for {key}"
 msgstr "Ekspozicija"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:371
+#: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not happening because there are no pages."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:636
+#: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:646
+#: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 msgid "Science Fiction"
 msgstr "&Pažymėjimas"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Magenta"
 msgid "Fantasy"
 msgstr "Purpurinė"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Aperture:"
 msgid "Adventure"
 msgstr "Anga:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Mirror"
 msgid "Horror"
 msgstr "Veidrodis"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Paste"
 msgid "Mystery"
 msgstr "Įdėti"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Crime"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Military"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Vertical Lines"
 msgid "Real Life"
 msgstr "Vertikalios linijos"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Superscript"
 msgid "Superhero"
 msgstr "Viršutinis indeksas"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Humor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Paste"
 msgid "Western"
 msgstr "Įdėti"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Manga"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Politics"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 msgid "Caricature"
 msgstr "Struktūra"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Import"
 msgid "Sports"
 msgstr "Importuoti"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Histogram"
 msgid "History"
 msgstr "Histograma"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Bibliography"
 msgid "Biography"
 msgstr "Bibliografija"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Function"
 msgid "Education"
 msgstr "Funkcija"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Compress:"
 msgid "Computer"
 msgstr "Suspausti:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Religion"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "Performance"
 msgid "Romance"
 msgstr "Našumas"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Children"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 #| msgid "No Selection"
 msgid "Non Fiction"
 msgstr "Nieko nepažymėta"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Adult"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #, fuzzy
 msgid "Alternative"
 msgstr "kintantis"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Artbook"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Writer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Adapter"
 msgstr "Skyrius"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Artistic"
 msgid "Artist"
 msgstr "Artistic"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #, fuzzy
 #| msgid "Pencil"
 msgid "Penciller"
 msgstr "Pieštukas"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Inker"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Colors"
 msgid "Colorist"
 msgstr "Spalvos"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #, fuzzy
 #| msgctxt "Page size"
 #| msgid "US Letter"
 msgid "Letterer"
 msgstr "US Letter"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #, fuzzy
 #| msgid "Artistic"
 msgid "Cover Artist"
 msgstr "Artistic"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Photographer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Editor:"
 msgid "Editor"
 msgstr "Redaktorius:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 #, fuzzy
 msgid "Assistant Editor"
 msgstr "Padėjėjas:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Translate"
 msgid "Translator"
 msgstr "Versti"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:259
 #, fuzzy
 #| msgid "Metadata"
 msgid "Comic Metadata"
 msgstr "Metaduomenys"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:272
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:271
 msgid "The proper title of the comic."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:274
 msgid "What will you tell others to entice them to read your comic?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:282
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:281
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
 "two or three."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:290
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:289
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:309
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:311
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
 msgid "No. "
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:313
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:312
 msgid "Vol. "
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 #, fuzzy
 #| msgid "Left to right"
 msgid "Left to Right"
 msgstr "Iš kairės į dešinę"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
 #, fuzzy
 #| msgid "Right to left"
 msgid "Right to Left"
 msgstr "Iš dešinės į kairę"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 #, fuzzy
 #| msgid "Page"
 msgid "Cover page:"
 msgstr "Puslapis"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 #, fuzzy
 msgid "Language:"
 msgstr "Paskutinis puslapis:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
 #, fuzzy
 #| msgid "Direction:"
 msgid "Reading direction:"
 msgstr "Kryptis:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Genre:"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy
 msgid "Characters:"
 msgstr "Rašmuo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
 #, fuzzy
 msgid "Format:"
 msgstr "Formatas"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 #, fuzzy
 #| msgid "Ratio:"
 msgid "Rating:"
 msgstr "Santykis:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
 #, fuzzy
 msgid "Series:"
 msgstr "Serijos"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:348
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
 #, fuzzy
 #| msgid "Other"
 msgid "Other:"
 msgstr "Kita"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:349
 #, fuzzy
 #| msgid "Workspace"
 msgid "Work"
 msgstr "Darbalaukis"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:355
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:354
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
 "inker, etc), email and homepage."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Role"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:381
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:380
 #, fuzzy
 msgid "Authors"
 msgstr "Autorius"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:391
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set opacity"
 msgid "Set Today"
 msgstr "Nepermatomumas"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Sets the publish date to the current date."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:398
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
 "conversion."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
 "the official website url should go here."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "City:"
 msgstr "Miestas:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 msgid "ISBN:"
 msgstr "ISBN:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 msgid "UUID:"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:426
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
 msgid "Database:"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:428
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Publisher:"
 msgid "Publisher"
 msgstr "Leidėjas:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:117
 #, fuzzy
 #| msgid "Keywords:"
 msgid "No keywords"
 msgstr "Raktažodžiai:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:132
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:131
 msgid "No last edit timestamp"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:152
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:151
 #, fuzzy
 #| msgid "Description"
 msgid "No description"
 msgstr "Aprašymas"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:197
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:196
 #, fuzzy
 #| msgid "Color Management"
 msgid "Comics Manager"
 msgstr "Spalvų valdymas"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:254
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:253
 #, fuzzy
 msgid "New Project"
 msgstr "Grupiniai pažymėjimai"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:256
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:255
 #, fuzzy
 msgid "Open Project"
 msgstr "Atverti dokumentą"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:268
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:267
 #, fuzzy
 msgid "Project Settings"
 msgstr "Paragrafas"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:270
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:127
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:269
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
 #, fuzzy
 #| msgid "Metadata"
 msgid "Meta Data"
 msgstr "Metaduomenys"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
 #, fuzzy
 #| msgid "Add Shape"
 msgid "Add Page"
 msgstr "Pridėti formą"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
 #, fuzzy
 msgid "Add Page from Template"
 msgstr "Įterpti pavadinimą"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:291
 #, fuzzy
 #| msgid "Add new paint layer"
 msgid "Add Existing Pages"
 msgstr "Pridėti naują piešimo sluoksnį"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 #, fuzzy
 msgid "Remove Page"
 msgstr "Pašalinti sluoksnį"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Batch Resize"
 msgstr "Keisti dydį"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:299
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 #, fuzzy
 msgid "View Page In Window"
 msgstr "Palaikytojas"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:300
 #, fuzzy
 msgid "Scrape Author Info"
 msgstr "Autorius"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:302
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:304
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:303
 msgid "Scrape Text for Translation"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 #, fuzzy
 msgid "Export Comic"
 msgstr "Dalinis"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:329
 #, fuzzy
 #| msgid "Rotation:"
 msgid "Copy Location"
 msgstr "Sukimas:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:331
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "Please select the JSON comic config file."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 #, fuzzy
 #| msgid "&Profiles:"
 msgid "JSON files"
 msgstr "&Profiliai:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid "Config cannot be used"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
 "be written to."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:387
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:386
 #, fuzzy
 msgid "Loading Pages..."
 msgstr "Ša&blonai"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 #, fuzzy
 msgid "Krita files"
 msgstr "Keisti ruošinius"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 msgid "Which existing pages to add?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:601
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:622
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:600
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:621
 #, fuzzy
 msgid "Where are the templates located?"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:648
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:647
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
 #, fuzzy
 msgid "Where should the pages go?"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 msgid "Which image should be the basis for the new page?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 #, fuzzy
 msgid "Export success"
 msgstr "Ekspozicija"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "The files have been written to the export folder."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:900
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:899
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize Image"
 msgid "Resize all Pages"
 msgstr "Keisti paveikslėlio dydį"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, fuzzy
 msgid "Resizing pages..."
 msgstr "Drobės dydis..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 #, fuzzy
 #| msgid "Facing pages"
 msgid "Resizing Pages"
 msgstr "Puslapiai greta"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:926
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:925
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -60650,55 +60652,55 @@ msgid ""
 " Estimated:{estimated}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 #, fuzzy
 msgid "Scraping success"
 msgstr "Ekspozicija"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:29
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:30
 msgid "Which folder?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:60
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:61
 #, fuzzy
 msgid "Change Folder"
 msgstr "&Filtro sluoksnis..."
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:109
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:110
 #, fuzzy
 #| msgid "Configure Settings"
 msgid "Comic Project Settings"
 msgstr "Konfigūruoti nustatymus"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where should the export go?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
 #, fuzzy
 msgid "Where are the templates?"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reset Transformations"
 msgid "Where are the translations?"
 msgstr "Atstatyti transformacijas"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reset Transformations"
 msgid "Where are the extra auto-completion keys located?"
 msgstr "Atstatyti transformacijas"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
 msgid ""
 "The location for extra autocompletion keys in the metadata editor. Point "
 "this at a folder containing key_characters/key_format/key_genre/key_rating/"
@@ -60707,192 +60709,192 @@ msgid ""
 "the Krita configuration, and not the project configuration."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
 #, fuzzy
 msgid "Project name:"
 msgstr "&Pirmas puslapis"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 #, fuzzy
 msgid "Project concept:"
 msgstr "&Pirmas puslapis"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
 #, fuzzy
 #| msgid "Page Edge:"
 msgid "Pages folder:"
 msgstr "Puslapio kraštas:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
 #, fuzzy
 #| msgid "Export Layer"
 msgid "Export folder:"
 msgstr "Eksportuoti sluoksnį"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Template folder:"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
 #, fuzzy
 #| msgid "Translate"
 msgid "Translation folder:"
 msgstr "Versti"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 #, fuzzy
 msgid "Default template:"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:134
 #, fuzzy
 #| msgid "Page Edge:"
 msgid "Extra keys folder:"
 msgstr "Puslapio kraštas:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:59
 msgid "Where should the comic project go?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 #, fuzzy
 msgid "Folder cannot be used"
 msgstr "Įtraukti į žymeles"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:68
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
 #, fuzzy
 #| msgid "Configure Settings"
 msgid "Comic Project Setup"
 msgstr "Konfigūruoti nustatymus"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:74
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
 #, fuzzy
 #| msgid "Configure Settings"
 msgid "Basic Comic Project Settings"
 msgstr "Konfigūruoti nustatymus"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:80
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:81
 msgid "A Project name. This can be different from the eventual title"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:82
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 #, fuzzy
 #| msgid "Generator"
 msgid "Generate"
 msgstr "Generatorius"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:88
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:89
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:90
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:91
 msgid "The main language the comic is in"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:103
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:104
 msgid "Make a new directory with the project name."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
 #, fuzzy
 #| msgid "Pages"
 msgid "pages"
 msgstr "Puslapiai"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
 #, fuzzy
 msgid "export"
 msgstr "Ekspozicija"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 #, fuzzy
 msgid "templates"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "The name for the folder where the page templates are sought in."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:121
 #, fuzzy
 #| msgid "Translate"
 msgid "translations"
 msgstr "Versti"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 #, fuzzy
 msgid "Comic concept:"
 msgstr "&Pirmas puslapis"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:125
 #, fuzzy
 msgid "Main language:"
 msgstr "Paskutinis puslapis:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Folder names and other."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Project directory:"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:138
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Pages directory"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Export directory"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Template directory"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:142
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Translation directory"
@@ -60967,290 +60969,290 @@ msgstr "Fonas"
 msgid "Creating template"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Abridger"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Art copyist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Actor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Art director"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Annotator"
 msgstr "Anotacija"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Bibliographic antecedent"
 msgstr "Bibliografijos įrašo įterpimas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Architect"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Artistic director"
 msgstr "Pažymėjimas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Action program"
 msgid "Associated name"
 msgstr "Veiksmo programa"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Auto bracket"
 msgid "Autographer"
 msgstr "Automatinis skliaustas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Attributed name"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Author of dialog"
 msgstr "Autorius"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Binding Edge:"
 msgid "Binding designer"
 msgstr "Susiejamas kraštas:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookjacket designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Book designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Book producer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Blurb writer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Binder"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookplate designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Booklet"
 msgid "Bookseller"
 msgstr "Bukletas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Bibliography"
 msgid "Calligrapher"
 msgstr "Bibliografija"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Censor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Page"
 msgid "Cover designer"
 msgstr "Puslapis"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Copyright holder"
 msgstr "Viršus dešinė"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "&Create"
 msgid "Creator"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Contributor"
 msgstr "Kontrastas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "&Create"
 msgid "Curator"
 msgstr "&Sukurti"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Commentator for written text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Draftsman"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Dubious author"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Etcher"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Expert"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Funder"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Illustrator"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Illuminator"
 msgstr "&Skiriamoji geba:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Inscriber"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Licensee"
 msgstr "eilutės aukštis"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Licensor"
 msgstr "eilutės aukštis"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Bibliography"
 msgid "Lithographer"
 msgstr "Bibliografija"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Metadata"
 msgid "Metadata contact"
 msgstr "Metaduomenys"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Owner"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Strong"
 msgid "Patron"
 msgstr "Stiprus"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Select a Directory"
 msgid "Publishing director"
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Printer"
 msgstr "&Piešimo sluoksnis"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Scenarist"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Subscript"
 msgid "Scribe"
 msgstr "Apatinis indeksas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Sponsor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Storyteller"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Transparent"
 msgid "Transcriber"
 msgstr "Permatomas"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Type designer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 #| msgid "Bibliography"
 msgid "Typographer"
 msgstr "Bibliografija"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added commentary"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added lyrics"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of accompanying material"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added text"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Writer of introduction"
 msgstr "&Skiriamoji geba:"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, fuzzy
 msgid "Writer of preface"
 msgstr "Filtro sluoksnio savybės"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of supplementary textual content"
 msgstr ""
 
-#: plugins/python/documenttools/documenttools.py:16
+#: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
 #, fuzzy
 #| msgid "Document Information"
 msgid "Document Tools"
 msgstr "Dokumento informacija"
 
-#: plugins/python/documenttools/documenttools.py:18
+#: plugins/python/documenttools/documenttools.py:19
 msgid "Plugin to manipulate properties of selected documents."
 msgstr ""
 
@@ -61284,145 +61286,145 @@ msgstr "Mastelis"
 msgid "The selected documents has been modified."
 msgstr ""
 
-#: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:121
+#: plugins/python/exportlayers/exportlayers.py:17
+#: plugins/python/exportlayers/uiexportlayers.py:122
 #, fuzzy
 #| msgid "Export Layer"
 msgid "Export Layers"
 msgstr "Eksportuoti sluoksnį"
 
-#: plugins/python/exportlayers/exportlayers.py:17
+#: plugins/python/exportlayers/exportlayers.py:18
 msgid "Plugin to export layers from a document."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:39
+#: plugins/python/exportlayers/uiexportlayers.py:40
 #, fuzzy
 #| msgid "Export Layer"
 msgid "Export filter layers"
 msgstr "Eksportuoti sluoksnį"
 
-#: plugins/python/exportlayers/uiexportlayers.py:40
+#: plugins/python/exportlayers/uiexportlayers.py:41
 #, fuzzy
 msgid "Export in batchmode"
 msgstr "Importuoti dokumentą..."
 
-#: plugins/python/exportlayers/uiexportlayers.py:41
+#: plugins/python/exportlayers/uiexportlayers.py:42
 #, fuzzy
 msgid "Group as layer"
 msgstr "&Grupuoti sluoksnį"
 
-#: plugins/python/exportlayers/uiexportlayers.py:43
+#: plugins/python/exportlayers/uiexportlayers.py:44
 #, fuzzy
 msgid "Ignore invisible layers"
 msgstr "&Filtro sluoksnis..."
 
-#: plugins/python/exportlayers/uiexportlayers.py:45
+#: plugins/python/exportlayers/uiexportlayers.py:46
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:47
+#: plugins/python/exportlayers/uiexportlayers.py:48
 msgid "Add incrementing prefix"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:82
+#: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "JPEG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:83
+#: plugins/python/exportlayers/uiexportlayers.py:84
 msgid "PNG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:98
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "dpi:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:106
+#: plugins/python/exportlayers/uiexportlayers.py:107
 #, fuzzy
 msgid "Initial directory:"
 msgstr "Plotis:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:107
+#: plugins/python/exportlayers/uiexportlayers.py:108
 #, fuzzy
 msgid "Export options:"
 msgstr "Dalinis"
 
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:109
 #, fuzzy
 msgid "Export size:"
 msgstr "Ekspozicija"
 
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:111
 #, fuzzy
 #| msgid "&Image Selection"
 msgid "Images extensions:"
 msgstr "&Paveikslėlio pasirinkimas"
 
-#: plugins/python/exportlayers/uiexportlayers.py:167
+#: plugins/python/exportlayers/uiexportlayers.py:168
 #, fuzzy
 msgid "Select one document."
 msgstr "Paskutiniai dokumentai"
 
-#: plugins/python/exportlayers/uiexportlayers.py:169
+#: plugins/python/exportlayers/uiexportlayers.py:170
 #, fuzzy
 msgid "Select the initial directory."
 msgstr "Pasirinkite aplanką"
 
-#: plugins/python/exportlayers/uiexportlayers.py:173
+#: plugins/python/exportlayers/uiexportlayers.py:174
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:243
+#: plugins/python/exportlayers/uiexportlayers.py:244
 #, fuzzy
 msgid "Select a Folder"
 msgstr "Pažymėti nepermatomumą"
 
-#: plugins/python/filtermanager/filtermanager.py:16
-#: plugins/python/filtermanager/uifiltermanager.py:59
+#: plugins/python/filtermanager/filtermanager.py:17
+#: plugins/python/filtermanager/uifiltermanager.py:60
 #, fuzzy
 msgid "Filter Manager"
 msgstr "&Filtro sluoksnis..."
 
-#: plugins/python/filtermanager/filtermanager.py:17
+#: plugins/python/filtermanager/filtermanager.py:18
 #, fuzzy
 #| msgid "Color Management"
 msgid "Plugin to filters management."
 msgstr "Spalvų valdymas"
 
-#: plugins/python/filtermanager/uifiltermanager.py:42
+#: plugins/python/filtermanager/uifiltermanager.py:43
 #, fuzzy
 #| msgid "Document Information"
 msgid "Document Tree Model"
 msgstr "Dokumento informacija"
 
-#: plugins/python/filtermanager/uifiltermanager.py:47
+#: plugins/python/filtermanager/uifiltermanager.py:48
 #, fuzzy
 #| msgid "Filters:"
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "Filtrai:"
 
-#: plugins/python/highpass/highpass.py:39
+#: plugins/python/highpass/highpass.py:40
 #, fuzzy
 msgid "High Pass"
 msgstr "Spaudimas"
 
-#: plugins/python/highpass/highpass.py:47
+#: plugins/python/highpass/highpass.py:48
 #, fuzzy
 msgid "High Pass Filter"
 msgstr "&Skiriamoji geba:"
 
-#: plugins/python/highpass/highpass.py:48
+#: plugins/python/highpass/highpass.py:49
 #, fuzzy
 #| msgid "The file %1 does not exist."
 msgid "There is no active image."
 msgstr "Failas %1 neegzistuoja."
 
-#: plugins/python/highpass/highpass.py:62
+#: plugins/python/highpass/highpass.py:63
 #, fuzzy
 msgid "Keep original layer"
 msgstr "Rodyti originalų sluoksnį"
 
-#: plugins/python/highpass/highpass.py:65
+#: plugins/python/highpass/highpass.py:66
 #, fuzzy
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
@@ -61523,22 +61525,22 @@ msgstr "Sluoksnio efektai"
 msgid "Create Script"
 msgstr "&Sukurti"
 
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:32
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 #, fuzzy
 msgid "Last Documents Docker"
 msgstr "Rodyti liniuotes"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:45
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 #, fuzzy
 #| msgid "Tablet settings"
 msgid "Change settings"
 msgstr "Planšetės nuostatos"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:62
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
 msgstr ""
 
-#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:41
+#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 #, fuzzy
 msgid "Number of slider lines: "
 msgstr "Rašmenų:"
@@ -61660,97 +61662,97 @@ msgid ""
 "and color settings based on the mutation settings configured above."
 msgstr ""
 
-#: plugins/python/palette_docker/palette_docker.py:47
+#: plugins/python/palette_docker/palette_docker.py:48
 #, fuzzy
 msgid "Python Palette Docker"
 msgstr "Užverti dokumentą"
 
-#: plugins/python/palette_docker/palette_docker.py:73
+#: plugins/python/palette_docker/palette_docker.py:74
 #, fuzzy
 #| msgid "Select"
 msgid "Set"
 msgstr "Žymėti"
 
-#: plugins/python/palette_docker/palette_docker.py:82
+#: plugins/python/palette_docker/palette_docker.py:83
 #, fuzzy
 #| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Pridėti grupę"
 
-#: plugins/python/palette_docker/palette_docker.py:85
+#: plugins/python/palette_docker/palette_docker.py:86
 #, fuzzy
 msgid "Remove Entry"
 msgstr "Pašalinti sluoksnį"
 
-#: plugins/python/palette_docker/palette_docker.py:101
+#: plugins/python/palette_docker/palette_docker.py:102
 #, fuzzy
 #| msgid "Filter Settings"
 msgid "Edit Palette Settings"
 msgstr "Filtro nuostatos"
 
-#: plugins/python/palette_docker/palette_docker.py:107
+#: plugins/python/palette_docker/palette_docker.py:108
 #, fuzzy
 msgid "Export as GIMP Palette File"
 msgstr "Eksportuoti sluoksnį"
 
-#: plugins/python/palette_docker/palette_docker.py:111
+#: plugins/python/palette_docker/palette_docker.py:112
 msgid "Export as Inkscape SVG with Swatches"
 msgstr ""
 
-#: plugins/python/palette_docker/palette_docker.py:115
+#: plugins/python/palette_docker/palette_docker.py:116
 #, fuzzy
 msgid "Sort Colors"
 msgstr "Teksto įrankis"
 
-#: plugins/python/palette_docker/palette_docker.py:225
+#: plugins/python/palette_docker/palette_docker.py:226
 #, fuzzy
 msgid "Edit Palette Data"
 msgstr "&Keisti metaduomenis..."
 
-#: plugins/python/palette_docker/palette_docker.py:230
+#: plugins/python/palette_docker/palette_docker.py:231
 #, fuzzy
 #| msgid "Palette"
 msgid "Palette Data"
 msgstr "Paletė"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:30
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:36
 #, fuzzy
 msgid "Export Successful"
 msgstr "Ekspozicija"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:32
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:33
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:38
 #, python-brace-format
 msgid "{input} has been exported to {output}."
 msgstr ""
 
-#: plugins/python/photobash_images/photobash_images_docker.py:76
+#: plugins/python/photobash_images/photobash_images_docker.py:83
 #, fuzzy
 msgctxt "@title:window"
 msgid "Photobash Images"
 msgstr "Štačiakampis žymėjimas"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:144
-#: plugins/python/photobash_images/photobash_images_docker.py:472
+#: plugins/python/photobash_images/photobash_images_docker.py:151
+#: plugins/python/photobash_images/photobash_images_docker.py:479
 #, fuzzy
 msgid "Change References Folder"
 msgstr "Pasirinkimai"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:150
-#: plugins/python/photobash_images/photobash_images_docker.py:222
+#: plugins/python/photobash_images/photobash_images_docker.py:157
+#: plugins/python/photobash_images/photobash_images_docker.py:229
 #, fuzzy, python-brace-format
 msgid "Image Scale: {0}%"
 msgstr "Šablonai"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:324
+#: plugins/python/photobash_images/photobash_images_docker.py:331
 #, fuzzy, python-brace-format
 #| msgid "Page %1"
 msgid "Page: {0}/{1}"
 msgstr "Puslapis %1"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:460
+#: plugins/python/photobash_images/photobash_images_docker.py:467
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change rectangle"
@@ -61758,7 +61760,7 @@ msgid "Change Directory for Images"
 msgstr "Stačiakampio pakeitimas"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:470
+#: plugins/python/photobash_images/photobash_images_docker.py:477
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, fuzzy, kde-format
 msgid "Set References Folder"
@@ -61777,7 +61779,7 @@ msgstr "&Filtro sluoksnis..."
 msgid "Scale To Canvas"
 msgstr "Sukti drobę"
 
-#: plugins/python/plugin_importer/plugin_downloader.py:70
+#: plugins/python/plugin_importer/plugin_downloader.py:72
 msgid "Could not determine download link from URL"
 msgstr ""
 
@@ -61803,71 +61805,71 @@ msgctxt "action"
 msgid "Import Python Plugin from Web..."
 msgstr "I&mportuoti sluoksnį..."
 
-#: plugins/python/plugin_importer/plugin_importer.py:142
+#: plugins/python/plugin_importer/plugin_importer.py:143
 msgid "Desktop file"
 msgstr ""
 
-#: plugins/python/plugin_importer/plugin_importer.py:210
+#: plugins/python/plugin_importer/plugin_importer.py:211
 msgid "No plugins found in archive"
 msgstr ""
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:36
+#: plugins/python/plugin_importer/plugin_importer_extension.py:35
 #, fuzzy
 msgid "Import Python Plugin from File..."
 msgstr "I&mportuoti sluoksnį..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:41
+#: plugins/python/plugin_importer/plugin_importer_extension.py:40
 #, fuzzy
 msgid "Import Python Plugin from Web..."
 msgstr "I&mportuoti sluoksnį..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:48
+#: plugins/python/plugin_importer/plugin_importer_extension.py:47
 #, fuzzy
 #| msgid "Overwrite Preset"
 msgid "Overwrite Plugin"
 msgstr "Perrašyti ruošinį"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:49
+#: plugins/python/plugin_importer/plugin_importer_extension.py:48
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
 msgstr ""
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:57
+#: plugins/python/plugin_importer/plugin_importer_extension.py:56
 msgid "The following plugins were imported:"
 msgstr ""
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:67
+#: plugins/python/plugin_importer/plugin_importer_extension.py:66
 #, fuzzy
 msgid "Enable plugins now? (Requires restart)"
 msgstr "Krita"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:72
+#: plugins/python/plugin_importer/plugin_importer_extension.py:71
 #, fuzzy
 msgid "Activate Plugins?"
 msgstr "&Aktyvūs kanalai"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:79
+#: plugins/python/plugin_importer/plugin_importer_extension.py:78
 msgid "Error during import:"
 msgstr ""
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:98
+#: plugins/python/plugin_importer/plugin_importer_extension.py:97
 msgid ""
 "<p><strong>Enter download URL</strong></p><p>For example:<ul><li>Zip "
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
 "(https://github.com/test/plugin)</li>"
 msgstr ""
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:106
-#: plugins/python/plugin_importer/plugin_importer_extension.py:120
+#: plugins/python/plugin_importer/plugin_importer_extension.py:105
+#: plugins/python/plugin_importer/plugin_importer_extension.py:119
 #, fuzzy
 msgid "Import Plugin"
 msgstr "Importuoti stulpelius:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:122
+#: plugins/python/plugin_importer/plugin_importer_extension.py:121
 msgid "Zip Archives"
 msgstr ""
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:35
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
 msgid "Quick Settings Docker"
 msgstr ""
 
@@ -61889,15 +61891,15 @@ msgstr "Apatinis indeksas"
 msgid "Script {0}"
 msgstr "Apatinis indeksas"
 
-#: plugins/python/scripter/debugcontroller.py:63
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:41
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:20
+#: plugins/python/scripter/debugcontroller.py:58
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:38
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:19
 msgid "Debugger"
 msgstr ""
 
-#: plugins/python/scripter/scripter.py:23
-#: plugins/python/scripter/uicontroller.py:94
+#: plugins/python/scripter/scripter.py:24
+#: plugins/python/scripter/uicontroller.py:96
 #, fuzzy
 #| msgid "Subscript"
 msgid "Scripter"
@@ -61909,11 +61911,11 @@ msgstr "Apatinis indeksas"
 msgid "Do you want to save the current document?"
 msgstr "Ar tikrai norite pašalinti šią grupę?"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:27
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:24
 msgid "Debug"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:25
 msgid "Debug Ctrl+D"
 msgstr ""
 
@@ -61931,25 +61933,25 @@ msgstr ""
 msgid "Do you want to save your changes?"
 msgstr "Ar tikrai norite pašalinti šią grupę?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:27
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
 #, fuzzy
 msgid "Open"
 msgstr "&Atverti"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
 #, fuzzy
 msgid "Python Files"
 msgstr "Dalintis spalvų profiliu"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 #, fuzzy
 #| msgid "Invalid value."
 msgid "Invalid File"
 msgstr "Neteisinga reikšmė."
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
 msgid "Open files with .py extension"
 msgstr ""
 
@@ -61974,27 +61976,27 @@ msgstr "Atverti egzistuojantį dokumentą"
 msgid "Please specify a document by opening it before reloading"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:61
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:35
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:57
 #: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:20
 msgid "Output"
 msgstr "Išvestis"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
 msgid "Run"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:44
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:40
 msgid "Run Ctrl+R"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
 #, fuzzy
 msgid "Save Python File"
 msgstr "Dalintis spalvų profiliu"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
 #, fuzzy
 msgid "Save As"
 msgstr "Išsaugoti makro"
@@ -62021,17 +62023,17 @@ msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "Reikšmė"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:25
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
 #, fuzzy
 #| msgid "Overlay"
 msgid "Step Over"
 msgstr "Padengti"
 
-#: plugins/python/scripter/uicontroller.py:173
+#: plugins/python/scripter/uicontroller.py:175
 msgid "Error Running Script"
 msgstr ""
 
-#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:25
+#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
 #, fuzzy
 msgid "Selections Bag"
 msgstr "Nieko nepažymėta"
@@ -62124,50 +62126,50 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Teptuko ruošiniai"
 
-#: plugins/python/tenbrushes/tenbrushes.py:33
+#: plugins/python/tenbrushes/tenbrushes.py:34
 #, fuzzy
 #| msgid "Brushes"
 msgid "Ten Brushes"
 msgstr "Teptukai"
 
-#: plugins/python/tenbrushes/tenbrushes.py:34
+#: plugins/python/tenbrushes/tenbrushes.py:35
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:92
+#: plugins/python/tenbrushes/tenbrushes.py:93
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Teptuko ruošiniai"
 
-#: plugins/python/tenbrushes/tenbrushes.py:121
+#: plugins/python/tenbrushes/tenbrushes.py:122
 #, fuzzy
 msgid ""
 "{}\n"
 "selected"
 msgstr "Žymėti"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:29
+#: plugins/python/tenbrushes/uitenbrushes.py:30
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:34
+#: plugins/python/tenbrushes/uitenbrushes.py:35
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:38
+#: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:57
+#: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:60
-#: plugins/python/tenscripts/uitenscripts.py:52
+#: plugins/python/tenbrushes/uitenbrushes.py:61
+#: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -62251,238 +62253,238 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "&Sukurti"
 
-#: plugins/python/tenscripts/tenscripts.py:30
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 #| msgid "Subscript"
 msgid "Ten Scripts"
 msgstr "Apatinis indeksas"
 
-#: plugins/python/tenscripts/tenscripts.py:31
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:57
+#: plugins/python/tenscripts/tenscripts.py:54
 #, fuzzy, python-brace-format
 msgid "Execute Script {num}"
 msgstr "&Sukurti"
 
-#: plugins/python/tenscripts/tenscripts.py:83
+#: plugins/python/tenscripts/tenscripts.py:77
 #, fuzzy, python-brace-format
 #| msgid "Subscript"
 msgid "Script {0} executed"
 msgstr "Apatinis indeksas"
 
-#: plugins/python/tenscripts/uitenscripts.py:72
+#: plugins/python/tenscripts/uitenscripts.py:73
 #, fuzzy
 msgid "Selected path"
 msgstr "Pažymėti nepermatomumą"
 
-#: plugins/python/tenscripts/uitenscripts.py:73
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 #, fuzzy
 msgid "Select the script"
 msgstr "Dublikuoti"
 
-#: plugins/python/tenscripts/uitenscripts.py:105
+#: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
 msgid "Custom icon"
 msgstr "Parinktys"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
 #| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "Įrankio ženkliukas"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
 #| msgid "Brush Presets"
 msgid "Brush preset icon"
 msgstr "Teptuko ruošiniai"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:71
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:72
 #, fuzzy
 #| msgid "Color Settings"
 msgid "Workflow Buttons settings"
 msgstr "Spalvų nuostatos"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:103
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
 msgid "Selected button:"
 msgstr "Žymėti"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:116
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Add a workflow button"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:124
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
 msgid "Move selected workflow button to the left"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:130
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Move selected workflow button to the right"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 #, fuzzy
 #| msgid "Delete the layer or mask"
 msgid "Delete selected workflow button"
 msgstr "Ištrinti sluoksnį ar kaukę"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:145
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
 #| msgid "Selection mode:"
 msgid "Select icon mode:"
 msgstr "Pasirinkimo veiksena:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
 #| msgid "Select image"
 msgid "Select a custom icon:"
 msgstr "Pažymėti paveikslėlį"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:164
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 #, fuzzy
 msgid "Custom icon path"
 msgstr "Savitas gradientas"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 #, fuzzy
 msgid "Select the custom icon"
 msgstr "Žymėti"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:177
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 #, fuzzy
 msgid "Enter a Tooltip:"
 msgstr "&Skiriamoji geba:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:180
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
 msgid "Tooltip text"
 msgstr "Įrank&iai"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:188
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
 msgid "Select a tool:"
 msgstr "Pažymėti nepermatomumą"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 #, fuzzy
 #| msgid "Current brush preset"
 msgid "Select a brush preset:"
 msgstr "Dabartinis teptuko ruošinys"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:206
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 #, fuzzy
 #| msgid "Brush Presets"
 msgid "Brush preset name"
 msgstr "Teptuko ruošiniai"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 #, fuzzy
 #| msgid "Current brush preset"
 msgid "Select the brush preset"
 msgstr "Dabartinis teptuko ruošinys"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:219
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "Select foreground color:"
 msgstr "Nustatyti fono spalvą"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:221
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 #, fuzzy
 msgid "Load current foreground color"
 msgstr "Priekinio plano spalva"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:224
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
 msgid "Clear foreground color"
 msgstr "Priekinio plano spalva"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:234
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:251
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "Select background color:"
 msgstr "Nustatyti fono spalvą"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:253
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "Load current background color"
 msgstr "Nustatyti fono spalvą"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:256
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "Clear background color"
 msgstr "Nustatyti fono spalvą"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 msgid "Select a script file:"
 msgstr "Dublikuoti"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:285
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
 msgid "Script path"
 msgstr "Pažymėti nepermatomumą"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:304
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 #, fuzzy
 #| msgid "PushButton"
 msgid "Buttons size:"
 msgstr "SpaudžiamasMygtukas"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:320
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 #, fuzzy
 msgid "Settings button position:"
 msgstr "Dalinis"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:322
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
 #| msgid "Bottom"
 msgid "Bottom bar"
 msgstr "Apačia"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
 #| msgid "Spline"
 msgid "Inline"
 msgstr "Lekalas"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:511
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:544
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "Spalva:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:581
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
 #, fuzzy
 msgid "Script files "
 msgstr "Dalintis spalvų profiliu"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:25
+#: plugins/python/workflow_buttons/workflow_buttons.py:26
 #, fuzzy
 #| msgid "Color Settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
 msgstr "Spalvų nuostatos"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:64
+#: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 

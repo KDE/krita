@@ -79,6 +79,7 @@
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
 #include "KisMainWindow.h"
+#include "kritaversion.h"
 
 #include "kis_file_name_requester.h"
 
@@ -410,7 +411,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     intMaxBrushSize->setValue(KisImageConfig(true).maxBrushSize());
     chkIgnoreHighFunctionKeys->setChecked(cfg.ignoreHighFunctionKeys());
-#ifndef Q_OS_WIN
+
+    /// 1) hide the option for 5.2.10
+    /// 2) TODO: fix KRITA_VERSION to use proper versions without this x.(y-1).99 nonsense
+#if !defined Q_OS_WIN || KRITA_MAKE_VERSION(KRITA_STABLE_VERSION_MAJOR, KRITA_STABLE_VERSION_MINOR, KRITA_STABLE_VERSION_RELEASE) <= KRITA_MAKE_VERSION(5, 2, 10)
     // we properly support ignoring high F-keys on Windows only. To support on other platforms
     // we should synchronize KisExtendedModifiersMatcher to ignore the keys as well.
     chkIgnoreHighFunctionKeys->setVisible(false);

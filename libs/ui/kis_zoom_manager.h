@@ -14,7 +14,6 @@
 #include <KoZoomMode.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
-#include <KoZoomController.h>
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"
 
@@ -44,76 +43,57 @@ public:
     KisZoomManager(QPointer<KisView> view, KoZoomHandler*, KoCanvasController *);
     ~KisZoomManager() override;
 
-    void updateScreenResolution(QWidget *parentWidget);
-
     void setup(KisKActionCollection * actionCollection);
-    void updateGuiAfterDocumentSize();
-    KoZoomController * zoomController() const {
-        return m_zoomController;
-    }
 
     void updateImageBoundsSnapping();
-    void updateCurrentZoomResource();
+    void syncOnImageResolutionChange();
 
+    KoZoomAction *zoomAction() const;
     QWidget *zoomActionWidget() const;
 
     KoRuler *horizontalRuler() const;
     KoRuler *verticalRuler() const;
 
-    qreal zoom() const;
-
-    qreal resolutionX() const;
-    qreal resolutionY() const;
-
-    void updateZoomMarginSize();
-
-    bool canvasMappingMode();
-
 public Q_SLOTS:
 
-    void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
-    void slotZoomLevelsChanged();
-    void slotScrollAreaSizeChanged();
     void setShowRulers(bool show);
     void setRulersTrackMouse(bool value);
     void mousePositionChanged(const QPoint &viewPos);
-    void changeCanvasMappingMode(bool canvasMappingMode);
-    void pageOffsetChanged();
+
     void zoomTo100();
+    void slotZoomIn();
+    void slotZoomOut();
     void slotZoomToFit();
     void slotZoomToFitWidth();
     void slotZoomToFitHeight();
     void slotToggleZoomToFit();
     void applyRulersUnit(const KoUnit &baseUnit);
-    void setMinMaxZoom();
     void setRulersPixelMultiple2(bool enabled);
 
 
 private Q_SLOTS:
     void slotUpdateGuiAfterZoomChange();
-    void slotUpdateGuiAfterPageOffsetChanged();
+    void slotUpdateGuiAfterDocumentRectChanged();
+    void slotConfigChanged();
 
 private:
     void updateMouseTrackingConnections();
+    void updateCurrentZoomResource();
 
 private:
 
     QPointer<KisView> m_view;
     KoZoomHandler * m_zoomHandler {nullptr};
     KoCanvasController *m_canvasController {nullptr};
-    KoZoomController *m_zoomController {nullptr};
     KoRuler * m_horizontalRuler {nullptr};
     KoRuler * m_verticalRuler {nullptr};
     KoZoomAction * m_zoomAction {nullptr};
     QPointer<QWidget> m_zoomActionWidget;
-    QPoint m_rulersOffset;
+    QRect m_cachedRulersRect;
     KisSignalAutoConnectionsStore m_mouseTrackingConnections;
-    qreal m_physicalDpiX {72.0};
-    qreal m_physicalDpiY {72.0};
-    qreal m_devicePixelRatio {1.0};
-    bool m_canvasMappingMode {false};
+
     KisSignalCompressor m_zoomChangedCompressor;
-    KisSignalCompressor m_pageOffsetChangedCompressor;
+    KisSignalCompressor m_documentRectChangedCompressor;
     qreal m_previousZoomLevel {1.0};
     KoZoomMode::Mode m_previousZoomMode;
     QPointF m_previousZoomPoint;

@@ -19,6 +19,8 @@
 #include <QPointF>
 #include <QPointer>
 
+#include <KoZoomState.h>
+
 class KisKActionCollection;
 class QRect;
 class QRectF;
@@ -69,10 +71,6 @@ public:
     virtual ~KoCanvasController();
 
 public:
-    /**
-     * @return the size of the viewport
-     */
-    virtual QSizeF viewportSize() const = 0;
 
     /**
      * Set the new canvas to be shown as a child
@@ -109,6 +107,7 @@ public:
      * @param center the position to zoom in on
      */
     virtual void zoomIn(const QPoint &center) = 0;
+    virtual void zoomIn() = 0;
 
     /**
      * @brief zooms out around the center.
@@ -119,17 +118,7 @@ public:
      * @param center the position to zoom out around
      */
     virtual void zoomOut(const QPoint &center) = 0;
-
-    /**
-     * @brief zooms around the center.
-     *
-     * The center must be specified in **widget** coordinates. The scrollbar positions
-     * are changed so that the center becomes center if possible.
-     *
-     * @param center the position to zoom around
-     * @param zoom the zoom to apply
-     */
-    virtual void zoomBy(const QPoint &center, qreal zoom) = 0;
+    virtual void zoomOut() = 0;
 
     /**
      * @brief zoom so that rect is exactly visible (as close as possible)
@@ -141,16 +130,7 @@ public:
      */
     virtual void zoomTo(const QRect &rect) = 0;
 
-    /**
-     * @brief repositions the scrollbars so previous center is once again center
-     *
-     * The previous center is cached from when the user uses the scrollbars or zoomTo
-     * are called. zoomTo is mostly used when a zoom tool of sorts have marked an area
-     * to zoom in on
-     *
-     * The success of this method is limited by the size of thing. But we try our best.
-     */
-    virtual void recenterPreferred() = 0;
+    virtual void setZoom(KoZoomMode::Mode mode, qreal zoom) = 0;
 
     /**
      * Sets the preferred center point in view coordinates (pixels).
@@ -203,33 +183,11 @@ public:
      */
     virtual void resetScrollBars() = 0;
 
-    /**
-     * Called when the size of your document in view coordinates (pixels) changes, for instance when zooming.
-     *
-     * @param newSize the new size, in view coordinates (pixels), of the document.
-     * @param recalculateCenter if true the offset in the document we center on after calling
-     *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
-     */
-    virtual void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) = 0;
-
-    /**
-     * Set scroll area to be bigger than actual document.
-     * It allows the user to move the corner of the document
-     * to e.g. the center of the screen
-     *
-     * @param factor the coefficient, defining how much we can scroll out,
-     *     measured in parts of the widget size. Null value means vast
-     *     scrolling is disabled.
-     */
-    virtual void setVastScrolling(qreal factor) = 0;
-
    /**
      * Returns the action collection for the window
      * @returns action collection for this window, can be 0
      */
     KisKActionCollection* actionCollection() const;
-
-    QPoint documentOffset() const;
 
     /**
      * @return the current position of the cursor fetched from QCursor::pos() and
@@ -237,16 +195,9 @@ public:
      */
     virtual QPointF currentCursorPosition() const = 0;
 
+    virtual KoZoomState zoomState() const = 0;
+
 protected:
-    void setDocumentSize(const QSizeF &sz);
-    QSizeF documentSize() const;
-
-    void setPreferredCenterFractionX(qreal);
-    qreal preferredCenterFractionX() const;
-
-    void setPreferredCenterFractionY(qreal);
-    qreal preferredCenterFractionY() const;
-
     void setDocumentOffset(const QPoint &offset);
 
 
@@ -279,8 +230,13 @@ public:
     void emitCanvasMousePositionChanged(const QPoint &position) { Q_EMIT canvasMousePositionChanged(position); }
     void emitDocumentMousePositionChanged(const QPointF &position) { Q_EMIT documentMousePositionChanged(position); }
     void emitSizeChanged(const QSize &size) { Q_EMIT sizeChanged(size); }
-    void emitMoveDocumentOffset(const QPoint &point) { Q_EMIT moveDocumentOffset(point); }
-    void emitZoomRelative(const qreal factor, const QPointF &stillPoint) { Q_EMIT zoomRelative(factor, stillPoint); }
+    void emitMoveDocumentOffset(const QPointF &oldOffset, const QPointF &newOffset) { Q_EMIT moveDocumentOffset(oldOffset, newOffset); }
+    void emitMoveViewportOffset(const QPointF &oldOffset, const QPointF &newOffset) { Q_EMIT moveViewportOffset(oldOffset, newOffset); }
+    void emitEffectiveZoomChanged(qreal zoom) { Q_EMIT effectiveZoomChanged(zoom); }
+    void emitZoomStateChanged(const KoZoomState &zoomState) { Q_EMIT zoomStateChanged(zoomState); }
+    void emitDocumentRectInWidgetPixelsChanged(const QRectF &documentRectInWidgetPixels) { Q_EMIT documentRectInWidgetPixelsChanged(documentRectInWidgetPixels); }
+    void emitDocumentRotationChanged(qreal angle) { Q_EMIT documentRotationChanged(angle); }
+    void emitDocumentMirrorStatusChanged(bool mirrorX, bool mirrorY) { Q_EMIT documentMirrorStatusChanged(mirrorX, mirrorY); }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }
@@ -330,69 +286,27 @@ Q_SIGNALS:
      * @param point the new top-left point from which the document should
      * be drawn.
      */
-    void moveDocumentOffset(const QPoint &point);
+    void moveDocumentOffset(const QPointF &oldOffset, const QPointF &newOffset);
 
     /**
-     * Emitted when zoomRelativeToPoint have calculated a factor by which
-     * the zoom should change and the point which should stand still
-     * on screen.
-     * Someone needs to connect to this and take action
+     * Emitted whenever the document is scrolled and the viewport offset is changed.
      *
-     * @param factor by how much the zoom needs to change.
-     * @param stillPoint the point which will not change its position
-     *                   in widget during the zooming. It is measured in
-     *                   view coordinate system *before* zoom.
+     * @param point the new top-left point from which the document should
+     * be drawn.
      */
-    void zoomRelative(const qreal factor, const QPointF &stillPoint);
+     void moveViewportOffset(const QPointF &oldOffset, const QPointF &newOffset);
 
-public Q_SLOTS:
-    /**
-     * Call this slot whenever the size of your document in view coordinates (pixels)
-     * changes, for instance when zooming.
-     * @param newSize the new size, in view coordinates (pixels), of the document.
-     * @param recalculateCenter if true the offset in the document we center on after calling
-     *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
-     */
-    void updateDocumentSize(const QSize &newSize, bool recalculateCenter = true);
+    void effectiveZoomChanged(qreal zoom);
+
+    void zoomStateChanged(const KoZoomState &zoomState);
+
+    void documentRectInWidgetPixelsChanged(const QRectF &documentRectInWidgetPixels);
+
+    void documentRotationChanged(qreal angle);
+    void documentMirrorStatusChanged(bool mirrorX, bool mirrorY);
 
 private:
     KoCanvasController *m_canvasController;
-};
-
-class KRITAFLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController {
-
-public:
-
-    explicit KoDummyCanvasController(KisKActionCollection* actionCollection)
-        : KoCanvasController(actionCollection)
-    {}
-
-    ~KoDummyCanvasController() override
-    {}
-
-
-    QSizeF viewportSize() const override { return QSizeF(); }
-    void setCanvas(KoCanvasBase *canvas) override {Q_UNUSED(canvas)}
-    KoCanvasBase *canvas() const override {return 0;}
-    void ensureVisibleDoc(const QRectF &, bool ) override {}
-    void zoomIn(const QPoint &/*center*/) override {}
-    void zoomOut(const QPoint &/*center*/) override {}
-    void zoomBy(const QPoint &/*center*/, qreal /*zoom*/) override {}
-    void zoomTo(const QRect &/*rect*/) override {}
-    void recenterPreferred() override {}
-    void setPreferredCenter(const QPointF &/*viewPoint*/) override {}
-    QPointF preferredCenter() const override {return QPointF();}
-    void pan(const QPoint &/*distance*/) override {}
-    void panUp() override {}
-    void panDown() override {}
-    void panLeft() override {}
-    void panRight() override {}
-    QPoint scrollBarValue() const override {return QPoint();}
-    void setScrollBarValue(const QPoint &/*value*/) override {}
-    void resetScrollBars() override {}
-    void updateDocumentSize(const QSizeF &/*sz*/, bool /*recalculateCenter*/) override {}
-    void setVastScrolling(qreal /*factor*/) override {}
-    QPointF currentCursorPosition() const override { return QPointF(); }
 };
 
 #endif

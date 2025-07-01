@@ -304,11 +304,8 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
     m_resourceManager->
                 setResource(KoCanvasResource::Unit, canvas->unit());
 
-    qreal zoomX, zoomY;
-    canvas->coordinatesConverter()->zoom(&zoomX, &zoomY);
-
-    qreal scaleX = zoomX / image->xRes();
-    qreal scaleY = zoomY / image->yRes();
+    qreal scaleX, scaleY;
+    canvas->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
     Q_EMIT sigOnScreenResolutionChanged(scaleX, scaleY);
 }

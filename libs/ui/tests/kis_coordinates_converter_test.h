@@ -24,6 +24,7 @@ private Q_SLOTS:
     void testCanvasOffset();
     void testImageSmallerThanCanvas();
     void testImageResolutionChange();
+    void testOffsetLimits_data();
     void testOffsetLimits();
     void testOffsetLimitsCropping();
     void testZoomMode_data();
@@ -40,6 +41,18 @@ private Q_SLOTS:
 
     void testResolutionModes_data();
     void testResolutionModes();
+
+    void testHiDPICanvasSize_data();
+    void testHiDPICanvasSize();
+
+    void testZoomLimits_data();
+    void testZoomLimits();
+
+    void testFindNextZoom_data();
+    void testFindNextZoom();
+
+    void testZoomTo_data();
+    void testZoomTo();
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_TEST_H */

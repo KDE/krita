@@ -12,7 +12,6 @@
 #include <klocalizedstring.h>
 
 #include <KoCanvasControllerWidget.h>
-#include <KoZoomController.h>
 
 #include <kis_canvas2.h>
 #include <kis_canvas_controller.h>
@@ -53,8 +52,6 @@ public:
 
     qreal startZoom {1.0};
     qreal lastDiscreteZoomDistance {0.0};
-
-    void zoomTo(bool zoomIn, const QPoint &pos);
 };
 
 QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
@@ -73,29 +70,6 @@ QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
         return result / count;
     } else {
         return QPointF();
-    }
-}
-
-void KisZoomAction::Private::zoomTo(bool zoomIn, const QPoint &point)
-{
-    KoZoomAction *zoomAction = q->inputManager()->canvas()->viewManager()->zoomController()->zoomAction();
-
-    if (!point.isNull()) {
-        float oldZoom = zoomAction->effectiveZoom();
-        float newZoom = zoomIn ?
-            zoomAction->nextZoomLevel() : zoomAction->prevZoomLevel();
-
-        KoCanvasControllerWidget *controller =
-            dynamic_cast<KoCanvasControllerWidget*>(
-                q->inputManager()->canvas()->canvasController());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
-        controller->zoomRelativeToPoint(point, newZoom / oldZoom);
-    } else {
-        if (zoomIn) {
-            zoomAction->zoomIn();
-        } else {
-            zoomAction->zoomOut();
-        }
     }
 }
 
@@ -157,64 +131,66 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
     switch(shortcut) {
         case ZoomModeShortcut:
         case RelativeZoomModeShortcut: {
-            d->startZoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
+            d->startZoom = inputManager()->canvas()->coordinatesConverter()->zoom();
             d->mode = (Shortcuts)shortcut;
             d->lastPosition = QPoint();
             break;
         }
         case DiscreteZoomModeShortcut:
         case RelativeDiscreteZoomModeShortcut:
-            d->startZoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
+            d->startZoom = inputManager()->canvas()->coordinatesConverter()->zoom();
             d->lastDiscreteZoomDistance = 0;
             d->mode = (Shortcuts)shortcut;
             break;
         case ZoomInShortcut:
-            d->zoomTo(true, pointFromEvent(event));
-            break;
         case ZoomOutShortcut:
-            d->zoomTo(false, pointFromEvent(event));
-            break;
-        case ZoomInToCursorShortcut: {
-            QPoint pt = pointFromEvent(event);
-
-            if (pt.isNull()) {
-                KoCanvasControllerWidget *controller =
-                            dynamic_cast<KoCanvasControllerWidget*>(
-                                inputManager()->canvas()->canvasController());
-                    KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
-                pt = controller->mapFromGlobal(QCursor::pos());
-            }
-
-            d->zoomTo(true, pt);
-            break;
-        }
+        case ZoomInToCursorShortcut:
         case ZoomOutFromCursorShortcut: {
-            QPoint pt = pointFromEvent(event);
+            KoCanvasControllerWidget *controller =
+                dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
 
+            QPoint pt = pointFromEvent(event);
             if (pt.isNull()) {
-                KoCanvasControllerWidget *controller =
-                        dynamic_cast<KoCanvasControllerWidget*>(
-                            inputManager()->canvas()->canvasController());
-                KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
-                pt = controller->mapFromGlobal(QCursor::pos());
+                if (shortcut == ZoomInToCursorShortcut || shortcut == ZoomOutFromCursorShortcut) {
+                    pt = controller->mapFromGlobal(QCursor::pos());
+                } else {
+                    pt = inputManager()->canvas()->coordinatesConverter()->widgetCenterPoint().toPoint();
+                }
             }
 
-            d->zoomTo(false, pt);
+            if (shortcut == ZoomInToCursorShortcut || shortcut == ZoomInShortcut) {
+                controller->zoomIn(pt);
+            } else {
+                controller->zoomOut(pt);
+            }
             break;
         }
-        case Zoom100PctShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+        case Zoom100PctShortcut: {
+            KoCanvasControllerWidget *controller =
+                dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0, inputManager()->canvas()->coordinatesConverter()->widgetCenterPoint());
             break;
-        case FitToViewShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        }
+        case FitToViewShortcut: {
+            KoCanvasControllerWidget *controller =
+                dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+            controller->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             break;
-        case FitToWidthShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
+        }
+        case FitToWidthShortcut: {
+            KoCanvasControllerWidget *controller =
+                dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+            controller->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
             break;
-        case FitToHeightShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
+        }
+        case FitToHeightShortcut: {
+            KoCanvasControllerWidget *controller =
+                dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+            controller->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
             break;
-    }
+        }
+        }
 }
 
 void KisZoomAction::inputEvent( QEvent* event )
@@ -300,9 +276,9 @@ void KisZoomAction::inputEvent( QEvent* event )
                 controller->zoomRelativeToPoint(canvas->canvasWidget()->mapFromGlobal(gevent->globalPos()), delta);
             } else if (gevent->gestureType() == Qt::SmartZoomNativeGesture) {
                 KisCanvas2 *canvas = inputManager()->canvas();
-                KoZoomController *controller = canvas->viewManager()->zoomController();
+                KoCanvasController *controller = canvas->canvasController();
 
-                if (controller->zoomMode() != KoZoomMode::ZOOM_WIDTH) {
+                if (controller->zoomState().mode != KoZoomMode::ZOOM_WIDTH) {
                     controller->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
                 } else {
                     controller->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
@@ -328,43 +304,47 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
 
         KisConfig cfg(true);
 
-        const qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
         const qreal logDistance = std::pow(2.0, qreal(cfg.zoomHorizontal() ? -diff.x() : diff.y()) / qreal(stepCont));
 
-        qreal newZoom = zoom;
+        qreal newZoom = 1.0;
         if (cfg.readEntry<bool>("InvertMiddleClickZoom", false)) {
             newZoom = d->startZoom / logDistance;
         } else {
             newZoom = d->startZoom * logDistance;
         }
 
+        KoCanvasControllerWidget *controller =
+            dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
+
         if (d->mode == ZoomModeShortcut) {
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
+            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
         } else {
-            const qreal coeff = newZoom / zoom;
-
-            KoCanvasControllerWidget *controller =
-                dynamic_cast<KoCanvasControllerWidget*>(
-                    inputManager()->canvas()->canvasController());
-            KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
-
-            controller->zoomRelativeToPoint(startPos.toPoint(), coeff);
+            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, startPos.toPoint());
         }
 
     } else if (d->mode == DiscreteZoomModeShortcut ||
                d->mode == RelativeDiscreteZoomModeShortcut) {
 
+        KoCanvasControllerWidget *controller =
+            dynamic_cast<KoCanvasControllerWidget *>(inputManager()->canvas()->canvasController());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
+
         KisConfig cfg(true);
 
         QPoint stillPoint = d->mode == RelativeDiscreteZoomModeShortcut ?
-            startPos.toPoint() : QPoint();
+            startPos.toPoint() : inputManager()->canvas()->coordinatesConverter()->widgetCenterPoint().toPoint();
 
         qreal axisDiff = qreal(cfg.zoomHorizontal() ? -diff.x() : diff.y());
         qreal currentDiff = axisDiff / stepDisc - d->lastDiscreteZoomDistance;
 
-        bool zoomIn = currentDiff > 0;
+        const bool zoomIn = currentDiff > 0;
         while (qAbs(currentDiff) > 1.0) {
-            d->zoomTo(zoomIn, stillPoint);
+            if (zoomIn) {
+                controller->zoomIn(stillPoint);
+            } else {
+                controller->zoomOut(stillPoint);
+            }
             d->lastDiscreteZoomDistance += zoomIn ? 1.0 : -1.0;
             currentDiff = axisDiff / stepDisc - d->lastDiscreteZoomDistance;
         }

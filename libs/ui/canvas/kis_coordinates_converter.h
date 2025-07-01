@@ -48,16 +48,20 @@ public:
     ~KisCoordinatesConverter() override;
 
     QSizeF getCanvasWidgetSize() const;
+    QSize viewportDevicePixelSize() const;
 
     void setCanvasWidgetSize(QSizeF size);
     void setDevicePixelRatio(qreal value);
     void setImage(KisImageWSP image);
+    void setExtraReferencesBounds(const QRect &imageRect);
     void setImageBounds(const QRect &rect, const QPointF oldImageStillPoint, const QPointF newImageStillPoint);
     void setImageResolution(qreal xRes, qreal yRes);
     void setDocumentOffset(const QPointF &offset);
+    void setDocumentOffsetHiDPIUnaligned(const QPointF& offset);
 
     qreal devicePixelRatio() const;
     QPoint documentOffset() const;
+    QPointF documentOffsetF() const;
     qreal rotationAngle() const;
 
     // Use the begin/end interface to rotate the canvas in one transformation.
@@ -67,16 +71,18 @@ public:
 
     void enableNatureGestureFlag();
 
-    QPoint rotate(QPointF center, qreal angle);
-    QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
+    void rotate(QPointF center, qreal angle);
+    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
     bool xAxisMirrored() const;
     bool yAxisMirrored() const;
-    QPoint resetRotation(QPointF center);
+    void resetRotation(QPointF center);
 
     void setZoom(qreal zoom) override;
 
+    void zoomTo(const QRectF &widgetRect);
     void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
     void setCanvasWidgetSizeKeepZoom(const QSizeF &size);
+    void setCanvasWidgetSizeKeepZoomHiDPIUnaligned(const QSize &size);
 
     /**
      * A composition of to scale methods: zoom level + image resolution
@@ -155,9 +161,18 @@ public:
     void imagePhysicalScale(qreal *scaleX, qreal *scaleY) const;
 
     QPointF snapToDevicePixel(const QPointF &point) const;
+    QSizeF snapWidgetSizeToDevicePixel(const QSizeF &size) const;
 
     QPoint minimumOffset() const;
     QPoint maximumOffset() const;
+
+    qreal minZoom() const;
+    qreal maxZoom() const;
+    qreal clampZoom(qreal zoom) const;
+    QVector<qreal> standardZoomLevels() const;
+
+    static qreal findNextZoom(qreal currentZoom, const QVector<qreal> &zoomLevels);
+    static qreal findPrevZoom(qreal currentZoom, const QVector<qreal> &zoomLevels);
 
 public:
     // overrides from KoViewConverter
@@ -172,6 +187,7 @@ private:
     void correctOffsetToTransformation();
     void correctTransformationToOffset();
     void recalculateTransformations();
+    void recalculateZoomLevelLimits();
     void recalculateOffsetBoundsAndCrop();
 
 private:

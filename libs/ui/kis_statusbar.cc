@@ -173,8 +173,8 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigSizeChanged(QPointF,QPointF)),
                 this, SLOT(imageSizeChanged()));
-        connect(m_imageView->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
-                this, SLOT(slotCanvasRotationChanged()));
+        connect(m_imageView->canvasController()->proxyObject, &KoCanvasControllerProxyObject::documentRotationChanged,
+                this, &KisStatusBar::slotCanvasRotationChanged);
         updateStatusBarProfileLabel();
         slotCanvasRotationChanged();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());

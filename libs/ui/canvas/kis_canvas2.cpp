@@ -31,6 +31,7 @@
 #include <KisDocument.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
+#include <KisReferenceImagesLayer.h>
 
 #include <KisUsageLogger.h>
 
@@ -81,7 +82,6 @@
 #include "kis_painting_assistants_decoration.h"
 
 #include "kis_canvas_updates_compressor.h"
-#include "KoZoomController.h"
 
 #include <KisStrokeSpeedMonitor.h>
 #include "opengl/kis_opengl_canvas_debugger.h"
@@ -133,6 +133,7 @@ public:
         , displayColorConverter(resourceManager, view)
         , inputActionGroupsMaskInterface(new CanvasInputActionGroupsMaskInterface(this))
         , regionOfInterestUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+        , referencesBoundsUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     {
     }
 
@@ -157,7 +158,6 @@ public:
     int openGLFilterMode = 0;
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
-    bool vastScrolling = false;
 
 #if !KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
     KisSignalCompressor canvasUpdateCompressor;
@@ -186,6 +186,7 @@ public:
     KisSignalCompressor frameRenderStartCompressor;
 
     KisSignalCompressor regionOfInterestUpdateCompressor;
+    KisSignalCompressor referencesBoundsUpdateCompressor;
     QRect regionOfInterest;
     qreal regionOfInterestMargin = 0.25;
 
@@ -263,7 +264,6 @@ void KisCanvas2::setup()
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg(true);
-    m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodPreferredInImage = cfg.levelOfDetailEnabled();
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
@@ -271,7 +271,9 @@ void KisCanvas2::setup()
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
     
-    connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
+    connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPointF, QPointF)), SLOT(documentOffsetMoved(QPointF, QPointF)));
+    connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveViewportOffset(QPointF, QPointF)), SLOT(viewportOffsetMoved(QPointF, QPointF)));
+    connect(m_d->view->canvasController()->proxyObject, SIGNAL(effectiveZoomChanged(qreal)), SLOT(slotEffectiveZoomChanged(qreal)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
     /**
@@ -307,8 +309,9 @@ void KisCanvas2::setup()
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
     connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateRegionOfInterest()));
+    connect(&m_d->referencesBoundsUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateReferencesBounds()));
 
-    connect(m_d->view->document(), SIGNAL(sigReferenceImagesChanged()), this, SLOT(slotReferenceImagesChanged()));
+    connect(m_d->view->document(), SIGNAL(sigReferenceImagesChanged()), &m_d->referencesBoundsUpdateCompressor, SLOT(start()));
 
     initializeFpsDecoration();
 
@@ -680,7 +683,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     if (needReset) {
         createCanvas(useOpenGL);
         connectCurrentCanvas();
-        notifyZoomChanged();
+        slotEffectiveZoomChanged(m_d->coordinatesConverter->effectiveZoom());
     }
     updateCanvasWidgetImpl();
 }
@@ -1107,8 +1110,10 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
     m_d->view->disconnect(object);
 }
 
-void KisCanvas2::notifyZoomChanged()
+void KisCanvas2::slotEffectiveZoomChanged(qreal newZoom)
 {
+    Q_UNUSED(newZoom)
+
     if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->notifyZoomChanged();
@@ -1141,9 +1146,15 @@ void KisCanvas2::slotUpdateRegionOfInterest()
     }
 }
 
-void KisCanvas2::slotReferenceImagesChanged()
+void KisCanvas2::slotUpdateReferencesBounds()
 {
-    canvasController()->resetScrollBars();
+    QRectF referencesRect;
+    KisReferenceImagesLayerSP layer = m_d->view->document()->referenceImagesLayer();
+    if (layer) {
+        referencesRect = layer->boundingImageRect();
+    }
+
+    m_d->view->canvasController()->syncOnReferencesChange(referencesRect);
 }
 
 void KisCanvas2::setRenderingLimit(const QRect &rc)
@@ -1216,37 +1227,29 @@ KisImageWSP KisCanvas2::currentImage() const
     return m_d->view->image();
 }
 
-void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
+void KisCanvas2::viewportOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset)
 {
-    QPointF offsetBefore = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
+    if (!m_d->currentCanvasIsOpenGL) {
+        const QPointF moveOffset = oldOffset - newOffset;
+        m_d->prescaledProjection->viewportMoved(-moveOffset);
+        // we don't emit updateCanvas() here, because it will be emitted later
+        // in documentOffsetMoved()
+    }
+}
 
-    // The given offset is in widget logical pixels. In order to prevent fuzzy
-    // canvas rendering at 100% pixel-perfect zoom level when devicePixelRatio
-    // is not integral, we adjusts the offset to map to whole device pixels.
-    //
-    // FIXME: This is a temporary hack for fixing the canvas under fractional
-    //        DPI scaling before a new coordinate system is introduced.
-    QPointF offsetAdjusted = m_d->coordinatesConverter->snapToDevicePixel(documentOffset);
-
-    m_d->coordinatesConverter->setDocumentOffset(offsetAdjusted);
-    QPointF offsetAfter = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
-
-    QPointF moveOffset = offsetAfter - offsetBefore;
-
-    if (!m_d->currentCanvasIsOpenGL)
-        m_d->prescaledProjection->viewportMoved(moveOffset);
-
-    Q_EMIT documentOffsetUpdateFinished();
+void KisCanvas2::documentOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset)
+{
+    Q_UNUSED(oldOffset)
+    Q_UNUSED(newOffset)
 
     updateCanvas();
-
+    Q_EMIT documentOffsetUpdateFinished();
     m_d->regionOfInterestUpdateCompressor.start();
 }
 
 void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg(true);
-    m_d->vastScrolling = cfg.vastScrolling();
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     resetCanvas(cfg.useOpenGL());
@@ -1339,8 +1342,7 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 }
 
 void KisCanvas2::slotPopupPaletteRequestedZoomChange(int zoom ) {
-    m_d->view->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, (qreal)(zoom/100.0)); // 1.0 is 100% zoom
-    notifyZoomChanged();
+    m_d->view->canvasController()->setZoom(KoZoomMode::ZOOM_CONSTANT, (qreal)(zoom/100.0)); // 1.0 is 100% zoom
 }
 
 void KisCanvas2::setCursor(const QCursor &cursor)

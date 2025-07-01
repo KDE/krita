@@ -167,13 +167,6 @@ krita_add_broken_unit_test( kis_node_manager_test.cpp
     NAME_PREFIX "libs-ui-"
     )
 
-krita_add_broken_unit_test( kis_zoom_and_pan_test.cpp ../../../sdk/tests/testutil.cpp
-    TEST_NAME KisZoomAndPanTest
-    LINK_LIBRARIES kritaui kritatestsdk
-    NAME_PREFIX "libs-ui-"
-    )
-#set_tests_properties(libs-ui-KisZoomAndPanTest PROPERTIES TIMEOUT 300)
-
 krita_add_broken_unit_test( kis_action_manager_test.cpp
     TEST_NAME KisActionManagerTest
     LINK_LIBRARIES kritaui kritatestsdk

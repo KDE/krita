@@ -62,8 +62,8 @@ set(kritaflake_SRCS
     KoMarkerCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
-    KoCanvasControllerWidget.cpp
-    KoCanvasControllerWidgetViewport_p.cpp
+    KoZoomMode.cpp
+    KoZoomState.cpp
     KoShapeRegistry.cpp
     KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp

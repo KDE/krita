@@ -17,6 +17,7 @@
 #include <kis_image.h>
 #include <kis_algebra_2d.h>
 #include <kis_assert.h>
+#include <KisValueCache.h>
 
 
 struct KisCoordinatesConverter::Private {
@@ -29,11 +30,13 @@ struct KisCoordinatesConverter::Private {
         isNativeGesture(false),
         rotationAngle(0.0),
         rotationBaseAngle(0.0),
-        devicePixelRatio(1.0)
+        devicePixelRatio(1.0),
+        standardZoomLevels(this)
     {
     }
 
     QRect imageBounds;
+    QRect extraReferencesBounds;
     qreal imageXRes;
     qreal imageYRes;
 
@@ -48,6 +51,17 @@ struct KisCoordinatesConverter::Private {
     QPointF documentOffset;
     QPoint minimumOffset;
     QPoint maximumOffset;
+
+    qreal minZoom {0.01};
+    qreal maxZoom {9.0};
+
+    struct StandardZoomLevelsInitializer {
+        StandardZoomLevelsInitializer(Private *d) : m_d(d) {}
+        QVector<qreal> initialize() const;
+        Private *m_d;
+    };
+
+    KisValueCache<StandardZoomLevelsInitializer> standardZoomLevels;
 
     QTransform flakeToWidget;
     QTransform rotationBaseTransform;
@@ -97,13 +111,17 @@ void KisCoordinatesConverter::recalculateOffsetBoundsAndCrop()
 
     KisConfig cfg(true);
 
-    // TODO: take references into account
-    QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
-    QPointF dPoint(documentSize.width(), documentSize.height());
+    const QRect refRect = imageToWidget(m_d->extraReferencesBounds).toAlignedRect();
+
+    QRect documentRect = imageRectInWidgetPixels().toAlignedRect();
+    QPointF dPointMax(qMax(documentRect.width(), refRect.right() + 1 - documentRect.x()),
+                      qMax(documentRect.height(),  refRect.bottom() + 1 - documentRect.y()));
+    QPointF dPointMin(qMin(0, refRect.left() - documentRect.x()),
+                      qMin(0,  refRect.top() - documentRect.y()));
     QPointF wPoint(m_d->canvasWidgetSize.width(), m_d->canvasWidgetSize.height());
 
-    QPointF minOffset = -cfg.vastScrolling() * wPoint;
-    QPointF maxOffset = dPoint - wPoint + cfg.vastScrolling() * wPoint;
+    QPointF minOffset = dPointMin - cfg.vastScrolling() * wPoint;
+    QPointF maxOffset = dPointMax - wPoint + cfg.vastScrolling() * wPoint;
 
     m_d->minimumOffset = minOffset.toPoint();
     m_d->maximumOffset = maxOffset.toPoint();
@@ -215,6 +233,7 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
     // to convert the image to the physical size of the display
 
     m_d->imageBounds = image->bounds();
+    recalculateZoomLevelLimits();
     recalculateTransformations();
 
     if (m_d->canvasWidgetSize.isEmpty()) {
@@ -228,6 +247,16 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
     }
 }
 
+void KisCoordinatesConverter::setExtraReferencesBounds(const QRect &imageRect)
+{
+    if (imageRect == m_d->extraReferencesBounds) return;
+
+    // this value affects scroll range only, so no need to do extra
+    // still point tracking
+    m_d->extraReferencesBounds = imageRect;
+    recalculateTransformations();
+}
+
 void KisCoordinatesConverter::setImageBounds(const QRect &rect, const QPointF oldImageStillPoint, const QPointF newImageStillPoint)
 {
     if (rect == m_d->imageBounds) return;
@@ -239,6 +268,7 @@ void KisCoordinatesConverter::setImageBounds(const QRect &rect, const QPointF ol
     setZoomMode(KoZoomMode::ZOOM_CONSTANT);
 
     m_d->imageBounds = rect;
+    recalculateZoomLevelLimits();
     recalculateTransformations();
 
     const QPointF newWidgetStillPoint = imageToWidget(newImageStillPoint);
@@ -265,11 +295,22 @@ void KisCoordinatesConverter::setImageResolution(qreal xRes, qreal yRes)
 
     m_d->imageXRes = xRes;
     m_d->imageYRes = yRes;
+    recalculateZoomLevelLimits();
     recalculateTransformations();
 
     const QPointF newImageCenter = imageCenterInWidgetPixel();
     m_d->documentOffset += newImageCenter - oldImageCenter;
     recalculateTransformations();
+}
+
+void KisCoordinatesConverter::setDocumentOffsetHiDPIUnaligned(const QPointF& offset)
+{
+    // The given offset is in widget logical pixels. In order to prevent fuzzy
+    // canvas rendering at 100% pixel-perfect zoom level when devicePixelRatio
+    // is not integral, we adjusts the offset to map to whole device pixels.
+
+    const QPointF offsetAdjusted = snapToDevicePixel(offset);
+    setDocumentOffset(offsetAdjusted);
 }
 
 void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
@@ -290,6 +331,11 @@ qreal KisCoordinatesConverter::devicePixelRatio() const
 QPoint KisCoordinatesConverter::documentOffset() const
 {
     return QPoint(int(m_d->documentOffset.x()), int(m_d->documentOffset.y()));
+}
+
+QPointF KisCoordinatesConverter::documentOffsetF() const
+{
+    return m_d->documentOffset;
 }
 
 qreal KisCoordinatesConverter::rotationAngle() const
@@ -326,6 +372,37 @@ void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoom(const QSizeF &size)
     }
 }
 
+QSizeF KisCoordinatesConverter::snapWidgetSizeToDevicePixel(const QSizeF &size) const
+{
+    if (qFuzzyCompare(m_d->devicePixelRatio, 1.0)) return size;
+
+    // This is how QOpenGLCanvas sets the FBO and the viewport size. If
+    // devicePixelRatioF() is non-integral, the result is truncated.
+    // *Correction*: The FBO size is actually rounded, but the glViewport call
+    // uses integer truncation and that's what really matters.
+    const int viewportWidth = static_cast<int>(size.width() * m_d->devicePixelRatio);
+    const int viewportHeight = static_cast<int>(size.height() * m_d->devicePixelRatio);
+
+    // The widget size may be an integer but here we actually want to give
+    // KisCoordinatesConverter the logical viewport size aligned to device
+    // pixels.
+    return QSizeF(viewportWidth, viewportHeight) / m_d->devicePixelRatio;
+}
+
+void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoomHiDPIUnaligned(const QSize &size)
+{
+    setCanvasWidgetSizeKeepZoom(snapWidgetSizeToDevicePixel(size));
+}
+
+QSize KisCoordinatesConverter::viewportDevicePixelSize() const
+{
+    // TODO: add an assert and a unittest to verify that there is no
+    //       actual rounding happens, only intolerances!
+    return qFuzzyCompare(m_d->devicePixelRatio, 1.0) ?
+        m_d->canvasWidgetSize.toSize() :
+        (m_d->canvasWidgetSize * m_d->devicePixelRatio).toSize();
+}
+
 void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
 {
     const int cfgMargin = zoomMarginSize();
@@ -333,6 +410,7 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
     auto updateDisplayResolution = [&]() {
         if (!qFuzzyCompare(resolutionX, this->resolutionX()) || !qFuzzyCompare(resolutionY, this->resolutionY())) {
             setResolution(resolutionX, resolutionY);
+            recalculateZoomLevelLimits();
         }
     };
 
@@ -392,6 +470,28 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
     }
 }
 
+void KisCoordinatesConverter::zoomTo(const QRectF &zoomRectWidget)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!zoomRectWidget.isEmpty());
+
+    const QPointF zoomPortionCenterInImagePixels = widgetToImage(zoomRectWidget.center());
+
+    const qreal zoomCoeffX = m_d->canvasWidgetSize.width() / zoomRectWidget.width();
+    const qreal zoomCoeffY = m_d->canvasWidgetSize.height() / zoomRectWidget.height();
+
+    const bool fitToWidth = zoomCoeffX < zoomCoeffY;
+
+    KoZoomHandler::setZoom(this->zoom() * (fitToWidth ? zoomCoeffX : zoomCoeffY));
+    KoZoomHandler::setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+    recalculateTransformations();
+
+    const QPointF offset = imageToWidget(zoomPortionCenterInImagePixels) - widgetCenterPoint();
+    QPointF newDocumentOffset = m_d->documentOffset + offset;
+
+    m_d->documentOffset = newDocumentOffset;
+    recalculateTransformations();
+}
+
 qreal KisCoordinatesConverter::effectiveZoom() const
 {
     qreal scaleX, scaleY;
@@ -441,7 +541,7 @@ void KisCoordinatesConverter::endRotation()
     m_d->isRotating = false;
 }
 
-QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
+void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;
     rot.rotate(angle);
@@ -464,11 +564,9 @@ QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 
     correctOffsetToTransformation();
     recalculateTransformations();
-
-    return m_d->documentOffset.toPoint();
 }
 
-QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
+void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
 {
     bool keepOrientation = false; // XXX: Keep here for now, maybe some day we can restore the parameter again.
 
@@ -505,8 +603,6 @@ QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mi
 
     correctOffsetToTransformation();
     recalculateTransformations();
-
-    return m_d->documentOffset.toPoint();
 }
 
 bool KisCoordinatesConverter::xAxisMirrored() const
@@ -519,7 +615,7 @@ bool KisCoordinatesConverter::yAxisMirrored() const
     return m_d->isYAxisMirrored;
 }
 
-QPoint KisCoordinatesConverter::resetRotation(QPointF center)
+void KisCoordinatesConverter::resetRotation(QPointF center)
 {
     QTransform rot;
     rot.rotate(-m_d->rotationAngle);
@@ -531,8 +627,6 @@ QPoint KisCoordinatesConverter::resetRotation(QPointF center)
 
     correctOffsetToTransformation();
     recalculateTransformations();
-
-    return m_d->documentOffset.toPoint();
 }
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const {
@@ -718,4 +812,52 @@ QTransform KisCoordinatesConverter::viewToWidget() const
 QTransform KisCoordinatesConverter::widgetToView() const
 {
     return flakeToWidgetTransform().inverted();
+}
+
+qreal KisCoordinatesConverter::minZoom() const
+{
+    return m_d->minZoom;
+}
+qreal KisCoordinatesConverter::maxZoom() const
+{
+    return m_d->maxZoom;
+}
+qreal KisCoordinatesConverter::clampZoom(qreal zoom) const
+{
+    return std::clamp(zoom, minZoom(), maxZoom());
+}
+
+QVector<qreal> KisCoordinatesConverter::standardZoomLevels() const
+{
+    return m_d->standardZoomLevels.value();
+}
+
+QVector<qreal> KisCoordinatesConverter::Private::StandardZoomLevelsInitializer::initialize() const
+{
+    return KoZoomMode::generateStandardZoomLevels(m_d->minZoom, m_d->maxZoom);
+}
+
+void KisCoordinatesConverter::recalculateZoomLevelLimits()
+{
+    qreal minDimension = 0.0;
+
+    if (m_d->imageBounds.width() < m_d->imageBounds.height()) {
+        minDimension = m_d->imageBounds.width() * resolutionX() / m_d->imageXRes;
+    } else {
+        minDimension = m_d->imageBounds.height() * resolutionY() / m_d->imageYRes;
+    }
+
+    m_d->minZoom = qMin(100.0 / minDimension, 0.1);
+    m_d->maxZoom = 90.0;
+    m_d->standardZoomLevels.clear(); // TODO: reset only on real change!
+}
+
+qreal KisCoordinatesConverter::findNextZoom(qreal currentZoom, const QVector<qreal> &zoomLevels)
+{
+    return KoZoomMode::findNextZoom(currentZoom, zoomLevels);
+}
+
+qreal KisCoordinatesConverter::findPrevZoom(qreal currentZoom, const QVector<qreal> &zoomLevels)
+{
+    return KoZoomMode::findPrevZoom(currentZoom, zoomLevels);
 }

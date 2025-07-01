@@ -11,19 +11,22 @@
 #ifndef KOCANVASCONTROLLERWIDGET_H
 #define KOCANVASCONTROLLERWIDGET_H
 
-#include "kritaflake_export.h"
+#include "kritaui_export.h"
 
 #include <QAbstractScrollArea>
 #include <QPointer>
 #include "KoCanvasController.h"
+#include <KoZoomMode.h>
 
 class KoShape;
 class KoCanvasBase;
 class KoCanvasSupervisor;
+class KisCanvasState;
+
 /**
  * KoCanvasController implementation for QWidget based canvases
  */
-class KRITAFLAKE_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public KoCanvasController
+class KRITAUI_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public KoCanvasController
 {
     Q_OBJECT
 public:
@@ -40,8 +43,6 @@ public:
      * Reimplemented from QAbstractScrollArea.
      */
     void scrollContentsBy(int dx, int dy) override;
-
-    QSizeF viewportSize() const override;
 
     /// Reimplemented from KoCanvasController
 
@@ -73,27 +74,21 @@ public:
      */
     void setToolOptionWidgets(const QList<QPointer<QWidget> > &widgets);
 
-    void zoomIn(const QPoint &center) override;
-
-    void zoomOut(const QPoint &center) override;
-
-    void zoomBy(const QPoint &center, qreal zoom) override;
-
     void zoomTo(const QRect &rect) override;
 
     /**
      * Zoom document keeping point \p widgetPoint unchanged
      * \param widgetPoint sticky point in widget pixels
-     * \param zoomCoeff the zoom
+     * \param zoomCoeff the coefficient to which zoom will be changed
      */
-    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
+    Q_DECL_DEPRECATED_X("use setZoom() with absolute zoom value instead")
+    void zoomRelativeToPoint(const QPointF &widgetPoint, qreal zoomCoeff);
 
-    void recenterPreferred() override;
+    void setZoom(KoZoomMode::Mode mode, qreal zoom) override;
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint);
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY);
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
 
-    void setPreferredCenter(const QPointF &viewPoint) override;
-
-    /// Returns the currently set preferred center point in view coordinates (pixels)
-    QPointF preferredCenter() const override;
 
     void pan(const QPoint &distance) override;
 
@@ -110,11 +105,7 @@ public:
      */
     void setScrollBarValue(const QPoint &value) override;
 
-    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter = true) override;
-
-    void setVastScrolling(qreal factor) override;
-
-    QPointF currentCursorPosition() const override;
+    virtual KisCanvasState canvasState() const = 0;
 
     /**
      * \internal
@@ -122,18 +113,8 @@ public:
     class Private;
     KoCanvasControllerWidget::Private *priv();
 
-private Q_SLOTS:
-
-    /// Called by the horizontal scrollbar when its value changes
-    void updateCanvasOffsetX();
-
-    /// Called by the vertical scrollbar when its value changes
-    void updateCanvasOffsetY();
-
 protected:
     friend class KisZoomAndPanTest;
-
-    qreal vastScrollingFactor() const;
 
     /// reimplemented from QWidget
     void paintEvent(QPaintEvent *event) override;
@@ -151,6 +132,13 @@ protected:
     bool focusNextPrevChild(bool next) override;
     /// reimplemented from QAbstractScrollArea
     bool viewportEvent(QEvent *event) override;
+
+    virtual void updateCanvasOffsetInternal(const QPointF &newOffset) = 0;
+    virtual void updateCanvasWidgetSizeInternal(const QSize &newSize) = 0;
+    virtual void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint) = 0;
+    virtual void zoomToInternal(const QRect &viewRect) = 0;
+
+    void emitSignals(const KisCanvasState &oldState, const KisCanvasState &newState);
 
 private:
     Q_PRIVATE_SLOT(d, void activate())

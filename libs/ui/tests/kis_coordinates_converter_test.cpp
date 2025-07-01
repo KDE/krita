@@ -7,6 +7,8 @@
 #include "kis_coordinates_converter_test.h"
 #include <simpletest.h>
 
+#include <algorithm>
+
 #include <QTransform>
 
 #include <KoZoomHandler.h>
@@ -394,8 +396,19 @@ void KisCoordinatesConverterTest::testImageResolutionChange()
     QCOMPARE(converter.imageCenterInWidgetPixel(), oldImageCenterInWidgetPixels);
 }
 
+void KisCoordinatesConverterTest::testOffsetLimits_data()
+{
+    QTest::addColumn<QRect>("extraRreferencesRect");
+
+    QTest::addRow("no-ref") << QRect();
+    QTest::addRow("ref-topleft") << QRect(-100, -100, 200, 200);
+    QTest::addRow("ref-bottomright") << QRect(900, 900, 200, 200);
+}
+
 void KisCoordinatesConverterTest::testOffsetLimits()
 {
+    QFETCH(QRect, extraRreferencesRect);
+
     KisImageSP image;
     KisCoordinatesConverter converter;
     initImage(&image, &converter);
@@ -405,22 +418,27 @@ void KisCoordinatesConverterTest::testOffsetLimits()
     converter.setZoom(0.5);
     converter.setDocumentOffset(QPoint(0,0));
     converter.setCanvasWidgetSize(widgetRect.size()); // should be initialized first
+    if (!extraRreferencesRect.isEmpty()) {
+        converter.setExtraReferencesBounds(extraRreferencesRect);
+    }
 
     const QPointF widgetSizeVector(widgetRect.width(), widgetRect.height());
 
     // initial offset is null, hence the topleft is at the origin of the widget
     QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(0,0));
 
+    const QRectF sampleImageRect = image->bounds() | extraRreferencesRect;
+
     // when the scrollbars offset in minimal, the topleft of the image is moved
     // to the bottom-right corner of the widget
     converter.setDocumentOffset(converter.minimumOffset());
-    QCOMPARE(converter.imageToWidget(QPointF(0,0)), 0.9 * widgetSizeVector);
+    QCOMPARE(converter.imageToWidget(sampleImageRect.topLeft()), 0.9 * widgetSizeVector);
 
     // when the scrollbars offset in maximal, the topleft of the image is moved
     // under the left side of the widget and we see only the bottom-right corner
     // of the image.
     converter.setDocumentOffset(converter.maximumOffset());
-    QCOMPARE(converter.imageToWidget(QPointF(1000,1000)), 0.1 * widgetSizeVector);
+    QCOMPARE(converter.imageToWidget(sampleImageRect.bottomRight()), 0.1 * widgetSizeVector);
 }
 
 void KisCoordinatesConverterTest::testOffsetLimitsCropping()
@@ -1362,6 +1380,516 @@ void KisCoordinatesConverterTest::testResolutionModes()
     QCOMPARE(converter.zoom(), expectedZoom);
     QCOMPARE(converter.effectiveZoom(), expectedEffectiveZoom);
     QCOMPARE(converter.imageRectInWidgetPixels(), expectedImageRectInWidgetPixels);
+
+    for (const auto &pair : std::as_const(expectedTestPoints)) {
+        const QPointF realPointWidgetPos = converter.imageToWidget(pair.first);
+
+        if (!KisAlgebra2D::fuzzyPointCompare(realPointWidgetPos, pair.second)) {
+            qWarning() << "Failed to compare test points after transformation:";
+            qWarning() << "    image point:          " << pair.first;
+            qWarning() << "    real widget point:    " << realPointWidgetPos;
+            qWarning() << "    expected widget point:" << pair.second;
+            QFAIL("faled to compare points after transforamation");
+        }
+    }
+}
+
+void KisCoordinatesConverterTest::testHiDPICanvasSize_data()
+{
+    QTest::addColumn<qreal>("devicePixelRatio");
+    QTest::addColumn<QSize>("widgetSize");
+    QTest::addColumn<QPointF>("offset");
+    QTest::addColumn<qreal>("zoom");
+    QTest::addColumn<QSizeF>("expectedWidgetSize");
+    QTest::addColumn<QPointF>("expectedOffsetF");
+    QTest::addColumn<QPoint>("expectedOffset");
+    QTest::addColumn<QSize>("expectedViewportDevicePixelSize");
+    QTest::addColumn<PointPairs>("expectedTestPoints");
+
+    QTest::newRow("lodpi")
+        << 1.0
+        << QSize(701, 503)
+        << QPointF(-101, -103)
+        << 1.0 // zoom
+        << QSizeF(701, 503)
+        << QPointF(-101, -103)
+        << QPoint(-101, -103)
+        << QSize(701, 503)
+        << PointPairs{
+            {{0,0},     {101,103}},
+            {{100,100}, {201,203}},
+            {{1000,1000}, {1101,1103}},
+           };
+
+    QTest::newRow("hidpi-i2")
+        << 2.0
+        << QSize(701, 503)
+        << QPointF(-101, -103)
+        << 1.0 // zoom
+        << QSizeF(701, 503)
+        << QPointF(-101, -103)
+        << QPoint(-101, -103)
+        << QSize(1402, 1006) // only viewport texture size is changed in integer scaling mode!
+        << PointPairs{
+            {{0,0},     {101,103}},
+            {{100,100}, {201,203}},
+            {{1000,1000}, {1101,1103}},
+            };
+
+    QTest::newRow("hidpi-i3")
+        << 3.0
+        << QSize(701, 503)
+        << QPointF(-101, -103)
+        << 1.0 // zoom
+        << QSizeF(701, 503)
+        << QPointF(-101, -103)
+        << QPoint(-101, -103)
+        << QSize(2103, 1509) // only viewport texture size is changed in integer scaling mode!
+        << PointPairs{
+            {{0,0},     {101,103}},
+            {{100,100}, {201,203}},
+            {{1000,1000}, {1101,1103}},
+            };
+
+    auto frac = [] (int whole, int nom, int denom) {
+        return denom == 0 ? whole :
+            qreal(whole * denom + nom) / denom;
+    };
+
+    QTest::newRow("hidpi-f1.5")
+        << 1.5
+        << QSize(701, 503)
+        << QPointF(-101, -103)
+        << 1.0 // zoom
+        << QSizeF(frac(700, 2, 3), frac(502, 2, 3))
+        << QPointF(-frac(101, 1, 3), -frac(103, 1, 3)) // offset is rounded to device pixels!
+        << QPoint(-101, -103)
+        << QSize(1051, 754) // the size is floored to device pixels!
+        << PointPairs{
+            {{0,0},      {frac(101, 1, 3), frac(103, 1, 3)}},
+            {{100,100},  {frac(201, 1, 3), frac(203, 1, 3)}},
+            {{1000,1000},{frac(1101, 1, 3), frac(1103, 1, 3)}},
+            };
+
+    QTest::newRow("hidpi-f1.75")
+        << 1.75
+        << QSize(701, 503)
+        << QPointF(-101, -103)
+        << 1.0 // zoom
+        << QSizeF(frac(700, 4, 7), frac(502, 6, 7))
+        << QPointF(-frac(101, 1, 7), -frac(102, 6, 7)) // offset is rounded to device pixels!
+        << QPoint(-101, -102) // scroll bars value is floored! (TODO: verify it is correct?)
+        << QSize(1226, 880) // the size is floored to device pixels!
+        << PointPairs{
+            {{0,0},      {frac(101, 1, 7), frac(102, 6, 7)}},
+            {{100,100},  {frac(201, 1, 7), frac(202, 6, 7)}},
+            {{1000,1000},{frac(1101, 1, 7), frac(1102, 6, 7)}},
+            };
+
+    QTest::newRow("hidpi-f1.25")
+        << 1.25
+        << QSize(701, 503)
+        << QPointF(-101, -103)
+        << 1.0 // zoom
+        << QSizeF(700.8, 502.4)
+        << QPointF(-100.8, -103.2) // offset is rounded to device pixels!
+        << QPoint(-100, -103) // scroll bars value is floored! (TODO: verify it is correct?)
+        << QSize(876, 628) // the size is floored to device pixels!
+        << PointPairs{
+            {{0,0},      {100.8, 103.2}},
+            {{100,100},  {200.8, 203.2}},
+            {{1000,1000},{1100.8, 1103.2}},
+            };
+}
+
+void KisCoordinatesConverterTest::testHiDPICanvasSize()
+{
+    QFETCH(qreal, devicePixelRatio);
+    QFETCH(QSize, widgetSize);
+    QFETCH(qreal, zoom);
+    QFETCH(QPointF, offset);
+    QFETCH(QSizeF, expectedWidgetSize);
+    QFETCH(QPointF, expectedOffsetF);
+    QFETCH(QPoint, expectedOffset);
+    QFETCH(QSize, expectedViewportDevicePixelSize);
+    QFETCH(PointPairs, expectedTestPoints);
+
+    KisImageSP image;
+    KisCoordinatesConverter converter;
+    initImage(&image, &converter);
+
+    converter.setDevicePixelRatio(devicePixelRatio);
+    converter.setImage(image);
+    converter.setCanvasWidgetSize(converter.snapWidgetSizeToDevicePixel(widgetSize));
+    converter.setZoom(zoom);
+    converter.setDocumentOffset(converter.snapToDevicePixel(offset));
+
+    QCOMPARE(converter.getCanvasWidgetSize(), expectedWidgetSize);
+    QCOMPARE(converter.documentOffsetF(), expectedOffsetF);
+    QCOMPARE(converter.documentOffset(), expectedOffset);
+    QCOMPARE(converter.viewportDevicePixelSize(), expectedViewportDevicePixelSize);
+
+    {
+        // verify if image origin is aligned to the device pixels
+        const QPointF imageTopLeftInWidgetPixels = converter.imageToWidget(QPointF(0, 0));
+        const QPointF imageTopLeftInDevicePixels = imageTopLeftInWidgetPixels * devicePixelRatio;
+
+        QCOMPARE(imageTopLeftInDevicePixels.x() - qFloor(imageTopLeftInDevicePixels.x()), 0.0);
+        QCOMPARE(imageTopLeftInDevicePixels.y() - qFloor(imageTopLeftInDevicePixels.y()), 0.0);
+
+        // TODO: also make sure that the bottom-right corner of the image is also aligned to
+        //       pixel grid
+    }
+
+    for (const auto &pair : std::as_const(expectedTestPoints)) {
+        const QPointF realPointWidgetPos = converter.imageToWidget(pair.first);
+
+        if (!KisAlgebra2D::fuzzyPointCompare(realPointWidgetPos, pair.second)) {
+            qWarning() << "Failed to compare test points after transformation:";
+            qWarning() << "    image point:          " << pair.first;
+            qWarning() << "    real widget point:    " << realPointWidgetPos;
+            qWarning() << "    expected widget point:" << pair.second;
+            QFAIL("faled to compare points after transforamation");
+        }
+    }
+}
+
+void KisCoordinatesConverterTest::testZoomLimits_data()
+{
+    QTest::addColumn<QSize>("originalImageSize");
+    QTest::addColumn<QPointF>("originalImageResolution");
+    QTest::addColumn<QPointF>("originalScreenResolution");
+    QTest::addColumn<PointPairs>("originalTestPoints");
+    QTest::addColumn<qreal>("expectedOriginalMinZoom");
+    QTest::addColumn<qreal>("expectedOriginalMaxZoom");
+    QTest::addColumn<QVector<qreal>>("expectedOriginalZoomLevels");
+
+    QTest::addColumn<QSize>("finalImageSize");
+    QTest::addColumn<QPointF>("finalImageResolution");
+    QTest::addColumn<QPointF>("finalScreenResolution");
+    QTest::addColumn<PointPairs>("expectedTestPoints");
+    QTest::addColumn<qreal>("expectedFinalMinZoom");
+    QTest::addColumn<qreal>("expectedFinalMaxZoom");
+    QTest::addColumn<QVector<qreal>>("expectedFinalZoomLevels");
+
+    QTest::newRow("image-resize")
+        << QSize(1000, 1000)
+        << QPointF(100, 100)
+        << QPointF(100, 100)
+        << PointPairs{
+            {{0,0},     {0,0}},
+            {{100,100}, {100,100}},
+           }
+        << 0.1
+        << 90.0
+        << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64}
+
+        << QSize(2000, 2000)
+        << QPointF(100, 100)
+        << QPointF(100, 100)
+        << PointPairs{
+            {{0,0},     {0,0}},
+            {{100,100}, {100,100}},
+           }
+        << 0.05
+        << 90.0
+        << QVector<qreal>{0.0625, 0.0833333, 0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64};
+
+    QTest::newRow("image-resolution-change")
+        << QSize(1000, 1000)
+        << QPointF(100, 100)
+        << QPointF(100, 100)
+        << PointPairs{
+            {{0,0},     {0,0}},
+            {{100,100}, {100,100}},
+           }
+        << 0.1
+        << 90.0
+        << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64}
+
+        << QSize(1000, 1000)
+        << QPointF(50, 50) // lower image DPI to increase physical screen size
+        << QPointF(100, 100)
+        << PointPairs{
+            {{0,0},     {0,0}},
+            {{100,100}, {200,200}},
+           }
+        << 0.05
+        << 90.0
+        << QVector<qreal>{0.0625, 0.0833333, 0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64};
+
+        QTest::newRow("screen-resolution-change")
+        << QSize(1000, 1000)
+        << QPointF(100, 100)
+        << QPointF(100, 100)
+        << PointPairs{
+            {{0,0},     {0,0}},
+            {{100,100}, {100,100}},
+           }
+        << 0.1
+        << 90.0
+        << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64}
+
+        << QSize(1000, 1000)
+        << QPointF(100, 100)
+        << QPointF(200, 200)  // increase screen dpi to increase the size of the image
+        << PointPairs{
+            {{0,0},     {0,0}},
+            {{100,100}, {200,200}},
+           }
+        << 0.05
+        << 90.0
+        << QVector<qreal>{0.0625, 0.0833333, 0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64};
+
+}
+
+void KisCoordinatesConverterTest::testZoomLimits()
+{
+    QFETCH(QSize, originalImageSize);
+    QFETCH(QPointF, originalImageResolution);
+    QFETCH(QPointF, originalScreenResolution);
+    QFETCH(PointPairs, originalTestPoints);
+    QFETCH(qreal, expectedOriginalMinZoom);
+    QFETCH(qreal, expectedOriginalMaxZoom);
+    QFETCH(QVector<qreal>, expectedOriginalZoomLevels);
+
+    QFETCH(QSize, finalImageSize);
+    QFETCH(QPointF, finalImageResolution);
+    QFETCH(QPointF, finalScreenResolution);
+    QFETCH(PointPairs, expectedTestPoints);
+    QFETCH(qreal, expectedFinalMinZoom);
+    QFETCH(qreal, expectedFinalMaxZoom);
+    QFETCH(QVector<qreal>, expectedFinalZoomLevels);
+
+    KisImageSP image;
+    KisCoordinatesConverter converter;
+    initImage(&image, &converter);
+
+    image->resizeImage(QRect(QPoint(), originalImageSize));
+    image->setResolution(originalImageResolution.x(), originalImageResolution.y());
+    image->waitForDone();
+    converter.setResolution(originalScreenResolution.x(), originalScreenResolution.y());
+
+    converter.setImage(image);
+    converter.setCanvasWidgetSize(QSize(700,500));
+    converter.setZoom(1.0);
+    converter.setDocumentOffset(QPointF());
+
+    for (const auto &pair : std::as_const(originalTestPoints)) {
+        const QPointF realPointWidgetPos = converter.imageToWidget(pair.first);
+
+        if (!KisAlgebra2D::fuzzyPointCompare(realPointWidgetPos, pair.second)) {
+            qWarning() << "Failed to compare test points before transformation:";
+            qWarning() << "    image point:          " << pair.first;
+            qWarning() << "    real widget point:    " << realPointWidgetPos;
+            qWarning() << "    expected widget point:" << pair.second;
+            QFAIL("faled to compare points before transforamation");
+        }
+    }
+
+    QCOMPARE(converter.minZoom(), expectedOriginalMinZoom);
+    QCOMPARE(converter.maxZoom(), expectedOriginalMaxZoom);
+
+    auto fuzzyCompareZoom = [] (qreal lhs, qreal rhs) {
+        return qRound(lhs * 10000) == qRound(rhs * 10000);
+    };
+
+    auto compareZoomLevels = [&] (const QVector<qreal> &real, const QVector<qreal> &expected) {
+        if (real.size() != expected.size()) {
+            qWarning() << "Zoom level vectors have different size!";
+            qWarning() << "    " << ppVar(real);
+            qWarning() << "    " << ppVar(expected);
+            return false;
+        }
+
+        auto mismatch = std::mismatch(real.begin(), real.end(),
+            expected.begin(),
+            fuzzyCompareZoom);
+
+        if (mismatch.first != real.end()) {
+            const int index = std::distance(real.begin(), mismatch.first);
+
+            qWarning() << "Zoom level mismatch at index" << index;
+            qWarning() << "    real:    " << *mismatch.first;
+            qWarning() << "    expected:" << *mismatch.second;
+            qWarning() << "   " << ppVar(real);
+            qWarning() << "   " << ppVar(expected);
+            return false;
+        }
+
+        return true;
+    };
+
+    if (!compareZoomLevels(converter.standardZoomLevels(), expectedOriginalZoomLevels)) {
+        QFAIL("Failed to compare original zoom levels");
+    }
+
+    if (originalImageSize != finalImageSize) {
+        image->resizeImage(QRect(QPoint(), finalImageSize));
+        image->waitForDone();
+        converter.setImageBounds(image->bounds(), QPoint(), QPoint());
+    }
+
+    if (originalImageResolution != finalImageResolution) {
+        KisFilterStrategy *strategy = new KisBilinearFilterStrategy();
+        image->scaleImage(image->bounds().size(), finalImageResolution.x(), finalImageResolution.y(), strategy);
+        image->waitForDone();
+        converter.setImageResolution(image->xRes(), image->yRes());
+        converter.setDocumentOffset(QPointF());
+    }
+
+    if (originalScreenResolution != finalScreenResolution) {
+        converter.setZoom(converter.zoomMode(),
+                          converter.zoom(),
+                          finalScreenResolution.x(),
+                          finalScreenResolution.y(),
+                          converter.widgetCenterPoint());
+        converter.setDocumentOffset(QPointF());
+    }
+
+    for (const auto &pair : std::as_const(expectedTestPoints)) {
+        const QPointF realPointWidgetPos = converter.imageToWidget(pair.first);
+
+        if (!KisAlgebra2D::fuzzyPointCompare(realPointWidgetPos, pair.second)) {
+            qWarning() << "Failed to compare test points after transformation:";
+            qWarning() << "    image point:          " << pair.first;
+            qWarning() << "    real widget point:    " << realPointWidgetPos;
+            qWarning() << "    expected widget point:" << pair.second;
+            QFAIL("faled to compare points after transforamation");
+        }
+    }
+
+    QCOMPARE(converter.minZoom(), expectedFinalMinZoom);
+    QCOMPARE(converter.maxZoom(), expectedFinalMaxZoom);
+
+    if (!compareZoomLevels(converter.standardZoomLevels(), expectedFinalZoomLevels)) {
+        QFAIL("Failed to compare original zoom levels");
+    }
+
+}
+
+void KisCoordinatesConverterTest::testFindNextZoom_data()
+{
+    QTest::addColumn<bool>("findNext");
+    QTest::addColumn<qreal>("startZoom");
+    QTest::addColumn<qreal>("expectedZoom");
+
+    QTest::newRow("next-below-minimum")
+        << true
+        << 0.03
+        << 0.0625;
+
+    QTest::newRow("next-middle")
+        << true
+        << 0.07
+        << 0.0833333;
+
+    QTest::newRow("next-collision")
+        << true
+        << 0.0833333
+        << 0.125;
+
+    QTest::newRow("next-above-maximum")
+        << true
+        << 65.0
+        << 65.0; // keep the current level
+
+    QTest::newRow("prev-below-minimum")
+        << false
+        << 0.03
+        << 0.03;
+
+    QTest::newRow("prev-middle")
+        << false
+        << 0.07
+        << 0.0625;
+
+    QTest::newRow("prev-collision")
+        << false
+        << 0.0833333
+        << 0.0625;
+
+    QTest::newRow("prev-above-maximum")
+        << false
+        << 65.0
+        << 64.0;
+
+
+}
+
+void KisCoordinatesConverterTest::testFindNextZoom()
+{
+    QFETCH(bool, findNext);
+    QFETCH(qreal, startZoom);
+    QFETCH(qreal, expectedZoom);
+
+    const QVector<qreal> levels{0.0625, 0.0833333, 0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1, 1.33333, 2, 2.66667, 4, 5.33333, 8, 10.6667, 16, 21.3333, 32, 42.6667, 64};
+
+    const qreal resultZoom =
+        findNext ?
+        KisCoordinatesConverter::findNextZoom(startZoom, levels) :
+        KisCoordinatesConverter::findPrevZoom(startZoom, levels);
+
+    QCOMPARE(resultZoom, expectedZoom);
+}
+
+void KisCoordinatesConverterTest::testZoomTo_data()
+{
+    QTest::addColumn<QPointF>("originalOffset");
+    QTest::addColumn<qreal>("originalZoom");
+    QTest::addColumn<PointPairs>("originalTestPoints");
+    QTest::addColumn<QRectF>("zoomToRect");
+    QTest::addColumn<qreal>("expectedZoom");
+    QTest::addColumn<PointPairs>("expectedTestPoints");
+
+    QTest::newRow("constant")
+        << QPointF(-100,-100)
+        << 1.0
+        << PointPairs{
+                      {{0,0},     {100,100}},
+                      {{100,100}, {200,200}},
+                     }
+        << QRectF(200,200,100,100)
+        << 5.0
+        << PointPairs{
+                      {{100,100},     {100, 0}}, // the selected portion takes the whole canvas
+                      {{200,200},     {600, 500}},
+                     };
+}
+
+void KisCoordinatesConverterTest::testZoomTo()
+{
+    QFETCH(QPointF, originalOffset);
+    QFETCH(qreal, originalZoom);
+    QFETCH(PointPairs, originalTestPoints);
+    QFETCH(QRectF, zoomToRect);
+    QFETCH(qreal, expectedZoom);
+    QFETCH(PointPairs, expectedTestPoints);
+
+    KisImageSP image;
+    KisCoordinatesConverter converter;
+    initImage(&image, &converter);
+
+    converter.setImage(image);
+    converter.setZoom(originalZoom);
+    converter.setDocumentOffset(originalOffset);
+    converter.setCanvasWidgetSize(QSize(700, 500));
+
+    for (const auto &pair : std::as_const(originalTestPoints)) {
+        const QPointF realPointWidgetPos = converter.imageToWidget(pair.first);
+
+        if (!KisAlgebra2D::fuzzyPointCompare(realPointWidgetPos, pair.second)) {
+            qWarning() << "Failed to compare test points before transformation:";
+            qWarning() << "    image point:          " << pair.first;
+            qWarning() << "    real widget point:    " << realPointWidgetPos;
+            qWarning() << "    expected widget point:" << pair.second;
+            QFAIL("faled to compare points before transforamation");
+        }
+    }
+
+    converter.zoomTo(zoomToRect);
+
+    QCOMPARE(converter.zoom(), expectedZoom);
 
     for (const auto &pair : std::as_const(expectedTestPoints)) {
         const QPointF realPointWidgetPos = converter.imageToWidget(pair.first);

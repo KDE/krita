@@ -13,6 +13,8 @@
 
 #include "kritawidgets_export.h"
 
+class KoZoomState;
+
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list (combobox), also with
@@ -25,7 +27,6 @@
 class KRITAWIDGETS_EXPORT KoZoomAction : public KSelectAction
 {
     Q_OBJECT
-    Q_PROPERTY(qreal effectiveZoom READ effectiveZoom NOTIFY zoomChanged)
 public:
 
   /**
@@ -34,7 +35,7 @@ public:
    * @param text The text that will be displayed.
    * @param parent The action's parent object.
    */
-    KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
+    KoZoomAction(const QString& text, QObject *parent);
     ~KoZoomAction() override;
 
     /**
@@ -42,74 +43,20 @@ public:
      */
     QWidget* createWidget(QWidget* parent) override;
 
-
-    qreal effectiveZoom() const;
-
 public Q_SLOTS:
 
-    /**
-     * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
-     * into the list at proper place so that the values remain sorted.
-     * emits zoomChanged
-     */
-    void setZoom( qreal zoom );
-
-  /**
-   * Change the zoom to a closer look than current
-   * Zoom mode will be CONSTANT afterwards
-   * emits zoomChanged
-   */
-    void zoomIn( );
-
-  /**
-   * Change the zoom to a wider look than current
-   * Zoom mode will be CONSTANT afterwards
-   * emits zoomChanged
-   */
-    void zoomOut( );
-
-  /**
-   * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
-   * plugged into the viewbar.
-   */
-    void setEffectiveZoom(qreal zoom);
-
-  /**
-   * Change the selected zoom mode.
-   */
-    void setSelectedZoomMode( KoZoomMode::Mode mode );
-
-  /**
-   * Change status of canvas size mapping button
-   * (emits canvasMappingModeChanged(bool) after the change, ALWAYS)
-   */
-    void setCanvasMappingMode(bool status);
+    void slotZoomStateChanged(const KoZoomState &zoomState);
 
     /**
-     * Returns next preferred zoom level that should be used for
-     * zoom in operations.
-     *
-     * This can be used by the caller, when it needs some special
-     * mode of zooming (e.g. relative to point) and needs
-     * KoCanvasControllerWidget to accomplish this.
+     * Change status of canvas size mapping button
+     * (emits canvasMappingModeChanged(bool) after the change, ALWAYS)
      */
-    qreal nextZoomLevel() const;
-
-    /**
-     * Returns previous preferred zoom level that should be used for
-     * zoom out operations.
-     *
-     * This can be used by the caller, when it needs some special
-     * mode of zooming (e.g. relative to point) and needs
-     * KoCanvasControllerWidget to accomplish this.
-     */
-    qreal prevZoomLevel() const;
-
-    void slotUpdateZoomLevels();
+    void setUsePrintResolutionMode(bool value);
 
 protected Q_SLOTS:
 
-    void triggered( const QString& text );
+    void slotTextZoomChanged(const QString &value);
+    void slotZoomLevelChangedIndex(int index);
     void sliderValueChanged(int value);
     void slotUpdateGuiAfterZoom();
 
@@ -123,89 +70,17 @@ Q_SIGNALS:
    */
     void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
-  /**
-   * Signal canvasMappingModeChanged is triggered when the user toggles the widget.
-   * Nothing else happens except that this signal is emitted.
-   * @param status Whether the special aspect mode is on
-   */
-    void canvasMappingModeChanged( bool status );
+    void sigUsePrintResolutionModeChanged(bool value);
 
-    /**
-     * Signal is triggered when the user clicks the zoom to selection button.
-     * Nothing else happens except that this signal is emitted.
-     */
-    void zoomedToSelection();
-
-    /**
-     * Signal is triggered when the user clicks the zoom to all button.
-     * Nothing else happens except that this signal is emitted.
-     */
-    void zoomedToAll();
-
-    void sliderZoomLevelsChanged(int value);
-    void zoomLevelsChanged(const QStringList &values);
-    void currentZoomLevelChanged(const QString &valueString);
-    void sliderChanged(int value);
-
-public:
-    /**
-     * Return the minimum zoom possible for documents.
-     *
-     * \return The minimum zoom possible.
-     */
-    qreal minimumZoom();
-    /**
-     * Return the maximum zoom possible for documents.
-     *
-     * \return The maximum zoom possible.
-     */
-    qreal maximumZoom();
-    /**
-     * Clamp the zoom value so that minimumZoom <= zoom <= maximumZoom.
-     *
-     * \param zoom The value to clamp.
-     *
-     * \return minimumZoom if zoom < minimumZoom, maximumZoom if zoom >
-     * maximumZoom, zoom if otherwise.
-     */
-    qreal clampZoom(qreal zoom);
-
-    /**
-     * Set the minimum zoom possible for documents.
-     *
-     * Note that after calling this, any existing KoZoomAction instances
-     * should be recreated.
-     *
-     * \param zoom The minimum zoom to use.
-     */
-    void setMinimumZoom(qreal zoom);
-    /**
-     * Set the maximum zoom possible for documents.
-     *
-     * Note that after calling this, any existing KoZoomAction instances
-     * should be recreated.
-     *
-     * \param zoom The maximum zoom to use.
-     */
-    void setMaximumZoom(qreal zoom);
-    /**
-     * Set the minimum and maximum zoom levels for documents.
-     *
-     * Note that after calling this, any existing KoZoomAction instances
-     * should be recreated.
-     *
-     * \param min The minimum zoom to use.
-     * \param max The maximum zoom to use.
-     */
-    void setMinMaxZoom(qreal min, qreal max);
+    void sigInternalUpdateZoomLevelsComboState(const QStringList &values, int index);
+    void sigInternalUpdateZoomLevelsSliderState(int size, int index);
+    void sigInternalUpdateUsePrintResolutionMode(bool value);
 
 protected:
-    /// Regenerates the action's items
-    void regenerateItems( const qreal zoom);
-
-private:
+    void regenerateItems();
     void syncSliderWithZoom();
 
+private:
     Q_DISABLE_COPY( KoZoomAction )
 
     class Private;

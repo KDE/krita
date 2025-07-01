@@ -12,10 +12,9 @@ set(kritawidgets_LIB_SRCS
     KoConfigAuthorPage.cpp
     KoUnitDoubleSpinBox.cpp
     KoZoomAction.cpp
-    KoZoomController.cpp
+    KoZoomActionState.cpp
     KoZoomInput.cpp
     KoZoomHandler.cpp
-    KoZoomMode.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp

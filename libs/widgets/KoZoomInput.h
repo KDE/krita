@@ -20,11 +20,14 @@ class KoZoomInput : public QStackedWidget
 
         void setZoomLevels(const QStringList& levels);
         void setCurrentZoomLevel(const QString& level);
+        void setCurrentZoomLevel(int index);
 
         bool eventFilter(QObject* watched, QEvent* event) override;
 
     Q_SIGNALS:
         void zoomLevelChanged(const QString& level);
+        void zoomLevelChangedIndex(int index);
+        void explicitZoomLevelRequested(const QString &level);
 
     protected:
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

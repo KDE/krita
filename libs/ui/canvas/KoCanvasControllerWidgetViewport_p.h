@@ -30,9 +30,6 @@ public:
     }
     void setDocumentSize(const QSizeF &size);
 
-public Q_SLOTS:
-    void documentOffsetMoved(const QPoint &);
-
 Q_SIGNALS:
     void sizeChanged();
 
@@ -64,7 +61,6 @@ private:
 
     QWidget *m_canvas;
     QSizeF m_documentSize; // Size in pixels of the document
-    QPoint m_documentOffset; // Place where the canvas widget should
 };
 
 #endif

@@ -4,7 +4,6 @@ include(KritaAddBrokenUnitTest)
 
 kis_add_tests(
     zoomhandler_test.cpp
-    zoomcontroller_test.cpp
     KoAnchorSelectionWidgetTest.cpp
     TestKoZoomAction.cpp
     TestKisTagSelectionWidget.cpp

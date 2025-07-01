@@ -15,7 +15,6 @@
 #include "KoToolProxy_p.h"
 #include "KoSelection.h"
 #include "KoCanvasController.h"
-#include "KoCanvasControllerWidget.h"
 #include "KoShape.h"
 #include "KoShapeLayer.h"
 #include "KoShapeRegistry.h"
@@ -752,16 +751,6 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     if (!canvasData || to == 0) {
         return;
     }
-
-    // Check if this app is about QWidget-based KoCanvasControllerWidget canvasses
-    // XXX: Focus handling for non-qwidget based canvases!
-    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-    if (!canvasControllerWidget) {
-        return;
-    }
-
-    // canvasWidget is set as focusproxy for KoCanvasControllerWidget,
-    // so all focus checks are to be done against canvasWidget objects
 
     // focus returned to current canvas?
     if (to == canvasData->canvas->canvas()->canvasWidget()) {

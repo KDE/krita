@@ -15,11 +15,13 @@
 #include <FlakeDebug.h>
 
 #include <KoConfig.h>
-#include "KoCanvasSupervisor.h"
+#include <KoCanvasControllerWidget.h>
+
 
 class KoCanvasControllerWidget;
 class Viewport;
 class KoCanvasBase;
+class KoCanvasSupervisor;
 
 class Q_DECL_HIDDEN KoCanvasControllerWidget::Private
 {
@@ -31,17 +33,8 @@ public:
         , canvas(0)
         , viewportWidget(0)
         , ignoreScrollSignals(false)
-        , vastScrollingFactor(0)
     {
     }
-
-    /**
-     * Gets called by the tool manager if this canvas controller is the current active canvas controller.
-     */
-    void setDocumentOffset();
-
-    void resetScrollBars();
-    void emitPointerPositionChangedSignals(QEvent *event);
 
     void activate();
     void unsetCanvas();
@@ -51,7 +44,6 @@ public:
     QPointer<KoCanvasBase> canvas;
     Viewport *viewportWidget;
     bool ignoreScrollSignals;
-    qreal vastScrollingFactor;
 };
 
 #endif

@@ -224,13 +224,10 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
 
     d->canvasController.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    d->canvasController.setVastScrolling(cfg.vastScrolling());
     d->canvasController.setCanvas(&d->canvas);
 
     d->zoomManager.setup(d->actionCollection);
 
-
-    connect(&d->canvasController, SIGNAL(documentSizeChanged()), &d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
@@ -403,11 +400,6 @@ void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)
     if (!d->isCurrent) {
         d->currentNode = newActiveNode;
     }
-}
-
-KoZoomController *KisView::zoomController() const
-{
-    return d->zoomManager.zoomController();
 }
 
 KisZoomManager *KisView::zoomManager() const
@@ -1220,7 +1212,7 @@ void KisView::slotScreenOrResolutionChanged()
      * slotScreenOrResolutionChanged() is guaranteed to come after
      * slotMigratedToScreen() when a migration happens
      */
-    d->zoomManager.updateScreenResolution(this);
+    d->canvasController.updateScreenResolution(this);
 
     if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
         int penWidth = qRound(d->screenMigrationTracker.currentScreen()->devicePixelRatio());
@@ -1274,60 +1266,6 @@ void KisView::slotUpdateDocumentTitle()
     this->setWindowTitle(title);
 }
 
-void KisView::resetImageSizeAndScroll(bool changeCentering,
-                                      const QPointF &oldImageStillPoint,
-                                      const QPointF &newImageStillPoint)
-{
-    const KisCoordinatesConverter *converter = d->canvas.coordinatesConverter();
-
-    QPointF oldPreferredCenter = d->canvasController.preferredCenter();
-
-    /**
-     * Calculating the still point in old coordinates depending on the
-     * parameters given
-     */
-
-    QPointF oldStillPoint;
-
-    if (changeCentering) {
-        oldStillPoint =
-                converter->imageToWidget(oldImageStillPoint) +
-                converter->documentOffset();
-    } else {
-        QSizeF oldDocumentSize = d->canvasController.documentSize();
-        oldStillPoint = QPointF(0.5 * oldDocumentSize.width(), 0.5 * oldDocumentSize.height());
-    }
-
-    /**
-     * Updating the document size
-     */
-
-    QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
-    KoZoomController *zc = d->zoomManager.zoomController();
-    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom(),
-                d->zoomManager.resolutionX(), d->zoomManager.resolutionY());
-    zc->setPageSize(size);
-    zc->setDocumentSize(size, true);
-
-    /**
-     * Calculating the still point in new coordinates depending on the
-     * parameters given
-     */
-
-    QPointF newStillPoint;
-
-    if (changeCentering) {
-        newStillPoint =
-                converter->imageToWidget(newImageStillPoint) +
-                converter->documentOffset();
-    } else {
-        QSizeF newDocumentSize = d->canvasController.documentSize();
-        newStillPoint = QPointF(0.5 * newDocumentSize.width(), 0.5 * newDocumentSize.height());
-    }
-
-    d->canvasController.setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
-}
-
 void KisView::syncLastActiveNodeToDocument()
 {
     KisDocument *doc = document();
@@ -1345,8 +1283,10 @@ void KisView::saveViewState(KisPropertiesConfiguration &config) const
         config.setProperty("geometry", d->subWindow->saveGeometry().toBase64());
     }
 
-    config.setProperty("zoomMode", (int)zoomController()->zoomMode());
-    config.setProperty("zoom", d->canvas.coordinatesConverter()->zoom());
+    const KoZoomState zoomState = d->canvasController.zoomState();
+
+    config.setProperty("zoomMode", zoomState.mode);
+    config.setProperty("zoom", zoomState.zoom);
 
     d->canvasController.saveCanvasState(config);
 }
@@ -1360,7 +1300,7 @@ void KisView::restoreViewState(const KisPropertiesConfiguration &config)
 
     qreal zoom = config.getFloat("zoom", 1.0f);
     int zoomMode = config.getInt("zoomMode", (int)KoZoomMode::ZOOM_PAGE);
-    d->zoomManager.zoomController()->setZoom((KoZoomMode::Mode)zoomMode, zoom);
+    d->canvasController.setZoom((KoZoomMode::Mode)zoomMode, zoom);
     d->canvasController.restoreCanvasState(config);
 }
 
@@ -1477,15 +1417,6 @@ void KisView::slotLoadingFinished()
 
     canvasBase()->initializeImage();
 
-    /**
-     * Dirty hack alert
-     */
-    d->zoomManager.zoomController()->setCanvasMappingMode(false);
-
-    if (viewConverter()) {
-        viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-    }
-
     connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)));
     connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), this, SIGNAL(sigProfileChanged(const KoColorProfile*)));
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
@@ -1497,16 +1428,15 @@ void KisView::slotLoadingFinished()
 
 void KisView::slotImageResolutionChanged()
 {
-    resetImageSizeAndScroll(false);
+    d->canvasController.syncOnImageResolutionChange();
+    d->zoomManager.syncOnImageResolutionChange();
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGuiAfterDocumentSize();
 }
 
 void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
 {
-    resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
+    d->canvasController.syncOnImageSizeChange(oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGuiAfterDocumentSize();
 }
 
 void KisView::closeView()

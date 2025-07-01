@@ -14,8 +14,10 @@
 #include "kis_types.h"
 #include "KisWraparoundAxis.h"
 
+class KisCanvasState;
 class KConfigGroup;
 class KisView;
+class KisCanvasState;
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
@@ -30,13 +32,26 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) override;
     void activate() override;
 
     QPointF currentCursorPosition() const override;
 
+    KisCanvasState canvasState() const override;
+    KoZoomState zoomState() const override;
+
+    QPointF preferredCenter() const override;
+    void setPreferredCenter(const QPointF &viewPoint) override;
+
+    void zoomIn() override;
+    void zoomIn(const QPoint &center) override;
+    void zoomOut() override;
+    void zoomOut(const QPoint &center) override;
+
+    void syncOnReferencesChange(const QRectF &referencesRect);
+    void syncOnImageResolutionChange();
+    void syncOnImageSizeChange(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
 public:
-    using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
     WrapAroundAxis wrapAroundModeAxis() const;
     bool levelOfDetailMode() const;
@@ -46,7 +61,15 @@ public:
 
     void resetScrollBars() override;
 
+    void updateScreenResolution(QWidget *parentWidget);
+    bool usePrintResolutionMode();
+
+    qreal effectiveCanvasResolutionX() const;
+    qreal effectiveCanvasResolutionY() const;
+
 public Q_SLOTS:
+    void setUsePrintResolutionMode(bool value);
+
     void mirrorCanvas(bool enable);
     void mirrorCanvasAroundCursor(bool enable);
     void mirrorCanvasAroundCanvas(bool enable);
@@ -68,9 +91,21 @@ public Q_SLOTS:
     void slotTogglePixelGrid(bool value);
     void slotToggleLevelOfDetailMode(bool value);
 
+protected:
+    void updateCanvasOffsetInternal(const QPointF &newOffset) override;
+    void updateCanvasWidgetSizeInternal(const QSize &newSize) override;
+    void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint) override;
+    void zoomToInternal(const QRect &viewRect) override;
+
+private:
+    void mirrorCanvasImpl(const QPointF &widgetPoint, bool enable);
+
 Q_SIGNALS:
     void documentSizeChanged();
-    void canvasMirrorModeChanged(bool);
+
+Q_SIGNALS:
+    void sigUsePrintResolutionModeChanged(bool value);
+
 
 private:
     struct Private;

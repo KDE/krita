@@ -24,6 +24,9 @@
 #include "kis_config.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_config_notifier.h"
+#include <KoUnit.h>
+
+#include "KisCanvasState.h"
 
 static const int gRulersUpdateDelay = 80 /* ms */;
 
@@ -47,9 +50,12 @@ struct KisCanvasController::Private {
     KisCoordinatesConverter *coordinatesConverter {0};
     KisCanvasController *q {0};
     QScopedPointer<KisSignalCompressorWithParam<QPoint> > mousePositionCompressor;
+    bool usePrintResolutionMode {false};
+    qreal physicalDpiX {72.0};
+    qreal physicalDpiY {72.0};
+    qreal devicePixelRatio {1.0};
 
     void emitPointerPositionChangedSignals(QPoint pointerPos);
-    void updateDocumentSizeAfterTransform();
     void showRotationValueOnCanvas();
     void showMirrorStateOnCanvas();
 };
@@ -63,19 +69,6 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QPoint poin
     q->proxyObject->emitDocumentMousePositionChanged(documentPos);
     q->proxyObject->emitCanvasMousePositionChanged(pointerPos);
 }
-
-void KisCanvasController::Private::updateDocumentSizeAfterTransform()
-{
-    // round the size of the area to the nearest integer instead of getting aligned rect
-    QSize widgetSize = coordinatesConverter->imageRectInWidgetPixels().toRect().size();
-    q->updateDocumentSize(widgetSize, true);
-
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(q->canvas());
-    Q_ASSERT(kritaCanvas);
-
-    kritaCanvas->notifyZoomChanged();
-}
-
 
 KisCanvasController::KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KisKActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, observerProvider, parent),
@@ -100,6 +93,36 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     }
 
     KoCanvasControllerWidget::setCanvas(canvas);
+}
+
+void KisCanvasController::updateScreenResolution(QWidget *parentWidget)
+{
+    if (qFuzzyCompare(parentWidget->physicalDpiX(), m_d->physicalDpiX) &&
+        qFuzzyCompare(parentWidget->physicalDpiY(), m_d->physicalDpiY) &&
+        qFuzzyCompare(parentWidget->devicePixelRatioF(), m_d->devicePixelRatio)) {
+
+        return;
+    }
+
+    m_d->physicalDpiX = parentWidget->physicalDpiX();
+    m_d->physicalDpiY = parentWidget->physicalDpiY();
+    m_d->devicePixelRatio = parentWidget->devicePixelRatioF();
+
+    m_d->coordinatesConverter->setDevicePixelRatio(m_d->devicePixelRatio);
+
+    setUsePrintResolutionMode(m_d->usePrintResolutionMode);
+}
+
+qreal KisCanvasController::effectiveCanvasResolutionX() const
+{
+    KisImageSP image = m_d->view->image();
+    return m_d->usePrintResolutionMode ? POINT_TO_INCH(m_d->physicalDpiX) : image->xRes() / m_d->devicePixelRatio;
+}
+
+qreal KisCanvasController::effectiveCanvasResolutionY() const
+{
+    KisImageSP image = m_d->view->image();
+    return m_d->usePrintResolutionMode ? POINT_TO_INCH(m_d->physicalDpiY) : image->yRes() / m_d->devicePixelRatio;
 }
 
 void KisCanvasController::activate()
@@ -189,13 +212,6 @@ void KisCanvasController::ensureVisibleDoc(const QRectF &docRect, bool smooth)
     pan(QPoint(horizontalMove, verticalMove));
 }
 
-void KisCanvasController::updateDocumentSize(const QSizeF &sz, bool recalculateCenter)
-{
-    KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
-
-    Q_EMIT documentSizeChanged();
-}
-
 void KisCanvasController::Private::showMirrorStateOnCanvas()
 {
     bool isXMirrored = coordinatesConverter->xAxisMirrored();
@@ -207,14 +223,19 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
             QIcon(), 500, KisFloatingMessage::Low);
 }
 
+void KisCanvasController::mirrorCanvasImpl(const QPointF &widgetPoint, bool enable)
+{
+    const KisCanvasState oldCanvasState = canvasState();
+    m_d->coordinatesConverter->mirror(widgetPoint, enable, false);
+    const KisCanvasState newCanvasState = canvasState();
+    emitSignals(oldCanvasState, newCanvasState);
+
+    m_d->showMirrorStateOnCanvas();
+}
+
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
-    m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValue(newOffset);
-    m_d->showMirrorStateOnCanvas();
-
-    Q_EMIT canvasMirrorModeChanged(enable);
+    mirrorCanvasImpl(m_d->coordinatesConverter->widgetCenterPoint(), enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
@@ -225,29 +246,19 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
         : QCursor::pos();
     KoCanvasBase* canvas = m_d->view->canvasBase();
     QWidget *canvasWidget = canvas->canvasWidget();
-    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
+    QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
     
     if (!canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
-        mirrorCanvas(enable);
-    } else {
-        QPoint newOffset = m_d->coordinatesConverter->mirror(cursorPosWidget, enable, false);
-        m_d->updateDocumentSizeAfterTransform();
-        setScrollBarValue(newOffset);
-        m_d->showMirrorStateOnCanvas();
+        cursorPosWidget = m_d->coordinatesConverter->widgetCenterPoint();
     }
-
-    Q_EMIT canvasMirrorModeChanged(enable);
+    
+    mirrorCanvasImpl(cursorPosWidget, enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
 {
     const QPointF center = m_d->coordinatesConverter->imageCenterInWidgetPixel();
-    QPoint newOffset = m_d->coordinatesConverter->mirror(center, enable, false);
-    setScrollBarValue(newOffset);
-    m_d->updateDocumentSizeAfterTransform();
-    m_d->showMirrorStateOnCanvas();
-
-    Q_EMIT canvasMirrorModeChanged(enable);
+    mirrorCanvasImpl(center, enable);
 }
 
 void KisCanvasController::Private::showRotationValueOnCanvas()
@@ -275,9 +286,11 @@ void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center, bool 
     if(isNativeGesture) {
         m_d->coordinatesConverter->enableNatureGestureFlag();
     }
-    QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);
-    m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValue(newOffset);
+    const KisCanvasState oldCanvasState = canvasState();
+    m_d->coordinatesConverter->rotate(center, angle);
+    const KisCanvasState newCanvasState = canvasState();
+    emitSignals(oldCanvasState, newCanvasState);
+
     m_d->showRotationValueOnCanvas();
 }
 
@@ -303,9 +316,11 @@ qreal KisCanvasController::rotation() const
 
 void KisCanvasController::resetCanvasRotation()
 {
-    QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
-    m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValue(newOffset);
+    const KisCanvasState oldCanvasState = canvasState();
+    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
+    const KisCanvasState newCanvasState = canvasState();
+    emitSignals(oldCanvasState, newCanvasState);
+
     m_d->showRotationValueOnCanvas();
 }
 
@@ -445,45 +460,173 @@ void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &c
     kritaCanvas->setLodPreferredInCanvas(config.getBool("enableInstantPreview", false));
 }
 
+void KisCanvasController::syncOnReferencesChange(const QRectF &referencesRect)
+{
+    const KisCanvasState oldCanvasState = canvasState();
+    m_d->coordinatesConverter->setExtraReferencesBounds(referencesRect.toAlignedRect());
+    const KisCanvasState newCanvasState = canvasState();
+
+    emitSignals(oldCanvasState, newCanvasState);
+}
+
+void KisCanvasController::syncOnImageResolutionChange()
+{
+    const KisCanvasState oldCanvasState = canvasState();
+
+    KisImageSP image = m_d->view->image();
+    m_d->coordinatesConverter->setImageResolution(image->xRes(), image->yRes());
+
+    if (!m_d->usePrintResolutionMode) {
+        m_d->coordinatesConverter->setZoom(m_d->coordinatesConverter->zoomMode(),
+                                           m_d->coordinatesConverter->zoom(),
+                                           effectiveCanvasResolutionX(),
+                                           effectiveCanvasResolutionY(),
+                                           m_d->coordinatesConverter->imageCenterInWidgetPixel());
+    }
+
+    const KisCanvasState newCanvasState = canvasState();
+
+    emitSignals(oldCanvasState, newCanvasState);
+}
+
+void KisCanvasController::syncOnImageSizeChange(const QPointF &oldStillPoint, const QPointF &newStillPoint)
+{
+    const KisCanvasState oldCanvasState = canvasState();
+
+    KisImageSP image = m_d->view->image();
+    m_d->coordinatesConverter->setImageBounds(image->bounds(), oldStillPoint, newStillPoint);
+
+    const KisCanvasState newCanvasState = canvasState();
+
+    emitSignals(oldCanvasState, newCanvasState);
+}
+
+void KisCanvasController::updateCanvasOffsetInternal(const QPointF &newOffset)
+{
+    m_d->coordinatesConverter->setDocumentOffset(
+        m_d->coordinatesConverter->snapToDevicePixel(newOffset));
+}
+
+void KisCanvasController::updateCanvasWidgetSizeInternal(const QSize &newSize)
+{
+    m_d->coordinatesConverter->setCanvasWidgetSizeKeepZoom(
+        m_d->coordinatesConverter->snapWidgetSizeToDevicePixel(newSize));
+}
+
+void KisCanvasController::updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
+{
+    m_d->coordinatesConverter->setZoom(mode, zoom, resolutionX, resolutionY, stillPoint);
+}
+
+KisCanvasState KisCanvasController::canvasState() const
+{
+    return KisCanvasState::fromConverter(*m_d->coordinatesConverter);
+}
+
+KoZoomState KisCanvasController::zoomState() const
+{
+    return canvasState().zoomState();
+}
+
+QPointF KisCanvasController::preferredCenter() const
+{
+    const QPointF transformedImageBoundsTopleft = m_d->coordinatesConverter->imageRectInWidgetPixels().topLeft();
+    return m_d->coordinatesConverter->widgetCenterPoint() - transformedImageBoundsTopleft;
+}
+
+void KisCanvasController::setPreferredCenter(const QPointF &viewPoint)
+{
+    const KisCanvasState oldState = canvasState();
+
+    const QPointF expectedTransformedImageBoundsTopleft = m_d->coordinatesConverter->widgetCenterPoint() - viewPoint;
+    updateCanvasOffsetInternal(-expectedTransformedImageBoundsTopleft);
+
+    emitSignals(oldState, canvasState());
+}
+
+void KisCanvasController::zoomIn()
+{
+    zoomIn(m_d->coordinatesConverter->widgetCenterPoint().toPoint());
+}
+
+void KisCanvasController::zoomOut()
+{
+    zoomOut(m_d->coordinatesConverter->widgetCenterPoint().toPoint());
+}
+
+void KisCanvasController::zoomIn(const QPoint &center)
+{
+    const qreal newZoom = KisCoordinatesConverter::findNextZoom(m_d->coordinatesConverter->zoom(), m_d->coordinatesConverter->standardZoomLevels());
+    if (!qFuzzyCompare(newZoom, m_d->coordinatesConverter->zoom())) {
+        setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, center);
+    }
+}
+
+void KisCanvasController::zoomOut(const QPoint &center)
+{
+    const qreal newZoom = KisCoordinatesConverter::findPrevZoom(m_d->coordinatesConverter->zoom(), m_d->coordinatesConverter->standardZoomLevels());
+    if (!qFuzzyCompare(newZoom, m_d->coordinatesConverter->zoom())) {
+        setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, center);
+    }
+}
+
+void KisCanvasController::zoomToInternal(const QRect &viewRect)
+{
+    m_d->coordinatesConverter->zoomTo(viewRect);
+}
+
 void KisCanvasController::resetScrollBars()
 {
     // The scrollbar value always points at the top-left corner of the
     // bit of image we paint.
 
-    KisDocument *doc = m_d->view->document();
-    if (!doc) return;
-
-    QRectF documentBounds = doc->documentBounds();
-    QRectF viewRect = m_d->coordinatesConverter->imageToWidget(documentBounds);
-
-    // Cancel out any existing pan
-    const QRectF imageBounds = m_d->view->image()->bounds();
-    const QRectF imageBB = m_d->coordinatesConverter->imageToWidget(imageBounds);
-    QPointF pan = imageBB.topLeft();
-    viewRect.translate(-pan);
-
-    int drawH = viewport()->height();
-    int drawW = viewport()->width();
-
-    qreal horizontalReserve = vastScrollingFactor() * drawW;
-    qreal verticalReserve = vastScrollingFactor() * drawH;
-
-    qreal xMin = viewRect.left() - horizontalReserve;
-    qreal yMin = viewRect.top() - verticalReserve;
-
-    qreal xMax = viewRect.right() - drawW + horizontalReserve;
-    qreal yMax = viewRect.bottom() - drawH + verticalReserve;
+    const QPoint minOffset = m_d->coordinatesConverter->minimumOffset();
+    const QPoint maxOffset = m_d->coordinatesConverter->maximumOffset();
+    const QPoint offset = m_d->coordinatesConverter->documentOffset();
 
     QScrollBar *hScroll = horizontalScrollBar();
     QScrollBar *vScroll = verticalScrollBar();
 
-    hScroll->setRange(static_cast<int>(xMin), static_cast<int>(xMax));
-    vScroll->setRange(static_cast<int>(yMin), static_cast<int>(yMax));
+    QSignalBlocker b1(hScroll);
+    QSignalBlocker b2(vScroll);
 
-    int fontHeight = QFontMetrics(font()).height();
+    hScroll->setRange(minOffset.x(), maxOffset.x());
+    hScroll->setValue(offset.x());
+    vScroll->setRange(minOffset.y(), maxOffset.y());
+    vScroll->setValue(offset.y());
+
+    const int drawH = viewport()->height() / 4;
+    const int drawW = viewport()->width() / 4;
+    const int fontHeight = QFontMetrics(font()).height();
 
     vScroll->setPageStep(drawH);
     vScroll->setSingleStep(fontHeight);
     hScroll->setPageStep(drawW);
     hScroll->setSingleStep(fontHeight);
+}
+
+bool KisCanvasController::usePrintResolutionMode()
+{
+    return m_d->usePrintResolutionMode;
+}
+
+void KisCanvasController::setUsePrintResolutionMode(bool value)
+{
+    const bool changed = value != m_d->usePrintResolutionMode;
+
+    KisImageSP image = m_d->view->image();
+
+    // changeCanvasMappingMode is called with the same canvasMappingMode when the window is
+    // moved across screens. Preserve the old zoomMode if this is the case.
+    const KoZoomMode::Mode newMode =
+            !changed ? m_d->coordinatesConverter->zoomMode() : KoZoomMode::ZOOM_CONSTANT;
+    const qreal newZoom = m_d->coordinatesConverter->zoom();
+
+    m_d->usePrintResolutionMode = value;
+
+    setZoom(newMode, newZoom, effectiveCanvasResolutionX(), effectiveCanvasResolutionY());
+
+    if (changed) {
+        Q_EMIT sigUsePrintResolutionModeChanged(value);
+    }
 }

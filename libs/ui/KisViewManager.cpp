@@ -64,6 +64,7 @@
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KisResourceLocator.h>
+#include <KoDummyCanvasController.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -499,8 +500,8 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setShowRulers(bool)));
         d->viewConnections.addUniqueConnection(d->rulersTrackMouseAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setRulersTrackMouse(bool)));
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
-        d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
-        d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+        d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomIn()));
+        d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomOut()));
         d->viewConnections.addUniqueConnection(d->zoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFit()));
         d->viewConnections.addUniqueConnection(d->zoomToFitWidth, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFitWidth()));
         d->viewConnections.addUniqueConnection(d->zoomToFitHeight, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFitHeight()));
@@ -508,8 +509,26 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(d->resetDisplay, SIGNAL(triggered()), imageView->viewManager(), SLOT(slotResetDisplay()));
 
-        d->viewConnections.addUniqueConnection(d->viewPrintSize, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(changeCanvasMappingMode(bool)));
-        d->viewConnections.addUniqueConnection(d->viewPrintSize, SIGNAL(toggled(bool)), imageView->zoomController()->zoomAction(), SLOT(setCanvasMappingMode(bool)));
+        d->viewConnections.addConnection(imageView->canvasController(),
+                                         &KisCanvasController::sigUsePrintResolutionModeChanged,
+                                         this,
+                                         [this](bool value) {
+                                             QSignalBlocker b(d->viewPrintSize);
+                                             d->viewPrintSize->setChecked(value);
+                                         });
+        d->viewPrintSize->setChecked(imageView->canvasController()->usePrintResolutionMode());
+        d->viewConnections.addUniqueConnection(d->viewPrintSize, &KisAction::toggled,
+            imageView->canvasController(), &KisCanvasController::setUsePrintResolutionMode);
+
+        d->viewConnections.addUniqueConnection(imageView->canvasController(),
+                                               &KisCanvasController::sigUsePrintResolutionModeChanged,
+                                               imageView->zoomManager()->zoomAction(),
+                                               &KoZoomAction::setUsePrintResolutionMode);
+        imageView->zoomManager()->zoomAction()->setUsePrintResolutionMode(imageView->canvasController()->usePrintResolutionMode());
+        d->viewConnections.addUniqueConnection(imageView->zoomManager()->zoomAction(),
+                                               &KoZoomAction::sigUsePrintResolutionModeChanged,
+                                               imageView->canvasController(),
+                                               &KisCanvasController::setUsePrintResolutionMode);
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
@@ -542,7 +561,6 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
-        d->currentImageView->zoomManager()->updateCurrentZoomResource();
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
@@ -557,9 +575,10 @@ void KisViewManager::setCurrentView(KisView *view)
                     this, SLOT(updateGUI()));
 
         d->viewConnections.addUniqueConnection(
-                    d->currentImageView->zoomManager()->zoomController(),
-                    SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-                    canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    d->currentImageView->canvasController()->proxyObject,
+                    &KoCanvasControllerProxyObject::effectiveZoomChanged,
+                    canvasResourceProvider(),
+                    &KisCanvasResourceProvider::slotOnScreenResolutionChanged);
     }
 
     d->actionManager.updateGUI();
@@ -568,15 +587,6 @@ void KisViewManager::setCurrentView(KisView *view)
     canvasResourceProvider()->slotOnScreenResolutionChanged();
 
     Q_EMIT viewChanged();
-}
-
-
-KoZoomController *KisViewManager::zoomController() const
-{
-    if (d->currentImageView) {
-        return d->currentImageView->zoomController();
-    }
-    return 0;
 }
 
 KisImageWSP KisViewManager::image() const
@@ -1431,9 +1441,11 @@ void KisViewManager::switchCanvasOnly(bool toggled)
     }
 
     if (useCanvasOffsetCompensation && toggled) {
+        const KoZoomMode::Mode mode = d->currentImageView->canvasController()->zoomState().mode;
+        
         const bool allowedZoomMode =
-            (zoomController()->zoomMode() == KoZoomMode::ZOOM_CONSTANT) ||
-            (zoomController()->zoomMode() == KoZoomMode::ZOOM_HEIGHT);
+            (mode == KoZoomMode::ZOOM_CONSTANT) ||
+            (mode == KoZoomMode::ZOOM_HEIGHT);
 
         if (allowedZoomMode) {
             // Defer the pan action until the layout is fully settled in (including the menu bars, etc.).
@@ -1547,10 +1559,6 @@ void KisViewManager::guiUpdateTimeout()
     d->nodeManager.updateGUI();
     d->selectionManager.updateGUI();
     d->filterManager.updateGUI();
-    if (zoomManager()) {
-        zoomManager()->updateGuiAfterDocumentSize();
-        zoomManager()->slotZoomLevelsChanged();
-    }
     d->gridManager.updateGUI();
     d->actionManager.updateGUI();
 }
@@ -1665,11 +1673,6 @@ void KisViewManager::slotUpdatePixelGridAction()
 
     KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled() && cfg.useOpenGL());
-}
-
-void KisViewManager::updatePrintSizeAction(bool canvasMappingMode)
-{
-    d->viewPrintSize->setChecked(canvasMappingMode);
 }
 
 void KisViewManager::slotActivateTransformTool()

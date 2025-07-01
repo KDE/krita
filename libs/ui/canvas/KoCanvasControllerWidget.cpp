@@ -218,6 +218,10 @@ void KoCanvasControllerWidget::emitSignals(const KisCanvasState &oldState, const
     if (oldState.imageRectInWidgetPixels != newState.imageRectInWidgetPixels) {
         proxyObject->emitDocumentRectInWidgetPixelsChanged(newState.imageRectInWidgetPixels);
     }
+
+    if (oldState != newState) {
+        proxyObject->emitCanvasStateChanged();
+    }
 }
 
 void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)

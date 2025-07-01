@@ -52,8 +52,7 @@ void OverviewWidget::setCanvas(KisCanvas2 *canvas)
 
     if (m_canvas) {
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
-        // TODO: we need a proper "any signal changed" here
-        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetChanged()), this, SLOT(update()), Qt::UniqueConnection);
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasStateChanged()), this, SLOT(update()), Qt::UniqueConnection);
         connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
     }
 }

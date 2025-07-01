@@ -237,6 +237,7 @@ public:
     void emitDocumentRectInWidgetPixelsChanged(const QRectF &documentRectInWidgetPixels) { Q_EMIT documentRectInWidgetPixelsChanged(documentRectInWidgetPixels); }
     void emitDocumentRotationChanged(qreal angle) { Q_EMIT documentRotationChanged(angle); }
     void emitDocumentMirrorStatusChanged(bool mirrorX, bool mirrorY) { Q_EMIT documentMirrorStatusChanged(mirrorX, mirrorY); }
+    void emitCanvasStateChanged() { Q_EMIT canvasStateChanged(); }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }
@@ -304,6 +305,8 @@ Q_SIGNALS:
 
     void documentRotationChanged(qreal angle);
     void documentMirrorStatusChanged(bool mirrorX, bool mirrorY);
+
+    void canvasStateChanged();
 
 private:
     KoCanvasController *m_canvasController;

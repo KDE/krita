@@ -68,15 +68,41 @@ void KoZoomAction::slotZoomStateChanged(const KoZoomState &zoomState)
 
 void KoZoomAction::slotTextZoomChanged(const QString &value)
 {
-    bool isValid = false;
-    const qreal zoom = QLocale().toDouble(value, &isValid);
+    // HACK ALERT: all items in predefined zooms are handled by
+    //             slotZoomLevelChangedIndex(), which comes first;
+    //             this implementation is for explicitly entered
+    //             values only.
 
-    // HACK ALERT: all items in predefined zooms are not convertible to
-    //             qreal, so they will be handled by slotZoomLevelChangedIndex();
-    //             this implementation is for explicitly entered values only.
+    bool isValid = false;
+    qreal zoom = QLocale().toDouble(value, &isValid);
+
+    if (!isValid) {
+        QString trimmedValue = value.trimmed();
+        if (trimmedValue.endsWith('%')) {
+            trimmedValue.removeLast();
+        } else if (trimmedValue.startsWith('%')) {
+            /**
+             * In Turkish language, the percent sign can go before the
+             * number...
+             */
+            trimmedValue.removeFirst();
+        }
+        zoom = QLocale().toDouble(trimmedValue, &isValid);
+    }
 
     if (isValid) {
-        Q_EMIT zoomChanged(KoZoomMode::ZOOM_CONSTANT, zoom / 100.0);
+        /**
+         * If the value has been selected from the dropdown, then it has already
+         * been activated by slotZoomLevelChangedIndex() and we shouldn't emit it
+         * once again.
+         */
+        const KoZoomState &zoomState = d->currentActionState.zoomState;
+        if (zoomState.mode != KoZoomMode::ZOOM_CONSTANT ||
+            qRound(zoomState.zoom * 1000.0) != qRound(zoom * 10.0)) {
+
+            Q_EMIT zoomChanged(KoZoomMode::ZOOM_CONSTANT, zoom / 100.0);
+        }
+
     }
 }
 

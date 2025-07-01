@@ -18,6 +18,7 @@
 #include <kis_algebra_2d.h>
 #include <kis_assert.h>
 #include <KisValueCache.h>
+#include <KisPortingUtils.h>
 
 
 struct KisCoordinatesConverter::Private {

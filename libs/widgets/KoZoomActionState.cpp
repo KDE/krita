@@ -6,6 +6,7 @@
 
 #include "KoZoomActionState.h"
 
+#include <QDebug>
 #include <QLocale>
 #include <klocalizedstring.h>
 
@@ -31,12 +32,12 @@ QVector<KoZoomActionState::ZoomItem> generateZoomGuiItems(const QVector<qreal> &
     QVector<KoZoomActionState::ZoomItem> result;
     result.reserve(zoomLevels.size() + 3);
 
-    result.emplace_back(KoZoomMode::ZOOM_PAGE, -1.0, KoZoomMode::toString(KoZoomMode::ZOOM_PAGE));
-    result.emplace_back(KoZoomMode::ZOOM_WIDTH, -1.0, KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH));
-    result.emplace_back(KoZoomMode::ZOOM_HEIGHT, -1.0, KoZoomMode::toString(KoZoomMode::ZOOM_HEIGHT));
+    result.push_back(KoZoomActionState::ZoomItem{KoZoomMode::ZOOM_PAGE, -1.0, KoZoomMode::toString(KoZoomMode::ZOOM_PAGE)});
+    result.push_back(KoZoomActionState::ZoomItem{KoZoomMode::ZOOM_WIDTH, -1.0, KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH)});
+    result.push_back(KoZoomActionState::ZoomItem{KoZoomMode::ZOOM_HEIGHT, -1.0, KoZoomMode::toString(KoZoomMode::ZOOM_HEIGHT)});
 
     Q_FOREACH (qreal value, zoomLevels) {
-        result.emplace_back(KoZoomMode::ZOOM_CONSTANT, value, zoomToString(value));
+        result.push_back(KoZoomActionState::ZoomItem{KoZoomMode::ZOOM_CONSTANT, value, zoomToString(value)});
     }
 
     return result;

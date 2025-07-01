@@ -11,6 +11,8 @@
 #include <QFlags>
 #include "kritaflake_export.h"
 
+class QDebug;
+
 /**
  * The ZoomMode container
  */

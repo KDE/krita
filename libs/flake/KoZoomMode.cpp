@@ -6,9 +6,14 @@
 */
 
 #include "KoZoomMode.h"
+
+#include <QDebug>
+
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+
+#include <cmath>
 
 const char* const KoZoomMode::modes[] =
 {

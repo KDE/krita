@@ -21,6 +21,7 @@
 #include <klocalizedstring.h>
 #include <kis_signal_compressor.h>
 #include <KoZoomActionState.h>
+#include <KisPortingUtils.h>
 
 class Q_DECL_HIDDEN KoZoomAction::Private
 {
@@ -77,15 +78,18 @@ void KoZoomAction::slotTextZoomChanged(const QString &value)
     qreal zoom = QLocale().toDouble(value, &isValid);
 
     if (!isValid) {
+        using KisPortingUtils::stringRemoveFirst;
+        using KisPortingUtils::stringRemoveLast;
+
         QString trimmedValue = value.trimmed();
         if (trimmedValue.endsWith('%')) {
-            trimmedValue.removeLast();
+            stringRemoveLast(trimmedValue);
         } else if (trimmedValue.startsWith('%')) {
             /**
              * In Turkish language, the percent sign can go before the
              * number...
              */
-            trimmedValue.removeFirst();
+            stringRemoveFirst(trimmedValue);
         }
         zoom = QLocale().toDouble(trimmedValue, &isValid);
     }

@@ -22,6 +22,7 @@
 #include "kis_tool_proxy.h"
 
 #include <kis_config.h>
+#include <kis_config_notifier.h>
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
 #include <kis_image.h>
@@ -62,6 +63,9 @@ KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
 {
     d->setupActions();
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    slotConfigChanged();
 
     connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)), SLOT(slotToolChanged()));
@@ -119,6 +123,15 @@ void KisInputManager::deregisterPopupWidget()
 
     d->popupWidget = nullptr;
 }
+
+void KisInputManager::slotConfigChanged()
+{
+#ifdef Q_OS_WIN
+    d->ignoreHighFunctionKeys = KisConfig(true).ignoreHighFunctionKeys();
+    d->fixShortcutMatcherModifiersState();
+#endif
+}
+
 
 void KisInputManager::toggleTabletLogger()
 {

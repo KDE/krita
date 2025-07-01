@@ -23,12 +23,17 @@
 #include <winuser.h>
 
 #include "krita_container_utils.h"
+#include "kis_config.h"
 
 
 QVector<Qt::Key> queryPressedKeysWin()
 {
     QVector<Qt::Key> result;
     BYTE vkeys[256];
+
+    KisConfig cfg(true);
+
+    const int maxFunctionKey = cfg.ignoreHighFunctionKeys() ? VK_F12 : VK_F24;
 
     if (GetKeyboardState(vkeys)) {
         for (int i = 0; i < 256; i++) {
@@ -49,8 +54,8 @@ QVector<Qt::Key> queryPressedKeysWin()
                     result << static_cast<Qt::Key>(Qt::Key_A + i - 0x41);
                 } else if (i >= 0x60 && i <= 0x69) {
                     result << static_cast<Qt::Key>(Qt::Key_0 + i - 0x60);
-                } else if (i >= 0x70 && i <= 0x87) {
-                    result << static_cast<Qt::Key>(Qt::Key_F1 + i - 0x70);
+                } else if (i >= VK_F1 && i <= maxFunctionKey) {
+                    result << static_cast<Qt::Key>(Qt::Key_F1 + i - VK_F1);
                 }
             }
         }

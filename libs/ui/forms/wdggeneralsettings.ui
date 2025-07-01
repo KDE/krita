@@ -1299,14 +1299,24 @@
              </layout>
             </widget>
            </item>
-           <item row="8" column="0">
+           <item row="8" column="1">
+            <widget class="QCheckBox" name="chkIgnoreHighFunctionKeys">
+             <property name="toolTip">
+              <string>Some applications may emulate presses of function keys with high numbers (e.g. F22) to bring themselves to the foreground. This may break Krita's shortcuts and actions system. If you have a keyboard with F13 or higher function keys, and you wish to use them, try disabling this option, but take this potential problem into account.</string>
+             </property>
+             <property name="text">
+              <string>Ignore high function keys (F13-F24)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
             <widget class="QLabel" name="label_9">
              <property name="text">
               <string>Maximum brush size:</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="1">
+           <item row="9" column="1">
             <widget class="QFrame" name="frame">
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <property name="leftMargin">
@@ -1378,7 +1388,7 @@
              </layout>
             </widget>
            </item>
-           <item row="9" column="0" colspan="2">
+           <item row="10" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_5">
              <property name="title">
               <string>Animation</string>
@@ -1407,7 +1417,7 @@
              </layout>
             </widget>
            </item>
-           <item row="10" column="0" colspan="2">
+           <item row="11" column="0" colspan="2">
             <widget class="QGroupBox" name="chkForcedFontDPI">
              <property name="title">
               <string>Font DPI Workaround</string>
@@ -1447,7 +1457,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="11" column="0" colspan="2">
+           <item row="12" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_51">
              <property name="title">
               <string>Automatic layer suffixes</string>
@@ -1470,7 +1480,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="12" column="0" colspan="2">
+           <item row="13" column="0" colspan="2">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>

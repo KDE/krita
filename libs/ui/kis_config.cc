@@ -1956,6 +1956,16 @@ void KisConfig::setTrackTabletEventLatency(bool value)
     m_cfg.writeEntry("trackTabletEventLatency", value);
 }
 
+bool KisConfig::ignoreHighFunctionKeys(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("ignoreHighFunctionKeys", false));
+}
+
+void KisConfig::setIgnoreHighFunctionKeys(bool value)
+{
+    m_cfg.writeEntry("ignoreHighFunctionKeys", value);
+}
+
 bool KisConfig::testingAcceptCompressedTabletEvents(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("testingAcceptCompressedTabletEvents", false));

@@ -128,9 +128,8 @@ void KoCanvasControllerWidget::resizeEvent(QResizeEvent *event)
 
     const KisCanvasState newCanvasState = canvasState();
 
-    // just to call resize on the subordinate widget
-    // TODO: remove passing the size!
-    d->viewportWidget->setDocumentSize(QSizeF(777.7, 888.8));
+    // jcall resize on the subordinate widget
+    d->viewportWidget->resetLayout();
 
     emitSignals(oldCanvasState, newCanvasState);
 }

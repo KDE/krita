@@ -28,10 +28,11 @@ public:
     QWidget *canvas() const {
         return m_canvas;
     }
-    void setDocumentSize(const QSizeF &size);
 
-Q_SIGNALS:
-    void sizeChanged();
+    /**
+     * Resizes the subordinate canvas widget as needed
+     */
+     void resetLayout();
 
 public:
 
@@ -46,21 +47,13 @@ private:
     QPointF correctPosition(const QPoint &point) const;
     void repaint(KoShape *shape);
 
-    /**
-       Decides whether the containing canvas widget should be as
-       big as the viewport (i.e., no margins are visible) or whether
-       there are margins to be left blank, and then places the canvas
-       widget accordingly.
-    */
-    void resetLayout();
+
 
 private:
 
     KoCanvasControllerWidget *m_parent;
     KoShape *m_draggedShape;
-
     QWidget *m_canvas;
-    QSizeF m_documentSize; // Size in pixels of the document
 };
 
 #endif

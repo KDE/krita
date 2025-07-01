@@ -57,15 +57,6 @@ void Viewport::setCanvas(QWidget *canvas)
     if (!canvas) return;
     m_canvas->setParent(this);
     m_canvas->show();
-    if (!m_canvas->minimumSize().isNull()) {
-        m_documentSize = m_canvas->minimumSize();
-    }
-    resetLayout();
-}
-
-void Viewport::setDocumentSize(const QSizeF &size)
-{
-    m_documentSize = size;
     resetLayout();
 }
 
@@ -290,5 +281,4 @@ void Viewport::resetLayout()
             m_canvas->update();
         }
     }
-    Q_EMIT sizeChanged();
 }

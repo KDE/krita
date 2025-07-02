@@ -196,7 +196,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 35 // 5.2.9 was released with version '34', increment on releasing
+    def versionRelease  = 35 // 5.2.10 was released with version '35', increment on releasing
 
     defaultConfig {
         compileSdk androidCompileSdkVersion.toInteger()

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -13095,12 +13095,12 @@ msgstr "&ซ่อน/แสดงเลเยอร์..."
 msgid "File"
 msgstr "&ขาว"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "เพิ่มมาสก์"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "เครื่องมือแ&ปรงทาสี"

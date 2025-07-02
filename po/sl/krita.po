@@ -15,15 +15,15 @@
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
 # Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013.
 # Jure Repinc <jlp@holodeck1.com>, 2006, 2012.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2025 Matjaž Jeran <matjaz.jeran@amis.net>
 # Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
-"PO-Revision-Date: 2025-06-15 08:34+0200\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
+"PO-Revision-Date: 2025-07-02 09:22+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -13060,12 +13060,12 @@ msgstr "Po&moč"
 msgid "File"
 msgstr "Datoteka"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, kde-format
 msgid "Edit"
 msgstr "Uredi"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Čopiči in drugo"
@@ -30022,12 +30022,17 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Nekateri programi lahko posnemajo pritiskanje funkcijskih tipk z "
+"visokimištevilkami (npr. F22), da jih postavijo v ospredje. To lahko "
+"preglasisistem tipkovnih bližnjic in dejanj Krite. Če imate tipkovnico "
+"sfunkcijskimi tipkami F13 in višjimi ter jih želite uporabljati, "
+"poskusiteonemogočiti to možnost, vendar se zavedajte morebitnih težav."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1639
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Prezri visoke funkcijske tipke (F13–F24)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18

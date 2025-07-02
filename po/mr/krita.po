@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -13405,12 +13405,12 @@ msgstr ""
 msgid "File"
 msgstr "फाईल (&F)"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "संपादन (&E)"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "कुंचले व तत्सम"

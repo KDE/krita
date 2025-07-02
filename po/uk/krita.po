@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
-"PO-Revision-Date: 2025-06-13 10:09+0300\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
+"PO-Revision-Date: 2025-07-02 10:07+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -13058,12 +13058,12 @@ msgstr "&Довідка"
 msgid "File"
 msgstr "Файл"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, kde-format
 msgid "Edit"
 msgstr "Зміни"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Пензлі та інше"
@@ -30378,12 +30378,18 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Деякі програми можуть імітувати натискання функціональних клавіш з великими "
+"номерами (наприклад, F22), щоб вивести себе на передній план. Це може "
+"порушити роботу системи скорочень та дій Krita. Якщо у вас є клавіатура з "
+"функціональними клавішами F13 або вище, і ви хочете їх використовувати, "
+"спробуйте зняти позначення з цього пункту, але не забувайте про цю "
+"потенційну проблему."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1639
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ігнорувати верхні функціональні клавіші (F13-F24)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18

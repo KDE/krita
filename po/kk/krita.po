@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -13520,12 +13520,12 @@ msgstr "&Анықтама"
 msgid "File"
 msgstr "Файл"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "&Өңдеу"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Қылқалам және басқа"

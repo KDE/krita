@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -13051,12 +13051,12 @@ msgstr "&Bantuan"
 msgid "File"
 msgstr "File"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, kde-format
 msgid "Edit"
 msgstr "Edit"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Kuas dan Hal-hal"

@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -13100,12 +13100,12 @@ msgstr "&அடுக்கை மறை/காட்டு"
 msgid "File"
 msgstr "&வடிகட்டி"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "திரையை சேர்"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "அடுக்கு குணங்கள்..."

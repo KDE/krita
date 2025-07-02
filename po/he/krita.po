@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2025-06-08 21:23+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -13069,12 +13069,12 @@ msgstr "הס&תר\\הצג שכבה"
 msgid "File"
 msgstr "&לבן"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "הוסף תבנית"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "מאפייני שכבה..."

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-02 02:00+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -13053,12 +13053,12 @@ msgstr "Steek weg/Vertoon Laag"
 msgid "File"
 msgstr "Wit"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Voeg by Mask"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Laag Eienskappe..."

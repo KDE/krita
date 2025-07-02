@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-02 03:26+0000\n"
-"PO-Revision-Date: 2025-06-19 19:18+0100\n"
+"PO-Revision-Date: 2025-07-02 12:23+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -25805,12 +25805,18 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Algunas aplicaciones pueden emular la pulsación de teclas de función con "
+"números altos (como F22) para que aparezcan en primer plano. Esto puede "
+"hacer que no funcione correctamente el sistema de atajos de teclado y "
+"acciones de Krita. Si tiene un teclado con teclas de función F13 o "
+"superiores y quiere usarlo, pruebe a desactivar esta opción, aunque debe "
+"tener presente este posible problema."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1308
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ignorar teclas de función altas (F13-F24)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1315

@@ -18,7 +18,7 @@
  * implementations for all virtual methods. This can be used as a base class
  * or for testing purposes.
  */
-class KRITAFLAKE_EXPORT KoDummyCanvasController : public KoCanvasController {
+class KoDummyCanvasController : public KoCanvasController {
 
 public:
     explicit KoDummyCanvasController(KisKActionCollection* actionCollection)

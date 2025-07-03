@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-02 08:19+0000\n"
-"PO-Revision-Date: 2025-06-29 18:46+0300\n"
+"PO-Revision-Date: 2025-07-02 16:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -30042,12 +30042,17 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Bazı uygulamalar, kendilerini ön plana getirmek için yüksek numaralı işlev "
+"düğmelerinin (F13–F24) basışına öykünebilirler. Bu, Krita’nın kısayollarını "
+"ve eylem sistemlerini bozabilir. F13 veya daha yüksek numaralı işlev "
+"düğmelerine sahip bir klavyeye sahipseniz ve onları kullanmak istiyorsanız "
+"bu seçeneği devre dışı bırakmayı deneyin; ancak bu durumu da göz önüne alın."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1639
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ek işlev düğmelerini yok say (F13–F24)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18

@@ -70,7 +70,7 @@ void KoZoomActionState::setZoomState(const KoZoomState &newState)
 
     int proposedCurrentIndex = currentRealLevelIndex;
 
-    if (changedGuiLevels || !qFuzzyCompare(newState.zoom, zoomState.zoom)) {
+    if (changedGuiLevels || !qFuzzyCompare(newState.zoom, zoomState.zoom) || newState.mode != zoomState.mode) {
         realGuiLevels = guiLevels;
 
         const qreal eps = 1e-5;

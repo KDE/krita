@@ -17,6 +17,13 @@
 
 using LightZoomItem = std::tuple<KoZoomMode::Mode, qreal>;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+Q_DECLARE_METATYPE(KoZoomMode::Mode)
+Q_DECLARE_METATYPE(KoZoomState)
+Q_DECLARE_METATYPE(std::optional<KoZoomState>)
+Q_DECLARE_METATYPE(LightZoomItem)
+#endif
+
 LightZoomItem zoomItem(KoZoomMode::Mode mode) {
     return std::make_tuple(mode, -1.0);
 }
@@ -98,16 +105,20 @@ bool compareZoomItems(const QVector<KoZoomActionState::ZoomItem> &real, const QV
 void TestKoZoomAction::testZoomActionState_data()
 {
     QTest::addColumn<KoZoomState>("zoomState");
+    QTest::addColumn<std::optional<KoZoomState>>("additionalSwitchState");
     QTest::addColumn<QVector<qreal>>("expectedStandardLevels");
     QTest::addColumn<int>("expectedStandardLevelIndex");
     QTest::addColumn<QVector<LightZoomItem>>("expectedGuiLevels");
     QTest::addColumn<QVector<LightZoomItem>>("expectedRealLevels");
     QTest::addColumn<int>("expectedRealIndex");
 
+    const std::optional<KoZoomState> noZoomState = std::nullopt;
+
     auto zi = [] (auto v) { return zoomItem(v);};
 
     QTest::addRow("constant-middle")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.45, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -122,6 +133,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("constant-exact")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -136,6 +148,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("constant-fuzzy-left")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5 - 1e-7, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -150,6 +163,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("constant-fuzzy-right")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5 - 1e-7, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -164,6 +178,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("constant-low")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.11, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 0
         << QVector<LightZoomItem>{
@@ -178,6 +193,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("constant-high")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 2.1, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 8
         << QVector<LightZoomItem>{
@@ -192,6 +208,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("page")
         << KoZoomState(KoZoomMode::ZOOM_PAGE, 0.5, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -206,6 +223,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("width")
         << KoZoomState(KoZoomMode::ZOOM_WIDTH, 0.5, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -220,6 +238,7 @@ void TestKoZoomAction::testZoomActionState_data()
 
     QTest::addRow("height")
         << KoZoomState(KoZoomMode::ZOOM_HEIGHT, 0.5, 0.1, 2.0)
+        << noZoomState
         << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
         << 4
         << QVector<LightZoomItem>{
@@ -231,11 +250,42 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
         << 2;
+
+    QTest::addRow("page-to-same-constant")
+        << KoZoomState(KoZoomMode::ZOOM_PAGE, 0.5, 0.1, 2.0)
+        << std::make_optional(KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5, 0.1, 2.0)) // switch mode only!
+        << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
+        << 4
+        << QVector<LightZoomItem>{
+            zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
+            zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
+        }
+        << QVector<LightZoomItem>{
+            zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
+            zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
+        }
+        << 5; // the mode has changed!
+
+    QTest::addRow("constant-to-same-page")
+        << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.45, 0.1, 2.0)
+        << std::make_optional(KoZoomState(KoZoomMode::ZOOM_PAGE, 0.45, 0.1, 2.0))
+        << QVector<qreal>{0.125, 0.166667, 0.25, 0.333333, 0.5, 0.666667, 1.0, 1.33333, 2.0}
+        << 4
+        << QVector<LightZoomItem>{
+            zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
+            zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
+        }
+        << QVector<LightZoomItem>{
+            zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
+            zi(0.25), zi(0.333333), zi(0.45), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
+        }
+        << 0;
 }
 
 void TestKoZoomAction::testZoomActionState()
 {
     QFETCH(KoZoomState, zoomState);
+    QFETCH(std::optional<KoZoomState>, additionalSwitchState);
     QFETCH(QVector<qreal>, expectedStandardLevels);
     QFETCH(int, expectedStandardLevelIndex);
     QFETCH(QVector<LightZoomItem>, expectedGuiLevels);
@@ -243,8 +293,12 @@ void TestKoZoomAction::testZoomActionState()
     QFETCH(int, expectedRealIndex);
 
     KoZoomActionState actionState(zoomState);
-
     QCOMPARE(actionState.zoomState, zoomState);
+
+    if (additionalSwitchState) {
+        actionState.setZoomState(*additionalSwitchState);
+        QCOMPARE(actionState.zoomState, *additionalSwitchState);
+    }
 
     if (!compareZoomLevels(actionState.standardLevels, expectedStandardLevels)) {
         QFAIL("Failed to compare original standard zoom levels");

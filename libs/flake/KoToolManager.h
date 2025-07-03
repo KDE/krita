@@ -135,14 +135,12 @@ public:
     ~KoToolManager() override;
 
     /**
-     * Register actions for switching to tools at the actionCollection parameter.
-     * The actions will have the text / shortcut as stated by the toolFactory.
-     * If the application calls this in their KoView extending class they will have all the benefits
+     * Initialize actions for switching to tools. The actions will have the
+     * text / shortcut as stated by the toolFactory. If the application calls
+     * this in their KoView extending class they will have all the benefits
      * from allowing this in the menus and to allow the use to configure the shortcuts used.
-     * @param ac the actionCollection that will be the parent of the actions.
-     * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerToolActions(KisKActionCollection *ac, KoCanvasController *controller);
+    void initializeToolActions();
 
     /**
      * Register a new canvas controller

@@ -64,7 +64,6 @@
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>
 #include <KisResourceLocator.h>
-#include <KoDummyCanvasController.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -313,8 +312,7 @@ KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCol
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
-    QScopedPointer<KoDummyCanvasController> dummy(new KoDummyCanvasController(actionCollection()));
-    KoToolManager::instance()->registerToolActions(actionCollection(), dummy.data());
+    KoToolManager::instance()->initializeToolActions();
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame.paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));

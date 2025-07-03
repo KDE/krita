@@ -1465,13 +1465,26 @@ void KisCoordinatesConverterTest::testHiDPICanvasSize_data()
         << QPointF(-101, -103)
         << 1.0 // zoom
         << QSizeF(frac(700, 2, 3), frac(502, 2, 3))
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        // Qt5 rounds negative numbers to the positive direction, causing qRound(-151.5) = -151
+        << QPointF(-frac(100, 2, 3), -frac(102, 2, 3)) // offset is rounded to device pixels!
+        << QPoint(-100, -102)
+#else
         << QPointF(-frac(101, 1, 3), -frac(103, 1, 3)) // offset is rounded to device pixels!
         << QPoint(-101, -103)
+#endif
         << QSize(1051, 754) // the size is floored to device pixels!
         << PointPairs{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            // Qt5 rounds negative numbers to the positive direction, hence different results
+            {{0,0},      {frac(100, 2, 3), frac(102, 2, 3)}},
+            {{100,100},  {frac(200, 2, 3), frac(202, 2, 3)}},
+            {{1000,1000},{frac(1100, 2, 3), frac(1102, 2, 3)}},
+#else
             {{0,0},      {frac(101, 1, 3), frac(103, 1, 3)}},
             {{100,100},  {frac(201, 1, 3), frac(203, 1, 3)}},
             {{1000,1000},{frac(1101, 1, 3), frac(1103, 1, 3)}},
+#endif
             };
 
     QTest::newRow("hidpi-f1.75")
@@ -1537,8 +1550,8 @@ void KisCoordinatesConverterTest::testHiDPICanvasSize()
         const QPointF imageTopLeftInWidgetPixels = converter.imageToWidget(QPointF(0, 0));
         const QPointF imageTopLeftInDevicePixels = imageTopLeftInWidgetPixels * devicePixelRatio;
 
-        QCOMPARE(imageTopLeftInDevicePixels.x() - qFloor(imageTopLeftInDevicePixels.x()), 0.0);
-        QCOMPARE(imageTopLeftInDevicePixels.y() - qFloor(imageTopLeftInDevicePixels.y()), 0.0);
+        QCOMPARE(imageTopLeftInDevicePixels.x() - qRound(imageTopLeftInDevicePixels.x()), 0.0);
+        QCOMPARE(imageTopLeftInDevicePixels.y() - qRound(imageTopLeftInDevicePixels.y()), 0.0);
 
         // TODO: also make sure that the bottom-right corner of the image is also aligned to
         //       pixel grid

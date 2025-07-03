@@ -1783,6 +1783,84 @@ void KisCoordinatesConverterTest::testZoomLimits()
     }
 
 }
+void KisCoordinatesConverterTest::testZoomLimitsEnforcement_data()
+{
+    QTest::addColumn<QSize>("originalImageSize");
+    QTest::addColumn<QSize>("originalCanvasSize");
+    QTest::addColumn<qreal>("expectedOriginalMinZoom");
+    QTest::addColumn<qreal>("expectedOriginalMaxZoom");
+    QTest::addColumn<KoZoomMode::Mode>("requestedZoomMode");
+    QTest::addColumn<qreal>("requestedZoom");
+    QTest::addColumn<KoZoomMode::Mode>("expectedFinalZoomMode");
+    QTest::addColumn<qreal>("expectedFinalZoom");
+
+    QTest::newRow("const-below-min")
+        << QSize(1000, 1000)
+        << QSize(700, 500)
+        << 0.1
+        << 90.0
+        << KoZoomMode::ZOOM_CONSTANT
+        << 0.0001
+        << KoZoomMode::ZOOM_CONSTANT
+        << 0.1;
+
+    QTest::newRow("const-above-max")
+        << QSize(1000, 1000)
+        << QSize(700, 500)
+        << 0.1
+        << 90.0
+        << KoZoomMode::ZOOM_CONSTANT
+        << 190.0
+        << KoZoomMode::ZOOM_CONSTANT
+        << 90.0;
+
+    QTest::newRow("page-below-min")
+        << QSize(1000, 1000)
+        << QSize(50, 50)
+        << 0.1
+        << 90.0
+        << KoZoomMode::ZOOM_PAGE
+        << 777.0
+        << KoZoomMode::ZOOM_PAGE
+        << 0.05; // fit-modes are allowed to ignore zoom limits
+}
+
+void KisCoordinatesConverterTest::testZoomLimitsEnforcement()
+{
+    /// Zoom limits enforcement is applied only to KoZoomMode::ZOOM_CONSTANT
+    /// mode. All the fit-modes are allowed to zoom as much as needed.
+
+    QFETCH(QSize, originalImageSize);
+    QFETCH(QSize, originalCanvasSize);
+    QFETCH(qreal, expectedOriginalMinZoom);
+    QFETCH(qreal, expectedOriginalMaxZoom);
+
+    QFETCH(KoZoomMode::Mode, requestedZoomMode);
+    QFETCH(qreal, requestedZoom);
+
+    QFETCH(KoZoomMode::Mode, expectedFinalZoomMode);
+    QFETCH(qreal, expectedFinalZoom);
+
+    KisImageSP image;
+    KisCoordinatesConverter converter;
+    initImage(&image, &converter);
+
+    image->resizeImage(QRect(QPoint(), originalImageSize));
+    image->waitForDone();
+
+    converter.setImage(image);
+    converter.setCanvasWidgetSize(originalCanvasSize);
+
+    QCOMPARE(converter.minZoom(), expectedOriginalMinZoom);
+    QCOMPARE(converter.maxZoom(), expectedOriginalMaxZoom);
+
+    converter.setZoom(requestedZoomMode, requestedZoom,
+        converter.resolutionX(), converter.resolutionY(),
+        converter.imageCenterInWidgetPixel());
+
+    QCOMPARE(converter.zoomMode(), expectedFinalZoomMode);
+    QCOMPARE(converter.zoom(), expectedFinalZoom);
+}
 
 void KisCoordinatesConverterTest::testFindNextZoom_data()
 {

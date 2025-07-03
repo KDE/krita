@@ -413,6 +413,11 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
 
     if(mode == KoZoomMode::ZOOM_CONSTANT) {
         if(qFuzzyIsNull(zoom)) return;
+
+        /// only constant mode is a subject for clamping,
+        /// fit-modes are allowed to zoom as much as needed
+        zoom = clampZoom(zoom);
+
         const QPointF oldStillPointInImagePixels =
             widgetToImage(stillPoint);
 

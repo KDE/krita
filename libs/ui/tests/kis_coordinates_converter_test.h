@@ -48,6 +48,9 @@ private Q_SLOTS:
     void testZoomLimits_data();
     void testZoomLimits();
 
+    void testZoomLimitsEnforcement_data();
+    void testZoomLimitsEnforcement();
+
     void testFindNextZoom_data();
     void testFindNextZoom();
 

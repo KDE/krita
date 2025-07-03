@@ -19,6 +19,9 @@
 #include "kis_filter_strategy.h"
 #include <kis_algebra_2d.h>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+Q_DECLARE_METATYPE(KoZoomMode::Mode)
+#endif
 
 void initImage(KisImageSP *image, KoZoomHandler *zoomHandler)
 {
@@ -1522,7 +1525,7 @@ void KisCoordinatesConverterTest::testHiDPICanvasSize()
     converter.setImage(image);
     converter.setCanvasWidgetSize(converter.snapWidgetSizeToDevicePixel(widgetSize));
     converter.setZoom(zoom);
-    converter.setDocumentOffset(converter.snapToDevicePixel(offset));
+    converter.setDocumentOffset(offset);
 
     QCOMPARE(converter.getCanvasWidgetSize(), expectedWidgetSize);
     QCOMPARE(converter.documentOffsetF(), expectedOffsetF);
@@ -1901,6 +1904,101 @@ void KisCoordinatesConverterTest::testZoomTo()
             qWarning() << "    expected widget point:" << pair.second;
             QFAIL("faled to compare points after transforamation");
         }
+    }
+}
+
+enum TestHiDPIMode
+{
+    ZoomPageTo7,
+    ZoomPageToWidth,
+    ScrollToFraction,
+    ScrollAway,
+    ImageResolution,
+    ImageBounds,
+    ZoomTo,
+    Rotate
+};
+
+Q_DECLARE_METATYPE(TestHiDPIMode)
+
+void KisCoordinatesConverterTest::testHiDPIOffsetSnapping_data()
+{
+    QTest::addColumn<TestHiDPIMode>("testingMode");
+
+    QTest::addRow("page-to-const7") << ZoomPageTo7;
+    QTest::addRow("page-to-width") << ZoomPageToWidth;
+    QTest::addRow("scroll-to-fraction") << ScrollToFraction;
+    QTest::addRow("scroll-away") << ScrollAway;
+    QTest::addRow("image-resolution") << ImageResolution;
+    QTest::addRow("image-bounds") << ImageBounds;
+    QTest::addRow("zoom-to") << ZoomTo;
+    QTest::addRow("rotate") << Rotate;
+
+}
+
+void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
+{
+    QFETCH(TestHiDPIMode, testingMode);
+
+    KisImageSP image;
+    KisCoordinatesConverter converter;
+    initImage(&image, &converter);
+
+    KisFilterStrategy *strategy = new KisBilinearFilterStrategy();
+    image->scaleImage(QSize(77, 83), image->xRes(), image->yRes(), strategy);
+    image->waitForDone();
+    QTest::qWait(100);
+
+    converter.setDevicePixelRatio(1.5);
+    converter.setImage(image);
+    converter.setCanvasWidgetSizeKeepZoom(converter.snapWidgetSizeToDevicePixel(QSize(700, 500)));
+
+    auto roundTo5thDigit = [] (qreal x) {
+        return qRound(x * 100000.0) / 100000.0;
+    };
+
+    {
+        const QPointF imageTopLeftInDevicePixelsHW = converter.imageRectInWidgetPixels().topLeft() * converter.devicePixelRatio();
+        QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
+        QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
+    }
+
+
+
+    switch (testingMode) {
+        case ZoomPageTo7:
+            converter.setZoom(KoZoomMode::ZOOM_CONSTANT, 0.17,
+                converter.resolutionX(), converter.resolutionY(), converter.imageCenterInWidgetPixel());
+            break;
+        case ZoomPageToWidth:
+            converter.setZoom(KoZoomMode::ZOOM_WIDTH, 1.0,
+                converter.resolutionX(), converter.resolutionY(), converter.imageCenterInWidgetPixel());
+            break;
+        case ScrollToFraction:
+            converter.setDocumentOffset(QPointF(-100.33, -200.77));
+            break;
+        case ScrollAway:
+            converter.setCanvasWidgetSizeKeepZoom(converter.snapWidgetSizeToDevicePixel(QSize(701, 503)));
+            converter.setDocumentOffset(QPointF(10000.33, 20000.22));
+            break;
+        case ImageResolution:
+            converter.setImageResolution(7.77, 3.13);
+            break;
+        case ImageBounds:
+            converter.setImageBounds(QRect(0,0,113, 117), QPointF(77,17), QPointF(111, 110));
+            break;
+        case ZoomTo:
+            converter.zoomTo(QRectF(13.33, 17.77, 333.17, 234.13));
+            break;
+        case Rotate:
+            converter.rotate(converter.imageCenterInWidgetPixel(), 17.3);
+            break;
+    }
+
+    {
+        const QPointF imageTopLeftInDevicePixelsHW = converter.imageRectInWidgetPixels().topLeft() * converter.devicePixelRatio();
+        QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
+        QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
     }
 }
 

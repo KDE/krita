@@ -130,7 +130,7 @@ void KisCoordinatesConverter::recalculateOffsetBoundsAndCrop()
     const QRectF limitRect(m_d->minimumOffset, m_d->maximumOffset);
 
     if (!limitRect.contains(m_d->documentOffset)) {
-        m_d->documentOffset = KisAlgebra2D::clampPoint(m_d->documentOffset, limitRect);
+        m_d->documentOffset = snapToDevicePixel(KisAlgebra2D::clampPoint(m_d->documentOffset, limitRect));
         qDebug() << "    corrected offset:" << m_d->documentOffset;
         correctTransformationToOffset();
     }
@@ -162,7 +162,7 @@ QPoint KisCoordinatesConverter::maximumOffset() const
  * return its value to be set in the canvas controller explicitly.
  */
 
-void KisCoordinatesConverter::correctOffsetToTransformation()
+void KisCoordinatesConverter::correctOffsetToTransformationAndSnap()
 {
     m_d->documentOffset = snapToDevicePixel(-(imageRectInWidgetPixels().topLeft() -
           centeringCorrection()));
@@ -273,7 +273,7 @@ void KisCoordinatesConverter::setImageBounds(const QRect &rect, const QPointF ol
     recalculateTransformations();
 
     const QPointF newWidgetStillPoint = imageToWidget(newImageStillPoint);
-    m_d->documentOffset += newWidgetStillPoint - oldWidgetStillPoint;
+    m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + newWidgetStillPoint - oldWidgetStillPoint);
     recalculateTransformations();
 }
 
@@ -300,18 +300,8 @@ void KisCoordinatesConverter::setImageResolution(qreal xRes, qreal yRes)
     recalculateTransformations();
 
     const QPointF newImageCenter = imageCenterInWidgetPixel();
-    m_d->documentOffset += newImageCenter - oldImageCenter;
+    m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + newImageCenter - oldImageCenter);
     recalculateTransformations();
-}
-
-void KisCoordinatesConverter::setDocumentOffsetHiDPIUnaligned(const QPointF& offset)
-{
-    // The given offset is in widget logical pixels. In order to prevent fuzzy
-    // canvas rendering at 100% pixel-perfect zoom level when devicePixelRatio
-    // is not integral, we adjusts the offset to map to whole device pixels.
-
-    const QPointF offsetAdjusted = snapToDevicePixel(offset);
-    setDocumentOffset(offsetAdjusted);
 }
 
 void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
@@ -320,7 +310,18 @@ void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
     // reset to constant
     setZoomMode(KoZoomMode::ZOOM_CONSTANT);
 
-    m_d->documentOffset = offset;
+    // The given offset is in widget logical pixels. In order to prevent fuzzy
+    // canvas rendering at 100% pixel-perfect zoom level when devicePixelRatio
+    // is not integral, we adjusts the offset to map to whole device pixels.
+
+    // Steps to reproduce the issue (when no snapping):
+    // 1) Download an image with 1px vertical black and white stripes
+    // 2) Enable fractional HiDPI support in Krita
+    // 3) Set display scaling to 1.5 or 2.5
+    // 4) Try to change offset of the image. If offset is unaligned, then
+    //    the image will disappear on the canvas.
+
+    m_d->documentOffset = snapToDevicePixel(offset);
     recalculateTransformations();
 }
 
@@ -427,7 +428,7 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
 
         const QPointF newStillPoint = imageToWidget(oldStillPointInImagePixels);
         const QPointF offset = newStillPoint - stillPoint;
-        m_d->documentOffset += offset;
+        m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + offset);
         recalculateTransformations();
     } else if (mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_HEIGHT) {
         updateDisplayResolution();
@@ -466,7 +467,7 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
             newDocumentOffset.setY(-cfgMargin);
         }
 
-        m_d->documentOffset = newDocumentOffset;
+        m_d->documentOffset = snapToDevicePixel(newDocumentOffset);
         recalculateTransformations();
     }
 }
@@ -489,7 +490,7 @@ void KisCoordinatesConverter::zoomTo(const QRectF &zoomRectWidget)
     const QPointF offset = imageToWidget(zoomPortionCenterInImagePixels) - widgetCenterPoint();
     QPointF newDocumentOffset = m_d->documentOffset + offset;
 
-    m_d->documentOffset = newDocumentOffset;
+    m_d->documentOffset = snapToDevicePixel(newDocumentOffset);
     recalculateTransformations();
 }
 
@@ -563,7 +564,7 @@ void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
 
-    correctOffsetToTransformation();
+    correctOffsetToTransformationAndSnap();
     recalculateTransformations();
 }
 
@@ -602,7 +603,7 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
 
-    correctOffsetToTransformation();
+    correctOffsetToTransformationAndSnap();
     recalculateTransformations();
 }
 
@@ -626,7 +627,7 @@ void KisCoordinatesConverter::resetRotation(QPointF center)
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
     m_d->rotationAngle = 0.0;
 
-    correctOffsetToTransformation();
+    correctOffsetToTransformationAndSnap();
     recalculateTransformations();
 }
 

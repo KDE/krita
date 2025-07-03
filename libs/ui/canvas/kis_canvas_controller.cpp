@@ -503,8 +503,8 @@ void KisCanvasController::syncOnImageSizeChange(const QPointF &oldStillPoint, co
 
 void KisCanvasController::updateCanvasOffsetInternal(const QPointF &newOffset)
 {
-    m_d->coordinatesConverter->setDocumentOffset(
-        m_d->coordinatesConverter->snapToDevicePixel(newOffset));
+    // not need to snap to device pixels, it is done by the converter automatically
+    m_d->coordinatesConverter->setDocumentOffset(newOffset);
 }
 
 void KisCanvasController::updateCanvasWidgetSizeInternal(const QSize &newSize)

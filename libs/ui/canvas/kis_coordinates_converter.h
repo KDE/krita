@@ -57,7 +57,6 @@ public:
     void setImageBounds(const QRect &rect, const QPointF oldImageStillPoint, const QPointF newImageStillPoint);
     void setImageResolution(qreal xRes, qreal yRes);
     void setDocumentOffset(const QPointF &offset);
-    void setDocumentOffsetHiDPIUnaligned(const QPointF& offset);
 
     qreal devicePixelRatio() const;
     QPoint documentOffset() const;
@@ -184,7 +183,7 @@ private:
     friend class KisCoordinatesConverterTest;
 
     QPointF centeringCorrection() const;
-    void correctOffsetToTransformation();
+    void correctOffsetToTransformationAndSnap();
     void correctTransformationToOffset();
     void recalculateTransformations();
     void recalculateZoomLevelLimits();

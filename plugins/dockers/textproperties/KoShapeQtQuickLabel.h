@@ -11,8 +11,8 @@
 /**
  * @brief The KoShapeQtQuickLabel class
  *
- * A QQuickPaintedItem that will load SVG as a KoShape
- * and paint it.
+ * A QQuickPaintedItem that will load SVG as KoShapes
+ * and paint them.
  */
 class KoShapeQtQuickLabel: public QQuickPaintedItem
 {
@@ -43,7 +43,10 @@ public:
     QString svgData() const;
     void setSvgData(const QString &newSvgData);
 
-    /// Foreground color.
+    /**
+     * @brief foregroundColor
+     * This is the color that is used as the fill for the KoShapes when fullColor is set false.
+     */
     QColor foregroundColor() const;
     void setForegroundColor(const QColor &newForegroundColor);
 
@@ -55,9 +58,18 @@ public:
     int padding() const;
     void setPadding(int newPadding);
 
+    /**
+     * @brief fullColor
+     * This controls whether the current shape background will be set to the foreground color
+     * or whether it will keep the color it received during parsing of SVG data.
+     */
     bool fullColor() const;
     void setFullColor(bool newFullColor);
 
+    /**
+     * @brief scalingType
+     * @see ScalingType enum.
+     */
     ScalingType scalingType() const;
     void setScalingType(const ScalingType type);
 

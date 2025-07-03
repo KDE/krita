@@ -16,15 +16,20 @@
 
 struct KoShapeQtQuickLabel::Private {
 
-    Private(): shape(new KoShapeGroup()) {
+    Private() {
 
     }
 
-    ~Private(){}
+    ~Private(){
+        shapePainter.reset();
+        qDeleteAll(shapes);
+    }
 
-    QScopedPointer<KoShapeGroup> shape;
+    QList<KoShape*> shapes;
     QScopedPointer<KoShapePainter> shapePainter;
     QString svgData;
+
+    QColor fgColor;
     bool fullColor = false;
     KoShapeQtQuickLabel::ScalingType scalingType = KoShapeQtQuickLabel::Fit;
     Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignVCenter;
@@ -97,7 +102,7 @@ void KoShapeQtQuickLabel::paint(QPainter *painter)
     const QRectF bbox = d->documentRect.isValid()? d->documentRect: d->shapePainter->contentRect();
     const QRectF bounds = QRectF(0, 0, width(), height());
     painter->save();
-    if (!d->shape) {
+    if (d->shapes.isEmpty()) {
         painter->restore();
         return;
     }
@@ -130,12 +135,17 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 
     QList<KoShape*> shapes = p.parseSvg(doc.documentElement(), &sz);
     if (shapes.isEmpty()) return;
-    if (!d->shape->shapes().isEmpty()) {
-        KoShapeUngroupCommand unGroup(d->shape.data(), d->shape->shapes());
-        unGroup.redo();
+
+    // TODO: Evaluate if this can't be faster.
+    d->shapePainter.reset(new KoShapePainter());
+
+    if (d->shapes.isEmpty()) {
+        qDeleteAll(d->shapes);
     }
-    KoShapeGroupCommand group(d->shape.data(), shapes, false);
-    group.redo();
+
+    d->shapes = shapes;
+    d->shapePainter->setShapes(d->shapes);
+    updateShapes();
 
     emit svgDataChanged();
     emit minimumRectChanged();
@@ -143,28 +153,16 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 
 QColor KoShapeQtQuickLabel::foregroundColor() const
 {
-    QColor fg = Qt::black;
-    if (d->shape && d->shape->background()) {
-        KoColorBackground *bg = dynamic_cast<KoColorBackground*>(d->shape->background().data());
-        if (bg) {
-            return bg->color();
-        }
-
-    }
-    return fg;
+    return d->fgColor;
 }
 
 void KoShapeQtQuickLabel::setForegroundColor(const QColor &newForegroundColor)
 {
-    if (!d->shape) return;
-    KoColorBackground *bg = dynamic_cast<KoColorBackground*>(d->shape->background().data());
-    if (bg) {
-        if (bg->color() == newForegroundColor)
+    if (d->fgColor == newForegroundColor)
             return;
-    }
 
-    d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(newForegroundColor)));
-    callUpdateIfComplete();
+    d->fgColor = newForegroundColor;
+    updateShapes();
     emit foregroundColorChanged();
 }
 
@@ -229,20 +227,17 @@ void KoShapeQtQuickLabel::componentComplete()
 {
     QQuickPaintedItem::componentComplete();
     updateShapes();
-    if (!d->shapePainter) {
-        d->shapePainter.reset(new KoShapePainter());
-        d->shapePainter->setShapes({d->shape.data()});
-        emit minimumRectChanged();
-    }
     setOpaquePainting(fillColor().alpha() == 255);
 }
 
 void KoShapeQtQuickLabel::updateShapes()
 {
-    if (d->shape) {
-        for (int i = 0; i < d->shape->shapes().size(); i++) {
-            d->shape->shapes().at(i)->setInheritBackground(!d->fullColor);
+    if (!d->fullColor) {
+        QSharedPointer<KoColorBackground> bg(new KoColorBackground(d->fgColor));
+        for (int i = 0; i < d->shapes.size(); i++) {
+            d->shapes.at(i)->setBackground(bg);
         }
+        callUpdateIfComplete();
     }
 }
 

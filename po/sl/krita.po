@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-02 03:26+0000\n"
-"PO-Revision-Date: 2025-03-12 10:01+0100\n"
+"PO-Revision-Date: 2025-07-03 10:48+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20463,11 +20463,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Ali želite prepisati datoteko?"
+msgstr "Ali želite prepisati obstoječi videoposnetek?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20477,6 +20475,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Datoteka že obstaja na poti, kamor želite izrisati videoposnetek [%1] ... \n"
+"                                                              Ali ste "
+"prepričani, da želite prepisati obstoječo datoteko?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -25746,12 +25747,17 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Nekateri programi lahko posnemajo pritiskanje funkcijskih tipk z "
+"visokimištevilkami (npr. F22), da jih postavijo v ospredje. To lahko "
+"preglasisistem tipkovnih bližnjic in dejanj Krite. Če imate tipkovnico "
+"sfunkcijskimi tipkami F13 in višjimi ter jih želite uporabljati, "
+"poskusiteonemogočiti to možnost, vendar se zavedajte morebitnih težav."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1308
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Prezri visoke funkcijske tipke (F13–F24)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1315
@@ -38111,8 +38117,7 @@ msgid "Bluer/Yellower: "
 msgstr "Bolj modro/rumeno: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Ponastavi"

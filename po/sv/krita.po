@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-02 03:26+0000\n"
-"PO-Revision-Date: 2025-06-21 21:21+0200\n"
+"PO-Revision-Date: 2025-07-03 10:52+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -25777,12 +25777,17 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Vissa program kan emulera tryckningar på funktionstangenter med höga siffror "
+"(t.ex. F22) för att komma i förgrunden. Det kan störa Kritas genvägar och "
+"åtgärdssystem. Om tangentbordet har F13 eller högre funktionstangenter som "
+"behöver användas, försök att inaktivera alternativet, men ta hänsyn till det "
+"potentiella problemet."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1308
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ignorera höga funktionstangenter (F13 - F24)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1315

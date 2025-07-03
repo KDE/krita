@@ -81,7 +81,6 @@ public:
     void zoomTo(const QRectF &widgetRect);
     void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
     void setCanvasWidgetSizeKeepZoom(const QSizeF &size);
-    void setCanvasWidgetSizeKeepZoomHiDPIUnaligned(const QSize &size);
 
     /**
      * A composition of to scale methods: zoom level + image resolution

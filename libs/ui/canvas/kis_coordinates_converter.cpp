@@ -215,7 +215,7 @@ QSizeF KisCoordinatesConverter::getCanvasWidgetSize() const
 
 void KisCoordinatesConverter::setCanvasWidgetSize(QSizeF size)
 {
-    m_d->canvasWidgetSize = size;
+    m_d->canvasWidgetSize = snapWidgetSizeToDevicePixel(size);
     recalculateTransformations();
 }
 
@@ -389,11 +389,6 @@ QSizeF KisCoordinatesConverter::snapWidgetSizeToDevicePixel(const QSizeF &size) 
     // KisCoordinatesConverter the logical viewport size aligned to device
     // pixels.
     return QSizeF(viewportWidth, viewportHeight) / m_d->devicePixelRatio;
-}
-
-void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoomHiDPIUnaligned(const QSize &size)
-{
-    setCanvasWidgetSizeKeepZoom(snapWidgetSizeToDevicePixel(size));
 }
 
 QSize KisCoordinatesConverter::viewportDevicePixelSize() const

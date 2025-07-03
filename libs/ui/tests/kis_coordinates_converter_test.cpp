@@ -1536,7 +1536,7 @@ void KisCoordinatesConverterTest::testHiDPICanvasSize()
 
     converter.setDevicePixelRatio(devicePixelRatio);
     converter.setImage(image);
-    converter.setCanvasWidgetSize(converter.snapWidgetSizeToDevicePixel(widgetSize));
+    converter.setCanvasWidgetSize(widgetSize);
     converter.setZoom(zoom);
     converter.setDocumentOffset(offset);
 
@@ -1964,7 +1964,7 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
 
     converter.setDevicePixelRatio(1.5);
     converter.setImage(image);
-    converter.setCanvasWidgetSizeKeepZoom(converter.snapWidgetSizeToDevicePixel(QSize(700, 500)));
+    converter.setCanvasWidgetSizeKeepZoom(QSize(700, 500));
 
     auto roundTo5thDigit = [] (qreal x) {
         return qRound(x * 100000.0) / 100000.0;
@@ -1991,7 +1991,7 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
             converter.setDocumentOffset(QPointF(-100.33, -200.77));
             break;
         case ScrollAway:
-            converter.setCanvasWidgetSizeKeepZoom(converter.snapWidgetSizeToDevicePixel(QSize(701, 503)));
+            converter.setCanvasWidgetSizeKeepZoom(QSize(701, 503));
             converter.setDocumentOffset(QPointF(10000.33, 20000.22));
             break;
         case ImageResolution:

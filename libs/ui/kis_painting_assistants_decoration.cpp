@@ -6,6 +6,7 @@
  */
 
 #include "kis_painting_assistants_decoration.h"
+#include "kis_selection_assistants_decoration.h"
 
 #include <limits>
 
@@ -324,6 +325,10 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
             drawEditorWidget(assistant, gc, converter);
         }
      }
+
+    // PLACEHOLDER TO DRAW SELECTION ACTION BAR
+     KisSelectionAssistantsDecoration decoration;
+     decoration.drawDecoration(gc, converter);
 }
 
 void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
@@ -573,11 +578,11 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
         }
     }
-     
+
     gc.setPen(stroke);
     gc.drawPath(bgPath);
-    gc.fillPath(bgPath, backgroundColor);   
-   
+    gc.fillPath(bgPath, backgroundColor);
+
 
     //draw drag handle
     QColor dragDecorationColor(150,150,150,255);
@@ -586,9 +591,9 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     int width = actionsPosition.x()+globalEditorWidgetData.boundingSize.width()-globalEditorWidgetData.dragDecorationWidth+widgetOffset;
     int height = actionsPosition.y()+globalEditorWidgetData.boundingSize.height()+widgetOffset;
     dragRect.addRect(QRectF(width,actionsPosition.y()+widgetOffset,globalEditorWidgetData.dragDecorationWidth,globalEditorWidgetData.boundingSize.height()));
-    
+
     gc.fillPath(bgPath.intersected(dragRect),dragDecorationColor);
-    
+
     //draw dot decoration on handle
     QPainterPath dragRectDots;
     QColor dragDecorationDotsColor(50,50,50,255);
@@ -646,7 +651,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
         gc.drawPixmap(iconDeletePosition, globalEditorWidgetData.m_iconDelete);
     }
 
-    
+
 
 
 }

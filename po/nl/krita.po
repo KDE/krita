@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-02 03:26+0000\n"
-"PO-Revision-Date: 2025-06-19 14:07+0200\n"
+"PO-Revision-Date: 2025-07-03 13:43+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -25845,12 +25845,17 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Sommige toepassingen kunnen drukken op functietoetsen met hoge nummers "
+"emuleren (bijv. F22) om henzelf naar de voorgrond te brengen. Dit kan "
+"sneltoetsen van Krita en actiesystemen breken. Als u een toetsenbord hebt "
+"met F13 of hogere functietoetsen en u wilt ze gebruiken, probeer dan deze "
+"optie uit te schakelen, maar houd met dit potentiële probleem rekening."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1308
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Hoge functietoetsen (F13-F24) negeren"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1315

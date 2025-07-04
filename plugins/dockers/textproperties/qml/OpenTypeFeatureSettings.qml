@@ -117,8 +117,8 @@ TextPropertyBase {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 
                     delegate: OpenTypeFeatureDelegate {
+                        width: ListView.view.width;
                         display: modelData.display;
-                        width: activeFeatureControl.width;
                         toolTip: display;
                         sample: activeFeatureDelegate.sample;
                         tag: activeFeatureDelegate.tag;
@@ -177,8 +177,8 @@ TextPropertyBase {
                 display: model.display;
                 toolTip: model.toolTip;
                 sample: model.sample;
+                width: ListView.view.width;
                 tag: model.tag;
-                width: cmbAvailableFeatures.width;
                 fontFamilies: properties.fontFamilies;
                 fontWeight: properties.fontWeight;
                 fontStyle: properties.fontStyle.style;
@@ -245,8 +245,9 @@ TextPropertyBase {
                     property string highlightedTag;
                     contentItem: ListView {
                         model: featureTxtEdit.filterModel;
-                        implicitHeight: contentHeight;
                         clip: true;
+                        implicitHeight: contentHeight;
+                        width: completerPopup.width;
 
                         ScrollBar.vertical: ScrollBar {
                         }
@@ -257,9 +258,8 @@ TextPropertyBase {
                             display: model.display;
                             toolTip: model.toolTip;
                             sample: model.sample;
+                            width: ListView.view.width;
                             tag: model.tag;
-                            height: implicitHeight;
-                            width: featureTxtEdit.width;
                             fontFamilies: properties.fontFamilies;
                             fontWeight: properties.fontWeight;
                             fontStyle: properties.fontStyle.style;

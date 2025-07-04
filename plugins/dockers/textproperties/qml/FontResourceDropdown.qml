@@ -44,7 +44,6 @@ Button {
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
             /// the metadata from the modelwrapper.
             width: fontResourceView.listWidth;
-            height: implicitContentHeight;
             highlighted: familyCmb.highlightedIndex === model.index;
 
             Component.onCompleted: {
@@ -70,7 +69,7 @@ Button {
                 svgData: fontDelegateItem.sample;
                 foregroundColor: highlighted? palette.highlightedText: palette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
-                implicitHeight: padding*5;
+                implicitHeight: padding*4;
 
                 Label {
                     id: nameLabel;

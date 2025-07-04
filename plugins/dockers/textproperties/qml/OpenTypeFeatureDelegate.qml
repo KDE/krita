@@ -12,7 +12,7 @@ import org.krita.components 1.0
 Control {
     id: root;
 
-    height: visible? implicitHeight: 0;
+    height: implicitHeight;
     implicitHeight: layout.height + padding*2;
     clip: true;
     property string display;

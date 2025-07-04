@@ -96,22 +96,19 @@ KoShapeQtQuickLabel::~KoShapeQtQuickLabel()
 
 void KoShapeQtQuickLabel::paint(QPainter *painter)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(d->shapePainter);
+    if (!d->shapePainter) return;
     if (!painter->isActive()) return;
 
     const QRectF bbox = d->documentRect.isValid()? d->documentRect: d->shapePainter->contentRect();
     const QRectF bounds = QRectF(0, 0, width(), height());
-    painter->save();
+
     if (d->shapes.isEmpty()) {
-        painter->restore();
         return;
     }
 
     d->shapePainter->paint(*painter,
                            bounds.toAlignedRect(),
                            d->adjustBBoxToScaling(bbox, bounds));
-
-    painter->restore();
 
 }
 
@@ -243,7 +240,7 @@ void KoShapeQtQuickLabel::updateShapes()
 
 void KoShapeQtQuickLabel::callUpdateIfComplete()
 {
-    if (isComponentComplete()) {
+    if (isComponentComplete() && isVisible()) {
         update(boundingRect().toAlignedRect());
     }
 }

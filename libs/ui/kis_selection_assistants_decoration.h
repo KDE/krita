@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2025 Ross Rosales <ross.erosales@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef _KIS_SELECTION_ASSISTANTS_DECORATION_H_
 #define _KIS_SELECTION_ASSISTANTS_DECORATION_H_
 

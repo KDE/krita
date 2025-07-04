@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2025 Ross Rosales <ross.erosales@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #include "kis_selection_assistants_decoration.h"
 
 #include <limits>

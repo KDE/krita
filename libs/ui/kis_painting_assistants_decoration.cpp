@@ -6,7 +6,6 @@
  */
 
 #include "kis_painting_assistants_decoration.h"
-#include "kis_selection_assistants_decoration.h"
 
 #include <limits>
 
@@ -325,10 +324,6 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
             drawEditorWidget(assistant, gc, converter);
         }
      }
-
-    // PLACEHOLDER TO DRAW SELECTION ACTION BAR
-     KisSelectionAssistantsDecoration decoration;
-     decoration.drawDecoration(gc, converter);
 }
 
 void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)

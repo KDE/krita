@@ -5,6 +5,7 @@
  */
 
 #include "kis_selection_decoration.h"
+#include "kis_selection_assistants_decoration.h"
 
 #include <QPainter>
 #include <QVarLengthArray>
@@ -230,6 +231,10 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
         gc.drawPath(m_outlinePath);
     }
     gc.restore();
+
+    // render floating bar
+     KisSelectionAssistantsDecoration decoration;
+     decoration.drawDecoration(gc, converter);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

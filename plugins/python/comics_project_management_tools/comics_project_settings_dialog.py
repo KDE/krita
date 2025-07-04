@@ -11,13 +11,14 @@ A dialog for editing the general project settings.
 """
 import os
 try:
-    from PyQt6.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QComboBox, QSizePolicy
+    from PyQt6.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QLabel, QLineEdit, QToolButton, QFrame, QComboBox, QSizePolicy
     from PyQt6.QtCore import QDir, Qt, pyqtSignal
     from PyQt6.QtGui import QAction
 except:
-    from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QAction, QComboBox, QSizePolicy
+    from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QLabel, QLineEdit, QToolButton, QFrame, QAction, QComboBox, QSizePolicy
     from PyQt5.QtCore import QDir, Qt, pyqtSignal
-from krita import *
+from krita import FileDialog
+from builtins import i18n, Application
 
 """
 A Widget that contains both a qlabel and a button for selecting a path.

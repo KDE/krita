@@ -3,10 +3,8 @@
 #
 
 import re
-from collections import OrderedDict
 from functools import partial
 from itertools import groupby, product, starmap, tee
-from pathlib import Path
 
 from krita import Krita
 try:

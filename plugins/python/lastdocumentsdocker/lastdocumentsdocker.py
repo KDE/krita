@@ -4,11 +4,12 @@ try:
     from PyQt6.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
 except:
     from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
-import krita
+from krita import DockWidget
+from builtins import i18n
 from . import lastdocumentslistmodel
 
 
-class LastDocumentsDocker(krita.DockWidget):
+class LastDocumentsDocker(DockWidget):
 
     def __init__(self):
         super(LastDocumentsDocker, self).__init__()

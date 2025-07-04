@@ -2,7 +2,6 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=plugin_importer
-X-Python-2-Compatible=false
 X-Krita-Manual=manual.html
 Name=Python Plugin Importer
 Name[ca]=Importador de connectors en Python

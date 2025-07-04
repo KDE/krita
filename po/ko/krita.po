@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-21 02:02+0000\n"
+"POT-Creation-Date: 2025-07-02 08:19+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -13935,20 +13935,20 @@ msgid "&Help"
 msgstr "도움말(&H)"
 
 #: krita/krita5.xmlgui:426 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:102
+#: plugins/python/scripter/uicontroller.py:104
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "파일"
 
-#: krita/krita5.xmlgui:435
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Edit"
 msgid "Edit"
 msgstr "편집"
 
-#: krita/krita5.xmlgui:440
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "브러시와 도장"
@@ -21468,14 +21468,14 @@ msgstr "축소(&M)"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
-#: plugins/python/exportlayers/uiexportlayers.py:37
+#: plugins/python/exportlayers/uiexportlayers.py:38
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:65
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
+#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -21563,7 +21563,7 @@ msgstr "기본값"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:59
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
 #, kde-format
 msgid "Size"
@@ -21607,7 +21607,7 @@ msgstr "크기"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1592
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1601
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21696,14 +21696,14 @@ msgstr " 픽셀"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
 #, kde-format
 msgid "Opacity"
 msgstr "불투명도"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
 #, kde-format
 msgid "Flow"
 msgstr "흐름"
@@ -21925,7 +21925,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1>(임베드됨)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:525
+#: libs/ui/dialogs/kis_dlg_preferences.cc:531
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -22239,7 +22239,7 @@ msgid "Locked"
 msgstr "잠김"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: plugins/python/channels2layers/channels2layers.py:110
+#: plugins/python/channels2layers/channels2layers.py:104
 #, kde-format
 msgid "Visible"
 msgstr "보이기"
@@ -22311,7 +22311,7 @@ msgid "Open File"
 msgstr "파일 열기"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#: plugins/python/plugin_importer/plugin_importer_extension.py:83
+#: plugins/python/plugin_importer/plugin_importer_extension.py:82
 #, kde-format
 msgid "Error"
 msgstr "오류"
@@ -23384,7 +23384,7 @@ msgstr "RGB(8비트 정수/채널, 관리되지 않음)"
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:30
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:352
-#: plugins/python/channels2layers/channels2layers.py:1406
+#: plugins/python/channels2layers/channels2layers.py:1400
 #, kde-format
 msgid "Blue"
 msgstr "파랑"
@@ -23400,7 +23400,7 @@ msgstr "파랑"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:113
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:235
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:406
-#: plugins/python/channels2layers/channels2layers.py:1404
+#: plugins/python/channels2layers/channels2layers.py:1398
 #, kde-format
 msgid "Green"
 msgstr "녹색"
@@ -23410,7 +23410,7 @@ msgstr "녹색"
 #: plugins/color/lcms2engine/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:26
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:32
-#: plugins/python/channels2layers/channels2layers.py:1402
+#: plugins/python/channels2layers/channels2layers.py:1396
 #, kde-format
 msgid "Red"
 msgstr "빨강"
@@ -24513,7 +24513,7 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:981
+#: libs/ui/dialogs/kis_dlg_preferences.cc:990
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
@@ -24684,7 +24684,7 @@ msgstr "저장소 ID"
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/resources/KisTagResourceModel.cpp:633
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Name"
@@ -24785,7 +24785,7 @@ msgstr ""
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1002
-#: plugins/impex/webp/kis_wdg_options_webp.ui:791
+#: plugins/impex/webp/kis_wdg_options_webp.ui:818
 #, kde-format
 msgid "Metadata"
 msgstr "메타데이터"
@@ -24809,12 +24809,12 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1957
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
-#: plugins/python/channels2layers/channels2layers.py:885
+#: plugins/python/channels2layers/channels2layers.py:879
 #, kde-format
 msgid "Unknown"
 msgstr "알 수 없음"
@@ -24946,7 +24946,7 @@ msgstr "글꼴 종류"
 #: libs/widgets/KoConfigAuthorPage.cpp:89
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:105
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Type"
@@ -24969,7 +24969,7 @@ msgstr "사전 설치됨"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:23
 #, kde-format
 msgid "Thumbnail"
 msgstr "섬네일"
@@ -25655,7 +25655,7 @@ msgstr ""
 "50 fps로 지정합니다.</p></body></html>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1981
 #, kde-format
 msgid "Warning(s):"
 msgstr "경고:"
@@ -26661,8 +26661,8 @@ msgstr "마스터 디스플레이:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2267
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -26762,8 +26762,8 @@ msgstr "비디오 애니메이션 가져오기"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26892,7 +26892,7 @@ msgstr "시간:"
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:250
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:389
-#: plugins/impex/webp/kis_wdg_options_webp.ui:147
+#: plugins/impex/webp/kis_wdg_options_webp.ui:174
 #, kde-format
 msgid "Advanced"
 msgstr "고급"
@@ -27169,7 +27169,7 @@ msgstr "FFMpeg 버전: 없음"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:631
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
-#: plugins/impex/webp/kis_wdg_options_webp.ui:424
+#: plugins/impex/webp/kis_wdg_options_webp.ui:451
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
 msgid "None"
@@ -27605,7 +27605,7 @@ msgid "Set color used for warning"
 msgstr "경고에 사용할 색상 설정"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1176
 #, fuzzy, kde-format
 #| msgid "Perceptual"
 msgctxt "Color conversion intent"
@@ -27613,7 +27613,7 @@ msgid "Perceptual"
 msgstr "인식"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1177
 #, fuzzy, kde-format
 #| msgid "Relative Colorimetric"
 msgctxt "Color conversion intent"
@@ -27621,7 +27621,7 @@ msgid "Relative Colorimetric"
 msgstr "상대적 색도계"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1169
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1178
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "Color conversion intent"
@@ -27629,7 +27629,7 @@ msgid "Saturation"
 msgstr "채도"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1170
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1179
 #, fuzzy, kde-format
 #| msgid "Absolute Colorimetric"
 msgctxt "Color conversion intent"
@@ -27637,7 +27637,7 @@ msgid "Absolute Colorimetric"
 msgstr "절대적 색도계"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1182
 #, fuzzy, kde-format
 #| msgid "Dynamics settings"
 msgctxt "Display Mode"
@@ -27645,14 +27645,14 @@ msgid "Use global display settings"
 msgstr "다이나믹 설정"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1174
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1183
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1175
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1184
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Display Mode"
@@ -27741,12 +27741,12 @@ msgstr "레이어 속성"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1505
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1509
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1513
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1598
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2023
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2081 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1514
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1522
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2032
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2090 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27760,13 +27760,13 @@ msgstr "레이어 속성"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:265
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:267
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:76
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:84
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:86
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:93
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:99
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:104
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:109
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:88
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:95
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:101
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:106
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:111
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:113
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
@@ -28025,36 +28025,36 @@ msgstr "이전 세션 불러오기"
 msgid "Show session manager"
 msgstr "세션 관리자 표시"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:490
+#: libs/ui/dialogs/kis_dlg_preferences.cc:496
 #, fuzzy, kde-format
 #| msgid "Note: Krita will need to be restarted for changes to take effect"
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "참고: 변경 사항을 적용하려면 Krita를 다시 시작해야 합니다"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:496
+#: libs/ui/dialogs/kis_dlg_preferences.cc:502
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:528
+#: libs/ui/dialogs/kis_dlg_preferences.cc:534
 #, fuzzy, kde-format
 #| msgid "Internal error"
 msgid "Internal Storage"
 msgstr "내부 오류"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:530
+#: libs/ui/dialogs/kis_dlg_preferences.cc:536
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:568
+#: libs/ui/dialogs/kis_dlg_preferences.cc:574
 #, fuzzy, kde-format
 #| msgid "User Manual"
 msgid "Choose Manually"
 msgstr "사용자 설명서"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:633
+#: libs/ui/dialogs/kis_dlg_preferences.cc:639
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -28069,27 +28069,27 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:969
+#: libs/ui/dialogs/kis_dlg_preferences.cc:978
 #, kde-format
 msgid "Select a Background Image"
 msgstr "배경 이미지 선택"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:981
+#: libs/ui/dialogs/kis_dlg_preferences.cc:990
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1은(는) 올바른 이미지 파일이 아닙니다!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1001
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1010
 #, fuzzy, kde-format
 #| msgid "2. The resource location at %1 is not writable."
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "2. 리소스 위치 %1에 쓸 수 없습니다."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1125
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1253
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1334
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1262
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1343
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -28097,19 +28097,19 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "화면 %1(%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1222
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "색 프로필 설치"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1419
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1428
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1442
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -28118,7 +28118,7 @@ msgstr ""
 "브러시 속도에 태블릿 드라이버 타임스탬프 사용(WinTab 태블릿 API 사용 시 아티"
 "팩트가 발생할 수 있음)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "브러시 속도에 태블릿 드라이버 타임스탬프 사용"
@@ -28126,7 +28126,7 @@ msgstr "브러시 속도에 태블릿 드라이버 타임스탬프 사용"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
 #, fuzzy, kde-format
 #| msgid "Maximum brush size:"
 msgid "Maximum brush speed: {n} px/ms"
@@ -28136,7 +28136,7 @@ msgstr[0] "최대 브러시 크기:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1463
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Brush Smoothing: Disabled"
@@ -28144,7 +28144,7 @@ msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "손떨림 보정: 사용 안 함"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1470
 #, fuzzy, kde-format
 #| msgctxt "Context: dynamic sensors"
 #| msgid "Tilt direction"
@@ -28152,13 +28152,13 @@ msgid "Pen tilt direction offset: "
 msgstr "기울기 방향"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1559
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1568
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1580
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1589
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -28167,30 +28167,30 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "초"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1583
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1592
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1822
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1831
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1832
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "소프트웨어 렌더러(매우 느림)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1836
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11(ANGLE 사용)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1828
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
 #, fuzzy, kde-format
 #| msgctxt "canvas renderer"
 #| msgid "OpenGL ES"
@@ -28198,159 +28198,159 @@ msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1830
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1839
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1846
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1866
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "자동(%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
 #, kde-format
 msgid "Display Id: %1"
 msgstr "디스플레이 ID: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1944
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "디스플레이 이름: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1945
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "최소 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "최대 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1947
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "최대 풀 프레임 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "기본 빨간색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "기본 녹색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1950
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "기본 파란색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "백색 점: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2119
 #, fuzzy, kde-format
 #| msgid "WARNING: current display doesn't support HDR rendering"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "경고: 현재 디스플레이에서 HDR 렌더링을 지원하지 않음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2250
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "캔버스 입력 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #, kde-format
 msgid "Canvas Input"
 msgstr "캔버스 입력"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2277
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "색 관리"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2270
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "색상"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2287
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
 #, kde-format
 msgid "Performance"
 msgstr "성능"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2297
 #, kde-format
 msgid "Tablet settings"
 msgstr "태블릿 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2290
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2299
 #, kde-format
 msgid "Tablet"
 msgstr "태블릿"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2307
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "캔버스만 보기 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2300
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2309
 #, kde-format
 msgid "Canvas-only"
 msgstr "캔버스만 보기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2308
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2310
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2317
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2319
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "팝업 팔레트"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2318
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2327
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2320
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2329
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2327
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2336
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -29142,7 +29142,7 @@ msgstr "이니셜:"
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:336
 #, kde-format
 msgid "Title:"
 msgstr "직함:"
@@ -29774,7 +29774,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
 #, kde-format
 msgid "Source:"
 msgstr "원본:"
@@ -30070,13 +30070,13 @@ msgstr "다음부터 표시:"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:979
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
-#: plugins/impex/webp/kis_wdg_options_webp.ui:305
-#: plugins/impex/webp/kis_wdg_options_webp.ui:328
-#: plugins/impex/webp/kis_wdg_options_webp.ui:466
-#: plugins/impex/webp/kis_wdg_options_webp.ui:596
-#: plugins/impex/webp/kis_wdg_options_webp.ui:684
-#: plugins/impex/webp/kis_wdg_options_webp.ui:750
-#: plugins/impex/webp/kis_wdg_options_webp.ui:773
+#: plugins/impex/webp/kis_wdg_options_webp.ui:332
+#: plugins/impex/webp/kis_wdg_options_webp.ui:355
+#: plugins/impex/webp/kis_wdg_options_webp.ui:493
+#: plugins/impex/webp/kis_wdg_options_webp.ui:623
+#: plugins/impex/webp/kis_wdg_options_webp.ui:711
+#: plugins/impex/webp/kis_wdg_options_webp.ui:777
+#: plugins/impex/webp/kis_wdg_options_webp.ui:800
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
@@ -30633,7 +30633,7 @@ msgstr "하위 창"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
 #: plugins/dockers/lut/wdglut.ui:241
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:23
 #, kde-format
 msgid "Clear"
 msgstr "지우기"
@@ -31193,6 +31193,23 @@ msgstr "민감도:"
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "키네틱 스크롤 사용 시 도커 스크롤 바 숨기기(다시 시작해야 함)"
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
+#: libs/ui/forms/wdggeneralsettings.ui:1636
+#, kde-format
+msgid ""
+"Some applications may emulate presses of function keys with high numbers (e."
+"g. F22) to bring themselves to the foreground. This may break Krita's "
+"shortcuts and actions system. If you have a keyboard with F13 or higher "
+"function keys, and you wish to use them, try disabling this option, but take "
+"this potential problem into account."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
+#: libs/ui/forms/wdggeneralsettings.ui:1639
+#, kde-format
+msgid "Ignore high function keys (F13-F24)"
+msgstr ""
+
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
 #, kde-format
@@ -31428,7 +31445,7 @@ msgstr "이미지 추가..."
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
-#: plugins/python/channels2layers/channels2layers.py:112
+#: plugins/python/channels2layers/channels2layers.py:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
 msgid "Remove"
@@ -31899,7 +31916,7 @@ msgstr "새 창 레이아웃 저장"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
 msgstr "이름:"
@@ -31950,7 +31967,7 @@ msgstr "현재 브러시 사전 설정"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
 msgstr "저장"
@@ -35435,7 +35452,7 @@ msgstr ""
 "\t\tKrita 설정 대화 상자에서 더 많은 RAM을 사용하도록 설정하십시오"
 
 #: libs/ui/kis_statusbar.cc:379
-#: plugins/python/channels2layers/channels2layers.py:111
+#: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "숨겨짐"
@@ -37127,7 +37144,7 @@ msgstr ""
 "야 합니다"
 
 #: libs/ui/KisWelcomePageWidget.cpp:163
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Language"
 msgstr "언어"
@@ -40000,7 +40017,7 @@ msgid "Back"
 msgstr "뒤로"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:45
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:24
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:23
 #, kde-format
 msgid "Stop"
 msgstr "정지"
@@ -40917,7 +40934,7 @@ msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Email"
 msgstr "이메일"
@@ -40929,7 +40946,7 @@ msgstr "팩스"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Homepage"
 msgstr "홈페이지"
@@ -42561,7 +42578,7 @@ msgstr "소실점"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:147
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:249
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:372
-#: plugins/python/channels2layers/channels2layers.py:1394
+#: plugins/python/channels2layers/channels2layers.py:1388
 #, kde-format
 msgid "Cyan"
 msgstr "시안"
@@ -42575,7 +42592,7 @@ msgstr "시안"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:96
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:273
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:430
-#: plugins/python/channels2layers/channels2layers.py:1396
+#: plugins/python/channels2layers/channels2layers.py:1390
 #, kde-format
 msgid "Magenta"
 msgstr "마젠타"
@@ -42589,7 +42606,7 @@ msgstr "마젠타"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:123
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:283
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:382
-#: plugins/python/channels2layers/channels2layers.py:1398
+#: plugins/python/channels2layers/channels2layers.py:1392
 #, kde-format
 msgid "Yellow"
 msgstr "노랑"
@@ -42597,7 +42614,7 @@ msgstr "노랑"
 #: plugins/color/lcms2engine/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:26
-#: plugins/python/channels2layers/channels2layers.py:1400
+#: plugins/python/channels2layers/channels2layers.py:1394
 #, kde-format
 msgid "Black"
 msgstr "검정"
@@ -42995,7 +43012,7 @@ msgstr "셰이드 선택기"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
-#: plugins/python/colorspace/uicolorspace.py:68
+#: plugins/python/colorspace/uicolorspace.py:71
 #, kde-format
 msgid "Color model:"
 msgstr "색 모델:"
@@ -43684,7 +43701,7 @@ msgstr "프레임 색상으로 어니언 스킨 필터"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:78
+#: plugins/python/palette_docker/palette_docker.py:79
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -43805,8 +43822,8 @@ msgstr "번호가 매겨진 값 스케일 표시"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:44
 #: plugins/filters/palettize/palettize.ui:56
-#: plugins/python/colorspace/colorspace.py:16
-#: plugins/python/colorspace/uicolorspace.py:82
+#: plugins/python/colorspace/colorspace.py:17
+#: plugins/python/colorspace/uicolorspace.py:85
 #, kde-format
 msgid "Color Space"
 msgstr "색 공간"
@@ -46169,7 +46186,7 @@ msgstr "설명"
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1108
+#: plugins/python/channels2layers/channels2layers.py:1102
 #, kde-format
 msgid "Mode"
 msgstr "모드"
@@ -47465,7 +47482,7 @@ msgstr "권한:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 #, kde-format
 msgid "Date:"
 msgstr "날짜:"
@@ -48289,7 +48306,7 @@ msgstr "더블린 코어"
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
-#: plugins/impex/webp/kis_wdg_options_webp.ui:812
+#: plugins/impex/webp/kis_wdg_options_webp.ui:839
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
 msgid "Exif"
@@ -48750,13 +48767,13 @@ msgstr ""
 msgid "Python Plugin Manager"
 msgstr "Python 플러그인 관리자"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:124
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
 msgstr "지정한 모듈 <application>%1</application>을(를) 찾을 수 없음"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:154
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -48766,13 +48783,13 @@ msgstr ""
 "<p>지정한 버전의 의존성 <application>%1</application>에 잘못된 형식이 있음: "
 "<icode>%2</icode>. 건너뜀</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:181
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
 msgstr "<title>의존성 검사</title>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:212
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -48784,13 +48801,13 @@ msgstr ""
 "PEP396 <code>__version__</code> 속성이 없습니다. 실행 중지된 것은 아니지만 동"
 "작은 예측할 수 없습니다...</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:226
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
 msgstr "<p><application>%1</application>: 예상하지 못한 모듈의 버전 형식"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:239
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -48800,20 +48817,20 @@ msgstr ""
 "<p><application>%1</application>: 적합한 버전을 찾을 수 없습니다. 필요한 버"
 "전 %2 %3이(가) 있지만 %4을(를) 찾았습니다</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:254
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr "<p><application>%1</application> 모듈 불러오기 실패:</p><pre>%2</pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:365
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "내부 엔진 오류"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:369
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
@@ -49146,7 +49163,7 @@ msgstr "다음으로 저장:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 #, kde-format
 msgid "Summary:"
 msgstr "요약:"
@@ -49191,7 +49208,7 @@ msgstr "http://"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
 #, kde-format
 msgid "License:"
 msgstr "라이선스:"
@@ -50837,7 +50854,7 @@ msgstr "독립된 채널"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
-#: plugins/python/highpass/highpass.py:66
+#: plugins/python/highpass/highpass.py:67
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
@@ -50970,9 +50987,9 @@ msgstr "인덱싱 팩터"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Other"
 msgstr "기타"
@@ -53530,6 +53547,7 @@ msgstr "프로그레시브"
 #. i18n: ectx: property (text), widget (QCheckBox, chkForceSRGB)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:38
 #: plugins/impex/png/kis_wdg_options_png.ui:105
+#: plugins/impex/webp/kis_wdg_options_webp.ui:146
 #, kde-format
 msgid "Force convert to sRGB"
 msgstr "강제로 sRGB로 변환"
@@ -53556,6 +53574,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProfile)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:132
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:157
+#: plugins/impex/webp/kis_wdg_options_webp.ui:153
 #, kde-format
 msgid "Save ICC Profile"
 msgstr "ICC 프로필 저장"
@@ -53620,7 +53639,7 @@ msgstr "최적화"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
-#: plugins/impex/webp/kis_wdg_options_webp.ui:806
+#: plugins/impex/webp/kis_wdg_options_webp.ui:833
 #, kde-format
 msgid "Formats:"
 msgstr "형식:"
@@ -53635,7 +53654,7 @@ msgstr "IPTC"
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1039
-#: plugins/impex/webp/kis_wdg_options_webp.ui:819
+#: plugins/impex/webp/kis_wdg_options_webp.ui:846
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
 msgid "XMP"
@@ -53655,7 +53674,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1008
-#: plugins/impex/webp/kis_wdg_options_webp.ui:797
+#: plugins/impex/webp/kis_wdg_options_webp.ui:824
 #, kde-format
 msgid "Store Document Metadata"
 msgstr "문서 메타데이터 저장"
@@ -56730,7 +56749,7 @@ msgstr "최소"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:261
-#: plugins/impex/webp/kis_wdg_options_webp.ui:431
+#: plugins/impex/webp/kis_wdg_options_webp.ui:458
 #, kde-format
 msgid "Best"
 msgstr "최고"
@@ -56923,8 +56942,8 @@ msgstr "디더링:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, targetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:202
-#: plugins/impex/webp/kis_wdg_options_webp.ui:218
+#: plugins/impex/webp/kis_wdg_options_webp.ui:229
+#: plugins/impex/webp/kis_wdg_options_webp.ui:245
 #, kde-format
 msgid ""
 "If non-zero, sets the desired target size in bytes. Takes precedence over "
@@ -56932,14 +56951,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:205
+#: plugins/impex/webp/kis_wdg_options_webp.ui:232
 #, fuzzy, kde-format
 #| msgid "Image Size"
 msgid "Target Size"
 msgstr "이미지 크기"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, targetSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:221
+#: plugins/impex/webp/kis_wdg_options_webp.ui:248
 #, fuzzy, kde-format
 #| msgid "0 B"
 msgid " B"
@@ -56947,8 +56966,8 @@ msgstr "0 B"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:231
-#: plugins/impex/webp/kis_wdg_options_webp.ui:247
+#: plugins/impex/webp/kis_wdg_options_webp.ui:258
+#: plugins/impex/webp/kis_wdg_options_webp.ui:274
 #, kde-format
 msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
@@ -56956,7 +56975,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:234
+#: plugins/impex/webp/kis_wdg_options_webp.ui:261
 #, fuzzy, kde-format
 #| msgid "Target:"
 msgid "Target PSNR"
@@ -56964,29 +56983,29 @@ msgstr "대상:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSegments)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:260
-#: plugins/impex/webp/kis_wdg_options_webp.ui:276
+#: plugins/impex/webp/kis_wdg_options_webp.ui:287
+#: plugins/impex/webp/kis_wdg_options_webp.ui:303
 #, fuzzy, kde-format
 #| msgid "Maximum Number of Brush Presets:"
 msgid "Maximum number of segments (1 to 4)."
 msgstr "팔레트 사전 설정 개수:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:263
+#: plugins/impex/webp/kis_wdg_options_webp.ui:290
 #, kde-format
 msgid "Segments"
 msgstr "세그먼트"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSNSStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, snsStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:292
-#: plugins/impex/webp/kis_wdg_options_webp.ui:302
+#: plugins/impex/webp/kis_wdg_options_webp.ui:319
+#: plugins/impex/webp/kis_wdg_options_webp.ui:329
 #, kde-format
 msgid "Spatial Noise Shaping: 0 = off, 100 = maximum."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:295
+#: plugins/impex/webp/kis_wdg_options_webp.ui:322
 #, fuzzy, kde-format
 #| msgid "Strength"
 msgid "SNS Strength"
@@ -56994,14 +57013,14 @@ msgstr "강도"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:315
-#: plugins/impex/webp/kis_wdg_options_webp.ui:325
+#: plugins/impex/webp/kis_wdg_options_webp.ui:342
+#: plugins/impex/webp/kis_wdg_options_webp.ui:352
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:318
+#: plugins/impex/webp/kis_wdg_options_webp.ui:345
 #, fuzzy, kde-format
 #| msgid "Filter Settings"
 msgctxt "Filter options specifically for WebP"
@@ -57010,14 +57029,14 @@ msgstr "필터 설정"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:338
-#: plugins/impex/webp/kis_wdg_options_webp.ui:348
+#: plugins/impex/webp/kis_wdg_options_webp.ui:365
+#: plugins/impex/webp/kis_wdg_options_webp.ui:375
 #, kde-format
 msgid "Filter sharpness: 0 = off, 7 = least sharp."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterSharpness)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:341
+#: plugins/impex/webp/kis_wdg_options_webp.ui:368
 #, fuzzy, kde-format
 #| msgid "Filter Settings"
 msgctxt "Filter options specifically for WebP"
@@ -57026,8 +57045,8 @@ msgstr "필터 설정"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterType)
 #. i18n: ectx: property (toolTip), widget (QComboBox, filterType)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:361
-#: plugins/impex/webp/kis_wdg_options_webp.ui:371
+#: plugins/impex/webp/kis_wdg_options_webp.ui:388
+#: plugins/impex/webp/kis_wdg_options_webp.ui:398
 #, kde-format
 msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
@@ -57035,14 +57054,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:364
+#: plugins/impex/webp/kis_wdg_options_webp.ui:391
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Type"
 msgstr "필터 형식"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAutofilter)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:378
+#: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Auto Adjust Filter Strength"
 msgstr ""
@@ -57054,19 +57073,19 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, lowMemory)
 #. i18n: ectx: property (text), widget (QCheckBox, exact)
 #. i18n: ectx: property (text), widget (QCheckBox, useSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:385
-#: plugins/impex/webp/kis_wdg_options_webp.ui:527
-#: plugins/impex/webp/kis_wdg_options_webp.ui:624
-#: plugins/impex/webp/kis_wdg_options_webp.ui:644
-#: plugins/impex/webp/kis_wdg_options_webp.ui:664
-#: plugins/impex/webp/kis_wdg_options_webp.ui:710
-#: plugins/impex/webp/kis_wdg_options_webp.ui:730
+#: plugins/impex/webp/kis_wdg_options_webp.ui:412
+#: plugins/impex/webp/kis_wdg_options_webp.ui:554
+#: plugins/impex/webp/kis_wdg_options_webp.ui:651
+#: plugins/impex/webp/kis_wdg_options_webp.ui:671
+#: plugins/impex/webp/kis_wdg_options_webp.ui:691
+#: plugins/impex/webp/kis_wdg_options_webp.ui:737
+#: plugins/impex/webp/kis_wdg_options_webp.ui:757
 #, kde-format
 msgid "Enabled"
 msgstr "활성화"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaCompression)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:392
+#: plugins/impex/webp/kis_wdg_options_webp.ui:419
 #, kde-format
 msgid ""
 "Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP "
@@ -57074,21 +57093,21 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:395
+#: plugins/impex/webp/kis_wdg_options_webp.ui:422
 #, fuzzy, kde-format
 #| msgid "Kra File Compression"
 msgid "Alpha Plane Compression"
 msgstr "Kra 파일 압축"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:405
+#: plugins/impex/webp/kis_wdg_options_webp.ui:432
 #, kde-format
 msgid "Predictive Filtering for Alpha Plane"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:414
+#: plugins/impex/webp/kis_wdg_options_webp.ui:441
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:86
 #, kde-format
@@ -57097,14 +57116,14 @@ msgstr "빠름"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaQuality)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, alphaQuality)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:453
-#: plugins/impex/webp/kis_wdg_options_webp.ui:463
+#: plugins/impex/webp/kis_wdg_options_webp.ui:480
+#: plugins/impex/webp/kis_wdg_options_webp.ui:490
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:456
+#: plugins/impex/webp/kis_wdg_options_webp.ui:483
 #, fuzzy, kde-format
 #| msgid "Advanced quality"
 msgid "Alpha Plane Quality"
@@ -57112,22 +57131,22 @@ msgstr "고급 품질"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:479
-#: plugins/impex/webp/kis_wdg_options_webp.ui:495
+#: plugins/impex/webp/kis_wdg_options_webp.ui:506
+#: plugins/impex/webp/kis_wdg_options_webp.ui:522
 #, kde-format
 msgid "Number of entropy-analysis passes (1 to 10)."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPass)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:482
+#: plugins/impex/webp/kis_wdg_options_webp.ui:509
 #, kde-format
 msgid "Entropy Passes"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblShowCompressed)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showCompressed)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:514
-#: plugins/impex/webp/kis_wdg_options_webp.ui:524
+#: plugins/impex/webp/kis_wdg_options_webp.ui:541
+#: plugins/impex/webp/kis_wdg_options_webp.ui:551
 #, kde-format
 msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
@@ -57135,14 +57154,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:517
+#: plugins/impex/webp/kis_wdg_options_webp.ui:544
 #, fuzzy, kde-format
 #| msgid "Compress:"
 msgid "Show Compressed"
 msgstr "압축:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:534
+#: plugins/impex/webp/kis_wdg_options_webp.ui:561
 #, fuzzy, kde-format
 #| msgid "Processing layer"
 msgctxt "Filter options specifically for WebP"
@@ -57151,8 +57170,8 @@ msgstr "처리 레이어"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:544
-#: plugins/impex/webp/kis_wdg_options_webp.ui:554
+#: plugins/impex/webp/kis_wdg_options_webp.ui:571
+#: plugins/impex/webp/kis_wdg_options_webp.ui:581
 #, kde-format
 msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
@@ -57160,7 +57179,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:547
+#: plugins/impex/webp/kis_wdg_options_webp.ui:574
 #, fuzzy, kde-format
 #| msgid "Patch Options"
 msgid "Partitions"
@@ -57168,8 +57187,8 @@ msgstr "패치 옵션"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitionLimit)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitionLimit)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:564
-#: plugins/impex/webp/kis_wdg_options_webp.ui:593
+#: plugins/impex/webp/kis_wdg_options_webp.ui:591
+#: plugins/impex/webp/kis_wdg_options_webp.ui:620
 #, kde-format
 msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
@@ -57177,20 +57196,20 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:567
+#: plugins/impex/webp/kis_wdg_options_webp.ui:594
 #, kde-format
 msgid "Partition Limit"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:576
+#: plugins/impex/webp/kis_wdg_options_webp.ui:603
 #, fuzzy, kde-format
 #| msgid "Maximum Height"
 msgid "Maximum degradation"
 msgstr "최대 높이"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:586
+#: plugins/impex/webp/kis_wdg_options_webp.ui:613
 #, fuzzy, kde-format
 #| msgid "Negation"
 msgid "No degradation"
@@ -57198,8 +57217,8 @@ msgstr "반전"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:611
-#: plugins/impex/webp/kis_wdg_options_webp.ui:621
+#: plugins/impex/webp/kis_wdg_options_webp.ui:638
+#: plugins/impex/webp/kis_wdg_options_webp.ui:648
 #, kde-format
 msgid ""
 "If enabled, compression parameters will be remapped to better match the "
@@ -57208,21 +57227,21 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmulateJPEGSize)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:614
+#: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "Emulate JPEG Size"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblThreadLevel)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, threadLevel)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:631
-#: plugins/impex/webp/kis_wdg_options_webp.ui:641
+#: plugins/impex/webp/kis_wdg_options_webp.ui:658
+#: plugins/impex/webp/kis_wdg_options_webp.ui:668
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:634
+#: plugins/impex/webp/kis_wdg_options_webp.ui:661
 #, fuzzy, kde-format
 #| msgid "Multithreading"
 msgid "Multithreaded Encoding"
@@ -57230,28 +57249,28 @@ msgstr "다중 스레드"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:651
-#: plugins/impex/webp/kis_wdg_options_webp.ui:661
+#: plugins/impex/webp/kis_wdg_options_webp.ui:678
+#: plugins/impex/webp/kis_wdg_options_webp.ui:688
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:654
+#: plugins/impex/webp/kis_wdg_options_webp.ui:681
 #, kde-format
 msgid "Reduce Memory Usage"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNearLossless)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, nearLossless)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:671
-#: plugins/impex/webp/kis_wdg_options_webp.ui:681
+#: plugins/impex/webp/kis_wdg_options_webp.ui:698
+#: plugins/impex/webp/kis_wdg_options_webp.ui:708
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:674
+#: plugins/impex/webp/kis_wdg_options_webp.ui:701
 #, fuzzy, kde-format
 #| msgid "Lossless"
 msgid "Near Lossless"
@@ -57259,8 +57278,8 @@ msgstr "무손실"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:697
-#: plugins/impex/webp/kis_wdg_options_webp.ui:707
+#: plugins/impex/webp/kis_wdg_options_webp.ui:724
+#: plugins/impex/webp/kis_wdg_options_webp.ui:734
 #, kde-format
 msgid ""
 "If enabled, preserve the exact RGB values under transparent areas. "
@@ -57269,35 +57288,35 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:700
+#: plugins/impex/webp/kis_wdg_options_webp.ui:727
 #, kde-format
 msgid "Exact"
 msgstr "정확함"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblUseSharpYUV)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, useSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:717
-#: plugins/impex/webp/kis_wdg_options_webp.ui:727
+#: plugins/impex/webp/kis_wdg_options_webp.ui:744
+#: plugins/impex/webp/kis_wdg_options_webp.ui:754
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:720
+#: plugins/impex/webp/kis_wdg_options_webp.ui:747
 #, kde-format
 msgid "Use Sharp YUV"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMin)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMin)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:737
-#: plugins/impex/webp/kis_wdg_options_webp.ui:747
+#: plugins/impex/webp/kis_wdg_options_webp.ui:764
+#: plugins/impex/webp/kis_wdg_options_webp.ui:774
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:740
+#: plugins/impex/webp/kis_wdg_options_webp.ui:767
 #, fuzzy, kde-format
 #| msgid "Quality"
 msgid "Minimum Quality"
@@ -57305,21 +57324,21 @@ msgstr "품질"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:760
-#: plugins/impex/webp/kis_wdg_options_webp.ui:770
+#: plugins/impex/webp/kis_wdg_options_webp.ui:787
+#: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:763
+#: plugins/impex/webp/kis_wdg_options_webp.ui:790
 #, fuzzy, kde-format
 #| msgid "Maximum Width"
 msgid "Maximum Quality"
 msgstr "최대 너비"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/webp/kis_wdg_options_webp.ui:829
+#: plugins/impex/webp/kis_wdg_options_webp.ui:856
 #, fuzzy, kde-format
 #| msgctxt "JPEG metadata filter"
 #| msgid "Filters:"
@@ -60708,125 +60727,125 @@ msgstr "높이 민감도"
 msgid "Direction/Tilt Mix Value"
 msgstr "방향/기울기 조합 값"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:24
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "Assign Profile"
 msgstr "프로필 할당"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:26
 msgid "There is no active document."
 msgstr "활성화된 문서가 없습니다."
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:58
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:59
 msgid "Assign Profile to Image"
 msgstr "이미지에 프로필 할당"
 
-#: plugins/python/channels2layers/channels2layers.py:90
-#: plugins/python/channels2layers/channels2layers.py:91
+#: plugins/python/channels2layers/channels2layers.py:84
+#: plugins/python/channels2layers/channels2layers.py:85
 msgid "Channels to layers"
 msgstr "채널을 레이어로"
 
-#: plugins/python/channels2layers/channels2layers.py:99
+#: plugins/python/channels2layers/channels2layers.py:93
 msgid "RGB Colors"
 msgstr "RGB 색상"
 
-#: plugins/python/channels2layers/channels2layers.py:100
+#: plugins/python/channels2layers/channels2layers.py:94
 msgid "CMY Colors"
 msgstr "CMY 색상"
 
-#: plugins/python/channels2layers/channels2layers.py:101
+#: plugins/python/channels2layers/channels2layers.py:95
 msgid "CMYK Colors"
 msgstr "CMYK 색상"
 
-#: plugins/python/channels2layers/channels2layers.py:102
+#: plugins/python/channels2layers/channels2layers.py:96
 msgid "RGB Grayscale levels"
 msgstr "RGB 그레이스케일 단계"
 
-#: plugins/python/channels2layers/channels2layers.py:103
+#: plugins/python/channels2layers/channels2layers.py:97
 msgid "CMY Grayscale levels"
 msgstr "CMY 회색조 단계"
 
-#: plugins/python/channels2layers/channels2layers.py:104
+#: plugins/python/channels2layers/channels2layers.py:98
 msgid "CMYK Grayscale levels"
 msgstr "CMYK 회색조 단계"
 
-#: plugins/python/channels2layers/channels2layers.py:109
+#: plugins/python/channels2layers/channels2layers.py:103
 msgid "Unchanged"
 msgstr "변경하지 않음"
 
-#: plugins/python/channels2layers/channels2layers.py:1044
+#: plugins/python/channels2layers/channels2layers.py:1038
 msgid "Processing layer"
 msgstr "처리 레이어"
 
-#: plugins/python/channels2layers/channels2layers.py:1074
+#: plugins/python/channels2layers/channels2layers.py:1068
 msgctxt ""
 "The name for a new group layer; the generated layers will be placed in this "
 "group."
 msgid "New layer group name"
 msgstr "새 레이어 그룹 이름"
 
-#: plugins/python/channels2layers/channels2layers.py:1079
+#: plugins/python/channels2layers/channels2layers.py:1073
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
 msgstr "새 레이어 색상 이름"
 
-#: plugins/python/channels2layers/channels2layers.py:1090
+#: plugins/python/channels2layers/channels2layers.py:1084
 msgid "Original layer"
 msgstr "원본 레이어"
 
-#: plugins/python/channels2layers/channels2layers.py:1149
+#: plugins/python/channels2layers/channels2layers.py:1143
 msgctxt "the original layer"
 msgid "Original"
 msgstr "원본"
 
-#: plugins/python/channels2layers/channels2layers.py:1162
+#: plugins/python/channels2layers/channels2layers.py:1156
 msgid "<i>Cyan</i>"
 msgstr "<i>시안</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1174
+#: plugins/python/channels2layers/channels2layers.py:1168
 msgid "<i>Magenta</i>"
 msgstr "<i>마젠타</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1186
+#: plugins/python/channels2layers/channels2layers.py:1180
 msgid "<i>Yellow</i>"
 msgstr "<i>노랑</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1198
+#: plugins/python/channels2layers/channels2layers.py:1192
 msgid "<i>Black</i>"
 msgstr "<i>검정</i>"
 
-#: plugins/python/colorspace/colorspace.py:18
+#: plugins/python/colorspace/colorspace.py:19
 msgid "Plugin to change color space of selected documents."
 msgstr "선택한 문서의 색 공간을 바꾸는 플러그인입니다."
 
-#: plugins/python/colorspace/uicolorspace.py:34
+#: plugins/python/colorspace/uicolorspace.py:37
 #: plugins/python/documenttools/uidocumenttools.py:25
-#: plugins/python/exportlayers/uiexportlayers.py:34
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:19
+#: plugins/python/exportlayers/uiexportlayers.py:35
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:20
 msgid "Refresh"
 msgstr "새로 고침"
 
-#: plugins/python/colorspace/uicolorspace.py:67
+#: plugins/python/colorspace/uicolorspace.py:70
 #: plugins/python/documenttools/uidocumenttools.py:50
-#: plugins/python/exportlayers/uiexportlayers.py:104
+#: plugins/python/exportlayers/uiexportlayers.py:105
 msgid "Documents:"
 msgstr "문서:"
 
-#: plugins/python/colorspace/uicolorspace.py:69
+#: plugins/python/colorspace/uicolorspace.py:72
 msgid "Color depth:"
 msgstr "색 농도:"
 
-#: plugins/python/colorspace/uicolorspace.py:70
+#: plugins/python/colorspace/uicolorspace.py:73
 msgid "Color profile:"
 msgstr "색 프로필:"
 
-#: plugins/python/colorspace/uicolorspace.py:137
+#: plugins/python/colorspace/uicolorspace.py:140
 #, fuzzy
 #| msgid "The selected documents has been converted."
 msgid "The selected documents have been converted."
 msgstr "선택한 문서를 변환했습니다."
 
-#: plugins/python/colorspace/uicolorspace.py:139
+#: plugins/python/colorspace/uicolorspace.py:142
 #: plugins/python/documenttools/uidocumenttools.py:112
 msgid "Select at least one document."
 msgstr "하나 이상의 문서를 선택하십시오."
@@ -60868,7 +60887,7 @@ msgid "Percentage:"
 msgstr "비율:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:214
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:272
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:271
 msgid "Export Settings"
 msgstr "설정 내보내기"
 
@@ -60962,7 +60981,7 @@ msgid "ACBF Document Info"
 msgstr "ACBF 문서 정보"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:412
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -61008,32 +61027,32 @@ msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr "CBZ/ACBF 파일 생성을 담당한 사람입니다."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Nick Name"
 msgstr "별명"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Given Name"
 msgstr "성 제외 이름"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Middle Name"
 msgstr "중간 이름"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Family Name"
 msgstr "성"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:372
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:371
 msgid "Add Author"
 msgstr "작성자 추가"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:374
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid "Remove Author"
 msgstr "작성자 삭제"
 
@@ -61121,29 +61140,29 @@ msgid "v{version}-in this version..."
 msgstr "v{version}-이 버전의 경우..."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:451
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:539
 msgid "Anon"
 msgstr "익명"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:452
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:541
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
 msgid "John"
 msgstr "홍"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:454
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:543
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:542
 msgid "Doe"
 msgstr "길동"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:143
+#: plugins/python/comics_project_management_tools/comics_exporter.py:138
 msgid "Preparing export."
 msgstr "내보내기를 준비하고 있습니다."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:144
+#: plugins/python/comics_project_management_tools/comics_exporter.py:139
 msgid "Exporting Comic..."
 msgstr "만화 내보내는 중..."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:162
+#: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -61151,21 +61170,21 @@ msgstr ""
 "ACBF 및 단독\n"
 "ACBF로 저장하는 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:168
 msgid "Saving out EPUB"
 msgstr "EPUB로 저장하는 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:178
-#: plugins/python/comics_project_management_tools/comics_exporter.py:212
-#: plugins/python/comics_project_management_tools/comics_exporter.py:371
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not Possible"
 msgstr "내보낼 수 없음"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:178
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
 msgstr "내보낼 것이 없으며, URL이 설정되지 않았습니다."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:186
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -61173,7 +61192,7 @@ msgstr ""
 "CoMet\n"
 "메타데이터 파일 저장 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:196
+#: plugins/python/comics_project_management_tools/comics_exporter.py:191
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -61181,11 +61200,11 @@ msgstr ""
 "Comicrack\n"
 "메타데이터 파일 저장 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:212
+#: plugins/python/comics_project_management_tools/comics_exporter.py:207
 msgid "Export failed because there's no export settings configured."
 msgstr "내보내기 설정이 구성되어 있지 않기 때문에 내보내지 못했습니다."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:229
+#: plugins/python/comics_project_management_tools/comics_exporter.py:224
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -61194,29 +61213,29 @@ msgstr ""
 "경과 시간: {passedString}\n"
 " 예상 시간: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_exporter.py:227
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pagesTotal} 중 {pages} 완료."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:243
+#: plugins/python/comics_project_management_tools/comics_exporter.py:238
 msgid "Opening next page"
 msgstr "다음 쪽 여는 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:251
+#: plugins/python/comics_project_management_tools/comics_exporter.py:246
 msgid "Cleaning up page"
 msgstr "쪽 비우는 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:285
+#: plugins/python/comics_project_management_tools/comics_exporter.py:280
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "{key}(으)로 내보내는 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:371
+#: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not happening because there are no pages."
 msgstr "쪽이 없으므로 내보내지 않습니다."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:636
+#: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -61224,185 +61243,185 @@ msgstr ""
 "Comicbook\n"
 "메타데이터 파일 저장 중"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:646
+#: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
 msgstr "CBZ 압축 파일"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Science Fiction"
 msgstr "공상 과학"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Fantasy"
 msgstr "판타지"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Adventure"
 msgstr "어드벤처"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Horror"
 msgstr "호러"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Mystery"
 msgstr "미스테리"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Crime"
 msgstr "범죄"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Military"
 msgstr "군사"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Real Life"
 msgstr "일상"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Superhero"
 msgstr "슈퍼히어로"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Humor"
 msgstr "유머"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Western"
 msgstr "서양식"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Manga"
 msgstr "망가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Politics"
 msgstr "정치"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Caricature"
 msgstr "만평"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Sports"
 msgstr "스포츠"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "History"
 msgstr "역사"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Biography"
 msgstr "전기, 일대기"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Education"
 msgstr "학습"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Computer"
 msgstr "컴퓨터"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Religion"
 msgstr "종교"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Romance"
 msgstr "로맨스"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Children"
 msgstr "어린이"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Non Fiction"
 msgstr "논픽션"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Adult"
 msgstr "성인"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Alternative"
 msgstr "대안"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:234
 msgid "Artbook"
 msgstr "화보집"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Writer"
 msgstr "작가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Adapter"
 msgstr "번안가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Artist"
 msgstr "예술가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Penciller"
 msgstr "연필 전문가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Inker"
 msgstr "잉크 전문가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Colorist"
 msgstr "화가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Letterer"
 msgstr "레터링 전문가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Cover Artist"
 msgstr "표지 화가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Photographer"
 msgstr "사진 작가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Editor"
 msgstr "편집자"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Assistant Editor"
 msgstr "도우미 편집가"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Designer"
 msgstr "디자이너"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Translator"
 msgstr "번역자"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:259
 msgid "Comic Metadata"
 msgstr "만화 메타데이터"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:272
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:271
 msgid "The proper title of the comic."
 msgstr "만화의 최종 제목입니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:274
 msgid "What will you tell others to entice them to read your comic?"
 msgstr "다른 사람에게 만화를 홍보할 때 어떻게 소개하시겠습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:282
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:281
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
@@ -61412,83 +61431,83 @@ msgstr ""
 "니다. 장르는 쉼표로 구분해서 입력합니다. 가급적이면 2개나 3개 정도만 입력하십"
 "시오."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:290
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:289
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr "만화에 등장하는 캐릭터 이름입니다. 쉼표로 구분합니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:309
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "이 만화가 시리즈의 일부라면 시리즈 이름과 번호를 입력하십시오."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:311
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
 msgid "No. "
 msgstr "번호 "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:313
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:312
 msgid "Vol. "
 msgstr "권 "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
 msgstr "이전에 있는 항목에 포함되지 않는 기타 키워드입니다. 쉼표로 구분합니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 msgid "Left to Right"
 msgstr "왼쪽에서 오른쪽으로"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
 msgid "Right to Left"
 msgstr "오른쪽에서 왼쪽으로"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr "어느 쪽이 표지입니까? 표지가 없으면 비워 두십시오."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 msgid "Cover page:"
 msgstr "표지:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 msgid "Language:"
 msgstr "언어:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
 msgid "Reading direction:"
 msgstr "읽는 방향:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Genre:"
 msgstr "장르:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Characters:"
 msgstr "문자:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
 msgid "Format:"
 msgstr "형식:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 msgid "Rating:"
 msgstr "별점:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
 msgid "Series:"
 msgstr "시리즈:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:348
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
 msgid "Other:"
 msgstr "기타:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:349
 msgid "Work"
 msgstr "작업"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:355
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:354
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
@@ -61497,36 +61516,36 @@ msgstr ""
 "다음은 이 만화에 기여한 작가 목록입니다. 별명, 이름, 역할(스케치, 선화 등), "
 "이메일 주소, 홈페이지 등을 설정할 수 있습니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Role"
 msgstr "역할"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:381
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:380
 msgid "Authors"
 msgstr "작성자"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
 msgstr "독자가 볼 최종판을 담당하는 회사, 그룹, 또는 사람 이름입니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:391
 msgid "Set Today"
 msgstr "오늘로 설정"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Sets the publish date to the current date."
 msgstr "게시 날짜를 오늘로 설정합니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:398
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
 msgstr ""
 "전통적인 게시자를 인용할 때에는 게시자가 위치한 도시 이름과 함께 언급됩니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
@@ -61535,7 +61554,7 @@ msgstr ""
 "만화 데이터베이스 항목이 있다면 여기에 추가하십시오. 만화를 처음부터 그린다"
 "면 건너뛸 수 있지만, 변환하는 경우에는 유용합니다."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
@@ -61544,89 +61563,89 @@ msgstr ""
 "만화가 기존 소스를 각색했는지, 그리고 각색했다면 원작의 정보입니다. 예를 들"
 "어 각색된 웹툰이라면 공식 웹사이트 URL을 여기에 입력하십시오."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "City:"
 msgstr "도시:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 msgid "ISBN:"
 msgstr "ISBN:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 msgid "UUID:"
 msgstr "UUID:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:426
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
 msgid "Database:"
 msgstr "데이터베이스:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:428
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:427
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Publisher"
 msgstr "게시자"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:117
 msgid "No keywords"
 msgstr "키워드 없음"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:132
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:131
 msgid "No last edit timestamp"
 msgstr "마지막 편집 타임스탬프 없음"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:152
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:151
 msgid "No description"
 msgstr "설명 없음"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:197
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:196
 msgid "Comics Manager"
 msgstr "만화 관리자"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:254
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:253
 msgid "New Project"
 msgstr "새 프로젝트"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:256
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:255
 msgid "Open Project"
 msgstr "프로젝트 열기"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:268
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:267
 msgid "Project Settings"
 msgstr "프로젝트 설정"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:270
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:127
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:269
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
 msgid "Meta Data"
 msgstr "메타데이터"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
 msgid "Add Page"
 msgstr "쪽 추가"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
 msgid "Add Page from Template"
 msgstr "서식에서 쪽 추가"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:291
 msgid "Add Existing Pages"
 msgstr "기존 쪽 추가"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "Remove Page"
 msgstr "쪽 삭제"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Batch Resize"
 msgstr "일괄 크기 조정"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:299
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "View Page In Window"
 msgstr "창에서 쪽 보기"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:300
 msgid "Scrape Author Info"
 msgstr "작성자 정보 스크랩"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:302
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -61634,19 +61653,19 @@ msgstr ""
 "문서에서 작성자 정보를 찾아서 저자 목록에 추가합니다. 중복 항목을 검사하지 않"
 "습니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:304
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:303
 msgid "Scrape Text for Translation"
 msgstr "번역할 텍스트 스크랩"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Export Comic"
 msgstr "만화 내보내기"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:329
 msgid "Copy Location"
 msgstr "복사 위치"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:331
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -61654,19 +61673,19 @@ msgstr ""
 "프로젝트 경로를 클립보드에 복사합니다. 파일 관리자 등으로 빠르게 복사할 수 있"
 "습니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "Please select the JSON comic config file."
 msgstr "JSON 만화 설정 파일을 선택하십시오."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "JSON files"
 msgstr "JSON 파일"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid "Config cannot be used"
 msgstr "설정을 사용할 수 없음"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:353
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:352
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -61675,57 +61694,57 @@ msgstr ""
 "Krita는 이 폴더에 대한 쓰기 권한이 없으므로 새 파일을 만들 수 없습니다. 폴더 "
 "액세스를 구성하거나 쓸 수 있는 폴더로 프로젝트를 이동하십시오."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:387
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:386
 msgid "Loading Pages..."
 msgstr "쪽 불러오는 중..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Krita files"
 msgstr "Krita 파일"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:540
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:539
 msgid "Which existing pages to add?"
 msgstr "추가할 기존 쪽이 있습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:601
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:622
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:600
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:621
 msgid "Where are the templates located?"
 msgstr "서식이 어디 저장되었습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:648
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:647
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
 msgid "Where should the pages go?"
 msgstr "어디에 쪽을 저장하시겠습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:667
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
 #, fuzzy
 #| msgid "Which image should be the basis the new page?"
 msgid "Which image should be the basis for the new page?"
 msgstr "새 쪽의 기반 이미지는 무엇입니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "Export success"
 msgstr "내보내기 성공"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:824
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "The files have been written to the export folder."
 msgstr "파일을 내보내기 폴더에 기록했습니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:900
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:899
 msgid "Resize all Pages"
 msgstr "모든 쪽 크기 조정"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 msgid "Resizing pages..."
 msgstr "쪽 크기 조정 중..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:912
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:911
 msgid "Resizing Pages"
 msgstr "쪽 크기 조정 중"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:926
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:925
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -61736,44 +61755,44 @@ msgstr ""
 "경과 시간: {passedString}:\n"
 " 예상 시간: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 msgid "Scraping success"
 msgstr "스크랩 성공"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:974
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:973
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT 파일을 다음에 기록함: {file}"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:29
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:30
 msgid "Which folder?"
 msgstr "어느 폴더입니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:60
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:61
 msgid "Change Folder"
 msgstr "폴더 변경"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:109
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:110
 msgid "Comic Project Settings"
 msgstr "만화 프로젝트 설정"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where should the export go?"
 msgstr "내보낼 위치는 어디입니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
 msgid "Where are the templates?"
 msgstr "서식이 어디 저장되었습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
 msgid "Where are the translations?"
 msgstr "번역이 어디 저장되었습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
 msgid "Where are the extra auto-completion keys located?"
 msgstr "추가 자동 완성 키는 어디에 있습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
 msgid ""
 "The location for extra autocompletion keys in the metadata editor. Point "
 "this at a folder containing key_characters/key_format/key_genre/key_rating/"
@@ -61787,48 +61806,48 @@ msgstr ""
 "장한 TXT 파일(rating에는 CSV)을 만든 다음 해당 폴더를 지정하십시오. 이 경로"
 "는 프로젝트 구성이 아닌 Krita 설정에 저장됩니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
 msgid "Project name:"
 msgstr "프로젝트 이름:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 msgid "Project concept:"
 msgstr "프로젝트 컨셉:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
 msgid "Pages folder:"
 msgstr "쪽 폴더:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
 msgid "Export folder:"
 msgstr "내보내기 폴더:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
 msgid "Template folder:"
 msgstr "서식 폴더:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
 msgid "Translation folder:"
 msgstr "번역 폴더:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 msgid "Default template:"
 msgstr "기본 서식:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:134
 msgid "Extra keys folder:"
 msgstr "추가 키 폴더:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:59
 msgid "Where should the comic project go?"
 msgstr "이 만화 프로젝트를 어디에 저장하시겠습니까?"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid "Folder cannot be used"
 msgstr "폴더를 사용할 수 없음"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:63
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
@@ -61836,23 +61855,23 @@ msgstr ""
 "Krita에서 이 폴더에 쓰기 권한이 없습니다. 파일을 생성할 수 없습니다. 다른 폴"
 "더를 선택하십시오."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:68
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
 msgid "Comic Project Setup"
 msgstr "만화 프로젝트 설정"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:74
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
 msgid "Basic Comic Project Settings"
 msgstr "기본 만화 프로젝트 설정"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:80
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:81
 msgid "A Project name. This can be different from the eventual title"
 msgstr "프로젝트 이름입니다. 최종 타이틀 제목과 다를 수 있습니다"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:82
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 msgid "Generate"
 msgstr "자동 생성"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -61860,7 +61879,7 @@ msgstr ""
 "프로젝트 이름이 생각나지 않는다면 고도로 발전된 프로젝트 이름 생성기를 사용하"
 "십시오."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:88
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:89
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -61868,15 +61887,15 @@ msgstr ""
 "이 만화는 무엇에 관한 것입니까? 편의상 기재하는 것이므로 오래 생각하지 마십시"
 "오."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:90
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:91
 msgid "The main language the comic is in"
 msgstr "만화에서 주로 사용되는 언어"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:103
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:104
 msgid "Make a new directory with the project name."
 msgstr "프로젝트 이름으로 새 폴더를 만듭니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -61884,67 +61903,67 @@ msgstr ""
 "이 옵션을 사용하면 일반 만화 프로젝트 디렉터리를 선택할 수 있습니다. 프로젝"
 "트 이름으로 새 폴더를 만듭니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
 msgid "pages"
 msgstr "쪽"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr "쪽이 들어 있는 폴더의 이름입니다. 없다면 생성합니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
 msgid "export"
 msgstr "내보내기"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr "쪽이 들어 있는 폴더의 이름입니다. 없다면 생성합니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 msgid "templates"
 msgstr "서식"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "The name for the folder where the page templates are sought in."
 msgstr "쪽 서식을 찾을 폴더의 이름입니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:121
 msgid "translations"
 msgstr "번역"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Comic concept:"
 msgstr "만화 컨셉:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:125
 msgid "Main language:"
 msgstr "주 언어:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Folder names and other."
 msgstr "폴더 이름 및 기타 설정입니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Project directory:"
 msgstr "프로젝트 디렉터리:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:138
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
 msgid "Pages directory"
 msgstr "쪽 디렉터리"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
 msgid "Export directory"
 msgstr "내보내기 디렉터리"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
 msgid "Template directory"
 msgstr "서식 디렉터리"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:142
 msgid "Translation directory"
 msgstr "번역 디렉터리"
 
@@ -62007,244 +62026,244 @@ msgstr "배경"
 msgid "Creating template"
 msgstr "서식 만들기"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Abridger"
 msgstr "요약자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Art copyist"
 msgstr "미술 모방가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Actor"
 msgstr "배우"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Art director"
 msgstr "미술 감독"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Annotator"
 msgstr "주석자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bibliographic antecedent"
 msgstr "도서 목록의 선행"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Architect"
 msgstr "설계자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Artistic director"
 msgstr "예술 감독"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Associated name"
 msgstr "연관된 이름"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Autographer"
 msgstr "사인작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Attributed name"
 msgstr "귀속된 이름"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Author of dialog"
 msgstr "대화 작성자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Binding designer"
 msgstr "제본 디자이너"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookjacket designer"
 msgstr "책장 디자이너"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Book designer"
 msgstr "책 디자이너"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Book producer"
 msgstr "책 제작자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Blurb writer"
 msgstr "안내문 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Binder"
 msgstr "제본가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookplate designer"
 msgstr "장서표 디자이너"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Bookseller"
 msgstr "서적상"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Calligrapher"
 msgstr "서예가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Censor"
 msgstr "검열관"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Cover designer"
 msgstr "표지 디자이너"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Copyright holder"
 msgstr "저작권 보유자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Creator"
 msgstr "만든 사람"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Contributor"
 msgstr "기여자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Curator"
 msgstr "기획자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Commentator for written text"
 msgstr "서면 텍스트에 대한 해설가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Draftsman"
 msgstr "기안자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Dubious author"
 msgstr "불확실한 저자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Etcher"
 msgstr "에칭 화가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Expert"
 msgstr "전문가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Funder"
 msgstr "자금 제공자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Illustrator"
 msgstr "삽화가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Illuminator"
 msgstr "조명기사"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Inscriber"
 msgstr "헌정인"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Licensee"
 msgstr "사용권자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Licensor"
 msgstr "허가권자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Lithographer"
 msgstr "리토그래퍼"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Metadata contact"
 msgstr "메타데이터 연락처"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Owner"
 msgstr "소유자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Patron"
 msgstr "후원자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Publishing director"
 msgstr "출판 감독"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Printer"
 msgstr "인쇄자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Scenarist"
 msgstr "영화각본 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Scribe"
 msgstr "필경사"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Sponsor"
 msgstr "후원자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Storyteller"
 msgstr "소설가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Transcriber"
 msgstr "등사자"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Type designer"
 msgstr "글꼴 디자이너"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Typographer"
 msgstr "인쇄공"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added commentary"
 msgstr "추가된 논평의 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added lyrics"
 msgstr "추가된 가사의 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of accompanying material"
 msgstr "동봉된 자료의 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of added text"
 msgstr "추가된 텍스트의 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of introduction"
 msgstr "소개 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of preface"
 msgstr "서문의 작가"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Writer of supplementary textual content"
 msgstr "보충 텍스트 내용 작성자"
 
-#: plugins/python/documenttools/documenttools.py:16
+#: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
 msgid "Document Tools"
 msgstr "문서 도구"
 
-#: plugins/python/documenttools/documenttools.py:18
+#: plugins/python/documenttools/documenttools.py:19
 msgid "Plugin to manipulate properties of selected documents."
 msgstr "선택한 문서의 속성을 변경하는 플러그인입니다."
 
@@ -62276,118 +62295,118 @@ msgstr "크기 조정"
 msgid "The selected documents has been modified."
 msgstr "선택한 문서를 수정했습니다."
 
-#: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:121
+#: plugins/python/exportlayers/exportlayers.py:17
+#: plugins/python/exportlayers/uiexportlayers.py:122
 msgid "Export Layers"
 msgstr "레이어 내보내기"
 
-#: plugins/python/exportlayers/exportlayers.py:17
+#: plugins/python/exportlayers/exportlayers.py:18
 msgid "Plugin to export layers from a document."
 msgstr "문서에서 레이어를 내보내는 플러그인입니다."
 
-#: plugins/python/exportlayers/uiexportlayers.py:39
+#: plugins/python/exportlayers/uiexportlayers.py:40
 msgid "Export filter layers"
 msgstr "필터 레이어 내보내기"
 
-#: plugins/python/exportlayers/uiexportlayers.py:40
+#: plugins/python/exportlayers/uiexportlayers.py:41
 msgid "Export in batchmode"
 msgstr "일괄 모드로 내보내기"
 
-#: plugins/python/exportlayers/uiexportlayers.py:41
+#: plugins/python/exportlayers/uiexportlayers.py:42
 msgid "Group as layer"
 msgstr "레이어로 그룹"
 
-#: plugins/python/exportlayers/uiexportlayers.py:43
+#: plugins/python/exportlayers/uiexportlayers.py:44
 msgid "Ignore invisible layers"
 msgstr "보이지 않는 레이어 무시하기"
 
-#: plugins/python/exportlayers/uiexportlayers.py:45
+#: plugins/python/exportlayers/uiexportlayers.py:46
 msgid "Adjust export size to layer content"
 msgstr "내보내기 크기를 레이어 크기에 맞게 조정"
 
-#: plugins/python/exportlayers/uiexportlayers.py:47
+#: plugins/python/exportlayers/uiexportlayers.py:48
 msgid "Add incrementing prefix"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:82
+#: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:83
+#: plugins/python/exportlayers/uiexportlayers.py:84
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:98
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "dpi:"
 msgstr "dpi:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:106
+#: plugins/python/exportlayers/uiexportlayers.py:107
 msgid "Initial directory:"
 msgstr "최초 디렉터리:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:107
+#: plugins/python/exportlayers/uiexportlayers.py:108
 msgid "Export options:"
 msgstr "내보내기 옵션:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:109
 msgid "Export size:"
 msgstr "내보내기 크기:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:111
 msgid "Images extensions:"
 msgstr "이미지 확장자:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:167
+#: plugins/python/exportlayers/uiexportlayers.py:168
 msgid "Select one document."
 msgstr "하나의 문서를 선택합니다."
 
-#: plugins/python/exportlayers/uiexportlayers.py:169
+#: plugins/python/exportlayers/uiexportlayers.py:170
 msgid "Select the initial directory."
 msgstr "초기 디렉터리를 선택합니다."
 
-#: plugins/python/exportlayers/uiexportlayers.py:173
+#: plugins/python/exportlayers/uiexportlayers.py:174
 msgid "All layers have been exported."
 msgstr "모든 레이어를 내보냈습니다."
 
-#: plugins/python/exportlayers/uiexportlayers.py:243
+#: plugins/python/exportlayers/uiexportlayers.py:244
 msgid "Select a Folder"
 msgstr "폴더 선택"
 
-#: plugins/python/filtermanager/filtermanager.py:16
-#: plugins/python/filtermanager/uifiltermanager.py:59
+#: plugins/python/filtermanager/filtermanager.py:17
+#: plugins/python/filtermanager/uifiltermanager.py:60
 msgid "Filter Manager"
 msgstr "필터 관리자"
 
-#: plugins/python/filtermanager/filtermanager.py:17
+#: plugins/python/filtermanager/filtermanager.py:18
 msgid "Plugin to filters management."
 msgstr "필터 관리 플러그인입니다."
 
-#: plugins/python/filtermanager/uifiltermanager.py:42
+#: plugins/python/filtermanager/uifiltermanager.py:43
 msgid "Document Tree Model"
 msgstr "문서 트리 모델"
 
-#: plugins/python/filtermanager/uifiltermanager.py:47
+#: plugins/python/filtermanager/uifiltermanager.py:48
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "필터:"
 
-#: plugins/python/highpass/highpass.py:39
+#: plugins/python/highpass/highpass.py:40
 msgid "High Pass"
 msgstr "하이 패스"
 
-#: plugins/python/highpass/highpass.py:47
+#: plugins/python/highpass/highpass.py:48
 msgid "High Pass Filter"
 msgstr "하이 패스 필터"
 
-#: plugins/python/highpass/highpass.py:48
+#: plugins/python/highpass/highpass.py:49
 msgid "There is no active image."
 msgstr "활성 이미지가 없습니다."
 
-#: plugins/python/highpass/highpass.py:62
+#: plugins/python/highpass/highpass.py:63
 msgid "Keep original layer"
 msgstr "원본 레이어 유지"
 
-#: plugins/python/highpass/highpass.py:65
+#: plugins/python/highpass/highpass.py:66
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
 msgstr "필터 반지름:"
@@ -62494,19 +62513,19 @@ msgstr "스크립트 활성화"
 msgid "Create Script"
 msgstr "스크립트 생성"
 
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:32
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
 msgstr "마지막으로 연 문서 도커"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:45
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
 msgstr "설정 변경"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:62
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
 msgstr "믹서 슬라이더 도커"
 
-#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:41
+#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
 msgstr "슬라이더 줄 수: "
 
@@ -62630,61 +62649,61 @@ msgid ""
 "and color settings based on the mutation settings configured above."
 msgstr ""
 
-#: plugins/python/palette_docker/palette_docker.py:47
+#: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
 msgstr "Python 팔레트 도커"
 
-#: plugins/python/palette_docker/palette_docker.py:73
+#: plugins/python/palette_docker/palette_docker.py:74
 msgid "Set"
 msgstr "지정하기"
 
-#: plugins/python/palette_docker/palette_docker.py:82
+#: plugins/python/palette_docker/palette_docker.py:83
 #, fuzzy
 #| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "그룹 추가"
 
-#: plugins/python/palette_docker/palette_docker.py:85
+#: plugins/python/palette_docker/palette_docker.py:86
 msgid "Remove Entry"
 msgstr "항목 삭제"
 
-#: plugins/python/palette_docker/palette_docker.py:101
+#: plugins/python/palette_docker/palette_docker.py:102
 msgid "Edit Palette Settings"
 msgstr "팔레트 설정 편집"
 
-#: plugins/python/palette_docker/palette_docker.py:107
+#: plugins/python/palette_docker/palette_docker.py:108
 msgid "Export as GIMP Palette File"
 msgstr "김프 팔레트 파일로 내보내기"
 
-#: plugins/python/palette_docker/palette_docker.py:111
+#: plugins/python/palette_docker/palette_docker.py:112
 msgid "Export as Inkscape SVG with Swatches"
 msgstr "스와치를 사용하여 Inkscape SVG로 내보내기"
 
-#: plugins/python/palette_docker/palette_docker.py:115
+#: plugins/python/palette_docker/palette_docker.py:116
 msgid "Sort Colors"
 msgstr "색상 정렬"
 
-#: plugins/python/palette_docker/palette_docker.py:225
+#: plugins/python/palette_docker/palette_docker.py:226
 msgid "Edit Palette Data"
 msgstr "팔레트 데이터 편집"
 
-#: plugins/python/palette_docker/palette_docker.py:230
+#: plugins/python/palette_docker/palette_docker.py:231
 msgid "Palette Data"
 msgstr "팔레트 데이터"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:30
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:36
 msgid "Export Successful"
 msgstr "내보내기 성공"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:32
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:33
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:38
 #, python-brace-format
 msgid "{input} has been exported to {output}."
 msgstr "{input}을(를) {output}(으)로 내보냈습니다."
 
-#: plugins/python/photobash_images/photobash_images_docker.py:76
+#: plugins/python/photobash_images/photobash_images_docker.py:83
 #, fuzzy
 #| msgctxt "description of a file type"
 #| msgid "Photoshop Image (Large)"
@@ -62692,28 +62711,28 @@ msgctxt "@title:window"
 msgid "Photobash Images"
 msgstr "Photoshop 이미지(대형)"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:144
-#: plugins/python/photobash_images/photobash_images_docker.py:472
+#: plugins/python/photobash_images/photobash_images_docker.py:151
+#: plugins/python/photobash_images/photobash_images_docker.py:479
 #, fuzzy
 #| msgctxt "action"
 #| msgid "References Tool"
 msgid "Change References Folder"
 msgstr "참조 도구"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:150
-#: plugins/python/photobash_images/photobash_images_docker.py:222
+#: plugins/python/photobash_images/photobash_images_docker.py:157
+#: plugins/python/photobash_images/photobash_images_docker.py:229
 #, fuzzy, python-brace-format
 #| msgid "Bayer Scale:"
 msgid "Image Scale: {0}%"
 msgstr "바이어 비율:"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:324
+#: plugins/python/photobash_images/photobash_images_docker.py:331
 #, fuzzy, python-brace-format
 #| msgid "Page %1"
 msgid "Page: {0}/{1}"
 msgstr "%1쪽"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:460
+#: plugins/python/photobash_images/photobash_images_docker.py:467
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change rectangle"
@@ -62721,7 +62740,7 @@ msgid "Change Directory for Images"
 msgstr "사각형 변경"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:470
+#: plugins/python/photobash_images/photobash_images_docker.py:477
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -62743,7 +62762,7 @@ msgstr "색상으로 프레임 필터"
 msgid "Scale To Canvas"
 msgstr "캔버스 회전"
 
-#: plugins/python/plugin_importer/plugin_downloader.py:70
+#: plugins/python/plugin_importer/plugin_downloader.py:72
 msgid "Could not determine download link from URL"
 msgstr "URL에서 다운로드 링크를 확인할 수 없음"
 
@@ -62768,48 +62787,48 @@ msgctxt "action"
 msgid "Import Python Plugin from Web..."
 msgstr "웹에서 Python 플러그인 가져오기..."
 
-#: plugins/python/plugin_importer/plugin_importer.py:142
+#: plugins/python/plugin_importer/plugin_importer.py:143
 msgid "Desktop file"
 msgstr "데스크톱 파일"
 
-#: plugins/python/plugin_importer/plugin_importer.py:210
+#: plugins/python/plugin_importer/plugin_importer.py:211
 msgid "No plugins found in archive"
 msgstr "압축 파일에서 플러그인을 찾을 수 없음"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:36
+#: plugins/python/plugin_importer/plugin_importer_extension.py:35
 msgid "Import Python Plugin from File..."
 msgstr "파일에서 Python 플러그인 가져오기..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:41
+#: plugins/python/plugin_importer/plugin_importer_extension.py:40
 msgid "Import Python Plugin from Web..."
 msgstr "웹에서 Python 플러그인 가져오기..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:48
+#: plugins/python/plugin_importer/plugin_importer_extension.py:47
 msgid "Overwrite Plugin"
 msgstr "플러그인 덮어쓰기"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:49
+#: plugins/python/plugin_importer/plugin_importer_extension.py:48
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
 msgstr "플러그인 \"%s\"이(가) 이미 존재합니다. 덮어쓰시겠습니까?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:57
+#: plugins/python/plugin_importer/plugin_importer_extension.py:56
 msgid "The following plugins were imported:"
 msgstr "다음과 같은 플러그인을 가져왔습니다:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:67
+#: plugins/python/plugin_importer/plugin_importer_extension.py:66
 msgid "Enable plugins now? (Requires restart)"
 msgstr "지금 플러그인을 활성화하시겠습니까?(다시 시작 필요)"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:72
+#: plugins/python/plugin_importer/plugin_importer_extension.py:71
 msgid "Activate Plugins?"
 msgstr "플러그인을 활성화하시겠습니까?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:79
+#: plugins/python/plugin_importer/plugin_importer_extension.py:78
 msgid "Error during import:"
 msgstr "가져오기 오류:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:98
+#: plugins/python/plugin_importer/plugin_importer_extension.py:97
 msgid ""
 "<p><strong>Enter download URL</strong></p><p>For example:<ul><li>Zip "
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
@@ -62819,16 +62838,16 @@ msgstr ""
 "(http://example.com/plugin.zip)</li><li>Github 저장소 (https://github.com/"
 "test/plugin)</li>"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:106
-#: plugins/python/plugin_importer/plugin_importer_extension.py:120
+#: plugins/python/plugin_importer/plugin_importer_extension.py:105
+#: plugins/python/plugin_importer/plugin_importer_extension.py:119
 msgid "Import Plugin"
 msgstr "플러그인 가져오기"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:122
+#: plugins/python/plugin_importer/plugin_importer_extension.py:121
 msgid "Zip Archives"
 msgstr "Zip 압축 파일"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:35
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
 msgid "Quick Settings Docker"
 msgstr "빠른 설정 도커"
 
@@ -62845,15 +62864,15 @@ msgstr "스크립트 도커"
 msgid "Script {0}"
 msgstr "스크립트 {0}"
 
-#: plugins/python/scripter/debugcontroller.py:63
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:41
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:20
+#: plugins/python/scripter/debugcontroller.py:58
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:38
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:19
 msgid "Debugger"
 msgstr "디버거"
 
-#: plugins/python/scripter/scripter.py:23
-#: plugins/python/scripter/uicontroller.py:94
+#: plugins/python/scripter/scripter.py:24
+#: plugins/python/scripter/uicontroller.py:96
 msgid "Scripter"
 msgstr "스크립터"
 
@@ -62861,11 +62880,11 @@ msgstr "스크립터"
 msgid "Do you want to save the current document?"
 msgstr "현재 문서를 저장하시겠습니까?"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:27
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:24
 msgid "Debug"
 msgstr "디버그"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:25
 msgid "Debug Ctrl+D"
 msgstr "디버그 Ctrl+D"
 
@@ -62881,23 +62900,23 @@ msgstr "문서가 수정되었습니다."
 msgid "Do you want to save your changes?"
 msgstr "변경 사항을 저장하시겠습니까?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:27
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
 msgid "Open"
 msgstr "열기"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
 #, fuzzy
 #| msgid "Save Python File"
 msgid "Python Files"
 msgstr "Python 파일 저장"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Invalid File"
 msgstr "잘못된 파일"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
 msgid "Open files with .py extension"
 msgstr "확장자가 .py인 파일 열기"
 
@@ -62917,26 +62936,26 @@ msgstr "존재하는 문서 없음"
 msgid "Please specify a document by opening it before reloading"
 msgstr "새로 고치기 전에 문서를 열어서 지정하십시오"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:61
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:35
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:57
 #: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:20
 msgid "Output"
 msgstr "출력"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
 msgid "Run"
 msgstr "실행"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:44
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:40
 msgid "Run Ctrl+R"
 msgstr "실행 Ctrl+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:39
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
 msgid "Save Python File"
 msgstr "Python 파일 저장"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
 msgid "Save As"
 msgstr "다른 이름으로 저장"
 
@@ -62959,15 +62978,15 @@ msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "명도"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:25
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
 msgid "Step Over"
 msgstr "넘어가기"
 
-#: plugins/python/scripter/uicontroller.py:173
+#: plugins/python/scripter/uicontroller.py:175
 msgid "Error Running Script"
 msgstr "스크립트 실행 오류"
 
-#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:25
+#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
 msgid "Selections Bag"
 msgstr "선택 가방"
 
@@ -63058,20 +63077,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "브러시 사전 설정 10 활성화"
 
-#: plugins/python/tenbrushes/tenbrushes.py:33
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
 msgstr "브러시 10개"
 
-#: plugins/python/tenbrushes/tenbrushes.py:34
+#: plugins/python/tenbrushes/tenbrushes.py:35
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "브러시 사전 설정 10개를 단축키 10개에 할당합니다."
 
-#: plugins/python/tenbrushes/tenbrushes.py:92
+#: plugins/python/tenbrushes/tenbrushes.py:93
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "브러시 사전 설정 {num} 활성화"
 
-#: plugins/python/tenbrushes/tenbrushes.py:121
+#: plugins/python/tenbrushes/tenbrushes.py:122
 msgid ""
 "{}\n"
 "selected"
@@ -63079,23 +63098,23 @@ msgstr ""
 "{}\n"
 "선택됨"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:29
+#: plugins/python/tenbrushes/uitenbrushes.py:30
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
 msgstr "단축키를 두 번 눌렀을 때 이전에 사용한 브러시 사전 설정 활성화(&A)"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:34
+#: plugins/python/tenbrushes/uitenbrushes.py:35
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "단축키를 눌렀을 때 자유형 브러시 도구 선택(&S)"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:38
+#: plugins/python/tenbrushes/uitenbrushes.py:39
 #, fuzzy
 #| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
 msgstr "캔버스에 팝업 메시지 표시"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:57
+#: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -63103,8 +63122,8 @@ msgstr ""
 "브러시 사전 설정을 선택한 다음 사용할 단추를 클릭하여 사전 설정을 선택하십시"
 "오."
 
-#: plugins/python/tenbrushes/uitenbrushes.py:60
-#: plugins/python/tenscripts/uitenscripts.py:52
+#: plugins/python/tenbrushes/uitenbrushes.py:61
+#: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -63188,200 +63207,200 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "스크립트 10 실행"
 
-#: plugins/python/tenscripts/tenscripts.py:30
+#: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
 msgstr "스크립트 10개"
 
-#: plugins/python/tenscripts/tenscripts.py:31
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "단축키 10개에 스크립트 10개를 할당합니다."
 
-#: plugins/python/tenscripts/tenscripts.py:57
+#: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "스크립트 {num} 실행"
 
-#: plugins/python/tenscripts/tenscripts.py:83
+#: plugins/python/tenscripts/tenscripts.py:77
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "스크립트 {0} 실행됨"
 
-#: plugins/python/tenscripts/uitenscripts.py:72
+#: plugins/python/tenscripts/uitenscripts.py:73
 msgid "Selected path"
 msgstr "선택한 경로"
 
-#: plugins/python/tenscripts/uitenscripts.py:73
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
+#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:291
 msgid "Select the script"
 msgstr "스크립트 선택"
 
-#: plugins/python/tenscripts/uitenscripts.py:105
+#: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Python 파일 (*.py)"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
 #| msgid "Custom Options:"
 msgid "Custom icon"
 msgstr "사용자 정의 옵션:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
 #| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "도구 아이콘"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
 #, fuzzy
 #| msgid "Brush presets"
 msgid "Brush preset icon"
 msgstr "브러시 사전 설정"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:71
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:72
 #, fuzzy
 #| msgid "Group settings"
 msgid "Workflow Buttons settings"
 msgstr "그룹 설정"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:103
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
 #, fuzzy
 #| msgctxt "left mouse button"
 #| msgid "left button"
 msgid "Selected button:"
 msgstr "왼쪽 단추"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:116
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Add a workflow button"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:124
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
 msgid "Move selected workflow button to the left"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:130
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Move selected workflow button to the right"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
 #, fuzzy
 #| msgid "Delete selected mask"
 msgid "Delete selected workflow button"
 msgstr "선택한 마스크 삭제"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:145
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
 #, fuzzy
 #| msgid "Selection mode:"
 msgid "Select icon mode:"
 msgstr "선택 모드:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Select a "
 msgid "Select a custom icon:"
 msgstr "선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:164
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
 #, fuzzy
 #| msgid "Custom Input"
 msgid "Custom icon path"
 msgstr "사용자 정의 입력"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 #, fuzzy
 #| msgid "Delete the current action"
 msgid "Select the custom icon"
 msgstr "현재 동작 삭제"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:177
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
 #, fuzzy
 #| msgid "Internal Pool:"
 msgid "Enter a Tooltip:"
 msgstr "내부 풀:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:180
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 #, fuzzy
 #| msgid "Tooltip"
 msgid "Tooltip text"
 msgstr "풍선 도움말"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:188
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
 #, fuzzy
 #| msgid "Select a Color"
 msgid "Select a tool:"
 msgstr "색상 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 #, fuzzy
 #| msgid "Current brush preset"
 msgid "Select a brush preset:"
 msgstr "현재 브러시 사전 설정"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:206
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 #, fuzzy
 #| msgid "Brush presets"
 msgid "Brush preset name"
 msgstr "브러시 사전 설정"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 #, fuzzy
 #| msgid "Current brush preset"
 msgid "Select the brush preset"
 msgstr "현재 브러시 사전 설정"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:219
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
 #, fuzzy
 #| msgid "Select background color"
 msgid "Select foreground color:"
 msgstr "배경색 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:221
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
 #, fuzzy
 #| msgid "Add foreground color"
 msgid "Load current foreground color"
 msgstr "전경색 추가"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:224
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
 #, fuzzy
 #| msgid "Add foreground color"
 msgid "Clear foreground color"
 msgstr "전경색 추가"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:234
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:251
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
 #, fuzzy
 #| msgid "Select background color"
 msgid "Select background color:"
 msgstr "배경색 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:253
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
 #, fuzzy
 #| msgid "Select background color"
 msgid "Load current background color"
 msgstr "배경색 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:256
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
 #, fuzzy
 #| msgid "Select background color"
 msgid "Clear background color"
 msgstr "배경색 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Select the script"
 msgid "Select a script file:"
 msgstr "스크립트 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:285
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 #, fuzzy
 #| msgid "Select path"
 msgid "Script path"
 msgstr "경로 선택"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:304
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
 #, fuzzy
 #| msgctxt ""
 #| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
@@ -63391,45 +63410,45 @@ msgstr "경로 선택"
 msgid "Buttons size:"
 msgstr "%1 단추"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:320
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
 #, fuzzy
 #| msgid "Sort by position"
 msgid "Settings button position:"
 msgstr "위치로 정렬"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:322
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
 #| msgid "Bottom"
 msgid "Bottom bar"
 msgstr "아래"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
 #, fuzzy
 #| msgid "Spline"
 msgid "Inline"
 msgstr "자유 곡선"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:511
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:544
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "색상:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:581
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
 #, fuzzy
 #| msgid "Python files (*.py)"
 msgid "Script files "
 msgstr "Python 파일 (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:25
+#: plugins/python/workflow_buttons/workflow_buttons.py:26
 #, fuzzy
 #| msgid "Group settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
 msgstr "그룹 설정"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:64
+#: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 

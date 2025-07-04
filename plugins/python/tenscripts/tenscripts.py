@@ -1,20 +1,17 @@
 # SPDX-License-Identifier: CC0-1.0
 
-import sys
-import krita
+from krita import Extension
+from builtins import i18n, Application
 try:
     from PyQt6.QtGui import QIcon
 except:
     from PyQt5.QtGui import QIcon
 from . import uitenscripts
 
-if sys.version_info[0] > 2:
-    import importlib
-else:
-    import imp
+import importlib
 
 
-class TenScriptsExtension(krita.Extension):
+class TenScriptsExtension(Extension):
 
     def __init__(self, parent):
         super(TenScriptsExtension, self).__init__(parent)
@@ -67,13 +64,10 @@ class TenScriptsExtension(krita.Extension):
 
         if script != "":
             try:
-                if sys.version_info[0] > 2:
-                    spec = importlib.util.spec_from_file_location(
-                        "users_script", script)
-                    users_module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(users_module)
-                else:
-                    users_module = imp.load_source("users_script", script)
+                spec = importlib.util.spec_from_file_location(
+                    "users_script", script)
+                users_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(users_module)
 
                 if (hasattr(users_module, 'main')
                         and callable(users_module.main)):

@@ -8,7 +8,7 @@ try:
 except:
     from PyQt5.QtWidgets import QDialog, QFormLayout
 from . import syntaxstylescombobox, fontscombobox
-import krita
+from builtins import i18n
 
 
 class SettingsDialog(QDialog):

@@ -16,11 +16,8 @@ This class does several things:
 4) Writing to a csv file was considered until the realisation hit that comic dialog itself contains commas.
 """
 
-import sys
 import os
-import csv
 import zipfile
-import types
 from xml.dom import minidom
 try:
     from PyQt6.QtCore import QDateTime, Qt

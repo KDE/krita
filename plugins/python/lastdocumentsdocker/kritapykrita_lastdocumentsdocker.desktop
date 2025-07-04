@@ -2,7 +2,6 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=lastdocumentsdocker
-X-Python-2-Compatible=false
 X-Krita-Manual=Manual.html
 Name=Last Documents Docker
 Name[ar]=رصيف بآخر المستندات

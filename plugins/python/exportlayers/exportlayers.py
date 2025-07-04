@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 
-import krita
+from krita import Extension
+from builtins import i18n
 from . import uiexportlayers
 
 
-class ExportLayersExtension(krita.Extension):
+class ExportLayersExtension(Extension):
 
     def __init__(self, parent):
         super(ExportLayersExtension, self).__init__(parent)

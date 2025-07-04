@@ -17,15 +17,13 @@ import re
 from krita import (
         Extension,
         InfoObject,
-        Node,
         Selection
     )
+from builtins import i18n, i18nc, Application
 try:
     from PyQt6.QtCore import (
             pyqtSlot,
-            QBuffer,
             QByteArray,
-            QIODevice,
             Qt,
             QRect
         )
@@ -36,7 +34,6 @@ try:
         )
     from PyQt6.QtWidgets import (
             QApplication,
-            QCheckBox,
             QComboBox,
             QDialog,
             QDialogButtonBox,
@@ -54,9 +51,7 @@ try:
 except:
     from PyQt5.QtCore import (
             pyqtSlot,
-            QBuffer,
             QByteArray,
-            QIODevice,
             Qt,
             QRect
         )
@@ -67,7 +62,6 @@ except:
         )
     from PyQt5.QtWidgets import (
             QApplication,
-            QCheckBox,
             QComboBox,
             QDialog,
             QDialogButtonBox,
@@ -1134,9 +1128,9 @@ class ChannelsToLayers(Extension):
 
         imgThumbSrc = self.toQImage(self.__sourceLayer, rect)
 
-        previewBaSrc.resize(imgThumbSrc.byteCount())
+        previewBaSrc.resize(imgThumbSrc.sizeInBytes())
         ptr = imgThumbSrc.bits()
-        ptr.setsize(imgThumbSrc.byteCount())
+        ptr.setsize(imgThumbSrc.sizeInBytes())
         previewBaSrc = QByteArray(ptr.asstring())
 
 

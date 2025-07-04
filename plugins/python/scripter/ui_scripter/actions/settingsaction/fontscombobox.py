@@ -4,13 +4,13 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 try:
-    from PyQt6.QtWidgets import QComboBox, QCompleter
+    from PyQt6.QtWidgets import QComboBox
     from PyQt6.QtGui import QFontDatabase
-    from PyQt6.QtCore import Qt, QLibraryInfo
+    from PyQt6.QtCore import QLibraryInfo
 except:
-    from PyQt5.QtWidgets import QComboBox, QCompleter
+    from PyQt5.QtWidgets import QComboBox
     from PyQt5.QtGui import QFontDatabase
-    from PyQt5.QtCore import Qt, QLibraryInfo
+    from PyQt5.QtCore import QLibraryInfo
 
 
 class FontsComboBox(QComboBox):

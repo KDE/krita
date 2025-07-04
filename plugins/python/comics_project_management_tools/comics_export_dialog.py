@@ -13,13 +13,13 @@ A dialog for editing the exporter settings.
 from enum import IntEnum
 try:
     from PyQt6.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
-    from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog, QStyledItemDelegate
+    from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QColorDialog, QStyledItemDelegate
     from PyQt6.QtCore import Qt, QUuid
 except:
     from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
-    from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog, QStyledItemDelegate
+    from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QColorDialog, QStyledItemDelegate
     from PyQt5.QtCore import Qt, QUuid
-from krita import *
+from builtins import i18n, Application
 
 """
 A generic widget to make selecting size easier.

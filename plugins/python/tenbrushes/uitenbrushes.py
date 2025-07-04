@@ -11,13 +11,14 @@ except:
     from PyQt5.QtWidgets import (QDialogButtonBox, QLabel, QVBoxLayout,
                                  QHBoxLayout, QCheckBox)
 from . import tenbrushesdialog, dropbutton
-import krita
+from krita import Krita, PresetChooser
+from builtins import i18n, Application
 
 
 class UITenBrushes(object):
 
     def __init__(self):
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.mainDialog = tenbrushesdialog.TenBrushesDialog(
             self, self.kritaInstance.activeWindow().qwindow())
 
@@ -45,7 +46,7 @@ class UITenBrushes(object):
         self.buttonBox.setStandardButtons(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
-        self.presetChooser = krita.PresetChooser(self.mainDialog)
+        self.presetChooser = PresetChooser(self.mainDialog)
 
     def initialize(self, tenbrushes):
         self.tenbrushes = tenbrushes

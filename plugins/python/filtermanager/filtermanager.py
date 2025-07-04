@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 
-import krita
+from krita import Extension
+from builtins import i18n
 from . import uifiltermanager
 
 
-class FilterManagerExtension(krita.Extension):
+class FilterManagerExtension(Extension):
 
     def __init__(self, parent):
         super(FilterManagerExtension, self).__init__(parent)

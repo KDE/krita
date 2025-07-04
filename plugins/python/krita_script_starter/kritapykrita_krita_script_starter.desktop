@@ -2,7 +2,6 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=krita_script_starter
-X-Python-2-Compatible=false
 X-Krita-Manual=Manual.html
 Name=Krita Script Starter
 Name[bg]=Krita Script Starter

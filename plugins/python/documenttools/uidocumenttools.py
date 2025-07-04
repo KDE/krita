@@ -11,9 +11,9 @@ except:
     from PyQt5.QtWidgets import (QFormLayout, QListWidget, QAbstractItemView,
                                  QDialogButtonBox, QVBoxLayout, QFrame, QTabWidget,
                                  QPushButton, QAbstractScrollArea, QMessageBox)
-import krita
+from krita import Krita
 import importlib
-
+from builtins import i18n
 
 class UIDocumentTools(object):
 
@@ -28,7 +28,7 @@ class UIDocumentTools(object):
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.documentsList = []
 
         self.refreshButton.clicked.connect(self.refreshButtonClicked)

@@ -3,7 +3,6 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=batch_exporter
 X-Krita-Manual=Manual.html
-X-Python-2-Compatible=false
 Name=Batch Exporter
 Name[ca]=Exportador per lots
 Name[ca@valencia]=Exportador per lots

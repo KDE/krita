@@ -3,7 +3,6 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=comics_project_management_tools
 X-Krita-Manual=README.html
-X-Python-2-Compatible=false
 Name=Comics Project Management Tools
 Name[ar]=أدوات إدارة المشاريع الهزليّة
 Name[ca]=Eines per a la gestió dels projectes de còmics

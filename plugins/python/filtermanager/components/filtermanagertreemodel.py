@@ -6,6 +6,7 @@ try:
 except:
     from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
     from PyQt5.QtGui import QPixmap
+from builtins import i18n
 from . import filtermanagertreeitem
 
 

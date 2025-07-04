@@ -17,14 +17,14 @@ import json
 import zipfile
 try:
     from PyQt6.QtGui import QImage, QPainter, QShortcut
-    from PyQt6.QtWidgets import QDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QDialogButtonBox, QLabel
+    from PyQt6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy
     from PyQt6.QtCore import QSize, Qt
 
     # To run standalone
     from PyQt6.QtWidgets import QApplication
 except:
     from PyQt5.QtGui import QImage, QPainter
-    from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QDialogButtonBox, QShortcut, QLabel
+    from PyQt5.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QShortcut
     from PyQt5.QtCore import QSize, Qt
 
     # To run standalone
@@ -288,7 +288,7 @@ if __name__ == '__main__':
             page_viewer_dialog.go_to_page_index(0)
             page_viewer_dialog.show()
         else:
-            print('No comic found in {comic}'.format(comic=comic))
+            print('No comic found in {comic}'.format(comic=path_to_config))
     else:
         print('Pass the path to a Krita comicConfig.json file to this script, to view the comic.')
 

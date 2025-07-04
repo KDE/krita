@@ -583,6 +583,8 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
     spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
     spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
+
+    lossySettings->setEnabled(!chkLossless->isChecked());
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const

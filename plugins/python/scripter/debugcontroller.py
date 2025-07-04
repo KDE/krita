@@ -4,13 +4,8 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 from .debugger_scripter import debugger
-import sys
-if sys.version_info[0] > 2:
-    import asyncio
-else:
-    # trollius is a port of asyncio for python2.
-    import trollius as asyncio
-
+import asyncio
+from builtins import i18n
 
 class DebugController (object):
 

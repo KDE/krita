@@ -2,7 +2,6 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=channels2layers
-X-Python-2-Compatible=false
 X-Krita-Manual=Manual.html
 Name=Channels to layers
 Name[bg]=Канали към слой

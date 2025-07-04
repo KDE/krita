@@ -15,13 +15,14 @@ import os
 from pathlib import Path
 import zipfile
 try:
-    from PyQt6.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+    from PyQt6.QtXml import QDomDocument
     from PyQt6.QtCore import Qt, QDateTime, QPointF
     from PyQt6.QtGui import QImage, QPolygonF, QColor
 except:
-    from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+    from PyQt5.QtXml import QDomDocument
     from PyQt5.QtCore import Qt, QDateTime, QPointF
     from PyQt5.QtGui import QImage, QPolygonF, QColor
+from builtins import i18n
 
 def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pageData = []):
     path = Path(os.path.join(projectURL, configDictionary["exportLocation"]))

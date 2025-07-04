@@ -7,11 +7,9 @@
 '''
 try:
     from PyQt6.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox
-    from PyQt6.QtGui import QIntValidator
     from PyQt6.QtCore import Qt
 except:
     from PyQt5.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox
-    from PyQt5.QtGui import QIntValidator
     from PyQt5.QtCore import Qt
 import krita
 

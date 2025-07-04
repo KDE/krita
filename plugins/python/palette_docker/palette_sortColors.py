@@ -7,6 +7,7 @@
 # @package palette_docker
 
 from krita import Palette
+from builtins import Application
 
 
 class sortColors(object):

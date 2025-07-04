@@ -16,13 +16,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from krita import *
+from krita import Krita, DockWidget, FileDialog
+from builtins import Application, i18n, i18nc
 import copy
 import math
 try:
-    from PyQt6 import QtWidgets, QtCore, uic
+    from PyQt6 import uic
+    from PyQt6.QtCore import Qt, QDirIterator, QMimeData, QUrl, QStandardPaths
+    from PyQt6.QtWidgets import QWidget, QSizePolicy, QApplication, QMessageBox
+    from PyQt6.QtGui import QImage
 except:
-    from PyQt5 import QtWidgets, QtCore, uic
+    from PyQt5 import uic
+    from PyQt5.QtCore import Qt, QDirIterator, QMimeData, QUrl, QStandardPaths
+    from PyQt5.QtWidgets import QWidget, QSizePolicy, QApplication, QMessageBox
+    from PyQt5.QtGui import QImage
 from .photobash_images_modulo import (
     Photobash_Display,
     Photobash_Button,

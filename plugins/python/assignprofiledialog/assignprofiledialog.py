@@ -9,6 +9,7 @@ except:
     from PyQt5.QtWidgets import (QDialogButtonBox, QDialog,
                                  QMessageBox, QComboBox, QVBoxLayout)
 from krita import Extension
+from builtins import Application, i18n
 
 
 class AssignProfileDialog(Extension):

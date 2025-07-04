@@ -10,7 +10,8 @@ except:
     from PyQt5.QtCore import Qt
     from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
                                  QVBoxLayout, QFrame, QTreeView)
-import krita
+from krita import Krita
+from builtins import i18n, i18nc
 
 
 class UIFilterManager(object):
@@ -22,7 +23,7 @@ class UIFilterManager(object):
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self._filters = sorted(self.kritaInstance.filters())
         self._documents = self.kritaInstance.documents()
         self.treeModel = filtermanagertreemodel.FilterManagerTreeModel(self)

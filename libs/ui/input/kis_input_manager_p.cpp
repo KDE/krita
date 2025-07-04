@@ -441,6 +441,24 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
         d->debugEvent<QEvent, false>(event);
         d->allowMouseEvents();
         break;
+#ifdef Q_OS_WIN
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+    case QEvent::ShortcutOverride:
+        if (d->ignoreHighFunctionKeys) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            int key = keyEvent->key();
+
+            if (key >= Qt::Key_F13 && key <= Qt::Key_F35) {
+                if (KisTabletDebugger::instance()->debugEnabled()) {
+                    const QString pre = "[BLOCKED HIGH F-KEY]";
+                    dbgTablet << KisTabletDebugger::instance()->eventToString(*keyEvent, pre);
+                }
+                return true;
+            }
+            break;
+        }
+#endif /* Q_OS_WIN */
     default:
         break;
     }

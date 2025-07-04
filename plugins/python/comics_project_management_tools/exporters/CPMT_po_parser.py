@@ -10,7 +10,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
 A thing that parses through POT files.
 """
 
-import sys
 import os
 import re
 

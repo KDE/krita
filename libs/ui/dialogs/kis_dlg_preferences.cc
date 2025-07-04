@@ -467,6 +467,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     }
 
     intMaxBrushSize->setValue(KisImageConfig(true).maxBrushSize());
+    chkIgnoreHighFunctionKeys->setChecked(cfg.ignoreHighFunctionKeys());
+#ifndef Q_OS_WIN
+    // we properly support ignoring high F-keys on Windows only. To support on other platforms
+    // we should synchronize KisExtendedModifiersMatcher to ignore the keys as well.
+    chkIgnoreHighFunctionKeys->setVisible(false);
+#endif
 
     //
     // Resources
@@ -717,6 +723,9 @@ void GeneralTab::setDefault()
 #endif
 
     intMaxBrushSize->setValue(1000);
+
+    chkIgnoreHighFunctionKeys->setChecked(cfg.ignoreHighFunctionKeys(true));
+
 
     chkUseCustomFont->setChecked(false);
     cmbCustomFont->setCurrentFont(qApp->font());
@@ -2457,6 +2466,7 @@ bool KisDlgPreferences::editPreferences()
         group.writeEntry("DontUseNativeFileDialog", !m_general->m_chkNativeFileDialog->isChecked());
 
         cfgImage.setMaxBrushSize(m_general->intMaxBrushSize->value());
+        cfg.setIgnoreHighFunctionKeys(m_general->chkIgnoreHighFunctionKeys->isChecked());
 
         cfg.writeEntry<bool>("use_custom_system_font", m_general->chkUseCustomFont->isChecked());
         if (m_general->chkUseCustomFont->isChecked()) {

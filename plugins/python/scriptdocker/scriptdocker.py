@@ -2,10 +2,10 @@
 
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QFormLayout,
                              QHBoxLayout, QPushButton, QLineEdit)
-import krita
+from krita import DockWidget
+from builtins import i18n
 
-
-class ScriptDocker(krita.DockWidget):
+class ScriptDocker(DockWidget):
 
     def __init__(self):
         super(ScriptDocker, self).__init__()

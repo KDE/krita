@@ -11,11 +11,10 @@ import tempfile
 from krita import Krita, Extension, FileDialog
 
 try:
-    from PyQt6.QtCore import QStandardPaths
     from PyQt6.QtWidgets import QMessageBox, QInputDialog
 except:
-    from PyQt5.QtCore import QStandardPaths
     from PyQt5.QtWidgets import QMessageBox, QInputDialog
+from builtins import i18n, Application
 
 from .plugin_importer import PluginImporter, PluginImportError
 from .plugin_downloader import download_plugin, PluginDownloadError

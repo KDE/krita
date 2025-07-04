@@ -18,6 +18,7 @@ import sys
 from tempfile import TemporaryDirectory
 import zipfile
 
+from builtins import i18n
 
 class PluginImportError(Exception):
     """Base class for all exceptions of this module."""

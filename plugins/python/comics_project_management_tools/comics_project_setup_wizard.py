@@ -15,12 +15,13 @@ import os  # For finding the script location.
 from pathlib import Path  # For reading all the files in a directory.
 import random  # For selecting two random words from a list.
 try:
-    from PyQt6.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
-    from PyQt6.QtCore import QDate, QLocale, QUuid
+    from PyQt6.QtWidgets import QWizard, QWizardPage, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog, QMessageBox
+    from PyQt6.QtCore import QLocale, QUuid
 except:
-    from PyQt5.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
-    from PyQt5.QtCore import QDate, QLocale, QUuid
-from krita import *
+    from PyQt5.QtWidgets import QWizard, QWizardPage, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog, QMessageBox
+    from PyQt5.QtCore import QLocale, QUuid
+from krita import FileDialog
+from builtins import i18n
 from . import comics_metadata_dialog
 
 """

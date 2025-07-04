@@ -11,8 +11,8 @@ except:
     from PyQt5.QtWidgets import QAction, QMessageBox
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
-import krita
 
+from builtins import i18n
 
 class CloseAction(QAction):
 

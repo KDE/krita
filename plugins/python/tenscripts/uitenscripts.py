@@ -14,6 +14,7 @@ except:
     from PyQt5.QtGui import QKeySequence
 from . import tenscriptsdialog
 from krita import Krita, FileDialog
+from builtins import i18n, Application
 
 class UITenScripts(object):
 

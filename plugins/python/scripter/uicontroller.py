@@ -19,7 +19,9 @@ from .ui_scripter.syntax import syntax, syntaxstyles
 from .ui_scripter.editor import pythoneditor
 from . import scripterdialog, utils
 import importlib
-import krita
+from builtins import i18n
+
+from scripter import resources_rc # Loads the icons qrc
 
 KEY_GEOMETRY = "geometry"
 DEFAULT_GEOMETRY = QRect(600, 200, 400, 500)

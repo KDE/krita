@@ -12,15 +12,17 @@ try:
                                 QAbstractItemView, QDialogButtonBox,
                                 QVBoxLayout, QFrame, QMessageBox, QPushButton,
                                 QAbstractScrollArea)
-    from PyQt6.QtGui import QIcon
 except:
     from PyQt5.QtCore import Qt
     from PyQt5.QtWidgets import (QFormLayout, QListWidget,
                                 QAbstractItemView, QDialogButtonBox,
                                 QVBoxLayout, QFrame, QMessageBox, QPushButton,
                                 QAbstractScrollArea)
-    from PyQt5.QtGui import QIcon
-import krita
+from krita import Krita
+from builtins import i18n
+from scripter import utils
+
+from . import resources_rc # Loads the icon qrc
 
 
 class UIColorSpace(object):
@@ -30,7 +32,8 @@ class UIColorSpace(object):
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
-        self.refreshButton = QPushButton(QIcon(':/icons/refresh.svg'),
+        utils.setNeedDarkIcon(self.mainDialog.palette().window().color())
+        self.refreshButton = QPushButton(utils.getThemedIcon(':/icons/refresh.svg'),
                                          i18n("Refresh"))
         self.widgetDocuments = QListWidget()
         self.colorModelComboBox = colormodelcombobox.ColorModelComboBox(self)
@@ -40,7 +43,7 @@ class UIColorSpace(object):
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
-        self.kritaInstance = krita.Krita.instance()
+        self.kritaInstance = Krita.instance()
         self.documentsList = []
         self.colorModelsList = []
         self.colorDepthsList = []

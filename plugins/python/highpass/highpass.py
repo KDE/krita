@@ -25,6 +25,7 @@ except:
         QVBoxLayout,
     )
 from krita import Extension
+from builtins import i18n, i18nc, Application
 
 
 class HighpassExtension(Extension):

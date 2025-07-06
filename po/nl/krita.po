@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-05 01:58+0000\n"
-"PO-Revision-Date: 2025-07-02 10:01+0200\n"
+"PO-Revision-Date: 2025-07-05 19:04+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -20591,11 +20591,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Fout: onjuist type (%2) voor waarde %1. Verwacht %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Middentonen niet aanpassen"
+msgstr "Niet meer vragen"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -52480,14 +52478,14 @@ msgstr "De animatie stelt een framesnelheid in van meer dan 240 FPS."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
-msgstr ""
+msgstr "Afbeelding plat maken en opslaan als een enkele laag (standaard)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "Animatieframes renderen is mislukt! Uitvoerbestanden zijn onvolledig."
+msgstr ""
+"Afbeelding vlak maken en animatieframes renderen als geanimeerde afbeelding"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -52496,6 +52494,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Van lagen rasters maken (inclusief groeps- en filterlagen) en opslaan als "
+"multi-laag afbeelding"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -52504,6 +52504,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Van lagen rasters maken (inclusief groeps- en filterlagen) en opslaan als "
+"multi-pagina afbeelding"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -52808,38 +52810,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Opslaan als:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Afbeelding plat maken"
+msgstr "Plat gemaakte afbeelding"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
 msgstr "Geanimeerde afbeelding"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Multithreading"
+msgstr "Multi-laag afbeelding"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Multi-pagina afbeelding"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)

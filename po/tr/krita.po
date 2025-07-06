@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-05 01:58+0000\n"
-"PO-Revision-Date: 2025-07-02 16:44+0300\n"
+"PO-Revision-Date: 2025-07-05 11:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20499,11 +20499,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Hata: %1 değeri için hatalı tür (%2). %3 bekleniyor"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Orta tonları ayarlama"
+msgstr "Bir daha sorma"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -52217,14 +52215,14 @@ msgstr "Canlandırma 240 FPS’ten daha fazla bir kare hızı beyan eder."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
-msgstr ""
+msgstr "Görseli düzleştir ve tek katmanlı bir görsel olarak kaydet (öntanımlı)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "Canlandırma kareleri sunulamadı! Çıktı dosyaları eksik."
+msgstr ""
+"Görseli düzleştir ve hareketli kareleri canlandırılmış görsel olarak sun"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -52233,6 +52231,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Katmanları (grup ve süzgeç katmanlar da içerilecek biçimde) rasterleştir ve "
+"çok katmanlı bir görsel olarak kaydet"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -52241,6 +52241,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Katmanları (grup ve süzgeç katmanlar da içerilecek biçimde) rasterleştir ve "
+"çok sayfalı bir görsel olarak kaydet"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -52543,38 +52545,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Farklı kaydet:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Görseli düzleştir"
+msgstr "Düzleştirilmiş görsel"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
-msgstr "Canlandırılmış Görsel"
+msgstr "Hareketli görsel"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Çoklu İş Parçacığı"
+msgstr "Çok katmanlı görsel"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Çok sayfalı görsel"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)

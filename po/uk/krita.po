@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-05 01:58+0000\n"
-"PO-Revision-Date: 2025-07-02 10:07+0300\n"
+"PO-Revision-Date: 2025-07-05 09:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -20607,11 +20607,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Помилка: помилковий тип (%2) значення %1. Мало бути %3."
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Не коригувати пів тони"
+msgstr "Більше не питати"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -52996,13 +52994,13 @@ msgstr ""
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
 msgstr ""
+"Звести зображення і зберегти як зображення з єдиним шаром (типовий варіант)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "Не вдалося обробити кадри анімації! Файли результату є неповними."
+msgstr "Звести зображення і обробити кадри анімації як анімоване зображення"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -53011,6 +53009,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Растеризувати шари (включно із груповими шарами і шарами фільтрування) і "
+"зберегти зображення як зображення із декількома шарами"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -53019,6 +53019,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Растеризувати шари (включно із груповими шарами і шарами фільтрування) і "
+"зберегти зображення як зображення із декількома сторінками"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -53322,38 +53324,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Зберегти як:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Звести зображення"
+msgstr "Зведене зображення"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
 msgstr "Анімоване зображення"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Багатопотоковість"
+msgstr "Багатошарове зображення"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Багатосторінкове зображення"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)

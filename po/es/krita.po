@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-05 01:58+0000\n"
-"PO-Revision-Date: 2025-07-02 12:23+0100\n"
+"PO-Revision-Date: 2025-07-05 11:52+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -20537,11 +20537,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Error: tipo incorrecto (%2) para el valor %1. Se esperaba %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "No ajustar los tonos medios"
+msgstr "No volver a preguntar esto"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -52458,15 +52456,14 @@ msgstr "La animación declara una tasa de fotogramas superior a 240 FPS."
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
 msgstr ""
+"Aplanar la imagen y guardar como imagen de una cola capa (predeterminado)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
 msgstr ""
-"La renderización de fotogramas de la animación ha fallado. Los archivos de "
-"salida están incompletos."
+"Aplanar la imagen y renderizar fotogramas de animación como imagen animada"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -52475,6 +52472,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Rasterizar capas (incluidas las capas de grupo y de filtro) y guardar como "
+"imagen multicapa"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -52483,6 +52482,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Rasterizar capas (incluidas las capas de grupo y de filtro) y guardar como "
+"imagen multipágina"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -52787,38 +52788,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Guardar como:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Aplanar la imagen"
+msgstr "Imagen aplanada"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
 msgstr "Imagen animada"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Multihilo"
+msgstr "Imagen multicapa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Imagen multipágina"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -66579,33 +66575,3 @@ msgstr "Herramienta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "Detected multi layer JPEG-XL image with unsupported blending mode, "
-#~ "importing flattened image."
-#~ msgstr ""
-#~ "Detectada imagen JPEG-XL multicapa con modo de fusión no compatible. Se "
-#~ "importa la imagen aplanada."
-
-#~ msgid "If this is not enabled, only the first frame will be saved."
-#~ msgstr "Si no está marcado, solo se guardará el primer fotograma."
-
-#~ msgid "Save as animated JPEG-XL"
-#~ msgstr "Guardar como JPEG-XL"
-
-#~ msgid ""
-#~ "<html><head/><body><p>If this is not enabled, the layers will be "
-#~ "rasterized and saved. However, animated exports are always flattened "
-#~ "regardless of this setting.</p><p>It is advised to leave this option "
-#~ "checked for web delivery and general compatibility with other "
-#~ "applications.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Si esto no está marcado, las capas se generarán y "
-#~ "se guardarán. No obstante, las exportaciones animadas se aplanarán "
-#~ "siempre sin tener en cuenta esta preferencia.</p><p>Se recomienda dejar "
-#~ "esta opción marcada para entregas web y para compatibilidad general con "
-#~ "otras aplicaciones.</p></body></html>"
-
-#~ msgid "Flatten the image"
-#~ msgstr "Aplanar la imagen"

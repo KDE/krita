@@ -234,8 +234,8 @@ void KoShapeQtQuickLabel::updateShapes()
         for (int i = 0; i < d->shapes.size(); i++) {
             d->shapes.at(i)->setBackground(bg);
         }
-        callUpdateIfComplete();
     }
+    callUpdateIfComplete();
 }
 
 void KoShapeQtQuickLabel::callUpdateIfComplete()

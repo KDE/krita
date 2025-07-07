@@ -14,7 +14,7 @@ Control {
     property TextPropertyConfigModel configModel: TextPropertyConfigModel {};
     property alias presetTitle: presetTitleField.text;
     property alias presetDescription: presetDescriptionArea.text;
-    property alias presetSample: presetSample.svgData;
+    property alias presetSample: presetSampleLabel.svgData;
     property string styleType: "paragraph";
     property double canvasDPI: 72.0;
     onStyleTypeChanged: {
@@ -46,15 +46,19 @@ Control {
             columns: 2;
 
             KoShapeQtQuickLabel {
-                id: presetSample;
+                id: presetSampleLabel;
                 Layout.fillWidth: true;
                 Layout.columnSpan: 2;
                 foregroundColor: palette.text;
+                fullColor: false;
+                Layout.preferredHeight: presetTitleField.height*2;
             }
 
             Label {
                 Layout.minimumWidth: implicitWidth;
                 text: i18nc("label:title", "Title:");
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+                horizontalAlignment: Text.AlignRight;
             }
             TextField {
                 id: presetTitleField;
@@ -63,16 +67,33 @@ Control {
             }
             Label {
                 Layout.minimumWidth: implicitWidth;
-                text: i18nc("label:title", "Description");
+                text: i18nc("label:title", "Description:");
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop;
+                horizontalAlignment: Text.AlignRight;
             }
-            TextArea {
-                id: presetDescriptionArea;
+            ScrollView {
+                id: descriptionScroll
                 Layout.fillWidth: true;
-                placeholderText: i18nc("info:placeholder", "Style Description.");
+                Layout.preferredHeight: 3 * presetTitleField.height;
+
+                TextArea {
+                    id: presetDescriptionArea;
+                    wrapMode: TextInput.Wrap;
+
+                    placeholderText: i18nc("info:placeholder", "Style Description.");
+                }
+
+                background: Rectangle {
+                    border.color: presetDescriptionArea.focus? palette.highlight: palette.mid;
+                    border.width: 1;
+                    color: palette.base;
+                }
             }
             Label {
                 Layout.minimumWidth: implicitWidth;
                 text: i18nc("label:Title", "Style Type:");
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+                horizontalAlignment: Text.AlignRight;
             }
             ComboBox {
                 id: styleTypeCmb;

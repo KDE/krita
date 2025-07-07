@@ -89,15 +89,13 @@ Rectangle {
             resourceDelegate: ItemDelegate {
                 id: presetDelegate;
                 required property var model;
-                property var meta: presetView.modelWrapper.metadataForIndex(model.index);
+                property var meta: model.metadata;
                 width: ListView.view.width;
                 highlighted: delegateMouseArea.containsMouse;
                 property bool selected: presetView.currentIndex === model.index;
                 contentItem: KoShapeQtQuickLabel {
-                    width: parent.width;
-                    height: nameLabel.height * 5;
-                    imageScale: 3;
-                    imagePadding: nameLabel.height;
+                    implicitHeight: nameLabel.height * 4;
+                    padding: nameLabel.height;
 
                     svgData: presetDelegate.meta.sample_svg;
                     foregroundColor: presetDelegate.highlighted? palette.highlightedText: palette.text;
@@ -108,8 +106,8 @@ Rectangle {
                         text: presetDelegate.model.name;
                         anchors.top: parent.top;
                         anchors.left: parent.left;
+                        anchors.right: parent.right;
                         elide: Text.ElideRight;
-                        width: parent.width;
                         color: presetDelegate.highlighted? palette.highlightedText: palette.text;
                     }
                 }

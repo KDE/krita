@@ -1109,24 +1109,32 @@ KoSvgTextProperties KoSvgTextShape::propertiesForTreeIndex(const QVector<int> &t
 bool KoSvgTextShape::setPropertiesAtTreeIndex(const QVector<int> treeIndex, const KoSvgTextProperties props)
 {
     QVector<int> idx = treeIndex;
-    if (treeIndex.isEmpty()) return false;
+    bool success = false;
+    if (treeIndex.isEmpty()) return success;
     idx.removeFirst();
     for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
         if (idx.isEmpty()) {
             if (it != d->textData.childEnd()) {
                 it->properties = props;
-                return true;
+                success = true;
+                break;
             } else {
-                return false;
+                success = false;
+                break;
             }
         }
         auto child = d->iteratorForTreeIndex(idx, it);
         if (child != d->textData.childEnd()) {
             child->properties = props;
-            return true;
+            success = true;
+            break;
         }
     }
-    return false;
+    if (success) {
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+    }
+    return success;
 }
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const

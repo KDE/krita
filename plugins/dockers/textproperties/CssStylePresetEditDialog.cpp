@@ -20,7 +20,7 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
     , m_model(new KoSvgTextPropertiesModel())
 
 {
-    setMinimumSize(500, 300);
+    setMinimumSize(300, 500);
     setModal(true);
 
     m_quickWidget = new QQuickWidget(this);
@@ -82,6 +82,7 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     m_quickWidget->rootObject()->setProperty("presetDescription", m_currentResource->description());
     m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
     m_quickWidget->rootObject()->setProperty("styleType", m_currentResource->styleType());
+    QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
 }
 
 KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
@@ -108,10 +109,12 @@ void CssStylePresetEditDialog::slotUpdateTextProperties()
 {
     if (m_currentResource) {
         KoSvgTextPropertyData textData = m_model->textData.get();
-        m_currentResource->setProperties(textData.commonProperties);
-        m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
+        if (m_currentResource->properties() != textData.commonProperties) {
+            m_currentResource->setProperties(textData.commonProperties);
+            m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
+            QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
+        }
     }
-    QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
 }
 
 QColor CssStylePresetEditDialog::modalColorDialog(QColor oldColor)

@@ -64,7 +64,7 @@ https://www.krita.org
 
 #### Stable
 
-* https://cdn.kde.org/ci-builds/graphics/krita/krita/5.2/
+* https://cdn.kde.org/ci-builds/graphics/krita/krita-5.2/
 
 #### Developers builds
 

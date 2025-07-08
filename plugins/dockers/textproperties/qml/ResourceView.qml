@@ -34,7 +34,7 @@ Control {
         anchors.fill: parent;
         property alias resourceModel : view.model;
         property alias tagModel: tagFilter.model;
-        resourceModel: modelWrapper.model;
+        resourceModel: visible? modelWrapper.model: null;
         tagModel: modelWrapper.tagModel;
 
         RowLayout {
@@ -179,14 +179,14 @@ Control {
             Layout.minimumHeight: font.pixelSize*3;
             Layout.fillWidth: true;
             Layout.fillHeight: true;
-            Layout.preferredHeight: contentHeight;
+            Layout.preferredHeight: font.pixelSize*15;
             palette: control.palette;
             clip: true;
             ListView {
                 anchors.fill: parent;
                 id: view;
-                implicitHeight: contentHeight;
                 currentIndex: modelWrapper.currentIndex;
+                reuseItems: true;
                 ScrollBar.vertical: ScrollBar {
                 }
             }

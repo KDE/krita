@@ -171,6 +171,12 @@ Rectangle {
                     icon.height: 16;
                     onClicked: mainWindow.editPreset(presetView.currentResource);
                     hoverEnabled: true;
+                    PaletteControl {
+                        id: editPalette;
+                    }
+                    palette: editPalette.palette;
+
+                    enabled: presetView.currentIndex >= 0;
                     ToolTip.visible: hovered;
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                     ToolTip.text: text;

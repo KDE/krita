@@ -33,12 +33,26 @@ static QList<QDomElement> extractToolBars(const QDomDocument &doc)
     return toolbars;
 }
 
-static void removeAllToolBars(QDomDocument &doc)
+static QStringList toolBarNames(const QList<QDomElement> &toolBars)
+{
+    QStringList names;
+    names.reserve(toolBars.count());
+    for (const QDomElement &e : toolBars) {
+        names.append(e.attribute(QStringLiteral("name")));
+    }
+    return names;
+}
+
+static void removeToolBars(QDomDocument &doc, const QStringList &toolBarNames)
+
 {
     QDomElement parent = doc.documentElement();
     const QList<QDomElement> toolBars = extractToolBars(doc);
     Q_FOREACH (const QDomElement &e, toolBars) {
-        parent.removeChild(e);
+        if (toolBarNames.contains(e.attribute(QStringLiteral("name")))) {
+            parent.removeChild(e);
+        }
+
     }
 }
 
@@ -303,8 +317,10 @@ KXmlGuiVersionHandler::KXmlGuiVersionHandler(const QStringList &files)
                     // and store the properties in there
                     storeActionProperties(document, properties);
                     if (!toolbars.isEmpty()) {
-                        // remove application toolbars
-                        removeAllToolBars(document);
+                        // remove application toolbars present in the user file
+                        // (not others, that the app might have added since)
+                        removeToolBars(document, toolBarNames(toolbars));
+
                         // add user toolbars
                         insertToolBars(document, toolbars);
                     }

@@ -158,6 +158,8 @@
 
 #include <mutex>
 
+void qt_set_sequence_auto_mnemonic(bool b);
+
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -346,6 +348,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
+
+    qt_set_sequence_auto_mnemonic(KisConfig(false).readEntry("HideAccelerators", false));
+
     KAcceleratorManager::setNoAccel(this);
 
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-05 05:53+0000\n"
-"PO-Revision-Date: 2025-06-16 11:15+0200\n"
+"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"PO-Revision-Date: 2025-07-07 09:33+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -25953,12 +25953,18 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Certaines applications peuvent émuler des appuis de touches de fonctions de "
+"rang élevé (Par exemple, la touche « F22 ») pour se mettre au premier plan. "
+"Cela pourrait endommagé le système de raccourcis et d'actions de Krita. Si "
+"vous avez un clavier avec des touches de fonction « F13 » ou de rang "
+"supérieure et que vous souhaitez les utiliser, veuillez essayer de "
+"désactiver cette option, mais en tenant compte de ce problème potentiel."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1308
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ignorer les touches de fonctions de rang supérieur (F13-F24)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1315
@@ -36688,7 +36694,7 @@ msgstr ""
 "sont utilisés pour le soutien juridique et l'organisation de conférences et "
 "de réunions.</p>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:126
 #, kde-format
 msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
@@ -36698,23 +36704,23 @@ msgstr ""
 "financier, en utilisant l'un des moyens décrits à l'adresse <a href=\"%1\">"
 "%1</a>.</p>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
 #, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "&À propos de"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "Soumettre des bogues ou des remarques"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:137
 #, kde-format
 msgid "&Join KDE"
 msgstr "Re&joindre KDE"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:145
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
 #, kde-format
 msgid "&Support KDE"
 msgstr "&Soutenir KDE"

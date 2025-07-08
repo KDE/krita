@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-05 05:53+0000\n"
+"POT-Creation-Date: 2025-07-08 03:35+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -37696,30 +37696,30 @@ msgid ""
 "conferences and meetings.</p>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:126
 #, kde-format
 msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
 #, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "&Acerca"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "Comunicar E&rros ou Desejos"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:137
 #, kde-format
 msgid "&Join KDE"
 msgstr "A&derir ao KDE"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:145
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
 #, kde-format
 msgid "&Support KDE"
 msgstr "A&poiar o KDE"

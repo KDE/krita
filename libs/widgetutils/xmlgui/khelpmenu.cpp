@@ -205,8 +205,10 @@ QAction *KisKHelpMenu::action(MenuId id) const
 
     case menuAboutKDE:
 #ifdef Q_OS_MACOS
-        // MACOS store version should not contain external links to donations
-        // support KDE tab has been seen as a call to action.
+        // macOS store version should not contain external links to donations
+        // support KDE tab contains many links to external sites with donation buttons
+        // this is seen in the review process as an external purchase to support the app
+        // despite our best efforts to explain there is no financial relation
         if (!KisMacosEntitlements().sandbox()) {
 #endif
         return d->mAboutKDEAction;

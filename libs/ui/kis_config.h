@@ -674,6 +674,9 @@ public:
     
     bool zoomHorizontal(bool defaultValue = false) const;
     void setZoomHorizontal(bool value);
+
+    bool selectionActionBar(bool defaultValue = false) const;
+    void setSelectionActionBar(bool value);
     
     enum RootSurfaceFormat {
         BT709_G22 = 0,

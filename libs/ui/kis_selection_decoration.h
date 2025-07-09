@@ -69,6 +69,7 @@ private:
 
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
+    bool m_selectionActionBar;
 };
 
 #endif

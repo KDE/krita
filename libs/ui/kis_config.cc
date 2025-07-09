@@ -2500,6 +2500,16 @@ void KisConfig::setZoomHorizontal(bool value)
     m_cfg.writeEntry("zoomHorizontal", value);
 }
 
+bool KisConfig::selectionActionBar(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("selectionActionBar", true);
+}
+
+void KisConfig::setSelectionActionBar(bool value)
+{
+    m_cfg.writeEntry("selectionActionBar", value);
+}
+
 KisConfig::RootSurfaceFormat KisConfig::rootSurfaceFormat(bool defaultValue) const
 {
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

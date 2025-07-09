@@ -349,6 +349,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     intZoomMarginSize->setValue(cfg.zoomMarginSize());
 
+    chkEnableSelectionActionBar->setChecked(cfg.selectionActionBar());
+
     //
     // File handling
     //
@@ -2525,6 +2527,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry("useTouchPressureSensitivity", m_general->chkTouchPressureSensitivity->isChecked());
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());
+        cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());

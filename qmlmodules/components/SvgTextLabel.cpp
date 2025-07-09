@@ -240,7 +240,7 @@ void SvgTextLabel::setTextColor(QColor textColor)
     d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(textColor)));
     d->props.setProperty(KoSvgTextProperties::FillId, d->shape->textProperties().property(KoSvgTextProperties::FillId));
     emit textColorChanged(textColor);
-    if (!opaquePainting() && isComponentComplete()) {
+    if (!opaquePainting() && isComponentComplete() && isVisible()) {
         update(boundingRect().toAlignedRect());
     }
 }
@@ -330,6 +330,8 @@ void SvgTextLabel::updateShape()
         d->shapePainter->setShapes({d->shape.data()});
         d->addedShapeToPainter = true;
     }
-    update(boundingRect().toAlignedRect());
+    if (isVisible()) {
+        update(boundingRect().toAlignedRect());
+    }
     emit minimumRectChanged();
 }

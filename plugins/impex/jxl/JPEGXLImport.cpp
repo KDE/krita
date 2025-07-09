@@ -252,33 +252,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
     }
 
     JPEGXLImportData d{};
-
-    // Multi-threaded parallel runner.
-    auto runner = JxlResizableParallelRunnerMake(nullptr);
-    auto dec = JxlDecoderMake(nullptr);
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(runner && dec, ImportExportCodes::InternalError);
-
-    // Set coalescing FALSE to enable layered JXL
-    if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), JXL_FALSE)) {
-        errFile << "JxlDecoderSetCoalescing failed";
-        return ImportExportCodes::InternalError;
-    }
-    bool decSetCoalescing = false;
-
-    if (JXL_DEC_SUCCESS
-        != JxlDecoderSubscribeEvents(dec.get(),
-                                     JXL_DEC_BASIC_INFO | JXL_DEC_COLOR_ENCODING | JXL_DEC_FULL_IMAGE | JXL_DEC_BOX
-                                         | JXL_DEC_FRAME)) {
-        errFile << "JxlDecoderSubscribeEvents failed";
-        return ImportExportCodes::InternalError;
-    }
-
-    if (JXL_DEC_SUCCESS != JxlDecoderSetParallelRunner(dec.get(), JxlResizableParallelRunner, runner.get())) {
-        errFile << "JxlDecoderSetParallelRunner failed";
-        return ImportExportCodes::InternalError;
-    }
-
     const auto data = io->readAll();
 
     const auto validation =
@@ -295,6 +268,235 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
         break;
     }
 
+    // Multi-threaded parallel runner.
+    auto runner = JxlResizableParallelRunnerMake(nullptr);
+    auto dec = JxlDecoderMake(nullptr);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(runner && dec, ImportExportCodes::InternalError);
+
+    // List of blend mode that we can currently support
+    static constexpr std::array<JxlBlendMode, 3> supportedBlendMode = {JXL_BLEND_REPLACE, JXL_BLEND_BLEND, JXL_BLEND_MULADD};
+
+    // Metadata and frame header decoding
+    bool isAnimated = false;
+    bool isMultilayer = false;
+    bool isMultipage = false;
+    bool forceCoalesce = false;
+    {
+        if (JXL_DEC_SUCCESS
+            != JxlDecoderSubscribeEvents(dec.get(), JXL_DEC_BASIC_INFO | JXL_DEC_FRAME)) {
+            errFile << "JxlDecoderSubscribeEvents failed";
+            return ImportExportCodes::InternalError;
+        }
+
+        if (JXL_DEC_SUCCESS != JxlDecoderSetParallelRunner(dec.get(), JxlResizableParallelRunner, runner.get())) {
+            errFile << "JxlDecoderSetParallelRunner failed";
+            return ImportExportCodes::InternalError;
+        }
+
+        if (JXL_DEC_SUCCESS
+            != JxlDecoderSetInput(dec.get(),
+                                  reinterpret_cast<const uint8_t *>(data.constData()),
+                                  static_cast<size_t>(data.size()))) {
+            errFile << "JxlDecoderSetInput failed";
+            return ImportExportCodes::InternalError;
+        };
+        JxlDecoderCloseInput(dec.get());
+
+        if (JXL_DEC_SUCCESS != JxlDecoderSetDecompressBoxes(dec.get(), JXL_TRUE)) {
+            errFile << "JxlDecoderSetDecompressBoxes failed";
+            return ImportExportCodes::InternalError;
+        };
+
+        if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), JXL_FALSE)) {
+            errFile << "JxlDecoderSetCoalescing failed";
+            return ImportExportCodes::InternalError;
+        };
+
+        for (;;) {
+            JxlDecoderStatus status = JxlDecoderProcessInput(dec.get());
+
+            if (status == JXL_DEC_ERROR) {
+                errFile << "Decoder error";
+                return ImportExportCodes::InternalError;
+            } else if (status == JXL_DEC_NEED_MORE_INPUT) {
+                errFile << "Error, already provided all input";
+                return ImportExportCodes::InternalError;
+            } else if (status == JXL_DEC_BASIC_INFO) {
+                if (JXL_DEC_SUCCESS != JxlDecoderGetBasicInfo(dec.get(), &d.m_info)) {
+                    errFile << "JxlDecoderGetBasicInfo failed";
+                    return ImportExportCodes::ErrorWhileReading;
+                }
+                // Coalesce frame on animation import
+                if (d.m_info.have_animation) {
+                    isMultilayer = false;
+                    isAnimated = true;
+                    isMultipage = true;
+                    forceCoalesce = true;
+                }
+
+                dbgFile << "Extra Channel[s] info:";
+                for (uint32_t i = 0; i < d.m_info.num_extra_channels; i++) {
+                    if (JXL_DEC_SUCCESS != JxlDecoderGetExtraChannelInfo(dec.get(), i, &d.m_extra)) {
+                        errFile << "JxlDecoderGetExtraChannelInfo failed";
+                        break;
+                    }
+                    // Channel name references taken from libjxl repo:
+                    // https://github.com/libjxl/libjxl/blob/v0.8.0/lib/extras/enc/pnm.cc#L262
+                    // With added "JXL-" prefix to indicate that it comes from JXL image.
+                    const QString channelTypeString = [&]() {
+                        switch (d.m_extra.type) {
+                        case JXL_CHANNEL_ALPHA:
+                            return QString("JXL-Alpha");
+                        case JXL_CHANNEL_DEPTH:
+                            return QString("JXL-Depth");
+                        case JXL_CHANNEL_SPOT_COLOR:
+                            return QString("JXL-SpotColor");
+                        case JXL_CHANNEL_SELECTION_MASK:
+                            return QString("JXL-SelectionMask");
+                        case JXL_CHANNEL_BLACK:
+                            return QString("JXL-Black");
+                        case JXL_CHANNEL_CFA:
+                            return QString("JXL-CFA");
+                        case JXL_CHANNEL_THERMAL:
+                            return QString("JXL-Thermal");
+                        default:
+                            return QString("JXL-UNKNOWN");
+                        }
+                    }();
+
+                    // List all extra channels
+                    dbgFile << "index:" << i << " | type:" << channelTypeString;
+                    if (d.m_extra.type == JXL_CHANNEL_BLACK) {
+                        d.isCMYK = true;
+                        d.cmykChannelID = i;
+                    }
+                    if (d.m_extra.type == JXL_CHANNEL_SPOT_COLOR) {
+                        warnFile << "Spot color channels unsupported! Rewinding decoder with coalescing enabled";
+                        document->setWarningMessage(i18nc("JPEG-XL errors",
+                                                          "Detected JPEG-XL image with spot color channels, "
+                                                          "importing flattened image."));
+                        forceCoalesce = true;
+                    }
+                }
+
+                dbgFile << "Info";
+                dbgFile << "Size:" << d.m_info.xsize << "x" << d.m_info.ysize;
+                dbgFile << "Depth:" << d.m_info.bits_per_sample << d.m_info.exponent_bits_per_sample;
+                dbgFile << "Number of color channels:" << d.m_info.num_color_channels;
+                dbgFile << "Number of extra channels:" << d.m_info.num_extra_channels;
+                dbgFile << "Extra channels depth:" << d.m_info.alpha_bits << d.m_info.alpha_exponent_bits;
+                dbgFile << "Has animation:" << d.m_info.have_animation << "loops:" << d.m_info.animation.num_loops
+                        << "tick:" << d.m_info.animation.tps_numerator << d.m_info.animation.tps_denominator;
+                dbgFile << "Internal pixel format:" << (d.m_info.uses_original_profile ? "Original" : "XYB");
+                JxlResizableParallelRunnerSetThreads(
+                    runner.get(),
+                    JxlResizableParallelRunnerSuggestThreads(d.m_info.xsize, d.m_info.ysize));
+
+                if (d.m_info.exponent_bits_per_sample != 0) {
+                    if (d.m_info.bits_per_sample <= 16) {
+                        d.m_pixelFormat.data_type = JXL_TYPE_FLOAT16;
+                        d.m_depthID = Float16BitsColorDepthID;
+                    } else if (d.m_info.bits_per_sample <= 32) {
+                        d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
+                        d.m_depthID = Float32BitsColorDepthID;
+                    } else {
+                        errFile << "Unsupported JPEG-XL input depth" << d.m_info.bits_per_sample
+                                << d.m_info.exponent_bits_per_sample;
+                        return ImportExportCodes::FormatFeaturesUnsupported;
+                    }
+                } else if (d.m_info.bits_per_sample <= 8) {
+                    d.m_pixelFormat.data_type = JXL_TYPE_UINT8;
+                    d.m_depthID = Integer8BitsColorDepthID;
+                } else if (d.m_info.bits_per_sample <= 16) {
+                    d.m_pixelFormat.data_type = JXL_TYPE_UINT16;
+                    d.m_depthID = Integer16BitsColorDepthID;
+                } else {
+                    errFile << "Unsupported JPEG-XL input depth" << d.m_info.bits_per_sample
+                            << d.m_info.exponent_bits_per_sample;
+                    return ImportExportCodes::FormatFeaturesUnsupported;
+                }
+
+                if (d.m_info.num_color_channels == 1) {
+                    // Grayscale
+                    d.m_pixelFormat.num_channels = 2;
+                    d.m_colorID = GrayAColorModelID;
+                } else if (d.m_info.num_color_channels == 3 && !d.isCMYK) {
+                    // RGBA
+                    d.m_pixelFormat.num_channels = 4;
+                    d.m_colorID = RGBAColorModelID;
+                } else if (d.m_info.num_color_channels == 3 && d.isCMYK) {
+                    // CMYKA
+                    d.m_pixelFormat.num_channels = 4;
+                    d.m_colorID = CMYKAColorModelID;
+                } else {
+                    warnFile << "Forcing a RGBA conversion, unknown color space";
+                    d.m_pixelFormat.num_channels = 4;
+                    d.m_colorID = RGBAColorModelID;
+                }
+
+                if (!d.m_info.uses_original_profile) {
+                    d.m_pixelFormat_target.data_type = d.m_pixelFormat.data_type;
+                    d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
+                    d.m_depthID_target = d.m_depthID;
+                    d.m_colorID_target = d.m_colorID;
+                    d.m_depthID = Float32BitsColorDepthID;
+
+                    if (d.m_colorID != GrayAColorModelID) {
+                        d.m_colorID = RGBAColorModelID;
+                    }
+                }
+            } else if (status == JXL_DEC_FRAME) {
+                if (JXL_DEC_SUCCESS != JxlDecoderGetFrameHeader(dec.get(), &d.m_header)) {
+                    errFile << "JxlDecoderGetFrameHeader failed";
+                    return ImportExportCodes::ErrorWhileReading;
+                }
+
+                const JxlBlendMode blendMode = d.m_header.layer_info.blend_info.blendmode;
+                const bool isBlendSupported =
+                    std::find(supportedBlendMode.begin(), supportedBlendMode.end(), blendMode) != supportedBlendMode.end();
+
+                if (!isBlendSupported) {
+                    forceCoalesce = true;
+                }
+
+                if (d.m_header.duration == 0) {
+                    isMultilayer = true;
+                } else if (d.m_header.duration == 0xFFFFFFFF) {
+                    isMultipage = true;
+                    isAnimated = false;
+                    forceCoalesce = true;
+                } else {
+                    isAnimated = true;
+                    isMultipage = false;
+                    isMultilayer = false;
+                    forceCoalesce = true;
+                }
+            } else if (status == JXL_DEC_SUCCESS) {
+                break;
+            }
+        }
+    }
+    JxlDecoderReset(dec.get());
+
+    // Set coalescing FALSE to enable layered JXL
+    if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), forceCoalesce ? JXL_TRUE : JXL_FALSE)) {
+        errFile << "JxlDecoderSetCoalescing failed";
+        return ImportExportCodes::InternalError;
+    }
+
+    if (JXL_DEC_SUCCESS
+        != JxlDecoderSubscribeEvents(dec.get(),
+                                     JXL_DEC_COLOR_ENCODING | JXL_DEC_FULL_IMAGE | JXL_DEC_BOX | JXL_DEC_FRAME)) {
+        errFile << "JxlDecoderSubscribeEvents failed";
+        return ImportExportCodes::InternalError;
+    }
+
+    if (JXL_DEC_SUCCESS != JxlDecoderSetParallelRunner(dec.get(), JxlResizableParallelRunner, runner.get())) {
+        errFile << "JxlDecoderSetParallelRunner failed";
+        return ImportExportCodes::InternalError;
+    }
+
     if (JXL_DEC_SUCCESS
         != JxlDecoderSetInput(dec.get(),
                               reinterpret_cast<const uint8_t *>(data.constData()),
@@ -303,6 +505,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
         return ImportExportCodes::InternalError;
     };
     JxlDecoderCloseInput(dec.get());
+
     if (JXL_DEC_SUCCESS != JxlDecoderSetDecompressBoxes(dec.get(), JXL_TRUE)) {
         errFile << "JxlDecoderSetDecompressBoxes failed";
         return ImportExportCodes::InternalError;
@@ -319,48 +522,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
 
-    // List of blend mode that we can currently support
-    static constexpr std::array<JxlBlendMode, 3> supportedBlendMode = {JXL_BLEND_REPLACE, JXL_BLEND_BLEND, JXL_BLEND_MULADD};
-
-    // Internal function to rewind decoder and enable coalescing
-    auto rewindDecoderWithCoalesce = [&]() {
-        // Check to make sure coalescing only called once,
-        // otherwise it can trigger an infinite loop if we forgot to check decSetCoalescing when decoding below
-        if (decSetCoalescing) {
-            return false;
-        }
-        JxlDecoderRewind(dec.get());
-        if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), JXL_TRUE)) {
-            errFile << "JxlDecoderSetCoalescing failed";
-            return false;
-        }
-        if (JXL_DEC_SUCCESS
-            != JxlDecoderSubscribeEvents(dec.get(),
-                                         JXL_DEC_BASIC_INFO | JXL_DEC_COLOR_ENCODING | JXL_DEC_FULL_IMAGE | JXL_DEC_BOX
-                                             | JXL_DEC_FRAME)) {
-            errFile << "JxlDecoderSubscribeEvents failed";
-            return false;
-        }
-        if (JXL_DEC_SUCCESS != JxlDecoderSetParallelRunner(dec.get(), JxlResizableParallelRunner, runner.get())) {
-            errFile << "JxlDecoderSetParallelRunner failed";
-            return false;
-        }
-        if (JXL_DEC_SUCCESS
-            != JxlDecoderSetInput(dec.get(),
-                                  reinterpret_cast<const uint8_t *>(data.constData()),
-                                  static_cast<size_t>(data.size()))) {
-            errFile << "JxlDecoderSetInput failed";
-            return false;
-        };
-        JxlDecoderCloseInput(dec.get());
-        if (JXL_DEC_SUCCESS != JxlDecoderSetDecompressBoxes(dec.get(), JXL_TRUE)) {
-            errFile << "JxlDecoderSetDecompressBoxes failed";
-            return false;
-        };
-        decSetCoalescing = true;
-        return true;
-    };
-
+    // Basic info already parsed above, skip doing it again
     for (;;) {
         JxlDecoderStatus status = JxlDecoderProcessInput(dec.get());
 
@@ -370,135 +532,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
         } else if (status == JXL_DEC_NEED_MORE_INPUT) {
             errFile << "Error, already provided all input";
             return ImportExportCodes::InternalError;
-        } else if (status == JXL_DEC_BASIC_INFO) {
-            if (JXL_DEC_SUCCESS != JxlDecoderGetBasicInfo(dec.get(), &d.m_info)) {
-                errFile << "JxlDecoderGetBasicInfo failed";
-                return ImportExportCodes::ErrorWhileReading;
-            }
-            // Coalesce frame on animation import
-            if (d.m_info.have_animation && !decSetCoalescing) {
-                if (!rewindDecoderWithCoalesce()) {
-                    return ImportExportCodes::InternalError;
-                } else {
-                    continue;
-                }
-            }
-
-            dbgFile << "Extra Channel[s] info:";
-            for (uint32_t i = 0; i < d.m_info.num_extra_channels; i++) {
-                if (JXL_DEC_SUCCESS != JxlDecoderGetExtraChannelInfo(dec.get(), i, &d.m_extra)) {
-                    errFile << "JxlDecoderGetExtraChannelInfo failed";
-                    break;
-                }
-                // Channel name references taken from libjxl repo:
-                // https://github.com/libjxl/libjxl/blob/v0.8.0/lib/extras/enc/pnm.cc#L262
-                // With added "JXL-" prefix to indicate that it comes from JXL image.
-                const QString channelTypeString = [&]() {
-                    switch (d.m_extra.type) {
-                    case JXL_CHANNEL_ALPHA:
-                        return QString("JXL-Alpha");
-                    case JXL_CHANNEL_DEPTH:
-                        return QString("JXL-Depth");
-                    case JXL_CHANNEL_SPOT_COLOR:
-                        return QString("JXL-SpotColor");
-                    case JXL_CHANNEL_SELECTION_MASK:
-                        return QString("JXL-SelectionMask");
-                    case JXL_CHANNEL_BLACK:
-                        return QString("JXL-Black");
-                    case JXL_CHANNEL_CFA:
-                        return QString("JXL-CFA");
-                    case JXL_CHANNEL_THERMAL:
-                        return QString("JXL-Thermal");
-                    default:
-                        return QString("JXL-UNKNOWN");
-                    }
-                }();
-
-                // List all extra channels
-                dbgFile << "index:" << i << " | type:" << channelTypeString;
-                if (d.m_extra.type == JXL_CHANNEL_BLACK) {
-                    d.isCMYK = true;
-                    d.cmykChannelID = i;
-                }
-                if (d.m_extra.type == JXL_CHANNEL_SPOT_COLOR && !decSetCoalescing) {
-                    warnFile << "Spot color channels unsupported! Rewinding decoder with coalescing enabled";
-                    document->setWarningMessage(i18nc("JPEG-XL errors",
-                                                      "Detected JPEG-XL image with spot color channels, "
-                                                      "importing flattened image."));
-                    if (!rewindDecoderWithCoalesce()) {
-                        return ImportExportCodes::InternalError;
-                    } else {
-                        continue;
-                    }
-                }
-            }
-
-            dbgFile << "Info";
-            dbgFile << "Size:" << d.m_info.xsize << "x" << d.m_info.ysize;
-            dbgFile << "Depth:" << d.m_info.bits_per_sample << d.m_info.exponent_bits_per_sample;
-            dbgFile << "Number of color channels:" << d.m_info.num_color_channels;
-            dbgFile << "Number of extra channels:" << d.m_info.num_extra_channels;
-            dbgFile << "Extra channels depth:" << d.m_info.alpha_bits << d.m_info.alpha_exponent_bits;
-            dbgFile << "Has animation:" << d.m_info.have_animation << "loops:" << d.m_info.animation.num_loops
-                    << "tick:" << d.m_info.animation.tps_numerator << d.m_info.animation.tps_denominator;
-            dbgFile << "Internal pixel format:" << (d.m_info.uses_original_profile ? "Original" : "XYB");
-            JxlResizableParallelRunnerSetThreads(
-                runner.get(),
-                JxlResizableParallelRunnerSuggestThreads(d.m_info.xsize, d.m_info.ysize));
-
-            if (d.m_info.exponent_bits_per_sample != 0) {
-                if (d.m_info.bits_per_sample <= 16) {
-                    d.m_pixelFormat.data_type = JXL_TYPE_FLOAT16;
-                    d.m_depthID = Float16BitsColorDepthID;
-                } else if (d.m_info.bits_per_sample <= 32) {
-                    d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
-                    d.m_depthID = Float32BitsColorDepthID;
-                } else {
-                    errFile << "Unsupported JPEG-XL input depth" << d.m_info.bits_per_sample
-                            << d.m_info.exponent_bits_per_sample;
-                    return ImportExportCodes::FormatFeaturesUnsupported;
-                }
-            } else if (d.m_info.bits_per_sample <= 8) {
-                d.m_pixelFormat.data_type = JXL_TYPE_UINT8;
-                d.m_depthID = Integer8BitsColorDepthID;
-            } else if (d.m_info.bits_per_sample <= 16) {
-                d.m_pixelFormat.data_type = JXL_TYPE_UINT16;
-                d.m_depthID = Integer16BitsColorDepthID;
-            } else {
-                errFile << "Unsupported JPEG-XL input depth" << d.m_info.bits_per_sample
-                        << d.m_info.exponent_bits_per_sample;
-                return ImportExportCodes::FormatFeaturesUnsupported;
-            }
-
-            if (d.m_info.num_color_channels == 1) {
-                // Grayscale
-                d.m_pixelFormat.num_channels = 2;
-                d.m_colorID = GrayAColorModelID;
-            } else if (d.m_info.num_color_channels == 3 && !d.isCMYK) {
-                // RGBA
-                d.m_pixelFormat.num_channels = 4;
-                d.m_colorID = RGBAColorModelID;
-            } else if (d.m_info.num_color_channels == 3 && d.isCMYK) {
-                // CMYKA
-                d.m_pixelFormat.num_channels = 4;
-                d.m_colorID = CMYKAColorModelID;
-            } else {
-                warnFile << "Forcing a RGBA conversion, unknown color space";
-                d.m_pixelFormat.num_channels = 4;
-                d.m_colorID = RGBAColorModelID;
-            }
-
-            if (!d.m_info.uses_original_profile) {
-                d.m_pixelFormat_target.data_type = d.m_pixelFormat.data_type;
-                d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
-                d.m_depthID_target = d.m_depthID;
-                d.m_colorID_target = d.m_colorID;
-                d.m_depthID = Float32BitsColorDepthID;
-
-                if (d.m_colorID != GrayAColorModelID) {
-                    d.m_colorID = RGBAColorModelID;
-                }
-            }
         } else if (status == JXL_DEC_COLOR_ENCODING) {
             // Determine color space information
             const KoColorProfile *profile = nullptr;
@@ -820,24 +853,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             }
 
             const JxlBlendMode blendMode = d.m_header.layer_info.blend_info.blendmode;
-            const bool isBlendSupported =
-                std::find(supportedBlendMode.begin(), supportedBlendMode.end(), blendMode) != supportedBlendMode.end();
 
-            if (!isBlendSupported && !decSetCoalescing) {
-                warnFile << "Blending mode unsupported! Rewinding decoder with coalescing enabled";
-                document->setWarningMessage(i18nc("JPEG-XL errors",
-                                                  "Detected multi layer JPEG-XL image with unsupported blending mode, "
-                                                  "importing flattened image."));
-                if (!rewindDecoderWithCoalesce()) {
-                    return ImportExportCodes::InternalError;
-                } else {
-                    additionalLayers.clear();
-                    bgLayerSet = false;
-                    continue;
-                }
-            }
-
-            if (!d.m_info.have_animation) {
+            if (isMultilayer || isMultipage) {
                 QString layerName;
                 QByteArray layerNameRaw;
                 if (d.m_header.name_length) {
@@ -879,7 +896,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                             static_cast<int>(layerInfo.crop_y0),
                                             static_cast<int>(layerInfo.xsize),
                                             static_cast<int>(layerInfo.ysize));
-            if (d.m_info.have_animation) {
+            if (isAnimated) {
                 dbgFile << "Importing frame @" << d.m_nextFrameTime
                         << d.m_header.duration;
 
@@ -887,7 +904,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 // current animation page has ended. Since we didn't currently support
                 // multipage image/animation, this will dump the whole animation instead.
                 // Otherwise, it may cause a lockup when loading a multipage image.
-                const uint32_t frameDurationNorm = d.m_header.duration == UINT32_MAX ? 1 : d.m_header.duration;
+                const uint32_t frameDurationNorm = d.m_header.duration == 0xFFFFFFFF ? 1 : d.m_header.duration;
                 if (d.m_nextFrameTime == 0) {
                     dbgFile << "Animation detected, ticks per second:"
                             << d.m_info.animation.tps_numerator

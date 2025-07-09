@@ -20,6 +20,13 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
     setupUi(this);
 
     {
+        flattenLayers->setToolTip(i18nc("JPEG-XL encoder options", "Flatten the image and save as single layer image (default)"));
+        haveAnimation->setToolTip(i18nc("JPEG-XL encoder options", "Flatten the image and render animation frames as animated image"));
+        multiLayer->setToolTip(i18nc("JPEG-XL encoder options", "Rasterize layers (including group and filter layers) and save as multi-layered image"));
+        multiPage->setToolTip(i18nc("JPEG-XL encoder options", "Rasterize layers (including group and filter layers) and save as multi-page image"));
+    }
+
+    {
         resampling->addItem(i18nc("JPEG-XL encoder options", "Default (only for low quality)"), -1);
         resampling->addItem(i18nc("JPEG-XL encoder options", "No downsampling"), 1);
         resampling->addItem(i18nc("JPEG-XL encoder options", "2x2 downsampling"), 2);
@@ -161,8 +168,10 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
 {
     using SpaceList = QList<std::tuple<QString, QString, QString>>;
 
-    haveAnimation->setChecked(cfg->getBool("haveAnimation", true));
+    haveAnimation->setChecked(cfg->getBool("haveAnimation", false));
     flattenLayers->setChecked(cfg->getBool("flattenLayers", true));
+    multiLayer->setChecked(cfg->getBool("multiLayer", false));
+    multiPage->setChecked(cfg->getBool("multiPage", false));
     lossyEncoding->setChecked(!cfg->getBool("lossless", true));
     effort->setValue(cfg->getInt("effort", 7));
     decodingSpeed->setValue(cfg->getInt("decodingSpeed", 0));
@@ -280,6 +289,8 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
 
     cfg->setProperty("haveAnimation", haveAnimation->isChecked());
     cfg->setProperty("flattenLayers", flattenLayers->isChecked());
+    cfg->setProperty("multiLayer", multiLayer->isChecked());
+    cfg->setProperty("multiPage", multiPage->isChecked());
     cfg->setProperty("lossless", !lossyEncoding->isChecked());
     cfg->setProperty("effort", effort->value());
     cfg->setProperty("decodingSpeed", decodingSpeed->value());

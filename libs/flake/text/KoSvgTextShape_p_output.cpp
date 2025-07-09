@@ -20,6 +20,8 @@
 #include <KoProperties.h>
 #include <KoClipMask.h>
 #include <KoInsets.h>
+#include <KoShapeGroup.h>
+#include <KoShapeGroupCommand.h>
 
 #include <kis_algebra_2d.h>
 
@@ -28,7 +30,7 @@
 
 #include <variant>
 
-void inheritPaintProperties(KisForest<KoSvgTextContentElement>::composition_iterator it,
+static void inheritPaintProperties(const KisForest<KoSvgTextContentElement>::composition_iterator it,
                        KoShapeStrokeModelSP &stroke,
                        QSharedPointer<KoShapeBackground> &background,
                        QVector<KoShape::PaintOrder> &paintOrder) {
@@ -359,7 +361,7 @@ KoShapeStrokeModelSP transformStrokeBgToNewBounds(KoShapeStrokeModelSP stroke, c
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-QList<KoShape *>
+KoShape *
 KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
 {
 
@@ -521,7 +523,35 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             }
         }
     }
-    return shapes;
+
+    KoShape *parentShape = new KoPathShape();
+    if (shapes.size() == 1) {
+        parentShape = shapes.first();
+    } else if (shapes.size() > 1) {
+        KoShapeGroup *group = new KoShapeGroup();
+        KoShapeGroupCommand cmd(group, shapes, false);
+        cmd.redo();
+
+        group->setBackground(rootShape->background());
+        group->setStroke(rootShape->stroke());
+        group->setPaintOrder(rootShape->paintOrder().first(), rootShape->paintOrder().at(1));
+        group->setInheritPaintOrder(rootShape->inheritPaintOrder());
+        for(int i = 0; i < group->shapes().size(); i++) {
+            if (group->shapes().at(i)->background() == group->background()) {
+                group->shapes().at(i)->setInheritBackground(true);
+            }
+            if (group->shapes().at(i)->stroke() == group->stroke()) {
+                group->shapes().at(i)->setInheritStroke(true);
+            }
+        }
+
+        parentShape = group;
+    }
+    parentShape->setZIndex(rootShape->zIndex());
+    parentShape->setTransformation(rootShape->absoluteTransformation());
+    parentShape->setName(rootShape->name());
+
+    return parentShape;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

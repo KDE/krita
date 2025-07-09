@@ -122,17 +122,10 @@ KisKAboutKdeDialog::KisKAboutKdeDialog(QWidget *parent)
                    "We use the funds to reimburse members and others for expenses "
                    "they incur when contributing. Further funds are used for legal "
                    "support and organizing conferences and meetings.</p>");
-#ifdef Q_OS_MACOS
-    // MACOS store version should not contain external links
-    if (!KisMacosEntitlements().sandbox()) {
-#endif
         supportText << i18n("<p>We would like to encourage you to support our efforts with a "
                     "financial donation, using one of the ways described at "
                     "<a href=\"%1\">%1</a>.</p>",
                     QStringLiteral("https://www.kde.org/community/donations/"));
-#ifdef Q_OS_MACOS
-    }
-#endif
     supportText << "<p>Thank you very much in advance for your support.</p></html>";
     support->setText(supportText.join(""));
 
@@ -141,7 +134,16 @@ KisKAboutKdeDialog::KisKAboutKdeDialog(QWidget *parent)
     tabWidget->addTab(about, i18nc("About KDE", "&About"));
     tabWidget->addTab(report, i18n("&Report Bugs or Wishes"));
     tabWidget->addTab(join, i18n("&Join KDE"));
+
+#ifdef Q_OS_MACOS
+    // MACOS store version should not contain external links to donations
+    // support KDE tab has been seen as a call to action.
+    if (!KisMacosEntitlements().sandbox()) {
+#endif
     tabWidget->addTab(support, i18n("&Support KDE"));
+#ifdef Q_OS_MACOS
+}
+#endif
 
     QLabel *image = new QLabel;
     image->setPixmap(QStringLiteral(":/kxmlgui5/aboutkde.png"));

@@ -64,13 +64,12 @@ Button {
                 property bool isVariable : typeof meta.is_variable === 'boolean'?  meta.is_variable: false;
                 property int type : typeof meta.font_type === 'number'? meta.font_type: 0;
                 property string fontName: fontDelegateItem.fontName;
-                width: parent.width;
-                height: nameLabel.height * 5;
-                imageScale: 3;
-                imagePadding: nameLabel.height;
+                padding: nameLabel.height;
+                scalingType: KoShapeQtQuickLabel.FitHeight;
                 svgData: fontDelegateItem.sample;
                 foregroundColor: highlighted? palette.highlightedText: palette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
+                implicitHeight: padding*4;
 
                 Label {
                     id: nameLabel;

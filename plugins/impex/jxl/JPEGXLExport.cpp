@@ -76,6 +76,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     KisImageSP image = document->savingImage();
     const QRect bounds = image->bounds();
 
+    const bool cfgFlattenLayer = cfg->getBool("flattenLayers", true);
+    const bool cfgHaveAnimation = cfg->getBool("haveAnimation", false);
+    const bool cfgMultiLayer = cfg->getBool("multiLayer", false);
+    const bool cfgMultiPage = cfg->getBool("multiPage", false);
+
     auto enc = JxlEncoderMake(nullptr);
     auto runner = JxlResizableParallelRunnerMake(nullptr);
     if (JXL_ENC_SUCCESS != JxlEncoderSetParallelRunner(enc.get(), JxlResizableParallelRunner, runner.get())) {
@@ -233,13 +238,19 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             info->uses_original_profile = JXL_FALSE;
             dbgFile << "JXL use internal XYB profile";
         }
-        if (image->animationInterface()->hasAnimation() && cfg->getBool("haveAnimation", true)) {
+        if (image->animationInterface()->hasAnimation() && cfgHaveAnimation) {
             info->have_animation = JXL_TRUE;
             info->animation.have_timecodes = JXL_FALSE;
             info->animation.num_loops = 0;
             // Unlike WebP, JXL does allow for setting proper frame rates.
             info->animation.tps_numerator =
                 static_cast<uint32_t>(image->animationInterface()->framerate());
+            info->animation.tps_denominator = 1;
+        } else if (cfgMultiPage) {
+            info->have_animation = JXL_TRUE;
+            info->animation.have_timecodes = JXL_FALSE;
+            info->animation.num_loops = 0;
+            info->animation.tps_numerator = 1;
             info->animation.tps_denominator = 1;
         }
         return info;
@@ -593,7 +604,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         // See: https://github.com/libjxl/libjxl/issues/2463
         const int setPatches = [&]() -> int {
 #if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0, 9, 0)
-            if ((cfg->getInt("effort", 7) > 4) && !cfg->getBool("flattenLayers", true)) {
+            if ((cfg->getInt("effort", 7) > 4) && cfgFlattenLayer) {
                 warnFile << "Using workaround for layer exports, disabling patches option on effort > 4";
                 return 0;
             }
@@ -649,7 +660,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
     {
         const bool isAnimated = [&]() {
-            if (image->animationInterface()->hasAnimation() && cfg->getBool("haveAnimation", true)) {
+            if (image->animationInterface()->hasAnimation() && cfgHaveAnimation) {
                 KisLayerUtils::flattenImage(image, nullptr);
                 image->waitForDone();
 
@@ -763,12 +774,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             }
         } else {
             auto frameHeader = std::make_unique<JxlFrameHeader>();
-            const bool flattenLayers = cfg->getBool("flattenLayers", true);
 
             // (On layered export) Convert group layer to paint layer to preserve
             // out-of-bound pixels so that it won't get clipped to canvas size
             quint32 lastValidLayer = 0;
-            if (!flattenLayers) {
+            if (cfgMultiLayer || cfgMultiPage) {
                 for (quint32 pos = 0; pos < image->root()->childCount(); pos++) {
                     KisNodeSP node = image->root()->at(pos);
                     KisLayer *layer = qobject_cast<KisLayer *>(node.data());
@@ -788,13 +798,13 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             for (quint32 pos = 0; pos < image->root()->childCount(); pos++) {
                 KisNodeSP node = image->root()->at(pos);
                 // Skip invalid and invisible layers
-                if (!flattenLayers && (!node || !node->visible() || node->isFakeNode())) {
+                if ((cfgMultiLayer || cfgMultiPage) && (!node || !node->visible() || node->isFakeNode())) {
                     dbgFile << "Skipping hidden layer" << node->name();
                     continue;
                 }
                 const bool isFirstLayer = (node == image->root()->firstChild());
 
-                if (!flattenLayers) {
+                if (cfgMultiLayer || cfgMultiPage) {
                     dbgFile << "Visiting on layer" << node->name();
 
                     if (!node->inherits("KisPaintLayer")) {
@@ -812,14 +822,14 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 }
 
                 const QRect layerBounds = [&]() {
-                    if (node->exactBounds().isEmpty() || flattenLayers) {
+                    if (node->exactBounds().isEmpty() || cfgFlattenLayer) {
                         return image->bounds();
                     }
                     return node->exactBounds();
                 }();
 
                 KisPaintDeviceSP dev;
-                if (flattenLayers) {
+                if (cfgFlattenLayer) {
                     dev = image->projection();
                 } else {
                     dev = node->projection();
@@ -880,11 +890,15 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     }
                 }();
 
-                if (!flattenLayers) {
+                if (cfgMultiLayer || cfgMultiPage) {
                     JxlEncoderInitFrameHeader(frameHeader.get());
 
                     // Set frame duration to 0 to indicate a multi-layered image
-                    frameHeader->duration = 0;
+                    if (cfgMultiLayer) {
+                        frameHeader->duration = 0;
+                    } else if (cfgMultiPage) {
+                        frameHeader->duration = 0xFFFFFFFF;
+                    }
 
                     // Enable crop info if layer dimension is different than main
                     // This also enables out-of-bound pixels to be preserved
@@ -907,7 +921,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     // EXPERIMENTAL! Additive blending mode on JPEG-XL produces
                     // slightly different result than Krita.
                     const QString frameName = node->name();
-                    if (!isFirstLayer) {
+                    if (!isFirstLayer && cfgMultiLayer) {
                         if (node->compositeOpId() == QString("add")) {
                             frameHeader->layer_info.blend_info.blendmode = JXL_BLEND_MULADD;
                         } else {
@@ -980,21 +994,21 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 }
                 const int progress = (pos * 100) / image->root()->childCount();
                 setProgress(progress);
-                if ((pos == lastValidLayer && !flattenLayers) || flattenLayers) {
+                if ((pos == lastValidLayer && (cfgMultiLayer || cfgMultiPage)) || cfgFlattenLayer) {
                     JxlEncoderCloseInput(enc.get());
                 }
                 if (JxlEncoderFlushInput(enc.get()) != JXL_ENC_SUCCESS) {
                     errFile << "JxlEncoderFlushInput failed";
                     return ImportExportCodes::InternalError;
                 }
-                if (flattenLayers) {
+                if (cfgFlattenLayer) {
                     break;
                 }
             }
         }
 #else
                 // Quit loop if flatten is active
-                if (flattenLayers) {
+                if (cfgFlattenLayer) {
                     break;
                 }
             }
@@ -1091,8 +1105,10 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     //   JXL_ENC_FRAME_SETTING_ALREADY_DOWNSAMPLED
     //   JXL_ENC_FRAME_SETTING_COLOR_TRANSFORM
 
-    cfg->setProperty("haveAnimation", true);
+    cfg->setProperty("haveAnimation", false);
     cfg->setProperty("flattenLayers", true);
+    cfg->setProperty("multiLayer", false);
+    cfg->setProperty("multiPage", false);
     cfg->setProperty("lossless", true);
     cfg->setProperty("effort", 7);
     cfg->setProperty("decodingSpeed", 0);

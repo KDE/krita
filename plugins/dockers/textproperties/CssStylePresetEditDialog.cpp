@@ -72,6 +72,7 @@ CssStylePresetEditDialog::~CssStylePresetEditDialog()
 void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
 {
     if (resource == m_currentResource) return;
+    m_blockUpdates = true;
     m_currentResource = resource;
     KoSvgTextProperties properties = m_currentResource->properties();
     KoSvgTextPropertyData textData;
@@ -82,20 +83,23 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     m_quickWidget->rootObject()->setProperty("presetDescription", m_currentResource->description());
     m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
     m_quickWidget->rootObject()->setProperty("styleType", m_currentResource->styleType());
+
+    m_quickWidget->rootObject()->setProperty("beforeSample", m_currentResource->beforeText());
+    m_quickWidget->rootObject()->setProperty("sampleText", m_currentResource->sampleText());
+    m_quickWidget->rootObject()->setProperty("afterSample", m_currentResource->afterText());
+
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
+    m_blockUpdates = false;
 }
 
 KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
 {
     if (m_currentResource) {
-        KoSvgTextPropertyData textData = m_model->textData.get();
-        m_currentResource->setProperties(textData.commonProperties);
+        slotUpdateTextProperties();
         const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();
         const QString description = m_quickWidget->rootObject()->property("presetDescription").toString();
-        const QString styleType = m_quickWidget->rootObject()->property("styleType").toString();
         m_currentResource->setName(title);
         m_currentResource->setDescription(description);
-        m_currentResource->setStyleType(styleType);
     }
     return m_currentResource;
 }
@@ -107,10 +111,21 @@ void CssStylePresetEditDialog::setDpi(const double dpi)
 
 void CssStylePresetEditDialog::slotUpdateTextProperties()
 {
-    if (m_currentResource) {
+    if (m_currentResource && !m_blockUpdates) {
+        const QString before = m_quickWidget->rootObject()->property("beforeSample").toString();
+        const QString sample = m_quickWidget->rootObject()->property("sampleText").toString();
+        const QString after = m_quickWidget->rootObject()->property("afterSample").toString();
+        const QString styleType = m_quickWidget->rootObject()->property("styleType").toString();
+
+        bool shouldUpdateSample = (before != m_currentResource->beforeText()
+                || sample != m_currentResource->sampleText()
+                || after != m_currentResource->afterText());
+
         KoSvgTextPropertyData textData = m_model->textData.get();
-        if (m_currentResource->properties() != textData.commonProperties) {
-            m_currentResource->setProperties(textData.commonProperties);
+
+        if (m_currentResource->properties() != textData.commonProperties || shouldUpdateSample) {
+            m_currentResource->setStyleType(styleType);
+            m_currentResource->setSampleText(sample,  textData.commonProperties, before, after);
             m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
             QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
         }

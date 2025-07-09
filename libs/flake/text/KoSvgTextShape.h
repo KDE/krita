@@ -246,14 +246,14 @@ public:
      * @param skipSynthetic -- whether to skip over synthetic cursorPositions.
      * @return the cursor -- position for an index.
      */
-    int posForIndex(int index, bool firstIndex = false, bool skipSynthetic = false);
+    int posForIndex(int index, bool firstIndex = false, bool skipSynthetic = false) const;
     /**
      * @brief indexForPos
      * get the string index for a given cursor position.
      * @param pos the cursor position.
      * @return the index in the string.
      */
-    int indexForPos(int pos);
+    int indexForPos(int pos) const;
 
     /**
      * @brief initialTextPosition
@@ -373,6 +373,17 @@ public:
      * @return if successful.
      */
     bool setPropertiesAtTreeIndex(const QVector<int> treeIndex, const KoSvgTextProperties props);
+
+    /**
+     * @brief findStartAndEndPosForTreeIndex
+     * Find the start and end cursor position for a given tree index.
+     * @param treeIndex the tree index to find the range for. This range will encompass any children.
+     * The treeindex will always start with the index of the paragraph (0)
+     * and an empty tree index is considered invalid.
+     * @return A QPair<int,int> describing cursor position range encompassed by the tree index and it's children.
+     * Will return {-1, -1} when the tree index is invalid.
+     */
+    QPair<int, int> findRangeForTreeIndex(const QVector<int> treeIndex) const;
 
     /*--------------- Properties ---------------*/
 

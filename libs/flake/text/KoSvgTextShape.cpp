@@ -729,7 +729,7 @@ int KoSvgTextShape::posForPointLineSensitive(QPointF point)
     return initialPos;
 }
 
-int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic)
+int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic) const
 {
     int pos = -1;
     if (d->cursorPos.isEmpty() || index < 0) {
@@ -752,7 +752,7 @@ int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic)
     return pos;
 }
 
-int KoSvgTextShape::indexForPos(int pos)
+int KoSvgTextShape::indexForPos(int pos) const
 {
     if (d->cursorPos.isEmpty() || pos < 0) {
         return -1;
@@ -1013,7 +1013,7 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
     }
 
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-        CursorPos cursorPos = d->cursorPos.at(pos);
+        CursorPos cursorPos = d->cursorPos.at(qMin(d->cursorPos.size()-1, pos));
         CharacterResult res = d->result.at(cursorPos.cluster);
         index = res.plaintTextIndex;
         oldIndex = cursorPos.index;
@@ -1135,6 +1135,30 @@ bool KoSvgTextShape::setPropertiesAtTreeIndex(const QVector<int> treeIndex, cons
         shapeChangedPriv(ContentChanged);
     }
     return success;
+}
+
+QPair<int, int> KoSvgTextShape::findRangeForTreeIndex(const QVector<int> treeIndex) const
+{
+    QVector<int> idx = treeIndex;
+    if (idx.isEmpty()) {
+        return qMakePair(-1, -1);
+    }
+    if (idx.size() == 1) {
+        return qMakePair(0, d->cursorPos.size());
+    }
+    idx.removeFirst();
+
+    int startIndex = 0;
+    int endIndex = 0;
+    for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
+        auto child = d->iteratorForTreeIndex(idx, it);
+        if (child != d->textData.childEnd()) {
+            // count children
+            d->startIndexOfIterator(d->textData.childBegin(), child, startIndex);
+            endIndex = d->numChars(child) + startIndex;
+        }
+    }
+    return qMakePair(posForIndex(startIndex), posForIndex(endIndex));
 }
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const
@@ -1453,6 +1477,7 @@ void KoSvgTextShape::debugParsing()
 
             qDebug() << QString(spaces + "+") << it->text;
             qDebug() << QString(spaces + "|") << it->properties.convertToSvgTextAttributes();
+            qDebug() << QString(spaces + "| PropertyType:") << it->properties.property(KoSvgTextProperties::KraTextStyleType).toString();
             qDebug() << QString(spaces + "| Fill set: ") << it->properties.hasProperty(KoSvgTextProperties::FillId);
             qDebug() << QString(spaces + "| Stroke set: ") << it->properties.hasProperty(KoSvgTextProperties::StrokeId);
             qDebug() << QString(spaces + "| Opacity: ") << it->properties.property(KoSvgTextProperties::Opacity);

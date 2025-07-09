@@ -756,6 +756,21 @@ public:
         }
         return KisForestDetail::childEnd(parent);
     }
+
+    static bool startIndexOfIterator(KisForest<KoSvgTextContentElement>::child_iterator parent, KisForest<KoSvgTextContentElement>::child_iterator target, int &currentIndex) {
+        for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
+            if (child == target) {
+                return true;
+            } else if ((KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child))) {
+                if (startIndexOfIterator(child, target, currentIndex)) {
+                    return true;
+                }
+            } else {
+                currentIndex += numChars(child);
+            }
+        }
+        return false;
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

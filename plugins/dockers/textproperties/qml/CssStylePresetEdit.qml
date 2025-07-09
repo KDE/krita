@@ -17,6 +17,11 @@ Control {
     property alias presetSample: presetSampleLabel.svgData;
     property string styleType: "paragraph";
     property double canvasDPI: 72.0;
+
+    property alias beforeSample: beforeSampleField.text;
+    property alias sampleText: sampleField.text;
+    property alias afterSample: afterSampleField.text;
+
     onStyleTypeChanged: {
         styleTypeCmb.currentIndex = styleTypeCmb.indexOfValue(styleType === "paragraph"? TextPropertyConfigModel.Paragraph: TextPropertyConfigModel.Character);
     }
@@ -84,7 +89,7 @@ Control {
                 }
 
                 background: Rectangle {
-                    border.color: presetDescriptionArea.focus? palette.highlight: palette.mid;
+                    border.color: presetDescriptionArea.activeFocus? palette.highlight: palette.mid;
                     border.width: 1;
                     color: palette.base;
                 }
@@ -105,6 +110,31 @@ Control {
                 valueRole: "value";
                 textRole: "text";
                 onActivated: styleEdit.styleType = currentValue === TextPropertyConfigModel.Character? "character": "paragraph";
+            }
+            Label {
+                text: i18nc("label:Title", "Sample Text:");
+            }
+            RowLayout {
+                Layout.columnSpan: 2;
+                Layout.fillWidth: true;
+                TextField {
+                    id: beforeSampleField;
+                    Layout.fillWidth: true;
+                    placeholderText: i18nc("info:placeholder", "Before...");
+                    onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                }
+                TextField {
+                    id: sampleField;
+                    Layout.fillWidth: true;
+                    placeholderText: presetTitleField.text.length == 0?  i18nc("info:placeholder", "Sample..."): presetTitleField.text;
+                    onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                }
+                TextField {
+                    id: afterSampleField;
+                    Layout.fillWidth: true;
+                    placeholderText: i18nc("info:placeholder", "... After");
+                    onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                }
             }
         }
         TextPropertyBaseList {

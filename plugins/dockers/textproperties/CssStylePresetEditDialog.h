@@ -33,6 +33,7 @@ private:
     QQuickWidget *m_quickWidget {0};
     KoSvgTextPropertiesModel *m_model;
     KoCssStylePresetSP m_currentResource;
+    bool m_blockUpdates {false};
 };
 
 #endif // CSSSTYLEPRESETEDITDIALOG_H

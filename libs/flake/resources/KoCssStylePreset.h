@@ -28,6 +28,7 @@ public:
     KoCssStylePreset &operator=(const KoCssStylePreset &rhs) = delete;
     ~KoCssStylePreset();
 
+    /// The actual text properties.
     KoSvgTextProperties properties();
     void setProperties(const KoSvgTextProperties &properties);
 
@@ -35,11 +36,31 @@ public:
     QString description() const;
     void setDescription(QString description);
 
+    /// Set the style type, type is either "paragraph" or "character".
     QString styleType() const;
     void setStyleType(const QString &type);
 
+    /// The sample text that is being styled by this preset.
+    QString sampleText() const;
+
+    /// The text displayed before the sample. Only relevant when in Character mode.
+    QString beforeText() const;
+
+    /// The text displayed after the sample, only relevant when in character mode.
+    QString afterText() const;
+
     /// Returns the sample svg metadata. Use updateThumbnail to update it.
     QString sampleSvg() const;
+
+    /**
+     * @brief setSampleText
+     * This allows setting the visible sample text. In effect, this reconstructs the internal text
+     * with before, styled and after text.
+     * @param before -- unstyled before text, this is only set when the styletype is character.
+     * @param sample -- text of the styled sample.
+     * @param after -- unstyled after text, this is only set when the styletype is character.
+     */
+    void setSampleText(const QString &sample, const KoSvgTextProperties &properties, const QString &before = "", const QString &after = "");
 
     // KoResource interface
 public:

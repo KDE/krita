@@ -35,6 +35,10 @@
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 
+#ifdef Q_OS_MACOS
+#include "libs/macosutils/KisMacosEntitlements.h"
+#endif
+
 using namespace KDEPrivate;
 
 class KisKHelpMenuPrivate
@@ -200,7 +204,15 @@ QAction *KisKHelpMenu::action(MenuId id) const
         break;
 
     case menuAboutKDE:
+#ifdef Q_OS_MACOS
+        // MACOS store version should not contain external links to donations
+        // support KDE tab has been seen as a call to action.
+        if (!KisMacosEntitlements().sandbox()) {
+#endif
         return d->mAboutKDEAction;
+#ifdef Q_OS_MACOS
+        }
+#endif
         break;
     }
 

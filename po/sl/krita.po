@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-08 01:59+0000\n"
-"PO-Revision-Date: 2025-07-02 09:22+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"PO-Revision-Date: 2025-07-06 13:47+0200\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20480,11 +20480,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Napaka: napačna vrsta (%2) za vrednost %1. Pričakovano %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Ne prilagajaj srednjih tonov"
+msgstr "Ne vprašaj več"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -52283,15 +52281,13 @@ msgstr "Animacija ima deklarirano hitrost več kot 240 sl/s."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
-msgstr ""
+msgstr "Splošči sliko in jo shrani kot enoplastno sliko (privzeto)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr ""
-"Upodabljanje sličic animacije ni uspelo! Izhodne datoteke so nepopolne."
+msgstr "Splošči sliko in izriši sličice animacije kot animirano sliko"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -52300,6 +52296,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Rasteriziraj plasti (vključno s skupinskimi in filtrirnimi plastmi) in "
+"shrani kot večplastno sliko"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -52308,6 +52306,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Rasteriziraj plasti (vključno s skupinskimi in filtrirnimi plastmi) in "
+"shrani kot večstransko sliko"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -52610,38 +52610,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Shrani kot:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Splošči sliko"
+msgstr "Sploščena slika"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
 msgstr "Animirana slika"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Večnitno delovanje"
+msgstr "Večplastna slika"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Večstranska slika"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -66272,33 +66267,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "Detected multi layer JPEG-XL image with unsupported blending mode, "
-#~ "importing flattened image."
-#~ msgstr ""
-#~ "Zaznana večplastna slika JPEG-XL z nepodprtim načinom mešanja, uvoz "
-#~ "sploščene slike."
-
-#~ msgid "If this is not enabled, only the first frame will be saved."
-#~ msgstr "Če to ni omogočeno, bo shranjena le prva sličica."
-
-#~ msgid "Save as animated JPEG-XL"
-#~ msgstr "Shrani kot animirani JPEG-XL"
-
-#~ msgid ""
-#~ "<html><head/><body><p>If this is not enabled, the layers will be "
-#~ "rasterized and saved. However, animated exports are always flattened "
-#~ "regardless of this setting.</p><p>It is advised to leave this option "
-#~ "checked for web delivery and general compatibility with other "
-#~ "applications.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Če ta možnost ni omogočena, se plasti rasterizirajo "
-#~ "in shranijo. Vendar so animirani izvozi vedno sploščeni ne glede na to "
-#~ "nastavitev.</p><p>Priporočljivo je, da pustite to možnost potrjeno zaradi "
-#~ "spletne dostave in splošne združljivosti z drugimi programi.</p></body></"
-#~ "html>"
-
-#~ msgid "Flatten the image"
-#~ msgstr "Splošči sliko"

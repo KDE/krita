@@ -131,17 +131,17 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
     p.setResolution(bb, 72);
 
     QList<KoShape*> shapes = p.parseSvg(doc.documentElement(), &sz);
-    if (shapes.isEmpty()) return;
 
     // TODO: Evaluate if this can't be faster.
     d->shapePainter.reset(new KoShapePainter());
 
-    if (d->shapes.isEmpty()) {
+    if (!d->shapes.isEmpty()) {
         qDeleteAll(d->shapes);
     }
 
     d->shapes = shapes;
     d->shapePainter->setShapes(d->shapes);
+
     updateShapes();
 
     emit svgDataChanged();

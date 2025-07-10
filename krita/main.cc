@@ -591,9 +591,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                 // See https://bugs.kde.org/show_bug.cgi?id=396370
                 KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
                 qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
+                qputenv("LANGUAGE", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
                 KLocalizedString::setLanguages(QStringList() << uiLanguages);
                 qputenv("LANG", envLanguage.toLocal8Bit());
+                qputenv("LANGUAGE", envLanguage.toLocal8Bit());
 #endif
             }
         }

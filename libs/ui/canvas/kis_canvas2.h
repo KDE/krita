@@ -220,7 +220,7 @@ Q_SIGNALS:
     void sigCanvasCacheUpdated();
     void sigContinueResizeImage(qint32 w, qint32 h);
 
-    void documentOffsetUpdateFinished();
+    void canvasStateChanged();
 
     // emitted whenever the canvas widget thinks sketch should update
     void updateCanvasRequested(const QRect &rc);

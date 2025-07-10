@@ -7,6 +7,7 @@
 #include "indexcolorpalette.h"
 
 #include <qmath.h>
+#include <QThread>
 
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
@@ -16,12 +17,16 @@
 float IndexColorPalette::similarity(LabColor c0, LabColor c1) const
 {
     static const qreal max = KoColorSpaceMathsTraits<quint16>::max;
+
     quint16 diffL = qAbs(c0.L - c1.L);
     quint16 diffa = qAbs(c0.a - c1.a);
     quint16 diffb = qAbs(c0.b - c1.b);
-    float valL = diffL/max*similarityFactors.L;
-    float valA = diffa/max*similarityFactors.a;
-    float valB = diffb/max*similarityFactors.b;
+
+
+    float valL = diffL / max * similarityFactors.L;
+    float valA = diffa / max * similarityFactors.a;
+    float valB = diffb / max * similarityFactors.b;
+
     return 1.f - qSqrt(valL * valL + valA * valA + valB * valB);
 }
 
@@ -34,34 +39,33 @@ IndexColorPalette::IndexColorPalette()
 
 int IndexColorPalette::numColors() const
 {
-    return colors.size();
+    return m_colors.size();
 }
 
 LabColor IndexColorPalette::getNearestIndex(LabColor clr) const
 {
     QVector<float> diffs;
-    diffs.resize(numColors());
-    for(int i = 0; i < numColors(); ++i)
-        diffs[i] = similarity(colors[i], clr);
 
-    int primaryColor = -1;
+    int colorCount = numColors();
+    Q_ASSERT(colorCount > 0);
+
+    diffs.resize(colorCount);
+    diffs.fill(0.0);
+
+    for (int i = 0; i < colorCount; ++i) {
+        diffs[i] = similarity(m_colors[i], clr);
+    }
+
+    int primaryColor = 0;
     float maxDiff = std::numeric_limits<float>::min();
-    for(int i = 0; i < numColors(); ++i)
-        if(diffs[i] > maxDiff) {
+    for (int i = 0; i < colorCount; ++i) {
+        if (diffs[i] > maxDiff) {
             primaryColor = i;
             maxDiff = diffs[primaryColor];
         }
-
-    KIS_SAFE_ASSERT_RECOVER (primaryColor >= 0) {
-        LabColor color;
-        color.L = 0;
-        color.a = 0;
-        color.b = 0;
-
-        return color;
     }
 
-    return colors[primaryColor];
+    return m_colors[primaryColor];
 }
 
 QPair<int, int> IndexColorPalette::getNeighbours(int mainClr) const
@@ -69,7 +73,7 @@ QPair<int, int> IndexColorPalette::getNeighbours(int mainClr) const
     QVector<float> diffs;
     diffs.resize(numColors());
     for(int i = 0; i < numColors(); ++i)
-        diffs[i] = similarity(colors[i], colors[mainClr]);
+        diffs[i] = similarity(m_colors[i], m_colors[mainClr]);
 
     int darkerColor = 0;
     int brighterColor = 0;
@@ -77,7 +81,7 @@ QPair<int, int> IndexColorPalette::getNeighbours(int mainClr) const
     {
         if(i != mainClr)
         {
-            if(colors[i].L < colors[mainClr].L)
+            if (m_colors[i].L < m_colors[mainClr].L)
             {
                 if(diffs[i] > diffs[darkerColor])
                     darkerColor = i;
@@ -132,7 +136,7 @@ void IndexColorPalette::insertShades(QColor qclrA, QColor qclrB, int shades)
 
 void IndexColorPalette::insertColor(LabColor clr)
 {
-    colors.append(clr);
+    m_colors.append(clr);
 }
 
 void IndexColorPalette::insertColor(KoColor koclr)
@@ -153,12 +157,12 @@ void IndexColorPalette::insertColor(QColor qclr)
 
 namespace
 {
-    struct ColorString
-    {
-        int color;
-        QPair<int, int> neighbours;
-        float similarity;
-    };
+struct ColorString
+{
+    int color;
+    QPair<int, int> neighbours;
+    float similarity;
+};
 }
 
 void IndexColorPalette::mergeMostRedundantColors()
@@ -172,9 +176,9 @@ void IndexColorPalette::mergeMostRedundantColors()
         float lSimilarity = 0.05f, rSimilarity = 0.05f;
         // There will be exactly 2 colors that have only 1 neighbour, the darkest and the brightest, we don't want to remove those
         if(colorHood[i].neighbours.first  != -1)
-            lSimilarity = similarity(colors[colorHood[i].neighbours.first], colors[i]);
+            lSimilarity = similarity(m_colors[colorHood[i].neighbours.first], m_colors[i]);
         if(colorHood[i].neighbours.second != -1)
-            rSimilarity = similarity(colors[colorHood[i].neighbours.second], colors[i]);
+            rSimilarity = similarity(m_colors[colorHood[i].neighbours.second], m_colors[i]);
         colorHood[i].similarity = (lSimilarity + rSimilarity) / 2;
     }
     int mostSimilarColor = 0;
@@ -185,13 +189,13 @@ void IndexColorPalette::mergeMostRedundantColors()
     int darkerIndex = colorHood[mostSimilarColor].neighbours.first;
     int brighterIndex = colorHood[mostSimilarColor].neighbours.second;
     if(darkerIndex   != -1 &&
-       brighterIndex != -1)
+        brighterIndex != -1)
     {
-        LabColor clrA = colors[darkerIndex];
-        LabColor clrB = colors[mostSimilarColor];
+        LabColor clrA = m_colors[darkerIndex];
+        LabColor clrB = m_colors[mostSimilarColor];
         // Remove two, add one = 1 color less
-        colors.remove(darkerIndex);
-        colors.remove(mostSimilarColor);
+        m_colors.remove(darkerIndex);
+        m_colors.remove(mostSimilarColor);
         //colors.remove(brighterIndex);
         insertShades(clrA, clrB, 1);
         //insertShades(clrB, clrC, 1);

@@ -428,11 +428,13 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #endif
 
 #ifdef Q_OS_MACOS
-    // MACOS store version should not contain external links
+    // macOS store version should not contain external links containing donation buttons or forms
     if (KisMacosEntitlements().sandbox()) {
         supportKritaLink->hide();
         supportKritaIcon->hide();
         labelSupportText->hide();
+        kritaWebsiteLink->hide();
+        kritaWebsiteIcon->hide();
     }
 #endif
 }

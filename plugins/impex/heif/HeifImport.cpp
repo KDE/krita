@@ -213,6 +213,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
     HeifLock lock;
 #endif
 
+#if LIBHEIF_HAVE_VERSION(1, 20, 0)
+    using HeifStrideType = size_t;
+#else
+    using HeifStrideType = int;
+#endif
+
     // Wrap input stream into heif Reader object
     Reader_QIODevice reader(io);
 
@@ -386,8 +392,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         if (heifChroma == heif_chroma_monochrome) {
             dbgFile << "monochrome heif file, bits:" << luma;
-            int strideG = 0;
-            int strideA = 0;
+            HeifStrideType strideG = 0;
+            HeifStrideType strideA = 0;
             const uint8_t *imgG = heifimage.get_plane(heif_channel_Y, &strideG);
             const uint8_t *imgA =
                 heifimage.get_plane(heif_channel_Alpha, &strideA);
@@ -408,10 +414,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         } else if (heifChroma == heif_chroma_444) {
             dbgFile << "planar heif file, bits:" << luma;
 
-            int strideR = 0;
-            int strideG = 0;
-            int strideB = 0;
-            int strideA = 0;
+            HeifStrideType strideR = 0;
+            HeifStrideType strideG = 0;
+            HeifStrideType strideB = 0;
+            HeifStrideType strideA = 0;
             const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
             const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
             const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
@@ -438,7 +444,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                     displayNits,
                                     colorSpace);
         } else if (heifChroma == heif_chroma_interleaved_RGB || heifChroma == heif_chroma_interleaved_RGBA) {
-            int stride = 0;
+            HeifStrideType stride = 0;
             dbgFile << "interleaved SDR heif file, bits:" << luma;
 
             const uint8_t *img = heifimage.get_plane(heif_channel_interleaved, &stride);
@@ -460,7 +466,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                       colorSpace);
 
         } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE || heifChroma == heif_chroma_interleaved_RRGGBB_BE || heifChroma == heif_chroma_interleaved_RRGGBB_BE) {
-            int stride = 0;
+            HeifStrideType stride = 0;
             dbgFile << "interleaved HDR heif file, bits:" << luma;
 
             const uint8_t *img =

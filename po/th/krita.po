@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"POT-Creation-Date: 2025-07-10 03:26+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -12936,7 +12936,7 @@ msgstr "ตัวห้อย"
 msgid "Setti&ngs"
 msgstr "ตั้งค่า"
 
-#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:136
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, fuzzy, kde-format
 msgid "&Help"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"POT-Creation-Date: 2025-07-10 03:26+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -12974,7 +12974,7 @@ msgstr "Công cụ &bút vẽ"
 msgid "Setti&ngs"
 msgstr "Thiết lập"
 
-#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:136
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, fuzzy, kde-format
 msgid "&Help"

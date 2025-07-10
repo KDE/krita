@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"POT-Creation-Date: 2025-07-10 03:26+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -13331,7 +13331,7 @@ msgstr "Indeks"
 msgid "Setti&ngs"
 msgstr "P&odešavanja"
 
-#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:136
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"

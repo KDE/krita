@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"POT-Creation-Date: 2025-07-10 03:26+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -13016,7 +13016,7 @@ msgstr "U&rzhiaouegoù"
 msgid "Setti&ngs"
 msgstr "Kefluniadur"
 
-#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:136
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, fuzzy, kde-format
 msgid "&Help"

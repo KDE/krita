@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"POT-Creation-Date: 2025-07-10 03:26+0000\n"
 "PO-Revision-Date: 2022-07-27 20:32+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -13232,7 +13232,7 @@ msgstr "Skripty"
 msgid "Setti&ngs"
 msgstr "Nastave&nia"
 
-#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:136
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"

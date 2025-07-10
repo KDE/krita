@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 03:35+0000\n"
+"POT-Creation-Date: 2025-07-10 03:26+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -12908,7 +12908,7 @@ msgstr "Përzgjedhje"
 msgid "Setti&ngs"
 msgstr "Parametrat e Ngjyrave"
 
-#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:136
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"

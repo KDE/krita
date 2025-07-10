@@ -96,7 +96,9 @@ Rectangle {
                 contentItem: KoShapeQtQuickLabel {
                     implicitHeight: nameLabel.height * 4;
                     padding: nameLabel.height;
-
+                    alignment: presetDelegate.meta.sample_align;
+                    scalingType: presetDelegate.meta.style_type === "paragraph"?
+                                     KoShapeQtQuickLabel.FitWidth: KoShapeQtQuickLabel.Fit;
                     svgData: presetDelegate.meta.sample_svg;
                     foregroundColor: presetDelegate.highlighted? palette.highlightedText: palette.text;
 

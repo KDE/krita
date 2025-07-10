@@ -22,6 +22,7 @@ const QString TITLE = "title";
 const QString DESCRIPTION = "description";
 const QString DESC = "desc";
 const QString SAMPLE_SVG = "sample_svg";
+const QString SAMPLE_ALIGN = "sample_align";
 const QString STYLE_TYPE = "style_type";
 
 const QString STYLE_TYPE_PARAGRAPH = "paragraph";
@@ -65,7 +66,7 @@ KoCssStylePreset::~KoCssStylePreset()
 
 }
 
-KoSvgTextProperties KoCssStylePreset::properties()
+KoSvgTextProperties KoCssStylePreset::properties() const
 {
     const QVector<int> treeIndex = d->shape->findTreeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
     qDebug() << "searching properties" << treeIndex;
@@ -103,7 +104,7 @@ void KoCssStylePreset::setDescription(QString description)
 QString KoCssStylePreset::styleType() const
 {
     QMap<QString, QVariant> m = metadata();
-    return m[STYLE_TYPE].toString();
+    return m.value(STYLE_TYPE, STYLE_TYPE_PARAGRAPH).toString();
 }
 
 void KoCssStylePreset::setStyleType(const QString &type)
@@ -143,6 +144,10 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
                 modifiedProps.removeProperty(p);
             }
         }
+        // Always remove inline size, it is shape-specific.
+        if (p == KoSvgTextProperties::InlineSizeId) {
+            modifiedProps.removeProperty(p);
+        }
     }
     // This one is added after removing, because otherwise, the type is removed...
     modifiedProps.setProperty(KoSvgTextProperties::KraTextStyleType, type);
@@ -150,32 +155,149 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
     sampleText->setPropertiesAtPos(-1, modifiedProps);
 
     if (type == STYLE_TYPE_PARAGRAPH) {
-        d->shape.reset(sampleText);
-    }
+        KoPathShape *inlineShape = new KoPathShape();
+        inlineShape->moveTo(QPointF(0, 0));
+        inlineShape->lineTo(QPointF(120, 0));
+        inlineShape->lineTo(QPointF(120, 120));
+        inlineShape->lineTo(QPointF(0, 120));
+        inlineShape->lineTo(QPointF(0, 0));
+        inlineShape->close();
+        sampleText->setShapesInside({inlineShape});
+        sampleText->relayout();
 
-    if (before.isEmpty() && after.isEmpty()) {
         d->shape.reset(sampleText);
     } else {
-        KoSvgTextShape *newShape = new KoSvgTextShape();
-        KoSvgTextProperties paraProps = KoSvgTextProperties::defaultProperties();
-        // Set whitespace rule to pre-wrap.
-        paraProps.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
-        paraProps.setProperty(KoSvgTextProperties::TextWrapId, KoSvgText::Wrap);
-        newShape->setPropertiesAtPos(-1, paraProps);
-        if (!after.isEmpty()) {
-            newShape->insertText(0, after);
-        }
-        if (!before.isEmpty()) {
-            newShape->insertText(0, before);
-        }
 
-        newShape->insertRichText(newShape->posForIndex(before.size()), sampleText);
-        d->shape.reset(newShape);
+        if (before.isEmpty() && after.isEmpty()) {
+            d->shape.reset(sampleText);
+        } else {
+            KoSvgTextShape *newShape = new KoSvgTextShape();
+            KoSvgTextProperties paraProps = KoSvgTextProperties::defaultProperties();
+            // Set whitespace rule to pre-wrap.
+            paraProps.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
+            paraProps.setProperty(KoSvgTextProperties::TextWrapId, KoSvgText::Wrap);
+            newShape->setPropertiesAtPos(-1, paraProps);
+            if (!after.isEmpty()) {
+                newShape->insertText(0, after);
+            }
+            if (!before.isEmpty()) {
+                newShape->insertText(0, before);
+            }
+
+            newShape->insertRichText(newShape->posForIndex(before.size()), sampleText);
+            d->shape.reset(newShape);
+        }
     }
+
     d->shape->debugParsing();
     // Don't d->shape->cleanup() here, as it *can* lead to the sample getting cleaned up.
     updateThumbnail();
     setValid(true);
+}
+
+Qt::Alignment KoCssStylePreset::alignSample() const
+{
+    QMap<QString, QVariant> m = metadata();
+    QVariant v = m.value(SAMPLE_ALIGN, static_cast<Qt::Alignment::Int>(Qt::AlignHCenter | Qt::AlignVCenter));
+    return static_cast<Qt::Alignment>(v.value<Qt::Alignment::Int>());
+}
+
+void KoCssStylePreset::updateAlignSample()
+{
+    Qt::AlignmentFlag hComponent = Qt::AlignHCenter;
+    Qt::AlignmentFlag vComponent = Qt::AlignVCenter;
+
+    const KoSvgTextProperties props = properties();
+    const QString type = styleType().isEmpty()? props.property(KoSvgTextProperties::KraTextStyleType).toString(): styleType();
+    if (type == STYLE_TYPE_PARAGRAPH) {
+        const KoSvgText::WritingMode mode = KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+        const KoSvgText::Direction dir = KoSvgText::Direction(props.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+        const bool textAlignLast = props.hasProperty(KoSvgTextProperties::TextAlignLastId);
+        if (props.hasProperty(KoSvgTextProperties::TextAlignAllId) || textAlignLast) {
+            const KoSvgText::TextAlign align = textAlignLast? KoSvgText::TextAlign(props.property(KoSvgTextProperties::TextAlignLastId).toInt())
+                                                            : KoSvgText::TextAlign(props.property(KoSvgTextProperties::TextAlignAllId).toInt());
+
+            if (mode == KoSvgText::HorizontalTB) {
+                vComponent = Qt::AlignTop;
+                if (align == KoSvgText::AlignStart || align == KoSvgText::AlignLastAuto) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        hComponent = Qt::AlignLeft;
+                    } else {
+                        hComponent = Qt::AlignRight;
+                    }
+                } else if (align == KoSvgText::AlignEnd) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        hComponent = Qt::AlignRight;
+                    } else {
+                        hComponent = Qt::AlignLeft;
+                    }
+                } else if (align == KoSvgText::AlignLeft) {
+                    hComponent = Qt::AlignLeft;
+                } else if (align == KoSvgText::AlignRight) {
+                    hComponent =  Qt::AlignRight;
+                }
+            } else {
+                hComponent = mode == KoSvgText::VerticalRL? Qt::AlignRight: Qt::AlignLeft;
+                if (align == KoSvgText::AlignStart || align == KoSvgText::AlignLastAuto) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        vComponent = Qt::AlignTop;
+                    } else {
+                        vComponent =  Qt::AlignBottom;
+                    }
+                } else if (align == KoSvgText::AlignEnd) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        vComponent =  Qt::AlignBottom;
+                    } else {
+                        vComponent =  Qt::AlignTop;
+                    }
+                } else if (align == KoSvgText::AlignLeft) {
+                    vComponent =  Qt::AlignTop;
+                } else if (align == KoSvgText::AlignRight) {
+                    vComponent =  Qt::AlignBottom;
+                }
+            }
+        } else {
+            const KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(props.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+
+            if (mode == KoSvgText::HorizontalTB) {
+                vComponent = Qt::AlignTop;
+                if (anchor == KoSvgText::AnchorStart) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        hComponent = Qt::AlignLeft;
+                    } else {
+                        hComponent = Qt::AlignRight;
+                    }
+                } else if (anchor == KoSvgText::AnchorEnd) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        hComponent = Qt::AlignRight;
+                    } else {
+                        hComponent = Qt::AlignLeft;
+                    }
+                } else {
+                    hComponent = Qt::AlignHCenter;
+                }
+            } else {
+                hComponent = mode == KoSvgText::VerticalRL? Qt::AlignRight: Qt::AlignLeft;
+                if (anchor == KoSvgText::AnchorStart) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        vComponent = Qt::AlignTop;
+                    } else {
+                        vComponent = Qt::AlignBottom;
+                    }
+                } else if (anchor == KoSvgText::AnchorEnd) {
+                    if (dir == KoSvgText::DirectionLeftToRight) {
+                        vComponent = Qt::AlignBottom;
+                    } else {
+                        vComponent = Qt::AlignTop;
+                    }
+                } else {
+                    vComponent = Qt::AlignVCenter;
+                }
+            }
+        }
+    }
+
+    addMetaData(SAMPLE_ALIGN, static_cast<Qt::Alignment::Int>(hComponent | vComponent));
 }
 
 QString KoCssStylePreset::beforeText() const
@@ -303,6 +425,7 @@ void KoCssStylePreset::updateThumbnail()
 
     /// generate SVG sample.
     addMetaData(SAMPLE_SVG, generateSVG(d->shape.data()));
+    updateAlignSample();
 
     setImage(img);
 }

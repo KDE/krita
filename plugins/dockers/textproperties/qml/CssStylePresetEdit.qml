@@ -15,7 +15,8 @@ Control {
     property alias presetTitle: presetTitleField.text;
     property alias presetDescription: presetDescriptionArea.text;
     property alias presetSample: presetSampleLabel.svgData;
-    property string styleType: "paragraph";
+    property alias presetSampleAlignment: presetSampleLabel.alignment;
+    property string styleType: "character"; // Defaults to character because the first index in the style combobox is character.
     property double canvasDPI: 72.0;
 
     property alias beforeSample: beforeSampleField.text;
@@ -56,7 +57,14 @@ Control {
                 Layout.columnSpan: 2;
                 foregroundColor: palette.text;
                 fullColor: false;
-                Layout.preferredHeight: presetTitleField.height*2;
+
+                scalingType: styleType === "paragraph"? KoShapeQtQuickLabel.FitWidth: KoShapeQtQuickLabel.Fit;
+                Layout.preferredHeight: presetTitleField.height*4;
+                padding: presetTitleField.height;
+
+                Frame {
+                    anchors.fill: parent;
+                }
             }
 
             Label {
@@ -119,9 +127,11 @@ Control {
                 Layout.fillWidth: true;
                 TextField {
                     id: beforeSampleField;
-                    Layout.fillWidth: true;
+                    Layout.fillWidth: visible? true: false;
+                    Layout.preferredWidth: visible? implicitWidth: 0;
                     placeholderText: i18nc("info:placeholder", "Before...");
                     onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                    visible: styleType !== "paragraph";
                 }
                 TextField {
                     id: sampleField;
@@ -131,9 +141,11 @@ Control {
                 }
                 TextField {
                     id: afterSampleField;
-                    Layout.fillWidth: true;
+                    Layout.fillWidth: visible? true: false;
+                    Layout.preferredWidth: visible? implicitWidth: 0;
                     placeholderText: i18nc("info:placeholder", "... After");
                     onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                    visible: styleType !== "paragraph";
                 }
             }
         }

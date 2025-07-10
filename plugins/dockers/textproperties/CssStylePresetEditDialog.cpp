@@ -15,6 +15,10 @@
 #include "FontAxesModel.h"
 #include "FontStyleModel.h"
 
+QVariant variantFromAlignment(Qt::Alignment align) {
+    return QVariant(static_cast<Qt::Alignment::Int>(align));
+}
+
 CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
     :KoDialog(parent)
     , m_model(new KoSvgTextPropertiesModel())
@@ -71,7 +75,6 @@ CssStylePresetEditDialog::~CssStylePresetEditDialog()
 
 void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
 {
-    if (resource == m_currentResource) return;
     m_blockUpdates = true;
     m_currentResource = resource;
     KoSvgTextProperties properties = m_currentResource->properties();
@@ -82,6 +85,7 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     m_quickWidget->rootObject()->setProperty("presetTitle", m_currentResource->name());
     m_quickWidget->rootObject()->setProperty("presetDescription", m_currentResource->description());
     m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
+    m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
     m_quickWidget->rootObject()->setProperty("styleType", m_currentResource->styleType());
 
     m_quickWidget->rootObject()->setProperty("beforeSample", m_currentResource->beforeText());
@@ -127,6 +131,7 @@ void CssStylePresetEditDialog::slotUpdateTextProperties()
             m_currentResource->setStyleType(styleType);
             m_currentResource->setSampleText(sample,  textData.commonProperties, before, after);
             m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
+            m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
             QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
         }
     }

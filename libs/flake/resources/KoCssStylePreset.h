@@ -29,7 +29,7 @@ public:
     ~KoCssStylePreset();
 
     /// The actual text properties.
-    KoSvgTextProperties properties();
+    KoSvgTextProperties properties() const;
     void setProperties(const KoSvgTextProperties &properties);
 
     /// The description associated with this style.
@@ -62,6 +62,11 @@ public:
      */
     void setSampleText(const QString &sample, const KoSvgTextProperties &properties, const QString &before = "", const QString &after = "");
 
+    /// Determines the prefered sample alignment based on the text properties. It's set up so that
+    /// the alignment anchor of the text is shown.
+    Qt::Alignment alignSample() const;
+
+    void updateAlignSample();
     // KoResource interface
 public:
     KoResourceSP clone() const override;

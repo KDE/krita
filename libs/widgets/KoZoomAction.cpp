@@ -138,7 +138,10 @@ void KoZoomAction::regenerateItems()
         setCurrentItem(d->currentActionState.currentRealLevelIndex);
     }
 
-    Q_EMIT sigInternalUpdateZoomLevelsComboState(values, d->currentActionState.currentRealLevelIndex);
+    Q_EMIT sigInternalUpdateZoomLevelsComboState(
+        values,
+        d->currentActionState.currentRealLevelIndex,
+        d->currentActionState.currentRealLevelText);
 }
 
 void KoZoomAction::sliderValueChanged(int value)

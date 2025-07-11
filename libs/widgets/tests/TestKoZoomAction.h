@@ -17,6 +17,7 @@ class TestKoZoomAction : public QObject
 private Q_SLOTS:
     void testZoomActionState_data();
     void testZoomActionState();
+    void testInitWithDefault();
 };
 
 #endif /* __TEST_KO_ZOOM_ACTION_H */

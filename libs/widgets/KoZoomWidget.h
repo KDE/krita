@@ -43,7 +43,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setSliderState(int size, int index);
-    void setZoomLevelsState(const QStringList &values, int index);
+    void setZoomLevelsState(const QStringList &values, int index, const QString &activeText);
     void setCurrentZoomLevel(const QString &valueString);
     void setCurrentZoomLevel(int index);
     void setSliderValue(int value);

@@ -52,9 +52,11 @@ KoZoomActionState::KoZoomActionState(const KoZoomState &state)
 
 void KoZoomActionState::setZoomState(const KoZoomState &newState)
 {
-    bool changedGuiLevels = false;
+    const bool forceInitialization = realGuiLevels.isEmpty();
+    bool needsUpdateRealLevels = forceInitialization;
 
-    if (!qFuzzyCompare(newState.minZoom, zoomState.minZoom) ||
+    if (forceInitialization ||
+        !qFuzzyCompare(newState.minZoom, zoomState.minZoom) ||
         !qFuzzyCompare(newState.maxZoom, zoomState.maxZoom)) {
 
         auto newStandardLevels = KoZoomMode::generateStandardZoomLevels(newState.minZoom, newState.maxZoom);
@@ -63,14 +65,14 @@ void KoZoomActionState::setZoomState(const KoZoomState &newState)
             auto newGuiLevels = generateZoomGuiItems(newStandardLevels);
             if (newGuiLevels != guiLevels) {
                 guiLevels = newGuiLevels;
-                changedGuiLevels = true;
+                needsUpdateRealLevels = true;
             }
         }
     }
 
     int proposedCurrentIndex = currentRealLevelIndex;
 
-    if (changedGuiLevels || !qFuzzyCompare(newState.zoom, zoomState.zoom) || newState.mode != zoomState.mode) {
+    if (needsUpdateRealLevels || !qFuzzyCompare(newState.zoom, zoomState.zoom) || newState.mode != zoomState.mode) {
         realGuiLevels = guiLevels;
 
         const qreal eps = 1e-5;
@@ -93,20 +95,30 @@ void KoZoomActionState::setZoomState(const KoZoomState &newState)
         proposedCurrentIndex = std::distance(realGuiLevels.begin(), it);
     }
 
+    auto textForFixedMode = [&] (const int index) {
+        ZoomItem zoomItem = realGuiLevels[index];
+        return i18nc("concatenate mode name (e.g. \"Fit Page\") and real zoom percent string", "%1 (%2)",
+            get<QString>(zoomItem),
+            zoomToString(newState.zoom));
+    };
+
     switch (newState.mode) {
     case KoZoomMode::ZOOM_PAGE:
         currentRealLevelIndex = 0;
+        currentRealLevelText = textForFixedMode(currentRealLevelIndex);
         break;
     case KoZoomMode::ZOOM_WIDTH:
         currentRealLevelIndex = 1;
+        currentRealLevelText = textForFixedMode(currentRealLevelIndex);
         break;
     case KoZoomMode::ZOOM_HEIGHT:
         currentRealLevelIndex = 2;
+        currentRealLevelText = textForFixedMode(currentRealLevelIndex);
         break;
-
     case KoZoomMode::ZOOM_CONSTANT:
     default:
         currentRealLevelIndex = proposedCurrentIndex;
+        currentRealLevelText = get<QString>(realGuiLevels[currentRealLevelIndex]);
         break;
     }
 

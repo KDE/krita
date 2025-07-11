@@ -111,6 +111,7 @@ void TestKoZoomAction::testZoomActionState_data()
     QTest::addColumn<QVector<LightZoomItem>>("expectedGuiLevels");
     QTest::addColumn<QVector<LightZoomItem>>("expectedRealLevels");
     QTest::addColumn<int>("expectedRealIndex");
+    QTest::addColumn<QString>("expectedRealText");
 
     const std::optional<KoZoomState> noZoomState = std::nullopt;
 
@@ -129,7 +130,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.45), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 5;
+        << 5
+        << "45.0%";
 
     QTest::addRow("constant-exact")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5, 0.1, 2.0)
@@ -144,7 +146,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 5;
+        << 5
+        << "50.0%";
 
     QTest::addRow("constant-fuzzy-left")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5 - 1e-7, 0.1, 2.0)
@@ -159,7 +162,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 5;
+        << 5
+        << "50.0%";
 
     QTest::addRow("constant-fuzzy-right")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.5 - 1e-7, 0.1, 2.0)
@@ -174,7 +178,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 5;
+        << 5
+        << "50.0%";
 
     QTest::addRow("constant-low")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.11, 0.1, 2.0)
@@ -189,7 +194,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.11), zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 3;
+        << 3
+        << "11.0%";
 
     QTest::addRow("constant-high")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 2.1, 0.1, 2.0)
@@ -204,7 +210,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0), zi(2.1)
         }
-        << 10;
+        << 10
+        << "210.0%";
 
     QTest::addRow("page")
         << KoZoomState(KoZoomMode::ZOOM_PAGE, 0.5, 0.1, 2.0)
@@ -219,7 +226,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 0;
+        << 0
+        << "Fit View (50.0%)";
 
     QTest::addRow("width")
         << KoZoomState(KoZoomMode::ZOOM_WIDTH, 0.5, 0.1, 2.0)
@@ -234,7 +242,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 1;
+        << 1
+        << "Fit View Width (50.0%)";
 
     QTest::addRow("height")
         << KoZoomState(KoZoomMode::ZOOM_HEIGHT, 0.5, 0.1, 2.0)
@@ -249,7 +258,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 2;
+        << 2
+        << "Fit View Height (50.0%)";
 
     QTest::addRow("page-to-same-constant")
         << KoZoomState(KoZoomMode::ZOOM_PAGE, 0.5, 0.1, 2.0)
@@ -264,7 +274,8 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 5; // the mode has changed!
+        << 5 // the mode has changed!
+        << "50.0%";
 
     QTest::addRow("constant-to-same-page")
         << KoZoomState(KoZoomMode::ZOOM_CONSTANT, 0.45, 0.1, 2.0)
@@ -279,11 +290,15 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(KoZoomMode::ZOOM_PAGE), zi(KoZoomMode::ZOOM_WIDTH), zi(KoZoomMode::ZOOM_HEIGHT),
             zi(0.25), zi(0.333333), zi(0.45), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
-        << 0;
+        << 0
+        << "Fit View (45.0%)";
 }
 
 void TestKoZoomAction::testZoomActionState()
 {
+    // to be able to compare zoom strings
+    QLocale::setDefault(QLocale::C);
+
     QFETCH(KoZoomState, zoomState);
     QFETCH(std::optional<KoZoomState>, additionalSwitchState);
     QFETCH(QVector<qreal>, expectedStandardLevels);
@@ -291,6 +306,7 @@ void TestKoZoomAction::testZoomActionState()
     QFETCH(QVector<LightZoomItem>, expectedGuiLevels);
     QFETCH(QVector<LightZoomItem>, expectedRealLevels);
     QFETCH(int, expectedRealIndex);
+    QFETCH(QString, expectedRealText);
 
     KoZoomActionState actionState(zoomState);
     QCOMPARE(actionState.zoomState, zoomState);
@@ -314,7 +330,15 @@ void TestKoZoomAction::testZoomActionState()
 
     QCOMPARE(actionState.currentRealLevelIndex, expectedRealIndex);
     QCOMPARE(actionState.calcNearestStandardLevel(actionState.zoomState.zoom), expectedStandardLevelIndex);
+    QCOMPARE(actionState.currentRealLevelText, expectedRealText);
 }
 
+void TestKoZoomAction::testInitWithDefault()
+{
+    KoZoomActionState actionState(KoZoomState{});
+    QVERIFY(actionState.standardLevels.size() > 0);
+    QVERIFY(actionState.guiLevels.size() > 0);
+    QVERIFY(actionState.realGuiLevels.size() > 0);
+}
 
 SIMPLE_TEST_MAIN(TestKoZoomAction)

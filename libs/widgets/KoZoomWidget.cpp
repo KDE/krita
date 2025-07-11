@@ -98,11 +98,11 @@ void KoZoomWidget::setSliderState(int size, int index)
     d->slider->setValue(index);
 }
 
-void KoZoomWidget::setZoomLevelsState(const QStringList &values, int index)
+void KoZoomWidget::setZoomLevelsState(const QStringList &values, int index, const QString &activeText)
 {
     QSignalBlocker b(d->input);
     d->input->setZoomLevels(values);
-    d->input->setCurrentZoomLevel(index);
+    d->input->setCurrentZoomLevel(index, activeText);
 }
 
 void KoZoomWidget::setCurrentZoomLevel(int index)

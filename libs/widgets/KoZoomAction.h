@@ -72,7 +72,7 @@ Q_SIGNALS:
 
     void sigUsePrintResolutionModeChanged(bool value);
 
-    void sigInternalUpdateZoomLevelsComboState(const QStringList &values, int index);
+    void sigInternalUpdateZoomLevelsComboState(const QStringList &values, int index, const QString &activeText);
     void sigInternalUpdateZoomLevelsSliderState(int size, int index);
     void sigInternalUpdateUsePrintResolutionMode(bool value);
 

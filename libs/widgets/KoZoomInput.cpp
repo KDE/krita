@@ -159,8 +159,13 @@ void KoZoomInput::setZoomLevels(const QStringList& levels)
 
 void KoZoomInput::setCurrentZoomLevel(int index)
 {
+    setCurrentZoomLevel(index, d->combo->itemText(index));
+}
+
+void KoZoomInput::setCurrentZoomLevel(int index, const QString &activeText)
+{
     d->combo->setCurrentIndex(index);
-    d->label->setText(d->combo->itemText(index));
+    d->label->setText(activeText);
 }
 
 void KoZoomInput::setCurrentZoomLevel(const QString& level)

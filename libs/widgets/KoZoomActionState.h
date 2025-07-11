@@ -24,6 +24,7 @@ public:
     QVector<ZoomItem> guiLevels;
     QVector<ZoomItem> realGuiLevels;
     int currentRealLevelIndex = 0;
+    QString currentRealLevelText;
 
     KoZoomActionState(const KoZoomState &state);
     void setZoomState(const KoZoomState &state);

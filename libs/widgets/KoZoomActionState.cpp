@@ -98,7 +98,7 @@ void KoZoomActionState::setZoomState(const KoZoomState &newState)
     auto textForFixedMode = [&] (const int index) {
         ZoomItem zoomItem = realGuiLevels[index];
         return i18nc("concatenate mode name (e.g. \"Fit Page\") and real zoom percent string", "%1 (%2)",
-            get<QString>(zoomItem),
+            std::get<QString>(zoomItem),
             zoomToString(newState.zoom));
     };
 
@@ -118,7 +118,7 @@ void KoZoomActionState::setZoomState(const KoZoomState &newState)
     case KoZoomMode::ZOOM_CONSTANT:
     default:
         currentRealLevelIndex = proposedCurrentIndex;
-        currentRealLevelText = get<QString>(realGuiLevels[currentRealLevelIndex]);
+        currentRealLevelText = std::get<QString>(realGuiLevels[currentRealLevelIndex]);
         break;
     }
 

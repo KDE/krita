@@ -303,7 +303,7 @@ protected:
     void setPreferredCenterFractionY(qreal);
     qreal preferredCenterFractionY() const;
 
-    void setDocumentOffset(const QPoint &offset);
+    void setDocumentOffset( QPoint &offset);
 
 
 private:

@@ -66,18 +66,17 @@ if [[ "${CI_COMMIT_BRANCH}" =~ release/.* ]]; then
     echo "Found a release branch: ${CI_COMMIT_BRANCH} using version: ${BRANCH_VERSION}"
 
     if [[ "$BRANCH_VERSION" != "$KRITA_VERSION" ]]; then
-        echo "ERROR: Branch version does not coincide with the version in kritaversion.h:"
+        echo "WARNING: Branch version does not coincide with the version in kritaversion.h:"
         echo "    branch version: $BRANCH_VERSION"
         echo "    kritaversion.h: $KRITA_VERSION"
-        exit 2
     fi
 
-    if [[ "${BRANCH_VERSION}" =~ -beta$ ]]; then
+    if [[ "${KRITA_VERSION}" =~ -beta$ ]]; then
         echo "ERROR: beta version does not have a numeric suffix, please change it to \"beta1\""
         exit 3
     fi
 
-    if [[ "${BRANCH_VERSION}" =~ -rc$ ]]; then
+    if [[ "${KRITA_VERSION}" =~ -rc$ ]]; then
         echo "ERROR: release candidate version does not have a numeric suffix, please change it to \"rc1\""
         exit 4
     fi

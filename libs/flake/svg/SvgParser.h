@@ -58,6 +58,10 @@ public:
     void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
     void setDefaultKraTextVersion(int version);
 
+    // Set whether to always consider shapes without fill or stroke explicitely set as inherited.
+    // By default, this is off, and the parser retrieves the fill from the graphicsContext.
+    void setInheritByDefault(const bool enable);
+
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 
@@ -231,6 +235,7 @@ private:
     QString m_documentDescription;
     QVector<KoID> m_warnings;
     QMap<KoShape *, QTransform> m_shapeParentTransform;
+    bool m_inheritByDefault = false;
 };
 
 #endif

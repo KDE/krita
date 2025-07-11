@@ -30,7 +30,7 @@ public:
     ~SvgStyleParser();
 
     /// Parses specified style attributes
-    void parseStyle(const SvgStyles &styles);
+    void parseStyle(const SvgStyles &styles, const bool inheritByDefault = false);
 
     /// Parses font attributes
     void parseFont(const SvgStyles &styles);

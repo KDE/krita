@@ -203,6 +203,11 @@ void SvgParser::setDefaultKraTextVersion(int version)
     m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
 }
 
+void SvgParser::setInheritByDefault(const bool enable)
+{
+    m_inheritByDefault = enable;
+}
+
 QList<KoShape*> SvgParser::shapes() const
 {
     return m_shapes;
@@ -940,7 +945,7 @@ void SvgParser::uploadStyleToContext(const QDomElement &e)
 {
     SvgStyles styles = m_context.styleParser().collectStyles(e);
     m_context.styleParser().parseFont(styles);
-    m_context.styleParser().parseStyle(styles);
+    m_context.styleParser().parseStyle(styles, m_inheritByDefault);
 }
 
 void SvgParser::applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
@@ -1001,7 +1006,7 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF 
     if (!gc)
         return;
 
-    m_context.styleParser().parseStyle(styles);
+    m_context.styleParser().parseStyle(styles, m_inheritByDefault);
 
     if (!obj)
         return;
@@ -1200,6 +1205,8 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));
             }
         }
+    } else if (gc->fillType == SvgGraphicsContext::Inherit) {
+        shape->setInheritBackground(true);
     }
 
     KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
@@ -1266,6 +1273,8 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
             applyDashes(gc->stroke, stroke);
             shape->setStroke(stroke);
         }
+    } else if (gc->strokeType == SvgGraphicsContext::Inherit) {
+        shape->setInheritStroke(true);
     }
 }
 

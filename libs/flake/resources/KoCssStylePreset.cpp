@@ -144,13 +144,15 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
                 modifiedProps.removeProperty(p);
             }
         }
-        // Always remove inline size, it is shape-specific.
-        if (p == KoSvgTextProperties::InlineSizeId) {
-            modifiedProps.removeProperty(p);
-        }
+
     }
     // This one is added after removing, because otherwise, the type is removed...
     modifiedProps.setProperty(KoSvgTextProperties::KraTextStyleType, type);
+    // Always remove inline size, it is shape-specific.
+    modifiedProps.removeProperty(KoSvgTextProperties::InlineSizeId);
+    // Remove fill and stroke for now as we have no widgets for them.
+    modifiedProps.removeProperty(KoSvgTextProperties::FillId);
+    modifiedProps.removeProperty(KoSvgTextProperties::StrokeId);
 
     sampleText->setPropertiesAtPos(-1, modifiedProps);
 
@@ -185,14 +187,16 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
             }
 
             newShape->insertRichText(newShape->posForIndex(before.size()), sampleText);
+
             d->shape.reset(newShape);
         }
     }
 
-    d->shape->debugParsing();
     // Don't d->shape->cleanup() here, as it *can* lead to the sample getting cleaned up.
+    d->shape->cleanUp();
     updateThumbnail();
     setValid(true);
+    setDirty(true);
 }
 
 Qt::Alignment KoCssStylePreset::alignSample() const

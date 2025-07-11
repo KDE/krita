@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-10 03:26+0000\n"
+"POT-Creation-Date: 2025-07-11 03:27+0000\n"
 "PO-Revision-Date: 2025-03-20 10:24+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -19758,7 +19758,7 @@ msgstr "Локальні ресурси"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:739
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:741
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23997,7 +23997,7 @@ msgid "Start"
 msgstr "Початок"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:646
 #, kde-format
 msgid "DEV BUILD"
 msgstr "ЗБІРКА У РОЗРОБЦІ"
@@ -30186,7 +30186,16 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Підтримайте розробку Krita!</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:230
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Сайт Krita</span></a></p>"
+
+#: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30197,7 +30206,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Початкові "
 "зауваження</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -30205,15 +30214,6 @@ msgid ""
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Підручник</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:235
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Сайт Krita</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
@@ -32013,23 +32013,23 @@ msgstr "Мова"
 msgid "English news is always up to date."
 msgstr "Новини англійською є завжди актуальними."
 
-#: libs/ui/KisWelcomePageWidget.cpp:667
+#: libs/ui/KisWelcomePageWidget.cpp:669
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Забути «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:760
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Доступна нова версія Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:787
+#: libs/ui/KisWelcomePageWidget.cpp:789
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Під час спроби оновити програму сталася помилка"
 
-#: libs/ui/KisWelcomePageWidget.cpp:793
+#: libs/ui/KisWelcomePageWidget.cpp:795
 #, kde-format
 msgid "Restart is required."
 msgstr "Потрібне перезавантаження."
@@ -47730,7 +47730,7 @@ msgstr "У документі не виявлено профілю кольор�
 msgid "Unknown error: %1"
 msgstr "Невідома помилка: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:534
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47740,7 +47740,7 @@ msgstr ""
 "Яскравість зображення буде перетворено до повної роздільної здатності, а "
 "колірність буде зменшено удвічі в обох напрямках."
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:535
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47750,7 +47750,7 @@ msgstr ""
 "Яскравість зображення буде перетворено до повної роздільної здатності, а "
 "колірність буде зменшено удвічі у горизонтальному напрямку."
 
-#: plugins/impex/heif/HeifExport.cpp:530
+#: plugins/impex/heif/HeifExport.cpp:536
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47759,21 +47759,21 @@ msgstr ""
 "І яскравість і колірність зображення буде перетворено до повної роздільної "
 "здатності."
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:545
+#: plugins/impex/heif/HeifExport.cpp:551
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -47787,7 +47787,7 @@ msgstr ""
 "2048). Рекомендовано для зображень із високим динамічним діапазоном там, де "
 "важлива абсолютна яскравість."
 
-#: plugins/impex/heif/HeifExport.cpp:547
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -47801,14 +47801,14 @@ msgstr ""
 "зображень із високим динамічним діапазоном там, де дисплей не здатен "
 "показувати кольори високого динамічного діапазону."
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Зберегти пігменти, закодувати PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:554
+#: plugins/impex/heif/HeifExport.cpp:560
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -47821,14 +47821,14 @@ msgstr ""
 "квантизації сприйняття (також відомої як крива SMPTE 2048). Рекомендовано "
 "для зображень там, де важлива абсолютна яскравість."
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Зберегти пігменти, закодувати HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -47840,14 +47840,14 @@ msgstr ""
 "гібридної логарифмічної гамми. Рекомендовано для зображень там, де показ "
 "відбуватиметься без використання PQ."
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Зберегти пігменти, закодувати SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -47861,13 +47861,13 @@ msgstr ""
 "форматі з рухомою крапкою. Цей пункт призначено для інвертування такої "
 "поведінки."
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Без змін, обрізати"
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

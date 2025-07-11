@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-10 03:26+0000\n"
+"POT-Creation-Date: 2025-07-11 03:27+0000\n"
 "PO-Revision-Date: 2025-07-06 11:07+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19543,7 +19543,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:739
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:741
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23743,7 +23743,7 @@ msgid "Start"
 msgstr "Inici"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:646
 #, kde-format
 msgid "DEV BUILD"
 msgstr "CONSTRUCCIÓ DEV"
@@ -29847,7 +29847,16 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Ajudeu el desenvolupament del Krita!</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:230
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Lloc web del Krita</span></a></p>"
+
+#: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -29858,23 +29867,14 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Com començar</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
-#, kde-format
-msgid ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
-msgstr ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
-
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Lloc web del Krita</span></a></p>"
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
@@ -31671,23 +31671,23 @@ msgstr "Idioma"
 msgid "English news is always up to date."
 msgstr "Les notícies en anglès sempre estan actualitzades."
 
-#: libs/ui/KisWelcomePageWidget.cpp:667
+#: libs/ui/KisWelcomePageWidget.cpp:669
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Oblida «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:760
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Hi ha disponible una versió nova del Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:787
+#: libs/ui/KisWelcomePageWidget.cpp:789
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "S'ha produït un error durant l'actualització"
 
-#: libs/ui/KisWelcomePageWidget.cpp:793
+#: libs/ui/KisWelcomePageWidget.cpp:795
 #, kde-format
 msgid "Restart is required."
 msgstr "Cal reiniciar."
@@ -47214,7 +47214,7 @@ msgstr "No s'ha trobat el perfil de color en el document."
 msgid "Unknown error: %1"
 msgstr "Error desconegut: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:534
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47224,7 +47224,7 @@ msgstr ""
 "La brillantor de la imatge estarà a màxima resolució, mentre que la "
 "coloració es reduirà a la meitat en ambdues dimensions."
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:535
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47234,7 +47234,7 @@ msgstr ""
 "La brillantor de la imatge estarà a màxima resolució, mentre que la "
 "coloració reduirà a la meitat horitzontalment."
 
-#: plugins/impex/heif/HeifExport.cpp:530
+#: plugins/impex/heif/HeifExport.cpp:536
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47243,21 +47243,21 @@ msgstr ""
 "Tant la brillantor com la coloració de la imatge estaran a la màxima "
 "resolució."
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec. 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec. 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:545
+#: plugins/impex/heif/HeifExport.cpp:551
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -47270,7 +47270,7 @@ msgstr ""
 "amb una corba quantificadora de percepció (també coneguda com a corba SMPTE "
 "2048). Recomanat per a imatges en HDR on la brillantor absoluta és important."
 
-#: plugins/impex/heif/HeifExport.cpp:547
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -47283,14 +47283,14 @@ msgstr ""
 "amb una corba Hybrid Log Gamma. Recomanat per a imatges en HDR on és "
 "possible que la pantalla no comprengui HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Conserva els colorants, codifica en PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:554
+#: plugins/impex/heif/HeifExport.cpp:560
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -47303,14 +47303,14 @@ msgstr ""
 "quantificadora de percepció (també coneguda com a corba SMPTE 2048). "
 "Recomanat per a imatges on la brillantor absoluta és important."
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Conserva els colorants, codifica en HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -47322,14 +47322,14 @@ msgstr ""
 "Hybrid Log Gamma. Recomanat per a imatges destinades a pantalles que no "
 "poden entendre PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Conserva els colorants, codifica en SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -47342,13 +47342,13 @@ msgstr ""
 "El Krita sempre obrirà les imatges com aquestes com a coma flotant lineal, "
 "aquesta opció hi és per a revertir això"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sense canvis, escurça"
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

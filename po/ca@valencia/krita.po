@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-10 03:26+0000\n"
-"PO-Revision-Date: 2025-07-02 09:49+0200\n"
+"POT-Creation-Date: 2025-07-11 03:27+0000\n"
+"PO-Revision-Date: 2025-07-06 11:07+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19544,7 +19544,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:739
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:741
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23749,7 +23749,7 @@ msgid "Start"
 msgstr "Inici"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:646
 #, kde-format
 msgid "DEV BUILD"
 msgstr "CONSTRUCCIÓ DEV"
@@ -23865,7 +23865,6 @@ msgstr "Notícies"
 msgid "News options"
 msgstr "Opcions de les notícies"
 
-# skip-rule: t-mot_rep
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1377
 #, kde-format
@@ -25033,7 +25032,8 @@ msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
 "together with the canvas"
 msgstr ""
-"Determina si els comprovadors estaran quiets o si es desplaçaran amb el llenç"
+"Determina si els quadros d'escacs estaran quiets o si es desplaçaran amb el "
+"llenç"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:579
@@ -25918,7 +25918,7 @@ msgstr ""
 "dependre del DPI de la pantalla (el qual era un error).\n"
 "En Krita 4.4.3, este error s'ha esmenat, el qual pot fer que els fitxers "
 "creats en versions anteriors es vegen diferent.\n"
-"Per a restaurar el comportament anterior, podeu obligar a Krita a utilitzar "
+"Per a restaurar el comportament anterior, podeu obligar Krita a utilitzar "
 "DPI de la pantalla per als tipus de lletra introduint-lo en este camp."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
@@ -26439,7 +26439,7 @@ msgstr "Ca&pa actual"
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:27
 #, kde-format
 msgid "Merge strategy:"
-msgstr "Estratègia de barreja:"
+msgstr "Estratègia de fusió:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgMissingColorProfile)
 #: libs/ui/forms/wdgMissingColorProfile.ui:20
@@ -26627,7 +26627,6 @@ msgstr ""
 msgid "As &raster layer"
 msgstr "Com a capa &ràster"
 
-# skip-rule: rst-link0italic,rst-italic2
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
@@ -27659,14 +27658,12 @@ msgstr "Corbada"
 msgid "Sine"
 msgstr "Sinusoidal"
 
-# skip-rule: punctuation-period
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:363
 #, kde-format
 msgid "Sphere Inc."
 msgstr "Esfera, creixent"
 
-# skip-rule: punctuation-period
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:368
 #, kde-format
@@ -27925,7 +27922,7 @@ msgid ""
 "hardware-dependent"
 msgstr ""
 "La quantitat de suavitzat que haurà de fer Krita per al sensor de velocitat. "
-"Este valor depén molt del maquinari."
+"Este valor depén molt del maquinari"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:220
@@ -29856,7 +29853,16 @@ msgstr ""
 "decoration: underline; color:%1;\">Ajudeu el desenvolupament de Krita!</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:230
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Lloc web de Krita</span></a></p>"
+
+#: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -29867,23 +29873,14 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Com començar</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
-#, kde-format
-msgid ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
-msgstr ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
-
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Lloc web de Krita</span></a></p>"
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
@@ -31680,23 +31677,23 @@ msgstr "Idioma"
 msgid "English news is always up to date."
 msgstr "Les notícies en anglés sempre estan actualitzades."
 
-#: libs/ui/KisWelcomePageWidget.cpp:667
+#: libs/ui/KisWelcomePageWidget.cpp:669
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Oblida «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:760
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Hi ha disponible una versió nova de Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:787
+#: libs/ui/KisWelcomePageWidget.cpp:789
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "S'ha produït un error durant l'actualització"
 
-#: libs/ui/KisWelcomePageWidget.cpp:793
+#: libs/ui/KisWelcomePageWidget.cpp:795
 #, kde-format
 msgid "Restart is required."
 msgstr "Cal reiniciar."
@@ -41129,7 +41126,7 @@ msgstr "Desplaçament:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
 #, kde-format
 msgid "Patches"
-msgstr "Patrons"
+msgstr "Pedaços"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -43007,7 +43004,6 @@ msgstr "No s'ha pogut carregar el mòdul «pykrita» integrat"
 msgid "Unexpected error initializing python plugin."
 msgstr "S'ha produït un error inesperat en restablir el connector en Python."
 
-# skip-rule: kct-toolbar
 #. i18n: ectx: property (whatsThis), widget (QIconButton, actionIcon)
 #. i18n: ectx: property (whatsThis), widget (QIconButton, configPageIcon)
 #: plugins/extensions/pykrita/plugin/info.ui:31
@@ -44114,7 +44110,6 @@ msgstr "Clic"
 msgid "Double Click"
 msgstr "Doble clic"
 
-# skip-rule: kct-tab
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:64
 #, kde-format
@@ -44168,7 +44163,6 @@ msgstr "Cercle en sentit horari"
 msgid "Circle Counterclockwise"
 msgstr "Cercle en sentit antihorari"
 
-# skip-rule: kct-tab
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
 #, kde-format
@@ -47227,7 +47221,7 @@ msgstr "No s'ha trobat el perfil de color en el document."
 msgid "Unknown error: %1"
 msgstr "S'ha produït un error desconegut: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:534
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47237,7 +47231,7 @@ msgstr ""
 "La brillantor de la imatge estarà a màxima resolució, mentre que la "
 "coloració es reduirà a la meitat en ambdues dimensions."
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:535
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47247,7 +47241,7 @@ msgstr ""
 "La brillantor de la imatge estarà a màxima resolució, mentre que la "
 "coloració reduirà a la meitat horitzontalment."
 
-#: plugins/impex/heif/HeifExport.cpp:530
+#: plugins/impex/heif/HeifExport.cpp:536
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47256,21 +47250,21 @@ msgstr ""
 "Tant la brillantor com la coloració de la imatge estaran a la màxima "
 "resolució."
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec. 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec. 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:545
+#: plugins/impex/heif/HeifExport.cpp:551
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -47283,7 +47277,7 @@ msgstr ""
 "amb una corba quantificadora de percepció (també coneguda com a corba SMPTE "
 "2048). Recomanat per a imatges en HDR on la brillantor absoluta és important."
 
-#: plugins/impex/heif/HeifExport.cpp:547
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -47296,14 +47290,14 @@ msgstr ""
 "amb una corba Hybrid Log Gamma. Recomanat per a imatges en HDR on és "
 "possible que la pantalla no comprenga HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Conserva els colorants, codifica en PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:554
+#: plugins/impex/heif/HeifExport.cpp:560
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -47316,14 +47310,14 @@ msgstr ""
 "quantificadora de percepció (també coneguda com a corba SMPTE 2048). "
 "Recomanat per a imatges on la brillantor absoluta és important."
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Conserva els colorants, codifica en HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -47335,14 +47329,14 @@ msgstr ""
 "Hybrid Log Gamma. Recomanat per a imatges destinades a pantalles que no "
 "poden entendre PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Conserva els colorants, codifica en SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -47355,13 +47349,13 @@ msgstr ""
 "Krita sempre obrirà les imatges com estes com a coma flotant lineal, esta "
 "opció hi és per a revertir açò"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sense canvis, escurça"
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48596,7 +48590,6 @@ msgstr ""
 "el valor predeterminat del codificador.\n"
 "S'utilitza per a la codificació modular."
 
-# skip-rule: t-sp_pu
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:734
 #, kde-format
@@ -50597,7 +50590,7 @@ msgid ""
 "Using a predictor can improve the compression (mostly for LZW and deflate.)"
 msgstr ""
 "Utilitzant un predictor es pot millorar la compressió (principalment per a "
-"LZW i «deflate»)."
+"LZW i «deflate»)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkPhotoshop)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:79
@@ -56437,6 +56430,7 @@ msgstr ""
 msgid "Enable Script"
 msgstr "Activa l'script"
 
+# skip-rule: kct-snapshot
 #. i18n: ectx: property (text), widget (QPushButton, create_button)
 #: plugins/python/krita_script_starter/bbdkss.ui:190
 #, kde-format
@@ -59440,7 +59434,7 @@ msgstr "Ambdós"
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
 #, kde-format
 msgid "S&VG Source Only"
-msgstr "Només codi font de SVG"
+msgstr "Només codi font de S&VG"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:84

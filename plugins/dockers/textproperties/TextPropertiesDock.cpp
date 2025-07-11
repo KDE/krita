@@ -50,6 +50,7 @@
 #include "LocaleHandler.h"
 #include "CssQmlUnitConverter.h"
 #include "TextPropertyConfigModel.h"
+#include <KisSurfaceColorSpaceWrapper.h>
 
 #include "TextPropertyConfigDialog.h"
 
@@ -124,6 +125,23 @@ TextPropertiesDock::TextPropertiesDock()
     , d(new Private())
 {
     m_quickWidget = new QQuickWidget(this);
+
+    QSurfaceFormat format;
+
+    {
+        /**
+         * Our version of Qt has a special handling of the color
+         * space passed to the surface of the QQuickWidget. It will
+         * allow it to render correctly on a Rec2020PQ window.
+         */
+        format.setRedBufferSize(8);
+        format.setGreenBufferSize(8);
+        format.setBlueBufferSize(8);
+        format.setAlphaBufferSize(8);
+        format.setColorSpace(KisSurfaceColorSpaceWrapper::makeSRGBColorSpace());
+    }
+
+    m_quickWidget->setFormat(format);
     setWidget(m_quickWidget);
     setEnabled(true);
 

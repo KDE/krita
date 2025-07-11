@@ -25,14 +25,9 @@ public:
         ZOOM_PAGE     = 1,  ///< zoom page
         ZOOM_WIDTH    = 2,  ///< zoom pagewidth
         ZOOM_HEIGHT   = 16,  ///< zoom pageheight
-        ZOOM_PIXELS   = 4   ///< zoom to actual pixels TODO: remove!!!
     };
 
     Q_DECLARE_FLAGS(Modes, Mode)
-
-    /// \param mode the mode name
-    /// \return the to Mode converted QString \c mode
-    static Mode toMode(const QString& mode);
 
     /// \return the to QString converted and translated Mode \c mode
     static QString toString(Mode mode);

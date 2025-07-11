@@ -14,53 +14,21 @@
 #include <ksharedconfig.h>
 
 #include <cmath>
-
-const char* const KoZoomMode::modes[] =
-{
-    QT_TRANSLATE_NOOP("", "%1%"),
-    QT_TRANSLATE_NOOP("", "Fit View"),
-    QT_TRANSLATE_NOOP("", "Fit View Width"),
-    0,
-    QT_TRANSLATE_NOOP("", "Actual Pixels"),
-    0,
-    0,
-    0,
-    QT_TRANSLATE_NOOP("", "Fit Text Width"),
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    QT_TRANSLATE_NOOP("", "Fit View Height")
-};
+#include "kis_assert.h"
 
 QString KoZoomMode::toString(Mode mode)
 {
-    return i18n(modes[mode]);
-}
-
-KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
-{
-    if (mode == i18n(modes[ZOOM_PAGE]))
-        return ZOOM_PAGE;
-    else
-        if (mode == i18n(modes[ZOOM_WIDTH]))
-            return ZOOM_WIDTH;
-        else
-            if (mode == i18n(modes[ZOOM_PIXELS]))
-                return ZOOM_PIXELS;
-            else
-                if (mode == i18n(modes[ZOOM_HEIGHT]))
-                    return ZOOM_HEIGHT;
-                else
-                    return ZOOM_CONSTANT;
-    // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
-    // or whatever, it's automatically converted. ZOOM_CONSTANT is
-    // changeable, whereas all other zoom modes (non-constants) are normal
-    // text like "Fit to xxx". they let the view grow/shrink according
-    // to windowsize, hence the term 'non-constant'
+    switch (mode) {
+    case KoZoomMode::ZOOM_CONSTANT:
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "constant zoom has no user-friendly representation", "XXX");
+    case KoZoomMode::ZOOM_PAGE:
+        return i18n("Fit View");
+    case KoZoomMode::ZOOM_WIDTH:
+        return i18n("Fit Width");
+    case KoZoomMode::ZOOM_HEIGHT:
+        return i18n("Fit Height");
+    }
+    return "";
 }
 
 QVector<qreal> KoZoomMode::generateStandardZoomLevels(qreal minZoom, qreal maxZoom)
@@ -128,9 +96,6 @@ QDebug operator<<(QDebug dbg, const KoZoomMode::Mode &mode)
         break;
     case KoZoomMode::ZOOM_HEIGHT:
         dbg << "ZOOM_HEIGHT";
-        break;
-    case KoZoomMode::ZOOM_PIXELS:
-        dbg << "ZOOM_PIXELS";
         break;
     default:
         dbg << "UNKNOWN";

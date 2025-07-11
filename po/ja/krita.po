@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 01:59+0000\n"
+"POT-Creation-Date: 2025-07-11 01:59+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16031,14 +16031,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: krita/main.cc:724 libs/ui/KisApplication.cpp:449
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:449
 #: libs/ui/KisApplication.cpp:727
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:725
+#: krita/main.cc:749
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16478,7 +16478,7 @@ msgstr "単純なパスシェイプ"
 msgid "%1 Options"
 msgstr "%1 オプション"
 
-#: libs/flake/KoToolManager.cpp:613
+#: libs/flake/KoToolManager.cpp:605
 #, kde-format
 msgid "Active tool: %1"
 msgstr "アクティブなツール: %1"
@@ -20365,8 +20365,8 @@ msgstr "選択したセグメントでパスを分割するには B を押して
 msgid "Edit Shapes Tool"
 msgstr "形状編集ツール"
 
-#: libs/flake/tools/KoZoomToolFactory.cpp:17
-#: libs/widgets/KoZoomController_p.h:28 libs/widgets/KoZoomWidget.cpp:52
+#: libs/flake/tools/KoZoomToolFactory.cpp:17 libs/ui/kis_zoom_manager.cc:68
+#: libs/widgets/KoZoomWidget.cpp:55
 #, kde-format
 msgid "Zoom"
 msgstr "倍率変更"
@@ -21066,7 +21066,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:372
+#: libs/ui/canvas/kis_canvas_controller.cpp:412
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -21125,7 +21125,7 @@ msgstr "画像をインポート"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
+#: libs/ui/KisDocument.cpp:2636 plugins/impex/psd/psd_loader.cpp:192
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -21291,8 +21291,7 @@ msgstr "回転 (Y)"
 msgid "Rotation (Z)"
 msgstr "回転 (Z)"
 
-#: libs/image/kis_layer.cc:275 libs/widgets/KoZoomAction.cpp:189
-#: libs/widgets/KoZoomAction.cpp:200
+#: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -21481,8 +21480,8 @@ msgid "Processing"
 msgstr "処理中"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1389
-#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1388
+#: libs/ui/KisMainWindow.cpp:1758 libs/ui/KisMainWindow.cpp:1771
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22234,8 +22233,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE 画像"
 
-#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2130
-#: libs/ui/KisMainWindow.cpp:2209
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2208
 #, kde-format
 msgid "Import frames"
 msgstr "フレームをインポート"
@@ -23526,7 +23525,7 @@ msgstr "アウト"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1185
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23584,19 +23583,19 @@ msgstr "ローカルリソース"
 #: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
 #: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
 #: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
-#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
-#: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
-#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
-#: libs/ui/KisMainWindow.cpp:1170 libs/ui/KisMainWindow.cpp:1267
-#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:1999
-#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2197
-#: libs/ui/KisMainWindow.cpp:2216 libs/ui/KisMainWindow.cpp:2841
+#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
+#: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisMainWindow.cpp:970 libs/ui/KisMainWindow.cpp:1040
+#: libs/ui/KisMainWindow.cpp:1169 libs/ui/KisMainWindow.cpp:1266
+#: libs/ui/KisMainWindow.cpp:1989 libs/ui/KisMainWindow.cpp:1998
+#: libs/ui/KisMainWindow.cpp:2137 libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2215 libs/ui/KisMainWindow.cpp:2840
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:698 libs/ui/KisView.cpp:1188
-#: libs/ui/KisWelcomePageWidget.cpp:737 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisWelcomePageWidget.cpp:739 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
@@ -24140,7 +24139,7 @@ msgid "Delete resource"
 msgstr "リソースを削除"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2637
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -24483,7 +24482,7 @@ msgid "Select All"
 msgstr "すべて選択"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:793
+#: libs/ui/KisView.cpp:779
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "塗りつぶし"
@@ -24545,7 +24544,7 @@ msgid "Paste shapes"
 msgstr "シェイプを貼り付け"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:607
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
 #, kde-format
 msgid "(pasted)"
 msgstr "(貼り付け)"
@@ -24616,7 +24615,7 @@ msgstr ""
 "す。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2238
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "アニメーションを出力"
@@ -26154,31 +26153,31 @@ msgstr "FFmpeg のバージョン:"
 msgid "None"
 msgstr "なし"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:171
+#: libs/ui/canvas/kis_canvas_controller.cpp:222
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "左右反転: %1 "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:400
 #, kde-format
 msgid "OFF"
 msgstr "オフ"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:400
 #, kde-format
 msgid "ON"
 msgstr "オン"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:233
+#: libs/ui/canvas/kis_canvas_controller.cpp:269
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "回転: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:293
+#: libs/ui/canvas/kis_canvas_controller.cpp:333
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26188,24 +26187,24 @@ msgstr ""
 "いません。\n"
 "ラップアラウンドモードを視覚化するには OpenGL を使用可能にしてください。"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:399
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "高速プレビューモード: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:366
+#: libs/ui/canvas/kis_canvas_controller.cpp:406
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "高速プレビューは OpenGL がアクティブな時のみにサポートされます"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:372
+#: libs/ui/canvas/kis_canvas_controller.cpp:412
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "最近傍"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:373
+#: libs/ui/canvas/kis_canvas_controller.cpp:413
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26216,7 +26215,7 @@ msgstr ""
 "モードかトリリニアでサポートされています。\n"
 "現在のモードは%1です"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:377
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -26694,7 +26693,7 @@ msgid "Numerical"
 msgstr "数字順"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Import Images"
 msgstr "画像をインポート"
@@ -26811,7 +26810,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "新しいスタイル名を入力"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2648
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27790,7 +27789,7 @@ msgid "Start"
 msgstr "開始"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
 #, kde-format
 msgid "DEV BUILD"
 msgstr "開発ビルド"
@@ -30910,7 +30909,7 @@ msgstr "現在のブラシプリセット"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1015
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -32309,7 +32308,7 @@ msgid "&Filter:"
 msgstr "フィルタ(&F):"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupPrintSize)
-#: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:121
+#: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:130
 #, kde-format
 msgid "Print Size"
 msgstr "印刷サイズ"
@@ -32768,13 +32767,13 @@ msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "「<i>キャンバスを回転</i>」操作はキャンバスを回転させます。"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:38
 #, kde-format
 msgid "Rotate Mode"
 msgstr "回転モード"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "15度毎回転モード"
@@ -33147,78 +33146,78 @@ msgstr "フリーハンド選択ツールをアクティブ化"
 msgid "Activate with Other Color"
 msgstr "他の色でアクティブ化"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:80
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "キャンバスの表示倍率変更"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
 "「<i>キャンバスの表示倍率変更</i>」操作はキャンバスの表示倍率を変更します"
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:84
 #, kde-format
 msgid "Zoom Mode"
 msgstr "表示倍率変更モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:85
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "個別拡大モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:86
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "相対倍率変更モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:87
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "段階的倍率変更モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:88
 #, kde-format
 msgid "Zoom In"
 msgstr "倍率拡大"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:89
 #, kde-format
 msgid "Zoom Out"
 msgstr "倍率縮小"
 
-#: libs/ui/input/kis_zoom_action.cpp:116
+#: libs/ui/input/kis_zoom_action.cpp:90
 #, kde-format
 msgid "Zoom In To Cursor"
 msgstr "カーソル位置を中心に拡大"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:91
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr "カーソル位置を中心に縮小"
 
-#: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:92 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "倍率を100%にリセット"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:93
 #, kde-format
 msgid "Fit to View"
 msgstr "表示領域に合わせる"
 
-#: libs/ui/input/kis_zoom_action.cpp:120
+#: libs/ui/input/kis_zoom_action.cpp:94
 #, kde-format
 msgid "Fit to View Width"
 msgstr "表示領域の幅に合わせる"
 
-#: libs/ui/input/kis_zoom_action.cpp:121
+#: libs/ui/input/kis_zoom_action.cpp:95
 #, kde-format
 msgid "Fit to View Height"
 msgstr "表示領域の高さに合わせる"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:36
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "キャンバスの倍率を変更して回転"
@@ -33369,7 +33368,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "フィルタレイヤーを変更"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:699
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:685
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34184,7 +34183,16 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Krita の開発を支援する！</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
+#: libs/ui/kis_splash_screen.cpp:231
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita ウェブサイト</span></a></p>"
+
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -34195,7 +34203,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">はじめに</span></"
 "a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -34203,15 +34211,6 @@ msgid ""
 msgstr ""
 "<p><a href=\"https://docs.krita.org/ja\"><span style=\" text-decoration: "
 "underline; color:%1;\">マニュアル</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:236
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita ウェブサイト</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
@@ -34355,7 +34354,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:324
+#: libs/ui/kis_zoom_manager.cc:256
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -34832,33 +34831,33 @@ msgstr "保存時に問題が発生しました。"
 msgid "Finished saving %1"
 msgstr "保存が完了しました %1"
 
-#: libs/ui/KisDocument.cpp:1469
+#: libs/ui/KisDocument.cpp:1470
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "自動保存中... %1"
 
-#: libs/ui/KisDocument.cpp:1477
+#: libs/ui/KisDocument.cpp:1478
 #, kde-format
 msgid "Autosaving..."
 msgstr "自動保存中..."
 
-#: libs/ui/KisDocument.cpp:1483
+#: libs/ui/KisDocument.cpp:1484
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "自動保存が延期されました: ドキュメントが使用中です..."
 
-#: libs/ui/KisDocument.cpp:1626
+#: libs/ui/KisDocument.cpp:1627
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "自動保存中のエラー %1: %2"
 
-#: libs/ui/KisDocument.cpp:1640
+#: libs/ui/KisDocument.cpp:1641
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "自動保存が完了しました %1"
 
-#: libs/ui/KisDocument.cpp:1897
+#: libs/ui/KisDocument.cpp:1898
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -34867,38 +34866,38 @@ msgstr ""
 "パスの形式が不正です\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1963
+#: libs/ui/KisDocument.cpp:1964
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "ファイル %1 がありません。"
 
-#: libs/ui/KisDocument.cpp:1992
+#: libs/ui/KisDocument.cpp:1993
 #, kde-format
 msgid "Opening document"
 msgstr "ドキュメントを開いています"
 
-#: libs/ui/KisDocument.cpp:2007
+#: libs/ui/KisDocument.cpp:2008
 #, kde-format
 msgid "Could not open %1."
 msgstr "%1 を開けませんでした。"
 
-#: libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisDocument.cpp:2019
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "%1 を開いている最中に問題が発生しました。"
 
-#: libs/ui/KisDocument.cpp:2156
+#: libs/ui/KisDocument.cpp:2157
 #, kde-format
 msgid "Not Saved"
 msgstr "未保存"
 
-#: libs/ui/KisDocument.cpp:2642
+#: libs/ui/KisDocument.cpp:2643
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "塗りつぶしの背景"
 
-#: libs/ui/KisDocument.cpp:2704
+#: libs/ui/KisDocument.cpp:2705
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -35318,64 +35317,64 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "レイヤーサムネイルを更新"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "スタイル"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "ドッキングパネル(&D)"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "ウィンドウ(&W)"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "新しいビュー(&V)"
 
-#: libs/ui/KisMainWindow.cpp:190
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "ワークスペース(&K)"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:585
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:318
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 ツールバーを表示"
 
-#: libs/ui/KisMainWindow.cpp:588
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "ツールバー %1 を非表示"
 
-#: libs/ui/KisMainWindow.cpp:1013
+#: libs/ui/KisMainWindow.cpp:1012
 #, kde-format
 msgid "Save as %1"
 msgstr "%1 として保存"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1040
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "ファイル %1 が存在しません。"
 
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Open Images"
 msgstr "画像を開く"
 
-#: libs/ui/KisMainWindow.cpp:1268
+#: libs/ui/KisMainWindow.cpp:1267
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35387,44 +35386,44 @@ msgstr ""
 "ものになったり、壊れたりする場合があります。\n"
 "元のファイルが無視されない場所を選んでください!"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Exporting"
 msgstr "エクスポート"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Saving As"
 msgstr "別名で保存"
 
-#: libs/ui/KisMainWindow.cpp:1738
+#: libs/ui/KisMainWindow.cpp:1737
 #, kde-format
 msgid "Create new document"
 msgstr "新しいドキュメントを作成"
 
-#: libs/ui/KisMainWindow.cpp:1762
+#: libs/ui/KisMainWindow.cpp:1761
 #, kde-format
 msgid "Custom Document"
 msgstr "カスタムドキュメント"
 
-#: libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1773
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "クリップボードより作成"
 
-#: libs/ui/KisMainWindow.cpp:1959
+#: libs/ui/KisMainWindow.cpp:1958
 #, kde-format
 msgid "Layers/Masks"
 msgstr "レイヤー/マスク"
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1984
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "リソースバンドルが有効になっていません。"
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1988
 #, kde-format
 msgid ""
 "\n"
@@ -35435,7 +35434,7 @@ msgstr ""
 "ブラシプリセットが存在しません。プリセットを持つバンドルを有効にして続行して"
 "ください。\n"
 
-#: libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:1998
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35446,7 +35445,7 @@ msgstr ""
 "\n"
 "ローカルリソースのみ使用可能です。"
 
-#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2216
+#: libs/ui/KisMainWindow.cpp:2137 libs/ui/KisMainWindow.cpp:2215
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35455,42 +35454,42 @@ msgstr ""
 "アニメーションのインポートを完了できませんでした:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "新しいドキュメントの作成に失敗しています。アニメーションのインポートが中止さ"
 "れました。"
 
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2628
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "ワークスペースをインポート(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/KisMainWindow.cpp:2643
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新しいワークスペース(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2648
+#: libs/ui/KisMainWindow.cpp:2647
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新しいワークスペース..."
 
-#: libs/ui/KisMainWindow.cpp:2692
+#: libs/ui/KisMainWindow.cpp:2691
 #, kde-format
 msgid "&%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2695
+#: libs/ui/KisMainWindow.cpp:2694
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2864
+#: libs/ui/KisMainWindow.cpp:2863
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35499,19 +35498,19 @@ msgstr ""
 "Krita LittleCMS カラーマネジメントプラグインはインストールされていません。"
 "Krita は終了します。"
 
-#: libs/ui/KisMainWindow.cpp:2880
+#: libs/ui/KisMainWindow.cpp:2879
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "インストールのエラー"
 
-#: libs/ui/KisMainWindow.cpp:2990
+#: libs/ui/KisMainWindow.cpp:2989
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "テーマ(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3049
+#: libs/ui/KisMainWindow.cpp:3048
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "スペーサーを拡大"
@@ -35827,27 +35826,27 @@ msgstr "利用可能な写真はありません。"
 msgid "Use This Template"
 msgstr "このテンプレートを使用する"
 
-#: libs/ui/KisView.cpp:768
+#: libs/ui/KisView.cpp:754
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "選択されたレイヤーではドラッグ＆ドロップで色を指定できません。"
 
-#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "レイヤーはロックされていてかつ非表示です"
 
-#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "レイヤーはロックされています"
 
-#: libs/ui/KisView.cpp:780 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "レイヤーは非表示です。"
 
-#: libs/ui/KisView.cpp:1189
+#: libs/ui/KisView.cpp:1175
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -35855,80 +35854,80 @@ msgid ""
 msgstr ""
 "<p>ドキュメント<b>'%1'</b>は内容変更されました。</p><p>保存しますか？</p>"
 
-#: libs/ui/KisView.cpp:1263
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Write Protected"
 msgstr "(書き込み保護)"
 
-#: libs/ui/KisView.cpp:1267
+#: libs/ui/KisView.cpp:1253
 #, kde-format
 msgid "Recovered"
 msgstr "復元"
 
-#: libs/ui/KisView.cpp:1421
+#: libs/ui/KisView.cpp:1355
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "浮動小数点ではソフトプルーフは働きません。"
 
-#: libs/ui/KisView.cpp:1426
+#: libs/ui/KisView.cpp:1360
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "ソフトプルーフ有効"
 
-#: libs/ui/KisView.cpp:1428
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "ソフトプルーフ無効"
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域警告は浮動小数点"
 
-#: libs/ui/KisView.cpp:1446
+#: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "色域警告有効"
 
-#: libs/ui/KisView.cpp:1448
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "ですがまだソフトプルーフは有効ではありません。"
 
-#: libs/ui/KisView.cpp:1451
+#: libs/ui/KisView.cpp:1385
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "色域警告無効"
 
-#: libs/ui/KisViewManager.cpp:795
+#: libs/ui/KisViewManager.cpp:803
 #, kde-format
 msgid "Active Author Profile"
 msgstr "アクティブな作者プロファイル"
 
-#: libs/ui/KisViewManager.cpp:925
+#: libs/ui/KisViewManager.cpp:933
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (コピー)"
 
-#: libs/ui/KisViewManager.cpp:1081 libs/ui/KisViewManager.cpp:1165
+#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "代わりの名前は既に使われています。より大きな数で手動で保存してください。"
 
-#: libs/ui/KisViewManager.cpp:1081
+#: libs/ui/KisViewManager.cpp:1089
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "増分バージョンを保存できませんでした"
 
-#: libs/ui/KisViewManager.cpp:1165
+#: libs/ui/KisViewManager.cpp:1173
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "増分バックアップを保存できませんでした"
 
-#: libs/ui/KisViewManager.cpp:1422
+#: libs/ui/KisViewManager.cpp:1430
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -35937,13 +35936,13 @@ msgstr ""
 "キャンバスのみ表示モードに移行する\n"
 "戻るには%1を押してください。."
 
-#: libs/ui/KisViewManager.cpp:1481
+#: libs/ui/KisViewManager.cpp:1491
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "リソースフォルダを開く"
 
-#: libs/ui/KisViewManager.cpp:1485
+#: libs/ui/KisViewManager.cpp:1495
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -35967,19 +35966,19 @@ msgstr ""
 "<p><b>プライベートアプリの場所</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1500
+#: libs/ui/KisViewManager.cpp:1510
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "ユーザの AppData フォルダを開く(&U)"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1511
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "プライベートアプリの場所を開く(&P)"
 
-#: libs/ui/KisViewManager.cpp:1614 libs/ui/KisViewManager.cpp:1632
+#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -36010,23 +36009,23 @@ msgstr "言語"
 msgid "English news is always up to date."
 msgstr "英語のお知らせが更新されています"
 
-#: libs/ui/KisWelcomePageWidget.cpp:665
+#: libs/ui/KisWelcomePageWidget.cpp:667
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\"を消去"
 
-#: libs/ui/KisWelcomePageWidget.cpp:756
+#: libs/ui/KisWelcomePageWidget.cpp:758
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "新しいバージョンの Krita があります。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:785
+#: libs/ui/KisWelcomePageWidget.cpp:787
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "アップデート中にエラーが発生しました。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:791
+#: libs/ui/KisWelcomePageWidget.cpp:793
 #, kde-format
 msgid "Restart is required."
 msgstr "再起動が必要です。"
@@ -39935,12 +39934,12 @@ msgstr "距離:"
 msgid "Tool Options"
 msgstr "ツールのオプション"
 
-#: libs/widgets/KoZoomWidget.cpp:124
+#: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
 msgstr "ピクセルサイズ"
 
-#: libs/widgets/KoZoomWidget.cpp:128
+#: libs/widgets/KoZoomWidget.cpp:137
 #, kde-format
 msgid ""
 "Map the displayed canvas size between pixel size or print size\n"
@@ -45974,8 +45973,8 @@ msgstr ""
 "%1 の保存に失敗しました\n"
 "理由: %2"
 
-#: plugins/extensions/imagesplit/imagesplit.cpp:172
-#: plugins/extensions/imagesplit/imagesplit.cpp:247
+#: plugins/extensions/imagesplit/imagesplit.cpp:170
+#: plugins/extensions/imagesplit/imagesplit.cpp:245
 #, kde-format
 msgid "Save Image on Split"
 msgstr "画像を分割して保存"
@@ -51706,7 +51705,7 @@ msgstr "色プロファイルがこのドキュメントに見つかりません
 msgid "Unknown error: %1"
 msgstr "未知のエラー: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:527
+#: plugins/impex/heif/HeifExport.cpp:533
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -51714,7 +51713,7 @@ msgid ""
 "colorfulness will be halved in both dimensions."
 msgstr "画像の明度はフル解像度で、彩度は両方向で半分になります。"
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:534
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -51722,28 +51721,28 @@ msgid ""
 "colorfulness will be halved horizontally."
 msgstr "画像の明度はフル解像度で、彩度は水平方向で半分になります。"
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:535
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "画像の明度と彩度はフル解像度で表示されます。"
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:549
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:549
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:550
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -51755,7 +51754,7 @@ msgstr ""
 "画像はまず Rec 2020 線形に変換され、その後、PQ カーブ (SMPTE 2048 曲線とも呼"
 "ばれる) でエンコードされます。絶対的な明るさが重要な HDR 画像におすすめです。"
 
-#: plugins/impex/heif/HeifExport.cpp:546
+#: plugins/impex/heif/HeifExport.cpp:552
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -51768,14 +51767,14 @@ msgstr ""
 "エンコードされます。HDR 画像で、ディスプレイが HDR に対応していない場合におす"
 "すめです。"
 
-#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "色彩を保持し、PQ でエンコード"
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
 #, kde-format
 msgctxt "@tooltip"
@@ -51787,14 +51786,14 @@ msgstr ""
 "画像はまず線形化され、その後、PQ カーブ (SMPTE 2048 曲線とも呼ばれる) でエン"
 "コードされます。絶対的な明度が重要な画像におすすめです。"
 
-#: plugins/impex/heif/HeifExport.cpp:557
+#: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "色彩を保持し、HLG でエンコード"
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
 #, kde-format
 msgctxt "@tooltip"
@@ -51805,14 +51804,14 @@ msgstr ""
 "画像はまず線形化され、その後、ハイブリッド・ログ = ガンマ曲線でエンコードされ"
 "ます。PQ に対応していないディスプレイ向けの画像におすすめです。"
 
-#: plugins/impex/heif/HeifExport.cpp:562
+#: plugins/impex/heif/HeifExport.cpp:568
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "色彩を保持し、SMPTE ST 428 でエンコード"
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
 #, kde-format
 msgctxt "@tooltip"
@@ -51825,13 +51824,13 @@ msgstr ""
 "このような画像を線形浮動小数点として開きます。このオプションはそれを元に戻す"
 "ためのものです"
 
-#: plugins/impex/heif/HeifExport.cpp:568
+#: plugins/impex/heif/HeifExport.cpp:574
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "変更なし、クリップ"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

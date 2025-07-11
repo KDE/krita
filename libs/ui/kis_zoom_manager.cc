@@ -403,11 +403,7 @@ void KisZoomManager::pageOffsetChanged()
 void KisZoomManager::slotUpdateGuiAfterPageOffsetChanged()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
-    const QPoint newRulersOffset = widgetRect.topLeft().toPoint();
-
-    if (m_rulersOffset == newRulersOffset) return;
-
-    m_rulersOffset = newRulersOffset;
+    m_rulersOffset = widgetRect.topLeft().toPoint();
 
     m_horizontalRuler->setOffset(m_rulersOffset.x());
     m_verticalRuler->setOffset(m_rulersOffset.y());

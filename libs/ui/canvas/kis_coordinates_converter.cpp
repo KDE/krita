@@ -545,6 +545,8 @@ void KisCoordinatesConverter::endRotation()
 
 void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
+    setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+
     QTransform rot;
     rot.rotate(angle);
 
@@ -571,6 +573,13 @@ void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
 {
     bool keepOrientation = false; // XXX: Keep here for now, maybe some day we can restore the parameter again.
+
+    if (kisSquareDistance(center, widgetCenterPoint()) > 2.0) {
+        // when mirroring not against the center, reset the zoom mode
+        setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+    }
+
+    const QPointF oldDocumentOffset = m_d->documentOffset;
 
     bool       doXMirroring = m_d->isXAxisMirrored ^ mirrorXAxis;
     bool       doYMirroring = m_d->isYAxisMirrored ^ mirrorYAxis;
@@ -604,6 +613,12 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
     m_d->isYAxisMirrored = mirrorYAxis;
 
     correctOffsetToTransformationAndSnap();
+
+    if (zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
+        // we were "centered", so let's try to keep the offset as before
+        m_d->documentOffset = oldDocumentOffset;
+    }
+
     recalculateTransformations();
 }
 

@@ -271,10 +271,9 @@ void KisCanvas2::setup()
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
     
-    connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPointF, QPointF)), SLOT(documentOffsetMoved(QPointF, QPointF)));
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveViewportOffset(QPointF, QPointF)), SLOT(viewportOffsetMoved(QPointF, QPointF)));
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(effectiveZoomChanged(qreal)), SLOT(slotEffectiveZoomChanged(qreal)));
-    connect(m_d->view->canvasController()->proxyObject, &KoCanvasControllerProxyObject::canvasStateChanged, this, &KisCanvas2::canvasStateChanged);
+    connect(m_d->view->canvasController()->proxyObject, &KoCanvasControllerProxyObject::canvasStateChanged, this, &KisCanvas2::slotCanvasStateChanged);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -1239,13 +1238,12 @@ void KisCanvas2::viewportOffsetMoved(const QPointF &oldOffset, const QPointF &ne
     }
 }
 
-void KisCanvas2::documentOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset)
+void KisCanvas2::slotCanvasStateChanged()
 {
-    Q_UNUSED(oldOffset)
-    Q_UNUSED(newOffset)
-
     updateCanvas();
     m_d->regionOfInterestUpdateCompressor.start();
+
+    Q_EMIT sigCanvasStateChanged();
 }
 
 void KisCanvas2::slotConfigChanged()

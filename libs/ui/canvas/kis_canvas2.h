@@ -220,7 +220,7 @@ Q_SIGNALS:
     void sigCanvasCacheUpdated();
     void sigContinueResizeImage(qint32 w, qint32 h);
 
-    void canvasStateChanged();
+    void sigCanvasStateChanged();
 
     // emitted whenever the canvas widget thinks sketch should update
     void updateCanvasRequested(const QRect &rc);
@@ -278,16 +278,9 @@ private Q_SLOTS:
     void slotSetLodUpdatesBlocked(bool value);
 
     void slotEffectiveZoomChanged(qreal newZoom);
+    void slotCanvasStateChanged();
 
     void viewportOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset);
-
-    /**
-     * Called whenever the view widget needs to show a different part of
-     * the document
-     *
-     * @param documentOffset the offset in widget pixels
-     */
-    void documentOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset);
 
     void slotSelectionChanged();
 

@@ -30,7 +30,7 @@ KisInfinityManager::KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas
     m_sideRects(NSides),
     m_canvas(canvas)
 {
-    connect(canvas, &KisCanvas2::canvasStateChanged,
+    connect(canvas, &KisCanvas2::sigCanvasStateChanged,
             this, &KisInfinityManager::imagePositionChanged);
 }
 

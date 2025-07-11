@@ -28,6 +28,7 @@ public Q_SLOTS:
     void slotUpdateTextProperties();
     QColor modalColorDialog(QColor oldColor);
     QString wwsFontFamilyName(QString familyName);
+    void slotUpdateDirty();
 
 private:
     QQuickWidget *m_quickWidget {0};

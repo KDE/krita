@@ -98,7 +98,10 @@ QString KoCssStylePreset::description() const
 void KoCssStylePreset::setDescription(QString description)
 {
     d->shape->setAdditionalAttribute(DESC, description);
+    QMap<QString, QVariant> m = metadata();
+    if (m[DESCRIPTION].toString() == description) return;
     addMetaData(DESCRIPTION, description);
+    setDirty(true);
 }
 
 QString KoCssStylePreset::styleType() const

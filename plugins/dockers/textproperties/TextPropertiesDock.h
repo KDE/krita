@@ -41,6 +41,7 @@ public Q_SLOTS:
 
     bool createNewPresetFromSettings();
     void editPreset(KoResourceSP resource);
+    void cloneAndEditPreset(KoResourceSP resource);
 
 
 private:

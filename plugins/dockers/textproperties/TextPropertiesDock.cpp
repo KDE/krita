@@ -279,6 +279,7 @@ bool TextPropertiesDock::createNewPresetFromSettings()
     KoCssStylePresetSP preset(new KoCssStylePreset(QString()));
     KoSvgTextPropertyData textData = d->textModel->textData.get();
     preset->setProperties(textData.commonProperties);
+    preset->setName(i18nc("@info:placeholder", "New Style Preset"));
 
     CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(this);
     dialog->setDpi(d->currentDpi);
@@ -301,5 +302,21 @@ void TextPropertiesDock::editPreset(KoResourceSP resource)
 
     if (dialog->exec() == QDialog::Accepted) {
         KisResourceUserOperations::updateResourceWithUserInput(this, dialog->currentResource());
+    }
+}
+
+void TextPropertiesDock::cloneAndEditPreset(KoResourceSP resource)
+{
+    KoResourceSP newResource = resource->clone();
+    KoCssStylePresetSP preset = newResource.staticCast<KoCssStylePreset>();
+    if (!preset) return;
+
+    CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(this);
+    dialog->setCurrentResource(preset);
+
+    if (dialog->exec() == QDialog::Accepted) {
+        preset = dialog->currentResource();
+        preset->setFilename(preset->name().replace(' ', '_').replace('.', '_') + preset->defaultFileExtension());
+        KisResourceUserOperations::addResourceWithUserInput(this, preset);
     }
 }

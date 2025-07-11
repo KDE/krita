@@ -77,6 +77,7 @@ Control {
                 id: presetTitleField;
                 Layout.fillWidth: true;
                 placeholderText: i18nc("info:placeholder", "Style Name");
+                onTextChanged: mainWindow.slotUpdateDirty();
             }
             Label {
                 Layout.minimumWidth: implicitWidth;
@@ -94,6 +95,7 @@ Control {
                     wrapMode: TextInput.Wrap;
 
                     placeholderText: i18nc("info:placeholder", "Style Description.");
+                    onTextChanged: mainWindow.slotUpdateDirty();
                 }
 
                 background: Rectangle {

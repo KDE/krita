@@ -183,6 +183,25 @@ Rectangle {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                     ToolTip.text: text;
                 }
+                ToolButton {
+                    text:  i18nc("@label:button", "Clone Style Preset");
+                    display: AbstractButton.IconOnly;
+                    icon.source: "qrc:///light_edit-copy.svg";
+                    icon.color: palette.text;
+                    icon.width: 16;
+                    icon.height: 16;
+                    onClicked: mainWindow.cloneAndEditPreset(presetView.currentResource);
+                    hoverEnabled: true;
+                    PaletteControl {
+                        id: cloneButtonPalette;
+                    }
+                    palette: cloneButtonPalette.palette;
+
+                    enabled: presetView.currentIndex >= 0;
+                    ToolTip.visible: hovered;
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                    ToolTip.text: text;
+                }
             }
         }
     }

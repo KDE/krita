@@ -8,6 +8,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QColorDialog>
+#include <QPushButton>
 #include <KoResourcePaths.h>
 #include <KLocalizedContext>
 #include <KLocalizedString>
@@ -94,6 +95,7 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
 
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
     m_blockUpdates = false;
+    slotUpdateDirty();
 }
 
 KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
@@ -133,6 +135,7 @@ void CssStylePresetEditDialog::slotUpdateTextProperties()
             m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
             m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
             QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
+            slotUpdateDirty();
         }
     }
 }
@@ -150,4 +153,16 @@ QString CssStylePresetEditDialog::wwsFontFamilyName(QString familyName)
         return familyName;
     }
     return name.value();
+}
+
+void CssStylePresetEditDialog::slotUpdateDirty() {
+    bool isDirty = m_currentResource->isDirty();
+    const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();
+    if (!isDirty) {
+        const QString description = m_quickWidget->rootObject()->property("presetDescription").toString();
+        if (title != m_currentResource->name() || description != m_currentResource->description()) {
+            isDirty = true;
+        }
+    }
+    this->button(KoDialog::Ok)->setEnabled(isDirty && !title.isEmpty());
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -16693,6 +16693,21 @@ msgstr "ជម្រើស​​"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "អនុវត្ត​ទម្រង់​"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "ទំព័រ Adrian"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "ទទឹង​បោះពុម្ព ៖"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "ទទឹង​បោះពុម្ព ៖"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39619,6 +39634,13 @@ msgstr "ចម្ងាយ​ ៖​"
 msgid "Tool Options"
 msgstr "ជម្រើស TIFF"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "ចម្លង​ពី"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -44737,7 +44759,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "លក្ខណៈ​សម្បត្តិ..."
@@ -66237,10 +66259,6 @@ msgstr "រូបភាព​យោង ៖"
 #~ msgstr "ទទឹង​បោះពុម្ព ៖"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "ទទឹង​បោះពុម្ព ៖"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "បើក..."
 
@@ -67221,11 +67239,6 @@ msgstr "រូបភាព​យោង ៖"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "អត្រា​ពណ៌"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "ចម្លង​ពី"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "ភាព​ស្រពិចស្រពិល​ ៖ "
@@ -85255,11 +85268,6 @@ msgstr "រូបភាព​យោង ៖"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "ជ្រើស​ឡើង​វិញ"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "ទទឹង​បោះពុម្ព ៖"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

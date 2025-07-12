@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -16598,6 +16598,21 @@ msgstr "Dibarzhoù %1"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Ostilh fiñval"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Lakaat ar bajenn a-zoare"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Ledander :"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Adaozañ hervez ar ledander"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39343,6 +39358,13 @@ msgstr "Hed : "
 msgid "Tool Options"
 msgstr "Ostilh Dibarzhoù"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Eilañ ar gwer"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44410,7 +44432,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Dibarzhoù an dra"
@@ -65512,10 +65534,6 @@ msgstr "Adenvel ar skeudenn"
 #~ msgstr "Adaozañ hervez ar ledander"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Adaozañ hervez ar ledander"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Digeriñ"
 
@@ -66495,11 +66513,6 @@ msgstr "Adenvel ar skeudenn"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Skeul al livioù"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Eilañ ar gwer"
 
 #, fuzzy
 #~ msgid "Fuzziness: "
@@ -83140,11 +83153,6 @@ msgstr "Adenvel ar skeudenn"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "Addibabit"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Ledander :"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

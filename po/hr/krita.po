@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -16487,6 +16487,21 @@ msgstr "Iznimke"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Iznimke"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Sljedeća stranica"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Širina:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Sljedeća stranica"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39093,6 +39108,13 @@ msgstr "Izmjesti"
 msgid "Tool Options"
 msgstr "Spremi dokument pod novim imenom"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Tvrtka"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44119,7 +44141,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Svojstva objekata"
@@ -64997,10 +65019,6 @@ msgstr "Podešenja"
 #~ msgstr "Sljedeća stranica"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Sljedeća stranica"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Otvori"
 
@@ -65945,11 +65963,6 @@ msgstr "Podešenja"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Boje"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Tvrtka"
 
 #, fuzzy
 #~ msgid "Fuzziness: "
@@ -81114,11 +81127,6 @@ msgstr "Podešenja"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "&Alat za zumiranje"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Širina:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

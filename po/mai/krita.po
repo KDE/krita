@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -16649,6 +16649,21 @@ msgstr "%1 बिकल्प"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "विकल्प"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "पृष्ठ चओड़ाइसँ फिट करू"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "पृष्ठ चओड़ाइसँ फिट करू"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "पृष्ठ चओड़ाइसँ फिट करू"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39501,6 +39516,14 @@ msgstr "चओड़ाइ:"
 msgid "Tool Options"
 msgstr "अओजार विकल्प"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgid "Copy"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "कापी करू"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -44626,7 +44649,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "विशेषतासभ..."
@@ -65852,14 +65875,6 @@ msgstr "वरीयतासभ"
 #~ msgstr "पिक्सल"
 
 #, fuzzy
-#~ msgid "Fit Text Width"
-#~ msgstr "पृष्ठ चओड़ाइसँ फिट करू"
-
-#, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "पृष्ठ चओड़ाइसँ फिट करू"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "खोलू (&O)"
 
@@ -66803,12 +66818,6 @@ msgstr "वरीयतासभ"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "रंग चयनक"
-
-#, fuzzy
-#~| msgid "Copy"
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "कापी करू"
 
 #, fuzzy
 #~ msgid "Fuzziness: "

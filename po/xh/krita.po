@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -16501,6 +16501,21 @@ msgstr "Ezizodwa"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Susa Ukhetho"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Iphepha Elilandelayo"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "&Ububanzi:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Iphepha Elilandelayo"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39047,6 +39062,13 @@ msgstr "Nyibilikisa"
 msgid "Tool Options"
 msgstr "Ugqibo Lwamagama"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "luhlaza okwengca"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44067,7 +44089,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Izinto zobumnini Zenjongo"
@@ -64919,10 +64941,6 @@ msgstr "Umfanekiso Onikwe igama kwakhona"
 #~ msgstr "Iphepha Elilandelayo"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Iphepha Elilandelayo"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "Oluphezulu Lwangoku %1"
 
@@ -65880,11 +65898,6 @@ msgstr "Umfanekiso Onikwe igama kwakhona"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Umtshintshi Wombala"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "luhlaza okwengca"
 
 #, fuzzy
 #~ msgid "Fuzziness: "
@@ -81624,11 +81637,6 @@ msgstr "Umfanekiso Onikwe igama kwakhona"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "Ukhetho"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "&Ububanzi:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

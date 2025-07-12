@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16482,6 +16482,24 @@ msgstr "%1 オプション"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "アクティブなツール: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "表示領域に合わせる"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit Text Width"
+msgid "Fit Width"
+msgstr "テキストの幅に合わせる"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit View Height"
+msgid "Fit Height"
+msgstr "ビューの高さに合わせる"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39934,6 +39952,15 @@ msgstr "距離:"
 msgid "Tool Options"
 msgstr "ツールのオプション"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "%1 (Qt)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (Qt)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -45103,7 +45130,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "テキストのプロパティ"
@@ -66422,10 +66449,6 @@ msgstr "資料画像ツール"
 #~ msgid "%1 (Wintab)"
 #~ msgstr "%1 (Wintab)"
 
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
 #~ msgid "Choose screen resolution"
 #~ msgstr "画面の解像度を選択"
 
@@ -66508,12 +66531,6 @@ msgstr "資料画像ツール"
 
 #~ msgid "Actual Pixels"
 #~ msgstr "実際のピクセル"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "テキストの幅に合わせる"
-
-#~ msgid "Fit View Height"
-#~ msgstr "ビューの高さに合わせる"
 
 #~ msgid "&Open..."
 #~ msgstr "開く(&O)..."

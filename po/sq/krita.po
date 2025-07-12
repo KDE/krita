@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -16479,6 +16479,21 @@ msgstr "Teksti"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Zgjedhës i ngjyrës"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Imazhi"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Gjerësia:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Imazhi"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39015,6 +39030,15 @@ msgstr "Patejdukshmëri:"
 msgid "Tool Options"
 msgstr "Teksti"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "%1 (Qt)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (Qt)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44052,7 +44076,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Filtrat"
@@ -64901,10 +64925,6 @@ msgstr "Rrotullo Imazhin"
 #~ msgid "%1 (Wintab)"
 #~ msgstr "%1 (Wintab)"
 
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
 #, fuzzy
 #~ msgid "Choose screen resolution"
 #~ msgstr "Përzgjedhje"
@@ -64958,14 +64978,6 @@ msgstr "Rrotullo Imazhin"
 #, fuzzy
 #~ msgid "Actual Pixels"
 #~ msgstr "pikselët"
-
-#, fuzzy
-#~ msgid "Fit Text Width"
-#~ msgstr "Gjerësia:"
-
-#, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Imazhi"
 
 #, fuzzy
 #~ msgid "&Open..."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -16642,6 +16642,21 @@ msgstr "Зачувај документ како"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Одбери..."
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Отстрани шаблон"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Ширина:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Ширина:"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39514,6 +39529,13 @@ msgstr "Рабови на страна"
 msgid "Tool Options"
 msgstr "Зачувај документ како"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Фирма :"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44677,7 +44699,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr ""
@@ -65955,10 +65977,6 @@ msgstr "Отстрани приказ"
 #~ msgstr "Ширина:"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Ширина:"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "Преглед на страна"
 
@@ -66913,11 +66931,6 @@ msgstr "Отстрани приказ"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Колони:"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Фирма :"
 
 #, fuzzy
 #~ msgid "Fuzziness: "
@@ -78597,11 +78610,6 @@ msgstr "Отстрани приказ"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Отстрани шаблон"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Ширина:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

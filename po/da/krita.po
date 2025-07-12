@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -17024,6 +17024,23 @@ msgstr "Indstillinger for %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktivt værktøj: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to Page"
+msgid "Fit View"
+msgstr "Tilpas siden"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Tilpas til bredden"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Pas til sidebredden"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40652,6 +40669,15 @@ msgstr "Afstand:"
 msgid "Tool Options"
 msgstr "Værktøjsindstillinger"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "%1 (Qt)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (Qt)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -45961,7 +45987,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Tekstegenskaber"
@@ -68111,10 +68137,6 @@ msgstr "Referencebilleder"
 #~ msgstr "Pas til tekstbredden"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Pas til sidebredden"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "Å&bn..."
 
@@ -69298,13 +69320,6 @@ msgstr "Referencebilleder"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Farverate"
-
-#, fuzzy
-#~| msgctxt "@option:radio"
-#~| msgid "%1 (Qt)"
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (Qt)"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Upræcished: "
@@ -91550,12 +91565,6 @@ msgstr "Referencebilleder"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Tilpas siden"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Tilpas til bredden"
 
 #, fuzzy
 #~| msgctxt "@option:radio"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -16429,6 +16429,24 @@ msgstr "Настройки на %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Активен инструмент: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Мащабиране до размера на страницата"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit Text Width"
+msgid "Fit Width"
+msgstr "Напасване на широчината на текста"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit View Height"
+msgid "Fit Height"
+msgstr "Напасване на изгледа на височина"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39356,6 +39374,17 @@ msgstr "Разстояние:"
 msgid "Tool Options"
 msgstr "Настройки на инструмент"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The number of the screen (ordinal) and shortened 'name' of the screen "
+#| "(model + resolution)"
+#| msgid "Screen %1 (%2):"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Екран %1 (%2):"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -44484,7 +44513,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 #| msgid "Image Properties"
 msgid "Text Properties"
@@ -65295,12 +65324,6 @@ msgstr "Референтни изображения"
 
 #~ msgid "Fit View Width"
 #~ msgstr "Напасване на изгледа по широчина"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "Напасване на широчината на текста"
-
-#~ msgid "Fit View Height"
-#~ msgstr "Напасване на изгледа на височина"
 
 #~ msgid "&Open..."
 #~ msgstr "&Отваряне..."

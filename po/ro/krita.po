@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -16629,6 +16629,21 @@ msgstr "Opțiuni %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Instrument activ: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Potrivire în pagină"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Potrivire la lăţimea paginii"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Potrivire la lăţimea paginii"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39578,6 +39593,13 @@ msgstr "Dizolvă"
 msgid "Tool Options"
 msgstr "Opțiuni instrument"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Verde"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44691,7 +44713,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Proprietăți plan..."
@@ -65860,11 +65882,6 @@ msgstr "Șterge imaginea"
 #~ msgstr "Verde"
 
 #, fuzzy
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "Verde"
-
-#, fuzzy
 #~ msgid "Choose screen resolution"
 #~ msgstr "Selecția"
 
@@ -65913,14 +65930,6 @@ msgstr "Șterge imaginea"
 
 #~ msgid "Actual Pixels"
 #~ msgstr "Pixeli actuali"
-
-#, fuzzy
-#~ msgid "Fit Text Width"
-#~ msgstr "Potrivire la lăţimea paginii"
-
-#, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Potrivire la lăţimea paginii"
 
 #, fuzzy
 #~ msgid "&Open..."

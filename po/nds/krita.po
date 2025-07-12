@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -16867,6 +16867,21 @@ msgstr "%1-Optschonen"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktiv Warktüüch: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Op Siedengrött topassen"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Druckbreed:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Op Breed topassen"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40170,6 +40185,13 @@ msgstr "Afstand: "
 msgid "Tool Options"
 msgstr "Warktüüch-Optschonen"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Koperen vun"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -45399,7 +45421,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Textegenschappen"
@@ -67218,10 +67240,6 @@ msgstr "Betogbild:"
 #~ msgstr "Op Breed topassen"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Op Breed topassen"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Opmaken"
 
@@ -68285,11 +68303,6 @@ msgstr "Betogbild:"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Klöör-Rebeet"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Koperen vun"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Wo akraat: "
@@ -88255,11 +88268,6 @@ msgstr "Betogbild:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "Torüchsetten"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Druckbreed:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -16403,6 +16403,21 @@ msgstr ""
 #: libs/flake/KoToolManager.cpp:605
 #, kde-format
 msgid "Active tool: %1"
+msgstr ""
+
+#: libs/flake/KoZoomMode.cpp:25
+#, kde-format
+msgid "Fit View"
+msgstr ""
+
+#: libs/flake/KoZoomMode.cpp:27
+#, kde-format
+msgid "Fit Width"
+msgstr ""
+
+#: libs/flake/KoZoomMode.cpp:29
+#, kde-format
+msgid "Fit Height"
 msgstr ""
 
 #: libs/flake/svg/SvgParser.cpp:1882
@@ -38772,6 +38787,13 @@ msgstr ""
 msgid "Tool Options"
 msgstr ""
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr ""
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -43779,7 +43801,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgid "Text Properties"

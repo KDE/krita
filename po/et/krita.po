@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17624,6 +17624,24 @@ msgstr "%1 valikud"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktiivne tööriist: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to Page"
+msgid "Fit View"
+msgstr "Sobita leheküljega"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Mahuta laiusele"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit to Page &Height"
+msgid "Fit Height"
+msgstr "Mahuta lehekülje &kõrgusele"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -41778,6 +41796,15 @@ msgstr "Vahemaa:"
 msgid "Tool Options"
 msgstr "Tööriista valikud"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip %2 is shortcut"
+#| msgid "%1 (%2)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -47150,7 +47177,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksti omadused"
@@ -69195,11 +69222,6 @@ msgstr "Kõrvutuspiltide tööriist"
 #~ msgid "Fit Text Width"
 #~ msgstr "Sobita teksti laiusele"
 
-#, fuzzy
-#~| msgid "Fit to Page &Height"
-#~ msgid "Fit View Height"
-#~ msgstr "Mahuta lehekülje &kõrgusele"
-
 #~ msgid "&Open..."
 #~ msgstr "&Ava..."
 
@@ -70442,10 +70464,6 @@ msgstr "Kõrvutuspiltide tööriist"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Värvimärgisega kihid"
-
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Segasus: "
@@ -94138,12 +94156,6 @@ msgstr "Kõrvutuspiltide tööriist"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Sobita leheküljega"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Mahuta laiusele"
 
 #, fuzzy
 #~| msgctxt "Screen rect when choosing Wintab/Qt settings"

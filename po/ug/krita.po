@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16898,6 +16898,22 @@ msgstr "%1 تاللانما"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "ئاكتىپ قورال: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "بەتكە خوپ كەلسۇن"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit Page Width"
+msgid "Fit Width"
+msgstr "بەت كەڭلىككە ماسلاش"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "بەت كەڭلىككە ماسلاش"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40138,6 +40154,13 @@ msgstr "ئارىلىق:"
 msgid "Tool Options"
 msgstr "قورال تاللانمىلىرى"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "كۆچۈر"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -45372,7 +45395,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "تېكىست خاسلىقى"
@@ -67211,15 +67234,6 @@ msgstr "نەقىل"
 #~ msgstr "ئەمەلىي پىكسېل"
 
 #, fuzzy
-#~| msgid "Fit Page Width"
-#~ msgid "Fit Text Width"
-#~ msgstr "بەت كەڭلىككە ماسلاش"
-
-#, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "بەت كەڭلىككە ماسلاش"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "ئاچ(&O)"
 
@@ -68203,11 +68217,6 @@ msgstr "نەقىل"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "رەڭ ئاتى:"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "كۆچۈر"
 
 #, fuzzy
 #~ msgid "Fuzziness: "

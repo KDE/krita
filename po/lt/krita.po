@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -16807,6 +16807,23 @@ msgstr "%1 parinktys"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktyvus įrankis: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to Page"
+msgid "Fit View"
+msgstr "Talpinti puslapyje"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Talpinti į plotį"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Tinkantis prie puslapio pločio"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40052,6 +40069,13 @@ msgstr "Atstumas:"
 msgid "Tool Options"
 msgstr "Įrankio parinktys"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Kopijuoti"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -45300,7 +45324,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksto savybės"
@@ -66966,15 +66990,6 @@ msgstr "Pasirinkimai"
 #~ msgstr "Pikselis"
 
 #, fuzzy
-#~| msgid "Fit to Width"
-#~ msgid "Fit Text Width"
-#~ msgstr "Talpinti į plotį"
-
-#, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Tinkantis prie puslapio pločio"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Atverti"
 
@@ -67964,11 +67979,6 @@ msgstr "Pasirinkimai"
 #~ "calculating the selection"
 #~ msgid "All Layers"
 #~ msgstr "&Filtro sluoksnis..."
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Kopijuoti"
 
 #, fuzzy
 #~ msgid "Fuzziness: "

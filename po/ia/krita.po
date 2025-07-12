@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -16846,6 +16846,24 @@ msgstr "%1 Optiones"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Instrumento active: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Adapta a Vista"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Adapta in largessa"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit Page Height"
+msgid "Fit Height"
+msgstr "Adapta  al altessa de pagi&na"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40140,6 +40158,15 @@ msgstr "Distantia:"
 msgid "Tool Options"
 msgstr "Optiones de instrumento"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip %2 is shortcut"
+#| msgid "%1 (%2)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -45456,7 +45483,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Proprietates de texto"
@@ -67172,11 +67199,6 @@ msgstr "Instrumento de Inages de Referentia"
 #~ msgid "Fit Text Width"
 #~ msgstr "Adapta largessa de texto"
 
-#, fuzzy
-#~| msgid "Fit Page Height"
-#~ msgid "Fit View Height"
-#~ msgstr "Adapta  al altessa de pagi&na"
-
 #~ msgid "&Open..."
 #~ msgstr "&Aperi ..."
 
@@ -68184,10 +68206,6 @@ msgstr "Instrumento de Inages de Referentia"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "HSL de color"
-
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Fuzziness (indistincte):"
@@ -83378,12 +83396,6 @@ msgstr "Instrumento de Inages de Referentia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Adapta al pagina"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Adapta in largessa"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) Screen rect when choosing Wintab/Qt settings"

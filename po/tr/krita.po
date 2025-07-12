@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2025-07-05 11:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16440,6 +16440,25 @@ msgstr "%1 Seçenekleri"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Etkin araç: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Görünüme Sığdır"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Line Width"
+msgid "Fit Width"
+msgstr "Çizgi Genişliği"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Line Height"
+msgid "Fit Height"
+msgstr "Çizgi Yüksekliği"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39845,6 +39864,17 @@ msgstr "Uzaklık:"
 msgid "Tool Options"
 msgstr "Araç Seçenekleri"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The number of the screen (ordinal) and shortened 'name' of the screen "
+#| "(model + resolution)"
+#| msgid "Screen %1 (%2):"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Ekran %1 (%2):"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -45002,7 +45032,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "OpenType Özellik Künyesi"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Metin Özellikleri"

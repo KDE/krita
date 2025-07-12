@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -16585,6 +16585,21 @@ msgstr "Eithriadau"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Symud Detholiad"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Ffitio i Dudalen"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Lled:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Ffitio i Dudalen"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39264,6 +39279,13 @@ msgstr "Dadleoli"
 msgid "Tool Options"
 msgstr "Gair Cwblhad"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Copio gwyrdd"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44311,7 +44333,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Nodweddion Gwrthrych"
@@ -65316,10 +65338,6 @@ msgstr "Ailenwi Delwedd"
 #~ msgstr "Ffitio i Dudalen"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Ffitio i Dudalen"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "A&gor"
 
@@ -66287,11 +66305,6 @@ msgstr "Ailenwi Delwedd"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Amrediad Lliw"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Copio gwyrdd"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Niwlaiddrwydd: "
@@ -82883,11 +82896,6 @@ msgstr "Ailenwi Delwedd"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "&Detholi"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Lled:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

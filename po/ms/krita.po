@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -16603,6 +16603,21 @@ msgstr "Pengecualian"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Alihkan alat"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Halaman Berikutnya"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Lebar:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Halaman Berikutnya"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39371,6 +39386,13 @@ msgstr "Menggantikan "
 msgid "Tool Options"
 msgstr "Kata Pelengkapan"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Salin Hijau"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44427,7 +44449,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Ciri Objek"
@@ -65433,10 +65455,6 @@ msgstr "Ungu Lembut Gangguan"
 #~ msgstr "Halaman Berikutnya"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Halaman Berikutnya"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Buka"
 
@@ -66393,11 +66411,6 @@ msgstr "Ungu Lembut Gangguan"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Julat Warna"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Salin Hijau"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Kesuraman:"
@@ -83048,11 +83061,6 @@ msgstr "Ungu Lembut Gangguan"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "&Pilih Semula"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Lebar:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

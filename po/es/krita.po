@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2025-07-05 11:52+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -16458,6 +16458,25 @@ msgstr "Opciones de %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Herramienta activa: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Ajustar a la vista"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Line Width"
+msgid "Fit Width"
+msgstr "Ancho de línea"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Line Height"
+msgid "Fit Height"
+msgstr "Altura de línea"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40013,6 +40032,17 @@ msgstr "Distancia:"
 msgid "Tool Options"
 msgstr "Opciones de la herramienta"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The number of the screen (ordinal) and shortened 'name' of the screen "
+#| "(model + resolution)"
+#| msgid "Screen %1 (%2):"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Pantalla %1 (%2):"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -45211,7 +45241,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Etiqueta de función OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Propiedades del texto"

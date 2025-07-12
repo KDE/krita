@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -16601,6 +16601,21 @@ msgstr "Opcions"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Opcions"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Pagina"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Largor :"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Inserir un saut"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39347,6 +39362,13 @@ msgstr "Largor :"
 msgid "Tool Options"
 msgstr "Opcions dels espleches"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "&Redimensionar"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44420,7 +44442,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Propietats"
@@ -65513,10 +65535,6 @@ msgstr "Preferéncias"
 #~ msgstr "Inserir un saut"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Inserir un saut"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Dobrir"
 
@@ -80500,11 +80518,6 @@ msgstr "Preferéncias"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "Seleccionar"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Largor :"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

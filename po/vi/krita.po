@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -16572,6 +16572,24 @@ msgstr "Tuỳ chọn"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Công cụ &di chuyển"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to Page"
+msgid "Fit View"
+msgstr "Vừa trang"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit Text Width"
+msgid "Fit Width"
+msgstr "Vừa bề rộng văn bản"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit Page Height"
+msgid "Fit Height"
+msgstr "Vừa bề cao trang"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39420,6 +39438,13 @@ msgstr "Khoảng cách:"
 msgid "Tool Options"
 msgstr "Cấu hình Công cụ"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "xanh nước biển"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44486,7 +44511,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Tính chất cho lớp mới"
@@ -65731,14 +65756,6 @@ msgstr "Ảnh tham chiếu:"
 #~ msgid "Actual Pixels"
 #~ msgstr "Điểm ảnh Thật"
 
-#~ msgid "Fit Text Width"
-#~ msgstr "Vừa bề rộng văn bản"
-
-#, fuzzy
-#~| msgid "Fit Page Height"
-#~ msgid "Fit View Height"
-#~ msgstr "Vừa bề cao trang"
-
 #, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Mở"
@@ -66694,11 +66711,6 @@ msgstr "Ảnh tham chiếu:"
 #~ "calculating the selection"
 #~ msgid "All Layers"
 #~ msgstr "Lớp &lặp lại"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "xanh nước biển"
 
 #, fuzzy
 #~ msgid "Fuzziness: "

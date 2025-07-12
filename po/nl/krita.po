@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2025-07-05 19:04+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -16534,6 +16534,25 @@ msgstr "Opties voor %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Actief gereedschap: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Laten passen om te bekijken"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Passend in de breedte"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit View Height"
+msgid "Fit Height"
+msgstr "Aanpassen aan weergavehoogte"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40059,6 +40078,15 @@ msgstr "Afstand:"
 msgid "Tool Options"
 msgstr "Hulpmiddelopties"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip %2 is shortcut"
+#| msgid "%1 (%2)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -45242,7 +45270,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Tag voor mogelijkheid Opentype"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksteigenschappen"
@@ -66753,9 +66781,6 @@ msgstr "Referentie-afbeeldingen"
 #~ msgid "Fit Text Width"
 #~ msgstr "Tekstbreedte laten passen"
 
-#~ msgid "Fit View Height"
-#~ msgstr "Aanpassen aan weergavehoogte"
-
 #~ msgid "&Open..."
 #~ msgstr "&Openen..."
 
@@ -67963,10 +67988,6 @@ msgstr "Referentie-afbeeldingen"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Met kleur gelabelde lagen"
-
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Vaagheid: "
@@ -86845,10 +86866,6 @@ msgstr "Referentie-afbeeldingen"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Passend in pagina"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Passend in de breedte"
 
 #~ msgctxt "(qtundo-format) Screen rect when choosing Wintab/Qt settings"
 #~ msgid "%1x%2 offset: %3,%4"

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2025-04-12 10:50+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16531,6 +16531,25 @@ msgstr "%1 - ustawienia"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktywne narzędzie: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Zmieść w widoku"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Dopasuj do szerokości"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit View Height"
+msgid "Fit Height"
+msgstr "Zmieść na wysokości widoku"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40082,6 +40101,15 @@ msgstr "Odległość:"
 msgid "Tool Options"
 msgstr "Ustawienia narzędzia"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip %2 is shortcut"
+#| msgid "%1 (%2)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -45286,7 +45314,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Właściwości tekstu"
@@ -66688,9 +66716,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgid "Fit Text Width"
 #~ msgstr "Dopasuj do szerokości tekstu"
 
-#~ msgid "Fit View Height"
-#~ msgstr "Zmieść na wysokości widoku"
-
 #~ msgid "&Open..."
 #~ msgstr "&Otwórz..."
 
@@ -67933,10 +67958,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Warstwy z barwnymi etykietami"
-
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Rozmycie: "
@@ -86728,10 +86749,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Dopasuj do strony"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Dopasuj do szerokości"
 
 #~ msgctxt "(qtundo-format) Screen rect when choosing Wintab/Qt settings"
 #~ msgid "%1x%2 offset: %3,%4"

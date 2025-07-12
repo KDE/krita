@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -16656,6 +16656,24 @@ msgstr "Valmöguleikar %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Virkt verkfæri: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to Page"
+msgid "Fit View"
+msgstr "Passa á síðu"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit Text Width"
+msgid "Fit Width"
+msgstr "Laga að breidd glugga"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit to Page &Height"
+msgid "Fit Height"
+msgstr "Passa á síðu&hæð"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39529,6 +39547,13 @@ msgstr "Fjarlægð:"
 msgid "Tool Options"
 msgstr "Valkostir áhalda"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "grænt"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -44718,7 +44743,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Eiginleikar..."
@@ -66101,14 +66126,6 @@ msgstr "Stillingar"
 #~ msgid "Actual Pixels"
 #~ msgstr "Dílar"
 
-#~ msgid "Fit Text Width"
-#~ msgstr "Laga að breidd glugga"
-
-#, fuzzy
-#~| msgid "Fit to Page &Height"
-#~ msgid "Fit View Height"
-#~ msgstr "Passa á síðu&hæð"
-
 #, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "Opna"
@@ -67096,11 +67113,6 @@ msgstr "Stillingar"
 #~ "calculating the selection"
 #~ msgid "All Layers"
 #~ msgstr "Öll lög"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "grænt"
 
 #, fuzzy
 #~ msgid "Fuzziness: "

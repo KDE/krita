@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16399,6 +16399,25 @@ msgstr "%1的选项"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "活动工具：%1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "缩放到视图大小"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Line Width"
+msgid "Fit Width"
+msgstr "线条宽度"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Line Height"
+msgid "Fit Height"
+msgstr "行高"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39344,6 +39363,17 @@ msgstr "距离："
 msgid "Tool Options"
 msgstr "工具选项"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The number of the screen (ordinal) and shortened 'name' of the screen "
+#| "(model + resolution)"
+#| msgid "Screen %1 (%2):"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "显示器 %1 (%2)："
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -44437,7 +44467,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "OpenType 功能标签"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "文字属性"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17212,6 +17212,21 @@ msgstr "Қоидадан ташқари ҳолат"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Матнни ўчириш"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "Бетга мослаш"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "Энига мослаш"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Энига мослаш"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40852,6 +40867,13 @@ msgstr "Белги услубини ўзгартириш"
 msgid "Tool Options"
 msgstr "Тўлдириш мосламалари"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Ташкилот"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -46210,7 +46232,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Text Properties"
@@ -68317,10 +68339,6 @@ msgstr "&Алмаштириш:"
 #~ msgstr "Энига мослаш"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Энига мослаш"
-
-#, fuzzy
 #~| msgid "&Open"
 #~ msgid "&Open..."
 #~ msgstr "&Очиш"
@@ -69350,11 +69368,6 @@ msgstr "&Алмаштириш:"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Хатчўпнинг номи:"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Ташкилот"
 
 #, fuzzy
 #~ msgid "Fuzziness: "
@@ -81709,11 +81722,6 @@ msgstr "&Алмаштириш:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Бетга мослаш"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Энига мослаш"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

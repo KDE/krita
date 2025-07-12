@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2025-07-05 09:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -16552,6 +16552,24 @@ msgstr "Параметри %1"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Активний засіб: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to View"
+msgid "Fit View"
+msgstr "Підібрати за розмірами"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit Text Width"
+msgid "Fit Width"
+msgstr "Влаштувати в ширину"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+#| msgid "Fit View Height"
+msgid "Fit Height"
+msgstr "Розмір за висотою перегляду"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40389,6 +40407,15 @@ msgstr "Відстань: "
 msgid "Tool Options"
 msgstr "Параметри інструмента"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip %2 is shortcut"
+#| msgid "%1 (%2)"
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
@@ -45698,7 +45725,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Мітка можливості OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Властивості тексту"
@@ -67332,12 +67359,6 @@ msgstr "Інструмент еталонних зображень"
 #~ msgid "Actual Pixels"
 #~ msgstr "Фактичні пікселі"
 
-#~ msgid "Fit Text Width"
-#~ msgstr "Влаштувати в ширину"
-
-#~ msgid "Fit View Height"
-#~ msgstr "Розмір за висотою перегляду"
-
 #~ msgid "&Open..."
 #~ msgstr "&Відкрити…"
 
@@ -68589,10 +68610,6 @@ msgstr "Інструмент еталонних зображень"
 #~ "calculating the selection"
 #~ msgid "All Layers"
 #~ msgstr "Усі шари"
-
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Нечіткість: "

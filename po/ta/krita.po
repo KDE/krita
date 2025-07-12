@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16518,6 +16518,21 @@ msgstr "தவிர்ப்புகள்"
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "நகர்த்தும் கருவி"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+msgid "Fit View"
+msgstr "அடுத்த பக்கம்"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+msgid "Fit Width"
+msgstr "அகலம்:"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "அடுத்த பக்கம்"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39139,6 +39154,13 @@ msgstr "பெயர்ச்சி "
 msgid "Tool Options"
 msgstr "வார்த்தை முடிவு"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "பச்சை நகல்"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -44189,7 +44211,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "பண்புகள்"
@@ -65129,10 +65151,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #~ msgstr "அடுத்த பக்கம்"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "அடுத்த பக்கம்"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "பேனா"
 
@@ -66097,11 +66115,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "நிற அளவு"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "பச்சை நகல்"
 
 #, fuzzy
 #~ msgid "Fuzziness: "
@@ -82505,11 +82518,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Zoom to 100%"
 #~ msgstr "&திரும்ப தேர்ந்தெடு"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "அகலம்:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

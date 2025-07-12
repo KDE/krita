@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 01:59+0000\n"
+"POT-Creation-Date: 2025-07-12 02:03+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -16955,6 +16955,23 @@ msgstr "%1 параметрі"
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Белсенді құрал: %1"
+
+#: libs/flake/KoZoomMode.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fit to Page"
+msgid "Fit View"
+msgstr "Парақ бетіне шақтау"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, fuzzy, kde-format
+#| msgid "Fit to Width"
+msgid "Fit Width"
+msgstr "Еніне шақтау"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, fuzzy, kde-format
+msgid "Fit Height"
+msgstr "Парақтың енін шақтау"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40519,6 +40536,13 @@ msgstr "Қашықтық: "
 msgid "Tool Options"
 msgstr "Құрал параметрлері"
 
+#: libs/widgets/KoZoomActionState.cpp:100
+#, fuzzy, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "Көшіріп алу"
+
 #: libs/widgets/KoZoomWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -45782,7 +45806,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
 msgid "Text Properties"
 msgstr "Мәтіннің қасиеттері"
@@ -67846,10 +67870,6 @@ msgstr "Эталон кескіндері"
 #~ msgstr "Мәтін енін шақтау"
 
 #, fuzzy
-#~ msgid "Fit View Height"
-#~ msgstr "Парақтың енін шақтау"
-
-#, fuzzy
 #~ msgid "&Open..."
 #~ msgstr "&Ашу"
 
@@ -68954,11 +68974,6 @@ msgstr "Эталон кескіндері"
 #~ "calculating the selection"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Түстер ауыстыруы"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "Көшіріп алу"
 
 #~ msgid "Fuzziness: "
 #~ msgstr "Ауытқуы: "
@@ -90588,12 +90603,6 @@ msgstr "Эталон кескіндері"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Парақ бетіне шақтау"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Еніне шақтау"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

@@ -37420,8 +37420,7 @@ msgid "Bluer/Yellower: "
 msgstr "Modrá-žlutá:"
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Obnovit"

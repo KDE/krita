@@ -616,7 +616,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2025-07-14" version="5.2.10.4"/>
+    <release date="2025-07-14" version="5.2.11"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

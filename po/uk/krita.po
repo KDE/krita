@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-05 09:22+0300\n"
+"PO-Revision-Date: 2025-07-12 19:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16554,22 +16554,19 @@ msgid "Active tool: %1"
 msgstr "Активний засіб: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to View"
+#, kde-format
 msgid "Fit View"
 msgstr "Підібрати за розмірами"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
-#| msgid "Fit Text Width"
+#, kde-format
 msgid "Fit Width"
-msgstr "Влаштувати в ширину"
+msgstr "Підібрати за шириною"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit View Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "Розмір за висотою перегляду"
+msgstr "Підібрати за висотою"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40408,9 +40405,7 @@ msgid "Tool Options"
 msgstr "Параметри інструмента"
 
 #: libs/widgets/KoZoomActionState.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip %2 is shortcut"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"

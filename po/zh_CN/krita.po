@@ -16401,23 +16401,19 @@ msgid "Active tool: %1"
 msgstr "活动工具：%1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to View"
+#, kde-format
 msgid "Fit View"
-msgstr "缩放到视图大小"
+msgstr "适合视图大小"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
-#| msgid "Line Width"
+#, kde-format
 msgid "Fit Width"
-msgstr "线条宽度"
+msgstr "适合视图宽度"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "行高"
+msgstr "适合视图高度"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -20359,11 +20355,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "错误：数值 %1 的类型 (%2) 不正确。应该为 %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "不调整中间调"
+msgstr "不再询问"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -27635,6 +27629,18 @@ msgid ""
 "href=\"https://krita.org/en/sponsors/\">sponsors</a>, and <a href=\"https://"
 "fund.krita.org/\">development fund</a> members.</p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita 是一款社区驱动的自由"
+"开源数字绘画工具，任何人均可使用。<br />Krita 项目的发展离不开 <a href="
+"\"https://docs.krita.org/en/contributors_manual.html\">贡献者</a> 的辛勤劳动"
+"和 <a href=\"https://krita.org/en/sponsors/\">赞助商</a>、<a href=\"https://"
+"fund.krita.org/\">发展基金会员</a> 的捐款支持。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -29761,12 +29767,15 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"某些应用程序会模拟高位功能键的按下操作来抢占焦点 (例如微信和 Chrome 会按住 "
+"F22 键)。这可能会干扰Krita 的快捷键和操作。如果您的键盘带有 F13 及以上的高位"
+"功能键，禁用此选项可让您使用这些功能键，但也会增加 Krita 被干扰的风险。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1639
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "忽略高位功能键 (F13 - F24，用于兼容微信和 Chrome 等)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -30851,13 +30860,13 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:325
 #, kde-format
 msgid "Frame rate"
-msgstr ""
+msgstr "帧速率"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
 #, kde-format
 msgid "Frame rate limit:"
-msgstr ""
+msgstr "帧速率限制："
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -30876,7 +30885,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "从屏幕检测"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361
@@ -39364,15 +39373,11 @@ msgid "Tool Options"
 msgstr "工具选项"
 
 #: libs/widgets/KoZoomActionState.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The number of the screen (ordinal) and shortened 'name' of the screen "
-#| "(model + resolution)"
-#| msgid "Screen %1 (%2):"
+#, kde-format
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"
-msgstr "显示器 %1 (%2)："
+msgstr "%1 (%2)"
 
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
@@ -51613,14 +51618,13 @@ msgstr "此动画的标称帧速率超过 240 FPS。"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
-msgstr ""
+msgstr "合并整个图像并保存为单层图像 (默认)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "渲染动画帧失败。输出文件不完整。"
+msgstr "合并整个图像并将动画帧导出为动画图像"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -51628,7 +51632,7 @@ msgctxt "JPEG-XL encoder options"
 msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
-msgstr ""
+msgstr "栅格化图层 (包括图层组和滤镜图层) 并保存为多图层图像"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -51636,7 +51640,7 @@ msgctxt "JPEG-XL encoder options"
 msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
-msgstr ""
+msgstr "栅格化图层 (包括图层组和滤镜图层) 并保存为多页图像"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -51942,38 +51946,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
-msgstr "另存为："
+msgstr "保存为："
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "合并整个图像"
+msgstr "单层图像"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
-msgstr "动态图像"
+msgstr "动画图像"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "多线程"
+msgstr "多层图像"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "多页图像"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -65306,30 +65305,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "Detected multi layer JPEG-XL image with unsupported blending mode, "
-#~ "importing flattened image."
-#~ msgstr ""
-#~ "检测到使用了不支持的混合模式的多图层 JPEG-XL 图像，将导入合并后的图像。"
-
-#~ msgid "If this is not enabled, only the first frame will be saved."
-#~ msgstr "如果未启用此项，将只保存第一帧。"
-
-#~ msgid "Save as animated JPEG-XL"
-#~ msgstr "保存为 JPEG-XL 动图"
-
-#~ msgid ""
-#~ "<html><head/><body><p>If this is not enabled, the layers will be "
-#~ "rasterized and saved. However, animated exports are always flattened "
-#~ "regardless of this setting.</p><p>It is advised to leave this option "
-#~ "checked for web delivery and general compatibility with other "
-#~ "applications.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>如果不启用此选项，图层将在光栅化之后保存。动画导出时"
-#~ "将无视此选项，一律合并所有图层。</p><p>建议在导出为网络图像时启用此选项，"
-#~ "而在导出用于其他程序时则不启用此选项以提高兼容性。</p></body></html>"
-
-#~ msgid "Flatten the image"
-#~ msgstr "合并此图像"

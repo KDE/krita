@@ -213,15 +213,6 @@ QString TagFilterProxyModelQmlWrapper::localizedNameFromMetadata(
     return name;
 }
 
-QVariantMap TagFilterProxyModelQmlWrapper::metadataForIndex(const int &resourceIndex) const
-{
-    if (!d->tagFilterProxyModel) return QVariantMap();
-    QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
-    // NOTE: KisTagFilterProxyModel has this weird thing where it switches between source models depending
-    // on whether filtering by tag happens. This somehow causes index() to not always work.
-    return d->tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::MetaData).toMap();
-}
-
 #include <KoWritingSystemUtils.h>
 QString TagFilterProxyModelQmlWrapper::localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack)
 {

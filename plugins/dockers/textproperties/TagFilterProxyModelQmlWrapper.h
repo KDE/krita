@@ -41,7 +41,15 @@ public:
     /// Associated tagmodel
     QAbstractItemModel *tagModel() const;
 
+    /// The current resource type.
     QString resourceType() const;
+
+    /**
+     * Setting the current resource type, this expects a
+     * resource type from KisResourceTypes, as this will be
+     * passed onto the initializers of the all internal resource
+     * related models.
+     */
     void setResourceType(const QString &type);
 
     /// Select tag at row in tag model.
@@ -52,7 +60,6 @@ public:
     /// The current search text on the filter model.
     QString searchText() const;
     void setSearchText(const QString &text);
-
 
     /// Toggle "search in tag".
     void setSearchInTag(const bool &newSearchInTag);
@@ -71,7 +78,6 @@ public:
 
     /// Get localized name for index, retrieved from the resource metadata.
     Q_INVOKABLE static QString localizedNameFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
-    Q_INVOKABLE QVariantMap metadataForIndex(const int &resourceIndex) const;
 
     /// Get localized sample string based on scripts of locale.
     Q_INVOKABLE static QString localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
@@ -88,7 +94,7 @@ public:
     /// Set the resource index in tagfilterproxy.
     void setCurrentIndex(const int &index);
 
-    /// Set resource to resource file name.
+    /// Set current resource to resource file name.
     Q_INVOKABLE void setResourceToFileName(const QString &filename);
 
     /// File name of the current resource.

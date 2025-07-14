@@ -67,18 +67,26 @@ Button {
                 property alias highlighted: fontDelegateItem.highlighted;
                 palette: fontDelegateItem.palette;
 
-                property string fontName: fontDelegateItem.fontName;
+                property alias fontName: fontDelegateItem.fontName;
 
                 implicitHeight: nameLabel.height*4;
 
                 Loader {
                     anchors.fill: parent;
                     asynchronous: true;
+
                     sourceComponent: Component {
                         KoShapeQtQuickLabel {
                             id: fontFamilyDelegate;
 
-                            property var meta: fontDelegateItem.meta;
+                            Binding {
+                                   target: fontFamilyDelegate
+                                   property: "meta"
+                                   when: fontDelegateItem && typeof fontDelegateItem !== 'undefined';
+                                   value: fontDelegateItem.meta;
+                            }
+
+                            property var meta: ({});
                             property bool colorBitmap : typeof meta.color_bitmap === 'boolean'? meta.color_bitmap: false;
                             property bool colorCLRV0 : typeof meta.color_clrv0 === 'boolean'?  meta.color_clrv0: false;
                             property bool colorCLRV1 : typeof meta.color_clrv1 === 'boolean'?  meta.color_clrv1: false;

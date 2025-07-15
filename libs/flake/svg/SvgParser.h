@@ -60,7 +60,13 @@ public:
 
     // Set whether to always consider shapes without fill or stroke explicitely set as inherited.
     // By default, this is off, and the parser retrieves the fill from the graphicsContext.
-    void setInheritByDefault(const bool enable);
+    void setFillStrokeInheritByDefault(const bool enable);
+
+    // Whether to try and resolve the text properties for toplevel shapes.
+    // By default this is on, as there might be doc-wide css that needs to
+    // be resolved. However, for the style properties resource we turn this
+    // off.
+    void setResolveTextPropertiesForTopLevel(const bool enable);
 
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
@@ -235,7 +241,8 @@ private:
     QString m_documentDescription;
     QVector<KoID> m_warnings;
     QMap<KoShape *, QTransform> m_shapeParentTransform;
-    bool m_inheritByDefault = false;
+    bool m_inheritStrokeFillByDefault = false;
+    bool m_resolveTextPropertiesForTopLevel = true;
 };
 
 #endif

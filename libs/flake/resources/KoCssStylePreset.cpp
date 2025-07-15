@@ -160,6 +160,8 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
     sampleText->setPropertiesAtPos(-1, modifiedProps);
 
     if (type == STYLE_TYPE_PARAGRAPH) {
+        // For paragraph we'll add a shape, as those will allow wrapping,
+        // without being part of the properties like inline-size is.
         KoPathShape *inlineShape = new KoPathShape();
         inlineShape->moveTo(QPointF(0, 0));
         inlineShape->lineTo(QPointF(120, 0));
@@ -172,30 +174,27 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
 
         d->shape.reset(sampleText);
     } else {
-
-        if (before.isEmpty() && after.isEmpty()) {
-            d->shape.reset(sampleText);
-        } else {
-            KoSvgTextShape *newShape = new KoSvgTextShape();
-            KoSvgTextProperties paraProps = KoSvgTextProperties::defaultProperties();
-            // Set whitespace rule to pre-wrap.
-            paraProps.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
-            paraProps.setProperty(KoSvgTextProperties::TextWrapId, KoSvgText::Wrap);
-            newShape->setPropertiesAtPos(-1, paraProps);
-            if (!after.isEmpty()) {
-                newShape->insertText(0, after);
-            }
-            if (!before.isEmpty()) {
-                newShape->insertText(0, before);
-            }
-
-            newShape->insertRichText(newShape->posForIndex(before.size()), sampleText);
-
-            d->shape.reset(newShape);
+        /// For character the sample always needs to be set to be a child to
+        /// ensure that the character property doesn't include the default props.
+        KoSvgTextShape *newShape = new KoSvgTextShape();
+        KoSvgTextProperties paraProps = KoSvgTextProperties::defaultProperties();
+        // Set whitespace rule to pre-wrap.
+        paraProps.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
+        paraProps.setProperty(KoSvgTextProperties::TextWrapId, KoSvgText::Wrap);
+        newShape->setPropertiesAtPos(-1, paraProps);
+        if (!after.isEmpty()) {
+            newShape->insertText(0, after);
         }
+        if (!before.isEmpty()) {
+            newShape->insertText(0, before);
+        }
+
+        newShape->insertRichText(newShape->posForIndex(before.size()), sampleText);
+
+        d->shape.reset(newShape);
+
     }
 
-    // Don't d->shape->cleanup() here, as it *can* lead to the sample getting cleaned up.
     d->shape->cleanUp();
     updateThumbnail();
     setValid(true);
@@ -340,6 +339,7 @@ KoResourceSP KoCssStylePreset::clone() const
 
 bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface)
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
     QString errorMsg;
     int errorLine = 0;
@@ -360,6 +360,7 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     KoDocumentResourceManager manager;
     SvgParser parser(&manager);
     parser.setResolution(QRectF(0,0,100,100), 72); // initialize with default values
+    parser.setResolveTextPropertiesForTopLevel(false);
     QSizeF fragmentSize;
 
     QList<KoShape*> shapes = parser.parseSvg(xmlDocument.documentElement(), &fragmentSize);

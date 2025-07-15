@@ -203,9 +203,14 @@ void SvgParser::setDefaultKraTextVersion(int version)
     m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
 }
 
-void SvgParser::setInheritByDefault(const bool enable)
+void SvgParser::setFillStrokeInheritByDefault(const bool enable)
 {
-    m_inheritByDefault = enable;
+    m_inheritStrokeFillByDefault = enable;
+}
+
+void SvgParser::setResolveTextPropertiesForTopLevel(const bool enable)
+{
+    m_resolveTextPropertiesForTopLevel = enable;
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -945,7 +950,7 @@ void SvgParser::uploadStyleToContext(const QDomElement &e)
 {
     SvgStyles styles = m_context.styleParser().collectStyles(e);
     m_context.styleParser().parseFont(styles);
-    m_context.styleParser().parseStyle(styles, m_inheritByDefault);
+    m_context.styleParser().parseStyle(styles, m_inheritStrokeFillByDefault);
 }
 
 void SvgParser::applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
@@ -1006,7 +1011,7 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF 
     if (!gc)
         return;
 
-    m_context.styleParser().parseStyle(styles, m_inheritByDefault);
+    m_context.styleParser().parseStyle(styles, m_inheritStrokeFillByDefault);
 
     if (!obj)
         return;
@@ -1899,7 +1904,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    textLoader.loadSvg(e, m_context, true);
+    textLoader.loadSvg(e, m_context, m_resolveTextPropertiesForTopLevel);
 
     // 1) apply transformation only in case we are not overriding the shape!
     // 2) the transformation should be applied *before* the shape is added to the group!

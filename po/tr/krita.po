@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-05 11:20+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
-"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"PO-Revision-Date: 2025-07-14 14:15+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16442,23 +16442,19 @@ msgid "Active tool: %1"
 msgstr "Etkin araç: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to View"
+#, kde-format
 msgid "Fit View"
 msgstr "Görünüme Sığdır"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
-#| msgid "Line Width"
+#, kde-format
 msgid "Fit Width"
-msgstr "Çizgi Genişliği"
+msgstr "Genişliğe Sığdır"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "Çizgi Yüksekliği"
+msgstr "Yüksekliğe Sığdır"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -39865,15 +39861,11 @@ msgid "Tool Options"
 msgstr "Araç Seçenekleri"
 
 #: libs/widgets/KoZoomActionState.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The number of the screen (ordinal) and shortened 'name' of the screen "
-#| "(model + resolution)"
-#| msgid "Screen %1 (%2):"
+#, kde-format
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"
-msgstr "Ekran %1 (%2):"
+msgstr "%1 (%2)"
 
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format

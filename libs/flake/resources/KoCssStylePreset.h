@@ -29,7 +29,7 @@ public:
     ~KoCssStylePreset();
 
     /// The actual text properties.
-    KoSvgTextProperties properties() const;
+    KoSvgTextProperties properties(int ppi = 72, bool removeKraProps = false) const;
     void setProperties(const KoSvgTextProperties &properties);
 
     /// The description associated with this style.
@@ -51,6 +51,16 @@ public:
 
     /// Returns the sample svg metadata. Use updateThumbnail to update it.
     QString sampleSvg() const;
+
+    /**
+     * The resolution that this style is tied to.
+     * if this is above 0, then the properties absolute values are scaled by
+     * to fit the document resolution.
+     * This allows for pixel-relative styles to be created.
+     */
+    int storedPPIResolution() const;
+
+    void setStoredPPIResolution(const int ppi);
 
     /**
      * @brief setSampleText

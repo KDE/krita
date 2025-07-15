@@ -158,6 +158,7 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
 }
 
 const QString TEXT_STYLE_TYPE = "krita:style-type";
+const QString TEXT_STYLE_RES = "krita:style-resolution";
 
 bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context, bool rootNode)
 {
@@ -233,6 +234,13 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
 
     if (e.hasAttribute(TEXT_STYLE_TYPE.toLatin1().data())) {
         properties.setProperty(KoSvgTextProperties::KraTextStyleType, e.attribute(TEXT_STYLE_TYPE.toLatin1().data()));
+        if (e.hasAttribute(TEXT_STYLE_RES.toLatin1().data())) {
+            QString resolution = e.attribute(TEXT_STYLE_RES.toLatin1().data()).toLower();
+            if (resolution.endsWith("dpi")) {
+                resolution.chop(3);
+            }
+            properties.setProperty(KoSvgTextProperties::KraTextStyleResolution, KisDomUtils::toInt(resolution));
+        }
     }
 
     return true;
@@ -359,6 +367,9 @@ bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
 
     if (properties.hasProperty(KoSvgTextProperties::KraTextStyleType)) {
         context.shapeWriter().addAttribute(TEXT_STYLE_TYPE.toLatin1().data(), properties.property(KoSvgTextProperties::KraTextStyleType).toString());
+        if (properties.hasProperty(KoSvgTextProperties::KraTextStyleResolution)) {
+            context.shapeWriter().addAttribute(TEXT_STYLE_RES.toLatin1().data(), QString::number(properties.property(KoSvgTextProperties::KraTextStyleResolution).toInt())+"dpi");
+        }
     }
 
     if (saveText) {

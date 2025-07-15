@@ -18,6 +18,9 @@ Control {
     property alias presetSampleAlignment: presetSampleLabel.alignment;
     property string styleType: "character"; // Defaults to character because the first index in the style combobox is character.
     property double canvasDPI: 72.0;
+    property double pixelRelativeDPI: 72.0;
+    property alias makePixelRelative: pixelRelativeCheck.checked;
+    onMakePixelRelativeChanged: mainWindow.slotUpdateStoreDPI();
 
     property alias beforeSample: beforeSampleField.text;
     property alias sampleText: sampleField.text;
@@ -69,19 +72,19 @@ Control {
 
             Label {
                 Layout.minimumWidth: implicitWidth;
-                text: i18nc("label:title", "Title:");
+                text: i18nc("@label:textfield", "Title:");
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
                 horizontalAlignment: Text.AlignRight;
             }
             TextField {
                 id: presetTitleField;
                 Layout.fillWidth: true;
-                placeholderText: i18nc("info:placeholder", "Style Name");
+                placeholderText: i18nc("@info:placeholder", "Style Name:");
                 onTextChanged: mainWindow.slotUpdateDirty();
             }
             Label {
                 Layout.minimumWidth: implicitWidth;
-                text: i18nc("label:title", "Description:");
+                text: i18nc("@label:textarea", "Description:");
                 Layout.alignment: Qt.AlignRight | Qt.AlignTop;
                 horizontalAlignment: Text.AlignRight;
             }
@@ -94,7 +97,7 @@ Control {
                     id: presetDescriptionArea;
                     wrapMode: TextInput.Wrap;
 
-                    placeholderText: i18nc("info:placeholder", "Style Description.");
+                    placeholderText: i18nc("@info:placeholder", "Style Description.");
                     onTextChanged: mainWindow.slotUpdateDirty();
                 }
 
@@ -106,7 +109,7 @@ Control {
             }
             Label {
                 Layout.minimumWidth: implicitWidth;
-                text: i18nc("label:Title", "Style Type:");
+                text: i18nc("label:listbox", "Style Type:");
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
                 horizontalAlignment: Text.AlignRight;
             }
@@ -114,15 +117,28 @@ Control {
                 id: styleTypeCmb;
                 Layout.fillWidth: true;
                 model: [
-                    {text: i18nc("listbox", "Character"), value: TextPropertyConfigModel.Character},
-                    {text: i18nc("listbox", "Paragraph"), value: TextPropertyConfigModel.Paragraph}
+                    {text: i18nc("@label:inlistbox", "Character"), value: TextPropertyConfigModel.Character},
+                    {text: i18nc("@label:inlistbox", "Paragraph"), value: TextPropertyConfigModel.Paragraph}
                 ];
                 valueRole: "value";
                 textRole: "text";
                 onActivated: styleEdit.styleType = currentValue === TextPropertyConfigModel.Character? "character": "paragraph";
             }
+            Item {
+                width: 1;
+                height: 1;
+            }
+            CheckBox {
+                id: pixelRelativeCheck;
+                text: i18nc("@option:check", "Style is Pixel Relative");
+                ToolTip.text: i18nc("info:tooltip", "By default, styles are stored in points, meaning that the sizes in pixels will be different depending on document print resolution. Toggle this to ensure the style will maintain the same pixel size across different documents.");
+                ToolTip.visible: hovered;
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                hoverEnabled: true;
+            }
+
             Label {
-                text: i18nc("label:Title", "Sample Text:");
+                text: i18nc("@label:textfield", "Sample Text:");
             }
             RowLayout {
                 Layout.columnSpan: 2;
@@ -131,21 +147,21 @@ Control {
                     id: beforeSampleField;
                     Layout.fillWidth: visible? true: false;
                     Layout.preferredWidth: visible? implicitWidth: 0;
-                    placeholderText: i18nc("info:placeholder", "Before...");
+                    placeholderText: i18nc("@info:placeholder", "Before...");
                     onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
                     visible: styleType !== "paragraph";
                 }
                 TextField {
                     id: sampleField;
                     Layout.fillWidth: true;
-                    placeholderText: presetTitleField.text.length == 0?  i18nc("info:placeholder", "Sample..."): presetTitleField.text;
+                    placeholderText: presetTitleField.text.length == 0?  i18nc("@info:placeholder", "Sample..."): presetTitleField.text;
                     onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
                 }
                 TextField {
                     id: afterSampleField;
                     Layout.fillWidth: visible? true: false;
                     Layout.preferredWidth: visible? implicitWidth: 0;
-                    placeholderText: i18nc("info:placeholder", "... After");
+                    placeholderText: i18nc("@info:placeholder", "... After");
                     onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
                     visible: styleType !== "paragraph";
                 }
@@ -154,7 +170,7 @@ Control {
         TextPropertyBaseList {
             Layout.fillWidth: true;
             Layout.fillHeight: true;
-            canvasDPI: styleEdit.canvasDPI;
+            canvasDPI: styleEdit.makePixelRelative? styleEdit.pixelRelativeDPI: styleEdit.canvasDPI;
             configModel: styleEdit.configModel;
             id: presetProperties;
             propertyType: styleType == "character"? TextPropertyConfigModel.Character: TextPropertyConfigModel.Paragraph;

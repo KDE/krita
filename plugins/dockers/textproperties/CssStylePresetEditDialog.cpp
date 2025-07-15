@@ -92,6 +92,8 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     m_quickWidget->rootObject()->setProperty("beforeSample", m_currentResource->beforeText());
     m_quickWidget->rootObject()->setProperty("sampleText", m_currentResource->sampleText());
     m_quickWidget->rootObject()->setProperty("afterSample", m_currentResource->afterText());
+    const int storedPPI = m_currentResource->storedPPIResolution();
+    m_quickWidget->rootObject()->setProperty("makePixelRelative", storedPPI > 0);
 
     QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
     m_blockUpdates = false;
@@ -165,4 +167,24 @@ void CssStylePresetEditDialog::slotUpdateDirty() {
         }
     }
     this->button(KoDialog::Ok)->setEnabled(isDirty && !title.isEmpty());
+}
+
+void CssStylePresetEditDialog::slotUpdateStoreDPI() {
+    //Whenever we make it pixel relative, we'll set the resolution to 72 dpi.
+    if (m_blockUpdates) return;
+    const bool makePixelRelative = m_quickWidget->rootObject()->property("makePixelRelative").toBool();
+    const int storedPPI = m_currentResource->storedPPIResolution();
+    const int canvasPPI = m_quickWidget->rootObject()->property("canvasDPI").toInt();
+    KoSvgTextPropertyData textData = m_model->textData.get();
+    if (storedPPI > 0 && !makePixelRelative) {
+        const double scale = double(storedPPI)/double(canvasPPI);
+        textData.commonProperties.scaleAbsoluteValues(scale, scale);
+        m_currentResource->setStoredPPIResolution(0);
+    } else if(storedPPI == 0 && makePixelRelative) {
+        const double scale = double(canvasPPI)/double(72);
+        textData.commonProperties.scaleAbsoluteValues(scale, scale);
+        m_currentResource->setStoredPPIResolution(72);
+    }
+    m_model->textData.set(textData);
+    slotUpdateTextProperties();
 }

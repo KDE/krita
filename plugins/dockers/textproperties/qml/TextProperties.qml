@@ -136,7 +136,7 @@ Rectangle {
                         presetView.applyPreset();
                     }
 
-                    ToolTip.text: presetDelegate.model.name + "\n" + presetDelegate.meta.description;
+                    ToolTip.text: typeof presetDelegate.meta.description !== 'undefined'? presetDelegate.model.name + "\n" + presetDelegate.meta.description: presetDelegate.model.name;
                     ToolTip.visible: containsMouse;
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 

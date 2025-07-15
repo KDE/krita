@@ -92,7 +92,6 @@ struct TextPropertiesDock::Private
 
     }
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
-    KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
     TextPropertyConfigModel *textPropertyConfigModel {nullptr};
     qreal currentDpi{72.0};
@@ -266,11 +265,10 @@ void TextPropertiesDock::applyPreset(KoResourceSP resource)
     KoCssStylePresetSP preset = resource.staticCast<KoCssStylePreset>();
     if (!preset) return;
     KoSvgTextPropertyData textData = d->textModel->textData.get();
-    KoSvgTextProperties properties = preset->properties();
+    KoSvgTextProperties properties = preset->properties(d->currentDpi, true);
     Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
         textData.commonProperties.setProperty(p, properties.property(p));
     }
-    qDebug() << "applied preset" << resource->name();
     d->textModel->textData.set(textData);
 }
 
@@ -302,6 +300,9 @@ void TextPropertiesDock::editPreset(KoResourceSP resource)
 
     if (dialog->exec() == QDialog::Accepted) {
         KisResourceUserOperations::updateResourceWithUserInput(this, dialog->currentResource());
+    } else {
+        KisResourceModel model = KisResourceModel(ResourceType::CssStyles, this);
+        model.reloadResource(preset);
     }
 }
 

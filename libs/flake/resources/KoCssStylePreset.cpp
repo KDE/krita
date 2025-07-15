@@ -24,6 +24,7 @@ const QString DESC = "desc";
 const QString SAMPLE_SVG = "sample_svg";
 const QString SAMPLE_ALIGN = "sample_align";
 const QString STYLE_TYPE = "style_type";
+const QString STORED_PPI = "stored_ppi";
 
 const QString STYLE_TYPE_PARAGRAPH = "paragraph";
 const QString STYLE_TYPE_CHARACTER = "character";
@@ -66,12 +67,23 @@ KoCssStylePreset::~KoCssStylePreset()
 
 }
 
-KoSvgTextProperties KoCssStylePreset::properties() const
+KoSvgTextProperties KoCssStylePreset::properties(int ppi, bool removeKraProps) const
 {
     const QVector<int> treeIndex = d->shape->findTreeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
-    qDebug() << "searching properties" << treeIndex;
+
     if (treeIndex.isEmpty()) return KoSvgTextProperties();
-    return d->shape->propertiesForTreeIndex(treeIndex);
+    KoSvgTextProperties props = d->shape->propertiesForTreeIndex(treeIndex);
+    const int storedPPI = storedPPIResolution();
+    if (storedPPI > 0 && ppi > 0) {
+        const double scale = double(storedPPI)/double(ppi);
+        props.scaleAbsoluteValues(scale, scale);
+    }
+    if (removeKraProps) {
+        props.removeProperty(KoSvgTextProperties::KraTextStyleType);
+        props.removeProperty(KoSvgTextProperties::KraTextStyleResolution);
+        props.removeProperty(KoSvgTextProperties::KraTextVersionId);
+    }
+    return props;
 }
 
 void KoCssStylePreset::setProperties(const KoSvgTextProperties &properties)
@@ -151,6 +163,11 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
     }
     // This one is added after removing, because otherwise, the type is removed...
     modifiedProps.setProperty(KoSvgTextProperties::KraTextStyleType, type);
+    if (storedPPIResolution() > 0) {
+        modifiedProps.setProperty(KoSvgTextProperties::KraTextStyleResolution, storedPPIResolution());
+    } else {
+        modifiedProps.removeProperty(KoSvgTextProperties::KraTextStyleResolution);
+    }
     // Always remove inline size, it is shape-specific.
     modifiedProps.removeProperty(KoSvgTextProperties::InlineSizeId);
     // Remove fill and stroke for now as we have no widgets for them.
@@ -332,6 +349,17 @@ QString KoCssStylePreset::sampleSvg() const
     return m[SAMPLE_SVG].toString();
 }
 
+int KoCssStylePreset::storedPPIResolution() const
+{
+    QMap<QString, QVariant> m = metadata();
+    return m.value(STORED_PPI, 0).toInt();
+}
+
+void KoCssStylePreset::setStoredPPIResolution(const int ppi)
+{
+    addMetaData(STORED_PPI, ppi);
+}
+
 KoResourceSP KoCssStylePreset::clone() const
 {
     return KoResourceSP(new KoCssStylePreset(*this));
@@ -377,6 +405,9 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
             if (!treeIndex.isEmpty()) {
                 KoSvgTextProperties props = d->shape->propertiesForTreeIndex(treeIndex);
                 styleType = props.property(KoSvgTextProperties::KraTextStyleType).toString();
+                if (props.hasProperty(KoSvgTextProperties::KraTextStyleResolution)) {
+                    addMetaData(STORED_PPI, props.property(KoSvgTextProperties::KraTextStyleResolution));
+                }
             }
 
             addMetaData(STYLE_TYPE, styleType);

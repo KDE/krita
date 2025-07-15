@@ -203,6 +203,46 @@ void KoSvgTextProperties::setAllButNonInheritableProperties(const KoSvgTextPrope
     }
 }
 
+void KoSvgTextProperties::scaleAbsoluteValues(const double scaleInline, const double scaleBlock)
+{
+    const KoSvgText::CssLengthPercentage::UnitType absoluteUnit = KoSvgText::CssLengthPercentage::Absolute;
+
+    for (auto it = this->m_d->properties.begin(); it != this->m_d->properties.end(); ++it) {
+        if (it.value().canConvert<KoSvgText::CssLengthPercentage>()) {
+            KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
+            if (length.unit != absoluteUnit) continue;
+            if (it.key() == FontSizeId || it.key() == BaselineShiftValueId) {
+                length.value *= scaleBlock;
+            } else {
+                length.value *= scaleInline;
+            }
+            it.value() = QVariant::fromValue(length);
+        } else if (it.value().canConvert<KoSvgText::LineHeightInfo>()) {
+            KoSvgText::LineHeightInfo info = it.value().value<KoSvgText::LineHeightInfo>();
+            if (info.length.unit != absoluteUnit) continue;
+            info.length.value *= scaleBlock;
+            it.value() = QVariant::fromValue(info);
+        } else if (it.value().canConvert<KoSvgText::TabSizeInfo>()) {
+            KoSvgText::TabSizeInfo info = it.value().value<KoSvgText::TabSizeInfo>();
+            if (info.length.unit != absoluteUnit) continue;
+            info.length.value *= scaleInline;
+            it.value() = QVariant::fromValue(info);
+        } else if (it.value().canConvert<KoSvgText::TextIndentInfo>()) {
+            KoSvgText::TextIndentInfo info = it.value().value<KoSvgText::TextIndentInfo>();
+            if (info.length.unit != absoluteUnit) continue;
+            info.length.value *= scaleInline;
+            it.value() = QVariant::fromValue(info);
+        } else if (it.value().canConvert<KoSvgText::AutoValue>()) {
+            KoSvgText::AutoValue info = it.value().value<KoSvgText::AutoValue>();
+            if (info.isAuto) continue;
+            if (it.key() != InlineSizeId) continue;
+            info.customValue *= scaleInline;
+            it.value() = QVariant::fromValue(info);
+        }
+        // TODO: Check shape padding and margin when they become editable.
+    }
+}
+
 KoSvgTextProperties KoSvgTextProperties::ownProperties(const KoSvgTextProperties &parentProperties, bool keepFontSize) const
 {
     KoSvgTextProperties result;

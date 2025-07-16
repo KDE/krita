@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-11 03:27+0000\n"
-"PO-Revision-Date: 2025-01-22 12:45+0100\n"
+"PO-Revision-Date: 2025-07-14 15:51+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -32,13 +32,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/brushes/triangle.svg"
 msgid "triangle"
-msgstr "triangelua"
+msgstr "hirukia"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1725,7 +1725,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Triangle_shape_1.gbr"
 msgid "Z_Triangle_shape_1"
-msgstr "Z_Triangelu_forma_1"
+msgstr "Z_Hiruki_forma_1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1733,7 +1733,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Triangle_shape_2.gbr"
 msgid "Z_Triangle_shape_2"
-msgstr "Z_Triangelu_forma_2"
+msgstr "Z_Hiruki_forma_2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3851,7 +3851,7 @@ msgstr "izar-eremua"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/triangle.svg"
 msgid "triangle"
-msgstr "triangelua"
+msgstr "hirukia"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27454,7 +27454,7 @@ msgstr "Kolore-hautatzailea:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
 #, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "sRGB triangelu hautatzailea"
+msgstr "sRGB hiruki hautatzailea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
@@ -44151,7 +44151,7 @@ msgstr "Mugimendu-lausotzea"
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:269
 #, kde-format
 msgid "Triangle"
-msgstr "Triangelua"
+msgstr "Hirukia"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:34
@@ -46722,7 +46722,7 @@ msgstr "Uhin sinusoidala"
 #, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
-msgstr "Uhin triangeluarra"
+msgstr "Hiruki-formako uhina"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:39
 #, kde-format

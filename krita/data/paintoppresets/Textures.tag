@@ -16,6 +16,7 @@ Name[eu]=Ehundurak
 Name[fi]=Pintakuviot
 Name[fr]=Textures
 Name[gl]=Texturas
+Name[he]=מרקמים
 Name[hi]=टेक्श्चर
 Name[hu]=Textúrák
 Name[ia]=Textures

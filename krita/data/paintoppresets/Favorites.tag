@@ -16,6 +16,7 @@ Name[eu]=★ Nire gogokoak
 Name[fi]=★ Suosikit
 Name[fr]=★ Mes préférés
 Name[gl]=★ Favoritas
+Name[he]=★ המועדפים שלי
 Name[hi]=★ मेरे पसंदीदा
 Name[hu]=★ Kedvencek
 Name[id]=★ Favorit Saya

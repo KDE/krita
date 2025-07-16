@@ -65,7 +65,6 @@ TextPropertyBase {
             Layout.preferredHeight: contentHeight;
             Layout.minimumHeight: noContentLabel.contentHeight;
             spacing: columnSpacing;
-            reuseItems: true;
 
             Label {
                 id: noContentLabel;
@@ -249,7 +248,6 @@ TextPropertyBase {
                         clip: true;
                         implicitHeight: Math.min(contentHeight, 300);
                         width: completerPopup.width;
-                        reuseItems: true;
 
                         ScrollBar.vertical: ScrollBar {
                         }

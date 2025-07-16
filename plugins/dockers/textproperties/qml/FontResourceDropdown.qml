@@ -49,9 +49,10 @@ Button {
             property var meta: model.metadata;
             // TODO: change this to use the text locale, if possible.
             property string sample: "";
-            onMetaChanged: {
-                sample = familyCmb.modelWrapper.localizedSampleFromMetadata(meta, locales, "");
-                fontName = familyCmb.modelWrapper.localizedNameFromMetadata(meta, locales, model.name);
+
+            Component.onCompleted: {
+                fontName = modelWrapper.localizedNameFromMetadata(meta, locales, model.name);
+                sample = modelWrapper.localizedSampleFromMetadata(meta, locales, "");
             }
 
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load

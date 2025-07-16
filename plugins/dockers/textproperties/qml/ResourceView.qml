@@ -186,7 +186,6 @@ Control {
                 anchors.fill: parent;
                 id: view;
                 currentIndex: modelWrapper.currentIndex;
-                reuseItems: true;
                 ScrollBar.vertical: ScrollBar {
                 }
             }

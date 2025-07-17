@@ -1,0 +1,71 @@
+/*
+ *  SPDX-FileCopyrightText: 2024 Deif Lou <ginoba@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+import QtQuick 2.15
+import org.krita.components 1.0
+
+KisDoubleSpinBox {
+    id: root
+
+    property alias prefix: contentId.prefix
+    property alias suffix: contentId.suffix
+    property real softDFrom: from
+    property real softDTo: from
+    property bool softRangeActive: false
+    property alias blockUpdateSignalOnDrag: contentId.blockUpdateSignalOnDrag
+    property alias exponentRatio: contentId.exponentRatio
+    property alias fastSliderStep: contentId.fastSliderStep
+    readonly property alias dragging : contentId.dragging
+
+    function fixSoftRange() {
+        if (root.softDFrom < root.dFrom) {
+            root.softDFrom = root.dFrom;
+        } else if (root.softDFrom > root.softDTo) {
+            root.softDFrom = root.softDTo;
+        }
+        if (root.softDTo < root.softDFrom) {
+            root.softDTo = root.softDFrom;
+        } else if (root.softDTo > root.dTo) {
+            root.softDTo = root.dTo;
+        }
+        contentId.showSoftRange = root.softDFrom !== root.softDTo;
+    }
+
+    editable: false
+    padding: 0
+    focusPolicy: Qt.WheelFocus
+    implicitWidth: contentId.implicitWidth + 1 + 2 + leftPadding + rightPadding
+
+    contentItem: FocusScope {
+        focus: true
+        
+        KisSliderSpinBoxContentItem {
+            id: contentId
+
+            anchors.fill: parent
+            anchors.margins: 1
+            anchors.rightMargin: 2
+            focus: true
+            
+            decimals: root.decimals
+            from: root.dFrom
+            to: root.dTo
+            softFrom: root.softDFrom
+            softTo: root.softDTo
+            showSoftRange: false
+            softRangeActive: root.softRangeActive
+            focusPolicy: root.focusPolicy
+            parentSpinBox: root
+
+            onValueChanged: root.dValue = value
+        }
+    }
+
+    onDValueChanged: contentId.value = root.dValue
+    onDFromChanged: fixSoftRange()
+    onDToChanged: fixSoftRange()
+    onSoftDFromChanged: fixSoftRange()
+    onSoftDToChanged: fixSoftRange()
+}

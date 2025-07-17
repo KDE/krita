@@ -28,12 +28,43 @@ else ()
             KritaQmlComponentsPlugin.h
             SvgTextLabel.cpp
             SvgTextLabel.h
+            KisNumParser.cpp
+            KisNumParser.h
+            KisCubicCurveQMLWrapper.cpp
+            KisCubicCurveQMLWrapper.h
     )
 
 endif ()
 
 ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/DoubleSpinBox.qml
+    
+    qml/button/KisGroupButton.qml
+    qml/button/KisOptionButtonStrip.qml
+    
+    qml/overlays/KisWarningOverlay.qml
+    qml/overlays/KisSliderOverlay.qml
+    qml/tooltip/KisToolTip.qml
+
+    qml/textinput/KisTextInputWithSelectionRange.qml
+    qml/textinput/KisTextInputWithPrefixAndSuffix.qml
+    
+    qml/spinbox/KisParseSpinBoxContentItem.qml
+    qml/spinbox/KisIntParseSpinBox.qml
+    qml/spinbox/KisDoubleSpinBox.qml
+    qml/spinbox/KisDoubleParseSpinBox.qml
+    qml/spinbox/KisParseSpinBoxUtil.js
+
+    qml/sliderspinbox/KisSliderSpinBoxManipulator.qml
+    qml/sliderspinbox/KisSliderSpinBoxRangeSwitch.qml
+    qml/sliderspinbox/KisSliderSpinBoxContentItem.qml
+    qml/sliderspinbox/KisIntSliderSpinBox.qml
+    qml/sliderspinbox/KisDoubleSliderSpinBox.qml
+
+    qml/curvewidget/KisCurveWidget.qml
+    qml/angleselector/KisAngleGauge.qml
+    qml/angleselector/KisAngleSelector.qml
+    qml/angleselector/KisAngleSelectorUtil.js
 )
 
 target_link_libraries(kritaqmlcomponents

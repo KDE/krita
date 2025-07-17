@@ -35,9 +35,8 @@ TextPropertyBase {
     CssQmlUnitConverter {
         id: converter;
         dpi: dpi;
-        dataMultiplier: lineHeightSpn.multiplier;
 
-        onUserValueChanged: lineHeightSpn.value = userValue;
+        onUserValueChanged: lineHeightSpn.dValue = userValue;
         onUserUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(userUnit);
     }
 
@@ -122,14 +121,14 @@ TextPropertyBase {
                 }
                 Layout.fillWidth: true;
                 Layout.fillHeight: true;
-                DoubleSpinBox {
+                KisDoubleSliderSpinBox {
                     id: lineHeightSpn
                     width: parent.width;
                     enabled: !lineHeightNormalCbx.checked;
-                    from: 0;
-                    to: 999 * multiplier;
+                    dFrom: 0;
+                    dTo: 99;
 
-                    onValueChanged:if (enabled)  converter.userValue = value;
+                    onDValueChanged:if (enabled)  converter.userValue = dValue;
                     palette: lineHeightPalette.palette;
                 }
             }
@@ -152,7 +151,6 @@ TextPropertyBase {
 
                 PaletteControl {
                     id: lineHeightPalette;
-                    colorGroup: lineHeightUnitCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
                 }
                 palette: lineHeightPalette.palette;
                 wheelEnabled: true;

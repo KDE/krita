@@ -67,28 +67,20 @@ CollapsibleGroupProperty {
         height: childrenRect.height;
         spacing: columnSpacing;
 
-        Label {
-            id: propertyTitleLabel;
-            text: propertyTitle;
-            verticalAlignment: Text.AlignVCenter
-            color: sysPalette.text;
-            elide: Text.ElideRight;
-            Layout.maximumWidth: contentWidth;
-        }
-
-        DoubleSpinBox {
+        KisDoubleSliderSpinBox {
+            prefix: propertyTitle + ": ";
             id: textIndentSpn;
             Layout.fillWidth: true;
-            from: 0;
-            to: 999 * multiplier;
-            onValueChanged: textIndentUnitCmb.userValue = value;
+            dFrom: 0;
+            dTo: 999;
+            onDValueChanged: textIndentUnitCmb.userValue = dValue;
         }
         /// Note: percentage calculation in the default unitcombobox isn't great for textIndent as it assumes 100% = fontsize,
         /// While spec-wise, it's the inline length that defines percentage.
         UnitComboBox {
             id: textIndentUnitCmb;
             spinBoxControl: textIndentSpn;
-            onUserValueChanged: textIndentSpn.value = userValue;
+            onUserValueChanged: textIndentSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
         }

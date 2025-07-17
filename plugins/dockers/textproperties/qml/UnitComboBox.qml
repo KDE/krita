@@ -41,7 +41,6 @@ SqueezedComboBox {
 
     CssQmlUnitConverter {
         id: converter;
-        dataMultiplier: spinBoxControl.multiplier;
 
         onUserUnitChanged: root.currentIndex = root.indexOfValue(userUnit);
     }

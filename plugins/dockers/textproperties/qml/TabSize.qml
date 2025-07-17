@@ -34,9 +34,8 @@ TextPropertyBase {
     CssQmlUnitConverter {
         id: converter;
         dpi: dpi;
-        dataMultiplier: tabSizeSpn.multiplier;
 
-        onUserValueChanged: tabSizeSpn.value = userValue;
+        onUserValueChanged: tabSizeSpn.dValue = userValue;
         onUserUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(userUnit);
     }
 
@@ -70,35 +69,23 @@ TextPropertyBase {
 
     onEnableProperty: properties.tabSizeState = KoSvgTextPropertiesModel.PropertySet;
 
-    GridLayout {
-        columns: 3
+    RowLayout {
         anchors.left: parent.left
         anchors.right: parent.right
-        columnSpacing: columnSpacing;
+        spacing: columnSpacing;
 
         RevertPropertyButton {
             revertState: properties.tabSizeState;
             onClicked: properties.tabSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
-        Label {
-            text: propertyTitle
-            Layout.columnSpan: 2;
-            elide: Text.ElideRight;
-            Layout.fillWidth: true;
-            font.italic: properties.tabSizeState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
 
-        Item {
-            width: 1;
-            height: 1;
-        }
-
-        DoubleSpinBox {
+        KisDoubleSliderSpinBox {
             id: tabSizeSpn;
+            prefix: propertyTitle + ": ";
             Layout.fillWidth: true;
-            from: 0;
-            to: 999 * multiplier;
-            onValueChanged: converter.userValue = value;
+            dFrom: 0;
+            dTo: 99;
+            onDValueChanged: converter.userValue = dValue;
         }
         SqueezedComboBox {
             id: tabSizeUnitCmb;

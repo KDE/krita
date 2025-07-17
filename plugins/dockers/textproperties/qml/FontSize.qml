@@ -53,23 +53,19 @@ TextPropertyBase {
             onClicked: properties.fontSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: propertyTitle;
-            elide: Text.ElideRight;
-            Layout.fillWidth: true;
-            font.italic: properties.fontSizeState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
-
-        DoubleSpinBox {
+        KisDoubleSliderSpinBox {
             id: fontSizeSpn;
-            editable: true;
+            prefix: propertyTitle+ ": "
             Layout.fillWidth: true;
 
-            from: 0;
-            to: 99999 * multiplier;
-            stepSize: 100;
+            dFrom: 0;
+            dTo: 999;
+            softDFrom: 0;
+            softDTo: 72;
+            softRangeActive: true;
+            blockUpdateSignalOnDrag: true;
 
-            onValueChanged: fontSizeUnitCmb.userValue = value;
+            onDValueChanged: fontSizeUnitCmb.userValue = dValue;
         }
 
         UnitComboBox {
@@ -81,7 +77,7 @@ TextPropertyBase {
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
 
-            onUserValueChanged: fontSizeSpn.value = userValue;
+            onUserValueChanged: fontSizeSpn.dValue = userValue;
         }
     }
 }

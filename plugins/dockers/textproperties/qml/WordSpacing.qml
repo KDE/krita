@@ -54,21 +54,19 @@ TextPropertyBase {
             onClicked: properties.wordSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: propertyTitle;
-            elide: Text.ElideRight;
+        KisDoubleSliderSpinBox {
+            id: wordSpacingSpn;
+            prefix: propertyTitle+ ": "
             Layout.fillWidth: true;
-            font.italic: properties.wordSpacingState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
 
-        DoubleSpinBox {
-            id: wordSpacingSpn
-            editable: true;
-            Layout.fillWidth: true;
-            from: -999 * multiplier;
-            to: 999 * multiplier;
+            dFrom: -99;
+            dTo: 99;
+            softDFrom: -10;
+            softDTo: 10;
+            softRangeActive: true;
+            dStepSize: 0.1;
 
-            onValueChanged: wordSpacingUnitCmb.userValue = value;
+            onDValueChanged: wordSpacingUnitCmb.userValue = dValue;
         }
 
         UnitComboBox {
@@ -76,7 +74,7 @@ TextPropertyBase {
             spinBoxControl: wordSpacingSpn;
             isFontSize: false;
             dpi: dpi;
-            onUserValueChanged: wordSpacingSpn.value = userValue;
+            onUserValueChanged: wordSpacingSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
             allowPercentage: false; // CSS-Text-4 has percentages for word-spacing, but so does SVG 1.1, and they both are implemented differently.

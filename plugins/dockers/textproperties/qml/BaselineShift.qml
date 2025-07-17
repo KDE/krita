@@ -116,13 +116,13 @@ TextPropertyBase {
                 id: baselinePalette;
                 colorGroup: baselineShiftSpn.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
-            DoubleSpinBox {
+            KisDoubleSliderSpinBox {
                 id: baselineShiftSpn
                 width: parent.width;
                 enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
-                from: -999 * multiplier;
-                to: 999 * multiplier;
-                onValueChanged: if (enabled) baselineShiftUnitCmb.userValue = value;
+                dFrom: -99;
+                dTo: 99;
+                onDValueChanged: if (enabled) baselineShiftUnitCmb.userValue = dValue;
                 palette: baselinePalette.palette;
             }
         }
@@ -136,7 +136,7 @@ TextPropertyBase {
             isFontSize: false;
             enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
             dpi:dpi;
-            onUserValueChanged: baselineShiftSpn.value = userValue;
+            onUserValueChanged: baselineShiftSpn.dValue = userValue;
         }
     }
 }

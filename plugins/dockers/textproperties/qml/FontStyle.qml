@@ -153,24 +153,14 @@ CollapsibleGroupProperty {
             onClicked: properties.fontWeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: i18nc("@label:spinbox", "Weight:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            horizontalAlignment: Text.AlignRight;
-            Layout.preferredWidth: implicitWidth;
-            elide: Text.ElideRight;
-            font.italic: properties.fontWeightState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
-
-
-        SpinBox {
+        KisIntSliderSpinBox {
             id: fontWeightSpn
+            prefix: i18nc("@label:spinbox", "Weight: ");
             from: 0;
             to: 1000;
-            editable: true;
+            blockUpdateSignalOnDrag: true;
             Layout.fillWidth: true;
-
-            wheelEnabled: true;
+            Layout.columnSpan: 2;
 
         }
         RevertPropertyButton {
@@ -193,22 +183,15 @@ CollapsibleGroupProperty {
             revertState: properties.fontWidthState;
             onClicked: properties.fontWidthState = KoSvgTextPropertiesModel.PropertyUnset;
         }
-        Label {
-            id: widthLabel;
-            text: i18nc("@label:spinbox", "Width:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            horizontalAlignment: Text.AlignRight;
-            Layout.preferredWidth: implicitWidth;
-            elide: Text.ElideRight;
-            font.italic: properties.fontWidthState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
-        SpinBox {
+
+        KisIntSliderSpinBox {
             id: fontStretchSpn
+            prefix: i18nc("@label:spinbox", "Width: ")
             from: 0;
             to: 200;
-            editable: true;
+            blockUpdateSignalOnDrag: true;
             Layout.fillWidth: true;
-            wheelEnabled: true;
+            Layout.columnSpan: 2;
         }
 
         RevertPropertyButton {
@@ -249,17 +232,18 @@ CollapsibleGroupProperty {
                 fontSlant = CssFontStyleModel.StyleOblique;
             }
             Layout.fillWidth: true;
-            Layout.fillHeight: true;
-            Layout.minimumHeight: fontSlantSpn.height;
-            SpinBox {
-                id: fontSlantSpn
+            Layout.preferredHeight: fontSlantSpn.implicitHeight;
+            KisIntSliderSpinBox {
+                id: fontSlantSpn;
+                suffix:"°"
                 from: -90;
                 to: 90;
-                editable: true;
                 enabled: fontSlant == CssFontStyleModel.StyleOblique;
-
-                wheelEnabled: true;
-
+                PaletteControl {
+                    id: slantSpnPal;
+                }
+                anchors.fill: parent;
+                palette: slantSpnPal.palette;
             }
         }
 
@@ -309,6 +293,7 @@ CollapsibleGroupProperty {
             Layout.fillWidth: true;
             Layout.preferredHeight: contentHeight;
             spacing: parent.columnSpacing;
+            reuseItems: true;
 
             Label {
                 text: i18n("No extra variable axes in this font");
@@ -318,32 +303,22 @@ CollapsibleGroupProperty {
                 visible: parent.count === 0;
             }
 
-            delegate: RowLayout {
-                spacing: axesView.spacing;
-                width: axesView.width;
-                height: implicitHeight;
+            delegate: KisDoubleSliderSpinBox {
+                id: axisSpn;
                 required property string display;
                 required property double axismin;
                 required property double axismax;
                 required property bool axishidden;
                 required property var model;
 
-                Label {
-                    text: parent.display;
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    horizontalAlignment: Text.AlignRight;
-                    height: parent.height;
-                    elide: Text.ElideRight;
-                    Layout.preferredWidth: widthLabel.width+spacing;
-                }
-                DoubleSpinBox {
-                    id: axisSpn;
-                    from: parent.axismin * multiplier;
-                    to: parent.axismax * multiplier;
-                    value: model.edit * multiplier;
-                    onValueModified: model.edit = (value / axisSpn.multiplier);
-                    Layout.fillWidth: true;
-                }
+                prefix: display + ": ";
+                dFrom: axismin;
+                dTo: axismax;
+                dValue: model.edit;
+                blockUpdateSignalOnDrag: true;
+                onDValueChanged: model.edit = dValue;
+
+                width: ListView.view.width;
             }
         }
 

@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-05 18:54+0200\n"
+"PO-Revision-Date: 2025-07-12 20:42+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16498,22 +16498,19 @@ msgid "Active tool: %1"
 msgstr "Strumento attivo: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to View"
+#, kde-format
 msgid "Fit View"
 msgstr "Adatta alla vista"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit Width"
-msgstr "Adatta alla larghezza"
+msgstr "Adatta larghezza"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit View Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "Adatta all'altezza della vista"
+msgstr "Adatta altezza"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -40083,9 +40080,7 @@ msgid "Tool Options"
 msgstr "Opzioni dello strumento"
 
 #: libs/widgets/KoZoomActionState.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip %2 is shortcut"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"

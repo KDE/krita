@@ -11,26 +11,22 @@ KisDoubleSpinBox {
 
     property alias prefix: contentId.prefix
     property alias suffix: contentId.suffix
-    property real softDFrom: from
-    property real softDTo: from
+    property real softDFrom: dFrom
+    property real softDTo: dFrom
     property bool softRangeActive: false
     property alias blockUpdateSignalOnDrag: contentId.blockUpdateSignalOnDrag
     property alias exponentRatio: contentId.exponentRatio
     property alias fastSliderStep: contentId.fastSliderStep
     readonly property alias dragging : contentId.dragging
 
+    property bool isComplete: false;
+
     function fixSoftRange() {
-        if (root.softDFrom < root.dFrom) {
-            root.softDFrom = root.dFrom;
-        } else if (root.softDFrom > root.softDTo) {
-            root.softDFrom = root.softDTo;
-        }
-        if (root.softDTo < root.softDFrom) {
-            root.softDTo = root.softDFrom;
-        } else if (root.softDTo > root.dTo) {
-            root.softDTo = root.dTo;
-        }
-        contentId.showSoftRange = root.softDFrom !== root.softDTo;
+        if (!isComplete) return;
+        root.softDFrom = Math.min(Math.max(root.softDFrom, root.dFrom), root.dTo);
+        root.softDTo = Math.min(Math.max(root.softDTo, root.softDFrom), root.dTo);
+        contentId.showSoftRange = (root.softDFrom != root.softDTo)
+                && (root.softDFrom !== root.dFrom || root.softDTo !== root.dTo);
     }
 
     editable: false
@@ -68,4 +64,9 @@ KisDoubleSpinBox {
     onDToChanged: fixSoftRange()
     onSoftDFromChanged: fixSoftRange()
     onSoftDToChanged: fixSoftRange()
+
+    Component.onCompleted: {
+        isComplete = true;
+        fixSoftRange()
+    }
 }

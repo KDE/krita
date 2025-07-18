@@ -10,7 +10,7 @@ ToolTip {
     id: root
 
     delay: Qt.styleHints.mousePressAndHoldInterval;
-    timeout: Qt.styleHints.mousePressAndHoldInterval;
+    timeout: Qt.styleHints.mousePressAndHoldInterval*10;
 
     property Item parentControl
     property bool changingParentControl: false

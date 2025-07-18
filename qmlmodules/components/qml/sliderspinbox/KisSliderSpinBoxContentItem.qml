@@ -66,7 +66,7 @@ FocusScope {
             const w = root.softTo - root.softFrom;
             return Math.max(Math.min(x, w), 0) / w;
         }
-        bottomBarWidth: value / (root.to - root.from)
+        bottomBarWidth: (value - root.from) / (root.to - root.from)
         faded: root.editing
         exponentRatio: root.exponentRatio
     }

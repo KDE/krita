@@ -19,18 +19,14 @@ SpinBox {
     property int fastSliderStep: 5
     readonly property alias dragging : contentId.dragging
 
+    property bool isComplete: false;
+
     function fixSoftRange() {
-        if (root.softFrom < root.from) {
-            root.softFrom = root.from;
-        } else if (root.softFrom > root.softTo) {
-            root.softFrom = root.softTo;
-        }
-        if (root.softTo < root.softFrom) {
-            root.softTo = root.softFrom;
-        } else if (root.softTo > root.to) {
-            root.softTo = root.to;
-        }
-        contentId.showSoftRange = root.softFrom !== root.softTo;
+        if (!isComplete) return;
+        root.softFrom = Math.min(Math.max(root.softFrom, root.from), root.To);
+        root.softTo = Math.min(Math.max(root.softTo, root.softFrom), root.To);
+        contentId.showSoftRange = (root.softFrom !== root.softTo)
+                && (root.softFrom !== root.from || root.softTo !== root.to);
     }
 
     editable: false
@@ -77,5 +73,7 @@ SpinBox {
         } else {
             root.leftPadding = 0;
         }
+        isComplete = true;
+        fixSoftRange()
     }
 }

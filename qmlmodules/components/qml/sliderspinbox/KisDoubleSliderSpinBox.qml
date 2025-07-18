@@ -55,11 +55,20 @@ KisDoubleSpinBox {
             focusPolicy: root.focusPolicy
             parentSpinBox: root
 
-            onValueChanged: root.dValue = value
+            onValueChanged: {
+                if (!(blockUpdateSignalOnDrag && dragging) && root.dValue !== value) {
+                    root.dValue = value;
+                }
+            }
+            onDraggingChanged: {
+                if (blockUpdateSignalOnDrag && !dragging) {
+                    root.dValue = value;
+                }
+            }
         }
     }
 
-    onDValueChanged: contentId.value = root.dValue
+    onDValueChanged: contentId.value = root.dValue;
     onDFromChanged: fixSoftRange()
     onDToChanged: fixSoftRange()
     onSoftDFromChanged: fixSoftRange()

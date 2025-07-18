@@ -55,7 +55,16 @@ SpinBox {
             focusPolicy: root.focusPolicy
             fastSliderStep: root.fastSliderStep
 
-            onValueChanged: root.value = Math.round(value)
+            onValueChanged: {
+                if (!(blockUpdateSignalOnDrag && dragging) && root.value !== value) {
+                    root.value = value;
+                }
+            }
+            onDraggingChanged: {
+                if (blockUpdateSignalOnDrag && !dragging) {
+                    root.value = value;
+                }
+            }
         }
     }
 

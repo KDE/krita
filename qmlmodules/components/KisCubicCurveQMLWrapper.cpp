@@ -9,7 +9,7 @@ KisCubicCurveQml::KisCubicCurveQml(QObject *parent)
     : QObject(parent)
 {}
 
-const QList<QPointF>& KisCubicCurveQml::points() const
+const QList<QPointF> KisCubicCurveQml::points() const
 {
     return m_curve.points();
 }
@@ -55,7 +55,7 @@ void KisCubicCurveQml::fromString(const QString &str)
 }
 
 
-void KisCubicCurveQml::setPoints(const QList<QPointF> &points)
+void KisCubicCurveQml::setPoints(const QList<QPointF> points)
 {
     m_curve.setPoints(points);
     emit pointsChanged(m_curve.points());

@@ -22,7 +22,7 @@ class KisCubicCurveQml : public QObject
 public:
     KisCubicCurveQml(QObject *parent = nullptr);
 
-    const QList<QPointF>& points() const;
+    const QList<QPointF> points() const;
     const QString& name() const;
 
     Q_INVOKABLE qreal value(qreal x) const;
@@ -34,7 +34,7 @@ public:
     Q_INVOKABLE void fromString(const QString&);
 
 public Q_SLOTS:
-    void setPoints(const QList<QPointF> &points);
+    void setPoints(const QList<QPointF> points);
     void setPoint(int idx, const QPointF &point);
     int addPoint(const QPointF &point);
     void removePoint(int idx);

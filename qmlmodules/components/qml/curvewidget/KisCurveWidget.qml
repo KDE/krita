@@ -5,7 +5,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Shapes 2.15
+import QtQuick.Shapes 1.15
 import org.krita.components 1.0
 
 Control {
@@ -20,6 +20,8 @@ Control {
 
     onPaletteChanged: contentItem.requestPaint()
     onActiveFocusChanged: contentItem.requestPaint()
+    onWidthChanged: contentItem.requestPaint();
+    onHeightChanged: contentItem.requestPaint();
 
     background: Rectangle {
         id: backgroundItem
@@ -69,9 +71,10 @@ Control {
     contentItem: Canvas {
         id: contentItem
 
-        property list<point> points
+        // Qt6: switch this to list<point>, qt5 doesn't support that.
+        property var points: []
 
-        function updatePoints(pts) {
+        function updatePoints() {
             const width = contentItem.width;
             const height = contentItem.height;
             const pointYs = root.curve.floatTransfer(width);
@@ -101,7 +104,15 @@ Control {
         implicitWidth: 256
         implicitHeight: 256
 
+        onWidthChanged: updatePoints();
+        onHeightChanged: updatePoints();
+
         onPointsChanged: contentItem.requestPaint()
+
+        function adjustOpacity(color, alpha) {
+            // In Qt6 we can use Qt.Alpha for this, but not in qt5
+            return Qt.rgba(color.r, color.g, color.b, alpha);
+        }
 
         onPaint: {
             if (!contentItem.points || contentItem.points.length === 0) {
@@ -111,7 +122,7 @@ Control {
 
             ctx.clearRect(0, 0, contentItem.width, contentItem.height);
             // Paint the curve
-            ctx.fillStyle = Qt.alpha(root.palette.text, 0.2);
+            ctx.fillStyle = adjustOpacity(root.palette.text, 0.2);
             ctx.strokeStyle = root.palette.text;
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -128,7 +139,7 @@ Control {
             ctx.stroke();
             // Paint non selected knots
             ctx.beginPath();
-            ctx.fillStyle = Qt.alpha(root.palette.base, 0.3);
+            ctx.fillStyle = adjustOpacity(root.palette.base, 0.3);
             for (let i = 0; i < root.curve.points.length; ++i) {
                 if (i === root.selectedKnotIndex && root.activeFocus) {
                     continue;
@@ -141,8 +152,8 @@ Control {
             // Paint the selected knot
             if (root.activeFocus) {
                 ctx.beginPath();
-                ctx.fillStyle = Qt.alpha(root.palette.highlight, 0.8);
-                ctx.strokeStyle = Qt.tint(root.palette.text, Qt.alpha(root.palette.highlight, 0.2));
+                ctx.fillStyle = adjustOpacity(root.palette.highlight, 0.8);
+                ctx.strokeStyle = Qt.tint(root.palette.text, adjustOpacity(root.palette.highlight, 0.2));
                 const p = root.curve.points[root.selectedKnotIndex];
                 ctx.ellipse(p.x * contentItem.width - 6, contentItem.height - p.y * contentItem.height - 6, 12, 12);
                 ctx.fill();
@@ -211,7 +222,7 @@ Control {
                 mouseArea.isDragging = true;
             }
 
-            onReleased: mouseArea.isDragging = false
+            onReleased: mouseArea.isDragging = false;
 
             onPositionChanged: (me) => {
                 if (root.readOnly) {
@@ -220,11 +231,7 @@ Control {
 
                 if (!mouseArea.isDragging) {
                     const closestKnot = mouseArea.closestKnotIndex(me.x, me.y);
-                    if (closestKnot < 0) {
-                        mouseArea.cursorShape = Qt.ArrowCursor;
-                    } else {
-                        mouseArea.cursorShape = Qt.CrossCursor;
-                    }
+                    mouseArea.cursorShape = closestKnot< 0? Qt.ArrowCursor: Qt.CrossCursor;
                 } else {
                     const crossedHoriz = me.x - mouseArea.width > 15 || me.x < -15;
                     const crossedVert =  me.y - mouseArea.height > 15 || me.y < -15;
@@ -279,7 +286,7 @@ Control {
     }
 
     Keys.onPressed: (ke) => {
-        if (ke.key == Qt.Key_Right) {
+        if (ke.key === Qt.Key_Right) {
             if (ke.modifiers & Qt.ControlModifier) {
                 if (root.selectedKnotIndex < root.curve.points.length - 1) {
                     root.selectedKnotIndex++;
@@ -297,7 +304,7 @@ Control {
             }
             ke.accepted = true;
 
-        } else if (ke.key == Qt.Key_Left) {
+        } else if (ke.key === Qt.Key_Left) {
             if (ke.modifiers & Qt.ControlModifier) {
                 if (root.selectedKnotIndex > 0) {
                     root.selectedKnotIndex--;
@@ -314,8 +321,7 @@ Control {
                 }
             }
             ke.accepted = true;
-
-        } else if (ke.key == Qt.Key_Up) {
+        } else if (ke.key === Qt.Key_Up) {
             let newPoint = root.curve.points[root.selectedKnotIndex];
             if (newPoint.y < 1.0) {
                 const inc = ke.modifiers & Qt.ShiftModifier ? 0.001 : 0.01;
@@ -324,7 +330,7 @@ Control {
             }
             ke.accepted = true;
 
-        } else if (ke.key == Qt.Key_Down) {
+        } else if (ke.key === Qt.Key_Down) {
             let newPoint = root.curve.points[root.selectedKnotIndex];
             if (newPoint.y > 0.0) {
                 const inc = ke.modifiers & Qt.ShiftModifier ? 0.001 : 0.01;
@@ -333,7 +339,7 @@ Control {
             }
             ke.accepted = true;
 
-        } else if (ke.key == Qt.Key_Delete || ke.key == Qt.Key_Backspace) {
+        } else if (ke.key === Qt.Key_Delete || ke.key === Qt.Key_Backspace) {
             if (root.selectedKnotIndex > 0 && root.selectedKnotIndex < root.curve.points.length - 1) {
                 const previouslySelectedKnotX = root.curve.points[root.selectedKnotIndex].x;
 
@@ -347,7 +353,7 @@ Control {
             }
             ke.accepted = true;
             
-        } else if (ke.key == Qt.Key_Escape && mouseArea.isDragging) {
+        } else if (ke.key === Qt.Key_Escape && mouseArea.isDragging) {
             if (mouseArea.draggedAwayKnotIndex !== -1) {
                 root.curve.addPoint(mouseArea.draggedAwayKnot);
                 root.selectedKnotIndex = mouseArea.draggedAwayKnotIndex;
@@ -358,7 +364,7 @@ Control {
             mouseArea.isDragging = false;
             ke.accepted = true;
 
-        } else if ((ke.key == Qt.Key_A || ke.key == Qt.Key_Insert) && !mouseArea.isDragging) {
+        } else if ((ke.key === Qt.Key_A || ke.key === Qt.Key_Insert) && !mouseArea.isDragging) {
             const selectedKnotX = root.curve.points[root.selectedKnotIndex].x;
             const neighborKnotX = root.selectedKnotIndex === root.curve.points.length - 1
                                     ? root.curve.points[root.selectedKnotIndex - 1].x
@@ -375,7 +381,7 @@ Control {
 
     Connections {
         target: root.curve
-        function onPointsChanged(pts) {
+        function onPointsChanged() {
             contentItem.updatePoints();
         }
     }

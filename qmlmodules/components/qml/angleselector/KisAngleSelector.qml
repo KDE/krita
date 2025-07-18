@@ -163,9 +163,10 @@ FocusScope {
                 visible: root.flipOptionsMode === KisAngleSelector.FlipOptionsMode.MenuButton
                 padding: 4
                 display: AbstractButton.IconOnly
-                icon.source: "qrc:/krita/qml/Krita/Resources/images/view-choose.svg"
+                icon.source: "qrc:///light_view-choose.svg"
                 icon.width: 16
                 icon.height: 16
+                icon.color: palette.buttonText;
                 onClicked: {
                     menu.popup(buttonMenu, 0, buttonMenu.height);
                     menu.forceActiveFocus();
@@ -178,6 +179,7 @@ FocusScope {
                 padding: 4
                 display: AbstractButton.IconOnly
                 action: actionFlipHorizontally
+                icon.color: palette.buttonText;
                 KisToolTip {
                     parentControl: buttonFlipHorizontally
                     text: actionFlipHorizontally.text
@@ -190,6 +192,7 @@ FocusScope {
                 padding: 4
                 display: AbstractButton.IconOnly
                 action: actionFlipVertically
+                icon.color: palette.buttonText;
                 KisToolTip {
                     parentControl: buttonFlipVertically
                     text: actionFlipVertically.text
@@ -202,6 +205,7 @@ FocusScope {
                 padding: 4
                 display: AbstractButton.IconOnly
                 action: actionFlipHorizontallyAndVertically
+                icon.color: palette.buttonText;
                 KisToolTip {
                     parentControl: buttonFlipHorizontallyAndVertically
                     text: actionFlipHorizontallyAndVertically.text

@@ -6,7 +6,7 @@
 import QtQml 2.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Shapes 2.15
+import QtQuick.Shapes 1.15
 
 Control {
     id: root
@@ -38,12 +38,18 @@ Control {
         }
     }
 
+    function adjustOpacity(color, alpha) {
+        // In Qt6 we can use Qt.Alpha for this, but not in qt5
+        return Qt.rgba(color.r, color.g, color.b, alpha);
+    }
+
     implicitWidth: 40
     implicitHeight: implicitWidth
     focusPolicy: Qt.WheelFocus
 
     contentItem: Shape {
         id: gaugeShape
+
 
         property point center: Qt.point(width / 2.0, height / 2.0)
         property real minSide: Math.min(center.x, center.y)
@@ -54,8 +60,10 @@ Control {
                                             root.increaseClockwise ? center.y + Math.sin(angleInRadians) * radius
                                                                    : center.y - Math.sin(angleInRadians) * radius)
         property bool darkMode: root.palette.window.hslLightness < 0.5
-        property color circleColor: darkMode ? root.palette.light : root.palette.dark
-        property color axesColor: Qt.alpha(circleColor, 0.75);
+        property color circleColor: darkMode ? root.palette.light : root.palette.dark;
+        property color axesColor: root.adjustOpacity(circleColor, 0.75);
+        property color bgColor: darkMode ? root.palette.dark: root.palette.light;
+        property color angleLineColor: darkMode ? Qt.rgba(1, 1, 1, 255): Qt.rgba(0, 0, 0, 255);
         
         property point topPoint: Qt.point(Math.round(center.x), Math.ceil(center.y - radius))
         property point bottomPoint: Qt.point(Math.round(center.x), Math.floor(center.y + radius))
@@ -72,7 +80,7 @@ Control {
             property real radius: (gaugeShape.bottomPoint.y - gaugeShape.topPoint.y) / 2
             strokeColor: "transparent"
             fillColor: root.enabled
-                       ? gaugeShape.darkMode ? root.palette.dark : root.palette.light
+                       ? gaugeShape.bgColor
                        : root.palette.window
             startX: gaugeShape.topPoint.x
             startY: gaugeShape.topPoint.y
@@ -136,9 +144,7 @@ Control {
         // Angle line
         ShapePath {
             id: angleLineShape
-            strokeColor: root.enabled
-                         ? (gaugeShape.darkMode ? Qt.rgba(1, 1, 1, 0.75) : Qt.rgba(0, 0, 0, 0.75))
-                         : (gaugeShape.darkMode ? root.palette.light : root.palette.dark)
+            strokeColor: root.adjustOpacity(gaugeShape.angleLineColor, 0.75);
             fillColor: "transparent"
             startX: gaugeShape.center.x
             startY: gaugeShape.center.y

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-11 03:27+0000\n"
-"PO-Revision-Date: 2025-03-20 10:24+0200\n"
+"PO-Revision-Date: 2025-07-17 08:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -20723,11 +20723,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Перезаписати файл?"
+msgstr "Перезаписати наявне відео?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20737,6 +20735,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Файл вже існує з адресою, за якою ви хочете обробити ваше відео [%1]... \n"
+"                                                              Ви справді "
+"хочете перезаписати наявний файл?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -26054,12 +26055,18 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Деякі програми можуть імітувати натискання функціональних клавіш з великими "
+"номерами (наприклад, F22), щоб вивести себе на передній план. Це може "
+"порушити роботу системи скорочень та дій Krita. Якщо у вас є клавіатура з "
+"функціональними клавішами F13 або вище, і ви хочете їх використовувати, "
+"спробуйте зняти позначення з цього пункту, але не забувайте про цю "
+"потенційну проблему."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1308
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Ігнорувати верхні функціональні клавіші (F13-F24)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1315
@@ -38603,8 +38610,7 @@ msgid "Bluer/Yellower: "
 msgstr "Синіше/Жовтіше: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Скинути"

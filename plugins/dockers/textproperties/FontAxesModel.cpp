@@ -35,8 +35,7 @@ FontAxesModel::~FontAxesModel()
 
 void FontAxesModel::setAxesData(QList<KoSvgText::FontFamilyAxis> axes)
 {
-    beginResetModel();
-    d->axes.clear();
+    QList<KoSvgText::FontFamilyAxis> newAxes;
     for (int i=0; i < axes.size(); i++) {
         QString tag = axes.at(i).tag;
         if (!(tag == WEIGHT_TAG
@@ -44,10 +43,16 @@ void FontAxesModel::setAxesData(QList<KoSvgText::FontFamilyAxis> axes)
                 || tag == ITALIC_TAG
                 || tag == SLANT_TAG)
                 && !axes.at(i).axisHidden) {
-            d->axes.append(axes.at(i));
+            newAxes.append(axes.at(i));
         }
     }
-    endResetModel();
+    if (newAxes != d->axes) {
+        // TODO: Rework this whole thing so we don't update axes unless absolutely necessary.
+        // This wll probably require a filterproxy model where invisible axes are filtered out.
+        beginResetModel();
+        d->axes = newAxes;
+        endResetModel();
+    }
 }
 
 void FontAxesModel::setLocales(QList<QLocale> locales)

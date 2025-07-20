@@ -16533,8 +16533,7 @@ msgid "Active tool: %1"
 msgstr "Aktywne narzędzie: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to View"
+#, kde-format
 msgid "Fit View"
 msgstr "Zmieść w widoku"
 

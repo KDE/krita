@@ -1,8 +1,9 @@
 windows-build:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-windows-builder-clang18:latest
+  image: storage.kde.org/vm-images/krita-windows-clang18
   tags:
-    - Windows
+    - VM
+    - amd64
   extends:
     - .ci-always-job-mixin
     - .ci-artifacts-with-packages-mixin

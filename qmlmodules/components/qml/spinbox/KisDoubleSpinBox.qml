@@ -5,7 +5,6 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "KisParseSpinBoxUtil.js" as KisParseSpinBoxUtil
 
 SpinBox {
     id: root
@@ -24,8 +23,6 @@ SpinBox {
 
     onValueChanged: root.dValue = root.value / root.factor;
 
-    onDecimalsChanged: root.dValue = KisParseSpinBoxUtil.truncateValue(root.dValue, root.decimals)
-
     onDValueChanged: {
         let v = root.dValue;
         if (v > root.dTo) {
@@ -33,7 +30,6 @@ SpinBox {
         } else if (v < root.dFrom) {
             v = root.dFrom;
         }
-        v = parseFloat(KisParseSpinBoxUtil.truncateValue(v, root.decimals));
         if (v !== root.dValue) {
             root.dValue = v;
         }
@@ -45,7 +41,7 @@ SpinBox {
             root.dFrom = root.dTo;
         }
         if (root.dFrom > root.dValue) {
-            root.dValue = KisParseSpinBoxUtil.truncateValue(root.dFrom, root.decimals);
+            root.dValue = root.dFrom;
         }
     }
 
@@ -54,8 +50,16 @@ SpinBox {
             root.dTo = root.dFrom;
         }
         if (root.dTo < root.dValue) {
-            root.dValue = KisParseSpinBoxUtil.truncateValue(root.dTo, root.decimals);
+            root.dValue = root.dTo;
         }
+    }
+
+    textFromValue: function(value, locale) {
+        return Number(value / factor).toLocaleString(locale, 'f', decimals)
+    }
+
+    valueFromText: function(text, locale) {
+        return Number.fromLocaleString(locale, text) * factor;
     }
 
     Component.onCompleted: {

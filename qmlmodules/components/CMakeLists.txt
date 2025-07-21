@@ -53,7 +53,6 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/spinbox/KisIntParseSpinBox.qml
     qml/spinbox/KisDoubleSpinBox.qml
     qml/spinbox/KisDoubleParseSpinBox.qml
-    qml/spinbox/KisParseSpinBoxUtil.js
 
     qml/sliderspinbox/KisSliderSpinBoxManipulator.qml
     qml/sliderspinbox/KisSliderSpinBoxRangeSwitch.qml

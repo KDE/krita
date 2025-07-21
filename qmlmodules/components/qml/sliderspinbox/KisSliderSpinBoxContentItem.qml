@@ -44,11 +44,11 @@ FocusScope {
         visible: root.showSoftRange;
         color: root.parentSpinBox.palette.text
         //: @info:tooltip toggle between soft and hard range in the slider spin box
-        toolTip: qsTr("Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]")
-                        .arg(root.from.toFixed(root.decimals))
-                        .arg(root.to.toFixed(root.decimals))
-                        .arg(root.softFrom.toFixed(root.decimals))
-                        .arg(root.softTo.toFixed(root.decimals))
+        toolTip: i18nc("@info:tooltip","Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]",
+                       Number(root.from).toLocaleString(Qt.locale(), decimals),
+                       Number(root.to).toLocaleString(Qt.locale(), decimals),
+                       Number(root.softFrom).toLocaleString(Qt.locale(), decimals),
+                       Number(root.softTo).toLocaleString(Qt.locale(), decimals));
 
         onSoftRangeActiveChanged: root.softRangeActive = softRangeActive
     }

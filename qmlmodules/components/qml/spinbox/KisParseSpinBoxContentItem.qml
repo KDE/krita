@@ -7,7 +7,6 @@ import QtQml 2.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import org.krita.components 1.0
-import "KisParseSpinBoxUtil.js" as KisParseSpinBoxUtil
 
 FocusScope {
     id: root
@@ -29,9 +28,9 @@ FocusScope {
     implicitHeight: textInput.implicitHeight
     implicitWidth: textMetrics.boundingRect.width + textInput.padding * 2
     
-    onValueChanged: textInput.contentsText = parseFloat(KisParseSpinBoxUtil.truncateValue(root.value, root.decimals));
+    onValueChanged: textInput.contentsText = Number(root.value).toLocaleString(Qt.locale(), 'f', decimals);
 
-    onDecimalsChanged: textInput.contentsText = KisParseSpinBoxUtil.truncateValue(root.value, root.decimals)
+    onDecimalsChanged: textInput.contentsText = Number(root.value).toLocaleString(Qt.locale(), 'f', decimals);
 
     KisWarningOverlay {
         id: warningOverlay
@@ -53,7 +52,7 @@ FocusScope {
         anchors.fill: parent
         verticalAlignment: Text.AlignVCenter
         padding: 4
-        contentsText: KisParseSpinBoxUtil.truncateValue(root.value, root.decimals)
+        contentsText: Number(root.value).toLocaleString(Qt.locale(), 'f', decimals);
         focus: true
         font: root.parentSpinBox.font
         color: root.parentSpinBox.palette.text
@@ -68,7 +67,7 @@ FocusScope {
                 warningOverlay.warn = true;
             } else {
                 warningOverlay.warn = false;
-                root.value = KisParseSpinBoxUtil.truncateValue(parsedValue, root.decimals);
+                root.value = parsedValue;
                 root.editingFinished();
             }
         }
@@ -89,7 +88,7 @@ FocusScope {
         Keys.onEscapePressed: {
             warningTimer.stop();
             warningOverlay.warn = false;
-            textInput.contentsText = KisParseSpinBoxUtil.truncateValue(root.value, root.decimals);
+            textInput.contentsText = Number(root.value).toLocaleString(Qt.locale(), 'f', decimals);
             root.editingCanceled();
         }
 
@@ -141,8 +140,8 @@ FocusScope {
         id: textMetrics
         font: textInput.font
         text: {
-            const fromText = KisParseSpinBoxUtil.truncateValue(root.from, root.decimals);
-            const toText = KisParseSpinBoxUtil.truncateValue(root.to, root.decimals);
+            const fromText = Number(root.from).toLocaleString(Qt.locale(), 'f', decimals);
+            const toText = Number(root.to).toLocaleString(Qt.locale(), 'f', decimals);
             return root.prefix
                     + (fromText.length > toText.length ? fromText : toText)
                     + root.suffix

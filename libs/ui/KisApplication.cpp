@@ -333,6 +333,7 @@ void KisApplication::addResourceTypes()
 
     // Make directories for all resources we can save, and tags
     KoResourcePaths::saveLocation("data", "/asl/", true);
+    KoResourcePaths::saveLocation("data", "/css_styles/", true);
     KoResourcePaths::saveLocation("data", "/input/", true);
     KoResourcePaths::saveLocation("data", "/pykrita/", true);
     KoResourcePaths::saveLocation("data", "/color-schemes/", true);

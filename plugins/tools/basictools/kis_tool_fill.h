@@ -126,6 +126,7 @@ private:
 
     Reference m_reference {Reference_CurrentLayer};
     QList<int> m_selectedColorLabels;
+    bool m_useActiveLayer {false};
 
     ContinuousFillMode m_continuousFillMode {ContinuousFillMode_FillAnyRegion};
     
@@ -181,6 +182,7 @@ private:
     KoGroupButton *m_buttonReferenceAll {nullptr};
     KoGroupButton *m_buttonReferenceLabeled {nullptr};
     KisColorLabelSelectorWidget *m_widgetLabels {nullptr};
+    QCheckBox *m_checkBoxUseActiveLayer {nullptr};
 
     KoGroupButton *m_buttonDragFillDoNotUse {nullptr};
     KoGroupButton *m_buttonDragFillAny {nullptr};
@@ -219,6 +221,7 @@ private Q_SLOTS:
     void slot_optionButtonStripReference_buttonToggled(KoGroupButton *button,
                                                        bool checked);
     void slot_widgetLabels_selectionChanged();
+    void slot_checkBoxUseActiveLayer_toggled(bool checked);
     void slot_optionButtonStripDragFill_buttonToggled(KoGroupButton *button,
                                                           bool checked);
     void slot_buttonReset_clicked();

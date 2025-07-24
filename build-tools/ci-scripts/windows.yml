@@ -9,8 +9,8 @@ windows-build:
     - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
-    KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
-    KDECI_CACHE_PATH: "C:\\Gitlab\\Artifacts\\krita-windows"
+    KDECI_CC_CACHE: "Z:\\krita-windows\\caches"
+    KDECI_CACHE_PATH: "Z:\\krita-windows\\artifacts"
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-windows
     KDECI_REPO_METADATA_PATH: "$CI_PROJECT_DIR\\krita-deps-management\\repo-metadata"

@@ -112,6 +112,21 @@ Rectangle {
                         elide: Text.ElideRight;
                         color: presetDelegate.highlighted? palette.highlightedText: palette.text;
                     }
+
+                    Row {
+                        anchors.bottom: parent.bottom;
+                        anchors.left: parent.left;
+                        anchors.right: parent.right;
+                        ToolButton {
+                            id: missingFamily;
+                            visible: typeof presetDelegate.meta.primary_font_family !== 'undefined'?
+                                     presetDelegate.meta.primary_font_family !== ""
+                                     && mainWindow.wwsFontFamilyName(presetDelegate.meta.primary_font_family, true) === "": false;
+                            icon.source: palette.window.hslLightness < 0.5? "qrc:///16_light_warning.svg": "qrc:///16_dark_warning.svg";
+                            icon.height: 8;
+                            icon.width: 8;
+                        }
+                    }
                 }
                 background: Rectangle {
                     color: presetDelegate.highlighted? presetDelegate.palette.highlight: "transparent";

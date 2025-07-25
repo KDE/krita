@@ -76,6 +76,16 @@ public:
     /// the alignment anchor of the text is shown.
     Qt::Alignment alignSample() const;
 
+    /**
+     * @brief primaryFontFamily
+     * If a style uses a FontFamily, it may not look as expected when that
+     * font family is missing. Typically, we'd use linked resources for this,
+     * however, embedding fonts is really complex.
+     * @return the primary font family for this style, will return empty if
+     * the style does not require a font family.
+     */
+    QString primaryFontFamily() const;
+
     void updateAlignSample();
     // KoResource interface
 public:

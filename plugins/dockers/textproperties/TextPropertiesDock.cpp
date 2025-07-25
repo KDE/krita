@@ -251,11 +251,11 @@ void TextPropertiesDock::slotTextPropertiesChanged()
 }
 
 #include <KoFontRegistry.h>
-QString TextPropertiesDock::wwsFontFamilyName(QString familyName)
+QString TextPropertiesDock::wwsFontFamilyName(QString familyName, bool returnEmptyWhenMissing)
 {
     std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName);
     if (!name) {
-        return familyName;
+        return returnEmptyWhenMissing? QString(): familyName;
     }
     return name.value();
 }

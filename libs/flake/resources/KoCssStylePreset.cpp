@@ -25,6 +25,7 @@ const QString SAMPLE_SVG = "sample_svg";
 const QString SAMPLE_ALIGN = "sample_align";
 const QString STYLE_TYPE = "style_type";
 const QString STORED_PPI = "stored_ppi";
+const QString PRIMARY_FONT_FAMILY = "primary_font_family";
 
 const QString STYLE_TYPE_PARAGRAPH = "paragraph";
 const QString STYLE_TYPE_CHARACTER = "character";
@@ -83,6 +84,13 @@ KoSvgTextProperties KoCssStylePreset::properties(int ppi, bool removeKraProps) c
         props.removeProperty(KoSvgTextProperties::KraTextStyleResolution);
         props.removeProperty(KoSvgTextProperties::KraTextVersionId);
     }
+    // remove fill and stroke for now.
+    props.removeProperty(KoSvgTextProperties::FillId);
+    props.removeProperty(KoSvgTextProperties::StrokeId);
+    props.removeProperty(KoSvgTextProperties::Opacity);
+    props.removeProperty(KoSvgTextProperties::Visiblity);
+    props.removeProperty(KoSvgTextProperties::TextOrientationId);
+    props.removeProperty(KoSvgTextProperties::PaintOrder);
     return props;
 }
 
@@ -173,8 +181,16 @@ void KoCssStylePreset::setSampleText(const QString &sample, const KoSvgTextPrope
     // Remove fill and stroke for now as we have no widgets for them.
     modifiedProps.removeProperty(KoSvgTextProperties::FillId);
     modifiedProps.removeProperty(KoSvgTextProperties::StrokeId);
+    modifiedProps.removeProperty(KoSvgTextProperties::PaintOrder);
+    modifiedProps.removeProperty(KoSvgTextProperties::Opacity);
+    modifiedProps.removeProperty(KoSvgTextProperties::Visiblity);
+    modifiedProps.removeProperty(KoSvgTextProperties::TextOrientationId);
 
     sampleText->setPropertiesAtPos(-1, modifiedProps);
+
+    QStringList fonts = modifiedProps.property(KoSvgTextProperties::FontFamiliesId).toStringList();
+    //TODO: Apparantly we cannot remove metadata, only set it to nothing...
+    addMetaData(PRIMARY_FONT_FAMILY, fonts.value(0));
 
     if (type == STYLE_TYPE_PARAGRAPH) {
         // For paragraph we'll add a shape, as those will allow wrapping,
@@ -223,6 +239,12 @@ Qt::Alignment KoCssStylePreset::alignSample() const
     QMap<QString, QVariant> m = metadata();
     QVariant v = m.value(SAMPLE_ALIGN, static_cast<Qt::Alignment::Int>(Qt::AlignHCenter | Qt::AlignVCenter));
     return static_cast<Qt::Alignment>(v.value<Qt::Alignment::Int>());
+}
+
+QString KoCssStylePreset::primaryFontFamily() const
+{
+    QMap<QString, QVariant> m = metadata();
+    return m.value(PRIMARY_FONT_FAMILY).toString();
 }
 
 void KoCssStylePreset::updateAlignSample()
@@ -407,6 +429,10 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                 styleType = props.property(KoSvgTextProperties::KraTextStyleType).toString();
                 if (props.hasProperty(KoSvgTextProperties::KraTextStyleResolution)) {
                     addMetaData(STORED_PPI, props.property(KoSvgTextProperties::KraTextStyleResolution));
+                }
+                if (props.hasProperty(KoSvgTextProperties::FontFamiliesId)) {
+                    QStringList fonts = props.property(KoSvgTextProperties::FontFamiliesId).toStringList();
+                    addMetaData(PRIMARY_FONT_FAMILY, fonts.value(0));
                 }
             }
 

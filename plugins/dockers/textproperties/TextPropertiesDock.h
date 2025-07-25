@@ -31,7 +31,7 @@ public:
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
-    QString wwsFontFamilyName(QString familyName);
+    QString wwsFontFamilyName(QString familyName, bool returnEmptyWhenMissing = false);
 
     QColor modalColorDialog(QColor oldColor);
 

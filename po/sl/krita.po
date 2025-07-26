@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 02:01+0000\n"
-"PO-Revision-Date: 2025-07-16 13:43+0200\n"
+"PO-Revision-Date: 2025-07-25 13:07+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -62301,11 +62301,9 @@ msgstr "Operjanje: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Isolate Active Layer"
+#, kde-format
 msgid "Use active layer"
-msgstr "Izoliraj dejavno plast"
+msgstr "Uporabi dejavno plast"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62450,14 +62448,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Izberi območja, nastala s spajanjem plasti z določenimi barvnimi oznakami"
+"Vključi dejavno plast v območja, najdena s spajanjem plasti z določenimi "
+"barvnimi oznakami"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

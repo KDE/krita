@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 02:01+0000\n"
-"PO-Revision-Date: 2025-07-12 11:33+0200\n"
+"PO-Revision-Date: 2025-07-25 10:42+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -62575,10 +62575,9 @@ msgstr "Veer: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgid "New active layer(s)"
+#, kde-format
 msgid "Use active layer"
-msgstr "Nieuwe actieve la(a)g(en)"
+msgstr "Actieve laag gebruiken"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62728,15 +62727,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Gebieden selecteren gevonden uit het samenvoegen van lagen met specifieke "
-"kleurlabels"
+"Omvat de actieve laag in gebieden gevonden uit samenvoegen van lagen met "
+"specifieke kleurlabels"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

@@ -61373,11 +61373,9 @@ msgstr "羽化半径："
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Isolate Active Layer"
+#, kde-format
 msgid "Use active layer"
-msgstr "单独显示活动图层"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -61517,13 +61515,11 @@ msgstr "对带有指定颜色标签的图层进行采样并进行填充"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
-msgstr "带有指定颜色标签的图层"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

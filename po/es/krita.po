@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 02:01+0000\n"
-"PO-Revision-Date: 2025-07-12 20:59+0100\n"
+"PO-Revision-Date: 2025-07-26 12:25+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -62577,11 +62577,9 @@ msgstr "Pluma: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Isolate Active Layer"
+#, kde-format
 msgid "Use active layer"
-msgstr "Aislar la capa activa"
+msgstr "Usar la capa activa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62731,15 +62729,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Seleccionar las regiones encontradas de la fusión de las capas con las "
-"etiquetas de color especificadas"
+"Incluye la capa activa en las regiones encontradas en la fusión de capas con "
+"las etiquetas de color especificadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

@@ -8,13 +8,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 02:01+0000\n"
-"PO-Revision-Date: 2025-07-12 11:08+0200\n"
+"PO-Revision-Date: 2025-07-25 09:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -62612,11 +62612,9 @@ msgstr "Ploma: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Isolate Active Layer"
+#, kde-format
 msgid "Use active layer"
-msgstr "Aïlla la capa activa"
+msgstr "Utilitza la capa activa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62765,15 +62763,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Selecciona regions trobades a partir de les capes amb etiquetes de colors "
-"específics"
+"Inclou la capa activa a les regions que es troben a partir de la fusió de "
+"capes amb etiquetes de color específic"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 02:01+0000\n"
-"PO-Revision-Date: 2025-07-14 14:15+0300\n"
+"PO-Revision-Date: 2025-07-26 16:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
-"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -62244,11 +62244,9 @@ msgstr "Yumuşat:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Isolate Active Layer"
+#, kde-format
 msgid "Use active layer"
-msgstr "Etkin Katmanı Soyutla"
+msgstr "Etkin katmanı kullan"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62394,14 +62392,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Belirli renk etiketli katmanların birleştirilmesiyle bulunan bölgeleri seç"
+"Belirli renk etiketlerine sahip katmanların birleştirilmesiyle bulunan "
+"bölgelerdeki etkin katmanı içerir."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

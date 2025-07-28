@@ -3,9 +3,26 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-KisTextInputWithSelectionRange {
+/*
+    \qmltype TextInputWithPrefixAndSuffix
+    This is a Text Input which holds a prefix and a suffix.
+
+ */
+TextInputWithSelectionRange {
+    /*
+        \qmlproperty prefix
+        A string that will be prefixed to the current input.
+    */
     property string prefix: ""
+    /*
+        \qmlproperty suffix
+        A string that will be suffixed to the current input.
+    */
     property string suffix: ""
+    /*
+        \qmlproperty contentsText
+        The current input text.
+    */
     property string contentsText: ""
 
     selectionRangeStart: prefix.length

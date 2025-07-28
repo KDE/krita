@@ -7,7 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@title:group", "Text Align");
@@ -168,8 +168,8 @@ CollapsibleGroupProperty {
         RowLayout {
             spacing: 0;
 
-            KisGroupButton {
-                groupPosition: KisGroupButton.GroupLeft;
+            Kis.GroupButton {
+                groupPosition: Kis.GroupButton.GroupLeft;
                 id: alignStartBtn;
                 checkable: true;
                 icon.source: properties.direction === KoSvgText.DirectionLeftToRight? "qrc:///16_light_format-justify-left.svg"
@@ -181,9 +181,9 @@ CollapsibleGroupProperty {
                 Layout.preferredWidth: height;
                 onToggled: setAlignmentFromButtons();
             }
-            KisGroupButton {
+            Kis.GroupButton {
                 id: alignMiddleBtn;
-                groupPosition: KisGroupButton.GroupCenter;
+                groupPosition: Kis.GroupButton.GroupCenter;
                 checkable: true;
                 icon.source: "qrc:///16_light_format-justify-center.svg";
                 icon.height: 16;
@@ -195,8 +195,8 @@ CollapsibleGroupProperty {
                     setAlignmentFromButtons();
                 }
             }
-            KisGroupButton {
-                groupPosition: KisGroupButton.GroupRight;
+            Kis.GroupButton {
+                groupPosition: Kis.GroupButton.GroupRight;
                 id: alignEndBtn;
                 checkable: true;
                 icon.source: properties.direction === KoSvgText.DirectionLeftToRight? "qrc:///16_light_format-justify-right.svg"
@@ -212,7 +212,7 @@ CollapsibleGroupProperty {
             Layout.fillWidth: true;
         }
 
-        KisGroupButton {
+        Kis.GroupButton {
             id: alignJustifyBtn;
             checkable: true;
             checked: textAlignAll === KoSvgText.AlignJustify;

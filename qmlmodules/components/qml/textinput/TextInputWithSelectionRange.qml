@@ -5,12 +5,36 @@
  */
 import QtQuick 2.15
 
+/*
+    \qmltype TextInputWithSelectionRange
+    This is a Text Input which keeps track of which part of the text can be
+    considered selected.
+
+    This is useful when dealing with a prefix or suffix.
+
+ */
 TextInput {
     id: root
 
+    /*
+        \qmlproperty selectionRangeStart
+        Start of the range.
+    */
     property int selectionRangeStart: 0
+    /*
+        \qmlproperty selectionRangeEnd
+        End of the range.
+    */
     property int selectionRangeEnd: 0
+    /*
+        \qmlproperty selectionRangeLength
+        Range length. Automatically determine by selectionRangeStart and selectionRangeEnd.
+    */
     property int selectionRangeLength: selectionRangeEnd - selectionRangeStart
+    /*
+        \qmlproperty displayTextWidth
+        Width of the text itself.
+    */
     property int displayTextWidth: textMetrics.boundingRect.width
 
     clip: displayTextWidth > width

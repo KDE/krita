@@ -7,7 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Word Spacing");
@@ -54,7 +54,7 @@ TextPropertyBase {
             onClicked: properties.wordSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        KisDoubleSliderSpinBox {
+        Kis.DoubleSliderSpinBox {
             id: wordSpacingSpn;
             prefix: propertyTitle+ ": "
             Layout.fillWidth: true;

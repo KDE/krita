@@ -6,16 +6,64 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+/*
+    \qmltype DoubleSpinBox
+    \inherits SpinBox
+    \brief A SpinBox that allows for floating point input.
+
+    Biggest difference between this and SpinBox is that the value and range
+    (from and to) are prefixed with "d", and *must* be used instead of from/to/value.
+    This is because those other values are reserved to be used by spinbox itself,
+    and must be multiplied by the desired factor.
+
+    \qml
+        DoubleParseSpinBox {
+            dFrom: 0
+            dTo: 100.0
+            dValue: 50.0
+            dStepSize: 5.0;
+            decimals: 2;
+        }
+    \endqml
+
+ */
 SpinBox {
     id: root
 
+    /*
+        \qmlproperty decimals
+        The amount of decimals after the floating point to show. In practice
+        this will affect the factor used to convert for the value inside the SpinBox.
+        By default this is 2.
+    */
     property int decimals: 2
+    /*
+        \qmlproperty dValue
+        The floating point value. This must used instead of "value".
+    */
     property real dValue: 0.0
+    /*
+        \qmlproperty dFrom
+        The floating point lower end of the spinbox range. This must used instead of "from".
+    */
     property real dFrom: 0.0
+    /*
+        \qmlproperty dTo
+        The floating point upper end of the spinbox range. This must used instead of "to".
+    */
     property real dTo: 100.0
+    /*
+        \qmlproperty dStepSize
+        The floating point increment size of the spinbox range. This must used instead of "stepsize".
+    */
     property real dStepSize: 1.0
 
-    property real factor: Math.pow(10, decimals)
+    /*
+        \qmlproperty factor
+        The multiplier to multiply the d-values to spinbox internal values.
+        It uses the decimals property as a power to 10 to achieve that.
+    */
+    readonly property real factor: Math.pow(10, decimals)
 
     stepSize: Math.round(dStepSize * factor)
     from: Math.round(dFrom * factor)

@@ -6,11 +6,32 @@
 import QtQuick 2.15
 import org.krita.components 1.0
 
+/*
+    \qmltype SliderSpinBoxRangeSwitch
+    This item is a button to that can be used to switch between the hard and
+    soft range that the slider spinboxes are capable of having these.
+
+    It uses states to witch between hovered/enabled/not enabled to allow
+    graceful transition between these states.
+ */
 Item {
     id: root
 
+    /*
+        \qmlproperty softRangeActive
+        Boolean indicating whether the softrange is active now.
+    */
     property bool softRangeActive: false
+    /*
+        \qmlproperty color
+        The color of the button
+        By default black, but should be set to palette text.
+    */
     property color color: "black"
+    /*
+        \qmlproperty toolTip.
+        The text of the tool tip.
+    */
     property alias toolTip: toolTipPopup.text
 
     opacity: 0.4

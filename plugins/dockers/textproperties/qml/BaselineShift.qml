@@ -7,7 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Baseline-Shift");
@@ -116,7 +116,7 @@ TextPropertyBase {
                 id: baselinePalette;
                 colorGroup: baselineShiftSpn.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
-            KisDoubleSliderSpinBox {
+            Kis.DoubleSliderSpinBox {
                 id: baselineShiftSpn
                 width: parent.width;
                 enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;

@@ -5,16 +5,60 @@
  */
 import QtQuick 2.15
 
+/*
+    \qmltype SliderOverlay
+    This item is an overlay that draws the slider in slider spinboxes.
+
+    It can show two seperate bars. Each can have a separate width, however
+    only one can be active. This bar will be shown wider than the inactive bar.
+ */
 Item {
     id: root
 
+    /*
+        \qmlproperty showTopBar
+        Whether to show the topbar. When this is inactive, only a single
+        bar will be shown.
+    */
     property bool showTopBar: false
+    /*
+        \qmlproperty topBarActive
+        whether the topbar is active currently. If not, bottom bar is assumed
+        to be active.
+    */
     property bool topBarActive: false
+    /*
+        \qmlproperty radius
+        The radius on the slider bar rectangles.
+    */
     property real radius: 0.0
+    /*
+        \qmlproperty color
+        The color of the sliders.
+        By default blue, but should be set to palette highlight.
+    */
     property color color: "blue"
+    /*
+        \qmlproperty topBarWidth
+        Width of the top bar. Ranges from 0.0 to 1.0. Exponent ratio, if any,
+        is applied separately.
+    */
     property real topBarWidth: 0.0
+    /*
+        \qmlproperty bottomBarWidth
+        Width of the bottom bar. Ranges from 0.0 to 1.0. Exponent ratio, if any,
+        is applied separately.
+    */
     property real bottomBarWidth: 0.0
+    /*
+        \qmlproperty faded
+    */
     property bool faded: false
+    /*
+        \qmlproperty exponentRatio
+        The exponent ratio. This is applied onto the values of the top and
+        bottom bar so they show the exponent of the slider appropriately.
+    */
     property real exponentRatio: 1.0
 
     states: [

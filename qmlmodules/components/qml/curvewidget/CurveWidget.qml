@@ -8,11 +8,34 @@ import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 import org.krita.components 1.0
 
+/*
+    \qmltype CurveWidget
+    A Widget to edit a kiscubic curve.
+
+    \qml
+        CurveWidget {
+        }
+    \endqml
+ */
 Control {
     id: root
 
+    /*
+        \qmlproperty curve
+        The current curve being edited.
+    */
     property KisCubicCurve curve: KisCubicCurve {}
+
+    /*
+        \qmlproperty selectedKnotIndex
+        current knot of the curve being edited.
+    */
     property int selectedKnotIndex: 0
+
+    /*
+        \qmlproperty readonly
+        whether to allow editing.
+    */
     property bool readOnly: false
 
     padding: 1

@@ -8,12 +8,48 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
+/*
+    \qmltype AngleGauge
+    A Circular Control for setting the angle.
+
+    \qml
+        AngleGauge {
+            angle: 45;
+            snapAngle: 5;
+            defaultAngle 0;
+            increaseClockwise: true;
+        }
+    \endqml
+ */
 Control {
     id: root
 
+    /*
+        \qmlproperty angle
+        Current angle value.
+    */
     property real angle: 0.0
+    /*
+        \qmlproperty snapAngle
+        Gets the angle to which multiples the selected angle will snap.
+
+        The default snap angle is 15 degrees so the selected angle will snap
+        to its multiples (0, 15, 30, 45, etc.)
+    */
     property real snapAngle: 15.0
+
+    /*
+        \qmlproperty defaultAngle
+        Gets the angle that is used to reset the current angle.
+        This angle is used when the user double clicks on the widget.
+    */
     property real defaultAngle: 0.0
+
+    /*
+        \qmlproperty increaseClockwise
+        Whether the angle gauge increase clockwise.
+        Otherwise, increases counter clockwise.
+    */
     property bool increaseClockwise: false
 
     function reset()

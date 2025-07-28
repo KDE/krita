@@ -7,7 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@label", "Font Style");
@@ -153,7 +153,7 @@ CollapsibleGroupProperty {
             onClicked: properties.fontWeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        KisIntSliderSpinBox {
+        Kis.IntSliderSpinBox {
             id: fontWeightSpn
             prefix: i18nc("@label:spinbox", "Weight: ");
             from: 0;
@@ -184,7 +184,7 @@ CollapsibleGroupProperty {
             onClicked: properties.fontWidthState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        KisIntSliderSpinBox {
+        Kis.IntSliderSpinBox {
             id: fontStretchSpn
             prefix: i18nc("@label:spinbox", "Width: ")
             from: 0;
@@ -233,7 +233,7 @@ CollapsibleGroupProperty {
             }
             Layout.fillWidth: true;
             Layout.preferredHeight: fontSlantSpn.implicitHeight;
-            KisIntSliderSpinBox {
+            Kis.IntSliderSpinBox {
                 id: fontSlantSpn;
                 suffix:"°"
                 from: -90;
@@ -303,7 +303,7 @@ CollapsibleGroupProperty {
                 visible: parent.count === 0;
             }
 
-            delegate: KisDoubleSliderSpinBox {
+            delegate: Kis.DoubleSliderSpinBox {
                 id: axisSpn;
                 required property string display;
                 required property double axismin;

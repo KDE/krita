@@ -5,28 +5,134 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
+/*
+    \qmltype SliderSpinBoxContentItem
+    This is a FocusScope that enables a slider on a spinbox.
+
+    \qml
+        SpinBox {
+            id: spinbox
+            contentItem: SliderSpinBoxContentItem {
+                id: parseItem
+                parentSpinBox: spinbox
+                anchors.fill: parent
+                from: spinbox.from
+                to: spinbox.to
+                softFrom: from + 1
+                softTo: to -1
+                onValueChanged: spinbox.value = Math.round(value)
+
+                prefix: i18nc("@label:spinbox", "Percentage: ")
+                suffix: i18nc("@item:valuesuffix", "%")
+            }
+
+            onValueChanged: parseItem.value = value;
+        }
+    \endqml
+ */
 FocusScope {
     id: root
 
+    /*
+        \qmlproperty value
+        The current value.
+    */
     property alias value: parseSpinBoxContentItem.value
+    /*
+        \qmlproperty decimals
+        Amount of decimals shown.
+    */
     property alias decimals: parseSpinBoxContentItem.decimals
+    /*
+        \qmlproperty from
+        Lower end of the hard range.
+    */
     property alias from: parseSpinBoxContentItem.from
+    /*
+        \qmlproperty to
+        Upper end of the hard range.
+    */
     property alias to: parseSpinBoxContentItem.to
+    /*
+        \qmlproperty softFrom
+        Lower end of the soft range. Should be below softTo and to,
+        and below or equals to "from".
+    */
     property real softFrom: 0
+    /*
+        \qmlproperty softTo
+        Upper end of the soft range. Should be above softFrom and from,
+        and below or equals to "to".
+    */
     property real softTo: 0
+    /*
+        \qmlproperty showSoftRange
+        Whether the softrange is shown. This is set whether the softrange
+        and the hard range overlap.
+    */
     property alias showSoftRange: sliderOverlay.showTopBar
+    /*
+        \qmlproperty softRangeActive
+        Whether the soft range is active.
+    */
     property alias softRangeActive: sliderOverlay.topBarActive
+    /*
+        \qmlproperty valueBeforeEditing
+    */
     property real valueBeforeEditing: 0.0
+    /*
+        \qmlproperty parentSpinBox
+        The SpinBox object that this is a content item of.
+    */
     required property SpinBox parentSpinBox
+    /*
+        \qmlproperty prefix
+        A string that will be prefixed to the current value.
+    */
     property alias prefix: parseSpinBoxContentItem.prefix
+    /*
+        \qmlproperty suffix
+        A string that will be suffixed to the current value.
+    */
     property alias suffix: parseSpinBoxContentItem.suffix
+    /*
+        \qmlproperty focusPolicy
+    */
     property alias focusPolicy: sliderManipulator.focusPolicy
+    /*
+        \qmlproperty editing
+        returns true when the parentSpinBox is currently being edited.
+    */
     readonly property bool editing: parentSpinBox ? parentSpinBox.editable : false
+    /*
+        \qmlproperty blockUpdateSignalOnDrag
+        Whether to block the value from being updates when dragging.
+    */
     property alias blockUpdateSignalOnDrag: sliderManipulator.blockUpdateSignalOnDrag
+
+    /*
+        \qmlproperty exponentRatio
+        Set the exponent used by a power function to modify the values
+        as a function of the horizontal position.
+
+        This allows having more values concentrated in one side of the
+        slider than the other.
+    */
     property alias exponentRatio: sliderManipulator.exponentRatio
+
+    /*
+        \qmlproperty fastSliderStep
+        This sets the stepSize used when the user presses CTRL when modifying
+        the slider.
+    */
     property alias fastSliderStep: sliderManipulator.fastSliderStep
+
+    /*
+        \qmlproperty dragging
+        Whether the slider is currently being dragged by the mouse.
+    */
     readonly property alias dragging : sliderManipulator.dragging
 
     implicitHeight: parseSpinBoxContentItem.implicitHeight
@@ -34,7 +140,7 @@ FocusScope {
 
     onSoftRangeActiveChanged: rangeSwitch.softRangeActive = root.softRangeActive
 
-    KisSliderSpinBoxRangeSwitch {
+    SliderSpinBoxRangeSwitch {
         id: rangeSwitch
 
         anchors.top: parent.top
@@ -53,7 +159,7 @@ FocusScope {
         onSoftRangeActiveChanged: root.softRangeActive = softRangeActive
     }
 
-    KisSliderOverlay {
+    Kis.SliderOverlay {
         id: sliderOverlay
         
         property real value: parseSpinBoxContentItem.value
@@ -71,7 +177,7 @@ FocusScope {
         exponentRatio: root.exponentRatio
     }
 
-    KisParseSpinBoxContentItem {
+    Kis.ParseSpinBoxContentItem {
         id: parseSpinBoxContentItem
         
         anchors.top: parent.top
@@ -117,7 +223,7 @@ FocusScope {
         }
     }
 
-    KisSliderSpinBoxManipulator {
+    SliderSpinBoxManipulator {
         id: sliderManipulator
         anchors.fill: parseSpinBoxContentItem
         focus: true

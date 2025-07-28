@@ -7,7 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     propertyTitle: i18nc("@label:spinbox", "Font Size Adjust");
@@ -45,7 +45,7 @@ TextPropertyBase {
             onClicked: properties.fontSizeAdjustState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        KisDoubleSliderSpinBox {
+        Kis.DoubleSliderSpinBox {
             id: fontSizeAdjustSpn
             prefix: propertyTitle+ ": "
             softDFrom: 0

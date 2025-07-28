@@ -5,33 +5,133 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import org.krita.components 1.0
-import "KisAngleSelectorUtil.js" as KisAngleSelectorUtil
+import org.krita.components 1.0 as Kis
+import "AngleSelectorUtil.js" as AngleSelectorUtil
 
+/*
+    \qmltype AngleSelector
+    A FocusScope that combines a AngleGauge and a DoubleSpinBox into one
+    convenient widget.
+
+    \qml
+        AngleSelector {
+            angle: 45;
+            deimals: 2;
+            from: -180;
+            to: 180;
+            snapAngle: 5;
+            defaultAngle 0;
+            increaseClockwise: true;
+
+            prefix: i18nc("@label:spinbox", "Angle: ")
+            suffix: i18nc("@item:valuesuffix", "°")
+
+            flipOptionsMode: AngleSelector.Buttons
+            flatSpinBox: false;
+        }
+    \endqml
+ */
 FocusScope {
     id: root
 
     enum FlipOptionsMode
     {
-        NoFlipOptions,
-        MenuButton,
-        Buttons,
-        ContextMenu
+        NoFlipOptions, ///< There is no flip options available
+        MenuButton,  ///< The flip options are shown as a menu accessible via a options button
+        Buttons, ///< The flip options are shown as individual buttons
+        ContextMenu ///< The flip options are shown only as a context menu when
+                    ///< right-clicking the gauge widget.
+                    ///< The options are shown in the context menu also if the mode is
+                    ///< FlipOptionsMode_MenuButton or FlipOptionsMode_Buttons but with this
+                    ///< mode there will be no additional buttons
     }
 
+    /*
+        \qmlproperty angle
+        Current angle value.
+    */
     property alias angle: spinBox.dValue
+
+    /*
+        \qmlproperty decimals
+        Amount of decimals to show.
+        /sa DoubleSpinBox
+    */
     property alias decimals: spinBox.decimals
+
+    /*
+      \qmlproperty from
+      Lower end of the angle range. Is a double.
+      */
     property alias from: spinBox.dFrom
+
+    /*
+      \qmlproperty to
+      Upper end of the angle range. Is a double.
+      */
     property alias to: spinBox.dTo
+
+    /*
+        \qmlproperty prefix
+        A string that will be prefixed to the current value.
+    */
     property alias prefix: spinBox.prefix
+
+    /*
+        \qmlproperty suffix
+        A string that will be suffixed to the current value.
+    */
     property alias suffix: spinBox.suffix
+
+    /*
+      \qmlproperty wrap
+      Whether the spinbox is wrapping.
+      */
     property alias wrap: spinBox.wrap
+
+    /*
+        \qmlproperty snapAngle
+        Gets the angle to which multiples the selected angle will snap.
+
+        The default snap angle is 15 degrees so the selected angle will snap
+        to its multiples (0, 15, 30, 45, etc.)
+    */
     property alias snapAngle: angleGauge.snapAngle
+
+    /*
+        \qmlproperty defaultAngle
+        Gets the angle that is used to reset the current angle.
+        This angle is used when the user double clicks on the widget.
+    */
     property alias defaultAngle: angleGauge.defaultAngle
+
+    /*
+        \qmlproperty increaseClockwise
+        Whether the angle gauge increase clockwise.
+        Otherwise, increases counter clockwise.
+    */
     property alias increaseClockwise: angleGauge.increaseClockwise
 
-    property int flipOptionsMode: KisAngleSelector.FlipOptionsMode.Buttons
+    /*
+      \qmlproperty flipOptionsMode
+      How the flipOptions are presented.
+
+      \sa FlipOptionsMode enum.
+      */
+    property int flipOptionsMode: AngleSelector.FlipOptionsMode.Buttons
+
+    /*
+      \qmlproperty gaugeSize
+
+      Set the explicit size for the gauge. Will otherwise use the implicit size.
+      */
     property int gaugeSize: 0
+
+    /*
+      \qmlproperty flatSpinBox
+
+      Gets if the spin box is flat (no border or background).
+      */
     property bool flatSpinBox: false
 
     function reset()
@@ -41,13 +141,13 @@ FocusScope {
 
     function closestCoterminalAngleInRange(angle: real) : real
     {
-        return KisAngleSelectorUtil.closestCoterminalAngleInRange(angle, root.from, root.to);
+        return AngleSelectorUtil.closestCoterminalAngleInRange(angle, root.from, root.to);
     }
 
     function flip(horizontal: bool, vertical: bool)
     {
         let ok = true;
-        let flippedAngle = KisAngleSelectorUtil.flipAngleInRange(root.angle, root.from, root.to, horizontal, vertical,
+        let flippedAngle = AngleSelectorUtil.flipAngleInRange(root.angle, root.from, root.to, horizontal, vertical,
                                                                  () => { ok = false; });
         if (ok) {
             root.angle = flippedAngle;
@@ -112,7 +212,7 @@ FocusScope {
         spacing: 5
         anchors.fill: parent
 
-        KisAngleGauge {
+        Kis.AngleGauge {
             id: angleGauge
 
             anchors.verticalCenter: parent.verticalCenter
@@ -132,7 +232,7 @@ FocusScope {
             }
         }
 
-        KisDoubleParseSpinBox {
+        Kis.DoubleParseSpinBox {
             id: spinBox
 
             anchors.verticalCenter: parent.verticalCenter
@@ -206,7 +306,7 @@ FocusScope {
                 display: AbstractButton.IconOnly
                 action: actionFlipHorizontallyAndVertically
                 icon.color: palette.buttonText;
-                KisToolTip {
+                Kis.KisToolTip {
                     parentControl: buttonFlipHorizontallyAndVertically
                     text: actionFlipHorizontallyAndVertically.text
                 }

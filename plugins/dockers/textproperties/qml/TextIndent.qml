@@ -7,7 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@title:group", "Text Indent");
@@ -67,7 +67,7 @@ CollapsibleGroupProperty {
         height: childrenRect.height;
         spacing: columnSpacing;
 
-        KisDoubleSliderSpinBox {
+        Kis.DoubleSliderSpinBox {
             prefix: propertyTitle + ": ";
             id: textIndentSpn;
             Layout.fillWidth: true;

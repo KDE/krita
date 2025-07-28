@@ -37,33 +37,32 @@ else ()
 endif ()
 
 ecm_target_qml_sources(kritaqmlcomponents SOURCES
-    qml/DoubleSpinBox.qml
     
-    qml/button/KisGroupButton.qml
-    qml/button/KisOptionButtonStrip.qml
+    qml/button/GroupButton.qml
+    qml/button/OptionButtonStrip.qml
     
-    qml/overlays/KisWarningOverlay.qml
-    qml/overlays/KisSliderOverlay.qml
+    qml/overlays/WarningOverlay.qml
+    qml/overlays/SliderOverlay.qml
     qml/tooltip/KisToolTip.qml
 
-    qml/textinput/KisTextInputWithSelectionRange.qml
-    qml/textinput/KisTextInputWithPrefixAndSuffix.qml
+    qml/textinput/TextInputWithSelectionRange.qml
+    qml/textinput/TextInputWithPrefixAndSuffix.qml
     
-    qml/spinbox/KisParseSpinBoxContentItem.qml
-    qml/spinbox/KisIntParseSpinBox.qml
-    qml/spinbox/KisDoubleSpinBox.qml
-    qml/spinbox/KisDoubleParseSpinBox.qml
+    qml/spinbox/ParseSpinBoxContentItem.qml
+    qml/spinbox/IntParseSpinBox.qml
+    qml/spinbox/DoubleSpinBox.qml
+    qml/spinbox/DoubleParseSpinBox.qml
 
-    qml/sliderspinbox/KisSliderSpinBoxManipulator.qml
-    qml/sliderspinbox/KisSliderSpinBoxRangeSwitch.qml
-    qml/sliderspinbox/KisSliderSpinBoxContentItem.qml
-    qml/sliderspinbox/KisIntSliderSpinBox.qml
-    qml/sliderspinbox/KisDoubleSliderSpinBox.qml
+    qml/sliderspinbox/SliderSpinBoxManipulator.qml
+    qml/sliderspinbox/SliderSpinBoxRangeSwitch.qml
+    qml/sliderspinbox/SliderSpinBoxContentItem.qml
+    qml/sliderspinbox/IntSliderSpinBox.qml
+    qml/sliderspinbox/DoubleSliderSpinBox.qml
 
-    qml/curvewidget/KisCurveWidget.qml
-    qml/angleselector/KisAngleGauge.qml
-    qml/angleselector/KisAngleSelector.qml
-    qml/angleselector/KisAngleSelectorUtil.js
+    qml/curvewidget/CurveWidget.qml
+    qml/angleselector/AngleGauge.qml
+    qml/angleselector/AngleSelector.qml
+    qml/angleselector/AngleSelectorUtil.js
 )
 
 target_link_libraries(kritaqmlcomponents

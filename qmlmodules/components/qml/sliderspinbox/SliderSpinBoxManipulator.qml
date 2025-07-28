@@ -5,22 +5,72 @@
  */
 import QtQuick 2.15
 
+/*
+    \qmltype SliderSpinBoxManipulator
+    This is a FocusScope that handles dragging the sliders on slider spinboxes.
+ */
 FocusScope {
     id: root
 
+    /*
+        \qmlproperty min
+        lower end of the total range.
+    */
     property real min: 0.0
+    /*
+        \qmlproperty max
+        upper end of the total range.
+    */
     property real max: 0.0
+    /*
+        \qmlproperty value
+        current value within range.
+    */
     property real value: 0.0
+    /*
+        \qmlproperty stepSize
+        the stepsize for increase and decrease actions.
+    */
     property real stepSize: 1.0
+    /*
+        \qmlproperty blockUpdateSignalOnDrag
+        Whether to block the value from being updates when dragging.
+    */
     property bool blockUpdateSignalOnDrag: false
+    /*
+        \qmlproperty exponentRatio
+        \sa SliderSpinBoxContentItem.exponentRatio
+    */
     property real exponentRatio: 1.0
+    /*
+        \qmlproperty fastSliderStep
+        This sets the stepSize used when the user presses CTRL when modifying
+        the slider.
+    */
     property real fastSliderStep: 5.0
+    /*
+        \qmlproperty dragging
+        returns true whether the slider is currently being dragged.
+    */
     readonly property alias dragging : mouseArea.isDragging
+
     property int focusPolicy: Qt.WheelFocus
 
+    /**
+      Emitted when editing is started.
+      */
     signal editingStarted()
+    /**
+      Emitted when editing is started with value
+      */
     signal editingStartedWithValue(v: real)
+    /**
+      Emitted when increased and whether that is from a wheel event.
+      */
     signal increase(wheel: bool)
+    /**
+      Emitted when deincreased and whether that is from a wheel event.
+      */
     signal decrease(wheel: bool)
     
     MouseArea {

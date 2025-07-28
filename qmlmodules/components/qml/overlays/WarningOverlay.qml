@@ -5,12 +5,36 @@
  */
 import QtQuick 2.15
 
+/*
+    \qmltype WarningOverlay
+    This item is an overlay for the parse spinboxes, when enabled
+    it shows a bright orange-red overlay with a warning sign.
+
+    It handles animating the changes for showing this warning as well.
+ */
 Item {
     id: root
 
+    /*
+        \qmlproperty warn
+        Whether to start warning. When enabled the overlay will show itself.
+    */
     property bool warn: false
+    /*
+        \qmlproperty warningSignAlignment
+        Whether the warning sign is at the left or right of the overlay.
+        By default this is Qt.AlignLeft.
+    */
     property int warningSignAlignment: Qt.AlignLeft
+    /*
+        \qmlproperty showWarningSign
+        Whether to show the warning sign.
+    */
     property bool showWarningSign: true
+    /*
+        \qmlproperty radius
+        the radius of the overlay rectangle.
+    */
     property alias radius: background.radius
 
     states: [

@@ -7,7 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     propertyTitle: i18nc("@label", "Line Height");
@@ -121,7 +121,7 @@ TextPropertyBase {
                 }
                 Layout.fillWidth: true;
                 Layout.fillHeight: true;
-                KisDoubleSliderSpinBox {
+                Kis.DoubleSliderSpinBox {
                     id: lineHeightSpn
                     width: parent.width;
                     enabled: !lineHeightNormalCbx.checked;

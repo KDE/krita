@@ -10,7 +10,7 @@ Row {
     id: root
 
     property alias exclusive: buttonGroup.exclusive
-    readonly property KisGroupButton checkedButton: buttonGroup.checkedButton as KisGroupButton
+    readonly property Kis.GroupButton checkedButton: buttonGroup.checkedButton as Kis.GroupButton
     property int checkedButtonIndex: -1
 
     function updateCheckedStatusFromIndex()

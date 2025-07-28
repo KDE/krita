@@ -72,7 +72,7 @@ Button {
 
         /sa GroupPosition
     */
-    property int groupPosition: KisGroupButton.GroupPosition.NoGroup
+    property int groupPosition: GroupButton.GroupPosition.NoGroup
     palette.button: checked? sysPalette.highlight: sysPalette.button;
     palette.buttonText: checked? sysPalette.highlightedText: sysPalette.buttonText
 
@@ -80,10 +80,10 @@ Button {
     clip: true
     implicitWidth: implicitContentWidth + (root.leftPadding ?? root.padding)
                                         + (root.rightPadding ?? root.padding)
-    leftInset: (groupPosition === KisGroupButton.GroupPosition.GroupRight ||
-                groupPosition === KisGroupButton.GroupPosition.GroupCenter) * -50
-    rightInset: (groupPosition === KisGroupButton.GroupPosition.GroupLeft ||
-                 groupPosition === KisGroupButton.GroupPosition.GroupCenter) * -50
+    leftInset: (groupPosition === GroupButton.GroupPosition.GroupRight ||
+                groupPosition === GroupButton.GroupPosition.GroupCenter) * -50
+    rightInset: (groupPosition === GroupButton.GroupPosition.GroupLeft ||
+                 groupPosition === GroupButton.GroupPosition.GroupCenter) * -50
 
     Rectangle {
         width: 1
@@ -91,7 +91,7 @@ Button {
         anchors.right: parent.right
         color: root.palette.buttonText;
         opacity: 0.1;
-        visible: root.groupPosition === KisGroupButton.GroupPosition.GroupLeft ||
-                 root.groupPosition === KisGroupButton.GroupPosition.GroupCenter
+        visible: root.groupPosition === GroupButton.GroupPosition.GroupLeft ||
+                 root.groupPosition === GroupButton.GroupPosition.GroupCenter
     }
 }

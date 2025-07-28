@@ -5,8 +5,9 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import org.krita.components 1.0 as Kis
-import "AngleSelectorUtil.js" as AngleSelectorUtil
+import "angleselector"
+import "tooltip"
+import "angleselector/AngleSelectorUtil.js" as AngleSelectorUtil
 
 /*
     \qmltype AngleSelector
@@ -212,7 +213,7 @@ FocusScope {
         spacing: 5
         anchors.fill: parent
 
-        Kis.AngleGauge {
+        AngleGauge {
             id: angleGauge
 
             anchors.verticalCenter: parent.verticalCenter
@@ -232,7 +233,7 @@ FocusScope {
             }
         }
 
-        Kis.DoubleParseSpinBox {
+        DoubleParseSpinBox {
             id: spinBox
 
             anchors.verticalCenter: parent.verticalCenter
@@ -306,7 +307,7 @@ FocusScope {
                 display: AbstractButton.IconOnly
                 action: actionFlipHorizontallyAndVertically
                 icon.color: palette.buttonText;
-                Kis.KisToolTip {
+                KisToolTip {
                     parentControl: buttonFlipHorizontallyAndVertically
                     text: actionFlipHorizontallyAndVertically.text
                 }

@@ -5,7 +5,8 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import org.krita.components 1.0 as Kis
+import "../overlays"
+import "../spinbox"
 
 /*
     \qmltype SliderSpinBoxContentItem
@@ -151,15 +152,15 @@ FocusScope {
         color: root.parentSpinBox.palette.text
         //: @info:tooltip toggle between soft and hard range in the slider spin box
         toolTip: i18nc("@info:tooltip","Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]",
-                       Number(root.from).toLocaleString(Qt.locale(), decimals),
-                       Number(root.to).toLocaleString(Qt.locale(), decimals),
-                       Number(root.softFrom).toLocaleString(Qt.locale(), decimals),
-                       Number(root.softTo).toLocaleString(Qt.locale(), decimals));
+                       Number(root.from).toLocaleString(Qt.locale(), 'f', decimals),
+                       Number(root.to).toLocaleString(Qt.locale(), 'f', decimals),
+                       Number(root.softFrom).toLocaleString(Qt.locale(), 'f', decimals),
+                       Number(root.softTo).toLocaleString(Qt.locale(), 'f', decimals));
 
         onSoftRangeActiveChanged: root.softRangeActive = softRangeActive
     }
 
-    Kis.SliderOverlay {
+    SliderOverlay {
         id: sliderOverlay
         
         property real value: parseSpinBoxContentItem.value
@@ -177,7 +178,7 @@ FocusScope {
         exponentRatio: root.exponentRatio
     }
 
-    Kis.ParseSpinBoxContentItem {
+    ParseSpinBoxContentItem {
         id: parseSpinBoxContentItem
         
         anchors.top: parent.top

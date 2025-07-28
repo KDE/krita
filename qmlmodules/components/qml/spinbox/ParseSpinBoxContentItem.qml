@@ -6,7 +6,9 @@
 import QtQml 2.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import org.krita.components 1.0 as Kis
+import "../textinput"
+import "../overlays"
+import org.krita.components 1.0
 
 /*
     \qmltype ParseSpinBoxContentItem
@@ -104,7 +106,7 @@ FocusScope {
 
     onDecimalsChanged: textInput.contentsText = Number(root.value).toLocaleString(Qt.locale(), 'f', decimals);
 
-    Kis.WarningOverlay {
+    WarningOverlay {
         id: warningOverlay
         anchors.fill: parent
         clip: true
@@ -114,7 +116,7 @@ FocusScope {
         warningSignAlignment: Qt.AlignRight
     }
 
-    Kis.TextInputWithPrefixAndSuffix {
+    TextInputWithPrefixAndSuffix {
         id: textInput
         property double parsedValue: 0.0
 
@@ -141,7 +143,7 @@ FocusScope {
             }
         }
 
-        Kis.KisNumParser { id: numParser;}
+        KisNumParser { id: numParser;}
 
         onContentsTextChanged: {
             parsedValue = numParser.parseSimpleMathExpr(contentsText);

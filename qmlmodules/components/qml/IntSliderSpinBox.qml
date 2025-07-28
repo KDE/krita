@@ -4,31 +4,24 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 import QtQuick 2.15
-import org.krita.components 1.0 as Kis
+import QtQuick.Controls 2.15
+import "sliderspinbox"
 
 /*
-    \qmltype DoubleSliderSpinBox
-    A DoubleSpinBox with a ParseSpinBoxContentItem and a slider.
-    This one only supports floating point values.
-
-    Biggest difference between this and IntSliderSpinBox is that the value and
-    range (from, to, softFrom and softTo) are prefixed with "d", and *must* be
-    used instead of from/to/value. This is because those other values are
-    reserved to be used by spinbox itself, and must be multiplied by the desired
-    factor.
+    \qmltype IntSliderSpinBox
+    A SpinBox with a ParseSpinBoxContentItem and a slider.
+    This one only supports integers.
 
     NOTE: SliderSpinBoxes have no internal signal compressors, so it may be
     useful to implement those on the level of the data model to reduce updates,
     OR you can use \sa blockUpdateSignalOnDrag.
 
     \qml
-        DoubleSliderSpinBox {
+        IntSliderSpinBox {
             id: spinbox
-            dFrom: -100.0;
-            dTo: 200.0;
-            softDFrom: 0.0;
-            softDTo: 100.0;
-            value: 50.25;
+            from: 0;
+            to: 100;
+            value: 50;
 
             prefix: i18nc("@label:spinbox", "Percentage: ")
             suffix: i18nc("@item:valuesuffix", "%")
@@ -59,7 +52,7 @@ import org.krita.components 1.0 as Kis
    The "soft range" is considered valid if the "soft maximum" is greater than
    the "soft minimum".
  */
-Kis.DoubleSpinBox {
+SpinBox {
     id: root
 
     /*
@@ -75,17 +68,18 @@ Kis.DoubleSpinBox {
     property alias suffix: contentId.suffix
 
     /*
-        \qmlproperty softDFrom
-        Lower end of the soft range. Should be below softDTo and Dto,
-        and below or equals to "DFrom".
+        \qmlproperty softFrom
+        Lower end of the soft range. Should be below softTo and to,
+        and below or equals to "from".
     */
-    property real softDFrom: dFrom
+    property int softFrom: from
+
     /*
-        \qmlproperty softDTo
-        Upper end of the soft range. Should be above softDFrom and dFrom,
-        and below or equals to dTo.
+        \qmlproperty softTo
+        Upper end of the soft range. Should be above softFrom and from,
+        and below or equals to "to".
     */
-    property real softDTo: dFrom
+    property int softTo: from
 
     /*
         \qmlproperty softRangeActive
@@ -115,11 +109,10 @@ Kis.DoubleSpinBox {
         This sets the stepSize used when the user presses CTRL when modifying
         the slider.
     */
-    property alias fastSliderStep: contentId.fastSliderStep
+    property int fastSliderStep: 5
 
     /*
         \qmlproperty dragging
-
         Whether the slider is currently being dragged by the mouse.
     */
     readonly property alias dragging : contentId.dragging
@@ -128,10 +121,10 @@ Kis.DoubleSpinBox {
 
     function fixSoftRange() {
         if (!isComplete) return;
-        root.softDFrom = Math.min(Math.max(root.softDFrom, root.dFrom), root.dTo);
-        root.softDTo = Math.min(Math.max(root.softDTo, root.softDFrom), root.dTo);
-        contentId.showSoftRange = (root.softDFrom != root.softDTo)
-                && (root.softDFrom !== root.dFrom || root.softDTo !== root.dTo);
+        root.softFrom = Math.min(Math.max(root.softFrom, root.from), root.To);
+        root.softTo = Math.min(Math.max(root.softTo, root.softFrom), root.To);
+        contentId.showSoftRange = (root.softFrom !== root.softTo)
+                && (root.softFrom !== root.from || root.softTo !== root.to);
     }
 
     editable: false
@@ -141,45 +134,52 @@ Kis.DoubleSpinBox {
 
     contentItem: FocusScope {
         focus: true
-        
-        Kis.SliderSpinBoxContentItem {
-            id: contentId
 
+        SliderSpinBoxContentItem {
+            id: contentId
+            
             anchors.fill: parent
             anchors.margins: 1
             anchors.rightMargin: 2
             focus: true
-            
-            decimals: root.decimals
-            from: root.dFrom
-            to: root.dTo
-            softFrom: root.softDFrom
-            softTo: root.softDTo
+
+            from: root.from
+            to: root.to
+            softFrom: root.softFrom
+            softTo: root.softTo
             showSoftRange: false
             softRangeActive: root.softRangeActive
-            focusPolicy: root.focusPolicy
             parentSpinBox: root
+            focusPolicy: root.focusPolicy
+            fastSliderStep: root.fastSliderStep
 
             onValueChanged: {
-                if (!(blockUpdateSignalOnDrag && dragging) && root.dValue !== value) {
-                    root.dValue = value;
+                if (!(blockUpdateSignalOnDrag && dragging) && root.value !== value) {
+                    root.value = value;
                 }
             }
             onDraggingChanged: {
                 if (blockUpdateSignalOnDrag && !dragging) {
-                    root.dValue = value;
+                    root.value = value;
                 }
             }
         }
     }
 
-    onDValueChanged: contentId.value = root.dValue;
-    onDFromChanged: fixSoftRange()
-    onDToChanged: fixSoftRange()
-    onSoftDFromChanged: fixSoftRange()
-    onSoftDToChanged: fixSoftRange()
+    onValueChanged: contentId.value = root.value
+    onFromChanged: fixSoftRange()
+    onToChanged: fixSoftRange()
+    onSoftFromChanged: fixSoftRange()
+    onSoftToChanged: fixSoftRange()
 
     Component.onCompleted: {
+        // The following is to avoid an oddity inside Fusion
+        // Where padding is added to ensure a centered text.
+        if (root.mirrored) {
+            root.rightPadding = 0;
+        } else {
+            root.leftPadding = 0;
+        }
         isComplete = true;
         fixSoftRange()
     }

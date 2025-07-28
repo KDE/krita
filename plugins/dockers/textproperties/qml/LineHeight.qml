@@ -130,6 +130,7 @@ TextPropertyBase {
 
                     onDValueChanged:if (enabled)  converter.userValue = dValue;
                     palette: lineHeightPalette.palette;
+                    blockUpdateSignalOnDrag: true;
                 }
             }
 

@@ -56,6 +56,7 @@ TextPropertyBase {
             dStepSize: 0.1;
             Layout.preferredWidth: implicitWidth;
             Layout.fillWidth: true;
+            blockUpdateSignalOnDrag: true;
         }
 
         Button {

@@ -74,6 +74,7 @@ CollapsibleGroupProperty {
             dFrom: 0;
             dTo: 999;
             onDValueChanged: textIndentUnitCmb.userValue = dValue;
+            blockUpdateSignalOnDrag: true;
         }
         /// Note: percentage calculation in the default unitcombobox isn't great for textIndent as it assumes 100% = fontsize,
         /// While spec-wise, it's the inline length that defines percentage.

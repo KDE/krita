@@ -67,6 +67,7 @@ TextPropertyBase {
             dStepSize: 0.1;
 
             onDValueChanged: wordSpacingUnitCmb.userValue = dValue;
+            blockUpdateSignalOnDrag: true;
         }
 
         UnitComboBox {

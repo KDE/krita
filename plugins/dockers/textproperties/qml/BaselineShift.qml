@@ -124,6 +124,7 @@ TextPropertyBase {
                 dTo: 99;
                 onDValueChanged: if (enabled) baselineShiftUnitCmb.userValue = dValue;
                 palette: baselinePalette.palette;
+                blockUpdateSignalOnDrag: true;
             }
         }
 

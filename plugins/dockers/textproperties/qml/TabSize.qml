@@ -86,6 +86,7 @@ TextPropertyBase {
             dFrom: 0;
             dTo: 99;
             onDValueChanged: converter.userValue = dValue;
+            blockUpdateSignalOnDrag: true;
         }
         SqueezedComboBox {
             id: tabSizeUnitCmb;

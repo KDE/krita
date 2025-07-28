@@ -30,7 +30,7 @@ import "sliderspinbox"
             softDTo: 100.0;
             value: 50.25;
 
-            prefix: i18nc("@label:spinbox", "Percentage: ")
+            prefix: i18nc("@label:slider", "Percentage: ")
             suffix: i18nc("@item:valuesuffix", "%")
         }
     \endqml

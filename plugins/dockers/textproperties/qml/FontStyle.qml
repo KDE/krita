@@ -155,7 +155,7 @@ CollapsibleGroupProperty {
 
         Kis.IntSliderSpinBox {
             id: fontWeightSpn
-            prefix: i18nc("@label:spinbox", "Weight: ");
+            prefix: i18nc("@label:slider", "Weight: ");
             from: 0;
             to: 1000;
             blockUpdateSignalOnDrag: true;
@@ -186,7 +186,7 @@ CollapsibleGroupProperty {
 
         Kis.IntSliderSpinBox {
             id: fontStretchSpn
-            prefix: i18nc("@label:spinbox", "Width: ")
+            prefix: i18nc("@label:slider", "Width: ")
             from: 0;
             to: 200;
             blockUpdateSignalOnDrag: true;
@@ -235,13 +235,15 @@ CollapsibleGroupProperty {
             Layout.preferredHeight: fontSlantSpn.implicitHeight;
             Kis.IntSliderSpinBox {
                 id: fontSlantSpn;
-                suffix:"°"
+                suffix: i18nc("@item:valuesuffix", "%")
                 from: -90;
                 to: 90;
                 enabled: fontSlant == CssFontStyleModel.StyleOblique;
                 PaletteControl {
                     id: slantSpnPal;
+                    colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
                 }
+                blockUpdateSignalOnDrag: true;
                 anchors.fill: parent;
                 palette: slantSpnPal.palette;
             }

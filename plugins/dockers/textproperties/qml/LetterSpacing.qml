@@ -66,6 +66,8 @@ TextPropertyBase {
             softRangeActive: true;
             dStepSize: 0.1;
 
+            blockUpdateSignalOnDrag: true;
+
             onDValueChanged: letterSpacingUnitCmb.userValue = dValue;
 
         }

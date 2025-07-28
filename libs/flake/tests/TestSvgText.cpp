@@ -3134,6 +3134,70 @@ void TestSvgText::testBcp47Parsing()
     QVERIFY(bcp.privateUseTags.join("-") == privateuse);
 }
 
+/**
+ * @brief TestSvgText::testSearchingTreeIndex
+ *
+ * This tests finding the treeIndex for a given property.
+ */
+void TestSvgText::testSearchingTreeIndex()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"font-size:10.0;font-family:Deja Vu Sans\">The quick <tspan style=\"font-style:italic\">brown</tspan> fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    QVector<int> refIndex = {0, 1};
+    QVector<int> treeIndex = textShape->findTreeIndexForPropertyId(KoSvgTextProperties::FontStyleId);
+
+    QCOMPARE(refIndex, treeIndex);
+}
+
+/**
+ * @brief TestSvgText::testRangeForTreeIndex
+ *
+ * This tests getting the range of a treeIndex.
+ */
+void TestSvgText::testRangeForTreeIndex()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"font-size:10.0;font-family:Deja Vu Sans\">The quick <tspan style=\"font-style:italic\">brown</tspan> fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    QVector<int> treeIndex = textShape->findTreeIndexForPropertyId(KoSvgTextProperties::FontStyleId);
+    QPair<int, int> range = textShape->findRangeForTreeIndex(treeIndex);
+
+    QCOMPARE(range.first, 10);
+    QCOMPARE(range.second, 15);
+}
+
+/**
+ * @brief TestSvgText::testSetPropertiesOnTreeIndex
+ *
+ * This tests both setting and retrieving KoSvgTextProperties via a treeindex.
+ */
+void TestSvgText::testSetPropertiesOnTreeIndex()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"font-size:10.0;font-family:Deja Vu Sans\">The quick <tspan style=\"font-style:italic\">brown</tspan> fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    QVector<int> treeIndex = textShape->findTreeIndexForPropertyId(KoSvgTextProperties::FontStyleId);
+    KoSvgTextProperties props = textShape->propertiesForTreeIndex(treeIndex);
+
+    QVERIFY(props.hasProperty(KoSvgTextProperties::FontStyleId));
+
+    props.setProperty(KoSvgTextProperties::FontWeightId, 700);
+    props.removeProperty(KoSvgTextProperties::FontStyleId);
+    textShape->setPropertiesAtTreeIndex(treeIndex, props);
+
+    KoSvgTextProperties props2 = textShape->propertiesForTreeIndex(treeIndex);
+    QVERIFY(!props2.hasProperty(KoSvgTextProperties::FontStyleId));
+    QVERIFY(props2.hasProperty(KoSvgTextProperties::FontWeightId));
+
+}
+
 #include "kistest.h"
 
 

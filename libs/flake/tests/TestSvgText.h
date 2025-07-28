@@ -120,6 +120,10 @@ private Q_SLOTS:
 
     void testBcp47Parsing_data();
     void testBcp47Parsing();
+
+    void testSearchingTreeIndex();
+    void testRangeForTreeIndex();
+    void testSetPropertiesOnTreeIndex();
 };
 
 #endif // TESTSVGTEXT_H

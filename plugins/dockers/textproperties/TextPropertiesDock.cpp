@@ -26,6 +26,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagModel.h>
+#include <kis_signal_compressor.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -111,6 +112,11 @@ private:
 
 struct TextPropertiesDock::Private
 {
+    Private(QObject *parent = nullptr)
+        : compressor(new KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent))
+        , canvasCompressor(new KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent)){
+
+    }
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
     FontStyleModel stylesModel;
     FontAxesModel axesModel;
@@ -118,6 +124,9 @@ struct TextPropertiesDock::Private
     KisCanvasResourceProvider *provider{nullptr};
     TextPropertyConfigModel *textPropertyConfigModel {nullptr};
     qreal currentDpi{72.0};
+
+    KisSignalCompressor *compressor;
+    KisSignalCompressor *canvasCompressor;
 };
 
 TextPropertiesDock::TextPropertiesDock()
@@ -182,7 +191,8 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
-            this, SLOT(slotTextPropertiesChanged()));
+            d->compressor, SLOT(start()));
+    connect(d->compressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
 
@@ -204,6 +214,8 @@ void TextPropertiesDock::setViewManager(KisViewManager *kisview)
     d->provider = kisview->canvasResourceProvider();
     if (d->provider) {
         connect(d->provider, SIGNAL(sigTextPropertiesChanged()),
+                d->canvasCompressor, SLOT(start()));
+        connect(d->canvasCompressor, SIGNAL(timeout()),
                 this, SLOT(slotCanvasTextPropertiesChanged()));
 
         // This initializes the docker to an empty entry;

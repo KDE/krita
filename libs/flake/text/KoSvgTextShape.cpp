@@ -163,7 +163,19 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
     KoShape::shapeChanged(type, shape);
 
-    if (type == ContentChanged) {
+    if ((d->shapesInside.contains(shape) || d->shapesSubtract.contains(shape))
+            && (type == PositionChanged
+                || type == RotationChanged
+                || type == ScaleChanged
+                || type == ShearChanged
+                || type == SizeChanged
+                || type == GenericMatrixChange
+                || type == ParameterChanged)) {
+        // update shape. relayout.
+        //TODO: also handle type == Deleted. Need to figure out the order of operations though.
+        relayout();
+    }
+    if ((!shape || shape == this) && type == ContentChanged) {
         relayout();
     }
 }
@@ -1792,37 +1804,6 @@ void KoSvgTextShape::paint(QPainter &painter) const
         d->paintPaths(painter, rootBounds, this, d->result, textRendering, chunk, currentIndex);
         d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationLineThrough, textRendering);
     }
-#if 0 // Debug
-    Q_FOREACH (KoShape *child, this->shapes()) {
-        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape *>(child);
-        if (textPathChunk) {
-            painter.save();
-            painter.setPen(Qt::magenta);
-            painter.setOpacity(0.5);
-            if (textPathChunk->layoutInterface()->textPath()) {
-                QPainterPath p = textPathChunk->layoutInterface()->textPath()->outline();
-                p = textPathChunk->layoutInterface()->textPath()->transformation().map(p);
-                painter.strokePath(p, QPen(Qt::green));
-                painter.drawPoint(p.pointAtPercent(0));
-                painter.drawPoint(p.pointAtPercent(p.percentAtLength(p.length() * 0.5)));
-                painter.drawPoint(p.pointAtPercent(1.0));
-            }
-            painter.restore();
-        }
-    }
-#endif
-#if 0 // Debug
-    Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
-        QPainterPath p = shapeInside->outline();
-        p = shapeInside->transformation().map(p);
-        painter.strokePath(p, QPen(Qt::green));
-    }
-    Q_FOREACH (KoShape *shapeInside, d->shapesSubtract) {
-        QPainterPath p = shapeInside->outline();
-        p = shapeInside->transformation().map(p);
-        painter.strokePath(p, QPen(Qt::red));
-    }
-#endif
 
     painter.restore();
 }
@@ -1835,12 +1816,19 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 
 QPainterPath KoSvgTextShape::outline() const {
     QPainterPath result;
-    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
-        result.addPath(it->associatedOutline);
-        for (int i = 0; i < it->textDecorations.values().size(); ++i) {
-            result.addPath(it->textDecorations.values().at(i));
+    if (!d->shapesInside.isEmpty()) {
+        //TODO: what about shape subtract?
+        Q_FOREACH(KoShape *shape, d->shapesInside) {
+            result.addPath(shape->transformation().map(shape->outline()));
         }
+    } else {
+        for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+            result.addPath(it->associatedOutline);
+            for (int i = 0; i < it->textDecorations.values().size(); ++i) {
+                result.addPath(it->textDecorations.values().at(i));
+            }
 
+        }
     }
     return result;
 }
@@ -1883,6 +1871,38 @@ QRectF KoSvgTextShape::boundingRect() const
     return this->absoluteTransformation().mapRect(result);
 }
 
+QSizeF KoSvgTextShape::size() const
+{
+    return outlineRect().size();
+}
+
+void KoSvgTextShape::setSize(const QSizeF &size)
+{
+    const QRectF oRect = this->outlineRect();
+    const QSizeF oldSize = oRect.size();
+
+    if (size == oldSize) return;
+
+    const qreal scaleX = size.width() / oldSize.width();
+    const qreal scaleY = size.height() / oldSize.height();
+
+    if (!d->shapesInside.isEmpty()) {
+        Q_FOREACH(KoShape *shape, d->shapesInside) {
+            KoFlake::resizeShapeCommon(shape, scaleX, scaleY, shape->boundingRect().topLeft() - oRect.topLeft(), false, false, this->transformation());
+        }
+        Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+            KoFlake::resizeShapeCommon(shape, scaleX, scaleY, shape->boundingRect().topLeft() - oRect.topLeft(), false, false, this->transformation());
+        }
+    } else {
+        this->scale(scaleX, scaleY);
+        //TODO: use scaling function for kosvgtextproperties when styles presets are merged.
+        //TODO: Support text-on-path
+        notifyChanged();
+        shapeChangedPriv(ScaleChanged);
+    }
+
+}
+
 void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements) const
 {
     if (elements & DebugElement::CharBbox) {
@@ -1891,6 +1911,18 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
             QPainterPath rootBounds;
             rootBounds.addRect(this->outline().boundingRect());
             d->paintDebug(painter, d->result, currentIndex);
+        }
+
+        //Debug shape outlines.
+        Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
+            QPainterPath p = shapeInside->outline();
+            p = shapeInside->transformation().map(p);
+            painter.strokePath(p, QPen(Qt::green));
+        }
+        Q_FOREACH (KoShape *shapeInside, d->shapesSubtract) {
+            QPainterPath p = shapeInside->outline();
+            p = shapeInside->transformation().map(p);
+            painter.strokePath(p, QPen(Qt::red));
         }
     }
 
@@ -1959,7 +1991,14 @@ KoSvgTextShape::TextType KoSvgTextShape::textType() const
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
 {
+    Q_FOREACH(KoShape *shape, d->shapesInside) {
+        shape->removeDependee(this);
+    }
     d->shapesInside = shapesInside;
+    Q_FOREACH(KoShape *shape, d->shapesInside) {
+        shape->addDependee(this);
+    }
+    shapeChangedPriv(ContentChanged);
 }
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const
@@ -1969,7 +2008,14 @@ QList<KoShape *> KoSvgTextShape::shapesInside() const
 
 void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 {
+    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+        shape->removeDependee(this);
+    }
     d->shapesSubtract = shapesSubtract;
+    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+        shape->addDependee(this);
+    }
+    shapeChangedPriv(ContentChanged);
 }
 
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const

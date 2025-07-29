@@ -23,10 +23,11 @@
 #include "kis_global.h"
 #include "kundo2command.h"
 
-SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked)
+SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked, KoShape *shape)
     : KoInteractionStrategy(tool)
     , m_dragStart(clicked)
     , m_dragEnd(clicked)
+    , m_flowShape(shape)
 {
     KoSvgTextProperties properties = tool->propertiesForNewText();
     properties.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
@@ -131,7 +132,12 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     params->setProperty("shapeRect", QVariant(rectangle));
     params->setProperty("origin", QVariant(origin));
 
-    KoShape *textShape = factory->createShape( params, tool->canvas()->shapeController()->resourceManager());
+    KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape *>(factory->createShape( params, tool->canvas()->shapeController()->resourceManager()));
+
+    if (m_flowShape) {
+        textShape->setPosition(QPointF());
+        textShape->setShapesInside({m_flowShape});
+    }
 
     KUndo2Command *parentCommand = new KUndo2Command();
 
@@ -162,4 +168,9 @@ bool SvgCreateTextStrategy::draggingInlineSize()
 {
     QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
     return (rectangle.width() >= m_minSizeInline.width() || rectangle.height() >= m_minSizeInline.height()) && !m_modifiers.testFlag(Qt::ControlModifier);
+}
+
+bool SvgCreateTextStrategy::hasWrappingShape()
+{
+    return (m_flowShape)? true: false;
 }

@@ -15,11 +15,12 @@
 class SvgTextTool;
 
 class KoSvgTextShape;
+class KoShape;
 
 class SvgCreateTextStrategy : public KoInteractionStrategy
 {
 public:
-    SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked);
+    SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked, KoShape *shape = nullptr);
     ~SvgCreateTextStrategy() override = default;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
@@ -29,11 +30,13 @@ public:
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
     bool draggingInlineSize();
+    bool hasWrappingShape();
 
 private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     QSizeF m_minSizeInline;
+    KoShape *m_flowShape;
     Qt::KeyboardModifiers m_modifiers;
 };
 

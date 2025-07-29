@@ -44,6 +44,9 @@ public:
     QRectF outlineRect() const override;
     QRectF boundingRect() const override;
 
+    QSizeF size() const override;
+    void setSize(const QSizeF &size) override;
+
     enum class DebugElement {
         CharBbox = 1 << 0,
         LineBox = 1 << 1,

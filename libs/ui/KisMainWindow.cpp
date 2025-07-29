@@ -1634,7 +1634,7 @@ void KisMainWindow::adjustLayoutForWelcomePage()
     }
     QList<QToolBar *> toolbars = findChildren<QToolBar *>();
     for (QToolBar *toolbar : toolbars) {
-        if (toolbar->objectName() == "BrushesAndStuff" || toolbar->objectName() == "editToolBar") {
+        if (toolbar->objectName() != "mainToolBar") {
             toolbar->hide();
         }
     }

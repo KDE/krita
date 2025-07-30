@@ -19,6 +19,7 @@ class KConfigGroup;
 class KisView;
 class KisCanvasState;
 
+
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
     Q_OBJECT
@@ -43,13 +44,15 @@ public:
     void setPreferredCenter(const QPointF &viewPoint) override;
 
     void zoomIn() override;
-    void zoomIn(const QPoint &center) override;
+    void zoomIn(const KoViewTransformStillPoint &widgetStillPoint) override;
     void zoomOut() override;
-    void zoomOut(const QPoint &center) override;
+    void zoomOut(const KoViewTransformStillPoint &widgetStillPoint) override;
 
     void syncOnReferencesChange(const QRectF &referencesRect);
     void syncOnImageResolutionChange();
     void syncOnImageSizeChange(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
+    void rotateCanvas(qreal angle, const std::optional<KoViewTransformStillPoint> &stillPoint, bool isNativeGesture = false);
 
 public:
     bool wrapAroundMode() const;
@@ -76,7 +79,6 @@ public Q_SLOTS:
 
     void beginCanvasRotation();
     void endCanvasRotation();
-    void rotateCanvas(qreal angle, const QPointF &center, bool isNativeGesture = false);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
@@ -94,11 +96,13 @@ public Q_SLOTS:
 protected:
     void updateCanvasOffsetInternal(const QPointF &newOffset) override;
     void updateCanvasWidgetSizeInternal(const QSize &newSize) override;
-    void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint) override;
+    void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint) override;
     void zoomToInternal(const QRect &viewRect) override;
 
 private:
-    void mirrorCanvasImpl(const QPointF &widgetPoint, bool enable);
+    void zoomInImpl(const std::optional<KoViewTransformStillPoint> &stillPoint);
+    void zoomOutImpl(const std::optional<KoViewTransformStillPoint> &stillPoint);
+    void mirrorCanvasImpl(const std::optional<KoViewTransformStillPoint> &stillPoint, bool enable);
 
 Q_SIGNALS:
     void documentSizeChanged();

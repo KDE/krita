@@ -18,6 +18,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_filter_strategy.h"
 #include <kis_algebra_2d.h>
+#include <KoViewTransformStillPoint.h>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 Q_DECLARE_METATYPE(KoZoomMode::Mode)
@@ -174,7 +175,7 @@ void KisCoordinatesConverterTest::testRotation()
     converter.setDocumentOffset(QPoint(0,0));
     converter.setCanvasWidgetSize(widgetSize);
 
-    converter.rotate(converter.widgetCenterPoint(), 30);
+    converter.rotate(std::nullopt, 30);
 
     QTransform viewportToWidget = converter.viewportToWidgetTransform();
 
@@ -213,7 +214,7 @@ void KisCoordinatesConverterTest::testMirroring()
 //    QTransform flakeToWidget;
 //    QTransform viewportToWidget;
 
-    converter.mirror(converter.imageCenterInWidgetPixel(), true, false);
+    converter.mirror(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), true, false);
 
     // image pixels == flake pixels
 
@@ -247,7 +248,7 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
 //    QTransform flakeToWidget;
 //    QTransform viewportToWidget;
 
-    converter.mirror(converter.imageCenterInWidgetPixel(), true, false);
+    converter.mirror(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), true, false);
 
     // image pixels == flake pixels
 
@@ -283,13 +284,13 @@ void KisCoordinatesConverterTest::testCanvasOffset()
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 0)));
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(1000, 0)));
 
-        converter.mirror(converter.widgetCenterPoint(), true, false);
+        converter.mirror(std::nullopt, true, false);
         qDebug() << "after mirror" << ppVar(converter.documentOffset());
 
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 0)));
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(1000, 0)));
 
-        converter.mirror(converter.widgetCenterPoint(), false, false);
+        converter.mirror(std::nullopt, false, false);
     }
 
     {
@@ -300,13 +301,13 @@ void KisCoordinatesConverterTest::testCanvasOffset()
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 0)));
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(1000, 0)));
 
-        converter.mirror(converter.widgetCenterPoint(), true, false);
+        converter.mirror(std::nullopt, true, false);
         qDebug() << "after mirror" << ppVar(converter.documentOffset());
 
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 0)));
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(1000, 0)));
 
-        converter.mirror(converter.widgetCenterPoint(), false, false);
+        converter.mirror(std::nullopt, false, false);
     }
 
     {
@@ -317,7 +318,7 @@ void KisCoordinatesConverterTest::testCanvasOffset()
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 0)));
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(1000, 0)));
 
-        converter.rotate(converter.widgetCenterPoint(), 30);
+        converter.rotate(std::nullopt, 30);
         qDebug() << "after rotate" << ppVar(converter.documentOffset());
 
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 0)));
@@ -325,7 +326,7 @@ void KisCoordinatesConverterTest::testCanvasOffset()
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(1000, 1000)));
         qDebug() << "  " << ppVar(converter.imageToWidget(QPointF(0, 1000)));
 
-        converter.mirror(converter.widgetCenterPoint(), false, false);
+        converter.mirror(std::nullopt, false, false);
     }
 }
 
@@ -463,7 +464,7 @@ void KisCoordinatesConverterTest::testOffsetLimitsCropping()
     // This mirror operation cause clipping of the offset, since
     // the left edge of the document shoudl appear at position
     // 480, which is higer than the limit of 450.
-    converter.mirror(QPointF(490, 0), true, false);
+    converter.mirror(converter.makeViewStillPoint(QPointF(490, 0)), true, false);
 
     QCOMPARE(converter.documentOffset(), QPoint(-450,0));
     QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(950,0));
@@ -477,7 +478,7 @@ void KisCoordinatesConverterTest::testOffsetLimitsCropping()
 
     // Now mirror on the left side. The offset should be corrected
     // to the right
-    converter.mirror(QPointF(10, 0), false, false);
+    converter.mirror(converter.makeViewStillPoint(QPointF(10, 0)), false, false);
 
     QCOMPARE(converter.documentOffset(), QPoint(450,0));
     QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(-450,0));
@@ -896,7 +897,8 @@ void KisCoordinatesConverterTest::testZoomMode()
         }
     }
 
-    converter.setZoom(newZoomMode, newConstantZoom, newScreenResolution.x(), newScreenResolution.y(), widgetStillPoint);
+    const KoViewTransformStillPoint stillPoint = converter.makeViewStillPoint(widgetStillPoint);
+    converter.setZoom(newZoomMode, newConstantZoom, newScreenResolution.x(), newScreenResolution.y(), stillPoint);
 
     QCOMPARE(converter.zoom(), expectedZoom);
     QCOMPARE(converter.zoomMode(), newZoomMode);
@@ -1034,7 +1036,7 @@ void KisCoordinatesConverterTest::testChangeCanvasSize()
 
     converter.setImage(image);
     converter.setCanvasWidgetSize(originalWidgetSize);
-    converter.setZoom(zoomMode, originalZoom, image->xRes(), image->yRes(), QRectF(QPointF(), originalWidgetSize).center());
+    converter.setZoom(zoomMode, originalZoom, image->xRes(), image->yRes(), std::nullopt);
     if (zoomMode == KoZoomMode::ZOOM_CONSTANT) {
         converter.setDocumentOffset(originalOffset);
     }
@@ -1142,7 +1144,7 @@ void KisCoordinatesConverterTest::testChangeImageResolution()
 
     converter.setImage(image);
     converter.setCanvasWidgetSize(widgetSize);
-    converter.setZoom(zoomMode, originalZoom, image->xRes(), image->yRes(), QRectF(QPointF(), widgetSize).center());
+    converter.setZoom(zoomMode, originalZoom, image->xRes(), image->yRes(), std::nullopt);
     if (zoomMode == KoZoomMode::ZOOM_CONSTANT) {
         converter.setDocumentOffset(originalOffset);
     }
@@ -1258,7 +1260,7 @@ void KisCoordinatesConverterTest::testChangeImageSize()
 
     converter.setImage(image);
     converter.setCanvasWidgetSize(widgetSize);
-    converter.setZoom(zoomMode, originalZoom, image->xRes(), image->yRes(), QRectF(QPointF(), widgetSize).center());
+    converter.setZoom(zoomMode, originalZoom, image->xRes(), image->yRes(), std::nullopt);
     if (zoomMode == KoZoomMode::ZOOM_CONSTANT) {
         converter.setDocumentOffset(originalOffset);
     }
@@ -1378,7 +1380,12 @@ void KisCoordinatesConverterTest::testResolutionModes()
         }
     }
 
-    converter.setZoom(KoZoomMode::ZOOM_CONSTANT, originalZoom, newScreenResolution, newScreenResolution, -originalOffset);
+    const KoViewTransformStillPoint stillPoint = converter.makeViewStillPoint(-originalOffset);
+
+    // that should be exactly the topleft of the document
+    QCOMPARE(stillPoint.docPoint(), QPointF());
+
+    converter.setZoom(KoZoomMode::ZOOM_CONSTANT, originalZoom, newScreenResolution, newScreenResolution, stillPoint);
 
     QCOMPARE(converter.zoom(), expectedZoom);
     QCOMPARE(converter.effectiveZoom(), expectedEffectiveZoom);
@@ -1759,7 +1766,7 @@ void KisCoordinatesConverterTest::testZoomLimits()
                           converter.zoom(),
                           finalScreenResolution.x(),
                           finalScreenResolution.y(),
-                          converter.widgetCenterPoint());
+                          std::nullopt);
         converter.setDocumentOffset(QPointF());
     }
 
@@ -1856,7 +1863,7 @@ void KisCoordinatesConverterTest::testZoomLimitsEnforcement()
 
     converter.setZoom(requestedZoomMode, requestedZoom,
         converter.resolutionX(), converter.resolutionY(),
-        converter.imageCenterInWidgetPixel());
+        converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()));
 
     QCOMPARE(converter.zoomMode(), expectedFinalZoomMode);
     QCOMPARE(converter.zoom(), expectedFinalZoom);
@@ -2007,7 +2014,8 @@ enum TestHiDPIMode
     ImageResolution,
     ImageBounds,
     ZoomTo,
-    Rotate
+    Rotate,
+    RotateOrthogonal
 };
 
 Q_DECLARE_METATYPE(TestHiDPIMode)
@@ -2015,21 +2023,27 @@ Q_DECLARE_METATYPE(TestHiDPIMode)
 void KisCoordinatesConverterTest::testHiDPIOffsetSnapping_data()
 {
     QTest::addColumn<TestHiDPIMode>("testingMode");
+    QTest::addColumn<bool>("expectsPixelAlignment");
 
-    QTest::addRow("page-to-const7") << ZoomPageTo7;
-    QTest::addRow("page-to-width") << ZoomPageToWidth;
-    QTest::addRow("scroll-to-fraction") << ScrollToFraction;
-    QTest::addRow("scroll-away") << ScrollAway;
-    QTest::addRow("image-resolution") << ImageResolution;
-    QTest::addRow("image-bounds") << ImageBounds;
-    QTest::addRow("zoom-to") << ZoomTo;
-    QTest::addRow("rotate") << Rotate;
-
+    QTest::addRow("page-to-const7") << ZoomPageTo7 << true;
+    QTest::addRow("page-to-width") << ZoomPageToWidth << true;
+    QTest::addRow("scroll-to-fraction") << ScrollToFraction << true;
+    QTest::addRow("scroll-away") << ScrollAway << true;
+    QTest::addRow("image-resolution") << ImageResolution << true;
+    QTest::addRow("image-bounds") << ImageBounds << true;
+    QTest::addRow("zoom-to") << ZoomTo << true;
+    QTest::addRow("rotate-orthogonal") << RotateOrthogonal << true;
+    /**
+     * In non-orthogonal rotation mode we disable pixel alignment
+     * to make rotations smoother.
+     */
+    QTest::addRow("rotate") << Rotate << false;
 }
 
 void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
 {
     QFETCH(TestHiDPIMode, testingMode);
+    QFETCH(bool, expectsPixelAlignment);
 
     KisImageSP image;
     KisCoordinatesConverter converter;
@@ -2059,11 +2073,11 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
     switch (testingMode) {
         case ZoomPageTo7:
             converter.setZoom(KoZoomMode::ZOOM_CONSTANT, 0.17,
-                converter.resolutionX(), converter.resolutionY(), converter.imageCenterInWidgetPixel());
+                converter.resolutionX(), converter.resolutionY(), converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()));
             break;
         case ZoomPageToWidth:
             converter.setZoom(KoZoomMode::ZOOM_WIDTH, 1.0,
-                converter.resolutionX(), converter.resolutionY(), converter.imageCenterInWidgetPixel());
+                converter.resolutionX(), converter.resolutionY(), converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()));
             break;
         case ScrollToFraction:
             converter.setDocumentOffset(QPointF(-100.33, -200.77));
@@ -2082,14 +2096,153 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
             converter.zoomTo(QRectF(13.33, 17.77, 333.17, 234.13));
             break;
         case Rotate:
-            converter.rotate(converter.imageCenterInWidgetPixel(), 17.3);
+            converter.rotate(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), 17.3);
+            break;
+        case RotateOrthogonal:
+            converter.rotate(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), 90.0);
             break;
     }
 
     {
         const QPointF imageTopLeftInDevicePixelsHW = converter.imageRectInWidgetPixels().topLeft() * converter.devicePixelRatio();
-        QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
-        QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
+        if (expectsPixelAlignment) {
+            QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
+            QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
+        } else {
+            QCOMPARE_NE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
+            QCOMPARE_NE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
+        }
+    }
+}
+
+void KisCoordinatesConverterTest::testPreferredCenterTransformations_data()
+{
+    QTest::addColumn<QString>("testingMode");
+    QTest::addColumn<bool>("useCustomStillPoint");
+
+    QTest::addRow("iterative-zoom") << "zoom" << false;
+    QTest::addRow("iterative-zoom-still-point") << "zoom" << true;
+    QTest::addRow("iterative-rotate") << "rotate" << false;
+    QTest::addRow("iterative-rotate-still-point") << "rotate" << true;
+    QTest::addRow("reset-rotation") << "reset-rotation" << false;
+    QTest::addRow("reset-rotation-still-point") << "reset-rotation" << true;
+    QTest::addRow("mirror") << "mirror" << false;
+    QTest::addRow("mirror-still-point") << "mirror" << true;
+
+    QTest::addRow("zoom-width") << "zoom-width" << false;
+    QTest::addRow("pan") << "pan" << false;
+    QTest::addRow("change-widget-size-page") << "change-widget-size-page" << false;
+    QTest::addRow("change-widget-size-const") << "change-widget-size-const" << false;
+    QTest::addRow("change-image-size") << "change-image-size" << false;
+    QTest::addRow("change-image-resolution") << "change-image-resolution" << false;
+}
+
+void KisCoordinatesConverterTest::testPreferredCenterTransformations()
+{
+    QFETCH(QString, testingMode);
+    QFETCH(bool, useCustomStillPoint);
+
+    KisImageSP image;
+    KisCoordinatesConverter converter;
+    initImage(&image, &converter);
+
+    converter.setImage(image);
+    converter.setCanvasWidgetSizeKeepZoom(QSize(700, 500));
+
+    KoViewTransformStillPoint expectedStillPoint;
+    std::optional<KoViewTransformStillPoint> realStillPoint;
+
+    if (!useCustomStillPoint) {
+        expectedStillPoint = {converter.imageRectInDocumentPixels().center(), converter.imageCenterInWidgetPixel()};
+        realStillPoint = std::nullopt;
+    } else {
+        expectedStillPoint = converter.makeViewStillPoint({100.0,100.0});
+        realStillPoint = expectedStillPoint;
+    }
+
+    bool ignoreStillPointComparison = false;
+
+    if (testingMode == "zoom") {
+        for (int i = 0; i < 100; i++) {
+            const qreal zoom = 0.033 + 0.0073 * i;
+            converter.setZoom(KoZoomMode::ZOOM_CONSTANT,
+                               zoom,
+                               converter.resolutionX(),
+                               converter.resolutionY(),
+                               realStillPoint);
+        }
+    } else if (testingMode == "rotate") {
+        for (int i = 0; i < 100; i++) {
+            converter.rotate(realStillPoint, M_PI / 113.0);
+        }
+    } else if (testingMode == "reset-rotation") {
+        converter.rotate(realStillPoint, M_PI / 6);
+        converter.resetRotation(realStillPoint);
+    } else if (testingMode == "mirror") {
+        converter.mirror(realStillPoint, true, false);
+    } else if (testingMode == "zoom-width") {
+        converter.setZoom(KoZoomMode::ZOOM_WIDTH, 1.0,
+            converter.resolutionX(), converter.resolutionY(),
+            std::nullopt);
+    } else if (testingMode == "pan") {
+        converter.setDocumentOffset(converter.documentOffsetF() + QPointF(100.0, 0.0));
+
+        /// the actual still point is checked in a  different test,
+        /// here we only need to test the preferred center
+        ignoreStillPointComparison = true;
+    } else if (testingMode == "change-widget-size-page") {
+        const qreal oldZoom = converter.zoom();
+        const QPointF oldOffset = converter.documentOffsetF();
+        converter.setCanvasWidgetSizeKeepZoom(QSize(1100,400));
+        QCOMPARE_NE(converter.zoom(), oldZoom);
+        QCOMPARE_NE(converter.documentOffsetF(), oldOffset);
+
+        // update the expected still point to the ceter of the "new" widget
+        expectedStillPoint.second = converter.widgetCenterPoint();
+
+    } else if (testingMode == "change-widget-size-const") {
+        converter.setZoom(KoZoomMode::ZOOM_CONSTANT,
+            converter.zoom(),
+            converter.resolutionX(),
+            converter.resolutionY(),
+            std::nullopt);
+
+        const qreal oldZoom = converter.zoom();
+        const QPointF oldOffset = converter.documentOffsetF();
+        converter.setCanvasWidgetSizeKeepZoom(QSize(1100,400));
+        QCOMPARE(converter.zoom(), oldZoom);
+        QCOMPARE(converter.documentOffsetF(), oldOffset);
+    } else if (testingMode == "change-image-size") {
+        converter.setImageBounds(QRect(0,0,113, 117), QPointF(77,17), QPointF(111, 110));
+
+        /// the actual still point is checked in a  different test,
+        /// here we only need to test the preferred center
+        ignoreStillPointComparison = true;
+    } else if (testingMode == "change-image-resolution") {
+        converter.setDocumentOffset(converter.documentOffsetF() + QPointF(100.0, 0.0));
+        converter.setImageResolution(7.77, 3.13);
+
+        /// the actual still point is checked in a  different test,
+        /// here we only need to test the preferred center
+        ignoreStillPointComparison = true;
+    } else {
+        qFatal("Unknown tesing mode");
+    }
+
+    if (!ignoreStillPointComparison &&
+        kisDistance(converter.documentToWidget(expectedStillPoint.docPoint()), expectedStillPoint.viewPoint()) > 1.0) {
+        qDebug() << "Failed to compare the final image center:";
+        qDebug() << "    " << ppVar(expectedStillPoint);
+        qDebug() << "    " << ppVar(converter.documentToWidget(expectedStillPoint.docPoint()));
+        QFAIL("The image center is not preserved");
+    }
+
+    if (kisDistance(converter.imageToWidget(converter.preferredTransformationCenter()), converter.widgetCenterPoint()) > 1.0) {
+        qDebug() << "Failed to compare the preferred center position";
+        qDebug() << "    " << ppVar(converter.preferredTransformationCenter());
+        qDebug() << "    " << ppVar(converter.imageToWidget(converter.preferredTransformationCenter()));
+        qDebug() << "    " << ppVar(converter.widgetCenterPoint());
+        QFAIL("The preferred center position does not point to the center of the widget");
     }
 }
 

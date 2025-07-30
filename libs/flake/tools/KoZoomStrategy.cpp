@@ -11,6 +11,7 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
+#include "KoViewTransformStillPoint.h"
 
 #include <FlakeDebug.h>
 
@@ -37,12 +38,18 @@ void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     if (modifiers & Qt::ControlModifier) {
         m_zoomOut = !m_zoomOut;
     }
+
+    auto makeStillPoint = [&] () -> KoViewTransformStillPoint {
+        const QPointF center = pixelRect.center();
+        return { m_controller->canvas()->viewConverter()->viewToDocument(center), center };
+    };
+
     if (m_zoomOut) {
-        m_controller->zoomOut(pixelRect.center());
+        m_controller->zoomOut(makeStillPoint());
     } else if (pixelRect.width() > 5 && pixelRect.height() > 5) {
         m_controller->zoomTo(pixelRect);
     } else {
-        m_controller->zoomIn(pixelRect.center());
+        m_controller->zoomIn(makeStillPoint());
     }
 }
 

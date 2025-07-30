@@ -14,10 +14,25 @@
 #include "kis_canvas_controller.h"
 #include <kis_canvas2.h>
 #include "kis_input_manager.h"
+#include <KoViewTransformStillPoint.h>
 
 #include <math.h>
 
 constexpr qreal DISCRETE_ANGLE_STEP = 15.0;  // discrete rotation snapping angle
+
+inline QPoint pointFromEvent(QEvent *event) {
+    if (!event) {
+        return QPoint();
+    } else if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
+        return mouseEvent->pos();
+    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
+        return tabletEvent->pos();
+    } else if (QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event)) {
+        return wheelEvent->position().toPoint();
+    }
+
+    return QPoint();
+}
 
 class KisRotateCanvasAction::Private
 {
@@ -31,6 +46,7 @@ public:
     qreal snapRotation {0.0};
     qreal touchRotation {0.0};
     bool allowRotation {false};
+    KoViewTransformStillPoint actionStillPoint;
 };
 
 
@@ -98,6 +114,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             const qreal startRotation = inputManager()->canvas()->rotationAngle();
             d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
             canvasController->beginCanvasRotation();
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(pointFromEvent(event));
             break;
         }
         case RotateLeftShortcut:
@@ -172,7 +189,11 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 
             const float angle = gevent->value();
             QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
-            controller->rotateCanvas(angle, widgetPos, true);
+
+            KoViewTransformStillPoint adjustedStillPoint = d->actionStillPoint;
+            adjustedStillPoint.second = widgetPos;
+
+            controller->rotateCanvas(angle, adjustedStillPoint, true);
             return;
         }
         case QEvent::TouchUpdate: {

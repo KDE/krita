@@ -59,6 +59,9 @@ private Q_SLOTS:
 
     void testHiDPIOffsetSnapping_data();
     void testHiDPIOffsetSnapping();
+
+    void testPreferredCenterTransformations_data();
+    void testPreferredCenterTransformations();
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_TEST_H */

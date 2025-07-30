@@ -31,6 +31,7 @@
 
 #include <QOpenGLWidget>
 #include <KisCanvasState.h>
+#include <KoViewTransformStillPoint.h>
 
 #include <math.h>
 #include <kis_debug.h>
@@ -287,20 +288,15 @@ void KoCanvasControllerWidget::dragLeaveEvent(QDragLeaveEvent *event)
     d->viewportWidget->handleDragLeaveEvent(event);
 }
 
-void KoCanvasControllerWidget::zoomRelativeToPoint(const QPointF &widgetPoint, qreal zoomCoeff)
-{
-    const qreal newZoom = d->canvas->viewConverter()->zoom() * zoomCoeff;
-    setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, widgetPoint);
-}
-
 void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom)
 {
-    setZoom(mode, zoom, QRectF(QPointF(), canvasState().canvasSize).center());
+    KoZoomHandler *zoomHandler = dynamic_cast<KoZoomHandler*>(d->canvas->viewConverter());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(zoomHandler);
+    setZoom(mode, zoom, zoomHandler->resolutionX(), zoomHandler->resolutionY(), std::nullopt);
 }
 
-void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint)
+void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom, const KoViewTransformStillPoint &stillPoint)
 {
-
     KoZoomHandler *zoomHandler = dynamic_cast<KoZoomHandler*>(d->canvas->viewConverter());
     KIS_SAFE_ASSERT_RECOVER_RETURN(zoomHandler);
     setZoom(mode, zoom, zoomHandler->resolutionX(), zoomHandler->resolutionY(), stillPoint);
@@ -308,15 +304,13 @@ void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom, const 
 
 void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY)
 {
-    setZoom(mode, zoom, resolutionX, resolutionY, QRectF(QPointF(), canvasState().canvasSize).center());
+    setZoom(mode, zoom, resolutionX, resolutionY, std::nullopt);
 }
 
-void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
+void KoCanvasControllerWidget::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &stillPoint)
 {
     const KisCanvasState oldCanvasState = canvasState();
-
     updateCanvasZoomInternal(mode, zoom, resolutionX, resolutionY, stillPoint);
-
     const KisCanvasState newCanvasState = canvasState();
 
     emitSignals(oldCanvasState, newCanvasState);

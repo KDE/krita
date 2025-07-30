@@ -29,6 +29,7 @@ class QRectF;
 class KoShape;
 class KoCanvasBase;
 class KoCanvasControllerProxyObject;
+class KoViewTransformStillPoint;
 
 /**
  * KoCanvasController is the base class for wrappers around your canvas
@@ -99,25 +100,15 @@ public:
     virtual void ensureVisibleDoc(const QRectF &docRect, bool smooth) = 0;
 
     /**
-     * @brief zooms in around the center.
-     *
-     * The center must be specified in **widget** coordinates. The scrollbar positions
-     * are changed so that the center becomes center if possible.
-     *
-     * @param center the position to zoom in on
+     * @brief zooms in keeping @p stillPoint not moved.
      */
-    virtual void zoomIn(const QPoint &center) = 0;
+    virtual void zoomIn(const KoViewTransformStillPoint &stillPoint) = 0;
     virtual void zoomIn() = 0;
 
     /**
-     * @brief zooms out around the center.
-     *
-     * The center must be specified in **widget** coordinates. The scrollbar positions
-     * are changed so that the center becomes center if possible.
-     *
-     * @param center the position to zoom out around
+     * @brief zooms out keeping @p stillPoint not moved.
      */
-    virtual void zoomOut(const QPoint &center) = 0;
+    virtual void zoomOut(const KoViewTransformStillPoint &stillPoint) = 0;
     virtual void zoomOut() = 0;
 
     /**

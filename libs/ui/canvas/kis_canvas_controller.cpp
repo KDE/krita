@@ -25,6 +25,7 @@
 #include "kis_signal_compressor_with_param.h"
 #include "kis_config_notifier.h"
 #include <KoUnit.h>
+#include <KoViewTransformStillPoint.h>
 
 #include "KisCanvasState.h"
 
@@ -223,10 +224,10 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
             QIcon(), 500, KisFloatingMessage::Low);
 }
 
-void KisCanvasController::mirrorCanvasImpl(const QPointF &widgetPoint, bool enable)
+void KisCanvasController::mirrorCanvasImpl(const std::optional<KoViewTransformStillPoint> &stillPoint, bool enable)
 {
     const KisCanvasState oldCanvasState = canvasState();
-    m_d->coordinatesConverter->mirror(widgetPoint, enable, false);
+    m_d->coordinatesConverter->mirror(stillPoint, enable, false);
     const KisCanvasState newCanvasState = canvasState();
     emitSignals(oldCanvasState, newCanvasState);
 
@@ -235,7 +236,7 @@ void KisCanvasController::mirrorCanvasImpl(const QPointF &widgetPoint, bool enab
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    mirrorCanvasImpl(m_d->coordinatesConverter->widgetCenterPoint(), enable);
+    mirrorCanvasImpl(std::nullopt, enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
@@ -246,19 +247,23 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
         : QCursor::pos();
     KoCanvasBase* canvas = m_d->view->canvasBase();
     QWidget *canvasWidget = canvas->canvasWidget();
-    QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
-    
-    if (!canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
-        cursorPosWidget = m_d->coordinatesConverter->widgetCenterPoint();
+    const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
+
+    std::optional<KoViewTransformStillPoint> stillPoint;
+
+    if (canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
+        stillPoint = m_d->coordinatesConverter->makeViewStillPoint(cursorPosWidget);
     }
-    
-    mirrorCanvasImpl(cursorPosWidget, enable);
+
+    mirrorCanvasImpl(stillPoint, enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
 {
-    const QPointF center = m_d->coordinatesConverter->imageCenterInWidgetPixel();
-    mirrorCanvasImpl(center, enable);
+    auto stillPoint =
+        m_d->coordinatesConverter->makeDocStillPoint(
+            m_d->coordinatesConverter->imageRectInDocumentPixels().center());
+    mirrorCanvasImpl(stillPoint, enable);
 }
 
 void KisCanvasController::Private::showRotationValueOnCanvas()
@@ -281,13 +286,13 @@ void KisCanvasController::endCanvasRotation()
     m_d->coordinatesConverter->endRotation();
 }
 
-void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center, bool isNativeGesture)
+void KisCanvasController::rotateCanvas(qreal angle, const std::optional<KoViewTransformStillPoint> &stillPoint, bool isNativeGesture)
 {
     if(isNativeGesture) {
         m_d->coordinatesConverter->enableNatureGestureFlag();
     }
     const KisCanvasState oldCanvasState = canvasState();
-    m_d->coordinatesConverter->rotate(center, angle);
+    m_d->coordinatesConverter->rotate(stillPoint, angle);
     const KisCanvasState newCanvasState = canvasState();
     emitSignals(oldCanvasState, newCanvasState);
 
@@ -296,7 +301,7 @@ void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center, bool 
 
 void KisCanvasController::rotateCanvas(qreal angle)
 {
-    rotateCanvas(angle, m_d->coordinatesConverter->widgetCenterPoint());
+    rotateCanvas(angle, std::nullopt);
 }
 
 void KisCanvasController::rotateCanvasRight15()
@@ -317,7 +322,7 @@ qreal KisCanvasController::rotation() const
 void KisCanvasController::resetCanvasRotation()
 {
     const KisCanvasState oldCanvasState = canvasState();
-    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
+    m_d->coordinatesConverter->resetRotation(std::nullopt);
     const KisCanvasState newCanvasState = canvasState();
     emitSignals(oldCanvasState, newCanvasState);
 
@@ -478,10 +483,11 @@ void KisCanvasController::syncOnImageResolutionChange()
 
     if (!m_d->usePrintResolutionMode) {
         m_d->coordinatesConverter->setZoom(m_d->coordinatesConverter->zoomMode(),
-                                           m_d->coordinatesConverter->zoom(),
-                                           effectiveCanvasResolutionX(),
-                                           effectiveCanvasResolutionY(),
-                                           m_d->coordinatesConverter->imageCenterInWidgetPixel());
+                                            m_d->coordinatesConverter->zoom(),
+                                            effectiveCanvasResolutionX(),
+                                            effectiveCanvasResolutionY(),
+                                            m_d->coordinatesConverter->makeViewStillPoint(
+                                                m_d->coordinatesConverter->imageCenterInWidgetPixel()));
     }
 
     const KisCanvasState newCanvasState = canvasState();
@@ -512,9 +518,9 @@ void KisCanvasController::updateCanvasWidgetSizeInternal(const QSize &newSize)
     m_d->coordinatesConverter->setCanvasWidgetSizeKeepZoom(newSize);
 }
 
-void KisCanvasController::updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
+void KisCanvasController::updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint)
 {
-    m_d->coordinatesConverter->setZoom(mode, zoom, resolutionX, resolutionY, stillPoint);
+    m_d->coordinatesConverter->setZoom(mode, zoom, resolutionX, resolutionY, docStillPoint);
 }
 
 KisCanvasState KisCanvasController::canvasState() const
@@ -545,27 +551,45 @@ void KisCanvasController::setPreferredCenter(const QPointF &viewPoint)
 
 void KisCanvasController::zoomIn()
 {
-    zoomIn(m_d->coordinatesConverter->widgetCenterPoint().toPoint());
+    zoomInImpl(std::nullopt);
 }
 
 void KisCanvasController::zoomOut()
 {
-    zoomOut(m_d->coordinatesConverter->widgetCenterPoint().toPoint());
+    zoomOutImpl(std::nullopt);
 }
 
-void KisCanvasController::zoomIn(const QPoint &center)
+void KisCanvasController::zoomIn(const KoViewTransformStillPoint &stillPoint)
+{
+    zoomInImpl(stillPoint);
+}
+
+void KisCanvasController::zoomOut(const KoViewTransformStillPoint &stillPoint)
+{
+    zoomOutImpl(stillPoint);
+}
+
+void KisCanvasController::zoomInImpl(const std::optional<KoViewTransformStillPoint> &stillPoint)
 {
     const qreal newZoom = KisCoordinatesConverter::findNextZoom(m_d->coordinatesConverter->zoom(), m_d->coordinatesConverter->standardZoomLevels());
     if (!qFuzzyCompare(newZoom, m_d->coordinatesConverter->zoom())) {
-        setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, center);
+        if (stillPoint) {
+            setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, *stillPoint);
+        } else {
+            setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
+        }
     }
 }
 
-void KisCanvasController::zoomOut(const QPoint &center)
+void KisCanvasController::zoomOutImpl(const std::optional<KoViewTransformStillPoint> &stillPoint)
 {
     const qreal newZoom = KisCoordinatesConverter::findPrevZoom(m_d->coordinatesConverter->zoom(), m_d->coordinatesConverter->standardZoomLevels());
     if (!qFuzzyCompare(newZoom, m_d->coordinatesConverter->zoom())) {
-        setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, center);
+        if (stillPoint) {
+            setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, *stillPoint);
+        } else {
+            setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
+        }
     }
 }
 

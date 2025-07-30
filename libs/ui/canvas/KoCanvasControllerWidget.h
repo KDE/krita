@@ -22,6 +22,7 @@ class KoShape;
 class KoCanvasBase;
 class KoCanvasSupervisor;
 class KisCanvasState;
+class KoViewTransformStillPoint;
 
 /**
  * KoCanvasController implementation for QWidget based canvases
@@ -76,18 +77,11 @@ public:
 
     void zoomTo(const QRect &rect) override;
 
-    /**
-     * Zoom document keeping point \p widgetPoint unchanged
-     * \param widgetPoint sticky point in widget pixels
-     * \param zoomCoeff the coefficient to which zoom will be changed
-     */
-    Q_DECL_DEPRECATED_X("use setZoom() with absolute zoom value instead")
-    void zoomRelativeToPoint(const QPointF &widgetPoint, qreal zoomCoeff);
-
     void setZoom(KoZoomMode::Mode mode, qreal zoom) override;
-    void setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint);
     void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY);
-    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
+
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, const KoViewTransformStillPoint &stillPoint);
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint);
 
 
     void pan(const QPoint &distance) override;
@@ -135,7 +129,7 @@ protected:
 
     virtual void updateCanvasOffsetInternal(const QPointF &newOffset) = 0;
     virtual void updateCanvasWidgetSizeInternal(const QSize &newSize) = 0;
-    virtual void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint) = 0;
+    virtual void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint) = 0;
     virtual void zoomToInternal(const QRect &viewRect) = 0;
 
     void emitSignals(const KisCanvasState &oldState, const KisCanvasState &newState);

@@ -106,6 +106,7 @@ set(kritaflake_SRCS
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
+    KoViewTransformStillPoint.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactoryBase.cpp

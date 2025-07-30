@@ -8,6 +8,7 @@
 #include <cmath>
 
 #include "kis_coordinates_converter.h"
+#include "KoViewTransformStillPoint.h"
 
 #include <QtMath>
 #include <QTransform>
@@ -31,6 +32,7 @@ struct KisCoordinatesConverter::Private {
         isNativeGesture(false),
         rotationAngle(0.0),
         rotationBaseAngle(0.0),
+        rotationIsOrthogonal(true),
         devicePixelRatio(1.0),
         standardZoomLevels(this)
     {
@@ -47,9 +49,11 @@ struct KisCoordinatesConverter::Private {
     bool isNativeGesture;
     qreal rotationAngle;
     qreal rotationBaseAngle;
+    bool rotationIsOrthogonal;
     QSizeF canvasWidgetSize;
     qreal devicePixelRatio;
     QPointF documentOffset;
+    QPointF preferredTransformationCenterImage;
     QPoint minimumOffset;
     QPoint maximumOffset;
 
@@ -69,6 +73,10 @@ struct KisCoordinatesConverter::Private {
     QTransform imageToDocument;
     QTransform documentToFlake;
     QTransform widgetToViewport;
+
+    QPointF preferredTransformationCenterInDocumentPixels() const {
+        return imageToDocument.map(preferredTransformationCenterImage);
+    }
 };
 
 /**
@@ -176,6 +184,11 @@ void KisCoordinatesConverter::correctTransformationToOffset()
     m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
 }
 
+void KisCoordinatesConverter::resetPreferredTransformationCenter()
+{
+    m_d->preferredTransformationCenterImage = widgetToImage(this->widgetCenterPoint());
+}
+
 void KisCoordinatesConverter::recalculateTransformations()
 {
     m_d->imageToDocument = QTransform::fromScale(1 / m_d->imageXRes,
@@ -217,6 +230,10 @@ void KisCoordinatesConverter::setCanvasWidgetSize(QSizeF size)
 {
     m_d->canvasWidgetSize = snapWidgetSizeToDevicePixel(size);
     recalculateTransformations();
+
+    // the widget center has changed, hence the preferred
+    // center changes as well
+    resetPreferredTransformationCenter();
 }
 
 void KisCoordinatesConverter::setDevicePixelRatio(qreal value)
@@ -242,9 +259,10 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
         // proposed mode and postpone the actual recentering of the image
         // (this case is supposed to happen in unittests only)
         KoZoomHandler::setZoomMode(KoZoomMode::ZOOM_PAGE);
+        m_d->preferredTransformationCenterImage = m_d->imageBounds.center();
     } else {
         // the default mode after initialization is "Zoom Page"
-        setZoom(KoZoomMode::ZOOM_PAGE, 777.7, resolutionX(), resolutionY(), QPointF(8888.8, 9999.9));
+        setZoom(KoZoomMode::ZOOM_PAGE, 777.7, resolutionX(), resolutionY(), std::nullopt);
     }
 }
 
@@ -275,6 +293,8 @@ void KisCoordinatesConverter::setImageBounds(const QRect &rect, const QPointF ol
     const QPointF newWidgetStillPoint = imageToWidget(newImageStillPoint);
     m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + newWidgetStillPoint - oldWidgetStillPoint);
     recalculateTransformations();
+
+    resetPreferredTransformationCenter();
 }
 
 void KisCoordinatesConverter::setImageResolution(qreal xRes, qreal yRes)
@@ -302,6 +322,8 @@ void KisCoordinatesConverter::setImageResolution(qreal xRes, qreal yRes)
     const QPointF newImageCenter = imageCenterInWidgetPixel();
     m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + newImageCenter - oldImageCenter);
     recalculateTransformations();
+
+    resetPreferredTransformationCenter();
 }
 
 void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
@@ -323,6 +345,8 @@ void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
 
     m_d->documentOffset = snapToDevicePixel(offset);
     recalculateTransformations();
+
+    resetPreferredTransformationCenter();
 }
 
 qreal KisCoordinatesConverter::devicePixelRatio() const
@@ -340,6 +364,11 @@ QPointF KisCoordinatesConverter::documentOffsetF() const
     return m_d->documentOffset;
 }
 
+QPointF KisCoordinatesConverter::preferredTransformationCenter() const
+{
+    return m_d->preferredTransformationCenterImage;
+}
+
 qreal KisCoordinatesConverter::rotationAngle() const
 {
     return m_d->rotationAngle;
@@ -353,6 +382,7 @@ void KisCoordinatesConverter::setZoom(qreal zoom)
 
     KoZoomHandler::setZoom(zoom);
     recalculateTransformations();
+    resetPreferredTransformationCenter();
 }
 
 void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoom(const QSizeF &size)
@@ -370,7 +400,7 @@ void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoom(const QSizeF &size)
          * canvas before transformation to calculate the position of the still point,
          * hence we cannot change the state separately.
          */
-        setZoom(zoomMode(), 777.0, resolutionX(), resolutionY(), QPointF(8888.8, 9999.9));
+        setZoom(zoomMode(), 777.0, resolutionX(), resolutionY(), std::nullopt);
     }
 }
 
@@ -400,7 +430,7 @@ QSize KisCoordinatesConverter::viewportDevicePixelSize() const
         (m_d->canvasWidgetSize * m_d->devicePixelRatio).toSize();
 }
 
-void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
+void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &stillPoint)
 {
     const int cfgMargin = zoomMarginSize();
 
@@ -418,18 +448,24 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
         /// fit-modes are allowed to zoom as much as needed
         zoom = clampZoom(zoom);
 
-        const QPointF oldStillPointInImagePixels =
-            widgetToImage(stillPoint);
+        KoViewTransformStillPoint effectiveStillPoint =
+            stillPoint ? *stillPoint :
+            KoViewTransformStillPoint(m_d->preferredTransformationCenterInDocumentPixels(), widgetCenterPoint());
 
         updateDisplayResolution();
         KoZoomHandler::setZoom(zoom);
         KoZoomHandler::setZoomMode(mode);
         recalculateTransformations();
 
-        const QPointF newStillPoint = imageToWidget(oldStillPointInImagePixels);
-        const QPointF offset = newStillPoint - stillPoint;
+        const QPointF newStillPoint = documentToWidget(effectiveStillPoint.docPoint());
+        const QPointF offset = newStillPoint - effectiveStillPoint.viewPoint();
         m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + offset);
         recalculateTransformations();
+
+        if (stillPoint) {
+            resetPreferredTransformationCenter();
+        }
+
     } else if (mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_HEIGHT) {
         updateDisplayResolution();
         recalculateTransformations();
@@ -469,6 +505,8 @@ void KisCoordinatesConverter::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal r
 
         m_d->documentOffset = snapToDevicePixel(newDocumentOffset);
         recalculateTransformations();
+
+        resetPreferredTransformationCenter();
     }
 }
 
@@ -492,6 +530,8 @@ void KisCoordinatesConverter::zoomTo(const QRectF &zoomRectWidget)
 
     m_d->documentOffset = snapToDevicePixel(newDocumentOffset);
     recalculateTransformations();
+
+    resetPreferredTransformationCenter();
 }
 
 qreal KisCoordinatesConverter::effectiveZoom() const
@@ -543,9 +583,13 @@ void KisCoordinatesConverter::endRotation()
     m_d->isRotating = false;
 }
 
-void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
+void KisCoordinatesConverter::rotate(const std::optional<KoViewTransformStillPoint> &stillPoint, qreal angle)
 {
     setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+
+    KoViewTransformStillPoint effectiveStillPoint =
+        stillPoint ? *stillPoint :
+        KoViewTransformStillPoint(m_d->preferredTransformationCenterInDocumentPixels(), widgetCenterPoint());
 
     QTransform rot;
     rot.rotate(angle);
@@ -562,19 +606,35 @@ void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
         m_d->rotationAngle = std::fmod(m_d->rotationAngle + angle, 360.0);
     }
 
-    m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
-    m_d->flakeToWidget *= rot;
-    m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
+    {
+        const qreal numQuadrants = m_d->rotationAngle / 90.0;
+        m_d->rotationIsOrthogonal = std::floor(numQuadrants) == numQuadrants;
+    }
 
+    m_d->flakeToWidget *= rot;
     correctOffsetToTransformationAndSnap();
     recalculateTransformations();
+
+    const QPointF newStillPoint = documentToWidget(effectiveStillPoint.docPoint());
+    const QPointF offset = newStillPoint - effectiveStillPoint.viewPoint();
+    m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + offset);
+    recalculateTransformations();
+
+    if (stillPoint) {
+        resetPreferredTransformationCenter();
+    }
 }
 
-void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
+void KisCoordinatesConverter::mirror(const std::optional<KoViewTransformStillPoint> &stillPoint, bool mirrorXAxis, bool mirrorYAxis)
 {
     bool keepOrientation = false; // XXX: Keep here for now, maybe some day we can restore the parameter again.
 
-    if (kisSquareDistance(center, widgetCenterPoint()) > 2.0) {
+    KoViewTransformStillPoint effectiveStillPoint =
+        stillPoint ? *stillPoint :
+        KoViewTransformStillPoint(m_d->preferredTransformationCenterInDocumentPixels(), widgetCenterPoint());
+
+
+    if (kisSquareDistance(effectiveStillPoint.viewPoint(), widgetCenterPoint()) > 2.0) {
         // when mirroring not against the center, reset the zoom mode
         setZoomMode(KoZoomMode::ZOOM_CONSTANT);
     }
@@ -590,7 +650,7 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
     QTransform rot;
     rot.rotate(m_d->rotationAngle);
 
-    m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
+    m_d->flakeToWidget *= QTransform::fromTranslate(-effectiveStillPoint.viewPoint().x(),-effectiveStillPoint.viewPoint().y());
 
     if (keepOrientation) {
         m_d->flakeToWidget *= rot.inverted();
@@ -602,7 +662,7 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
         m_d->flakeToWidget *= rot;
     }
 
-    m_d->flakeToWidget *= QTransform::fromTranslate(center.x(),center.y());
+    m_d->flakeToWidget *= QTransform::fromTranslate(effectiveStillPoint.viewPoint().x(),effectiveStillPoint.viewPoint().y());
 
 
     if (!keepOrientation && (doXMirroring ^ doYMirroring)) {
@@ -617,9 +677,18 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
     if (zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
         // we were "centered", so let's try to keep the offset as before
         m_d->documentOffset = oldDocumentOffset;
+    } else {
+        recalculateTransformations();
+        const QPointF newStillPoint = documentToWidget(effectiveStillPoint.docPoint());
+        const QPointF offset = newStillPoint - effectiveStillPoint.viewPoint();
+        m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + offset);
     }
 
     recalculateTransformations();
+
+    if (stillPoint) {
+        resetPreferredTransformationCenter();
+    }
 }
 
 bool KisCoordinatesConverter::xAxisMirrored() const
@@ -632,18 +701,30 @@ bool KisCoordinatesConverter::yAxisMirrored() const
     return m_d->isYAxisMirrored;
 }
 
-void KisCoordinatesConverter::resetRotation(QPointF center)
+void KisCoordinatesConverter::resetRotation(const std::optional<KoViewTransformStillPoint> &stillPoint)
 {
+    KoViewTransformStillPoint effectiveStillPoint =
+        stillPoint ? *stillPoint :
+        KoViewTransformStillPoint(m_d->preferredTransformationCenterInDocumentPixels(), widgetCenterPoint());
+
     QTransform rot;
     rot.rotate(-m_d->rotationAngle);
 
-    m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(), -center.y());
     m_d->flakeToWidget *= rot;
-    m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
     m_d->rotationAngle = 0.0;
+    m_d->rotationIsOrthogonal = true;
 
     correctOffsetToTransformationAndSnap();
     recalculateTransformations();
+
+    const QPointF newStillPoint = documentToWidget(effectiveStillPoint.docPoint());
+    const QPointF offset = newStillPoint - effectiveStillPoint.viewPoint();
+    m_d->documentOffset = snapToDevicePixel(m_d->documentOffset + offset);
+    recalculateTransformations();
+
+    if (stillPoint) {
+        resetPreferredTransformationCenter();
+    }
 }
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const {
@@ -815,6 +896,10 @@ void KisCoordinatesConverter::imagePhysicalScale(qreal *scaleX, qreal *scaleY) c
 
 QPointF KisCoordinatesConverter::snapToDevicePixel(const QPointF &point) const
 {
+    if (!m_d->rotationIsOrthogonal) {
+        return point;
+    }
+
     QPoint devicePixel = (point * m_d->devicePixelRatio).toPoint();
     // These adjusted coords will be in logical pixel but is aligned in device
     // pixel space for pixel-perfect rendering.
@@ -877,4 +962,14 @@ qreal KisCoordinatesConverter::findNextZoom(qreal currentZoom, const QVector<qre
 qreal KisCoordinatesConverter::findPrevZoom(qreal currentZoom, const QVector<qreal> &zoomLevels)
 {
     return KoZoomMode::findPrevZoom(currentZoom, zoomLevels);
+}
+
+KoViewTransformStillPoint KisCoordinatesConverter::makeViewStillPoint(const QPointF &viewPoint) const
+{
+    return {widgetToDocument(viewPoint), viewPoint};
+}
+
+KoViewTransformStillPoint KisCoordinatesConverter::makeDocStillPoint(const QPointF &docPoint) const
+{
+    return {docPoint, documentToWidget(docPoint)};
 }

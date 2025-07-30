@@ -20,20 +20,6 @@
 
 constexpr qreal DISCRETE_ANGLE_STEP = 15.0;  // discrete rotation snapping angle
 
-inline QPoint pointFromEvent(QEvent *event) {
-    if (!event) {
-        return QPoint();
-    } else if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
-        return mouseEvent->pos();
-    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
-        return tabletEvent->pos();
-    } else if (QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event)) {
-        return wheelEvent->position().toPoint();
-    }
-
-    return QPoint();
-}
-
 class KisRotateCanvasAction::Private
 {
 public:
@@ -114,7 +100,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             const qreal startRotation = inputManager()->canvas()->rotationAngle();
             d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
             canvasController->beginCanvasRotation();
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(pointFromEvent(event));
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
             break;
         }
         case RotateLeftShortcut:

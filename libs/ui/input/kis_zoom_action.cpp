@@ -22,21 +22,6 @@
 #include "kis_config.h"
 
 
-inline QPoint pointFromEvent(QEvent *event) {
-    if (!event) {
-        return QPoint();
-    } else if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
-        return mouseEvent->pos();
-    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
-        return tabletEvent->pos();
-    } else if (QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event)) {
-        return wheelEvent->position().toPoint();
-    }
-
-    return QPoint();
-}
-
-
 class KisZoomAction::Private
 {
 public:
@@ -137,7 +122,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             d->startZoom = inputManager()->canvas()->coordinatesConverter()->zoom();
             d->mode = (Shortcuts)shortcut;
             d->lastPosition = QPoint();
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(pointFromEvent(event));
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
             break;
         }
         case DiscreteZoomModeShortcut:
@@ -145,7 +130,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             d->startZoom = inputManager()->canvas()->coordinatesConverter()->zoom();
             d->lastDiscreteZoomDistance = 0;
             d->mode = (Shortcuts)shortcut;
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(pointFromEvent(event));
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
             break;
         case ZoomInShortcut:
         case ZoomOutShortcut:
@@ -157,7 +142,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 
             QPoint pt;
             if (shortcut == ZoomInToCursorShortcut || shortcut == ZoomOutFromCursorShortcut) {
-                pt = pointFromEvent(event);
+                pt = eventPos(event);
                 if (pt.isNull()) {
                     pt = controller->mapFromGlobal(QCursor::pos());
                 }

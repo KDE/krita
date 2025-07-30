@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 02:01+0000\n"
-"PO-Revision-Date: 2025-07-03 20:56+0200\n"
+"PO-Revision-Date: 2025-07-29 19:51+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16481,23 +16481,19 @@ msgid "Active tool: %1"
 msgstr "Aktivt verktyg: %1"
 
 #: libs/flake/KoZoomMode.cpp:25
-#, fuzzy, kde-format
-#| msgid "Fit to View"
+#, kde-format
 msgid "Fit View"
 msgstr "Anpassa till vy"
 
 #: libs/flake/KoZoomMode.cpp:27
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit Width"
 msgstr "Anpassa till bredd"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit View Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "Anpassa till vyns höjd"
+msgstr "Anpassa till höjd"
 
 #: libs/flake/svg/SvgParser.cpp:1882
 #, kde-format
@@ -20079,13 +20075,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr ""
+msgstr "Höger-till-vänster speglade former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr ""
+msgstr "Ersätter glyfer med deras höger-till-vänster speglade former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
@@ -20097,26 +20093,26 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
-msgstr ""
+msgstr "Ersätter glyfer som behöver tänjas ut med tänjbara glyfer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
-msgstr ""
+msgstr "Stilistisk uppsättning %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
-msgstr ""
+msgstr "Ersätter glyfer med alternativ."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
 #, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr ""
+msgstr "Teckenvariant %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
 #: libs/flake/text/KoSvgTextShape.cpp:1635
@@ -20429,11 +20425,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Fel: Felaktig typ (%2) för värde %1. Förväntade %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Justera inte mellantoner"
+msgstr "Fråga inte igen"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -23696,12 +23690,12 @@ msgstr "Felaktig status"
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Felaktigt statusmeddelande"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
 msgid "Some resources are missing:"
-msgstr ""
+msgstr "Vissa resurser saknas:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -26928,6 +26922,8 @@ msgstr "Installera färgprofiler"
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
+"Programmeringsgränssnitt för ritplattans indata  (för närvarande aktiva "
+"programmeringsgränssnitt: \"%1\")"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1442
 #, kde-format
@@ -29690,6 +29686,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"När alternativet är markerat fästs nyskapade lager automatiskt i "
+"animeringens tidslinje. Det är användbart vid animering med ett litet antal "
+"lager eller när många element på olika animerade lager interagerar med "
+"varandra."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29706,6 +29706,10 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"När alternativet är markerat justeras dokumentets start- och slutbildrutor "
+"automatiskt så att nyskapade nyckelbilder alltid finns inom animeringens "
+"uppspelningsområde. Funktionen rekommenderas för att snabba upp "
+"animeringsarbetsflödet när en scen utan en förutbestämd längd improviseras."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29722,12 +29726,16 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"När alternativet är markerat skalas animationstidslinjens panelvisning "
+"automatiskt så att den passar dokumentets uppspelningsområde. Ett mindre "
+"uppspelningsområde gör att tidslinjen zoomar in, medan ett större "
+"uppspelningsområde gör att tidslinjen zoomar ut."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
-msgstr ""
+msgstr "Zooma tidslinjen automatiskt för att passa uppspelningsområdet"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -31100,7 +31108,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Detektera från skärm"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361
@@ -31980,7 +31988,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:226
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
-msgstr ""
+msgstr "Vinkel tillagd till den rapporterade pennans lutningsriktning."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:233
@@ -39763,9 +39771,7 @@ msgid "Tool Options"
 msgstr "Verktygsalternativ"
 
 #: libs/widgets/KoZoomActionState.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip %2 is shortcut"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"
@@ -44849,19 +44855,19 @@ msgstr "X-höjd (ex)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr ""
+msgstr "Versalhöjd (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr ""
+msgstr "Proportionell (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "Ideografisk (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
@@ -44903,7 +44909,7 @@ msgstr "Tom"
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
-msgstr ""
+msgstr "%1, %2, variant: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #, kde-format
@@ -44915,7 +44921,7 @@ msgstr "%1, %2"
 #, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %3"
-msgstr ""
+msgstr "%1, variant: %3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -44933,7 +44939,7 @@ msgstr "Av"
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr ""
+msgstr "OpenType-funktionsetikett"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
 #, kde-format
@@ -52148,13 +52154,13 @@ msgstr "Animeringen anger en bildfrekvens större än 240 bilder/s."
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
 msgstr ""
+"Platta ut bilden och spara som en bild med ett enda lager (normalvärde)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
+msgstr "Platta ut bilden och återge animerade bildrutor som animerade bilder"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -52163,6 +52169,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Rastrera lager (inklusive grupp- och filterlager) och spara som "
+"flerlagersbild"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -52171,6 +52179,7 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Rastrera lager (inklusive grupp- och filterlager) och spara som flersidesbild"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -52454,41 +52463,53 @@ msgid ""
 "Modular mode - optimized for graphical content, illustrations, and lossless "
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
+"underline;\">Avancerat</span></p><p>Alternativet \"Standard (kodaren "
+"väljer)\" är vanligt. Det betyder att kodaren automatiskt väljer optimala "
+"inställningar baserat på valet av avvägning mellan kvalitet och hastighet. "
+"Alternativet rekommenderas för de flesta användare.</p><p><span style=\" "
+"font-size:14pt; text-decoration: underline;\">Kodningsparametrar:</span></"
+"p><p>allmänna inställningar som gäller för den övergripande JPEG XL-"
+"kodningsprocessen, oavsett vilken komprimeringsmetod som används.</"
+"p><p><span style=\" font-size:14pt; text-decoration: underline;\">VarDCT-"
+"parametrar:</span></p><p>Variabel diskret cosinustransform (optimerad för "
+"fotografiskt innehåll)</p><p>Den tillhör samma familj av "
+"komprimeringstekniker som används av den ursprungliga JPEG-filen, och är "
+"därför bäst för \"naturliga\" bilder, till exempel fotografier och bilder "
+"med många toningar och strukturer.</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">Modulära parametrar:</span></p><p>Inställningar av "
+"modulärt läge, optimerat för grafiskt innehåll, illustrationer och "
+"komprimering av förlustfria bilder.</p><p><br/></p><p><br/></p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Spara som:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Platta ut bild"
+msgstr "Utplattad bild"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
 msgstr "Animerad bild"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Parallellbearbetning"
+msgstr "Flerlagersbild"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Flersidesbild"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -52686,7 +52707,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:412
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "Håll över texten för att få information i verktygstips"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -52710,6 +52731,9 @@ msgid ""
 "Only recommended for low quality settings as it reduces sharpness at color "
 "transitions.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Minskar färgupplösningen för att få mindre filer. "
+"Rekommenderas endast för inställningar med låg kvalitet eftersom det minskar "
+"skärpan vid färgövergångar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
@@ -52765,6 +52789,10 @@ msgid ""
 "compression. Higher values reconstruct more noise, useful for preserving the "
 "natural look of high-ISO photos.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Separerar kamerasensorns brusmönster för bättre "
+"komprimering. Högre värden rekonstruerar mer brus, vilket är användbart för "
+"att bevara det naturliga utseendet på foton med stora ISO-värden.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
@@ -52797,6 +52825,9 @@ msgid ""
 "patterns in the image. Useful for scanned documents and certain textures.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifierar och kodar effektivt upprepade "
+"punktmönster i bilden. Användbart för inlästa dokument och vissa strukturer."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
@@ -52819,6 +52850,10 @@ msgid ""
 "icons) and stores them once, referencing them elsewhere. Improves "
 "compression for digital illustrations and screenshots.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifierar upprepade element (som tecken i text "
+"eller ikoner) och lagrar dem en gång, och refererar till dem någon "
+"annanstans. Förbättrar komprimeringen för digitala illustrationer och "
+"skärmbilder.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
@@ -52841,6 +52876,9 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Jämnar ut områden samtidigt som skarpa kanter bevaras, "
+"vilket förbättrar komprimeringen utan att viktiga detaljer suddas ut. Högre "
+"värden använder starkare filtrering.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:531
@@ -52893,6 +52931,9 @@ msgid ""
 "compression of complex textured areas while preserving visual quality.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Avancerat strukturanalysfilter som förbättrar "
+"komprimeringen av komplexa strukturerade områden samtidigt som den visuella "
+"kvaliteten bevaras.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:606
@@ -52909,6 +52950,9 @@ msgid ""
 "compressing graphics with sharp edges and limited colors. Can be lossless or "
 "lossy.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Använder det modulära komprimeringssystemet som "
+"utmärker sig vid komprimering av grafik med skarpa kanter och begränsade "
+"färger. Kan vara förlustfri eller förstörande.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:616
@@ -52984,6 +53028,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Förutsäger färg från information av ljusstyrka, vilket "
+"minskar filstorleken. Mycket effektivt för naturliga bilder där ljusstyrka "
+"och färg är korrelerade.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -53007,6 +53054,10 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Möjliggör progressiv inläsning med avancerad "
+"färgmatematik för fina detaljer. Bilder läses in som en grov förhandsvisning "
+"som gradvis blir skarpare. Tar längre tid men ger bättre resultat.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -53034,6 +53085,9 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Möjliggör progressiv inläsning med hjälp av "
+"kvantisering för att komprimera fina detaljer. Resulterar i mindre "
+"filstorlekar men kräver mer kodningstid.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -53049,6 +53103,10 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skapar en bättre grov förhandsgranskningsbild för "
+"progressiv inläsning. Lägger till några byte till filstorleken men "
+"förbättrar den initiala förhandsgranskningskvaliteten vid låg upplösning.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
@@ -53078,6 +53136,9 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Aktiverar transformeringen 'Squeeze' som gör att "
+"bilder kan läsas in progressivt från låg till hög kvalitet allt eftersom "
+"data strömmar in.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -53099,6 +53160,9 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Bestämmer hur färgvärden avbildas över hela bilden. "
+"'Alla' använder hela omfånget; mindre procentandelar skapar effektivare "
+"komprimering för bilder med begränsade färgomfång.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
@@ -53129,6 +53193,9 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Bestämmer färgavbildningar inom lokala 256 × 256 "
+"bildpunktsrutor. Mer effektivt för bilder med områden med begränsad "
+"färgvariation.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
@@ -53159,6 +53226,9 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Aktiverar palettbaserad komprimering när bilden "
+"innehåller det här antal unika färger eller färre. -1 låter kodaren bestämma "
+"automatiskt.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
@@ -53186,6 +53256,9 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Möjliggör relativ färgkodning som lagrar skillnader "
+"mellan förväntade och faktiska färger. Utmärkt för nästan förlustfri "
+"komprimering av jämna toningar utan bandförvrängningar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -53237,6 +53310,9 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Väljer algoritm som används för att förutsäga "
+"bildpunktsvärden baserat på omgivande bildpunkter. Olika prediktorer "
+"fungerar bättre för olika bildtyper.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:955
@@ -62079,10 +62155,9 @@ msgstr "Vävning: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgid "New active layer(s)"
+#, kde-format
 msgid "Use active layer"
-msgstr "Nya aktiva lager"
+msgstr "Använd aktivt lager"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62228,15 +62303,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Markera områden som hittas från sammanfogning av lager med specifika "
-"färgbeteckningar"
+"Inkluderar det aktiva lagret i områden som hittas från sammanfogning av "
+"lager med specifika färgbeteckningar"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

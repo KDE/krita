@@ -113,8 +113,8 @@ private:
 struct TextPropertiesDock::Private
 {
     Private(QObject *parent = nullptr)
-        : compressor(new KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent))
-        , canvasCompressor(new KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent)){
+        : modelToProviderCompressor(KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent))
+        , providerToModelCompressor(KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent)){
 
     }
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
@@ -125,13 +125,13 @@ struct TextPropertiesDock::Private
     TextPropertyConfigModel *textPropertyConfigModel {nullptr};
     qreal currentDpi{72.0};
 
-    KisSignalCompressor *compressor;
-    KisSignalCompressor *canvasCompressor;
+    KisSignalCompressor modelToProviderCompressor;
+    KisSignalCompressor providerToModelCompressor;
 };
 
 TextPropertiesDock::TextPropertiesDock()
     : QDockWidget(i18n("Text Properties"))
-    , d(new Private())
+    , d(new Private(this))
 {
     m_quickWidget = new QQuickWidget(this);
 
@@ -191,8 +191,8 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
-            d->compressor, SLOT(start()));
-    connect(d->compressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
+            &d->modelToProviderCompressor, SLOT(start()));
+    connect(&d->modelToProviderCompressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
 
@@ -214,8 +214,6 @@ void TextPropertiesDock::setViewManager(KisViewManager *kisview)
     d->provider = kisview->canvasResourceProvider();
     if (d->provider) {
         connect(d->provider, SIGNAL(sigTextPropertiesChanged()),
-                d->canvasCompressor, SLOT(start()));
-        connect(d->canvasCompressor, SIGNAL(timeout()),
                 this, SLOT(slotCanvasTextPropertiesChanged()));
 
         // This initializes the docker to an empty entry;
@@ -280,21 +278,17 @@ void TextPropertiesDock::slotCanvasTextPropertiesChanged()
     KoSvgTextPropertyData data = d->provider->textPropertyData();
     if (d->textModel->textData.get() != data) {
         d->textModel->textData.set(data);
-
-        QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
     }
 }
 
 void TextPropertiesDock::slotTextPropertiesChanged()
 {
-
     KoSvgTextPropertyData textData = d->textModel->textData.get();
     debugFlake << Q_FUNC_INFO << textData;
     if (d->provider && d->provider->textPropertyData() != textData) {
-        QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
-
         d->provider->setTextPropertyData(textData);
     }
+    QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
 }
 
 void TextPropertiesDock::slotUpdateStylesModel()

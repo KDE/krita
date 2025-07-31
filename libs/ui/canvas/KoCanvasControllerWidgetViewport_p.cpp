@@ -56,8 +56,8 @@ void Viewport::setCanvas(QWidget *canvas)
     m_canvas = canvas;
     if (!canvas) return;
     m_canvas->setParent(this);
-    m_canvas->show();
     resetLayout();
+    m_canvas->show();
 }
 
 void Viewport::handleDragEnterEvent(QDragEnterEvent *event)

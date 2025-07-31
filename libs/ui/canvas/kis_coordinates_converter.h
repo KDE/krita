@@ -8,6 +8,8 @@
 #ifndef KIS_COORDINATES_CONVERTER_H
 #define KIS_COORDINATES_CONVERTER_H
 
+#include <optional>
+
 #include <QTransform>
 #include <KoZoomHandler.h>
 

@@ -13,6 +13,7 @@
 
 #include "kritaui_export.h"
 
+#include <optional>
 #include <QAbstractScrollArea>
 #include <QPointer>
 #include "KoCanvasController.h"

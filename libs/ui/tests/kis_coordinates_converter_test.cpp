@@ -2109,8 +2109,13 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
             QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
             QCOMPARE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
         } else {
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
             QCOMPARE_NE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()), qRound(imageTopLeftInDevicePixelsHW.x()));
             QCOMPARE_NE(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()), qRound(imageTopLeftInDevicePixelsHW.y()));
+#else
+            QVERIFY(roundTo5thDigit(imageTopLeftInDevicePixelsHW.x()) != qRound(imageTopLeftInDevicePixelsHW.x()));
+            QVERIFY(roundTo5thDigit(imageTopLeftInDevicePixelsHW.y()) != qRound(imageTopLeftInDevicePixelsHW.y()));
+#endif
         }
     }
 }
@@ -2194,8 +2199,13 @@ void KisCoordinatesConverterTest::testPreferredCenterTransformations()
         const qreal oldZoom = converter.zoom();
         const QPointF oldOffset = converter.documentOffsetF();
         converter.setCanvasWidgetSizeKeepZoom(QSize(1100,400));
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
         QCOMPARE_NE(converter.zoom(), oldZoom);
         QCOMPARE_NE(converter.documentOffsetF(), oldOffset);
+#else
+        QVERIFY(!qFuzzyCompare(converter.zoom(), oldZoom));
+        QVERIFY(converter.documentOffsetF() != oldOffset);
+#endif
 
         // update the expected still point to the ceter of the "new" widget
         expectedStillPoint.second = converter.widgetCenterPoint();

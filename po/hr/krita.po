@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-25 02:01+0000\n"
+"POT-Creation-Date: 2025-08-01 02:06+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -44092,7 +44092,7 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Uzdigni trenutni %1"
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:107
+#: plugins/dockers/textproperties/FontAxesModel.cpp:112
 #, fuzzy, kde-format
 #| msgid "Optimize"
 msgctxt "@info:label"
@@ -44141,7 +44141,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:133
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Svojstva objekata"

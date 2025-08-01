@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-25 02:01+0000\n"
+"POT-Creation-Date: 2025-08-01 02:06+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -44424,7 +44424,7 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "百分比 (%)"
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:107
+#: plugins/dockers/textproperties/FontAxesModel.cpp:112
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
@@ -44472,7 +44472,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "OpenType 功能标签"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:133
 #, kde-format
 msgid "Text Properties"
 msgstr "文字属性"
@@ -56659,9 +56659,7 @@ msgstr "文字："
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:139
 #, kde-format
 msgid "The Quick Brown Fox Jumps Over The Lazy Dog"
-msgstr ""
-"The Quick Brown Fox Jumps Over The Lazy Dog\n"
-"龙跳天门，虎卧凰阁"
+msgstr "The Quick Brown Fox Jumps Over The Lazy Dog 龙跳天门 虎卧凰阁"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171

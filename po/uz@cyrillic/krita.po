@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-25 02:01+0000\n"
+"POT-Creation-Date: 2025-08-01 02:06+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -46181,7 +46181,7 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:107
+#: plugins/dockers/textproperties/FontAxesModel.cpp:112
 #, fuzzy, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
@@ -46232,7 +46232,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:133
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Text Properties"

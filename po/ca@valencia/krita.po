@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-25 02:01+0000\n"
+"POT-Creation-Date: 2025-08-01 02:06+0000\n"
 "PO-Revision-Date: 2025-07-25 09:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -45227,7 +45227,7 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Percentatge (%)"
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:107
+#: plugins/dockers/textproperties/FontAxesModel.cpp:112
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
@@ -45275,7 +45275,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Etiqueta de característica d'OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:124
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:133
 #, kde-format
 msgid "Text Properties"
 msgstr "Propietats del text"

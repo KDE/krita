@@ -278,6 +278,8 @@ bool TextPropertiesDock::createNewPresetFromSettings()
     KoSvgTextPropertyData textData = d->textModel->textData.get();
     preset->setProperties(textData.commonProperties);
     preset->setName(i18nc("@info:placeholder", "New Style Preset"));
+    preset->setStyleType("character");
+    preset->updateThumbnail();
 
     CssStylePresetEditDialog *dialog = new CssStylePresetEditDialog(this);
     dialog->setDpi(d->currentDpi);

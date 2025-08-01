@@ -30,11 +30,13 @@ public:
 
     /// The actual text properties.
     KoSvgTextProperties properties(int ppi = 72, bool removeKraProps = false) const;
+
+    /// set the properties. Call updateThumbnail to update the sample.
     void setProperties(const KoSvgTextProperties &properties);
 
     /// The description associated with this style.
     QString description() const;
-    void setDescription(QString description);
+    void setDescription(const QString &desc);
 
     /// Set the style type, type is either "paragraph" or "character".
     QString styleType() const;
@@ -43,11 +45,20 @@ public:
     /// The sample text that is being styled by this preset.
     QString sampleText() const;
 
+    /// set the sample. Call updateThumbnail to update the sample.
+    void setSampleText(const QString &text);
+
     /// The text displayed before the sample. Only relevant when in Character mode.
     QString beforeText() const;
 
+    /// set the before text. Call updateThumbnail to update the sample.
+    void setBeforeText(const QString &text);
+
     /// The text displayed after the sample, only relevant when in character mode.
     QString afterText() const;
+
+    /// set the after text. Call updateThumbnail to update the sample.
+    void setAfterText(const QString &text);
 
     /// Returns the sample svg metadata. Use updateThumbnail to update it.
     QString sampleSvg() const;
@@ -63,14 +74,10 @@ public:
     void setStoredPPIResolution(const int ppi);
 
     /**
-     * @brief setSampleText
-     * This allows setting the visible sample text. In effect, this reconstructs the internal text
-     * with before, styled and after text.
-     * @param before -- unstyled before text, this is only set when the styletype is character.
-     * @param sample -- text of the styled sample.
-     * @param after -- unstyled after text, this is only set when the styletype is character.
+     * @brief generateSampleShape
+     * This generates the sample textshape from the properties and sample text(s).
      */
-    void setSampleText(const QString &sample, const KoSvgTextProperties &properties, const QString &before = "", const QString &after = "");
+    KoShape* generateSampleShape() const;
 
     /// Determines the prefered sample alignment based on the text properties. It's set up so that
     /// the alignment anchor of the text is shown.
@@ -87,6 +94,7 @@ public:
     QString primaryFontFamily() const;
 
     void updateAlignSample();
+
     // KoResource interface
 public:
     KoResourceSP clone() const override;

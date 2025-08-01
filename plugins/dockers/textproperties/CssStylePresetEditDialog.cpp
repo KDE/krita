@@ -133,7 +133,11 @@ void CssStylePresetEditDialog::slotUpdateTextProperties()
 
         if (m_currentResource->properties() != textData.commonProperties || shouldUpdateSample) {
             m_currentResource->setStyleType(styleType);
-            m_currentResource->setSampleText(sample,  textData.commonProperties, before, after);
+            m_currentResource->setBeforeText(before);
+            m_currentResource->setSampleText(sample);
+            m_currentResource->setAfterText(after);
+            m_currentResource->setProperties(textData.commonProperties);
+            m_currentResource->updateThumbnail();
             m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
             m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
             QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");

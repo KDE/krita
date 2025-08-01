@@ -352,6 +352,22 @@ public:
     /// Cleans up the internal text data. Used by undo commands.
     void cleanUp();
 
+/*****************************************************************************
+ * Tree Index functions.
+ *
+ * SVG Text is internally a tree of nodes, with each node having text
+ * properties, and the child nodes furthest from the root having text content.
+ * While we can access the latter by using ranges, and we can easily access
+ * the root node by using -1, there's no way to access the nodes that may
+ * be inbetween. Tree index allows accessing these nodes.
+ *
+ * Each entry in the index is represents the index it is in the parent's list
+ * of child nodes. This means that the root index is always {0}. The second
+ * child of the root would be represented as {0, 1}, and the first child of
+ * the second child of the root as {0, 1, 0}, etc.
+ *
+ ****************************************************************************/
+
     /**
      * @brief findTreeIndexForPropertyId
      * @return the tree index of the first content element found with a given property id.

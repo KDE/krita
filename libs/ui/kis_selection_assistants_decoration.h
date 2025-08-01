@@ -9,6 +9,9 @@
 
 #include <QPointF>
 #include <QColor>
+#include <QPushButton>
+#include <QObject>
+#include "kis_types.h"
 
 #include "KoPointerEvent.h"
 #include "KoSnapGuide.h"
@@ -17,22 +20,28 @@
 #include "kis_painting_assistant.h"
 #include <kritaui_export.h>
 
-class KisView;
+class KisCanvas2;
+class KisCoordinatesConverter;
+class KisViewManager;
 
 class KisSelectionAssistantsDecoration;
 typedef KisSharedPtr<KisSelectionAssistantsDecoration> KisSelectionAssistantsDecorationSP;
 
-class KRITAUI_EXPORT KisSelectionAssistantsDecoration
+class KRITAUI_EXPORT KisSelectionAssistantsDecoration : public QObject
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     KisSelectionAssistantsDecoration();
     ~KisSelectionAssistantsDecoration();
-    void drawDecoration(QPainter& gc, const KisCoordinatesConverter *converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas, bool selectionActionBarVisible);
+    void setViewManager(KisViewManager* viewManager);
 
 private:
     struct Private;
     Private* const d;
+
+Q_SIGNALS:
+
 };
 
 #endif

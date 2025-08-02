@@ -1,8 +1,9 @@
 .android-build-base:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder-sdk34-2204:latest
+  image: storage.kde.org/vm-images/krita-android-sdk34-2204
   tags:
-    - Linux
+    - VM
+    - amd64
   extends:
     - .ci-manual-job-mixin
     - .ci-artifacts-with-packages-mixin
@@ -103,8 +104,10 @@
 
 android-build-appbundle:
   stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder-sdk34-2204:latest
+  image: storage.kde.org/vm-images/krita-android-sdk34-2204
   tags:
+    - VM
+    - amd64
     - Linux
   extends:
     - .ci-manual-job-mixin

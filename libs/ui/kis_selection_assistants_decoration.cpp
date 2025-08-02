@@ -38,6 +38,7 @@ struct KisSelectionAssistantsDecoration::Private {
     KisCanvas2 * m_canvas = 0;
     QPushButton *buttonSelectAll = nullptr;
     QPushButton *buttonDeselect = nullptr;
+    QPushButton *buttonCopyToNewLayer = nullptr;
     KisSelectionManager *selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
 };
@@ -82,6 +83,15 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         connect(d->buttonDeselect, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::deselect);
     }
 
+    if (!d->buttonCopyToNewLayer) {
+        d->buttonCopyToNewLayer = new QPushButton();
+        d->buttonCopyToNewLayer->setFixedSize(25, 25);
+        d->buttonCopyToNewLayer->setToolTip("Copy To New Layer");
+        d->buttonCopyToNewLayer->setStyleSheet("background-color: rgba(255,255,255,180); border: 1px solid gray;");
+
+        connect(d->buttonCopyToNewLayer, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::copySelectionToNewLayer);
+    }
+
     if (canvasWidget && d->buttonSelectAll && m_selectionActionBar) {
            d->buttonSelectAll->setParent(canvasWidget);
            d->buttonSelectAll->move(200, 512);
@@ -96,6 +106,14 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
             d->buttonDeselect->show();
         } else if (d->buttonDeselect) {
             d->buttonDeselect->hide();
+        }
+
+    if (canvasWidget && d->buttonCopyToNewLayer && m_selectionActionBar) {
+            d->buttonCopyToNewLayer->setParent(canvasWidget);
+            d->buttonCopyToNewLayer->move(250, 512);
+            d->buttonCopyToNewLayer->show();
+        } else if (d->buttonCopyToNewLayer) {
+            d->buttonCopyToNewLayer->hide();
         }
 
     if (!m_selectionActionBar) {

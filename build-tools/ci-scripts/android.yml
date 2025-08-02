@@ -109,7 +109,6 @@ android-build-appbundle:
   tags:
     - VM
     - amd64
-    - Linux
   extends:
     - .ci-manual-job-mixin
   interruptible: true

@@ -473,7 +473,14 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     newSwatch.setSpotColor(chkSpot->isChecked());
     m_d->model->addSwatch(newSwatch, groupName);
     m_d->modifiedGroupNames.insert(groupName);
-    m_d->modifiedPaletteInfo.groups[groupName]->addSwatch(newSwatch);
+    // TODO: This is getting called when startEditing is never called. This avoids the crash, but what is its purpose?
+    if (m_d->isEditing) {
+        KisSwatchGroupSP cs = m_d->modifiedPaletteInfo.groups.value(groupName);
+        cs->addSwatch(newSwatch);
+        if (!m_d->modifiedPaletteInfo.groups.contains(groupName)) {
+            m_d->modifiedPaletteInfo.groups.insert(groupName, cs);
+        }
+    }
 }
 
 bool KisPaletteEditor::isModified() const
@@ -500,10 +507,11 @@ void KisPaletteEditor::startEditing()
     m_d->modifiedPaletteInfo.name = palette->name();
     m_d->modifiedPaletteInfo.storageLocation = palette->storageLocation();
     m_d->modifiedPaletteInfo.columnCount = palette->columnCount();
+    m_d->modifiedPaletteInfo.groups.clear();
 
     Q_FOREACH (const QString &groupName, palette->swatchGroupNames()) {
-        KisSwatchGroupSP cs = palette->getGroup(groupName);
-        m_d->modifiedPaletteInfo.groups[groupName].reset(new KisSwatchGroup(*cs.data()));
+        KisSwatchGroupSP cs(new KisSwatchGroup(*palette->getGroup(groupName).data()));
+        m_d->modifiedPaletteInfo.groups.insert(groupName, cs);
     }
 
     m_d->isEditing = true;

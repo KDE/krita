@@ -39,6 +39,7 @@ struct KisSelectionAssistantsDecoration::Private {
     QPushButton *buttonSelectAll = nullptr;
     QPushButton *buttonDeselect = nullptr;
     QPushButton *buttonCopyToNewLayer = nullptr;
+    QPushButton *buttonInvert = nullptr;
     KisSelectionManager *selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
 };
@@ -66,55 +67,75 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     QWidget *canvasWidget = dynamic_cast<QWidget*>(canvas->canvasWidget());
 
     if (!d->buttonSelectAll) {
-            d->buttonSelectAll = new QPushButton();
-            d->buttonSelectAll->setFixedSize(25, 25);
-            d->buttonSelectAll->setToolTip("select all");
-            d->buttonSelectAll->setStyleSheet("background-color: rgba(255,255,255,180); border: 1px solid gray;");
+        d->buttonSelectAll = new QPushButton();
+        d->buttonSelectAll->setIcon(KisIconUtils::loadIcon("select-all"));
+        d->buttonSelectAll->setFixedSize(25, 25);
+        d->buttonSelectAll->setToolTip("Select All");
+        d->buttonSelectAll->setStyleSheet("background-color: black); border: 1px solid black;");
 
-            connect(d->buttonSelectAll, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::selectAll);
+        connect(d->buttonSelectAll, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::selectAll);
         }
 
     if (!d->buttonDeselect) {
         d->buttonDeselect = new QPushButton();
+        d->buttonDeselect->setIcon(KisIconUtils::loadIcon("select-clear"));
         d->buttonDeselect->setFixedSize(25, 25);
-        d->buttonDeselect->setToolTip("deselect");
-        d->buttonDeselect->setStyleSheet("background-color: rgba(255,255,255,180); border: 1px solid gray;");
+        d->buttonDeselect->setToolTip("Deselect");
+        d->buttonDeselect->setStyleSheet("background-color: black); border: 1px solid black;");
 
         connect(d->buttonDeselect, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::deselect);
     }
 
     if (!d->buttonCopyToNewLayer) {
         d->buttonCopyToNewLayer = new QPushButton();
+        d->buttonCopyToNewLayer->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
         d->buttonCopyToNewLayer->setFixedSize(25, 25);
         d->buttonCopyToNewLayer->setToolTip("Copy To New Layer");
-        d->buttonCopyToNewLayer->setStyleSheet("background-color: rgba(255,255,255,180); border: 1px solid gray;");
+        d->buttonCopyToNewLayer->setStyleSheet("background-color: black); border: 1px solid black;");
 
         connect(d->buttonCopyToNewLayer, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::copySelectionToNewLayer);
     }
 
+    if (!d->buttonInvert) {
+        d->buttonInvert = new QPushButton();
+        d->buttonInvert->setFixedSize(25, 25);
+        d->buttonInvert->setToolTip("Invert Selection");
+        d->buttonInvert->setStyleSheet("background-color: black); border: 1px solid black;");
+
+        connect(d->buttonInvert, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::invert);
+    }
+
     if (canvasWidget && d->buttonSelectAll && m_selectionActionBar) {
-           d->buttonSelectAll->setParent(canvasWidget);
-           d->buttonSelectAll->move(200, 512);
-           d->buttonSelectAll->show();
-       } else if (d->buttonSelectAll) {
-           d->buttonSelectAll->hide();
-       }
+        d->buttonSelectAll->setParent(canvasWidget);
+        d->buttonSelectAll->move(200, 512);
+        d->buttonSelectAll->show();
+    } else if (d->buttonSelectAll) {
+        d->buttonSelectAll->hide();
+    }
 
     if (canvasWidget && d->buttonDeselect && m_selectionActionBar) {
-            d->buttonDeselect->setParent(canvasWidget);
-            d->buttonDeselect->move(225, 512);
-            d->buttonDeselect->show();
-        } else if (d->buttonDeselect) {
-            d->buttonDeselect->hide();
-        }
+        d->buttonDeselect->setParent(canvasWidget);
+        d->buttonDeselect->move(225, 512);
+        d->buttonDeselect->show();
+    } else if (d->buttonDeselect) {
+        d->buttonDeselect->hide();
+    }
 
     if (canvasWidget && d->buttonCopyToNewLayer && m_selectionActionBar) {
-            d->buttonCopyToNewLayer->setParent(canvasWidget);
-            d->buttonCopyToNewLayer->move(250, 512);
-            d->buttonCopyToNewLayer->show();
-        } else if (d->buttonCopyToNewLayer) {
-            d->buttonCopyToNewLayer->hide();
-        }
+        d->buttonCopyToNewLayer->setParent(canvasWidget);
+        d->buttonCopyToNewLayer->move(250, 512);
+        d->buttonCopyToNewLayer->show();
+    } else if (d->buttonCopyToNewLayer) {
+        d->buttonCopyToNewLayer->hide();
+    }
+
+    if (canvasWidget && d->buttonInvert && m_selectionActionBar) {
+        d->buttonInvert->setParent(canvasWidget);
+        d->buttonInvert->move(275, 512);
+        d->buttonInvert->show();
+    } else if (d->buttonInvert) {
+        d->buttonInvert->hide();
+    }
 
     if (!m_selectionActionBar) {
         return;

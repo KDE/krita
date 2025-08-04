@@ -124,6 +124,12 @@ private Q_SLOTS:
     void testSearchingTreeIndex();
     void testRangeForTreeIndex();
     void testSetPropertiesOnTreeIndex();
+
+    void testInsertTransforms_data();
+    void testInsertTransforms();
+
+    void testRemoveTransforms_data();
+    void testRemoveTransforms();
 };
 
 #endif // TESTSVGTEXT_H

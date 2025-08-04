@@ -769,20 +769,26 @@ QPointF KoSvgTextShape::initialTextPosition() const
 bool KoSvgTextShape::insertText(int pos, QString text)
 {
     bool success = false;
-    int currentIndex = 0;
-    int index = 0;
-    int oldIndex = 0;
+    int currentIndex = 0; ///< Current position of the search.
+
+    /// The distinction between element and insertion index allows us to insert text at
+    /// the start or end of a content element, without ambiguity on whether we're
+    /// inserting into the next element.
+    int elementIndex = 0;
+    int insertionIndex = 0;
     if (pos > -1 && !d->cursorPos.isEmpty()) {
         CursorPos cursorPos = d->cursorPos.at(pos);
         CharacterResult res = d->result.at(cursorPos.cluster);
-        index = res.plaintTextIndex;
-        oldIndex = cursorPos.index;
-        index = qMin(index, d->result.size()-1);
+        elementIndex = res.plaintTextIndex;
+        insertionIndex = cursorPos.index;
+        elementIndex = qMin(elementIndex, d->result.size()-1);
     }
-    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, elementIndex);
     if (it != d->textData.depthFirstTailEnd()) {
-        int offset = oldIndex - currentIndex;
+        const int offset = insertionIndex - currentIndex;
         it->insertText(offset, text);
+
+        d->insertTransforms(d->textData, insertionIndex, text.size(), (elementIndex == insertionIndex));
         notifyChanged();
         shapeChangedPriv(ContentChanged);
         success = true;
@@ -813,6 +819,9 @@ bool KoSvgTextShape::removeText(int &index, int &length)
             if (index >= currentIndex) {
                 index = currentIndex + offset;
             }
+
+            d->removeTransforms(d->textData, index, endLength);
+
             success = true;
         } else {
             currentLength = -1;
@@ -1004,8 +1013,8 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
 {
     bool success = false;
     int currentIndex = 0;
-    int index = 0;
-    int oldIndex = 0;
+    int elementIndex = 0;
+    int insertionIndex = 0;
 
     if (isEnd(richText->d->textData.childBegin())) {
         // rich text is empty.
@@ -1015,20 +1024,20 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
     if (pos > -1 && !d->cursorPos.isEmpty()) {
         CursorPos cursorPos = d->cursorPos.at(qMin(d->cursorPos.size()-1, pos));
         CharacterResult res = d->result.at(cursorPos.cluster);
-        index = res.plaintTextIndex;
-        oldIndex = cursorPos.index;
-        index = qMin(index, d->result.size()-1);
+        elementIndex = res.plaintTextIndex;
+        insertionIndex = cursorPos.index;
+        elementIndex = qMin(elementIndex, d->result.size()-1);
     }
 
-    KoSvgTextShape::Private::splitContentElement(this->d->textData, oldIndex);
+    KoSvgTextShape::Private::splitContentElement(this->d->textData, insertionIndex);
 
-    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, oldIndex);
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, insertionIndex);
     if (it != d->textData.depthFirstTailEnd()) {
         d->textData.move(richText->d->textData.childBegin(), siblingCurrent(it));
         success = true;
     } else {
         currentIndex = 0;
-        it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
+        it = d->findTextContentElementForIndex(d->textData, currentIndex, elementIndex);
         if (it != d->textData.depthFirstTailEnd()) {
             d->textData.move(richText->d->textData.childBegin(), siblingEnd(siblingCurrent(it)));
             success = true;

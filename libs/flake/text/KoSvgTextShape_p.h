@@ -13,6 +13,8 @@
 #include "KoSvgText.h"
 #include "KoSvgTextContentElement.h"
 
+#include "KoCssTextUtils.h"
+
 #include <kis_assert.h>
 #include <KisForest.h>
 
@@ -687,6 +689,156 @@ public:
             return true;
         }
         return false;
+    }
+
+    /**
+     * @brief collapsedWhiteSpacesForText
+     * This returns the collapsed spaces for a given piece of text, without transforms.
+     * @param tree -- text data tree.
+     * @param alsoCollapseLowSurrogate -- whether to mark utf16 surrogates as collapsed too.
+     * @return list of collapsed characters
+     */
+    static QVector<bool> collapsedWhiteSpacesForText(KisForest<KoSvgTextContentElement> &tree, const bool alsoCollapseLowSurrogate = false) {
+        QString allText;
+        QMap<int, KoSvgText::TextSpaceCollapse> collapseModes;
+
+        for (auto it = tree.depthFirstTailBegin(); it != tree.depthFirstTailEnd(); it++) {
+            const int children = childCount(siblingCurrent(it));
+            if (children == 0) {
+                QString text = it->text;
+                KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(it->properties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
+                collapseModes.insert(allText.size(), collapse);
+                allText += text;
+            } else {
+                break;
+            }
+        }
+        QVector<bool> collapsed = KoCssTextUtils::collapseSpaces(&allText, collapseModes);
+        if (alsoCollapseLowSurrogate) {
+            for (int i = 0; i < allText.size(); i++) {
+                if (i > 0 && allText.at(i).isLowSurrogate() && allText.at(i-1).isHighSurrogate()) {
+                    collapsed[i] = true;
+                }
+            }
+        }
+        return collapsed;
+    }
+
+    /**
+     * @brief removeTransforms
+     * Remove all local SVG character transforms in a certain range.
+     * Local transforms are influenced by whitespace collapse and
+     * whether they are set to unicode codepoints, and they also accumulate
+     * from parent to child. This function removes all local transforms in
+     * a certain section.
+     * @param tree -- tree to remove transforms from.
+     * @param start -- start at which to remove transforms.
+     * @param length -- end to remove from.
+     */
+    static void removeTransforms(KisForest<KoSvgTextContentElement> &tree, const int start, const int length) {
+        QVector<bool> collapsedCharacters = collapsedWhiteSpacesForText(tree, true);
+
+        auto root = tree.childBegin();
+        removeTransformsImpl(root, 0, start, length, collapsedCharacters);
+    }
+
+    /**
+     * @brief removeTransformsImpl
+     * recursive function that handles removing local transforms in a certain range.
+     * Used by removeTransform.
+     */
+    static int removeTransformsImpl(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, const int globalIndex, const int start, const int length, const QVector<bool> collapsedCharacters) {
+        int currentLength = 0;
+        auto it = childBegin(currentTextElement);
+        if (it != childEnd(currentTextElement)) {
+            for (; it != childEnd(currentTextElement); it++) {
+                currentLength += removeTransformsImpl(it, globalIndex + currentLength, start, length, collapsedCharacters);
+            }
+        } else {
+            currentLength = currentTextElement->text.size();
+        }
+
+        if (!currentTextElement->localTransformations.isEmpty()) {
+            int transformOffset = 0;
+            int transformOffsetEnd = 0;
+
+            for (int i = globalIndex; i < globalIndex + currentLength; i++) {
+                if (i < start) {
+                    transformOffset += collapsedCharacters.at(i)? 0: 1;
+                }
+                if (i < start + length) {
+                    transformOffsetEnd += collapsedCharacters.at(i)? 0: 1;
+                } else {
+                    break;
+                }
+            }
+            if (transformOffset < currentTextElement->localTransformations.size()) {
+                currentTextElement->localTransformations.remove(transformOffset, transformOffsetEnd-transformOffset);
+            }
+
+        }
+        return currentLength;
+    }
+
+    /**
+     * @brief insertTransforms
+     * Inserts empty transforms into tree recursively.
+     * @param tree -- tree to insert transforms on.
+     * @param start -- start index.
+     * @param length -- amount of transforms to insert.
+     * @param allowSkipFirst -- whether we're allowed to skip the first
+     * transform because it is at the start of a text element.
+     */
+    static void insertTransforms(KisForest<KoSvgTextContentElement> &tree, const int start, const int length, const bool allowSkipFirst) {
+        QVector<bool> collapsedCharacters = collapsedWhiteSpacesForText(tree, true);
+
+        auto root = tree.childBegin();
+        insertTransformsImpl(root, 0, start, length, collapsedCharacters, allowSkipFirst);
+    }
+    /**
+     * @brief insertTransformsImpl
+     * Recursive function that handles inserting empty transforms into a given range.
+     * Used by insertTransforms.
+     */
+    static int insertTransformsImpl(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, const int globalIndex, const int start, const int length, const QVector<bool> collapsedCharacters, const bool allowSkipFirst) {
+        int currentLength = 0;
+        auto it = childBegin(currentTextElement);
+        if (it != childEnd(currentTextElement)) {
+            for (; it != childEnd(currentTextElement); it++) {
+                currentLength += insertTransformsImpl(it, globalIndex + currentLength, start, length, collapsedCharacters, allowSkipFirst);
+            }
+        } else {
+            currentLength = currentTextElement->text.size();
+        }
+
+        if (!currentTextElement->localTransformations.isEmpty()) {
+            int transformOffset = 0;
+            int transformOffsetEnd = 0;
+
+            for (int i = globalIndex; i < globalIndex + currentLength; i++) {
+                if (i < start) {
+                    transformOffset += collapsedCharacters.at(i)? 0: 1;
+                }
+                if (i < start + length) {
+                    transformOffsetEnd += collapsedCharacters.at(i)? 0: 1;
+                } else {
+                    break;
+                }
+            }
+
+            // When at the start, skip the first transform.
+            if (transformOffset == 0 && allowSkipFirst && currentTextElement->localTransformations.at(0).startsNewChunk()) {
+                transformOffset += 1;
+            }
+
+            if (transformOffset < currentTextElement->localTransformations.size()) {
+                for (int i = transformOffset; i < transformOffsetEnd; i++) {
+                    currentTextElement->localTransformations.insert(i, KoSvgText::CharTransformation());
+                }
+            }
+
+        }
+        return currentLength;
     }
 
     /**

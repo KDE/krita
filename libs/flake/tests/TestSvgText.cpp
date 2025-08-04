@@ -3195,7 +3195,68 @@ void TestSvgText::testSetPropertiesOnTreeIndex()
     KoSvgTextProperties props2 = textShape->propertiesForTreeIndex(treeIndex);
     QVERIFY(!props2.hasProperty(KoSvgTextProperties::FontStyleId));
     QVERIFY(props2.hasProperty(KoSvgTextProperties::FontWeightId));
+}
 
+void TestSvgText::testInsertTransforms_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<int>("pos");
+    QTest::addColumn<QString>("insert");
+    QTest::addColumn<QPoint>("caretp1");
+
+    QTest::addRow("no transforms") << "<text>Text</text>" << 3 << "test" << QPoint(12, 3);
+    QTest::addRow("base transform") << "<text x=\"20\" y=\"20\">Text</text>" << 3 << "test" << QPoint(32,23);
+    QTest::addRow("list transforms") << "<text x=\"20\" y=\"20 10 10 10 10 10\">Text</text>" << 3 << "test" << QPoint(27, 13);
+    QTest::addRow("nested transforms") << "<text x=\"20\" y=\"20 10 10 10 10 10\">Te<tspan dy=\"20 10 10 10 10 10\">xt</tspan></text>" << 3 << "test" << QPoint(27, 13);
+    QTest::addRow("nested transforms start") << "<text x=\"20\" y=\"20 10 10 10 10 10\">Te<tspan dy=\"20 10 10 10 10 10\">xt</tspan></text>" << 3 << "A" << QPoint(27, 13);
+}
+
+void TestSvgText::testInsertTransforms()
+{
+    QFETCH(QString, svg);
+    QFETCH(int, pos);
+    QFETCH(QString, insert);
+    QFETCH(QPoint, caretp1);
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    textShape->insertText(pos, insert);
+    QLineF caret;
+    QColor color;
+    textShape->cursorForPos(2, caret, color);
+    QVERIFY(caret.p1().toPoint() == caretp1);
+}
+
+void TestSvgText::testRemoveTransforms_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<int>("pos");
+    QTest::addColumn<int>("length");
+    QTest::addColumn<QPoint>("caretp1");
+
+    QTest::addRow("no transforms") << "<text>Texttest</text>" << 3 << 4 << QPoint(12, 3);
+    QTest::addRow("base transform") << "<text x=\"20\" y=\"20\">Texttest</text>" << 3 << 4 << QPoint(32, 23);
+    QTest::addRow("list transforms") << "<text x=\"20\" y=\"20 10 10 10 10 10\">Texttest</text>" << 3 << 4 << QPoint(27, 13);
+    QTest::addRow("nested transforms") << "<text x=\"20\" y=\"20 10 10 10 10 10\">Text<tspan dy=\"20 10 10 10 10 10\">test</tspan></text>" << 3 << 4 << QPoint(27, 13);
+    QTest::addRow("nested transforms start") << "<text x=\"20\" y=\"20 10 10 10 10 10\">Text<tspan dy=\"20 10 10 10 10 10\">test</tspan></text>" << 3 << 1 << QPoint(27, 13);
+}
+
+void TestSvgText::testRemoveTransforms()
+{
+    QFETCH(QString, svg);
+    QFETCH(int, pos);
+    QFETCH(int, length);
+    QFETCH(QPoint, caretp1);
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    textShape->removeText(pos, length);
+    QLineF caret;
+    QColor color;
+    textShape->cursorForPos(2, caret, color);
+    QVERIFY(caret.p1().toPoint() == caretp1);
 }
 
 #include "kistest.h"

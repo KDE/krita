@@ -200,9 +200,10 @@ android {
 
     defaultConfig {
         compileSdk androidCompileSdkVersion.toInteger()
-        ndkVersion "27.2.12479018"
+        buildToolsVersion "35.0.0"
+        ndkVersion "27.3.13750724"
 
-        targetSdkVersion 34
+        targetSdkVersion 35
         minSdkVersion 24
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
         versionName "5.2.10"

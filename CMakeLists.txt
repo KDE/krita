@@ -225,6 +225,13 @@ elseif(ANDROID)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
+
+    if (${CMAKE_ANDROID_NDK_VERSION} VERSION_GREATER_EQUAL "27.0.0"
+            AND (CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a" OR CMAKE_ANDROID_ARCH_ABI STREQUAL "x86_64"))
+        message(STATUS "Enable 16K page alignment for Android NDK 27")
+        set(PAGE_ALIGN_16K_LINKER_FLAGS -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384)
+        add_link_options(${PAGE_ALIGN_16K_LINKER_FLAGS})
+    endif()
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
@@ -1282,7 +1289,7 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
-  set (ANDROID_SDK_COMPILE_API "34")
+  set (ANDROID_SDK_COMPILE_API "35")
 
   # To assist stdcpp-path in deployment.json file
   set(ANDROID_SYSROOT_PREFIX "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr" CACHE STRING "" FORCE)

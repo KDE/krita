@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 03:27+0000\n"
+"POT-Creation-Date: 2025-08-04 03:55+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -31437,7 +31437,7 @@ msgstr "Stopkleur:"
 msgid "Swatch Group:"
 msgstr "Groepnamme ynfiere:"
 
-#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
+#: libs/ui/KisPaletteEditor.cpp:618 libs/ui/KisPaletteEditor.cpp:621
 #, fuzzy, kde-format
 #| msgid "New program %1"
 msgctxt "Default new group name"

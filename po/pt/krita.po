@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 03:27+0000\n"
+"POT-Creation-Date: 2025-08-04 03:55+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -32477,7 +32477,7 @@ msgstr "Cor pontual"
 msgid "Swatch Group:"
 msgstr "RGB da Swatch"
 
-#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
+#: libs/ui/KisPaletteEditor.cpp:618 libs/ui/KisPaletteEditor.cpp:621
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"

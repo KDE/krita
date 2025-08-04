@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 03:27+0000\n"
+"POT-Creation-Date: 2025-08-04 03:55+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -33486,7 +33486,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 msgid "Swatch Group:"
 msgstr "ਮਾਸਟਰ ਸਲਾਈਡ ਬਦਲੋ"
 
-#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
+#: libs/ui/KisPaletteEditor.cpp:618 libs/ui/KisPaletteEditor.cpp:621
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "Default new group name"

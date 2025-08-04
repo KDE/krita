@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 03:27+0000\n"
+"POT-Creation-Date: 2025-08-04 03:55+0000\n"
 "PO-Revision-Date: 2016-03-29 00:49+0100\n"
 "Last-Translator: enolp <enolp@softastur.org>\n"
 "Language-Team: Asturian <>\n"
@@ -30881,7 +30881,7 @@ msgstr "Axustes"
 msgid "Swatch Group:"
 msgstr "Softastur"
 
-#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
+#: libs/ui/KisPaletteEditor.cpp:618 libs/ui/KisPaletteEditor.cpp:621
 #, fuzzy, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"

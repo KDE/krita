@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-11 03:27+0000\n"
+"POT-Creation-Date: 2025-08-04 03:55+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -31806,7 +31806,7 @@ msgstr "रंग थांबवा."
 msgid "Swatch Group:"
 msgstr "पूर्वनिश्चीत उतरणी"
 
-#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
+#: libs/ui/KisPaletteEditor.cpp:618 libs/ui/KisPaletteEditor.cpp:621
 #, fuzzy, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"

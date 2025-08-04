@@ -860,7 +860,6 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
 
     QVector<KoSvgText::CharTransformation> local = currentTextElement->localTransformations;
 
-    int i = 0;
 
     int index = currentIndex;
     int j = index + numChars(currentTextElement, true, resolvedProps);
@@ -868,6 +867,7 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
     if (currentTextElement->textPath) {
         textInPath = true;
     } else {
+        int i = 0;
         for (int k = index; k < j; k++ ) {
             if (k >= text.size()) {
                 continue;
@@ -895,7 +895,7 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
                 resolved[k] = newTransform;
                 i += 1;
             } else if (k > 0) {
-                if (resolved[k - 1].rotate) {
+                if (resolved[k - 1].rotate && !resolved[k].rotate) {
                     resolved[k].rotate = resolved[k - 1].rotate;
                 }
             }

@@ -42,9 +42,10 @@ struct KisSelectionAssistantsDecoration::Private {
     QPushButton *buttonInvert = nullptr;
     KisSelectionManager *selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
+    QPoint dragRectPosition = QPoint(200, 512);
+    bool dragging = false;
+    QPoint dragStartOffset;
 };
-
-
 
 KisSelectionAssistantsDecoration::KisSelectionAssistantsDecoration() :
     d(new Private)
@@ -64,14 +65,15 @@ void KisSelectionAssistantsDecoration::setViewManager(KisViewManager* viewManage
 void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas, bool m_selectionActionBar)
 {
     Q_UNUSED(updateRect);
+    d->m_canvas = canvas;
     QWidget *canvasWidget = dynamic_cast<QWidget*>(canvas->canvasWidget());
+    canvasWidget->installEventFilter(this);
 
     if (!d->buttonSelectAll) {
         d->buttonSelectAll = new QPushButton();
         d->buttonSelectAll->setIcon(KisIconUtils::loadIcon("select-all"));
         d->buttonSelectAll->setFixedSize(25, 25);
         d->buttonSelectAll->setToolTip("Select All");
-        d->buttonSelectAll->setStyleSheet("background-color: black); border: 1px solid black;");
 
         connect(d->buttonSelectAll, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::selectAll);
         }
@@ -81,7 +83,6 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         d->buttonDeselect->setIcon(KisIconUtils::loadIcon("select-clear"));
         d->buttonDeselect->setFixedSize(25, 25);
         d->buttonDeselect->setToolTip("Deselect");
-        d->buttonDeselect->setStyleSheet("background-color: black); border: 1px solid black;");
 
         connect(d->buttonDeselect, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::deselect);
     }
@@ -91,7 +92,6 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         d->buttonCopyToNewLayer->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
         d->buttonCopyToNewLayer->setFixedSize(25, 25);
         d->buttonCopyToNewLayer->setToolTip("Copy To New Layer");
-        d->buttonCopyToNewLayer->setStyleSheet("background-color: black); border: 1px solid black;");
 
         connect(d->buttonCopyToNewLayer, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::copySelectionToNewLayer);
     }
@@ -100,14 +100,13 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         d->buttonInvert = new QPushButton();
         d->buttonInvert->setFixedSize(25, 25);
         d->buttonInvert->setToolTip("Invert Selection");
-        d->buttonInvert->setStyleSheet("background-color: black); border: 1px solid black;");
 
         connect(d->buttonInvert, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::invert);
     }
 
     if (canvasWidget && d->buttonSelectAll && m_selectionActionBar) {
         d->buttonSelectAll->setParent(canvasWidget);
-        d->buttonSelectAll->move(200, 512);
+        d->buttonSelectAll->move(d->dragRectPosition.x(), d->dragRectPosition.y());
         d->buttonSelectAll->show();
     } else if (d->buttonSelectAll) {
         d->buttonSelectAll->hide();
@@ -115,7 +114,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
 
     if (canvasWidget && d->buttonDeselect && m_selectionActionBar) {
         d->buttonDeselect->setParent(canvasWidget);
-        d->buttonDeselect->move(225, 512);
+        d->buttonDeselect->move(d->dragRectPosition.x() + 25, d->dragRectPosition.y());
         d->buttonDeselect->show();
     } else if (d->buttonDeselect) {
         d->buttonDeselect->hide();
@@ -123,7 +122,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
 
     if (canvasWidget && d->buttonCopyToNewLayer && m_selectionActionBar) {
         d->buttonCopyToNewLayer->setParent(canvasWidget);
-        d->buttonCopyToNewLayer->move(250, 512);
+        d->buttonCopyToNewLayer->move(d->dragRectPosition.x() + 50, d->dragRectPosition.y());
         d->buttonCopyToNewLayer->show();
     } else if (d->buttonCopyToNewLayer) {
         d->buttonCopyToNewLayer->hide();
@@ -131,7 +130,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
 
     if (canvasWidget && d->buttonInvert && m_selectionActionBar) {
         d->buttonInvert->setParent(canvasWidget);
-        d->buttonInvert->move(275, 512);
+        d->buttonInvert->move(d->dragRectPosition.x() + 75, d->dragRectPosition.y());
         d->buttonInvert->show();
     } else if (d->buttonInvert) {
         d->buttonInvert->hide();
@@ -142,13 +141,13 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     }
 
     QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(200, 512, 128, 67), 6, 6); // placeholder position and size
+    bgPath.addRoundedRect(QRectF(d->dragRectPosition, QSize(128, 67)), 6, 6);
     gc.fillPath(bgPath, Qt::darkGray);
 
     QPainterPath dragRect;
     int width = 240;
     int height = 67;
-    dragRect.addRect(QRectF(300, 512, width, height));
+    dragRect.addRect(QRectF(d->dragRectPosition.x() + 103, d->dragRectPosition.y(), width, height));
     gc.fillPath(bgPath.intersected(dragRect),Qt::lightGray);
 
     QPainterPath dragRectDots;
@@ -162,7 +161,37 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     dragRectDots.addEllipse(-3,7.5,dotSize,dotSize);
     dragRectDots.addEllipse(-3,-2.5,dotSize,dotSize);
     dragRectDots.addEllipse(-3,-7.5,dotSize,dotSize);
-    dragRectDots.translate(315, 542);
+    dragRectDots.translate(d->dragRectPosition.x() + 115, d->dragRectPosition.y() + 30);
 
     gc.fillPath(dragRectDots,dragDecorationDotsColor);
+}
+
+bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
+{
+    QWidget *canvasWidget = dynamic_cast<QWidget*>(d->m_canvas->canvasWidget());
+    if (obj != canvasWidget) return false;
+
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QRect rect(d->dragRectPosition, QSize(128, 67));
+        if (rect.contains(mouseEvent->pos())) {
+            d->dragging = true;
+            d->dragStartOffset = mouseEvent->pos() - d->dragRectPosition;
+            return true;
+        }
+    }
+
+    if (event->type() == QEvent::MouseMove && d->dragging) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        d->dragRectPosition = mouseEvent->pos() - d->dragStartOffset;
+        canvasWidget->update();
+        return true;
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease && d->dragging) {
+        d->dragging = false;
+        return true;
+    }
+
+    return false;
 }

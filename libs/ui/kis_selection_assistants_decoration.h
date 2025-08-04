@@ -35,6 +35,7 @@ public:
     ~KisSelectionAssistantsDecoration();
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas, bool selectionActionBarVisible);
     void setViewManager(KisViewManager* viewManager);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     struct Private;

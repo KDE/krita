@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-01 02:06+0000\n"
-"PO-Revision-Date: 2025-07-12 20:42+0200\n"
+"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"PO-Revision-Date: 2025-07-27 22:15+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -35715,7 +35715,7 @@ msgstr "Colore a tinta piatta:"
 msgid "Swatch Group:"
 msgstr "Gruppo campioni:"
 
-#: libs/ui/KisPaletteEditor.cpp:609 libs/ui/KisPaletteEditor.cpp:612
+#: libs/ui/KisPaletteEditor.cpp:617 libs/ui/KisPaletteEditor.cpp:620
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -62640,10 +62640,9 @@ msgstr "Sfumatura: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgid "New active layer(s)"
+#, kde-format
 msgid "Use active layer"
-msgstr "Nuovi livelli attivi"
+msgstr "Usa livello attivo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62793,15 +62792,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select regions found from the merging of layers with specific color labels"
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Seleziona le regioni rinvenute dall'unione dei livelli con specifiche "
-"etichette di colore"
+"Include il livello attivo nelle regioni rinvenute dall'unione dei livelli "
+"con specifiche etichette di colore"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format

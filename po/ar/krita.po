@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-01 02:06+0000\n"
-"PO-Revision-Date: 2025-06-28 17:14+0400\n"
+"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"PO-Revision-Date: 2025-08-03 11:55+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -14348,7 +14348,7 @@ msgstr "ام&سح"
 #, kde-format
 msgctxt "action"
 msgid "Clear"
-msgstr "امسح"
+msgstr "امحُ"
 
 #. i18n: context: text @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:459
@@ -23843,7 +23843,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Erase"
 msgid "Erase"
-msgstr "امسح"
+msgstr "امحُ"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, fuzzy, kde-format
@@ -25927,7 +25927,7 @@ msgstr "معدل البت"
 #: libs/ui/animation/video_export_options_dialog.ui:406
 #, kde-format
 msgid "Lossless"
-msgstr "بدون فقد"
+msgstr "بلا فقد"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
@@ -28792,7 +28792,7 @@ msgstr "صورة OpenRaster"
 #, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
-msgstr "امسح"
+msgstr "امحُ"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
 #: libs/ui/forms/KisWelcomePage.ui:1116
@@ -30535,7 +30535,7 @@ msgstr "نوافذ فرعية"
 #: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:23
 #, kde-format
 msgid "Clear"
-msgstr "امسح"
+msgstr "امحُ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdggeneralsettings.ui:461
@@ -32770,7 +32770,7 @@ msgstr "حمّل من مكتبة الأيقونات"
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:133
 #, kde-format
 msgid "Clear Thumbnail"
-msgstr "امسح المصغّرة"
+msgstr "امحُ المصغّرة"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, stopLeftLabel)
@@ -36713,7 +36713,7 @@ msgstr "لون البقعة:"
 msgid "Swatch Group:"
 msgstr "مجموعة حامل ألوان:"
 
-#: libs/ui/KisPaletteEditor.cpp:609 libs/ui/KisPaletteEditor.cpp:612
+#: libs/ui/KisPaletteEditor.cpp:617 libs/ui/KisPaletteEditor.cpp:620
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -40949,7 +40949,7 @@ msgstr "لا مدخلات"
 #: libs/widgetutils/config/krecentfilesaction.cpp:96
 #, kde-format
 msgid "Clear List"
-msgstr "امسح القائمة"
+msgstr "امحُ القائمة"
 
 #: libs/widgetutils/config/kstandardaction.cpp:78
 #, kde-format
@@ -44881,7 +44881,7 @@ msgstr "عدد الصّفوف:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:305
 #, kde-format
 msgid "Clear History"
-msgstr "امسح التاريخ"
+msgstr "امحُ التاريخ"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:307
 #, fuzzy, kde-format
@@ -48666,7 +48666,7 @@ msgstr "QtScript"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:108
 #, kde-format
 msgid "Clear The Console"
-msgstr "امسح المعراض"
+msgstr "امحُ المعراض"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:113
@@ -49094,7 +49094,7 @@ msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
 "location, when no resource is shown so there is no specific filename"
 msgid "(None selected)"
-msgstr "(بدون تجديد)"
+msgstr "(لم يحدد شيء)"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
@@ -52370,7 +52370,7 @@ msgstr "التّقاطعات:"
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:53
 #, kde-format
 msgid "No Connectors"
-msgstr "بدون وصلات"
+msgstr "بلا وصلات"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:54
 #, fuzzy, kde-format
@@ -53419,7 +53419,7 @@ msgstr ""
 #: plugins/impex/heif/WdgHeifExport.ui:151
 #, kde-format
 msgid "&Lossless"
-msgstr "&بدون فقد"
+msgstr "&بلا فقد"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMonochromesRGB)
 #: plugins/impex/heif/WdgHeifExport.ui:161
@@ -55435,7 +55435,7 @@ msgstr "ليس في الملف صورة."
 #: plugins/impex/pdf/kis_pdf_import.cpp:78
 #, kde-format
 msgid "A password is required to read that pdf"
-msgstr "كلمة المرور مطلوبة لقراءة ملفّ PDF"
+msgstr "كلمة السر مطلوبة لقراءة ملفّ PDF"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:87
 #, kde-format
@@ -56810,7 +56810,7 @@ msgstr "بلا"
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "Lossless"
-msgstr "بدون فقد"
+msgstr "بلا فقد"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:49
 #, kde-format
@@ -61676,7 +61676,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:151
 msgid "No description"
-msgstr "بدون وصف"
+msgstr "بلا وصف"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:196
 #, fuzzy
@@ -67830,7 +67830,7 @@ msgstr "ارسم"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1622
 #, kde-format
 msgid "Clear Points"
-msgstr "امسح النّقاط"
+msgstr "امحُ النّقاط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1689

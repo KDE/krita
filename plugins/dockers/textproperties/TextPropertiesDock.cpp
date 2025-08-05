@@ -135,6 +135,7 @@ TextPropertiesDock::TextPropertiesDock()
 {
     m_quickWidget = new QQuickWidget(this);
 
+#if !defined(Q_OS_MACOS) || QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QSurfaceFormat format;
 
     {
@@ -151,6 +152,7 @@ TextPropertiesDock::TextPropertiesDock()
     }
 
     m_quickWidget->setFormat(format);
+#endif
     setWidget(m_quickWidget);
     setEnabled(true);
 

@@ -438,6 +438,15 @@ public:
     /// Notify that the markup has changed.
     void notifyMarkupChanged();
 
+    /*--------------- Converter functions ---------------*/
+
+    /**
+     * @brief convertCharTransformsToPreformatted
+     *
+     * @param makeInlineSize -- whether to have inline size applied.
+     */
+    void convertCharTransformsToPreformatted(const bool makeInlineSize = false);
+
     /*--------------- Loading / Saving ------------------*/
 
     /// Saves SVG data.

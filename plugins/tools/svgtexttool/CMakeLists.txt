@@ -23,6 +23,7 @@ set (SvgTextTool_SRCS
     SvgTextToolFactory.cpp
     FontSizeAction.cpp
     SvgTextShapeManagerBlocker.cpp
+    SvgConvertTextTypeCommand.cpp
 
     glyphpalette/GlyphPaletteDialog.cpp
     glyphpalette/GlyphPaletteProxyModel.cpp

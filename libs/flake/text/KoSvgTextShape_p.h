@@ -510,10 +510,10 @@ public:
                                                CharacterResult &charResult, const KoSvgText::TextRendering rendering);
 
     void clearAssociatedOutlines();
-    void resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
+    static void resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                            QString text, QVector<CharacterResult> &result, int &currentIndex,
                            bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved,
-                           QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps);
+                           QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps, bool withControls = true);
 
     void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal,
                          const KoSvgTextProperties resolvedProps, const KoSvgText::ResolutionHandler &resHandler);
@@ -695,25 +695,33 @@ public:
      * @brief collapsedWhiteSpacesForText
      * This returns the collapsed spaces for a given piece of text, without transforms.
      * @param tree -- text data tree.
+     * @param allText -- some collapseMethods modify the text. This is a pointer that sets the modified text.
      * @param alsoCollapseLowSurrogate -- whether to mark utf16 surrogates as collapsed too.
      * @return list of collapsed characters
      */
-    static QVector<bool> collapsedWhiteSpacesForText(KisForest<KoSvgTextContentElement> &tree, const bool alsoCollapseLowSurrogate = false) {
-        QString allText;
+    static QVector<bool> collapsedWhiteSpacesForText(KisForest<KoSvgTextContentElement> &tree, QString &allText, const bool alsoCollapseLowSurrogate = false) {
         QMap<int, KoSvgText::TextSpaceCollapse> collapseModes;
 
-        for (auto it = tree.depthFirstTailBegin(); it != tree.depthFirstTailEnd(); it++) {
-            const int children = childCount(siblingCurrent(it));
-            if (children == 0) {
-                QString text = it->text;
-                KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(it->properties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
-                collapseModes.insert(allText.size(), collapse);
-                allText += text;
+        QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
+        for (auto it = tree.compositionBegin(); it != tree.compositionEnd(); it++) {
+            if (it.state() == KisForestDetail::Enter) {
+                KoSvgTextProperties ownProperties = it->properties;
+                ownProperties.inheritFrom(parentProps.last());
+                parentProps.append(ownProperties);
+
+                const int children = childCount(siblingCurrent(it));
+                if (children == 0) {
+                    QString text = it->text;
+                    KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(parentProps.last().propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
+                    collapseModes.insert(allText.size(), collapse);
+                    allText += text;
+                }
             } else {
-                break;
+                parentProps.pop_back();
             }
         }
         QVector<bool> collapsed = KoCssTextUtils::collapseSpaces(&allText, collapseModes);
+
         if (alsoCollapseLowSurrogate) {
             for (int i = 0; i < allText.size(); i++) {
                 if (i > 0 && allText.at(i).isLowSurrogate() && allText.at(i-1).isHighSurrogate()) {
@@ -736,7 +744,8 @@ public:
      * @param length -- end to remove from.
      */
     static void removeTransforms(KisForest<KoSvgTextContentElement> &tree, const int start, const int length) {
-        QVector<bool> collapsedCharacters = collapsedWhiteSpacesForText(tree, true);
+        QString all;
+        QVector<bool> collapsedCharacters = collapsedWhiteSpacesForText(tree, all, true);
 
         auto root = tree.childBegin();
         removeTransformsImpl(root, 0, start, length, collapsedCharacters);
@@ -790,7 +799,8 @@ public:
      * transform because it is at the start of a text element.
      */
     static void insertTransforms(KisForest<KoSvgTextContentElement> &tree, const int start, const int length, const bool allowSkipFirst) {
-        QVector<bool> collapsedCharacters = collapsedWhiteSpacesForText(tree, true);
+        QString all;
+        QVector<bool> collapsedCharacters = collapsedWhiteSpacesForText(tree, all, true);
 
         auto root = tree.childBegin();
         insertTransformsImpl(root, 0, start, length, collapsedCharacters, allowSkipFirst);
@@ -839,6 +849,119 @@ public:
 
         }
         return currentLength;
+    }
+
+    /**
+     * @brief applyWhiteSpace
+     * CSS Whitespace processes whitespaces so that duplicate white spaces and
+     * unecessary hard breaks get removed from the text. Within the text layout
+     * we avoid removing the white spaces. However, when converting between text
+     * types it can be useful to remove these spaces.
+     * This function actually applies the white space rule to the active text.
+     * @param tree -- tree to apply the whitespace rule onto.
+     * @param convertToPreWrapped -- switch all whitespace rules to pre-wrapped.
+     */
+    void applyWhiteSpace(KisForest<KoSvgTextContentElement> &tree, const bool convertToPreWrapped = false) {
+        QString allText;
+        QVector<bool> collapsed = collapsedWhiteSpacesForText(tree, allText, false);
+
+        auto end = std::make_reverse_iterator(tree.childBegin());
+        auto begin = std::make_reverse_iterator(tree.childEnd());
+
+        for (; begin != end; begin++) {
+            applyWhiteSpaceImpl(begin, collapsed, allText, convertToPreWrapped);
+        }
+        if (convertToPreWrapped) {
+            tree.childBegin()->properties.setProperty(KoSvgTextProperties::TextCollapseId, QVariant::fromValue(KoSvgText::Preserve));
+            tree.childBegin()->properties.setProperty(KoSvgTextProperties::TextWrapId, QVariant::fromValue(KoSvgText::Wrap));
+        }
+    }
+
+    void applyWhiteSpaceImpl(std::reverse_iterator<KisForest<KoSvgTextContentElement>::child_iterator> current, QVector<bool> &collapsed, QString &allText, const bool convertToPreWrapped) {
+        auto base = current.base();
+        // It seems that .base() refers to the next entry instead of the pointer,
+        // which is coherent with the template implementation of "operator*" here:
+        // https://en.cppreference.com/w/cpp/iterator/reverse_iterator.html
+        base--;
+        if(base != siblingEnd(base)) {
+            auto end = std::make_reverse_iterator(childBegin(base));
+            auto begin = std::make_reverse_iterator(childEnd(base));
+            for (; begin != end; begin++) {
+                applyWhiteSpaceImpl(begin, collapsed, allText, convertToPreWrapped);
+            }
+        }
+
+        if (!current->text.isEmpty()) {
+            const int total = current->text.size();
+            QString currentText = allText.right(total);
+
+            for (int i = 0; i < total; i++) {
+                const int j = total - (i+1);
+                const bool col = collapsed.takeLast();
+                if (col) {
+                    currentText.remove(j, 1);
+                }
+
+            }
+            current->text = currentText;
+            allText.chop(total);
+        }
+        if (convertToPreWrapped) {
+            current->properties.removeProperty(KoSvgTextProperties::TextCollapseId);
+            current->properties.removeProperty(KoSvgTextProperties::TextWrapId);
+        }
+    }
+
+    /**
+     * @brief insertNewLinesAtAnchors
+     * Resolves character transforms and then inserts new lines at each
+     * transform that creates a new chunk.
+     * @param tree -- tree to apply to.
+     * @param shapesInside -- whether we're wrapping in shape.
+     */
+    static void insertNewLinesAtAnchors(KisForest<KoSvgTextContentElement> &tree, bool shapesInside = false) {
+        QString all;
+        QVector<bool> collapsed = collapsedWhiteSpacesForText(tree, all, false);
+        QVector<CharacterResult> result(all.size());
+        int globalIndex = 0;
+        const KoSvgTextProperties props = tree.childBegin()->properties;
+        KoSvgText::WritingMode mode = KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+        bool isHorizontal = mode == KoSvgText::HorizontalTB;
+        bool isWrapped = (props.hasProperty(KoSvgTextProperties::InlineSizeId) || shapesInside);
+        QVector<KoSvgText::CharTransformation> resolvedTransforms(all.size());
+        resolveTransforms(tree.childBegin(), all, result, globalIndex, isHorizontal, isWrapped, false, resolvedTransforms, collapsed, KoSvgTextProperties::defaultProperties(), false);
+
+        auto end = std::make_reverse_iterator(tree.childBegin());
+        auto begin = std::make_reverse_iterator(tree.childEnd());
+
+        for (; begin != end; begin++) {
+            insertNewLinesAtAnchorsImpl(begin, resolvedTransforms);
+        }
+    }
+
+    static void insertNewLinesAtAnchorsImpl(std::reverse_iterator<KisForest<KoSvgTextContentElement>::child_iterator> current, QVector<KoSvgText::CharTransformation> &resolvedTransforms) {
+        auto base = current.base();
+        base--;
+        if(base != siblingEnd(base)) {
+            auto end = std::make_reverse_iterator(childBegin(base));
+            auto begin = std::make_reverse_iterator(childEnd(base));
+            for (; begin != end; begin++) {
+                insertNewLinesAtAnchorsImpl(begin, resolvedTransforms);
+            }
+        }
+
+        if (!current->text.isEmpty()) {
+            const int total = current->text.size();
+
+            for (int i = 0; i < total; i++) {
+                const int j = total - (i+1);
+                KoSvgText::CharTransformation transform = resolvedTransforms.takeLast();
+                if (transform.startsNewChunk() && !resolvedTransforms.isEmpty() && current->text.at(j) != QChar::LineFeed) {
+                    current->text.insert(j, "\n");
+                }
+            }
+        }
+        current->localTransformations.clear();
     }
 
     /**

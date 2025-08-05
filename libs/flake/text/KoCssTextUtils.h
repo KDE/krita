@@ -91,7 +91,8 @@ public:
      *
      * @param text the text to check against, this text will be transformed if
      * the collapse method requires that.
-     * @param collapseMethod the white-space/text-space-collapse method.
+     * @param collapseMethod the white-space/text-space-collapse method,
+     * with the key indicating the position in the string at which it starts.
      * @return A vector of booleans the size of the input text that marks
      * whether the character should be collapsed.
      */

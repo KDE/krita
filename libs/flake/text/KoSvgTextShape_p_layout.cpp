@@ -246,7 +246,7 @@ void KoSvgTextShape::Private::relayout()
         resolvedTransforms[0].xPos = 0;
         resolvedTransforms[0].yPos = 0;
     }
-    this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars, KoSvgTextProperties::defaultProperties());
+    this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars, KoSvgTextProperties::defaultProperties(), true);
 
     // pass everything to a css-compatible text-layout algortihm.
     raqm_t_sp layout(raqm_create());
@@ -854,15 +854,17 @@ void KoSvgTextShape::Private::clearAssociatedOutlines()
  * @brief KoSvgTextShape::Private::resolveTransforms
  * This resolves transforms and applies whitespace collapse.
  */
-
 const QString bidiControls = "\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069";
-void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps) {
-
+void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
+                                                QString text, QVector<CharacterResult> &result, int &currentIndex,
+                                                bool isHorizontal, bool wrapped, bool textInPath,
+                                                QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars,
+                                                const KoSvgTextProperties resolvedProps, bool withControls) {
     QVector<KoSvgText::CharTransformation> local = currentTextElement->localTransformations;
 
 
     int index = currentIndex;
-    int j = index + numChars(currentTextElement, true, resolvedProps);
+    int j = index + numChars(currentTextElement, withControls, resolvedProps);
 
     if (currentTextElement->textPath) {
         textInPath = true;
@@ -905,7 +907,7 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
     KoSvgTextProperties props = currentTextElement->properties;
     props.inheritFrom(resolvedProps, true);
     for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
-        resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars, props);
+        resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars, props, withControls);
 
     }
 

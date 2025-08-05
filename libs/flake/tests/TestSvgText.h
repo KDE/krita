@@ -130,6 +130,11 @@ private Q_SLOTS:
 
     void testRemoveTransforms_data();
     void testRemoveTransforms();
+
+    void testApplyWhiteSpace_data();
+    void testApplyWhiteSpace();
+
+    void testInsertNewLinesAtAnchors();
 };
 
 #endif // TESTSVGTEXT_H

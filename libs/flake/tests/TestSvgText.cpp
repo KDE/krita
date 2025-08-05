@@ -3259,6 +3259,47 @@ void TestSvgText::testRemoveTransforms()
     QVERIFY(caret.p1().toPoint() == caretp1);
 }
 
+void TestSvgText::testApplyWhiteSpace_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<QString>("result");
+
+    QTest::addRow("normal") << "<text style=\"white-space:normal\">   Text \n  test   </text>" << "Text test";
+    QTest::addRow("nowrap") << "<text style=\"white-space:nowrap\">   Text \n  test   </text>" << "Text test";
+    QTest::addRow("pre-line") << "<text style=\"white-space:pre-line\">   Text \n  test   </text>" << "Text \ntest ";
+    QTest::addRow("pre-wrap") << "<text style=\"white-space:pre-wrap\">   Text \n  test   </text>" << "   Text \n  test   ";
+    QTest::addRow("nested") << "<text style=\"white-space:pre-line\">   Text \n <tspan style=\"white-space:pre-wrap\">  test</tspan>   </text>" << "Text \n  test";
+    QTest::addRow("xml:preserve") << "<text xml:space=\"preserve\">   Text \n\ttest   </text>" << "   Text test   ";
+}
+
+void TestSvgText::testApplyWhiteSpace()
+{
+    QFETCH(QString, svg);
+    QFETCH(QString, result);
+
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    textShape->d->applyWhiteSpace(textShape->d->textData);
+    textShape->relayout();
+    QVERIFY2(textShape->plainText() == result, QString("Apply whitespace result is incorrect: \"%1\"").arg(textShape->plainText()).toLatin1());
+}
+
+void TestSvgText::testInsertNewLinesAtAnchors()
+{
+    const QString svg = "<text style=\"white-space:pre-wrap\"><tspan x=\"0\" y=\"0\">Text</tspan><tspan x=\"0\" y=\"12\">\ntest</tspan><tspan x=\"0\" y=\"24\">text</tspan></text>";
+    const QString result = "Text\ntest\ntext";
+    //TODO: test text path and nested transforms.
+
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    textShape->convertCharTransformsToPreformatted();
+    QVERIFY2(textShape->plainText() == result, QString("Insert newlines result is incorrect: \"%1\"").arg(textShape->plainText()).toLatin1());
+}
+
 #include "kistest.h"
 
 

@@ -1286,6 +1286,28 @@ void KoSvgTextShape::notifyMarkupChanged()
     }
 }
 
+void KoSvgTextShape::convertCharTransformsToPreformatted(const bool makeInlineSize)
+{
+    const int inlineSize = writingMode() == KoSvgText::HorizontalTB? outlineRect().width(): outlineRect().height();
+    d->applyWhiteSpace(d->textData, true);
+    d->insertNewLinesAtAnchors(d->textData, !d->shapesInside.isEmpty());
+
+    KoSvgTextProperties props = this->propertiesForPos(-1);
+    if (makeInlineSize) {
+        KoSvgText::AutoValue val;
+        val.customValue = inlineSize;
+        val.isAuto = false;
+        if (!props.hasProperty(KoSvgTextProperties::InlineSizeId)) {
+            props.setProperty(KoSvgTextProperties::InlineSizeId, QVariant::fromValue(val));
+        }
+    } else {
+        props.removeProperty(KoSvgTextProperties::InlineSizeId);
+    }
+    // NOTE: applyWhiteSpace and insertNewLines don't notify changes,
+    // so setProperties is the only thing triggering relayout();
+    setPropertiesAtPos(-1, props);
+}
+
 #include "KoXmlWriter.h"
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {

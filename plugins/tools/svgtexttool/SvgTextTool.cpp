@@ -19,6 +19,7 @@
 #include "SvgTextChangeCommand.h"
 #include "SvgTextEditor.h"
 #include "SvgTextRemoveCommand.h"
+#include "SvgConvertTextTypeCommand.h"
 
 #include <QPainterPath>
 #include <QGridLayout>
@@ -268,6 +269,9 @@ QWidget *SvgTextTool::createOptionWidget()
     connect(optionUi.btnEdit, SIGNAL(clicked(bool)), SLOT(showEditor()));
     connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditorSvgSource()));
     connect(optionUi.btnGlyphPalette, SIGNAL(clicked(bool)), SLOT(showGlyphPalette()));
+
+    connect(optionUi.convertPreFormatBtn, SIGNAL(clicked(bool)), this, SLOT(slotConvertToPreformatted()));
+    connect(optionUi.convertInlineBtn, SIGNAL(clicked(bool)), this, SLOT(slotConvertToInlineSize()));
 
     return optionWidget;
 }
@@ -533,6 +537,21 @@ void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
 {
     if (canvas()) {
         canvas()->updateCanvas(updateRect);
+    }
+}
+
+void SvgTextTool::slotConvertToPreformatted() {
+    if (selectedShape()) {
+        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToPreFormatted);
+        canvas()->addCommand(cmd);
+    }
+}
+
+void SvgTextTool::slotConvertToInlineSize()
+{
+    if (selectedShape()) {
+        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToInlineSize);
+        canvas()->addCommand(cmd);
     }
 }
 

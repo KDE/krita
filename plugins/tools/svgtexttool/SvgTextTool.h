@@ -156,6 +156,9 @@ private Q_SLOTS:
      */
     void slotUpdateCursorDecoration(QRectF updateRect);
 
+    void slotConvertToPreformatted();
+    void slotConvertToInlineSize();
+
 
 private:
     enum class DragMode {

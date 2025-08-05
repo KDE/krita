@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-04 02:13+0000\n"
-"PO-Revision-Date: 2025-08-03 11:55+0400\n"
+"PO-Revision-Date: 2025-08-04 18:46+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -14338,7 +14338,7 @@ msgstr "أتريد مسح ملفّ الإعدادات؟"
 #, kde-format
 msgctxt "action"
 msgid "C&lear"
-msgstr "ام&سح"
+msgstr "ام&حُ"
 
 #. i18n: context: toolTip @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (clear), Actions (Edit), ActionCollection (Menu)
@@ -16634,7 +16634,7 @@ msgstr "اعكس"
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
-msgstr "التّخطيطات"
+msgstr "التخطيطات"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2053
@@ -22462,7 +22462,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
@@ -30752,7 +30752,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:984
 #, kde-format
 msgid "Enable Touch Painting"
-msgstr "فعّل الطّلاء باللمس"
+msgstr "مكّن الطّلاء باللمس"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:991
@@ -30930,7 +30930,7 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
-"تحذير: إن فعّلت هذا الإعداد ورأيت حواريّات الملفّات تتصرّف بغرابة، لا تُبلغ عن "
+"تحذير: إن مكّنت هذا الإعداد ورأيت حواريّات الملفّات تتصرّف بغرابة، لا تُبلغ عن "
 "علّة."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
@@ -35877,7 +35877,7 @@ msgstr "يحفظ آليًّا... %1"
 #: libs/ui/KisDocument.cpp:1478
 #, kde-format
 msgid "Autosaving..."
-msgstr "يحفظ آليا..."
+msgstr "يحفظ آليّا..."
 
 #: libs/ui/KisDocument.cpp:1484
 #, kde-format
@@ -37908,7 +37908,7 @@ msgstr "استخدام الضوء الشامل"
 #: libs/ui/layerstyles/wdglayerstyles.ui:23
 #, kde-format
 msgid "Enable Effects"
-msgstr "فعّل التّأثيرات"
+msgstr "مكّن التّأثيرات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpStyleSelector)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -38310,7 +38310,7 @@ msgstr "مقاس الأيقونة"
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:148
 #, kde-format
@@ -39429,7 +39429,7 @@ msgstr "عتبة المعاينة اللحظيّة:"
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:57
 #, kde-format
 msgid "Enable after:"
-msgstr "فعّل بعد:"
+msgstr "مكّن بعد:"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:131
 #, kde-format
@@ -42954,7 +42954,7 @@ msgstr "أقصى حدقة:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:769
 #, kde-format
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignVertical)
@@ -43177,12 +43177,12 @@ msgstr "عمليات الطبقة"
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:288
 #, kde-format
 msgid "Reset Channel"
-msgstr "أعد ضبط القناة"
+msgstr "صفّر القناة"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:294
 #, kde-format
 msgid "Reset All Channels"
-msgstr "أعد ضبط كل القنوات"
+msgstr "صفّر كل القنوات"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:492
 #, kde-format
@@ -47499,7 +47499,7 @@ msgstr "يدويّ"
 #, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto bracket"
-msgstr "أقواس تلقائية"
+msgstr "أقواس آليّة"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: plugins/extensions/metadataeditor/editors/exif.ui:115
@@ -47643,7 +47643,7 @@ msgstr "أقصى حدقة:"
 #, kde-format
 msgctxt "EXIF"
 msgid "Autofocus"
-msgstr "الضبط التلقائي"
+msgstr "الضبط الآليّ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: plugins/extensions/metadataeditor/editors/exif.ui:312
@@ -51100,7 +51100,7 @@ msgstr ""
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
 #, kde-format
 msgid "Reset channel"
-msgstr "أعد ضبط القناة"
+msgstr "صفّر القناة"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:130
@@ -51181,7 +51181,7 @@ msgstr "طبّق النّتيجة على طبقة ألفا"
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
 #, kde-format
 msgid "Reset all channels"
-msgstr "أعد ضبط كل القنوات"
+msgstr "صفّر كل القنوات"
 
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
 #, kde-format
@@ -56159,7 +56159,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
-msgstr "سطوع آلي"
+msgstr "سطوع آليّ"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:547
 #, kde-format
@@ -56516,7 +56516,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset to default value"
-msgstr "صفّر إلى القيمة الافتراضيّة"
+msgstr "صفّر إلى القيمة المبدئيّة"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:362
 #, kde-format
@@ -58902,7 +58902,7 @@ msgstr ""
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
 #, kde-format
 msgid "Auto Spacing"
-msgstr "ضبط آلي للمسافات"
+msgstr "ضبط آليّ للمسافات"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211

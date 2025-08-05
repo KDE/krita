@@ -200,7 +200,12 @@ android {
 
     defaultConfig {
         compileSdk androidCompileSdkVersion.toInteger()
+
+        // even though buildToolsVersion is deprecated,
+        // we should still explicitly state it. Otherwise,
+        // AGP will use the default one
         buildToolsVersion "35.0.0"
+
         ndkVersion "27.3.13750724"
 
         targetSdkVersion 35

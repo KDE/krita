@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-04 03:55+0000\n"
-"PO-Revision-Date: 2025-08-04 18:46+0400\n"
+"PO-Revision-Date: 2025-08-05 12:42+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -36868,7 +36868,7 @@ msgstr "اضبط أشرطة الأ&دوات..."
 #: libs/widgetutils/config/kstandardaction_p.h:92
 #, kde-format
 msgid "Configure &Notifications..."
-msgstr "اضبط الإ&خطارات..."
+msgstr "ا&ضبط الإشعارات..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:93
 #, fuzzy, kde-format

@@ -272,6 +272,7 @@ QWidget *SvgTextTool::createOptionWidget()
 
     connect(optionUi.convertPreFormatBtn, SIGNAL(clicked(bool)), this, SLOT(slotConvertToPreformatted()));
     connect(optionUi.convertInlineBtn, SIGNAL(clicked(bool)), this, SLOT(slotConvertToInlineSize()));
+    connect(optionUi.convertToSvg1_1, SIGNAL(clicked(bool)), this, SLOT(slotConvertToSVGCharTransforms()));
 
     return optionWidget;
 }
@@ -551,6 +552,14 @@ void SvgTextTool::slotConvertToInlineSize()
 {
     if (selectedShape()) {
         SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToInlineSize);
+        canvas()->addCommand(cmd);
+    }
+}
+
+void SvgTextTool::slotConvertToSVGCharTransforms()
+{
+    if (selectedShape()) {
+        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToCharTransforms);
         canvas()->addCommand(cmd);
     }
 }

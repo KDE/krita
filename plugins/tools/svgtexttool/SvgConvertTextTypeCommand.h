@@ -24,7 +24,8 @@ class KRITATOOLSVGTEXT_EXPORT SvgConvertTextTypeCommand : public KUndo2Command
 public:
     enum ConversionType {
         ToPreFormatted, ///< Apply whitespace, convert whitespace rule to pre-wrapped, insert newlines at chunk starts and remove character transforms. Removes InlineSize.
-        ToInlineSize ///< Same as ToPreFormatted, except adds an inline-size.
+        ToInlineSize, ///< Same as ToPreFormatted, except adds an inline-size.
+        ToCharTransforms ///< This applies SVG 1.1 char transforms and sets whitespace to normal.
     };
 
     SvgConvertTextTypeCommand(KoSvgTextShape *shape, ConversionType type, KUndo2Command *parent = 0);

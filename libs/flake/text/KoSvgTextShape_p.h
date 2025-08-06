@@ -518,6 +518,7 @@ public:
     void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal,
                          const KoSvgTextProperties resolvedProps, const KoSvgText::ResolutionHandler &resHandler);
     static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal, const KoSvgText::ResolutionHandler resHandler);
+    static qreal anchoredChunkShift(const QVector<CharacterResult> &result, const bool isHorizontal, const int start, int &i);
     static qreal
     characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
     static QPainterPath stretchGlyphOnPath(const QPainterPath &glyph,
@@ -989,6 +990,72 @@ public:
             }
         }
         current->localTransformations.clear();
+    }
+
+    void setTransformsFromLayout(KisForest<KoSvgTextContentElement> &tree, const QVector<CharacterResult> layout) {
+        for (int i = 0; i< layout.size(); i++) {
+            //split all anchored chunks, so we can set transforms on them.
+            if (layout.at(i).anchored_chunk) {
+                int plainTextIndex = layout.at(i).plaintTextIndex;
+                splitContentElement(tree, plainTextIndex);
+            }
+        }
+
+        int globalIndex = 0;
+        for (auto it = tree.childBegin(); it != tree.childEnd(); it++) {
+            KoSvgText::WritingMode mode = KoSvgText::WritingMode(
+                        it->properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+            bool isHorizontal = mode == KoSvgText::HorizontalTB;
+            setTransformsFromLayoutImpl(it, KoSvgTextProperties::defaultProperties(), layout, globalIndex, isHorizontal);
+        }
+    }
+
+    void setTransformsFromLayoutImpl(KisForest<KoSvgTextContentElement>::child_iterator current,
+                                     const KoSvgTextProperties parentProps, const QVector<CharacterResult> layout,
+                                     int &globalIndex, bool isHorizontal) {
+        KoSvgTextProperties props = current->properties;
+        props.inheritFrom(parentProps);
+        if (current->textPath) return; // When we're doing text-on-path, we're already in preformatted mode.
+        for (auto it = childBegin(current); it!= childEnd(current); it++) {
+            setTransformsFromLayoutImpl(it, props, layout, globalIndex, isHorizontal);
+        }
+
+        if (current->text.isEmpty()) {
+            current->localTransformations.clear();
+        } else {
+            QVector<KoSvgText::CharTransformation> transforms;
+            const int length = current->numChars(true, props);
+
+            for (int i = globalIndex; i< globalIndex+length; i++) {
+                CharacterResult result = layout.value(i);
+
+                if (!result.addressable) {
+                    continue;
+                }
+                KoSvgText::CharTransformation transform;
+
+                //TODO: Also split up content element if multiple anchored chunks.
+                if (result.anchored_chunk) {
+                    int endIndex = 0;
+                    qreal shift = anchoredChunkShift(layout, isHorizontal, i, endIndex);
+                    QPointF offset = isHorizontal? QPointF(shift, 0): QPointF(0, shift);
+                    transform.xPos = result.finalPosition.x() - offset.x();
+                    transform.yPos = result.finalPosition.y() - offset.y();
+                } else if (i > 0) {
+                    CharacterResult resultPrev = layout.value(i-1);
+                    QPointF offset = (result.finalPosition - result.cssPosition) - (resultPrev.finalPosition - resultPrev.cssPosition);
+
+                    transform.dxPos = offset.x();
+                    transform.dyPos = offset.y();
+                }
+                transform.rotate = result.rotate;
+
+                transforms.append(transform);
+            }
+            current->localTransformations = transforms;
+            current->text = current->text.split("\n").join(" ");
+            globalIndex += length;
+        }
     }
 
     /**

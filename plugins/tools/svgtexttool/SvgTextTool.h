@@ -158,6 +158,7 @@ private Q_SLOTS:
 
     void slotConvertToPreformatted();
     void slotConvertToInlineSize();
+    void slotConvertToSVGCharTransforms();
 
 
 private:

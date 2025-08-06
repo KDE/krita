@@ -447,6 +447,11 @@ public:
      */
     void convertCharTransformsToPreformatted(const bool makeInlineSize = false);
 
+    /**
+     * @brief setCharacterTransformsFromLayout
+     */
+    void setCharacterTransformsFromLayout();
+
     /*--------------- Loading / Saving ------------------*/
 
     /// Saves SVG data.

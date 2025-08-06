@@ -1683,39 +1683,8 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
     int start = 0;
 
     while (start < result.size()) {
-        qreal a = 0;
-        qreal b = 0;
-        for (i = start; i < result.size(); i++) {
-            if (!result.at(i).addressable) {
-                continue;
-            }
-            if (result.at(i).anchored_chunk && i > start) {
-                break;
-            }
-            qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
-            qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
 
-            if (result.at(i).anchored_chunk) {
-                a = qMin(pos, pos + advance);
-                b = qMax(pos, pos + advance);
-            } else {
-                a = qMin(a, qMin(pos, pos + advance));
-                b = qMax(b, qMax(pos, pos + advance));
-            }
-        }
-
-        const bool rtl = result.at(start).direction == KoSvgText::DirectionRightToLeft;
-        qreal shift = isHorizontal ? result.at(start).finalPosition.x() : result.at(start).finalPosition.y();
-
-        if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl) || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
-            shift = shift - a;
-
-        } else if ((result.at(start).anchor == KoSvgText::AnchorEnd && !rtl) || (result.at(start).anchor == KoSvgText::AnchorStart && rtl)) {
-            shift = shift - b;
-
-        } else {
-            shift = shift - (a + b) * 0.5;
-        }
+        qreal shift = anchoredChunkShift(result, isHorizontal, start, i);
 
         const QPointF shiftP = resHandler.adjust(isHorizontal ? QPointF(shift, 0) : QPointF(0, shift));
 
@@ -1724,6 +1693,44 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
         }
         start = i;
     }
+}
+
+qreal KoSvgTextShape::Private::anchoredChunkShift(const QVector<CharacterResult> &result, const bool isHorizontal, const int start, int &i)
+{
+    qreal a = 0;
+    qreal b = 0;
+    for (i = start; i < result.size(); i++) {
+        if (!result.at(i).addressable) {
+            continue;
+        }
+        if (result.at(i).anchored_chunk && i > start) {
+            break;
+        }
+        qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
+        qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
+
+        if (result.at(i).anchored_chunk) {
+            a = qMin(pos, pos + advance);
+            b = qMax(pos, pos + advance);
+        } else {
+            a = qMin(a, qMin(pos, pos + advance));
+            b = qMax(b, qMax(pos, pos + advance));
+        }
+    }
+
+    const bool rtl = result.at(start).direction == KoSvgText::DirectionRightToLeft;
+    qreal shift = isHorizontal ? result.at(start).finalPosition.x() : result.at(start).finalPosition.y();
+
+    if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl) || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
+        shift = shift - a;
+
+    } else if ((result.at(start).anchor == KoSvgText::AnchorEnd && !rtl) || (result.at(start).anchor == KoSvgText::AnchorStart && rtl)) {
+        shift = shift - b;
+
+    } else {
+        shift = shift - (a + b) * 0.5;
+    }
+    return shift;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

@@ -3321,6 +3321,39 @@ void TestSvgText::testInsertNewLinesAtAnchors()
     QVERIFY2(textShape->plainText() == result, QString("Insert newlines result is incorrect: \"%1\"").arg(textShape->plainText()).toLatin1());
 }
 
+void TestSvgText::testSetTransformsFromLayout_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<QString>("result");
+    QTest::addColumn<int>("pos");
+    QTest::addColumn<QPoint>("caretp1");
+
+    QTest::addRow("Basic") <<"<text style=\"white-space:pre-wrap\">Text\ntest\ntext</text>"
+                          << "Text test text" << 6 << QPoint(0, 17);
+    QTest::addRow("Inline-Size") <<"<text style=\"white-space:pre-wrap; inline-size: 50;\">Text test\ntest test text</text>"
+                          << "Text test test test text" << 16 << QPoint(23, 32);
+}
+
+void TestSvgText::testSetTransformsFromLayout()
+{
+    QFETCH(QString, svg);
+    QFETCH(QString, result);
+    QFETCH(int, pos);
+    QFETCH(QPoint, caretp1);
+
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+    textShape->setCharacterTransformsFromLayout();
+
+    QLineF caret;
+    QColor color;
+    textShape->cursorForPos(pos, caret, color);
+
+    QVERIFY(caret.p1().toPoint() == caretp1);
+    QVERIFY2(textShape->plainText() == result, QString("Insert newlines result is incorrect: \"%1\"").arg(textShape->plainText()).toLatin1());
+}
+
 #include "kistest.h"
 
 

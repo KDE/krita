@@ -1309,6 +1309,20 @@ void KoSvgTextShape::convertCharTransformsToPreformatted(const bool makeInlineSi
     setPropertiesAtPos(-1, props);
 }
 
+void KoSvgTextShape::setCharacterTransformsFromLayout()
+{
+    if (d->result.isEmpty()) return;
+    d->setTransformsFromLayout(d->textData, d->result);
+    d->cleanUp(d->textData);
+    //d->applyWhiteSpace(d->textData, true);
+    KoSvgTextProperties props = this->propertiesForPos(-1);
+    props.removeProperty(KoSvgTextProperties::InlineSizeId);
+    props.removeProperty(KoSvgTextProperties::TextCollapseId);
+    props.removeProperty(KoSvgTextProperties::TextWrapId);
+
+    setPropertiesAtPos(-1, props);
+}
+
 #include "KoXmlWriter.h"
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {

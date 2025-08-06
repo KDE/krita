@@ -22,6 +22,8 @@ void SvgConvertTextTypeCommand::redo()
         m_shape->convertCharTransformsToPreformatted(false);
     } else if (m_conversionType == ToInlineSize) {
         m_shape->convertCharTransformsToPreformatted(true);
+    } else if (m_conversionType == ToCharTransforms) {
+        m_shape->setCharacterTransformsFromLayout();
     }
 
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());

@@ -136,6 +136,9 @@ private Q_SLOTS:
 
     void testInsertNewLinesAtAnchors_data();
     void testInsertNewLinesAtAnchors();
+
+    void testSetTransformsFromLayout_data();
+    void testSetTransformsFromLayout();
 };
 
 #endif // TESTSVGTEXT_H

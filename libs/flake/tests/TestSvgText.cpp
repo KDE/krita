@@ -3286,11 +3286,32 @@ void TestSvgText::testApplyWhiteSpace()
     QVERIFY2(textShape->plainText() == result, QString("Apply whitespace result is incorrect: \"%1\"").arg(textShape->plainText()).toLatin1());
 }
 
+void TestSvgText::testInsertNewLinesAtAnchors_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<QString>("result");
+
+    QTest::addRow("Basic") <<"<text style=\"white-space:pre-wrap\"><tspan x=\"0\" y=\"0\">Text</tspan><tspan x=\"0\" y=\"12\">\ntest</tspan><tspan x=\"0\" y=\"24\">text</tspan></text>"
+                          << "Text\ntest\ntext";
+
+
+    QTest::addRow("Nested") <<"<text style=\"white-space:pre-wrap\" x=\"10 15 20 25\"><tspan x=\"0\" y=\"0\">Text</tspan><tspan x=\"0\" y=\"12\">\ntest</tspan><tspan x=\"0\" y=\"24\">text</tspan></text>"
+                          << "Text\ntest\ntext";
+
+    QTest::addRow("TextPath") <<"<text style=\"white-space:pre-wrap\"><tspan x=\"0\" y=\"0\">Text </tspan><textPath d=\"M0 12 L0 10\">test</textPath><tspan x=\"0\" y=\"24\">text</tspan></text>"
+                          << "Text test\ntext";
+
+    QTest::addRow("Mulitransform") <<"<text style=\"white-space:pre-wrap\"><tspan x=\"0\" y=\"0\">Text</tspan><tspan x=\"0 5 10 15\" y=\"12 12 13 11\">test</tspan><tspan x=\"0\" y=\"24\">text</tspan></text>"
+                          << "Text\ntest\ntext";
+
+    QTest::addRow("Single Dimension Absolute") <<"<text style=\"white-space:pre-wrap\"><tspan x=\"0\" y=\"0\">Text</tspan><tspan x=\"0 5 10 15\" dy=\"12 12 13 11\">\ntest</tspan><tspan x=\"0 5 10\" y=\"12\" dy=\"0 1 -1\">text</tspan></text>"
+                          << "Text\ntest\ntext";
+}
+
 void TestSvgText::testInsertNewLinesAtAnchors()
 {
-    const QString svg = "<text style=\"white-space:pre-wrap\"><tspan x=\"0\" y=\"0\">Text</tspan><tspan x=\"0\" y=\"12\">\ntest</tspan><tspan x=\"0\" y=\"24\">text</tspan></text>";
-    const QString result = "Text\ntest\ntext";
-    //TODO: test text path and nested transforms.
+    QFETCH(QString, svg);
+    QFETCH(QString, result);
 
     KoSvgTextShape *textShape = new KoSvgTextShape();
     KoSvgTextShapeMarkupConverter converter(textShape);

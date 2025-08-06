@@ -134,6 +134,7 @@ private Q_SLOTS:
     void testApplyWhiteSpace_data();
     void testApplyWhiteSpace();
 
+    void testInsertNewLinesAtAnchors_data();
     void testInsertNewLinesAtAnchors();
 };
 

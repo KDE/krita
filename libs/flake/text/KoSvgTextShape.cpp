@@ -1291,6 +1291,7 @@ void KoSvgTextShape::convertCharTransformsToPreformatted(const bool makeInlineSi
     const int inlineSize = writingMode() == KoSvgText::HorizontalTB? outlineRect().width(): outlineRect().height();
     d->applyWhiteSpace(d->textData, true);
     d->insertNewLinesAtAnchors(d->textData, !d->shapesInside.isEmpty());
+    d->cleanUp(d->textData);
 
     KoSvgTextProperties props = this->propertiesForPos(-1);
     if (makeInlineSize) {

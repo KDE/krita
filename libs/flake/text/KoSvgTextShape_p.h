@@ -924,29 +924,42 @@ public:
         QVector<bool> collapsed = collapsedWhiteSpacesForText(tree, all, false);
         QVector<CharacterResult> result(all.size());
         int globalIndex = 0;
-        const KoSvgTextProperties props = tree.childBegin()->properties;
-        KoSvgText::WritingMode mode = KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+        KoSvgTextProperties props = tree.childBegin()->properties;
+        props.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
+        KoSvgText::WritingMode mode = KoSvgText::WritingMode(
+                    props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
         bool isHorizontal = mode == KoSvgText::HorizontalTB;
-        bool isWrapped = (props.hasProperty(KoSvgTextProperties::InlineSizeId) || shapesInside);
+        bool isWrapped = (props.hasProperty(KoSvgTextProperties::InlineSizeId)
+                          || shapesInside);
         QVector<KoSvgText::CharTransformation> resolvedTransforms(all.size());
-        resolveTransforms(tree.childBegin(), all, result, globalIndex, isHorizontal, isWrapped, false, resolvedTransforms, collapsed, KoSvgTextProperties::defaultProperties(), false);
+        resolveTransforms(tree.childBegin(), all, result, globalIndex,
+                          isHorizontal, isWrapped, false, resolvedTransforms,
+                          collapsed, KoSvgTextProperties::defaultProperties(),
+                          false);
 
         auto end = std::make_reverse_iterator(tree.childBegin());
         auto begin = std::make_reverse_iterator(tree.childEnd());
 
+        bool inTextPath = false;
         for (; begin != end; begin++) {
-            insertNewLinesAtAnchorsImpl(begin, resolvedTransforms);
+            insertNewLinesAtAnchorsImpl(begin, resolvedTransforms, inTextPath);
         }
     }
 
-    static void insertNewLinesAtAnchorsImpl(std::reverse_iterator<KisForest<KoSvgTextContentElement>::child_iterator> current, QVector<KoSvgText::CharTransformation> &resolvedTransforms) {
+    static void insertNewLinesAtAnchorsImpl(std::reverse_iterator<KisForest<KoSvgTextContentElement>::child_iterator> current,
+                                            QVector<KoSvgText::CharTransformation> &resolvedTransforms,
+                                            bool &inTextPath) {
+
+        inTextPath = (current->textPath);
         auto base = current.base();
         base--;
         if(base != siblingEnd(base)) {
             auto end = std::make_reverse_iterator(childBegin(base));
             auto begin = std::make_reverse_iterator(childEnd(base));
             for (; begin != end; begin++) {
-                insertNewLinesAtAnchorsImpl(begin, resolvedTransforms);
+                insertNewLinesAtAnchorsImpl(begin,
+                                            resolvedTransforms,
+                                            inTextPath);
             }
         }
 
@@ -956,7 +969,21 @@ public:
             for (int i = 0; i < total; i++) {
                 const int j = total - (i+1);
                 KoSvgText::CharTransformation transform = resolvedTransforms.takeLast();
-                if (transform.startsNewChunk() && !resolvedTransforms.isEmpty() && current->text.at(j) != QChar::LineFeed) {
+                /**
+                 * Because sometimes we have to deal with multiple transforms on a span
+                 * we only really want to insert newlines when at a content element start.
+                 * In theory the other transforms can be tested, but this is hard,
+                 * and semantically it doesn't make sense if a svg text does this.
+                 */
+                bool startsNewChunk = transform.startsNewChunk() && j == 0;
+
+                if (inTextPath) {
+                    // First transform in path is always absolute, so we don't insert a newline.
+                    startsNewChunk = false;
+                    inTextPath = false;
+                }
+                // When there's no new chunk, we're not at the start of the text and there isn't already a line feed, insert a line feed.
+                if (startsNewChunk && !resolvedTransforms.isEmpty() && current->text.at(j) != QChar::LineFeed) {
                     current->text.insert(j, "\n");
                 }
             }

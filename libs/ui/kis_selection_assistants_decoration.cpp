@@ -141,27 +141,34 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     }
 
     QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(d->dragRectPosition, QSize(128, 67)), 6, 6);
+    bgPath.addRoundedRect(QRectF(d->dragRectPosition, QSize(125, 25)), 4, 4);
     gc.fillPath(bgPath, Qt::darkGray);
 
+    QPen pen(QColor(60, 60, 60, 80));
+    pen.setWidth(6);
+    gc.setPen(pen);
+
+    gc.drawPath(bgPath);
+
     QPainterPath dragRect;
-    int width = 240;
-    int height = 67;
-    dragRect.addRect(QRectF(d->dragRectPosition.x() + 103, d->dragRectPosition.y(), width, height));
-    gc.fillPath(bgPath.intersected(dragRect),Qt::lightGray);
+    int width = 25;
+    int height = 25;
+    dragRect.addRect(QRectF(d->dragRectPosition.x() + 100, d->dragRectPosition.y(), width, height));
+    gc.fillPath(bgPath.intersected(dragRect), Qt::darkGray);
 
     QPainterPath dragRectDots;
-    QColor dragDecorationDotsColor(50,50,50,255);
-    int dotSize = 2;
-    dragRectDots.addEllipse(3,2.5,dotSize,dotSize);
-    dragRectDots.addEllipse(3,7.5,dotSize,dotSize);
-    dragRectDots.addEllipse(3,-2.5,dotSize,dotSize);
-    dragRectDots.addEllipse(3,-7.5,dotSize,dotSize);
-    dragRectDots.addEllipse(-3,2.5,dotSize,dotSize);
-    dragRectDots.addEllipse(-3,7.5,dotSize,dotSize);
-    dragRectDots.addEllipse(-3,-2.5,dotSize,dotSize);
-    dragRectDots.addEllipse(-3,-7.5,dotSize,dotSize);
-    dragRectDots.translate(d->dragRectPosition.x() + 115, d->dragRectPosition.y() + 30);
+    QColor dragDecorationDotsColor(Qt::lightGray);
+    int dotSize = 4;
+    dragRectDots.addEllipse(0,0,dotSize,dotSize);
+    dragRectDots.addEllipse(5,-5,dotSize,dotSize);
+    dragRectDots.addEllipse(5,0,dotSize,dotSize);
+    dragRectDots.addEllipse(5,5,dotSize,dotSize);
+    dragRectDots.addEllipse(0,-5,dotSize,dotSize);
+    dragRectDots.addEllipse(0,5,dotSize,dotSize);
+    dragRectDots.addEllipse(-5,-5,dotSize,dotSize);
+    dragRectDots.addEllipse(-5,0,dotSize,dotSize);
+    dragRectDots.addEllipse(-5,5,dotSize,dotSize);
+    dragRectDots.translate(d->dragRectPosition.x() + 110, d->dragRectPosition.y() + 10);
 
     gc.fillPath(dragRectDots,dragDecorationDotsColor);
 }
@@ -183,7 +190,17 @@ bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
 
     if (event->type() == QEvent::MouseMove && d->dragging) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        d->dragRectPosition = mouseEvent->pos() - d->dragStartOffset;
+        QPoint newPos = mouseEvent->pos() - d->dragStartOffset;
+
+        // bound actionBar to stay within canvas space
+        QRect canvasBounds = canvasWidget->rect();
+        int actionBarWidth = 125;
+        int actionBarHeight = 25;
+        int bufferSpace = 5;
+        newPos.setX(qBound(canvasBounds.left() + bufferSpace, newPos.x(), canvasBounds.right() - actionBarWidth - bufferSpace));
+        newPos.setY(qBound(canvasBounds.top() + bufferSpace, newPos.y(), canvasBounds.bottom() - actionBarHeight - bufferSpace));
+
+        d->dragRectPosition = newPos;
         canvasWidget->update();
         return true;
     }

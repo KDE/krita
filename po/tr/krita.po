@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"POT-Creation-Date: 2025-08-07 19:47+0000\n"
 "PO-Revision-Date: 2025-07-26 16:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -20999,7 +20999,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26075,31 +26075,31 @@ msgstr "FFmpeg sürümü:"
 msgid "None"
 msgstr "Yok"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "Dikey yansıtma: %1 "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "OFF"
 msgstr "KAPALI"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "ON"
 msgstr "AÇIK"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:269
+#: libs/ui/canvas/kis_canvas_controller.cpp:274
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Döndürme: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:333
+#: libs/ui/canvas/kis_canvas_controller.cpp:338
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26108,24 +26108,24 @@ msgstr ""
 "Sarmalama kipini etkinleştirdiniz; ancak OpenGL hâlâ kapalı.\n"
 "Sarmalama kipini görselleştirmek için OpenGL’yi etkinleştirin."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:399
+#: libs/ui/canvas/kis_canvas_controller.cpp:404
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Anında önizleme kipi: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:406
+#: libs/ui/canvas/kis_canvas_controller.cpp:411
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Anında Önizleme yalnızca OpenGL etkinleştirildiğinde desteklenir"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "En yakın komşu"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:413
+#: libs/ui/canvas/kis_canvas_controller.cpp:418
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26136,7 +26136,7 @@ msgstr ""
 " veya Yüksek Kalite süzme kiplerinde desteklenir.\n"
 "Geçerli kip %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:422
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -32471,7 +32471,7 @@ msgstr "Fare Girdisini Düzenle"
 msgid "Edit Mouse Wheel Input"
 msgstr "Fare Tekerleği Girdisini Düzenle"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:34
+#: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -32674,39 +32674,39 @@ msgstr "Yukarı Kaydır"
 msgid "Pan Down"
 msgstr "Aşağı Kaydır"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Tuvali Döndür"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "<i>Tuvali Döndür</i> eylemi tuvali döndürür."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Döndürme Kipi"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Kesikli Döndürme Kipi"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Left"
 msgstr "Sola Döndür"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Rotate Right"
 msgstr "Sağa Döndür"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Döndürmeyi Sıfırla"
@@ -33065,77 +33065,77 @@ msgstr "Serbest Seçim Aracını Etkinleştir"
 msgid "Activate with Other Color"
 msgstr "Diğer Renkle Etkinleştir"
 
-#: libs/ui/input/kis_zoom_action.cpp:80
+#: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Tuvali Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "<i>Tuvali Yakınlaştır</i> eylemi tuvali yakınlaştırır."
 
-#: libs/ui/input/kis_zoom_action.cpp:84
+#: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:85
+#: libs/ui/input/kis_zoom_action.cpp:73
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Kesikli Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:86
+#: libs/ui/input/kis_zoom_action.cpp:74
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Göreceli Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:87
+#: libs/ui/input/kis_zoom_action.cpp:75
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Göreceli Soyut Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:88
+#: libs/ui/input/kis_zoom_action.cpp:76
 #, kde-format
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:89
+#: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:90
+#: libs/ui/input/kis_zoom_action.cpp:78
 #, kde-format
 msgid "Zoom In To Cursor"
 msgstr "İmleç Konumuna Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:91
+#: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr "İmleç Konumundan Uzaklaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:92 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "%​100’e Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:93
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
 msgid "Fit to View"
 msgstr "Görünüme Sığdır"
 
-#: libs/ui/input/kis_zoom_action.cpp:94
+#: libs/ui/input/kis_zoom_action.cpp:82
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Görünüm Genişliğine Sığdır"
 
-#: libs/ui/input/kis_zoom_action.cpp:95
+#: libs/ui/input/kis_zoom_action.cpp:83
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Görünüm Yüksekliğine Sığdır"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:36
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Yakınlaştır ve Tuvali Döndür"

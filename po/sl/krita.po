@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"POT-Creation-Date: 2025-08-07 19:47+0000\n"
 "PO-Revision-Date: 2025-07-25 13:07+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -20980,7 +20980,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26054,31 +26054,31 @@ msgstr "Različica FFMpeg:"
 msgid "None"
 msgstr "Brez"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "Vodoravno zrcaljenje: %1 "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "OFF"
 msgstr "IZKLJUČENO"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "ON"
 msgstr "VKLJUČENO"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:269
+#: libs/ui/canvas/kis_canvas_controller.cpp:274
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Vrtenje: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:333
+#: libs/ui/canvas/kis_canvas_controller.cpp:338
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26087,24 +26087,24 @@ msgstr ""
 "Aktivirate način oblivanja, vendar niste omogočili OpenGL.\n"
 "Če želite vizualizirati način oblivanja, omogočite OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:399
+#: libs/ui/canvas/kis_canvas_controller.cpp:404
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Način sprotnega predogleda: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:406
+#: libs/ui/canvas/kis_canvas_controller.cpp:411
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Sprotni predogled je podprt samo z aktiviranim OpenGL-om"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Najbližji sosed"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:413
+#: libs/ui/canvas/kis_canvas_controller.cpp:418
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26115,7 +26115,7 @@ msgstr ""
 " v trilinearnih ali visokokakovostnih načinih filtriranja.\n"
 "Trenutni način je %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:422
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -32461,7 +32461,7 @@ msgstr "Uredi vnos miške"
 msgid "Edit Mouse Wheel Input"
 msgstr "Uredi vnos koleščka miške"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:34
+#: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -32663,39 +32663,39 @@ msgstr "Pomakni navzgor"
 msgid "Pan Down"
 msgstr "Pomakni navzdol"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Zavrti platno"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "Dejanje <i>Zavrti platno </i> zasuka platno."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Način vrtenja"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Diskretni način vrtenja"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Left"
 msgstr "Zavrti v levo"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Rotate Right"
 msgstr "Zavrti v desno"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Ponastavi vrtenje"
@@ -33056,77 +33056,77 @@ msgstr "Aktiviraj orodje Prostoročni izbor"
 msgid "Activate with Other Color"
 msgstr "Aktiviraj z drugo barvo"
 
-#: libs/ui/input/kis_zoom_action.cpp:80
+#: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Približaj platno"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "Dejanje <i>Približaj platno</i> približa pogled na platno."
 
-#: libs/ui/input/kis_zoom_action.cpp:84
+#: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:85
+#: libs/ui/input/kis_zoom_action.cpp:73
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Diskretni način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:86
+#: libs/ui/input/kis_zoom_action.cpp:74
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Relativni način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:87
+#: libs/ui/input/kis_zoom_action.cpp:75
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Relativni diskretni način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:88
+#: libs/ui/input/kis_zoom_action.cpp:76
 #, kde-format
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: libs/ui/input/kis_zoom_action.cpp:89
+#: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: libs/ui/input/kis_zoom_action.cpp:90
+#: libs/ui/input/kis_zoom_action.cpp:78
 #, kde-format
 msgid "Zoom In To Cursor"
 msgstr "Približaj na kazalec"
 
-#: libs/ui/input/kis_zoom_action.cpp:91
+#: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr "Oddalji od kazalca"
 
-#: libs/ui/input/kis_zoom_action.cpp:92 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Približaj na 100 %"
 
-#: libs/ui/input/kis_zoom_action.cpp:93
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
 msgid "Fit to View"
 msgstr "Prilagodi pogledu"
 
-#: libs/ui/input/kis_zoom_action.cpp:94
+#: libs/ui/input/kis_zoom_action.cpp:82
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Prilagodi širini pogleda"
 
-#: libs/ui/input/kis_zoom_action.cpp:95
+#: libs/ui/input/kis_zoom_action.cpp:83
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Prilagodi višini pogleda"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:36
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Približaj in zavrti platno"

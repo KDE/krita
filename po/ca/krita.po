@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"POT-Creation-Date: 2025-08-07 19:47+0000\n"
 "PO-Revision-Date: 2025-07-25 09:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21102,7 +21102,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26192,31 +26192,31 @@ msgstr "Versió del FFmpeg:"
 msgid "None"
 msgstr "Cap"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "Emmirallat horitzontal: %1 "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "OFF"
 msgstr "Inactiu"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "ON"
 msgstr "Actiu"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:269
+#: libs/ui/canvas/kis_canvas_controller.cpp:274
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Gir: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:333
+#: libs/ui/canvas/kis_canvas_controller.cpp:338
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26225,24 +26225,24 @@ msgstr ""
 "Esteu activant el mode d'ajust cíclic, però no heu activat l'OpenGL.\n"
 "Per a visualitzar el mode d'ajust cíclic, activeu l'OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:399
+#: libs/ui/canvas/kis_canvas_controller.cpp:404
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Mode de vista prèvia instantània: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:406
+#: libs/ui/canvas/kis_canvas_controller.cpp:411
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "La vista prèvia instantània només funciona amb l'OpenGL activat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Proximitat"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:413
+#: libs/ui/canvas/kis_canvas_controller.cpp:418
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26253,7 +26253,7 @@ msgstr ""
 "en els modes de filtratge trilineal i alta qualitat.\n"
 "El mode actual és %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:422
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -32636,7 +32636,7 @@ msgstr "Edició de l'entrada del ratolí"
 msgid "Edit Mouse Wheel Input"
 msgstr "Edició de l'entrada de la roda del ratolí"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:34
+#: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -32841,39 +32841,39 @@ msgstr "Desplaça cap amunt"
 msgid "Pan Down"
 msgstr "Desplaça cap avall"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Gira el llenç"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "L'acció <i>Gira el llenç</i> gira el llenç."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Mode de gir"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Mode de gir discret"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Left"
 msgstr "Gira a l'esquerra"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Rotate Right"
 msgstr "Gira a la dreta"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Reinicia el gir"
@@ -33232,77 +33232,77 @@ msgstr "Activa l'eina de selecció a mà alçada"
 msgid "Activate with Other Color"
 msgstr "Activa amb un altre color"
 
-#: libs/ui/input/kis_zoom_action.cpp:80
+#: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Zoom del llenç"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "L'acció <i>Zoom del llenç</i> apropa/allunya el llenç."
 
-#: libs/ui/input/kis_zoom_action.cpp:84
+#: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Mode de zoom"
 
-#: libs/ui/input/kis_zoom_action.cpp:85
+#: libs/ui/input/kis_zoom_action.cpp:73
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Mode de zoom discret"
 
-#: libs/ui/input/kis_zoom_action.cpp:86
+#: libs/ui/input/kis_zoom_action.cpp:74
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Mode de zoom relatiu"
 
-#: libs/ui/input/kis_zoom_action.cpp:87
+#: libs/ui/input/kis_zoom_action.cpp:75
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Mode de zoom discret relatiu"
 
-#: libs/ui/input/kis_zoom_action.cpp:88
+#: libs/ui/input/kis_zoom_action.cpp:76
 #, kde-format
 msgid "Zoom In"
 msgstr "Apropa"
 
-#: libs/ui/input/kis_zoom_action.cpp:89
+#: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
 msgstr "Allunya"
 
-#: libs/ui/input/kis_zoom_action.cpp:90
+#: libs/ui/input/kis_zoom_action.cpp:78
 #, kde-format
 msgid "Zoom In To Cursor"
 msgstr "Apropa en el cursor"
 
-#: libs/ui/input/kis_zoom_action.cpp:91
+#: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr "Allunya del cursor"
 
-#: libs/ui/input/kis_zoom_action.cpp:92 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Zoom al 100%"
 
-#: libs/ui/input/kis_zoom_action.cpp:93
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
 msgid "Fit to View"
 msgstr "Ajusta a la vista"
 
-#: libs/ui/input/kis_zoom_action.cpp:94
+#: libs/ui/input/kis_zoom_action.cpp:82
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Ajusta a l'amplada de la vista"
 
-#: libs/ui/input/kis_zoom_action.cpp:95
+#: libs/ui/input/kis_zoom_action.cpp:83
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Ajusta a l'alçada de la vista"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:36
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Zoom i gira el llenç"

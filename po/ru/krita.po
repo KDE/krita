@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"POT-Creation-Date: 2025-08-07 19:47+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -21319,7 +21319,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26544,31 +26544,31 @@ msgstr "Версия FFmpeg:"
 msgid "None"
 msgstr "Нет"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "Горизонтальное отражение: %1 "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "OFF"
 msgstr "Выкл."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "ON"
 msgstr "Вкл."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:269
+#: libs/ui/canvas/kis_canvas_controller.cpp:274
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Поворот: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:333
+#: libs/ui/canvas/kis_canvas_controller.cpp:338
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26577,25 +26577,25 @@ msgstr ""
 "Активирован режим «Замостить», но не включён OpenGL.\n"
 "Для визуализации замощения включите OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:399
+#: libs/ui/canvas/kis_canvas_controller.cpp:404
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Режим мгновенного предпросмотра: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:406
+#: libs/ui/canvas/kis_canvas_controller.cpp:411
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr ""
 "Мгновенный предпросмотр поддерживается только при активированном OpenGL"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Ближайшее соседнее значение"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:413
+#: libs/ui/canvas/kis_canvas_controller.cpp:418
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26606,7 +26606,7 @@ msgstr ""
 " в Трилинейном или Высококачественном режимах фильтрации.\n"
 "Текущий режим: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:422
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -33026,7 +33026,7 @@ msgid "Edit Mouse Wheel Input"
 msgstr "Изменить ввод колеса мыши"
 
 # BUGME: please clarify what this means. --aspotashev
-#: libs/ui/input/kis_abstract_input_action.cpp:34
+#: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -33228,39 +33228,39 @@ msgstr "Сдвинуть вверх"
 msgid "Pan Down"
 msgstr "Сдвинуть вниз"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Повернуть холст"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "Команда <i>Повернуть холст</i> поворачивает холст."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Режим поворота"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Дискретный режим поворота"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Left"
 msgstr "Повернуть влево"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Rotate Right"
 msgstr "Повернуть вправо"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Сбросить поворот"
@@ -33621,78 +33621,78 @@ msgstr "Активировать инструмент «Выделение от 
 msgid "Activate with Other Color"
 msgstr "Активировать рисование прямых линий"
 
-#: libs/ui/input/kis_zoom_action.cpp:80
+#: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Масштабирование холста"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "<i>Масштабирование холста</i> изменяет размер холста."
 
-#: libs/ui/input/kis_zoom_action.cpp:84
+#: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Режим масштабирования"
 
-#: libs/ui/input/kis_zoom_action.cpp:85
+#: libs/ui/input/kis_zoom_action.cpp:73
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Режим дискретного масштабирования"
 
-#: libs/ui/input/kis_zoom_action.cpp:86
+#: libs/ui/input/kis_zoom_action.cpp:74
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Режим относительного масштабирования"
 
-#: libs/ui/input/kis_zoom_action.cpp:87
+#: libs/ui/input/kis_zoom_action.cpp:75
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Режим относительного дискретного масштабирования"
 
-#: libs/ui/input/kis_zoom_action.cpp:88
+#: libs/ui/input/kis_zoom_action.cpp:76
 #, kde-format
 msgid "Zoom In"
 msgstr "Увеличить масштаб"
 
-#: libs/ui/input/kis_zoom_action.cpp:89
+#: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
 msgstr "Уменьшить масштаб"
 
-#: libs/ui/input/kis_zoom_action.cpp:90
+#: libs/ui/input/kis_zoom_action.cpp:78
 #, fuzzy, kde-format
 #| msgid "No Cursor"
 msgid "Zoom In To Cursor"
 msgstr "Без курсора"
 
-#: libs/ui/input/kis_zoom_action.cpp:91
+#: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr ""
 
-#: libs/ui/input/kis_zoom_action.cpp:92 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Масштаб 100%"
 
-#: libs/ui/input/kis_zoom_action.cpp:93
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
 msgid "Fit to View"
 msgstr "Подогнать по размеру области просмотра"
 
-#: libs/ui/input/kis_zoom_action.cpp:94
+#: libs/ui/input/kis_zoom_action.cpp:82
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Подогнать по ширине области просмотра"
 
-#: libs/ui/input/kis_zoom_action.cpp:95
+#: libs/ui/input/kis_zoom_action.cpp:83
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Подогнать по высоте области просмотра"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:36
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Масштабирование и вращение холста"

@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:13+0000\n"
+"POT-Creation-Date: 2025-08-07 19:47+0000\n"
 "PO-Revision-Date: 2025-07-27 20:26+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -21098,7 +21098,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -26174,31 +26174,31 @@ msgstr "«FFmpeg»ren bertsioa:"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "Isla horizontala: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "OFF"
 msgstr "ITZALITA"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:222
-#: libs/ui/canvas/kis_canvas_controller.cpp:400
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "ON"
 msgstr "PIZTUTA"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:269
+#: libs/ui/canvas/kis_canvas_controller.cpp:274
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Biraketa: %1º"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:333
+#: libs/ui/canvas/kis_canvas_controller.cpp:338
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26207,24 +26207,24 @@ msgstr ""
 "Modu inguratzailea aktibatzen ari zara, baina ez duzu OpenGL gaitu.\n"
 "Modu inguratzailea irudikatzeko, gaitu OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:399
+#: libs/ui/canvas/kis_canvas_controller.cpp:404
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Bat-batean aurreikusteko modua:  %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:406
+#: libs/ui/canvas/kis_canvas_controller.cpp:411
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Bat-batean aurreikustea onartzen da soilik OpenGL aktibatuta dagoenean"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:412
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Bizilagun hurbilena"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:413
+#: libs/ui/canvas/kis_canvas_controller.cpp:418
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26235,7 +26235,7 @@ msgstr ""
 " iragazteko modu trilinialean edo Kalitate handikoan.\n"
 "Uneko modua %1 da"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:417
+#: libs/ui/canvas/kis_canvas_controller.cpp:422
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -32533,7 +32533,7 @@ msgstr "Editatu saguaren sarrera"
 msgid "Edit Mouse Wheel Input"
 msgstr "Editatu sagu-gurpilaren sarrera"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:34
+#: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -32732,39 +32732,39 @@ msgstr "Panoramika goitik"
 msgid "Pan Down"
 msgstr "Panoramika behetik"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Biratu oihala"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "<i>Oihala biratzea</i> ekintzak oihala biratzen du."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Biratze modua"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Biratze modu diskretua"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Left"
 msgstr "Biratu ezkerrera"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Rotate Right"
 msgstr "Biratu eskuinera"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Berrezarri biraketa"
@@ -33139,81 +33139,81 @@ msgstr "Aktibatu esku-hutsezko hautapen-tresna"
 msgid "Activate with Other Color"
 msgstr "Aktibatu lerro-tresna"
 
-#: libs/ui/input/kis_zoom_action.cpp:80
+#: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Egin zoom oihalari"
 
-#: libs/ui/input/kis_zoom_action.cpp:81
+#: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "<i>Zoom oihalari</i> ekintzak oihalean zoom egiten du."
 
-#: libs/ui/input/kis_zoom_action.cpp:84
+#: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Zoom modua"
 
-#: libs/ui/input/kis_zoom_action.cpp:85
+#: libs/ui/input/kis_zoom_action.cpp:73
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Zoom modu diskretua"
 
-#: libs/ui/input/kis_zoom_action.cpp:86
+#: libs/ui/input/kis_zoom_action.cpp:74
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Zoom modu erlatiboa"
 
-#: libs/ui/input/kis_zoom_action.cpp:87
+#: libs/ui/input/kis_zoom_action.cpp:75
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Zoom modu erlatibo diskretua"
 
-#: libs/ui/input/kis_zoom_action.cpp:88
+#: libs/ui/input/kis_zoom_action.cpp:76
 #, kde-format
 msgid "Zoom In"
 msgstr "Zooma handiagotu"
 
-#: libs/ui/input/kis_zoom_action.cpp:89
+#: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
 msgstr "Zooma txikiagotu"
 
-#: libs/ui/input/kis_zoom_action.cpp:90
+#: libs/ui/input/kis_zoom_action.cpp:78
 #, fuzzy, kde-format
 #| msgid "No Cursor"
 msgid "Zoom In To Cursor"
 msgstr "Kurtsorerik ez"
 
-#: libs/ui/input/kis_zoom_action.cpp:91
+#: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr ""
 
-#: libs/ui/input/kis_zoom_action.cpp:92 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Zooma % 100"
 
-#: libs/ui/input/kis_zoom_action.cpp:93
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, fuzzy, kde-format
 #| msgid "Fit to Page"
 msgid "Fit to View"
 msgstr "Doitu orriari"
 
-#: libs/ui/input/kis_zoom_action.cpp:94
+#: libs/ui/input/kis_zoom_action.cpp:82
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgid "Fit to View Width"
 msgstr "Doitu zabalerari"
 
-#: libs/ui/input/kis_zoom_action.cpp:95
+#: libs/ui/input/kis_zoom_action.cpp:83
 #, fuzzy, kde-format
 #| msgid "Fit to Height"
 msgid "Fit to View Height"
 msgstr "Doitu altuerara"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:36
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Oihalari zoom egin eta biratu"

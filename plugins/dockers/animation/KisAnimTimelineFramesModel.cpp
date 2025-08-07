@@ -1055,14 +1055,6 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
                                       true,
                                       parentCommand.data());
         }
-
-        const int oldTime = m_d->image->animationInterface()->currentUITime();
-        const int newTime = qMax(minSelectedTime, oldTime + count * uniqueKeyframesInSelection.count());
-
-        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
-                                        oldTime,
-                                        newTime,
-                                        parentCommand.data());
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),

@@ -66,8 +66,10 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
 {
     Q_UNUSED(updateRect);
     d->m_canvas = canvas;
-    QWidget *canvasWidget = dynamic_cast<QWidget*>(canvas->canvasWidget());
+    QWidget *canvasWidget = dynamic_cast<QWidget*>(d->m_canvas->canvasWidget());
     canvasWidget->installEventFilter(this);
+
+    d->dragRectPosition = updateCanvasBoundaries(d->dragRectPosition, canvasWidget);
 
     if (!d->buttonSelectAll) {
         d->buttonSelectAll = new QPushButton();
@@ -193,14 +195,7 @@ bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
         QPoint newPos = mouseEvent->pos() - d->dragStartOffset;
 
         // bound actionBar to stay within canvas space
-        QRect canvasBounds = canvasWidget->rect();
-        int actionBarWidth = 125;
-        int actionBarHeight = 25;
-        int bufferSpace = 5;
-        newPos.setX(qBound(canvasBounds.left() + bufferSpace, newPos.x(), canvasBounds.right() - actionBarWidth - bufferSpace));
-        newPos.setY(qBound(canvasBounds.top() + bufferSpace, newPos.y(), canvasBounds.bottom() - actionBarHeight - bufferSpace));
-
-        d->dragRectPosition = newPos;
+        d->dragRectPosition = updateCanvasBoundaries(newPos, canvasWidget);
         canvasWidget->update();
         return true;
     }
@@ -211,4 +206,16 @@ bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
     }
 
     return false;
+}
+
+QPoint KisSelectionAssistantsDecoration::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget)
+{
+    QRect canvasBounds = canvasWidget->rect();
+    int actionBarWidth = 125;
+    int actionBarHeight = 25;
+    int bufferSpace = 5;
+    position.setX(qBound(canvasBounds.left() + bufferSpace, position.x(), canvasBounds.right() - actionBarWidth - bufferSpace));
+    position.setY(qBound(canvasBounds.top() + bufferSpace, position.y(), canvasBounds.bottom() - actionBarHeight - bufferSpace));
+
+    return position;
 }

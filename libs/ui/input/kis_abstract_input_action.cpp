@@ -199,7 +199,11 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event)
          * in the widget's coordinates). So we should manually map it
          * from global.
          */
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         return canvas->canvasWidget()->mapFromGlobal(QPointF(static_cast<const QNativeGestureEvent*>(event)->globalPos())).toPoint();
+#else
+        return canvas->canvasWidget()->mapFromGlobal(static_cast<const QNativeGestureEvent*>(event)->globalPos());
+#endif
     }
 
     default:
@@ -240,7 +244,11 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
          * in the widget's coordinates). So we should manually map it
          * from global.
          */
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         return canvas->canvasWidget()->mapFromGlobal(QPointF(static_cast<const QNativeGestureEvent*>(event)->globalPos()));
+#else
+        return canvas->canvasWidget()->mapFromGlobal(static_cast<const QNativeGestureEvent*>(event)->globalPos());
+#endif
     }
     default:
         warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();

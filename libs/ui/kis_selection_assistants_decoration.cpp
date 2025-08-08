@@ -40,11 +40,16 @@ struct KisSelectionAssistantsDecoration::Private {
     QPushButton *buttonDeselect = nullptr;
     QPushButton *buttonCopyToNewLayer = nullptr;
     QPushButton *buttonInvert = nullptr;
+    QPushButton *buttonFillForegroundColor = nullptr;
+    QPushButton *buttonCropToSelection = nullptr;
     KisSelectionManager *selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
     QPoint dragRectPosition = QPoint(200, 512);
     bool dragging = false;
     QPoint dragStartOffset;
+    int buttonCount = 7; // buttons + move handle
+    int buttonSize = 25;
+    int actionBarWidth = buttonCount * buttonSize;
 };
 
 KisSelectionAssistantsDecoration::KisSelectionAssistantsDecoration() :
@@ -106,6 +111,24 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         connect(d->buttonInvert, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::invert);
     }
 
+    if (!d->buttonFillForegroundColor) {
+        d->buttonFillForegroundColor = new QPushButton();
+        d->buttonFillForegroundColor->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
+        d->buttonFillForegroundColor->setFixedSize(25, 25);
+        d->buttonFillForegroundColor->setToolTip("Fill Selection with Color");
+
+        connect(d->buttonFillForegroundColor, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::fillForegroundColor);
+    }
+
+    if (!d->buttonCropToSelection) {
+        d->buttonCropToSelection = new QPushButton();
+        d->buttonCropToSelection->setIcon(KisIconUtils::loadIcon("tool_crop"));
+        d->buttonCropToSelection->setFixedSize(25, 25);
+        d->buttonCropToSelection->setToolTip("Crop to Selection");
+
+        connect(d->buttonCropToSelection, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::imageResizeToSelection);
+    }
+
     if (canvasWidget && d->buttonSelectAll && m_selectionActionBar) {
         d->buttonSelectAll->setParent(canvasWidget);
         d->buttonSelectAll->move(d->dragRectPosition.x(), d->dragRectPosition.y());
@@ -138,16 +161,32 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         d->buttonInvert->hide();
     }
 
+    if (canvasWidget && d->buttonFillForegroundColor && m_selectionActionBar) {
+        d->buttonFillForegroundColor->setParent(canvasWidget);
+        d->buttonFillForegroundColor->move(d->dragRectPosition.x() + 100, d->dragRectPosition.y());
+        d->buttonFillForegroundColor->show();
+    } else if (d->buttonFillForegroundColor) {
+        d->buttonFillForegroundColor->hide();
+    }
+
+    if (canvasWidget && d->buttonCropToSelection && m_selectionActionBar) {
+        d->buttonCropToSelection->setParent(canvasWidget);
+        d->buttonCropToSelection->move(d->dragRectPosition.x() + 125, d->dragRectPosition.y());
+        d->buttonCropToSelection->show();
+    } else if (d->buttonCropToSelection) {
+        d->buttonCropToSelection->hide();
+    }
+
     if (!m_selectionActionBar) {
         return;
     }
 
     QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(d->dragRectPosition, QSize(125, 25)), 4, 4);
+    bgPath.addRoundedRect(QRectF(d->dragRectPosition, QSize(25 * (d->buttonCount), 25)), 4, 4);
     gc.fillPath(bgPath, Qt::darkGray);
 
     QPen pen(QColor(60, 60, 60, 80));
-    pen.setWidth(6);
+    pen.setWidth(5);
     gc.setPen(pen);
 
     gc.drawPath(bgPath);
@@ -155,7 +194,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     QPainterPath dragRect;
     int width = 25;
     int height = 25;
-    dragRect.addRect(QRectF(d->dragRectPosition.x() + 100, d->dragRectPosition.y(), width, height));
+    dragRect.addRect(QRectF(d->dragRectPosition.x() + (25 * d->buttonCount+1), d->dragRectPosition.y(), width, height));
     gc.fillPath(bgPath.intersected(dragRect), Qt::darkGray);
 
     QPainterPath dragRectDots;
@@ -170,7 +209,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     dragRectDots.addEllipse(-5,-5,dotSize,dotSize);
     dragRectDots.addEllipse(-5,0,dotSize,dotSize);
     dragRectDots.addEllipse(-5,5,dotSize,dotSize);
-    dragRectDots.translate(d->dragRectPosition.x() + 110, d->dragRectPosition.y() + 10);
+    dragRectDots.translate(d->dragRectPosition.x() + 160, d->dragRectPosition.y() + 10);
 
     gc.fillPath(dragRectDots,dragDecorationDotsColor);
 }
@@ -182,7 +221,7 @@ bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
 
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        QRect rect(d->dragRectPosition, QSize(128, 67));
+        QRect rect(d->dragRectPosition, QSize(25 * (d->buttonCount), 25));
         if (rect.contains(mouseEvent->pos())) {
             d->dragging = true;
             d->dragStartOffset = mouseEvent->pos() - d->dragRectPosition;
@@ -211,8 +250,8 @@ bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
 QPoint KisSelectionAssistantsDecoration::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget)
 {
     QRect canvasBounds = canvasWidget->rect();
-    int actionBarWidth = 125;
-    int actionBarHeight = 25;
+    int actionBarWidth = d->actionBarWidth;
+    int actionBarHeight = d->buttonSize;
     int bufferSpace = 5;
     position.setX(qBound(canvasBounds.left() + bufferSpace, position.x(), canvasBounds.right() - actionBarWidth - bufferSpace));
     position.setY(qBound(canvasBounds.top() + bufferSpace, position.y(), canvasBounds.bottom() - actionBarHeight - bufferSpace));

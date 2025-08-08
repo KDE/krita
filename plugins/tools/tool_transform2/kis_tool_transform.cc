@@ -131,6 +131,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     rotateNinetyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
     rotateNinetyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
 
+    keepAspectRatioAction = new KisAction(i18n("Keep Aspect Ratio"));
+    keepAspectRatioAction->setCheckable(true);
+    keepAspectRatioAction->setChecked(false);
+
     applyTransformation = new KisAction(i18n("Apply"));
     resetTransformation = new KisAction(i18n("Reset"));
 
@@ -177,6 +181,7 @@ KisToolTransform::~KisToolTransform()
     delete mirrorVerticalAction;
     delete rotateNinetyCWAction;
     delete rotateNinetyCCWAction;
+    delete keepAspectRatioAction;
 }
 
 void KisToolTransform::outlineChanged()
@@ -432,6 +437,10 @@ QMenu* KisToolTransform::popupActionsMenu()
             m_contextMenu->addAction(mirrorVerticalAction);
             m_contextMenu->addAction(rotateNinetyCWAction);
             m_contextMenu->addAction(rotateNinetyCCWAction);
+
+            m_contextMenu->addSeparator();
+            keepAspectRatioAction->setChecked(m_currentArgs.keepAspectRatio());
+            m_contextMenu->addAction(keepAspectRatioAction);
         }
 
         m_contextMenu->addSeparator();
@@ -1155,6 +1164,8 @@ QWidget* KisToolTransform::createOptionWidget()
     connect(mirrorVerticalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
     connect(rotateNinetyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
     connect(rotateNinetyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
+
+    connect(keepAspectRatioAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotSetKeepAspectRatio(bool)));
 
 
     connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));

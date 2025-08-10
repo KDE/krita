@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-04 03:55+0000\n"
-"PO-Revision-Date: 2025-08-05 12:42+0400\n"
+"PO-Revision-Date: 2025-08-09 23:20+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -25348,7 +25348,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
 #, kde-format
 msgid "Profile Picker"
-msgstr "منتقي اللاحات"
+msgstr "منتقي التشكيلات"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:59
@@ -25375,7 +25375,7 @@ msgstr "التشكيلة"
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:151
 #, kde-format
 msgid "Profile Properties"
-msgstr "خيارات اللاحة"
+msgstr "خيارات التشكيلة"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
@@ -36166,7 +36166,7 @@ msgstr ""
 #: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name of Profile"
-msgstr "اسم اللاحة"
+msgstr "اسم التشكيلة"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:334
 #, fuzzy, kde-format
@@ -41048,7 +41048,7 @@ msgstr "حرر التشكيلة"
 #: plugins/dockers/recorder/recorder_profile_settings.ui:26
 #, kde-format
 msgid "Profile settings"
-msgstr "إعدادات الملف الشخصي"
+msgstr "إعدادات التشكيلة"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonPresetRevert)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:33
@@ -49846,7 +49846,7 @@ msgstr "تعذّر تحميل بيانات البكسل: %1."
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:638
 #, kde-format
 msgid "Could not load profile: %1."
-msgstr "تعذّر تحميل اللاحة: %1."
+msgstr "تعذّر تحميل التشكيلة: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:693
 #, fuzzy, kde-format
@@ -59614,12 +59614,12 @@ msgstr "الحالي"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:209
 #, kde-format
 msgid "Profile name"
-msgstr "اسم اللاحة"
+msgstr "اسم التشكيلة"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:210
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr "رجاءً أدخِل الاسم الذي تريد حفظ هذه اللاحة به:"
+msgstr "رجاءً أدخِل الاسم الذي تريد حفظ هذه التشكيلة به:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format

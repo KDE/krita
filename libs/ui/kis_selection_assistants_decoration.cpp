@@ -23,6 +23,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_tool_proxy.h"
 #include "kis_selection_manager.h"
+#include "kis_selection.h"
 #include <QTransform>
 #include <QPushButton>
 
@@ -44,12 +45,14 @@ struct KisSelectionAssistantsDecoration::Private {
     QPushButton *buttonCropToSelection = nullptr;
     KisSelectionManager *selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
-    QPoint dragRectPosition = QPoint(200, 512);
+    QPoint dragRectPosition = QPoint(0, 0);
     bool dragging = false;
     QPoint dragStartOffset;
     int buttonCount = 7; // buttons + move handle
     int buttonSize = 25;
+    int bufferSpace = 5;
     int actionBarWidth = buttonCount * buttonSize;
+    bool selectionActive = false;
 };
 
 KisSelectionAssistantsDecoration::KisSelectionAssistantsDecoration() :
@@ -73,6 +76,22 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     d->m_canvas = canvas;
     QWidget *canvasWidget = dynamic_cast<QWidget*>(d->m_canvas->canvasWidget());
     canvasWidget->installEventFilter(this);
+
+    KisSelectionSP selection = d->m_viewManager->selection();
+    if (!d->selectionActive && selection) {
+        d->selectionActive = true;
+        QRectF selectionBounds = selection->selectedRect();
+        int selectionBottom = selectionBounds.bottom();
+        QPointF selectionCenter = selectionBounds.center();
+
+        QPointF bottomCenter(selectionCenter.x(), selectionBottom);
+
+        QPointF widgetBottomCenter = converter->imageToWidget(bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
+        widgetBottomCenter.setX(widgetBottomCenter.x() - (d->actionBarWidth / 2)); // centers toolbar midpoint with the selection center
+        widgetBottomCenter.setY(widgetBottomCenter.y() + d->bufferSpace);
+
+        d->dragRectPosition = widgetBottomCenter.toPoint();
+    }
 
     d->dragRectPosition = updateCanvasBoundaries(d->dragRectPosition, canvasWidget);
 
@@ -178,6 +197,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     }
 
     if (!m_selectionActionBar) {
+        d->selectionActive = false;
         return;
     }
 
@@ -252,9 +272,8 @@ QPoint KisSelectionAssistantsDecoration::updateCanvasBoundaries(QPoint position,
     QRect canvasBounds = canvasWidget->rect();
     int actionBarWidth = d->actionBarWidth;
     int actionBarHeight = d->buttonSize;
-    int bufferSpace = 5;
+    int bufferSpace = d->bufferSpace;
     position.setX(qBound(canvasBounds.left() + bufferSpace, position.x(), canvasBounds.right() - actionBarWidth - bufferSpace));
     position.setY(qBound(canvasBounds.top() + bufferSpace, position.y(), canvasBounds.bottom() - actionBarHeight - bufferSpace));
-
     return position;
 }

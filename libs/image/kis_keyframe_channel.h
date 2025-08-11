@@ -102,6 +102,13 @@ public:
     int activeKeyframeTime(int time) const;
     int activeKeyframeTime() const { return activeKeyframeTime(currentTime()); }
 
+    /**
+     * @brief Search for the time for a given keyframe. (Reverse map lookup, so use sparingly.)
+     * @param toLookup - the keyframe to look up the time for.
+     * @return Returns the time of the keyframe.
+     */
+    int lookupKeyframeTime(KisKeyframeSP toLookup);
+
     int firstKeyframeTime() const;
     int previousKeyframeTime(const int time) const;
     int nextKeyframeTime(const int time) const;

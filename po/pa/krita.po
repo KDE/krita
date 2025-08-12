@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-07 19:47+0000\n"
+"POT-Creation-Date: 2025-08-12 02:03+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17209,52 +17209,52 @@ msgid "Activate angle snap"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
-#: libs/basicflakes/tools/KoPencilTool.cpp:298
+#: libs/basicflakes/tools/KoPencilTool.cpp:294
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Precision:"
 msgstr "ਸਥਿਤੀ"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:300
+#: libs/basicflakes/tools/KoPencilTool.cpp:296
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr ""
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:301
+#: libs/basicflakes/tools/KoPencilTool.cpp:297
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
 #, kde-format
 msgid "Curve"
 msgstr "ਵਤਰ"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:302
+#: libs/basicflakes/tools/KoPencilTool.cpp:298
 #, kde-format
 msgid "Straight"
 msgstr "ਸਿੱਧਾ ਉੱਤੇ"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:311
-#: libs/basicflakes/tools/KoPencilTool.cpp:317
+#: libs/basicflakes/tools/KoPencilTool.cpp:307
+#: libs/basicflakes/tools/KoPencilTool.cpp:314
 #, kde-format
 msgid "Optimize"
 msgstr ""
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:323
+#: libs/basicflakes/tools/KoPencilTool.cpp:321
 #, fuzzy, kde-format
 #| msgid "Height"
 msgid "Exactness:"
 msgstr "ਉਚਾਈ"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:356
-#: libs/basicflakes/tools/KoPencilTool.cpp:357
+#: libs/basicflakes/tools/KoPencilTool.cpp:354
+#: libs/basicflakes/tools/KoPencilTool.cpp:355
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Pencil"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
-#: libs/basicflakes/tools/KoPencilTool.cpp:362
+#: libs/basicflakes/tools/KoPencilTool.cpp:360
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:17
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:51
 #, fuzzy, kde-format
@@ -17693,7 +17693,7 @@ msgid "Cannot save %1 to html"
 msgstr ""
 
 #: libs/flake/KoMarkerCollection.cpp:67
-#: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:122
+#: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
 #: libs/ui/flake/kis_shape_layer.cc:579
 #, kde-format
 msgid ""
@@ -22159,11 +22159,18 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Style"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: libs/image/commands_new/kis_switch_current_time_command.cpp:15
+#: libs/image/commands_new/kis_switch_current_time_command.cpp:17
 #, fuzzy
 #| msgid "Copy the current page"
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
+msgstr "ਮੌਜੂਦਾ ਸਫ਼ੇ ਦੀ ਕਾਪੀ ਕਰੋ"
+
+#: libs/image/commands_new/kis_switch_current_time_command.cpp:59
+#, fuzzy
+#| msgid "Copy the current page"
+msgctxt "(qtundo-format)"
+msgid "Switch current time to keyframe"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ੇ ਦੀ ਕਾਪੀ ਕਰੋ"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
@@ -27345,6 +27352,7 @@ msgstr "ਤਬਦੀਲ"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Display"
@@ -39550,7 +39558,7 @@ msgstr "ਟੂਲ"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Icon Size"
@@ -47678,7 +47686,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgid "Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:156
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "Symbol Libraries"

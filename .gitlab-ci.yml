@@ -124,8 +124,11 @@ workflow:
     - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
 
 include:
-  - local: /build-tools/ci-scripts/cppcheck.yml
   - local: /build-tools/ci-scripts/linux.yml
   - local: /build-tools/ci-scripts/windows.yml
   - local: /build-tools/ci-scripts/android.yml
   - local: /build-tools/ci-scripts/macos.yml
+  - project: sysadmin/ci-utilities
+    file:
+      - /gitlab-templates/cppcheck.yml
+

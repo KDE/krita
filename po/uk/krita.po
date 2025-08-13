@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-25 11:16+0300\n"
+"POT-Creation-Date: 2025-08-13 02:01+0000\n"
+"PO-Revision-Date: 2025-08-12 09:50+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -20975,14 +20975,11 @@ msgstr ""
 "перемикання поточного часу"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Switch current time"
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
 msgstr ""
-"Перемкнути поточний час\n"
-"перемикання поточного часу"
+"Перемкнути поточний час на ключовий кадр\n"
+"перемикання поточного часу на ключовий кадр"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -25184,13 +25181,13 @@ msgstr "Завантаження відеоданих… Оброблено %1 �
 msgid "ffmpeg could not be found at %1"
 msgstr "Не вдалось знайти ffmpeg у %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Створюємо палітру для формату файлів %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:199
+#: libs/ui/animation/KisVideoSaver.cpp:198
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "

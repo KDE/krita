@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-14 16:44+0300\n"
+"POT-Creation-Date: 2025-08-13 02:01+0000\n"
+"PO-Revision-Date: 2025-08-12 14:37+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -24809,13 +24809,13 @@ msgstr ""
 msgid "ffmpeg could not be found at %1"
 msgstr "לא ניתן למצוא %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr ""
 
-#: libs/ui/animation/KisVideoSaver.cpp:199
+#: libs/ui/animation/KisVideoSaver.cpp:198
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -62536,15 +62536,15 @@ msgid "Discard Selection"
 msgstr "בחירת מילוי"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr "&מברשת"
+msgstr "אפשרויות נתיב"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magnetic Selection Tool"
-msgstr "בחירה"
+msgstr "בלי בחירה מגנטי"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -62555,10 +62555,10 @@ msgstr "בחירה"
 #: plugins/tools/selectiontools/KisToolSelectOutline.action:7
 #: plugins/tools/selectiontools/KisToolSelectOutline.action:9
 #: plugins/tools/selectiontools/KisToolSelectOutline.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Freehand Selection Tool"
-msgstr "בחירה"
+msgstr "בלי בחירה ביד חופשית"
 
 #. i18n: context: text @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -62569,10 +62569,10 @@ msgstr "בחירה"
 #: plugins/tools/selectiontools/KisToolSelectPath.action:7
 #: plugins/tools/selectiontools/KisToolSelectPath.action:9
 #: plugins/tools/selectiontools/KisToolSelectPath.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Bezier Curve Selection Tool"
-msgstr "הזז בחירה"
+msgstr "כלי בחירה עקומת בזייה"
 
 #. i18n: context: toolTip @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -62580,10 +62580,10 @@ msgstr "הזז בחירה"
 #. i18n: context: iconText @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/selectiontools/KisToolSelectPolygonal.action:8
 #: plugins/tools/selectiontools/KisToolSelectPolygonal.action:9
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Polygonal Selection Tool"
-msgstr "בחירה מצ&ולעת"
+msgstr "כלי בחירה מצולעת"
 
 #. i18n: context: text @ Action (KisToolSelectRectangular), Actions (Rectangular Selection Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectRectangular), Actions (Rectangular Selection Tool), ActionCollection (Tools)
@@ -62594,10 +62594,10 @@ msgstr "בחירה מצ&ולעת"
 #: plugins/tools/selectiontools/KisToolSelectRectangular.action:7
 #: plugins/tools/selectiontools/KisToolSelectRectangular.action:9
 #: plugins/tools/selectiontools/KisToolSelectRectangular.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rectangular Selection Tool"
-msgstr "בחירה מלבנית"
+msgstr "כלי בחירה מלבנית"
 
 #. i18n: context: text @ Action (KisToolSelectSimilar), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectSimilar), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -62608,22 +62608,22 @@ msgstr "בחירה מלבנית"
 #: plugins/tools/selectiontools/KisToolSelectSimilar.action:7
 #: plugins/tools/selectiontools/KisToolSelectSimilar.action:9
 #: plugins/tools/selectiontools/KisToolSelectSimilar.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Similar Color Selection Tool"
-msgstr "הדבקת בחירה"
+msgstr "כלי בחירת צבע דומה"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "לוחות צבעים"
+msgstr "לוח גליפים"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr "&תמונה"
+msgstr "כל הגליפים"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -62631,10 +62631,9 @@ msgid "Adjust text auto wrap"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move text"
-msgstr "הזז בחירה"
+msgstr "הזזת טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:25
 #, fuzzy
@@ -62643,9 +62642,9 @@ msgid "Change SvgTextTool"
 msgstr "שינוי רישיות"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Tool"
-msgstr "כלי מי&לוי"
+msgstr "כלי טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
 #, fuzzy, kde-format
@@ -62653,15 +62652,15 @@ msgid "Conversion failed"
 msgstr "בחירה &רציפה"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
-#, fuzzy, kde-format
+#, kde-format
 msgid "Find Text"
-msgstr "הוספת טקסט"
+msgstr "איתור טקסט"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
-#, fuzzy, kde-format
+#, kde-format
 msgid "Find:"
-msgstr "חיפוש"
+msgstr "איתור:"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
 #, kde-format
@@ -62894,10 +62893,10 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.action:96
 #: plugins/tools/svgtexttool/SvgTextTool.action:98
 #: plugins/tools/svgtexttool/SvgTextTool.action:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Align Center"
-msgstr "זוויות:"
+msgstr "יישור למרכז"
 
 #. i18n: context: iconText @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -63199,9 +63198,9 @@ msgid "&Insert"
 msgstr "הבא שכבה מעלה"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Format"
-msgstr "תבנית תאריך"
+msgstr "&עיצוב"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:45
 #, kde-format
@@ -63309,9 +63308,9 @@ msgstr "עריכת מקור SVG"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
-#, fuzzy, kde-format
+#, kde-format
 msgid "Glyph Palette"
-msgstr "לוחות צבעים"
+msgstr "לוח גליפים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -63631,10 +63630,10 @@ msgid "Spread: {n}%"
 msgstr "פריסה: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "&צבע"
+msgstr "סגירת פער: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
@@ -63657,10 +63656,10 @@ msgid "Grow: "
 msgstr "תפיחה: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
-msgstr "&בוחר צבעים"
+msgstr "נוצה: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format

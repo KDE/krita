@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-25 10:42+0200\n"
+"POT-Creation-Date: 2025-08-13 02:01+0000\n"
+"PO-Revision-Date: 2025-08-12 11:23+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -20929,12 +20929,9 @@ msgid "Switch current time"
 msgstr "Verwissel huidige tijd"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Switch current time"
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr "Verwissel huidige tijd"
+msgstr "Verwissel huidige tijd naar keyframe"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -24998,13 +24995,13 @@ msgstr "Video-gegevens laden... %1 frames onderzocht."
 msgid "ffmpeg could not be found at %1"
 msgstr "ffmpeg is niet gevonden in %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Palet voor %1-bestandsformaat wordt gemaakt..."
 
-#: libs/ui/animation/KisVideoSaver.cpp:199
+#: libs/ui/animation/KisVideoSaver.cpp:198
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-12 02:03+0000\n"
-"PO-Revision-Date: 2025-07-25 09:13+0200\n"
+"POT-Creation-Date: 2025-08-13 02:01+0000\n"
+"PO-Revision-Date: 2025-08-12 08:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8417,7 +8417,7 @@ msgstr "Mo&stra d'un color de la pantalla"
 #, kde-format
 msgctxt "action"
 msgid "Sample a color from the screen"
-msgstr "Seleccioneu un color des de la pantalla"
+msgstr "Trieu un color des de la pantalla"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:304
@@ -15900,7 +15900,7 @@ msgstr "Tria el &color de primer pla"
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr "Seleccioneu el color de primer pla"
+msgstr "Trieu el color de primer pla"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1981
@@ -15917,7 +15917,7 @@ msgstr "Tria el &color de fons"
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
-msgstr "Seleccioneu el color de fons"
+msgstr "Trieu el color de fons"
 
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -20937,12 +20937,9 @@ msgid "Switch current time"
 msgstr "Canvia a l'hora actual"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Switch current time"
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr "Canvia a l'hora actual"
+msgstr "Canvia l'hora actual a un fotograma clau"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -24849,7 +24846,7 @@ msgstr "No s'han pogut exportar els fotogrames des del vídeo"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:353
 #, kde-format
 msgid "Select your Video File"
-msgstr "Seleccioneu el fitxer de vídeo"
+msgstr "Trieu el fitxer de vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
 #, kde-format
@@ -25007,13 +25004,13 @@ msgstr "S'estan carregant les dades del vídeo… s'han examinat %1 fotogrames."
 msgid "ffmpeg could not be found at %1"
 msgstr "«ffmpeg» no s'ha pogut trobar a %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "S'està creant la paleta per al format de fitxer %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:199
+#: libs/ui/animation/KisVideoSaver.cpp:198
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -27083,7 +27080,7 @@ msgstr "Targeta SD"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:574
 #, kde-format
 msgid "Choose Manually"
-msgstr "Seleccioneu manualment"
+msgstr "Trieu manualment"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:639
 #, kde-format
@@ -31756,7 +31753,7 @@ msgid ""
 "information, such as the preset being a special effects brush, or just using "
 "tilt, or angled in some way.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Seleccioneu la icona opcional de l'emblema que indica "
+"<html><head/><body><p>Trieu la icona opcional de l'emblema que indica "
 "informació extra, com el predefinit que és un pinzell d'efectes especials, o "
 "només utilitzant inclinació, o angle d'alguna manera.</p></body></html>"
 
@@ -39623,12 +39620,12 @@ msgstr "V:"
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
 msgid "Select a file to load..."
-msgstr "Seleccioneu un fitxer que s'haja de carregar…"
+msgstr "Trieu un fitxer que s'haja de carregar…"
 
 #: libs/widgets/kis_file_name_requester.cpp:90
 #, kde-format
 msgid "Select a directory to load..."
-msgstr "Seleccioneu un directori que s'haja de carregar…"
+msgstr "Trieu un directori que s'haja de carregar…"
 
 #: libs/widgets/kis_palette_view.cpp:104
 #, kde-format
@@ -42966,7 +42963,7 @@ msgstr "Inseriu un nom"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:350
 #, kde-format
 msgid "Select a Directory"
-msgstr "Seleccioneu un directori"
+msgstr "Trieu un directori"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:267
 #, kde-format
@@ -44001,7 +43998,7 @@ msgstr "No hi ha cap fotograma que s'haja d'explorar."
 #: plugins/dockers/recorder/recorder_export.cpp:549
 #, kde-format
 msgid "Select FFmpeg Executable File"
-msgstr "Seleccioneu el fitxer executable de FFmpeg"
+msgstr "Trieu el fitxer executable de FFmpeg"
 
 #: plugins/dockers/recorder/recorder_export.cpp:594
 #, kde-format
@@ -44672,7 +44669,7 @@ msgstr "Este sistema no és prou eficient per a esta característica"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:584
 #, kde-format
 msgid "Select a Directory for Recordings"
-msgstr "Seleccioneu una carpeta per a les gravacions"
+msgstr "Trieu una carpeta per a les gravacions"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:705
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:711
@@ -44840,8 +44837,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #, kde-format
 msgid "Please choose svg file to specify the layout for exporting."
-msgstr ""
-"Seleccioneu el fitxer SVG per a especificar la disposició que s'exportarà."
+msgstr "Trieu el fitxer SVG per a especificar la disposició que s'exportarà."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
 #, kde-format
@@ -44849,8 +44845,8 @@ msgid ""
 "The SVG file to specify layout doesn't exist. Please choose an existing SVG "
 "file."
 msgstr ""
-"El fitxer SVG per a especificar la disposició no existix. Seleccioneu un "
-"fitxer SVG existent."
+"El fitxer SVG per a especificar la disposició no existix. Trieu un fitxer "
+"SVG existent."
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -47803,7 +47799,7 @@ msgstr "Ja hi ha instal·lat un paquet amb este nom. Voleu sobreescriure'l?"
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:276
 #, kde-format
 msgid "Choose the bundle to edit"
-msgstr "Seleccioneu el paquet que s'ha d'editar"
+msgstr "Trieu el paquet que s'ha d'editar"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:411
 #, kde-format
@@ -48000,12 +47996,12 @@ msgstr "Amb quin recurs voleu importar estos fitxers %1?"
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
 msgid "Select a directory to save the bundle"
-msgstr "Seleccioneu un directori a on s'ha de guardar el paquet"
+msgstr "Trieu un directori a on s'ha de guardar el paquet"
 
 #: plugins/extensions/resourcemanager/page_metadata_info.cpp:107
 #, kde-format
 msgid "Select file to use as bundle icon"
-msgstr "Seleccioneu un fitxer que s'ha d'utilitzar com a icona del paquet"
+msgstr "Trieu un fitxer que s'ha d'utilitzar com a icona del paquet"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -48255,7 +48251,7 @@ msgstr "Mostra els recursos suprimits"
 #: plugins/extensions/resourcemanager/wdgside.ui:118
 #, kde-format
 msgid "Choose Save Location"
-msgstr "Seleccioneu una ubicació de guardada"
+msgstr "Trieu una ubicació de guardada"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, kde-format
@@ -60685,7 +60681,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "Please select the JSON comic config file."
-msgstr "Seleccioneu el fitxer JSON de configuració del còmic."
+msgstr "Trieu el fitxer JSON de configuració del còmic."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:347
 msgid "JSON files"
@@ -60863,7 +60859,7 @@ msgid ""
 "Please choose a different folder."
 msgstr ""
 "Krita no té accés d'escriptura a esta carpeta, per tant, no es poden crear "
-"fitxers. Seleccioneu una carpeta diferent."
+"fitxers. Trieu una carpeta diferent."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
 msgid "Comic Project Setup"
@@ -61385,7 +61381,7 @@ msgstr "S'han exportat totes les capes."
 
 #: plugins/python/exportlayers/uiexportlayers.py:244
 msgid "Select a Folder"
-msgstr "Seleccioneu una carpeta"
+msgstr "Trieu una carpeta"
 
 #: plugins/python/filtermanager/filtermanager.py:17
 #: plugins/python/filtermanager/uifiltermanager.py:60
@@ -62336,7 +62332,7 @@ msgstr "Neteja el color de fons"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select a script file:"
-msgstr "Seleccioneu un fitxer de script:"
+msgstr "Trieu un fitxer de script:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
 msgid "Script path"

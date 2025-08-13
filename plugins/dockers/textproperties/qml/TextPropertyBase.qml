@@ -67,7 +67,7 @@ Column {
 
     MenuSeparator {
         id: seperator;
-        width: parent.width;
+        width: parent && typeof parent != 'undefined'? parent.width: 100;
         topPadding: parent.padding;
     }
 }

@@ -12,7 +12,7 @@ Column {
     property int firstColumnWidth: 32;
     property int columnSpacing: 5;
     padding: columnSpacing;
-    width: parent && typeof parent !== 'undefined'? parent.width - (padding * 2): 100;
+    width: ListView.view? ListView.view.width - (padding * 2): 100;
     height: visible? implicitHeight: 0;
 
     property KoSvgTextPropertiesModel properties : textPropertiesModel;

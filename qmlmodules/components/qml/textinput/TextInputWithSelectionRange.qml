@@ -39,8 +39,7 @@ TextInput {
 
     clip: displayTextWidth > width
 
-    function clampSelection(selectionPosition: int)
-    {
+    function clampSelection(selectionPosition: int) : int {
         return Math.min(Math.max(selectionPosition, selectionRangeStart), selectionRangeEnd);
     }
 

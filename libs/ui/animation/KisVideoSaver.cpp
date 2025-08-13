@@ -83,7 +83,6 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
     QScopedPointer<KisFFMpegWrapper> ffmpegWrapper(new KisFFMpegWrapper(this));
     
     {
-        
         QStringList paletteArgs;
         QStringList simpleFilterArgs;
         QStringList complexFilterArgs;
@@ -102,7 +101,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             additionalOptionsList.removeAt( lavfiOptionsIndex );
         }                  
       
-        if ( suffix == "gif" ) {
+        if ( options.videoMimeType == "image/gif" ) {
             paletteArgs << "-r" << QString::number(options.frameRate)
                         << "-start_number" << QString::number(sequenceStart) << "-start_number_range" << "1"
                         << "-i" << savedFilesMask;

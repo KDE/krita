@@ -16,13 +16,15 @@
 #include <QQuickStyle>
 #include <QColorDialog>
 
+#include <KisQQuickWidget.h>
+
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisStaticInitializer.h>
 
 #include <KLocalizedContext>
 
-#include <KoResourcePaths.h>
+
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagModel.h>
@@ -53,7 +55,6 @@
 #include "LocaleHandler.h"
 #include "CssQmlUnitConverter.h"
 #include "TextPropertyConfigModel.h"
-#include <KisSurfaceColorSpaceWrapper.h>
 
 #include "TextPropertyConfigDialog.h"
 #include "CssStylePresetEditDialog.h"
@@ -104,42 +105,10 @@ TextPropertiesDock::TextPropertiesDock()
     : QDockWidget(i18n("Text Properties"))
     , d(new Private(this))
 {
-    m_quickWidget = new QQuickWidget(this);
+    m_quickWidget = new KisQQuickWidget(this);
 
-#if !defined(Q_OS_MACOS) || QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    QSurfaceFormat format;
-
-    {
-        /**
-         * Our version of Qt has a special handling of the color
-         * space passed to the surface of the QQuickWidget. It will
-         * allow it to render correctly on a Rec2020PQ window.
-         */
-        format.setRedBufferSize(8);
-        format.setGreenBufferSize(8);
-        format.setBlueBufferSize(8);
-        format.setAlphaBufferSize(8);
-        format.setColorSpace(KisSurfaceColorSpaceWrapper::makeSRGBColorSpace());
-    }
-
-    m_quickWidget->setFormat(format);
-#endif
     setWidget(m_quickWidget);
     setEnabled(true);
-
-    m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
-    m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
-
-    // Default to fusion style unless the user forces another style
-    if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
-         QQuickStyle::setStyle(QStringLiteral("Fusion"));
-    }
-
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
     m_quickWidget->setMinimumHeight(100);
 
@@ -159,7 +128,6 @@ TextPropertiesDock::TextPropertiesDock()
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             &d->modelToProviderCompressor, SLOT(start()));
     connect(&d->modelToProviderCompressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
-    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
 
     m_quickWidget->setPalette(this->palette());
@@ -167,11 +135,6 @@ TextPropertiesDock::TextPropertiesDock()
 
 TextPropertiesDock::~TextPropertiesDock()
 {
-    /// Prevent accessing destroyed objects in QML engine
-    /// See:
-    ///   * https://invent.kde.org/graphics/krita/-/commit/d8676f4e9cac1a8728e73fec3ff1df1763c713b7
-    ///   * https://bugreports.qt.io/browse/QTBUG-81247
-    m_quickWidget->setParent(nullptr);
     delete m_quickWidget;
 }
 

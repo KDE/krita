@@ -28,17 +28,9 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
     setMinimumSize(300, 500);
     setModal(true);
 
-    m_quickWidget = new QQuickWidget(this);
+    m_quickWidget = new KisQQuickWidget(this);
     this->setMainWidget(m_quickWidget);
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
-    m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
-
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
     m_quickWidget->setPalette(this->palette());
     this->setWindowTitle(i18nc("@title:window", "Edit Style Preset"));
@@ -55,7 +47,6 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
     connect(m_model, SIGNAL(textPropertyChanged()),
             this, SLOT(slotUpdateTextProperties()));
 
-    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/CssStylePresetEdit.qml"));
 
     if (!m_quickWidget->errors().empty()) {
@@ -65,11 +56,6 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
 
 CssStylePresetEditDialog::~CssStylePresetEditDialog()
 {
-    /// Prevent accessing destroyed objects in QML engine
-    /// See:
-    ///   * https://invent.kde.org/graphics/krita/-/commit/d8676f4e9cac1a8728e73fec3ff1df1763c713b7
-    ///   * https://bugreports.qt.io/browse/QTBUG-81247
-    m_quickWidget->setParent(nullptr);
     delete m_quickWidget;
 
 }

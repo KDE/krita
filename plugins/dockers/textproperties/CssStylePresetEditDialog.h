@@ -9,7 +9,7 @@
 #include <QObject>
 #include <KoDialog.h>
 #include <resources/KoCssStylePreset.h>
-#include <QQuickWidget>
+#include <KisQQuickWidget.h>
 #include <lager/KoSvgTextPropertiesModel.h>
 
 class CssStylePresetEditDialog : public KoDialog
@@ -32,7 +32,7 @@ public Q_SLOTS:
     void slotUpdateStoreDPI();
 
 private:
-    QQuickWidget *m_quickWidget {0};
+    KisQQuickWidget *m_quickWidget {0};
     KoSvgTextPropertiesModel *m_model;
     KoCssStylePresetSP m_currentResource;
     bool m_blockUpdates {false};

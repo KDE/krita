@@ -15,7 +15,7 @@
 #include <KoResource.h>
 
 class KoDialog;
-class QQuickWidget;
+class KisQQuickWidget;
 class KoSvgTextProperties;
 
 class TextPropertiesDock : public QDockWidget, public KisMainwindowObserver {
@@ -46,7 +46,7 @@ public Q_SLOTS:
 
 private:
     QPointer<KisCanvas2> m_canvas;
-    QQuickWidget *m_quickWidget {0};
+    KisQQuickWidget *m_quickWidget {0};
 
     struct Private;
     const QScopedPointer<Private> d;

@@ -7,7 +7,7 @@
 #define GLYPHPALETTEDIALOG_H
 
 #include <KoDialog.h>
-#include <QtQuickWidgets/QQuickWidget>
+#include <KisQQuickWidget.h>
 
 #include <KoSvgTextProperties.h>
 #include <KoFontGlyphModel.h>
@@ -49,7 +49,7 @@ public Q_SLOTS:
     void slotHidePopupPalette();
 
 private:
-    QQuickWidget *m_quickWidget {0};
+    KisQQuickWidget *m_quickWidget {0};
     GlyphPaletteAltPopup *m_altPopup {0};
     QPair<KoSvgTextProperties, KoSvgTextProperties> m_lastUsedProperties;
     KoFontGlyphModel *m_model;

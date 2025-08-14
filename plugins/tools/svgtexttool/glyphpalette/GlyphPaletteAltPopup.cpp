@@ -17,7 +17,7 @@ GlyphPaletteAltPopup::GlyphPaletteAltPopup(QWidget *parent)
 {
     setWindowFlags(Qt::Popup);
     setFrameStyle(QFrame::Box | QFrame::Plain);
-    m_quickWidget = new QQuickWidget(this);
+    m_quickWidget = new KisQQuickWidget(this);
     QHBoxLayout *layout = new QHBoxLayout(this);
 
     m_quickWidget->setFixedSize(300, 400);
@@ -29,18 +29,9 @@ GlyphPaletteAltPopup::GlyphPaletteAltPopup(QWidget *parent)
     layout->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
 
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
-    m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
-
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
     m_quickWidget->setPalette(this->palette());
 
-    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/GlyphPaletteAlts.qml"));
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();

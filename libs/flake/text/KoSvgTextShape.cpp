@@ -1055,8 +1055,8 @@ QVector<int> findTreeIndexForPropertyIdImpl(KisForest<KoSvgTextContentElement>::
         if (child->properties.hasProperty(propertyId)) {
             return QVector<int>({count});
         } else if (KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child)) {
-            QVector current = QVector<int>({count});
-            QVector childIndex = findTreeIndexForPropertyIdImpl(child, propertyId);
+            QVector<int> current = QVector<int>({count});
+            QVector<int> childIndex = findTreeIndexForPropertyIdImpl(child, propertyId);
             if (!childIndex.isEmpty()) {
                 current.append(childIndex);
                 return current;

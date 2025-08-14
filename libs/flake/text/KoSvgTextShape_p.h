@@ -465,6 +465,11 @@ public:
         disableFontMatching = rhs.disableFontMatching;
     }
 
+    ~Private() {
+        qDeleteAll(shapesInside);
+        qDeleteAll(shapesSubtract);
+    }
+
     int xRes = 72;
     int yRes = 72;
     QList<KoShape*> shapesInside;

@@ -23123,7 +23123,7 @@ msgid ""
 msgstr ""
 "<p>يقوم طاقم عربآيز بترجمة واجهة كِيدِي إلى اللغة العربية، و هذا بفضل جهود "
 "طاقم مترجمين متطوعين من كافة الدول العربية وغيرها. </p><p>للمزيد من "
-"المعلومات حول ترجمة كِيدِي إلى العربية ، زر  <a href=\"http://www.arabeyes.org"
+"المعلومات حول ترجمة كِيدِي إلى العربية، زر  <a href=\"http://www.arabeyes.org"
 "\"> الموقع الرسمي لعربآيز</a> الرجاء التبليغ عن أخطاء الترجمة على العنوان "
 "التالي: contact@arabeyes.org</p><p>تترجم كِيدِي إلى لغات متعددة بفضل طواقم "
 "الترجمة من العالم بأسره.</p><p>لمزيد من المعلومات زر <a  href=\"http://l10n."
@@ -37183,7 +37183,7 @@ msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
 "please use the Report Bug menu item of the correct application"
 msgstr ""
-"البرنامج الذي سترسل تقرير الخطأ له ، إذا لم يكن هذا صحيح ، استعمل خيار تقرير "
+"البرنامج الذي سترسل تقرير الخطأ له، إذا لم يكن هذا صحيح، استعمل خيار تقرير "
 "الخطأ الموجود في قائمة البرنامج الذي تريد إرسال التقرير عنه"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
@@ -37375,8 +37375,8 @@ msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
 msgstr ""
-"هذه قائمة إجراءات حركية. يمكنك تحريكها ، لكن إذا حذفتها ، لن يمكنك إضافتها "
-"مرة أخرى."
+"هذه قائمة إجراءات حركية. يمكنك تحريكها، لكن إذا حذفتها، لن يمكنك إضافتها مرة "
+"أخرى."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
 #, kde-format
@@ -37453,8 +37453,8 @@ msgid ""
 "(e.g. 'Copy') shown in the left column and keys or combination of keys (e.g. "
 "Ctrl+V) shown in the right column."
 msgstr ""
-"تستطيع أن ترى هنا لائحة مواثق أزرار ، أي ربط إجراءات معينة (مثل النسخ) في "
-"العمود الأيسر ، بأزرار أو تركيبة أزرار  (Ctrl+V مثلا) في العمود الأيمن)."
+"تستطيع أن ترى هنا لائحة مواثق أزرار، أي ربط إجراءات معينة (مثل النسخ) في "
+"العمود الأيسر، بأزرار أو تركيبة أزرار  (Ctrl+V مثلا) في العمود الأيمن)."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:38
@@ -44043,8 +44043,7 @@ msgid ""
 "The shortcut to fire this action, such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"الاختصار لإطلاق هذا الإجراء مثل ’Ctrl+1‘ أو سيرورة QKeySequence أو ”بلا/"
-"None“."
+"الاختصار لإطلاق هذا الإجراء مثل ’Ctrl+1‘ أو نسخة QKeySequence أو ”بلا/None“."
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/extensions/pykrita/plugin/info.ui:68
@@ -44113,8 +44112,7 @@ msgid ""
 "The shortcut to fire this action such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"الاختصار لإطلاق هذا الإجراء مثل ’Ctrl+1‘ أو سيرورة QKeySequence أو ”بلا/"
-"None“."
+"الاختصار لإطلاق هذا الإجراء مثل ’Ctrl+1‘ أو نسخة QKeySequence أو ”بلا/None“."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/pykrita/plugin/info.ui:240

@@ -243,7 +243,7 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
         << 1
-        << "Fit View Width (50.0%)";
+        << "Fit Width (50.0%)";
 
     QTest::addRow("height")
         << KoZoomState(KoZoomMode::ZOOM_HEIGHT, 0.5, 0.1, 2.0)
@@ -259,7 +259,7 @@ void TestKoZoomAction::testZoomActionState_data()
             zi(0.25), zi(0.333333), zi(0.5), zi(0.666667), zi(1.0), zi(1.33333), zi(2.0)
         }
         << 2
-        << "Fit View Height (50.0%)";
+        << "Fit Height (50.0%)";
 
     QTest::addRow("page-to-same-constant")
         << KoZoomState(KoZoomMode::ZOOM_PAGE, 0.5, 0.1, 2.0)

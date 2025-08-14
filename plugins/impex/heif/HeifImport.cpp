@@ -213,10 +213,15 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
     HeifLock lock;
 #endif
 
-#if LIBHEIF_HAVE_VERSION(1, 20, 0)
+#if LIBHEIF_HAVE_VERSION(1, 20, 2)
     using HeifStrideType = size_t;
+    auto heifGetPlaneMethod = std::mem_fn(qNonConstOverload<heif_channel, HeifStrideType*>(&heif::Image::get_plane2));
+#elif LIBHEIF_HAVE_VERSION(1, 20, 0)
+    using HeifStrideType = size_t;
+    auto heifGetPlaneMethod = std::mem_fn(qNonConstOverload<heif_channel, HeifStrideType*>(&heif::Image::get_plane));
 #else
     using HeifStrideType = int;
+    auto heifGetPlaneMethod = std::mem_fn(qNonConstOverload<heif_channel, HeifStrideType*>(&heif::Image::get_plane));
 #endif
 
     // Wrap input stream into heif Reader object
@@ -394,9 +399,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             dbgFile << "monochrome heif file, bits:" << luma;
             HeifStrideType strideG = 0;
             HeifStrideType strideA = 0;
-            const uint8_t *imgG = heifimage.get_plane(heif_channel_Y, &strideG);
+            const uint8_t *imgG = heifGetPlaneMethod(heifimage, heif_channel_Y, &strideG);
             const uint8_t *imgA =
-                heifimage.get_plane(heif_channel_Alpha, &strideA);
+                heifGetPlaneMethod(heifimage, heif_channel_Alpha, &strideA);
             const int width = heifimage.get_width(heif_channel_Y);
             const int height = heifimage.get_height(heif_channel_Y);
             KisHLineIteratorSP it =
@@ -418,11 +423,11 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             HeifStrideType strideG = 0;
             HeifStrideType strideB = 0;
             HeifStrideType strideA = 0;
-            const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
-            const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
-            const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
+            const uint8_t* imgR = heifGetPlaneMethod(heifimage, heif_channel_R, &strideR);
+            const uint8_t* imgG = heifGetPlaneMethod(heifimage, heif_channel_G, &strideG);
+            const uint8_t* imgB = heifGetPlaneMethod(heifimage, heif_channel_B, &strideB);
             const uint8_t *imgA =
-                heifimage.get_plane(heif_channel_Alpha, &strideA);
+                heifGetPlaneMethod(heifimage, heif_channel_Alpha, &strideA);
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
             Planar::readPlanarLayer(luma,
@@ -447,7 +452,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             HeifStrideType stride = 0;
             dbgFile << "interleaved SDR heif file, bits:" << luma;
 
-            const uint8_t *img = heifimage.get_plane(heif_channel_interleaved, &stride);
+            const uint8_t *img = heifGetPlaneMethod(heifimage, heif_channel_interleaved, &stride);
             width = heifimage.get_width(heif_channel_interleaved);
             height = heifimage.get_height(heif_channel_interleaved);
             KisHLineIteratorSP it =
@@ -470,7 +475,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             dbgFile << "interleaved HDR heif file, bits:" << luma;
 
             const uint8_t *img =
-                heifimage.get_plane(heif_channel_interleaved, &stride);
+                heifGetPlaneMethod(heifimage, heif_channel_interleaved, &stride);
             KisHLineIteratorSP it =
                 layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 

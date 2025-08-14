@@ -96,55 +96,32 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
     d->dragRectPosition = updateCanvasBoundaries(d->dragRectPosition, canvasWidget);
 
     if (!d->buttonSelectAll) {
-        d->buttonSelectAll = new QPushButton();
-        d->buttonSelectAll->setIcon(KisIconUtils::loadIcon("select-all"));
-        d->buttonSelectAll->setFixedSize(25, 25);
-        d->buttonSelectAll->setToolTip("Select All");
-
+        d->buttonSelectAll = createButton("select-all", "Select All");
         connect(d->buttonSelectAll, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::selectAll);
         }
 
     if (!d->buttonDeselect) {
-        d->buttonDeselect = new QPushButton();
-        d->buttonDeselect->setIcon(KisIconUtils::loadIcon("select-clear"));
-        d->buttonDeselect->setFixedSize(25, 25);
-        d->buttonDeselect->setToolTip("Deselect");
-
+        d->buttonDeselect = createButton("select-clear", "Deselect");
         connect(d->buttonDeselect, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::deselect);
     }
 
     if (!d->buttonCopyToNewLayer) {
-        d->buttonCopyToNewLayer = new QPushButton();
-        d->buttonCopyToNewLayer->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
-        d->buttonCopyToNewLayer->setFixedSize(25, 25);
-        d->buttonCopyToNewLayer->setToolTip("Copy To New Layer");
-
+        d->buttonCopyToNewLayer = createButton("duplicatelayer", "Copy To New Layer");
         connect(d->buttonCopyToNewLayer, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::copySelectionToNewLayer);
     }
 
     if (!d->buttonInvert) {
-        d->buttonInvert = new QPushButton();
-        d->buttonInvert->setFixedSize(25, 25);
-        d->buttonInvert->setToolTip("Invert Selection");
-
+        d->buttonInvert = createButton("", "Invert Selection");
         connect(d->buttonInvert, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::invert);
     }
 
     if (!d->buttonFillForegroundColor) {
-        d->buttonFillForegroundColor = new QPushButton();
-        d->buttonFillForegroundColor->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
-        d->buttonFillForegroundColor->setFixedSize(25, 25);
-        d->buttonFillForegroundColor->setToolTip("Fill Selection with Color");
-
+        d->buttonFillForegroundColor = createButton("krita_tool_color_fill", "Fill Selection with Color");
         connect(d->buttonFillForegroundColor, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::fillForegroundColor);
     }
 
     if (!d->buttonCropToSelection) {
-        d->buttonCropToSelection = new QPushButton();
-        d->buttonCropToSelection->setIcon(KisIconUtils::loadIcon("tool_crop"));
-        d->buttonCropToSelection->setFixedSize(25, 25);
-        d->buttonCropToSelection->setToolTip("Crop to Selection");
-
+        d->buttonCropToSelection = createButton("tool_crop", "Crop to Selection");
         connect(d->buttonCropToSelection, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::imageResizeToSelection);
     }
 
@@ -276,4 +253,13 @@ QPoint KisSelectionAssistantsDecoration::updateCanvasBoundaries(QPoint position,
     position.setX(qBound(canvasBounds.left() + bufferSpace, position.x(), canvasBounds.right() - actionBarWidth - bufferSpace));
     position.setY(qBound(canvasBounds.top() + bufferSpace, position.y(), canvasBounds.bottom() - actionBarHeight - bufferSpace));
     return position;
+}
+
+QPushButton* KisSelectionAssistantsDecoration::createButton(const QString &iconName, const QString &tooltip)
+{
+    QPushButton *button = new QPushButton();
+    button->setIcon(KisIconUtils::loadIcon(iconName));
+    button->setFixedSize(d->buttonSize, d->buttonSize);
+    button->setToolTip(tooltip);
+    return button;
 }

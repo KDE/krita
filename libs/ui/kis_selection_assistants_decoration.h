@@ -33,10 +33,11 @@ class KRITAUI_EXPORT KisSelectionAssistantsDecoration : public QObject
 public:
     KisSelectionAssistantsDecoration();
     ~KisSelectionAssistantsDecoration();
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas, bool selectionActionBarVisible);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas, bool selectionActionBarVisible);
     void setViewManager(KisViewManager* viewManager);
     bool eventFilter(QObject *obj, QEvent *event) override;
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
+    QPushButton* createButton(const QString &iconName, const QString &tooltip);
 
 private:
     struct Private;

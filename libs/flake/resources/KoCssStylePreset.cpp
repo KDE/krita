@@ -155,8 +155,7 @@ KoShape* KoCssStylePreset::generateSampleShape() const
     const QString after = d->afterText;
     const QString before = d->beforeText;
 
-    KoSvgTextShape *textShape = new KoSvgTextShape();
-    KoSvgTextShape *sampleText = new KoSvgTextShape();
+    QScopedPointer<KoSvgTextShape> sampleText(new KoSvgTextShape());
     sampleText->insertText(0, sample.isEmpty()? name().isEmpty()? SAMPLE_PLACEHOLDER: name(): sample);
     const QString type = styleType().isEmpty()? STYLE_TYPE_CHARACTER: styleType();
 
@@ -207,11 +206,11 @@ KoShape* KoCssStylePreset::generateSampleShape() const
         sampleText->setShapesInside({inlineShape});
         sampleText->relayout();
 
-        textShape = sampleText;
+        return sampleText.take();
     } else {
         /// For character the sample always needs to be set to be a child to
         /// ensure that the character property doesn't include the default props.
-        KoSvgTextShape *newShape = new KoSvgTextShape();
+        QScopedPointer<KoSvgTextShape> newShape(new KoSvgTextShape());
         KoSvgTextProperties paraProps = KoSvgTextProperties::defaultProperties();
         // Set whitespace rule to pre-wrap.
         paraProps.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
@@ -224,11 +223,11 @@ KoShape* KoCssStylePreset::generateSampleShape() const
             newShape->insertText(0, before);
         }
 
-        newShape->insertRichText(newShape->posForIndex(before.size()), sampleText);
-        textShape = newShape;
+        newShape->insertRichText(newShape->posForIndex(before.size()), sampleText.data());
+        return newShape.take();
     }
 
-    return textShape;
+    return nullptr;
 }
 
 Qt::Alignment KoCssStylePreset::alignSample() const
@@ -459,15 +458,16 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
 bool KoCssStylePreset::saveToDevice(QIODevice *dev) const
 {
-    KoShape *shape = generateSampleShape();
+    QScopedPointer<KoShape> shape(generateSampleShape());
     if (!shape) return false;
 
     QMap<QString, QVariant> m = metadata();
     shape->setAdditionalAttribute(DESC, m[DESCRIPTION].toString());
     shape->setAdditionalAttribute(TITLE, name());
 
-    SvgWriter writer({shape});
-    return writer.save(*dev, shape->boundingRect().size());
+    const QRectF boundingRect = shape->boundingRect();
+    SvgWriter writer({shape.take()});
+    return writer.save(*dev, boundingRect.size());
 }
 
 QString KoCssStylePreset::defaultFileExtension() const
@@ -488,7 +488,7 @@ QString generateSVG(const KoSvgTextShape *shape) {
 
 void KoCssStylePreset::updateThumbnail()
 {
-    KoSvgTextShape *shape = dynamic_cast<KoSvgTextShape*>(generateSampleShape());
+    QScopedPointer<KoSvgTextShape> shape (dynamic_cast<KoSvgTextShape*>(generateSampleShape()));
     if (!shape) return;
     QImage img(256,
                256,
@@ -496,11 +496,11 @@ void KoCssStylePreset::updateThumbnail()
     img.fill(Qt::white);
 
     KoShapePainter painter;
-    painter.setShapes({shape});
+    painter.setShapes({shape.data()});
     painter.paint(img);
 
     /// generate SVG sample.
-    addMetaData(SAMPLE_SVG, generateSVG(shape));
+    addMetaData(SAMPLE_SVG, generateSVG(shape.data()));
     updateAlignSample();
 
     setImage(img);

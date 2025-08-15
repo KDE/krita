@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 03:55+0000\n"
+"POT-Creation-Date: 2025-08-15 04:02+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -46596,7 +46596,7 @@ msgstr "图像不包含色彩特性文件。"
 msgid "Unknown error: %1"
 msgstr "未知错误：%1"
 
-#: plugins/impex/heif/HeifExport.cpp:534
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46606,7 +46606,7 @@ msgstr ""
 "图像的亮度信息将保留完整分辨率，而颜色信息的分辨率则会在水平和垂直方向上同时"
 "减半。"
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46615,28 +46615,28 @@ msgid ""
 msgstr ""
 "图像的亮度信息将保留完整分辨率，而颜色信息的分辨率则会在水平方向上减半。"
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:542
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "图像将保留完整的亮度和颜色分辨率。"
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:551
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -46648,7 +46648,7 @@ msgstr ""
 "图像将首先被转换为 Rec 2020 线性，然后通过可感知量化曲线 (也称 SMPTE 2048 曲"
 "线) 进行编码。推荐用于绝对亮度信息较为重要的 HDR 图像。"
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -46660,14 +46660,14 @@ msgstr ""
 "图像将首先被转换为 Rec 2020 线性，然后通过混合对数伽玛值曲线进行编码。推荐用"
 "于显示器无法解析 HDR 时的 HDR 图像。"
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "保持颜色，PQ 编码"
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:566
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -46679,14 +46679,14 @@ msgstr ""
 "图像将首先被线性化，然后通过可感知量化曲线 (也称 SMPTE 2048 曲线) 进行编码。"
 "推荐用于绝对亮度信息较为重要的 HDR 图像。"
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "保持颜色，HLG 编码"
 
-#: plugins/impex/heif/HeifExport.cpp:565
+#: plugins/impex/heif/HeifExport.cpp:571
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -46697,14 +46697,14 @@ msgstr ""
 "图像将首先被线性化，然后通过混合对数伽玛值曲线进行编码。推荐用于显示器无法解"
 "析 HDR 时的 HDR 图像。"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "保持颜色，SMPTE ST 428 编码"
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -46716,13 +46716,13 @@ msgstr ""
 "图像将首先被线性化，然后通过 SMPTE ST 428 曲线进行编码。Krita 本来会始终将此"
 "类图像作为线性浮点图像打开，而此选项则用于反转此行为。"
 
-#: plugins/impex/heif/HeifExport.cpp:575
+#: plugins/impex/heif/HeifExport.cpp:581
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "不更改，剪切"
 
-#: plugins/impex/heif/HeifExport.cpp:576
+#: plugins/impex/heif/HeifExport.cpp:582
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

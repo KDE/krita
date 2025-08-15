@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 03:55+0000\n"
+"POT-Creation-Date: 2025-08-15 04:02+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -48310,7 +48310,7 @@ msgstr "문서에서 색 프로필을 찾을 수 없습니다."
 msgid "Unknown error: %1"
 msgstr "알 수 없는 오류: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:534
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48320,7 +48320,7 @@ msgstr ""
 "이미지의 명도는 최대 해상도로 유지되고, 채도는 두 차원에서 절반으로 줄어듭니"
 "다."
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48329,28 +48329,28 @@ msgid ""
 msgstr ""
 "이미지의 명도는 최대 해상도가 되고, 채도는 수평으로 절반으로 줄어듭니다."
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:542
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "이미지의 명도와 채도는 모두 최대 해상도입니다."
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:551
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -48362,7 +48362,7 @@ msgstr ""
 "이미지는 먼저 Rec 2020 선형으로 변환된 다음, 지각 양자화 곡선(SMPTE 2048 곡선"
 "이라고도 함)으로 인코딩됩니다. 절대 명도가 중요한 HDR 영상에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -48375,7 +48375,7 @@ msgstr ""
 "코딩됩니다. HDR을 처리하지 못할 수 있는 디스플레이에서 표시될 수 있는 HDR 이"
 "미지에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -48384,7 +48384,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "색소 유지, PQ 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:566
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -48396,7 +48396,7 @@ msgstr ""
 "이미지는 먼저 선형화된 다음 지각 양자화 곡선 (SMPTE 2048 곡선이라고도 함)으"
 "로 인코딩됩니다. 절대 명도가 중요한 이미지에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -48405,7 +48405,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "색소 유지, HLG 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:565
+#: plugins/impex/heif/HeifExport.cpp:571
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -48417,7 +48417,7 @@ msgstr ""
 "처리하지 못할 수 있는 디스플레이에서 표시될 수 있는 화면용 이미지에 권장됩니"
 "다"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -48426,7 +48426,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "색소 유지, SMPTE ST 428 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -48438,7 +48438,7 @@ msgstr ""
 "이미지는 먼저 선형화된 다음 SMPTEST 428로 인코딩됩니다. Krita는 항상 이러한 "
 "이미지를 선형 부동 소수점으로 엽니다. 이 옵션은 과정을 뒤집습니다"
 
-#: plugins/impex/heif/HeifExport.cpp:575
+#: plugins/impex/heif/HeifExport.cpp:581
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option"
 #| msgid "No changes, clip"
@@ -48446,7 +48446,7 @@ msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "변경 사항 없음, 클립"
 
-#: plugins/impex/heif/HeifExport.cpp:576
+#: plugins/impex/heif/HeifExport.cpp:582
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

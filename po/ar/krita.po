@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 03:55+0000\n"
-"PO-Revision-Date: 2025-08-09 23:20+0400\n"
+"POT-Creation-Date: 2025-08-15 04:02+0000\n"
+"PO-Revision-Date: 2025-08-14 09:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -23121,13 +23121,16 @@ msgid ""
 "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a></p>"
 msgstr ""
-"<p>يقوم طاقم عربآيز بترجمة واجهة كِيدِي إلى اللغة العربية، و هذا بفضل جهود "
-"طاقم مترجمين متطوعين من كافة الدول العربية وغيرها. </p><p>للمزيد من "
-"المعلومات حول ترجمة كِيدِي إلى العربية، زر  <a href=\"http://www.arabeyes.org"
-"\"> الموقع الرسمي لعربآيز</a> الرجاء التبليغ عن أخطاء الترجمة على العنوان "
-"التالي: contact@arabeyes.org</p><p>تترجم كِيدِي إلى لغات متعددة بفضل طواقم "
-"الترجمة من العالم بأسره.</p><p>لمزيد من المعلومات زر <a  href=\"http://l10n."
-"kde.org \">http://l10n.kde.org</a></p>"
+"<p>يُعرب المتطوعون سطح مكتب بلازما وبرامج كيدي حتى يتمكن الناطقون بالعربية من "
+"الاستفادة والتفاعل مع مجتمع كيدي العالمي.</p>\n"
+"<p>بدأت عملية التعريب مع بداية الألفية بواسطة <a href=\"https://www.arabeyes."
+"org\">فريق عربآيز</a>وهو فريق من متطوّعين من كافة الدول العربية وغيرها . فلهم "
+"جزيل الشكر والعرفان</p>\n"
+"<p>تُدار عملية التعريب حاليا على موقع كيدي الرسمي .</p><p>لمزيد من المعلومات "
+"زُر <a  href=\"https://l10n.kde.org/team-infos.php?teamcode=ar\">https://l10n."
+"kde.org/team-infos.php?teamcode=ar</a>.</p><p>رجاءً أبلغ عن أخطاء الترجمة على "
+"<a href=\"https://mail.kde.org/cgi-bin/mailman/listinfo/kde-l10n-ar"
+"\">القائمة البريدية العربية</a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
@@ -32353,7 +32356,7 @@ msgstr "الاسم مستخدم بالفعل."
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "Do you really want to remove that group?"
-msgstr "هل ترغب بالفعل بإزالة هذه المجموعة ؟"
+msgstr "هل ترغب فعلًا بإزالة هذه المجموعة ؟"
 
 #: libs/ui/KisTemplateCreateDia.cpp:435
 #, kde-format
@@ -37584,7 +37587,7 @@ msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
-"تجميعة المفاتيح ’%1‘ يستخدمها الإجراء <b>%2</b> بالفعل.<br>رجاءً اختر أخرى "
+"تجميعة المفاتيح ’%1‘ يستخدمها الإجراء <b>%2</b> فعلًا.<br>رجاءً اختر أخرى "
 "مختلفة."
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
@@ -37684,7 +37687,7 @@ msgstr "مخطّط جديد"
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:103
 #, kde-format
 msgid "A scheme with this name already exists."
-msgstr "ثمّة مخطّط بهذا الاسم بالفعل."
+msgstr "ثمّة مخطّط بهذا الاسم فعلًا."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
 #, kde-format
@@ -48382,7 +48385,7 @@ msgstr ""
 msgid "Unknown error: %1"
 msgstr "خطأ مجهول: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:534
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48390,7 +48393,7 @@ msgid ""
 "colorfulness will be halved in both dimensions."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48398,28 +48401,28 @@ msgid ""
 "colorfulness will be halved horizontally."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:542
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:551
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -48429,7 +48432,7 @@ msgid ""
 "for HDR images where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -48439,14 +48442,14 @@ msgid ""
 "not understand HDR."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:566
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -48456,14 +48459,14 @@ msgid ""
 "where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:565
+#: plugins/impex/heif/HeifExport.cpp:571
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -48472,14 +48475,14 @@ msgid ""
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -48489,13 +48492,13 @@ msgid ""
 "is there to reverse that"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:575
+#: plugins/impex/heif/HeifExport.cpp:581
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:576
+#: plugins/impex/heif/HeifExport.cpp:582
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -59636,7 +59639,7 @@ msgid ""
 "A profile with that name already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
-"هناك لاحة بالاسم هذا بالفعل.\n"
+"هناك لاحة بالاسم هذا فعلًا.\n"
 "أتريد الكتابة فوقها؟"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:363

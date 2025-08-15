@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 03:55+0000\n"
+"POT-Creation-Date: 2025-08-15 04:02+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -48704,7 +48704,7 @@ msgstr "O perfil de cores não foi encontrado no documento."
 msgid "Unknown error: %1"
 msgstr "Erro desconhecido: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:534
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48714,7 +48714,7 @@ msgstr ""
 "O brilho que terá a imagem na resolução total, enquanto a cor será reduzida "
 "a metade em ambas as dimensões."
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48724,7 +48724,7 @@ msgstr ""
 "O brilho que terá a imagem na resolução total, enquanto a cor será reduzida "
 "a metade na horizontal."
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:542
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48732,7 +48732,7 @@ msgid ""
 msgstr ""
 "Tanto brilho como a cor da imagem estarão presentes na resolução total."
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, fuzzy, kde-format
 #| msgctxt "Colorspace name"
@@ -48741,7 +48741,7 @@ msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "HLG da Rec. 2100"
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, fuzzy, kde-format
 #| msgctxt "Colorspace name"
@@ -48750,7 +48750,7 @@ msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "PQ da Rec. 2100"
 
-#: plugins/impex/heif/HeifExport.cpp:551
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:179
 #, kde-format
 msgctxt "@tooltip"
@@ -48763,7 +48763,7 @@ msgstr ""
 "com uma curva de quantização perceptual (também conhecida como a curva SMPTE "
 "2048). É recomendada para imagens HDR onde é importante o brilho absoluto."
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #, kde-format
 msgctxt "@tooltip"
@@ -48776,7 +48776,7 @@ msgstr ""
 "com uma curva de Hybrid Log Gamma. É recomendada para imagens HDR onde o "
 "ecrã poderá não compreender o HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -48785,7 +48785,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Manter os colorantes, codificar com QP"
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:566
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "@tooltip"
@@ -48798,7 +48798,7 @@ msgstr ""
 "quantização perceptual (também conhecida como a curva SMPTE 2048). É "
 "recomendada para imagens HDR onde é importante o brilho absoluto."
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -48807,7 +48807,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Manter os colorantes, codificar com HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:565
+#: plugins/impex/heif/HeifExport.cpp:571
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
 #, kde-format
 msgctxt "@tooltip"
@@ -48819,7 +48819,7 @@ msgstr ""
 "Hybrid Log Gamma. É recomendada para imagens HDR onde o ecrã poderá não "
 "compreender a QP"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -48828,7 +48828,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Manter os colorantes, codificar com SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:570
+#: plugins/impex/heif/HeifExport.cpp:576
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format
 msgctxt "@tooltip"
@@ -48841,7 +48841,7 @@ msgstr ""
 "Krita abre sempre estas imagens como sendo de vírgula-flutuante linear, "
 "sendo que esta opção existe para reverter isso"
 
-#: plugins/impex/heif/HeifExport.cpp:575
+#: plugins/impex/heif/HeifExport.cpp:581
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option"
 #| msgid "No changes, clip"
@@ -48849,7 +48849,7 @@ msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sem modificações, com recorte"
 
-#: plugins/impex/heif/HeifExport.cpp:576
+#: plugins/impex/heif/HeifExport.cpp:582
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

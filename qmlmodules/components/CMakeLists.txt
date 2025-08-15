@@ -13,6 +13,10 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         PRIVATE
             SvgTextLabel.cpp
             SvgTextLabel.h
+            KisNumParser.cpp
+            KisNumParser.h
+            KisCubicCurveQMLWrapper.cpp
+            KisCubicCurveQMLWrapper.h
     )
 
 else ()
@@ -28,12 +32,56 @@ else ()
             KritaQmlComponentsPlugin.h
             SvgTextLabel.cpp
             SvgTextLabel.h
+            KisNumParser.cpp
+            KisNumParser.h
+            KisCubicCurveQMLWrapper.cpp
+            KisCubicCurveQMLWrapper.h
     )
 
 endif ()
 
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH textinput SOURCES
+    qml/textinput/TextInputWithSelectionRange.qml
+    qml/textinput/TextInputWithPrefixAndSuffix.qml
+)
+
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH overlays SOURCES
+    qml/overlays/WarningOverlay.qml
+    qml/overlays/SliderOverlay.qml
+)
+
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH spinbox SOURCES
+    qml/spinbox/ParseSpinBoxContentItem.qml
+)
+
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH sliderspinbox SOURCES
+    qml/sliderspinbox/SliderSpinBoxManipulator.qml
+    qml/sliderspinbox/SliderSpinBoxRangeSwitch.qml
+    qml/sliderspinbox/SliderSpinBoxContentItem.qml
+)
+
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH angleselector SOURCES
+    qml/angleselector/AngleSelectorUtil.js
+    qml/angleselector/AngleGauge.qml
+)
+
 ecm_target_qml_sources(kritaqmlcomponents SOURCES
+    qml/button/GroupButton.qml
+    qml/button/OptionButtonStrip.qml
+
+    qml/IntParseSpinBox.qml
     qml/DoubleSpinBox.qml
+    qml/DoubleParseSpinBox.qml
+
+    qml/IntSliderSpinBox.qml
+    qml/DoubleSliderSpinBox.qml
+
+    qml/tooltip/KisToolTip.qml
+
+    qml/curvewidget/CurveWidget.qml
+
+    qml/AngleSelector.qml
+
 )
 
 target_link_libraries(kritaqmlcomponents

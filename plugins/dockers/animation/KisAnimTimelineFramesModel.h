@@ -73,7 +73,7 @@ public:
     void makeClonesUnique(const QModelIndexList &indices);
 
     bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
-    bool insertHoldFrames(const QModelIndexList &selectedIndexes, int count);
+    bool insertHoldFrames(const QModelIndexList &selectedIndexes, int insertCount);
 
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QFileInfo &fileName);

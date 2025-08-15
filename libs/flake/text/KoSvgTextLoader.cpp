@@ -88,15 +88,19 @@ void KoSvgTextLoader::setStyleInfo(KoShape *s)
             }
         }
 
-        if ((parentBg && !parentBg->compareTo(s->background().data()))
-                || (!parentBg && s->background())) {
-            d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
-                                                   QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
+        if (!s->inheritBackground()) {
+            if ((parentBg && !parentBg->compareTo(s->background().data()))
+                    || (!parentBg && s->background())) {
+                d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
+                                                       QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
+            }
         }
-        if ((parentStroke && (!parentStroke->compareFillTo(s->stroke().data()) || !parentStroke->compareStyleTo(s->stroke().data())))
-                || (!parentStroke && s->stroke())) {
-            d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
-                                                   QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
+        if (!s->inheritStroke()) {
+            if ((parentStroke && (!parentStroke->compareFillTo(s->stroke().data()) || !parentStroke->compareStyleTo(s->stroke().data())))
+                    || (!parentStroke && s->stroke())) {
+                d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
+                                                       QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
+            }
         }
         d->currentNode->properties.setProperty(KoSvgTextProperties::Opacity,
                                                s->transparency());

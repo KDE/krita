@@ -30,7 +30,8 @@ KisInfinityManager::KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas
     m_sideRects(NSides),
     m_canvas(canvas)
 {
-    connect(canvas, SIGNAL(documentOffsetUpdateFinished()), SLOT(imagePositionChanged()));
+    connect(canvas, &KisCanvas2::sigCanvasStateChanged,
+            this, &KisInfinityManager::imagePositionChanged);
 }
 
 inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPointF &handlePoint, qreal angle, Side side)

@@ -1,8 +1,9 @@
 .android-build-base:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder-sdk34-2204:latest
+  image: storage.kde.org/vm-images/krita-android-sdk34-2204
   tags:
-    - Linux
+    - VM
+    - amd64
   extends:
     - .ci-manual-job-mixin
     - .ci-artifacts-with-packages-mixin
@@ -78,8 +79,8 @@
   variables:
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-android-x86_64
     KDECI_ANDROID_ABI: x86_64
-    KDECI_CC_CACHE: /mnt/caches/krita-android/x86_64/
-    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/x86_64/
+    KDECI_CC_CACHE: /mnt/krita-android/x86_64/caches/
+    KDECI_CACHE_PATH: /mnt/krita-android/x86_64/artifacts/
     KRITACI_ARCHIVE_ARTIFACTS: True
     KRITACI_SKIP_COMMON_ARTIFACTS: True
 
@@ -87,8 +88,8 @@
   variables:
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-android-arm64-v8a
     KDECI_ANDROID_ABI: arm64-v8a
-    KDECI_CC_CACHE: /mnt/caches/krita-android/arm64-v8a/
-    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/arm64-v8a/
+    KDECI_CC_CACHE: /mnt/krita-android/arm64-v8a/caches/
+    KDECI_CACHE_PATH: /mnt/krita-android/arm64-v8a/artifacts/
     KRITACI_ARCHIVE_ARTIFACTS: True
     KRITACI_SKIP_COMMON_ARTIFACTS: False # only arm64-v8a packages common artifacts
 
@@ -96,16 +97,17 @@
   variables:
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-android-armeabi-v7a
     KDECI_ANDROID_ABI: armeabi-v7a
-    KDECI_CC_CACHE: /mnt/caches/krita-android/armeabi-v7a/
-    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/armeabi-v7a/
+    KDECI_CC_CACHE: /mnt/krita-android/armeabi-v7a/caches/
+    KDECI_CACHE_PATH: /mnt/krita-android/armeabi-v7a/artifacts/
     KRITACI_ARCHIVE_ARTIFACTS: True
     KRITACI_SKIP_COMMON_ARTIFACTS: True
 
 android-build-appbundle:
   stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder-sdk34-2204:latest
+  image: storage.kde.org/vm-images/krita-android-sdk34-2204
   tags:
-    - Linux
+    - VM
+    - amd64
   extends:
     - .ci-manual-job-mixin
   interruptible: true

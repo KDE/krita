@@ -52,15 +52,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 01:59+0000\n"
-"PO-Revision-Date: 2025-07-03 20:56+0200\n"
+"POT-Creation-Date: 2025-08-15 02:17+0000\n"
+"PO-Revision-Date: 2025-08-12 07:39+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16028,14 +16028,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: krita/main.cc:724 libs/ui/KisApplication.cpp:449
-#: libs/ui/KisApplication.cpp:727
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:452
+#: libs/ui/KisApplication.cpp:730
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varning"
 
-#: krita/main.cc:725
+#: krita/main.cc:749
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16062,49 +16062,49 @@ msgid "Activate angle snap"
 msgstr "Aktivera vinkellåsning"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
-#: libs/basicflakes/tools/KoPencilTool.cpp:298
+#: libs/basicflakes/tools/KoPencilTool.cpp:294
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "Precision:"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:300
+#: libs/basicflakes/tools/KoPencilTool.cpp:296
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Obehandlad"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:301
+#: libs/basicflakes/tools/KoPencilTool.cpp:297
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
 #, kde-format
 msgid "Curve"
 msgstr "Kurva"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:302
+#: libs/basicflakes/tools/KoPencilTool.cpp:298
 #, kde-format
 msgid "Straight"
 msgstr "Rak"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:311
-#: libs/basicflakes/tools/KoPencilTool.cpp:317
+#: libs/basicflakes/tools/KoPencilTool.cpp:307
+#: libs/basicflakes/tools/KoPencilTool.cpp:314
 #, kde-format
 msgid "Optimize"
 msgstr "Optimera"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:323
+#: libs/basicflakes/tools/KoPencilTool.cpp:321
 #, kde-format
 msgid "Exactness:"
 msgstr "Exakthet:"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:356
-#: libs/basicflakes/tools/KoPencilTool.cpp:357
+#: libs/basicflakes/tools/KoPencilTool.cpp:354
+#: libs/basicflakes/tools/KoPencilTool.cpp:355
 #, kde-format
 msgid "Pencil"
 msgstr "Penna"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
-#: libs/basicflakes/tools/KoPencilTool.cpp:362
+#: libs/basicflakes/tools/KoPencilTool.cpp:360
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:17
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:51
 #, kde-format
@@ -16450,7 +16450,7 @@ msgid "Cannot save %1 to html"
 msgstr "Kan inte spara %1 som HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
-#: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:122
+#: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
 #: libs/ui/flake/kis_shape_layer.cc:579
 #, kde-format
 msgid ""
@@ -16475,12 +16475,34 @@ msgstr "En enkel konturform"
 msgid "%1 Options"
 msgstr "Alternativ för %1"
 
-#: libs/flake/KoToolManager.cpp:613
+#: libs/flake/KoToolManager.cpp:605
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktivt verktyg: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1882
+#: libs/flake/KoZoomMode.cpp:25
+#, kde-format
+msgid "Fit View"
+msgstr "Anpassa till vy"
+
+#: libs/flake/KoZoomMode.cpp:27
+#, kde-format
+msgid "Fit Width"
+msgstr "Anpassa till bredd"
+
+#: libs/flake/KoZoomMode.cpp:29
+#, kde-format
+msgid "Fit Height"
+msgstr "Anpassa till höjd"
+
+#: libs/flake/resources/KoCssStylePreset.cpp:32
+#, fuzzy, kde-format
+#| msgid "Style Sheet"
+msgctxt "info:placeholder"
+msgid "Style Sample"
+msgstr "Stilmall"
+
+#: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -17696,31 +17718,31 @@ msgstr "Gammal nordarabisk"
 #, kde-format
 msgctxt "@title"
 msgid "Manichaean"
-msgstr ""
+msgstr "Manichaeiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:222
 #, kde-format
 msgctxt "@title"
 msgid "Avestan"
-msgstr ""
+msgstr "Avestiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Inskriptionell parthiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Inskriptionell pahlavi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:225
 #, kde-format
 msgctxt "@title"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Psaltarpahlavi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
 #, kde-format
@@ -17738,25 +17760,25 @@ msgstr "Gammalungerska"
 #, kde-format
 msgctxt "@title"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Hanifi Rohingya"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:229
 #, kde-format
 msgctxt "@title"
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:230
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "Rumi siffersymboler"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Yezidi"
-msgstr ""
+msgstr "Yazidi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:232
 #, kde-format
@@ -17768,139 +17790,139 @@ msgstr "Utökad arabiska-C"
 #, kde-format
 msgctxt "@title"
 msgid "Old Sogdian"
-msgstr ""
+msgstr "Gammalsogdiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:234
 #, kde-format
 msgctxt "@title"
 msgid "Sogdian"
-msgstr ""
+msgstr "Sogdiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:235
 #, kde-format
 msgctxt "@title"
 msgid "Old Uyghur"
-msgstr ""
+msgstr "Gammaluiguriska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:236
 #, kde-format
 msgctxt "@title"
 msgid "Chorasmian"
-msgstr ""
+msgstr "Choresmiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:237
 #, kde-format
 msgctxt "@title"
 msgid "Elymaic"
-msgstr ""
+msgstr "Elymeiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:238
 #, kde-format
 msgctxt "@title"
 msgid "Brahmi"
-msgstr ""
+msgstr "Brāhmi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:239
 #, kde-format
 msgctxt "@title"
 msgid "Kaithi"
-msgstr ""
+msgstr "Kaithī"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:240
 #, kde-format
 msgctxt "@title"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sorang-Sompeng"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:241
 #, kde-format
 msgctxt "@title"
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:242
 #, kde-format
 msgctxt "@title"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
 #, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr ""
+msgstr "Śāradā"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala Archaic Numbers"
-msgstr ""
+msgstr "Sinhala arkaiska siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:245
 #, kde-format
 msgctxt "@title"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
 #, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr ""
+msgstr "Multani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
 msgctxt "@title"
 msgid "Khudawadi"
-msgstr ""
+msgstr "Khudabadi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:248
 #, kde-format
 msgctxt "@title"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:250
 #, kde-format
 msgctxt "@title"
 msgid "Newa"
-msgstr ""
+msgstr "Newari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:251
 #, kde-format
 msgctxt "@title"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:252
 #, kde-format
 msgctxt "@title"
 msgid "Siddham"
-msgstr ""
+msgstr "Siddhaṃ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
 #, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr ""
+msgstr "Moḍī"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
 msgctxt "@title"
 msgid "Mongolian Supplement"
-msgstr ""
+msgstr "Mongoliska tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:255
 #, kde-format
 msgctxt "@title"
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:256
 #, kde-format
@@ -17912,139 +17934,139 @@ msgstr "Utökad Myanmar-C"
 #, kde-format
 msgctxt "@title"
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:258
 #, kde-format
 msgctxt "@title"
 msgid "Dogra"
-msgstr ""
+msgstr "Dogra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:259
 #, kde-format
 msgctxt "@title"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Varang Kshiti"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:260
 #, kde-format
 msgctxt "@title"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Nandinagari"
-msgstr ""
+msgstr "Nandinagari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:262
 #, kde-format
 msgctxt "@title"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Zanabazar kvadrat"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:263
 #, kde-format
 msgctxt "@title"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:264
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr ""
+msgstr "Enhetliga utökade kanadensiska aboriginstavelser-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:266
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended-A"
-msgstr ""
+msgstr "Utökad kyrilliska-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:267
 #, kde-format
 msgctxt "@title"
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunuwar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:268
 #, kde-format
 msgctxt "@title"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
 #, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr ""
+msgstr "Marchen"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
 msgctxt "@title"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:271
 #, kde-format
 msgctxt "@title"
 msgid "Gunjala Gondi"
-msgstr ""
+msgstr "Gunjala Gondi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:272
 #, kde-format
 msgctxt "@title"
 msgid "Makasar"
-msgstr ""
+msgstr "Makassar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Kawi"
-msgstr ""
+msgstr "Kawi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:274
 #, kde-format
 msgctxt "@title"
 msgid "Lisu Supplement"
-msgstr ""
+msgstr "Lisu tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:275
 #, kde-format
 msgctxt "@title"
 msgid "Tamil Supplement"
-msgstr ""
+msgstr "Tamil tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:276
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr ""
+msgstr "Kilskrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform Numbers and Punctuation"
-msgstr ""
+msgstr "Kilskriftsnummer och skiljetecken"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:278
 #, kde-format
 msgctxt "@title"
 msgid "Early Dynastic Cuneiform"
-msgstr ""
+msgstr "Tidig kilskrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:279
 #, kde-format
 msgctxt "@title"
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Cypro-minoisk"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:280
 #, kde-format
@@ -18056,7 +18078,7 @@ msgstr "Egyptiska hieroglyfer"
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr ""
+msgstr "Egyptiska hieroglyfer formatkontroller"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:282
 #, kde-format
@@ -18068,139 +18090,139 @@ msgstr "Utökade egyptiska hieroglyfer-A"
 #, kde-format
 msgctxt "@title"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Anatoliska hieroglyfer"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:284
 #, kde-format
 msgctxt "@title"
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:285
 #, kde-format
 msgctxt "@title"
 msgid "Bamum Supplement"
-msgstr ""
+msgstr "Bamum tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
 #, kde-format
 msgctxt "@title"
 msgid "Mro"
-msgstr ""
+msgstr "Mro"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:287
 #, kde-format
 msgctxt "@title"
 msgid "Tangsa"
-msgstr ""
+msgstr "Tangsa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:288
 #, kde-format
 msgctxt "@title"
 msgid "Bassa Vah"
-msgstr ""
+msgstr "Bassa Vah"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:290
 #, kde-format
 msgctxt "@title"
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:291
 #, kde-format
 msgctxt "@title"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "Medefaidrin"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:292
 #, kde-format
 msgctxt "@title"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Symbols and Punctuation"
-msgstr ""
+msgstr "Ideografiska symboler och skiljetecken"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:294
 #, kde-format
 msgctxt "@title"
 msgid "Tangut"
-msgstr ""
+msgstr "Tangut"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
 #, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr ""
+msgstr "Tangut komponenter"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
 #, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Khitansk liten skrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
 #, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr ""
+msgstr "Tangut tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
 #, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr ""
+msgstr "Utökad Kana-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
 #, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr ""
+msgstr "Kana-tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
 #, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr ""
+msgstr "Utökad Kana-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
 #, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr ""
+msgstr "Utökade små Kana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
 msgctxt "@title"
 msgid "Nushu"
-msgstr ""
+msgstr "Nüshu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:303
 #, kde-format
 msgctxt "@title"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployé"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:304
 #, kde-format
 msgctxt "@title"
 msgid "Shorthand Format Controls"
-msgstr ""
+msgstr "Stenografiska formatkontroller"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "Symboler för äldre datasystem tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:306
 #, kde-format
@@ -18230,37 +18252,37 @@ msgstr "Forntida grekisk musiknotation"
 #, kde-format
 msgctxt "@title"
 msgid "Kaktovik Numerals"
-msgstr ""
+msgstr "Kaktovikiska siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
 #, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr ""
+msgstr "Mayanska siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
 msgctxt "@title"
 msgid "Tai Xuan Jing Symbols"
-msgstr ""
+msgstr "Tai Xuan Jing symboler"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Counting Rod Numerals"
-msgstr ""
+msgstr "Räknestavsiffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:314
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Alphanumeric Symbols"
-msgstr ""
+msgstr "Matematiska alfanumeriska symboler"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
 #, kde-format
 msgctxt "@title"
 msgid "Sutton SignWriting"
-msgstr ""
+msgstr "Sutton teckenskrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:316
 #, kde-format
@@ -18272,43 +18294,43 @@ msgstr "Utökat latin-G"
 #, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr ""
+msgstr "Glagolitiska tillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-D"
-msgstr ""
+msgstr "Utökad kyrilliska-D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:319
 #, kde-format
 msgctxt "@title"
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng Puachue Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:320
 #, kde-format
 msgctxt "@title"
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
 #, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr ""
+msgstr "Wancho"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
 msgctxt "@title"
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag Mundari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
 #, kde-format
 msgctxt "@title"
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:324
 #, kde-format
@@ -18320,31 +18342,31 @@ msgstr "Utökad etiopiska-B"
 #, kde-format
 msgctxt "@title"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende Kikakui"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:326
 #, kde-format
 msgctxt "@title"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:327
 #, kde-format
 msgctxt "@title"
 msgid "Indic Siyaq Numbers"
-msgstr ""
+msgstr "Indiska Siyaq-siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:328
 #, kde-format
 msgctxt "@title"
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Ottomanska Siyaq-siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:329
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "Arabiska matematiska alfabetssymboler"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
 #, kde-format
@@ -18482,43 +18504,43 @@ msgstr "Enhetlig CJK-ideogramtillägg I"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs Supplement"
-msgstr ""
+msgstr "CJK-kompatibilitet Ideograftillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:353
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension G"
-msgstr ""
+msgstr "Enhetlig CJK-ideogramtillägg G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:354
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension H"
-msgstr ""
+msgstr "Enhetlig CJK-ideogramtillägg H"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:355
 #, kde-format
 msgctxt "@title"
 msgid "Tags"
-msgstr ""
+msgstr "Etiketter"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:356
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors Supplement"
-msgstr ""
+msgstr "Variationsväljartillägg"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:357
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-A"
-msgstr ""
+msgstr "Kompletterande område för privat användning-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:358
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-B"
-msgstr ""
+msgstr "Kompletterande område för privat användning-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
 #, kde-format
@@ -18530,37 +18552,37 @@ msgstr "Inget block"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
-msgstr ""
+msgstr "%1 glyfvarianter."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
 #, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr ""
+msgstr "Åtkomst av alla alternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
 msgctxt "@tooltip"
 msgid "Access any possible substitutions."
-msgstr ""
+msgstr "Åtkomst av alla möjliga ersättningar"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Sammanhangsberoende alternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr ""
+msgstr "Ersätter glyfer beroende på deras sammanhang inne i en text."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Sammanhangsberoende ligaturer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
 #, kde-format
@@ -18569,12 +18591,14 @@ msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
 msgstr ""
+"Ersätter sekvenser av glyfer med ligaturer beroende på deras sammanhang inne "
+"i en text."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Sammanhangsberoende släng"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18582,12 +18606,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
 msgstr ""
+"Ersätter glyfer med slängglyfer beroende på deras sammanhang inne i en text."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Godtyckliga ligaturer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18595,31 +18620,32 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
 msgstr ""
+"Ersätter sekvenser av glyfer med ligaturer avsedda för typografisk effekt."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Alternativ för sista glyf på raden"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr ""
+msgstr "Ersätter glyfer med deras radslutsformer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
 #, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Historiska former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their historical forms."
-msgstr ""
+msgstr "Ersätter glyfer med deras historiska former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
 #, kde-format
@@ -18628,60 +18654,62 @@ msgid ""
 "Replaces sequences glyphs with ligatures that were in use in the past, but "
 "rare today."
 msgstr ""
+"Ersätter sekvenser av glyfer med ligaturer som användes förr men är "
+"sällsynta idag."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:57
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Inpassningsalternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
-msgstr ""
+msgstr "Ersätter glyfer med deras alternativ avsedda för inpassning."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
 #, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr ""
+msgstr "Standardligaturer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr ""
+msgstr "Ersätter sekvenser av glyfer med vanliga ligaturer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr ""
+msgstr "Vänster gräns"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the left side."
-msgstr ""
+msgstr "Justerar glyfer så att det inte finns något utrymme på vänster sida."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
 #, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr ""
+msgstr "Landsanpassade former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
-msgstr ""
+msgstr "Ersätter glyfer med språkspecifika versioner."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
 #, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Optiska gränser"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18690,48 +18718,50 @@ msgid ""
 "Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
 "Krita."
 msgstr ""
+"Justerar glyfer som att de riktas in enligt deras optiska gränser. Gör "
+"ingenting i Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
 #, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr ""
+msgstr "Ornament"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ornaments for decorative purposes."
-msgstr ""
+msgstr "Ersätter glyfer med ornament i dekorativt syfte."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
 #, kde-format
 msgctxt "@title"
 msgid "Randomize"
-msgstr ""
+msgstr "Slumpmässiga"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:82
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with random alternates."
-msgstr ""
+msgstr "Ersätter glyfer med slumpmässiga alternativ."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
 #, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr ""
+msgstr "Höger gräns"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the right side."
-msgstr ""
+msgstr "Justerar glyfer så att det inte finns något utrymme på höger sida."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Stilistiska alternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18740,24 +18770,26 @@ msgid ""
 "Replaces glyphs with stylistic alternates that do not fit in other "
 "categories."
 msgstr ""
+"Ersätter glyfer med stilistiska alternativ som inte passar in i andra "
+"kategorier."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr ""
+msgstr "Släng"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr ""
+msgstr "Ersätter glyfer med slängalternativ."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
 #, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr ""
+msgstr "Sammanfogning/uppdelning av glyfer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
 #, kde-format
@@ -18766,25 +18798,27 @@ msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
+"Fogar samman eller dela upp grafemer så att de resulterande glyferna senare "
+"kan omformas. Används vanligtvis för att hantera diakritiska tecken."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
 #, kde-format
 msgctxt "@title"
 msgid "Kerning"
-msgstr ""
+msgstr "Kerning"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls kerning on the font."
-msgstr ""
+msgstr "Bestämmer teckensnittets kerning."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
 #, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Markörpositionering"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -18793,6 +18827,8 @@ msgid ""
 "This controls the positioning of mark glyphs on base glyphs. Commonly used "
 "for diacritics."
 msgstr ""
+"Bestämmer positioneringen av markörglyfer på basglyfer. Används vanligtvis "
+"för diakritiska tecken."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
 #, kde-format
@@ -18801,12 +18837,14 @@ msgid ""
 "This controls the positioning of mark glyphs onto other mark glyphs. "
 "Commonly used for diacritics."
 msgstr ""
+"Bestämmer positioneringen av markörglyfer ovanpå andra markörglyfer. Används "
+"vanligtvis för diakritiska tecken."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Nödvändiga sammanhangsberoende alternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
@@ -18814,24 +18852,26 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
+"Ersätter glyfer med alternativa tecken beroende på sammanhang, nödvändiga "
+"för att teckensnittet ska fungera."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
 msgctxt "@title"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Obligatoriska ligaturer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs with required ligatures."
-msgstr ""
+msgstr "Ersätter sekvenser av glyfer med obligatoriska ligaturer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
 #, kde-format
 msgctxt "@title"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Obligatoriska variantalternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:124
 #, kde-format
@@ -18840,12 +18880,14 @@ msgid ""
 "Replaces glyphs in a variable font with ones suited for the current "
 "variation."
 msgstr ""
+"Ersätter glyfer i ett variabelt teckensnitt med sådana som passar den "
+"aktuella varianten."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
 #, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr ""
+msgstr "Optisk storlek"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -18854,36 +18896,38 @@ msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
 msgstr ""
+"Anger hur passande teckensnittet är för sin nuvarande storlek. Gör ingenting "
+"i Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr ""
+msgstr "Vertikal kerning"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls vertical kerning on the font."
-msgstr ""
+msgstr "Bestämmer teckensnittets vertikala kerning."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
 #, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr ""
+msgstr "Alternativa bråk"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
-msgstr ""
+msgstr "Ersätter siffror separerade med snedstreck med en vertikal bråkform."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
 #, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr ""
+msgstr "Nämnare"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -18892,12 +18936,14 @@ msgid ""
 "Replaces figures with forms that are suited to represent the denominator in "
 "a fraction."
 msgstr ""
+"Ersätter siffror med former som är lämpade att representera nämnaren i ett "
+"bråk."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:145
 #, kde-format
 msgctxt "@title"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Punktfria former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:146
 #, kde-format
@@ -18906,24 +18952,26 @@ msgid ""
 "Replaces dotted letters such as i and j with dotless forms, for use in "
 "mathematical formula."
 msgstr ""
+"Ersätter bokstäver med punkt, såsom i och j, med punktfria former, för "
+"användning i matematiska formler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
 #, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Utplattade accentformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
-msgstr ""
+msgstr "Ersätter accenter i versaler med utplattade former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
 #, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr ""
+msgstr "Bråk"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -18934,12 +18982,16 @@ msgid ""
 "separated by a 'fraction slash' (U+2044), then this will replace the figures "
 "with numerators before the slash and denominators after the slash."
 msgstr ""
+"Ersätter siffror separerade med ett snedstreck med en korrekt diagonal "
+"bråkform. Om ett teckensnitt har täljare och nämnare, och siffrorna är "
+"separerade med ett \"bråkstreck\" (U+2044), ersätts siffrorna med täljare "
+"före snedstrecket och nämnare efter snedstrecket."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
 #, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Linjerade siffror"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -18948,12 +19000,14 @@ msgid ""
 "Replaces oldstyle figures with lining figures, which harmonize well with "
 "uppercase letters."
 msgstr ""
+"Ersätter hängande siffror med linjerade siffror, som harmoniserar bra med "
+"versaler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Matematiskt grekiska"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -18961,24 +19015,27 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
 msgstr ""
+"Ersätter normalt grekiskt skrift med glyfer avsedda för matematisk "
+"användning."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Alternativa annoteringsformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr ""
+"Ersätter siffror och bokstäver med notationella former, såsom omringade"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
 #, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr ""
+msgstr "Täljare"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -18987,12 +19044,14 @@ msgid ""
 "Replaces figures with forms that are suited to represent the numerator in a "
 "fraction."
 msgstr ""
+"Ersätter siffror med former som är lämpade att representera täljaren i ett "
+"bråk."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Hängande siffror"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19001,36 +19060,38 @@ msgid ""
 "Replaces lining figures with oldstyle figures, which harmonize well with "
 "lowercase letters."
 msgstr ""
+"Ersätter linjerade siffror med hängande siffror, som harmoniserar bra med "
+"gemener."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
 #, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr ""
+msgstr "Ordningstal"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces letters that follow figures with their ordinal forms."
-msgstr ""
+msgstr "Ersätter bokstäver som följer siffror med deras ordningstalsformer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr ""
+msgstr "Proportionella siffror"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces tabular figures with proportional figures."
-msgstr ""
+msgstr "Ersätter tabellsiffror med proportionella siffror."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:185
 #, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Vetenskapliga underordnade"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19039,60 +19100,62 @@ msgid ""
 "Replaces glyphs with forms that are suited for displaying the number in "
 "chemical formulas."
 msgstr ""
+"Ersätter glyfer med former som är lämpade för att visa talet i kemiska "
+"formler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Stilalternativ för matematisk skrift"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for super- and subscripts."
-msgstr ""
+msgstr "Ersätter glyfer med sådana mer lämpade för upphöjd och nedsänkt text."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
 #, kde-format
 msgctxt "@title"
 msgid "Subscript"
-msgstr ""
+msgstr "Nedsänkt"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for subscript."
-msgstr ""
+msgstr "Ersätter glyfer med sådana mer lämpade för nedsänkt text."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
 #, kde-format
 msgctxt "@title"
 msgid "Superscript"
-msgstr ""
+msgstr "Upphöjt"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for superscript."
-msgstr ""
+msgstr "Ersätter glyfer med sådana mer lämpade för upphöjd text."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
 #, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Tabellsiffror"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces proportional figures with tabular figures."
-msgstr ""
+msgstr "Ersätter proportionella siffror med tabellsiffror."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Noll med snedstreck"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
 #, kde-format
@@ -19101,12 +19164,14 @@ msgid ""
 "Replaces the number zero with one that has a slash in the middle, which can "
 "help prevent confusion with similar glyphs like the letter 'O'."
 msgstr ""
+"Ersätter siffran noll med en som har ett snedstreck i mitten, vilket kan "
+"bidra till att förhindra förvirring med liknande glyfer som bokstaven 'O'."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "Skiftlägeskänsliga former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
 #, kde-format
@@ -19115,24 +19180,26 @@ msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
 msgstr ""
+"Justerar glyfer att fungera bättre med text som enbart består av versaler "
+"eller linjerade siffror."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
 #, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Versalmellanrum"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts inter-glyph spacing for all-capital text."
-msgstr ""
+msgstr "Justerar mellanrum mellan glyfer för text med enbart versaler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Petite versaler från versaler"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
 #, kde-format
@@ -19141,24 +19208,26 @@ msgid ""
 "Replaces uppercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Ersätter versaler med petite versala former, som är närmare teckensnittets x-"
+"höjd än små versala former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Små versaler från versaler"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uppercase letters with small capital forms."
-msgstr ""
+msgstr "Ersätter versaler med små versala former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "Petite versaler"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:228
 #, kde-format
@@ -19167,48 +19236,51 @@ msgid ""
 "Replaces lowercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Ersätter gemener med petite versala former, som är närmare teckensnittets x-"
+"höjd än små versala former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr ""
+msgstr "Små versaler"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces lowercase letters with small capital forms."
-msgstr ""
+msgstr "Ersätter gemener med små versala former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
 #, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr ""
+msgstr "Rubriksättning"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternate forms suited for header text."
-msgstr ""
+msgstr "Ersätter glyfer med alternativa former lämpade för rubriktext."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
 #, kde-format
 msgctxt "@title"
 msgid "Unicase"
-msgstr ""
+msgstr "Förenat skiftläge"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces both upper and lowercase glyphs with unicase glyphs."
 msgstr ""
+"Ersätter både versala och gemena glyfer med glyfer som har förenat skiftläge"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:245
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Former ovanför bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
 #, kde-format
@@ -19216,144 +19288,146 @@ msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
 msgstr ""
+"Bestämmer ersättning ovanför basformer i Khmer och andra Indiska skrifttyper"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Positionering markerad ovanför bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:250
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
-msgstr ""
+msgstr "Bestämmer positionering markerad ovanför basen för indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Ersättningar ovanför bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
-msgstr ""
+msgstr "Bestämmer ligaturer markerade ovanför basen för indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
 #, kde-format
 msgctxt "@title"
 msgid "Akhand"
-msgstr ""
+msgstr "Akhand"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr ""
+msgstr "Bestämmer Akhand-ligaturer för indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Former nedanför bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr ""
+"Bestämmer ersättning nedanför basformer i Khmer och andra Indiska skrifttyper"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Positionering markerad nedanför bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:266
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
-msgstr ""
+msgstr "Bestämmer positionering markerad nedanför basen för indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Ersättningar nedanför bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
-msgstr ""
+msgstr "Bestämmer ligaturer markerade nedanför basen för indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Förenad form efter Ro"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr ""
+msgstr "Bestämmer glyfer som följer förenat Ro i Khmer-skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Förenade former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr ""
+msgstr "Bestämmer förenade former i indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr ""
+msgstr "Avstånd"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls distances in Indic scripts, to avoid collisions."
-msgstr ""
+msgstr "Bestämmer avstånd i indisk skrift för att undvika kollisioner."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr ""
+msgstr "Halvformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr ""
+msgstr "Ersätter konsonanter i indisk skrift med deras halvformer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Halant-former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr ""
+msgstr "Ersätter konsonanter i indisk skrift med deras halant-former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Nukta-former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
 #, kde-format
@@ -19362,12 +19436,14 @@ msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
 msgstr ""
+"Ersätter konsonanter kombinerade med Nukta i indisk skrift med deras Nukta-"
+"former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Forms"
-msgstr ""
+msgstr "Former före bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:298
 #, kde-format
@@ -19376,24 +19452,26 @@ msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
 "situation occurs."
 msgstr ""
+"Ersätter formerna före basen av en konsonant i Khmer-skrift, när en 'Coeng "
+"Ra' situation uppstår."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Ersättningar före bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants with their pre-base forms in Indic scripts."
-msgstr ""
+msgstr "Ersätter konsonanter med deras former före basen i indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Former efter bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
 #, kde-format
@@ -19402,12 +19480,14 @@ msgid ""
 "Replaces consonants with their post-base forms in Gurmukhi, Malayalam, and "
 "Khmer."
 msgstr ""
+"Ersätter konsonanter med deras former efter basen i Gurmukhi, Malayalam och "
+"Khmer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Ersättningar efter bas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
 #, kde-format
@@ -19415,24 +19495,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
 msgstr ""
+"Ersätter basglyfer med glyfer efter basen med en ligatur i indisk skrift."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Rakar-former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
-msgstr ""
+msgstr "Ersätter sekvenser av glyfer i indisk skrift med deras Rakar-former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
 #, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr ""
+msgstr "Reph-form"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
 #, kde-format
@@ -19440,26 +19521,27 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
 msgstr ""
+"Ersätter Reph-former i indisk skrift med en konsonant och Halant-sekvens."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
 #, kde-format
 msgctxt "@title"
 msgid "Vattu Variants"
-msgstr ""
+msgstr "Vattu-varianter"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces ligatures in Indic scripts with a base consonant and Vattu form."
-msgstr ""
+msgstr "Ersätter ligaturer i indisk skrift med en baskonsonant och Vattu-form."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:343
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Half-width Spacing"
-msgstr ""
+msgstr "Sammanhangsberoende halvbreddsmellanrum"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:328
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:440
@@ -19469,42 +19551,49 @@ msgid ""
 "Respaces full-width glyphs to be half-width depending on the context, common "
 "examples include CJK full-width brackets and other punctuation marks."
 msgstr ""
+"Ändrar mellanrum för glyfer med full bredd till halvbredd beroende på "
+"sammanhanget, vanliga exempel omfattar CJK fullbredds parenteser och andra "
+"skiljetecken."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
 #, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Centrerade CJK-skiljetecken"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
+"Justerar skiljetecken som inte är centrerade till att vara centrerade i CJK-"
+"skript."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
 #, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr ""
+msgstr "Expertformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard forms in Japanese fonts with expert forms."
-msgstr ""
+msgstr "Ersätter vanliga former i japanska teckensnitt med expertformer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
 #, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr ""
+msgstr "Fulla bredder"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces or respaces proportional glyphs with full-width glyphs."
 msgstr ""
+"Ersätter eller ändrar mellanrum för proportionella glyfer eller glyfer med "
+"full bredd."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:344
 #, kde-format
@@ -19513,12 +19602,14 @@ msgid ""
 "Respaces full-width glyphs to be half-width, common examples include CJK "
 "full-width brackets and other punctuation marks."
 msgstr ""
+"Ändrar mellanrum för glyfer med full bredd till halvbredd, vanliga exempel "
+"omfattar CJK fullbredds parenteser och andra skiljetecken."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
 #, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Horisontella kana alternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19527,24 +19618,26 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for horizontal "
 "layout."
 msgstr ""
+"Ersätter vanliga kana i japanska teckensnitt med sådana lämpade för "
+"horisontell layout."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
 #, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
-msgstr ""
+msgstr "Ersätter hanja i koreanska med motsvarande hangul. Föråldrad."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:355
 #, kde-format
 msgctxt "@title"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Hojo Kanji former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:356
 #, kde-format
@@ -19553,12 +19646,14 @@ msgid ""
 "Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
 "X 0212-1990') forms."
 msgstr ""
+"Ersätter Kanji med 'JIS X 0213:2004' form i japanska teckensnitt med Hojo "
+"('JIS X 0212-1990') former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
 #, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr ""
+msgstr "Halvbredder"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19567,12 +19662,14 @@ msgid ""
 "Replaces or respaces proportional or full-width glyphs with half-width "
 "glyphs."
 msgstr ""
+"Ersätter eller ändrar mellanrum för proportionella glyfer eller glyfer med "
+"full bred till halvbreddsglyfer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
 #, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr ""
+msgstr "Kursiv"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
@@ -19585,55 +19682,59 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "JIS78 former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
 msgstr ""
+"Ersätter Kanji med vanlig form i japanska teckensnitt med JIS78-former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
 #, kde-format
 msgctxt "@title"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "JIS83 former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
 msgstr ""
+"Ersätter Kanji med vanlig form i japanska teckensnitt med JIS83-former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
 #, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "JIS90 former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
 msgstr ""
+"Ersätter Kanji med vanlig form i japanska teckensnitt med JIS90-former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
 #, kde-format
 msgctxt "@title"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "JIS2004 former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:380
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
 msgstr ""
+"Ersätter Kanji med vanlig form i japanska teckensnitt med JIS2004-former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
 #, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Inledande Jamo former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
 #, kde-format
@@ -19641,72 +19742,77 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of leading class Hangul Jamo with a combined leading form."
 msgstr ""
+"Ersätter sekvenser av inledande klass Hangul Jamo med en kombinerad "
+"inledande form."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
 #, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC Kanji former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
-msgstr ""
+msgstr "Ersätter Kanji med vanlig form i japanska teckensnitt med NLC-former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Proportionella alternativa bredder"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
 msgctxt "@tooltip"
 msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
+"Ändrar mellanrum för glyfer med full bredd för att passa i ett "
+"proportionellt sammanhang."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "Proportionella kana"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
+"Ersätter kana med full bredd i Japanska teckensnitt med proportionella kana."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "Proportionella bredder"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uniform-width glyphs with proportional glyphs."
-msgstr ""
+msgstr "Ersätter glyfer av likformig bredd med proportionella glyfer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
 #, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Fjärdedelsbredder"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with quarter-width glyphs."
-msgstr ""
+msgstr "Ersätter glyfer med fjärdedelsbredd glyfer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:407
 #, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Ruby-notationsformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -19715,24 +19821,26 @@ msgid ""
 "Replaces glyphs in CJK fonts with ones suited for the small text in ruby "
 "annotations."
 msgstr ""
+"Ersätter glyfer i CJK-teckensnitt med sådana lämpade för den lilla texten i "
+"ruby-annoteringar."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
 #, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "Förenklade former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'simplified' forms."
-msgstr ""
+msgstr "Ersätter glyfer i CJK-teckensnitt med 'förenklade' former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:415
 #, kde-format
 msgctxt "@title"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Avslutande Jamo former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
 #, kde-format
@@ -19741,12 +19849,14 @@ msgid ""
 "Replaces sequences of trailing class Hangul Jamo with a combined trailing "
 "form."
 msgstr ""
+"Ersätter sekvenser av avslutande klass Hangul Jamo med en kombinerad "
+"avslutande form."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Traditionella namnformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -19755,78 +19865,82 @@ msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
 msgstr ""
+"Ersätter Kanji med vanlig form i japanska teckensnitt med sådana "
+"traditionellt använda för namn."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Traditionella former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
-msgstr ""
+msgstr "Ersätter glyfer i CJK-teckensnitt med 'traditionella' former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
 #, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr ""
+msgstr "Tredjedelsbredd"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with third-width glyphs."
-msgstr ""
+msgstr "Ersätter glyfer med tredjedelsbredd glyfer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Alternativa vertikala mått"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in vertical layout."
-msgstr ""
+msgstr "Positionerar om glyfer så att de ser lämpligare ut i vertikal layout."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Alternativa halvbredder"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in horizontal layout."
 msgstr ""
+"Positionerar om glyfer så att de ser lämpligare ut i horisontell layout.."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Contextual Half-width Spacing"
-msgstr ""
+msgstr "Vertikalt sammanhangsberoende halvbreddsmellanrum"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr ""
+msgstr "Vertikala alternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
+"Ersätter glyfer i CJK-teckensnitt med sådana lämpade för vertikal skrivning."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Alternativa vertikala halvmått"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -19834,12 +19948,13 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are half-width in a vertical writing context."
 msgstr ""
+"Positionerar om glyfer så att de är halvbredd i vertikalt skrivsammanhang."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Jamo vokalformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -19847,12 +19962,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
 msgstr ""
+"Ersätter sekvenser av vokalklass Hangul Jamo med en kombinerad vokalform."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "Vertikala alternativ för kana"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -19861,12 +19977,14 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for vertical "
 "layout."
 msgstr ""
+"Ersätter vanliga kana i japanska teckensnitt med sådana lämpade för vertikal "
+"layout."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:459
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Proportionella alternativa vertikala mått"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -19874,24 +19992,27 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are proportional in a vertical writing context."
 msgstr ""
+"Positionerar om glyfer så att de är proportionella i vertikalt "
+"skrivsammanhang."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "Vertikala alternativ för rotation"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
 msgstr ""
+"Ersätter en delmängd av glyfer med roterade varianter för vertikal layout."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Vertikala alternativ och rotation"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -19900,6 +20021,8 @@ msgid ""
 "Replaces all horizontal-script glyphs with rotated variants for vertical "
 "layout."
 msgstr ""
+"Ersätter alla glyfer i horisontell skrift med roterade varianter för "
+"vertikal layout."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
 #, kde-format
@@ -19917,7 +20040,7 @@ msgstr "Justerar glyfernas position så att de blir rätt kursiva"
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr ""
+msgstr "Slutformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -19926,12 +20049,14 @@ msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
 "end form."
 msgstr ""
+"Ersätter den slutliga glyfen i en sekvens av glyfer i sammanfogad skrift med "
+"dess slutform."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr ""
+msgstr "Slutform nr. 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -19939,13 +20064,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form."
-msgstr ""
+msgstr "Ersätter Alaph-glyfen i slutet av syriska ord med dess lämpliga form."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr ""
+msgstr "Slutform nr. 3"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -19954,13 +20079,15 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form, when neither Terminal forms or Terminal forms 2 are applicable."
 msgstr ""
+"Ersätter Alaph-glyfen i slutet av syriska ord med dess lämpliga form, när "
+"varken Slutformer eller Slutformer 2 är tillämpliga."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
 #, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr ""
+msgstr "Initialformer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -19969,6 +20096,8 @@ msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
 msgstr ""
+"Ersätter den första glyfen i en sekvens av glyfer i sammanfogad skrift med "
+"dess startform."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
 #, kde-format
@@ -19977,36 +20106,38 @@ msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
 msgstr ""
+"Ersätter en glyf i en sekvens av glyfer i sammanfogad skrift med dess "
+"isolerade form."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr ""
+msgstr "Vänster till höger glyfalternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right alternates."
-msgstr ""
+msgstr "Ersätter glyfer med deras vänster till höger alternativ."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr ""
+msgstr "Vänster till höger speglade former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr ""
+msgstr "Ersätter glyfer med deras vänster till höger speglade former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Mediala former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -20015,12 +20146,14 @@ msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
 msgstr ""
+"Ersätter glyfer mitt i en sekvens av glyfer i sammanfogad skrift med deras "
+"mediala former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Mediala former nr. 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20028,13 +20161,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph in the middle of Syriac words with its appropriate "
 "form."
-msgstr ""
+msgstr "Ersätter Alaph-glyfen mitt i syriska ord med dess lämpliga form."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
 #, kde-format
 msgctxt "@title"
 msgid "mset"
-msgstr ""
+msgstr "mset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
 #, kde-format
@@ -20043,87 +20176,89 @@ msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
 msgstr ""
+"Placerar arabiska kombinationstecken i teckensnitt för Windows 95 med hjälp "
+"av glyfersättning."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left glyph alternates"
-msgstr ""
+msgstr "Höger till vänster glyfalternativ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left alternates."
-msgstr ""
+msgstr "Ersätter glyfer med deras höger till vänster alternativ."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr ""
+msgstr "Höger till vänster speglade former"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr ""
+msgstr "Ersätter glyfer med deras höger till vänster speglade former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Uppdelning av tänjningsglyfer"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
-msgstr ""
+msgstr "Ersätter glyfer som behöver tänjas ut med tänjbara glyfer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
-msgstr ""
+msgstr "Stilistisk uppsättning %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
-msgstr ""
+msgstr "Ersätter glyfer med alternativ."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
 #, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr ""
+msgstr "Teckenvariant %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1635
+#: libs/flake/text/KoSvgTextShape.cpp:1750
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Platsmarkeringstext"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1614
+#: libs/flake/text/KoSvgTextShape.cpp:1729
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1616
-#: libs/flake/text/KoSvgTextShape.cpp:1624
+#: libs/flake/text/KoSvgTextShape.cpp:1731
+#: libs/flake/text/KoSvgTextShape.cpp:1739
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-textform"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1622
+#: libs/flake/text/KoSvgTextShape.cpp:1737
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1645
+#: libs/flake/text/KoSvgTextShape.cpp:1760
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20199,8 +20334,8 @@ msgstr "Tryck på %1 för att dela upp kontur vid markerade segment."
 msgid "Edit Shapes Tool"
 msgstr "Formredigeringsverktyg"
 
-#: libs/flake/tools/KoZoomToolFactory.cpp:17
-#: libs/widgets/KoZoomController_p.h:28 libs/widgets/KoZoomWidget.cpp:52
+#: libs/flake/tools/KoZoomToolFactory.cpp:17 libs/ui/kis_zoom_manager.cc:68
+#: libs/widgets/KoZoomWidget.cpp:55
 #, kde-format
 msgid "Zoom"
 msgstr "Zooma"
@@ -20410,11 +20545,9 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Fel: Felaktig typ (%2) för värde %1. Förväntade %3"
 
 #: libs/global/KisMessageBoxWrapper.cpp:24
-#, fuzzy, kde-format
-#| msgctxt "Do not perform midtones enhancement in auto levels"
-#| msgid "Don't adjust the midtones"
+#, kde-format
 msgid "Don't ask this again"
-msgstr "Justera inte mellantoner"
+msgstr "Fråga inte igen"
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -20577,9 +20710,9 @@ msgstr "Storlek"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:494
-#: plugins/tools/basictools/kis_tool_fill.cc:581
-#: plugins/tools/basictools/kis_tool_fill.cc:597
-#: plugins/tools/basictools/kis_tool_fill.cc:609
+#: plugins/tools/basictools/kis_tool_fill.cc:582
+#: plugins/tools/basictools/kis_tool_fill.cc:598
+#: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:481
@@ -20591,9 +20724,9 @@ msgstr "Storlek"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:501
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -20729,10 +20862,15 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Style"
 msgstr "Ändra lagerstil"
 
-#: libs/image/commands_new/kis_switch_current_time_command.cpp:15
+#: libs/image/commands_new/kis_switch_current_time_command.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Ändra nuvarande tid"
+
+#: libs/image/commands_new/kis_switch_current_time_command.cpp:59
+msgctxt "(qtundo-format)"
+msgid "Switch current time to keyframe"
+msgstr "Ändra nuvarande tid till nyckelbild"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -20897,7 +21035,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:372
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -20957,7 +21095,7 @@ msgstr "Importerad bild"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2635 plugins/impex/psd/psd_loader.cpp:192
+#: libs/ui/KisDocument.cpp:2636 plugins/impex/psd/psd_loader.cpp:192
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -21123,8 +21261,7 @@ msgstr "Rotation (y)"
 msgid "Rotation (Z)"
 msgstr "Rotation (z)"
 
-#: libs/image/kis_layer.cc:275 libs/widgets/KoZoomAction.cpp:189
-#: libs/widgets/KoZoomAction.cpp:200
+#: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
 msgstr "%1 %"
@@ -21314,8 +21451,8 @@ msgid "Processing"
 msgstr "Behandlar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1389
-#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1388
+#: libs/ui/KisMainWindow.cpp:1758 libs/ui/KisMainWindow.cpp:1771
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22066,8 +22203,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE-bild"
 
-#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2130
-#: libs/ui/KisMainWindow.cpp:2209
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2208
 #, kde-format
 msgid "Import frames"
 msgstr "Importera bildrutor"
@@ -23352,7 +23489,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1185
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23406,23 +23543,23 @@ msgstr "Lokala resurser"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1110
-#: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
-#: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
-#: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
-#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1963
-#: libs/ui/KisDocument.cpp:2006 libs/ui/KisDocument.cpp:2017
-#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1041
-#: libs/ui/KisMainWindow.cpp:1170 libs/ui/KisMainWindow.cpp:1267
-#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:1999
-#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2197
-#: libs/ui/KisMainWindow.cpp:2216 libs/ui/KisMainWindow.cpp:2841
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1113
+#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1164 libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1206 libs/ui/KisDocument.cpp:1004
+#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
+#: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisMainWindow.cpp:970 libs/ui/KisMainWindow.cpp:1040
+#: libs/ui/KisMainWindow.cpp:1169 libs/ui/KisMainWindow.cpp:1266
+#: libs/ui/KisMainWindow.cpp:1989 libs/ui/KisMainWindow.cpp:1998
+#: libs/ui/KisMainWindow.cpp:2137 libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2215 libs/ui/KisMainWindow.cpp:2840
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:698 libs/ui/KisView.cpp:1188
-#: libs/ui/KisWelcomePageWidget.cpp:737 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisWelcomePageWidget.cpp:739 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
@@ -23678,12 +23815,12 @@ msgstr "Felaktig status"
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Felaktigt statusmeddelande"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
 msgid "Some resources are missing:"
-msgstr ""
+msgstr "Vissa resurser saknas:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -23730,95 +23867,102 @@ msgstr "Minne"
 msgid "Invalid"
 msgstr "Ogiltig"
 
-#: libs/resources/KisResourceTypes.cpp:44
+#: libs/resources/KisResourceTypes.cpp:45
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr "Penselförinställningar"
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr "Penselspetsar"
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:47
 #, kde-format
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "Toningar"
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:48
 #, kde-format
 msgctxt "resource type"
 msgid "Palettes"
 msgstr "Paletter"
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:49
 #, kde-format
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "Mönster"
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:50
 #, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:51
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr "Symbolbibliotek"
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr "Fönsterlayouter"
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:53
 #, kde-format
 msgctxt "resource type"
 msgid "Sessions"
 msgstr "Sessioner"
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:54
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr "Färgomfångsmasker"
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:55
 #, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr "SeExpr-skript"
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:56
 #, kde-format
 msgctxt "resource type"
 msgid "Filter Effects"
 msgstr "Filtereffekter"
 
-#: libs/resources/KisResourceTypes.cpp:56
+#: libs/resources/KisResourceTypes.cpp:57
 #, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr "Aktivitetsuppsättningar"
 
-#: libs/resources/KisResourceTypes.cpp:57
+#: libs/resources/KisResourceTypes.cpp:58
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "Lagerstilar"
 
-#: libs/resources/KisResourceTypes.cpp:58
+#: libs/resources/KisResourceTypes.cpp:59
 #, kde-format
 msgctxt "resource type"
 msgid "Font Families"
 msgstr "Teckenfamiljer"
+
+#: libs/resources/KisResourceTypes.cpp:60
+#, fuzzy, kde-format
+#| msgid "Pt. Presets"
+msgctxt "resource type"
+msgid "Style Presets"
+msgstr "Pt. förinställningar"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -23959,7 +24103,8 @@ msgid "Delete resource"
 msgstr "Ta bort resurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2637
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -24302,7 +24447,7 @@ msgid "Select All"
 msgstr "Markera alla"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:793
+#: libs/ui/KisView.cpp:779
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Fyll ut lager"
@@ -24364,7 +24509,7 @@ msgid "Paste shapes"
 msgstr "Klistra in former"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:607
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
 #, kde-format
 msgid "(pasted)"
 msgstr "(inklistrad)"
@@ -24433,7 +24578,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2238
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "Återge animering"
@@ -24779,13 +24924,13 @@ msgstr "Läser in videodata ... %1 bildrutor hanterade."
 msgid "ffmpeg could not be found at %1"
 msgstr "ffmpeg kunde inte hittas i %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Skapar palett som krävs av filformatet %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:199
+#: libs/ui/animation/KisVideoSaver.cpp:198
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -25467,6 +25612,7 @@ msgstr "Huvudskärm:"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
 #, kde-format
 msgid "Display"
 msgstr "Bildskärm"
@@ -25970,31 +26116,31 @@ msgstr "FFmpeg-version:"
 msgid "None"
 msgstr "Ingen"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:171
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
 msgstr "Horisontellt spegling: %1 "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "OFF"
 msgstr "AV"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:223
+#: libs/ui/canvas/kis_canvas_controller.cpp:405
 #, kde-format
 msgid "ON"
 msgstr "PÅ"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:233
+#: libs/ui/canvas/kis_canvas_controller.cpp:274
 #, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Rotation: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:293
+#: libs/ui/canvas/kis_canvas_controller.cpp:338
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -26003,24 +26149,24 @@ msgstr ""
 "Du försöker aktivera rundgångsläge, men har inte aktiverat OpenGL.\n"
 "För att synliggöra rundgångsläge, aktivera OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:404
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Direkt förhandsgranskningsläge: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:366
+#: libs/ui/canvas/kis_canvas_controller.cpp:411
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Direkt förhandsgranskning stöds bara med OpenGL aktiverat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:372
+#: libs/ui/canvas/kis_canvas_controller.cpp:417
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Närmaste granne"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:373
+#: libs/ui/canvas/kis_canvas_controller.cpp:418
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -26031,7 +26177,7 @@ msgstr ""
 "trilinjära eller högkvalitativa filtreringsläget.\n"
 "Nuvarande läge är %1."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:377
+#: libs/ui/canvas/kis_canvas_controller.cpp:422
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -26504,7 +26650,7 @@ msgid "Numerical"
 msgstr "Numerisk"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Import Images"
 msgstr "Importera bilder"
@@ -26621,7 +26767,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ange nytt stilnamn"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2648
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26910,6 +27056,8 @@ msgstr "Installera färgprofiler"
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
+"Programmeringsgränssnitt för ritplattans indata  (för närvarande aktiva "
+"programmeringsgränssnitt: \"%1\")"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1442
 #, kde-format
@@ -27600,7 +27748,7 @@ msgid "Start"
 msgstr "Starta"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
 #, kde-format
 msgid "DEV BUILD"
 msgstr "Utvecklingsbygge"
@@ -29672,6 +29820,10 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with eachother."
 msgstr ""
+"När alternativet är markerat fästs nyskapade lager automatiskt i "
+"animeringens tidslinje. Det är användbart vid animering med ett litet antal "
+"lager eller när många element på olika animerade lager interagerar med "
+"varandra."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1061
@@ -29688,6 +29840,10 @@ msgid ""
 "animation playback range. This feature is recommended to speed up animation "
 "workflow when improvising a scene without a predetermined length."
 msgstr ""
+"När alternativet är markerat justeras dokumentets start- och slutbildrutor "
+"automatiskt så att nyskapade nyckelbilder alltid finns inom animeringens "
+"uppspelningsområde. Funktionen rekommenderas för att snabba upp "
+"animeringsarbetsflödet när en scen utan en förutbestämd längd improviseras."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1071
@@ -29704,12 +29860,16 @@ msgid ""
 "playback range will cause the timeline to zoom in, while a larger playback "
 "range will cause the timeline to zoom out."
 msgstr ""
+"När alternativet är markerat skalas animationstidslinjens panelvisning "
+"automatiskt så att den passar dokumentets uppspelningsområde. Ett mindre "
+"uppspelningsområde gör att tidslinjen zoomar in, medan ett större "
+"uppspelningsområde gör att tidslinjen zoomar ut."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1081
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
-msgstr ""
+msgstr "Zooma tidslinjen automatiskt för att passa uppspelningsområdet"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -30001,8 +30161,8 @@ msgstr "Bakgrundsfärg"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:644
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:556
+#: plugins/tools/basictools/kis_tool_fill.cc:646
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:558
 #, kde-format
 msgid "Pattern"
 msgstr "Mönster"
@@ -30023,7 +30183,7 @@ msgstr "Ingen kontur"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:550
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:552
 #, kde-format
 msgid "Brush"
 msgstr "Pensel"
@@ -30709,7 +30869,7 @@ msgstr "Nuvarande penselförinställningar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1015
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -31082,7 +31242,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:351
 #, kde-format
 msgid "Detect from screen"
-msgstr ""
+msgstr "Detektera från skärm"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:361
@@ -31723,7 +31883,7 @@ msgid "HSV CCW"
 msgstr "HSV moturs"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:389
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:391
 #, kde-format
 msgid "Sessions"
 msgstr "Sessioner"
@@ -31783,8 +31943,8 @@ msgstr "Linje:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:642
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:554
+#: plugins/tools/basictools/kis_tool_fill.cc:644
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:556
 #, kde-format
 msgid "Foreground color"
 msgstr "Förgrundsfärg"
@@ -31793,8 +31953,8 @@ msgstr "Förgrundsfärg"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:643
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:557
 #, kde-format
 msgid "Background color"
 msgstr "Bakgrundsfärg"
@@ -31962,7 +32122,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:226
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
-msgstr ""
+msgstr "Vinkel tillagd till den rapporterade pennans lutningsriktning."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:233
@@ -32107,7 +32267,7 @@ msgid "&Filter:"
 msgstr "&Filter:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupPrintSize)
-#: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:121
+#: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:130
 #, kde-format
 msgid "Print Size"
 msgstr "Utskriftsstorlek"
@@ -32353,7 +32513,7 @@ msgstr "Redigera musinmatning"
 msgid "Edit Mouse Wheel Input"
 msgstr "Redigera mushjulsinmatning"
 
-#: libs/ui/input/kis_abstract_input_action.cpp:34
+#: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
 #, kde-format
 msgid "Activate"
@@ -32556,39 +32716,39 @@ msgstr "Panorera uppåt"
 msgid "Pan Down"
 msgstr "Panorera neråt"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:41
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Rotera duk"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "Åtgärden <i>Rotera duk</i> roterar duken."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Roteringsmetod"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:42
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Diskret roteringsmetod"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Rotate Left"
 msgstr "Rotera åt vänster"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:48
+#: libs/ui/input/kis_rotate_canvas_action.cpp:50
 #, kde-format
 msgid "Rotate Right"
 msgstr "Rotera åt höger"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:49
+#: libs/ui/input/kis_rotate_canvas_action.cpp:51
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Återställ rotation"
@@ -32947,77 +33107,77 @@ msgstr "Aktivera frihandsmarkeringsverktyg"
 msgid "Activate with Other Color"
 msgstr "Aktivera med annan färg"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Zooma duk"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "Åtgärden <i>Zooma duk</i> zoomar duken."
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Zoommetod"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:73
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Diskret zoommetod"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:74
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Relativ zoommetod"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:75
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Relativ diskret zoommetod"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:76
 #, kde-format
 msgid "Zoom In"
 msgstr "Zooma in"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
 msgstr "Zooma ut"
 
-#: libs/ui/input/kis_zoom_action.cpp:116
+#: libs/ui/input/kis_zoom_action.cpp:78
 #, kde-format
 msgid "Zoom In To Cursor"
 msgstr "Zooma in till markör"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
 msgstr "Zooma ut från markör"
 
-#: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Zooma till 100 %"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
 msgid "Fit to View"
 msgstr "Anpassa till vy"
 
-#: libs/ui/input/kis_zoom_action.cpp:120
+#: libs/ui/input/kis_zoom_action.cpp:82
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Anpassa till vyns bredd"
 
-#: libs/ui/input/kis_zoom_action.cpp:121
+#: libs/ui/input/kis_zoom_action.cpp:83
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Anpassa till vyns höjd"
 
-#: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
+#: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
 msgstr "Zooma och rotera duk"
@@ -33167,7 +33327,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ändra arkivlager"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:699
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:685
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -33226,7 +33386,7 @@ msgstr "Ö&ppna bakgrundsfärgväljare"
 msgid "&Docker Box"
 msgstr "&Panelruta"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:385
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:387
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33240,8 +33400,8 @@ msgstr "Mönster"
 msgid "Custom Pattern"
 msgstr "Egna mönster"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:370
-#: libs/ui/KisApplication.cpp:371
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -33761,9 +33921,9 @@ msgstr "Välj penselförinställning"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
-#: plugins/tools/basictools/kis_tool_fill.cc:558
+#: plugins/tools/basictools/kis_tool_fill.cc:559
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:486
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
@@ -33983,7 +34143,16 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Stöd Kritas utveckling!</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
+#: libs/ui/kis_splash_screen.cpp:231
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Kritas webbsida</span></a></p>"
+
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -33994,7 +34163,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Komma igång</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -34002,15 +34171,6 @@ msgid ""
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Handbok</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:236
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Kritas webbsida</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
@@ -34153,26 +34313,26 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:324
+#: libs/ui/kis_zoom_manager.cc:256
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zoom: %1 %"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:364
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Penselförinställningar"
 
-#: libs/ui/KisApplication.cpp:365 libs/ui/KisApplication.cpp:366
 #: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:369 libs/ui/KisApplication.cpp:370
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Penselspetsar"
 
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/KisApplication.cpp:375
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34180,7 +34340,7 @@ msgstr "Penselspetsar"
 msgid "Palettes"
 msgstr "Paletter"
 
-#: libs/ui/KisApplication.cpp:386 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34188,39 +34348,45 @@ msgstr "Paletter"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: libs/ui/KisApplication.cpp:387
+#: libs/ui/KisApplication.cpp:389
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG-symbolbibliotek"
 
-#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:390 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Fönsterlayouter"
 
-#: libs/ui/KisApplication.cpp:390
+#: libs/ui/KisApplication.cpp:392
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Färgomfångsmasker"
 
-#: libs/ui/KisApplication.cpp:392
+#: libs/ui/KisApplication.cpp:394
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr-skript"
 
-#: libs/ui/KisApplication.cpp:397
+#: libs/ui/KisApplication.cpp:399
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Lagerstilar"
 
-#: libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:402
 #, kde-format
 msgid "Font Families"
 msgstr "Teckenfamiljer"
 
-#: libs/ui/KisApplication.cpp:412
+#: libs/ui/KisApplication.cpp:403
+#, fuzzy, kde-format
+#| msgid "Pt. Presets"
+msgid "Style Presets"
+msgstr "Pt. förinställningar"
+
+#: libs/ui/KisApplication.cpp:415
 #, kde-format
 msgid ""
 "%1\n"
@@ -34231,13 +34397,13 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:415 libs/ui/KisApplication.cpp:421
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Allvarligt fel"
 
-#: libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:421
 #, kde-format
 msgid ""
 "\n"
@@ -34248,7 +34414,7 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:453
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34259,65 +34425,65 @@ msgstr ""
 "Det rekommenderas inte.\n"
 "Ladda ner och installera x64-programmet istället."
 
-#: libs/ui/KisApplication.cpp:467
+#: libs/ui/KisApplication.cpp:470
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Initierar globala värden..."
 
-#: libs/ui/KisApplication.cpp:499
+#: libs/ui/KisApplication.cpp:502
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Lägger till resurstyper..."
 
-#: libs/ui/KisApplication.cpp:503
+#: libs/ui/KisApplication.cpp:506
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Läser in insticksmoduler..."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:512
 #, kde-format
 msgid "Loading resources..."
 msgstr "Läser in resurser..."
 
-#: libs/ui/KisApplication.cpp:518
+#: libs/ui/KisApplication.cpp:521
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Laddar huvudfönster..."
 
-#: libs/ui/KisApplication.cpp:550
+#: libs/ui/KisApplication.cpp:553
 #, kde-format
 msgid "Launching..."
 msgstr "Startar..."
 
-#: libs/ui/KisApplication.cpp:619
+#: libs/ui/KisApplication.cpp:622
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mime-typ hittades inte, försök använda väljaren -mimetyp"
 
-#: libs/ui/KisApplication.cpp:680
+#: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Misslyckades återge animeringsbildrutor."
 
-#: libs/ui/KisApplication.cpp:708 libs/ui/KisApplication.cpp:981
+#: libs/ui/KisApplication.cpp:711 libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "File layer"
 msgstr "Arkivlager"
 
-#: libs/ui/KisApplication.cpp:716 libs/ui/KisApplication.cpp:721
-#: libs/ui/KisApplication.cpp:975 libs/ui/KisApplication.cpp:989
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:719 libs/ui/KisApplication.cpp:724
+#: libs/ui/KisApplication.cpp:978 libs/ui/KisApplication.cpp:992
+#: libs/ui/KisApplication.cpp:997
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Varning"
 
-#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:990
+#: libs/ui/KisApplication.cpp:720 libs/ui/KisApplication.cpp:993
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Kan inte lägga till %1 som ett arkivlager: filen finns inte."
 
-#: libs/ui/KisApplication.cpp:722
+#: libs/ui/KisApplication.cpp:725
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34338,7 +34504,7 @@ msgstr ""
 "instans av Krita som redan kör, markera kryssrutan \"Tillåt bara en instans "
 "av Krita\" i inställningarna (Inställningar -> Allmänt -> Fönster)."
 
-#: libs/ui/KisApplication.cpp:728
+#: libs/ui/KisApplication.cpp:731
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34349,32 +34515,32 @@ msgstr ""
 "Du kan antingen skapa en ny fil genom att använda väljaren --new-image, "
 "eller öppna en befintlig fil."
 
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:979
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Kunde inte öppna filen %1"
 
-#: libs/ui/KisApplication.cpp:995
+#: libs/ui/KisApplication.cpp:998
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Kan inte lägga till arkivlagret: inget dokument är öppet."
 
-#: libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1114
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ingen mall hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:1114
+#: libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "För många mallar hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1133
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallen %1 kunde inte läsas in."
 
-#: libs/ui/KisApplication.cpp:1162
+#: libs/ui/KisApplication.cpp:1165
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34389,7 +34555,7 @@ msgstr ""
 "\n"
 "Starta om Krita för att ändringarna ska få effekt."
 
-#: libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1179
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34400,7 +34566,7 @@ msgstr ""
 "\n"
 "Försäkra dig om att inget annat program använder filen och försök igen."
 
-#: libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1207
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Vill du verkligen tömma inställningsfilen?"
@@ -34620,33 +34786,33 @@ msgstr "Vissa problem uppstod när det sparades."
 msgid "Finished saving %1"
 msgstr "Spara %1 färdigt"
 
-#: libs/ui/KisDocument.cpp:1469
+#: libs/ui/KisDocument.cpp:1470
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Sparar automatiskt... %1"
 
-#: libs/ui/KisDocument.cpp:1477
+#: libs/ui/KisDocument.cpp:1478
 #, kde-format
 msgid "Autosaving..."
 msgstr "Sparar automatiskt..."
 
-#: libs/ui/KisDocument.cpp:1483
+#: libs/ui/KisDocument.cpp:1484
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Spara automatiskt fördröjt: dokumentet är upptaget ..."
 
-#: libs/ui/KisDocument.cpp:1626
+#: libs/ui/KisDocument.cpp:1627
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fel vid spara automatiskt av %1: %2"
 
-#: libs/ui/KisDocument.cpp:1640
+#: libs/ui/KisDocument.cpp:1641
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Spara %1 automatiskt färdigt"
 
-#: libs/ui/KisDocument.cpp:1897
+#: libs/ui/KisDocument.cpp:1898
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -34655,38 +34821,38 @@ msgstr ""
 "Felaktig sökväg\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1963
+#: libs/ui/KisDocument.cpp:1964
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisDocument.cpp:1992
+#: libs/ui/KisDocument.cpp:1993
 #, kde-format
 msgid "Opening document"
 msgstr "Öppnar dokument"
 
-#: libs/ui/KisDocument.cpp:2007
+#: libs/ui/KisDocument.cpp:2008
 #, kde-format
 msgid "Could not open %1."
 msgstr "Kunde inte öppna %1."
 
-#: libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisDocument.cpp:2019
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Problem uppstod när %1 skulle öppnas."
 
-#: libs/ui/KisDocument.cpp:2156
+#: libs/ui/KisDocument.cpp:2157
 #, kde-format
 msgid "Not Saved"
 msgstr "Inte sparad"
 
-#: libs/ui/KisDocument.cpp:2642
+#: libs/ui/KisDocument.cpp:2643
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrundsfyllnad"
 
-#: libs/ui/KisDocument.cpp:2704
+#: libs/ui/KisDocument.cpp:2705
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -35106,64 +35272,64 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Uppdatera lagrets miniatyrbilder"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Stilar"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Paneler"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Fönster"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Ny &vy"
 
-#: libs/ui/KisMainWindow.cpp:190
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Ar&betsyta"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:585
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:318
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Visa verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:588
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Dölj verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:1013
+#: libs/ui/KisMainWindow.cpp:1012
 #, kde-format
 msgid "Save as %1"
 msgstr "Spara som %1"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1040
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Open Images"
 msgstr "Öppna bilder"
 
-#: libs/ui/KisMainWindow.cpp:1268
+#: libs/ui/KisMainWindow.cpp:1267
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35176,44 +35342,44 @@ msgstr ""
 "\n"
 "Välj en plats där originalfilen inte överskrids."
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Exporting"
 msgstr "Exporterar"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Saving As"
 msgstr "Sparar som"
 
-#: libs/ui/KisMainWindow.cpp:1738
+#: libs/ui/KisMainWindow.cpp:1737
 #, kde-format
 msgid "Create new document"
 msgstr "Skapa nytt dokument"
 
-#: libs/ui/KisMainWindow.cpp:1762
+#: libs/ui/KisMainWindow.cpp:1761
 #, kde-format
 msgid "Custom Document"
 msgstr "Eget dokument"
 
-#: libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1773
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Skapa från klippbord"
 
-#: libs/ui/KisMainWindow.cpp:1959
+#: libs/ui/KisMainWindow.cpp:1958
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lager och masker"
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1984
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har inga resurspackar aktiverade."
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1988
 #, kde-format
 msgid ""
 "\n"
@@ -35224,7 +35390,7 @@ msgstr ""
 "Det finns inga tillgängliga penselförinställningar. Aktivera en packe som "
 "har penselförinställningar innan du fortsätter.\n"
 
-#: libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:1998
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35235,7 +35401,7 @@ msgstr ""
 "\n"
 "Bara dina lokala resurser är tillgängliga."
 
-#: libs/ui/KisMainWindow.cpp:2138 libs/ui/KisMainWindow.cpp:2216
+#: libs/ui/KisMainWindow.cpp:2137 libs/ui/KisMainWindow.cpp:2215
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35244,40 +35410,40 @@ msgstr ""
 "Kunde inte slutföra import av animering:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Misslyckades skapa nytt dokument. Import av animering avbruten."
 
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2628
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importera arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/KisMainWindow.cpp:2643
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2648
+#: libs/ui/KisMainWindow.cpp:2647
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2692
+#: libs/ui/KisMainWindow.cpp:2691
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2695
+#: libs/ui/KisMainWindow.cpp:2694
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2864
+#: libs/ui/KisMainWindow.cpp:2863
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35286,19 +35452,19 @@ msgstr ""
 "Kritas insticksprogram för LittleCMS-färghantering är inte installerat. "
 "Krita avslutas nu."
 
-#: libs/ui/KisMainWindow.cpp:2880
+#: libs/ui/KisMainWindow.cpp:2879
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installationsfel"
 
-#: libs/ui/KisMainWindow.cpp:2990
+#: libs/ui/KisMainWindow.cpp:2989
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teman"
 
-#: libs/ui/KisMainWindow.cpp:3049
+#: libs/ui/KisMainWindow.cpp:3048
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expanderande mellanrum"
@@ -35423,7 +35589,7 @@ msgstr "Punktfärg:"
 msgid "Swatch Group:"
 msgstr "Färgrutegrupp:"
 
-#: libs/ui/KisPaletteEditor.cpp:609 libs/ui/KisPaletteEditor.cpp:612
+#: libs/ui/KisPaletteEditor.cpp:617 libs/ui/KisPaletteEditor.cpp:620
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -35614,27 +35780,27 @@ msgstr "Ingen bild tillgänglig."
 msgid "Use This Template"
 msgstr "Använd den här mallen"
 
-#: libs/ui/KisView.cpp:768
+#: libs/ui/KisView.cpp:754
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Det går inte att dra och släppa färger på den valda lagertypen."
 
-#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Lagret är låst och osynligt."
 
-#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Lagret är låst."
 
-#: libs/ui/KisView.cpp:780 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Lagret är osynligt."
 
-#: libs/ui/KisView.cpp:1189
+#: libs/ui/KisView.cpp:1175
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -35642,80 +35808,80 @@ msgid ""
 msgstr ""
 "<p>Dokumentet <b>\"%1\"</b> har blivit ändrat.</p><p>Vill du spara det?</p>"
 
-#: libs/ui/KisView.cpp:1263
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Write Protected"
 msgstr "Skrivskyddad"
 
-#: libs/ui/KisView.cpp:1267
+#: libs/ui/KisView.cpp:1253
 #, kde-format
 msgid "Recovered"
 msgstr "Återställd"
 
-#: libs/ui/KisView.cpp:1421
+#: libs/ui/KisView.cpp:1355
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Bildskärmskorrektur fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1426
+#: libs/ui/KisView.cpp:1360
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Bildskärmskorrektur på."
 
-#: libs/ui/KisView.cpp:1428
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Bildskärmskorrektur av."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Färgomfångsvarningar fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1446
+#: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Färgomfångsvarningar på."
 
-#: libs/ui/KisView.cpp:1448
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Men bildskärmskorrektur är fortfarande av."
 
-#: libs/ui/KisView.cpp:1451
+#: libs/ui/KisView.cpp:1385
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Färgomfångsvarningar av."
 
-#: libs/ui/KisViewManager.cpp:795
+#: libs/ui/KisViewManager.cpp:803
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiv upphovsmannaprofil"
 
-#: libs/ui/KisViewManager.cpp:925
+#: libs/ui/KisViewManager.cpp:933
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopia)"
 
-#: libs/ui/KisViewManager.cpp:1081 libs/ui/KisViewManager.cpp:1165
+#: libs/ui/KisViewManager.cpp:1089 libs/ui/KisViewManager.cpp:1173
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternativa namn förbrukade. Försök att spara manuellt med ett större nummer"
 
-#: libs/ui/KisViewManager.cpp:1081
+#: libs/ui/KisViewManager.cpp:1089
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Kunde inte spara inkrementell version"
 
-#: libs/ui/KisViewManager.cpp:1165
+#: libs/ui/KisViewManager.cpp:1173
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Kunde inte spara inkrementell säkerhetskopia"
 
-#: libs/ui/KisViewManager.cpp:1422
+#: libs/ui/KisViewManager.cpp:1430
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -35724,13 +35890,13 @@ msgstr ""
 "Visar enbart duk.\n"
 "Tryck på %1 för att gå tillbaka."
 
-#: libs/ui/KisViewManager.cpp:1481
+#: libs/ui/KisViewManager.cpp:1491
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Öppna resurskatalog"
 
-#: libs/ui/KisViewManager.cpp:1485
+#: libs/ui/KisViewManager.cpp:1495
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -35754,19 +35920,19 @@ msgstr ""
 "<p><b>Privata programmets plats</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1500
+#: libs/ui/KisViewManager.cpp:1510
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Öppna i an&vändarens programdata"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1511
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Öppna i &privat programplats"
 
-#: libs/ui/KisViewManager.cpp:1614 libs/ui/KisViewManager.cpp:1632
+#: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -35797,23 +35963,23 @@ msgstr "Språk"
 msgid "English news is always up to date."
 msgstr "Nyheter på engelska är alltid aktuella."
 
-#: libs/ui/KisWelcomePageWidget.cpp:665
+#: libs/ui/KisWelcomePageWidget.cpp:667
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Glöm \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:756
+#: libs/ui/KisWelcomePageWidget.cpp:758
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Ny version av Krita är tillgänglig."
 
-#: libs/ui/KisWelcomePageWidget.cpp:785
+#: libs/ui/KisWelcomePageWidget.cpp:787
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Ett fel uppstod vid uppdatering"
 
-#: libs/ui/KisWelcomePageWidget.cpp:791
+#: libs/ui/KisWelcomePageWidget.cpp:793
 #, kde-format
 msgid "Restart is required."
 msgstr "Omstart krävs."
@@ -37007,7 +37173,7 @@ msgstr "Verktygslåda"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
 msgid "Icon Size"
 msgstr "Ikonstorlek"
@@ -38472,7 +38638,7 @@ msgid "No Preview for this engine"
 msgstr "Ingen förhandsgranskning för det här gränssnittet"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:590
+#: plugins/tools/basictools/kis_tool_fill.cc:591
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
@@ -38548,8 +38714,8 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Öka eller minska markeringen med angivet värde"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/basictools/kis_tool_fill.cc:661
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:570
+#: plugins/tools/basictools/kis_tool_fill.cc:663
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "Sluta växa vid de mörkaste och/eller mest ogenomskinliga bildpunkterna"
@@ -39744,12 +39910,19 @@ msgstr "Avstånd:"
 msgid "Tool Options"
 msgstr "Verktygsalternativ"
 
-#: libs/widgets/KoZoomWidget.cpp:124
+#: libs/widgets/KoZoomActionState.cpp:100
+#, kde-format
+msgctxt ""
+"concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
 msgid "Pixel Size"
 msgstr "Bildpunktsstorlek"
 
-#: libs/widgets/KoZoomWidget.cpp:128
+#: libs/widgets/KoZoomWidget.cpp:137
 #, kde-format
 msgid ""
 "Map the displayed canvas size between pixel size or print size\n"
@@ -40976,7 +41149,7 @@ msgstr "Ellipsguide"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:547
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
 #, kde-format
 msgid "Ellipse"
 msgstr "Ellips"
@@ -42745,7 +42918,7 @@ msgstr "Är du säker på att du vill ta bort masken <b>'%1'</b>?"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:546
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:548
 #, kde-format
 msgid "Rectangle"
 msgstr "Rektangel"
@@ -44758,7 +44931,7 @@ msgstr "Kommentarer"
 msgid "Mode"
 msgstr "Läge"
 
-#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:156
+#: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, kde-format
 msgid "Symbol Libraries"
 msgstr "Symbolbibliotek"
@@ -44822,19 +44995,19 @@ msgstr "X-höjd (ex)"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr ""
+msgstr "Versalhöjd (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr ""
+msgstr "Proportionell (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "Ideografisk (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
@@ -44860,7 +45033,14 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Procentvärde (%)"
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:107
+#: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
+#, fuzzy, kde-format
+#| msgid "Edit Presets"
+msgctxt "@title:window"
+msgid "Edit Style Preset"
+msgstr "Redigera förinställningar"
+
+#: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
@@ -44876,7 +45056,7 @@ msgstr "Tom"
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
-msgstr ""
+msgstr "%1, %2, variant: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #, kde-format
@@ -44888,7 +45068,7 @@ msgstr "%1, %2"
 #, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %3"
-msgstr ""
+msgstr "%1, variant: %3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -44906,12 +45086,19 @@ msgstr "Av"
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr ""
+msgstr "OpenType-funktionsetikett"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:123
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
 #, kde-format
 msgid "Text Properties"
 msgstr "Textegenskaper"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#, fuzzy, kde-format
+#| msgid "New Style"
+msgctxt "@info:placeholder"
+msgid "New Style Preset"
+msgstr "Ny stil"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format
@@ -45779,8 +45966,8 @@ msgstr ""
 "Kunde inte spara %1\n"
 "Orsak: %2"
 
-#: plugins/extensions/imagesplit/imagesplit.cpp:172
-#: plugins/extensions/imagesplit/imagesplit.cpp:247
+#: plugins/extensions/imagesplit/imagesplit.cpp:170
+#: plugins/extensions/imagesplit/imagesplit.cpp:245
 #, kde-format
 msgid "Save Image on Split"
 msgstr "Spara bild vid delning"
@@ -51481,7 +51668,7 @@ msgstr "Färgprofil hittades inte i dokumentet."
 msgid "Unknown error: %1"
 msgstr "Okänt fel: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:527
+#: plugins/impex/heif/HeifExport.cpp:539
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -51491,7 +51678,7 @@ msgstr ""
 "Bildens ljusstyrka använder full upplösning, medan färgomfånget halveras i "
 "båda dimensionerna."
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -51501,28 +51688,28 @@ msgstr ""
 "Bildens ljusstyrka använder full upplösning, medan färgomfånget halveras "
 "horisontellt."
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "Både bildens ljusstyrka och färgomfång använder full upplösning."
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rek. 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rek. 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -51535,7 +51722,7 @@ msgstr ""
 "perceptuell kvantiseringskurva (också känd som SMPTE 2048). Rekommenderas "
 "för HDR-bilder där den absoluta ljusstyrkan är viktig."
 
-#: plugins/impex/heif/HeifExport.cpp:546
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -51548,14 +51735,14 @@ msgstr ""
 "Hybrid Log Gamma-kurva. Rekommenderas för HDR-bilder där bildskärmen kanske "
 "inte förstår HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Behåll färgvärden, koda PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
 #, kde-format
 msgctxt "@tooltip"
@@ -51568,14 +51755,14 @@ msgstr ""
 "kvantiseringskurva (också känd som SMPTE 2048). Rekommenderas för bilder där "
 "den absoluta ljusstyrkan är viktig."
 
-#: plugins/impex/heif/HeifExport.cpp:557
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Behåll färgvärden, koda HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
 #, kde-format
 msgctxt "@tooltip"
@@ -51586,14 +51773,14 @@ msgstr ""
 "Bilden görs först linjär, och kodas sedan med en Hybrid Log Gamma-kurva. "
 "Rekommenderas för bilder avsedda för skärmar som inte kan förstår PQ."
 
-#: plugins/impex/heif/HeifExport.cpp:562
+#: plugins/impex/heif/HeifExport.cpp:574
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Behåll färgvärden, koda SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
 #, kde-format
 msgctxt "@tooltip"
@@ -51606,13 +51793,13 @@ msgstr ""
 "alltid bilder som de här med linjära flyttal. Det här alternativet finns för "
 "att vända på det."
 
-#: plugins/impex/heif/HeifExport.cpp:568
+#: plugins/impex/heif/HeifExport.cpp:580
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Inga ändringar, beskär"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:581
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -52121,13 +52308,13 @@ msgstr "Animeringen anger en bildfrekvens större än 240 bilder/s."
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
 msgstr ""
+"Platta ut bilden och spara som en bild med ett enda lager (normalvärde)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#, fuzzy, kde-format
-#| msgid "Failed to render animation frames! Output files are incomplete."
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and render animation frames as animated image"
-msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
+msgstr "Platta ut bilden och återge animerade bildrutor som animerade bilder"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
@@ -52136,6 +52323,8 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-"
 "layered image"
 msgstr ""
+"Rastrera lager (inklusive grupp- och filterlager) och spara som "
+"flerlagersbild"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, kde-format
@@ -52144,6 +52333,7 @@ msgid ""
 "Rasterize layers (including group and filter layers) and save as multi-page "
 "image"
 msgstr ""
+"Rastrera lager (inklusive grupp- och filterlager) och spara som flersidesbild"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
@@ -52427,41 +52617,53 @@ msgid ""
 "Modular mode - optimized for graphical content, illustrations, and lossless "
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
+"underline;\">Avancerat</span></p><p>Alternativet \"Standard (kodaren "
+"väljer)\" är vanligt. Det betyder att kodaren automatiskt väljer optimala "
+"inställningar baserat på valet av avvägning mellan kvalitet och hastighet. "
+"Alternativet rekommenderas för de flesta användare.</p><p><span style=\" "
+"font-size:14pt; text-decoration: underline;\">Kodningsparametrar:</span></"
+"p><p>allmänna inställningar som gäller för den övergripande JPEG XL-"
+"kodningsprocessen, oavsett vilken komprimeringsmetod som används.</"
+"p><p><span style=\" font-size:14pt; text-decoration: underline;\">VarDCT-"
+"parametrar:</span></p><p>Variabel diskret cosinustransform (optimerad för "
+"fotografiskt innehåll)</p><p>Den tillhör samma familj av "
+"komprimeringstekniker som används av den ursprungliga JPEG-filen, och är "
+"därför bäst för \"naturliga\" bilder, till exempel fotografier och bilder "
+"med många toningar och strukturer.</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">Modulära parametrar:</span></p><p>Inställningar av "
+"modulärt läge, optimerat för grafiskt innehåll, illustrationer och "
+"komprimering av förlustfria bilder.</p><p><br/></p><p><br/></p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
-#, fuzzy, kde-format
-#| msgid "Save As:"
+#, kde-format
 msgid "Save as:"
 msgstr "Spara som:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Platta ut bild"
+msgstr "Utplattad bild"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated Image"
+#, kde-format
 msgid "Animated image"
 msgstr "Animerad bild"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Parallellbearbetning"
+msgstr "Flerlagersbild"
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
 #, kde-format
 msgid "Multi-paged image"
-msgstr ""
+msgstr "Flersidesbild"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -52659,7 +52861,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:412
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "Håll över texten för att få information i verktygstips"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -52683,6 +52885,9 @@ msgid ""
 "Only recommended for low quality settings as it reduces sharpness at color "
 "transitions.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Minskar färgupplösningen för att få mindre filer. "
+"Rekommenderas endast för inställningar med låg kvalitet eftersom det minskar "
+"skärpan vid färgövergångar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
@@ -52738,6 +52943,10 @@ msgid ""
 "compression. Higher values reconstruct more noise, useful for preserving the "
 "natural look of high-ISO photos.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Separerar kamerasensorns brusmönster för bättre "
+"komprimering. Högre värden rekonstruerar mer brus, vilket är användbart för "
+"att bevara det naturliga utseendet på foton med stora ISO-värden.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
@@ -52770,6 +52979,9 @@ msgid ""
 "patterns in the image. Useful for scanned documents and certain textures.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifierar och kodar effektivt upprepade "
+"punktmönster i bilden. Användbart för inlästa dokument och vissa strukturer."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
@@ -52792,6 +53004,10 @@ msgid ""
 "icons) and stores them once, referencing them elsewhere. Improves "
 "compression for digital illustrations and screenshots.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifierar upprepade element (som tecken i text "
+"eller ikoner) och lagrar dem en gång, och refererar till dem någon "
+"annanstans. Förbättrar komprimeringen för digitala illustrationer och "
+"skärmbilder.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
@@ -52814,6 +53030,9 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Jämnar ut områden samtidigt som skarpa kanter bevaras, "
+"vilket förbättrar komprimeringen utan att viktiga detaljer suddas ut. Högre "
+"värden använder starkare filtrering.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:531
@@ -52866,6 +53085,9 @@ msgid ""
 "compression of complex textured areas while preserving visual quality.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Avancerat strukturanalysfilter som förbättrar "
+"komprimeringen av komplexa strukturerade områden samtidigt som den visuella "
+"kvaliteten bevaras.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:606
@@ -52882,6 +53104,9 @@ msgid ""
 "compressing graphics with sharp edges and limited colors. Can be lossless or "
 "lossy.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Använder det modulära komprimeringssystemet som "
+"utmärker sig vid komprimering av grafik med skarpa kanter och begränsade "
+"färger. Kan vara förlustfri eller förstörande.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:616
@@ -52957,6 +53182,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Förutsäger färg från information av ljusstyrka, vilket "
+"minskar filstorleken. Mycket effektivt för naturliga bilder där ljusstyrka "
+"och färg är korrelerade.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -52980,6 +53208,10 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Möjliggör progressiv inläsning med avancerad "
+"färgmatematik för fina detaljer. Bilder läses in som en grov förhandsvisning "
+"som gradvis blir skarpare. Tar längre tid men ger bättre resultat.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -53007,6 +53239,9 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Möjliggör progressiv inläsning med hjälp av "
+"kvantisering för att komprimera fina detaljer. Resulterar i mindre "
+"filstorlekar men kräver mer kodningstid.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -53022,6 +53257,10 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skapar en bättre grov förhandsgranskningsbild för "
+"progressiv inläsning. Lägger till några byte till filstorleken men "
+"förbättrar den initiala förhandsgranskningskvaliteten vid låg upplösning.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
@@ -53051,6 +53290,9 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Aktiverar transformeringen 'Squeeze' som gör att "
+"bilder kan läsas in progressivt från låg till hög kvalitet allt eftersom "
+"data strömmar in.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -53072,6 +53314,9 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Bestämmer hur färgvärden avbildas över hela bilden. "
+"'Alla' använder hela omfånget; mindre procentandelar skapar effektivare "
+"komprimering för bilder med begränsade färgomfång.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
@@ -53102,6 +53347,9 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Bestämmer färgavbildningar inom lokala 256 × 256 "
+"bildpunktsrutor. Mer effektivt för bilder med områden med begränsad "
+"färgvariation.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
@@ -53132,6 +53380,9 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Aktiverar palettbaserad komprimering när bilden "
+"innehåller det här antal unika färger eller färre. -1 låter kodaren bestämma "
+"automatiskt.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
@@ -53159,6 +53410,9 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Möjliggör relativ färgkodning som lagrar skillnader "
+"mellan förväntade och faktiska färger. Utmärkt för nästan förlustfri "
+"komprimering av jämna toningar utan bandförvrängningar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -53210,6 +53464,9 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Väljer algoritm som används för att förutsäga "
+"bildpunktsvärden baserat på omgivande bildpunkter. Olika prediktorer "
+"fungerar bättre för olika bildtyper.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:955
@@ -61996,7 +62253,7 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Fyll ut"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:550
+#: plugins/tools/basictools/kis_tool_fill.cc:551
 #, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
@@ -62004,19 +62261,19 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Skala: {n} %"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:554
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:481
+#: plugins/tools/basictools/kis_tool_fill.cc:555
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
 #, kde-format
 msgid "Use custom blending options"
 msgstr "Använd egna blandningsalternativ"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:569
+#: plugins/tools/basictools/kis_tool_fill.cc:570
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Tröskel: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:576
+#: plugins/tools/basictools/kis_tool_fill.cc:577
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
@@ -62024,13 +62281,13 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Spridning: {n} %"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:579
+#: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
 msgstr "Stäng gap: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:586
+#: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
@@ -62038,87 +62295,93 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Använd markering som gräns"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:594
+#: plugins/tools/basictools/kis_tool_fill.cc:595
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Öka: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:606
+#: plugins/tools/basictools/kis_tool_fill.cc:607
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Vävning: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:625
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
+#, kde-format
+msgid "Use active layer"
+msgstr "Använd aktivt lager"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Återställ"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/basictools/kis_tool_fill.cc:640
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Fyll i den aktiva markeringen, eller hela duken"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:639
+#: plugins/tools/basictools/kis_tool_fill.cc:641
 #, kde-format
 msgid "Fill a contiguous region"
 msgstr "Fyll i ett sammanhängande område"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:640
+#: plugins/tools/basictools/kis_tool_fill.cc:642
 #, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Fyll i alla områden med liknande färg"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:645
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:557
+#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Ställ in mönstrets skala"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:558
+#: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:560
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Ställ in mönstrets rotation"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
+#: plugins/tools/basictools/kis_tool_fill.cc:649
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr "Ange egna blandningsalternativ istället för att använda penselns"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:648
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:560
+#: plugins/tools/basictools/kis_tool_fill.cc:650
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:562
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Ställ in egen ogenomskinlighet för ifyllnad"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:649
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
+#: plugins/tools/basictools/kis_tool_fill.cc:651
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:563
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Ställ in eget blandningsläge för ifyllnad"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:651
+#: plugins/tools/basictools/kis_tool_fill.cc:653
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr "Fyll i områden med en färg som liknar det klickade området"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:652
+#: plugins/tools/basictools/kis_tool_fill.cc:654
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Markera alla områden till en specifik kantfärg"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:653
+#: plugins/tools/basictools/kis_tool_fill.cc:655
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Boundary color"
 msgstr "Kantfärg"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:654
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:563
+#: plugins/tools/basictools/kis_tool_fill.cc:656
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
@@ -62127,8 +62390,8 @@ msgstr ""
 "Ange ifyllnadens tolerans för färglikhet Att öka tröskeln ökar omfattningen "
 "av liknande färger som fylls i."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:655
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:564
+#: plugins/tools/basictools/kis_tool_fill.cc:657
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
@@ -62137,14 +62400,14 @@ msgstr ""
 "Ange utsträckning av ifyllnadens ogenomskinliga del Att minska spridning "
 "minskar ogenomskinligheten hos ifyllda områden beroende på färglikhet."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:656
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
+#: plugins/tools/basictools/kis_tool_fill.cc:658
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
 msgstr "Stäng gap i linjer upp till angivet värde"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:657
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
+#: plugins/tools/basictools/kis_tool_fill.cc:659
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -62153,38 +62416,38 @@ msgstr ""
 "Aktivera om den aktuella markeringens kontur ska behandlas som en gräns när "
 "området fylls i"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:659
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
+#: plugins/tools/basictools/kis_tool_fill.cc:661
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:570
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Jämnar ut ifyllnadens kanter"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:660
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/basictools/kis_tool_fill.cc:662
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Öka eller minska ifyllnad med angivet värde"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:662
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
+#: plugins/tools/basictools/kis_tool_fill.cc:664
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:573
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Gör ifyllnad suddigt med angivet värde"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:664
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:573
+#: plugins/tools/basictools/kis_tool_fill.cc:666
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:575
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Fyll i området hittade från det aktiva lagret"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:665
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:574
+#: plugins/tools/basictools/kis_tool_fill.cc:667
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:576
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Fyll i områden som hittas från sammanfogning av alla lager"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:666
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:575
+#: plugins/tools/basictools/kis_tool_fill.cc:668
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:577
 #, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
@@ -62192,17 +62455,27 @@ msgstr ""
 "Fyll i områden som hittas från sammanfogning av lager med specifika "
 "färgbeteckningar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:668
+#: plugins/tools/basictools/kis_tool_fill.cc:669
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#, kde-format
+msgid ""
+"Includes the active layer in regions found from merging of layers with "
+"specific color labels"
+msgstr ""
+"Inkluderar det aktiva lagret i områden som hittas från sammanfogning av "
+"lager med specifika färgbeteckningar"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:671
 #, kde-format
 msgid "Dragging will not fill different regions"
 msgstr "Att dra fyller inte olika områden"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:669
+#: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "Att dra fyller i områden med vilken färg som helst"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:670
+#: plugins/tools/basictools/kis_tool_fill.cc:673
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
@@ -62211,49 +62484,49 @@ msgstr ""
 "Att dra fyller bara i områden med en färg som liknar det ursprungliga "
 "området (användbart för att fylla i teckningar)"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:672
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:577
+#: plugins/tools/basictools/kis_tool_fill.cc:675
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:580
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Återställ alternativen till sina standardvärden"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:681
+#: plugins/tools/basictools/kis_tool_fill.cc:684
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Ifyllnadsläge"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:688
+#: plugins/tools/basictools/kis_tool_fill.cc:691
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Ifyllnadskälla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:702
+#: plugins/tools/basictools/kis_tool_fill.cc:710
 #, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Referens"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:711
+#: plugins/tools/basictools/kis_tool_fill.cc:719
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Ifyllnadsutsträckning"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:724
+#: plugins/tools/basictools/kis_tool_fill.cc:732
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Justeringar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:733
+#: plugins/tools/basictools/kis_tool_fill.cc:741
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr "Drag och fyll"
 
-#: plugins/tools/basictools/kis_tool_fill.h:239
+#: plugins/tools/basictools/kis_tool_fill.h:242
 #, kde-format
 msgid "Fill Tool"
 msgstr "Fyllverktyg"
@@ -63788,7 +64061,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Liknande färgmarkeringsverktyg"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -64780,19 +65053,19 @@ msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
 msgstr "Inneslut och fyll"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
 #, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Invertera"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:459
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
 msgstr "Inkludera konturområden"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
 #, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
@@ -64800,13 +65073,13 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Skala: {n} %"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:490
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Tröskel: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:496
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:497
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
@@ -64814,13 +65087,13 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Spridning: {n} %"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:499
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
 msgstr "Stäng gap: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:505
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in enclose and fill tool to use "
@@ -64828,143 +65101,143 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Använd markering som gräns"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
 #, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "Kantutjämning"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
 msgstr "Öka: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "Vävning: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "Återställ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:548
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:550
 #, kde-format
 msgid "Bezier Curve"
 msgstr "Bezierkurva"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
 #, kde-format
 msgid "Lasso"
 msgstr "Lasso"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:552
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:554
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr "Aktivera för att fylla i motsatta områden istället"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:553
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 "Aktivera för att också fylla former som rör det omgivande områdets kontur"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:586
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:589
 #, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "inneslutningsmetod"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:593
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:601
 #, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Referens"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:603
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:611
 #, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Målområden"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:613
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:621
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Ifyllnadskälla"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:627
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:635
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Ifyllnadsutsträckning"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:637
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:645
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Justeringar"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:893
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:906
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Alla"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:896
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:909
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Specifik färg"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:899
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:912
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Genomskinlighet"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:902
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:915
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Specifik färg eller genomskinlighet"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:905
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:918
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Alla, med undantag för en specifik färg"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:908
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:921
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Alla, med undantag för genomskinlighet"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:911
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:924
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Alla, med undantag för en specifik färg eller genomskinlighet"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:914
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:927
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Alla omgivna av en specifik färg"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:917
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:930
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Alla omgivna av genomskinlighet"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:920
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:933
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
@@ -66221,9 +66494,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "Fit Text Width"
 #~ msgstr "Anpassa textbredd"
 
-#~ msgid "Fit View Height"
-#~ msgstr "Anpassa till vyns höjd"
-
 #~ msgid "&Open..."
 #~ msgstr "Ö&ppna..."
 
@@ -67446,10 +67716,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Change the color of the line/border"
 #~ msgstr "Ändra linjens eller kantens färg"
-
-#~ msgctxt "@info:tooltip %2 is shortcut"
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
 
 #~ msgid "Use same aspect as pixels"
 #~ msgstr "Använd samma proportion som bildpunkter"
@@ -69827,9 +70093,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Create a new style inheriting the current style"
 #~ msgstr "Skapa en ny stil som ärver nuvarande stil"
-
-#~ msgid "New Style"
-#~ msgstr "Ny stil"
 
 #~ msgid "Another style named '%1' already exist. Please choose another name."
 #~ msgstr "En annan stil som heter '%1' finns redan. Välj ett annat namn."
@@ -72718,9 +72981,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "New layer(s)"
 #~ msgstr "Nya lager"
-
-#~ msgid "New active layer(s)"
-#~ msgstr "Nya aktiva lager"
 
 #~ msgid "New image"
 #~ msgstr "Ny bild"
@@ -85955,10 +86215,6 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fit to Page"
 #~ msgstr "Anpassa till sida"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Fit to Width"
-#~ msgstr "Anpassa till bredd"
 
 #~ msgctxt "(qtundo-format) Screen rect when choosing Wintab/Qt settings"
 #~ msgid "%1x%2 offset: %3,%4"
@@ -99641,9 +99897,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Total Refresh"
 #~ msgstr "Fullständig uppdatering"
-
-#~ msgid "Pt. Presets"
-#~ msgstr "Pt. förinställningar"
 
 #~ msgid "?"
 #~ msgstr "?"

@@ -248,6 +248,13 @@ int KisKeyframeChannel::activeKeyframeTime(int time) const
     return iter.key();
 }
 
+int KisKeyframeChannel::lookupKeyframeTime(KisKeyframeSP toLookup)
+{
+    int time = m_d->keys.key(toLookup, -1);
+    KIS_ASSERT(time >= 0);
+    return time;
+}
+
 int KisKeyframeChannel::firstKeyframeTime() const
 {
     if (m_d->keys.isEmpty()) {

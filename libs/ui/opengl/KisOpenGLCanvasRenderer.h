@@ -63,7 +63,6 @@ public:
     void paintCanvasOnly(const QRect &canvasImageDirtyRect, const QRect &viewportUpdateRect = QRect());
 
 private:
-    void updateSize(const QSize &viewportSize);
     void renderCanvasGL(const QRect &updateRect);
 
 public:

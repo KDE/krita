@@ -1259,6 +1259,7 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
                     this, SIGNAL(sigReferenceImagesChanged()));
 
         Q_EMIT sigReferenceImagesLayerChanged(referencesLayer);
+        Q_EMIT sigReferenceImagesChanged();
     }
 
     KisDecorationsWrapperLayerSP decorationsLayer =
@@ -2771,6 +2772,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     }
 
     Q_EMIT sigReferenceImagesLayerChanged(layer);
+    Q_EMIT sigReferenceImagesChanged();
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

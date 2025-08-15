@@ -43,7 +43,7 @@ struct KRITAFLAKE_EXPORT KoSvgSymbol {
     QString id;
     QString title;
     KoShape *shape {0};
-    QImage icon();
+    QImage icon(int size);
 
     bool operator==(const KoSvgSymbol& rhs) const {
         return title == rhs.title;

@@ -57,6 +57,7 @@ private:
 
 protected:
     QPointF widgetToDocument(const QPointF &widgetPoint) const override;
+    QPointF documentToWidget(const QPointF &documentPoint) const override;
 
 private:
     bool m_isActionActivated;

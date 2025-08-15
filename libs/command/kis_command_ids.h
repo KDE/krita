@@ -27,6 +27,7 @@ enum CommandId {
     ChangeNodeNameId,
     ChangeNodeCompositeOpId,
     ChangeCurrentTimeId,
+    ChangeCurrentTimeToKeyId,
     DisableUIUpdatesCommandId,
     UpdateCommandId,
     EmitImageSignalsCommandId,

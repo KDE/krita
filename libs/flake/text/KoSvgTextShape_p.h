@@ -465,6 +465,11 @@ public:
         disableFontMatching = rhs.disableFontMatching;
     }
 
+    ~Private() {
+        qDeleteAll(shapesInside);
+        qDeleteAll(shapesSubtract);
+    }
+
     int xRes = 72;
     int yRes = 72;
     QList<KoShape*> shapesInside;
@@ -738,6 +743,38 @@ public:
                 }
             }
         }
+    }
+
+    static KisForest<KoSvgTextContentElement>::child_iterator iteratorForTreeIndex(const QVector<int> treeIndex, KisForest<KoSvgTextContentElement>::child_iterator parent) {
+        if (treeIndex.isEmpty()) return parent;
+        QVector<int> idx = treeIndex;
+        int count = idx.takeFirst();
+        for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
+            if (count == 0) {
+                if ((KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child))) {
+                    return iteratorForTreeIndex(idx, child);
+                } else {
+                    return child;
+                }
+            }
+            count -= 1;
+        }
+        return KisForestDetail::childEnd(parent);
+    }
+
+    static bool startIndexOfIterator(KisForest<KoSvgTextContentElement>::child_iterator parent, KisForest<KoSvgTextContentElement>::child_iterator target, int &currentIndex) {
+        for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
+            if (child == target) {
+                return true;
+            } else if ((KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child))) {
+                if (startIndexOfIterator(child, target, currentIndex)) {
+                    return true;
+                }
+            } else {
+                currentIndex += numChars(child);
+            }
+        }
+        return false;
     }
 };
 

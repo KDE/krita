@@ -966,18 +966,18 @@ bool KisAnimTimelineFramesModel::insertFrames(int dstColumn, const QList<int> &d
     return true;
 }
 
-bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexes, int count)
+bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexes, int insertCount)
 {
-    if (selectedIndexes.isEmpty() || count == 0) return true;
+    if (selectedIndexes.isEmpty() || insertCount == 0) return true;
 
-    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count)));
+    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", insertCount)));
 
     {
         KisImageBarrierLock locker(m_d->image);
 
+        // Find Keyframes in selection...
         QSet<TimelineSelectionEntry> uniqueKeyframesInSelection;
-
-        int minSelectedTime = std::numeric_limits<int>::max();
+        int earliestAffectedTime = std::numeric_limits<int>::max();
 
         Q_FOREACH (const QModelIndex &index, selectedIndexes) {
             KisNodeSP node = nodeAt(index);
@@ -986,7 +986,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
             KisRasterKeyframeChannel *channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
             if (!channel) continue;
 
-            minSelectedTime = qMin(minSelectedTime, index.column());
+            earliestAffectedTime = qMin(earliestAffectedTime, index.column()); // Earliest of selection... (to be continued.)
 
             int time = channel->activeKeyframeTime(index.column());
             KisRasterKeyframeSP keyframe = channel->activeKeyframeAt<KisRasterKeyframe>(index.column());
@@ -996,6 +996,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
             }
         }
 
+        // Determine which keyframes need to move and sort by time...
         QList<TimelineSelectionEntry> keyframesToMove;
 
         for (auto it = uniqueKeyframesInSelection.begin(); it != uniqueKeyframesInSelection.end(); ++it) {
@@ -1017,25 +1018,39 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
 
         if (keyframesToMove.isEmpty()) return true;
 
+        const int oldTime = m_d->image->animationInterface()->currentUITime();
         const int maxColumn = columnCount();
 
-        if (count > 0) {
-            setLastVisibleFrame(columnCount() + count);
+        // Store the original active keyframe, so we can switch to its new time at the end.
+        // (This helps to keep artist drawing on the right keyframe even while adding and removing hold frames.)
+        QModelIndex activeIndex = index(m_d->activeLayerIndex, oldTime);
+        KisNodeSP activeNode = nodeAt(activeIndex);
+        KisRasterKeyframeChannel *activeChannel = dynamic_cast<KisRasterKeyframeChannel*>(activeNode->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
+
+        KisRasterKeyframeSP originalActiveKeyframe = nullptr;
+        if (activeChannel) {
+            originalActiveKeyframe = activeChannel->activeKeyframeAt<KisRasterKeyframe>(oldTime);
+        }
+
+        // Create keyframe movement commands...
+        if (insertCount > 0) {
+            setLastVisibleFrame(columnCount() + insertCount);
         }
 
         Q_FOREACH (TimelineSelectionEntry entry, keyframesToMove) {
-            int plannedFrameMove = count;
+            int plannedFrameMove = insertCount;
 
-            if (count < 0) {
+            if (insertCount < 0) {
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(entry.time > 0, false);
 
                 int prevKeyframeTime = entry.channel->previousKeyframeTime(entry.time);
                 KisRasterKeyframeSP prevFrame = entry.channel->keyframeAt<KisRasterKeyframe>(prevKeyframeTime);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(prevFrame, false);
 
-                plannedFrameMove = qMax(count, prevKeyframeTime - entry.time + 1);
+                // Clamp values so that they never exceed or overlap the previous frame
+                plannedFrameMove = qMax(insertCount, prevKeyframeTime - entry.time + 1);
 
-                minSelectedTime = qMin(minSelectedTime, prevKeyframeTime);
+                earliestAffectedTime = qMin(earliestAffectedTime, prevKeyframeTime); // No longer limited to selection.
             }
 
             KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(entry.channel->node());
@@ -1056,13 +1071,14 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
                                       parentCommand.data());
         }
 
-        const int oldTime = m_d->image->animationInterface()->currentUITime();
-        const int newTime = qMax(minSelectedTime, oldTime + count * uniqueKeyframesInSelection.count());
-
-        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
+        if (originalActiveKeyframe) {
+        new KisSwitchCurrentTimeToKeyframeCommand(m_d->image->animationInterface(),
                                         oldTime,
-                                        newTime,
+                                        activeNode,
+                                        KisKeyframeChannel::Raster,
+                                        originalActiveKeyframe,
                                         parentCommand.data());
+        }
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),

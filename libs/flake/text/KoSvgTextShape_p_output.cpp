@@ -372,10 +372,12 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
     const QString imageViewTransformProp = "viewboxTransform";
     KoShapeFactoryBase *rectangleFactory = KoShapeRegistry::instance()->value("RectangleShape");
 
-
     KoShapeStrokeModelSP stroke = rootShape->stroke();
     QSharedPointer<KoShapeBackground> background = rootShape->background();
     QVector<KoShape::PaintOrder> paintOrder = rootShape->paintOrder();
+
+    bool currentNodeInheritsBg = false;
+    bool currentNodeInheritsStroke = false;
 
     for (auto it = compositionBegin(textData); it != compositionEnd(textData); it++) {
         bool hasPaintOrder = it->properties.hasProperty(KoSvgTextProperties::PaintOrder);
@@ -394,6 +396,11 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         KoShape::PaintOrder first = paintOrder.at(0);
         KoShape::PaintOrder second = paintOrder.at(1);
 
+        if (it != compositionBegin(textData)) {
+            currentNodeInheritsBg = currentNodeInheritsBg? !it->properties.hasProperty(KoSvgTextProperties::FillId): false;
+            currentNodeInheritsStroke = currentNodeInheritsStroke? !it->properties.hasProperty(KoSvgTextProperties::StrokeId): false;
+        }
+
         if (it.state() == KisForestDetail::Enter) {
 
 
@@ -408,6 +415,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                 if (hasPaintOrder)
                     shape->setPaintOrder(first, second);
                 shapes.append(shape);
+                if (currentNodeInheritsBg && !textDecorationColor.isValid()) {
+                    shape->setInheritBackground(true);
+                }
+                shape->setInheritStroke(currentNodeInheritsStroke);
             }
             if (textDecorations.contains(KoSvgText::DecorationOverline)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline));
@@ -422,6 +433,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                 if (hasPaintOrder)
                     shape->setPaintOrder(first, second);
                 shapes.append(shape);
+                if (currentNodeInheritsBg && !textDecorationColor.isValid()) {
+                    shape->setInheritBackground(true);
+                }
+                shape->setInheritStroke(currentNodeInheritsStroke);
             }
 
             if (childCount(siblingCurrent(it)) == 0) {
@@ -448,6 +463,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                                 shape->setFillRule(Qt::WindingFill);
                                 shape->setPaintOrder(first, second);
                                 shapes.append(shape);
+                                if (replace && currentNodeInheritsBg) {
+                                    shape->setInheritBackground(true);
+                                }
+                                shape->setInheritStroke(currentNodeInheritsStroke);
                             }
                         } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
                             chunk.addPath(tf.map(outlineGlyph->path));
@@ -478,6 +497,8 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                                     rect->setTransformation(imageTf*tf);
 
                                     shapes.append(rect);
+                                    rect->setInheritBackground(currentNodeInheritsBg);
+                                    rect->setInheritStroke(currentNodeInheritsStroke);
                                 } else {
                                     shape->setSize(drawRect.size());
                                     shape->setTransformation(imageTf*tf);
@@ -501,8 +522,17 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                 if (hasPaintOrder)
                     shape->setPaintOrder(first, second);
                 shapes.append(shape);
+                shape->setInheritBackground(currentNodeInheritsBg);
+                shape->setInheritStroke(currentNodeInheritsStroke);
                 currentIndex = j;
 
+            }
+            if (it == compositionBegin(textData)) {
+                // We don't want the root to inherit stroke or fill, but after
+                // that it should, so we turn both to inherit at the end of the
+                // 'enter' code block for the root.
+                currentNodeInheritsBg = true;
+                currentNodeInheritsStroke = true;
             }
         }
         if (it.state() ==KisForestDetail::Leave) {
@@ -520,6 +550,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                 if (hasPaintOrder)
                     shape->setPaintOrder(first, second);
                 shapes.append(shape);
+                if (currentNodeInheritsBg && !textDecorationColor.isValid()) {
+                    shape->setInheritBackground(true);
+                }
+                shape->setInheritStroke(currentNodeInheritsStroke);
             }
         }
     }
@@ -536,14 +570,6 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         group->setStroke(rootShape->stroke());
         group->setPaintOrder(rootShape->paintOrder().first(), rootShape->paintOrder().at(1));
         group->setInheritPaintOrder(rootShape->inheritPaintOrder());
-        for(int i = 0; i < group->shapes().size(); i++) {
-            if (group->shapes().at(i)->background() == group->background()) {
-                group->shapes().at(i)->setInheritBackground(true);
-            }
-            if (group->shapes().at(i)->stroke() == group->stroke()) {
-                group->shapes().at(i)->setInheritStroke(true);
-            }
-        }
 
         parentShape = group;
     }

@@ -48,26 +48,17 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
 {
     Q_ASSERT(controller);
 
-    QPoint offset = QPoint(controller->canvasOffsetX(), controller->canvasOffsetY());
-    QPoint origin = controller->canvas()->documentOrigin();
-    QPoint viewPoint = widgetScrollPoint - origin - offset;
+    const QPoint originalWidgetPoint = parent->documentToWidget(widgetScrollPointDoc).toPoint();
 
-    QRectF mouseArea(viewPoint, QSizeF(10, 10));
+    QRectF mouseArea(widgetScrollPointDoc, QSizeF(10, 10));
     mouseArea.setTopLeft(mouseArea.center());
 
-    controller->ensureVisible(mouseArea, true);
+    controller->ensureVisibleDoc(mouseArea, true);
 
-    QPoint newOffset = QPoint(controller->canvasOffsetX(), controller->canvasOffsetY());
+    widgetScrollPointDoc = parent->widgetToDocument(originalWidgetPoint);
 
-    QPoint moved = offset - newOffset;
-    if (moved.isNull())
-        return;
-
-    widgetScrollPoint += moved;
-
-    QPointF documentPoint = parent->widgetToDocument(widgetScrollPoint);
-    QMouseEvent event(QEvent::MouseMove, widgetScrollPoint, Qt::LeftButton, Qt::LeftButton, QFlags<Qt::KeyboardModifier>());
-    KoPointerEvent ev(&event, documentPoint);
+    QMouseEvent event(QEvent::MouseMove, originalWidgetPoint, Qt::LeftButton, Qt::LeftButton, QFlags<Qt::KeyboardModifier>());
+    KoPointerEvent ev(&event, widgetScrollPointDoc);
     activeTool->mouseMoveEvent(&ev);
 }
 
@@ -81,7 +72,7 @@ void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
     if (event.buttons() != Qt::LeftButton) return;
 
 
-    widgetScrollPoint = event.pos();
+    widgetScrollPointDoc = event.point;
 
     if (! scrollTimer.isActive())
         scrollTimer.start();
@@ -129,16 +120,6 @@ void KoToolProxy::paint(QPainter &painter, const KoViewConverter &converter)
 void KoToolProxy::repaintDecorations()
 {
     if (d->activeTool) d->activeTool->repaintDecorations();
-}
-
-
-QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
-{
-    QPoint offset = QPoint(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
-    QPoint origin = d->controller->canvas()->documentOrigin();
-    QPointF viewPoint = widgetPoint.toPoint() - QPointF(origin - offset);
-
-    return d->controller->canvas()->viewConverter()->viewToDocument(viewPoint);
 }
 
 KoCanvasBase* KoToolProxy::canvas() const

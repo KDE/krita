@@ -21,6 +21,47 @@ private Q_SLOTS:
     void testRotation();
     void testMirroring();
     void testMirroringCanvasBiggerThanImage();
+    void testCanvasOffset();
+    void testImageSmallerThanCanvas();
+    void testImageResolutionChange();
+    void testOffsetLimits_data();
+    void testOffsetLimits();
+    void testOffsetLimitsCropping();
+    void testZoomMode_data();
+    void testZoomMode();
+
+    void testChangeCanvasSize_data();
+    void testChangeCanvasSize();
+
+    void testChangeImageResolution_data();
+    void testChangeImageResolution();
+
+    void testChangeImageSize_data();
+    void testChangeImageSize();
+
+    void testResolutionModes_data();
+    void testResolutionModes();
+
+    void testHiDPICanvasSize_data();
+    void testHiDPICanvasSize();
+
+    void testZoomLimits_data();
+    void testZoomLimits();
+
+    void testZoomLimitsEnforcement_data();
+    void testZoomLimitsEnforcement();
+
+    void testFindNextZoom_data();
+    void testFindNextZoom();
+
+    void testZoomTo_data();
+    void testZoomTo();
+
+    void testHiDPIOffsetSnapping_data();
+    void testHiDPIOffsetSnapping();
+
+    void testPreferredCenterTransformations_data();
+    void testPreferredCenterTransformations();
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_TEST_H */

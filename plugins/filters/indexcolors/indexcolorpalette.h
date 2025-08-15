@@ -21,7 +21,7 @@ struct LabColor
 
 struct IndexColorPalette
 {
-    QVector<LabColor> colors;
+    QVector<LabColor> m_colors;
 
     struct
     {

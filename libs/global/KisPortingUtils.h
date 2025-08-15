@@ -36,7 +36,29 @@ inline int getScreenNumberForWidget(const QWidget *w)
     return screens.indexOf(QGuiApplication::primaryScreen());
 }
 
+inline void stringRemoveLast(QString &str)
+{
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    str.remove(str.size() - 1, 1);
+#else
+    str.removeLast();
+#endif
 }
+
+inline void stringRemoveFirst(QString &str)
+{
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    str.remove(0, 1);
+#else
+    str.removeFirst();
+#endif
+}
+
+}
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#define Q_UNREACHABLE_RETURN(...) Q_UNREACHABLE(); return __VA_ARGS__
+#endif
 
 
 #endif // KISPORTINGUTILS_H

@@ -116,7 +116,9 @@ public:
 
         TextRenderingId, ///< Enum
 
-        KraTextVersionId ///< Int, used for handling incorrectly saved files.
+        KraTextVersionId, ///< Int, used for handling incorrectly saved files.
+        KraTextStyleType, ///< string, used to identify the style preset type (character or paragraph).
+        KraTextStyleResolution, ///< Int, used to scale style presets to be pixel-relative.
     };
 
     KoSvgTextProperties();
@@ -199,6 +201,18 @@ public:
 
     /// Used to merge child properties into parent properties
     void setAllButNonInheritableProperties(const KoSvgTextProperties &properties);
+
+    /**
+     * @brief scaleAbsoluteValues
+     * This scales all absolute values stored in these text properties. Relative
+     * values don't need to be scaled. This can be used to scale styles in setSize
+     * as well as scale the text properties for Style Presets.
+     * @param scaleInline -- affects inline-direction values, like letter-spacing,
+     * inline-size, tab-size, text-indent, etc.
+     * @param scaleBlock -- affects block-direction values, like font-size,
+     * line-height, and baseline-shift.
+     */
+    void scaleAbsoluteValues(const double scaleInline = 1.0, const double scaleBlock = 1.0);
 
     /**
      * Return a set of properties that ar **not** inherited from \p

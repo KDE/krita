@@ -12,9 +12,10 @@
 #include <QPointer>
 
 #include <kis_canvas2.h>
+#include <KoResource.h>
 
 class KoDialog;
-class QQuickWidget;
+class KisQQuickWidget;
 class KoSvgTextProperties;
 
 class TextPropertiesDock : public QDockWidget, public KisMainwindowObserver {
@@ -30,18 +31,22 @@ public:
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
-    void slotUpdateStylesModel();
-    void slotUpdateAxesValues();
-    QString wwsFontFamilyName(QString familyName);
-    void connectAutoEnabler(QObject *watched);
+    QString wwsFontFamilyName(QString familyName, bool returnEmptyWhenMissing = false);
 
     QColor modalColorDialog(QColor oldColor);
 
     void callModalTextPropertyConfigDialog();
 
+    void applyPreset(KoResourceSP resource);
+
+    bool createNewPresetFromSettings();
+    void editPreset(KoResourceSP resource);
+    void cloneAndEditPreset(KoResourceSP resource);
+
+
 private:
     QPointer<KisCanvas2> m_canvas;
-    QQuickWidget *m_quickWidget {0};
+    KisQQuickWidget *m_quickWidget {0};
 
     struct Private;
     const QScopedPointer<Private> d;

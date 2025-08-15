@@ -44,13 +44,13 @@ bool Canvas::operator!=(const Canvas &other) const
 qreal Canvas::zoomLevel() const
 {
     if (!d->canvas) return 1.0;
-    return d->canvas->imageView()->zoomManager()->zoom();
+    return d->canvas->imageView()->viewConverter()->zoom();
 }
 
 void Canvas::setZoomLevel(qreal value)
 {
     if (!d->canvas) return;
-    d->canvas->imageView()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, value);
+    d->canvas->imageView()->canvasController()->setZoom(KoZoomMode::ZOOM_CONSTANT, value);
 }
 
 void Canvas::setPreferredCenter(const QPointF& imagePos)

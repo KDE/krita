@@ -440,6 +440,28 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     qputenv("QSG_RHI_BACKEND", "opengl");
 #endif
 
+#if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (config.rendererId() == KisOpenGL::RendererOpenGLES) {
+        /**
+         * Activate anti-flickering workarounds in Qt for ANGLE backend.
+         * They should **not** be activated for openGL backend, because
+         * it may cause flickering :)
+         */
+        if (!qEnvironmentVariableIsSet("QT_USE_PREMATURE_RESIZE_EVENTS")) {
+            qInfo() << "INFO: activateing QT_USE_PREMATURE_RESIZE_EVENTS...";
+            qputenv("QT_USE_PREMATURE_RESIZE_EVENTS", "1");
+        }
+        if (!qEnvironmentVariableIsSet("QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE")) {
+            qInfo() << "INFO: activateing QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE...";
+            qputenv("QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE", "1");
+        }
+        if (!qEnvironmentVariableIsSet("QT_PREFILL_RHI_SURFACE")) {
+            qInfo() << "INFO: activateing QT_PREFILL_RHI_SURFACE...";
+            qputenv("QT_PREFILL_RHI_SURFACE", "1");
+        }
+    }
+#endif
+
 #if KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
     if (!qEnvironmentVariableIsSet("QT_BACKING_STORE_USE_FAST_QIMAGE_TRANSFER")) {
         qputenv("QT_BACKING_STORE_USE_FAST_QIMAGE_TRANSFER", "1");
@@ -569,9 +591,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                 // See https://bugs.kde.org/show_bug.cgi?id=396370
                 KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
                 qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
+                qputenv("LANGUAGE", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
                 KLocalizedString::setLanguages(QStringList() << uiLanguages);
                 qputenv("LANG", envLanguage.toLocal8Bit());
+                qputenv("LANGUAGE", envLanguage.toLocal8Bit());
 #endif
             }
         }

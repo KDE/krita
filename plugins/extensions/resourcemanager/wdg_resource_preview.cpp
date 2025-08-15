@@ -69,7 +69,7 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
         #if defined HAVE_SEEXPR
         resourceTypes << ResourceType::SeExprScripts;
         #endif
-        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces << ResourceType::FontFamilies;
+        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces << ResourceType::CssStyles;
 
         for (int i = 0; i < resourceTypes.size(); i++) {
             m_ui->cmbResourceType->addItem(ResourceName::resourceTypeToName(resourceTypes[i]));

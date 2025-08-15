@@ -41,7 +41,6 @@ class KisInputManager;
 class KoUpdater;
 class KoProgressUpdater;
 class KisMainWindow;
-class KoZoomController;
 class KoCanvasResourceProvider;
 class KisIdleTasksManager;
 class KisTextPropertiesManager;
@@ -74,8 +73,6 @@ public:  // Krita specific interfaces
 
     /// Return the image this view is displaying
     KisImageWSP image() const;
-
-    KoZoomController *zoomController() const;
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
@@ -231,8 +228,6 @@ public Q_SLOTS:
     // Enable the last set brush outline, or disable it if already enabled
     void slotToggleBrushOutline();
 
-    void updatePrintSizeAction(bool canvasMappingMode);
-    
 Q_SIGNALS:
 
     void floatingMessageRequested(const QString &message, const QString &iconName);

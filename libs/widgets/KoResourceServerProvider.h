@@ -22,6 +22,7 @@
 #include <resources/KoColorSet.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 #include <resources/KoGamutMask.h>
+#include <resources/KoCssStylePreset.h>
 #include <config-seexpr.h>
 #if defined HAVE_SEEXPR
 #include <resources/KisSeExprScript.h>
@@ -45,6 +46,7 @@ public:
     static KoResourceServer<KoColorSet> *paletteServer();
     static KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer();
     static KoResourceServer<KoGamutMask> *gamutMaskServer();
+    static KoResourceServer<KoCssStylePreset> *stylePresetServer();
 #if defined HAVE_SEEXPR
     static KoResourceServer<KisSeExprScript> *seExprScriptServer();
 #endif

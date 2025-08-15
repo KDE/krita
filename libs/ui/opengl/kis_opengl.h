@@ -53,7 +53,7 @@ public:
         AngleRendererD3d11Warp  = 0x0008, // "Windows Advanced Rasterization Platform"
     };
 
-    struct RendererConfig {
+    struct KRITAUI_EXPORT RendererConfig {
         QSurfaceFormat format;
         AngleRenderer angleRenderer = AngleRendererDefault;
 

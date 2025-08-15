@@ -31,7 +31,7 @@ public:
 public Q_SLOTS:
     void mirrorUpdateIcon();
     void rotateCanvasView(qreal rotation);
-    void updateSlider();
+    void updateRotationSlider(qreal rotation);
     void setPinControls(bool pin);
 
 protected:

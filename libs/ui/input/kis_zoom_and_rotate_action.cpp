@@ -12,11 +12,11 @@
 #include <kis_canvas_controller.h>
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
-#include <KoZoomController.h>
 #include <kis_algebra_2d.h>
 
 #include "kis_zoom_and_rotate_action.h"
 #include "kis_input_manager.h"
+#include <KoViewTransformStillPoint.h>
 
 class KisZoomAndRotateAction::Private {
 public:
@@ -28,6 +28,8 @@ public:
     qreal previousAngle {0.0};
     qreal initialReferenceAngle {0.0};
     qreal accumRotationAngle {0.0};
+
+    KoViewTransformStillPoint actionStillPoint;
 };
 
 KisZoomAndRotateAction::KisZoomAndRotateAction()
@@ -71,6 +73,7 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
         d->previousAngle = 0;
         d->initialReferenceAngle = 0;
         d->accumRotationAngle = 0;
+        d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(d->lastPosition);
     }
 }
 
@@ -101,15 +104,13 @@ void KisZoomAndRotateAction::inputEvent(QEvent *event)
             const float dist = QLineF(p0, p1).length();
             const float scaleDelta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
 
-            QTransform transform;
-            transform.rotate(rotationAngle);
-            const QPointF stationaryPointOffset = (p0 - d->lastPosition) * transform * scaleDelta;
-
             KisCanvas2 *canvas = inputManager()->canvas();
             KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
-            controller->zoomRelativeToPoint(p0.toPoint(), scaleDelta);
-            controller->rotateCanvas(rotationAngle, p0);
-            controller->pan(-stationaryPointOffset.toPoint());
+            const qreal newZoom = canvas->viewConverter()->zoom() * scaleDelta;
+            KoViewTransformStillPoint adjustedStillPoint = d->actionStillPoint;
+            adjustedStillPoint.second = p0;
+            controller->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom, adjustedStillPoint);
+            controller->rotateCanvas(rotationAngle, adjustedStillPoint);
 
             d->lastPosition = p0;
             d->lastDistance = dist;

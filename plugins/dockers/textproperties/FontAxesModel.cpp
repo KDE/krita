@@ -6,6 +6,10 @@
 #include "FontAxesModel.h"
 #include <klocalizedstring.h>
 #include <QDebug>
+#include <resources/KoFontFamily.h>
+#include <KisResourceModel.h>
+#include <KoFontRegistry.h>
+#include <lager/KoSvgTextPropertiesModel.h>
 
 const QString WEIGHT_TAG = "wght";
 const QString WIDTH_TAG = "wdth";
@@ -20,13 +24,19 @@ struct FontAxesModel::Private {
     QVariantMap axisValues;
 
     bool blockAxesValuesUpdate = false;
+    KisResourceModel *fontModel = {nullptr};
 };
 
 FontAxesModel::FontAxesModel(QObject *parent)
     : QAbstractItemModel(parent)
     , d(new Private)
 {
-
+    d->fontModel = new KisResourceModel(ResourceType::FontFamilies);
+    QList<QLocale> locales;
+    Q_FOREACH (const QString langCode, KLocalizedString::languages()) {
+        locales.append(QLocale(langCode));
+    }
+    d->locales = locales;
 }
 
 FontAxesModel::~FontAxesModel()
@@ -35,8 +45,7 @@ FontAxesModel::~FontAxesModel()
 
 void FontAxesModel::setAxesData(QList<KoSvgText::FontFamilyAxis> axes)
 {
-    beginResetModel();
-    d->axes.clear();
+    QList<KoSvgText::FontFamilyAxis> newAxes;
     for (int i=0; i < axes.size(); i++) {
         QString tag = axes.at(i).tag;
         if (!(tag == WEIGHT_TAG
@@ -44,15 +53,16 @@ void FontAxesModel::setAxesData(QList<KoSvgText::FontFamilyAxis> axes)
                 || tag == ITALIC_TAG
                 || tag == SLANT_TAG)
                 && !axes.at(i).axisHidden) {
-            d->axes.append(axes.at(i));
+            newAxes.append(axes.at(i));
         }
     }
-    endResetModel();
-}
-
-void FontAxesModel::setLocales(QList<QLocale> locales)
-{
-    d->locales = locales;
+    if (newAxes != d->axes) {
+        // TODO: Rework this whole thing so we don't update axes unless absolutely necessary.
+        // This wll probably require a filterproxy model where invisible axes are filtered out.
+        beginResetModel();
+        d->axes = newAxes;
+        endResetModel();
+    }
 }
 
 void FontAxesModel::setOpticalSizeDisabled(bool disable)
@@ -170,6 +180,31 @@ QHash<int, QByteArray> FontAxesModel::roleNames() const
 QVariantMap FontAxesModel::axisValues() const
 {
     return d->axisValues;
+}
+
+void FontAxesModel::setFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel)
+{
+    QStringList families = textPropertiesModel->fontFamilies();
+    QList<KoSvgText::FontFamilyAxis> axes;
+
+
+    if (!families.isEmpty() && d->fontModel) {
+
+        std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(families.first());
+        QString familyName = !name? families.first(): name.value();
+
+        QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(familyName);
+        if (!res.isEmpty()) {
+            KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
+            if (family) {
+                axes = family->axes();
+            }
+        }
+    }
+    setBlockAxesValuesSignal(true);
+    setAxesData(axes);
+    setAxisValues(textPropertiesModel->axisValues());
+    setBlockAxesValuesSignal(false);
 }
 
 void FontAxesModel::setAxisValues(const QVariantMap &newAxisValues)

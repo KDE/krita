@@ -15,10 +15,9 @@ class TestKoZoomAction : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void test();
-
-private Q_SLOTS:
-    //void slotValueChanged(KoFlake::AnchorPosition id);
+    void testZoomActionState_data();
+    void testZoomActionState();
+    void testInitWithDefault();
 };
 
 #endif /* __TEST_KO_ZOOM_ACTION_H */

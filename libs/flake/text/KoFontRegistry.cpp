@@ -123,6 +123,11 @@ public:
         }
         m_config.reset(config);
 
+        // Add fonts folder from resource folder.
+        const QString fontsFolder = KoResourcePaths::saveLocation("data", "/fonts/", true);
+        const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(fontsFolder.toUtf8().data());
+        FcConfigAppFontAddDir(m_config.data(), vals);
+
         /// Setup the change tracker.
         FcStrList *list = FcConfigGetFontDirs(m_config.data());
         FcStrListFirst(list);
@@ -135,6 +140,7 @@ public:
             dirString = FcStrListNext(list);
             path = QString::fromUtf8(reinterpret_cast<char *>(dirString));
         }
+        paths.append(fontsFolder);
         FcStrListDone(list);
         changeTracker.reset(new KoFontChangeTracker(paths));
         changeTracker->resetChangeTracker();

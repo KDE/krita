@@ -300,3 +300,21 @@ pep8.py --ignore=E501
 
 You can read more about the error codes and what they mean here:
 http://pep8.readthedocs.io/en/release-1.7.x/intro.html#error-codes
+
+QML Notes:
+
+    While the hacking file is not a good place to discuss human interface design, there are some technical
+    oddities with QML to take into account:
+
+    - Height, Implicit Height and Content Height can get very confusing. In theory, implicit height is only used
+    when height isn't set, but this is complicated by delegates never using the height property, and only using
+    implicit height. Furthermore, contentHeight, and contentItem.implicitHeight are only relevant when the item
+    has a contentItem, like with AbstractButtons and PopUps, but commonly, the implicit height of these
+    is already set to the contentHeight, so doesn't need to be set (and can in fact lead to slowdowns).
+    Conversely, if no implicit height is set on the content item, the content item will take the height
+    and width from the parent button or popup.
+    - Similarly, ListViews are not supossed to instatiate delegates outside of their views, but if a ListViews
+    is instatiated with their height set to contentHeight, then, even as the ListView resizes itself later, it
+    will instantiate a delegate for every single item it could lay out upon the ListView itself be instantiated.
+    It's better to set the default height of the ListView to something bounded, like the fontSize * 3, and then
+    ensure it is resized later.

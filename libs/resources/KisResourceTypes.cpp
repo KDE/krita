@@ -26,6 +26,7 @@ namespace ResourceType {
     const QString TaskSets {QStringLiteral("tasksets")};
     const QString LayerStyles {QStringLiteral("layerstyles")};
     const QString FontFamilies {QStringLiteral("fontfamilies")};
+    const QString CssStyles {QStringLiteral("css_styles")};
 }
 
 namespace ResourceSubType {
@@ -56,6 +57,7 @@ namespace ResourceName {
     const KLocalizedString TaskSets = ki18nc("resource type", "Task Sets");
     const KLocalizedString LayerStyles = ki18nc("resource type", "Layer Styles");
     const KLocalizedString FontFamilies = ki18nc("resource type", "Font Families");
+    const KLocalizedString CssStyles = ki18nc("resource type", "Style Presets");
 }
 
 QString ResourceName::resourceTypeToName(const QString &resourceType)
@@ -80,6 +82,7 @@ QString ResourceName::resourceTypeToName(const QString &resourceType)
         typeMap[ResourceType::TaskSets] = ResourceName::TaskSets.toString();
         typeMap[ResourceType::LayerStyles] = ResourceName::LayerStyles.toString();
         typeMap[ResourceType::FontFamilies] = ResourceName::FontFamilies.toString();
+        typeMap[ResourceType::CssStyles] = ResourceName::CssStyles.toString();
         return typeMap;
     }();
 

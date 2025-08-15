@@ -1,15 +1,16 @@
 linux-build:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder-2204:latest
+  image: storage.kde.org/vm-images/krita-appimage-2204
   tags:
-    - Linux
+    - VM
+    - amd64
   extends:
     - .ci-always-job-mixin
     - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
-    KDECI_CC_CACHE: /mnt/caches/krita-appimage/
-    KDECI_CACHE_PATH: /mnt/artifacts/krita-appimage/
+    KDECI_CC_CACHE: /mnt/krita-appimage/caches/
+    KDECI_CACHE_PATH: /mnt/krita-appimage/artifacts/
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-appimage
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata

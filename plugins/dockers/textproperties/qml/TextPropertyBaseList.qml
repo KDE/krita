@@ -13,6 +13,7 @@ ColumnLayout {
     id: propertyBaseList;
     property int propertyType: TextPropertyConfigModel.Character;
     property TextPropertyConfigModel configModel;
+    property double canvasDPI: 72.0;
 
     ListModel {
         id: propertyList;
@@ -161,66 +162,98 @@ ColumnLayout {
             model: ObjectModel {
                 id: propertyWidgetModel;
                 WritingMode {
+                    dpi: canvasDPI;
                 }
                 Direction {
+                    dpi: canvasDPI;
                 }
                 TextIndent{
+                    dpi: canvasDPI;
                 }
                 TextAlign{
+                    dpi: canvasDPI;
                 }
                 DominantBaseline {
+                    dpi: canvasDPI;
                 }
                 WhiteSpace {
+                    dpi: canvasDPI;
                 }
                 UnderlinePosition {
+                    dpi: canvasDPI;
                 }
                 HangingPunctuation {
+                    dpi: canvasDPI;
                 }
                 TabSize {
+                    dpi: canvasDPI;
                 }
-                TextRendering {}
+                TextRendering {
+                    dpi: canvasDPI;
+                }
                 FontSize {
+                    dpi: canvasDPI;
                 }
                 FontSizeAdjust {
+                    dpi: canvasDPI;
                 }
 
                 FontFamily {
+                    dpi: canvasDPI;
                 }
                 FontStyle {
+                    dpi: canvasDPI;
                 }
                 LetterSpacing {
+                    dpi: canvasDPI;
                 }
                 WordSpacing {
+                    dpi: canvasDPI;
                 }
                 LineHeight {
+                    dpi: canvasDPI;
                 }
                 LineBreak {
+                    dpi: canvasDPI;
                 }
                 WordBreak {
+                    dpi: canvasDPI;
                 }
                 TextTransform {
+                    dpi: canvasDPI;
                 }
                 TextDecoration {
+                    dpi: canvasDPI;
                 }
                 OTLigatures {
+                    dpi: canvasDPI;
                 }
                 OTPosition {
+                    dpi: canvasDPI;
                 }
                 OTNumeric {
+                    dpi: canvasDPI;
                 }
                 OTCaps {
+                    dpi: canvasDPI;
                 }
                 OTEastAsian {
+                    dpi: canvasDPI;
                 }
                 OpenTypeFeatureSettings {
+                    dpi: canvasDPI;
                 }
                 FontKerning {
+                    dpi: canvasDPI;
                 }
                 BaselineShift {
+                    dpi: canvasDPI;
                 }
                 AlignmentBaseline {
+                    dpi: canvasDPI;
                 }
                 Language {
+                    dpi: canvasDPI;
                 }
             }
         }

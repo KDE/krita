@@ -7,7 +7,7 @@
 #define GLYPHPALETTEALTPOPUP_H
 
 #include <QFrame>
-#include <QQuickWidget>
+#include <KisQQuickWidget.h>
 #include <QAbstractItemModel>
 
 /**
@@ -54,7 +54,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sigInsertRichText(int charRow, int glyphRow, bool replace, bool useCharMap);
 private:
-    QQuickWidget *m_quickWidget {0};
+    KisQQuickWidget *m_quickWidget {0};
     QAbstractItemModel *m_charMapModel {0};
 };
 

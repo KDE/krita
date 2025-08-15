@@ -38,7 +38,7 @@ public:
     KoToolBase *activeTool {0};
     bool hasSelection {false};
     QTimer scrollTimer;
-    QPoint widgetScrollPoint;
+    QPointF widgetScrollPointDoc;
     KoCanvasController *controller {0};
     KoToolProxy *parent {0};
 

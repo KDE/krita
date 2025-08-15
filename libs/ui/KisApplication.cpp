@@ -99,6 +99,7 @@
 #include <KisSessionResource.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 #include <resources/KoFontFamily.h>
+#include <resources/KoCssStylePreset.h>
 
 #include "widgets/KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
@@ -332,6 +333,7 @@ void KisApplication::addResourceTypes()
 
     // Make directories for all resources we can save, and tags
     KoResourcePaths::saveLocation("data", "/asl/", true);
+    KoResourcePaths::saveLocation("data", "/css_styles/", true);
     KoResourcePaths::saveLocation("data", "/input/", true);
     KoResourcePaths::saveLocation("data", "/pykrita/", true);
     KoResourcePaths::saveLocation("data", "/color-schemes/", true);
@@ -398,6 +400,7 @@ bool KisApplication::registerResources()
                                                      QStringList() << "application/x-photoshop-style"));
 
     reg->add(new KisResourceLoader<KoFontFamily>(ResourceType::FontFamilies, ResourceType::FontFamilies, i18n("Font Families"), QStringList() << "application/x-font-ttf" << "application/x-font-otf"));
+    reg->add(new KisResourceLoader<KoCssStylePreset>(ResourceType::CssStyles, ResourceType::CssStyles, i18n("Style Presets"), QStringList() << "image/svg+xml"));
 
     reg->registerFixup(10, new KisBrushTypeMetaDataFixup());
 

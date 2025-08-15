@@ -22,11 +22,14 @@ class TagFilterProxyModelQmlWrapper : public QObject
     Q_PROPERTY(QAbstractItemModel *model READ model NOTIFY modelChanged)
     Q_PROPERTY(QAbstractItemModel *tagModel READ tagModel NOTIFY tagModelChanged)
 
+    Q_PROPERTY(QString resourceType READ resourceType WRITE setResourceType NOTIFY resourceTypeChanged)
+
     Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
     Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
     Q_PROPERTY(bool searchInTag READ searchInTag WRITE setSearchInTag NOTIFY searchInTagChanged)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentResourceChanged)
     Q_PROPERTY(QString resourceFilename READ resourceFilename NOTIFY currentResourceChanged)
+    Q_PROPERTY(KoResourceSP currentResource READ currentResource NOTIFY currentResourceChanged)
 public:
     TagFilterProxyModelQmlWrapper(QObject *parent = nullptr);
     ~TagFilterProxyModelQmlWrapper();
@@ -38,6 +41,17 @@ public:
     /// Associated tagmodel
     QAbstractItemModel *tagModel() const;
 
+    /// The current resource type.
+    QString resourceType() const;
+
+    /**
+     * Setting the current resource type, this expects a
+     * resource type from KisResourceTypes, as this will be
+     * passed onto the initializers of the all internal resource
+     * related models.
+     */
+    void setResourceType(const QString &type);
+
     /// Select tag at row in tag model.
     void tagActivated(const int &row);
     /// Return row of current tag in tag model.
@@ -46,7 +60,6 @@ public:
     /// The current search text on the filter model.
     QString searchText() const;
     void setSearchText(const QString &text);
-
 
     /// Toggle "search in tag".
     void setSearchInTag(const bool &newSearchInTag);
@@ -65,7 +78,6 @@ public:
 
     /// Get localized name for index, retrieved from the resource metadata.
     Q_INVOKABLE static QString localizedNameFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
-    Q_INVOKABLE QVariantMap metadataForIndex(const int &resourceIndex) const;
 
     /// Get localized sample string based on scripts of locale.
     Q_INVOKABLE static QString localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
@@ -82,9 +94,20 @@ public:
     /// Set the resource index in tagfilterproxy.
     void setCurrentIndex(const int &index);
 
+    /// Set current resource to resource file name.
     Q_INVOKABLE void setResourceToFileName(const QString &filename);
 
+    /// File name of the current resource.
     QString resourceFilename();
+
+    /// current resource.
+    KoResourceSP currentResource() const;
+
+    /// Import a resource with file picker.
+    Q_INVOKABLE void importResource();
+
+    /// Disable the currently selected resource.
+    Q_INVOKABLE void removeResource();
 
 Q_SIGNALS:
     void modelChanged();
@@ -94,6 +117,7 @@ Q_SIGNALS:
     void modelSortUpdated();
     void currentResourceChanged();
     void tagModelChanged();
+    void resourceTypeChanged();
 
 private Q_SLOTS:
     /// Slot to set the search text on the model via a signal compressor.

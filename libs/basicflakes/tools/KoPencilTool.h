@@ -9,6 +9,7 @@
 
 #include "KoFlakeTypes.h"
 #include "KoToolBase.h"
+#include <kconfiggroup.h>
 
 class KoPathShape;
 class KoShapeStroke;
@@ -71,20 +72,22 @@ private:
 
     enum PencilMode { ModeRaw, ModeCurve, ModeStraight };
 
-    PencilMode m_mode;
-    bool m_optimizeRaw;
-    bool m_optimizeCurve;
-    qreal m_combineAngle;
-    qreal m_fittingError;
-    bool m_close;
+    PencilMode m_mode {ModeCurve};
+    bool m_optimizeRaw {false};
+    bool m_optimizeCurve {false};
+    qreal m_combineAngle {15.0};
+    qreal m_fittingError {5.0};
+    bool m_close {false};
 
     QList<QPointF> m_points; // the raw points
 
-    KoPathShape * m_shape;
-    KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
-    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
-    KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
-    KoStrokeConfigWidget *m_strokeWidget;
+    KoPathShape * m_shape {0};
+    KoPathPoint *m_existingStartPoint {0}; ///< an existing path point we started a new path at
+    KoPathPoint *m_existingEndPoint {0};   ///< an existing path point we finished a new path at
+    KoPathPoint *m_hoveredPoint {0}; ///< an existing path end point the mouse is hovering on
+    KoStrokeConfigWidget *m_strokeWidget {0};
+
+    KConfigGroup m_configGroup;
 };
 
 #endif // _KOPENCILTOOL_H_

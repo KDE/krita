@@ -7,7 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@label", "Font Style");
@@ -23,6 +23,14 @@ CollapsibleGroupProperty {
     property alias fontWidth: fontStretchSpn.value;
     property alias fontSlantSlope: fontSlantSpn.value;
     property int fontSlant: CssFontStyleModel.StyleNormal;
+
+    property FontAxesModel axesModel: FontAxesModel {
+        // TODO: handle locales.
+        onAxisValuesChanged: properties.axisValues = axisValues;
+    }
+    property FontStyleModel stylesModel: FontStyleModel {
+
+    }
 
     onFontSlantChanged: {
         fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
@@ -43,17 +51,16 @@ CollapsibleGroupProperty {
         fontSlantSlope = properties.fontStyle.value;
         fontSynthesizeSlant = properties.fontSynthesisStyle;
         fontSynthesizeWeight = properties.fontSynthesisWeight;
-        styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
-
-        propertyState = [
-            properties.fontWeightState,
-            properties.fontStyleState,
-            properties.fontWidthState,
-            properties.fontOpticalSizeLinkState,
-            properties.axisValueState,
-            properties.fontSynthesisStyleState,
-            properties.fontSynthesisWeightState
-        ]
+        axesModel.setFromTextPropertiesModel(properties);
+        stylesModel.setFromTextPropertiesModel(properties);
+        styleCmb.currentIndex = stylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
+        visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.axisValueState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontSynthesisStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontSynthesisWeightState !== KoSvgTextPropertiesModel.PropertyUnset;
         setVisibleFromProperty();
         blockSignals = false;
     }
@@ -97,10 +104,6 @@ CollapsibleGroupProperty {
         properties.fontWeightState = KoSvgTextPropertiesModel.PropertySet;
     }
 
-    Component.onCompleted: {
-        mainWindow.connectAutoEnabler(fontSlantSpnArea);
-    }
-
     titleItem: RowLayout{
         width: parent.width;
         height: implicitHeight;
@@ -117,7 +120,7 @@ CollapsibleGroupProperty {
 
         SqueezedComboBox {
         id: styleCmb;
-        model: fontStylesModel;
+        model: stylesModel;
         textRole: "display";
         Layout.fillWidth: true;
         Layout.preferredHeight: implicitHeight;
@@ -125,11 +128,11 @@ CollapsibleGroupProperty {
             if (!blockSignals) {
                 // Because each change to propertiesModel causes signals to fire,
                 // we need to first store the vars and then apply them.
-                var weight = fontStylesModel.weightValue(currentIndex);
-                var width = fontStylesModel.widthValue(currentIndex);
-                var styleMode = fontStylesModel.styleModeValue(currentIndex);
-                var styleVal = fontStylesModel.slantValue(currentIndex);
-                var axesValues = fontStylesModel.axesValues(currentIndex);
+                var weight = stylesModel.weightValue(currentIndex);
+                var width = stylesModel.widthValue(currentIndex);
+                var styleMode = stylesModel.styleModeValue(currentIndex);
+                var styleVal = stylesModel.slantValue(currentIndex);
+                var axesValues = stylesModel.axesValues(currentIndex);
                 properties.fontWeight = weight;
                 properties.fontWidth = width;
                 properties.fontStyle.style = styleMode;
@@ -153,24 +156,14 @@ CollapsibleGroupProperty {
             onClicked: properties.fontWeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: i18nc("@label:spinbox", "Weight:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            horizontalAlignment: Text.AlignRight;
-            Layout.preferredWidth: implicitWidth;
-            elide: Text.ElideRight;
-            font.italic: properties.fontWeightState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
-
-
-        SpinBox {
+        Kis.IntSliderSpinBox {
             id: fontWeightSpn
+            prefix: i18nc("@label:slider", "Weight: ");
             from: 0;
             to: 1000;
-            editable: true;
+            blockUpdateSignalOnDrag: true;
             Layout.fillWidth: true;
-
-            wheelEnabled: true;
+            Layout.columnSpan: 2;
 
         }
         RevertPropertyButton {
@@ -193,22 +186,15 @@ CollapsibleGroupProperty {
             revertState: properties.fontWidthState;
             onClicked: properties.fontWidthState = KoSvgTextPropertiesModel.PropertyUnset;
         }
-        Label {
-            id: widthLabel;
-            text: i18nc("@label:spinbox", "Width:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            horizontalAlignment: Text.AlignRight;
-            Layout.preferredWidth: implicitWidth;
-            elide: Text.ElideRight;
-            font.italic: properties.fontWidthState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
-        SpinBox {
+
+        Kis.IntSliderSpinBox {
             id: fontStretchSpn
+            prefix: i18nc("@label:slider", "Width: ")
             from: 0;
             to: 200;
-            editable: true;
+            blockUpdateSignalOnDrag: true;
             Layout.fillWidth: true;
-            wheelEnabled: true;
+            Layout.columnSpan: 2;
         }
 
         RevertPropertyButton {
@@ -245,21 +231,30 @@ CollapsibleGroupProperty {
         }
         MouseArea {
             id: fontSlantSpnArea;
-            function autoEnable() {
-                fontSlant = CssFontStyleModel.StyleOblique;
-            }
+
             Layout.fillWidth: true;
-            Layout.fillHeight: true;
-            Layout.minimumHeight: fontSlantSpn.height;
-            SpinBox {
-                id: fontSlantSpn
+            Layout.preferredHeight: fontSlantSpn.implicitHeight;
+            Kis.IntSliderSpinBox {
+                id: fontSlantSpn;
+                suffix: i18nc("@item:valuesuffix", "%")
                 from: -90;
                 to: 90;
-                editable: true;
                 enabled: fontSlant == CssFontStyleModel.StyleOblique;
+                PaletteControl {
+                    id: slantSpnPal;
+                }
+                blockUpdateSignalOnDrag: true;
+                anchors.fill: parent;
+                palette: slantSpnPal.palette;
 
                 wheelEnabled: true;
+            }
 
+            onClicked: {
+                if (!fontSlantSpn.enabled) {
+                    fontSlant = CssFontStyleModel.StyleOblique;
+                    fontSlantSpn.forceActiveFocus();
+                }
             }
         }
 
@@ -304,11 +299,12 @@ CollapsibleGroupProperty {
         }
         ListView {
             id: axesView;
-            model: fontAxesModel;
+            model: axesModel;
             Layout.columnSpan: 2;
             Layout.fillWidth: true;
             Layout.preferredHeight: contentHeight;
             spacing: parent.columnSpacing;
+            reuseItems: true;
 
             Label {
                 text: i18n("No extra variable axes in this font");
@@ -318,32 +314,22 @@ CollapsibleGroupProperty {
                 visible: parent.count === 0;
             }
 
-            delegate: RowLayout {
-                spacing: axesView.spacing;
-                width: axesView.width;
-                height: implicitHeight;
+            delegate: Kis.DoubleSliderSpinBox {
+                id: axisSpn;
                 required property string display;
                 required property double axismin;
                 required property double axismax;
                 required property bool axishidden;
                 required property var model;
 
-                Label {
-                    text: parent.display;
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    horizontalAlignment: Text.AlignRight;
-                    height: parent.height;
-                    elide: Text.ElideRight;
-                    Layout.preferredWidth: widthLabel.width+spacing;
-                }
-                DoubleSpinBox {
-                    id: axisSpn;
-                    from: parent.axismin * multiplier;
-                    to: parent.axismax * multiplier;
-                    value: model.edit * multiplier;
-                    onValueModified: model.edit = (value / axisSpn.multiplier);
-                    Layout.fillWidth: true;
-                }
+                prefix: display + ": ";
+                dFrom: axismin;
+                dTo: axismax;
+                dValue: model.edit;
+                blockUpdateSignalOnDrag: true;
+                onDValueChanged: model.edit = dValue;
+
+                width: ListView.view.width;
             }
         }
 

@@ -57,8 +57,12 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 
     KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
     bool fillRule = pathShape && pathShape->background() && pathShape->fillRule() == Qt::OddEvenFill? true: false;
-    saveSvgFill(shape->background(), fillRule, shape->outlineRect(), shape->size(), shape->absoluteTransformation(), context);
-    saveSvgStroke(shape->stroke(), context);
+    if (!shape->inheritBackground()) {
+        saveSvgFill(shape->background(), fillRule, shape->outlineRect(), shape->size(), shape->absoluteTransformation(), context);
+    }
+    if (!shape->inheritStroke()) {
+        saveSvgStroke(shape->stroke(), context);
+    }
 
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);

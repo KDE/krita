@@ -13,7 +13,6 @@
 #include <QCursor>
 
 #include <KoCanvasController.h>
-#include <KoZoomController.h>
 
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
@@ -26,6 +25,7 @@
 #include <KisMainWindow.h>
 #include "KisIdleTasksManager.h"
 #include <KisDisplayConfig.h>
+
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : KisWidgetWithIdleTask<QWidget>(parent)
@@ -52,7 +52,7 @@ void OverviewWidget::setCanvas(KisCanvas2 *canvas)
 
     if (m_canvas) {
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
-        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasStateChanged()), this, SLOT(update()), Qt::UniqueConnection);
         connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
     }
 }
@@ -202,9 +202,9 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 {
     if (m_canvas) {
         if (event->angleDelta().y() > 0) {
-            m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
+            m_canvas->canvasController()->zoomIn();
         } else {
-            m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
+            m_canvas->canvasController()->zoomOut();
         }
     }
 }

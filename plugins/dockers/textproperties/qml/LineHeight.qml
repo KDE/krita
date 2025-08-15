@@ -7,9 +7,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: lineHeightBase;
     propertyTitle: i18nc("@label", "Line Height");
     propertyName: "line-height";
     propertyType: TextPropertyConfigModel.Character;
@@ -34,17 +35,15 @@ TextPropertyBase {
 
     CssQmlUnitConverter {
         id: converter;
-        dpi: dpi;
-        dataMultiplier: lineHeightSpn.multiplier;
+        dpi: lineHeightBase.dpi;
 
-        onUserValueChanged: lineHeightSpn.value = userValue;
+        onUserValueChanged: lineHeightSpn.dValue = userValue;
         onUserUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(userUnit);
     }
 
     onPropertiesUpdated: {
         blockSignals = true;
         isNormal = properties.lineHeight.isNormal;
-        converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties, false, true);
         converter.percentageReference = properties.resolvedFontSize(false);
         converter.setDataValueAndUnit(properties.lineHeight.value, properties.lineHeight.unit);
@@ -77,7 +76,6 @@ TextPropertyBase {
     onEnableProperty: properties.lineHeightState = KoSvgTextPropertiesModel.PropertySet;
 
     Component.onCompleted: {
-        mainWindow.connectAutoEnabler(lineHeightSpnArea);
         converter.setDataUnitMap(unitMap);
         converter.setDataValueAndUnit(0, 0);
     }
@@ -117,20 +115,24 @@ TextPropertyBase {
             Layout.columnSpan: 2;
             MouseArea {
                 id: lineHeightSpnArea;
-                function autoEnable() {
-                    lineHeightNormalCbx.checked = false;
-                }
                 Layout.fillWidth: true;
                 Layout.fillHeight: true;
-                DoubleSpinBox {
+                Kis.DoubleSliderSpinBox {
                     id: lineHeightSpn
                     width: parent.width;
                     enabled: !lineHeightNormalCbx.checked;
-                    from: 0;
-                    to: 999 * multiplier;
+                    dFrom: 0;
+                    dTo: 99;
 
-                    onValueChanged:if (enabled)  converter.userValue = value;
+                    onDValueChanged:if (enabled)  converter.userValue = dValue;
                     palette: lineHeightPalette.palette;
+                    blockUpdateSignalOnDrag: true;
+                }
+                onClicked: {
+                    if (!lineHeightSpn.enabled) {
+                        lineHeightNormalCbx.checked = false;
+                        lineHeightSpn.forceActiveFocus();
+                    }
                 }
             }
 
@@ -152,7 +154,6 @@ TextPropertyBase {
 
                 PaletteControl {
                     id: lineHeightPalette;
-                    colorGroup: lineHeightUnitCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
                 }
                 palette: lineHeightPalette.palette;
                 wheelEnabled: true;

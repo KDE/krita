@@ -112,10 +112,15 @@ SvgStyleParser::~SvgStyleParser()
     delete d;
 }
 
-void SvgStyleParser::parseStyle(const SvgStyles &styles)
+void SvgStyleParser::parseStyle(const SvgStyles &styles, const bool inheritByDefault)
 {
     SvgGraphicsContext *gc = d->context.currentGC();
     if (!gc) return;
+
+    if (inheritByDefault) {
+        gc->fillType = SvgGraphicsContext::Inherit;
+        gc->strokeType = SvgGraphicsContext::Inherit;
+    }
 
     // make sure we parse the style attributes in the right order
     Q_FOREACH (const QString & command, d->styleAttributes) {

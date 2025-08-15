@@ -26,20 +26,20 @@ def nodeToImage(wnode):
     """
     Returns an QImage 8-bit sRGB
     """
-    SRGB_PROFILE = "sRGB-elle-V2-srgbtrc.icc"
+    icc_profile = (wnode.meta.get("icc") or wnode.cfg["meta"]["icc"])[0]
     [x, y, w, h] = wnode.bounds
 
-    is_srgb = (
+    conversion_not_needed = (
         wnode.node.colorModel() == "RGBA"
         and wnode.node.colorDepth() == "U8"
-        and wnode.node.colorProfile().lower() == SRGB_PROFILE.lower()
+        and wnode.node.colorProfile().lower() == icc_profile.lower()
     )
 
-    if is_srgb:
+    if conversion_not_needed:
         pixel_data = wnode.node.projectionPixelData(x, y, w, h).data()
     else:
         temp_node = wnode.node.duplicate()
-        temp_node.setColorSpace("RGBA", "U8", SRGB_PROFILE)
+        temp_node.setColorSpace("RGBA", "U8", icc_profile)
         pixel_data = temp_node.projectionPixelData(x, y, w, h).data()
 
     return QImage(pixel_data, w, h, QImage.Format.Format_ARGB32)

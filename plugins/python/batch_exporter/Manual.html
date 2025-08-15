@@ -14,6 +14,7 @@
 <li><code>[m=20,30,100]</code> - extra margin in <code>px</code>. The layer is trimmed to the smallest bounding box by default. This option adds extra padding around the layer.</li>
 <li><code>[t=false]</code> or <code>[t=no]</code> - disable trimming the exported layer to the bounding box of the content. This option is not inherited from parent layers.</li>
 <li><code>[i=false]</code> or <code>[i=no]</code> - disable parent metadata inheritance for a layer. More info <a href="#layer-inheritance">below</a>.</li>
+<li><code>[icc=name_of_color_profile.icc]</code> - selects a specific color profile when exporting, defaulting to <code>sRGB-elle-V2-srgbtrc.icc</code></li>
 </ul>
 <p>A typical layer name with metadata looks like: <code>CharacterTorso e=png m=30 s=50,100</code>. This exports the layer as two images, with an added padding of 30 pixels on each side: <code>CharacterTorso_s100_m030.png</code>, and <code>CharacterTorso_s050_m030.png</code>, a copy of the layer scaled down to half the original size.</p>
 <p>All the metadata tags are optional. Each tag can contain one or multiple options separated by comma <code>,</code>. Write <code>e=jpg</code> to export the layer to <code>jpg</code> only and <code>e=jpg,png</code> to export the layer twice, as a <code>jpg</code> and as a <code>png</code> file. Note that the other tag, <code>p=</code> has been left out. Below we describe how the plugin works.</p>

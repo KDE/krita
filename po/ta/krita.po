@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-13 02:01+0000\n"
+"POT-Creation-Date: 2025-08-15 02:17+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16026,8 +16026,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:449
-#: libs/ui/KisApplication.cpp:727
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:452
+#: libs/ui/KisApplication.cpp:730
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16534,7 +16534,13 @@ msgstr "அகலம்:"
 msgid "Fit Height"
 msgstr "அடுத்த பக்கம்"
 
-#: libs/flake/svg/SvgParser.cpp:1882
+#: libs/flake/resources/KoCssStylePreset.cpp:32
+#, fuzzy, kde-format
+msgctxt "info:placeholder"
+msgid "Style Sample"
+msgstr "சைன்"
+
+#: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -20164,31 +20170,31 @@ msgid "Character Variant %1"
 msgstr "&விகிதம்:"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1635
+#: libs/flake/text/KoSvgTextShape.cpp:1750
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1614
+#: libs/flake/text/KoSvgTextShape.cpp:1729
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "உரை"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1616
-#: libs/flake/text/KoSvgTextShape.cpp:1624
+#: libs/flake/text/KoSvgTextShape.cpp:1731
+#: libs/flake/text/KoSvgTextShape.cpp:1739
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "வடிவம்:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1622
+#: libs/flake/text/KoSvgTextShape.cpp:1737
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "உரை:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1645
+#: libs/flake/text/KoSvgTextShape.cpp:1760
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23518,10 +23524,10 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1110
-#: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
-#: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
-#: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1113
+#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1164 libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1206 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:970 libs/ui/KisMainWindow.cpp:1040
@@ -23846,99 +23852,105 @@ msgstr "எண்ணி சீரமை:"
 msgid "Invalid"
 msgstr "புள்ளிகள்/அங்குலம்"
 
-#: libs/resources/KisResourceTypes.cpp:44
+#: libs/resources/KisResourceTypes.cpp:45
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:46
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr "தூரிகை வடிவங்கள்"
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:47
 #, fuzzy, kde-format
 #| msgid "Gradients"
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "நிறமாற்ற சரிவுகள்"
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:48
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Palettes"
 msgstr "உருவகைகள்"
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:49
 #, fuzzy, kde-format
 #| msgid "Patterns"
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "உருவகைகள்"
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:50
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:51
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr "&அடுக்கை ஒன்றுசேர்"
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:52
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr "பின்னணி"
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:53
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Sessions"
 msgstr "&படத்துணுக்கு அளவுகள்"
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:54
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr "உருவகைகள்"
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:55
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr "கீழொட்டு"
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:56
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Filter Effects"
 msgstr "அடுக்கை மேலே அனுப்பு"
 
-#: libs/resources/KisResourceTypes.cpp:56
+#: libs/resources/KisResourceTypes.cpp:57
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr "சதுரம்"
 
-#: libs/resources/KisResourceTypes.cpp:57
+#: libs/resources/KisResourceTypes.cpp:58
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "அடுக்கு அளவு"
 
-#: libs/resources/KisResourceTypes.cpp:58
+#: libs/resources/KisResourceTypes.cpp:59
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgctxt "resource type"
 msgid "Font Families"
 msgstr "எழுத்துருக் குடும்பம்"
+
+#: libs/resources/KisResourceTypes.cpp:60
+#, fuzzy, kde-format
+msgctxt "resource type"
+msgid "Style Presets"
+msgstr "அடுக்கு குணங்கள்..."
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -24081,6 +24093,7 @@ msgstr "உரையை அழி"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -31503,7 +31516,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:389
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:391
 #, fuzzy, kde-format
 msgid "Sessions"
 msgstr "&படத்துணுக்கு அளவுகள்"
@@ -32990,7 +33003,7 @@ msgstr "&பின்னணி வண்ணம்"
 msgid "&Docker Box"
 msgstr "இணைக்கப்பட்ட"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:385
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:387
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33004,8 +33017,8 @@ msgstr "உருவகைகள்"
 msgid "Custom Pattern"
 msgstr "உருவகைகள்"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:370
-#: libs/ui/KisApplication.cpp:371
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -33906,20 +33919,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "பெரிதாக்கு 1:%1"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:364
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, fuzzy, kde-format
 msgid "Brush presets"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/ui/KisApplication.cpp:365 libs/ui/KisApplication.cpp:366
 #: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:369 libs/ui/KisApplication.cpp:370
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 msgid "Brush tips"
 msgstr "தூரிகை வடிவங்கள்"
 
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/KisApplication.cpp:375
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -33927,7 +33940,7 @@ msgstr "தூரிகை வடிவங்கள்"
 msgid "Palettes"
 msgstr "உருவகைகள்"
 
-#: libs/ui/KisApplication.cpp:386 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -33935,41 +33948,46 @@ msgstr "உருவகைகள்"
 msgid "Workspaces"
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisApplication.cpp:387
+#: libs/ui/KisApplication.cpp:389
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "&அடுக்கை ஒன்றுசேர்"
 
-#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:390 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisApplication.cpp:390
+#: libs/ui/KisApplication.cpp:392
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "உருவகைகள்"
 
-#: libs/ui/KisApplication.cpp:392
+#: libs/ui/KisApplication.cpp:394
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "கீழொட்டு"
 
-#: libs/ui/KisApplication.cpp:397
+#: libs/ui/KisApplication.cpp:399
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:402
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "எழுத்துருக் குடும்பம்"
 
-#: libs/ui/KisApplication.cpp:412
+#: libs/ui/KisApplication.cpp:403
+#, fuzzy, kde-format
+msgid "Style Presets"
+msgstr "அடுக்கு குணங்கள்..."
+
+#: libs/ui/KisApplication.cpp:415
 #, kde-format
 msgid ""
 "%1\n"
@@ -33977,13 +33995,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:415 libs/ui/KisApplication.cpp:421
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "வேறுபாடு:"
 
-#: libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:421
 #, kde-format
 msgid ""
 "\n"
@@ -33991,7 +34009,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:453
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -33999,65 +34017,65 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:467
+#: libs/ui/KisApplication.cpp:470
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "சதுரம்"
 
-#: libs/ui/KisApplication.cpp:499
+#: libs/ui/KisApplication.cpp:502
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "சதுரம்"
 
-#: libs/ui/KisApplication.cpp:503
+#: libs/ui/KisApplication.cpp:506
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "உரை தூரிகை"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:512
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "&அடுக்கை நீக்கு"
 
-#: libs/ui/KisApplication.cpp:518
+#: libs/ui/KisApplication.cpp:521
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "வெளிப்படுத்தும் நிறமாற்றம்..."
 
-#: libs/ui/KisApplication.cpp:550
+#: libs/ui/KisApplication.cpp:553
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "&பிம்பத்தை சுற்று..."
 
-#: libs/ui/KisApplication.cpp:619
+#: libs/ui/KisApplication.cpp:622
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:680
+#: libs/ui/KisApplication.cpp:683
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "%1 புதிதாக உருவாக்கு"
 
-#: libs/ui/KisApplication.cpp:708 libs/ui/KisApplication.cpp:981
+#: libs/ui/KisApplication.cpp:711 libs/ui/KisApplication.cpp:984
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/KisApplication.cpp:716 libs/ui/KisApplication.cpp:721
-#: libs/ui/KisApplication.cpp:975 libs/ui/KisApplication.cpp:989
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:719 libs/ui/KisApplication.cpp:724
+#: libs/ui/KisApplication.cpp:978 libs/ui/KisApplication.cpp:992
+#: libs/ui/KisApplication.cpp:997
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:990
+#: libs/ui/KisApplication.cpp:720 libs/ui/KisApplication.cpp:993
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:722
+#: libs/ui/KisApplication.cpp:725
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34070,7 +34088,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:728
+#: libs/ui/KisApplication.cpp:731
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34078,32 +34096,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:979
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "உருவத்திற்கு அடுக்கை சேர்க்க முடியவில்லை."
 
-#: libs/ui/KisApplication.cpp:995
+#: libs/ui/KisApplication.cpp:998
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1114
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/ui/KisApplication.cpp:1114
+#: libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "%1 க்கான வார்ப்புரு அதிகமாக உள்ளது:"
 
-#: libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1133
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "தேர்வு"
 
-#: libs/ui/KisApplication.cpp:1162
+#: libs/ui/KisApplication.cpp:1165
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34113,7 +34131,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1179
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34121,7 +34139,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1207
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -44169,7 +44187,13 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "&விகிதம்:"
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:112
+#: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Edit Style Preset"
+msgstr "அடுக்கு குணங்கள்..."
+
+#: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, fuzzy, kde-format
 #| msgid "Optimize"
 msgctxt "@info:label"
@@ -44218,10 +44242,16 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:133
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "பண்புகள்"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#, fuzzy, kde-format
+msgctxt "@info:placeholder"
+msgid "New Style Preset"
+msgstr "சைன்"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, fuzzy, kde-format
@@ -50769,7 +50799,7 @@ msgstr ""
 msgid "Unknown error: %1"
 msgstr "உருவகைகள்"
 
-#: plugins/impex/heif/HeifExport.cpp:533
+#: plugins/impex/heif/HeifExport.cpp:539
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -50777,7 +50807,7 @@ msgid ""
 "colorfulness will be halved in both dimensions."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:534
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -50785,28 +50815,28 @@ msgid ""
 "colorfulness will be halved horizontally."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -50816,7 +50846,7 @@ msgid ""
 "for HDR images where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -50826,14 +50856,14 @@ msgid ""
 "not understand HDR."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
 #, kde-format
 msgctxt "@tooltip"
@@ -50843,14 +50873,14 @@ msgid ""
 "where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
 #, kde-format
 msgctxt "@tooltip"
@@ -50859,14 +50889,14 @@ msgid ""
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:568
+#: plugins/impex/heif/HeifExport.cpp:574
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
 #, kde-format
 msgctxt "@tooltip"
@@ -50876,13 +50906,13 @@ msgid ""
 "is there to reverse that"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:574
+#: plugins/impex/heif/HeifExport.cpp:580
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:575
+#: plugins/impex/heif/HeifExport.cpp:581
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -62829,7 +62859,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "தேர்வை அளவுமாற்று"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -68612,10 +68642,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #, fuzzy
 #~ msgid "No Border"
 #~ msgstr "&விளிம்புகள்"
-
-#, fuzzy
-#~ msgid "New Style"
-#~ msgstr "சைன்"
 
 #, fuzzy
 #~ msgid "Another style named '%1' already exist. Please choose another name."
@@ -90580,10 +90606,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #, fuzzy
 #~ msgid "Spray brush"
 #~ msgstr "உரை தூரிகை"
-
-#, fuzzy
-#~ msgid "Pt. Presets"
-#~ msgstr "அடுக்கு குணங்கள்..."
 
 #, fuzzy
 #~ msgid "Horizontal Radius"

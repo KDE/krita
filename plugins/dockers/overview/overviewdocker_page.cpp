@@ -125,12 +125,12 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     m_overviewWidget->setCanvas(m_canvas);
-    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
-        bool canvasMappingMode = m_canvas->imageView()->zoomManager()->canvasMappingMode();
-        m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
+    if (m_canvas && m_canvas->viewManager()) {
+        bool usePrintResolutionMode = m_canvas->imageView()->canvasController()->usePrintResolutionMode();
+        m_zoomSlider = m_canvas->imageView()->zoomManager()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
         KoZoomWidget* zoomWidget = static_cast<KoZoomWidget*>(m_zoomSlider);
         zoomWidget->setZoomInputFlat(false);
-        zoomWidget->setCanvasMappingMode(canvasMappingMode);
+        zoomWidget->setUsePrintResolutionMode(usePrintResolutionMode);
         m_controlsLayout->addWidget(m_zoomSlider);
 
         m_rotateAngleSelector = new KisAngleSelector();
@@ -139,7 +139,7 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
         m_rotateAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
         m_rotateAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
         connect(m_rotateAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(rotateCanvasView(qreal)), Qt::UniqueConnection);
-        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(updateSlider()));
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(documentRotationChanged(qreal)), this, SLOT(updateRotationSlider(qreal)));
 
         m_mirrorCanvas = new QToolButton();
         QList<QAction *> actions = m_canvas->viewManager()->actionCollection()->actions();
@@ -210,12 +210,12 @@ void OverviewDockerPage::rotateCanvasView(qreal rotation)
     }
 }
 
-void OverviewDockerPage::updateSlider()
+void OverviewDockerPage::updateRotationSlider(qreal angle)
 {
-    if (!m_canvas) return;
-    KisSignalsBlocker l(m_rotateAngleSelector);
-
-    m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
+    if (qAbs(m_rotateAngleSelector->angle() - angle) > 0.01) {
+        KisSignalsBlocker l(m_rotateAngleSelector);
+        m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
+    }
 }
 
 void OverviewDockerPage::setPinControls(bool pin)

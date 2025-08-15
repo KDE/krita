@@ -8,7 +8,10 @@
 
 #include <QObject>
 #include <KisStaticInitializer.h>
+
 #include <SvgTextLabel.h>
+#include <KisNumParser.h>
+#include <KisCubicCurveQMLWrapper.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #error "This plugin implementation is to be used with Qt5 only!\n"
@@ -33,6 +36,8 @@ void KritaQmlComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *
 void KritaQmlComponentsPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<SvgTextLabel>(uri, 1, 0, "SvgTextLabel");
+    qmlRegisterType<KisNumParser>(uri, 1, 0, "KisNumParser");
+    qmlRegisterType<KisCubicCurveQml>(uri, 1, 0, "KisCubicCurve");
 }
 
 #include "KritaQmlComponentsPlugin.moc"

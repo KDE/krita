@@ -25,23 +25,9 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
 {
     setMinimumSize(500, 300);
 
-    m_quickWidget = new QQuickWidget(this);
+    m_quickWidget = new KisQQuickWidget(this);
     this->setMainWidget(m_quickWidget);
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
-    m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
-
-    /*
-    // Default to fusion style unless the user forces another style
-        if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
-             QQuickStyle::setStyle(QStringLiteral("Fusion"));
-        }
-    */
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
     m_quickWidget->setPalette(this->palette());
     this->setWindowTitle(i18nc("@title:window", "Glyph Palette"));
@@ -53,7 +39,6 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     m_quickWidget->rootContext()->setContextProperty("glyphModel", QVariant::fromValue(m_model));
     m_quickWidget->rootContext()->setContextProperty("charMapProxyModel", QVariant::fromValue(m_charMapModel));
 
-    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/GlyphPalette.qml"));
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
@@ -63,12 +48,6 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
 
 GlyphPaletteDialog::~GlyphPaletteDialog()
 {
-
-    /// Prevent accessing destroyed objects in QML engine
-    /// See:
-    ///   * https://invent.kde.org/graphics/krita/-/commit/d8676f4e9cac1a8728e73fec3ff1df1763c713b7
-    ///   * https://bugreports.qt.io/browse/QTBUG-81247
-    m_quickWidget->setParent(nullptr);
     delete m_quickWidget;
 
 }

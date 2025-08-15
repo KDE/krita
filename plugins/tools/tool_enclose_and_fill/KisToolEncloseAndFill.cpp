@@ -297,7 +297,8 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
                     newReferencePaintDevice,
                     m_selectedColorLabels,
                     KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
-                    m_previousTime != currentTime
+                    m_previousTime != currentTime,
+                    m_useActiveLayer ? currentNode() : nullptr
                 )),
                 false,
                 KisStrokeJobData::SEQUENTIAL,
@@ -539,6 +540,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_widgetLabels->setButtonSize(20);
     m_widgetLabels->setButtonWrapEnabled(true);
     m_widgetLabels->setMouseDragEnabled(true);
+    m_checkBoxUseActiveLayer = new QCheckBox(i18n("Use active layer"));
 
     QPushButton *buttonReset = new QPushButton(i18nc("The 'reset' button in enclose and fill tool options", "Reset"));
 
@@ -573,6 +575,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_buttonReferenceCurrent->setToolTip(i18n("Fill regions found from the active layer"));
     m_buttonReferenceAll->setToolTip(i18n("Fill regions found from the merging of all layers"));
     m_buttonReferenceLabeled->setToolTip(i18n("Fill regions found from the merging of layers with specific color labels"));
+    m_checkBoxUseActiveLayer->setToolTip(i18n("Includes the active layer in regions found from merging of layers with specific color labels"));
 
     buttonReset->setToolTip(i18n("Reset the options to their default values"));
 
@@ -588,12 +591,17 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     sectionEnclosingMethod->setPrimaryWidget(optionButtonStripEnclosingMethod);
     m_optionWidget->appendWidget("sectionEnclosingMethod", sectionEnclosingMethod);
 
+    KisOptionCollectionWidget *widgetLabelsGroup = new KisOptionCollectionWidget;
+    widgetLabelsGroup->appendWidget("labelWidget", m_widgetLabels);
+    widgetLabelsGroup->appendWidget("checkBoxUseActiveLayer", m_checkBoxUseActiveLayer);
+    widgetLabelsGroup->setWidgetsMargin(0);
+
     KisOptionCollectionWidgetWithHeader *sectionReference =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'reference' section label in enclose and fill tool options", "Reference")
         );
     sectionReference->setPrimaryWidget(optionButtonStripReference);
-    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
+    sectionReference->appendWidget("widgetLabels", widgetLabelsGroup);
     sectionReference->setWidgetVisible("widgetLabels", false);
     m_optionWidget->appendWidget("sectionReference", sectionReference);
 
@@ -712,6 +720,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
         sectionReference->setWidgetVisible("widgetLabels", true);
     }
     m_widgetLabels->setSelection(m_selectedColorLabels);
+    m_checkBoxUseActiveLayer->setChecked(m_useActiveLayer);
 
     // Make connections
     connect(optionButtonStripEnclosingMethod,
@@ -779,6 +788,9 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     connect(m_widgetLabels,
             SIGNAL(selectionChanged()),
             SLOT(slot_widgetLabels_selectionChanged()));
+    connect(m_checkBoxUseActiveLayer,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxUseActiveLayer_toggled(bool)));
     connect(buttonReset,
             SIGNAL(clicked()),
             SLOT(slot_buttonReset_clicked()));
@@ -847,6 +859,7 @@ void KisToolEncloseAndFill::loadConfiguration()
             }
         }
     }
+    m_useActiveLayer = m_configGroup.readEntry<bool>("useActiveLayer", false);
 
     setupEnclosingSubtool();
 }
@@ -1353,4 +1366,13 @@ void KisToolEncloseAndFill::slot_colorSpaceChanged(const KoColorSpace *colorSpac
         compositionSpace = currentNode()->paintDevice()->compositionSourceColorSpace();
     }
     m_comboBoxCustomCompositeOp->validate(compositionSpace);
+}
+
+void KisToolEncloseAndFill::slot_checkBoxUseActiveLayer_toggled(bool checked)
+{
+    if (checked == m_useActiveLayer) {
+        return;
+    }
+    m_useActiveLayer = checked;
+    m_configGroup.writeEntry("useActiveLayer", checked);
 }

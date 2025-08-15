@@ -81,7 +81,7 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
         #if defined HAVE_SEEXPR
         resourceTypes << ResourceType::SeExprScripts;
         #endif
-        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
+        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces << ResourceType::CssStyles;
 
 
         for (int i = 0; i < resourceTypes.size(); i++) {

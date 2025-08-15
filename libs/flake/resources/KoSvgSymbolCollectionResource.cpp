@@ -29,25 +29,39 @@
 
 #include <FlakeDebug.h>
 
-QImage KoSvgSymbol::icon()
+QImage KoSvgSymbol::icon(int size = 0)
 {
     KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(group, QImage());
 
     QRectF rc = group->boundingRect().normalized();
 
-    QImage image(rc.width(), rc.height(), QImage::Format_ARGB32_Premultiplied);
+    if (size == 0) {
+        size = 128;
+    }
+
+    int maxDim = qMax(rc.width(), rc.height());
+    // no need to customize it, most of the time the code being able to set the size
+    // doesn't even know where this image will end up
+    // because it's saved into the database and then used in widgets
+    const qreal margin = 0.05;
+
+    QImage image(size, size, QImage::Format_ARGB32_Premultiplied);
+    qreal symbolScale = (qreal)(size*(1.0 - 2*margin))/maxDim;
     QPainter gc(&image);
+    gc.setRenderHint(QPainter::Antialiasing, true);
     image.fill(Qt::gray);
 
 //        debugFlake << "Going to render. Original bounding rect:" << group->boundingRect()
 //                 << "Normalized: " << rc
 //                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
-
+    gc.translate(size*margin, size*margin); // go inwards (towards the center, or bottom-right corner) by one margin
+    gc.scale(symbolScale, symbolScale);
     gc.translate(-rc.x(), -rc.y());
+
+    gc.translate((maxDim - rc.width())/2.0, (maxDim - rc.height())/2.0);
     KoShapeManager::renderSingleShape(group, gc);
     gc.end();
-    image = image.scaled(128, 128, Qt::KeepAspectRatio);
     return image;
 }
 
@@ -150,7 +164,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
         return false;
     }
     setValid(true);
-    setImage(d->symbols[0]->icon());
+    setImage(d->symbols[0]->icon(256));
     return true;
 }
 

@@ -62,8 +62,8 @@ set(kritaflake_SRCS
     KoMarkerCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
-    KoCanvasControllerWidget.cpp
-    KoCanvasControllerWidgetViewport_p.cpp
+    KoZoomMode.cpp
+    KoZoomState.cpp
     KoShapeRegistry.cpp
     KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp
@@ -106,6 +106,7 @@ set(kritaflake_SRCS
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
+    KoViewTransformStillPoint.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactoryBase.cpp
@@ -250,6 +251,7 @@ set(kritaflake_SRCS
     resources/KoGamutMask.cpp
     resources/KoFontFamily.cpp
     resources/KoFontStorage.cpp
+    resources/KoCssStylePreset.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp

@@ -28,13 +28,11 @@ public:
     QWidget *canvas() const {
         return m_canvas;
     }
-    void setDocumentSize(const QSizeF &size);
 
-public Q_SLOTS:
-    void documentOffsetMoved(const QPoint &);
-
-Q_SIGNALS:
-    void sizeChanged();
+    /**
+     * Resizes the subordinate canvas widget as needed
+     */
+     void resetLayout();
 
 public:
 
@@ -43,30 +41,19 @@ public:
     void handleDragMoveEvent(QDragMoveEvent *event);
     void handleDragLeaveEvent(QDragLeaveEvent *event);
     void handlePaintEvent(QPainter &gc, QPaintEvent *event);
-    void setMargin(int margin) { m_margin = margin; resetLayout(); }
 
 private:
 
     QPointF correctPosition(const QPoint &point) const;
     void repaint(KoShape *shape);
 
-    /**
-       Decides whether the containing canvas widget should be as
-       big as the viewport (i.e., no margins are visible) or whether
-       there are margins to be left blank, and then places the canvas
-       widget accordingly.
-    */
-    void resetLayout();
+
 
 private:
 
     KoCanvasControllerWidget *m_parent;
     KoShape *m_draggedShape;
-
     QWidget *m_canvas;
-    QSizeF m_documentSize; // Size in pixels of the document
-    QPoint m_documentOffset; // Place where the canvas widget should
-    int m_margin; // The viewport margin around the document
 };
 
 #endif

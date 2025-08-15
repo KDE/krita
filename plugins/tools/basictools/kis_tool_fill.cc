@@ -283,7 +283,8 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
                         newReferencePaintDevice,
                         m_selectedColorLabels,
                         KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
-                        m_previousTime != currentTime
+                        m_previousTime != currentTime,
+                        m_useActiveLayer ? currentNode() : nullptr
                     )),
                     false,
                     KisStrokeJobData::SEQUENTIAL,
@@ -621,6 +622,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_widgetLabels->setButtonSize(20);
     m_widgetLabels->setButtonWrapEnabled(true);
     m_widgetLabels->setMouseDragEnabled(true);
+    m_checkBoxUseActiveLayer = new QCheckBox(i18n("Use active layer"));
 
     KisOptionButtonStrip *optionButtonStripDragFill =
         new KisOptionButtonStrip;
@@ -664,6 +666,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_buttonReferenceCurrent->setToolTip(i18n("Fill regions found from the active layer"));
     m_buttonReferenceAll->setToolTip(i18n("Fill regions found from the merging of all layers"));
     m_buttonReferenceLabeled->setToolTip(i18n("Fill regions found from the merging of layers with specific color labels"));
+    m_checkBoxUseActiveLayer->setToolTip(i18n("Includes the active layer in regions found from merging of layers with specific color labels"));
 
     m_buttonDragFillDoNotUse->setToolTip(i18n("Dragging will not fill different regions"));
     m_buttonDragFillAny->setToolTip(i18n("Dragging will fill regions of any color"));
@@ -697,12 +700,17 @@ QWidget* KisToolFill::createOptionWidget()
     sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", false);
     m_optionWidget->appendWidget("sectionFillWith", sectionFillWith);
 
+    KisOptionCollectionWidget *widgetLabelsGroup = new KisOptionCollectionWidget;
+    widgetLabelsGroup->appendWidget("labelWidget", m_widgetLabels);
+    widgetLabelsGroup->appendWidget("checkBoxUseActiveLayer", m_checkBoxUseActiveLayer);
+    widgetLabelsGroup->setWidgetsMargin(0);
+
     KisOptionCollectionWidgetWithHeader *sectionReference =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'reference' section label in fill tool options", "Reference")
         );
     sectionReference->setPrimaryWidget(optionButtonStripReference);
-    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
+    sectionReference->appendWidget("widgetLabels", widgetLabelsGroup);
     sectionReference->setWidgetVisible("widgetLabels", false);
     m_optionWidget->appendWidget("sectionReference", sectionReference);
 
@@ -796,6 +804,7 @@ QWidget* KisToolFill::createOptionWidget()
         m_buttonDragFillSimilar->setChecked(true);
     }
     m_widgetLabels->setSelection(m_selectedColorLabels);
+    m_checkBoxUseActiveLayer->setChecked(m_useActiveLayer);
 
     // Make connections
     connect(optionButtonStripWhatToFill,
@@ -841,6 +850,7 @@ QWidget* KisToolFill::createOptionWidget()
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
             SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton *, bool)));
     connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
+    connect(m_checkBoxUseActiveLayer, SIGNAL(toggled(bool)), SLOT(slot_checkBoxUseActiveLayer_toggled(bool)));
     connect(
         optionButtonStripDragFill,
         SIGNAL(buttonToggled(KoGroupButton *, bool)),
@@ -933,6 +943,7 @@ void KisToolFill::loadConfiguration()
                 m_selectedColorLabels << colorLabel;
             }
         }
+        m_useActiveLayer = m_configGroup.readEntry<bool>("useActiveLayer", false);
     }
     {
         const QString continuousFillModeStr = m_configGroup.readEntry<QString>("continuousFillMode", "fillAnyRegion");
@@ -1307,4 +1318,13 @@ void KisToolFill::slot_colorSpaceChanged(const KoColorSpace *colorSpace)
         compositionSpace = currentNode()->paintDevice()->compositionSourceColorSpace();
     }
     m_comboBoxCustomCompositeOp->validate(compositionSpace);
+}
+
+void KisToolFill::slot_checkBoxUseActiveLayer_toggled(bool checked)
+{
+    if (checked == m_useActiveLayer) {
+        return;
+    }
+    m_useActiveLayer = checked;
+    m_configGroup.writeEntry("useActiveLayer", checked);
 }

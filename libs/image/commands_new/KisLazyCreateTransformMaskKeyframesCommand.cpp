@@ -7,7 +7,7 @@
 #include "KisLazyCreateTransformMaskKeyframesCommand.h"
 
 #include "kis_transform_mask.h"
-#include "kis_keyframe_channel.h"
+#include "kis_scalar_keyframe_channel.h"
 
 KisLazyCreateTransformMaskKeyframesCommand::KisLazyCreateTransformMaskKeyframesCommand(KisTransformMaskSP mask, KUndo2Command *parent)
     : KisCommandUtils::AggregateCommand(parent)
@@ -44,12 +44,11 @@ void KisLazyCreateTransformMaskKeyframesCommand::populateChildCommands()
 
     auto addKeyframe = [this, time] (const KoID &channelId, KUndo2Command *parentCommand)
     {
-        KisKeyframeChannel *channel = m_mask->getKeyframeChannel(channelId.id());
+        KisScalarKeyframeChannel *channel = dynamic_cast<KisScalarKeyframeChannel*>(m_mask->getKeyframeChannel(channelId.id()));
         KIS_SAFE_ASSERT_RECOVER_RETURN(channel);
 
-        if (!channel->keyframeAt(time)){
-            const int activeTime = channel->activeKeyframeTime(time);
-            channel->copyKeyframe(activeTime, time, parentCommand);
+        if (!channel->keyframeAt(time)) {
+            channel->addScalarKeyframe(time, channel->valueAt(time), parentCommand);
         }
     };
 

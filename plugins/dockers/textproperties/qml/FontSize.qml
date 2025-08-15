@@ -7,9 +7,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: fontSizeBase;
     propertyTitle: i18nc("@label:spinbox", "Font Size");
     propertyName: "font-size";
     propertyType: TextPropertyConfigModel.Character;
@@ -24,7 +25,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        fontSizeUnitCmb.dpi = canvasDPI;
         fontSizeUnitCmb.setTextProperties(properties);
         fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
         propertyState = [properties.fontSizeState];
@@ -53,35 +53,32 @@ TextPropertyBase {
             onClicked: properties.fontSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: propertyTitle;
-            elide: Text.ElideRight;
-            Layout.fillWidth: true;
-            font.italic: properties.fontSizeState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
-
-        DoubleSpinBox {
+        Kis.DoubleSliderSpinBox {
             id: fontSizeSpn;
-            editable: true;
+            prefix: propertyTitle+ ": "
             Layout.fillWidth: true;
 
-            from: 0;
-            to: 99999 * multiplier;
-            stepSize: 100;
+            dFrom: 0;
+            dTo: 999;
+            softDFrom: 0;
+            softDTo: 72;
+            softRangeActive: true;
+            blockUpdateSignalOnDrag: true;
 
-            onValueChanged: fontSizeUnitCmb.userValue = value;
+            onDValueChanged: fontSizeUnitCmb.userValue = dValue;
         }
 
         UnitComboBox {
             id: fontSizeUnitCmb;
             spinBoxControl: fontSizeSpn;
+            dpi: fontSizeBase.dpi;
             isFontSize: true;
             isLineHeight: false;
             percentageReference: properties.resolvedFontSize(true);
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
 
-            onUserValueChanged: fontSizeSpn.value = userValue;
+            onUserValueChanged: fontSizeSpn.dValue = userValue;
         }
     }
 }

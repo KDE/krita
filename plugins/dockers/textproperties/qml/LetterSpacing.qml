@@ -7,9 +7,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: letterSpacingBase;
     propertyTitle: i18nc("@label:spinbox", "Letter Spacing");
     propertyName: "letter-spacing";
     propertyType: TextPropertyConfigModel.Character;
@@ -22,7 +23,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        letterSpacingUnitCmb.dpi = canvasDPI;
         letterSpacingUnitCmb.setTextProperties(properties);
         letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
 
@@ -53,31 +53,34 @@ TextPropertyBase {
             onClicked: properties.letterSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-            Label {
-                text: propertyTitle;
-                elide: Text.ElideRight;
-                Layout.fillWidth: true;
-                font.italic: properties.letterSpacingState === KoSvgTextPropertiesModel.PropertyTriState;
-            }
 
-            DoubleSpinBox {
-                id: letterSpacingSpn
-                editable: true;
-                Layout.fillWidth: true;
-                from: -999 * multiplier;
-                to: 999 * multiplier;
-                onValueChanged: letterSpacingUnitCmb.userValue = value;
-            }
+        Kis.DoubleSliderSpinBox {
+            id: letterSpacingSpn;
+            prefix: propertyTitle+ ": "
+            Layout.fillWidth: true;
 
-            UnitComboBox {
-                id: letterSpacingUnitCmb
-                spinBoxControl: letterSpacingSpn;
-                isFontSize: false;
-                dpi:dpi;
-                onUserValueChanged: letterSpacingSpn.value = userValue;
-                Layout.preferredWidth: minimumUnitBoxWidth;
-                Layout.maximumWidth: implicitWidth;
-                allowPercentage: false; // CSS-Text-4 has percentages for letter-spacing, but so does SVG 1.1, and they both are implemented differently.
-            }
+            dFrom: -99;
+            dTo: 99;
+            softDFrom: -10;
+            softDTo: 10;
+            softRangeActive: true;
+            dStepSize: 0.1;
+
+            blockUpdateSignalOnDrag: true;
+
+            onDValueChanged: letterSpacingUnitCmb.userValue = dValue;
+
+        }
+
+        UnitComboBox {
+            id: letterSpacingUnitCmb
+            spinBoxControl: letterSpacingSpn;
+            isFontSize: false;
+            dpi:letterSpacingBase.dpi;
+            onUserValueChanged: letterSpacingSpn.dValue = userValue;
+            Layout.preferredWidth: minimumUnitBoxWidth;
+            Layout.maximumWidth: implicitWidth;
+            allowPercentage: false; // CSS-Text-4 has percentages for letter-spacing, but so does SVG 1.1, and they both are implemented differently.
+        }
     }
 }

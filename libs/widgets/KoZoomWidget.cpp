@@ -33,6 +33,8 @@ public:
     QToolButton* canvasMappingButton;
 
     qreal effectiveZoom {1.0};
+
+    void updateUsePrintResolutionButtonIcon(bool value);
 };
 
 KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
@@ -46,6 +48,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
 
     d->input = new KoZoomInput(this);
     connect(d->input, SIGNAL(zoomLevelChanged(QString)), this, SIGNAL(zoomLevelChanged(QString)));
+    connect(d->input, SIGNAL(zoomLevelChangedIndex(int)), this, SIGNAL(zoomLevelChangedIndex(int)));
     layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -64,8 +67,12 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
     d->canvasMappingButton->setCheckable(true);
     d->canvasMappingButton->setChecked(false);
     d->canvasMappingButton->setAutoRaise(true);
-    connect(d->canvasMappingButton, SIGNAL(toggled(bool)), this, SIGNAL(canvasMappingModeChanged(bool)));
     layout->addWidget(d->canvasMappingButton);
+    connect(d->canvasMappingButton, &QToolButton::toggled, this, [this](bool value) {
+        d->updateUsePrintResolutionButtonIcon(value);
+        Q_EMIT sigUsePrintResolutionModeChanged(value);
+    });
+    d->updateUsePrintResolutionButtonIcon(false);
 
     connect(d->slider, SIGNAL(valueChanged(int)), this, SIGNAL(sliderValueChanged(int)));
 }
@@ -84,14 +91,23 @@ void KoZoomWidget::setZoomInputFlat(bool flat)
     d->input->setFlat(flat);
 }
 
-void KoZoomWidget::setSliderSize(int size)
+void KoZoomWidget::setSliderState(int size, int index)
 {
-    d->slider->setMaximum(size);
+    QSignalBlocker b(d->slider);
+    d->slider->setMaximum(size - 1);
+    d->slider->setValue(index);
 }
 
-void KoZoomWidget::setZoomLevels(const QStringList &values)
+void KoZoomWidget::setZoomLevelsState(const QStringList &values, int index, const QString &activeText)
 {
+    QSignalBlocker b(d->input);
     d->input->setZoomLevels(values);
+    d->input->setCurrentZoomLevel(index, activeText);
+}
+
+void KoZoomWidget::setCurrentZoomLevel(int index)
+{
+    d->input->setCurrentZoomLevel(index);
 }
 
 void KoZoomWidget::setCurrentZoomLevel(const QString &valueString)
@@ -101,31 +117,34 @@ void KoZoomWidget::setCurrentZoomLevel(const QString &valueString)
 
 void KoZoomWidget::setSliderValue(int value)
 {
-    d->slider->blockSignals(true);
+    QSignalBlocker b(d->slider);
     d->slider->setValue(value);
-    d->slider->blockSignals(false);
 }
 
-void KoZoomWidget::setCanvasMappingMode(bool status)
+void KoZoomWidget::Private::updateUsePrintResolutionButtonIcon(bool value)
 {
-    if(d->canvasMappingButton && d->canvasMappingButton->isChecked() != status) {
-        d->canvasMappingButton->blockSignals(true);
-        d->canvasMappingButton->setChecked(status);
-        d->canvasMappingButton->blockSignals(false);
-    }
-
     QString canvasMappingMode;
 
-    if (status) {
-        d->canvasMappingButton->setIcon(kisIcon("zoom-print"));
+    if (value) {
+        canvasMappingButton->setIcon(kisIcon("zoom-print"));
         canvasMappingMode = i18n("Print Size");
     } else {
-        d->canvasMappingButton->setIcon(kisIcon("zoom-pixels"));
+        canvasMappingButton->setIcon(kisIcon("zoom-pixels"));
         canvasMappingMode = i18n("Pixel Size");
     }
 
-    d->canvasMappingButton->setToolTip(
-                        i18n("Map the displayed canvas size between pixel size or print size\n"
-                             "Current Mapping: %1", canvasMappingMode));
+    canvasMappingButton->setToolTip(
+        i18n("Map the displayed canvas size between pixel size or print size\n"
+             "Current Mapping: %1",
+             canvasMappingMode));
+}
+
+void KoZoomWidget::setUsePrintResolutionMode(bool value)
+{
+    if (d->canvasMappingButton->isChecked() != value) {
+        QSignalBlocker b(d->canvasMappingButton);
+        d->canvasMappingButton->setChecked(value);
+        d->updateUsePrintResolutionButtonIcon(value);
+    }
 }
 

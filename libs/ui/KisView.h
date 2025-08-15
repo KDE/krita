@@ -30,8 +30,6 @@ class KisCanvasResourceProvider;
 class KisCoordinatesConverter;
 class KisInputManager;
 
-class KoZoomController;
-class KoZoomController;
 class KoCanvasResourceProvider;
 
 // KDE classes
@@ -115,11 +113,6 @@ public:
      */
     void removeStatusBarItem(QWidget * widget);
 
-    /**
-     * Return the zoomController for this view.
-     */
-    KoZoomController *zoomController() const;
-
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
 
@@ -163,10 +156,6 @@ public:
 
 
     KisCoordinatesConverter *viewConverter() const;
-
-    void resetImageSizeAndScroll(bool changeCentering,
-                                 const QPointF &oldImageStillPoint = QPointF(),
-                                 const QPointF &newImageStillPoint = QPointF());
 
     void setCurrentNode(KisNodeSP node);
     KisNodeSP currentNode() const;

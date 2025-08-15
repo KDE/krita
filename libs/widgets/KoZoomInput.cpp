@@ -63,6 +63,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     d->isFlat = true;
 
     connect(d->combo, SIGNAL(textActivated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
+    connect(d->combo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(zoomLevelChangedIndex(int)));
 }
 
 KoZoomInput::~KoZoomInput()
@@ -154,6 +155,17 @@ void KoZoomInput::setZoomLevels(const QStringList& levels)
 {
     d->combo->clear();
     d->combo->addItems(levels);
+}
+
+void KoZoomInput::setCurrentZoomLevel(int index)
+{
+    setCurrentZoomLevel(index, d->combo->itemText(index));
+}
+
+void KoZoomInput::setCurrentZoomLevel(int index, const QString &activeText)
+{
+    d->combo->setCurrentIndex(index);
+    d->label->setText(activeText);
 }
 
 void KoZoomInput::setCurrentZoomLevel(const QString& level)

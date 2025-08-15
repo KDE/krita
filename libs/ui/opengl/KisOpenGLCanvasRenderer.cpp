@@ -338,27 +338,25 @@ void KisOpenGLCanvasRenderer::reportFailedShaderCompilation(const QString &conte
     cfg.setCanvasState("OPENGL_FAILED");
 }
 
-void KisOpenGLCanvasRenderer::updateSize(const QSize &viewportSize)
-{
-    d->viewportDevicePixelSize = viewportSize;
-    d->pixelAlignedWidgetSize = QSizeF(viewportSize) / devicePixelRatioF();
-
-    // The widget size may be an integer but here we actually want to give
-    // KisCoordinatesConverter the logical viewport size aligned to device
-    // pixels.
-    coordinatesConverter()->setCanvasWidgetSize(d->pixelAlignedWidgetSize);
-}
-
 void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
 {
-    // This is how QOpenGLCanvas sets the FBO and the viewport size. If
-    // devicePixelRatioF() is non-integral, the result is truncated.
-    // *Correction*: The FBO size is actually rounded, but the glViewport call
-    // uses integer truncation and that's what really matters.
-    int viewportWidth = static_cast<int>(width * devicePixelRatioF());
-    int viewportHeight = static_cast<int>(height * devicePixelRatioF());
+    {
+        // just a sanity check!
+        //
+        // This is how QOpenGLCanvas sets the FBO and the viewport size. If
+        // devicePixelRatioF() is non-integral, the result is truncated.
+        // *Correction*: The FBO size is actually rounded, but the glViewport call
+        // uses integer truncation and that's what really matters.
+        int viewportWidth = static_cast<int>(width * devicePixelRatioF());
+        int viewportHeight = static_cast<int>(height * devicePixelRatioF());
 
-    updateSize(QSize(viewportWidth, viewportHeight));
+        // we expect the size to be adjusted in the converter at the higher
+        // level of hierarchy
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QSize(viewportWidth, viewportHeight) == coordinatesConverter()->viewportDevicePixelSize());
+    }
+
+    d->viewportDevicePixelSize = coordinatesConverter()->viewportDevicePixelSize();
+    d->pixelAlignedWidgetSize = coordinatesConverter()->getCanvasWidgetSize();
 
     if (KisOpenGL::useFBOForToolOutlineRendering()) {
         QOpenGLFramebufferObjectFormat format;

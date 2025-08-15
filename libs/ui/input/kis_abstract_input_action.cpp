@@ -11,6 +11,10 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 
+#include <input/kis_input_manager.h>
+#include <kis_canvas2.h>
+
+
 class Q_DECL_HIDDEN KisAbstractInputAction::Private
 {
 public:
@@ -185,8 +189,22 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event)
     case QEvent::Wheel:
         return static_cast<const QWheelEvent*>(event)->position().toPoint();
 
-    case QEvent::NativeGesture:
-        return static_cast<const QNativeGestureEvent*>(event)->pos();
+    case QEvent::NativeGesture: {
+        KisCanvas2 *canvas = d->inputManager->canvas();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, QPoint());
+
+        /**
+         * Native gesture event has an issue in Qt on MacOS, its
+         * event->position() method returns an incorrect value (not
+         * in the widget's coordinates). So we should manually map it
+         * from global.
+         */
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return canvas->canvasWidget()->mapFromGlobal(QPointF(static_cast<const QNativeGestureEvent*>(event)->globalPos())).toPoint();
+#else
+        return canvas->canvasWidget()->mapFromGlobal(static_cast<const QNativeGestureEvent*>(event)->globalPos());
+#endif
+    }
 
     default:
         warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
@@ -216,9 +234,22 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
     case QEvent::Wheel:
         return static_cast<const QWheelEvent*>(event)->position();
 
-    case QEvent::NativeGesture:
-        return QPointF(static_cast<const QNativeGestureEvent*>(event)->pos());
+    case QEvent::NativeGesture: {
+        KisCanvas2 *canvas = d->inputManager->canvas();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, QPointF());
 
+        /**
+         * Native gesture event has an issue in Qt on MacOS, its
+         * event->position() method returns an incorrect value (not
+         * in the widget's coordinates). So we should manually map it
+         * from global.
+         */
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return canvas->canvasWidget()->mapFromGlobal(QPointF(static_cast<const QNativeGestureEvent*>(event)->globalPos()));
+#else
+        return canvas->canvasWidget()->mapFromGlobal(static_cast<const QNativeGestureEvent*>(event)->globalPos());
+#endif
+    }
     default:
         warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
         return QPointF();

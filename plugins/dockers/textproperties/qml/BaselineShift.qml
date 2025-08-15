@@ -7,9 +7,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: baselineShiftBase;
     propertyTitle: i18nc("@label", "Baseline-Shift");
     propertyName: "baseline-shift";
     propertyType: TextPropertyConfigModel.Character;
@@ -25,7 +26,6 @@ TextPropertyBase {
     onPropertiesUpdated: {
         blockSignals = true;
         baselineShiftMode = properties.baselineShiftMode;
-        baselineShiftUnitCmb.dpi = canvasDPI;
         baselineShiftUnitCmb.setTextProperties(properties);
         baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.value, properties.baselineShiftValue.unitType)
         propertyState = [properties.baselineShiftState];
@@ -55,9 +55,6 @@ TextPropertyBase {
 
     onEnableProperty: properties.baselineShiftState = KoSvgTextPropertiesModel.PropertySet;
 
-    Component.onCompleted: {
-        mainWindow.connectAutoEnabler(baselineShiftSpnArea);
-    }
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -107,23 +104,26 @@ TextPropertyBase {
 
         MouseArea {
             id: baselineShiftSpnArea;
-            function autoEnable() {
-                baselineShiftMode = 3;
-            }
             Layout.fillWidth: true;
             Layout.fillHeight: true;
-            PaletteControl {
-                id: baselinePalette;
-                colorGroup: baselineShiftSpn.enabled? SystemPalette.Active: SystemPalette.Disabled;
-            }
-            DoubleSpinBox {
+            Kis.DoubleSliderSpinBox {
                 id: baselineShiftSpn
                 width: parent.width;
                 enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
-                from: -999 * multiplier;
-                to: 999 * multiplier;
-                onValueChanged: if (enabled) baselineShiftUnitCmb.userValue = value;
+                dFrom: -99;
+                dTo: 99;
+                onDValueChanged: if (enabled) baselineShiftUnitCmb.userValue = dValue;
                 palette: baselinePalette.palette;
+                blockUpdateSignalOnDrag: true;
+                PaletteControl {
+                    id: baselinePalette;
+                }
+            }
+            onClicked: {
+                if (!baselineShiftSpn.enabled) {
+                    baselineShiftMode = 3;
+                    baselineShiftSpn.forceActiveFocus();
+                }
             }
         }
 
@@ -135,8 +135,8 @@ TextPropertyBase {
             Layout.maximumWidth: implicitWidth;
             isFontSize: false;
             enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
-            dpi:dpi;
-            onUserValueChanged: baselineShiftSpn.value = userValue;
+            dpi:baselineShiftBase.dpi;
+            onUserValueChanged: baselineShiftSpn.dValue = userValue;
         }
     }
 }

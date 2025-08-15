@@ -109,6 +109,7 @@ private:
     int m_expand {0};
     int m_stopGrowingAtDarkestPixel {false};
     int m_feather {0};
+    bool m_useActiveLayer {false};
 
     Reference m_reference {CurrentLayer};
     QList<int> m_selectedColorLabels;
@@ -156,6 +157,7 @@ private:
     KoGroupButton *m_buttonReferenceAll{nullptr};
     KoGroupButton *m_buttonReferenceLabeled{nullptr};
     KisColorLabelSelectorWidget *m_widgetLabels {nullptr};
+    QCheckBox *m_checkBoxUseActiveLayer {nullptr};
 
     KConfigGroup m_configGroup;
     
@@ -222,6 +224,7 @@ private Q_SLOTS:
     void slot_colorSpaceChanged(const KoColorSpace *colorSpace);
 
     void slot_delegateTool_enclosingMaskProduced(KisPixelSelectionSP enclosingMask);
+    void slot_checkBoxUseActiveLayer_toggled(bool checked);
 
     void resetCursorStyle() override;
 };

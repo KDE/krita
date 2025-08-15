@@ -464,7 +464,7 @@ void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
     // If zoom on scratchPad have to be updated, then it have to be udpated manually through setScale() method
 
     // value not changed? do nothing
-    if (scaleX == m_canvasScaleX && scaleY == m_canvasScaleY) return;
+    if (qFuzzyCompare(scaleX, m_canvasScaleX) && qFuzzyCompare(scaleY, m_canvasScaleY)) return;
 
     // always keep in memory canvas zoom, even if link is not active
     m_canvasScaleX = scaleX;

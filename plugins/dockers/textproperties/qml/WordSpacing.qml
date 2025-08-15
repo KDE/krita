@@ -7,9 +7,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: wordSpacingBase;
     propertyTitle: i18nc("@title:group", "Word Spacing");
     propertyName: "word-spacing";
     propertyType: TextPropertyConfigModel.Character;
@@ -23,7 +24,6 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        wordSpacingUnitCmb.dpi = canvasDPI;
         wordSpacingUnitCmb.setTextProperties(properties);
         wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
 
@@ -54,29 +54,28 @@ TextPropertyBase {
             onClicked: properties.wordSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: propertyTitle;
-            elide: Text.ElideRight;
+        Kis.DoubleSliderSpinBox {
+            id: wordSpacingSpn;
+            prefix: propertyTitle+ ": "
             Layout.fillWidth: true;
-            font.italic: properties.wordSpacingState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
 
-        DoubleSpinBox {
-            id: wordSpacingSpn
-            editable: true;
-            Layout.fillWidth: true;
-            from: -999 * multiplier;
-            to: 999 * multiplier;
+            dFrom: -99;
+            dTo: 99;
+            softDFrom: -10;
+            softDTo: 10;
+            softRangeActive: true;
+            dStepSize: 0.1;
 
-            onValueChanged: wordSpacingUnitCmb.userValue = value;
+            onDValueChanged: wordSpacingUnitCmb.userValue = dValue;
+            blockUpdateSignalOnDrag: true;
         }
 
         UnitComboBox {
             id: wordSpacingUnitCmb
             spinBoxControl: wordSpacingSpn;
             isFontSize: false;
-            dpi: dpi;
-            onUserValueChanged: wordSpacingSpn.value = userValue;
+            dpi: wordSpacingBase.dpi;
+            onUserValueChanged: wordSpacingSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
             allowPercentage: false; // CSS-Text-4 has percentages for word-spacing, but so does SVG 1.1, and they both are implemented differently.

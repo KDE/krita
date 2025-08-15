@@ -223,17 +223,17 @@ void KisSplashScreen::displayLinks(bool show) {
                         << i18n("<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>",color);
 
 #ifdef Q_OS_MACOS
-        // MACOS store version should not contain external links
+        // macOS store version should not contain external links containing donation buttons or forms
         if (!KisMacosEntitlements().sandbox()) {
 #endif
 
-            lblLinksText    << i18n("<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>",color);
+            lblLinksText    << i18n("<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>",color)
+                            << i18n("<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>",color);
 #ifdef Q_OS_MACOS
         }
 #endif
         lblLinksText    << i18n("<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>",color)
                         << i18n("<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>",color)
-                        << i18n("<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>",color)
                         << "</td><td>"
                         << i18n("<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>",color)
                         << i18n("<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>",color)

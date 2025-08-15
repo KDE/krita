@@ -241,12 +241,12 @@ TextPropertyBase {
                     x: 0;
                     padding: 0;
                     width: featureTxtEdit.width;
-                    height: Math.min(contentItem.implicitHeight, 300);
+                    height: contentItem.implicitHeight;
                     property string highlightedTag;
                     contentItem: ListView {
                         model: featureTxtEdit.filterModel;
                         clip: true;
-                        implicitHeight: contentHeight;
+                        implicitHeight: Math.min(contentHeight, 300);
                         width: completerPopup.width;
 
                         ScrollBar.vertical: ScrollBar {

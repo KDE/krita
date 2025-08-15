@@ -249,7 +249,7 @@
       <statusTip/>
     </Action>
     <Action name="invert_selection">
-      <icon/>
+      <icon>select-invert</icon>
       <text>&amp;Invert Selection</text>
       <whatsThis/>
       <toolTip>Invert current selection</toolTip>

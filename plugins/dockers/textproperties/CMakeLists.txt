@@ -10,6 +10,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     CssQmlUnitConverter.cpp
     TextPropertyConfigModel.cpp
     TextPropertyConfigDialog.cpp
+    CssStylePresetEditDialog.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)
@@ -17,6 +18,7 @@ qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)
 kis_add_library(kritatextproperties MODULE ${KRITA_TEXTPROPERTIES_SOURCES})
 target_link_libraries(kritatextproperties 
     kritaui
+    kritaqmlwidgets
     Qt${QT_MAJOR_VERSION}::Quick  
     Qt${QT_MAJOR_VERSION}::QuickWidgets 
     Qt${QT_MAJOR_VERSION}::QuickControls2

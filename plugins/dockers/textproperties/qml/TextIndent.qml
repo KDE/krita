@@ -7,9 +7,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
+    id: textIndentBase;
     propertyTitle: i18nc("@title:group", "Text Indent");
     propertyName: "text-indent";
     propertyType: TextPropertyConfigModel.Paragraph;
@@ -25,7 +26,6 @@ CollapsibleGroupProperty {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        textIndentUnitCmb.dpi = canvasDPI;
         textIndentUnitCmb.setTextProperties(properties);
         textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.length.value, properties.textIndent.length.unitType);
         hanging = properties.textIndent.hanging;
@@ -67,28 +67,22 @@ CollapsibleGroupProperty {
         height: childrenRect.height;
         spacing: columnSpacing;
 
-        Label {
-            id: propertyTitleLabel;
-            text: propertyTitle;
-            verticalAlignment: Text.AlignVCenter
-            color: sysPalette.text;
-            elide: Text.ElideRight;
-            Layout.maximumWidth: contentWidth;
-        }
-
-        DoubleSpinBox {
+        Kis.DoubleSliderSpinBox {
+            prefix: propertyTitle + ": ";
             id: textIndentSpn;
             Layout.fillWidth: true;
-            from: 0;
-            to: 999 * multiplier;
-            onValueChanged: textIndentUnitCmb.userValue = value;
+            dFrom: 0;
+            dTo: 999;
+            onDValueChanged: textIndentUnitCmb.userValue = dValue;
+            blockUpdateSignalOnDrag: true;
         }
         /// Note: percentage calculation in the default unitcombobox isn't great for textIndent as it assumes 100% = fontsize,
         /// While spec-wise, it's the inline length that defines percentage.
         UnitComboBox {
             id: textIndentUnitCmb;
+            dpi: textIndentBase.dpi;
             spinBoxControl: textIndentSpn;
-            onUserValueChanged: textIndentSpn.value = userValue;
+            onUserValueChanged: textIndentSpn.dValue = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
         }

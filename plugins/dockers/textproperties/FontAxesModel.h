@@ -10,6 +10,8 @@
 #include <QLocale>
 #include <KoSvgText.h>
 
+class KoSvgTextPropertiesModel;
+
 /**
  * @brief The FontAxesModel class
  *
@@ -33,8 +35,6 @@ public:
     ~FontAxesModel();
 
     void setAxesData(QList<KoSvgText::FontFamilyAxis> axes);
-    /// This sets which translated labels (if available) are returned.
-    void setLocales(QList<QLocale> locales);
 
     /// If optical size link is enabled, then the slider should be disabled.
     void setOpticalSizeDisabled(bool disable);
@@ -43,6 +43,8 @@ public:
     bool axesValueSignalBlocked() const;
 
     QVariantMap axisValues() const;
+
+    Q_INVOKABLE void setFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel);
 public Q_SLOTS:
     void setAxisValues(const QVariantMap &newAxisValues);
 

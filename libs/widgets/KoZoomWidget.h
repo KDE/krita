@@ -11,7 +11,6 @@
 #define KOZOOMWIDGET_H
 
 #include <QWidget>
-#include "KoZoomAction.h"
 #include <QScopedPointer>
 #include <kritawidgets_export.h>
 
@@ -38,36 +37,18 @@ Q_SIGNALS:
     * @param level value of the slider
     */
     void zoomLevelChanged(const QString& level);
+    void zoomLevelChangedIndex(int index);
 
-   /**
-    * Signal canvasMappingModeChanged is triggered when the user toggles the widget.
-    * Nothing else happens except that this signal is emitted.
-    * @param status Whether the special aspect mode is on
-    */
-    void canvasMappingModeChanged( bool status );
-
-    /**
-     * Signal is triggered when the user clicks the zoom to selection button.
-     * Nothing else happens except that this signal is emitted.
-     */
-    void zoomedToSelection();
-
-    /**
-     * Signal is triggered when the user clicks the zoom to all button.
-     * Nothing else happens except that this signal is emitted.
-     */
-    void zoomedToAll();
+    void sigUsePrintResolutionModeChanged(bool value);
 
 public Q_SLOTS:
-    void setZoomLevels(const QStringList &values);
-    void setSliderSize(int size);
+    void setSliderState(int size, int index);
+    void setZoomLevelsState(const QStringList &values, int index, const QString &activeText);
     void setCurrentZoomLevel(const QString &valueString);
+    void setCurrentZoomLevel(int index);
     void setSliderValue(int value);
 
-   /**
-    * Change status of canvas size mapping button
-    */
-    void setCanvasMappingMode(bool status);
+    void setUsePrintResolutionMode(bool value);
 private:
     class Private;
     QScopedPointer<Private> const d;

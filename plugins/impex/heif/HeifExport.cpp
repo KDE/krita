@@ -136,6 +136,18 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     HeifLock lock;
 #endif
 
+#if LIBHEIF_HAVE_VERSION(1, 20, 2)
+    using HeifStrideType = size_t;
+    auto heifGetPlaneMethod = std::mem_fn(qNonConstOverload<heif_channel, HeifStrideType*>(&heif::Image::get_plane2));
+#elif LIBHEIF_HAVE_VERSION(1, 20, 0)
+    using HeifStrideType = size_t;
+    auto heifGetPlaneMethod = std::mem_fn(qNonConstOverload<heif_channel, HeifStrideType*>(&heif::Image::get_plane));
+#else
+    using HeifStrideType = int;
+    auto heifGetPlaneMethod = std::mem_fn(qNonConstOverload<heif_channel, HeifStrideType*>(&heif::Image::get_plane));
+#endif
+
+
     KisImageSP image = document->savingImage();
     const KoColorSpace *cs = image->colorSpace();
 
@@ -249,19 +261,19 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.add_plane(heif_channel_G, width,height, 8);
                 img.add_plane(heif_channel_B, width,height, 8);
 
-                int strideR = 0;
-                int strideG = 0;
-                int strideB = 0;
-                int strideA = 0;
+                HeifStrideType strideR = 0;
+                HeifStrideType strideG = 0;
+                HeifStrideType strideB = 0;
+                HeifStrideType strideA = 0;
 
-                uint8_t *ptrR = img.get_plane(heif_channel_R, &strideR);
-                uint8_t *ptrG = img.get_plane(heif_channel_G, &strideG);
-                uint8_t *ptrB = img.get_plane(heif_channel_B, &strideB);
+                uint8_t *ptrR = heifGetPlaneMethod(img, heif_channel_R, &strideR);
+                uint8_t *ptrG = heifGetPlaneMethod(img, heif_channel_G, &strideG);
+                uint8_t *ptrB = heifGetPlaneMethod(img, heif_channel_B, &strideB);
 
                 uint8_t *ptrA = [&]() -> uint8_t * {
                     if (hasAlpha) {
                         img.add_plane(heif_channel_Alpha, width, height, 8);
-                        return img.get_plane(heif_channel_Alpha, &strideA);
+                        return heifGetPlaneMethod(img, heif_channel_Alpha, &strideA);
                     } else {
                         return nullptr;
                     }
@@ -288,9 +300,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.create(width, height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
-                int stride = 0;
+                HeifStrideType stride = 0;
 
-                uint8_t *ptr = img.get_plane(heif_channel_interleaved, &stride);
+                uint8_t *ptr = heifGetPlaneMethod(img, heif_channel_interleaved, &stride);
 
                 KisPaintDeviceSP pd = image->projection();
                 KisHLineConstIteratorSP it =
@@ -329,14 +341,14 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 img.add_plane(heif_channel_Y, width, height, 8);
 
-                int strideG = 0;
-                int strideA = 0;
+                HeifStrideType strideG = 0;
+                HeifStrideType strideA = 0;
 
-                uint8_t *ptrG = img.get_plane(heif_channel_Y, &strideG);
+                uint8_t *ptrG = heifGetPlaneMethod(img, heif_channel_Y, &strideG);
                 uint8_t *ptrA = [&]() -> uint8_t * {
                     if (hasAlpha) {
                         img.add_plane(heif_channel_Alpha, width, height, 8);
-                        return img.get_plane(heif_channel_Alpha, &strideA);
+                        return heifGetPlaneMethod(img, heif_channel_Alpha, &strideA);
                     } else {
                         return nullptr;
                     }
@@ -362,14 +374,14 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 img.add_plane(heif_channel_Y, width, height, 12);
 
-                int strideG = 0;
-                int strideA = 0;
+                HeifStrideType strideG = 0;
+                HeifStrideType strideA = 0;
 
-                uint8_t *ptrG = img.get_plane(heif_channel_Y, &strideG);
+                uint8_t *ptrG = heifGetPlaneMethod(img, heif_channel_Y, &strideG);
                 uint8_t *ptrA = [&]() -> uint8_t * {
                     if (hasAlpha) {
                         img.add_plane(heif_channel_Alpha, width, height, 12);
-                        return img.get_plane(heif_channel_Alpha, &strideA);
+                        return heifGetPlaneMethod(img, heif_channel_Alpha, &strideA);
                     } else {
                         return nullptr;
                     }

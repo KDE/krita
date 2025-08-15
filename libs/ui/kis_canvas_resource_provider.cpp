@@ -31,6 +31,7 @@
 #include "kis_config.h"
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
+#include <KoUnit.h>
 
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
@@ -299,11 +300,12 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
 
     if(!image || !canvas) return;
 
-    qreal zoomX, zoomY;
-    canvas->coordinatesConverter()->zoom(&zoomX, &zoomY);
+    // update KoUnit value for the document
+    m_resourceManager->
+                setResource(KoCanvasResource::Unit, canvas->unit());
 
-    qreal scaleX = zoomX / image->xRes();
-    qreal scaleY = zoomY / image->yRes();
+    qreal scaleX, scaleY;
+    canvas->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
     Q_EMIT sigOnScreenResolutionChanged(scaleX, scaleY);
 }

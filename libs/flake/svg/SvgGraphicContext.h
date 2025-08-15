@@ -20,7 +20,8 @@ public:
     enum StyleType {
         None,     ///< no style
         Solid,    ///< solid style
-        Complex   ///< gradient or pattern style
+        Complex,   ///< gradient or pattern style
+        Inherit
     };
 
     SvgGraphicsContext();

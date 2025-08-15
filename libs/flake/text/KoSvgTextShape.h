@@ -246,14 +246,14 @@ public:
      * @param skipSynthetic -- whether to skip over synthetic cursorPositions.
      * @return the cursor -- position for an index.
      */
-    int posForIndex(int index, bool firstIndex = false, bool skipSynthetic = false);
+    int posForIndex(int index, bool firstIndex = false, bool skipSynthetic = false) const;
     /**
      * @brief indexForPos
      * get the string index for a given cursor position.
      * @param pos the cursor position.
      * @return the index in the string.
      */
-    int indexForPos(int pos);
+    int indexForPos(int pos) const;
 
     /**
      * @brief initialTextPosition
@@ -352,6 +352,55 @@ public:
     /// Cleans up the internal text data. Used by undo commands.
     void cleanUp();
 
+/*****************************************************************************
+ * Tree Index functions.
+ *
+ * SVG Text is internally a tree of nodes, with each node having text
+ * properties, and the child nodes furthest from the root having text content.
+ * While we can access the latter by using ranges, and we can easily access
+ * the root node by using -1, there's no way to access the nodes that may
+ * be inbetween. Tree index allows accessing these nodes.
+ *
+ * Each entry in the index is represents the index it is in the parent's list
+ * of child nodes. This means that the root index is always {0}. The second
+ * child of the root would be represented as {0, 1}, and the first child of
+ * the second child of the root as {0, 1, 0}, etc.
+ *
+ ****************************************************************************/
+
+    /**
+     * @brief findTreeIndexForPropertyId
+     * @return the tree index of the first content element found with a given property id.
+     *     Empty vector means none was found.
+     * @propertyId -- id to search for.
+     */
+    QVector<int> findTreeIndexForPropertyId(KoSvgTextProperties::PropertyId propertyId);
+
+    /**
+     * @brief propertiesForTreeIndex
+     * @param treeIndex -- vector representing the tree index.
+     * @return properties at the given tree index. If the tree index is wrong, empty properties will be returned.
+     */
+    KoSvgTextProperties propertiesForTreeIndex(const QVector<int> &treeIndex) const;
+
+    /**
+     * @brief setPropertiesAtTreeIndex
+     * @param treeIndex -- set text properties at given tree index.
+     * @return if successful.
+     */
+    bool setPropertiesAtTreeIndex(const QVector<int> treeIndex, const KoSvgTextProperties props);
+
+    /**
+     * @brief findStartAndEndPosForTreeIndex
+     * Find the start and end cursor position for a given tree index.
+     * @param treeIndex the tree index to find the range for. This range will encompass any children.
+     * The treeindex will always start with the index of the paragraph (0)
+     * and an empty tree index is considered invalid.
+     * @return A QPair<int,int> describing cursor position range encompassed by the tree index and it's children.
+     * Will return {-1, -1} when the tree index is invalid.
+     */
+    QPair<int, int> findRangeForTreeIndex(const QVector<int> treeIndex) const;
+
     /*--------------- Properties ---------------*/
 
     KoSvgTextProperties textProperties() const;
@@ -361,6 +410,7 @@ public:
     void setStroke(KoShapeStrokeModelSP stroke) override;
     QVector<PaintOrder> paintOrder() const override;
     void setPaintOrder(PaintOrder first, PaintOrder second) override;
+
 
     /**
      * @brief plainText

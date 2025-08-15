@@ -37,7 +37,6 @@ CollapsibleGroupProperty {
         } else {
             properties.fontFamilies = fontFamilies;
         }
-        mainWindow.slotUpdateStylesModel();
     }
 
     titleItem: RowLayout {

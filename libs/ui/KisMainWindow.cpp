@@ -82,7 +82,6 @@
 #include <KoFileDialog.h>
 #include <kis_icon.h>
 #include <KoToolManager.h>
-#include <KoZoomController.h>
 #include "KoToolDocker.h"
 #include "toolbox/KoToolBoxFactory.h"
 #include <KoDockRegistry.h>

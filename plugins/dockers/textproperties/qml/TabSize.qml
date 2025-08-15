@@ -7,9 +7,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
+    id: tabSizeBase;
     propertyTitle: i18nc("@title:group", "Tab Size");
     propertyName: "tab-size";
     propertyType: TextPropertyConfigModel.Paragraph;
@@ -33,16 +34,14 @@ TextPropertyBase {
 
     CssQmlUnitConverter {
         id: converter;
-        dpi: dpi;
-        dataMultiplier: tabSizeSpn.multiplier;
+        dpi: tabSizeBase.dpi;
 
-        onUserValueChanged: tabSizeSpn.value = userValue;
+        onUserValueChanged: tabSizeSpn.dValue = userValue;
         onUserUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(userUnit);
     }
 
     onPropertiesUpdated: {
         blockSignals = true;
-        converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties);
         converter.setDataValueAndUnit(properties.tabSize.value, properties.tabSize.unit);
 
@@ -70,35 +69,24 @@ TextPropertyBase {
 
     onEnableProperty: properties.tabSizeState = KoSvgTextPropertiesModel.PropertySet;
 
-    GridLayout {
-        columns: 3
+    RowLayout {
         anchors.left: parent.left
         anchors.right: parent.right
-        columnSpacing: columnSpacing;
+        spacing: columnSpacing;
 
         RevertPropertyButton {
             revertState: properties.tabSizeState;
             onClicked: properties.tabSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
-        Label {
-            text: propertyTitle
-            Layout.columnSpan: 2;
-            elide: Text.ElideRight;
-            Layout.fillWidth: true;
-            font.italic: properties.tabSizeState === KoSvgTextPropertiesModel.PropertyTriState;
-        }
 
-        Item {
-            width: 1;
-            height: 1;
-        }
-
-        DoubleSpinBox {
+        Kis.DoubleSliderSpinBox {
             id: tabSizeSpn;
+            prefix: propertyTitle + ": ";
             Layout.fillWidth: true;
-            from: 0;
-            to: 999 * multiplier;
-            onValueChanged: converter.userValue = value;
+            dFrom: 0;
+            dTo: 99;
+            onDValueChanged: converter.userValue = dValue;
+            blockUpdateSignalOnDrag: true;
         }
         SqueezedComboBox {
             id: tabSizeUnitCmb;

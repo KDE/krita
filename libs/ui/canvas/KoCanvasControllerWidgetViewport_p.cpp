@@ -33,14 +33,13 @@
 #include "KoCanvasControllerWidget.h"
 #include "KoViewConverter.h"
 #include "KoSvgPaste.h"
+#include <kis_canvas2.h>
 
 // ********** Viewport **********
 Viewport::Viewport(KoCanvasControllerWidget *parent)
     : QWidget(parent)
     , m_draggedShape(0)
     , m_canvas(0)
-    , m_documentOffset(QPoint(0, 0))
-    , m_margin(0)
 {
     setAutoFillBackground(true);
     setAcceptDrops(true);
@@ -57,23 +56,8 @@ void Viewport::setCanvas(QWidget *canvas)
     m_canvas = canvas;
     if (!canvas) return;
     m_canvas->setParent(this);
+    resetLayout();
     m_canvas->show();
-    if (!m_canvas->minimumSize().isNull()) {
-        m_documentSize = m_canvas->minimumSize();
-    }
-    resetLayout();
-}
-
-void Viewport::setDocumentSize(const QSizeF &size)
-{
-    m_documentSize = size;
-    resetLayout();
-}
-
-void Viewport::documentOffsetMoved(const QPoint &pt)
-{
-    m_documentOffset = pt;
-    resetLayout();
 }
 
 void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
@@ -229,11 +213,9 @@ void Viewport::handleDropEvent(QDropEvent *event)
 
 QPointF Viewport::correctPosition(const QPoint &point) const
 {
-    QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
-    Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
-    QPoint correctedPos(point.x() - canvasWidget->x(), point.y() - canvasWidget->y());
-    correctedPos += m_documentOffset;
-    return m_parent->canvas()->viewToDocument(correctedPos);
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(m_parent->canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, QPointF());
+    return kisCanvas->coordinatesConverter()->widgetToDocument(point);
 }
 
 void Viewport::handleDragMoveEvent(QDragMoveEvent *event)
@@ -252,13 +234,12 @@ void Viewport::handleDragMoveEvent(QDragMoveEvent *event)
 
 void Viewport::repaint(KoShape *shape)
 {
-    QRect rect = m_parent->canvas()->viewConverter()->documentToView(shape->boundingRect()).toRect();
-    QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
-    Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
-    rect.moveLeft(rect.left() + canvasWidget->x() - m_documentOffset.x());
-    rect.moveTop(rect.top() + canvasWidget->y() - m_documentOffset.y());
-    rect.adjust(-2, -2, 2, 2); // adjust for antialias
-    update(rect);
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(m_parent->canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+
+    QRect updateRect = kisCanvas->coordinatesConverter()->documentToWidget(shape->boundingRect()).toAlignedRect();
+    updateRect.adjust(-2, -2, 2, 2); // adjust for antialias
+    update(updateRect);
 }
 
 void Viewport::handleDragLeaveEvent(QDragLeaveEvent *event)
@@ -280,13 +261,7 @@ void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
         const KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
         painter.save();
-        QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
-        Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
-        painter.translate(canvasWidget->x() - m_documentOffset.x(),
-                          canvasWidget->y() - m_documentOffset.y());
-        QPointF offset = vc->documentToView(m_draggedShape->position());
         painter.setOpacity(0.6);
-        painter.translate(offset.x(), offset.y());
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setTransform(vc->documentToView());
         m_draggedShape->paint(painter);
@@ -296,11 +271,8 @@ void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
 
 void Viewport::resetLayout()
 {
-    // Determine the area we have to show
-    QRect viewRect(m_documentOffset, size());
-
-    const int viewH = viewRect.height();
-    const int viewW = viewRect.width();
+    const int viewH = size().height();
+    const int viewW = size().width();
 
     if (m_canvas) {
         QRect geom = QRect(0, 0, viewW, viewH);
@@ -309,10 +281,4 @@ void Viewport::resetLayout()
             m_canvas->update();
         }
     }
-    Q_EMIT sizeChanged();
-#if 0
-    debugFlake <<"View port geom:" << geometry();
-    if (m_canvas)
-        debugFlake <<"Canvas widget geom:" << m_canvas->geometry();
-#endif
 }

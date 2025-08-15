@@ -210,15 +210,6 @@ public:
     KoCanvasController *canvasController() const;
 
     /**
-     * @brief Scrolls the content of the canvas so that the given rect is visible.
-     *
-     * The rect is to be specified in document coordinates.
-     *
-     * @param rect the rectangle to make visible
-     */
-    virtual void ensureVisible(const QRectF &rect);
-
-    /**
      * Returns the snap guide of the canvas
      */
     KoSnapGuide *snapGuide() const;

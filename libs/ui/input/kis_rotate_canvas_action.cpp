@@ -14,6 +14,7 @@
 #include "kis_canvas_controller.h"
 #include <kis_canvas2.h>
 #include "kis_input_manager.h"
+#include <KoViewTransformStillPoint.h>
 
 #include <math.h>
 
@@ -31,6 +32,7 @@ public:
     qreal snapRotation {0.0};
     qreal touchRotation {0.0};
     bool allowRotation {false};
+    KoViewTransformStillPoint actionStillPoint;
 };
 
 
@@ -98,6 +100,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             const qreal startRotation = inputManager()->canvas()->rotationAngle();
             d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
             canvasController->beginCanvasRotation();
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
             break;
         }
         case RotateLeftShortcut:
@@ -172,7 +175,11 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 
             const float angle = gevent->value();
             QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
-            controller->rotateCanvas(angle, widgetPos, true);
+
+            KoViewTransformStillPoint adjustedStillPoint = d->actionStillPoint;
+            adjustedStillPoint.second = widgetPos;
+
+            controller->rotateCanvas(angle, adjustedStillPoint, true);
             return;
         }
         case QEvent::TouchUpdate: {

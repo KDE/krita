@@ -94,6 +94,7 @@ public:
      * @param groupSelectionPolicy How to treat groups
      * @param forceRegeneration If true, the cache is ignored and the merged
      *                          result is regenerated
+     * @param activeNode The current node that is being edited.
      */
     KisMergeLabeledLayersCommand(KisImageSP image,
                                  ReferenceNodeInfoListSP prevRefNodeInfoList,
@@ -102,7 +103,8 @@ public:
                                  KisPaintDeviceSP newRefPaintDevice,
                                  QList<int> selectedLabels,
                                  GroupSelectionPolicy groupSelectionPolicy = GroupSelectionPolicy_SelectAlways,
-                                 bool forceRegeneration = false);
+                                 bool forceRegeneration = false,
+                                 KisNodeSP activeNode = nullptr);
                                  
     ~KisMergeLabeledLayersCommand() override;
 
@@ -127,6 +129,7 @@ private:
     QList<int> m_selectedLabels;
     GroupSelectionPolicy m_groupSelectionPolicy;
     bool m_forceRegeneration;
+    KisNodeSP m_activeNode;
 };
 
 #endif /* __KIS_MERGE_LABELED_LAYERS_H */

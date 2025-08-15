@@ -34,6 +34,7 @@ KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP image,
     , m_selectedLabels(selectedLabels)
     , m_groupSelectionPolicy(groupSelectionPolicy)
     , m_forceRegeneration(true)
+    , m_activeNode(nullptr)
 {
     KIS_ASSERT(newRefPaintDevice);
     if (image->animationInterface()->hasAnimation()) {
@@ -49,7 +50,8 @@ KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP image,
                                                            KisPaintDeviceSP newRefPaintDevice,
                                                            QList<int> selectedLabels,
                                                            GroupSelectionPolicy groupSelectionPolicy,
-                                                           bool forceRegeneration)
+                                                           bool forceRegeneration,
+                                                           KisNodeSP activeNode)
     : KUndo2Command(kundo2_noi18n("MERGE_LABELED_LAYERS"))
     , m_refImage(new KisImage(new KisSurrogateUndoStore(), image->width(), image->height(), image->colorSpace(), "Merge Labeled Layers Reference Image"))
     , m_prevRefNodeInfoList(prevRefNodeInfoList)
@@ -60,6 +62,7 @@ KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP image,
     , m_selectedLabels(selectedLabels)
     , m_groupSelectionPolicy(groupSelectionPolicy)
     , m_forceRegeneration(forceRegeneration)
+    , m_activeNode(activeNode)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(prevRefNodeInfoList);
     KIS_SAFE_ASSERT_RECOVER_NOOP(newRefNodeInfoList);
@@ -116,7 +119,11 @@ QPair<KisNodeSP, QPair<bool, bool>> KisMergeLabeledLayersCommand::collectNode(Ki
         // Do not use this node if it is not labeled appropriately. The children
         // should still be visited if it is a group. The next sibling should
         // also be visited
-        return {nullptr, {true, node->inherits("KisGroupLayer")}};
+        if (!(m_activeNode != nullptr && node->uuid() == m_activeNode->uuid())) {
+            // If the active node has been passed and it is being considered,
+            // it should be treated as if it is labeled to match.
+            return {nullptr, {true, node->inherits("KisGroupLayer")}};
+        }
     }
 
     if (node->inherits("KisCloneLayer")) {
@@ -164,7 +171,7 @@ QPair<KisNodeSP, QPair<bool, bool>> KisMergeLabeledLayersCommand::collectNode(Ki
             return {node, {true, false}};
         }
     }
-    
+
     // By default, visit the next sibling, but not the children
     return {node, {true, false}};
 }
@@ -199,7 +206,7 @@ bool KisMergeLabeledLayersCommand::collectNodes(KisNodeSP node, QList<KisNodeSP>
             node = node->prevSibling();
         }
     }
-    
+
     return visitNextSibling;
 }
 

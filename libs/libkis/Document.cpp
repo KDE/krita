@@ -849,13 +849,13 @@ QList<qreal> Document::horizontalGuides() const
     warnScript << "DEPRECATED Document.horizontalGuides() - use Document.guidesConfig().horizontalGuides() instead";
     QList<qreal> lines;
     if (!d->document || !d->document->image()) return lines;
-    KisCoordinatesConverter converter;
-    converter.setImage(d->document->image());
-    QTransform transform = converter.imageToDocumentTransform().inverted();
+    const QTransform documentToImage =
+        QTransform::fromScale(d->document->image()->xRes(), d->document->image()->yRes());
+
     QList<qreal> untransformedLines = d->document->guidesConfig().horizontalGuideLines();
     for (int i = 0; i< untransformedLines.size(); i++) {
         qreal line = untransformedLines[i];
-        lines.append(transform.map(QPointF(line, line)).x());
+        lines.append(documentToImage.map(QPointF(line, line)).x());
     }
     return lines;
 }
@@ -865,13 +865,12 @@ QList<qreal> Document::verticalGuides() const
     warnScript << "DEPRECATED Document.verticalGuides() - use Document.guidesConfig().verticalGuides() instead";
     QList<qreal> lines;
     if (!d->document || !d->document->image()) return lines;
-    KisCoordinatesConverter converter;
-    converter.setImage(d->document->image());
-    QTransform transform = converter.imageToDocumentTransform().inverted();
+    const QTransform documentToImage =
+        QTransform::fromScale(d->document->image()->xRes(), d->document->image()->yRes());
     QList<qreal> untransformedLines = d->document->guidesConfig().verticalGuideLines();
     for (int i = 0; i< untransformedLines.size(); i++) {
         qreal line = untransformedLines[i];
-        lines.append(transform.map(QPointF(line, line)).y());
+        lines.append(documentToImage.map(QPointF(line, line)).y());
     }
     return lines;
 }
@@ -905,13 +904,12 @@ void Document::setHorizontalGuides(const QList<qreal> &lines)
     warnScript << "DEPRECATED Document.setHorizontalGuides() - use Document.guidesConfig().setHorizontalGuides() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
-    KisCoordinatesConverter converter;
-    converter.setImage(d->document->image());
-    QTransform transform = converter.imageToDocumentTransform();
+    const QTransform imageToDocument =
+        QTransform::fromScale(1.0 / d->document->image()->xRes(), 1.0 / d->document->image()->yRes());
     QList<qreal> transformedLines;
     for (int i = 0; i< lines.size(); i++) {
         qreal line = lines[i];
-        transformedLines.append(transform.map(QPointF(line, line)).x());
+        transformedLines.append(imageToDocument.map(QPointF(line, line)).x());
     }
     config.setHorizontalGuideLines(transformedLines);
     d->document->setGuidesConfig(config);
@@ -922,13 +920,12 @@ void Document::setVerticalGuides(const QList<qreal> &lines)
     warnScript << "DEPRECATED Document.setVerticalGuides() - use Document.guidesConfig().setVerticalGuides() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
-    KisCoordinatesConverter converter;
-    converter.setImage(d->document->image());
-    QTransform transform = converter.imageToDocumentTransform();
+    const QTransform imageToDocument =
+        QTransform::fromScale(1.0 / d->document->image()->xRes(), 1.0 / d->document->image()->yRes());
     QList<qreal> transformedLines;
     for (int i = 0; i< lines.size(); i++) {
         qreal line = lines[i];
-        transformedLines.append(transform.map(QPointF(line, line)).y());
+        transformedLines.append(imageToDocument.map(QPointF(line, line)).y());
     }
     config.setVerticalGuideLines(transformedLines);
     d->document->setGuidesConfig(config);
@@ -1192,16 +1189,13 @@ GuidesConfig *Document::guidesConfig()
     KisGuidesConfig *tmpConfig = new KisGuidesConfig(d->document->guidesConfig());
 
     if (d->document && d->document->image()) {
-        KisCoordinatesConverter converter;
-        converter.setImage(d->document->image());
-
-        QTransform transform = converter.imageToDocumentTransform().inverted();
-
+        const QTransform documentToImage =
+            QTransform::fromScale(d->document->image()->xRes(), d->document->image()->yRes());
         QList<qreal> transformedLines;
         QList<qreal> untransformedLines = tmpConfig->horizontalGuideLines();
         for (int i = 0; i< untransformedLines.size(); i++) {
             qreal untransformedLine = untransformedLines[i];
-            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+            transformedLines.append(documentToImage.map(QPointF(untransformedLine, untransformedLine)).x());
         }
         tmpConfig->setHorizontalGuideLines(transformedLines);
 
@@ -1209,7 +1203,7 @@ GuidesConfig *Document::guidesConfig()
         untransformedLines = tmpConfig->verticalGuideLines();
         for (int i = 0; i< untransformedLines.size(); i++) {
             qreal untransformedLine = untransformedLines[i];
-            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).y());
+            transformedLines.append(documentToImage.map(QPointF(untransformedLine, untransformedLine)).y());
         }
         tmpConfig->setVerticalGuideLines(transformedLines);
     }
@@ -1230,16 +1224,13 @@ void Document::setGuidesConfig(GuidesConfig *guidesConfig)
     KisGuidesConfig tmpConfig = guidesConfig->guidesConfig();
 
     if (d->document->image()) {
-        KisCoordinatesConverter converter;
-        converter.setImage(d->document->image());
-
-        QTransform transform = converter.imageToDocumentTransform();
-
+        const QTransform imageToDocument =
+            QTransform::fromScale(1.0 / d->document->image()->xRes(), 1.0 / d->document->image()->yRes());
         QList<qreal> transformedLines;
         QList<qreal> untransformedLines = tmpConfig.horizontalGuideLines();
         for (int i = 0; i< untransformedLines.size(); i++) {
             qreal untransformedLine = untransformedLines[i];
-            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+            transformedLines.append(imageToDocument.map(QPointF(untransformedLine, untransformedLine)).x());
         }
         tmpConfig.setHorizontalGuideLines(transformedLines);
 
@@ -1247,7 +1238,7 @@ void Document::setGuidesConfig(GuidesConfig *guidesConfig)
         untransformedLines = tmpConfig.verticalGuideLines();
         for (int i = 0; i< untransformedLines.size(); i++) {
             qreal untransformedLine = untransformedLines[i];
-            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+            transformedLines.append(imageToDocument.map(QPointF(untransformedLine, untransformedLine)).x());
         }
         tmpConfig.setVerticalGuideLines(transformedLines);
     }

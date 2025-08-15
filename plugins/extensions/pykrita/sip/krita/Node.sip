@@ -64,7 +64,7 @@ public Q_SLOTS:
     QByteArray pixelData(int x, int y, int w, int h) const;
     QByteArray pixelDataAtTime(int x, int y, int w, int h, int time) const;
     QByteArray projectionPixelData(int x, int y, int w, int h) const;
-    void setPixelData(QByteArray value, int x, int y, int w, int h);
+    bool setPixelData(QByteArray value, int x, int y, int w, int h);
     QRect bounds() const;
     void move(int x, int y);
     QPoint position() const;
@@ -78,7 +78,7 @@ public Q_SLOTS:
     void shearNode(double angleX, double angleY);
     QImage thumbnail(int w, int h);
     QString layerStyleToAsl();
-    void setLayerStyleFromAsl(const QString &asl);
+    bool setLayerStyleFromAsl(const QString &asl);
     int index() const;
     QUuid uniqueId() const;
 

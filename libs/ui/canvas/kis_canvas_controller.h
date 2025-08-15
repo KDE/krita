@@ -14,8 +14,11 @@
 #include "kis_types.h"
 #include "KisWraparoundAxis.h"
 
+class KisCanvasState;
 class KConfigGroup;
 class KisView;
+class KisCanvasState;
+
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
@@ -25,17 +28,33 @@ public:
     KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KisKActionCollection * actionCollection);
     ~KisCanvasController() override;
 
+    void ensureVisibleDoc(const QRectF &docRect, bool smooth) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) override;
     void activate() override;
 
     QPointF currentCursorPosition() const override;
 
+    KisCanvasState canvasState() const override;
+    KoZoomState zoomState() const override;
+
+    QPointF preferredCenter() const override;
+    void setPreferredCenter(const QPointF &viewPoint) override;
+
+    void zoomIn() override;
+    void zoomIn(const KoViewTransformStillPoint &widgetStillPoint) override;
+    void zoomOut() override;
+    void zoomOut(const KoViewTransformStillPoint &widgetStillPoint) override;
+
+    void syncOnReferencesChange(const QRectF &referencesRect);
+    void syncOnImageResolutionChange();
+    void syncOnImageSizeChange(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
+    void rotateCanvas(qreal angle, const std::optional<KoViewTransformStillPoint> &stillPoint, bool isNativeGesture = false);
+
 public:
-    using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
     WrapAroundAxis wrapAroundModeAxis() const;
     bool levelOfDetailMode() const;
@@ -45,14 +64,21 @@ public:
 
     void resetScrollBars() override;
 
+    void updateScreenResolution(QWidget *parentWidget);
+    bool usePrintResolutionMode();
+
+    qreal effectiveCanvasResolutionX() const;
+    qreal effectiveCanvasResolutionY() const;
+
 public Q_SLOTS:
+    void setUsePrintResolutionMode(bool value);
+
     void mirrorCanvas(bool enable);
     void mirrorCanvasAroundCursor(bool enable);
     void mirrorCanvasAroundCanvas(bool enable);
 
     void beginCanvasRotation();
     void endCanvasRotation();
-    void rotateCanvas(qreal angle, const QPointF &center, bool isNativeGesture = false);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
@@ -67,9 +93,23 @@ public Q_SLOTS:
     void slotTogglePixelGrid(bool value);
     void slotToggleLevelOfDetailMode(bool value);
 
+protected:
+    void updateCanvasOffsetInternal(const QPointF &newOffset) override;
+    void updateCanvasWidgetSizeInternal(const QSize &newSize) override;
+    void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint) override;
+    void zoomToInternal(const QRect &viewRect) override;
+
+private:
+    void zoomInImpl(const std::optional<KoViewTransformStillPoint> &stillPoint);
+    void zoomOutImpl(const std::optional<KoViewTransformStillPoint> &stillPoint);
+    void mirrorCanvasImpl(const std::optional<KoViewTransformStillPoint> &stillPoint, bool enable);
+
 Q_SIGNALS:
     void documentSizeChanged();
-    void canvasMirrorModeChanged(bool);
+
+Q_SIGNALS:
+    void sigUsePrintResolutionModeChanged(bool value);
+
 
 private:
     struct Private;

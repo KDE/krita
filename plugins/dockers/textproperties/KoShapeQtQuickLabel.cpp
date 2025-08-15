@@ -29,7 +29,7 @@ struct KoShapeQtQuickLabel::Private {
     QScopedPointer<KoShapePainter> shapePainter;
     QString svgData;
 
-    QColor fgColor;
+    QColor fgColor = Qt::black;
     bool fullColor = false;
     KoShapeQtQuickLabel::ScalingType scalingType = KoShapeQtQuickLabel::Fit;
     Qt::Alignment alignment = Qt::AlignHCenter | Qt::AlignVCenter;
@@ -129,19 +129,20 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
     QRectF bb = QRectF( 0, 0, 200, 200);
     QSizeF sz = bb.size();
     p.setResolution(bb, 72);
+    p.setFillStrokeInheritByDefault(true);
 
     QList<KoShape*> shapes = p.parseSvg(doc.documentElement(), &sz);
-    if (shapes.isEmpty()) return;
 
     // TODO: Evaluate if this can't be faster.
     d->shapePainter.reset(new KoShapePainter());
 
-    if (d->shapes.isEmpty()) {
+    if (!d->shapes.isEmpty()) {
         qDeleteAll(d->shapes);
     }
 
     d->shapes = shapes;
     d->shapePainter->setShapes(d->shapes);
+
     updateShapes();
 
     emit svgDataChanged();
@@ -234,8 +235,8 @@ void KoShapeQtQuickLabel::updateShapes()
         for (int i = 0; i < d->shapes.size(); i++) {
             d->shapes.at(i)->setBackground(bg);
         }
-        callUpdateIfComplete();
     }
+    callUpdateIfComplete();
 }
 
 void KoShapeQtQuickLabel::callUpdateIfComplete()

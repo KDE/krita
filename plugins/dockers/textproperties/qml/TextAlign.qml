@@ -7,6 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@title:group", "Text Align");
@@ -156,7 +157,6 @@ CollapsibleGroupProperty {
             id: propertyTitleLabel;
             text: propertyTitle;
             verticalAlignment: Text.AlignVCenter
-            color: sysPalette.text;
             elide: Text.ElideRight;
             Layout.maximumWidth: contentWidth;
         }
@@ -165,57 +165,64 @@ CollapsibleGroupProperty {
             id: alignGroup;
         }
 
-        Button {
-            id: alignStartBtn;
-            checkable: true;
-            icon.source: properties.direction === KoSvgText.DirectionLeftToRight? "qrc:///16_light_format-justify-left.svg"
-                                                                                : "qrc:///16_light_format-justify-right.svg";
-            icon.height: 16;
-            icon.width: 16;
-            icon.color: palette.text;
-            ButtonGroup.group: alignGroup;
-            Layout.preferredWidth: height;
-            onToggled: setAlignmentFromButtons();
-        }
-        Button {
-            id: alignMiddleBtn;
-            checkable: true;
-            icon.source: "qrc:///16_light_format-justify-center.svg";
-            icon.height: 16;
-            icon.width: 16;
-            icon.color: palette.text;
-            ButtonGroup.group: alignGroup;
-            Layout.preferredWidth: height;
-            onToggled: {
-                setAlignmentFromButtons();
+        RowLayout {
+            spacing: 0;
+
+            Kis.GroupButton {
+                groupPosition: Kis.GroupButton.GroupLeft;
+                id: alignStartBtn;
+                checkable: true;
+                icon.source: properties.direction === KoSvgText.DirectionLeftToRight? "qrc:///16_light_format-justify-left.svg"
+                                                                                    : "qrc:///16_light_format-justify-right.svg";
+                icon.height: 16;
+                icon.width: 16;
+                icon.color: palette.buttonText;
+                ButtonGroup.group: alignGroup;
+                Layout.preferredWidth: height;
+                onToggled: setAlignmentFromButtons();
             }
-        }
-        Button {
-            id: alignEndBtn;
-            checkable: true;
-            icon.source: properties.direction === KoSvgText.DirectionLeftToRight? "qrc:///16_light_format-justify-right.svg"
-                                                                                : "qrc:///16_light_format-justify-left.svg";
-            icon.height: 16;
-            icon.width: 16;
-            icon.color: palette.text;
-            ButtonGroup.group: alignGroup;
-            Layout.preferredWidth: height;
-            onToggled: setAlignmentFromButtons();
-        }
+            Kis.GroupButton {
+                id: alignMiddleBtn;
+                groupPosition: Kis.GroupButton.GroupCenter;
+                checkable: true;
+                icon.source: "qrc:///16_light_format-justify-center.svg";
+                icon.height: 16;
+                icon.width: 16;
+                icon.color: palette.buttonText;
+                ButtonGroup.group: alignGroup;
+                Layout.preferredWidth: height;
+                onToggled: {
+                    setAlignmentFromButtons();
+                }
+            }
+            Kis.GroupButton {
+                groupPosition: Kis.GroupButton.GroupRight;
+                id: alignEndBtn;
+                checkable: true;
+                icon.source: properties.direction === KoSvgText.DirectionLeftToRight? "qrc:///16_light_format-justify-right.svg"
+                                                                                    : "qrc:///16_light_format-justify-left.svg";
+                icon.height: 16;
+                icon.width: 16;
+                icon.color: palette.buttonText;
+                ButtonGroup.group: alignGroup;
+                Layout.preferredWidth: height;
+                onToggled: setAlignmentFromButtons();
+            }
         Item {
             Layout.fillWidth: true;
         }
 
-        Button {
+        Kis.GroupButton {
             id: alignJustifyBtn;
             checkable: true;
             checked: textAlignAll === KoSvgText.AlignJustify;
             icon.height: 16;
             icon.width: 16;
-            icon.color: palette.text;
+            icon.color: palette.buttonText;
             icon.source: "qrc:///16_light_format-justify-fill.svg";
             Layout.preferredWidth: height;
             onToggled: setAlignmentFromButtons();
+        }
         }
     }
 

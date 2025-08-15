@@ -49,8 +49,22 @@ buildEnvironment = dict(os.environ)
 buildEnvironment['ANDROID_ABI'] = os.environ['KDECI_ANDROID_ABI']
 buildEnvironment['KRITA_INSTALL_PREFIX'] = depsPath
 
-buildEnvironment['KRITA_UNSTABLE_PACKAGE_SUFFIX'] = '' if arguments.package_type == 'release' \
-    else '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA'])
+if arguments.package_type == 'release':
+    unstablePackageSuffix = ''
+else:
+    shortSha = os.environ.get('CI_COMMIT_SHORT_SHA')
+    if shortSha is None:
+        print('## CI_COMMIT_SHORT_SHA not set, attempting to retrieve it through git')
+        scriptDir = os.path.dirname(os.path.abspath(__file__))
+        shortSha = subprocess.check_output(['git', 'log', '--pretty=%h', '-n', '1'], cwd=scriptDir).decode().strip()
+
+    if not shortSha:
+        print('## ERROR: no unstable package suffix, please set CI_COMMIT_SHORT_SHA')
+        sys.exit(1)
+
+    unstablePackageSuffix = '-{}'.format(shortSha)
+
+buildEnvironment['KRITA_UNSTABLE_PACKAGE_SUFFIX'] = unstablePackageSuffix
 
 commandToRun = 'cmake --build . --target create-apk'
 try:

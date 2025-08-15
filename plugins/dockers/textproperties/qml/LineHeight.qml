@@ -152,7 +152,7 @@ TextPropertyBase {
                 Layout.preferredWidth: symbolWidth.width+leftPadding+rightPadding+spacing+indicator.width;
                 Layout.maximumWidth: implicitWidth;
 
-                PaletteControl {
+                Kis.ThemedControl {
                     id: lineHeightPalette;
                 }
                 palette: lineHeightPalette.palette;

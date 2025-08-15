@@ -13,9 +13,6 @@ TextPropertyBase {
     property alias titleItem: titleItemContainer.data;
     spacing: columnSpacing;
 
-    SystemPalette {
-        id: sysPalette;
-    }
 
     GridLayout {
         id: grid;
@@ -33,7 +30,7 @@ TextPropertyBase {
                 id: collapse;
                 display: AbstractButton.IconOnly
                 icon.source: contentItemContainer.visible? "qrc:///light_groupOpened.svg" : "qrc:///light_groupClosed.svg";
-                icon.color: sysPalette.text;
+                icon.color: palette.text;
                 icon.width: 12;
                 icon.height: 12;
                 onClicked: contentItemContainer.visible = !contentItemContainer.visible;

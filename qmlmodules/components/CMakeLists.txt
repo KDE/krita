@@ -17,6 +17,8 @@ if (QT_MAJOR_VERSION STREQUAL "6")
             KisNumParser.h
             KisCubicCurveQMLWrapper.cpp
             KisCubicCurveQMLWrapper.h
+            KisTheme.cpp
+            KisTheme.h
     )
 
 else ()
@@ -36,6 +38,8 @@ else ()
             KisNumParser.h
             KisCubicCurveQMLWrapper.cpp
             KisCubicCurveQMLWrapper.h
+            KisTheme.cpp
+            KisTheme.h
     )
 
 endif ()
@@ -69,6 +73,7 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/button/GroupButton.qml
     qml/button/OptionButtonStrip.qml
 
+    qml/ThemedControl.qml
     qml/IntParseSpinBox.qml
     qml/DoubleSpinBox.qml
     qml/DoubleParseSpinBox.qml

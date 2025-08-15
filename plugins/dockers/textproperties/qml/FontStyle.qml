@@ -111,8 +111,7 @@ CollapsibleGroupProperty {
         Label {
             id: propertyTitleLabel;
             text: propertyTitle;
-            verticalAlignment: Text.AlignVCenter
-            color: sysPalette.text;
+            verticalAlignment: Text.AlignVCenter;
             elide: Text.ElideRight;
             Layout.maximumWidth: contentWidth;
             Layout.preferredHeight: implicitHeight;
@@ -236,11 +235,11 @@ CollapsibleGroupProperty {
             Layout.preferredHeight: fontSlantSpn.implicitHeight;
             Kis.IntSliderSpinBox {
                 id: fontSlantSpn;
-                suffix: i18nc("@item:valuesuffix", "%")
+                suffix: i18nc("@item:valuesuffix", "°")
                 from: -90;
                 to: 90;
                 enabled: fontSlant == CssFontStyleModel.StyleOblique;
-                PaletteControl {
+                Kis.ThemedControl {
                     id: slantSpnPal;
                 }
                 blockUpdateSignalOnDrag: true;

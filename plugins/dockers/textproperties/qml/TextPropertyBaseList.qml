@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.1
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 ColumnLayout {
     id: propertyBaseList;
@@ -146,9 +147,8 @@ ColumnLayout {
         clip: true;
         padding: 0;
 
-        PaletteControl {
+        Kis.ThemedControl {
             id: paletteControl;
-            colorGroup: frame.enabled? SystemPalette.Active: SystemPalette.Disabled;
         }
         palette: paletteControl.palette;
 
@@ -297,9 +297,8 @@ ColumnLayout {
             displayText: i18nc("@label:listbox", "Add Property");
             onPopupChanged: if (!addPropertyCmb.popup.visible) { propertySearch.text = ""; }
 
-            PaletteControl {
+            Kis.ThemedControl {
                 id: cmbPalette;
-                colorGroup: addPropertyCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
             palette: cmbPalette.palette;
 
@@ -356,9 +355,8 @@ ColumnLayout {
                 required property string toolTip;
                 contentItem: Label {
                     enabled: addPropertyDelegate.enabled;
-                    PaletteControl {
+                    Kis.ThemedControl {
                         id: addPropertyPalette;
-                        colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
                     }
                     palette: addPropertyPalette.palette;
                     color: addPropertyDelegate.highlighted? palette.highlightedText: palette.text;

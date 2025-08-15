@@ -7,6 +7,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import org.krita.flake.text 1.0;
+import org.krita.components 1.0 as Kis
 
 Control {
     id: styleEdit;
@@ -30,14 +31,10 @@ Control {
         styleTypeCmb.currentIndex = styleTypeCmb.indexOfValue(styleType === "paragraph"? TextPropertyConfigModel.Paragraph: TextPropertyConfigModel.Character);
     }
 
-    PaletteControl {
-        id: styleEditPalette;
+    Kis.ThemedControl {
+        id: pal;
     }
-    SystemPalette {
-        id: sysPalette;
-        colorGroup: styleEditPalette.colorGroup;
-    }
-    palette: styleEditPalette.palette;
+    palette: pal.palette;
 
     background: Rectangle {
         color: palette.window;

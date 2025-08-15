@@ -7,22 +7,20 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
-
-Rectangle {
+Control {
     id: root;
-    color: sysPalette.window;
     anchors.fill: parent;
 
     property TextPropertyConfigModel configModel : textPropertyConfigModel;
     property double canvasDPI: 72.0;
-
-    PaletteControl {
-        id: paletteControl;
+    Kis.ThemedControl {
+        id: pal;
     }
-    SystemPalette {
-        id: sysPalette;
-        colorGroup: paletteControl.colorGroup;
+    palette: pal.palette;
+    background: Rectangle {
+        color: palette.window;
     }
 
     function setProperties() {
@@ -41,7 +39,6 @@ Rectangle {
         anchors.right: parent.right;
         anchors.left: parent.left;
         anchors.top: parent.top;
-        palette: paletteControl.palette;
         TabButton {
             text: i18nc("@title:tab", "Character")
         }
@@ -79,7 +76,6 @@ Rectangle {
             resourceType: "css_styles";
             Layout.fillHeight: true;
             Layout.fillWidth: true;
-            palette: paletteControl.palette;
 
             signal applyPreset;
             onApplyPreset: {
@@ -93,6 +89,7 @@ Rectangle {
                 width: ListView.view.width;
                 highlighted: delegateMouseArea.containsMouse;
                 property bool selected: presetView.currentIndex === model.index;
+                palette: presetView.palette;
                 contentItem: KoShapeQtQuickLabel {
                     implicitHeight: nameLabel.height * 4;
                     padding: nameLabel.height;
@@ -130,7 +127,7 @@ Rectangle {
                 }
                 background: Rectangle {
                     color: presetDelegate.highlighted? presetDelegate.palette.highlight: "transparent";
-                    border.color: presetDelegate.selected? presetDelegate.palette.highlight: presetDelegate.palette.base;
+                    border.color: presetDelegate.selected? presetDelegate.palette.highlight: presetDelegate.palette.mid;
                     border.width: presetDelegate.selected? 2: 1;
                 }
 
@@ -189,7 +186,7 @@ Rectangle {
                     icon.height: 16;
                     onClicked: mainWindow.editPreset(presetView.currentResource);
                     hoverEnabled: true;
-                    PaletteControl {
+                    Kis.ThemedControl {
                         id: editPalette;
                     }
                     palette: editPalette.palette;
@@ -208,7 +205,7 @@ Rectangle {
                     icon.height: 16;
                     onClicked: mainWindow.cloneAndEditPreset(presetView.currentResource);
                     hoverEnabled: true;
-                    PaletteControl {
+                    Kis.ThemedControl {
                         id: cloneButtonPalette;
                     }
                     palette: cloneButtonPalette.palette;

@@ -37,6 +37,8 @@ public:
     void notifyPixelGridModeChanged();
     void notifyColorHistoryModeChanged();
 
+    void notifyColorThemeChanged(const QString &filename);
+
 Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
@@ -45,6 +47,7 @@ Q_SIGNALS:
     void dropFramesModeChanged();
     void pixelGridModeChanged();
     void colorHistoryModeChanged();
+    void signalColorThemeChanged(const QString &filename);
 private:
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);

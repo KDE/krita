@@ -7,6 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     propertyTitle: i18nc("@label:listbox", "Direction");
@@ -81,9 +82,8 @@ TextPropertyBase {
             iconSize: 16;
             onActivated: direction = currentValue;
             wheelEnabled: true;
-            PaletteControl {
+            Kis.ThemedControl {
                 id: directionCmbPalette;
-                colorGroup: directionCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
             palette: directionCmbPalette.palette;
         }
@@ -120,9 +120,8 @@ TextPropertyBase {
             onActivated: unicodeBidi = currentValue;
             wheelEnabled: true;
 
-            PaletteControl {
+            Kis.ThemedControl {
                 id: unicodeBidiCmbPalette;
-                colorGroup: unicodeBidiCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
             palette: unicodeBidiCmbPalette.palette;
         }

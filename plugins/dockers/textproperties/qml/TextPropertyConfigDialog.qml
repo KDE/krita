@@ -7,6 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 /**
   This should be a dialog, but because qml doesn't get proper dialog handling till 6.8,
@@ -20,16 +21,12 @@ Control {
         defaultVisibilityCmb.currentIndex = defaultVisibilityCmb.indexOfValue(configModel.defaultVisibilityState);
     }
 
-    PaletteControl {
-        id: paletteControl;
-        colorGroup: control.enabled? SystemPalette.Active: SystemPalette.Disabled;
+    Kis.ThemedControl {
+        id: pal;
     }
-
-    palette: paletteControl.palette;
-
+    palette: pal.palette;
     background: Rectangle {
         color: palette.window;
-        anchors.fill: parent;
     }
 
     ColumnLayout {
@@ -53,6 +50,7 @@ Control {
 
                 textRole: "text";
                 valueRole: "value";
+                palette: control.palette;
                 Layout.preferredWidth: implicitWidth;
                 onActivated: {
                     if (control.configModel) {
@@ -68,7 +66,7 @@ Control {
             Layout.fillHeight: true;
             padding: 0;
             background: Rectangle {
-                color: palette.base;
+                color: control.palette.base;
             }
 
             ListView {
@@ -90,7 +88,7 @@ Control {
                     palette: control.palette;
 
                     background: Rectangle {
-                        color: "transparent";
+                        visible: false;
                     }
 
                     contentItem: RowLayout {

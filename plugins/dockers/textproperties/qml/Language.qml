@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.15
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     propertyTitle: i18nc("@title:group", "Language");
@@ -218,9 +219,8 @@ TextPropertyBase {
 
             editable: true;
 
-            PaletteControl {
+            Kis.ThemedControl {
                 id: scriptPalette;
-                colorGroup: scriptCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
             palette: scriptPalette.palette;
 

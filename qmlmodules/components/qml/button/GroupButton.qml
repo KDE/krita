@@ -5,7 +5,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import org.krita.components 1.0 as Kis
 
 /*
     \qmltype GroupButton
@@ -59,11 +59,9 @@ Button {
         GroupCenter //!< The button is on the center of the group, so it would have separators on both sides
     }
 
-    SystemPalette {
-        id: sysPalette;
-        colorGroup: root.enabled?
-                        root.activeFocus? SystemPalette.Active:
-                                          SystemPalette.Inactive: SystemPalette.Disabled;
+    Kis.Theme {
+        id: theme;
+        button.state: root.enabled? root.activeFocus? SystemPalette.Active: SystemPalette.Inactive: SystemPalette.Disabled;
     }
 
     /*
@@ -72,9 +70,9 @@ Button {
 
         /sa GroupPosition
     */
-    property int groupPosition: GroupButton.GroupPosition.NoGroup
-    palette.button: checked? sysPalette.highlight: sysPalette.button;
-    palette.buttonText: checked? sysPalette.highlightedText: sysPalette.buttonText
+    property int groupPosition: GroupButton.GroupPosition.NoGroup;
+    palette.button: checked? theme.selection.backgroundColor: theme.button.backgroundColor;
+    palette.buttonText: checked? theme.selection.textColor: theme.button.textColor;
 
     text: "Button"
     clip: true
@@ -89,7 +87,7 @@ Button {
         width: 1
         height: root.background.height
         anchors.right: parent.right
-        color: root.palette.buttonText;
+        color: palette.buttonText;
         opacity: 0.1;
         visible: root.groupPosition === GroupButton.GroupPosition.GroupLeft ||
                  root.groupPosition === GroupButton.GroupPosition.GroupCenter

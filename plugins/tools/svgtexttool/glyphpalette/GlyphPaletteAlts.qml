@@ -7,8 +7,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQml.Models 2.15
 import org.krita.tools.text 1.0
+import org.krita.components 1.0 as Kis
 
-Rectangle {
+Control {
     id: root;
     property QtObject glyphModel;
     property int parentIndex: 0;
@@ -24,12 +25,15 @@ Rectangle {
     property double fontSlant: 0.0;
     property var fontAxesValues;
     property string language: "";
-    SystemPalette {
-        id: sysPalette;
-        colorGroup: SystemPalette.Active
-    }
 
-    color: sysPalette.base;
+    Kis.ThemedControl {
+        id: pal;
+    }
+    palette: pal.palette;
+
+    background: Rectangle {
+        color: root.palette.base;
+    }
 
     GridView {
         anchors.fill: parent;
@@ -46,8 +50,7 @@ Rectangle {
             }
 
             delegate: GlyphDelegate {
-                textColor: hovered? sysPalette.highlightedText: sysPalette.text;
-                fillColor: hovered? sysPalette.highlight: sysPalette.base;
+                fillColor: "transparent";
                 fontFamilies: root.fontFamilies;
                 fontSize: root.fontSize;
                 fontStyle: root.fontStyle;

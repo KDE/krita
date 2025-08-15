@@ -46,6 +46,7 @@
 
 // Calligra
 #include <kis_icon.h>
+#include <kis_config_notifier.h>
 
 #ifdef __APPLE__
 #include <QStyle>
@@ -188,6 +189,7 @@ void ThemeManager::slotChangePalette()
     // hint for the style to synchronize the color scheme with the window manager/compositor
     qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
     qApp->setPalette(palette);
+    KisConfigNotifier::instance()->notifyColorThemeChanged(filename);
 
     Q_EMIT signalThemeChanged();
 }

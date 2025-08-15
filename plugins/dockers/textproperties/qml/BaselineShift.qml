@@ -115,7 +115,7 @@ TextPropertyBase {
                 onDValueChanged: if (enabled) baselineShiftUnitCmb.userValue = dValue;
                 palette: baselinePalette.palette;
                 blockUpdateSignalOnDrag: true;
-                PaletteControl {
+                Kis.ThemedControl {
                     id: baselinePalette;
                 }
             }

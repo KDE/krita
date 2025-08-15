@@ -30,14 +30,13 @@ GlyphPaletteAltPopup::GlyphPaletteAltPopup(QWidget *parent)
 
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    m_quickWidget->setPalette(this->palette());
-
     m_quickWidget->setSource(QUrl("qrc:/GlyphPaletteAlts.qml"));
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
     } else if (m_quickWidget->rootObject()){
         m_quickWidget->rootObject()->setProperty("columns", QVariant::fromValue(3));
     }
+    m_quickWidget->setPalette(this->palette());
 }
 
 GlyphPaletteAltPopup::~GlyphPaletteAltPopup()

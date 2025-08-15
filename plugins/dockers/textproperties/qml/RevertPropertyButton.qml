@@ -6,6 +6,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.0
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 Item {
     width: firstColumnWidth;
@@ -23,12 +24,16 @@ Item {
         id: revert;
         icon.width: 22;
         icon.height: 22;
-        icon.color: sysPalette.text;
+        icon.color: palette.text;
         enabled: revertState !== KoSvgTextPropertiesModel.PropertyUnset && revertState !== KoSvgTextPropertiesModel.PropertyInherited;
-        opacity: enabled? 1.0: 0.3;
         display: AbstractButton.IconOnly;
         icon.source: revertState === KoSvgTextPropertiesModel.PropertyTriState? "qrc:///light_edit-undo-tristate.svg": "qrc:///light_edit-undo.svg";
         onClicked: parent.clicked();
+
+        Kis.ThemedControl {
+            id: buttonPalette;
+        }
+        palette: buttonPalette.palette;
 
         ToolTip.text: revertState === KoSvgTextPropertiesModel.PropertyTriState? tristateText: setText;
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;

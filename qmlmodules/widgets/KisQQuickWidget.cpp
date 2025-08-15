@@ -39,6 +39,9 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
     engine()->rootContext()->setContextProperty("mainWindow", parent);
     engine()->rootContext()->setContextObject(new KLocalizedContext(parent));
 
+    // Clear color is the 'default background color', which, in qwidget context is the window bg.
+    setClearColor(palette().window().color());
+
     // Default to fusion style unless the user forces another style
     const QString fusion = "Fusion";
     if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE") && QQuickStyle::name() != fusion) {

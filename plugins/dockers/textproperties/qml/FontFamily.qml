@@ -7,6 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
     propertyTitle: i18nc("@label", "Font Family");
@@ -45,8 +46,7 @@ CollapsibleGroupProperty {
         Label {
             id: propertyTitleLabel;
             text: propertyTitle;
-            verticalAlignment: Text.AlignVCenter
-            color: sysPalette.text;
+            verticalAlignment: Text.AlignVCenter;
             elide: Text.ElideRight;
             Layout.maximumWidth: contentWidth;
 
@@ -61,9 +61,8 @@ CollapsibleGroupProperty {
                     fontFamilies = [ text ];
                 }
             }
-            PaletteControl {
+            Kis.ThemedControl {
                 id: mainCmbPalette;
-                colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
             }
             palette: mainCmbPalette.palette;
             function updateCurrentIndex() {
@@ -110,9 +109,8 @@ CollapsibleGroupProperty {
                         onActivated: {
                             fontFamilies[fontListDelegate.dIndex] = text;
                         }
-                        PaletteControl {
+                        Kis.ThemedControl {
                             id: fontCmbPalette;
-                            colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
                         }
                         palette: fontCmbPalette.palette;
                         Component.onCompleted: {

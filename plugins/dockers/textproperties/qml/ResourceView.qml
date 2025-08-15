@@ -7,6 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 Control {
     id: control;
@@ -99,6 +100,7 @@ Control {
                         id: assignToTag;
                         title: i18nc("@title:menu", "Assign to Tag");
                         height: contentChildren.height;
+                        palette: control.palette;
                         ListView {
                             id: tagAddView;
                             model: tagActionsContextMenu.resourceTaggedModel;
@@ -142,17 +144,14 @@ Control {
                         text: i18nc("@action:inmenu", "Remove from this tag");
                         icon.source: "qrc:///16_light_list-remove.svg";
                         icon.color: palette.text;
-                        PaletteControl {
-                            id: pal;
-                            colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
-                        }
-                        palette: pal.palette;
+                        palette: control.palette;
                         onTriggered: modelWrapper.untagResource(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
                     }
 
                     Menu {
                         id: removeFromTag;
                         title: i18nc("@title:menu", "Remove from other tag");
+                        palette: control.palette;
 
                         ListView {
                             id: tagRemoveView;

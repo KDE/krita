@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 import QtQuick 2.15
+import org.krita.components 1.0 as Kis
 
 /*
     \qmltype WarningOverlay
@@ -141,8 +142,12 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: Qt.rgba(1, 0.2, 0, 1)
+        color: theme.view.negativeBackgroundColor;
         opacity: 0
+
+        Kis.Theme {
+            id: theme;
+        }
     }
 
     Item {

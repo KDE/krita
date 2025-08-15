@@ -8,8 +8,9 @@ import QtQml.Models 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.15
 import org.krita.tools.text 1.0
+import org.krita.components 1.0 as Kis
 
-Rectangle {
+Control {
     id: root;
     anchors.fill: parent;
     property QtObject model: glyphModel;
@@ -24,11 +25,14 @@ Rectangle {
     property double fontSlant: 0.0;
     property var fontAxesValues: ({});
     property string language: "";
-    SystemPalette {
-        id: sysPalette;
-        colorGroup: SystemPalette.Active
+
+    Kis.ThemedControl {
+        id: pal;
     }
-    color: sysPalette.window
+    palette: pal.palette;
+    background: Rectangle {
+        color: root.palette.window;
+    }
 
     TabBar {
         id: tabs;
@@ -76,28 +80,36 @@ Rectangle {
             Layout.fillHeight: true;
             Layout.fillWidth: true;
             spacing: 1;
-            ListView {
-                id: charMapFilter
-                model: root.charMapModel.blockLabels;
+
+            Frame {
                 Layout.minimumWidth: 100;
                 Layout.maximumWidth: 200;
                 Layout.fillHeight: true;
                 Layout.fillWidth: true;
-
-                onCurrentIndexChanged: {
-                   root.charMapModel.blockFilter = currentIndex;
+                background: Rectangle {
+                    color: root.palette.base;
                 }
+                ListView {
+                    id: charMapFilter
+                    model: root.charMapModel.blockLabels;
+                    anchors.fill: parent;
 
-                clip: true;
-                delegate: ItemDelegate {
-                    width: charMapFilter !== undefined? charMapFilter.width: 0;
-                    text: modelData.name;
-                    highlighted: ListView.isCurrentItem;
-                    onClicked: {
-                        charMapFilter.currentIndex = modelData.value;
+                    onCurrentIndexChanged: {
+                        root.charMapModel.blockFilter = currentIndex;
                     }
-                }
-                ScrollBar.vertical: ScrollBar {
+
+                    clip: true;
+                    delegate: ItemDelegate {
+                        width: charMapFilter !== undefined? charMapFilter.width: 0;
+                        text: modelData.name;
+                        highlighted: ListView.isCurrentItem;
+                        onClicked: {
+                            charMapFilter.currentIndex = modelData.value;
+                        }
+                        palette: root.palette;
+                    }
+                    ScrollBar.vertical: ScrollBar {
+                    }
                 }
             }
 
@@ -106,8 +118,6 @@ Rectangle {
                 Layout.minimumWidth: 180;
                 Layout.fillHeight: true;
                 Layout.fillWidth: true;
-
-
 
                 TextField {
                     id: searchInput;
@@ -126,41 +136,48 @@ Rectangle {
                     ToolTip.visible: hovered;
                 }
 
-                GridView {
-                    id: charMap;
-                    model: root.charMapModel;
-                    focus: true;
-                    clip: true;
+                Frame {
                     Layout.fillHeight: true;
                     Layout.fillWidth: true;
-
-                    cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
-                    cellHeight: cellWidth;
-
-                    delegate: GlyphDelegate {
-                        textColor: hovered? sysPalette.highlightedText: sysPalette.text;
-                        fillColor: hovered? sysPalette.highlight: sysPalette.base;
-                        fontFamilies: root.fontFamilies;
-                        fontSize: root.fontSize;
-                        fontStyle: root.fontStyle;
-                        fontWeight: root.fontWeight;
-                        language: root.language;
-                        fontWidth: root.fontWidth;
-                        fontSlant: root.fontSlant;
-                        fontAxesValues: root.fontAxesValues === undefined? {}: root.fontAxesValues;
-                        onGlyphDoubleClicked: (index, mouse)=> {
-                                                  mainWindow.slotInsertRichText(index, -1, false, true)
-                                              };
-                        onGlyphClicked: (index, mouse)=> {
-                                            if (model.childCount > 1){
-                                                var entryPos = mapToItem(root, 0+width, 0);
-                                                mainWindow.slotShowPopupPalette(index, entryPos.x, entryPos.y, width, height)
-                                            }
-                                        }
+                    background: Rectangle {
+                        color: root.palette.base;
                     }
+                    padding:0;
+                    GridView {
+                        id: charMap;
+                        model: root.charMapModel;
+                        focus: true;
+                        clip: true;
+                        anchors.fill: parent;
 
-                    ScrollBar.vertical: ScrollBar {
-                        id: charMapScroll;
+
+                        cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
+                        cellHeight: cellWidth;
+
+                        delegate: GlyphDelegate {
+                            fillColor: "transparent";
+                            fontFamilies: root.fontFamilies;
+                            fontSize: root.fontSize;
+                            fontStyle: root.fontStyle;
+                            fontWeight: root.fontWeight;
+                            language: root.language;
+                            fontWidth: root.fontWidth;
+                            fontSlant: root.fontSlant;
+                            fontAxesValues: root.fontAxesValues === undefined? {}: root.fontAxesValues;
+                            onGlyphDoubleClicked: (index, mouse)=> {
+                                                      mainWindow.slotInsertRichText(index, -1, false, true)
+                                                  };
+                            onGlyphClicked: (index, mouse)=> {
+                                                if (model.childCount > 1){
+                                                    var entryPos = mapToItem(root, 0+width, 0);
+                                                    mainWindow.slotShowPopupPalette(index, entryPos.x, entryPos.y, width, height)
+                                                }
+                                            }
+                        }
+
+                        ScrollBar.vertical: ScrollBar {
+                            id: charMapScroll;
+                        }
                     }
                 }
             }

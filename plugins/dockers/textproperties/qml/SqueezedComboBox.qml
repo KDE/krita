@@ -6,6 +6,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import org.krita.components 1.0 as Kis
 /**
   This is a QML Interpretation of KisSqueezedComboBox, where the main combobox button is resized and elided,
   but the pop-up is scaled so all items fit inside.

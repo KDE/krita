@@ -241,7 +241,7 @@ void KoShapeQtQuickLabel::updateShapes()
 
 void KoShapeQtQuickLabel::callUpdateIfComplete()
 {
-    if (isComponentComplete() && isVisible()) {
+    if (isComponentComplete()) {
         update(boundingRect().toAlignedRect());
     }
 }

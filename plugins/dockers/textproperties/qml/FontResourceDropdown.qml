@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.15
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 Button {
     id: familyCmb;
@@ -19,6 +20,11 @@ Button {
         id: modelWrapperId;
         resourceType: "fontfamilies";
     };
+
+    Kis.ThemedControl {
+        id: palControl;
+    }
+    palette: palControl.palette;
 
     /// Ideally we'd have the max popup height be Window-height - y-pos-of-item-to-window.
     /// But that's pretty hard to calculate (map to global is screen relative, but there's

@@ -8,7 +8,7 @@
 
 #include <QObject>
 #include <KoDialog.h>
-#include <QQuickWidget>
+#include <KisQQuickWidget.h>
 
 #include "TextPropertyConfigModel.h"
 
@@ -22,7 +22,7 @@ public:
     void setTextPropertyConfigModel(TextPropertyConfigModel *model);
     TextPropertyConfigModel *model();
 private:
-    QQuickWidget *m_quickWidget {0};
+    KisQQuickWidget *m_quickWidget {0};
     TextPropertyConfigModel *m_model;
 };
 

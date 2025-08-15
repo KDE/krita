@@ -42,7 +42,6 @@
         <file alias="font-type-opentype.svg">icons/font-type-opentype.svg</file>
         <file alias="font-type-postscript.svg">icons/font-type-postscript.svg</file>
         <file alias="font-type-opentype-variable.svg">icons/font-type-opentype-variable.svg</file>
-        <file alias="PaletteControl.qml">qml/PaletteControl.qml</file>
         <file alias="SqueezedComboBox.qml">qml/SqueezedComboBox.qml</file>
         <file alias="OpenTypeFeatureSettings.qml">qml/OpenTypeFeatureSettings.qml</file>
         <file alias="OpenTypeFeatureDelegate.qml">qml/OpenTypeFeatureDelegate.qml</file>

@@ -29,7 +29,6 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     this->setMainWidget(m_quickWidget);
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    m_quickWidget->setPalette(this->palette());
     this->setWindowTitle(i18nc("@title:window", "Glyph Palette"));
 
     m_charMapModel->setSourceModel(m_model);
@@ -44,6 +43,7 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
     }
     connect(m_altPopup, SIGNAL(sigInsertRichText(int,int,bool,bool)), this, SLOT(slotInsertRichText(int,int,bool,bool)));
+    m_quickWidget->setPalette(this->palette());
 }
 
 GlyphPaletteDialog::~GlyphPaletteDialog()

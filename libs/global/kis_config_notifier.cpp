@@ -54,3 +54,8 @@ void KisConfigNotifier::notifyColorHistoryModeChanged()
 {
     Q_EMIT colorHistoryModeChanged();
 }
+
+void KisConfigNotifier::notifyColorThemeChanged(const QString &filename)
+{
+    Q_EMIT signalColorThemeChanged(filename);
+}

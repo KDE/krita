@@ -6,6 +6,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 Column {
     id: root;
@@ -61,8 +62,7 @@ Column {
         children.push(seperator);
     }
 
-    property PaletteControl propertyBasePalette: PaletteControl {
-        colorGroup: enabled? SystemPalette.Active: SystemPalette.Disabled;
+    property Kis.ThemedControl propertyBasePalette: Kis.ThemedControl {
     }
 
     MenuSeparator {

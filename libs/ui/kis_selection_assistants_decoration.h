@@ -38,6 +38,8 @@ public:
     bool eventFilter(QObject *obj, QEvent *event) override;
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
     QPushButton* createButton(const QString &iconName, const QString &tooltip);
+    void setupButtons();
+    void drawActionBarBackground(QPainter& gc);
 
 private:
     struct Private;

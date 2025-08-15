@@ -33,26 +33,39 @@
 
 class KisSelectionManager;
 
+struct ActionButtonData {
+    QString iconName;
+    QString tooltip;
+    void (KisSelectionManager::*slot)();
+};
+
 struct KisSelectionAssistantsDecoration::Private {
     Private()
     {}
     KisCanvas2 * m_canvas = 0;
-    QPushButton *buttonSelectAll = nullptr;
-    QPushButton *buttonDeselect = nullptr;
-    QPushButton *buttonCopyToNewLayer = nullptr;
-    QPushButton *buttonInvert = nullptr;
-    QPushButton *buttonFillForegroundColor = nullptr;
-    QPushButton *buttonCropToSelection = nullptr;
     KisSelectionManager *selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
     QPoint dragRectPosition = QPoint(0, 0);
     bool dragging = false;
     QPoint dragStartOffset;
-    int buttonCount = 7; // buttons + move handle
+    bool selectionActive = false;
     int buttonSize = 25;
     int bufferSpace = 5;
+
+    QVector<QPushButton*> buttons;
+    static const QVector<ActionButtonData>& buttonData() {
+        static const QVector<ActionButtonData> data = {
+            { "select-all", "Select All", &KisSelectionManager::selectAll },
+            { "select-clear", "Deselect", &KisSelectionManager::deselect },
+            { "duplicatelayer", "Copy To New Layer", &KisSelectionManager::copySelectionToNewLayer },
+            { "", "Invert Selection", &KisSelectionManager::invert },
+            { "krita_tool_color_fill", "Fill Selection with Color", &KisSelectionManager::fillForegroundColor },
+            { "tool_crop", "Crop to Selection", &KisSelectionManager::imageResizeToSelection }
+        };
+        return data;
+    }
+    int buttonCount = buttonData().size() + 1; // buttons + drag handle
     int actionBarWidth = buttonCount * buttonSize;
-    bool selectionActive = false;
 };
 
 KisSelectionAssistantsDecoration::KisSelectionAssistantsDecoration() :
@@ -95,82 +108,18 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
 
     d->dragRectPosition = updateCanvasBoundaries(d->dragRectPosition, canvasWidget);
 
-    if (!d->buttonSelectAll) {
-        d->buttonSelectAll = createButton("select-all", "Select All");
-        connect(d->buttonSelectAll, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::selectAll);
+    setupButtons();
+
+    for (int i = 0; i < d->buttons.size(); i++) {
+        QPushButton *btn = d->buttons[i];
+        if (canvasWidget && m_selectionActionBar) {
+            int buttonPosition = i * d->buttonSize;
+            btn->setParent(canvasWidget);
+            btn->show();
+            btn->move(d->dragRectPosition.x() + buttonPosition, d->dragRectPosition.y());
+        } else {
+            btn->hide();
         }
-
-    if (!d->buttonDeselect) {
-        d->buttonDeselect = createButton("select-clear", "Deselect");
-        connect(d->buttonDeselect, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::deselect);
-    }
-
-    if (!d->buttonCopyToNewLayer) {
-        d->buttonCopyToNewLayer = createButton("duplicatelayer", "Copy To New Layer");
-        connect(d->buttonCopyToNewLayer, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::copySelectionToNewLayer);
-    }
-
-    if (!d->buttonInvert) {
-        d->buttonInvert = createButton("", "Invert Selection");
-        connect(d->buttonInvert, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::invert);
-    }
-
-    if (!d->buttonFillForegroundColor) {
-        d->buttonFillForegroundColor = createButton("krita_tool_color_fill", "Fill Selection with Color");
-        connect(d->buttonFillForegroundColor, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::fillForegroundColor);
-    }
-
-    if (!d->buttonCropToSelection) {
-        d->buttonCropToSelection = createButton("tool_crop", "Crop to Selection");
-        connect(d->buttonCropToSelection, &QPushButton::clicked, d->selectionManager, &KisSelectionManager::imageResizeToSelection);
-    }
-
-    if (canvasWidget && d->buttonSelectAll && m_selectionActionBar) {
-        d->buttonSelectAll->setParent(canvasWidget);
-        d->buttonSelectAll->move(d->dragRectPosition.x(), d->dragRectPosition.y());
-        d->buttonSelectAll->show();
-    } else if (d->buttonSelectAll) {
-        d->buttonSelectAll->hide();
-    }
-
-    if (canvasWidget && d->buttonDeselect && m_selectionActionBar) {
-        d->buttonDeselect->setParent(canvasWidget);
-        d->buttonDeselect->move(d->dragRectPosition.x() + 25, d->dragRectPosition.y());
-        d->buttonDeselect->show();
-    } else if (d->buttonDeselect) {
-        d->buttonDeselect->hide();
-    }
-
-    if (canvasWidget && d->buttonCopyToNewLayer && m_selectionActionBar) {
-        d->buttonCopyToNewLayer->setParent(canvasWidget);
-        d->buttonCopyToNewLayer->move(d->dragRectPosition.x() + 50, d->dragRectPosition.y());
-        d->buttonCopyToNewLayer->show();
-    } else if (d->buttonCopyToNewLayer) {
-        d->buttonCopyToNewLayer->hide();
-    }
-
-    if (canvasWidget && d->buttonInvert && m_selectionActionBar) {
-        d->buttonInvert->setParent(canvasWidget);
-        d->buttonInvert->move(d->dragRectPosition.x() + 75, d->dragRectPosition.y());
-        d->buttonInvert->show();
-    } else if (d->buttonInvert) {
-        d->buttonInvert->hide();
-    }
-
-    if (canvasWidget && d->buttonFillForegroundColor && m_selectionActionBar) {
-        d->buttonFillForegroundColor->setParent(canvasWidget);
-        d->buttonFillForegroundColor->move(d->dragRectPosition.x() + 100, d->dragRectPosition.y());
-        d->buttonFillForegroundColor->show();
-    } else if (d->buttonFillForegroundColor) {
-        d->buttonFillForegroundColor->hide();
-    }
-
-    if (canvasWidget && d->buttonCropToSelection && m_selectionActionBar) {
-        d->buttonCropToSelection->setParent(canvasWidget);
-        d->buttonCropToSelection->move(d->dragRectPosition.x() + 125, d->dragRectPosition.y());
-        d->buttonCropToSelection->show();
-    } else if (d->buttonCropToSelection) {
-        d->buttonCropToSelection->hide();
     }
 
     if (!m_selectionActionBar) {
@@ -178,37 +127,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF
         return;
     }
 
-    QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(d->dragRectPosition, QSize(25 * (d->buttonCount), 25)), 4, 4);
-    gc.fillPath(bgPath, Qt::darkGray);
-
-    QPen pen(QColor(60, 60, 60, 80));
-    pen.setWidth(5);
-    gc.setPen(pen);
-
-    gc.drawPath(bgPath);
-
-    QPainterPath dragRect;
-    int width = 25;
-    int height = 25;
-    dragRect.addRect(QRectF(d->dragRectPosition.x() + (25 * d->buttonCount+1), d->dragRectPosition.y(), width, height));
-    gc.fillPath(bgPath.intersected(dragRect), Qt::darkGray);
-
-    QPainterPath dragRectDots;
-    QColor dragDecorationDotsColor(Qt::lightGray);
-    int dotSize = 4;
-    dragRectDots.addEllipse(0,0,dotSize,dotSize);
-    dragRectDots.addEllipse(5,-5,dotSize,dotSize);
-    dragRectDots.addEllipse(5,0,dotSize,dotSize);
-    dragRectDots.addEllipse(5,5,dotSize,dotSize);
-    dragRectDots.addEllipse(0,-5,dotSize,dotSize);
-    dragRectDots.addEllipse(0,5,dotSize,dotSize);
-    dragRectDots.addEllipse(-5,-5,dotSize,dotSize);
-    dragRectDots.addEllipse(-5,0,dotSize,dotSize);
-    dragRectDots.addEllipse(-5,5,dotSize,dotSize);
-    dragRectDots.translate(d->dragRectPosition.x() + 160, d->dragRectPosition.y() + 10);
-
-    gc.fillPath(dragRectDots,dragDecorationDotsColor);
+    drawActionBarBackground(gc);
 }
 
 bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
@@ -262,4 +181,62 @@ QPushButton* KisSelectionAssistantsDecoration::createButton(const QString &iconN
     button->setFixedSize(d->buttonSize, d->buttonSize);
     button->setToolTip(tooltip);
     return button;
+}
+
+void KisSelectionAssistantsDecoration::setupButtons()
+{
+    if (!d->buttons.isEmpty()) return;
+
+    for (const ActionButtonData &buttonData : Private::buttonData()) {
+        QPushButton *button = createButton(buttonData.iconName, buttonData.tooltip);
+        connect(button, &QPushButton::clicked, d->selectionManager, buttonData.slot);
+        d->buttons.append(button);
+    }
+}
+
+void KisSelectionAssistantsDecoration::drawActionBarBackground(QPainter& gc)
+{
+    int cornerRadius = 4;
+    int penWidth = 5;
+    QColor backgroundColor = Qt::darkGray;
+    QColor outlineColor(60, 60, 60, 80);
+    QColor dotColor = Qt::lightGray;
+    int dotSize = 4;
+    int dotSpacing = 5;
+    QPoint dragHandleRectDotsOffset(10, 10);
+
+    QRectF actionBarRect(d->dragRectPosition, QSize(d->actionBarWidth, d->buttonSize));
+    QPainterPath bgPath;
+    bgPath.addRoundedRect(actionBarRect, cornerRadius, cornerRadius);
+    gc.fillPath(bgPath, backgroundColor);
+
+    QPen pen(outlineColor);
+    pen.setWidth(penWidth);
+    gc.setPen(pen);
+    gc.drawPath(bgPath);
+
+    QRectF dragHandleRect(QPoint(d->dragRectPosition.x() + d->actionBarWidth - d->buttonSize, d->dragRectPosition.y()), QSize(d->buttonSize, d->buttonSize));
+    QPainterPath dragHandlePath;
+    dragHandlePath.addRect(dragHandleRect);
+    gc.fillPath(dragHandlePath, backgroundColor);
+
+    const std::list<std::pair<int, int>> offsets = {
+        {0, 0},
+        {dotSpacing, 0},
+        {-dotSpacing, 0},
+        {0, dotSpacing},
+        {0, -dotSpacing},
+        {dotSpacing, dotSpacing},
+        {dotSpacing, -dotSpacing},
+        {-dotSpacing, dotSpacing},
+        {-dotSpacing, -dotSpacing}
+    };
+
+    QPainterPath dragHandleRectDots;
+    for (const std::pair<int, int> &offset : offsets) {
+        dragHandleRectDots.addEllipse(offset.first, offset.second, dotSize, dotSize);
+    };
+
+    dragHandleRectDots.translate(dragHandleRect.topLeft() + dragHandleRectDotsOffset);
+    gc.fillPath(dragHandleRectDots, dotColor);
 }

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-12 15:13+0300\n"
+"PO-Revision-Date: 2025-08-15 20:34+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16457,11 +16457,10 @@ msgid "Fit Height"
 msgstr "Yüksekliğe Sığdır"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Biçem Dosyası"
+msgstr "Biçem Örneği"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23931,11 +23930,10 @@ msgid "Font Families"
 msgstr "Yazıtipi Aileleri"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Biçem Dosyası"
+msgstr "Biçem Önayarları"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -34361,10 +34359,9 @@ msgid "Font Families"
 msgstr "Yazıtipi Aileleri"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "Biçem Dosyası"
+msgstr "Biçem Önayarları"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -45004,11 +45001,10 @@ msgid "Percentage (%)"
 msgstr "Yüzde (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Önayarları Düzenle"
+msgstr "Biçem Önayarını Düzenle"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -45064,12 +45060,10 @@ msgid "Text Properties"
 msgstr "Metin Özellikleri"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Yeni Biçem"
+msgstr "Yeni Biçem Önayarı"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format

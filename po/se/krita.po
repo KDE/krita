@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-12 02:03+0000\n"
+"POT-Creation-Date: 2025-08-15 02:17+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -1025,16 +1025,16 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_dotted-flat."
-"png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_dotted-"
+"flat.png"
 msgid "3 dotted-flat"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-brush."
-"png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-"
+"brush.png"
 msgid "3 flat-brush"
 msgstr ""
 
@@ -1099,16 +1099,16 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"A_Nice_sketch.gbr"
 msgid "A_Nice Sketch"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch2."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"A_Nice_sketch2.gbr"
 msgid "A_Nice Sketch2"
 msgstr ""
 
@@ -1180,8 +1180,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-spot."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-"
+"spot.gbr"
 msgid "A_dirty-spot"
 msgstr ""
 
@@ -1196,8 +1196,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_lucky_star."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"A_lucky_star.gbr"
 msgid "A-5 Lucky-star"
 msgstr ""
 
@@ -1227,8 +1227,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_reptile-skin."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_reptile-"
+"skin.gbr"
 msgid "A_reptile-skin"
 msgstr ""
 
@@ -1270,8 +1270,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_starfield2."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"A_starfield2.gbr"
 msgid "A_starfield2"
 msgstr ""
 
@@ -1285,8 +1285,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/C_Dirty_Spot."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"C_Dirty_Spot.gbr"
 msgid "C_Dirty_Spot"
 msgstr ""
 
@@ -1300,8 +1300,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/D_Normal_dust."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"D_Normal_dust.gbr"
 msgid "D_Normal dust"
 msgstr ""
 
@@ -1500,8 +1500,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_Softer."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"O_Oils_Softer.gbr"
 msgid "O_Oils Softer"
 msgstr ""
 
@@ -1536,8 +1536,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake_small."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"R_Rake_small.gbr"
 msgid "R_Rake_small"
 msgstr ""
 
@@ -1566,24 +1566,24 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Sc_Scratches.gbr"
 msgid "Sc_Scratches"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches_2."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Sc_Scratches_2.gbr"
 msgid "Sc_Scratches2"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches_3."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Sc_Scratches_3.gbr"
 msgid "Sc_Scratches3"
 msgstr ""
 
@@ -1691,8 +1691,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Pixel_Cross."
-"gbr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Z_Pixel_Cross.gbr"
 msgid "Z_Pixel Cross"
 msgstr ""
 
@@ -2488,8 +2488,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/Sketch."
-"kpp"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
+"Sketch.kpp"
 msgid "Sketch"
 msgstr ""
 
@@ -2800,40 +2800,40 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
-"kpp"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
+"pixel1.kpp"
 msgid "pixel1"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Animation."
-"kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
+"Animation.kws"
 msgid "Animation"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint."
-"kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
+"Big_Paint.kws"
 msgid "Big Paint"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint_2."
-"kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
+"Big_Paint_2.kws"
 msgid "Big Paint 2"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
-"kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
+"Big_Vector.kws"
 msgid "Big Vector"
 msgstr ""
 
@@ -2862,8 +2862,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/VFX_Paint."
-"kws"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
+"VFX_Paint.kws"
 msgid "VFX Paint"
 msgstr ""
 
@@ -2885,8 +2885,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-"patterns/02b_WoofTissue.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"02b_WoofTissue.png"
 msgid "02b WoofTissue"
 msgstr ""
 
@@ -2917,16 +2917,16 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-grain."
-"png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-"
+"grain.png"
 msgid "06 hard-grain"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/07_big-grain."
-"png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/07_big-"
+"grain.png"
 msgid "07 big-grain"
 msgstr ""
 
@@ -2941,8 +2941,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-"patterns/09_drawed_crosshatched.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
 msgstr ""
 
@@ -2957,32 +2957,32 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-"patterns/10_drawed_dotted.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"10_drawed_dotted.png"
 msgid "10 drawed dotted"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-"patterns/11_drawed_furry.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"11_drawed_furry.png"
 msgid "11 drawed furry"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-"patterns/12_drawed_vertical.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"12_drawed_vertical.png"
 msgid "12 drawed vertical"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-"patterns/13_drawed_swirl.png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"13_drawed_swirl.png"
 msgid "13 drawed swirl"
 msgstr ""
 
@@ -3029,8 +3029,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18b_WaveFlex."
-"png"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"18b_WaveFlex.png"
 msgid "18b WaveFlex"
 msgstr ""
 
@@ -3101,8 +3101,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Canvas_Hard."
-"pat"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"Canvas_Hard.pat"
 msgid "Canvas 01"
 msgstr ""
 
@@ -3233,8 +3233,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/HR_Wall_Paper."
-"pat"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"HR_Wall_Paper.pat"
 msgid "HR Wall Paper"
 msgstr ""
 
@@ -3468,8 +3468,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/hexacolBW__2."
-"pat"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
+"hexacolBW__2.pat"
 msgid "Hexacol BW By Tarkan"
 msgstr ""
 
@@ -3484,8 +3484,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bokey_circle."
-"gbr"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"bokey_circle.gbr"
 msgid "U Circle shape 5"
 msgstr ""
 
@@ -3562,8 +3562,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_sparse."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"chalk_sparse.png"
 msgid "chalk sparse"
 msgstr ""
 
@@ -3578,16 +3578,16 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_eroded."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"chisel_eroded.png"
 msgid "chisel eroded"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_knife."
-"gbr"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"chisel_knife.gbr"
 msgid "chisel_knife"
 msgstr ""
 
@@ -3601,8 +3601,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_streaks."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"chisel_streaks.png"
 msgid "chisel streaks"
 msgstr ""
 
@@ -3709,8 +3709,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-debris."
-"gbr"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-"
+"debris.gbr"
 msgid "flat-tip-dirty"
 msgstr ""
 
@@ -3766,8 +3766,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spike_eroded."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"spike_eroded.png"
 msgid "spike eroded"
 msgstr ""
 
@@ -3788,16 +3788,16 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_eroded."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"square_eroded.png"
 msgid "square eroded"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_rough."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"square_rough.png"
 msgid "square rough"
 msgstr ""
 
@@ -4901,8 +4901,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-"patterns/02b_WoofTissue.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"02b_WoofTissue.png"
 msgid "02b WoofTissue"
 msgstr ""
 
@@ -4933,8 +4933,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/06_hard-grain."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/06_hard-"
+"grain.png"
 msgid "06 hard-grain"
 msgstr ""
 
@@ -4949,8 +4949,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-"patterns/09_drawed_crosshatched.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
 msgstr ""
 
@@ -4965,32 +4965,32 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-"patterns/10_drawed_dotted.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"10_drawed_dotted.png"
 msgid "10 drawed dotted"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-"patterns/11_drawed_furry.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"11_drawed_furry.png"
 msgid "11 drawed furry"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-"patterns/12_drawed_vertical.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"12_drawed_vertical.png"
 msgid "12 drawed vertical"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-"patterns/13_drawed_swirl.png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"13_drawed_swirl.png"
 msgid "13 drawed swirl"
 msgstr ""
 
@@ -5037,8 +5037,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18b_WaveFlex."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"18b_WaveFlex.png"
 msgid "18b WaveFlex"
 msgstr ""
 
@@ -5233,8 +5233,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/hexacolBW__2."
-"pat"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"hexacolBW__2.pat"
 msgid "Hexacol BW By Tarkan"
 msgstr ""
 
@@ -5249,8 +5249,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/HR_Wall_Paper."
-"pat"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"HR_Wall_Paper.pat"
 msgid "HR Wall Paper"
 msgstr ""
 
@@ -5306,8 +5306,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Rough_Paper."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"Rough_Paper.png"
 msgid "Rough Paper"
 msgstr ""
 
@@ -5399,8 +5399,8 @@ msgstr ""
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Stars_Sized."
-"png"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
+"Stars_Sized.png"
 msgid "Stars Sized"
 msgstr ""
 
@@ -5805,8 +5805,8 @@ msgstr ""
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-dry."
-"kpp"
+"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-"
+"dry.kpp"
 msgid "m) RGBA 01 Thick-dry"
 msgstr ""
 
@@ -5831,8 +5831,8 @@ msgstr ""
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_04_Impasto."
-"kpp"
+"./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/"
+"m)_RGBA_04_Impasto.kpp"
 msgid "m) RGBA 04 Impasto"
 msgstr ""
 
@@ -5894,8 +5894,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-brush.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-brush."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-"
+"brush.gih"
 msgid "A - 2 Dirty Brush2"
 msgstr ""
 
@@ -5975,8 +5975,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-dust.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-dust."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_fairy-"
+"dust.gih"
 msgid "A-4 Fairy Dust"
 msgstr ""
 
@@ -6016,8 +6016,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-floor.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-floor."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_grass-"
+"floor.gih"
 msgid "A-4 Grass-Floor"
 msgstr ""
 
@@ -6126,8 +6126,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-texture.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-texture."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_wall-"
+"texture.gih"
 msgid "A-4 Wall"
 msgstr ""
 
@@ -6144,8 +6144,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured1.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured1."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Flat_textured1.gih"
 msgid "Flat_textured1"
 msgstr ""
 
@@ -6153,8 +6153,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured2.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured2."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Flat_textured2.gih"
 msgid "Flat_textured2"
 msgstr ""
 
@@ -6292,8 +6292,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured1.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured1."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Rect_textured1.gih"
 msgid "Rect_textured1"
 msgstr ""
 
@@ -6301,8 +6301,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured2.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured2."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Rect_textured2.gih"
 msgid "Rect_textured2"
 msgstr ""
 
@@ -6310,8 +6310,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured3.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured3."
-"gih"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
+"Rect_textured3.gih"
 msgid "Rect_textured3"
 msgstr ""
 
@@ -6486,8 +6486,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-Glare.ggr:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-Glare."
-"ggr"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-FG-"
+"Glare.ggr"
 msgid "GPS FG Glare"
 msgstr ""
 
@@ -6654,8 +6654,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16.gpl:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16."
-"gpl"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/"
+"pixelart-16.gpl"
 msgid "PixelArt 16"
 msgstr ""
 
@@ -6663,8 +6663,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32.gpl:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32."
-"gpl"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/"
+"pixelart-32.gpl"
 msgid "PixelArt 32"
 msgstr ""
 
@@ -6679,8 +6679,8 @@ msgstr ""
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk.gpl:2
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk."
-"gpl"
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-"
+"cmyk.gpl"
 msgid "Swatch CMYK"
 msgstr ""
 
@@ -6747,8 +6747,8 @@ msgstr ""
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel."
-"gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"chalk_chisel.gih"
 msgid "Chalk Chisel"
 msgstr ""
 
@@ -6808,8 +6808,8 @@ msgstr ""
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain."
-"gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"graphite_grain.gih"
 msgid "Graphite Grain"
 msgstr ""
 
@@ -6867,8 +6867,8 @@ msgstr ""
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/paint_splats.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/paint_splats."
-"gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"paint_splats.gih"
 msgid "Paint Splats"
 msgstr ""
 
@@ -6876,8 +6876,8 @@ msgstr ""
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-vegetal.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-vegetal."
-"gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-"
+"vegetal.gih"
 msgid "A-4 random vegetal2"
 msgstr ""
 
@@ -6901,8 +6901,8 @@ msgstr ""
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_scraped.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_scraped."
-"gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"rock_scraped.gih"
 msgid "rock_scraped"
 msgstr ""
 
@@ -6954,8 +6954,8 @@ msgstr ""
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large.gih:1
 #, kde-format
 msgctxt ""
-"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large."
-"gih"
+"./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
+"splats_large.gih"
 msgid "S_Splats 2"
 msgstr ""
 
@@ -15949,8 +15949,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr ""
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:449
-#: libs/ui/KisApplication.cpp:727
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:452
+#: libs/ui/KisApplication.cpp:730
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16413,7 +16413,13 @@ msgstr ""
 msgid "Fit Height"
 msgstr ""
 
-#: libs/flake/svg/SvgParser.cpp:1882
+#: libs/flake/resources/KoCssStylePreset.cpp:32
+#, kde-format
+msgctxt "info:placeholder"
+msgid "Style Sample"
+msgstr ""
+
+#: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -20029,30 +20035,30 @@ msgid "Character Variant %1"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1635
+#: libs/flake/text/KoSvgTextShape.cpp:1750
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1614
+#: libs/flake/text/KoSvgTextShape.cpp:1729
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1616
-#: libs/flake/text/KoSvgTextShape.cpp:1624
+#: libs/flake/text/KoSvgTextShape.cpp:1731
+#: libs/flake/text/KoSvgTextShape.cpp:1739
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1622
+#: libs/flake/text/KoSvgTextShape.cpp:1737
 #, kde-format
 msgid "SVG Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1645
+#: libs/flake/text/KoSvgTextShape.cpp:1760
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23287,10 +23293,10 @@ msgstr ""
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1110
-#: libs/ui/KisApplication.cpp:1113 libs/ui/KisApplication.cpp:1129
-#: libs/ui/KisApplication.cpp:1161 libs/ui/KisApplication.cpp:1175
-#: libs/ui/KisApplication.cpp:1203 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1113
+#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1164 libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1206 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:970 libs/ui/KisMainWindow.cpp:1040
@@ -23609,94 +23615,100 @@ msgstr ""
 msgid "Invalid"
 msgstr "Gustohis"
 
-#: libs/resources/KisResourceTypes.cpp:44
+#: libs/resources/KisResourceTypes.cpp:45
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:47
 #, kde-format
 msgctxt "resource type"
 msgid "Gradients"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:48
 #, kde-format
 msgctxt "resource type"
 msgid "Palettes"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:49
 #, kde-format
 msgctxt "resource type"
 msgid "Patterns"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:50
 #, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:51
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:53
 #, kde-format
 msgctxt "resource type"
 msgid "Sessions"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:54
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:55
 #, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:56
 #, kde-format
 msgctxt "resource type"
 msgid "Filter Effects"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:56
+#: libs/resources/KisResourceTypes.cpp:57
 #, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:57
+#: libs/resources/KisResourceTypes.cpp:58
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr ""
 
-#: libs/resources/KisResourceTypes.cpp:58
+#: libs/resources/KisResourceTypes.cpp:59
 #, kde-format
 msgctxt "resource type"
 msgid "Font Families"
+msgstr ""
+
+#: libs/resources/KisResourceTypes.cpp:60
+#, kde-format
+msgctxt "resource type"
+msgid "Style Presets"
 msgstr ""
 
 #: libs/resources/KisStorageModel.cpp:465
@@ -23839,6 +23851,7 @@ msgstr ""
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -24608,13 +24621,13 @@ msgstr ""
 msgid "ffmpeg could not be found at %1"
 msgstr ""
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr ""
 
-#: libs/ui/animation/KisVideoSaver.cpp:199
+#: libs/ui/animation/KisVideoSaver.cpp:198
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -25967,8 +25980,8 @@ msgstr ""
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
 "translation teams all over the world.</p><p>For more information on KDE "
-"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
-"org</a></p>"
+"internationalization visit <a href=\"http://l10n.kde.org\">http://"
+"l10n.kde.org</a></p>"
 msgstr ""
 
 #: libs/ui/dialogs/kis_about_application.cpp:92
@@ -25977,8 +25990,8 @@ msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p "
 "align=\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></"
 "a> <h2 align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a "
-"href=\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic."
-"png\"></a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img "
+"href=\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/"
+"epic.png\"></a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img "
 "src=\":/broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-"
 "chuck.com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a "
 "href=\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> "
@@ -29509,8 +29522,8 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1636
 #, kde-format
 msgid ""
-"Some applications may emulate presses of function keys with high numbers (e."
-"g. F22) to bring themselves to the foreground. This may break Krita's "
+"Some applications may emulate presses of function keys with high numbers "
+"(e.g. F22) to bring themselves to the foreground. This may break Krita's "
 "shortcuts and actions system. If you have a keyboard with F13 or higher "
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
@@ -30726,8 +30739,8 @@ msgstr ""
 #, kde-format
 msgid ""
 "<html><head/><body><p>Size limit after which the frames will be scaled down</"
-"p><p><span style=\" font-weight:600;\">Recommended value:</span> 2500&nbsp;"
-"px</p></body></html>"
+"p><p><span style=\" font-weight:600;\">Recommended value:</span> "
+"2500&nbsp;px</p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
@@ -31197,7 +31210,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:389
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:391
 #, kde-format
 msgid "Sessions"
 msgstr "Bargovuorut"
@@ -32672,7 +32685,7 @@ msgstr ""
 msgid "&Docker Box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:385
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:387
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -32686,8 +32699,8 @@ msgstr "Minsttarat"
 msgid "Custom Pattern"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:370
-#: libs/ui/KisApplication.cpp:371
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -33420,9 +33433,9 @@ msgstr ""
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
-"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-"html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-"Started</span></a></p>"
+"<p><a href=\"https://docs.krita.org/en/user_manual/"
+"getting_started.html\"><span style=\" text-decoration: underline; color:"
+"%1;\">Getting Started</span></a></p>"
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:236
@@ -33555,20 +33568,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:364
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:365 libs/ui/KisApplication.cpp:366
 #: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:369 libs/ui/KisApplication.cpp:370
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/KisApplication.cpp:375
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -33576,7 +33589,7 @@ msgstr ""
 msgid "Palettes"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:386 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -33584,39 +33597,44 @@ msgstr ""
 msgid "Workspaces"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:387
+#: libs/ui/KisApplication.cpp:389
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:390 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:390
+#: libs/ui/KisApplication.cpp:392
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:392
+#: libs/ui/KisApplication.cpp:394
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:397
+#: libs/ui/KisApplication.cpp:399
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:400
+#: libs/ui/KisApplication.cpp:402
 #, kde-format
 msgid "Font Families"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:412
+#: libs/ui/KisApplication.cpp:403
+#, kde-format
+msgid "Style Presets"
+msgstr ""
+
+#: libs/ui/KisApplication.cpp:415
 #, kde-format
 msgid ""
 "%1\n"
@@ -33624,13 +33642,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:415 libs/ui/KisApplication.cpp:421
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:418
+#: libs/ui/KisApplication.cpp:421
 #, kde-format
 msgid ""
 "\n"
@@ -33638,7 +33656,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:453
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -33646,65 +33664,65 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:467
+#: libs/ui/KisApplication.cpp:470
 #, kde-format
 msgid "Initializing Globals..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:499
+#: libs/ui/KisApplication.cpp:502
 #, kde-format
 msgid "Adding resource types..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:503
+#: libs/ui/KisApplication.cpp:506
 #, kde-format
 msgid "Loading plugins..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:512
 #, kde-format
 msgid "Loading resources..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:518
+#: libs/ui/KisApplication.cpp:521
 #, kde-format
 msgid "Loading Main Window..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:550
+#: libs/ui/KisApplication.cpp:553
 #, kde-format
 msgid "Launching..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:619
+#: libs/ui/KisApplication.cpp:622
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Ii gávdnan mime-šlája, geahččal «-mimetype» molssaeavttuin"
 
-#: libs/ui/KisApplication.cpp:680
+#: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:708 libs/ui/KisApplication.cpp:981
+#: libs/ui/KisApplication.cpp:711 libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "File layer"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:716 libs/ui/KisApplication.cpp:721
-#: libs/ui/KisApplication.cpp:975 libs/ui/KisApplication.cpp:989
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:719 libs/ui/KisApplication.cpp:724
+#: libs/ui/KisApplication.cpp:978 libs/ui/KisApplication.cpp:992
+#: libs/ui/KisApplication.cpp:997
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:990
+#: libs/ui/KisApplication.cpp:720 libs/ui/KisApplication.cpp:993
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:722
+#: libs/ui/KisApplication.cpp:725
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -33717,7 +33735,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:728
+#: libs/ui/KisApplication.cpp:731
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -33725,32 +33743,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:976
+#: libs/ui/KisApplication.cpp:979
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:995
+#: libs/ui/KisApplication.cpp:998
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1114
 #, kde-format
 msgid "No template found for: %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1114
+#: libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Menddo máŋga málle gávdnon %1 várás"
 
-#: libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1133
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Ii sáhttán viežžat málle %1."
 
-#: libs/ui/KisApplication.cpp:1162
+#: libs/ui/KisApplication.cpp:1165
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -33760,7 +33778,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1179
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -33768,7 +33786,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1207
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -36298,16 +36316,16 @@ msgstr ""
 #: libs/ui/wdgsplash.ui:439
 #, kde-format
 msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Links</span></p></body></html>"
+"<html><head/><body><p align=\"left\"><span style=\" font-"
+"weight:600;\">Links</span></p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblRecent)
 #: libs/ui/wdgsplash.ui:493
 #, kde-format
 msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Recent files</span></p></body></html>"
+"<html><head/><body><p align=\"left\"><span style=\" font-"
+"weight:600;\">Recent files</span></p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowAtStartup)
@@ -36964,8 +36982,8 @@ msgid ""
 "<p><b>Extra notes on profiles by Elle Stone:</b></p><p><i>Krita comes with a "
 "number of high quality profiles created by <a href=\"https://"
 "ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check <a "
-"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles."
-"html\">the full documentation</a> as well.</i></p>"
+"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-"
+"profiles.html\">the full documentation</a> as well.</i></p>"
 msgstr ""
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
@@ -37982,8 +38000,8 @@ msgid ""
 "<html><body><p><b>WARNING:</b> the image will look different after changing "
 "the color profile because it contains either:<ul><li>more than one layer</"
 "li><li>one or more layers with transparent pixels</li><li>layers with "
-"blending modes other than \"Normal\"</li></ul></p><p><a href=\"https://docs."
-"krita.org/en/general_concepts/colors/color_managed_workflow.html\">More "
+"blending modes other than \"Normal\"</li></ul></p><p><a href=\"https://"
+"docs.krita.org/en/general_concepts/colors/color_managed_workflow.html\">More "
 "information</a></p></body></html>"
 msgstr ""
 
@@ -38525,10 +38543,11 @@ msgctxt ""
 "This is a list of suggestions for positions an artist can take, comma-"
 "separated"
 msgid ""
-"Adapter,Animator,Artist,Art Director,Author,Assistant,Editor,Background,"
-"Cartoonist,Colorist,Concept Artist,Corrector,Cover Artist,Creator,Designer,"
-"Inker,Letterer,Matte Painter,Painter,Penciller,Proofreader,Pixel Artist,"
-"Redliner,Sprite Artist,Typographer,Texture Artist,Translator,Writer,Other"
+"Adapter,Animator,Artist,Art "
+"Director,Author,Assistant,Editor,Background,Cartoonist,Colorist,Concept "
+"Artist,Corrector,Cover Artist,Creator,Designer,Inker,Letterer,Matte "
+"Painter,Painter,Penciller,Proofreader,Pixel Artist,Redliner,Sprite "
+"Artist,Typographer,Texture Artist,Translator,Writer,Other"
 msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
@@ -39019,12 +39038,13 @@ msgid ""
 msgstr ""
 "<html>Prográmmagálvu sáhttá álo buoridit, ja KDE-joavku lea gárvvis dahkat "
 "dan. Muhto, don – geavaheaddji – fertet muitalit midjiide go juoga ii "
-"doaimma nu go vurdojuvvon dahje sáhttá dahkkojuvvot buorebut<br /><br />KDE:"
-"s lea vuogádat gos sáhttá ohcat vigiid. Fina <a href=\"%1\">%1</a> báikkis "
-"dahje geavat «Váidal dihki …»-láseža «Veahkki» fálus váidalit dihkiid.<br /"
-"><br />Jus dus lea evttohus mo buoridit prográmma, de leat bures boahtin "
-"geavahit dihkeohcanvuogádaga registreret du sávaldaga. Sihkkarastte ahte "
-"geavahat «duođalašvuođa» mii gohccoduvvo «Sávaldatlistu (Wishlist)».</html>"
+"doaimma nu go vurdojuvvon dahje sáhttá dahkkojuvvot buorebut<br /><br /"
+">KDE:s lea vuogádat gos sáhttá ohcat vigiid. Fina <a href=\"%1\">%1</a> "
+"báikkis dahje geavat «Váidal dihki …»-láseža «Veahkki» fálus váidalit "
+"dihkiid.<br /><br />Jus dus lea evttohus mo buoridit prográmma, de leat "
+"bures boahtin geavahit dihkeohcanvuogádaga registreret du sávaldaga. "
+"Sihkkarastte ahte geavahat «duođalašvuođa» mii gohccoduvvo «Sávaldatlistu "
+"(Wishlist)».</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:90
 #, kde-format
@@ -43723,7 +43743,13 @@ msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr ""
 
-#: plugins/dockers/textproperties/FontAxesModel.cpp:112
+#: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit Style Preset"
+msgstr ""
+
+#: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
@@ -43771,9 +43797,15 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:133
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
 #, kde-format
 msgid "Text Properties"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "New Style Preset"
 msgstr ""
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
@@ -50279,7 +50311,7 @@ msgstr ""
 msgid "Unknown error: %1"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:533
+#: plugins/impex/heif/HeifExport.cpp:539
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -50287,7 +50319,7 @@ msgid ""
 "colorfulness will be halved in both dimensions."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:534
+#: plugins/impex/heif/HeifExport.cpp:540
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -50295,28 +50327,28 @@ msgid ""
 "colorfulness will be halved horizontally."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:541
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:555
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:556
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -50326,7 +50358,7 @@ msgid ""
 "for HDR images where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -50336,14 +50368,14 @@ msgid ""
 "not understand HDR."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:559
+#: plugins/impex/heif/HeifExport.cpp:565
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
 #, kde-format
 msgctxt "@tooltip"
@@ -50353,14 +50385,14 @@ msgid ""
 "where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:564
+#: plugins/impex/heif/HeifExport.cpp:570
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
 #, kde-format
 msgctxt "@tooltip"
@@ -50369,14 +50401,14 @@ msgid ""
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:568
+#: plugins/impex/heif/HeifExport.cpp:574
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:575
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
 #, kde-format
 msgctxt "@tooltip"
@@ -50386,13 +50418,13 @@ msgid ""
 "is there to reverse that"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:574
+#: plugins/impex/heif/HeifExport.cpp:580
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:575
+#: plugins/impex/heif/HeifExport.cpp:581
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -51299,8 +51331,8 @@ msgstr ""
 #, kde-format
 msgid ""
 "Sets encoder effort/speed level without affecting decoding speed.\n"
-"Valid values are, from faster to slower speed: 1:lightning 2:thunder 3:"
-"falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.\n"
+"Valid values are, from faster to slower speed: 1:lightning 2:thunder "
+"3:falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.\n"
 "Default: squirrel (7)."
 msgstr ""
 
@@ -61899,7 +61931,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr ""
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"

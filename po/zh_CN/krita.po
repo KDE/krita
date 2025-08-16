@@ -16416,11 +16416,10 @@ msgid "Fit Height"
 msgstr "适合视图高度"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "样式表"
+msgstr ""
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23746,11 +23745,10 @@ msgid "Font Families"
 msgstr "字体系列"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "样式表"
+msgstr ""
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -34008,10 +34006,9 @@ msgid "Font Families"
 msgstr "字体系列"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "样式表"
+msgstr ""
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -44452,11 +44449,10 @@ msgid "Percentage (%)"
 msgstr "百分比 (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "编辑预设"
+msgstr ""
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -44512,12 +44508,10 @@ msgid "Text Properties"
 msgstr "文字属性"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "新建样式"
+msgstr ""
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format

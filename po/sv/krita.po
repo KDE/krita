@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-12 07:39+0200\n"
+"PO-Revision-Date: 2025-08-15 07:25+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16496,11 +16496,10 @@ msgid "Fit Height"
 msgstr "Anpassa till höjd"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Stilmall"
+msgstr "Stilexempel"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23958,11 +23957,10 @@ msgid "Font Families"
 msgstr "Teckenfamiljer"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Pt. Presets"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Pt. förinställningar"
+msgstr "Stilförinställningar"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -34381,10 +34379,9 @@ msgid "Font Families"
 msgstr "Teckenfamiljer"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Pt. Presets"
+#, kde-format
 msgid "Style Presets"
-msgstr "Pt. förinställningar"
+msgstr "Stilförinställningar"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -45034,11 +45031,10 @@ msgid "Percentage (%)"
 msgstr "Procentvärde (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Redigera förinställningar"
+msgstr "Redigera stilförinställningar"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -45094,11 +45090,10 @@ msgid "Text Properties"
 msgstr "Textegenskaper"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Ny stil"
+msgstr "Ny stilförinställning"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format

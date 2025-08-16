@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-12 19:55+0100\n"
+"PO-Revision-Date: 2025-08-15 13:42+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16475,11 +16475,10 @@ msgid "Fit Height"
 msgstr "Ajustar a la altura"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Hoja de estilos"
+msgstr "Ejemplo de estilo"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23978,11 +23977,10 @@ msgid "Font Families"
 msgstr "Familias de tipos de letra"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Hoja de estilos"
+msgstr "Preajustes de estilo"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -34473,10 +34471,9 @@ msgid "Font Families"
 msgstr "Familias de tipos de letra"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "Hoja de estilos"
+msgstr "Preajustes de estilo"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -45213,11 +45210,10 @@ msgid "Percentage (%)"
 msgstr "Porcentaje (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Editar valores predefinidos"
+msgstr "Editar valores predefinidos del estilo"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -45273,12 +45269,10 @@ msgid "Text Properties"
 msgstr "Propiedades del texto"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Nuevo estilo"
+msgstr "Nuevo preajuste de estilo"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format

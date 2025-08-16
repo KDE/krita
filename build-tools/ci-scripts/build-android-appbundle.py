@@ -32,8 +32,23 @@ buildEnvironment = dict(os.environ)
 buildEnvironment['KRITA_BUILD_APPBUNDLE'] = '1'
 buildEnvironment['APK_PATH'] = artifactsFolder
 buildEnvironment['KRITA_INSTALL_PREFIX'] = '.xxx' # just a fake path to trigger an error if used (if shouldn't be used for aab)
-buildEnvironment['KRITA_UNSTABLE_PACKAGE_SUFFIX'] = '' if arguments.package_type == 'release' \
-    else '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA'])
+
+if arguments.package_type == 'release':
+    unstablePackageSuffix = ''
+else:
+    shortSha = os.environ.get('CI_COMMIT_SHORT_SHA')
+    if shortSha is None:
+        print('## CI_COMMIT_SHORT_SHA not set, attempting to retrieve it through git')
+        scriptDir = os.path.dirname(os.path.abspath(__file__))
+        shortSha = subprocess.check_output(['git', 'log', '--pretty=%h', '-n', '1'], cwd=scriptDir).decode().strip()
+
+    if not shortSha:
+        print('## ERROR: no unstable package suffix, please set CI_COMMIT_SHORT_SHA')
+        sys.exit(1)
+
+    unstablePackageSuffix = '-{}'.format(shortSha)
+
+buildEnvironment['KRITA_UNSTABLE_PACKAGE_SUFFIX'] = unstablePackageSuffix
 
 try:
     print( "## MERGING libs.xml" )

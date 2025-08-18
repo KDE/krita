@@ -58,7 +58,7 @@ struct KisSelectionAssistantsDecoration::Private {
             { "select-all", "Select All", &KisSelectionManager::selectAll },
             { "select-clear", "Deselect", &KisSelectionManager::deselect },
             { "duplicatelayer", "Copy To New Layer", &KisSelectionManager::copySelectionToNewLayer },
-            { "", "Invert Selection", &KisSelectionManager::invert },
+            { "select-invert", "Invert Selection", &KisSelectionManager::invert },
             { "krita_tool_color_fill", "Fill Selection with Color", &KisSelectionManager::fillForegroundColor },
             { "tool_crop", "Crop to Selection", &KisSelectionManager::imageResizeToSelection }
         };

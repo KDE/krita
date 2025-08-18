@@ -16419,7 +16419,7 @@ msgstr "适合视图高度"
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr ""
+msgstr "样式示例"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23748,7 +23748,7 @@ msgstr "字体系列"
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr ""
+msgstr "样式预设"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -34008,7 +34008,7 @@ msgstr "字体系列"
 #: libs/ui/KisApplication.cpp:403
 #, kde-format
 msgid "Style Presets"
-msgstr ""
+msgstr "样式预设"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -44452,7 +44452,7 @@ msgstr "百分比 (%)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr ""
+msgstr "编辑样式预设"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -44511,7 +44511,7 @@ msgstr "文字属性"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr ""
+msgstr "新建样式预设"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format

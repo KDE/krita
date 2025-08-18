@@ -23,3 +23,7 @@ add_subdirectory( metadata )
 add_subdirectory( resourcewidgets )
 add_subdirectory( psd )
 add_subdirectory( multiarch )
+
+if (NOT ANDROID AND HAVE_WAYLAND)
+   add_subdirectory( surfacecolormanagementapi )
+endif()

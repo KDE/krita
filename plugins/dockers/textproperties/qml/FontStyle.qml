@@ -57,7 +57,7 @@ CollapsibleGroupProperty {
             updateVisibility();
         }
         function onFontOpticalSizeLinkChanged() {
-            updateWeight();
+            updateOptical();
             updateVisibility();
         }
         function onFontSynthesisStyleChanged() {
@@ -154,7 +154,7 @@ CollapsibleGroupProperty {
                          properties.axisValueState,
                          properties.fontSynthesisStyleState,
                          properties.fontSynthesisWeightState,
-                         properties.axisValueState
+                         properties.axisValuesState
                 ];
         setVisibleFromProperty();
     }
@@ -381,8 +381,8 @@ CollapsibleGroupProperty {
 
         ColumnLayout {
             RevertPropertyButton {
-                revertState: properties.axisValueState;
-                onClicked: properties.axisValueState = KoSvgTextPropertiesModel.PropertyUnset;
+                revertState: properties.axisValuesState;
+                onClicked: properties.axisValuesState = KoSvgTextPropertiesModel.PropertyUnset;
             }
             Item {
                 Layout.fillHeight: true;

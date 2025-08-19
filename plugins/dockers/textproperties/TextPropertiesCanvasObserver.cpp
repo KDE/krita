@@ -23,7 +23,7 @@
 struct TextPropertiesCanvasObserver::Private {
 
     Private(QObject *parent = nullptr)
-        : modelToProviderCompressor(KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, parent)) {
+        : modelToProviderCompressor(KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, parent)) {
 
     }
 
@@ -124,7 +124,7 @@ TextPropertyConfigModel *TextPropertiesCanvasObserver::textPropertyConfig() cons
 void TextPropertiesCanvasObserver::slotCanvasTextPropertiesChanged()
 {
     KoSvgTextPropertyData data = d->provider->textPropertyData();
-    if (d->textModel->textData.get() != data) {
+    if (d->textModel->textData.get() != data && !d->modelToProviderCompressor.isActive()) {
         d->textModel->textData.set(data);
         Q_EMIT textPropertiesChanged();
     }

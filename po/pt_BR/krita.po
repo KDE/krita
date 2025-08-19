@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 04:02+0000\n"
-"PO-Revision-Date: 2025-08-12 12:31-0300\n"
+"PO-Revision-Date: 2025-08-18 13:37-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12549,7 +12549,7 @@ msgstr "Histograma"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr "&Converter o espaço de cores da camada..."
+msgstr "&Converter o espaço de cor da camada..."
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
@@ -12559,7 +12559,7 @@ msgstr "&Converter o espaço de cores da camada..."
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
-msgstr "Converter o espaço de cores da camada"
+msgstr "Converter o espaço de cor da camada"
 
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
@@ -12579,8 +12579,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
-"Converter todas as camadas ao espaço de cores da imagem (caso elas tenham um "
-"espaço de cores diferente)"
+"Converter todas as camadas ao espaço de cor da imagem (caso elas tenham um "
+"espaço de cor diferente)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
@@ -12796,7 +12796,7 @@ msgstr "Direção do modo em ciclo"
 #: krita/krita5.xmlgui:99
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr "&Zoom, Rotação and Espelhamento"
+msgstr "&Zoom, rotação and espelhamento"
 
 #: krita/krita5.xmlgui:131
 #, kde-format
@@ -13531,7 +13531,7 @@ msgstr "Colar na camada ativa"
 #, kde-format
 msgctxt "action"
 msgid "Paste into &New Image"
-msgstr "Colar em uma &Nova Imagem"
+msgstr "Colar em uma &nova imagem"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
@@ -13916,7 +13916,7 @@ msgstr "Modo de Visualização Instantânea"
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr "Suavizar Prova"
+msgstr "Simulação de tela"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -13926,7 +13926,7 @@ msgstr "Suavizar Prova"
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr "Ligar suavização de prova"
+msgstr "Ligar simulação de tela"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:722
@@ -13947,7 +13947,7 @@ msgid ""
 "turned on."
 msgstr ""
 "Liga os avisos de cores fora da gama de cores nas impressões gráficas, é "
-"necessário ligar o Suavizar Prova"
+"necessário ligar a simulação de tela."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -14567,7 +14567,7 @@ msgstr "Transparência e Cor de Fundo da Imagem"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr "&Converter o espaço de cores da imagem..."
+msgstr "&Converter o espaço de cor da imagem..."
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
@@ -14577,7 +14577,7 @@ msgstr "&Converter o espaço de cores da imagem..."
 #, kde-format
 msgctxt "action"
 msgid "Convert Image Color Space"
-msgstr "Converter o espaço de cores da imagem"
+msgstr "Converter o espaço de cor da imagem"
 
 #. i18n: context: text @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1185
@@ -17230,17 +17230,17 @@ msgstr "Recortar imagem"
 #: libs/image/kis_image.cc:1293
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
-msgstr "Converter o espaço de cores da camada"
+msgstr "Converter o espaço de cor da camada"
 
 #: libs/image/kis_image.cc:1344
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
-msgstr "Converter o espaço de cores da imagem"
+msgstr "Converter o espaço de cor da imagem"
 
 #: libs/image/kis_image.cc:1345
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
-msgstr "Converter o espaço de cores da projeção"
+msgstr "Converter o espaço de cor da projeção"
 
 #: libs/image/kis_image.cc:1397
 msgctxt "(qtundo-format)"
@@ -18360,7 +18360,7 @@ msgstr "Alfa (16-bits/canal ponto flutuante)"
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:172
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr "Operação indefinida no espaço de cores 'alfa'"
+msgstr "Operação indefinida no espaço de cor 'alfa'"
 
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:29
 #: libs/pigment/colorspaces/KoLabColorSpace.h:66
@@ -18454,7 +18454,7 @@ msgstr "Vermelho"
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:67
 #, kde-format
 msgid "Undefined operation in the %1 space"
-msgstr "Operação indefinida no espaço de cores %1"
+msgstr "Operação indefinida no espaço de cor %1"
 
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:84
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:89
@@ -18469,7 +18469,7 @@ msgstr "Operação indefinida no espaço de cores %1"
 #: libs/pigment/colorspaces/KoSimpleColorSpace.h:127
 #, kde-format
 msgid "Undefined operation in the %1 color space"
-msgstr "Operação indefinida no espaço de cores %1"
+msgstr "Operação indefinida no espaço de cor %1"
 
 #: libs/pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
 #, kde-format
@@ -23214,7 +23214,7 @@ msgstr "Interação da área de desenho"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
-msgstr "Gerenciamento de Cores"
+msgstr "Gerenciamento de cor"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2119
 #, kde-format
@@ -23899,7 +23899,7 @@ msgstr ""
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita é de código aberto e "
-"uma ferramenta voltada para a comunidade para artistas digitais em todos os "
+"uma ferramenta voltada para a comunidade e artistas digitais de todos os "
 "lugares.<br />O progresso é possível graças ao apoio contínuo de nossa "
 "comunidade de <a href=\"https://docs.krita.org/en/contributors_manual.html"
 "\">contribuidores</a>, patrocinadores, e <a href=\"https://fund.krita.org/"
@@ -24425,7 +24425,7 @@ msgstr "Importar perfil"
 #: libs/ui/forms/wdgcolorsettings.ui:243
 #, kde-format
 msgid "Soft Proofing"
-msgstr "Suavizar Prova"
+msgstr "Simulação de tela"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorsettings.ui:249
@@ -24438,7 +24438,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:266
 #, kde-format
 msgid "Proofing Rendering Intent:"
-msgstr "Tentativa de Renderização de Prova"
+msgstr "Tentativa de Renderização:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
 #: libs/ui/forms/wdgcolorsettings.ui:297
@@ -24498,7 +24498,7 @@ msgstr "Instalar um novo perfil de um arquivo."
 #: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
-msgstr "Navegador de espaço de cores"
+msgstr "Navegador de espaço de cor"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
@@ -24553,7 +24553,7 @@ msgstr "Propriedades do perfil"
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
 #, kde-format
 msgid "Colorspace Conversion"
-msgstr "Conversão do espaço de cores"
+msgstr "Conversão do espaço de cor"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
 #: libs/ui/forms/wdgconvertcolorspace.ui:40
@@ -25714,8 +25714,7 @@ msgstr "Salvar sessão quando o Krita fechar"
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr ""
-"Ao importar as imagens como camadas, converter para o espaço de cores da "
-"imagem"
+"Ao importar as imagens como camadas, converter para o espaço de cor da imagem"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
@@ -26097,7 +26096,7 @@ msgstr "Espaço de Cor da Imagem"
 #: libs/ui/forms/wdgimageproperties.ui:225
 #, kde-format
 msgid "Convert color space of image layers"
-msgstr "Converter espaço de cores das camadas da imagem"
+msgstr "Converter espaço de cor das camadas da imagem"
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpSoftProof)
 #: libs/ui/forms/wdgimageproperties.ui:272
@@ -26125,7 +26124,7 @@ msgstr ""
 "<html><head/><body><p>Defina o quanto você deseja corrigir o estado de "
 "adaptação.Isso afetará como <span style=\"font-style:italic;\">o valor "
 "Colorimétrico Absoluto</span> altera os brancos da sua imagem. Nos termos de "
-"Layman: como você deseja que o gerenciamento de cores corrija a cor do papel "
+"Layman: como você deseja que o gerenciamento de cor corrija a cor do papel "
 "para tela branca ao usar<span style=\"font-style:italic;\">Colorimétrico "
 "Absoluto</span>?</p></body></html>"
 
@@ -30651,7 +30650,7 @@ msgstr "O formato do arquivo contém recursos não suportados."
 #: libs/ui/KisImportExportErrorCode.cpp:156
 #, kde-format
 msgid "The file format contains unsupported color space."
-msgstr "O formato do arquivo contém espaço de cores não suportado."
+msgstr "O formato do arquivo contém espaço de cor não suportado."
 
 #: libs/ui/KisImportExportErrorCode.cpp:158
 #, kde-format
@@ -30927,7 +30926,7 @@ msgstr "Também salva sua imagem como arquivo do Krita."
 #: libs/ui/KisImportExportUtils.cpp:48
 #, kde-format
 msgid "Convert image color space on import"
-msgstr "Converter o espaço de cores da imagem ao importar"
+msgstr "Converter o espaço de cor da imagem ao importar"
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -31122,7 +31121,7 @@ msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
-"O plugin de gerenciamento de cores LittleCMS do Krita não está instalado. O "
+"O plugin de gerenciamento de cor LittleCMS do Krita não está instalado. O "
 "Krita será fechado agora."
 
 #: libs/ui/KisMainWindow.cpp:2856
@@ -32671,7 +32670,7 @@ msgstr ""
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
-"O OpenColorIO está desativado: o espaço de cores da imagem não é suportado"
+"O OpenColorIO está desativado: o espaço de cor da imagem não é suportado"
 
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
@@ -32752,7 +32751,7 @@ msgstr ""
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
-"O motor de pincéis do MyPaint não está disponível para este espaço de cores"
+"O motor de pincéis do MyPaint não está disponível para este espaço de cor"
 
 #: libs/ui/tool/kis_tool_paint.cc:591
 #, kde-format
@@ -33383,7 +33382,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The Tone Response Curve of this color space is either sRGB, L* or rec709 TRC."
 msgstr ""
-"A Curva de Resposta do Tom (TRC) deste espaço de cores será o sRGB, L* ou "
+"A Curva de Resposta do Tom (TRC) deste espaço de cor será o sRGB, L* ou "
 "rec709 TRC."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:313
@@ -33445,11 +33444,11 @@ msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, "
 "Green, Blue ou Vermelho, Verde, Azul, em português)</a></b> é o modelo de "
 "cores usado pelas telas e outros dispositivos baseados em luz.<br/>É um "
-"modelo de cores aditivo: a adição das cores em conjunto torna-as mais "
-"claras. Este modelo de cores é o mais abrangente de todos os modelos de "
-"cores, sendo recomendado como um modelo para desenhos, que podem ser "
-"convertidos mais tarde para outros espaços. O RGB também é o espaço de cores "
-"recomendado para edição de HDR."
+"modelo de cor aditivo: a adição das cores em conjunto torna-as mais claras. "
+"Este modelo de cor é o mais abrangente de todos os modelos de cor, sendo "
+"recomendado como um modelo para desenhos, que podem ser convertidos mais "
+"tarde para outros espaços. O RGB também é o espaço de cor recomendado para "
+"edição de HDR."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
@@ -33535,7 +33534,7 @@ msgstr ""
 "a grande maioria das fórmulas matemáticas de cores nos modos de mistura "
 "<b>não</b> funcionam como esperado.<br/>De forma semelhante, o Krita não "
 "oferece suporte para HDR no LAB, o que significa que as imagens HDR "
-"convertidas para LAB perdem a informação das cores. Esse espaço de cores "
+"convertidas para LAB perdem a informação das cores. Esse espaço de cor "
 "<b>não</b> é recomendado para pinturas, nem para exportação, mas é melhor "
 "como um espaço para fazer algum pós-processamento. A TRC (Tone Response "
 "Curve) assume-se como sendo a do L*."
@@ -33614,13 +33613,13 @@ msgid ""
 msgstr ""
 "<b>16 bits ponto flutuante</b>: Também conhecido como 'Ponto Semi-Flutuante' "
 "e é o padrão nas imagens de indústria VFX. O modo de 16 bits flutuante é "
-"ideal para edição de imagens com uma TRC linear, um espaço de cores "
-"abrangente ou quando precisar de uma mistura de cores mais precisa. O fato "
-"de ser em ponto flutuante é um requisito absoluto para imagens de Referência "
-"de Cenas (HDR). Este modo ocupa o dobro de espaço em RAM e disco que uma "
-"imagem equivalente de 8 bits e, em alguns casos, precisa de muito mais "
-"capacidade de processamento. Recomendamos que monitore o uso de RAM do "
-"arquivo com cuidado ou use 8 bits se o seu computador se tornar mais lento."
+"ideal para edição de imagens com uma TRC linear, um espaço de cor abrangente "
+"ou quando precisar de uma mistura de cores mais precisa. O fato de ser em "
+"ponto flutuante é um requisito absoluto para imagens de Referência de Cenas "
+"(HDR). Este modo ocupa o dobro de espaço em RAM e disco que uma imagem "
+"equivalente de 8 bits e, em alguns casos, precisa de muito mais capacidade "
+"de processamento. Recomendamos que monitore o uso de RAM do arquivo com "
+"cuidado ou use 8 bits se o seu computador se tornar mais lento."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
@@ -33637,13 +33636,13 @@ msgid ""
 msgstr ""
 "<b>32 bits ponto flutuante</b>: Também conhecido como 'Ponto Flutuante "
 "Total'. O modo de 32 bits flutuante é ideal para edição de imagens com uma "
-"TRC linear, um espaço de cores abrangente ou quando precisar de uma mistura "
-"de cores mais precisa. O fato de ser em ponto flutuante é um requisito "
-"absoluto para imagens de Referência de Cenas (HDR). Este modo ocupa quatro "
-"vezes o espaço em RAM e disco que uma imagem equivalente de 8 bits e, em "
-"alguns casos, precisa de muito mais capacidade de processamento. "
-"Recomendamos que monitore o uso de RAM do arquivo com cuidado ou use 8 bits "
-"se o seu computador se tornar mais lento."
+"TRC linear, um espaço de cor abrangente ou quando precisar de uma mistura de "
+"cores mais precisa. O fato de ser em ponto flutuante é um requisito absoluto "
+"para imagens de Referência de Cenas (HDR). Este modo ocupa quatro vezes o "
+"espaço em RAM e disco que uma imagem equivalente de 8 bits e, em alguns "
+"casos, precisa de muito mais capacidade de processamento. Recomendamos que "
+"monitore o uso de RAM do arquivo com cuidado ou use 8 bits se o seu "
+"computador se tornar mais lento."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
@@ -33715,11 +33714,10 @@ msgid ""
 "color space it has no negative values and contains only few colors that fall "
 "just barely outside the area of real colors humans can see</p>"
 msgstr ""
-"<p>O espaço de cores ACEScg é menor que o espaço de cores ACES, mas é grande "
-"o suficiente para conter a 'gama Rec-2020 e DCI-P3'. Ao contrário do espaço "
-"de cores ACES, ele não tem valores negativos e contém apenas algumas cores "
-"que ultrapassam um pouco o espectro das cores que os humanos conseguem ver.</"
-"p>"
+"<p>O espaço de cor ACEScg é menor que o espaço de cor ACES, mas é grande o "
+"suficiente para conter a 'gama Rec-2020 e DCI-P3'. Ao contrário do espaço de "
+"cor ACES, ele não tem valores negativos e contém apenas algumas cores que "
+"ultrapassam um pouco o espectro das cores que os humanos conseguem ver.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
 #, kde-format
@@ -33740,8 +33738,8 @@ msgstr ""
 "<p>Para evitar possíveis problemas com infração de direitos autorais, usamos "
 "o 'ClayRGB' (com base no ArgyllCMS) como nome de base para esses perfis. "
 "Como é usado abaixo, o 'Compatível com o Adobe RGB 1998' é uma terminologia "
-"sugerida no preâmbulo para a especificação do espaço de cores AdobeRGB 1998."
-"</p><p>A gama de cores do Adobe RGB 1998 cobre uma maior porcentagem dos "
+"sugerida no preâmbulo para a especificação do espaço de cor AdobeRGB 1998.</"
+"p><p>A gama de cores do Adobe RGB 1998 cobre uma maior porcentagem dos "
 "cianos, verdes e verdes-amarelados reais que o sRGB, mas ainda não inclui "
 "todos os cianos, verdes e verdes-amarelados que podem ser impressos, "
 "especialmente ao usar impressoras jato-de-tinta de alto desempenho, com gama "
@@ -33769,18 +33767,17 @@ msgid ""
 "colors.</p>"
 msgstr ""
 "<p>A gama de cores deste perfil é aproximadamente do mesmo tamanho e forma "
-"do espaço de cores do ACES e, como acontece nesse espaço de cores, o "
+"do espaço de cor do ACES e, como acontece nesse espaço de cor, o "
 "AllColorsRGB contém todas as cores reais possíveis. Porém, o AllColorsRGB "
 "tem uma gama de cores ligeiramente maior (para capturar alguma cores "
 "marginais que não se qualificam como reais, quando vistas por um observador "
-"padrão) e usa o ponto branco D50.</p><p>Como no espaço de cores ACES, o "
+"padrão) e usa o ponto branco D50.</p><p>Como no espaço de cor ACES, o "
 "AllColorsRGB possui uma grande porcentagem de cores imaginárias. Leia o <a "
 "href=\"http://ninedegreesbelow.com/photography/xyz-rgb.html\">Completely "
 "Painless Programmer's Guide to XYZ, RGB, ICC, xyY and TRCs</a> para obter "
 "mais informações sobre as cores imaginárias.</p><p>Não há um motivo em "
 "particular para usar este perfil na edição, a menos que necessite garantir "
-"que o seu espaço de cores realmente possua todas as cores reais possíveis.</"
-"p>"
+"que o seu espaço de cor realmente possua todas as cores reais possíveis.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
@@ -33796,10 +33793,10 @@ msgid ""
 "be calculated from the spectral wavelengths, so I did.</p>"
 msgstr ""
 "<p>Este perfil é incluído principalmente pelo seu significado histórico. É o "
-"espaço de cores que foi usado nas experiências originais de correspondência "
-"de cores que levaram à criação do espaço de cores de referência XYZ.</p><p>O "
+"espaço de cor que foi usado nas experiências originais de correspondência de "
+"cores que levaram à criação do espaço de cor de referência XYZ.</p><p>O "
 "ponto branco do ASTM E é, provavelmente, o ponto branco E correto a usar ao "
-"criar o perfil do espaço de cores CIERGB. Não é claro quais sejam as cores "
+"criar o perfil do espaço de cor CIERGB. Não é claro quais sejam as cores "
 "primárias corretas do CIERGB. O Lindbloom oferece um conjunto. O tutorial da "
 "versão 1 do LCMS usa um conjunto diferente. Seguimos as pessoas experientes "
 "no assunto, que dizem que as cores primárias reais devem ser calculadas a "
@@ -33868,14 +33865,14 @@ msgid ""
 "in the digital darkroom Rec.2020 is much more suitable as a general RGB "
 "working space than the exceedingly small sRGB color space.</p>"
 msgstr ""
-"<p>Rec.2020 é o próximo substituto para o desatualizado espaço de cores que "
-"é o sRGB. Desde junho de 2015, pouquíssimos (se existirem) dispositivos de "
+"<p>Rec.2020 é o próximo substituto para o desatualizado espaço de cor que é "
+"o sRGB. Desde junho de 2015, pouquíssimos (se existirem) dispositivos de "
 "apresentação (e certamente nenhum dispositivo com preço baixo) consegue "
 "mostrar todas as cores da Rec.2020. Contudo, a tecnologia já está se "
 "aproximando da Rec.2020, os filmes já estão sendo feitos para a Rec.2020 e "
 "diversas câmeras oferecem suporte para a Rec.2020. E, na câmera escura "
-"digital, a Rec.2020 é muito mais adequada como um espaço de cores RGB geral "
-"do que o espaço de cores extremamente pequeno que é o sRGB.</p>"
+"digital, a Rec.2020 é muito mais adequada como um espaço de cor RGB geral do "
+"que o espaço de cor extremamente pequeno que é o sRGB.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
@@ -33911,7 +33908,7 @@ msgstr ""
 "interpolados das câmeras digitais também normalmente excedem a gama de cores "
 "sRGB.</p><p>Como ponto relevante, o uso da percepção ao converter para o "
 "sRGB não faz automaticamente com que as cores fora da gama sejam "
-"incorporadas na gama de cores sRGB! O espaço de cores padrão do sRGB (em "
+"incorporadas na gama de cores sRGB! O espaço de cor padrão do sRGB (em "
 "conjunto com todos os outros perfis RGB fornecidos pelo pacote de perfis) é "
 "um perfil matriz e estes perfis não têm tabelas de intenção de percepção.</p>"
 
@@ -33929,11 +33926,11 @@ msgid ""
 msgstr ""
 "<p>Para evitar possíveis problemas com infração de direitos autorais, usamos "
 "o nome 'WideRGB' como nome base para estes perfis.</p><p>O WideGamutRGB foi "
-"projetado pela Adobe para ser um espaço de cores de gama de cores ampla que "
+"projetado pela Adobe para ser um espaço de cor de gama de cores ampla que "
 "usa cores espectrais como cores primárias. Os valores primários de Pascale "
 "produzem um perfil que corresponde aos perfis antigos V2 Widegamut da Adobe "
-"e da Canon. É um espaço de cores interessante, mas logo após a sua "
-"introdução, a Adobe mudou a ênfase para o espaço de cores ProPhotoRGB.</p>"
+"e da Canon. É um espaço de cor interessante, mas logo após a sua introdução, "
+"a Adobe mudou a ênfase para o espaço de cor ProPhotoRGB.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
 #, kde-format
@@ -34013,7 +34010,7 @@ msgstr ""
 "cores pequena e uma TRC uniforme de forma aproximada ou exata. Dos perfis "
 "fornecidos no meu pacote, só os espaços de cores sRGB e AdobeRGB1998 "
 "(ClayRGB) são pequenos o suficiente para edição em 8 bits. Mesmo com o "
-"espaço de cores AdobeRGB1998, é preciso ter cuidado para não criar um efeito "
+"espaço de cor AdobeRGB1998, é preciso ter cuidado para não criar um efeito "
 "de poster. Obviamente, você também não poderá usar as versões de gama linear "
 "destes perfis para edição em 8 bits.</p>"
 
@@ -34099,7 +34096,7 @@ msgstr "Desbloquear (manter configurações atuais)"
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:658
 #, kde-format
 msgid "Uncalibrated color space"
-msgstr "Espaço de cores não calibrado"
+msgstr "espaço de cor não calibrado"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:664
 #, kde-format
@@ -34148,7 +34145,7 @@ msgstr ""
 "inteiros de 8-bits. Sugerimos que use inteiros de 16-bits ou um espaço de "
 "cores de ponto flutuante qualquer para perfis lineares.\n"
 "\n"
-"Clique em \"Ok\" para criar um espaço de cores RGB linear de 8-bits inteiros "
+"Clique em \"Ok\" para criar um espaço de cor RGB linear de 8-bits inteiros "
 "ou em \"Cancelar\" para voltar à janela de configuração."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
@@ -37898,7 +37895,7 @@ msgstr "Use uma cor personalizada para o seletor da cor de fundo."
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
-msgstr "O seletor de cores usa um espaço de cores diferente da ima&gem"
+msgstr "O seletor de cores usa um espaço de cor diferente da ima&gem"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
@@ -39567,7 +39564,7 @@ msgstr "Exposição:"
 #: plugins/dockers/lut/wdglut.ui:152
 #, kde-format
 msgid "Input ColorSpace:"
-msgstr "Espaço de cores de entrada:"
+msgstr "espaço de cor de entrada:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblConfig)
 #: plugins/dockers/lut/wdglut.ui:175
@@ -40983,7 +40980,7 @@ msgstr "Camada/Máscara"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
 #, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Prova de cores para espaço de cores de pintura"
+msgstr "Prova de cores para espaço de cor de pintura"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
@@ -44532,7 +44529,7 @@ msgid ""
 "The current configuration was created for a different colorspace and cannot "
 "be used. All curves will be reset."
 msgstr ""
-"A configuração atual foi criada para um espaço de cores diferente e não pode "
+"A configuração atual foi criada para um espaço de cor diferente e não pode "
 "ser usada. Todas as curvas serão redefinidas."
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
@@ -44766,7 +44763,7 @@ msgstr "Altura para o Mapa da Normal"
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "O Mapa de Altura para Normal não funciona neste espaço de cores."
+msgstr "O Mapa de Altura para Normal não funciona neste espaço de cor."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -47153,7 +47150,7 @@ msgstr "Não foi possível codificar ou gravar imagem."
 #: plugins/impex/heif/HeifError.cpp:45
 #, kde-format
 msgid "Color profile was not found in the document."
-msgstr "O perfil de cores não foi encontrado no documento."
+msgstr "O perfil de cor não foi encontrado no documento."
 
 #: plugins/impex/heif/HeifError.cpp:49
 #, kde-format
@@ -49026,7 +49023,7 @@ msgstr "Não foi possível salvar o perfil da imagem."
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr "Não foi possível salvar o perfil de cores do pós-processamento."
+msgstr "Não foi possível salvar o perfil de cor do pós-processamento."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:595
 #, kde-format
@@ -49468,7 +49465,7 @@ msgid ""
 msgstr ""
 "<p>Se ativado, todos os arquivos RAW serão decodificados em profundidade de "
 "cor de 16 bits usando uma curva gama linear. Para evitar a renderização de "
-"imagens escuras no editor, recomenda-se usar o Gerenciamento de Cores neste "
+"imagens escuras no editor, recomenda-se usar o gerenciamento de cor neste "
 "modo. </p><p>Se desativado, todos os arquivos RAW serão decodificados em "
 "profundidade de cor de 8 bits com uma curva gama BT.709 e um ponto branco de "
 "99 porcento. Este modo é mais rápido que a decodificação de 16 bits.</p>"
@@ -50216,14 +50213,13 @@ msgid ""
 "if it exists.</li><li><emphasis strong='true'>Custom</emphasis>: use a "
 "custom input color space profile.</li></ul></p>"
 msgstr ""
-"<title>Perfil da câmera</title><p>Selecione aqui o espaço de cores de "
-"entrada, usado para descodificar os dados RAW.</p><p><ul><li><emphasis "
-"strong='true'>Nenhum</emphasis>: não é usado nenhum perfil de cores de "
-"entrada durante a descodificação RAW.</li><li><emphasis "
-"strong='true'>Incorporado</emphasis>: usa o perfil de cores incorporado do "
-"arquivo RAW, se existir.</li><li><emphasis strong='true'>Personalizado</"
-"emphasis>: usa um perfil de espaço de cores de entrada personalizado.</li></"
-"ul></p>"
+"<title>Perfil da câmera</title><p>Selecione aqui o espaço de cor de entrada, "
+"usado para descodificar os dados RAW.</p><p><ul><li><emphasis "
+"strong='true'>Nenhum</emphasis>: não é usado nenhum perfil de cor de entrada "
+"durante a descodificação RAW.</li><li><emphasis strong='true'>Incorporado</"
+"emphasis>: usa o perfil de cor incorporado do arquivo RAW, se existir.</"
+"li><li><emphasis strong='true'>Personalizado</emphasis>: usa um perfil de "
+"espaço de cor de entrada personalizado.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
 #, kde-format
@@ -50292,23 +50288,22 @@ msgid ""
 "in mind.</li><li><emphasis strong='true'>Custom</emphasis>: use a custom "
 "output color space profile.</li></ul></p>"
 msgstr ""
-"<title>Espaço de trabalho</title><p>Selecione aqui o espaço de cores usado "
+"<title>Espaço de trabalho</title><p>Selecione aqui o espaço de cor usado "
 "para descodificar os dados RAW.</p><p><ul><li><emphasis strong='true'>RAW "
-"(linear)</emphasis>: neste modo, não é usado nenhum espaço de cores "
-"resultante na descodificação do RAW.</li><li><emphasis strong='true'>sRGB</"
-"emphasis>: este espaço de cores é um espaço de cores RGB, criado em "
-"cooperação entre a Hewlett-Packard e a Microsoft, sendo a melhor escolha "
-"para as imagens destinadas à Web e aos retratos fotográficos.</"
-"li><li><emphasis strong='true'>RGB da Adobe</emphasis>: este espaço de cores "
-"é um espaço de cores RGB desenvolvido pela Adobe, que é usado em aplicativos "
-"de fotografia como a publicidade e a arte.</li><li><emphasis "
-"strong='true'>Gama de cores ampla</emphasis>: este espaço de cores é uma "
-"versão expandida do espaço de cores RGB da Adobe.</li><li><emphasis "
-"strong='true'>Pro-Photo</emphasis>: este espaço de cores é um espaço RGB, "
-"desenvolvido pela Kodak, que oferece uma gama especialmente grande, "
-"desenhado para ser usado com resultados fotográficos em mente.</"
-"li><li><emphasis strong='true'>Personalizado</emphasis>: usar um perfil de "
-"espaço de cores com resultado personalizado.</li></ul></p>"
+"(linear)</emphasis>: neste modo, não é usado nenhum espaço de cor resultante "
+"na descodificação do RAW.</li><li><emphasis strong='true'>sRGB</emphasis>: "
+"este espaço de cor é um espaço de cor RGB, criado em cooperação entre a "
+"Hewlett-Packard e a Microsoft, sendo a melhor escolha para as imagens "
+"destinadas à Web e aos retratos fotográficos.</li><li><emphasis "
+"strong='true'>RGB da Adobe</emphasis>: este espaço de cor é um espaço de cor "
+"RGB desenvolvido pela Adobe, que é usado em aplicativos de fotografia como a "
+"publicidade e a arte.</li><li><emphasis strong='true'>Gama de cores ampla</"
+"emphasis>: este espaço de cor é uma versão expandida do espaço de cor RGB da "
+"Adobe.</li><li><emphasis strong='true'>Pro-Photo</emphasis>: este espaço de "
+"cor é um espaço RGB, desenvolvido pela Kodak, que oferece uma gama "
+"especialmente grande, desenhado para ser usado com resultados fotográficos "
+"em mente.</li><li><emphasis strong='true'>Personalizado</emphasis>: usar um "
+"perfil de espaço de cor com resultado personalizado.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
 #, kde-format
@@ -50319,7 +50314,7 @@ msgstr "Arquivos ICC (*.icc *.icm)"
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
-msgstr "Gerenciamento de cores"
+msgstr "Gerenciamento de cor"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
 #, kde-format
@@ -54622,7 +54617,7 @@ msgstr "<i>Preto</i>"
 
 #: plugins/python/colorspace/colorspace.py:18
 msgid "Plugin to change color space of selected documents."
-msgstr "Plugin para alterar o espaço de cores dos documentos selecionados."
+msgstr "Plugin para alterar o espaço de cor dos documentos selecionados."
 
 #: plugins/python/colorspace/uicolorspace.py:26
 #: plugins/python/documenttools/uidocumenttools.py:19

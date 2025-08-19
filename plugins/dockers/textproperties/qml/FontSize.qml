@@ -23,14 +23,49 @@ TextPropertyBase {
     property alias fontSize: fontSizeUnitCmb.dataValue;
     property alias fontSizeUnit: fontSizeUnitCmb.dataUnit;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onFontSizeChanged() {
+            updateFontSize();
+            updateVisibility();
+        }
+
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+        function onLineHeightChanged() {
+            updateUnits();
+        }
+
+        function onFontSizeStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateFontSize();
+        updateVisibility();
+    }
+
+    function updateUnits() {
         blockSignals = true;
         fontSizeUnitCmb.setTextProperties(properties);
-        fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
-        propertyState = [properties.fontSizeState];
-        setVisibleFromProperty();
         blockSignals = false;
     }
+
+    function updateFontSize() {
+        if (!fontSizeSpn.isDragging) {
+            blockSignals = true;
+            fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
+            blockSignals = false;
+        }
+    }
+
+    function updateVisibility() {
+        propertyState = [properties.fontSizeState];
+        setVisibleFromProperty();
+    }
+
     onFontSizeChanged: {
         if (!blockSignals) {
             properties.fontSize.value = fontSize;
@@ -63,7 +98,7 @@ TextPropertyBase {
             softDFrom: 0;
             softDTo: 72;
             softRangeActive: true;
-            blockUpdateSignalOnDrag: true;
+            //blockUpdateSignalOnDrag: true;
 
             onDValueChanged: fontSizeUnitCmb.userValue = dValue;
         }

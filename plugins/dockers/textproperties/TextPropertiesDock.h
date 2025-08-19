@@ -23,25 +23,17 @@ class TextPropertiesDock : public QDockWidget, public KisMainwindowObserver {
 public:
     TextPropertiesDock();
     ~TextPropertiesDock();
-    QString observerName() override { return "TextPropertiesDock"; }
+
+    QString observerName() override;
     void setViewManager(KisViewManager *kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
 public Q_SLOTS:
-    void slotCanvasTextPropertiesChanged();
-    void slotTextPropertiesChanged();
     QString wwsFontFamilyName(QString familyName, bool returnEmptyWhenMissing = false);
 
     QColor modalColorDialog(QColor oldColor);
 
-    void callModalTextPropertyConfigDialog();
-
-    void applyPreset(KoResourceSP resource);
-
-    bool createNewPresetFromSettings();
-    void editPreset(KoResourceSP resource);
-    void cloneAndEditPreset(KoResourceSP resource);
 
 
 private:

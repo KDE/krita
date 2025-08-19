@@ -18,12 +18,30 @@ TextPropertyBase {
                        "text-rendering, hinting, anti-aliasing");
     property int textRendering;
 
-    onPropertiesUpdated: {
-        blockSignals = true;
-        textRendering = properties.textRendering;
+    Connections {
+        target: properties;
+        function onTextRenderingChanged() {
+            updateRendering();
+            updateVisibility();
+        }
 
+        function onTextRenderingStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateRendering();
+        updateVisibility();
+    }
+
+    function updateVisibility() {
         propertyState = [properties.textRenderingState];
         setVisibleFromProperty();
+    }
+
+    function updateRendering() {
+        blockSignals = true;
+        textRendering = properties.textRendering;
         blockSignals = false;
     }
 

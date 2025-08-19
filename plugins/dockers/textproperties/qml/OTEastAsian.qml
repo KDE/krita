@@ -21,15 +21,33 @@ TextPropertyBase {
     property int widthType;
     property alias ruby: rubyCbx.checked;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onFontVariantEastAsianChanged() {
+            updateOTEastAsian();
+            updateVisibility();
+        }
+
+        function onFontVariantEastAsianStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateOTEastAsian();
+        updateVisibility();
+    }
+
+    function updateOTEastAsian() {
         blockSignals = true;
         ruby = properties.fontVariantEastAsian.ruby;
         variantType = properties.fontVariantEastAsian.variant;
         widthType = properties.fontVariantEastAsian.width;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.fontVariantEastAsianState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onVariantTypeChanged: {

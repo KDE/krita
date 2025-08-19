@@ -165,6 +165,7 @@ Control {
             }
         }
         TextPropertyBaseList {
+            propertiesModel: textPropertiesModel;
             Layout.fillWidth: true;
             Layout.fillHeight: true;
             canvasDPI: styleEdit.makePixelRelative? styleEdit.pixelRelativeDPI: styleEdit.canvasDPI;

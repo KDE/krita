@@ -18,12 +18,30 @@ TextPropertyBase {
                        "dominant-baseline, mojisoroe");
     property int baselineSelection
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onDominantBaselineChanged() {
+            updateDominantBaseline();
+            updateVisibility();
+        }
+
+        function onDominantBaselineStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateDominantBaseline();
+        updateVisibility();
+    }
+    function updateDominantBaseline() {
         blockSignals = true;
         baselineSelection = properties.dominantBaseline;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.dominantBaselineState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onBaselineSelectionChanged: {

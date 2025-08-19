@@ -20,13 +20,34 @@ TextPropertyBase {
 
     property alias fontSizeAdjust: fontSizeAdjustSpn.dValue;
 
-    onPropertiesUpdated: {
-        blockSignals = true;
-        fontSizeAdjust = properties.fontSizeAdjust;
+    Connections {
+        target: properties;
+        function onFontSizeAdjustChanged() {
+            updateFontSizeAdjust();
+            updateVisibility();
+        }
+
+        function onFontSizeAdjustStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateFontSizeAdjust();
+        setVisibleFromProperty();
+    }
+
+    function updateFontSizeAdjust() {
+        if (!fontSizeAdjustSpn.isDragging) {
+            blockSignals = true;
+            fontSizeAdjust = properties.fontSizeAdjust;
+            blockSignals = false;
+        }
+    }
+    function updateVisibility() {
         propertyState = [properties.fontSizeAdjustState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
+
     onFontSizeAdjustChanged: {
         if (!blockSignals) {
             properties.fontSizeAdjust = fontSizeAdjust;
@@ -56,7 +77,7 @@ TextPropertyBase {
             dStepSize: 0.1;
             Layout.preferredWidth: implicitWidth;
             Layout.fillWidth: true;
-            blockUpdateSignalOnDrag: true;
+            //blockUpdateSignalOnDrag: true;
         }
 
         Button {

@@ -19,12 +19,30 @@ TextPropertyBase {
                        "line-break, line breaking, strictness, kinsoku");
     propertyType: TextPropertyConfigModel.Character;
 
-    onPropertiesUpdated: {
-        blockSignals = true;
-        breakType = properties.lineBreak;
+    Connections {
+        target: properties;
+        function onLineBreakChanged() {
+            updateLineBreak();
+            updateVisibility();
+        }
 
+        function onLineBreakStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateLineBreak();
+        updateVisibility();
+    }
+
+    function updateVisibility() {
         propertyState = [properties.lineBreakState];
         setVisibleFromProperty();
+    }
+
+    function updateLineBreak() {
+        blockSignals = true;
+        breakType = properties.lineBreak;
         blockSignals = false;
     }
 

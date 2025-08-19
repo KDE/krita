@@ -23,21 +23,85 @@ TextPropertyBase {
     property int lineStyle;
     property color lineColor;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onTextDecorationLineThroughChanged() {
+            updateTextDecorThrough();
+            updateVisibility();
+        }
+        function onTextDecorationUnderlineChanged() {
+            updateTextDecorUnder();
+            updateVisibility();
+        }
+        function onTextDecorationOverlineChanged() {
+            updateTextDecorOver();
+            updateVisibility();
+        }
+
+        function onTextDecorationStyleChanged() {
+            updateTextDecorStyle();
+            updateVisibility();
+        }
+
+        function onTextDecorationColorChanged() {
+            updateTextDecorColor();
+            updateVisibility();
+        }
+
+        function onTextDecorationLineStateChanged() {
+            updateVisibility();
+        }
+        function onTextDecorationStyleStateChanged() {
+            updateVisibility();
+        }
+        function onTextDecorationColorStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateTextDecorThrough();
+        updateTextDecorUnder();
+        updateTextDecorOver();
+        updateTextDecorStyle();
+        updateTextDecorColor();
+        updateVisibility();
+    }
+
+    function updateTextDecorOver() {
+        blockSignals = true;
+        overline = properties.textDecorationOverline;
+        blockSignals = false;
+    }
+    function updateTextDecorThrough() {
+        blockSignals = true;
+        linethrough = properties.textDecorationLineThrough;
+        blockSignals = false;
+    }
+    function updateTextDecorUnder() {
         blockSignals = true;
         underline = properties.textDecorationUnderline;
-        overline = properties.textDecorationOverline;
-        linethrough = properties.textDecorationLineThrough;
-        lineStyle = properties.textDecorationStyle;
-        lineColor = properties.textDecorationColor;
+        blockSignals = false;
+    }
 
+    function updateTextDecorStyle() {
+        blockSignals = true;
+        lineStyle = properties.textDecorationStyle;
+        blockSignals = false;
+    }
+
+    function updateTextDecorColor() {
+        blockSignals = true;
+        lineColor = properties.textDecorationColor;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [
             properties.textDecorationLineState,
             properties.textDecorationStyleState,
             properties.textDecorationColorState
         ];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onLineStyleChanged: {

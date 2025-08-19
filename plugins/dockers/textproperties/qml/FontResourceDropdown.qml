@@ -20,6 +20,7 @@ Button {
         id: modelWrapperId;
         resourceType: "fontfamilies";
     };
+    property var locales: [];
 
     Kis.ThemedControl {
         id: palControl;
@@ -57,8 +58,8 @@ Button {
             property string sample: "";
 
             Component.onCompleted: {
-                fontName = modelWrapper.localizedNameFromMetadata(meta, locales, model.name);
-                sample = modelWrapper.localizedSampleFromMetadata(meta, locales, "");
+                fontName = modelWrapper.localizedNameFromMetadata(meta, familyCmb.locales, model.name);
+                sample = modelWrapper.localizedSampleFromMetadata(meta, familyCmb.locales, "");
             }
 
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load

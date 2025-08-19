@@ -20,14 +20,32 @@ TextPropertyBase {
     property alias fullSizeKana: fullSizeKanaChk.checked;
     property int capitals;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onTextTransformChanged() {
+            updateTextTransform();
+            updateVisibility();
+        }
+
+        function onTextTransformStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateTextTransform();
+        updateVisibility();
+    }
+
+    function updateVisibility() {
+        propertyState = [properties.textTransformState];
+        setVisibleFromProperty();
+    }
+
+    function updateTextTransform() {
         blockSignals = true;
         fullWidth = properties.textTransform.fullWidth;
         fullSizeKana = properties.textTransform.fullSizeKana;
         capitals = properties.textTransform.capitals;
-
-        propertyState = [properties.textTransformState];
-        setVisibleFromProperty();
         blockSignals = false;
     }
 

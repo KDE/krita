@@ -24,16 +24,51 @@ CollapsibleGroupProperty {
     property alias eachLine: eachLineCkb.checked;
     property alias textIndentUnit: textIndentUnitCmb.dataUnit;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onTextIndentChanged() {
+            updateTextIndentValue();
+            updateVisibility();
+        }
+
+        // Fontsize and lineheight affect the metrics.
+        function onFontSizeChanged() {
+            updateUnits();
+        }
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+        function onLineHeightChanged() {
+            updateUnits();
+        }
+
+        function onTextIndentStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateTextIndentValue();
+        updateVisibility();
+    }
+
+    function updateUnits() {
         blockSignals = true;
         textIndentUnitCmb.setTextProperties(properties);
+        blockSignals = false;
+    }
+
+    function updateTextIndentValue() {
+        blockSignals = true;
         textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.length.value, properties.textIndent.length.unitType);
         hanging = properties.textIndent.hanging;
         eachLine = properties.textIndent.eachLine;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.textIndentState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onTextIndentValueChanged: {

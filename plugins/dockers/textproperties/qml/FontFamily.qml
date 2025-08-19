@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
 CollapsibleGroupProperty {
+    id: root;
     propertyTitle: i18nc("@label", "Font Family");
     propertyName: "font-family";
     propertyType: TextPropertyConfigModel.Character;
@@ -20,13 +21,33 @@ CollapsibleGroupProperty {
                        "font-family, typeface, font, fallback");
 
     property var fontFamilies: [];
+    property var locales: [];
 
-    onPropertiesUpdated: {
-        blockSignals = true;
-        fontFamilies = properties.fontFamilies;
+    Connections {
+        target: properties;
+        function onFontFamiliesChanged() {
+            updateFontFamilies();
+            updateFontFamilies();
+        }
+
+        function onFontFamiliesStateChanged() {
+            updateFontFamilies();
+        }
+    }
+    onPropertiesChanged: {
+        updateFontFamilies();
+        setVisibleFromProperty();
+    }
+
+    function updateFontFamilies() {
+            blockSignals = true;
+            fontFamilies = properties.fontFamilies;
+            blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.fontFamiliesState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onFontFamiliesChanged: {
@@ -54,6 +75,7 @@ CollapsibleGroupProperty {
         FontResourceDropdown {
             id: mainFamilyCmb;
             Layout.fillWidth: true;
+            locales: root.locales;
             onActivated: {
                 if (fontFamilies.length >0) {
                     fontFamilies[0] = text;
@@ -106,6 +128,7 @@ CollapsibleGroupProperty {
                     FontResourceDropdown {
                         id: fontCmb;
                         Layout.fillWidth: true;
+                        locales: root.locales;
                         onActivated: {
                             fontFamilies[fontListDelegate.dIndex] = text;
                         }

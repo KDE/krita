@@ -21,16 +21,52 @@ TextPropertyBase {
     property alias wordSpacing: wordSpacingUnitCmb.dataValue;
     property alias wordSpacingUnit: wordSpacingUnitCmb.dataUnit;
 
+    Connections {
+        target: properties;
+        function onWordSpacingChanged() {
+            updateWordSpacing();
+            updateVisibility();
+        }
+        // Fontsize and lineheight affect the metrics.
+        function onFontSizeChanged() {
+            updateUnits();
+        }
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+        function onLineHeightChanged() {
+            updateUnits();
+        }
 
-    onPropertiesUpdated: {
+        function onWordSpacingStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateWordSpacing();
+        updateVisibility();
+    }
+
+    function updateUnits() {
         blockSignals = true;
         wordSpacingUnitCmb.setTextProperties(properties);
-        wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
-
-        propertyState = [properties.wordSpacingState];
-        setVisibleFromProperty();
         blockSignals = false;
     }
+
+    function updateWordSpacing() {
+        if (!wordSpacingSpn.isDragging) {
+            blockSignals = true;
+            wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
+            blockSignals = false;
+        }
+    }
+
+    function updateVisibility() {
+        propertyState = [properties.wordSpacingState];
+        setVisibleFromProperty();
+    }
+
     onWordSpacingChanged: {
         if (!blockSignals) {
             properties.wordSpacing.value = wordSpacing;

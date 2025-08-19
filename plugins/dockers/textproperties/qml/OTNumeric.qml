@@ -23,17 +23,34 @@ TextPropertyBase {
     property alias ordinals: ordinalsCbx.checked;
     property alias slashedZero: slashedZeroCbx.checked;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onFontVariantNumericChanged() {
+            updateOTNumeric();
+            updateVisibility();
+        }
+
+        function onFontVariantNumericStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateOTNumeric();
+        updateVisibility();
+    }
+    function updateOTNumeric() {
         blockSignals = true;
         figureStyleType = properties.fontVariantNumeric.figureStyle;
         figureSpacingType = properties.fontVariantNumeric.figureSpacing;
         fractionType = properties.fontVariantNumeric.fractions;
         ordinals = properties.fontVariantNumeric.ordinals;
         slashedZero = properties.fontVariantNumeric.slashedZero;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.fontVariantNumericState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onFigureStyleTypeChanged: {

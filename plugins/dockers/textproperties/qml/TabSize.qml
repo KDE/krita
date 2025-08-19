@@ -40,14 +40,49 @@ TextPropertyBase {
         onUserUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(userUnit);
     }
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onTabSizeChanged() {
+            updateTabSize();
+            updateVisibility();
+        }
+
+        // Fontsize and lineheight affect the metrics.
+        function onFontSizeChanged() {
+            updateUnits();
+        }
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+        function onLineHeightChanged() {
+            updateUnits();
+        }
+
+        function onTabSizeStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateTabSize();
+        updateVisibility();
+    }
+
+    function updateUnits() {
         blockSignals = true;
         converter.setFontMetricsFromTextPropertiesModel(properties);
-        converter.setDataValueAndUnit(properties.tabSize.value, properties.tabSize.unit);
+        blockSignals = false;
+    }
 
+    function updateTabSize() {
+        blockSignals = true;
+        converter.setDataValueAndUnit(properties.tabSize.value, properties.tabSize.unit);
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.tabSizeState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onTabSizeChanged: {

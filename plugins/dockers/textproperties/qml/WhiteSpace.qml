@@ -27,7 +27,27 @@ TextPropertyBase {
     readonly property int wsBreakSpace: 4;
     readonly property int wsPreLine: 5;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+
+        function onTextCollapseChanged() {
+            updateWhiteSpace();
+            updateVisibility();
+        }
+        function onTextWrapChanged() {
+            updateWhiteSpace();
+            updateVisibility();
+        }
+
+        function onTextCollapseStateChanged() {
+            updateVisibility();
+        }
+        function onTextWrapStateChanged() {
+            updateVisibility();
+        }
+    }
+
+    function updateWhiteSpace() {
         blockSignals = true;
         if (properties.textWrap !== KoSvgText.NoWrap) {
             if (properties.textCollapse === KoSvgText.Preserve) {
@@ -46,10 +66,12 @@ TextPropertyBase {
                 whiteSpace = wsNoWrap;
             }
         }
-
-        propertyState = [properties.textCollapseState, properties.textWrap];
-        setVisibleFromProperty();
         blockSignals = false;
+    }
+
+    function updateVisibility() {
+        propertyState = [properties.textCollapseState, properties.textWrapState];
+        setVisibleFromProperty();
     }
 
     onWhiteSpaceChanged: {

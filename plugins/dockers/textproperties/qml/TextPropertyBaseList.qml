@@ -15,6 +15,8 @@ ColumnLayout {
     property int propertyType: TextPropertyConfigModel.Character;
     property TextPropertyConfigModel configModel;
     property double canvasDPI: 72.0;
+    property KoSvgTextPropertiesModel propertiesModel;
+    property var locales: [];
 
     ListModel {
         id: propertyList;
@@ -54,7 +56,8 @@ ColumnLayout {
                                     prop.visibilityState
                                     );
 
-            if (testShowProperty(prop.propertyType) && !shouldFilter(prop.propertyName)) {
+            prop.parentPropertyType = propertyBaseList.propertyType;
+            if (!shouldFilter(prop.propertyName)) {
                 prop.setVisibleFromProperty();
             } else {
                 prop.visible = false;
@@ -64,28 +67,14 @@ ColumnLayout {
         updatePropertyVisibilityState();
     }
 
-    /// Test if the current propertyType is the same as the one for this list.
-    /// Used to filter out paragraph-properties from character property list and vice-versa.
-    function testShowProperty(propertyType) {
-        if (filteredConfigModel.showParagraphProperties && propertyType === TextPropertyConfigModel.Character) {
-            return false;
-        } else if (!filteredConfigModel.showParagraphProperties && propertyType === TextPropertyConfigModel.Paragraph) {
-            return false;
-        }
-        return true;
-    }
-
     /// Update properties on the list or hide them.
     function updateProperties() {
         for (var i = 0; i < propertyWidgetModel.count; i++) {
             let prop = propertyWidgetModel.get(i);
-            if (testShowProperty(prop.propertyType)) {
-                prop.propertiesUpdated();
-                if (shouldFilter(prop.propertyName)) {
-                    prop.visible = false;
-                }
-            } else {
+            if (shouldFilter(prop.propertyName)) {
                 prop.visible = false;
+            } else {
+                prop.setVisibleFromProperty();
             }
         }
     }
@@ -108,14 +97,10 @@ ColumnLayout {
             prop.defaultVisibilityState = configModel.defaultVisibilityState;
             prop.visibilityState = configModel.visibilityStateForName(name);
 
-            if (testShowProperty(prop.propertyType)) {
-                if (shouldFilter(name)) {
-                    prop.visible = false;
-                } else {
-                    prop.setVisibleFromProperty();
-                }
-            } else {
+            if (shouldFilter(name)) {
                 prop.visible = false;
+            } else {
+                prop.setVisibleFromProperty();
             }
         }
     }
@@ -140,6 +125,8 @@ ColumnLayout {
         }
     }
 
+    signal callPropertyVisibilityConfig;
+
     Frame {
         id: frame;
         Layout.fillHeight: true;
@@ -163,97 +150,129 @@ ColumnLayout {
                 id: propertyWidgetModel;
                 WritingMode {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 Direction {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 TextIndent{
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 TextAlign{
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 DominantBaseline {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 WhiteSpace {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 UnderlinePosition {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 HangingPunctuation {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 TabSize {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 TextRendering {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 FontSize {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 FontSizeAdjust {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
 
                 FontFamily {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
+                    locales: propertyBaseList.locales;
                 }
                 FontStyle {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 LetterSpacing {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 WordSpacing {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 LineHeight {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 LineBreak {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 WordBreak {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 TextTransform {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 TextDecoration {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 OTLigatures {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 OTPosition {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 OTNumeric {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 OTCaps {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 OTEastAsian {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 OpenTypeFeatureSettings {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 FontKerning {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 BaselineShift {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 AlignmentBaseline {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
                 Language {
                     dpi: canvasDPI;
+                    properties: propertiesModel;
                 }
             }
         }
@@ -261,123 +280,125 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true;
-        TextField {
-            id: filterPropertyLn;
+        StackLayout {
             Layout.fillWidth: true;
-            Layout.minimumHeight: implicitHeight;
-            placeholderText: i18nc("@info:placeholder", "Filter...");
+            Layout.maximumHeight: Math.max(addPropertyCmb.implicitHeight, filterPropertyLn.implicitHeight);
 
-            visible: filteredConfigModel.isFiltering;
-            onVisibleChanged: {
-                if (visible) {
-                    text = "";
+            currentIndex: filteredConfigModel.isFiltering? 0: 1;
+            TextField {
+                id: filterPropertyLn;
+                Layout.fillWidth: true;
+                Layout.maximumHeight: implicitHeight;
+                placeholderText: i18nc("@info:placeholder", "Filter...");
+
+                onVisibleChanged: {
+                    if (visible) {
+                        text = "";
+                    }
                 }
-            }
-
-            onTextChanged: {
-                if (visible) {
-                    filteredConfigModel.setFilterRegularExpression(text);
-                }
-            }
-        }
-
-        ComboBox {
-            id: addPropertyCmb;
-            visible: !filteredConfigModel.isFiltering;
-            onVisibleChanged: {
-                if (visible) {
-                    filteredConfigModel.setFilterRegularExpression("");
-                }
-            }
-
-            Layout.fillWidth: true;
-            Layout.minimumHeight: implicitHeight;
-            model: filteredConfigModel;
-            textRole: "display";
-            displayText: i18nc("@label:listbox", "Add Property");
-            onPopupChanged: if (!addPropertyCmb.popup.visible) { propertySearch.text = ""; }
-
-            Kis.ThemedControl {
-                id: cmbPalette;
-            }
-            palette: cmbPalette.palette;
-
-            function enableProperty(name) {
-                propertySearch.blockSignals = true;
-                propertySearch.text = "";
-                propertyBaseList.enableProperty(name);
-                popup.close();
-                propertySearch.blockSignals = false;
-            }
-
-            contentItem: TextField {
-                id: propertySearch;
-                placeholderText: i18nc("@info:placeholder", "Add Property...");
-
-                verticalAlignment: Text.AlignVCenter
-                font: addPropertyCmb.font
-                color: addPropertyCmb.palette.text
-                selectionColor: addPropertyCmb.palette.highlight
-                selectedTextColor: addPropertyCmb.palette.highlightedText;
-
-                property bool blockSignals: false;
-
-                selectByMouse: true;
 
                 onTextChanged: {
-                    if (text !== "") {
-                        filteredConfigModel.setFilterRegularExpression(text);
-                        addPropertyCmb.popup.open();
-                    } else {
-                        addPropertyCmb.popup.close();
+                    if (visible) {
                         filteredConfigModel.setFilterRegularExpression(text);
                     }
-                }
-
-                onAccepted: {
-                    blockSignals = true;
-                    let name = filteredConfigModel.filteredNames[addPropertyCmb.highlightedIndex]
-                    if (typeof name != 'undefined') {
-                        addPropertyCmb.enableProperty(name);
-                    }
-                    text = "";
-                    blockSignals = false;
                 }
             }
 
-            delegate: ItemDelegate {
-                id: addPropertyDelegate;
-                width: addPropertyCmb.width;
-                required property var model;
-                required property string title;
-                required property string name;
-                required property int index;
-                required property string toolTip;
-                contentItem: Label {
-                    enabled: addPropertyDelegate.enabled;
-                    Kis.ThemedControl {
-                        id: addPropertyPalette;
+            ComboBox {
+                id: addPropertyCmb;
+                Layout.fillWidth: true;
+                Layout.maximumHeight: implicitHeight;
+                onVisibleChanged: {
+                    if (visible) {
+                        filteredConfigModel.setFilterRegularExpression("");
                     }
-                    palette: addPropertyPalette.palette;
-                    color: addPropertyDelegate.highlighted? palette.highlightedText: palette.text;
-                    text: addPropertyDelegate.title;
-                    elide: Text.ElideRight;
+                }
+                model: filteredConfigModel;
+                textRole: "display";
+                displayText: i18nc("@label:listbox", "Add Property");
+                onPopupChanged: if (!addPropertyCmb.popup.visible) { propertySearch.text = ""; }
+
+                Kis.ThemedControl {
+                    id: cmbPalette;
+                }
+                palette: cmbPalette.palette;
+
+                function enableProperty(name) {
+                    propertySearch.blockSignals = true;
+                    propertySearch.text = "";
+                    propertyBaseList.enableProperty(name);
+                    popup.close();
+                    propertySearch.blockSignals = false;
+                }
+
+                contentItem: TextField {
+                    id: propertySearch;
+                    placeholderText: i18nc("@info:placeholder", "Add Property...");
+
                     verticalAlignment: Text.AlignVCenter
+                    font: addPropertyCmb.font
+                    color: addPropertyCmb.palette.text
+                    selectionColor: addPropertyCmb.palette.highlight
+                    selectedTextColor: addPropertyCmb.palette.highlightedText;
+
+                    property bool blockSignals: false;
+
+                    selectByMouse: true;
+
+                    onTextChanged: {
+                        if (text !== "") {
+                            filteredConfigModel.setFilterRegularExpression(text);
+                            addPropertyCmb.popup.open();
+                        } else {
+                            addPropertyCmb.popup.close();
+                            filteredConfigModel.setFilterRegularExpression(text);
+                        }
+                    }
+
+                    onAccepted: {
+                        blockSignals = true;
+                        let name = filteredConfigModel.filteredNames[addPropertyCmb.highlightedIndex]
+                        if (typeof name != 'undefined') {
+                            addPropertyCmb.enableProperty(name);
+                        }
+                        text = "";
+                        blockSignals = false;
+                    }
                 }
-                enabled: !isVisible(name);
-                highlighted: addPropertyCmb.highlightedIndex === index;
-                background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
 
-                ToolTip.text: toolTip;
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: highlighted;
+                delegate: ItemDelegate {
+                    id: addPropertyDelegate;
+                    width: addPropertyCmb.width;
+                    required property var model;
+                    required property string title;
+                    required property string name;
+                    required property int index;
+                    required property string toolTip;
+                    contentItem: Label {
+                        enabled: addPropertyDelegate.enabled;
+                        Kis.ThemedControl {
+                            id: addPropertyPalette;
+                        }
+                        palette: addPropertyPalette.palette;
+                        color: addPropertyDelegate.highlighted? palette.highlightedText: palette.text;
+                        text: addPropertyDelegate.title;
+                        elide: Text.ElideRight;
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    enabled: !isVisible(name);
+                    highlighted: addPropertyCmb.highlightedIndex === index;
+                    background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
 
-                onClicked: addPropertyCmb.enableProperty(name);
+                    ToolTip.text: toolTip;
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: highlighted;
+
+                    onClicked: addPropertyCmb.enableProperty(name);
+                }
+                popup.y: addPropertyCmb.height - 1;
+                popup.palette: cmbPalette.palette;
             }
-            popup.y: addPropertyCmb.height - 1;
-            popup.palette: cmbPalette.palette;
         }
-
         ToolButton {
             id: configButton;
             icon.source: "qrc:///light_configure.svg"
@@ -392,7 +413,8 @@ ColumnLayout {
 
             palette: paletteControl.palette;
 
-            onClicked: mainWindow.callModalTextPropertyConfigDialog();
+            onClicked: callPropertyVisibilityConfig();
         }
+
     }
 }

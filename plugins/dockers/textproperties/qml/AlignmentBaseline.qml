@@ -18,12 +18,30 @@ TextPropertyBase {
                        "alignment-baseline, mojisoroe");
     property int baselineSelection;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onAlignmentBaselineChanged() {
+            updateAlignmentBaseline();
+            updateVisibility();
+        }
+
+        function onAlignmentBaselineStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateAlignmentBaseline();
+        updateVisibility();
+    }
+    function updateAlignmentBaseline() {
         blockSignals = true;
         baselineSelection = properties.alignmentBaseline;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.alignmentBaselineState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onBaselineSelectionChanged: {

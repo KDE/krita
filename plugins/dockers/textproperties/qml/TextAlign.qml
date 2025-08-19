@@ -23,20 +23,69 @@ CollapsibleGroupProperty {
     property int textAlignLast: 0;
     property int textAnchor: 0;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onTextAlignAllChanged() {
+            updateTextAlignAll();
+            setButtonsChecked();
+            updateVisibility();
+        }
+
+        function onTextAlignLastChanged() {
+            updateTextAlignLast();
+            setButtonsChecked();
+            updateVisibility();
+        }
+
+        function onTextAnchorChanged() {
+            updateTextAnchor();
+            setButtonsChecked();
+            updateVisibility();
+        }
+
+        function onTextAlignAllStateChanged() {
+            updateVisibility();
+        }
+        function onTextAlignLastStateChanged() {
+            updateVisibility();
+        }
+        function onTextAnchorStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateTextAlignAll();
+        updateTextAlignLast();
+        updateTextAnchor();
+        setButtonsChecked();
+        updateVisibility();
+    }
+
+    function updateTextAlignAll() {
         blockSignals = true;
         textAlignAll = properties.textAlignAll;
-        textAlignLast = properties.textAlignLast;
-        textAnchor = properties.textAnchor;
-        setButtonsChecked();
+        blockSignals = false;
+    }
 
+    function updateTextAlignLast() {
+        blockSignals = true;
+        textAlignLast = properties.textAlignLast;
+        blockSignals = false;
+    }
+
+    function updateTextAnchor() {
+        blockSignals = true;
+        textAnchor = properties.textAnchor;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [
             properties.textAlignAllState,
             properties.textAlignLastState,
             properties.textAnchorState
         ];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onTextAlignAllChanged: {

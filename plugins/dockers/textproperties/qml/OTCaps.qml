@@ -19,14 +19,30 @@ TextPropertyBase {
 
     property int capsType;
 
+    Connections {
+        target: properties;
+        function onFontVariantCapsChanged() {
+            updateOTCaps();
+            updateVisibility();
+        }
 
-    onPropertiesUpdated: {
+        function onFontVariantCapsStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateOTCaps();
+        updateVisibility();
+    }
+    function updateOTCaps() {
         blockSignals = true;
         capsType = properties.fontVariantCaps;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.fontVariantCapsState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onCapsTypeChanged: {

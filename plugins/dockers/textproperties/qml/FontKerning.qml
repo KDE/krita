@@ -22,12 +22,32 @@ TextPropertyBase {
                        "font-kerning, tracking");
 
     property alias kerning: fontKerningCbx.checked;
-    onPropertiesUpdated: {
+
+    Connections {
+        target: properties;
+        function onFontKerningChanged() {
+            updateKerning();
+            updateVisibility();
+        }
+
+        function onFontKerningStateChanged() {
+            updateVisibility();
+        }
+    }
+
+    onPropertiesChanged: {
+        updateKerning();
+        updateVisibility();
+    }
+
+    function updateKerning() {
         blockSignals = true;
         kerning = properties.fontKerning;
+        blockSignals = false;
+    }
+    function updateVisibility() {
         propertyState = [properties.fontKerningState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onKerningChanged: {

@@ -42,28 +42,123 @@ CollapsibleGroupProperty {
     property alias fontSynthesizeWeight: synthesizeWeightCbx.checked;
     property alias fontSynthesizeSlant: synthesizeSlantCbx.checked;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onFontWeightChanged() {
+            updateWeight();
+            updateVisibility();
+        }
+        function onFontStyleChanged() {
+            updateSlant();
+            updateVisibility();
+        }
+        function onFontWidthChanged() {
+            updateWidth();
+            updateVisibility();
+        }
+        function onFontOpticalSizeLinkChanged() {
+            updateWeight();
+            updateVisibility();
+        }
+        function onFontSynthesisStyleChanged() {
+            updateFontSynthesizeSlant();
+            updateVisibility();
+        }
+        function onFontSynthesisWeightChanged() {
+            updateFontSynthesizeWeight();
+            updateVisibility();
+        }
+
+        function onAxisValuesChanged() {
+            updateAxisValues();
+            updateVisibility();
+        }
+
+        function onFontFamiliesChanged() {
+            updateAxisAndStyle();
+        }
+    }
+    onPropertiesChanged: {
+        updateWeight();
+        updateSlant();
+        updateWidth();
+        updateOptical();
+        updateFontSynthesizeSlant();
+        updateFontSynthesizeWeight();
+        updateAxisAndStyle();
+        updateVisibility();
+    }
+
+    function updateWeight() {
+        if (!fontWeightSpn.isDragging) {
+            blockSignals = true;
+            fontWeight = properties.fontWeight;
+            blockSignals = false;
+        }
+    }
+
+    function updateSlant() {
+        if (!fontSlantSpn.isDragging) {
+            blockSignals = true;
+            fontSlant = properties.fontStyle.style;
+            fontSlantSlope = properties.fontStyle.value;
+            blockSignals = false;
+        }
+    }
+
+    function updateWidth() {
+        if (!fontStretchSpn.isDragging) {
+            blockSignals = true;
+            fontWidth = properties.fontWidth;
+            blockSignals = false;
+        }
+    }
+
+    function updateOptical() {
         blockSignals = true;
-        fontWeight = properties.fontWeight;
-        fontWidth = properties.fontWidth;
         fontOptical = properties.fontOpticalSizeLink;
-        fontSlant = properties.fontStyle.style;
-        fontSlantSlope = properties.fontStyle.value;
+        blockSignals = false;
+    }
+
+    function updateFontSynthesizeSlant() {
+        blockSignals = true;
         fontSynthesizeSlant = properties.fontSynthesisStyle;
+        blockSignals = false;
+    }
+
+    function updateFontSynthesizeWeight() {
+        blockSignals = true;
         fontSynthesizeWeight = properties.fontSynthesisWeight;
+        blockSignals = false;
+    }
+
+    function updateAxisValues() {
+        blockSignals = true;
+        axesModel.axisValues = properties.axisValues;
+        blockSignals = false;
+    }
+
+    function updateAxisAndStyle() {
+        blockSignals = true;
         axesModel.setFromTextPropertiesModel(properties);
         stylesModel.setFromTextPropertiesModel(properties);
         styleCmb.currentIndex = stylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
-        visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.axisValueState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontSynthesisStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                || properties.fontSynthesisWeightState !== KoSvgTextPropertiesModel.PropertyUnset;
-        setVisibleFromProperty();
         blockSignals = false;
     }
+
+    function updateVisibility() {
+        propertyState = [properties.fontWeightState,
+                         properties.fontStyleState,
+                         properties.fontWidthState,
+                         properties.fontOpticalSizeLinkState,
+                         properties.axisValueState,
+                         properties.fontSynthesisStyleState,
+                         properties.fontSynthesisWeightState,
+                         properties.axisValueState
+                ];
+        setVisibleFromProperty();
+    }
+
     onFontWeightChanged: {
         if (!blockSignals) {
             properties.fontWeight = fontWeight;
@@ -160,7 +255,6 @@ CollapsibleGroupProperty {
             prefix: i18nc("@label:slider", "Weight: ");
             from: 0;
             to: 1000;
-            blockUpdateSignalOnDrag: true;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
 
@@ -191,7 +285,6 @@ CollapsibleGroupProperty {
             prefix: i18nc("@label:slider", "Width: ")
             from: 0;
             to: 200;
-            blockUpdateSignalOnDrag: true;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
         }
@@ -242,7 +335,6 @@ CollapsibleGroupProperty {
                 Kis.ThemedControl {
                     id: slantSpnPal;
                 }
-                blockUpdateSignalOnDrag: true;
                 anchors.fill: parent;
                 palette: slantSpnPal.palette;
 
@@ -325,7 +417,6 @@ CollapsibleGroupProperty {
                 dFrom: axismin;
                 dTo: axismax;
                 dValue: model.edit;
-                blockUpdateSignalOnDrag: true;
                 onDValueChanged: model.edit = dValue;
 
                 width: ListView.view.width;

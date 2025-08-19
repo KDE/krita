@@ -17,17 +17,39 @@ TextPropertyBase {
                        "text-decoration-position, underline, left, right, under");
     propertyType: TextPropertyConfigModel.Mixed;
 
-
     property int horizontalPos: 0;
     property int verticalPos: 0;
-    onPropertiesUpdated: {
+
+    Connections {
+        target: properties;
+        function onTextDecorationUnderlinePosHorizontalChanged() {
+            updateUnderlinePos();
+            updateVisibility();
+        }
+        function onTextDecorationUnderlinePosVerticalChanged() {
+            updateUnderlinePos();
+            updateVisibility();
+        }
+
+        function onTextDecorationUnderlinePositionStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnderlinePos();
+        updateVisibility();
+    }
+
+    function updateUnderlinePos() {
         blockSignals = true;
         horizontalPos = properties.textDecorationUnderlinePosHorizontal;
         verticalPos = properties.textDecorationUnderlinePosVertical;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.textDecorationUnderlinePositionState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onHorizontalPosChanged: {

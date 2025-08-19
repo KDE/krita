@@ -11,6 +11,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     TextPropertyConfigModel.cpp
     TextPropertyConfigDialog.cpp
     CssStylePresetEditDialog.cpp
+    TextPropertiesCanvasObserver.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

@@ -41,16 +41,48 @@ TextPropertyBase {
         onUserUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(userUnit);
     }
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onLineHeightChanged() {
+            updateLineHeight();
+            updateVisibility();
+        }
+
+        // Fontsize and lineheight affect the metrics.
+        function onFontSizeChanged() {
+            updateUnits();
+        }
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+
+        function onLineHeightStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateLineHeight();
+        updateVisibility();
+    }
+
+    function updateUnits() {
+        blockSignals = true;
+        converter.setFontMetricsFromTextPropertiesModel(properties, false, true);
+        blockSignals = false;
+    }
+
+    function updateLineHeight() {
         blockSignals = true;
         isNormal = properties.lineHeight.isNormal;
-        converter.setFontMetricsFromTextPropertiesModel(properties, false, true);
         converter.percentageReference = properties.resolvedFontSize(false);
         converter.setDataValueAndUnit(properties.lineHeight.value, properties.lineHeight.unit);
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.lineHeightState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onLineHeightUnitChanged: {

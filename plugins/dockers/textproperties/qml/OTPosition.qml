@@ -19,14 +19,30 @@ TextPropertyBase {
 
     property int positionType;
 
+    Connections {
+        target: properties;
+        function onFontVariantPositionChanged() {
+            updateOTPosition();
+            updateVisibility();
+        }
 
-    onPropertiesUpdated: {
+        function onFontVariantPositionStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateOTPosition();
+        updateVisibility();
+    }
+    function updateOTPosition() {
         blockSignals = true;
         positionType = properties.fontVariantPosition;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.fontVariantPositionState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onPositionTypeChanged: {

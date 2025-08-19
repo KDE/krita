@@ -18,13 +18,30 @@ TextPropertyBase {
                        "word-break, line breaking");
     property int breakType;
 
+    Connections {
+        target: properties;
+        function onWordBreakChanged() {
+            updateWordBreak();
+            updateVisibility();
+        }
 
-    onPropertiesUpdated: {
-        blockSignals = true;
-        breakType = properties.wordBreak;
+        function onWordBreakStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateWordBreak();
+        updateVisibility();
+    }
 
+    function updateVisibility() {
         propertyState = [properties.wordBreakState];
         setVisibleFromProperty();
+    }
+
+    function updateWordBreak() {
+        blockSignals = true;
+        breakType = properties.wordBreak;
         blockSignals = false;
     }
 

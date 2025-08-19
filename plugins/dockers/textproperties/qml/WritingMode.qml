@@ -18,15 +18,31 @@ TextPropertyBase {
                        "writing-mode, horizontal, vertical, top-to-bottom");
     property int writingMode;
 
+    Connections {
+        target: properties;
+        function onWritingModeChanged() {
+            updateWritingMode();
+            updateVisibility();
+        }
 
+        function onWritingModeStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateWritingMode();
+        updateVisibility();
+    }
 
-    onPropertiesUpdated: {
+    function updateWritingMode() {
         blockSignals = true;
         writingMode = properties.writingMode;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.writingModeState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onWritingModeChanged: {

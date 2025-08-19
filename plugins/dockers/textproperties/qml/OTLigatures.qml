@@ -22,17 +22,33 @@ TextPropertyBase {
     property alias historicalLigatures: historicalLigaCbx.checked;
     property alias contextualAlternates: contextualLigaCbx.checked;
 
+    Connections {
+        target: properties;
+        function onFontVariantLigaturesChanged() {
+            updateOTLigatures();
+            updateVisibility();
+        }
 
-    onPropertiesUpdated: {
+        function onFontVariantLigaturesStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateOTLigatures();
+        updateVisibility();
+    }
+    function updateOTLigatures() {
         blockSignals = true;
         commonLigatures = properties.fontVariantLigatures.commonLigatures;
         discretionaryLigatures = properties.fontVariantLigatures.discretionaryLigatures;
         historicalLigatures = properties.fontVariantLigatures.historicalLigatures;
         contextualAlternates = properties.fontVariantLigatures.contextualAlternates;
+        blockSignals = false;
+    }
 
+    function updateVisibility() {
         propertyState = [properties.fontVariantLigaturesState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onCommonLigaturesChanged: {

@@ -23,14 +23,59 @@ TextPropertyBase {
     property alias baselineShiftUnit: baselineShiftUnitCmb.dataUnit;
     property int baselineShiftMode;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onBaselineShiftModeChanged() {
+            updateBaselineShiftMode();
+            updateVisibility();
+        }
+        function onBaselineShiftValueChanged() {
+            updateBaselineShiftValue();
+            updateVisibility();
+        }
+
+        // Fontsize and lineheight affect the metrics.
+        function onFontSizeChanged() {
+            updateUnits();
+        }
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+        function onLineHeightChanged() {
+            updateUnits();
+        }
+
+        function onBaselineShiftStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateBaselineShiftMode();
+        updateBaselineShiftValue();
+        updateVisibility();
+    }
+
+    function updateUnits() {
+        blockSignals = true;
+        baselineShiftUnitCmb.setTextProperties(properties);
+        blockSignals = false;
+    }
+
+    function updateBaselineShiftMode() {
         blockSignals = true;
         baselineShiftMode = properties.baselineShiftMode;
-        baselineShiftUnitCmb.setTextProperties(properties);
-        baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.value, properties.baselineShiftValue.unitType)
+        blockSignals = false;
+    }
+    function updateBaselineShiftValue() {
+        blockSignals = true;
+        baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.value, properties.baselineShiftValue.unitType);
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.baselineShiftState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onBaselineShiftValueChanged: {

@@ -13,8 +13,18 @@ Control {
     id: root;
     anchors.fill: parent;
 
-    property TextPropertyConfigModel configModel : textPropertyConfigModel;
-    property double canvasDPI: 72.0;
+    property TextPropertiesCanvasObserver canvasObserver: TextPropertiesCanvasObserver {
+    };
+
+    Connections {
+        target: canvasObserver;
+        function onTextPropertyConfigChanged() {updatePropertyVisibilityState()}
+        function onTextPropertiesChanged() {setProperties()}
+    }
+
+
+    property TextPropertyConfigModel configModel : canvasObserver.textPropertyConfig;
+    property double canvasDPI: canvasObserver.dpi;
     Kis.ThemedControl {
         id: pal;
     }
@@ -32,6 +42,12 @@ Control {
         configModel.loadFromConfiguration();
         characterPropertyList.updatePropertyVisibilityState();
         paragraphPropertyList.updatePropertyVisibilityState();
+    }
+
+    onCanvasObserverChanged: updatePropertyVisibilityState();
+    Component.onCompleted: {
+        updatePropertyVisibilityState();
+        setProperties();
     }
 
     TabBar {
@@ -62,6 +78,10 @@ Control {
             propertyType: TextPropertyConfigModel.Character;
             configModel: root.configModel;
             canvasDPI: root.canvasDPI;
+            locales: canvasObserver.locales;
+            propertiesModel: canvasObserver.textProperties;
+
+            onCallPropertyVisibilityConfig: canvasObserver.callModalTextPropertyConfigDialog();
         }
 
         TextPropertyBaseList {
@@ -69,6 +89,10 @@ Control {
             propertyType: TextPropertyConfigModel.Paragraph;
             configModel: root.configModel;
             canvasDPI: root.canvasDPI;
+            locales: canvasObserver.locales;
+            propertiesModel: canvasObserver.textProperties;
+
+            onCallPropertyVisibilityConfig: canvasObserver.callModalTextPropertyConfigDialog();
         }
 
         ResourceView {
@@ -79,7 +103,7 @@ Control {
 
             signal applyPreset;
             onApplyPreset: {
-                mainWindow.applyPreset(currentResource);
+                canvasObserver.applyPreset(currentResource);
             }
 
             resourceDelegate: ItemDelegate {
@@ -171,7 +195,7 @@ Control {
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
-                    onClicked: mainWindow.createNewPresetFromSettings();
+                    onClicked: canvasObserver.createNewPresetFromSettings();
                     hoverEnabled: true;
                     ToolTip.text: text;
                     ToolTip.visible: hovered;
@@ -184,7 +208,7 @@ Control {
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
-                    onClicked: mainWindow.editPreset(presetView.currentResource);
+                    onClicked: canvasObserver.editPreset(presetView.currentResource);
                     hoverEnabled: true;
                     Kis.ThemedControl {
                         id: editPalette;
@@ -203,7 +227,7 @@ Control {
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
-                    onClicked: mainWindow.cloneAndEditPreset(presetView.currentResource);
+                    onClicked: canvasObserver.cloneAndEditPreset(presetView.currentResource);
                     hoverEnabled: true;
                     Kis.ThemedControl {
                         id: cloneButtonPalette;

@@ -31,12 +31,31 @@ TextPropertyBase {
         onLanguageChanged: languageCmb.currentIndex = languageCmb.indexOfValue(language);
     }
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onLanguageChanged() {
+            updateBcpTags();
+            updateVisibility();
+        }
+
+        function onLanguageStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateBcpTags();
+        updateVisibility();
+    }
+
+    function updateBcpTags() {
         blockSignals = true;
-        localeHandler.bcp47Tag = properties.language;
+        localeHandler.bcp47Tag = properties.language
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.languageState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onEnableProperty: properties.languageState = KoSvgTextPropertiesModel.PropertySet;

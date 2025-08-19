@@ -21,16 +21,43 @@ TextPropertyBase {
     property int direction;
     property int unicodeBidi;
 
+    Connections {
+        target: properties;
+        function onDirectionChanged() {
+            updateDirection();
+            updateVisibility();
+        }
+        function onUnicodeBidiChanged() {
+            updateUnicodeBidi();
+            updateVisibility();
+        }
 
+        function onDirectionStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateDirection();
+        updateUnicodeBidi();
+        updateVisibility();
+    }
 
-    onPropertiesUpdated: {
+    function updateDirection() {
         blockSignals = true;
         direction = properties.direction;
+        blockSignals = false;
+    }
+
+    function updateUnicodeBidi() {
+        blockSignals = true;
         unicodeBidi = properties.unicodeBidi;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         enabled = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
         propertyState = [properties.directionState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onDirectionChanged: {

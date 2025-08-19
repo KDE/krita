@@ -20,14 +20,53 @@ TextPropertyBase {
     property alias hangEnd: paragraphEndCbx.checked;
     property int hangComma: KoSvgTextPropertiesModel.NoHang;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onHangingPunctuationFirstChanged() {
+            updateHangStart();
+            updateVisibility();
+        }
+        function onHangingPunctuationLastChanged() {
+            updateHangEnd();
+            updateVisibility();
+        }
+        function onHangingPunctuationCommaChanged() {
+            updateHangComma();
+            updateVisibility();
+        }
+
+        function onHangingPunctuationStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateHangStart();
+        updateHangEnd();
+        updateHangComma();
+        updateVisibility();
+    }
+
+    function updateHangStart() {
         blockSignals = true;
         hangStart = properties.hangingPunctuationFirst;
+        blockSignals = false;
+    }
+
+    function updateHangEnd() {
+        blockSignals = true;
         hangEnd = properties.hangingPunctuationLast;
+        blockSignals = false;
+    }
+
+    function updateHangComma() {
+        blockSignals = true;
         hangComma = properties.hangingPunctuationComma;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.hangingPunctuationState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onHangStartChanged: {

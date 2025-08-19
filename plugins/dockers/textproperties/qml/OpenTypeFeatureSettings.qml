@@ -27,14 +27,41 @@ TextPropertyBase {
         }
     }
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onFontFeatureSettingsChanged() {
+            updateFontFeatures();
+            updateVisibility();
+        }
+        function onFontFamiliesChanged() {
+            updateFontFeatureModel();
+            updateVisibility();
+        }
+        function onFontFeatureSettingsStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateFontFeatureModel();
+        updateVisibility();
+    }
+
+    function updateFontFeatureModel() {
         blockSignals = true;
         // Setting text properties model will also set the opentype features.
         fontFeatureModel.setFromTextPropertiesModel(properties);
+        blockSignals = false;
+    }
 
+    function updateFontFeatures() {
+        blockSignals = true;
+        fontFeatureModel.openTypeFeatures = properties.fontFeatureSettings;
+        blockSignals = false;
+    }
+
+    function updateVisibility() {
         propertyState = [properties.fontFeatureSettingsState];
         setVisibleFromProperty();
-        blockSignals = false;
     }
 
     onEnableProperty: properties.fontFeatureSettingsState = KoSvgTextPropertiesModel.PropertySet;

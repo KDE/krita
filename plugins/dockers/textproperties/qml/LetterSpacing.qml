@@ -21,15 +21,52 @@ TextPropertyBase {
     property alias letterSpacing: letterSpacingUnitCmb.dataValue;
     property alias letterSpacingUnit: letterSpacingUnitCmb.dataUnit;
 
-    onPropertiesUpdated: {
+    Connections {
+        target: properties;
+        function onLetterSpacingChanged() {
+            updateLetterSpacing();
+            updateVisibility();
+        }
+        // Fontsize and lineheight affect the metrics.
+        function onFontSizeChanged() {
+            updateUnits();
+        }
+        function onFontFamiliesChanged() {
+            updateUnits();
+        }
+        function onLineHeightChanged() {
+            updateUnits();
+        }
+
+        function onLetterSpacingStateChanged() {
+            updateVisibility();
+        }
+    }
+    onPropertiesChanged: {
+        updateUnits();
+        updateLetterSpacing();
+        updateVisibility();
+    }
+
+    function updateUnits() {
         blockSignals = true;
         letterSpacingUnitCmb.setTextProperties(properties);
-        letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
-
-        propertyState = [properties.letterSpacingState];
-        setVisibleFromProperty();
         blockSignals = false;
     }
+
+    function updateLetterSpacing() {
+        if (!letterSpacingSpn.isDragging) {
+            blockSignals = true;
+            letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
+            blockSignals = false;
+        }
+    }
+
+    function updateVisibility() {
+        propertyState = [properties.letterSpacingState];
+        setVisibleFromProperty();
+    }
+
     onLetterSpacingChanged: {
         if (!blockSignals) {
             properties.letterSpacing.value = letterSpacing;
@@ -63,13 +100,11 @@ TextPropertyBase {
             dTo: 99;
             softDFrom: -10;
             softDTo: 10;
-            softRangeActive: true;
             dStepSize: 0.1;
-
-            blockUpdateSignalOnDrag: true;
+            softRangeActive: true;
 
             onDValueChanged: letterSpacingUnitCmb.userValue = dValue;
-
+            blockUpdateSignalOnDrag: true;
         }
 
         UnitComboBox {

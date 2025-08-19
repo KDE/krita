@@ -26,7 +26,13 @@ def nodeToImage(wnode):
     """
     Returns an QImage 8-bit sRGB
     """
-    icc_profile = (wnode.meta.get("icc") or wnode.cfg["meta"]["icc"])[0]
+    icc_profile = wnode.meta.get("icc")
+    if not icc_profile and self.inherit:
+        icc_profile = wnode.inheritedMetadata().get("icc")
+    if not icc_profile:
+        icc_profile = wnode.cfg["meta"]["icc"]
+
+    icc_profile = icc_profile[0]
     [x, y, w, h] = wnode.bounds
 
     conversion_not_needed = (

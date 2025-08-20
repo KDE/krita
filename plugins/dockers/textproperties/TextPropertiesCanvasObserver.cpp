@@ -34,6 +34,7 @@ struct TextPropertiesCanvasObserver::Private {
     TextPropertyConfigModel *textPropertyConfigModel {nullptr};
     qreal currentDpi{72.0};
     QStringList locales;
+    bool hasFocus {true};
 };
 
 TextPropertiesCanvasObserver::TextPropertiesCanvasObserver(QObject *parent)
@@ -121,10 +122,23 @@ TextPropertyConfigModel *TextPropertiesCanvasObserver::textPropertyConfig() cons
     return d->textPropertyConfigModel;
 }
 
+bool TextPropertiesCanvasObserver::hasFocus() const
+{
+    return d->hasFocus;
+}
+
+void TextPropertiesCanvasObserver::setHasFocus(const bool focus)
+{
+    if (d->hasFocus == focus) return;
+    d->hasFocus = focus;
+    Q_EMIT hasFocusChanged();
+}
+
 void TextPropertiesCanvasObserver::slotCanvasTextPropertiesChanged()
 {
     KoSvgTextPropertyData data = d->provider->textPropertyData();
-    if (d->textModel->textData.get() != data && !d->modelToProviderCompressor.isActive()) {
+    const bool shouldSet = d->hasFocus? !d->modelToProviderCompressor.isActive(): true;
+    if (d->textModel->textData.get() != data && shouldSet) {
         d->textModel->textData.set(data);
         Q_EMIT textPropertiesChanged();
     }

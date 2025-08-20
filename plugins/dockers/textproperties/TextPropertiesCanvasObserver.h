@@ -32,6 +32,14 @@ class TextPropertiesCanvasObserver : public QObject, public KisMainwindowObserve
     Q_PROPERTY(QStringList locales READ locales() NOTIFY localesChanged)
     Q_PROPERTY(KoSvgTextPropertiesModel *textProperties READ textProperties NOTIFY textPropertiesChanged)
     Q_PROPERTY(TextPropertyConfigModel *textPropertyConfig READ textPropertyConfig NOTIFY textPropertyConfigChanged)
+    /*
+     * \qmlproperty hasFocus
+     * whether the related widget has foxus. Used to use to figure out whether
+     * we want to let the current signal compressor go on(hasFocus = true), or
+     * whether we want to retrieve the new text property data from the canvas
+     *  resource provider (hasFocus = false).
+     */
+    Q_PROPERTY(bool hasFocus READ hasFocus WRITE setHasFocus NOTIFY hasFocusChanged)
 public:
     explicit TextPropertiesCanvasObserver(QObject *parent = nullptr);
     ~TextPropertiesCanvasObserver();
@@ -45,6 +53,9 @@ public:
     QStringList locales() const;
     KoSvgTextPropertiesModel *textProperties() const;
     TextPropertyConfigModel *textPropertyConfig() const;
+
+    bool hasFocus() const;
+    void setHasFocus(const bool focus);
 
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
@@ -61,6 +72,7 @@ Q_SIGNALS:
     void localesChanged();
     void textPropertiesChanged();
     void textPropertyConfigChanged();
+    void hasFocusChanged();
 private:
     struct Private;
     const QScopedPointer<Private> d;

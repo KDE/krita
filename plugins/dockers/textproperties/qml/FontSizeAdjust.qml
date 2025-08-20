@@ -69,15 +69,15 @@ TextPropertyBase {
         Kis.DoubleSliderSpinBox {
             id: fontSizeAdjustSpn
             prefix: propertyTitle+ ": "
-            softDFrom: 0
-            softDTo: 1
+            softDFrom: 0;
+            softDTo: 1;
             dFrom: 0;
             dTo: 5;
             softRangeActive: true
             dStepSize: 0.1;
             Layout.preferredWidth: implicitWidth;
             Layout.fillWidth: true;
-            //blockUpdateSignalOnDrag: true;
+            blockUpdateSignalOnDrag: true;
         }
 
         Button {
@@ -85,7 +85,7 @@ TextPropertyBase {
             ToolTip.text: i18nc("@info:tooltip", "Calculate the x-height to font size ratio for the first font family.");
             onClicked: {
                 let ratio = properties.resolvedXHeight(true)/properties.resolvedFontSize(true);
-                fontSizeAdjust = ratio * fontSizeAdjustSpn.multiplier;
+                fontSizeAdjust = ratio;
             }
         }
     }

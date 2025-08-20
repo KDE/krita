@@ -55,7 +55,7 @@ TextPropertyBase {
     }
 
     function updateLetterSpacing() {
-        if (!letterSpacingSpn.isDragging) {
+        if (!letterSpacingSpn.dragging) {
             blockSignals = true;
             letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
             blockSignals = false;

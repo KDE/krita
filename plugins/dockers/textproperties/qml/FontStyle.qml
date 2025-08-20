@@ -77,6 +77,29 @@ CollapsibleGroupProperty {
         function onFontFamiliesChanged() {
             updateAxisAndStyle();
         }
+
+        function onFontWeightStateChanged() {
+            updateVisibility();
+        }
+        function onFontStyleStateChanged() {
+            updateVisibility();
+        }
+        function onFontWidthStateChanged() {
+            updateVisibility();
+        }
+        function onFontOpticalSizeLinkStateChanged() {
+            updateVisibility();
+        }
+        function onFontSynthesisStyleStateChanged() {
+            updateVisibility();
+        }
+        function onFontSynthesisWeightStateChanged() {
+            updateVisibility();
+        }
+
+        function onAxisValuesStateChanged() {
+            updateVisibility();
+        }
     }
     onPropertiesChanged: {
         updateWeight();
@@ -90,7 +113,7 @@ CollapsibleGroupProperty {
     }
 
     function updateWeight() {
-        if (!fontWeightSpn.isDragging) {
+        if (!fontWeightSpn.dragging) {
             blockSignals = true;
             fontWeight = properties.fontWeight;
             blockSignals = false;
@@ -98,7 +121,7 @@ CollapsibleGroupProperty {
     }
 
     function updateSlant() {
-        if (!fontSlantSpn.isDragging) {
+        if (!fontSlantSpn.dragging) {
             blockSignals = true;
             fontSlant = properties.fontStyle.style;
             fontSlantSlope = properties.fontStyle.value;
@@ -107,7 +130,7 @@ CollapsibleGroupProperty {
     }
 
     function updateWidth() {
-        if (!fontStretchSpn.isDragging) {
+        if (!fontStretchSpn.dragging) {
             blockSignals = true;
             fontWidth = properties.fontWidth;
             blockSignals = false;
@@ -151,7 +174,6 @@ CollapsibleGroupProperty {
                          properties.fontStyleState,
                          properties.fontWidthState,
                          properties.fontOpticalSizeLinkState,
-                         properties.axisValueState,
                          properties.fontSynthesisStyleState,
                          properties.fontSynthesisWeightState,
                          properties.axisValuesState
@@ -257,6 +279,7 @@ CollapsibleGroupProperty {
             to: 1000;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
+            blockUpdateSignalOnDrag: true;
 
         }
         RevertPropertyButton {
@@ -287,6 +310,7 @@ CollapsibleGroupProperty {
             to: 200;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
+            blockUpdateSignalOnDrag: true;
         }
 
         RevertPropertyButton {
@@ -338,7 +362,7 @@ CollapsibleGroupProperty {
                 anchors.fill: parent;
                 palette: slantSpnPal.palette;
 
-                wheelEnabled: true;
+                blockUpdateSignalOnDrag: true;
             }
 
             onClicked: {

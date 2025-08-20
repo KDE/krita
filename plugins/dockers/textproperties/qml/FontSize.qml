@@ -54,7 +54,7 @@ TextPropertyBase {
     }
 
     function updateFontSize() {
-        if (!fontSizeSpn.isDragging) {
+        if (!fontSizeSpn.dragging) {
             blockSignals = true;
             fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
             blockSignals = false;
@@ -98,7 +98,7 @@ TextPropertyBase {
             softDFrom: 0;
             softDTo: 72;
             softRangeActive: true;
-            //blockUpdateSignalOnDrag: true;
+            blockUpdateSignalOnDrag: true;
 
             onDValueChanged: fontSizeUnitCmb.userValue = dValue;
         }

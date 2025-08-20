@@ -55,7 +55,7 @@ TextPropertyBase {
     }
 
     function updateWordSpacing() {
-        if (!wordSpacingSpn.isDragging) {
+        if (!wordSpacingSpn.dragging) {
             blockSignals = true;
             wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
             blockSignals = false;

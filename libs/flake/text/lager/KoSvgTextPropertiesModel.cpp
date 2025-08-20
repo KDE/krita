@@ -58,7 +58,7 @@ auto simplifiedAutoLengthPropertyImpl = lager::lenses::getset(
                 return length.isAuto? KoSvgText::CssLengthPercentage(): length.length;
             },
             [](KoSvgText::AutoLengthPercentage length, const KoSvgText::CssLengthPercentage &val){
-                length = val; return length;
+                length.length = val; length.isAuto = false; return length;
             }
         );
 
@@ -86,7 +86,7 @@ auto autoValueSimplifiedImpl = lager::lenses::getset(
                 return value.isAuto? 0.0: value.customValue;
             },
             [](KoSvgText::AutoValue value, const qreal &val){
-                value.customValue = val;
+                value.customValue = val < 0? 0: val;
                 value.isAuto = value.customValue > 0? false: true;
                 return value;
             }

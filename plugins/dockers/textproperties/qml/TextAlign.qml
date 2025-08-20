@@ -162,6 +162,11 @@ CollapsibleGroupProperty {
                     }
                 }
             }
+        } else {
+            // default to all being unset if nothing is set.
+            alignStartBtn.checked = false;
+            alignMiddleBtn.checked = false;
+            alignEndBtn.checked = false;
         }
     }
 

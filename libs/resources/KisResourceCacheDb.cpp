@@ -2368,6 +2368,7 @@ QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString 
         if (!ba.isEmpty()) {
             QDataStream ds(QByteArray::fromBase64(ba));
             QVariant value;
+            ds.setVersion(QDataStream::Qt_5_15); // so Qt6 can read metatypes written by Qt5
             ds >> value;
             map[key] = value;
         }
@@ -2433,6 +2434,7 @@ bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int
         if (!v.isNull() && v.isValid()) {
             QByteArray ba;
             QDataStream ds(&ba, QIODevice::WriteOnly);
+            ds.setVersion(QDataStream::Qt_5_15); // so Qt6 can write metatypes readable by Qt5
             ds << v;
             ba = ba.toBase64();
             q.bindValue(":value", QString::fromLatin1(ba));

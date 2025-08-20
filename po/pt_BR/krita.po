@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-18 14:43-0300\n"
+"PO-Revision-Date: 2025-08-19 10:04-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -16565,7 +16565,7 @@ msgid "Hebrew"
 msgstr "Hebraico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Arabic"
 msgstr "Árabe"
@@ -18569,12 +18569,14 @@ msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
 msgstr ""
+"Substitui sequências de glifos por ligaduras dependendo do contexto dentro "
+"de um texto."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Floreio contextual"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18582,12 +18584,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
 msgstr ""
+"Substitui glifos por glifos floreados dependendo do contexto dentro do texto."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr "Direção do filtro"
+msgstr "Ligaduras discricionárias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18595,31 +18598,33 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
 msgstr ""
+"Substitui sequências de glifos por ligaduras destinadas ao efeito "
+"tipográfico."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Glifo Final em Alternativas Online"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr ""
+msgstr "Substitui glifos por suas formas de fim de linha."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "Histograma"
+msgstr "Formas históricas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their historical forms."
-msgstr ""
+msgstr "Substitui glifos por suas formas históricas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
 #, kde-format
@@ -18628,60 +18633,62 @@ msgid ""
 "Replaces sequences glyphs with ligatures that were in use in the past, but "
 "rare today."
 msgstr ""
+"Substitui glifos de sequências por ligaduras que eram usadas no passado, mas "
+"raras hoje em dia."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:57
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Alternativas justificativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
-msgstr ""
+msgstr "Substitui glifos por suas alternativas destinadas à justificação."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "Luz normal A"
+msgstr "Ligaduras padrão"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr ""
+msgstr "Substitui glifos de sequências por ligaduras comuns."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr "Limites da imagem"
+msgstr "Limites na esquerda"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the left side."
-msgstr ""
+msgstr "Isso ajusta os glifos para que não haja espaço no lado esquerdo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "Recursos locais"
+msgstr "Formas localizadas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
-msgstr ""
+msgstr "Isso substitui glifos por versões específicas do idioma."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr "Opções"
+msgstr "Limites ópticos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18690,21 +18697,23 @@ msgid ""
 "Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
 "Krita."
 msgstr ""
+"Ajusta os glifos para que se alinhem de acordo com seus limites ópticos. Não "
+"faz nada no Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr "Gradientes"
+msgstr "Ornamentos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ornaments for decorative purposes."
-msgstr ""
+msgstr "Substitui glifos por ornamentos para fins decorativos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Randomize"
 msgstr "Aleatório"
@@ -18713,25 +18722,25 @@ msgstr "Aleatório"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with random alternates."
-msgstr ""
+msgstr "Substitui glifos por alternativas aleatórias."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr "Limites da imagem"
+msgstr "Limites na direita"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the right side."
-msgstr ""
+msgstr "Isso ajusta os glifos para que não haja espaço no lado direito."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "Alternativo"
+msgstr "Alternativas estilísticas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18740,24 +18749,26 @@ msgid ""
 "Replaces glyphs with stylistic alternates that do not fit in other "
 "categories."
 msgstr ""
+"Substitui glifos por alternativas estilísticas que não se enquadram em "
+"outras categorias."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr ""
+msgstr "Floreio"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr ""
+msgstr "Substitui glifos por alternativas floreadas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
 #, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr ""
+msgstr "Composição/Decomposição de Glifos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
 #, kde-format
@@ -18766,9 +18777,12 @@ msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
+"Isso compõe ou decompõe grafemas para que os glifos resultantes possam ser "
+"recompostos posteriormente. Comumente usado para lidar com sinais "
+"diacríticos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
 msgstr "Kerning"
@@ -18777,14 +18791,14 @@ msgstr "Kerning"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls kerning on the font."
-msgstr ""
+msgstr "Isso controla o kerning na fonte."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr "Posição"
+msgstr "Posicionamento de marca"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -18793,6 +18807,8 @@ msgid ""
 "This controls the positioning of mark glyphs on base glyphs. Commonly used "
 "for diacritics."
 msgstr ""
+"Controla o posicionamento dos glifos de marca nos glifos de base. Comumente "
+"usado para sinais diacríticos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
 #, kde-format
@@ -18801,12 +18817,14 @@ msgid ""
 "This controls the positioning of mark glyphs onto other mark glyphs. "
 "Commonly used for diacritics."
 msgstr ""
+"Controla o posicionamento de glifos de marca sobre outros glifos de marca. "
+"Comumente usado para sinais diacríticos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Alternativas contextuais necessárias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
@@ -18814,24 +18832,26 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
+"Substitui glifos contextualmente por alternativas, necessárias para que a "
+"fonte funcione."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
 msgctxt "@title"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Ligaduras necessárias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs with required ligatures."
-msgstr ""
+msgstr "Substitui sequências de glifos pelas ligaduras necessárias."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
 #, kde-format
 msgctxt "@title"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Alternativas de variação necessárias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:124
 #, kde-format
@@ -18840,12 +18860,13 @@ msgid ""
 "Replaces glyphs in a variable font with ones suited for the current "
 "variation."
 msgstr ""
+"Substitui glifos em uma fonte variável por outros adequados à variação atual."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Otimizar"
+msgstr "Tamanho óptico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -18854,36 +18875,38 @@ msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
 msgstr ""
+"Indica o quanto a fonte é adequada para o seu tamanho atual. Não faz nada no "
+"Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "Linhas verticais"
+msgstr "Kerning vertical"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls vertical kerning on the font."
-msgstr ""
+msgstr "Isso controla o kerning vertical na fonte."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "Lista alternativa"
+msgstr "Frações alternativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
-msgstr ""
+msgstr "Substitui números separados por uma barra por uma fração de nut."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "Iluminador"
+msgstr "Denominadores"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -18892,12 +18915,14 @@ msgid ""
 "Replaces figures with forms that are suited to represent the denominator in "
 "a fraction."
 msgstr ""
+"Substitui algarismos por formas adequadas para representar o denominador em "
+"uma fração."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:145
 #, kde-format
 msgctxt "@title"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Formas sem pontos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:146
 #, kde-format
@@ -18906,24 +18931,26 @@ msgid ""
 "Replaces dotted letters such as i and j with dotless forms, for use in "
 "mathematical formula."
 msgstr ""
+"Substitui letras pontilhadas, como i e j, por formas sem ponto, para uso em "
+"fórmulas matemáticas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "Achatar camada"
+msgstr "Formas de acento achatadas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
-msgstr ""
+msgstr "Substitui acentos em letras maiúsculas por formas achatadas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "Ações"
+msgstr "Frações"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -18934,12 +18961,17 @@ msgid ""
 "separated by a 'fraction slash' (U+2044), then this will replace the figures "
 "with numerators before the slash and denominators after the slash."
 msgstr ""
+"Substitui algarismos separados por uma barra por uma forma de fração "
+"diagonal adequada. Se uma fonte tiver os recursos de numerador e "
+"denominador, e os números forem separados por uma 'barra de fração' (U"
+"+2044), isso substituirá os algarismos com numeradores antes da barra e "
+"denominadores depois da barra."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "Preenchimento em Espiral"
+msgstr "Figuras alinhadas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -18948,12 +18980,14 @@ msgid ""
 "Replaces oldstyle figures with lining figures, which harmonize well with "
 "uppercase letters."
 msgstr ""
+"Substitui figuras antigas por figuras alinhadas, que harmonizam bem com "
+"letras maiúsculas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Matemática Grega"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -18961,24 +18995,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
 msgstr ""
+"Substitui a escrita grega normal por glifos destinados ao uso matemático."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr "Invocação alternada"
+msgstr "Formas de anotação alternadas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures and letters with notational forms, like encircled."
-msgstr ""
+msgstr "Substitui números e letras por formas de notação, como circulado."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "Curador"
+msgstr "Numeradores"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -18987,6 +19022,8 @@ msgid ""
 "Replaces figures with forms that are suited to represent the numerator in a "
 "fraction."
 msgstr ""
+"Substitui algarismos por formas adequadas para representar o numerador em "
+"uma fração."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
 #, kde-format

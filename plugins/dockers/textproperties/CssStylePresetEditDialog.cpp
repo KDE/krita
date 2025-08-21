@@ -25,7 +25,7 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
     , m_model(new KoSvgTextPropertiesModel())
 
 {
-    setMinimumSize(300, 500);
+    setMinimumSize(600, 400);
     setModal(true);
 
     m_quickWidget = new KisQQuickWidget(this);
@@ -40,10 +40,6 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
         wellFormedBCPNames.append(langCode.split("_").join("-"));
     }
 
-    m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", m_model);
-    m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
-    m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(72));
-
     connect(m_model, SIGNAL(textPropertyChanged()),
             this, SLOT(slotUpdateTextProperties()));
 
@@ -51,6 +47,9 @@ CssStylePresetEditDialog::CssStylePresetEditDialog(QWidget *parent)
 
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
+    } else {
+        m_quickWidget->rootObject()->setProperty("textProperties", QVariant::fromValue(m_model));
+        m_quickWidget->rootObject()->setProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     }
 }
 
@@ -69,19 +68,19 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     textData.inheritedProperties = KoSvgTextProperties();
     textData.commonProperties = properties;
     m_model->textData.set(textData);
-    m_quickWidget->rootObject()->setProperty("presetTitle", m_currentResource->name());
-    m_quickWidget->rootObject()->setProperty("presetDescription", m_currentResource->description());
-    m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
-    m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
-    m_quickWidget->rootObject()->setProperty("styleType", m_currentResource->styleType());
+    if (m_quickWidget->rootObject()) {
+        m_quickWidget->rootObject()->setProperty("presetTitle", m_currentResource->name());
+        m_quickWidget->rootObject()->setProperty("presetDescription", m_currentResource->description());
+        m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
+        m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
+        m_quickWidget->rootObject()->setProperty("styleType", m_currentResource->styleType());
 
-    m_quickWidget->rootObject()->setProperty("beforeSample", m_currentResource->beforeText());
-    m_quickWidget->rootObject()->setProperty("sampleText", m_currentResource->sampleText());
-    m_quickWidget->rootObject()->setProperty("afterSample", m_currentResource->afterText());
-    const int storedPPI = m_currentResource->storedPPIResolution();
-    m_quickWidget->rootObject()->setProperty("makePixelRelative", storedPPI > 0);
-
-    QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
+        m_quickWidget->rootObject()->setProperty("beforeSample", m_currentResource->beforeText());
+        m_quickWidget->rootObject()->setProperty("sampleText", m_currentResource->sampleText());
+        m_quickWidget->rootObject()->setProperty("afterSample", m_currentResource->afterText());
+        const int storedPPI = m_currentResource->storedPPIResolution();
+        m_quickWidget->rootObject()->setProperty("makePixelRelative", storedPPI > 0);
+    }
     m_blockUpdates = false;
     slotUpdateDirty();
 }
@@ -100,7 +99,9 @@ KoCssStylePresetSP CssStylePresetEditDialog::currentResource()
 
 void CssStylePresetEditDialog::setDpi(const double dpi)
 {
-    m_quickWidget->rootObject()->setProperty("canvasDPI", dpi);
+    if (m_quickWidget->rootObject()) {
+        m_quickWidget->rootObject()->setProperty("canvasDPI", dpi);
+    }
 }
 
 void CssStylePresetEditDialog::slotUpdateTextProperties()
@@ -126,7 +127,6 @@ void CssStylePresetEditDialog::slotUpdateTextProperties()
             m_currentResource->updateThumbnail();
             m_quickWidget->rootObject()->setProperty("presetSample", m_currentResource->sampleSvg());
             m_quickWidget->rootObject()->setProperty("presetSampleAlignment", variantFromAlignment(m_currentResource->alignSample()));
-            QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
             slotUpdateDirty();
         }
     }
@@ -150,7 +150,7 @@ QString CssStylePresetEditDialog::wwsFontFamilyName(QString familyName)
 void CssStylePresetEditDialog::slotUpdateDirty() {
     bool isDirty = m_currentResource->isDirty();
     const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();
-    if (!isDirty) {
+    if (!isDirty && m_quickWidget->rootObject()) {
         const QString description = m_quickWidget->rootObject()->property("presetDescription").toString();
         if (title != m_currentResource->name() || description != m_currentResource->description()) {
             isDirty = true;
@@ -162,6 +162,7 @@ void CssStylePresetEditDialog::slotUpdateDirty() {
 void CssStylePresetEditDialog::slotUpdateStoreDPI() {
     //Whenever we make it pixel relative, we'll set the resolution to 72 dpi.
     if (m_blockUpdates) return;
+    if (!m_quickWidget->rootObject()) return;
     const bool makePixelRelative = m_quickWidget->rootObject()->property("makePixelRelative").toBool();
     const int storedPPI = m_currentResource->storedPPIResolution();
     const int canvasPPI = m_quickWidget->rootObject()->property("canvasDPI").toInt();

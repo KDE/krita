@@ -21,6 +21,11 @@ Control {
     property double canvasDPI: 72.0;
     property double pixelRelativeDPI: 72.0;
     property alias makePixelRelative: pixelRelativeCheck.checked;
+
+    property var locales: [];
+    property KoSvgTextPropertiesModel textProperties: KoSvgTextPropertiesModel{};
+
+
     onMakePixelRelativeChanged: mainWindow.slotUpdateStoreDPI();
 
     property alias beforeSample: beforeSampleField.text;
@@ -40,14 +45,12 @@ Control {
         color: palette.window;
     }
 
-    function setProperties() {
-        presetProperties.updateProperties();
-    }
-
-    ColumnLayout {
+    GridLayout {
         anchors.fill: parent;
         GridLayout {
-            Layout.fillWidth: true;
+            Layout.minimumWidth: 250;
+            Layout.maximumWidth: 300;
+            Layout.fillHeight: true;
             Layout.preferredHeight: implicitHeight;
             columns: 2;
 
@@ -145,27 +148,32 @@ Control {
                     Layout.fillWidth: visible? true: false;
                     Layout.preferredWidth: visible? implicitWidth: 0;
                     placeholderText: i18nc("@info:placeholder", "Before...");
-                    onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                    onTextChanged: mainWindow.slotUpdateTextProperties();
                     visible: styleType !== "paragraph";
                 }
                 TextField {
                     id: sampleField;
                     Layout.fillWidth: true;
                     placeholderText: presetTitleField.text.length == 0?  i18nc("@info:placeholder", "Sample..."): presetTitleField.text;
-                    onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                    onTextChanged: mainWindow.slotUpdateTextProperties();
                 }
                 TextField {
                     id: afterSampleField;
                     Layout.fillWidth: visible? true: false;
                     Layout.preferredWidth: visible? implicitWidth: 0;
                     placeholderText: i18nc("@info:placeholder", "... After");
-                    onFocusChanged: if (!activeFocus) mainWindow.slotUpdateTextProperties();
+                    onTextChanged: mainWindow.slotUpdateTextProperties();
                     visible: styleType !== "paragraph";
                 }
             }
+            Item {
+                Layout.fillHeight: true;
+                Layout.fillWidth: true;
+            }
         }
         TextPropertyBaseList {
-            propertiesModel: textPropertiesModel;
+            propertiesModel: styleEdit.textProperties;
+            locales: styleEdit.locales;
             Layout.fillWidth: true;
             Layout.fillHeight: true;
             canvasDPI: styleEdit.makePixelRelative? styleEdit.pixelRelativeDPI: styleEdit.canvasDPI;

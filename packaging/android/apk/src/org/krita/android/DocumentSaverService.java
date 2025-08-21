@@ -126,7 +126,15 @@ public class DocumentSaverService extends Service {
     private void runSaverThread() {
         do {
             resetSaveAgain();
-            JNIWrappers.saveState();
+            try {
+                JNIWrappers.saveState();
+            } catch (UnsatisfiedLinkError e) {
+                // This can happen if the application has been unloaded and only
+                // this saver thread is left dangling. Since the application is
+                // gone, there's no documents left to save, so just bail out.
+                Log.w(TAG, "Unsatisfied link error while saving: " + e);
+                break;
+            }
         } while (shouldSaveAgain());
         finishSaverThread();
     }

@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-15 12:15+0200\n"
+"PO-Revision-Date: 2025-08-20 13:54+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -20914,7 +20914,7 @@ msgstr "Ustvarjalnik"
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "Zapolni upodobitev plasti"
+msgstr "Izriši plast polnila"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format

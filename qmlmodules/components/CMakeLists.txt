@@ -88,14 +88,24 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/AngleSelector.qml
 
 )
-
-target_link_libraries(kritaqmlcomponents
-    PRIVATE
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(kritaqmlcomponents
+        PRIVATE
         kritaui
         Qt::Qml
         Qt::Quick
         Qt::QuickControls2
-)
+        KF${KF_MAJOR}::ColorScheme
+    )
+else ()
+    target_link_libraries(kritaqmlcomponents
+        PRIVATE
+        kritaui
+        Qt::Qml
+        Qt::Quick
+        Qt::QuickControls2
+    )
+endif ()
 
 ecm_finalize_qml_module(kritaqmlcomponents DESTINATION ${KDE_INSTALL_QMLDIR})
 

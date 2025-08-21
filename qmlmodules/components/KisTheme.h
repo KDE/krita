@@ -10,8 +10,12 @@
 #include <QQmlEngine>
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
-#include <kcolorscheme.h>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#include <kcolorscheme.h>
+#else
+#include <KColorScheme>
+#endif
 class KisThemeColorGroup : public QObject
 {
     Q_OBJECT

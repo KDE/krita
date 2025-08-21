@@ -16,6 +16,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -87,16 +88,24 @@ public class DocumentSaverService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void tryStartServiceInForegroundS() {
         try {
-            Log.w(TAG, "Starting the service in foreground");
-            startForeground(NOTIFICATION_ID, getNotification());
-            mStartedInForeground = true;
+            tryStartServiceInForegroundQ();
         } catch (ForegroundServiceStartNotAllowedException e) {
             Log.w(TAG, "Could not run the service in foreground: " + e);
             mStartedInForeground = false;
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void tryStartServiceInForegroundQ() {
+        Log.i(TAG, "Starting foreground short service");
+        startForeground(
+            NOTIFICATION_ID, getNotification(),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE);
+        mStartedInForeground = true;
+    }
+
     private void tryStartServiceInForeground() {
+        Log.i(TAG, "Starting foreground service");
         startForeground(NOTIFICATION_ID, getNotification());
         mStartedInForeground = true;
     }
@@ -152,6 +161,8 @@ public class DocumentSaverService extends Service {
                 Log.i(TAG, "Attempting to promote to foreground service");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     tryStartServiceInForegroundS();
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    tryStartServiceInForegroundQ();
                 } else {
                     tryStartServiceInForeground();
                 }

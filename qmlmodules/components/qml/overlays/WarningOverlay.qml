@@ -38,6 +38,8 @@ Item {
     */
     property alias radius: background.radius
 
+    property alias color: background.color;
+
     states: [
         State {
             name: "warning"
@@ -142,7 +144,7 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: theme.view.negativeBackgroundColor;
+        color: theme.window.negativeBackgroundColor;
         opacity: 0
 
         Kis.Theme {
@@ -161,7 +163,7 @@ Item {
         Image {
             anchors.fill: parent
             anchors.margins: 4
-            source: "qrc:///16_light_warning.svg"
+            source: root.color.hslLightness < 0.5? "qrc:///16_light_warning.svg": "qrc:///16_dark_warning.svg";
         }
     }
 }

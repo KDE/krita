@@ -11,17 +11,59 @@ import org.krita.components 1.0 as Kis
 
 Control {
     id: control;
-    property TagFilterProxyModelQmlWrapper modelWrapper: TagFilterProxyModelQmlWrapper{
-        id: modelWrapperId;
+    property TagFilterProxyModelQmlWrapper modelWrapper: TagFilterProxyModelQmlWrapper {
+        resourceType: control.resourceType;
     };
-    property alias resourceType : modelWrapperId.resourceType;
-    property alias currentIndex : modelWrapperId.currentIndex;
-    property alias currentResource : modelWrapperId.currentResource;
+
+    Connections {
+        target: modelWrapper;
+        function onCurrentIndexChanged() {
+            control.highlightedIndex = modelWrapper.currentIndex;
+        }
+        function onResourceTypeChanged() {
+            control.resourceType = modelWrapper.resourceType;
+        }
+    }
+
+    /*
+        \qmlProperty resourceType
+        A string corresponding to KisResourceTypes.h ResourceType.
+        Used to set the resource model and tagging models.
+
+        Because modelwrapper can change, we cannot use aliasing here.
+      */
+    property string resourceType;
+    onResourceTypeChanged: modelWrapper.resourceType = resourceType;
+
+
+    /*
+
+     */
+    property alias highlightedIndex : view.currentIndex;
 
     property alias resourceDelegate : view.delegate;
 
     property alias addResourceRow: addResourceRow;
     property alias additionalAddResourceRow: addResourceRow.data;
+
+    property alias showTagging: tagAndConfig.visible;
+    property alias showSearch: searchBar.visible;
+
+    function downPress() {
+        highlightedIndex += 1;
+    }
+    function upPress() {
+        highlightedIndex -= 1;
+    }
+
+    function applyHighlightedIndex() {
+        if (modelWrapper) {
+            modelWrapper.currentIndex = highlightedIndex;
+        }
+    }
+
+    Keys.onDownPressed: downPress();
+    Keys.onUpPressed: upPress();
 
     function openContextMenu(x, y, resourceName, resourceIndex) {
         tagActionsContextMenu.resourceName = resourceName;
@@ -35,11 +77,12 @@ Control {
         anchors.fill: parent;
         property alias resourceModel : view.model;
         property alias tagModel: tagFilter.model;
-        resourceModel: visible? modelWrapper.model: null;
+        resourceModel: modelWrapper.model;
         tagModel: modelWrapper.tagModel;
 
         RowLayout {
             id: tagAndConfig;
+            height: visible? implicitHeight: 0;
 
             ComboBox {
                 id: tagFilter;
@@ -184,12 +227,18 @@ Control {
             ListView {
                 anchors.fill: parent;
                 id: view;
-                currentIndex: modelWrapper.currentIndex;
+                currentIndex: 0;
+
+                Keys.onDownPressed: control.downPress();
+                Keys.onUpPressed: control.upPress();
+
                 ScrollBar.vertical: ScrollBar {
                 }
             }
         }
         RowLayout {
+            id: searchBar;
+            height: visible? implicitHeight: 0;
             Layout.preferredHeight: childrenRect.height;
             TextField {
                 id: search;

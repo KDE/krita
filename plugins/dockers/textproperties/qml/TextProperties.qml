@@ -122,7 +122,7 @@ Control {
 
             signal applyPreset;
             onApplyPreset: {
-                canvasObserver.applyPreset(currentResource);
+                canvasObserver.applyPreset(modelWrapper.currentResource);
             }
 
             resourceDelegate: ItemDelegate {
@@ -130,8 +130,8 @@ Control {
                 required property var model;
                 property var meta: model.metadata;
                 width: ListView.view.width;
-                highlighted: delegateMouseArea.containsMouse;
-                property bool selected: presetView.currentIndex === model.index;
+                highlighted: presetView.highlightedIndex === model.index;
+                property bool selected: presetView.modelWrapper.currentIndex === model.index;
                 palette: presetView.palette;
                 contentItem: KoShapeQtQuickLabel {
                     implicitHeight: nameLabel.height * 4;
@@ -179,16 +179,22 @@ Control {
                     acceptedButtons: Qt.RightButton | Qt.LeftButton;
                     anchors.fill: parent;
                     hoverEnabled: true;
+                    preventStealing: true;
                     onClicked: {
                         if (mouse.button === Qt.RightButton) {
                             presetView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
                         } else {
-                            presetView.modelWrapper.currentIndex = parent.model.index;
+                            presetView.applyHighlightedIndex();
                         }
                     }
                     onDoubleClicked: {
-                        presetView.modelWrapper.currentIndex = parent.model.index;
+                        presetView.applyHighlightedIndex();
                         presetView.applyPreset();
+                    }
+                    onContainsMouseChanged: {
+                        if (containsMouse) {
+                            presetView.highlightedIndex = parent.model.index;
+                        }
                     }
 
                     readonly property string missingFontName : i18nc("%1 is name of a font family", "Font Family \"%1\" is missing on this machine. This style preset may not work correctly.", presetDelegate.meta.primary_font_family);
@@ -227,14 +233,14 @@ Control {
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
-                    onClicked: canvasObserver.editPreset(presetView.currentResource);
+                    onClicked: canvasObserver.editPreset(presetView.modelWrapper.currentResource);
                     hoverEnabled: true;
                     Kis.ThemedControl {
                         id: editPalette;
                     }
                     palette: editPalette.palette;
 
-                    enabled: presetView.currentIndex >= 0;
+                    enabled: presetView.modelWrapper.currentIndex >= 0;
                     ToolTip.visible: hovered;
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                     ToolTip.text: text;
@@ -246,14 +252,14 @@ Control {
                     icon.color: palette.text;
                     icon.width: 16;
                     icon.height: 16;
-                    onClicked: canvasObserver.cloneAndEditPreset(presetView.currentResource);
+                    onClicked: canvasObserver.cloneAndEditPreset(presetView.modelWrapper.currentResource);
                     hoverEnabled: true;
                     Kis.ThemedControl {
                         id: cloneButtonPalette;
                     }
                     palette: cloneButtonPalette.palette;
 
-                    enabled: presetView.currentIndex >= 0;
+                    enabled: presetView.modelWrapper.currentIndex >= 0;
                     ToolTip.visible: hovered;
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                     ToolTip.text: text;

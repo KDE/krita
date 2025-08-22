@@ -16,11 +16,21 @@ Button {
 
     //--- Model setup. ---//
 
-    property TagFilterProxyModelQmlWrapper modelWrapper : TagFilterProxyModelQmlWrapper{
-        id: modelWrapperId;
-        resourceType: "fontfamilies";
-    };
+    property alias modelWrapper : resourceView.modelWrapper;
+
+    Connections {
+        target: modelWrapper;
+        function onResourceFilenameChanged() {
+            familyCmb.fontFileName = modelWrapper.resourceFilename;
+        }
+    }
+
     property var locales: [];
+    property alias fontFileName: textInput.text;
+    topPadding: 0;
+    bottomPadding: 0;
+    leftPadding:  (familyCmb.mirrored ? padding + indicator.width + spacing : 0);
+    rightPadding: (!familyCmb.mirrored ? padding + indicator.width + spacing : 0);
 
     Kis.ThemedControl {
         id: palControl;
@@ -30,42 +40,131 @@ Button {
     /// Ideally we'd have the max popup height be Window-height - y-pos-of-item-to-window.
     /// But that's pretty hard to calculate (map to global is screen relative, but there's
     /// no way to get window.y relative to screen), so we'll just use 300 as the maximum.
-    property int maxPopupHeight: Math.min(Window.height, 300) - height*3;
+    property int maxPopupHeight: Math.min(Window.height, 500) - height*3;
 
-    text: modelWrapper.resourceFilename;
-    property int highlightedIndex;
+    contentItem: Kis.InformingTextInput {
+        id: textInput;
+
+        warnColor: palControl.theme.window.neutralBackgroundColor;
+        warnColorBorder: palControl.theme.window.neutralTextColor;
+        readOnly: !familyCmb.enabled;
+
+        onEditingFinished: {
+            if (familyCmbPopup.visible) {
+                resourceView.applyHighlightedIndex();
+            }
+
+            testInput();
+            familyCmb.activated();
+        }
+        onTextChanged: {
+            testInput();
+        }
+
+        onTextEdited: {
+            stopWarning();
+            modelWrapper.searchText = text;
+            resourceView.showTagging = false;
+            resourceView.showSearch = false;
+            familyCmbPopup.open();
+        }
+
+        onActiveFocusChanged: {
+            if (activeFocus) {
+                selectAll();
+            }
+        }
+
+        warningTimeOut: activeFocus? 1000: 0;
+
+        function testInput() {
+            let test = mainWindow.wwsFontFamilyName(text, true);
+
+            if (test === "") {
+                if (!activeFocus) {
+                    startWarning();
+                }
+            } else {
+                stopWarning();
+                text = test;
+                modelWrapper.resourceFilename = text;
+            }
+        }
+
+        Keys.onDownPressed: {
+            resourceView.downPress();
+        }
+        Keys.onUpPressed: {
+            resourceView.upPress();
+        }
+    }
+
+    indicator: Image {
+        id: imgIndicator
+        x: familyCmb.mirrored ? familyCmb.padding : familyCmb.width - width - familyCmb.padding
+        y: familyCmb.topPadding + (familyCmb.availableHeight - height) / 2
+        source: familyCmb.palette.button.hslLightness < 0.5? "qrc:///light_groupOpened.svg": "qrc:///dark_groupOpened.svg";
+        width: 12;
+        height: 12;
+        fillMode: Image.Pad;
+        clip: true;
+    }
+
     onClicked: {
         if (familyCmbPopup.visible) {
             familyCmbPopup.close();
         } else {
+            resourceView.showTagging = true;
+            resourceView.showSearch = true;
             familyCmbPopup.open();
         }
     }
     signal activated();
     onActivated: {
         familyCmbPopup.close();
+        modelWrapper.searchText = "";
     }
 
     //--- Delegate setup. ---//
     Component {
         id: fontDelegate
         ItemDelegate {
+            /**
+              Ideally we'd just use required properties for the metadata etc.
+              However, when changing the modelwrapper in the font list,
+              there's a short moment where the model data is unavailable, so
+              instead we ensure we're not accessing undefined objects.
+
+              Not great, would like a better solution...
+              */
             id: fontDelegateItem;
             required property var model;
-            property string fontName: model.name;
-            property var meta: model.metadata;
+            property string name: typeof model.name !== "undefined"? model.name: "";
+            property int index: model.index;
+            property string fontName: name;
+            property var metadata: model.metadata;
             // TODO: change this to use the text locale, if possible.
             property string sample: "";
 
+            onMetadataChanged: {
+                updateNameAndSample();
+            }
+
             Component.onCompleted: {
-                fontName = modelWrapper.localizedNameFromMetadata(meta, familyCmb.locales, model.name);
-                sample = modelWrapper.localizedSampleFromMetadata(meta, familyCmb.locales, "");
+                updateNameAndSample();
+            }
+
+            function updateNameAndSample() {
+                if (typeof metadata == "undefined") return;
+                fontName = modelWrapper.localizedNameFromMetadata(metadata, familyCmb.locales, name);
+                sample = modelWrapper.localizedSampleFromMetadata(metadata, familyCmb.locales, "");
             }
 
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
             /// the metadata from the modelwrapper.
             width: ListView.view.width;
-            highlighted: familyCmb.highlightedIndex === model.index;
+            highlighted: resourceView.highlightedIndex === model.index;
+            property bool selected: resourceView.modelWrapper.currentIndex === model.index;
 
             palette: familyCmb.palette;
 
@@ -90,8 +189,8 @@ Button {
                             Binding {
                                    target: fontFamilyDelegate
                                    property: "meta"
-                                   when: fontDelegateItem && typeof fontDelegateItem !== 'undefined';
-                                   value: fontDelegateItem.meta;
+                                   when: fontDelegateItem && typeof fontDelegateItem !== 'undefined' && typeof fontDelegateItem.metadata !== 'undefined';
+                                   value: fontDelegateItem.metadata;
                             }
 
                             property var meta: ({});
@@ -208,20 +307,25 @@ Button {
                 acceptedButtons: Qt.RightButton | Qt.LeftButton;
                 anchors.fill: parent;
                 hoverEnabled: true;
+                // Itemdelegate can also handle hovers, but we don't use those.
+                preventStealing: true;
                 onClicked: {
                     if (mouse.button === Qt.RightButton) {
                         resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
                     } else {
-                        familyCmb.modelWrapper.currentIndex = parent.model.index;
+                        resourceView.applyHighlightedIndex();
                         familyCmb.activated();
                     }
                 }
-                onHoveredChanged: familyCmb.highlightedIndex = parent.model.index;
+                onContainsMouseChanged: {
+                    if(containsMouse) {
+                        resourceView.highlightedIndex = parent.index;
+                    }
+                }
 
                 ToolTip.text: fontDelegateItem.fontName;
                 ToolTip.visible: containsMouse;
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
-
             }
         }
     }
@@ -231,7 +335,7 @@ Button {
         id: familyCmbPopup;
         y: familyCmb.height - 1;
         x: familyCmb.width - width;
-        width: contentWidth;
+        width: Math.max(contentWidth, familyCmb.width);
         height: Math.min(contentItem.implicitHeight, familyCmb.maxPopupHeight - topMargin - bottomMargin)
         padding: 2;
 
@@ -239,7 +343,7 @@ Button {
 
         contentItem: ResourceView {
             id: resourceView;
-            modelWrapper: familyCmb.modelWrapper;
+            resourceType: "fontfamilies";
             resourceDelegate: fontDelegate;
             palette: familyCmbPopup.palette;
             addResourceRow.visible: false;

@@ -86,6 +86,7 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/curvewidget/CurveWidget.qml
 
     qml/AngleSelector.qml
+    qml/InformingTextInput.qml
 
 )
 if (QT_MAJOR_VERSION STREQUAL "6")

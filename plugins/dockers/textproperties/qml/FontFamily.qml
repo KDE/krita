@@ -78,22 +78,18 @@ CollapsibleGroupProperty {
             locales: root.locales;
             onActivated: {
                 if (fontFamilies.length >0) {
-                    fontFamilies[0] = text;
+                    fontFamilies[0] = fontFileName;
                 } else {
-                    fontFamilies = [ text ];
+                    fontFamilies = [ fontFileName ];
                 }
             }
-            Kis.ThemedControl {
-                id: mainCmbPalette;
-            }
-            palette: mainCmbPalette.palette;
             function updateCurrentIndex() {
                 var name = mainWindow.wwsFontFamilyName(fontFamilies[0]);
                 if (name !== modelWrapper.resourceFilename) {
                     modelWrapper.currentTag = 0;
                     modelWrapper.currentIndex = -1;
                 }
-                modelWrapper.setResourceToFileName(name)
+                fontFileName = name;
             }
         }
     }
@@ -130,22 +126,15 @@ CollapsibleGroupProperty {
                         Layout.fillWidth: true;
                         locales: root.locales;
                         onActivated: {
-                            fontFamilies[fontListDelegate.dIndex] = text;
+                            fontFamilies[fontListDelegate.dIndex] = fontFileName;
                         }
-                        Kis.ThemedControl {
-                            id: fontCmbPalette;
-                        }
-                        palette: fontCmbPalette.palette;
                         Component.onCompleted: {
                             if (fontListDelegate.dIndex === 0) {
                                 modelWrapper = mainFamilyCmb.modelWrapper;
-                            } else {
-                                updateCurrentIndex();
+                                fontFileName = mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
                             }
                         }
-                        function updateCurrentIndex() {
-                            modelWrapper.setResourceToFileName(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]))
-                        }
+                        fontFileName: mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
                     }
                     ToolButton {
                         id: removeFont;

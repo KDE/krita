@@ -293,6 +293,7 @@ void TagFilterProxyModelQmlWrapper::setCurrentIndex(const int &index)
 void TagFilterProxyModelQmlWrapper::setResourceToFileName(const QString &filename)
 {
     if (!d->allResourceModel) return;
+    if (d->currentResource && d->currentResource->filename() == filename) return;
     KoResourceSP resource = d->currentResource;
     QVector<KoResourceSP> resources = d->allResourceModel->resourcesForFilename(filename);
     if (!resources.isEmpty()) {

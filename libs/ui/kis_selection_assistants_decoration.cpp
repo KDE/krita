@@ -55,12 +55,12 @@ struct KisSelectionAssistantsDecoration::Private {
     QVector<QPushButton*> buttons;
     static const QVector<ActionButtonData>& buttonData() {
         static const QVector<ActionButtonData> data = {
-            { "select-all", "Select All", &KisSelectionManager::selectAll },
-            { "select-clear", "Deselect", &KisSelectionManager::deselect },
-            { "duplicatelayer", "Copy To New Layer", &KisSelectionManager::copySelectionToNewLayer },
-            { "select-invert", "Invert Selection", &KisSelectionManager::invert },
-            { "krita_tool_color_fill", "Fill Selection with Color", &KisSelectionManager::fillForegroundColor },
-            { "tool_crop", "Crop to Selection", &KisSelectionManager::imageResizeToSelection }
+            { "select-all", i18nc("tooltip", "Select All"), &KisSelectionManager::selectAll },
+            { "select-clear", i18nc("tooltip", "Deselect"), &KisSelectionManager::deselect },
+            { "duplicatelayer", i18nc("tooltip", "Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer },
+            { "select-invert", i18nc("tooltip", "Invert Selection"), &KisSelectionManager::invert },
+            { "krita_tool_color_fill", i18nc("tooltip", "Fill Selection with Color"), &KisSelectionManager::fillForegroundColor },
+            { "tool_crop", i18nc("tooltip", "Crop to Selection"), &KisSelectionManager::imageResizeToSelection }
         };
         return data;
     }

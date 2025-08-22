@@ -83,9 +83,8 @@ void KisSelectionAssistantsDecoration::setViewManager(KisViewManager* viewManage
     d->selectionManager = viewManager->selectionManager();
 }
 
-void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas, bool m_selectionActionBar)
+void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const KisCoordinatesConverter *converter, KisCanvas2* canvas, bool m_selectionActionBar)
 {
-    Q_UNUSED(updateRect);
     d->m_canvas = canvas;
     QWidget *canvasWidget = dynamic_cast<QWidget*>(d->m_canvas->canvasWidget());
     canvasWidget->installEventFilter(this);

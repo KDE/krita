@@ -193,7 +193,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_UNUSED(canvas);
 
     if (!selectionIsActive()) {
-        m_selectionAssistantsDecoration->drawDecoration(gc, updateRect, converter, canvas, false);
+        m_selectionAssistantsDecoration->drawDecoration(gc, converter, canvas, false);
         return;
     };
     if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
@@ -240,7 +240,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.restore();
 
     // render Selection Action Bar
-    m_selectionAssistantsDecoration->drawDecoration(gc, updateRect, converter, canvas, m_selectionActionBar);
+    m_selectionAssistantsDecoration->drawDecoration(gc, converter, canvas, m_selectionActionBar);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

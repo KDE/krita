@@ -164,7 +164,7 @@ void KisSelectionDecoration::slotConfigChanged()
     m_opacity = imageConfig.selectionOutlineOpacity();
     m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
-    m_selectionActionBar = cfg.selectionActionBar();
+    m_selectionActionBarEnabled = cfg.selectionActionBar();
 }
 
 void KisSelectionDecoration::slotCanvasResourcesChanged(int key, const QVariant &v)
@@ -240,7 +240,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.restore();
 
     // render Selection Action Bar
-    m_selectionAssistantsDecoration->drawDecoration(gc, converter, canvas, m_selectionActionBar);
+    m_selectionAssistantsDecoration->drawDecoration(gc, converter, canvas, m_selectionActionBarEnabled);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

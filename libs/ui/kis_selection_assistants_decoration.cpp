@@ -83,7 +83,7 @@ void KisSelectionAssistantsDecoration::setViewManager(KisViewManager* viewManage
     d->selectionManager = viewManager->selectionManager();
 }
 
-void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const KisCoordinatesConverter *converter, KisCanvas2* canvas, bool m_selectionActionBar)
+void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const KisCoordinatesConverter *converter, KisCanvas2* canvas, bool selectionActionBarEnabled)
 {
     d->m_canvas = canvas;
     QWidget *canvasWidget = dynamic_cast<QWidget*>(d->m_canvas->canvasWidget());
@@ -111,7 +111,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const KisCoo
 
     for (int i = 0; i < d->buttons.size(); i++) {
         QPushButton *btn = d->buttons[i];
-        if (canvasWidget && m_selectionActionBar) {
+        if (canvasWidget && selectionActionBarEnabled) {
             int buttonPosition = i * d->buttonSize;
             btn->setParent(canvasWidget);
             btn->show();
@@ -121,7 +121,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter& gc, const KisCoo
         }
     }
 
-    if (!m_selectionActionBar) {
+    if (!selectionActionBarEnabled) {
         d->selectionActive = false;
         return;
     }

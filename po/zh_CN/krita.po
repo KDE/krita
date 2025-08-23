@@ -23694,7 +23694,7 @@ msgstr "工作区"
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
-msgstr "符号图库"
+msgstr "矢量图形库"
 
 #: libs/resources/KisResourceTypes.cpp:52
 #, kde-format

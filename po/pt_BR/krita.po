@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-22 11:23-0300\n"
+"PO-Revision-Date: 2025-08-23 10:07-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -30160,7 +30160,7 @@ msgstr "Não preenchido"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:156
 #, kde-format
 msgid "Foreground Color"
-msgstr "Cor Principal"
+msgstr "Cor do primeiro plano"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
@@ -31979,7 +31979,7 @@ msgstr "Linha:"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:556
 #, kde-format
 msgid "Foreground color"
-msgstr "Cor de primeiro plano"
+msgstr "Cor do primeiro plano"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -39085,7 +39085,7 @@ msgstr "Quantidade:"
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
 msgid "Spread:"
-msgstr "Espalhar:"
+msgstr "Difusão:"
 
 #. i18n: ectx: property (text), widget (QLabel, thresholdModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:39
@@ -41919,7 +41919,7 @@ msgstr "Mudanças na cor de fundo"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
 #, kde-format
 msgid "Foreground color changes"
-msgstr "Mudar a cor principal"
+msgstr "Mudar a cor do primeiro plano"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:415
@@ -43738,7 +43738,7 @@ msgstr "Salvar para as paletas de documento é feito salvando o documento."
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:82
 #, kde-format
 msgid "Add foreground color"
-msgstr "Adicionar cor principal"
+msgstr "Adicionar cor do primeiro plano"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
@@ -53293,6 +53293,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Prevê a cor a partir de informações de brilho, "
+"reduzindo o tamanho do arquivo. Muito eficaz para imagens naturais onde "
+"brilho e cor estão correlacionados.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -53316,6 +53319,10 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Permite o carregamento progressivo usando matemática "
+"de cor avançada para detalhes finos. As imagens são carregadas como uma "
+"visualização aproximada que se torna progressivamente mais nítida. Leva mais "
+"tempo, mas oferece melhores resultados.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -53343,6 +53350,9 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Permite o carregamento progressivo usando quantização "
+"para comprimir detalhes finos. Resulta em tamanhos de arquivo menores, mas "
+"requer mais tempo de codificação.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -53358,6 +53368,10 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Cria uma imagem de visualização mais grosseira para "
+"carregamento progressivo. Adiciona alguns bytes ao tamanho do arquivo, mas "
+"melhora a qualidade inicial da visualização em baixa resolução.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
@@ -53386,6 +53400,9 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Ativa a transformação 'Espremer', que permite que as "
+"imagens sejam carregadas progressivamente, de baixa para alta qualidade, "
+"conforme os fluxos de dados chegam.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -53407,6 +53424,10 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Controla como os valores de cor são mapeados em toda a "
+"imagem. A opção \"Tudo\" usa toda a gama; porcentagens menores criam uma "
+"compressão mais eficiente para imagens com gamas de cores limitadas.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
@@ -53437,6 +53458,9 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Controla o mapeamento de cor em blocos locais de "
+"256×256 pixels. Mais eficiente para imagens com áreas de variedade de cor "
+"limitada.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
@@ -53467,6 +53491,9 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Ativa a compressão baseada em paleta quando a imagem "
+"contém este número de cores exclusivas ou menos. -1 permite que o "
+"codificador decida automaticamente.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
@@ -53494,6 +53521,9 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Permite codificação de cores relativa que armazena "
+"diferenças entre cores previstas e reais. Excelente para compressão quase "
+"sem perdas de gradientes suaves sem artefatos de bandas.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -53510,13 +53540,14 @@ msgstr "Habilita ou desabilita a paleta delta. Usado no modo modular."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:928
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Use a pressão na mesa digitalizadora para determinar "
-"as normais.</p></body></html>"
+"<html><head/><body><p>Define o tamanho do bloco para compactação. Grupos "
+"maiores podem melhorar a compactação, mas exigem mais memória.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
@@ -53545,6 +53576,9 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Seleciona o algoritmo usado para prever valores de "
+"pixel com base nos pixels circundantes. Diferentes preditores funcionam "
+"melhor para diferentes tipos de imagem.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:955
@@ -53562,6 +53596,10 @@ msgid ""
 "pixel. Higher values may improve compression but take longer.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Controla quantos pixels são analisados ​​para construir "
+"a árvore de decisão meta-adaptativa que seleciona o preditor ideal para cada "
+"pixel. Valores mais altos podem melhorar a compactação, mas levam mais tempo."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:965
@@ -53644,9 +53682,9 @@ msgid "Could not load \"id\" of the transform mask"
 msgstr "Não foi possível carregar o \"id\" da máscara de transformação"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:400
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not find transform mask XML element"
-msgstr "Não foi possível criar os parâmetros da máscara de transformação"
+msgstr "Não foi possível encontrar o elemento XML da máscara de transformação"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:422
 #, kde-format
@@ -56198,7 +56236,7 @@ msgstr "Fraca"
 #, kde-format
 msgctxt "Color rate of active Foreground color"
 msgid "Color Rate"
-msgstr "Intervalo de cores"
+msgstr "Intervalo de cor"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionData.h:40
 #, kde-format
@@ -57655,12 +57693,15 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Aplica menos textura quando a intensidade for menor. Use esta opção se "
+"desejar que o pincel faça a transição entre a aparência texturizada e a sem "
+"textura"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft texturing"
-msgstr "Simulação de tela"
+msgstr "Suavizar texturização"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:242
@@ -57692,7 +57733,7 @@ msgstr "Inverter Padrão: "
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
 #, kde-format
 msgid "Auto Invert For Eraser"
-msgstr ""
+msgstr "Inversão automática para borracha"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -60535,9 +60576,8 @@ msgid "Where should the pages go?"
 msgstr "Para onde as páginas devem ir?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:666
-#, fuzzy
 msgid "Which image should be the basis for the new page?"
-msgstr "Qual imagem deve ser a base da nova página?"
+msgstr "Qual imagem deve ser a base para a nova página?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:823
 msgid "Export success"
@@ -61146,7 +61186,7 @@ msgstr "Ajustar o tamanho da exportação para o conteúdo da camada"
 
 #: plugins/python/exportlayers/uiexportlayers.py:48
 msgid "Add incrementing prefix"
-msgstr ""
+msgstr "Adicionar prefixo incremental"
 
 #: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "JPEG"
@@ -61353,111 +61393,115 @@ msgstr "Número de linhas da barra:"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "Curador"
+msgstr "Mutador"
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "Girar"
+msgstr "Mutar"
 
 #: plugins/python/mutator/mutator.py:127
-#, fuzzy
 msgid "Settings mutated!"
-msgstr "Começando"
+msgstr "Configurações mutadas!"
 
 #: plugins/python/mutator/mutator.py:157
-#, fuzzy
 msgid "Mutator"
-msgstr "Curador"
+msgstr "Mutador"
 
 #: plugins/python/mutator/mutator.py:171
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush size."
 msgstr ""
+"Controla o grau com que a mutação afeta o tamanho global do pincel do Krita."
 
 #: plugins/python/mutator/mutator.py:173
-#, fuzzy
 msgid "Size Mutation: "
-msgstr "Saturação: "
+msgstr "Mutação do tamanho: "
 
 #: plugins/python/mutator/mutator.py:180
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush rotation."
 msgstr ""
+"Controla o grau com que a mutação afeta a rotação global do pincel do Krita."
 
 #: plugins/python/mutator/mutator.py:182
-#, fuzzy
 msgid "Rotation Mutation: "
-msgstr "Rotação:"
+msgstr "Mutação de rotação: "
 
 #: plugins/python/mutator/mutator.py:189
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush opacity."
 msgstr ""
+"Controla o grau com que a mutação afeta a opacidade global do pincel do "
+"Krita."
 
 #: plugins/python/mutator/mutator.py:191
-#, fuzzy
 msgid "Opacity Mutation: "
-msgstr "Opacidade: "
+msgstr "Mutação de opacidade: "
 
 #: plugins/python/mutator/mutator.py:198
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush flow."
 msgstr ""
+"Controla o grau com que a mutação afeta o fluxo global do pincel do Krita."
 
 #: plugins/python/mutator/mutator.py:200
-#, fuzzy
 msgid "Flow Mutation: "
-msgstr "Rotação:"
+msgstr "Mutação do fluxo: "
 
 #: plugins/python/mutator/mutator.py:207
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color hue."
 msgstr ""
+"Controla o grau com que a mutação afeta a tonalidade da cor de primeiro "
+"plano global do Krita."
 
 #: plugins/python/mutator/mutator.py:209
-#, fuzzy
 msgid "Hue Mutation: "
-msgstr "Rotação:"
+msgstr "Mutação da tonalidade: "
 
 #: plugins/python/mutator/mutator.py:216
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
 msgstr ""
+"Controla o grau com que a mutação afeta a saturação global da cor de "
+"primeiro plano do Krita."
 
 #: plugins/python/mutator/mutator.py:218
-#, fuzzy
 msgid "Saturation Mutation: "
-msgstr "Anéis de saturação:"
+msgstr "Mutação da saturação: "
 
 #: plugins/python/mutator/mutator.py:225
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color value."
 msgstr ""
+"Controla o grau com que a mutação afeta o valor da cor de primeiro plano "
+"global do Krita."
 
 #: plugins/python/mutator/mutator.py:227
-#, fuzzy
 msgid "Value Mutation: "
-msgstr "Duração do vídeo:"
+msgstr "Mutação do valor: "
 
 #: plugins/python/mutator/mutator.py:237
-#, fuzzy
 msgid "Mutate"
-msgstr "Girar"
+msgstr "Mutar"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
+"Invoca a ação \"Mutar\", que modifica aleatoriamente várias configurações "
+"globais de pincel e cor com base nas configurações de mutação definidas "
+"acima."
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
@@ -61700,9 +61744,8 @@ msgstr "Abrir"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
-#, fuzzy
 msgid "Python Files"
-msgstr "Salvar Arquivo Python"
+msgstr "Arquivos Python"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Invalid File"
@@ -61901,9 +61944,8 @@ msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Selecione a ferramenta pincel à mão livre ao pressionar um atalho"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:39
-#, fuzzy
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Mostrar mensagens pop-up na tela de pintura"
+msgstr "Mostrar mensagem pop-up na tela ao ativar a predefinição de pincel"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
@@ -62031,180 +62073,150 @@ msgid "Python files (*.py)"
 msgstr "Arquivos Python (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
 msgid "Custom icon"
-msgstr "Opções Customizadas"
+msgstr "Ícone customizado"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
 msgid "Tool icon"
-msgstr "Ícone de Ferramenta"
+msgstr "Ícone da ferramenta"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:67
-#, fuzzy
 msgid "Brush preset icon"
-msgstr "Predefinições do pincel"
+msgstr "Ícone de predefinição de pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:72
-#, fuzzy
 msgid "Workflow Buttons settings"
-msgstr "Configurações de Grupo"
+msgstr "Configurações de botões do fluxo de trabalho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:104
-#, fuzzy
 msgid "Selected button:"
-msgstr "botão esquerdo"
+msgstr "Botão selecionado:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Add a workflow button"
-msgstr ""
+msgstr "Adicionar um botão de fluxo de trabalho"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:125
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "Mover o botão de fluxo de trabalho selecionado para a esquerda"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "Mover o botão de fluxo de trabalho selecionado para a direita"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:139
-#, fuzzy
 msgid "Delete selected workflow button"
-msgstr "Remover máscara selecionada"
+msgstr "Excluir o botão de fluxo de trabalho selecionado"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:146
-#, fuzzy
 msgid "Select icon mode:"
-msgstr "Modo de seleção:"
+msgstr "Selecionar modo de ícone:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
-#, fuzzy
 msgid "Select a custom icon:"
-msgstr "Selecionar uma "
+msgstr "Selecionar um ícone personalizado:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:165
-#, fuzzy
 msgid "Custom icon path"
-msgstr "Entrada personalizada"
+msgstr "Caminho do ícone personalizado"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
 msgid "Select the custom icon"
-msgstr "Apagar a ação atual"
+msgstr "Selecionar o ícone personalizado"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:178
-#, fuzzy
 msgid "Enter a Tooltip:"
-msgstr "Recurso interno:"
+msgstr "Digitar uma Dica:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
 msgid "Tooltip text"
-msgstr "Dica"
+msgstr "Texto da Dica"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:189
-#, fuzzy
 msgid "Select a tool:"
-msgstr "Selecionar uma cor"
+msgstr "Selecionar uma ferramenta:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
-#, fuzzy
 msgid "Select a brush preset:"
-msgstr "Predefinição de pincel atual"
+msgstr "Selecionar uma predefinição de pincel:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
-#, fuzzy
 msgid "Brush preset name"
-msgstr "Predefinições do pincel"
+msgstr "Nome da predefinições do pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
 msgid "Select the brush preset"
-msgstr "Recarregar a predefinição de pincel"
+msgstr "Selecionar a predefinição de pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:220
-#, fuzzy
 msgid "Select foreground color:"
-msgstr "Selecionar cor de fundo"
+msgstr "Selecionar cor do primeiro plano:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:222
-#, fuzzy
 msgid "Load current foreground color"
-msgstr "Adicionar cor principal"
+msgstr "Carregar o cor do primeiro plano atual"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:225
-#, fuzzy
 msgid "Clear foreground color"
-msgstr "Adicionar cor principal"
+msgstr "Limpar a cor do primeiro plano"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:235
 msgid "Color model ; depth ; profile ; components"
-msgstr ""
+msgstr "Modelo de cor; profundidade; perfil; componentes"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:252
-#, fuzzy
 msgid "Select background color:"
-msgstr "Selecionar cor de fundo"
+msgstr "Selecionar cor do plano de fundo:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:254
-#, fuzzy
 msgid "Load current background color"
-msgstr "Selecionar cor de fundo"
+msgstr "Carregar cor do plano de fundo atual"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:257
-#, fuzzy
 msgid "Clear background color"
-msgstr "Selecionar cor de fundo"
+msgstr "Limpar cor do plano de fundo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
-#, fuzzy
 msgid "Select a script file:"
-msgstr "Selecione o script"
+msgstr "Selecionar um arquivo de script:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:286
-#, fuzzy
 msgid "Script path"
-msgstr "Selecionar caminho"
+msgstr "Caminho do script"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:305
-#, fuzzy
 msgid "Buttons size:"
-msgstr "Tamanho do pincel"
+msgstr "Tamanho dos botões:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:321
-#, fuzzy
 msgid "Settings button position:"
-msgstr "Ordenar pela posição"
+msgstr "Configurações de posição do botão:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
-#, fuzzy
 msgid "Bottom bar"
-msgstr "Inferior"
+msgstr "Barra de botões"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:324
-#, fuzzy
 msgid "Inline"
-msgstr "Incorporado"
+msgstr "Em linha"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:512
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:545
-#, fuzzy
 msgid "Color info: "
-msgstr "Cor:"
+msgstr "Informações de cor: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:582
-#, fuzzy
 msgid "Script files "
-msgstr "Arquivos do Krita"
+msgstr "Arquivos script "
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:26
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr ""
+msgstr "Botões de fluxo de trabalho"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:65
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "Abra a janela de configurações dos botões do fluxo de trabalho"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"
@@ -62212,24 +62224,24 @@ msgid "Freehand Brush Stroke"
 msgstr "Traços livres de pincel"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Contagem de amostras:"
+msgstr "Contagem de amostras na velocidade máxima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:226
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Contagem de amostras:"
+msgstr "Contagem de amostras na velocidade mínima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:236
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance at Max Speed:"
-msgstr "Distância do parágrafo:"
+msgstr "Distância na velocidade máxima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:246
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance at Min Speed:"
-msgstr "Intervalo de &distância:"
+msgstr "Distância na velocidade mínima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
@@ -62256,7 +62268,7 @@ msgid "Stabilizer"
 msgstr "Estabilizador"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:419
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Pixel"
@@ -62396,12 +62408,12 @@ msgid "Flood Fill"
 msgstr "Preenchimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:551
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Escala:"
+msgstr "Escala: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
@@ -62416,18 +62428,18 @@ msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Espalhar:"
+msgstr "Difusão: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Fechar"
+msgstr "Fechar lacuna:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -62451,9 +62463,9 @@ msgstr "Suavização: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use active layer"
-msgstr "Nova(s) camada(s) ativa(s)"
+msgstr "Usar camada ativa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62545,9 +62557,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
-#, fuzzy, kde-format
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Embaçar a seleção pela quantidade definida"
+msgstr "Fecha as lacunas nas linhas até o valor definido"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:659
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
@@ -62600,18 +62612,18 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Includes the active layer in regions found from merging of layers with "
 "specific color labels"
 msgstr ""
-"Selecione regiões encontradas na mesclagens de camadas com etiquetas "
-"coloridas específicas"
+"Inclui a camada ativa em regiões encontradas a partir da fusão de camadas "
+"com rótulos de cores específicos"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:671
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Arrastar preencherá regiões de qualquer cor"
+msgstr "Arrastar não preencherá regiões diferentes"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
@@ -62805,15 +62817,17 @@ msgid "Copy Translate"
 msgstr "Copiar Traduzir"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:454
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Copiar Traduzir"
+msgstr "Copiar Traduzir em Intervalos"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:565
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"A ferramenta Multi-pincéis não suporta mais de %1 pincéis; use um intervalo "
+"maior."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:99
 #, kde-format
@@ -63025,7 +63039,7 @@ msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
 "masks. Shortcut: ctrl-click."
 msgstr ""
-"Mover a camada atualmente selecionada na área de camadas com as suas "
+"Move a camada atualmente selecionada na área de camadas com as suas "
 "máscaras. Atalho: ctrl-clique."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
@@ -63039,29 +63053,29 @@ msgstr "&Mover a camada atual"
 #, kde-format
 msgid "Move the first layer with visible content at the place where you click."
 msgstr ""
-"Mova a primeira camada com conteúdo visível para o local onde você clicar."
+"Move a primeira camada com conteúdo visível para o local onde você clicar."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:64
 #, kde-format
 msgid "Mo&ve layer with content"
-msgstr "Mo&ve a camada com o conteúdo"
+msgstr "Mo&ver a camada com o conteúdo"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
-"Mover o grupo que contém a primeira camada com conteúdo visível. Atalho: "
-"ctrl-shift-clique."
+"Move o grupo que contém a primeira camada com conteúdo visível. Atalho: ctrl-"
+"clique."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77
 #, kde-format
 msgid "Move &the whole group"
-msgstr "Move o grupo inteiro"
+msgstr "Mover o grupo inteiro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:93
@@ -63204,15 +63218,15 @@ msgstr "Remover Tudo"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interval X:"
-msgstr "Interna"
+msgstr "Intervalo X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interval Y:"
-msgstr "Interna"
+msgstr "Intervalo Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, kde-format
@@ -63320,44 +63334,44 @@ msgstr "Ferramenta de Selecionar Formas"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:107
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Preenchimento, Traço, Marcadores"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Preenchimento, Marcadores, Traço"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Traço, Preenchimento, Marcadores"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Traço, Marcadores, Preenchimento"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Marcadores, Preenchimento, Traço"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Marcadores, Traço, Preenchimento"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "Opacidade: "
+msgstr "Opacidade: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:120
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "Opacidade [*varies*]: "
+msgstr "Opacidade [*varia*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -63502,32 +63516,32 @@ msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "Opacidade [*varies*]: "
+msgstr "Opacidade [*varia*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Saturação: "
+msgstr "Saturação: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "Saturação [*varies*]: "
+msgstr "Saturação [*varia*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Apagar todas as Imagem de Referência"
+msgstr "Apagar imagens de referência selecionadas"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Reference Image From File"
-msgstr "Adicionar Imagem de Referência:"
+msgstr "Adicionar imagem de referência a partir do arquivo"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
@@ -63535,14 +63549,14 @@ msgid "Paste Reference Image From System Clipboard"
 msgstr "Colar imagem de referência da área de transferência do sistema"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr "Colar imagem de referência da área de transferência do sistema"
+msgstr "Criar imagem de referência a partir da camada ativa"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Colar imagem de referência da área de transferência do sistema"
+msgstr "Criar imagem de referência a partir da tela visível"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -63583,9 +63597,9 @@ msgstr "Salvar Localização:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "Remover máscara selecionada"
+msgstr "Excluir imagens selecionadas"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -63595,19 +63609,19 @@ msgstr "Adicionar/Selecionar uma imagem para mostrar opções"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "Adicionar Imagem de referência"
+msgstr "Adicionar uma nova imagem de referência:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other options:"
-msgstr "Opções de caminho"
+msgstr "Outras opções:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete All"
 msgstr "Excluir tudo"
 
@@ -63692,9 +63706,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "Insira o nome com o qual deseja salvar este perfil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "Desculpe, mas o nome que você inseriu é inválido."
+msgstr "O nome que você inseriu é inválido."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -63813,12 +63827,12 @@ msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Espalhar:"
+msgstr "Difusão: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, kde-format
@@ -63869,10 +63883,10 @@ msgstr ""
 "fazer uma nova seleção"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Fechar"
+msgstr "Fechar lacuna: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -63979,12 +63993,12 @@ msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Espalhar:"
+msgstr "Difusão: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -64209,27 +64223,26 @@ msgid "Similar Color Selection Tool"
 msgstr "Ferramenta de seleção de cores semelhantes"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "Abrir paleta"
+msgstr "Paleta de Glifos"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr "Todas as pá&ginas"
+msgstr "Todos os glifos"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
-msgstr ""
+msgstr "Ajustar o ajuste automático do texto"
 
 #: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move text"
-msgstr "Mover à esquerda"
+msgstr "Mover texto"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:25
 msgctxt "(qtundo-format)"
@@ -64306,13 +64319,13 @@ msgstr "Altura da linha"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normal"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
@@ -64325,28 +64338,24 @@ msgid "Letter Spacing"
 msgstr "Espaçamento entre letras"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:20
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Texto Invertido"
+msgstr "Inserir texto"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Texto Invertido"
+msgstr "Inserir texto formatado"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Alterar as propriedades da camada"
+msgstr "Alterar as propriedades do texto"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "Remover modelo"
+msgstr "Remover texto"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -64736,7 +64745,7 @@ msgstr "Kerning"
 #, kde-format
 msgctxt "action"
 msgid "Legacy Hard Wrap"
-msgstr ""
+msgstr "Quebra rígida legada"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:268
@@ -64746,6 +64755,9 @@ msgid ""
 "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
 "are explicitly positioned, but the line height may be slightly inaccurate."
 msgstr ""
+"Use o modo de quebra rígido legado (o mesmo do Krita 5.1 e versões "
+"anteriores). Cada linha é posicionada explicitamente, mas a altura da linha "
+"pode ser ligeiramente imprecisa."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -64756,14 +64768,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Hard Wrap"
-msgstr ""
+msgstr "Quebra rígida SVG"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:278
 #, kde-format
 msgctxt "action"
 msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr ""
+msgstr "Use o modo de quebra rígido CSS `white-space: pre` do SVG."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -64774,7 +64786,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Auto Wrap with Fixed Width"
-msgstr ""
+msgstr "Quebra automática de SVG com largura fixa"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:288
@@ -64784,6 +64796,8 @@ msgid ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 msgstr ""
+"Usa o modo de quebra CSS `white-space: pre-wrap` do SVG, com `inline-size` "
+"definindo a largura do texto."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:303
 #, kde-format
@@ -64808,9 +64822,9 @@ msgstr "&Altura"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text W&rapping"
-msgstr "Edição de texto"
+msgstr "Queb&ra de texto"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
@@ -64873,49 +64887,49 @@ msgstr "Ancorar texto à direita."
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:170
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "O texto flui horizontalmente, de cima para baixo."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:196
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "O texto flui verticalmente, da direita para a esquerda."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:222
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "O texto flui verticalmente, da esquerda para a direita."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left to right text direction."
-msgstr "Escapar para a direita"
+msgstr "Direção do texto da esquerda para a direita."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:281
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right to left text direction."
-msgstr "Mudar direção do texto"
+msgstr "Direção do texto da direita para a esquerda."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:325
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit SVG Source"
-msgstr "Fonte SVG"
+msgstr "Editar fonte SVG"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
-#, fuzzy, kde-format
+#, kde-format
 msgid "Glyph Palette"
-msgstr "Abrir paleta"
+msgstr "Paleta de Glifos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
 msgid "Keyword"
-msgstr "Palavra-chave:"
+msgstr "Palavra-chave"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
@@ -65212,12 +65226,12 @@ msgid "Include contour regions"
 msgstr "Incluir regiões de contorno"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Escala:"
+msgstr "Escala: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, kde-format
@@ -65226,18 +65240,18 @@ msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:497
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Espalhar:"
+msgstr "Difusão: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Fechar"
+msgstr "Fechar lacuna: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
@@ -65436,10 +65450,10 @@ msgstr ""
 "o valor \"Dica de fechamento de lacuna\""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Limpar:"
+msgstr "Limpar: {n}%"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
@@ -65593,7 +65607,7 @@ msgid "Patch Radius:"
 msgstr "Raios do Caminho:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Krita was built without the support of GNU Scientific Library, so you cannot "
 "scale the selection with handles. Please compile Krita with GNU Scientific "
@@ -65601,8 +65615,8 @@ msgid ""
 msgstr ""
 "Infelizmente, o Krita foi compilado sem suporte à GNU Scientific Library "
 "(GSL). Por isso, você não poderá ajustar a escala da seleção com as alças. "
-"Por favor, compile o Krita com o suporte à GSL ou use o item de opções para "
-"edição manual dos valores de escala."
+"Por favor, compile o Krita com o suporte à GSL ou use as opções para edição "
+"manual dos valores de escala."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:121
 #, kde-format

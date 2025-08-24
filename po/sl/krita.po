@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-20 13:54+0200\n"
+"PO-Revision-Date: 2025-08-23 08:37+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -35957,7 +35957,7 @@ msgstr "Potreben je ponoven zagon."
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
 msgid "Document Information"
-msgstr "Informacije o dokumentu"
+msgstr "Podatki o dokumentu"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:115
 #, kde-format
@@ -38833,7 +38833,7 @@ msgstr "Naslov"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Zakleni sidrišče"
+msgstr "Zakleni zloženo okno"
 
 #: libs/ui/widgets/kis_wdg_generator.cpp:148
 #: libs/ui/widgets/kis_wdg_generator.cpp:160
@@ -39816,13 +39816,13 @@ msgstr "Poišči pomoč ..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Plavajoče sidrišče"
+msgstr "Plavajoče zloženo okno"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Zapri sidrišče"
+msgstr "Zapri zloženo okno"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
@@ -41689,7 +41689,7 @@ msgstr "Zamik: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:42
 #, kde-format
 msgid "Docker:"
-msgstr "Sidrišče:"
+msgstr "Zloženo okno:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
@@ -43134,7 +43134,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"Prikazuje globalni izbor kot običajno masko za izbor v sidrišču <b>Plasti</b>"
+"Prikazuje globalni izbor kot običajno masko za izbor v zloženem oknu "
+"<b>Plasti</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
 #, kde-format
@@ -45120,7 +45121,7 @@ msgstr "Prilagoditev lastnosti besedila"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Sidrišče dotikov"
+msgstr "Zloženo okno Dotik"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -61218,7 +61219,7 @@ msgstr "Ra&zširitev"
 #: plugins/python/krita_script_starter/bbdkss.ui:129
 #, kde-format
 msgid "&Docker"
-msgstr "&Sidrišče"
+msgstr "&Zloženo okno"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:152
@@ -61231,8 +61232,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Če je ta možnost potrjena, bo skript samodejno "
 "omogočen v Kriti. To pomeni, da se bo prikazal v meniju Skripti ali seznamu "
-"sidrišča. Sicer boste morali skript ročno omogočiti prek menijskega ukaza "
-"Krita-&gt;Nastavitve. </p></body></html>"
+"zloženih oken. Sicer boste morali skript ročno omogočiti prek menijskega "
+"ukaza Krita-&gt;Nastavitve. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -61256,7 +61257,7 @@ msgstr "Spremeni nastavitve"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr "Sidrišče drsnika mešalnika"
+msgstr "Zloženo okno Drsnik mešalnika"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -61566,7 +61567,7 @@ msgstr "Dodaj skript"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Sidrišče skriptov"
+msgstr "Zloženo okno skriptov"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -63994,7 +63995,7 @@ msgstr "Dodatno območje, ki ga je treba preiskati"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr "Vrzel med dvema sidroma v interaktivnem načinu"
+msgstr "Vrzel med sidroma v interaktivnem načinu"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
 #, kde-format

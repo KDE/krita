@@ -7,6 +7,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
+import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     id: root;
@@ -139,9 +140,10 @@ TextPropertyBase {
                         enableMouseEvents: false;
                     }
 
-                    ToolTip.text: activeFeatureDelegate.toolTip;
-                    ToolTip.visible: activeFeatureControl.hovered;
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                    Kis.ToolTipBase {
+                        text: activeFeatureDelegate.toolTip;
+                        visible: activeFeatureControl.hovered;
+                    }
 
                     delegate: OpenTypeFeatureDelegate {
                         width: ListView.view.width;

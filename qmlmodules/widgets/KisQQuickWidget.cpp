@@ -9,6 +9,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QQmlFileSelector>
+#include <QFileSelector>
 
 #include <KLocalizedContext>
 
@@ -53,6 +55,15 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
 
     engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
+
+    QQmlFileSelector* selector = new QQmlFileSelector(engine());
+    QStringList extraSelectors;
+    /*
+     * This allows for Style specific components, which it'll load from
+     * a "+StyleName" folder.
+     */
+    extraSelectors << QQuickStyle::name();
+    selector->setExtraSelectors(extraSelectors);
 
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);

@@ -74,13 +74,13 @@ Control {
         anchors.right: parent.right;
         anchors.left: parent.left;
         anchors.top: parent.top;
-        TabButton {
+        Kis.TabButtonBase {
             text: i18nc("@title:tab", "Character")
         }
-        TabButton {
+        Kis.TabButtonBase {
             text: i18nc("@title:tab", "Paragraph")
         }
-        TabButton {
+        Kis.TabButtonBase {
             text: i18nc("@title:tab", "Preset")
         }
     }

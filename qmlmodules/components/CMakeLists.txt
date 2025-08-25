@@ -69,6 +69,11 @@ ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH angleselector SOURCES
     qml/angleselector/AngleGauge.qml
 )
 
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH +Fusion SOURCES
+    qml/themedComponents/+Fusion/TabButtonBase.qml
+    qml/themedComponents/+Fusion/ToolSeparatorBase.qml
+)
+
 ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/button/GroupButton.qml
     qml/button/OptionButtonStrip.qml
@@ -81,7 +86,9 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/IntSliderSpinBox.qml
     qml/DoubleSliderSpinBox.qml
 
-    qml/tooltip/ToolTipBase.qml
+    qml/themedComponents/ToolTipBase.qml
+    qml/themedComponents/TabButtonBase.qml
+    qml/themedComponents/ToolSeparatorBase.qml
 
     qml/curvewidget/CurveWidget.qml
 

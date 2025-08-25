@@ -63,15 +63,16 @@ Column {
         enabled = true;
     }
     Component.onCompleted: {
-        children.push(seperator);
+        Qt.createQmlObject("import org.krita.components 1.0 as Kis
+                Kis.ToolSeparatorBase {
+                id: separator;
+                orientation: Qt.Horizontal;
+                width: parent && typeof parent != 'undefined'? parent.width: 100;
+                topPadding: parent.padding;
+                }", root)
     }
 
     property Kis.ThemedControl propertyBasePalette: Kis.ThemedControl {
     }
 
-    MenuSeparator {
-        id: seperator;
-        width: parent && typeof parent != 'undefined'? parent.width: 100;
-        topPadding: parent.padding;
-    }
 }

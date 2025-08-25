@@ -392,7 +392,7 @@ ColumnLayout {
                     Kis.ToolTipBase {
                         parent: addPropertyDelegate;
                         text: addPropertyDelegate.toolTip;
-                        visible: addPropertyDelegate.highlighted;
+                        visible: addPropertyDelegate.highlighted && addPropertyCmb.popup.visible;
                     }
 
                     onClicked: addPropertyCmb.enableProperty(name);

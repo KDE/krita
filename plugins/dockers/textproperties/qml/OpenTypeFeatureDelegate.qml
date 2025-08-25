@@ -59,6 +59,7 @@ Control {
 
         ToolSeparator {
             Layout.fillHeight: true;
+            palette.window: root.containsMouse? root.palette.highlight: root.palette.window;
         }
 
         ColumnLayout {

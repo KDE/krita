@@ -145,6 +145,7 @@ TextPropertyBase {
 
                     delegate: OpenTypeFeatureDelegate {
                         width: ListView.view.width;
+                        required property var modelData;
                         display: modelData.display;
                         toolTip: display;
                         sample: activeFeatureDelegate.sample;

@@ -15,10 +15,10 @@ Control {
     height: implicitHeight;
     implicitHeight: layout.height + padding*2;
     clip: true;
-    property string display;
-    property string tag;
-    property string sample;
-    property string toolTip;
+    required property string display;
+    required property string tag;
+    required property string sample;
+    required property string toolTip;
     property int featureValue: 0;
 
     onFeatureValueChanged: svgTextLabel.updateFeatureValue();
@@ -113,9 +113,11 @@ Control {
         hoverEnabled: root.enableMouseEvents;
         enabled: root.enableMouseEvents;
         onClicked: (mouse)=>{ featureClicked(mouse); }
-
-        ToolTip.text: root.toolTip;
-        ToolTip.visible: containsMouse;
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+        Kis.ToolTipBase {
+            parent: mouseArea;
+            text: root.toolTip;
+            visible: mouseArea.containsMouse;
+        }
     }
+
 }

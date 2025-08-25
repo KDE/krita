@@ -61,7 +61,7 @@ Button {
 
     Kis.Theme {
         id: theme;
-        button.state: root.enabled? root.activeFocus? SystemPalette.Active: SystemPalette.Inactive: SystemPalette.Disabled;
+        button.state: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
     }
 
     /*
@@ -73,6 +73,12 @@ Button {
     property int groupPosition: GroupButton.GroupPosition.NoGroup;
     palette.button: checked? theme.selection.backgroundColor: theme.button.backgroundColor;
     palette.buttonText: checked? theme.selection.textColor: theme.button.textColor;
+    palette.light: checked? theme.selection.lightShadeColor: theme.button.lightShadeColor;
+    palette.midlight: checked? theme.selection.midLightShadeColor: theme.button.midLightShadeColor;
+    palette.mid: checked? theme.selection.midShadeColor: theme.button.midShadeColor;
+    palette.dark: checked? theme.selection.darkShadeColor: theme.button.darkShadeColor;
+    palette.shadow: checked? theme.selection.shadowShadeColor: theme.button.shadowShadeColor;
+    palette.window: theme.window.backgroundColor;
 
     text: "Button"
     clip: true

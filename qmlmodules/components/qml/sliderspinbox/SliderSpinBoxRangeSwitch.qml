@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 import QtQuick 2.15
-import org.krita.components 1.0
+import org.krita.components 1.0 as Kis
 
 /*
     \qmltype SliderSpinBoxRangeSwitch
@@ -133,7 +133,7 @@ Item {
         onClicked: root.softRangeActive = !root.softRangeActive
     }
 
-    KisToolTip {
+    Kis.ToolTipBase {
         id: toolTipPopup
         parent: root
         visible: root.enabled && mouseArea.containsMouse

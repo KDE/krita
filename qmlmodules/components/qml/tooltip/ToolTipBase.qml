@@ -5,6 +5,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import org.krita.components 1.0 as Kis
 
 ToolTip {
     id: root
@@ -24,6 +25,21 @@ ToolTip {
             root.visible = false;
         }
     }
+
+    Kis.Theme {
+        id: theme;
+    }
+
+    palette.toolTipBase: theme.tooltip.backgroundColor;
+    palette.toolTipText: theme.tooltip.textColor;
+    palette.link: theme.tooltip.linkTextColor;
+    palette.linkVisited: theme.tooltip.linkVisitedColor;
+
+    palette.light: theme.tooltip.lightShadeColor;
+    palette.midlight: theme.tooltip.midLightShadeColor;
+    palette.mid: theme.tooltip.midShadeColor;
+    palette.dark: theme.tooltip.darkShadeColor;
+    palette.shadow: theme.tooltip.shadowShadeColor;
 
     onParentControlChanged: {
         changingParentControl = true;

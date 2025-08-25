@@ -198,9 +198,10 @@ Control {
                     }
 
                     readonly property string missingFontName : i18nc("%1 is name of a font family", "Font Family \"%1\" is missing on this machine. This style preset may not work correctly.", presetDelegate.meta.primary_font_family);
-                    ToolTip.text: (typeof presetDelegate.meta.description !== 'undefined'? presetDelegate.model.name + "\n" + presetDelegate.meta.description: presetDelegate.model.name) + (missingFamily.visible?  "\n"+ missingFontName: "");
-                    ToolTip.visible: containsMouse;
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                    Kis.ToolTipBase {
+                        text: (typeof presetDelegate.meta.description !== 'undefined'? presetDelegate.model.name + "\n" + presetDelegate.meta.description: presetDelegate.model.name) + (missingFamily.visible?  "\n"+ delegateMouseArea.missingFontName: "");
+                        visible: delegateMouseArea.containsMouse;
+                    }
 
                 }
             }

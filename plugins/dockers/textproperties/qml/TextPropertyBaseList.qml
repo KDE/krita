@@ -389,9 +389,11 @@ ColumnLayout {
                     highlighted: addPropertyCmb.highlightedIndex === index;
                     background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
 
-                    ToolTip.text: toolTip;
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: highlighted;
+                    Kis.ToolTipBase {
+                        parent: addPropertyDelegate;
+                        text: addPropertyDelegate.toolTip;
+                        visible: addPropertyDelegate.highlighted;
+                    }
 
                     onClicked: addPropertyCmb.enableProperty(name);
                 }
@@ -407,9 +409,11 @@ ColumnLayout {
             icon.height: 16;
             text: i18nc("@label:button", "Configure");
             display: AbstractButton.IconOnly;
-            ToolTip.text: text;
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: highlighted;
+
+            Kis.ToolTipBase {
+                text: configButton.text;
+                visible: configButton.highlighted;
+            }
 
             palette: paletteControl.palette;
 

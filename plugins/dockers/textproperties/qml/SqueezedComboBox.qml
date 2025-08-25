@@ -36,9 +36,11 @@ ComboBox {
 
         background: Rectangle{ color:"transparent";}
 
-        ToolTip.text: tooltipText;
-        ToolTip.visible: highlighted && tooltipText.length > 0;
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+        Kis.ToolTipBase {
+            parent: contentItemDelegate
+            visible: contentItemDelegate.hovered && contentItemDelegate.tooltipText.length > 0;
+            text: contentItemDelegate.tooltipText;
+        }
         onClicked: {
             squeezedComboBox.popup.visible? squeezedComboBox.popup.close(): squeezedComboBox.popup.open();
         }
@@ -84,9 +86,11 @@ ComboBox {
             font: squeezedComboDelegate.font;
         }
 
-        ToolTip.text: tooltipText;
-        ToolTip.visible: highlighted && tooltipText.length > 0;
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+        Kis.ToolTipBase {
+            parent: squeezedComboDelegate;
+            visible: highlighted && squeezedComboDelegate.tooltipText.length > 0;
+            text: squeezedComboDelegate.tooltipText;
+        }
     }
 
     popup.palette: squeezedComboBox.palette;

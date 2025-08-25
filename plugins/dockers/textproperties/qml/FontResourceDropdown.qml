@@ -304,6 +304,7 @@ Button {
             }
 
             MouseArea {
+                id: delegateMouseArea;
                 acceptedButtons: Qt.RightButton | Qt.LeftButton;
                 anchors.fill: parent;
                 hoverEnabled: true;
@@ -323,9 +324,10 @@ Button {
                     }
                 }
 
-                ToolTip.text: fontDelegateItem.fontName;
-                ToolTip.visible: containsMouse;
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                Kis.ToolTipBase {
+                    text: fontDelegateItem.fontName;
+                    visible: delegateMouseArea.containsMouse;
+                }
             }
         }
     }
@@ -335,7 +337,7 @@ Button {
         id: familyCmbPopup;
         y: familyCmb.height - 1;
         x: familyCmb.width - width;
-        width: Math.max(contentWidth, familyCmb.width);
+        width: Math.max(contentWidth, Math.max(familyCmb.width, 200));
         height: Math.min(contentItem.implicitHeight, familyCmb.maxPopupHeight - topMargin - bottomMargin)
         padding: 2;
 

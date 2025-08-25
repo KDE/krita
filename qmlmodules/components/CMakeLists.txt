@@ -81,7 +81,7 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/IntSliderSpinBox.qml
     qml/DoubleSliderSpinBox.qml
 
-    qml/tooltip/KisToolTip.qml
+    qml/tooltip/ToolTipBase.qml
 
     qml/curvewidget/CurveWidget.qml
 

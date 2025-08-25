@@ -174,6 +174,7 @@ Control {
         TextPropertyBaseList {
             propertiesModel: styleEdit.textProperties;
             locales: styleEdit.locales;
+            textConfigButtonVisible: false;
             Layout.fillWidth: true;
             Layout.fillHeight: true;
             canvasDPI: styleEdit.makePixelRelative? styleEdit.pixelRelativeDPI: styleEdit.canvasDPI;

@@ -18,6 +18,8 @@ ColumnLayout {
     property KoSvgTextPropertiesModel propertiesModel;
     property var locales: [];
 
+    property alias textConfigButtonVisible: configButton.visible;
+
     ListModel {
         id: propertyList;
     }
@@ -405,7 +407,7 @@ ColumnLayout {
             id: configButton;
             icon.source: "qrc:///light_configure.svg"
             icon.color: palette.text;
-            icon.width: 16;
+            icon.width: visible? 16: 0;
             icon.height: 16;
             text: i18nc("@label:button", "Configure");
             display: AbstractButton.IconOnly;

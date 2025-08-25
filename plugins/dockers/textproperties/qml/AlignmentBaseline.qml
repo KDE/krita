@@ -26,6 +26,7 @@ TextPropertyBase {
         }
 
         function onAlignmentBaselineStateChanged() {
+            updateAlignmentBaseline();
             updateVisibility();
         }
     }
@@ -45,7 +46,8 @@ TextPropertyBase {
     }
 
     onBaselineSelectionChanged: {
-        baselineCmb.currentIndex = baselineCmb.indexOfValue(baselineSelection);
+        let idx = baselineCmb.indexOfValue(baselineSelection);
+        baselineCmb.currentIndex = idx > 0? idx: 0;
         if (!blockSignals) {
             properties.alignmentBaseline = baselineSelection;
         }
@@ -77,7 +79,7 @@ TextPropertyBase {
         }
         SqueezedComboBox {
             model: [
-                {text: i18nc("@label:inlistbox", "Baseline"), value: KoSvgText.BaselineAuto, icon: "",
+                {text: i18nc("@label:inlistbox", "Baseline"), value: KoSvgText.BaselineDominant, icon: "",
                     toolTip: i18nc("@info:tooltip", "Align to the baseline defined by Dominant Baseline.")},
                 {text: i18nc("@label:inlistbox", "Alphabetic"), value: KoSvgText.BaselineAlphabetic, icon: "qrc:///baseline-alphabetic.svg",
                     toolTip: i18nc("@info:tooltip", "Align to the baseline for scripts that align at the bottom.")},

@@ -91,23 +91,6 @@ variables:
         coverage_format: cobertura
         path: CoberturaLcovResults.xml
 
-clang_format:
-  stage: build
-  image: debian:testing
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends wget ca-certificates git clang-format-11
-    - update-ca-certificates
-  script:
-    - ./.gitlab-ci.script
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
-      when: never
-    - when: manual
-      allow_failure: true
-
 workflow:
   rules:
     # Prevent branch pipelines if an MR is open on the branch.
@@ -123,6 +106,20 @@ workflow:
     - if: $CI_COMMIT_BRANCH =~ /^krita\//
     - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
 
+.clang_format:
+  stage: build
+  allow_failure: true
+  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt69:latest
+  tags:
+    - Linux
+  before_script:
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
+  script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - if [[ ! -f .clang-format && ! -f _clang-format ]]; then wget -O .clang-format https://invent.kde.org/frameworks/extra-cmake-modules/-/raw/master/kde-modules/clang-format.cmake; fi
+    - ./ci-utilities/run-clang-format.py
+
+
 include:
   - local: /build-tools/ci-scripts/linux.yml
   - local: /build-tools/ci-scripts/windows.yml
@@ -131,4 +128,3 @@ include:
   - project: sysadmin/ci-utilities
     file:
       - /gitlab-templates/cppcheck.yml
-

@@ -3,12 +3,11 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
-import QtQuick.Window 2.15
 
 Control {
     id: root;
@@ -21,26 +20,13 @@ Control {
         target: canvasObserver;
         function onTextPropertyConfigChanged() {updatePropertyVisibilityState()}
         function onTextPropertiesChanged() {setProperties()}
+
     }
 
-    Window.onActiveFocusItemChanged: {
-        /// Quick test to check this docker is in focus.
-        let currentFocusItem = Window.activeFocusItem;
-        let anyFocus = (typeof currentFocusItem !== "undefined" || currentFocusItem);
-        if (anyFocus) {
-            anyFocus = false;
-            let testFocus = currentFocusItem;
-            while (typeof testFocus !== "undefined" && testFocus) {
-                if (testFocus == root) {
-                    anyFocus = true;
-                    break;
-                }
-                testFocus = testFocus.parent;
-            }
-        }
-        canvasObserver.hasFocus = anyFocus;
+    Kis.WindowFocusChecker {
+        id: focusChecker;
+        onInFocusChanged: canvasObserver.hasFocus = inFocus;
     }
-
 
     property TextPropertyConfigModel configModel : canvasObserver.textPropertyConfig;
     property double canvasDPI: canvasObserver.dpi;

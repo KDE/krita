@@ -63,6 +63,11 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
      * a "+StyleName" folder.
      */
     extraSelectors << QQuickStyle::name();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    extraSelectors << "qt6";
+#elif QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    extraSelectors << "qt5";
+#endif
     selector->setExtraSelectors(extraSelectors);
 
 

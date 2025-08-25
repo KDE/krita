@@ -74,6 +74,10 @@ ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH +Fusion SOURCES
     qml/themedComponents/+Fusion/ToolSeparatorBase.qml
 )
 
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH +qt5 SOURCES
+    qml/+qt5/WindowFocusChecker.qml
+)
+
 ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/button/GroupButton.qml
     qml/button/OptionButtonStrip.qml
@@ -94,6 +98,8 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
 
     qml/AngleSelector.qml
     qml/InformingTextInput.qml
+
+    qml/WindowFocusChecker.qml
 
 )
 if (QT_MAJOR_VERSION STREQUAL "6")

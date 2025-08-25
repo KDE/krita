@@ -5,7 +5,7 @@
  */
 
 #include "kis_selection_decoration.h"
-#include "kis_selection_assistants_decoration.h"
+#include "kis_selection_actions_panel.h"
 
 #include <QPainter>
 #include <QVarLengthArray>
@@ -66,7 +66,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     // selections should be at the top of the stack
     setPriority(100);
 
-    m_selectionAssistantsDecoration = new KisSelectionAssistantsDecoration();
+    m_selectionAssistantsDecoration = new KisSelectionActionsPanel();
     m_selectionAssistantsDecoration->setViewManager(this->view()->viewManager());
 }
 

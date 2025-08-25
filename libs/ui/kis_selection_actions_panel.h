@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef _KIS_SELECTION_ASSISTANTS_DECORATION_H_
-#define _KIS_SELECTION_ASSISTANTS_DECORATION_H_
+#ifndef _KIS_SELECTION_ACTIONS_PANEL_H_
+#define _KIS_SELECTION_ACTIONS_PANEL_H_
 
 #include "kis_types.h"
 #include <QColor>
@@ -24,15 +24,15 @@ class KisCanvas2;
 class KisCoordinatesConverter;
 class KisViewManager;
 
-class KisSelectionAssistantsDecoration;
-typedef KisSharedPtr<KisSelectionAssistantsDecoration> KisSelectionAssistantsDecorationSP;
+class KisSelectionActionsPanel;
+typedef KisSharedPtr<KisSelectionActionsPanel> KisSelectionActionsPanelSP;
 
-class KRITAUI_EXPORT KisSelectionAssistantsDecoration : public QObject
+class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
 {
     Q_OBJECT
 public:
-    KisSelectionAssistantsDecoration();
-    ~KisSelectionAssistantsDecoration();
+    KisSelectionActionsPanel();
+    ~KisSelectionActionsPanel();
     void drawDecoration(QPainter &gc,
                         const KisCoordinatesConverter *converter,
                         KisCanvas2 *canvas,

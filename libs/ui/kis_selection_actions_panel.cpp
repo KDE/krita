@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_selection_assistants_decoration.h"
+#include "kis_selection_actions_panel.h"
 
 #include <limits>
 
@@ -39,7 +39,7 @@ struct ActionButtonData {
     void (KisSelectionManager::*slot)();
 };
 
-struct KisSelectionAssistantsDecoration::Private {
+struct KisSelectionActionsPanel::Private {
     Private()
     {
     }
@@ -71,23 +71,23 @@ struct KisSelectionAssistantsDecoration::Private {
     int m_actionBarWidth = m_buttonCount * m_buttonSize;
 };
 
-KisSelectionAssistantsDecoration::KisSelectionAssistantsDecoration()
+KisSelectionActionsPanel::KisSelectionActionsPanel()
     : d(new Private)
 {
 }
 
-KisSelectionAssistantsDecoration::~KisSelectionAssistantsDecoration()
+KisSelectionActionsPanel::~KisSelectionActionsPanel()
 {
     delete d;
 }
 
-void KisSelectionAssistantsDecoration::setViewManager(KisViewManager *viewManager)
+void KisSelectionActionsPanel::setViewManager(KisViewManager *viewManager)
 {
     d->m_viewManager = viewManager;
     d->m_selectionManager = viewManager->selectionManager();
 }
 
-void KisSelectionAssistantsDecoration::drawDecoration(QPainter &gc,
+void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
                                                       const KisCoordinatesConverter *converter,
                                                       KisCanvas2 *canvas,
                                                       bool selectionActionBarEnabled)
@@ -138,7 +138,7 @@ void KisSelectionAssistantsDecoration::drawDecoration(QPainter &gc,
     drawActionBarBackground(gc);
 }
 
-bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
+bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
     QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_canvas->canvasWidget());
     if (obj != canvasWidget)
@@ -172,7 +172,7 @@ bool KisSelectionAssistantsDecoration::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
-QPoint KisSelectionAssistantsDecoration::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget)
+QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget)
 {
     QRect canvasBounds = canvasWidget->rect();
     int m_actionBarWidth = d->m_actionBarWidth;
@@ -187,7 +187,7 @@ QPoint KisSelectionAssistantsDecoration::updateCanvasBoundaries(QPoint position,
     return position;
 }
 
-QPushButton *KisSelectionAssistantsDecoration::createButton(const QString &iconName, const QString &tooltip)
+QPushButton *KisSelectionActionsPanel::createButton(const QString &iconName, const QString &tooltip)
 {
     QPushButton *button = new QPushButton();
     button->setIcon(KisIconUtils::loadIcon(iconName));
@@ -196,7 +196,7 @@ QPushButton *KisSelectionAssistantsDecoration::createButton(const QString &iconN
     return button;
 }
 
-void KisSelectionAssistantsDecoration::setupButtons()
+void KisSelectionActionsPanel::setupButtons()
 {
     if (!d->m_buttons.isEmpty())
         return;
@@ -208,7 +208,7 @@ void KisSelectionAssistantsDecoration::setupButtons()
     }
 }
 
-void KisSelectionAssistantsDecoration::drawActionBarBackground(QPainter &gc)
+void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
 {
     int cornerRadius = 4;
     int penWidth = 5;

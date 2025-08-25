@@ -141,7 +141,7 @@ set(kritaui_LIB_SRCS
     KisLayerThumbnailCache.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
-    kis_selection_assistants_decoration.cpp
+    kis_selection_actions_panel.cpp
     KisDecorationsManager.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp

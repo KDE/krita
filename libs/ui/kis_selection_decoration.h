@@ -14,7 +14,7 @@
 
 #include <kis_signal_compressor.h>
 #include "canvas/kis_canvas_decoration.h"
-#include "kis_selection_assistants_decoration.h"
+#include "kis_selection_actions_panel.h"
 
 class KisView;
 class QWindow;
@@ -70,7 +70,7 @@ private:
 
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
-    KisSelectionAssistantsDecoration *m_selectionAssistantsDecoration;
+    KisSelectionActionsPanel *m_selectionAssistantsDecoration;
     bool m_selectionActionBarEnabled;
 };
 

@@ -212,7 +212,7 @@ void KisSelectionActionsPanel::setupButtons()
     }
 }
 
-void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
+void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter)
 {
     const int CORNER_RADIUS = 4;
     const int PEN_WIDTH = 5;
@@ -226,19 +226,19 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
     QRectF actionBarRect(d->m_dragRectPosition, QSize(d->m_actionBarWidth, BUTTON_SIZE));
     QPainterPath bgPath;
     bgPath.addRoundedRect(actionBarRect, CORNER_RADIUS, CORNER_RADIUS);
-    gc.fillPath(bgPath, BACKGROUND_COLOR);
+    painter.fillPath(bgPath, BACKGROUND_COLOR);
 
     QPen pen(OUTLINE_COLOR);
     pen.setWidth(PEN_WIDTH);
-    gc.setPen(pen);
-    gc.drawPath(bgPath);
+    painter.setPen(pen);
+    painter.drawPath(bgPath);
 
     QRectF dragHandleRect(
         QPoint(d->m_dragRectPosition.x() + d->m_actionBarWidth - BUTTON_SIZE, d->m_dragRectPosition.y()),
         QSize(BUTTON_SIZE, BUTTON_SIZE));
     QPainterPath dragHandlePath;
     dragHandlePath.addRect(dragHandleRect);
-    gc.fillPath(dragHandlePath, BACKGROUND_COLOR);
+    painter.fillPath(dragHandlePath, BACKGROUND_COLOR);
 
     const std::list<std::pair<int, int>> offsets = {{0, 0},
                                                     {DOT_SPACING, 0},
@@ -256,5 +256,5 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
     };
 
     dragHandleRectDots.translate(dragHandleRect.topLeft() + DRAG_HANDLE_RECT_DOTS_OFFSET);
-    gc.fillPath(dragHandleRectDots, DOT_COLOR);
+    painter.fillPath(dragHandleRectDots, DOT_COLOR);
 }

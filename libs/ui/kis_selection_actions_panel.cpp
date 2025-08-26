@@ -176,14 +176,18 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget)
 {
     QRect canvasBounds = canvasWidget->rect();
-    int m_actionBarWidth = d->m_actionBarWidth;
-    int actionBarHeight = BUTTON_SIZE;
+
+    const int ACTION_BAR_WIDTH = d->m_actionBarWidth;
+    const int ACTION_BAR_HEIGHT = BUTTON_SIZE;
+
     position.setX(qBound(canvasBounds.left() + BUFFER_SPACE,
                          position.x(),
-                         canvasBounds.right() - m_actionBarWidth - BUFFER_SPACE));
+                         canvasBounds.right() - ACTION_BAR_WIDTH - BUFFER_SPACE));
+
     position.setY(qBound(canvasBounds.top() + BUFFER_SPACE,
                          position.y(),
-                         canvasBounds.bottom() - actionBarHeight - BUFFER_SPACE));
+                         canvasBounds.bottom() - ACTION_BAR_HEIGHT - BUFFER_SPACE));
+
     return position;
 }
 

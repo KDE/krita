@@ -1039,6 +1039,9 @@
        </item>
        <item row="10" column="1">
         <widget class="QCheckBox" name="chkEnableSelectionActionBar">
+         <property name="toolTip">
+          <string>When enabled, any selections will produce a small floating panel of useful selection-related actions.</string>
+         </property>
          <property name="text">
           <string>Enable Selection Actions Bar</string>
          </property>

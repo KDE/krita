@@ -58,12 +58,12 @@ struct KisSelectionActionsPanel::Private {
     {
         static const QVector<ActionButtonData> data = {
             {"select-all", i18nc("tooltip", "Select All"), &KisSelectionManager::selectAll},
-            {"select-clear", i18nc("tooltip", "Deselect"), &KisSelectionManager::deselect},
-            {"duplicatelayer", i18nc("tooltip", "Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
             {"select-invert", i18nc("tooltip", "Invert Selection"), &KisSelectionManager::invert},
+            {"select-clear", i18nc("tooltip", "Deselect"), &KisSelectionManager::deselect},
             {"krita_tool_color_fill",
              i18nc("tooltip", "Fill Selection with Color"),
              &KisSelectionManager::fillForegroundColor},
+            {"duplicatelayer", i18nc("tooltip", "Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
             {"tool_crop", i18nc("tooltip", "Crop to Selection"), &KisSelectionManager::imageResizeToSelection}};
         return data;
     }

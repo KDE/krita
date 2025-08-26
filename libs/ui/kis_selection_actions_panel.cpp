@@ -210,22 +210,22 @@ void KisSelectionActionsPanel::setupButtons()
 
 void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
 {
-    int cornerRadius = 4;
-    int penWidth = 5;
-    QColor backgroundColor = Qt::darkGray;
-    QColor outlineColor(60, 60, 60, 80);
-    QColor dotColor = Qt::lightGray;
-    int dotSize = 4;
-    int dotSpacing = 5;
-    QPoint dragHandleRectDotsOffset(10, 10);
+    const int CORNER_RADIUS = 4;
+    const int PEN_WIDTH = 5;
+    const QColor BACKGROUND_COLOR = Qt::darkGray;
+    const QColor OUTLINE_COLOR(60, 60, 60, 80);
+    const QColor DOT_COLOR = Qt::lightGray;
+    const int DOT_SIZE = 4;
+    const int DOT_SPACING = 5;
+    const QPoint DRAG_HANDLE_RECT_DOTS_OFFSET(10, 10);
 
     QRectF actionBarRect(d->m_dragRectPosition, QSize(d->m_actionBarWidth, d->m_buttonSize));
     QPainterPath bgPath;
-    bgPath.addRoundedRect(actionBarRect, cornerRadius, cornerRadius);
-    gc.fillPath(bgPath, backgroundColor);
+    bgPath.addRoundedRect(actionBarRect, CORNER_RADIUS, CORNER_RADIUS);
+    gc.fillPath(bgPath, BACKGROUND_COLOR);
 
-    QPen pen(outlineColor);
-    pen.setWidth(penWidth);
+    QPen pen(OUTLINE_COLOR);
+    pen.setWidth(PEN_WIDTH);
     gc.setPen(pen);
     gc.drawPath(bgPath);
 
@@ -234,23 +234,23 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
         QSize(d->m_buttonSize, d->m_buttonSize));
     QPainterPath dragHandlePath;
     dragHandlePath.addRect(dragHandleRect);
-    gc.fillPath(dragHandlePath, backgroundColor);
+    gc.fillPath(dragHandlePath, BACKGROUND_COLOR);
 
     const std::list<std::pair<int, int>> offsets = {{0, 0},
-                                                    {dotSpacing, 0},
-                                                    {-dotSpacing, 0},
-                                                    {0, dotSpacing},
-                                                    {0, -dotSpacing},
-                                                    {dotSpacing, dotSpacing},
-                                                    {dotSpacing, -dotSpacing},
-                                                    {-dotSpacing, dotSpacing},
-                                                    {-dotSpacing, -dotSpacing}};
+                                                    {DOT_SPACING, 0},
+                                                    {-DOT_SPACING, 0},
+                                                    {0, DOT_SPACING},
+                                                    {0, -DOT_SPACING},
+                                                    {DOT_SPACING, DOT_SPACING},
+                                                    {DOT_SPACING, -DOT_SPACING},
+                                                    {-DOT_SPACING, DOT_SPACING},
+                                                    {-DOT_SPACING, -DOT_SPACING}};
 
     QPainterPath dragHandleRectDots;
     for (const std::pair<int, int> &offset : offsets) {
-        dragHandleRectDots.addEllipse(offset.first, offset.second, dotSize, dotSize);
+        dragHandleRectDots.addEllipse(offset.first, offset.second, DOT_SIZE, DOT_SIZE);
     };
 
-    dragHandleRectDots.translate(dragHandleRect.topLeft() + dragHandleRectDotsOffset);
-    gc.fillPath(dragHandleRectDots, dotColor);
+    dragHandleRectDots.translate(dragHandleRect.topLeft() + DRAG_HANDLE_RECT_DOTS_OFFSET);
+    gc.fillPath(dragHandleRectDots, DOT_COLOR);
 }

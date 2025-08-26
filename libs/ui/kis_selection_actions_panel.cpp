@@ -240,18 +240,18 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter)
     dragHandlePath.addRect(dragHandleRect);
     painter.fillPath(dragHandlePath, BACKGROUND_COLOR);
 
-    const std::list<std::pair<int, int>> offsets = {{0, 0},
-                                                    {DOT_SPACING, 0},
-                                                    {-DOT_SPACING, 0},
-                                                    {0, DOT_SPACING},
-                                                    {0, -DOT_SPACING},
-                                                    {DOT_SPACING, DOT_SPACING},
-                                                    {DOT_SPACING, -DOT_SPACING},
-                                                    {-DOT_SPACING, DOT_SPACING},
-                                                    {-DOT_SPACING, -DOT_SPACING}};
+    const std::list<std::pair<int, int>> DOT_OFFSETS = {{0, 0},
+                                                        {DOT_SPACING, 0},
+                                                        {-DOT_SPACING, 0},
+                                                        {0, DOT_SPACING},
+                                                        {0, -DOT_SPACING},
+                                                        {DOT_SPACING, DOT_SPACING},
+                                                        {DOT_SPACING, -DOT_SPACING},
+                                                        {-DOT_SPACING, DOT_SPACING},
+                                                        {-DOT_SPACING, -DOT_SPACING}};
 
     QPainterPath dragHandleRectDots;
-    for (const std::pair<int, int> &offset : offsets) {
+    for (const std::pair<int, int> &offset : DOT_OFFSETS) {
         dragHandleRectDots.addEllipse(offset.first, offset.second, DOT_SIZE, DOT_SIZE);
     };
 

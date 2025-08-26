@@ -125,8 +125,7 @@ public:
 
         // Add fonts folder from resource folder.
         const QString fontsFolder = KoResourcePaths::saveLocation("data", "/fonts/", true);
-        const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(fontsFolder.toUtf8().data());
-        FcConfigAppFontAddDir(m_config.data(), vals);
+        FcConfigAppFontAddDir(m_config.data(), reinterpret_cast<const FcChar8 *>(fontsFolder.toUtf8().data()));
 
         /// Setup the change tracker.
         FcStrList *list = FcConfigGetFontDirs(m_config.data());

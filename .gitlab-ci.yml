@@ -9,12 +9,12 @@ variables:
   DEPS_BRANCH_NAME_WINDOWS: 'master'
   DEPS_BRANCH_NAME_LINUX: 'master'
   DEPS_BRANCH_NAME_MACOS: 'master'
-  DEPS_BRANCH_NAME_ANDROID: 'transition.now/android-35'
+  DEPS_BRANCH_NAME_ANDROID: 'master'
 
   DEPS_REPO_BRANCH_NAME_WINDOWS: 'master'
   DEPS_REPO_BRANCH_NAME_LINUX: 'master'
   DEPS_REPO_BRANCH_NAME_MACOS: 'master'
-  DEPS_REPO_BRANCH_NAME_ANDROID: 'transition.now/android-35'
+  DEPS_REPO_BRANCH_NAME_ANDROID: 'master'
 
 .nightly-job-mixin:
   rules:

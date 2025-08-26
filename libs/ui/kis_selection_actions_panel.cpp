@@ -31,6 +31,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
+const int BUTTON_SIZE = 25;
+
 class KisSelectionManager;
 
 struct ActionButtonData {
@@ -50,7 +52,6 @@ struct KisSelectionActionsPanel::Private {
     bool m_dragging = false;
     QPoint m_dragStartOffset;
     bool m_selectionActive = false;
-    int m_buttonSize = 25;
     int m_bufferSpace = 5;
 
     QVector<QPushButton *> m_buttons;
@@ -68,7 +69,7 @@ struct KisSelectionActionsPanel::Private {
         return data;
     }
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle
-    int m_actionBarWidth = m_buttonCount * m_buttonSize;
+    int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
 };
 
 KisSelectionActionsPanel::KisSelectionActionsPanel()
@@ -121,7 +122,7 @@ void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
     for (int i = 0; i < d->m_buttons.size(); i++) {
         QPushButton *btn = d->m_buttons[i];
         if (canvasWidget && selectionActionBarEnabled) {
-            int buttonPosition = i * d->m_buttonSize;
+            int buttonPosition = i * BUTTON_SIZE;
             btn->setParent(canvasWidget);
             btn->show();
             btn->move(d->m_dragRectPosition.x() + buttonPosition, d->m_dragRectPosition.y());
@@ -176,7 +177,7 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
 {
     QRect canvasBounds = canvasWidget->rect();
     int m_actionBarWidth = d->m_actionBarWidth;
-    int actionBarHeight = d->m_buttonSize;
+    int actionBarHeight = BUTTON_SIZE;
     int m_bufferSpace = d->m_bufferSpace;
     position.setX(qBound(canvasBounds.left() + m_bufferSpace,
                          position.x(),
@@ -191,7 +192,7 @@ QPushButton *KisSelectionActionsPanel::createButton(const QString &iconName, con
 {
     QPushButton *button = new QPushButton();
     button->setIcon(KisIconUtils::loadIcon(iconName));
-    button->setFixedSize(d->m_buttonSize, d->m_buttonSize);
+    button->setFixedSize(BUTTON_SIZE, BUTTON_SIZE);
     button->setToolTip(tooltip);
     return button;
 }
@@ -219,7 +220,7 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
     const int DOT_SPACING = 5;
     const QPoint DRAG_HANDLE_RECT_DOTS_OFFSET(10, 10);
 
-    QRectF actionBarRect(d->m_dragRectPosition, QSize(d->m_actionBarWidth, d->m_buttonSize));
+    QRectF actionBarRect(d->m_dragRectPosition, QSize(d->m_actionBarWidth, BUTTON_SIZE));
     QPainterPath bgPath;
     bgPath.addRoundedRect(actionBarRect, CORNER_RADIUS, CORNER_RADIUS);
     gc.fillPath(bgPath, BACKGROUND_COLOR);
@@ -230,8 +231,8 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &gc)
     gc.drawPath(bgPath);
 
     QRectF dragHandleRect(
-        QPoint(d->m_dragRectPosition.x() + d->m_actionBarWidth - d->m_buttonSize, d->m_dragRectPosition.y()),
-        QSize(d->m_buttonSize, d->m_buttonSize));
+        QPoint(d->m_dragRectPosition.x() + d->m_actionBarWidth - BUTTON_SIZE, d->m_dragRectPosition.y()),
+        QSize(BUTTON_SIZE, BUTTON_SIZE));
     QPainterPath dragHandlePath;
     dragHandlePath.addRect(dragHandleRect);
     gc.fillPath(dragHandlePath, BACKGROUND_COLOR);

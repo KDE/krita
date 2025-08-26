@@ -578,6 +578,9 @@
              </item>
              <item>
               <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>0</width>
@@ -604,6 +607,9 @@
        </item>
        <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
@@ -850,6 +856,9 @@
        </item>
        <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
@@ -1010,6 +1019,9 @@
        </item>
        <item row="9" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
@@ -1021,14 +1033,14 @@
        <item row="10" column="0">
         <widget class="QLabel" name="lblSelectionActionBar">
          <property name="text">
-          <string>Selection Action Bar</string>
+          <string>Selection Actions Bar</string>
          </property>
         </widget>
        </item>
        <item row="10" column="1">
         <widget class="QCheckBox" name="chkEnableSelectionActionBar">
          <property name="text">
-          <string>Enable Selection Action Bar</string>
+          <string>Enable Selection Actions Bar</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -1096,6 +1108,9 @@
        </item>
        <item>
         <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
@@ -1149,6 +1164,9 @@
        </item>
        <item row="5" column="0" colspan="2">
         <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
@@ -1196,7 +1214,7 @@
             <x>0</x>
             <y>0</y>
             <width>1675</width>
-            <height>669</height>
+            <height>609</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1289,6 +1307,9 @@
              </item>
              <item>
               <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>40</width>
@@ -1356,6 +1377,9 @@
               </item>
               <item>
                <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -1426,6 +1450,9 @@
               </item>
               <item>
                <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeType">
                  <enum>QSizePolicy::Fixed</enum>
                 </property>
@@ -1572,6 +1599,9 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
                    <property name="sizeHint" stdset="0">
                     <size>
                      <width>0</width>
@@ -1598,6 +1628,9 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
            </item>
            <item row="14" column="0" colspan="2">
             <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>0</width>

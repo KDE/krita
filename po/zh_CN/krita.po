@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 02:17+0000\n"
+"POT-Creation-Date: 2025-08-26 02:00+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16416,11 +16416,10 @@ msgid "Fit Height"
 msgstr "适合视图高度"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "样式表"
+msgstr "样式示例"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23695,7 +23694,7 @@ msgstr "工作区"
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
-msgstr "符号图库"
+msgstr "矢量图形库"
 
 #: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
@@ -23746,11 +23745,10 @@ msgid "Font Families"
 msgstr "字体系列"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "样式表"
+msgstr "样式预设"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -24920,7 +24918,7 @@ msgstr "添加到此的 FFmpeg 的过滤选项将插入到来源数据和 FFmpeg
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Reset"
 msgstr "重置"
@@ -34008,10 +34006,9 @@ msgid "Font Families"
 msgstr "字体系列"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "样式表"
+msgstr "样式预设"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -44452,11 +44449,10 @@ msgid "Percentage (%)"
 msgstr "百分比 (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "编辑预设"
+msgstr "编辑样式预设"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -44512,12 +44508,10 @@ msgid "Text Properties"
 msgstr "文字属性"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "新建样式"
+msgstr "新建样式预设"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format
@@ -64562,28 +64556,35 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "旋转 (逆时针 90 度)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Keep Aspect Ratio"
+msgid "Keep Aspect Ratio"
+msgstr "保持宽高比"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format
 msgid "Apply"
 msgstr "应用"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:419
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "变形工具操作"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "图层类型不支持变形工具"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "该图层类型不支持变形工具。请改用变形蒙版。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:932
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -64591,20 +64592,20 @@ msgid ""
 "transformation."
 msgstr "图层包含变形蒙版子图层。请在进行变形之前禁用这些子图层。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "编辑变形蒙版时，选区不被使用"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1031
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1070
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "无法对空图层进行变形操作"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1057
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -64612,7 +64613,7 @@ msgid ""
 "them to be transformed "
 msgstr "不可见的子图层也将被变形。请锁定不想被变形的图层 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:359
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "变形工具：对图层或选区生效"

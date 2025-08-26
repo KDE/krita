@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-07-27 22:15+0200\n"
+"POT-Creation-Date: 2025-08-26 02:00+0000\n"
+"PO-Revision-Date: 2025-08-15 17:44+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16513,11 +16513,10 @@ msgid "Fit Height"
 msgstr "Adatta altezza"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Foglio di stile"
+msgstr "Campione stile"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -20932,12 +20931,9 @@ msgid "Switch current time"
 msgstr "Alterna l'ora attuale"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Switch current time"
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr "Alterna l'ora attuale"
+msgstr "Alterna l'ora attuale nel fotogramma chiave"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -24030,11 +24026,10 @@ msgid "Font Families"
 msgstr "Famiglie di caratteri"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Modifica preimpostazioni"
+msgstr "Preimpostazioni degli stili"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -25237,7 +25232,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Reset"
 msgstr "Azzera"
@@ -34527,10 +34522,9 @@ msgid "Font Families"
 msgstr "Famiglie di caratteri"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgid "Style Presets"
-msgstr "Modifica preimpostazioni"
+msgstr "Preimpostazioni degli stili"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -45267,11 +45261,10 @@ msgid "Percentage (%)"
 msgstr "Percentuale (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Modifica preimpostazioni"
+msgstr "Modifica preimpostazione stile"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -45327,11 +45320,10 @@ msgid "Text Properties"
 msgstr "Proprietà del testo"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Nuovo stile"
+msgstr "Nuova preimpostazione stile"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format
@@ -65899,22 +65891,29 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Ruota di 90° in senso antiorario"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Keep Aspect Ratio"
+msgid "Keep Aspect Ratio"
+msgstr "Mantieni le proporzioni"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format
 msgid "Apply"
 msgstr "Applica"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:419
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Azioni strumento Trasforma"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Il tipo di livello non può utilizzare lo strumento Trasforma"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65922,7 +65921,7 @@ msgstr ""
 "Il tipo di livello non può utilizzare lo strumento Trasforma. Usa invece la "
 "maschera di trasformazione."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:932
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65932,7 +65931,7 @@ msgstr ""
 "Il livello ha figli con maschere di trasformazione. Disabilitali prima di "
 "eseguire la trasformazione."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -65940,14 +65939,14 @@ msgstr ""
 "Le selezioni non vengono utilizzate durante la modifica delle maschere di "
 "trasformazione "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1031
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1070
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossibile trasformare un livello vuoto "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1057
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65957,7 +65956,7 @@ msgstr ""
 "Saranno trasformati anche i sottolivelli invisibili. Blocca i livelli se non "
 "vuoi che vengano trasformati"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:359
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Trasforma un livello o una selezione"

@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 02:17+0000\n"
+"POT-Creation-Date: 2025-08-26 02:00+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -25884,7 +25884,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Reset"
 msgstr "Ысыру"
@@ -66998,28 +66998,35 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Кескінді 90° солға бұрау"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Keep Aspect Ratio"
+msgid "Keep Aspect Ratio"
+msgstr "Ара қатынасын сақтау"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format
 msgid "Apply"
 msgstr "Іске асыру"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:419
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
 #, fuzzy, kde-format
 msgid "Transform Tool Actions"
 msgstr "Түрлендіру"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Келесі қабатқа ауысу"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Келесі қабатқа ауысу"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:932
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -67027,20 +67034,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1031
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1070
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Түйінді түрлендіру"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1057
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -67048,7 +67055,7 @@ msgid ""
 "them to be transformed "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:359
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Қабатты не таңдалғанның түрлердіру"

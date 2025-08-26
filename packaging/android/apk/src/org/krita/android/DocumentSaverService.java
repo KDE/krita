@@ -16,6 +16,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -35,8 +36,9 @@ public class DocumentSaverService extends Service {
     private static final String CANCEL_SAVING = "CANCEL_SAVING";
 
     private boolean mStartedInForeground = false;
+    private boolean mSaveAgain = false;
     private boolean mKillProcess = false;
-    private Thread mDocSaverThread;
+    private Thread mDocSaverThread = null;
 
     @Override
     public void onCreate() {
@@ -86,57 +88,120 @@ public class DocumentSaverService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void tryStartServiceInForegroundS() {
         try {
-            Log.w(TAG, "Starting the service in foreground");
-            startForeground(NOTIFICATION_ID, getNotification());
-            mStartedInForeground = true;
+            tryStartServiceInForegroundQ();
         } catch (ForegroundServiceStartNotAllowedException e) {
             Log.w(TAG, "Could not run the service in foreground: " + e);
             mStartedInForeground = false;
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void tryStartServiceInForegroundQ() {
+        Log.i(TAG, "Starting foreground short service");
+        startForeground(
+            NOTIFICATION_ID, getNotification(),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE);
+        mStartedInForeground = true;
+    }
+
     private void tryStartServiceInForeground() {
+        Log.i(TAG, "Starting foreground service");
         startForeground(NOTIFICATION_ID, getNotification());
         mStartedInForeground = true;
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "[onStartCommand]");
+    private synchronized void resetSaveAgain() {
+        Log.i(TAG, "Start saving, foreground " + mStartedInForeground + " again " + mSaveAgain + " kill " + mKillProcess);
+        mSaveAgain = false;
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            tryStartServiceInForegroundS();
-        } else {
-            tryStartServiceInForeground();
+    private synchronized boolean shouldSaveAgain() {
+        Log.i(TAG, "Saving done, foreground " + mStartedInForeground + " again " + mSaveAgain + " kill " + mKillProcess);
+        return mSaveAgain && !mKillProcess;
+    }
+
+    private synchronized void finishSaverThread() {
+        if (mStartedInForeground) {
+            mStartedInForeground = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                stopForeground(STOP_FOREGROUND_REMOVE);
+            } else {
+                stopForeground(true);
+            }
         }
+        mDocSaverThread = null;
+    }
 
-        if (intent.getBooleanExtra(START_SAVING, false)) {
-            Log.i(TAG, "Starting Auto Save");
-            // let's not block the Android UI thread if we return to the app quickly
+    private void runSaverThread() {
+        do {
+            resetSaveAgain();
+            try {
+                JNIWrappers.saveState();
+            } catch (UnsatisfiedLinkError e) {
+                // This can happen if the application has been unloaded and only
+                // this saver thread is left dangling. Since the application is
+                // gone, there's no documents left to save, so just bail out.
+                Log.w(TAG, "Unsatisfied link error while saving: " + e);
+                break;
+            }
+        } while (shouldSaveAgain());
+        finishSaverThread();
+    }
+
+    private synchronized void startSaving() {
+        if (mDocSaverThread == null) {
+            // Promote this to a so-called foreground service. This will keep
+            // the service running even when the application isn't in the
+            // foreground. For further foreground/background confusion, my
+            // Samsung tablet shows the notification for this service under a
+            // (pretty well-hidden) section called "background activities".
+            if (mStartedInForeground) {
+                Log.w(TAG, "Already started in foreground, should not happen");
+            } else {
+                Log.i(TAG, "Attempting to promote to foreground service");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    tryStartServiceInForegroundS();
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    tryStartServiceInForegroundQ();
+                } else {
+                    tryStartServiceInForeground();
+                }
+            }
+            // No matter if foregrounding succeeded or not, we spawn a thread to
+            // do the saving on. That will take care of un-foregrounding the
+            // service and nulling the member variable once it's finished.
+            Log.i(TAG, "Starting save thread");
             mDocSaverThread =
                     new Thread(
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.i(TAG, "... calling JNIWrappers.saveState()");
-                                    JNIWrappers.saveState();
-                                    Log.i(TAG, "... exited JNIWrappers.saveState(), started in foreground: " + mStartedInForeground);
-                                    if (mStartedInForeground) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            stopForeground(STOP_FOREGROUND_REMOVE);
-                                        } else {
-                                            stopForeground(true);
-                                        }
-                                        // reset the value
-                                        mStartedInForeground = false;
-                                    }
+                                    runSaverThread();
                                 }
                             });
             mDocSaverThread.start();
+        } else {
+            Log.i(TAG, "Save thread already running, setting save again flag");
+            mSaveAgain = true;
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "[onStartCommand]");
+        if (intent.getBooleanExtra(START_SAVING, false)) {
+            startSaving();
+
         } else if (intent.getBooleanExtra(KILL_PROCESS, false)) {
             Log.i(TAG, "kill process command received");
-            mKillProcess = true;
-            if (mStartedInForeground) {
+
+            boolean needsThread;
+            synchronized (this) {
+                mKillProcess = true;
+                needsThread = mStartedInForeground;
+            }
+
+            if (needsThread) {
                 // This can be async, because foreground service are promised to run beyond process death.
                 // This has to be async, because we have to handle cancelling action.
                 new Thread(new Runnable() {
@@ -154,6 +219,7 @@ public class DocumentSaverService extends Service {
                 waitForSaving();
                 stopSelf();
             }
+
         } else if (intent.getBooleanExtra(CANCEL_SAVING, false)) {
             Log.i(TAG, "cancel saving command received");
             // without this Android will think we crashed
@@ -161,7 +227,11 @@ public class DocumentSaverService extends Service {
 
             // TODO: Think about atomicity, which Qt doesn't support for Android
             killProcess(myPid());
+
+        } else {
+            Log.i(TAG, "nothing to do");
         }
+
         return START_NOT_STICKY;
     }
 
@@ -179,11 +249,16 @@ public class DocumentSaverService extends Service {
         super.onDestroy();
     }
 
-    private void waitForSaving() {
+    private synchronized Thread getThreadToWaitOn() {
         Log.i(TAG, "[waitForSaving]: mStartedInForeground: " + mStartedInForeground);
-        if (mDocSaverThread != null) {
+        return mDocSaverThread;
+    }
+
+    private void waitForSaving() {
+        Thread thread = getThreadToWaitOn();
+        if (thread != null) {
             try {
-                mDocSaverThread.join();
+                thread.join();
             } catch (InterruptedException e) {
                 Log.e(TAG, "Saving Interrupted :" + e.getMessage());
             }

@@ -1152,6 +1152,10 @@ void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
        unblockNotifications();
     }
 
+    blockUiSlots();
+    aspectButton->setKeepAspectRatio(value);
+    unblockUiSlots();
+
     notifyConfigChanged();
 }
 

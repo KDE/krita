@@ -295,6 +295,7 @@ private:
     KisAction* mirrorVerticalAction {0};
     KisAction* rotateNinetyCWAction {0};
     KisAction* rotateNinetyCCWAction {0};
+    KisAction* keepAspectRatioAction {0};
 
 
 

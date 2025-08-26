@@ -3,5 +3,7 @@
     <!-- TODO: use newer theme -->
     <style name = "DefaultTheme" parent="android:Theme.Holo.Light">
         <item name="android:windowBackground">@android:color/black</item>
+        <!-- TODO: remove after updating to anroid-36 and uptating to Qt6 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
 </resources>

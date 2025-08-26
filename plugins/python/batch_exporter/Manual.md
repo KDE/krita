@@ -22,6 +22,7 @@ the layer name. The supported options are:
   layer.
 - `[t=false]` or `[t=no]` - disable trimming the exported layer to the bounding box of the content. This option is not inherited from parent layers.
 - `[i=false]` or `[i=no]` - disable parent metadata inheritance for a layer. More info [below](#layer-inheritance).
+- `[icc=name_of_color_profile.icc]` - selects a specific color profile when exporting, defaulting to `sRGB-elle-V2-srgbtrc.icc`
 
 A typical layer name with metadata looks like: `CharacterTorso e=png m=30 s=50,100`. This exports
 the layer as two images, with an added padding of 30 pixels on each side:

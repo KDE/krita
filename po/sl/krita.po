@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 02:17+0000\n"
-"PO-Revision-Date: 2025-08-13 10:55+0200\n"
+"POT-Creation-Date: 2025-08-26 02:00+0000\n"
+"PO-Revision-Date: 2025-08-23 08:37+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16464,11 +16464,10 @@ msgid "Fit Height"
 msgstr "Prilagodi širini"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Slogovna predloga"
+msgstr "Vzorec sloga"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -20915,7 +20914,7 @@ msgstr "Ustvarjalnik"
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "Zapolni upodobitev plasti"
+msgstr "Izriši plast polnila"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -23916,11 +23915,10 @@ msgid "Font Families"
 msgstr "Družine pisav"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Slogovna predloga"
+msgstr "Prednastavitve slogov"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -25113,7 +25111,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Reset"
 msgstr "Ponastavi"
@@ -34357,10 +34355,9 @@ msgid "Font Families"
 msgstr "Družine pisav"
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "Slogovna predloga"
+msgstr "Prednastavitve slogov"
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -35960,7 +35957,7 @@ msgstr "Potreben je ponoven zagon."
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
 msgid "Document Information"
-msgstr "Informacije o dokumentu"
+msgstr "Podatki o dokumentu"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:115
 #, kde-format
@@ -38836,7 +38833,7 @@ msgstr "Naslov"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Zakleni sidrišče"
+msgstr "Zakleni zloženo okno"
 
 #: libs/ui/widgets/kis_wdg_generator.cpp:148
 #: libs/ui/widgets/kis_wdg_generator.cpp:160
@@ -39819,13 +39816,13 @@ msgstr "Poišči pomoč ..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Plavajoče sidrišče"
+msgstr "Plavajoče zloženo okno"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Zapri sidrišče"
+msgstr "Zapri zloženo okno"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
@@ -41692,7 +41689,7 @@ msgstr "Zamik: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:42
 #, kde-format
 msgid "Docker:"
-msgstr "Sidrišče:"
+msgstr "Zloženo okno:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
@@ -43137,7 +43134,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"Prikazuje globalni izbor kot običajno masko za izbor v sidrišču <b>Plasti</b>"
+"Prikazuje globalni izbor kot običajno masko za izbor v zloženem oknu "
+"<b>Plasti</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
 #, kde-format
@@ -45050,11 +45048,10 @@ msgid "Percentage (%)"
 msgstr "Odstotek (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Uredi prednastavitve"
+msgstr "Uredi prednastavitev sloga"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -45110,12 +45107,10 @@ msgid "Text Properties"
 msgstr "Lastnosti besedila"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Nov slog"
+msgstr "Nova prednastavitev sloga"
 
 #: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
 #, kde-format
@@ -45126,7 +45121,7 @@ msgstr "Prilagoditev lastnosti besedila"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Sidrišče dotikov"
+msgstr "Zloženo okno Dotik"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -61224,7 +61219,7 @@ msgstr "Ra&zširitev"
 #: plugins/python/krita_script_starter/bbdkss.ui:129
 #, kde-format
 msgid "&Docker"
-msgstr "&Sidrišče"
+msgstr "&Zloženo okno"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:152
@@ -61237,8 +61232,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Če je ta možnost potrjena, bo skript samodejno "
 "omogočen v Kriti. To pomeni, da se bo prikazal v meniju Skripti ali seznamu "
-"sidrišča. Sicer boste morali skript ročno omogočiti prek menijskega ukaza "
-"Krita-&gt;Nastavitve. </p></body></html>"
+"zloženih oken. Sicer boste morali skript ročno omogočiti prek menijskega "
+"ukaza Krita-&gt;Nastavitve. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -61262,7 +61257,7 @@ msgstr "Spremeni nastavitve"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr "Sidrišče drsnika mešalnika"
+msgstr "Zloženo okno Drsnik mešalnika"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -61572,7 +61567,7 @@ msgstr "Dodaj skript"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Sidrišče skriptov"
+msgstr "Zloženo okno skriptov"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -64000,7 +63995,7 @@ msgstr "Dodatno območje, ki ga je treba preiskati"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr "Vrzel med dvema sidroma v interaktivnem načinu"
+msgstr "Vrzel med sidroma v interaktivnem načinu"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
 #, kde-format
@@ -65540,22 +65535,29 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Zasukaj za 90° v obratni SUK"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Keep Aspect Ratio"
+msgid "Keep Aspect Ratio"
+msgstr "Ohrani razmerje"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format
 msgid "Apply"
 msgstr "Uporabi"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:419
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Dejanja orodja Preoblikovanje"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Vrsta plasti ne more uporabiti orodja za preoblikovanje."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65563,7 +65565,7 @@ msgstr ""
 "Vrsta plasti ne more uporabiti orodja za preoblikovanje. Namesto tega "
 "uporabite masko za preoblikovanje."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:932
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65573,20 +65575,20 @@ msgstr ""
 "Plast ima z maskami preoblikovanja izvedene (hčerinske) plasti. Pred "
 "preoblikovanjem jih onemogočite."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Izbori se ne uporabijo pri urejanju mask transformacije "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1031
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1070
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Prazne plasti ni mogoče preoblikovati"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1057
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65596,7 +65598,7 @@ msgstr ""
 "Preoblikovale se bodo tudi nevidne podplasti. Zaklenite plasti, če ne "
 "želite, da se preoblikujejo "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:359
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Preoblikuj plast ali izbor"

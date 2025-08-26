@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 02:17+0000\n"
+"POT-Creation-Date: 2025-08-26 02:00+0000\n"
 "PO-Revision-Date: 2025-07-27 20:26+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -25236,7 +25236,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Reset"
 msgstr "Berrezarri"
@@ -65306,22 +65306,29 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Biratu 90° erlojuaren aurkako noranzkoan"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Keep Aspect Ratio"
+msgid "Keep Aspect Ratio"
+msgstr "Mantendu itxura-proportzioa"
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format
 msgid "Apply"
 msgstr "Ezarri"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:419
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Eraldatze-tresnaren ekintzak"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Geruza motak ezin du eraldatze-tresna erabili"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65329,7 +65336,7 @@ msgstr ""
 "Geruza motak ezin du erabili eraldatze-tresna. Horren ordez erabili "
 "eraldatze-maskara."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:932
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65339,20 +65346,20 @@ msgstr ""
 "Geruzak eraldatzeko maskarak dituzten haurrak ditu. Mesedez, ezgaitu itzazu "
 "eraldatu aurretik."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Hautapenak ez dira erabiltzen eraldatze maskarak editatzean"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1031
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1070
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ezin eraldatu hutsik dauden geruzak "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1057
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65362,7 +65369,7 @@ msgstr ""
 "Azpigeruza ikusezinak ere eraldatuko dira. Giltzatu geruzak ez baduzu haiek "
 "eraldatzerik nahi"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:359
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Eraldatu geruza bat edo hautapen bat"

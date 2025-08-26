@@ -1,6 +1,6 @@
 .android-build-base:
   stage: build
-  image: storage.kde.org/vm-images/krita-android-sdk34-2204
+  image: storage.kde.org/vm-images/krita-android-sdk35-2204
   tags:
     - VM
     - amd64
@@ -104,7 +104,7 @@
 
 android-build-appbundle:
   stage: deploy
-  image: storage.kde.org/vm-images/krita-android-sdk34-2204
+  image: storage.kde.org/vm-images/krita-android-sdk35-2204
   tags:
     - VM
     - amd64

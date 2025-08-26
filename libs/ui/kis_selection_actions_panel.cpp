@@ -32,6 +32,7 @@
 #include <QPainterPath>
 
 const int BUTTON_SIZE = 25;
+const int BUFFER_SPACE = 5;
 
 class KisSelectionManager;
 
@@ -52,7 +53,6 @@ struct KisSelectionActionsPanel::Private {
     bool m_dragging = false;
     QPoint m_dragStartOffset;
     bool m_selectionActive = false;
-    int m_bufferSpace = 5;
 
     QVector<QPushButton *> m_buttons;
     static const QVector<ActionButtonData> &buttonData()
@@ -110,7 +110,7 @@ void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
             bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
         widgetBottomCenter.setX(widgetBottomCenter.x()
                                 - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
-        widgetBottomCenter.setY(widgetBottomCenter.y() + d->m_bufferSpace);
+        widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
 
         d->m_dragRectPosition = widgetBottomCenter.toPoint();
     }
@@ -178,13 +178,12 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     QRect canvasBounds = canvasWidget->rect();
     int m_actionBarWidth = d->m_actionBarWidth;
     int actionBarHeight = BUTTON_SIZE;
-    int m_bufferSpace = d->m_bufferSpace;
-    position.setX(qBound(canvasBounds.left() + m_bufferSpace,
+    position.setX(qBound(canvasBounds.left() + BUFFER_SPACE,
                          position.x(),
-                         canvasBounds.right() - m_actionBarWidth - m_bufferSpace));
-    position.setY(qBound(canvasBounds.top() + m_bufferSpace,
+                         canvasBounds.right() - m_actionBarWidth - BUFFER_SPACE));
+    position.setY(qBound(canvasBounds.top() + BUFFER_SPACE,
                          position.y(),
-                         canvasBounds.bottom() - actionBarHeight - m_bufferSpace));
+                         canvasBounds.bottom() - actionBarHeight - BUFFER_SPACE));
     return position;
 }
 

@@ -70,6 +70,7 @@ struct KisSelectionActionsPanel::Private {
         return data;
     }
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle
+
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
 };
 

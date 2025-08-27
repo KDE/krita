@@ -29,6 +29,7 @@ Button {
     property alias fontFileName: textInput.text;
     topPadding: 0;
     bottomPadding: 0;
+    spacing: padding;
     leftPadding:  (familyCmb.mirrored ? padding + indicator.width + spacing : 0);
     rightPadding: (!familyCmb.mirrored ? padding + indicator.width + spacing : 0);
 
@@ -101,12 +102,11 @@ Button {
 
     indicator: Image {
         id: imgIndicator
-        x: familyCmb.mirrored ? familyCmb.padding : familyCmb.width - width - familyCmb.padding
-        y: familyCmb.topPadding + (familyCmb.availableHeight - height) / 2
+        x: Math.round(familyCmb.mirrored ? familyCmb.padding : familyCmb.width - width - familyCmb.padding);
+        y: Math.round(familyCmb.topPadding + (familyCmb.availableHeight - height) / 2);
         source: familyCmb.palette.button.hslLightness < 0.5? "qrc:///light_groupOpened.svg": "qrc:///dark_groupOpened.svg";
         width: 12;
         height: 12;
-        fillMode: Image.Pad;
         clip: true;
     }
 

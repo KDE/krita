@@ -129,6 +129,11 @@ ColumnLayout {
 
     signal callPropertyVisibilityConfig;
 
+    Item {
+        id: topPadding;
+        height: Math.floor(spacing/2);
+    }
+
     Frame {
         id: frame;
         Layout.fillHeight: true;

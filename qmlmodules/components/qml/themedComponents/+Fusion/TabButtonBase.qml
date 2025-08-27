@@ -12,32 +12,31 @@ import QtQuick.Controls 2.15
 */
 TabButton {
     id: control;
-    bottomInset: -10;
     clip: true;
-    y: checked ? 0 : 2;
 
-    height: implicitHeight + (checked ? 2 : 0);
+    padding: 2;
+    horizontalPadding: 4
+    spacing: 6
+    icon.width: 16
+    icon.height: 16
+
+    z: checked;
 
     background:Rectangle {
         readonly property bool checked: control.checked;
 
         color: checked? control.palette.window: Qt.darker(parent.palette.window, 1.1);
         border.color: Qt.darker(parent.palette.window, 1.4);
-        radius: 1;
+        radius: 2;
+        y: checked ? 2 : 4;
+        height: control.height+5;
         Rectangle {
             x: 1; y: 1
             width: parent.width - 2
             height: parent.height - 2
-            border.color: Qt.lighter(parent.color, 1.3);
+            border.color: control.palette.window;
             color: parent.color;
-            radius: 2;
-        }
-        Rectangle {
-            x: 2; y: 2
-            width: parent.width - 4
-            height: parent.height;
-            color: parent.color;
-            radius: 3;
+            radius: parent.radius+1;
         }
     }
 }

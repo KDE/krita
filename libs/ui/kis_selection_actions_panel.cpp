@@ -39,7 +39,9 @@ class KisSelectionManager;
 struct ActionButtonData {
     QString iconName;
     QString tooltip;
-    void (KisSelectionManager::*slot)();
+
+    using TargetSlot = void (KisSelectionManager::*)();
+    TargetSlot slot;
 };
 
 struct KisSelectionActionsPanel::Private {

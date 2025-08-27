@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 02:17+0000\n"
+"POT-Creation-Date: 2025-08-26 02:00+0000\n"
 "PO-Revision-Date: 2024-03-09 12:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -24860,7 +24860,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Reset"
 msgstr "Tilbakestill"
@@ -63522,27 +63522,32 @@ msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, kde-format
+msgid "Keep Aspect Ratio"
+msgstr ""
+
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
+#, kde-format
 msgid "Apply"
 msgstr "Bruk"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:419
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:932
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -63550,20 +63555,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:946
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Utvalg brukes ikke når omformingsmasker redigeres "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1031
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1070
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan ikke omforme et tomt lag "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1057
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -63573,7 +63578,7 @@ msgstr ""
 "Usynlige under-lag vil også bli transformert. Lås lagene hvis du ikke vil at "
 "de skal transformeres "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:359
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Omform et lag eller et utvalg"

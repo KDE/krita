@@ -58,14 +58,14 @@ struct KisSelectionActionsPanel::Private {
     static const QVector<ActionButtonData> &buttonData()
     {
         static const QVector<ActionButtonData> data = {
-            {"select-all", i18nc("tooltip", "Select All"), &KisSelectionManager::selectAll},
-            {"select-invert", i18nc("tooltip", "Invert Selection"), &KisSelectionManager::invert},
-            {"select-clear", i18nc("tooltip", "Deselect"), &KisSelectionManager::deselect},
+            {"select-all", i18n("Select All"), &KisSelectionManager::selectAll},
+            {"select-invert", i18n("Invert Selection"), &KisSelectionManager::invert},
+            {"select-clear", i18n("Deselect"), &KisSelectionManager::deselect},
             {"krita_tool_color_fill",
-             i18nc("tooltip", "Fill Selection with Color"),
+             i18n("Fill Selection with Color"),
              &KisSelectionManager::fillForegroundColor},
-            {"duplicatelayer", i18nc("tooltip", "Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
-            {"tool_crop", i18nc("tooltip", "Crop to Selection"), &KisSelectionManager::imageResizeToSelection}};
+            {"duplicatelayer", i18n("Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
+            {"tool_crop", i18n("Crop to Selection"), &KisSelectionManager::imageResizeToSelection}};
         return data;
     }
     int m_buttonCount = buttonData().size() + 1; // buttons + drag handle

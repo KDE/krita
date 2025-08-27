@@ -64,7 +64,7 @@ struct KisSelectionActionsPanel::Private {
             {"select-invert", i18n("Invert Selection"), &KisSelectionManager::invert},
             {"select-clear", i18n("Deselect"), &KisSelectionManager::deselect},
             {"krita_tool_color_fill", i18n("Fill Selection with Color"), &KisSelectionManager::fillForegroundColor},
-            {"krita_tool_color_fill", i18n("Clear Selection"), &KisSelectionManager::clear},
+            {"draw-eraser", i18n("Clear Selection"), &KisSelectionManager::clear},
             {"duplicatelayer", i18n("Copy To New Layer"), &KisSelectionManager::copySelectionToNewLayer},
             {"tool_crop", i18n("Crop to Selection"), &KisSelectionManager::imageResizeToSelection}};
         return data;

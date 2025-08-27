@@ -110,8 +110,8 @@ void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
 
         QPointF widgetBottomCenter = converter->imageToWidget(
             bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
-        widgetBottomCenter.setX(widgetBottomCenter.x()
-                                - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
+
+        widgetBottomCenter.setX(widgetBottomCenter.x() - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
         widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
 
         d->m_dragRectPosition = widgetBottomCenter.toPoint();

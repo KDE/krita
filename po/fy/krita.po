@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -24415,7 +24415,7 @@ msgstr "Wiskje"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -33431,6 +33431,7 @@ msgid "Color Sampler"
 msgstr "Lytse kleurkiezer"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "De-selektearje"
@@ -34292,39 +34293,36 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "Alle&s selektearje"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "&Laach seleksje"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "De-selektearje"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Seleksjemodus:"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Nije lagen&groep..."
+msgid "Clear Selection"
+msgstr "Paad seleksje"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-msgctxt "tooltip"
+msgid "Copy To New Layer"
+msgstr "Nije lagen&groep..."
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "Seleksje fergrutsje"
 
@@ -44095,13 +44093,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Ofbylding skeanlûke..."
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-msgid "Select All"
-msgstr "Alle&s selektearje"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 #| msgid "Select Font"
@@ -45034,18 +45025,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-msgid "Text Properties"
-msgstr "Objekteigenskippen"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Folgjende styl:"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+msgid "Text Properties"
+msgstr "Objekteigenskippen"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -64115,7 +64106,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Lykweardige seleksje"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "@title:window"
@@ -66409,6 +66400,21 @@ msgstr "Zoomark"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referinsje-ôfbylding:"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Alle&s selektearje"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "&Laach seleksje"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "De-selektearje"
 
 #, fuzzy
 #~ msgid "Flatten the image"

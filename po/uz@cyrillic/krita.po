@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -25000,7 +25000,7 @@ msgstr "Матнни ўчириш"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 #| msgid "Choose Filter"
@@ -34212,6 +34212,7 @@ msgid "Color Sampler"
 msgstr "Тўлдириш"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 #| msgid "&Reset"
 msgid "Deselect"
@@ -35150,43 +35151,39 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "&Алмаштириш:"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgid "Current Section"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Жорий бўлим"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-#| msgid "&Reset"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "&Тиклаш"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Матнни ўчириш"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgid "Company Name"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Ташкилотнинг номи"
+msgid "Clear Selection"
+msgstr "Намунани яратиш"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
+#| msgid "Company Name"
+msgid "Copy To New Layer"
+msgstr "Ташкилотнинг номи"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 #| msgid "Current Section"
-msgctxt "tooltip"
 msgid "Crop to Selection"
 msgstr "Жорий бўлим"
 
@@ -45360,13 +45357,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Сақланмоқда..."
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-msgid "Select All"
-msgstr "&Алмаштириш:"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 #| msgid "Select Font"
@@ -46329,20 +46319,20 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Text Properties"
-msgstr "Жойлашиши"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 #| msgid "St&yle"
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "&Услуб"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Text Properties"
+msgstr "Жойлашиши"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgctxt "@title:window"
@@ -66020,7 +66010,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Тўлдириш"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Palettes"
 msgctxt "@title:window"
@@ -68374,6 +68364,23 @@ msgstr "Ранги:"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "&Алмаштириш:"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "&Алмаштириш:"
+
+#, fuzzy
+#~| msgid "Current Section"
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Жорий бўлим"
+
+#, fuzzy
+#~| msgid "&Reset"
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "&Тиклаш"
 
 #, fuzzy
 #~| msgid "Paste Text"

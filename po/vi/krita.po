@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -24178,7 +24178,7 @@ msgstr "Xoá"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -33106,6 +33106,7 @@ msgid "Color Sampler"
 msgstr "Không gian màu:"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "Bỏ chọn"
@@ -33958,40 +33959,37 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "Chọn Tất cả"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Chọn &Lớp"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
-#, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Bỏ chọn"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
 #| msgid "Select similar colors"
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Chọn các màu tương tự"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Layer &trước..."
+msgid "Clear Selection"
+msgstr "Chọn đường"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-msgctxt "tooltip"
+msgid "Copy To New Layer"
+msgstr "Layer &trước..."
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "Không có phần chọn"
 
@@ -43667,13 +43665,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Đổi tên ảnh"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-msgid "Select All"
-msgstr "Chọn Tất cả"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 #| msgid "Selection"
@@ -44601,18 +44592,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-msgid "Text Properties"
-msgstr "Tính chất cho lớp mới"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Các kiểu"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+msgid "Text Properties"
+msgstr "Tính chất cho lớp mới"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -63474,7 +63465,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Chọn Tương tự"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Palette"
 msgctxt "@title:window"
@@ -65753,6 +65744,21 @@ msgstr "Công cụ &Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ảnh tham chiếu:"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Chọn Tất cả"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Chọn &Lớp"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Bỏ chọn"
 
 #, fuzzy
 #~ msgid "Flatten the image"

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
-"PO-Revision-Date: 2025-08-15 13:13+0200\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"PO-Revision-Date: 2025-08-27 13:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -24182,7 +24182,7 @@ msgstr "Suprimix el recurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -29913,10 +29913,9 @@ msgstr "Utilitza l'eix horitzontal per a l'acció de zoom del llenç"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Accions de selecció"
+msgstr "Barra d'accions de selecció"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29925,13 +29924,14 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"Quan es marca, qualsevol selecció produirà un quadro flotant xicotet "
+"d'accions útils relacionades amb la selecció."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Accions de selecció"
+msgstr "Activa la barra d'accions de selecció"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -33408,6 +33408,7 @@ msgid "Color Sampler"
 msgstr "Color de mostra"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "Desselecciona"
@@ -34241,50 +34242,47 @@ msgstr ""
 "No hi ha cap etiqueta disponible en esta finestra emergent. Per a afegir "
 "predefinits cal etiquetar-los i després seleccionar ací l'etiqueta."
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "Tria-ho tot"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Invertix la selecció"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Desselecciona"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-#| msgid "Select a Color"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Fill Selection with Color"
 msgid "Fill Selection with Color"
-msgstr "Tria un color"
+msgstr "Òmpliga la selecció amb color"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Copia una capa"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "Selecció suau"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Copy To New Layer"
+msgid "Copy To New Layer"
+msgstr "Copia a una capa nova"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
+#| msgctxt "tooltip"
+#| msgid "Crop to Selection"
 msgid "Crop to Selection"
-msgstr "Seleccions escapçades"
+msgstr "Escapça a la selecció"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -38971,19 +38969,19 @@ msgstr "Difumina la selecció segons la quantitat establida"
 #: libs/ui/widgets/kis_selection_options.cc:244
 #, kde-format
 msgid "Select regions found from the active layer"
-msgstr "Tria les Tregionstrobades a partir de la capa activa"
+msgstr "Tria les regions trobades a partir de la capa activa"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Tria les Tregionstrobades a partir de la fusió de totes les capes"
+msgstr "Tria les regions trobades a partir de la fusió de totes les capes"
 
 #: libs/ui/widgets/kis_selection_options.cc:248
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
-"Tria les Tregionstrobades a partir de les capes amb etiquetes de colors "
+"Tria les regions trobades a partir de les capes amb etiquetes de colors "
 "específics"
 
 #: libs/ui/widgets/kis_selection_options.cc:256
@@ -44402,13 +44400,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "S'està explorant…"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "Tria-ho tot"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -45368,18 +45359,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Etiqueta de característica d'OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, kde-format
-msgid "Text Properties"
-msgstr "Propietats del text"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Predefinit d'estil nou"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, kde-format
+msgid "Text Properties"
+msgstr "Propietats del text"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -64089,7 +64080,7 @@ msgstr "Utilitza la selecció com a límit"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr "Tria les Tregionssimilars en color a la regió en la qual s'ha fet clic"
+msgstr "Tria les regions similars en color a la regió en la qual s'ha fet clic"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
 #, kde-format
@@ -64468,7 +64459,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Eina de selecció de colors similars"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -65917,9 +65908,7 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Gira 90° en sentit antihorari"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
+#, kde-format
 msgid "Keep Aspect Ratio"
 msgstr "Mantín la relació d'aspecte"
 
@@ -66734,3 +66723,15 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Tria-ho tot"
+
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Invertix la selecció"
+
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Desselecciona"

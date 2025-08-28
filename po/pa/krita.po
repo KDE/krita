@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -25788,7 +25788,7 @@ msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
@@ -35325,6 +35325,7 @@ msgid "Color Sampler"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Deselect"
@@ -36313,45 +36314,42 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 #| msgid "Replace"
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgid "Change Connection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
-#, fuzzy, kde-format
-#| msgid "Create shape"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "ਸ਼ਕਲ ਬਣਾਓ"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
 #| msgid "D&elete"
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "ਹਟਾਓ(&e)"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgid "Copy Page"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
+#| msgid "Create shape"
+msgid "Clear Selection"
+msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
+#| msgid "Copy Page"
+msgid "Copy To New Layer"
+msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 #| msgid "Change Connection"
-msgctxt "tooltip"
 msgid "Crop to Selection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
@@ -46941,14 +46939,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-#| msgid "Replace"
-msgid "Select All"
-msgstr "ਤਬਦੀਲ"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 #| msgid "Insert Page"
@@ -47948,20 +47938,20 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Text Properties"
-msgstr "ਸਥਿਤੀ"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Text Properties"
+msgstr "ਸਥਿਤੀ"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@title:window"
@@ -68502,7 +68492,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Page %1"
 msgctxt "@title:window"
@@ -70941,6 +70931,24 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Change Connection"
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#, fuzzy
+#~| msgid "Create shape"
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #, fuzzy
 #~| msgid "Master Page"

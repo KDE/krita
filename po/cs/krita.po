@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -12882,11 +12882,10 @@ msgstr "Referenční obrázek z viditelného"
 
 #. i18n: context: text @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3668
-#, fuzzy, kde-format
-#| msgid "Gradient Colors"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette Colors"
-msgstr "Barvy přechodu"
+msgstr ""
 
 #. i18n: context: whatsThis @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
@@ -12902,12 +12901,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3671
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "action"
 msgid "Force Palette"
-msgstr "Paleta barev"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -16454,18 +16451,15 @@ msgid "Fit Width"
 msgstr "Přizpůsobit šířce"
 
 #: libs/flake/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
+#, kde-format
 msgid "Fit Height"
-msgstr "Tloušťka čáry"
+msgstr ""
 
 #: libs/flake/resources/KoCssStylePreset.cpp:32
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Styl"
+msgstr ""
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -23758,11 +23752,10 @@ msgid "Font Families"
 msgstr ""
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Styl"
+msgstr ""
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -23904,7 +23897,7 @@ msgstr "Smazat zdroj"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -29375,11 +29368,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Cut Selection to New Layer"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Vyjmout výběr do nové vrstvy"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29391,10 +29382,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Scale Selection"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Změnit měřítko výběru"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -30732,10 +30722,9 @@ msgstr "Vzorkovací frekvence"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:331
-#, fuzzy, kde-format
-#| msgid "Frame Rate: "
+#, kde-format
 msgid "Frame rate limit:"
-msgstr "Vzorkovací frekvence: "
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:344
@@ -32693,6 +32682,7 @@ msgid "Color Sampler"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "Zrušit výběr"
@@ -33522,49 +33512,45 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Obrátit výběr"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
-#, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Zrušit výběr"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Similar Color"
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Vybrat podobnou barvu"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Kopírovat vrstvu"
+#| msgid "Scale Selection"
+msgid "Clear Selection"
+msgstr "Změnit měřítko výběru"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Copy Layer"
+msgid "Copy To New Layer"
+msgstr "Kopírovat vrstvu"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
-msgctxt "tooltip"
 msgid "Crop to Selection"
 msgstr "Ořezat výběr"
 
@@ -33856,10 +33842,9 @@ msgid "Font Families"
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:403
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "Styl"
+msgstr ""
 
 #: libs/ui/KisApplication.cpp:415
 #, kde-format
@@ -38996,15 +38981,11 @@ msgid "Tool Options"
 msgstr "Možnosti nástrojů"
 
 #: libs/widgets/KoZoomActionState.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The number of the screen (ordinal) and shortened 'name' of the screen "
-#| "(model + resolution)"
-#| msgid "Screen %1 (%2):"
+#, kde-format
 msgctxt ""
 "concatenate mode name (e.g. \"Fit Page\") and real zoom percent string"
 msgid "%1 (%2)"
-msgstr "Obrazovka %1 (%2):"
+msgstr ""
 
 #: libs/widgets/KoZoomWidget.cpp:133
 #, kde-format
@@ -43159,13 +43140,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Zkoumám..."
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "Vybrat vše"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -44015,11 +43989,10 @@ msgid "Percentage (%)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Upravit přednastavení"
+msgstr ""
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -44069,25 +44042,22 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "New Style Preset"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
 msgid "Text Properties"
 msgstr "Vlastnosti textu"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
-msgctxt "@info:placeholder"
-msgid "New Style Preset"
-msgstr "Nový styl"
-
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Select OpenColorIO Configuration"
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
+#, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
-msgstr "Vyberte nastavení OpenColorIO"
+msgstr ""
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -51486,25 +51456,21 @@ msgstr "Uložit jako:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flattened image"
-msgstr "Sloučit obraz"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "Animated"
+#, kde-format
 msgid "Animated image"
-msgstr "Animovaný"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiLayer)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:63
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multi-layered image"
-msgstr "Práce s vlákny"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, multiPage)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:70
@@ -59866,10 +59832,8 @@ msgstr "Otevřít"
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
-#, fuzzy
-#| msgid "Python"
 msgid "Python Files"
-msgstr "Python"
+msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
 msgid "Invalid File"
@@ -60577,11 +60541,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Move a layer"
+#, kde-format
 msgid "Use active layer"
-msgstr "Posunout vrstvu"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -62271,7 +62233,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Nástroj pro výběr podobné barvy"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -63696,9 +63658,7 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
+#, kde-format
 msgid "Keep Aspect Ratio"
 msgstr "Zachovat poměr"
 
@@ -64498,9 +64458,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Flatten the image"
-#~ msgstr "Zploštit obraz"
-
-#~ msgid "Icon files "
-#~ msgstr "Soubory ikon"

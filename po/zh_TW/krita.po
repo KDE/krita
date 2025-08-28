@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -24103,7 +24103,7 @@ msgstr "刪除資源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -33135,6 +33135,7 @@ msgid "Color Sampler"
 msgstr "色彩取樣器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "取消選取"
@@ -33977,48 +33978,44 @@ msgstr ""
 "沒有標籤可供浮動畫具板載入。如要新增筆刷預設至浮動畫具板，請先為筆刷預設指派"
 "標籤，然後在此處選取該標籤。"
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "全部選擇"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "反轉選取"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
-#, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "取消選取"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
 #| msgid "Select a Color"
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "選取一種色彩"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "複製圖層"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "羽化選取區域"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Copy Layer"
+msgid "Copy To New Layer"
+msgstr "複製圖層"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
-msgctxt "tooltip"
 msgid "Crop to Selection"
 msgstr "裁切選取區域"
 
@@ -43891,13 +43888,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "掃描中……"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "全部選擇"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -44848,14 +44838,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
-msgid "Text Properties"
-msgstr "變更圖層屬性"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 #| msgctxt "Default name for a new style"
 #| msgid "New Style"
@@ -44863,7 +44846,14 @@ msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "建立樣式"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Layer Properties"
+msgid "Text Properties"
+msgstr "變更圖層屬性"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "Reset Configurations"
 msgctxt "@title:window"
@@ -63607,7 +63597,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "相似色彩選取區域工具"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Palette"
 msgctxt "@title:window"
@@ -65860,6 +65850,25 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#, fuzzy
+#~| msgid "Select All"
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "全部選擇"
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "Invert Selection"
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "反轉選取"
+
+#, fuzzy
+#~| msgid "Deselect"
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "取消選取"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid ""

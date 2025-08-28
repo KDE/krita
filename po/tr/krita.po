@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
-"PO-Revision-Date: 2025-08-15 20:34+0300\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"PO-Revision-Date: 2025-08-27 09:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -24075,7 +24075,7 @@ msgstr "Özkaynağı sil"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -29778,10 +29778,9 @@ msgstr "Tuvale yakınlaştır eylemi için yatay ekseni kullan"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Seçim Eylemleri"
+msgstr "Seçim eylemleri çubuğu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29790,13 +29789,14 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"Etkinleştirildiğinde, herhangi bir seçim, seçim ile ilgili eylemlerin "
+"listelendiği kullanışlı bir yüzer panel açar."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Seçim Eylemleri"
+msgstr "Seçim eylemleri çubuğunu etkinleştir"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -33245,6 +33245,7 @@ msgid "Color Sampler"
 msgstr "Renk Örnekleyicisi"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "Seçimi Kaldır"
@@ -34080,50 +34081,47 @@ msgstr ""
 "Bu açılır pencerede göstermek için uygun künye yok. Önayarlar eklemek için "
 "künyelemeniz ve künyeyi burada seçmeniz gerekiyor."
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Seçimi Tersine Çevir"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Seçimi Kaldır"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-#| msgid "Select a Color"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Fill Selection with Color"
 msgid "Fill Selection with Color"
-msgstr "Renk Seç"
+msgstr "Seçimi renkle doldur"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Katmanı Kopyala"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "Seçimi Yumuşat"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Copy To New Layer"
+msgid "Copy To New Layer"
+msgstr "Yeni katmana kopyala"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
+#| msgctxt "tooltip"
+#| msgid "Crop to Selection"
 msgid "Crop to Selection"
-msgstr "Seçimleri Kırp"
+msgstr "Seçime kırp"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -44168,13 +44166,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Taranıyor…"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "Tümünü Seç"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -45121,18 +45112,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "OpenType Özellik Künyesi"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, kde-format
-msgid "Text Properties"
-msgstr "Metin Özellikleri"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Yeni Biçem Önayarı"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, kde-format
+msgid "Text Properties"
+msgstr "Metin Özellikleri"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -64102,7 +64093,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Benzer Renk Seçim Aracı"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -65549,11 +65540,9 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "90° saat yönünün tersine döndür"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
+#, kde-format
 msgid "Keep Aspect Ratio"
-msgstr "En–Boy Oranını Koru"
+msgstr "En–boy oranını koru"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format
@@ -66362,6 +66351,22 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
+
+#~| msgid "Select All"
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Tümünü seç"
+
+#~| msgctxt "action"
+#~| msgid "Invert Selection"
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Seçimi tersine çevir"
+
+#~| msgid "Deselect"
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Seçimi kaldır"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid ""

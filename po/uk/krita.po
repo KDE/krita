@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
-"PO-Revision-Date: 2025-08-26 09:45+0300\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"PO-Revision-Date: 2025-08-27 13:51+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -24347,7 +24347,7 @@ msgstr "Вилучити ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -30115,10 +30115,9 @@ msgstr "Використовувати горизонтальну вісь дл�
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Дії з позначеним"
+msgstr "Панель дій з позначеним"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -30127,13 +30126,14 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"Якщо увімкнено, будь-які позначення відкриватимуть невеличку рухому панель "
+"із корисними для роботи з позначеним кнопками."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Дії з позначеним"
+msgstr "Увімкнути панель дій із позначеним"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -33620,6 +33620,7 @@ msgid "Color Sampler"
 msgstr "Вибір кольору"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "Зняти позначення"
@@ -34532,52 +34533,47 @@ msgstr ""
 "Немає міток для показу на цій контекстній панелі. Щоб додати набори, вам "
 "слід визначити для них мітку, а потім вибрати її тут."
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "Позначити усе"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Інвертувати позначене"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Зняти позначення"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-#| msgid "Select a Color"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Fill Selection with Color"
 msgid "Fill Selection with Color"
-msgstr "Виберіть колір"
+msgstr "Заповнити позначене кольором"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Копіювати шар"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "Вигладити позначене"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Copy To New Layer"
+msgid "Copy To New Layer"
+msgstr "Копіювати у новий шар"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
+#| msgctxt "tooltip"
+#| msgid "Crop to Selection"
 msgid "Crop to Selection"
-msgstr ""
-"Обрізати позначене\n"
-"обрізання позначеного"
+msgstr "Обрізати до позначеного"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -44854,13 +44850,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Сканування…"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "Позначити усе"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -45821,18 +45810,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Мітка можливості OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, kde-format
-msgid "Text Properties"
-msgstr "Властивості тексту"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Новий набір стилів"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, kde-format
+msgid "Text Properties"
+msgstr "Властивості тексту"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -65009,7 +64998,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Інструмент «Вибір подібного кольору»"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -67303,6 +67292,22 @@ msgstr "Інструмент масштабування"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
+
+#~| msgid "Select All"
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Позначити усе"
+
+#~| msgctxt "action"
+#~| msgid "Invert Selection"
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Інвертувати позначене"
+
+#~| msgid "Deselect"
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Зняти позначення"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid ""

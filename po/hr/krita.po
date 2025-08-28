@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -24042,7 +24042,7 @@ msgstr "Ukloni tekst"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -32813,6 +32813,7 @@ msgid "Color Sampler"
 msgstr "Umetni odabrano"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "Odabir"
@@ -33676,39 +33677,36 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "Odabir"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Umetni odabrano"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Odabir"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Odabir"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Promjeni veličinu sloja u mjerilu..."
+msgid "Clear Selection"
+msgstr "Odabir"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-msgctxt "tooltip"
+msgid "Copy To New Layer"
+msgstr "Promjeni veličinu sloja u mjerilu..."
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "Premjesti označeno"
 
@@ -43313,13 +43311,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Učitavanje..."
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-msgid "Select All"
-msgstr "Odabir"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 msgid "Select None"
@@ -44228,18 +44219,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-msgid "Text Properties"
-msgstr "Svojstva objekata"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "linija"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+msgid "Text Properties"
+msgstr "Svojstva objekata"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -62821,7 +62812,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Umetni odabrano"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -65061,6 +65052,21 @@ msgstr "&Alat za zumiranje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Podešenja"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Odabir"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Umetni odabrano"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Odabir"
 
 #, fuzzy
 #~ msgid "Flatten the image"

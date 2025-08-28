@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -24819,7 +24819,7 @@ msgstr "Ресурсты жою"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -34028,6 +34028,7 @@ msgid "Color Sampler"
 msgstr "Түс таңдағышы"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "Таңдаудан бас тарту"
@@ -34905,39 +34906,37 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "Бүкілін таңдау"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Таңдауды терістеу"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Таңдаудан бас тарту"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Мөлдірсіздікті таңдау"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Қабатты &топтастыру"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "Таңдау шегін еріту"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-msgctxt "tooltip"
+msgid "Copy To New Layer"
+msgstr "Қабатты &топтастыру"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "Таңдауды үлғайту"
 
@@ -44915,13 +44914,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Реңкті түрлендіру..."
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-msgid "Select All"
-msgstr "Бүкілін таңдау"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 #| msgid "Select Font"
@@ -45899,19 +45891,19 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, kde-format
-msgid "Text Properties"
-msgstr "Мәтіннің қасиеттері"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 #| msgid "New Style"
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Жаңа стилі"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, kde-format
+msgid "Text Properties"
+msgstr "Мәтіннің қасиеттері"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "Configuration:"
 msgctxt "@title:window"
@@ -65544,7 +65536,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Ұқсасын таңдау"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "@title:window"
@@ -67876,6 +67868,21 @@ msgstr "Барлығын ұғайту"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталон кескіндері"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Бүкілін таңдау"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Таңдауды терістеу"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Таңдаудан бас тарту"
 
 #, fuzzy
 #~| msgid "Flatten the &image"

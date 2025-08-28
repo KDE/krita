@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -24338,7 +24338,7 @@ msgstr "លុប​ទាំងអស់"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -33326,6 +33326,7 @@ msgid "Color Sampler"
 msgstr "ឧបករណ៍​ជ្រើស​ពណ៌"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "ដោះជ្រើស"
@@ -34178,39 +34179,37 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Select All"
 msgstr "ជ្រើស​ទាំងអស់"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "ដាក់​ជម្រើស​បញ្ជ្រាស"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "ដោះជ្រើស"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "ជ្រើស​ស្រអាប់"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "ដាក់​ស្រទាប់​ជា​ក្រុម"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "ការជ្រើស​សណ្ឋាន​ពិសេស"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-msgctxt "tooltip"
+msgid "Copy To New Layer"
+msgstr "ដាក់​ស្រទាប់​ជា​ក្រុម"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "បង្កើន​ការ​ជ្រើស​រើស"
 
@@ -43901,13 +43900,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "កំពុងផ្គូផ្គង​សំឡេង..."
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-msgid "Select All"
-msgstr "ជ្រើស​ទាំងអស់"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, fuzzy, kde-format
 msgid "Select None"
@@ -44852,18 +44844,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, fuzzy, kde-format
-msgid "Text Properties"
-msgstr "លក្ខណៈ​សម្បត្តិ..."
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "រចនាប័ទ្ម​"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, fuzzy, kde-format
+msgid "Text Properties"
+msgstr "លក្ខណៈ​សម្បត្តិ..."
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -63975,7 +63967,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "ជម្រើស​ស្រដៀងគ្នា"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -66265,6 +66257,21 @@ msgstr "ពណ៌​ទៅ​អាល់ហ្វា"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "រូបភាព​យោង ៖"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "ជ្រើស​ទាំងអស់"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "ដាក់​ជម្រើស​បញ្ជ្រាស"
+
+#, fuzzy
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "ដោះជ្រើស"
 
 #, fuzzy
 #~| msgid "Flatten the &image"

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
-"PO-Revision-Date: 2025-08-26 09:07+0200\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"PO-Revision-Date: 2025-08-27 19:18+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -24060,7 +24060,7 @@ msgstr "Izbriši vir"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -29760,10 +29760,9 @@ msgstr "Uporabi vodoravno os za dejanje povečave platna"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Dejanja izbora"
+msgstr "Vrstica Dejanja izbora"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29772,13 +29771,14 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"Ko je omogočeno, bodo vse izbire ustvarile majhno plavajočo ploščo uporabnih "
+"dejanj, povezanih z izbiro."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Dejanja izbora"
+msgstr "Omogoči vrstico Dejanja izbora"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -33235,6 +33235,7 @@ msgid "Color Sampler"
 msgstr "Vzorčevalnik barv"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "Prekliči izbor"
@@ -34074,50 +34075,47 @@ msgstr ""
 "V tem pojavnem oknu ni za prikaz na voljo nobenih oznak. Če želite dodati "
 "prednastavitve, jih morate označiti in nato tukaj izbrati oznako."
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Preobrni izbor"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Prekliči izbor"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
-#, fuzzy, kde-format
-#| msgid "Select a Color"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Fill Selection with Color"
 msgid "Fill Selection with Color"
-msgstr "Izberite barvo"
+msgstr "Zapolni izbor z barvo"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Kopiraj plast"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "Operjeni izbor"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
-msgctxt "tooltip"
+#| msgctxt "tooltip"
+#| msgid "Copy To New Layer"
+msgid "Copy To New Layer"
+msgstr "Kopiraj v novo plast"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
+#| msgctxt "tooltip"
+#| msgid "Crop to Selection"
 msgid "Crop to Selection"
-msgstr "Obreži izbore"
+msgstr "Obreži v izbor"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -44213,13 +44211,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Preiskovanje …"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "Izberi vse"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -45168,18 +45159,18 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Oznaka funkcije OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, kde-format
-msgid "Text Properties"
-msgstr "Lastnosti besedila"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Nova prednastavitev sloga"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, kde-format
+msgid "Text Properties"
+msgstr "Lastnosti besedila"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, kde-format
 msgctxt "@title:window"
 msgid "Text Property Configuration"
@@ -64154,7 +64145,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Orodje Izbor podobne barve"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -66413,3 +66404,15 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Izberi vse"
+
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Preobrni izbor"
+
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Prekliči izbor"

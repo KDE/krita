@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-27 02:07+0000\n"
+"POT-Creation-Date: 2025-08-28 02:11+0000\n"
 "PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -24198,7 +24198,7 @@ msgstr "Eliminar o recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:324
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -33394,6 +33394,7 @@ msgid "Color Sampler"
 msgstr "Tomador de mostras de cor"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/kis_selection_actions_panel.cpp:65
 #, kde-format
 msgid "Deselect"
 msgstr "Anular a selección"
@@ -34230,48 +34231,44 @@ msgstr ""
 "engadir predefinicións, etiquéteas e seleccione a continuación a súa "
 "etiqueta aquí."
 
-#: libs/ui/kis_selection_actions_panel.cpp:61
-#, fuzzy, kde-format
-#| msgid "Select All"
-msgctxt "tooltip"
+#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
+#: libs/ui/kis_selection_actions_panel.cpp:63
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
+#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
+#, kde-format
 msgid "Select All"
 msgstr "Seleccionalo todo"
 
-#: libs/ui/kis_selection_actions_panel.cpp:62
+#: libs/ui/kis_selection_actions_panel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
-msgctxt "tooltip"
 msgid "Invert Selection"
 msgstr "Inverter a selección"
 
-#: libs/ui/kis_selection_actions_panel.cpp:63
-#, fuzzy, kde-format
-#| msgid "Deselect"
-msgctxt "tooltip"
-msgid "Deselect"
-msgstr "Anular a selección"
-
-#: libs/ui/kis_selection_actions_panel.cpp:65
+#: libs/ui/kis_selection_actions_panel.cpp:66
 #, fuzzy, kde-format
 #| msgid "Select a Color"
-msgctxt "tooltip"
 msgid "Fill Selection with Color"
 msgstr "Seleccionar unha cor"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
-msgctxt "tooltip"
-msgid "Copy To New Layer"
-msgstr "Copiar a capa"
+#| msgid "Feather Selection"
+msgid "Clear Selection"
+msgstr "Selección suave"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
 #, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Copy Layer"
+msgid "Copy To New Layer"
+msgstr "Copiar a capa"
+
+#: libs/ui/kis_selection_actions_panel.cpp:69
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
-msgctxt "tooltip"
 msgid "Crop to Selection"
 msgstr "Recortar as seleccións"
 
@@ -44372,13 +44369,6 @@ msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Analizando…"
 
-#. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
-#: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, kde-format
-msgid "Select All"
-msgstr "Seleccionalo todo"
-
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
@@ -45346,19 +45336,19 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Etiqueta de funcionalidade de OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:105
-#, kde-format
-msgid "Text Properties"
-msgstr "Propiedades de texto"
-
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:243
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
 #, fuzzy, kde-format
 #| msgid "New Style"
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
 msgstr "Novo estilo"
 
-#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:36
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
+#, kde-format
+msgid "Text Properties"
+msgstr "Propiedades de texto"
+
+#: plugins/dockers/textproperties/TextPropertyConfigDialog.cpp:26
 #, fuzzy, kde-format
 #| msgid "Reset Configurations"
 msgctxt "@title:window"
@@ -64345,7 +64335,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Ferramenta de selección de cores semellantes"
 
-#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:33
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
@@ -66617,6 +66607,25 @@ msgstr "Ferramenta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de imaxes de referencia"
+
+#, fuzzy
+#~| msgid "Select All"
+#~ msgctxt "tooltip"
+#~ msgid "Select All"
+#~ msgstr "Seleccionalo todo"
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "Invert Selection"
+#~ msgctxt "tooltip"
+#~ msgid "Invert Selection"
+#~ msgstr "Inverter a selección"
+
+#, fuzzy
+#~| msgid "Deselect"
+#~ msgctxt "tooltip"
+#~ msgid "Deselect"
+#~ msgstr "Anular a selección"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid ""

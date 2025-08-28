@@ -12869,10 +12869,9 @@ msgid "&Transform"
 msgstr "&Transformovat"
 
 #: krita/krita5.xmlgui:276
-#, fuzzy, kde-format
-#| msgid "Transform Mask"
+#, kde-format
 msgid "Transform &All Layers"
-msgstr "Maska transformace"
+msgstr ""
 
 #: krita/krita5.xmlgui:291
 #, kde-format
@@ -20386,11 +20385,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Přepsat soubor?"
+msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20773,10 +20770,9 @@ msgstr "Datový tok:"
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
 #: libs/ui/animation/video_export_options_dialog.ui:78
 #: libs/ui/animation/video_export_options_dialog.ui:141
-#, fuzzy, kde-format
-#| msgid "Constrain aspect ratio"
+#, kde-format
 msgid "Constant Rate Factor:"
-msgstr "Omezit poměr stran"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH264)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
@@ -20814,17 +20810,15 @@ msgstr "Profil:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseHDRMetadata)
 #: libs/ui/animation/video_export_options_dialog.ui:188
-#, fuzzy, kde-format
-#| msgid "Mode"
+#, kde-format
 msgid "HDR Mode"
-msgstr "Režim"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
 #: libs/ui/animation/video_export_options_dialog.ui:197
-#, fuzzy, kde-format
-#| msgid "Metadata"
+#, kde-format
 msgid "HDR Metadata..."
-msgstr "Metadata"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
@@ -20846,21 +20840,15 @@ msgstr "Bezeztrátový"
 #: libs/ui/animation/video_export_options_dialog.ui:286
 #: libs/ui/animation/video_export_options_dialog.ui:373
 #: libs/ui/animation/video_export_options_dialog.ui:443
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Stop animation"
+#, kde-format
 msgid "Loop Animation"
-msgstr "Zastavit animaci"
+msgstr ""
 
-# Přechod sklouznutí má posunovače, kde vlevo (žádný výběr) znamená průhlednost a vpravo (výběr 100 %) znamená neprůhlednost.
-# Opačně to nedává smysl.
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
 #: libs/ui/animation/video_export_options_dialog.ui:293
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Transparency Difference"
-msgstr "Průhlednost"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
@@ -20878,18 +20866,15 @@ msgstr "Rozptyl:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
 #: libs/ui/animation/video_export_options_dialog.ui:320
-#, fuzzy, kde-format
-#| msgid "Pattern Scale:"
+#, kde-format
 msgid "Bayer Scale:"
-msgstr "Měřítko předlohy:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
 #: libs/ui/animation/video_export_options_dialog.ui:337
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgid "Difference Mode:"
-msgstr "Rozdíl"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:347
@@ -20911,22 +20896,17 @@ msgid ""
 "body></html>"
 msgstr ""
 
-# Přechod sklouznutí má posunovače, kde vlevo (žádný výběr) znamená průhlednost a vpravo (výběr 100 %) znamená neprůhlednost.
-# Opačně to nedává smysl.
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:350
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Preserve Transparency"
-msgstr "Průhlednost"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
 #: libs/ui/animation/video_export_options_dialog.ui:380
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgid "Prediction Mode:"
-msgstr "Režim označování"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
 #: libs/ui/animation/video_export_options_dialog.ui:413
@@ -21411,10 +21391,9 @@ msgstr "Dialog"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Master Display:"
-msgstr "Zobrazení:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
@@ -21452,10 +21431,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
-#, fuzzy, kde-format
-#| msgid "Green:"
+#, kde-format
 msgid "Green Primary:"
-msgstr "Zelená:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
@@ -21473,11 +21451,9 @@ msgstr "Bílý bod:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Luminance:"
+#, kde-format
 msgid "Min Luminance:"
-msgstr "Svítivost:"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMinLuminance)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMaxLuminance)
@@ -21496,11 +21472,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Luminance:"
+#, kde-format
 msgid "Max Luminance:"
-msgstr "Svítivost:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
@@ -21516,10 +21490,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VideoImportDialog)
 #: libs/ui/animation/VideoImportDialog.ui:24
-#, fuzzy, kde-format
-#| msgid "Render Animation"
+#, kde-format
 msgid "Video Animation Import"
-msgstr "Vykreslit animaci"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGeneral)
 #. i18n: ectx: property (title), widget (QGroupBox, grpGeneralOptions)
@@ -21618,11 +21591,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
 #: libs/ui/animation/VideoImportDialog.ui:325
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Import animation"
+#, kde-format
 msgid "Import into:"
-msgstr "Importovat animaci"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, fpsLabel)
 #: libs/ui/animation/VideoImportDialog.ui:375
@@ -21633,10 +21604,9 @@ msgstr "FPS:"
 
 #. i18n: ectx: property (text), widget (QLabel, frameSkipLabel)
 #: libs/ui/animation/VideoImportDialog.ui:388
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Skip Interval:"
-msgstr "Vnitřní"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, startExportingAtLabel)
 #: libs/ui/animation/VideoImportDialog.ui:447
@@ -21758,11 +21728,9 @@ msgstr "Výška:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsImportVideoScaleGroup)
 #: libs/ui/animation/VideoImportDialog.ui:553
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Import resource"
+#, kde-format
 msgid "Import Video Scale"
-msgstr "Importovat zdroj"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
@@ -21794,10 +21762,9 @@ msgstr "Cesta k FFprobe:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
-#, fuzzy, kde-format
-#| msgid "Entire Image"
+#, kde-format
 msgid "Animation Renderer Image"
-msgstr "Celý obrázek"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/animation/wdg_animationrenderer.ui:22
@@ -21845,10 +21812,9 @@ msgstr "Umístění obrázku:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/wdg_animationrenderer.ui:96
-#, fuzzy, kde-format
-#| msgid "Layer name:"
+#, kde-format
 msgid "Base name:"
-msgstr "Název vrstvy:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBasename)
 #: libs/ui/animation/wdg_animationrenderer.ui:103
@@ -21858,10 +21824,9 @@ msgstr "rámec"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/animation/wdg_animationrenderer.ui:110
-#, fuzzy, kde-format
-#| msgid "Start Recording"
+#, kde-format
 msgid "Start numbering at:"
-msgstr "Začít nahrávat"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOnlyUniqueFrames)
 #: libs/ui/animation/wdg_animationrenderer.ui:124
@@ -21893,10 +21858,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
 #: libs/ui/animation/wdg_animationrenderer.ui:222
 #: plugins/dockers/recorder/recorder_export.ui:374
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Video location:"
-msgstr "Délka videa:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
 #: libs/ui/animation/wdg_animationrenderer.ui:232
@@ -21906,10 +21870,9 @@ msgstr "Zahrnout zvuk"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Umístění obrázku:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
@@ -21952,10 +21915,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
-#, fuzzy, kde-format
-#| msgid "New configuration %1"
+#, kde-format
 msgid "Brush HUD configuration"
-msgstr "Nové nastavení  %1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
@@ -21981,10 +21943,9 @@ msgstr "<"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgid "Current properties:"
-msgstr "Současné přednastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnUp)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
@@ -23250,10 +23211,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgCustomTabletResolution)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:18
-#, fuzzy, kde-format
-#| msgid "Advanced Blending"
+#, kde-format
 msgid "Advanced Tablet Setting"
-msgstr "Pokročilé mísení"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:24
@@ -23440,10 +23400,9 @@ msgstr "Krita"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOpenAutosave)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:37
-#, fuzzy, kde-format
-#| msgid "Delete the author profile"
+#, kde-format
 msgid "Open the autosave file"
-msgstr "Smazat profil autora"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbDiscardAutosave)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:44
@@ -23605,10 +23564,9 @@ msgstr "Webová stránka aplikace Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1041
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "Otevřít obrázky"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1065
@@ -23633,10 +23591,9 @@ msgstr "Novinky"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1270
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "News options"
-msgstr "Žádné možnosti"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1377
@@ -23698,10 +23655,9 @@ msgstr "Změněno:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLicense)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:69
-#, fuzzy, kde-format
-#| msgid "License:"
+#, kde-format
 msgid "License/Rights:"
-msgstr "Licence:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -24215,18 +24171,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:266
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Proofing Rendering Intent:"
-msgstr "Zobrazovací záměr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
 #: libs/ui/forms/wdgcolorsettings.ui:297
 #: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Getting Started"
+#, kde-format
 msgid "Adaptation State:"
-msgstr "Začínáme"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgcolorsettings.ui:311
@@ -24265,17 +24219,15 @@ msgstr "Profil:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnInstallProfile)
 #: libs/ui/forms/wdgcolorspaceselector.ui:119
-#, fuzzy, kde-format
-#| msgid "Install Color Profiles"
+#, kde-format
 msgid "Install a new profile from a file"
-msgstr "Nainstalujte barevné profily"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, bnInstallProfile)
 #: libs/ui/forms/wdgcolorspaceselector.ui:122
-#, fuzzy, kde-format
-#| msgid "Install Color Profiles"
+#, kde-format
 msgid "Install a new profile from a file."
-msgstr "Nainstalujte barevné profily"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAdvanced)
 #: libs/ui/forms/wdgcolorspaceselector.ui:134
@@ -24404,10 +24356,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgconvertcolorspace.ui:109
-#, fuzzy, kde-format
-#| msgid "Best for graphs and charts"
+#, kde-format
 msgid "Best for spot colors"
-msgstr "Nejlepší pro grafy a schémata"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgconvertcolorspace.ui:117
@@ -24528,10 +24479,9 @@ msgstr "Trilineární filtrování"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
-#, fuzzy, kde-format
-#| msgid "High Pass Filter"
+#, kde-format
 msgid "High Quality Filtering"
-msgstr "Filtr horní propusti"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:139
@@ -24541,10 +24491,9 @@ msgstr "Režim změny měřítka"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Asistenční nástroj"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24570,38 +24519,33 @@ msgstr "Mezipaměť obrázků"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Pixmap Cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Mezipaměť obrázků"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
-#, fuzzy, kde-format
-#| msgid "(needs restart)"
+#, kde-format
 msgid "Preferred Renderer (needs restart):"
-msgstr "(potřebuje restartovat)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgdisplaysettings.ui:220
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current Renderer:"
-msgstr "Aktuální vrstva"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:250
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "HDR Settings"
-msgstr "Nastavení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:256
-#, fuzzy, kde-format
-#| msgid "Display Format:"
+#, kde-format
 msgid "Current Display Format"
-msgstr "Formát zobrazení:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:263
@@ -24629,17 +24573,15 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:315
-#, fuzzy, kde-format
-#| msgid "Decoration:"
+#, kde-format
 msgid "Canvas Decorations"
-msgstr "Dekorace:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:321
-#, fuzzy, kde-format
-#| msgid "Transparent color: "
+#, kde-format
 msgid "Transparency Checkerboard:"
-msgstr "Průhledná barva: "
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:327
@@ -24701,17 +24643,15 @@ msgstr "Barva:"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Start at: "
+#, kde-format
 msgid "Start showing at:"
-msgstr "Začít na: "
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:447
-#, fuzzy, kde-format
-#| msgid "Selection mode:"
+#, kde-format
 msgid "Selection Overlay:"
-msgstr "Režim výběru:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:459
@@ -24765,10 +24705,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:566
-#, fuzzy, kde-format
-#| msgid "Enable curve anti-aliasing"
+#, kde-format
 msgid "Enable selection outline anti-aliasing"
-msgstr "Povolit vyhlazování křivek"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:573
@@ -24837,10 +24776,9 @@ msgstr "Uzpůsobit na rozlišení obrázku (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "Scaling Mode:"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "Režim změny měřítka"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -24857,10 +24795,9 @@ msgstr "Umístění úložiště:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:102
-#, fuzzy, kde-format
-#| msgid "Switch to"
+#, kde-format
 msgid "Swatch group:"
-msgstr "Přepnout do"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfiles)
 #: libs/ui/forms/wdgdlgpngimport.ui:21
@@ -24886,10 +24823,9 @@ msgstr "Náhled"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFilterSelectedFrames)
 #: libs/ui/forms/wdgfilterdialog.ui:74
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgid "Multiframe"
-msgstr "rámec"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonCreateMaskEffect)
 #: libs/ui/forms/wdgfilterdialog.ui:97
@@ -24899,11 +24835,9 @@ msgstr "Vytvořit masku filtrů"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FilterSelector)
 #: libs/ui/forms/wdgfilterselector.ui:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit Selection"
+#, kde-format
 msgid "Filter selection"
-msgstr "Upravit výběr"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkRememberPreset)
 #: libs/ui/forms/wdgfilterselector.ui:120
@@ -24913,10 +24847,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRememberPreset)
 #: libs/ui/forms/wdgfilterselector.ui:123
-#, fuzzy, kde-format
-#| msgid "Choose brush preset"
+#, kde-format
 msgid "Use last preset"
-msgstr "Zvolte přednastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPresets)
 #: libs/ui/forms/wdgfilterselector.ui:130
@@ -24926,10 +24859,9 @@ msgstr "Upravit přednastavení"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnXML)
 #: libs/ui/forms/wdgfilterselector.ui:137
-#, fuzzy, kde-format
-#| msgid "Could not filter configuration %1."
+#, kde-format
 msgid "Get the XML for the current filter configuration."
-msgstr "Nelze filtrovat nastavení %1."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnXML)
 #: libs/ui/forms/wdgfilterselector.ui:140
@@ -24982,10 +24914,9 @@ msgstr "Stavový panel"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggleMask)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:51
-#, fuzzy, kde-format
-#| msgid "Gamut masks"
+#, kde-format
 msgid "Toggle gamut mask"
-msgstr "Masky Gamutu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
@@ -25008,17 +24939,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: libs/ui/forms/wdggeneralsettings.ui:83
-#, fuzzy, kde-format
-#| msgid "Brush Shape"
+#, kde-format
 msgid "Brush Outline Shape:"
-msgstr "Tvary štětce"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdggeneralsettings.ui:111
-#, fuzzy, kde-format
-#| msgid "&Oilpaint..."
+#, kde-format
 msgid "While painting..."
-msgstr "&Olejomalba..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
 #. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
@@ -25068,10 +24997,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdggeneralsettings.ui:303
-#, fuzzy, kde-format
-#| msgid "Brush (Background Color)"
+#, kde-format
 msgid "Brush Outline Color:"
-msgstr "Štětec (barva pozadí)"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:324
@@ -25168,10 +25096,9 @@ msgstr "Písmo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:576
-#, fuzzy, kde-format
-#| msgid "Enable Script"
+#, kde-format
 msgid "Enable HiDPI support"
-msgstr "Povolit skript"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
 #: libs/ui/forms/wdggeneralsettings.ui:600
@@ -25208,17 +25135,15 @@ msgstr "V do&ku"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
 #: libs/ui/forms/wdggeneralsettings.ui:669
-#, fuzzy, kde-format
-#| msgid "&Toolbar:"
+#, kde-format
 msgid "I&n Toolbar"
-msgstr "Panel nás&trojů:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:682
-#, fuzzy, kde-format
-#| msgid "(needs restart)"
+#, kde-format
 msgid "Brush Flow Mode (needs restart):"
-msgstr "(potřebuje restartovat)"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:690
@@ -25288,10 +25213,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Kinetic Scrolling (needs restart)"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Kinetický posun (potřebuje restartovat)"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -25301,10 +25225,9 @@ msgstr "Manipulace se soubory"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_autosaveCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:861
-#, fuzzy, kde-format
-#| msgid "Enable Logging"
+#, kde-format
 msgid "Enable Autosaving"
-msgstr "Povolit záznamy"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:870
@@ -25340,10 +25263,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:921
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Backup File Location"
-msgstr "Umístění ukládaných souborů:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:929
@@ -25353,17 +25275,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:934
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "User Folder"
-msgstr "Složka"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:939
-#, fuzzy, kde-format
-#| msgid "Copy Location"
+#, kde-format
 msgid "Temporary File Location"
-msgstr "Kopírovat umístění"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/forms/wdggeneralsettings.ui:947
@@ -25379,31 +25299,24 @@ msgstr "~"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdggeneralsettings.ui:964
-#, fuzzy, kde-format
-#| msgid "Number of tiles"
+#, kde-format
 msgid "Number of Backup Files Kept:"
-msgstr "Počet dlaždic"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdggeneralsettings.ui:984
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "KRA File Compression"
-msgstr "Komprese"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:990
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#| "\">Recent files</span></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Only use this option for <span style=\" font-"
 "weight:600;\">very</span> large files: larger than 4 GiB on disk.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
-"\">Nedávné soubory</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:993
@@ -25519,11 +25432,9 @@ msgstr "Zobrazit originální vrstvu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
 #: libs/ui/forms/wdggeneralsettings.ui:1238
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Krita log for bug reports."
+#, kde-format
 msgid "Enable Logging for bug reports"
-msgstr "Zobrazit záznam Krita pro hlášení chyb."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
 #: libs/ui/forms/wdggeneralsettings.ui:1269
@@ -25651,11 +25562,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1463
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Automatic color axis adjustments"
+#, kde-format
 msgid "Automatic layer suffixes"
-msgstr "Automatická úprava barevných os"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1469
@@ -25777,10 +25686,9 @@ msgstr "Štětec (barva pozadí)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPatternTransform)
 #: libs/ui/forms/wdggeometryoptions.ui:114
-#, fuzzy, kde-format
-#| msgid "Transform"
+#, kde-format
 msgid "Pattern Transform"
-msgstr "Transformovat"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeometryoptions.ui:120
@@ -25861,10 +25769,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpSoftProof)
 #: libs/ui/forms/wdgimageproperties.ui:272
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Softproofing"
-msgstr "Softwarový náhled"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProofing)
 #: libs/ui/forms/wdgimageproperties.ui:278
@@ -25957,12 +25864,11 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, beginFromZeroIndexBox)
 #: libs/ui/forms/wdgimportimagesequence.ui:82
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The first imported frame will be placed in #0 instead "
 "of #1</p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, beginFromZeroIndexBox)
 #: libs/ui/forms/wdgimportimagesequence.ui:85
@@ -25996,11 +25902,9 @@ msgstr "Krok"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, spinStep)
 #: libs/ui/forms/wdgimportimagesequence.ui:122
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Number of frames:"
+#, kde-format
 msgid "Number of frames between images"
-msgstr "Počet rámců:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFramerate)
 #: libs/ui/forms/wdgimportimagesequence.ui:135
@@ -26106,10 +26010,9 @@ msgstr "Výběr o&brázku"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgmaskfromselection.ui:44
-#, fuzzy, kde-format
-#| msgid "Key Combination"
+#, kde-format
 msgid "Combination method"
-msgstr "Kombinace kláves"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
 #: libs/ui/forms/wdgmaskfromselection.ui:50
@@ -26262,10 +26165,9 @@ msgstr "Schránka"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgnewimage.ui:344
-#, fuzzy, kde-format
-#| msgid "Scale to Image Size"
+#, kde-format
 msgid "Save Image Size as:"
-msgstr "Změnit měřítko na velikost obrázku"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMode)
 #: libs/ui/forms/wdgnewimage.ui:354
@@ -26276,10 +26178,9 @@ msgstr "Barva"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnSaveAsPredefined)
 #: libs/ui/forms/wdgnewimage.ui:410
-#, fuzzy, kde-format
-#| msgid "Save the current script"
+#, kde-format
 msgid "Save the current dimensions"
-msgstr "Uložit aktuální skript"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -26334,11 +26235,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsRaster)
 #: libs/ui/forms/wdgnewimage.ui:554
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste Layer"
+#, kde-format
 msgid "As &raster layer"
-msgstr "Vložit vrstvu"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:567
@@ -26364,10 +26263,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
 #: libs/ui/forms/wdgnewimage.ui:586
-#, fuzzy, kde-format
-#| msgid "Fill Layer"
+#, kde-format
 msgid "As fill la&yer"
-msgstr "Vyplnit vrstvu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblDocumentInfo)
 #: libs/ui/forms/wdgnewimage.ui:651
@@ -26408,10 +26306,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkActiveInAllWindows)
 #: libs/ui/forms/wdgnewwindowlayout.ui:47
-#, fuzzy, kde-format
-#| msgid "Zoom to fit page in window"
+#, kde-format
 msgid "Show active image in all windows"
-msgstr "Přizpůsobit stránku oknu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonCurrentLayer)
 #: libs/ui/forms/wdgnodequerypatheditor.ui:21
@@ -26453,10 +26350,9 @@ msgstr "Uložit"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushEngineLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:230
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgid "Current Brush Engine"
-msgstr "Současné přednastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:340
@@ -26502,11 +26398,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushOpacityCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:637
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase brush Opacity"
+#, kde-format
 msgid "Eraser switch opacity"
-msgstr "Zvýšit krytí štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, dirtyPresetCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:653
@@ -26522,10 +26416,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
 #: libs/ui/forms/wdgpaintopsettings.ui:843
-#, fuzzy, kde-format
-#| msgid "Fill area with current image"
+#, kde-format
 msgid "Fill area with brush preset icon"
-msgstr "Vyplnit oblast aktuálním obrázkem"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
 #: libs/ui/forms/wdgpaintopsettings.ui:862
@@ -26579,11 +26472,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseLocal)
 #: libs/ui/forms/wdgPasteFormat.ui:92
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Reset All Profiles"
+#, kde-format
 msgid "Use &local file"
-msgstr "Resetovat všechny profily"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgPasteFormat.ui:105
@@ -26663,10 +26554,9 @@ msgstr " MiB"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgperformancesettings.ui:119
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Internal Pool:"
-msgstr "Vnitřní"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
@@ -26726,19 +26616,17 @@ msgstr "Omezení CPU:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderThreadsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:276
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Krita will not use more CPU cores than selected by "
 "this limit</p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgperformancesettings.ui:283
-#, fuzzy, kde-format
-#| msgid "Frame Rendering Timeout"
+#, kde-format
 msgid "Frame Rendering Clones Limit"
-msgstr "Vypršení času pro vykreslování rámce"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:296
@@ -26806,10 +26694,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableAVXOptimizations)
 #: libs/ui/forms/wdgperformancesettings.ui:366
-#, fuzzy, kde-format
-#| msgid "Disable all vector optimizations"
+#, kde-format
 msgid "Disable AVX vector optimizations"
-msgstr "Zakázat všechny vektorové optimalizace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableVectorOptimizations)
 #: libs/ui/forms/wdgperformancesettings.ui:373
@@ -26825,10 +26712,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerformanceLogging)
 #: libs/ui/forms/wdgperformancesettings.ui:387
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Performance logging"
-msgstr "Výkon"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgperformancesettings.ui:400
@@ -26842,10 +26728,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgperformancesettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Animation Curves"
+#, kde-format
 msgid "Animation Cache"
-msgstr "Křivky animace"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:433
@@ -26891,10 +26776,9 @@ msgstr "Na disku"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/forms/wdgperformancesettings.ui:462
-#, fuzzy, kde-format
-#| msgid "No configuration options"
+#, kde-format
 msgid "Cache Generation Options"
-msgstr "Žádné možnosti nastavení"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:468
@@ -26913,26 +26797,20 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:484
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#| "\">Recent files</span></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Size limit after which the frames will be scaled down</"
 "p><p><span style=\" font-weight:600;\">Recommended value:</span> 2500&nbsp;"
 "px</p></body></html>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
-"\">Nedávné soubory</span></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
 #: libs/ui/forms/wdgperformancesettings.ui:491
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>When the image is too big, render only currently "
 "visible part of it</p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRegionOfInterest)
 #: libs/ui/forms/wdgperformancesettings.ui:494
@@ -26952,12 +26830,11 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:514
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:517
@@ -26980,10 +26857,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdgperformancesettings.ui:557
-#, fuzzy, kde-format
-#| msgid "Instant Preview"
+#, kde-format
 msgid "Force Instant Preview"
-msgstr "Okamžitý náhled"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:563
@@ -26996,11 +26872,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:566
-#, fuzzy, kde-format
-#| msgctxt "Filter as an effect"
-#| msgid "Filters"
+#, kde-format
 msgid "in Filters"
-msgstr "Filtry"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:573
@@ -27013,10 +26887,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:576
-#, fuzzy, kde-format
-#| msgid "Transform"
+#, kde-format
 msgid "in Transform Tool"
-msgstr "Transformovat"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:583
@@ -27029,10 +26902,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:586
-#, fuzzy, kde-format
-#| msgid "Move Tool"
+#, kde-format
 msgid "in Move Tool"
-msgstr "Nástroj pro přesouvání"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
@@ -27062,10 +26934,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Page Size:"
+#, kde-format
 msgid "Palette Size:"
-msgstr "Velikost stránky:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:82
@@ -27075,10 +26946,9 @@ msgstr "Paleta barev:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
-#, fuzzy, kde-format
-#| msgid "Shade Selector"
+#, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "Paleta odstínů"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
@@ -27089,24 +26959,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:103
-#, fuzzy, kde-format
-#| msgid "Selected:"
+#, kde-format
 msgid "Selector Size:"
-msgstr "Vybráno:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColorHistory)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:126
-#, fuzzy, kde-format
-#| msgid "Show Color Histor&y"
+#, kde-format
 msgid "Show Color History Ring"
-msgstr "Zobrazit historii ba&rev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRotationTrack)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:136
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgid "Show Rotation Ring"
-msgstr "Rotace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -27143,10 +27010,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:170
-#, fuzzy, kde-format
-#| msgid "For images"
+#, kde-format
 msgid "Tool image:"
-msgstr "Pro obrázky"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
@@ -27205,11 +27071,9 @@ msgstr ""
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intRoundCornersX)
 #: libs/ui/forms/wdgrectangleconstraints.ui:181
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Round Dots"
-#| msgid "Round"
+#, kde-format
 msgid "Round X: "
-msgstr "Kolo"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:197
@@ -27219,11 +27083,9 @@ msgstr ""
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:203
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Round Dots"
-#| msgid "Round"
+#, kde-format
 msgid "Round Y: "
-msgstr "Kolo"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, newBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:35
@@ -27233,10 +27095,9 @@ msgstr "Název štětce:"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:57
-#, fuzzy, kde-format
-#| msgid "Brush Name:"
+#, kde-format
 msgid "BrushName"
-msgstr "Název štětce:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgsavebrushpreset.ui:89
@@ -27247,17 +27108,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, loadExistingThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:143
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:112
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Load Existing Thumbnail"
-msgstr "Velký náhled"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, loadScratchPadThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:150
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Load Scratchpad Thumbnail"
-msgstr "Velký náhled"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, loadImageIntoThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:157
@@ -27277,31 +27136,27 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, clearPresetThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:171
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:133
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Clear Thumbnail"
-msgstr "Velký náhled"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, stopLeftLabel)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:300
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:450
-#, fuzzy, kde-format
-#| msgid "Text Color"
+#, kde-format
 msgctxt "Edit left side of segment in segment editor"
 msgid "Left Color:"
-msgstr "Barva textu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, stopRightLabel)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:310
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:460
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Lighter Color"
-#| msgid "Lighter Color"
+#, kde-format
 msgctxt "Edit right side of segment in segment editor"
 msgid "Right Color:"
-msgstr "Světlejší barva"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, interpolationLabel)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:320
@@ -27407,10 +27262,9 @@ msgstr "Tah"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, typeBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:63
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgid "Current Brush"
-msgstr "Současné přednastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, typeBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:68
@@ -27945,10 +27799,9 @@ msgstr "Gesto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_key_input_editor.ui:33
-#, fuzzy, kde-format
-#| msgid "Key Combination"
+#, kde-format
 msgid "Edit Key Combination"
-msgstr "Kombinace kláves"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, keysLabel)
 #: libs/ui/input/config/kis_key_input_editor.ui:46
@@ -27971,10 +27824,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_wheel_input_editor.ui:56
-#, fuzzy, kde-format
-#| msgid "Mouse Wheel Up"
+#, kde-format
 msgid "Edit Mouse Wheel Input"
-msgstr "Kolečko myši nahoru"
+msgstr ""
 
 #: libs/ui/input/kis_abstract_input_action.cpp:34
 #: libs/ui/input/kis_tool_invocation_action.cpp:41
@@ -31286,11 +31138,9 @@ msgstr "St&yl:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:50
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Auto Levels"
+#, kde-format
 msgid "Outer Bevel"
-msgstr "Automatické úrovně"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:55
@@ -31307,19 +31157,15 @@ msgstr "Reliéf"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:65
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Emboss"
+#, kde-format
 msgid "Pillow Emboss"
-msgstr "Reliéf"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:70
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Emboss"
+#, kde-format
 msgid "Stroke Emboss"
-msgstr "Reliéf"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:78
@@ -31410,10 +31256,9 @@ msgstr "Výš&ka:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:248
-#, fuzzy, kde-format
-#| msgid "Contour:"
+#, kde-format
 msgid "&Gloss Contour:"
-msgstr "Obrys:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntiAliased)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:263
@@ -31442,10 +31287,9 @@ msgstr "Režim zvýraznění:"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:49
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:52
 #: libs/ui/layerstyles/WdgSatin.ui:51
-#, fuzzy, kde-format
-#| msgid "Set a custom blend mode for the fill"
+#, kde-format
 msgid "Set the blend mode for the layer"
-msgstr "Nastavit vlastní režim mísení výplně"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity2)
@@ -31460,10 +31304,9 @@ msgstr "Nastavit vlastní režim mísení výplně"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:110
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:81
 #: libs/ui/layerstyles/WdgSatin.ui:89
-#, fuzzy, kde-format
-#| msgid "Set a custom opacity for the fill"
+#, kde-format
 msgid "Set the master opacity for the layer"
-msgstr "Nastavit vlastní úroveň krytí výplně"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intFillOpacity)
@@ -31496,17 +31339,15 @@ msgstr "Režim stínu"
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:39
-#, fuzzy, kde-format
-#| msgid "Scaling Options"
+#, kde-format
 msgid "Blending Options"
-msgstr "Možnosti změny měřítka"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpGeneralBlending)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:27
-#, fuzzy, kde-format
-#| msgid "General settings"
+#, kde-format
 msgid "General Blending"
-msgstr "Obecná nastavení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:33
@@ -31533,10 +31374,9 @@ msgstr "Kry&tí výplně:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intFillOpacity)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:119
-#, fuzzy, kde-format
-#| msgid "Set a custom opacity for the fill"
+#, kde-format
 msgid "Set the interior opacity for the layer"
-msgstr "Nastavit vlastní úroveň krytí výplně"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:129
@@ -31556,10 +31396,9 @@ msgstr "Kanály:"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:168
 #: libs/ui/layerstyles/wdgblendingoptions.ui:178
 #: libs/ui/layerstyles/wdgblendingoptions.ui:188
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgid "Choose channels to blend"
-msgstr "Kanály na vrstvy"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannel1_2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannel2_2)
@@ -31644,10 +31483,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_9)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:261
-#, fuzzy, kde-format
-#| msgid "Transparency Mask"
+#, kde-format
 msgid "&Transparency Shapes Layer"
-msgstr "Maska průhlednosti"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBox_10)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBox_11)
@@ -31673,11 +31511,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBlendIf)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:291
-#, fuzzy, kde-format
-#| msgctxt "The color rate of sampled color setting slider"
-#| msgid "Blend: "
+#, kde-format
 msgid "Blend If"
-msgstr "Mísení: "
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:302
@@ -31695,21 +31531,17 @@ msgstr "255"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:330
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Underline"
+#, kde-format
 msgid "Underlying Layer"
-msgstr "Podtržené"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/WdgColorOverlay.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:114
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Overlay"
-#| msgid "Overlay"
+#, kde-format
 msgid "Color Overlay"
-msgstr "Překrytí"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -31738,11 +31570,9 @@ msgstr "Obrys:"
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAntiAliased)
 #: libs/ui/layerstyles/wdgContour.ui:45 libs/ui/layerstyles/wdgdropshadow.ui:75
 #: libs/ui/layerstyles/WdgSatin.ui:159
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Smooth Selection"
+#, kde-format
 msgid "Smooth the contour"
-msgstr "Hladký výběr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
@@ -31844,10 +31674,9 @@ msgstr "Vel&ikost:"
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:122
-#, fuzzy, kde-format
-#| msgid "Gradient Map"
+#, kde-format
 msgid "Gradient Overlay"
-msgstr "Mapa přechodu"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFillType)
@@ -31944,33 +31773,29 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblDither)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:235
-#, fuzzy, kde-format
-#| msgid "Dither"
+#, kde-format
 msgid "&Dither:"
-msgstr "Dither"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/wdgInnerGlow.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:68
-#, fuzzy, kde-format
-#| msgid "Inner Shadow"
+#, kde-format
 msgid "Inner Glow"
-msgstr "Vnitřní stín"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbTechnique)
 #: libs/ui/layerstyles/wdgInnerGlow.ui:181
-#, fuzzy, kde-format
-#| msgid "Soft"
+#, kde-format
 msgid "Softer"
-msgstr "Jemně"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbTechnique)
 #: libs/ui/layerstyles/wdgInnerGlow.ui:186
-#, fuzzy, kde-format
-#| msgid "Precision:"
+#, kde-format
 msgid "Precise"
-msgstr "Přesnost:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSource)
 #: libs/ui/layerstyles/wdgInnerGlow.ui:194
@@ -32045,19 +31870,17 @@ msgstr "Textura"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/wdglayerstyles.ui:106 libs/ui/layerstyles/WdgSatin.ui:21
-#, fuzzy, kde-format
-#| msgid "Rating:"
+#, kde-format
 msgid "Satin"
-msgstr "Hodnocení:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/wdglayerstyles.ui:130
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:21
-#, fuzzy, kde-format
-#| msgid "Pattern fill"
+#, kde-format
 msgid "Pattern Overlay"
-msgstr "Výplň vzorkem"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -32115,10 +31938,9 @@ msgstr "Vzorek:"
 #. i18n: ectx: property (text), widget (QPushButton, bnSnapToOrigin)
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:122
 #: libs/ui/layerstyles/WdgStroke.ui:363 libs/ui/layerstyles/wdgTexture.ui:64
-#, fuzzy, kde-format
-#| msgid "Snap to grid"
+#, kde-format
 msgid "Sn&ap to Origin"
-msgstr "Přichytávat k mřížce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLinkWithLayer)
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:148
@@ -33891,11 +33713,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Reset Highlights"
+#, kde-format
 msgctxt "Contrast enhancement section in auto levels"
 msgid "Shadows and Highlights"
-msgstr "Resetovat světla"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:62
@@ -33928,40 +33749,34 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Highlights:"
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the highlights side in auto levels"
 msgid "Highlights clipping:"
-msgstr "Zvýraznění:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Random offset:"
+#, kde-format
 msgctxt ""
 "Maximum distance the black/white points can be moved from their relative "
 "extremes in auto levels"
 msgid "Maximum offset:"
-msgstr "Náhodný posun:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Shadows"
+#, kde-format
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Stíny"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Highlights:"
+#, kde-format
 msgctxt "Output color used for the highlights in auto levels"
 msgid "Highlights color:"
-msgstr "Zvýraznění:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
@@ -34021,11 +33836,9 @@ msgstr "Rozptyl:"
 
 #. i18n: ectx: property (text), widget (QLabel, thresholdModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:39
-#, fuzzy, kde-format
-#| msgctxt "The 'threshold' spinbox prefix in fill tool options"
-#| msgid "Threshold: "
+#, kde-format
 msgid "Threshold Mode"
-msgstr "Práh: "
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, thresholdModeComboBox)
 #: libs/ui/widgets/KisDitherWidget.ui:55
@@ -34045,10 +33858,9 @@ msgstr "Množství:  "
 
 #. i18n: ectx: property (text), widget (QLabel, patternValueModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:108
-#, fuzzy, kde-format
-#| msgid "Smudge Mode"
+#, kde-format
 msgid "Value Mode"
-msgstr "Režim rozmazávání"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -34195,11 +34007,9 @@ msgstr "Výplň vzorkem"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnMeshFill)
 #: libs/ui/widgets/KoFillConfigWidget.ui:123
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Save Gradient"
+#, kde-format
 msgid "Mesh Gradient"
-msgstr "Uložit přechod"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, repeatLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
@@ -36465,17 +36275,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedLengthCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:117
-#, fuzzy, kde-format
-#| msgid "Fixed angle:"
+#, kde-format
 msgid "Fixed Length"
-msgstr "Pevný úhel:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Global Color:"
-msgstr "Barva:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -36485,17 +36293,15 @@ msgstr "Vlastní barva"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
-#, fuzzy, kde-format
-#| msgid "Save Assistant"
+#, kde-format
 msgid "Load Assistant Set"
-msgstr "Uložit asistenta"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Save Assistant"
+#, kde-format
 msgid "Save Assistant Set"
-msgstr "Uložit asistenta"
+msgstr ""
 
 #: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:24
 #, kde-format
@@ -37075,11 +36881,9 @@ msgstr "Paleta barev"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show color selector"
-msgstr "Zobrazit historii barev"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
@@ -37153,17 +36957,15 @@ msgstr "Při změně velikosti doku:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:294
-#, fuzzy, kde-format
-#| msgid "Color Selector:"
+#, kde-format
 msgid "Show Zoom Selector UI: "
-msgstr "Paleta barev:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:304
-#, fuzzy, kde-format
-#| msgid "Color Selector:"
+#, kde-format
 msgid "Zoom Selector Size: "
-msgstr "Paleta barev:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, hidePopupOnClickCheck)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
@@ -37187,10 +36989,9 @@ msgstr "Barevný model:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
-#, fuzzy, kde-format
-#| msgid "Shade Selector"
+#, kde-format
 msgid "Update Selector When:"
-msgstr "Paleta odstínů"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
@@ -37278,19 +37079,17 @@ msgstr "Zobrazit historii ba&rev"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:639
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:855
-#, fuzzy, kde-format
-#| msgid "PNG Options"
+#, kde-format
 msgid "Patch Options"
-msgstr "Možnosti PNG"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:682
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:898
-#, fuzzy, kde-format
-#| msgid "Patches"
+#, kde-format
 msgid "Max Patches: "
-msgstr "Opravy"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, formGroupBox)
@@ -37405,19 +37204,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1115
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Red-Green:"
+#, kde-format
 msgid "Redder/Greener: "
-msgstr "Červeno-Zelená:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1129
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Blue-Yellow:"
+#, kde-format
 msgid "Bluer/Yellower: "
-msgstr "Modrá-žlutá:"
+msgstr ""
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
 #, kde-format
@@ -37832,10 +37627,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, OnionSkinsDocker)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:23
-#, fuzzy, kde-format
-#| msgid "Constrain proportions"
+#, kde-format
 msgid "Onion skin options"
-msgstr "Omezit proporce"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorFilterGroupbox)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:54
@@ -37854,17 +37648,15 @@ msgstr "+"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrevColor)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:169
-#, fuzzy, kde-format
-#| msgid "Previous Frame"
+#, kde-format
 msgid "Previous frames"
-msgstr "Předchozí rámec"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNextColor)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:189
-#, fuzzy, kde-format
-#| msgid "Next Frame"
+#, kde-format
 msgid "Next frames"
-msgstr "Následující rámec"
+msgstr ""
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, kde-format
@@ -37951,18 +37743,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:21
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Rectangle"
+#, kde-format
 msgid "Selector Appearance"
-msgstr "Vyberte obdélník"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showBgColor)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:27
-#, fuzzy, kde-format
-#| msgid "Select background color"
+#, kde-format
 msgid "Show background color indicator"
-msgstr "Vybrat barvu pozadí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showValueScaleNumbers)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:34
@@ -37996,50 +37785,43 @@ msgstr "HS&V"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:256
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Gamut Mask Behavior"
-msgstr "Masky Gamutu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, enforceGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:264
-#, fuzzy, kde-format
-#| msgid "Gamut masks"
+#, kde-format
 msgid "Enforce gamut &mask"
-msgstr "Masky Gamutu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, permissiveGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:271
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste shapes"
+#, kde-format
 msgid "&Just show the shapes"
-msgstr "Vložit tvary"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:283
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Default Selector Steps Settings"
-msgstr "Nastavení palety barev"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefHueSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelHueSteps)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:305
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:98
-#, fuzzy, kde-format
-#| msgid "Steps"
+#, kde-format
 msgid "Hue Steps"
-msgstr "Kroky"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefSaturationSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelSaturationSteps)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:321
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:79
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgid "Saturation Rings"
-msgstr "Nasycení: "
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefValueScaleSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelValueScaleSteps)
@@ -38051,25 +37833,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisPopupButton, bnWheelPrefs)
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:67
-#, fuzzy, kde-format
-#| msgid "Column Preference"
+#, kde-format
 msgid "Color wheel preferences"
-msgstr "Přednastavení sloupce"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisPopupButton, bnDockerPrefs)
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
-#, fuzzy, kde-format
-#| msgid "Profile settings"
+#, kde-format
 msgid "Docker settings"
-msgstr "Nastavení profilu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgid "Invert Saturation"
-msgstr "Zvýšit nasycení barev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDefault)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
@@ -38161,10 +37939,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, exportCompositions)
 #: plugins/dockers/compositiondocker/wdgcompositiondocker.ui:34
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Export checked compositions."
-msgstr "Exportovat kompozici"
+msgstr ""
 
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:37
 #, kde-format
@@ -38178,39 +37955,33 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskNew)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:52
-#, fuzzy, kde-format
-#| msgid "Create new Template"
+#, kde-format
 msgid "Create new mask"
-msgstr "Vytvořit novou šablonu"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskEditor)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:65
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Stroke selected shapes"
+#, kde-format
 msgid "Edit selected mask"
-msgstr "Táhnout vybrané tvary"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskDuplicate)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:78
-#, fuzzy, kde-format
-#| msgid "Duplicate layer or mask"
+#, kde-format
 msgid "Duplicate selected mask"
-msgstr "Duplikovat vrstvu nebo masku"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskDelete)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:104
-#, fuzzy, kde-format
-#| msgid "Delete the layer or mask"
+#, kde-format
 msgid "Delete selected mask"
-msgstr "Smazat vrstvu nebo masku"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, maskPropertiesBox)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:126
-#, fuzzy, kde-format
-#| msgid "Gamut masks"
+#, kde-format
 msgid "Edit the gamut mask"
-msgstr "Masky Gamutu"
+msgstr ""
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:57
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
@@ -38295,38 +38066,33 @@ msgstr "Přichytávat k mřížce"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:142
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Cell Spacing:"
-msgstr "Mezery:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, rightAngleLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, fuzzy, kde-format
-#| msgid "Right Edge"
+#, kde-format
 msgid "Right Angle:"
-msgstr "Pravý okraj"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, leftAngleLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, fuzzy, kde-format
-#| msgid "Angle:"
+#, kde-format
 msgid "Left Angle:"
-msgstr "Úhel:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:191
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "X spacing:"
-msgstr "Mezery:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblYSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:223
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Y spacing:"
-msgstr "Mezery:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
 #: plugins/dockers/griddocker/grid_config_widget.ui:246
@@ -38336,10 +38102,9 @@ msgstr "Další členění:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:315
-#, fuzzy, kde-format
-#| msgid "Line Style:"
+#, kde-format
 msgid "Div Style:"
-msgstr "Styl čáry:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
@@ -38374,17 +38139,15 @@ msgstr "Tečky"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMainStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:394
-#, fuzzy, kde-format
-#| msgid "Line Style:"
+#, kde-format
 msgid "Main Style:"
-msgstr "Styl čáry:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOffset)
 #: plugins/dockers/griddocker/grid_config_widget.ui:424
-#, fuzzy, kde-format
-#| msgid "Offset"
+#, kde-format
 msgid "Grid Offset"
-msgstr "Posun"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:546
@@ -38575,10 +38338,9 @@ msgstr "Ano"
 
 #. i18n: ectx: property (whatsThis), widget (KisCompositeOpComboBox, cmbComposite)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:59
-#, fuzzy, kde-format
-#| msgid "Set a custom blend mode for the fill"
+#, kde-format
 msgid "Select the blending mode for the layer."
-msgstr "Nastavit vlastní režim mísení výplně"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, doubleOpacity)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:120
@@ -38803,10 +38565,9 @@ msgstr "Žádný"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
-#, fuzzy, kde-format
-#| msgid "Use sensors"
+#, kde-format
 msgid "Use OpenColorIO"
-msgstr "Použít senzory"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblDisplayDevice)
 #: plugins/dockers/lut/wdglut.ui:93
@@ -38854,10 +38615,9 @@ msgstr "Pohled:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/lut/wdglut.ui:296
-#, fuzzy, kde-format
-#| msgid "Color name:"
+#, kde-format
 msgid "Color Engine:"
-msgstr "Název barvy:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:310
@@ -38972,10 +38732,9 @@ msgstr "Přidat barvu popředí"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Save the current script"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Uložit aktuální skript"
+msgstr ""
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -39176,17 +38935,15 @@ msgstr "Čistí se..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderExport)
 #: plugins/dockers/recorder/recorder_export.ui:18
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export Timelapse"
-msgstr "Exportovat obrázky"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseDirectory)
 #: plugins/dockers/recorder/recorder_export.ui:64
-#, fuzzy, kde-format
-#| msgid "Export directory"
+#, kde-format
 msgid "Open record directory"
-msgstr "Exportovat adresář"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spinCaptureInterval)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinLastFrameSec)
@@ -39215,10 +38972,9 @@ msgstr "Vstupní FPS:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFps)
 #: plugins/dockers/recorder/recorder_export.ui:259
-#, fuzzy, kde-format
-#| msgid "Video file:"
+#, kde-format
 msgid "Video FPS:"
-msgstr "Soubor videa:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
 #: plugins/dockers/recorder/recorder_export.ui:290
@@ -39323,20 +39079,17 @@ msgstr "Zobrazit ve složce"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRemoveSnapshots)
 #: plugins/dockers/recorder/recorder_export.ui:996
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove points"
+#, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Remove recordings"
-msgstr "Odstranit body"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
-#| msgid "Render as:"
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Vykreslit jako:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -39455,10 +39208,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
-#, fuzzy, kde-format
-#| msgid "Start Recording"
+#, kde-format
 msgid "Clean up Recordings"
-msgstr "Začít nahrávat"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelProgress)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
@@ -39474,10 +39226,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpaceTitle)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
-#, fuzzy, kde-format
-#| msgid "Save to file"
+#, kde-format
 msgid "Space to be freed:"
-msgstr "Uložit do souboru"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpace)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:272
@@ -39487,32 +39238,28 @@ msgstr "0 B"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
-#, fuzzy, kde-format
-#| msgid "Project directory:"
+#, kde-format
 msgctxt "A folder where recordings are stored"
 msgid "Recordings directory:"
-msgstr "Adresář projektu:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonManageRecordings)
 #: plugins/dockers/recorder/recorderdocker.ui:105
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Manage recordings..."
-msgstr "Spravovat zdroje..."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
-#, fuzzy, kde-format
-#| msgid "Select a directory to load..."
+#, kde-format
 msgid "Select the recordings directory..."
-msgstr "Vyberte adresář k načtení..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelCaptureRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
-#, fuzzy, kde-format
-#| msgid "Autosave Interval:"
+#, kde-format
 msgid "Capture interval:"
-msgstr "Interval automatického ukládání:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelQuality)
 #: plugins/dockers/recorder/recorderdocker.ui:199
@@ -39578,10 +39325,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxAutoRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:318
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Record automatically"
-msgstr "Svisle"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:337
@@ -39753,10 +39499,9 @@ msgstr "Výběr konkrétní barvy"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, colorspacePopupButton)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Color space:"
+#, kde-format
 msgid "Set color space"
-msgstr "Barevný prostor:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:69
@@ -39982,10 +39727,9 @@ msgstr "Pouze komentáře"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgExportStoryboard)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:20
-#, fuzzy, kde-format
-#| msgid "Export directory"
+#, kde-format
 msgid "Export Storyboard"
-msgstr "Exportovat adresář"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:34
@@ -40136,17 +39880,15 @@ msgstr "Začít nahrávat"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveButton)
 #: plugins/dockers/tasksetdocker/wdgtasksetdocker.ui:53
-#, fuzzy, kde-format
-#| msgid "Save the script"
+#, kde-format
 msgid "Save the taskset"
-msgstr "Uložit skript"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, clearButton)
 #: plugins/dockers/tasksetdocker/wdgtasksetdocker.ui:66
-#, fuzzy, kde-format
-#| msgid "Delete this tag"
+#, kde-format
 msgid "Delete the taskset"
-msgstr "Smazat tuto značku"
+msgstr ""
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -40197,11 +39939,9 @@ msgstr "Zobrazit na&bídku rychlého nastavení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select layout"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "Vybrat rozvržení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
@@ -40211,11 +39951,9 @@ msgstr "Vybrat..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Převést barevné prostředí projekce"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
@@ -40225,11 +39963,9 @@ msgstr "Vrstva/maska"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Převést barevné prostředí projekce"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
@@ -40239,10 +39975,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgid "Drop size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Velikost kapek"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
@@ -40288,10 +40023,9 @@ msgstr "s&visle"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "Orientace"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40299,10 +40033,9 @@ msgstr "Orientace"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
-msgstr "Svisle"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40330,10 +40063,9 @@ msgstr "Opravy"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgid "Patches"
+#, kde-format
 msgid "Max Patches:"
-msgstr "Opravy"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
@@ -40343,11 +40075,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Color Range Selection"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Výběr rozsahu barev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
@@ -40357,10 +40087,9 @@ msgstr "Pravým kliknutím na paletu odstínů"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Iterace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
@@ -40376,11 +40105,9 @@ msgstr "Tloušťka čáry:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "levé tlačítko"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
@@ -40660,11 +40387,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/buginfo/wdg_buginfo.ui:39
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgid "Please add this information to a bug report:"
-msgstr "Zobrazit informace o systému pro hlášení chyb."
+msgstr ""
 
 #: plugins/extensions/clonesarray/clonesarray.xmlgui:5
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:7
@@ -40849,11 +40574,9 @@ msgstr "Přid&at k současnému výběru"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSubtract)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:108
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert current selection"
+#, kde-format
 msgid "Subtract fro&m current selection"
-msgstr "Obrátit současný výběr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeselect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:141
@@ -40937,10 +40660,9 @@ msgstr "Datum aktualizace"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
-#, fuzzy, kde-format
-#| msgid "For images"
+#, kde-format
 msgid "Storages"
-msgstr "Pro obrázky"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
@@ -40950,10 +40672,9 @@ msgstr "Verze"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:160
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Schema Information"
-msgstr "Informace o dokumentu"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
@@ -40981,10 +40702,9 @@ msgstr "Aktualizace schématu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource View"
-msgstr "Typ zdroje"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:236
@@ -41134,11 +40854,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisregardOpacity)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:76
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Opacity"
+#, kde-format
 msgid "Disregard opacity"
-msgstr "Snížit krytí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:83
@@ -41172,17 +40890,12 @@ msgstr "Rozdělit do místních masek výběru"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:129
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#| "\">Recent files</span></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Split a layer "
 "according to color</span></p><p>Creates a new layer for every color in the "
 "active layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
-"\">Nedávné soubory</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:21
@@ -41477,11 +41190,10 @@ msgstr "Jiný"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #: plugins/extensions/metadataeditor/editors/exif.ui:379
-#, fuzzy, kde-format
-#| msgid "Distance:"
+#, kde-format
 msgctxt "EXIF: autofocus"
 msgid "D&istance range:"
-msgstr "Vzdálenost:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:390
@@ -41534,12 +41246,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:438
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Noise reduction:"
+#, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "No strobe return detection"
-msgstr "Potlačení šumu:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:443
@@ -41855,11 +41565,10 @@ msgstr "Jemně"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSharpness)
 #: plugins/extensions/metadataeditor/editors/exif.ui:739
-#, fuzzy, kde-format
-#| msgid "Hard"
+#, kde-format
 msgctxt "EXIF: postprocessing - sharpness"
 msgid "Hard"
-msgstr "Těžká"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: plugins/extensions/metadataeditor/editors/exif.ui:747
@@ -41884,11 +41593,10 @@ msgstr "Jemně"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editContrast)
 #: plugins/extensions/metadataeditor/editors/exif.ui:768
-#, fuzzy, kde-format
-#| msgid "Hard"
+#, kde-format
 msgctxt "EXIF: postprocessing - contrast"
 msgid "Hard"
-msgstr "Těžká"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_28)
 #: plugins/extensions/metadataeditor/editors/exif.ui:776
@@ -41969,11 +41677,10 @@ msgstr "Model:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_27)
 #: plugins/extensions/metadataeditor/editors/exif.ui:867
-#, fuzzy, kde-format
-#| msgid "Blending mode:"
+#, kde-format
 msgctxt "EXIF: misc"
 msgid "Sens&ing method type:"
-msgstr "Režim mísení:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:878
@@ -42020,12 +41727,10 @@ msgstr "Trilineární čidlo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:913
-#, fuzzy, kde-format
-#| msgctxt "EXIF: misc - sensing method type"
-#| msgid "Trilinear sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Color sequential linear sensor"
-msgstr "Trilineární čidlo"
+msgstr ""
 
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:97
 #, kde-format
@@ -42139,10 +41844,9 @@ msgstr "Vyhlazování"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_feather_selection.ui:21
-#, fuzzy, kde-format
-#| msgid "Outer radius:"
+#, kde-format
 msgid "Feather radius:"
-msgstr "Vnější poloměr:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_grow_selection.ui:24
@@ -42287,10 +41991,9 @@ msgstr "Činnost:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab3)
 #: plugins/extensions/pykrita/plugin/info.ui:163
-#, fuzzy, kde-format
-#| msgid "Configuration:"
+#, kde-format
 msgid "Configuration Pages"
-msgstr "Nastavení:"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, fullName)
 #: plugins/extensions/pykrita/plugin/info.ui:171
@@ -42308,11 +42011,9 @@ msgstr "Strana:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, topics)
 #: plugins/extensions/pykrita/plugin/info.ui:269
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select Normal Blending Mode"
+#, kde-format
 msgid "Select a Plugin or Built-in Module"
-msgstr "Vybrat normální režim mísení"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ExceptHookDialog)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
@@ -42396,10 +42097,9 @@ msgstr "QtScript"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:108
-#, fuzzy, kde-format
-#| msgid "Clear the log"
+#, kde-format
 msgid "Clear The Console"
-msgstr "Vyprázdnit záznam"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:113
@@ -42455,16 +42155,11 @@ msgstr "Ctrl+S"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/manager.ui:21
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#| "\">Recent files</span></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
-"\">Nedávné soubory</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
@@ -42474,19 +42169,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:75
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
 "style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
 "School</span></a>!</p></body></html>"
 msgstr ""
-"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Škola skriptování</span></a></p>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
@@ -42852,26 +42541,21 @@ msgstr "Zd&roje"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Import resource"
+#, kde-format
 msgid "Import a resource library"
-msgstr "Importovat zdroj"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
+#, kde-format
 msgid "Delete a resource library"
-msgstr "Smazat zdroj"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
-#, fuzzy, kde-format
-#| msgid "Create Resource Bundle"
+#, kde-format
 msgid "Create a resource library"
-msgstr "Vytvořit balíček zdrojů"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -42960,18 +42644,15 @@ msgstr "Uložit do:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
-#, fuzzy, kde-format
-#| msgid "Add images..."
+#, kde-format
 msgid "Embed tags..."
-msgstr "Přidat obrázky..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
+#, kde-format
 msgid "Show deleted resources"
-msgstr "Smazat zdroj"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:114
@@ -42987,11 +42668,9 @@ msgstr "Otevřít složku zdrojů"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:128
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
+#, kde-format
 msgid "Create a Bundle"
-msgstr "Vytvořit balíček"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:138
@@ -43003,10 +42682,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:141
-#, fuzzy, kde-format
-#| msgid "Select a Folder"
+#, kde-format
 msgid "Save Tags to Folder"
-msgstr "Vyberte složku"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:234
@@ -43286,10 +42964,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:33
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgid "Button Actions"
-msgstr "Činnosti"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:39
@@ -43331,10 +43008,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Line height"
+#, kde-format
 msgid "Swipe Right"
-msgstr "Tloušťka čáry"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:113
@@ -43344,17 +43020,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:120
-#, fuzzy, kde-format
-#| msgid "Clockwise"
+#, kde-format
 msgid "Circle Clockwise"
-msgstr "Ve směru hodinových ručiček"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:127
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Circle Counterclockwise"
-msgstr "Kruhový obrys"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
@@ -43386,11 +43060,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblWaveletScales)
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:24
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Noise Reduction"
-#| msgid "Wavelets"
+#, kde-format
 msgid "Wavelet scales:"
-msgstr "Vlnky"
+msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
@@ -43418,10 +43090,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblBase)
 #: plugins/filters/asccdl/wdg_asccdl.ui:42
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgid "ASC-CDL  color balance"
-msgstr "Vyvážení barev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPower)
 #: plugins/filters/asccdl/wdg_asccdl.ui:56
@@ -43661,10 +43332,9 @@ msgstr "Práh:"
 
 #. i18n: ectx: property (text), widget (QLabel, samplerLabel)
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
-#, fuzzy, kde-format
-#| msgid "Color name:"
+#, kde-format
 msgid "Color Sampler:"
-msgstr "Název barvy:"
+msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -43849,10 +43519,9 @@ msgstr "Zachovat jas"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupType)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:39
-#, fuzzy, kde-format
-#| msgid "Less saturation "
+#, kde-format
 msgid "Desaturation method:"
-msgstr "Méně nasycení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLightness)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:51
@@ -43910,17 +43579,15 @@ msgstr "Odstín/Sytost/Jas"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:69
-#, fuzzy, kde-format
-#| msgid "Hue/Saturation/Lightness"
+#, kde-format
 msgid "Hue/Saturation/Intensity"
-msgstr "Odstín/Sytost/Jas"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:74
-#, fuzzy, kde-format
-#| msgid "Hue/Saturation/Value"
+#, kde-format
 msgid "Hue/Saturation/Luma"
-msgstr "Odstín/Sytost/Hodnota"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:79
@@ -43960,10 +43627,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPerChannel)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:24
-#, fuzzy, kde-format
-#| msgid "Brightness:"
+#, kde-format
 msgid "BrightnessCon"
-msgstr "Jas:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelIn)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
@@ -43993,10 +43659,9 @@ msgstr "Kanál:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDriverChannel)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:385
-#, fuzzy, kde-format
-#| msgid "&Active Channels"
+#, kde-format
 msgid "Driver channel"
-msgstr "&Aktivní kanály:"
+msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_height to normal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_height to normal), Actions (Filters), ActionCollection (Krita)
@@ -44189,10 +43854,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransparent)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:57
-#, fuzzy, kde-format
-#| msgid "Discard alpha channel"
+#, kde-format
 msgid "Apply result to alpha channel"
-msgstr "Zahodit alfa kanál"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:64
@@ -44358,10 +44022,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Generator"
+#, kde-format
 msgid "Screen Generator"
-msgstr "Generátor"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostprocessing)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostProcessing)
@@ -44375,11 +44038,9 @@ msgstr "Následné zpracování"
 #. i18n: ectx: property (text), widget (QLabel, labelHardness)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:113
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:84
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing"
-#| msgid "Sharpness:"
+#, kde-format
 msgid "Hardness:"
-msgstr "Zaostření:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelInvert)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:130
@@ -44531,10 +44192,9 @@ msgstr "Počet barev:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, indexingBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:170
-#, fuzzy, kde-format
-#| msgid "Index Colors"
+#, kde-format
 msgid "Indexing Factors"
-msgstr "Indexovat barvy"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
@@ -44577,10 +44237,9 @@ msgstr "Úrovně"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLightnessMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Lightness Only:"
+#, kde-format
 msgid "Modify lightness only"
-msgstr "Pouze jas:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
@@ -44590,10 +44249,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAll)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
-#, fuzzy, kde-format
-#| msgid "Reset All"
+#, kde-format
 msgid "Reset channel"
-msgstr "Resetovat vše"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:130
@@ -44603,19 +44261,15 @@ msgstr "<b>Úrovně vstupu</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLinearHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show linear histogram"
-msgstr "Zobrazit historii barev"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLogarithmicHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show logarithmic histogram"
-msgstr "Zobrazit historii barev"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToFit)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:201
@@ -44643,17 +44297,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:404
-#, fuzzy, kde-format
-#| msgid "<b>Input Levels</b>"
+#, kde-format
 msgid "<b>Output Levels</b>"
-msgstr "<b>Úrovně vstupu</b>"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetOutputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:427
-#, fuzzy, kde-format
-#| msgid "Select zoom level"
+#, kde-format
 msgid "Reset output levels"
-msgstr "Vybrat úroveň přiblížení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3_2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:524
@@ -44669,10 +44321,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
-#, fuzzy, kde-format
-#| msgid "All Channels"
+#, kde-format
 msgid "Reset all channels"
-msgstr "Všechny kanály"
+msgstr ""
 
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
 #, kde-format
@@ -44793,24 +44444,21 @@ msgstr "Lab"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:90
-#, fuzzy, kde-format
-#| msgid "Vertical Offset:"
+#, kde-format
 msgid "Per Channel Offset"
-msgstr "Svislý posun:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:95
-#, fuzzy, kde-format
-#| msgid "Text Colors"
+#, kde-format
 msgid "Nearest Colors"
-msgstr "Barvy textu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, alphaModeLabel)
 #: plugins/filters/palettize/palettize.ui:170
-#, fuzzy, kde-format
-#| msgid "Alpha Locked"
+#, kde-format
 msgid "Alpha Mode"
-msgstr "Uzamčená alfa"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, alphaModeComboBox)
 #: plugins/filters/palettize/palettize.ui:181
@@ -44858,10 +44506,9 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:112
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:213
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:286
-#, fuzzy, kde-format
-#| msgid "Reflect"
+#, kde-format
 msgid "Reflectivity:"
-msgstr "Odraz"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpecularShinyExp)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:138
@@ -44953,11 +44600,9 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:595
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:697
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:796
-#, fuzzy, kde-format
-#| msgctxt "Pen tilt declination"
-#| msgid "Declination"
+#, kde-format
 msgid "Inclination:"
-msgstr "Deklinace"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox2)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:526
@@ -45111,10 +44756,9 @@ msgstr "&Práh..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/threshold/wdg_threshold.ui:127
-#, fuzzy, kde-format
-#| msgid "Threshold:"
+#, kde-format
 msgid "Threshold &level:"
-msgstr "Práh:"
+msgstr ""
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
@@ -45152,10 +44796,9 @@ msgstr "Wave"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:52
-#, fuzzy, kde-format
-#| msgid "Horizontal Scale"
+#, kde-format
 msgid "Horizontal Wave"
-msgstr "Vodorovné měřítko"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
@@ -45191,10 +44834,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, Vertical_wave)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:181
-#, fuzzy, kde-format
-#| msgid "Vertical Scale"
+#, kde-format
 msgid "Vertical Wave"
-msgstr "Svislé měřítko"
+msgstr ""
 
 #: plugins/flake/imageshape/ImageShapeFactory.cpp:24
 #, kde-format
@@ -45744,12 +45386,10 @@ msgstr "Šířka čáry:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbConnector)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:70
-#, fuzzy, kde-format
-#| msgctxt "Connector line color"
-#| msgid "Connector:"
+#, kde-format
 msgctxt "Connector Lines in Multigridpattern"
 msgid "Connector Lines"
-msgstr "Konektor:"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
@@ -45775,10 +45415,9 @@ msgstr "Konektor:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbColors)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:146
-#, fuzzy, kde-format
-#| msgid "Color Selector"
+#, kde-format
 msgid "Color Factors"
-msgstr "Paleta barev"
+msgstr ""
 
 #: plugins/generators/pattern/patterngenerator.cpp:113
 #, kde-format
@@ -45803,24 +45442,21 @@ msgstr "Zkosit:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
 #: plugins/generators/pattern/wdgpatternoptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "3d Rotation:"
-msgstr "Rotace:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/generators/pattern/wdgpatternoptions.ui:314
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "X-Rotation:"
-msgstr "Rotace:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/generators/pattern/wdgpatternoptions.ui:321
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Y-Rotation:"
-msgstr "Rotace:"
+msgstr ""
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:62
@@ -45917,20 +45553,17 @@ msgstr "Žádný"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationFunctionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:157
-#, fuzzy, kde-format
-#| msgctxt "EXIF: flash"
-#| msgid "Function"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Function Based"
-msgstr "Funkce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationTemplateBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:173
-#, fuzzy, kde-format
-#| msgid "templates"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Template Based"
-msgstr "šablony"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransformation)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:204
@@ -45940,24 +45573,21 @@ msgstr "Transformace"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSizeMode)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:245
-#, fuzzy, kde-format
-#| msgid "Scaling Mode:"
+#, kde-format
 msgid "Size Mode:"
-msgstr "Režim změny měřítka"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModeResolutionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:257
-#, fuzzy, kde-format
-#| msgid "Resolution:"
+#, kde-format
 msgid "Resolution based"
-msgstr "Rozlišení:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModePixelBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:273
-#, fuzzy, kde-format
-#| msgid "Pixels"
+#, kde-format
 msgid "Pixel based"
-msgstr "Pixely"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
@@ -45974,11 +45604,9 @@ msgstr "Centimetry"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonResolutionFromImage)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:353
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Image"
+#, kde-format
 msgid "Get From Image"
-msgstr "Ořezat obrázek"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_frequency)
 #. i18n: ectx: property (text), widget (QLabel, labelFrequency)
@@ -45990,10 +45618,9 @@ msgstr "Frekvence:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
-#, fuzzy, kde-format
-#| msgid "Pixel Grid:"
+#, kde-format
 msgid "Align to Pixel Grid:"
-msgstr "Mřížka pixelů:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelPosition)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:586
@@ -46185,10 +45812,9 @@ msgstr "Možnosti"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
 #: plugins/generators/seexpr/wdgseexpr.ui:237
-#, fuzzy, kde-format
-#| msgid "Save New Brush Preset..."
+#, kde-format
 msgid "Save New SeExpr Preset..."
-msgstr "Uložit nové přednastavení štětce..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: plugins/generators/seexpr/wdgseexpr.ui:244
@@ -46226,10 +45852,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, seed_groupbox)
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:91
-#, fuzzy, kde-format
-#| msgid "Use custom interface font"
+#, kde-format
 msgid "Use Custom Seed"
-msgstr "Použít vlastní písmo prostředí"
+msgstr ""
 
 #: plugins/generators/solid/colorgenerator.cpp:44
 #, kde-format
@@ -46328,10 +45953,9 @@ msgstr "Vytvořit masku z barvy"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/brush/wdg_export_gih.ui:66
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
-#, fuzzy, kde-format
-#| msgid "Brush Shape"
+#, kde-format
 msgid "Brush Style"
-msgstr "Tvary štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
@@ -46416,10 +46040,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkFlatten)
 #: plugins/impex/exr/exr_export_widget.ui:30
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:147
-#, fuzzy, kde-format
-#| msgid "Flatten the image"
+#, kde-format
 msgid "Flatten the &image"
-msgstr "Zploštit obraz"
+msgstr ""
 
 #: plugins/impex/heif/HeifError.cpp:37
 #, kde-format
@@ -46564,10 +46187,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossySettings)
 #: plugins/impex/heif/WdgHeifExport.ui:21
-#, fuzzy, kde-format
-#| msgid "Advanced Blending"
+#, kde-format
 msgid "Lossy Advanced Settings"
-msgstr "Pokročilé mísení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, qualityLabel)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
@@ -46579,20 +46201,17 @@ msgstr "Kvalita:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/heif/WdgHeifExport.ui:47
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Chrominance:"
+#, kde-format
 msgid "Chroma:"
-msgstr "Barevnost:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, conversionSettings)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/impex/heif/WdgHeifExport.ui:57
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:250
-#, fuzzy, kde-format
-#| msgid "Canvas-only settings"
+#, kde-format
 msgid "Conversion settings"
-msgstr "Nastavení pro Pouze plátno"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:69
@@ -46606,20 +46225,18 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, spaceLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:79
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:269
-#, fuzzy, kde-format
-#| msgid "Replace:"
+#, kde-format
 msgid "Space:"
-msgstr "Nahradit:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: plugins/impex/heif/WdgHeifExport.ui:96
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:298
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
 "from PQ.</p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
 #: plugins/impex/heif/WdgHeifExport.ui:113
@@ -46750,10 +46367,9 @@ msgstr "Velikost souboru (v bajtech)"
 
 #. i18n: ectx: property (text), widget (QLabel, endiannessLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:56
-#, fuzzy, kde-format
-#| msgid "Exactness:"
+#, kde-format
 msgid "Endianness:"
-msgstr "Přesnost:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioLittle)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:65
@@ -46789,10 +46405,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, guessButton)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:105
-#, fuzzy, kde-format
-#| msgid "Dimensions"
+#, kde-format
 msgid "Guess dimensions"
-msgstr "Rozměry"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, heightInput)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:132
@@ -46808,10 +46423,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, bppDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:182
-#, fuzzy, kde-format
-#| msgid "White Pixel"
+#, kde-format
 msgid "Bits per pixel:"
-msgstr "Bílý Pixel"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/impex/jp2/kis_wdg_options_jp2.ui:23
@@ -46858,20 +46472,18 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:88
-#, fuzzy, kde-format
-#| msgid "Transparent color: "
+#, kde-format
 msgid "Transparent pixel fill color:"
-msgstr "Průhledná barva: "
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisColorButton, bnTransparencyFillColor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:110
 #: plugins/impex/png/kis_wdg_options_png.ui:77
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Background color to replace transparent pixels with.</"
 "p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProfile)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:132
@@ -46974,10 +46586,9 @@ msgstr ""
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:872
 #: plugins/impex/webp/kis_wdg_options_webp.ui:797
-#, fuzzy, kde-format
-#| msgid "Multiple Document Mode:"
+#, kde-format
 msgid "Store Document Metadata"
-msgstr "Režim pro více dokumentů:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:343
@@ -46997,10 +46608,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:927
-#, fuzzy, kde-format
-#| msgid "Active Author Profile"
+#, kde-format
 msgid "Sign with Author Profile Data"
-msgstr "Aktivní profil autora"
+msgstr ""
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:426
 #, kde-format
@@ -47301,10 +46911,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, the image will be saved losslessly."
+#, kde-format
 msgid "If this is not enabled, only the first frame will be saved."
-msgstr "Pokud je tato volba není zapnuta, bude obrázek uložen bezeztrátově."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -47316,10 +46925,9 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:47
 #: plugins/impex/webp/kis_wdg_options_webp.ui:44
-#, fuzzy, kde-format
-#| msgid "Scaling Options"
+#, kde-format
 msgid "Encoding options"
-msgstr "Možnosti změny měřítka"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
@@ -47411,11 +47019,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowest)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:186
-#, fuzzy, kde-format
-#| msgctxt "The file will save fast but will not be compressed a lot"
-#| msgid "Lowest quality"
+#, kde-format
 msgid "Slowest/Best quality"
-msgstr "Nejnižší kvalita"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowerBetter2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:193
@@ -47459,20 +47065,16 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Změnit parametr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Color Range Selection"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
-msgstr "Výběr rozsahu barev"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:358
@@ -47517,11 +47119,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:404
-#, fuzzy, kde-format
-#| msgid "Generate"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate dots"
-msgstr "Vygenerovat"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:411
@@ -47531,11 +47132,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
-#, fuzzy, kde-format
-#| msgid "Generate"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
-msgstr "Vygenerovat"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:425
@@ -47551,10 +47151,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:453
-#, fuzzy, kde-format
-#| msgid "Maximum Height"
+#, kde-format
 msgid "Maximum strength"
-msgstr "Maximální výška"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:470
@@ -47579,18 +47178,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:505
-#, fuzzy, kde-format
-#| msgid "Lossy encoding"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular encoding"
-msgstr "Ztrátové kódování"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:512
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Enables modular encoding."
-msgstr "Povolit malbu dotykem"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:519
@@ -47628,11 +47225,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "VarDCT parameters"
-msgstr "Změnit parametr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:564
@@ -47652,20 +47247,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:581
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "animation"
+#, kde-format
 msgid "Quantization"
-msgstr "animace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:595
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgid "Low resolution DC"
-msgstr "Rozlišení X:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:602
@@ -47675,19 +47265,15 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:610
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Modular parameters"
-msgstr "Změnit parametr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:616
-#, fuzzy, kde-format
-#| msgctxt "A progressive jpeg file can be displayed while loading."
-#| msgid "Progressive"
+#, kde-format
 msgid "Progressive encoding"
-msgstr "Progresivní"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:623
@@ -47744,11 +47330,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:770
-#, fuzzy, kde-format
-#| msgid "Choose palette"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
-msgstr "Zvolte paletu"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:777
@@ -47758,11 +47343,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:784
-#, fuzzy, kde-format
-#| msgid "Drop size"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group size"
-msgstr "Velikost kapek"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:791
@@ -47778,11 +47362,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:805
-#, fuzzy, kde-format
-#| msgid "Project directory:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Predictor"
-msgstr "Adresář projektu:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:812
@@ -48283,10 +47866,9 @@ msgstr "Strana %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, PDFImportWidgetBase)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:18
-#, fuzzy, kde-format
-#| msgid "Imported Image"
+#, kde-format
 msgid "PDFImportWidget"
-msgstr "Importovaný obrázek"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:24
@@ -48308,10 +47890,9 @@ msgstr "&První strana"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolSelectionPage)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:47
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgid "Selec&tion of page"
-msgstr "Režim označování"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intResolution)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:304
@@ -48398,18 +47979,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/png/kis_wdg_options_png.ui:87
-#, fuzzy, kde-format
-#| msgid "Metadata"
+#, kde-format
 msgid "Store Metadata"
-msgstr "Metadata"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/png/kis_wdg_options_png.ui:98
-#, fuzzy, kde-format
-#| msgid "File size:"
+#, kde-format
 msgctxt "The file will save fast but will not be compressed a lot"
 msgid "Large file size"
-msgstr "Velikost souboru:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, tryToSaveAsIndexed)
 #: plugins/impex/png/kis_wdg_options_png.ui:112
@@ -48506,10 +48085,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197
-#, fuzzy, kde-format
-#| msgid "Edit profile"
+#, kde-format
 msgid "Embed sRGB profile"
-msgstr "Upravit profil"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAuthor)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
@@ -49497,11 +49075,10 @@ msgstr "Typ komprese"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:56
-#, fuzzy, kde-format
-#| msgid "Project directory:"
+#, kde-format
 msgctxt "TIFF encoder options"
 msgid "Predictor"
-msgstr "Adresář projektu:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kComboBoxPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:69
@@ -49568,10 +49145,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxDeflate)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:329
-#, fuzzy, kde-format
-#| msgid "JPEG Compression Options"
+#, kde-format
 msgid "Deflate Compression Options"
-msgstr "Možnosti komprese JPEG"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -49597,10 +49173,9 @@ msgstr "Malá"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxPixarLog)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:441
-#, fuzzy, kde-format
-#| msgid "JPEG Compression Options"
+#, kde-format
 msgid "Pixar Log Compression Options"
-msgstr "Možnosti komprese JPEG"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFast_2)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:473
@@ -49708,10 +49283,9 @@ msgstr "Přednastavení"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:60
-#, fuzzy, kde-format
-#| msgid "Lossy encoding"
+#, kde-format
 msgid "Lossless encoding"
-msgstr "Ztrátové kódování"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQuality)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, quality)
@@ -49770,19 +49344,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:234
-#, fuzzy, kde-format
-#| msgid "Target Size"
+#, kde-format
 msgid "Target PSNR"
-msgstr "Cílová velikost"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSegments)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
-#| msgid "Maximum Number of Brush Presets:"
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "Maximální počet přednastavení štětců:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -49800,10 +49372,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:295
-#, fuzzy, kde-format
-#| msgid "Strength"
+#, kde-format
 msgid "SNS Strength"
-msgstr "Síla"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
@@ -49854,11 +49425,9 @@ msgstr "Filtrovat typ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAutofilter)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:378
-#, fuzzy, kde-format
-#| msgctxt "Filter options specifically for WebP"
-#| msgid "Filter Strength"
+#, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr "Filtrovat sílu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -49888,10 +49457,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:395
-#, fuzzy, kde-format
-#| msgid "Layer compression"
+#, kde-format
 msgid "Alpha Plane Compression"
-msgstr "Komprese vrstev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:405
@@ -49918,10 +49486,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:456
-#, fuzzy, kde-format
-#| msgid "Advanced quality"
+#, kde-format
 msgid "Alpha Plane Quality"
-msgstr "Pokročilá kvalita"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
@@ -49949,18 +49516,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:517
-#, fuzzy, kde-format
-#| msgid "Compress:"
+#, kde-format
 msgid "Show Compressed"
-msgstr "Komprimovat:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:534
-#, fuzzy, kde-format
-#| msgid "Processing"
+#, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
-msgstr "Zpracování"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
@@ -49990,25 +49555,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:567
-#, fuzzy, kde-format
-#| msgid "Partitions"
+#, kde-format
 msgid "Partition Limit"
-msgstr "Oddíly disků"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:576
-#, fuzzy, kde-format
-#| msgid "Maximum Height"
+#, kde-format
 msgid "Maximum degradation"
-msgstr "Maximální výška"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:586
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Negation"
-#| msgid "Negation"
+#, kde-format
 msgid "No degradation"
-msgstr "Negace"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
@@ -50037,10 +49598,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:634
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multithreaded Encoding"
-msgstr "Práce s vlákny"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
@@ -50066,10 +49626,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:674
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Near Lossless"
-msgstr "Bezeztrátový"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
@@ -50112,10 +49671,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:740
-#, fuzzy, kde-format
-#| msgid "Quality"
+#, kde-format
 msgid "Minimum Quality"
-msgstr "Kvalita"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
@@ -50127,10 +49685,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:763
-#, fuzzy, kde-format
-#| msgid "Maximum Width"
+#, kde-format
 msgid "Maximum Quality"
-msgstr "Maximální šířka"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
@@ -50377,19 +49934,16 @@ msgstr "Velikost historie:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:39
-#, fuzzy, kde-format
-#| msgid "Outline opacity:"
+#, kde-format
 msgid "Curves opacity:"
-msgstr "Krytí obrysové čáry:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, connectionCHBox)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:52
 #: plugins/paintops/sketch/wdgsketchoptions.ui:141
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Pin to Timeline"
+#, kde-format
 msgid "Paint connection line"
-msgstr "Připnout k časové ose"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, smoothingCHBox)
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:59
@@ -50455,11 +50009,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:48
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
+#, kde-format
 msgid "Source point move"
-msgstr "Nastavit typ bodu"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbResetSourcePoint)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:58
@@ -50689,24 +50241,21 @@ msgstr "Klikatá výplň"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hardEdgeCHBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:123
-#, fuzzy, kde-format
-#| msgid "Hard"
+#, kde-format
 msgid "Hard edge"
-msgstr "Těžká"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, fillStylGroupBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:138
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Fill Style"
-msgstr "Styl písma"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, patternButton)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:166
-#, fuzzy, kde-format
-#| msgid "Fill Patterns"
+#, kde-format
 msgid "Global Pattern"
-msgstr "Vyplňovací vzory"
+msgstr ""
 
 #: plugins/paintops/filterop/filterop.cpp:31
 #, kde-format
@@ -50752,10 +50301,9 @@ msgstr "Svislý okraj:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, divisionPressureCHBox)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:68
-#, fuzzy, kde-format
-#| msgid "Divisions:"
+#, kde-format
 msgid "Division by pressure"
-msgstr "Oblasti:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
@@ -50783,10 +50331,9 @@ msgstr "Šířka mřížky:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:121
-#, fuzzy, kde-format
-#| msgid "Divisions:"
+#, kde-format
 msgid "Division level:"
-msgstr "Oblasti:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, jitterBorderCHBox)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:131
@@ -50855,11 +50402,9 @@ msgstr "Tlak myši:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:191
-#, fuzzy, kde-format
-#| msgctxt "Connector line color"
-#| msgid "Connector:"
+#, kde-format
 msgid "Connect hairs:"
-msgstr "Konektor:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:198
@@ -50869,10 +50414,9 @@ msgstr "Vyhlazování:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:205
-#, fuzzy, kde-format
-#| msgid "Compositions"
+#, kde-format
 msgid "Composite bristles:"
-msgstr "Kompozice"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, brushTab)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:37
@@ -50958,18 +50502,16 @@ msgstr "Množství inkoustu"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:335
 #: plugins/paintops/hairy/wdgInkOptions.ui:135
-#, fuzzy, kde-format
-#| msgid "Animation Curves"
+#, kde-format
 msgid "Ink Depletion Curve"
-msgstr "Křivky animace"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, weightGroup)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:347
 #: plugins/paintops/hairy/wdgInkOptions.ui:158
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgid "Saturation Weights"
-msgstr "Nasycení: "
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSlider, pressureSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:359
@@ -51029,10 +50571,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/hairy/wdgInkOptions.ui:171
-#, fuzzy, kde-format
-#| msgid "Pressure Weight:"
+#, kde-format
 msgid "Bristle Ink Weight:"
-msgstr "Síla přítlaku:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hairy/wdgInkOptions.ui:178
@@ -51103,19 +50644,15 @@ msgstr "Oddělení:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:148
-#, fuzzy, kde-format
-#| msgctxt "Origin in Multihand Tool"
-#| msgid "Origin:"
+#, kde-format
 msgid "Origin X:"
-msgstr "Původ:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:186
-#, fuzzy, kde-format
-#| msgctxt "Origin in Multihand Tool"
-#| msgid "Origin:"
+#, kde-format
 msgid "Origin Y:"
-msgstr "Původ:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
@@ -51155,17 +50692,15 @@ msgstr "Vzorek &moiré"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384
-#, fuzzy, kde-format
-#| msgid "Separation"
+#, kde-format
 msgid "Separation Style"
-msgstr "Oddělení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:396
-#, fuzzy, kde-format
-#| msgid "Autosave Interval:"
+#, kde-format
 msgid "Input-based intervals:"
-msgstr "Interval automatického ukládání:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:30
@@ -51181,17 +50716,15 @@ msgstr "Vyhlazované čáry"
 
 #. i18n: ectx: property (text), widget (QCheckBox, subpixelPrecisionCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:46
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subpixel precision"
-msgstr "Další členění:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, opaqueBackgroundCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:56
-#, fuzzy, kde-format
-#| msgid "Fill background"
+#, kde-format
 msgid "Color background"
-msgstr "Vyplnit pozadí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, rateLbl)
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:41
@@ -51201,10 +50734,9 @@ msgstr "Míra:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxIgnoreSpacing)
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:76
-#, fuzzy, kde-format
-#| msgid "Letter Spacing"
+#, kde-format
 msgid "Override Spacing"
-msgstr "Rozestupy znaků"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaskType)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:69
@@ -51278,10 +50810,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, jitterMoveBox)
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:53
-#, fuzzy, kde-format
-#| msgid "Jitter borders"
+#, kde-format
 msgid "Jitter Movement"
-msgstr "Okraje chvění"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLbl)
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:185
@@ -51297,19 +50828,17 @@ msgstr "Zachovat alfu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
-#, fuzzy, kde-format
-#| msgid "Random"
+#, kde-format
 msgid "Random HSV"
-msgstr "Náhodné"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHbox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:104
 #: plugins/paintops/sketch/wdgsketchoptions.ui:155
-#, fuzzy, kde-format
-#| msgid "Random Noise"
+#, kde-format
 msgid "Random opacity"
-msgstr "Náhodný šum"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, colorPerParticleCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:122
@@ -51340,11 +50869,9 @@ msgstr "Vzorová vstupní vrstva"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mixBgColorCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Fill with Background Color"
+#, kde-format
 msgid "Mix with background color"
-msgstr "Vyplnit barvou pozadí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:41
@@ -51368,19 +50895,17 @@ msgstr "Následující režimy mísení"
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:52
 #: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:52
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:57
-#, fuzzy, kde-format
-#| msgid "Tablet settings"
+#, kde-format
 msgid "Enable Pen Settings"
-msgstr "Nastavení tabletu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, yRangeLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:464
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:469
-#, fuzzy, kde-format
-#| msgid "Range:"
+#, kde-format
 msgid "Y Range:"
-msgstr "Rozsah:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, toLabel2)
 #. i18n: ectx: property (text), widget (QLabel, toLabel1)
@@ -51423,10 +50948,9 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:524
 #: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:427
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:529
-#, fuzzy, kde-format
-#| msgid "Selection mode:"
+#, kde-format
 msgid "Curves calculation mode:"
-msgstr "Režim výběru:"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:544
@@ -51480,17 +51004,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:586
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:591
-#, fuzzy, kde-format
-#| msgid "Range:"
+#, kde-format
 msgid "X Range:"
-msgstr "Rozsah:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, fuzzy, kde-format
-#| msgid "Preserve alpha"
+#, kde-format
 msgid "Preserve alpha channel"
-msgstr "Zachovat alfu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
@@ -51555,32 +51077,27 @@ msgstr "Razítko"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgid "Current Brush Tip"
-msgstr "Současné přednastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
-#, fuzzy, kde-format
-#| msgid "Brush Settings"
+#, kde-format
 msgid "Brush Details"
-msgstr "Nastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, fuzzy, kde-format
-#| msgid "Brush Settings"
+#, kde-format
 msgid "Preserve Brush Preset Settings"
-msgstr "Nastavení štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
-#, fuzzy, kde-format
-#| msgctxt "Predefined Brush tip mode"
-#| msgid "Predefined"
+#, kde-format
 msgid "Reset Predefined Tip"
-msgstr "Předdefinováno"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
@@ -51591,11 +51108,9 @@ msgstr "Režim štětce"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
-#, fuzzy, kde-format
-#| msgctxt "The 'adjustments' section label in selection tools options"
-#| msgid "Adjustments"
+#, kde-format
 msgid "Reset Adjustments"
-msgstr "Přizpůsobení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFont)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:72
@@ -51623,26 +51138,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:174
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgid "Pipe mode"
-msgstr "Jednoduchý režim"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:144
-#, fuzzy, kde-format
-#| msgctxt "Texture lightness range cutoff range slider"
-#| msgid "Cutoff:"
+#, kde-format
 msgid "Cutoff Policy:"
-msgstr "Bod zkrácení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblDensity)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:160
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "Meterin&g mode:"
+#, kde-format
 msgid "Texturing Mode:"
-msgstr "&Režim měření"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
@@ -51653,10 +51163,9 @@ msgstr "Bod zkrácení"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:199
-#, fuzzy, kde-format
-#| msgid "White Point:"
+#, kde-format
 msgid "Neutral Point:"
-msgstr "Bílý bod:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:222
@@ -51666,11 +51175,9 @@ msgstr "Vodorovný posuv:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:238
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/fractal_pattern.pat"
-#| msgid "Fractal Pattern"
+#, kde-format
 msgid "Invert Pattern"
-msgstr "Fraktálový vzor"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
@@ -52773,10 +52280,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Radius Logarithmic:"
-msgstr "Logaritmický"
+msgstr ""
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
 #, kde-format
@@ -52827,10 +52333,9 @@ msgstr "Částice:"
 
 #. i18n: ectx: property (text), widget (QLabel, opacity)
 #: plugins/paintops/particle/wdgparticleoptions.ui:79
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgid "Opacity weight:"
-msgstr "Krytí:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_5)
 #: plugins/paintops/particle/wdgparticleoptions.ui:108
@@ -52886,11 +52391,9 @@ msgstr "Náčrt"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgid "Offset scale:"
-msgstr "Posunout vrstvu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceDensityCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:114
@@ -52912,17 +52415,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRGBCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
-#, fuzzy, kde-format
-#| msgid "Random"
+#, kde-format
 msgid "Random RGB"
-msgstr "Náhodné"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceOpacityCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:169
-#, fuzzy, kde-format
-#| msgid "Outline opacity:"
+#, kde-format
 msgid "Distance opacity"
-msgstr "Krytí obrysové čáry:"
+msgstr ""
 
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:133
 #, kde-format
@@ -53131,11 +52632,10 @@ msgstr "Mezery:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
-#, fuzzy, kde-format
-#| msgid "Jitter borders"
+#, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr "Okraje chvění"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
@@ -53371,19 +52871,17 @@ msgstr "- Z"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TiltOptions)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:219
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Tilt Options"
-msgstr "Možnosti nástrojů"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:227
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use the tilt of the tablet to determine the normals.</"
 "p></body></html>"
-msgstr "<html><head/><body><p>Popis činnosti</p></body></html>"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:230
@@ -53426,18 +52924,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
-#, fuzzy, kde-format
-#| msgctxt "Drawing Angle"
-#| msgid "Direction"
+#, kde-format
 msgid "Direction/Tilt Mix"
-msgstr "Směr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, L_elevation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
-#, fuzzy, kde-format
-#| msgid "Sensitivity"
+#, kde-format
 msgid "Elevation Sensitivity"
-msgstr "Citlivost"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, L_mix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:291
@@ -55077,10 +54572,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/python/krita_script_starter/bbdkss.ui:54
-#, fuzzy, kde-format
-#| msgid "Type of script:"
+#, kde-format
 msgid "Name of Script:"
-msgstr "Typ skriptu:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_name_of_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:67
@@ -55099,19 +54593,12 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_menu_entry)
 #: plugins/python/krita_script_starter/bbdkss.ui:81
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>This will appear in the &quot;comment&quot; entry "
-#| "in the dialog where a user can enable or disable Krita scripts. </p></"
-#| "body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>What you want to appear in the Tools-&gt; Scripts "
 "menu. If you leave this blank a default entry will be created based on the "
 "name of the script. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>Toto se objeví v záznamu &quot;komentáře&quot; v "
-"dialogu, kde uživatel může povolit nebo zakázat skripty aplikace Krita. </"
-"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/python/krita_script_starter/bbdkss.ui:92
@@ -55273,17 +54760,15 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
-#, fuzzy, kde-format
-#| msgid "Filter by name..."
+#, kde-format
 msgid "Filter images by words..."
-msgstr "Filtrovat podle názvu..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
-#, fuzzy, kde-format
-#| msgid "Rotate Canvas"
+#, kde-format
 msgid "Scale To Canvas"
-msgstr "Otočit plátno"
+msgstr ""
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
@@ -56361,10 +55846,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgid "Color Sampler"
-msgstr "Barevné prostředí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, blendLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:29
@@ -56398,10 +55882,9 @@ msgstr "Vzorkovat všechny viditelné vrstvy"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:87
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Sample Current Layer"
-msgstr "Aktuální vrstva"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
 #: plugins/tools/basictools/wdgcolorsampler.ui:95
@@ -56467,10 +55950,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:238
-#, fuzzy, kde-format
-#| msgid "Update now!"
+#, kde-format
 msgid "Update color"
-msgstr "Aktualizovat nyní."
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:27
@@ -56514,17 +55996,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:62
-#, fuzzy, kde-format
-#| msgid "Move into next group"
+#, kde-format
 msgid "Move &the whole group"
-msgstr "Přesunout do další skupiny"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:78
-#, fuzzy, kde-format
-#| msgid "Save Shortcuts"
+#, kde-format
 msgid "Move Shortcut"
-msgstr "Uložit zkratky"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveScale)
 #: plugins/tools/basictools/wdgmovetool.ui:90
@@ -56597,11 +56077,9 @@ msgstr "&y:"
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowCoordinates)
 #: plugins/tools/basictools/wdgmovetool.ui:304
 #: plugins/tools/basictools/wdgmovetool.ui:307
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Coordinates"
+#, kde-format
 msgid "Show coordinates on canvas"
-msgstr "Zobrazit souřadnice"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, brushesLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
@@ -56611,10 +56089,9 @@ msgstr "Štětce:"
 
 #. i18n: ectx: property (text), widget (QLabel, subbrushLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:74
-#, fuzzy, kde-format
-#| msgid "Brushes:"
+#, kde-format
 msgid "Subbrushes:"
-msgstr "Štětce:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87
@@ -56765,10 +56242,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
-#, fuzzy, kde-format
-#| msgid "Anchor Points"
+#, kde-format
 msgid "Anchor Lock"
-msgstr "Body kotvy"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
@@ -56783,10 +56259,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Layer Styles"
+#, kde-format
 msgid "Scale Styles"
-msgstr "Styly vrstvy"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:218
@@ -56802,10 +56277,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
-#, fuzzy, kde-format
-#| msgid "Polar Coordinates"
+#, kde-format
 msgid "Global Coordinates"
-msgstr "Polární souřadnice"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:25
 #, kde-format
@@ -56948,10 +56422,9 @@ msgstr "Umístění ukládaných souborů:"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
-#, fuzzy, kde-format
-#| msgid "Select an image"
+#, kde-format
 msgid "Add/Select an image to show options"
-msgstr "Vyberte obrázek"
+msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -58073,17 +57546,15 @@ msgstr "SVG"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkVertical)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:81
-#, fuzzy, kde-format
-#| msgid "Vertical Shear"
+#, kde-format
 msgid "Vertical Text Layout"
-msgstr "Svislé zkosení"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
-#, fuzzy, kde-format
-#| msgid "Editor"
+#, kde-format
 msgid "Editor Mode"
-msgstr "Editor"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:31
@@ -58093,10 +57564,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRichText)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:41
-#, fuzzy, kde-format
-#| msgid "Text Only"
+#, kde-format
 msgid "Rich Te&xt Only"
-msgstr "Pouze text"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
@@ -58137,18 +57607,15 @@ msgstr "Hodnota"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:224
-#, fuzzy, kde-format
-#| msgid "Edit Text"
+#, kde-format
 msgid "Editor text color"
-msgstr "Upravit text"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:234
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set background"
+#, kde-format
 msgid "Editor background:"
-msgstr "Nastavit pozadí"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:260
@@ -58288,10 +57755,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockWidthButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:333
-#, fuzzy, kde-format
-#| msgid "Lock the height"
+#, kde-format
 msgid "Lock the width"
-msgstr "Uzamknout výšku"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockHeightButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:346
@@ -58301,10 +57767,9 @@ msgstr "Uzamknout výšku"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockRatioButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:359
-#, fuzzy, kde-format
-#| msgid "Keep aspect ratio"
+#, kde-format
 msgid "Lock the aspect ratio"
-msgstr "Zachovat poměr stran"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:405
@@ -58326,10 +57791,9 @@ msgstr "Oř&ez"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:430
-#, fuzzy, kde-format
-#| msgid "Application: "
+#, kde-format
 msgid "Applies to:"
-msgstr "Aplikace: "
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:446
@@ -58636,10 +58100,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
-#, fuzzy, kde-format
-#| msgid "Auto Update"
+#, kde-format
 msgid "Auto updates"
-msgstr "Automaticky aktualizovat"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
@@ -58649,10 +58112,9 @@ msgstr "Aktualizovat"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
-#, fuzzy, kde-format
-#| msgid "Edit presets"
+#, kde-format
 msgid "Edit key strokes"
-msgstr "Upravit přednastavení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowOutput)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:46
@@ -58668,11 +58130,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Option Category"
-#| msgid "Stroke"
+#, kde-format
 msgid "Key Strokes"
-msgstr "Tah"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTransparent)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:149
@@ -58749,21 +58209,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 preset name, check simplescreenrecorder for standard translations"
-#| msgid "fast"
+#, kde-format
 msgid "low/fast"
-msgstr "rychlé"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Accurate)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:50
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 preset name, check simplescreenrecorder for standard translations"
-#| msgid "slow"
+#, kde-format
 msgid "high/slow"
-msgstr "pomalu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Fast_2)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:98
@@ -58773,10 +58227,9 @@ msgstr "Přesnost:"
 
 #. i18n: ectx: property (text), widget (QLabel, patchRadiusLabel)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:115
-#, fuzzy, kde-format
-#| msgid "Radius:"
+#, kde-format
 msgid "Patch Radius:"
-msgstr "Poloměr:"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
@@ -59052,10 +58505,9 @@ msgstr "Přesná"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:69
-#, fuzzy, kde-format
-#| msgid "Instant Preview"
+#, kde-format
 msgid "Accurate with Instant Preview"
-msgstr "Okamžitý náhled"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
@@ -59067,10 +58519,9 @@ msgstr "Volné"
 #. i18n: ectx: property (text), widget (QLabel, lblTransformType)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:127
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:292
-#, fuzzy, kde-format
-#| msgid "Transform"
+#, kde-format
 msgid "Free Transform"
-msgstr "Transformovat"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, warpButton)
 #. i18n: ectx: property (text), widget (QToolButton, warpButton)
@@ -59190,10 +58641,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:886
-#, fuzzy, kde-format
-#| msgid "Grid height:"
+#, kde-format
 msgid "Camera height:"
-msgstr "Výška mřížky:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
@@ -59293,10 +58743,9 @@ msgstr "Body kotvy"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdi&vide"
-msgstr "Další členění:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1577
@@ -59312,17 +58761,15 @@ msgstr "Smazat body"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1663
-#, fuzzy, kde-format
-#| msgid "Anchor Points"
+#, kde-format
 msgid "Add/Ed&it Anchor Points"
-msgstr "Body kotvy"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1679
-#, fuzzy, kde-format
-#| msgid "No Selection"
+#, kde-format
 msgid "Defor&m Selection"
-msgstr "Žádný výběr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
@@ -59365,25 +58812,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2153
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgid "Mesh size"
-msgstr "Velikost štětce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
-#, fuzzy, kde-format
-#| msgid "Show guides"
+#, kde-format
 msgid "Show handles"
-msgstr "Zobrazit vodítka"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
-#, fuzzy, kde-format
-#| msgctxt "the gradient will be drawn as a symmetric cone"
-#| msgid "Conical Symmetric"
+#, kde-format
 msgid "Lock handles symmetrically"
-msgstr "Symetricky kónický"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196

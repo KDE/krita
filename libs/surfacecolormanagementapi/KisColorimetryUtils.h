@@ -13,6 +13,8 @@
 #include <boost/operators.hpp>
 #include <QDebug>
 
+#include <kritasurfacecolormanagementapi_export.h>
+
 namespace KisColorimetryUtils
 {
 
@@ -26,7 +28,7 @@ struct XYZ;
 /**
  * xyY, with Y unspecified
  */
-struct xy {
+struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT xy {
     double x;
     double y;
 
@@ -35,7 +37,7 @@ struct xy {
     bool operator==(const xy &other) const;
 };
 
-struct xyY {
+struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT xyY {
     double x;
     double y;
     double Y;
@@ -44,7 +46,7 @@ struct xyY {
     bool operator==(const xyY &other) const;
 };
 
-struct XYZ {
+struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT XYZ {
     double X;
     double Y;
     double Z;
@@ -65,7 +67,7 @@ struct XYZ {
  * Red, green and blue define the chromaticities ("absolute colors") of the red, green and blue LEDs on a display in xy coordinates
  * White defines the the chromaticity of the reference white in xy coordinates
  */
-class Colorimetry
+class KRITASURFACECOLORMANAGEMENTAPI_EXPORT Colorimetry
 {
 public:
     static const Colorimetry BT709;
@@ -142,10 +144,10 @@ private:
     QMatrix4x4 m_fromXYZ;
 };
 
-QDebug operator<<(QDebug debug, const xy &value);
-QDebug operator<<(QDebug debug, const xyY &value);
-QDebug operator<<(QDebug debug, const XYZ &value);
-QDebug operator<<(QDebug debug, const Colorimetry &value);
+KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const xy &value);
+KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const xyY &value);
+KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const XYZ &value);
+KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const Colorimetry &value);
 
 } // namespace KisColorimetryUtils
 

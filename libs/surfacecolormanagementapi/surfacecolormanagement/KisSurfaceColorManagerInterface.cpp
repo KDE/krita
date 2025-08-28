@@ -6,8 +6,9 @@
 
 #include "KisSurfaceColorManagerInterface.h"
 
-KisSurfaceColorManagerInterface::KisSurfaceColorManagerInterface(QWindow *window)
-    : m_window(window)
+KisSurfaceColorManagerInterface::KisSurfaceColorManagerInterface(QWindow *window, QObject *parent)
+    : QObject(parent)
+    , m_window(window)
 {
 }
 

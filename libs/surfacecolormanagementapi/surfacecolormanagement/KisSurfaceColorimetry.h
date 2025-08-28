@@ -43,7 +43,7 @@ namespace KisSurfaceColorimetry
         render_intent_relative_bpc = 4, // media-relative colorimetric + black point compensation
     };
 
-    struct Luminance : boost::equality_comparable<Luminance> {
+    struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT Luminance : boost::equality_comparable<Luminance> {
         Luminance() = default;
         Luminance(uint32_t minLuminanceArg, uint32_t maxLuminanceArg, uint32_t referenceLuminanceArg)
             : minLuminance(minLuminanceArg)
@@ -63,7 +63,7 @@ namespace KisSurfaceColorimetry
         }
     };
 
-    struct MasteringLuminance : boost::equality_comparable<MasteringLuminance> {
+    struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT MasteringLuminance : boost::equality_comparable<MasteringLuminance> {
         MasteringLuminance() = default;
         MasteringLuminance(uint32_t minLuminanceArg, uint32_t maxLuminanceArg)
             : minLuminance(minLuminanceArg)
@@ -83,7 +83,7 @@ namespace KisSurfaceColorimetry
         }
     };
 
-    struct ColorSpace : boost::equality_comparable<ColorSpace> {
+    struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT ColorSpace : boost::equality_comparable<ColorSpace> {
         std::variant<NamedPrimaries, Colorimetry> primaries;
         // named transfer function or <exponent * 10000>
         std::variant<NamedTransferFunction, uint32_t> transferFunction;
@@ -96,7 +96,7 @@ namespace KisSurfaceColorimetry
         }
     };
 
-    struct MasteringInfo : boost::equality_comparable<MasteringInfo> {
+    struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT MasteringInfo : boost::equality_comparable<MasteringInfo> {
         Colorimetry primaries = Colorimetry::BT709;
         MasteringLuminance luminance;
         std::optional<uint32_t> maxCll;
@@ -110,7 +110,7 @@ namespace KisSurfaceColorimetry
         }
     };
 
-    struct SurfaceDescription : boost::equality_comparable<SurfaceDescription> {
+    struct KRITASURFACECOLORMANAGEMENTAPI_EXPORT SurfaceDescription : boost::equality_comparable<SurfaceDescription> {
         ColorSpace colorSpace;
         std::optional<MasteringInfo> masteringInfo;
 
@@ -120,14 +120,14 @@ namespace KisSurfaceColorimetry
         }
     };
 
-    QDebug operator<<(QDebug debug, const NamedPrimaries &value);
-    QDebug operator<<(QDebug debug, const NamedTransferFunction &value);
-    QDebug operator<<(QDebug debug, const Luminance &value);
-    QDebug operator<<(QDebug debug, const MasteringLuminance &value);
-    QDebug operator<<(QDebug debug, const ColorSpace &value);
-    QDebug operator<<(QDebug debug, const MasteringInfo &value);
-    QDebug operator<<(QDebug debug, const SurfaceDescription &value);
-    QDebug operator<<(QDebug debug, const RenderIntent &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const NamedPrimaries &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const NamedTransferFunction &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const Luminance &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const MasteringLuminance &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const ColorSpace &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const MasteringInfo &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const SurfaceDescription &value);
+    KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const RenderIntent &value);
 }
 
 #endif /* KISSURFACECOLORIMETRY_H */

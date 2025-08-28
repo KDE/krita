@@ -40,10 +40,11 @@ class QScreen;
  * emits \ref sigReadyChanged() with argument set to false, and restarts
  * the initialization process.
  */
-class KisOutputColorInfoInterface : public QObject
+class KRITASURFACECOLORMANAGEMENTAPI_EXPORT KisOutputColorInfoInterface : public QObject
 {
     Q_OBJECT
 public:
+    KisOutputColorInfoInterface(QObject *parent = nullptr);
     virtual ~KisOutputColorInfoInterface();
 
     /**

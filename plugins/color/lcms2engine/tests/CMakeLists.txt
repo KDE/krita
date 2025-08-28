@@ -13,3 +13,11 @@ kis_add_tests(
     NAME_PREFIX "plugins-lcmsengine-"
     LINK_LIBRARIES kritawidgets kritapigment KF${KF_MAJOR}::I18n kritatestsdk ${LCMS2_LIBRARIES}
     )
+
+if (HAVE_WAYLAND)
+    kis_add_test(
+        TestIccFromColorimetryConversion.cpp
+        NAME_PREFIX "plugins-lcmsengine-"
+        LINK_LIBRARIES kritapigment kritatestsdk ${LCMS2_LIBRARIES} kritasurfacecolormanagementapi
+    )
+endif()

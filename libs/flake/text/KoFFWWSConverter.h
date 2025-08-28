@@ -78,6 +78,9 @@ public:
     /// Sort any straggling fonts into WWSFamilies.
     void sortIntoWWSFamilies();
 
+    /// This adds a CSS generic family. Call this before sortIntoWWSFamilies.
+    void addGenericFamily(const QString &name);
+
     /// Collects all WWSFamilies (that is, CSS compatible groupings of font files) and return them.
     QList<KoFontFamilyWWSRepresentation> collectFamilies() const;
 

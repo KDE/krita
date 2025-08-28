@@ -198,6 +198,9 @@ public:
         for (int j = 0; j < allFonts->nfont; j++) {
             fontFamilyConverter->addFontFromPattern(allFonts->fonts[j], library());
         }
+        fontFamilyConverter->addGenericFamily("serif");
+        fontFamilyConverter->addGenericFamily("sans-serif");
+        fontFamilyConverter->addGenericFamily("monospace");
         fontFamilyConverter->sortIntoWWSFamilies();
         return true;
     }

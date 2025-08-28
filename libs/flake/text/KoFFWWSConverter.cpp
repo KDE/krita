@@ -844,6 +844,31 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
     }
 }
 
+void KoFFWWSConverter::addGenericFamily(const QString &name)
+{
+    FontFamilyNode typographicFamily;
+    FontFamilyNode fontFamily;
+
+    QHash<QLocale, QString> familyNames = {{QLocale(QLocale::English), name}};
+    // TODO: can and should we translate this?
+    QHash<QLocale, QString> styleNames = {{QLocale(QLocale::English), "Regular"}};
+
+    fontFamily.fontFamily = name;
+    fontFamily.localizedFontFamilies = familyNames;
+
+    fontFamily.type = KoSvgText::OpenTypeFontType;
+
+    typographicFamily = fontFamily;
+    fontFamily.axes.insert(WEIGHT_TAG, KoSvgText::FontFamilyAxis::weightAxis(400));
+    fontFamily.fontStyle = styleNames.values().first();
+    fontFamily.localizedFontStyle = styleNames;
+    QString tag = KoWritingSystemUtils::sampleTagForQLocale(QLocale(QLocale::English));
+    fontFamily.sampleStrings.insert(tag, KoWritingSystemUtils::samples().key(tag));
+
+    auto typographic = d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), typographicFamily);
+    d->fontFamilyCollection.insert(childEnd(typographic), fontFamily);
+}
+
 KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::child_iterator wws, KisForest<FontFamilyNode>::child_iterator typographic, bool singleFamily) {
     KoFontFamilyWWSRepresentation representation;
     representation.fontFamilyName = wws->fontFamily;
@@ -1173,6 +1198,7 @@ QVector<KoFFWWSConverter::FontFileEntry> KoFFWWSConverter::candidatesForCssValue
                 fileNames.append(node.fileName);
                 fileNames = node.pixelSizes.value(pixelSize, fileNames);
                 Q_FOREACH(const QString &fileName, fileNames) {
+                    if (fileName.isEmpty()) continue;
                     FontFileEntry entry;
                     entry.fileName = fileName;
                     entry.fontIndex = node.fileIndex;

@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -13402,6 +13402,18 @@ msgstr "Modifica"
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Radio de pincel"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 1"
+msgstr "Color personalisate"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 2"
+msgstr "Color personalisate"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

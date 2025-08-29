@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -13145,6 +13145,18 @@ msgstr "Sửa"
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Định sẵn:"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "Custom toolbar 1"
+msgstr "Tự đặt"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "Custom toolbar 2"
+msgstr "Tự đặt"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

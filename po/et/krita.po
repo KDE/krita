@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -14154,6 +14154,18 @@ msgstr "Redigeerimine"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Pintslid ja muud asjad"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 1"
+msgstr "Kohandatud värv"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 2"
+msgstr "Kohandatud värv"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

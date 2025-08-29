@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
-"PO-Revision-Date: 2025-08-27 13:04+0200\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
+"PO-Revision-Date: 2025-08-28 13:17+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -13160,6 +13160,18 @@ msgstr "Bewerken"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Penselen en dergelijke"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 1"
+msgstr "Aangepaste kleur"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 2"
+msgstr "Aangepaste kleur"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -34250,36 +34262,27 @@ msgid "Select All"
 msgstr "Alles selecteren"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
-msgstr "Selectie omkeren"
+msgstr "Selectie inverteren"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Fill Selection with Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "Selectie met kleur vullen"
+msgstr "Bestandsselectie met kleur vullen"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Doezel-selectie"
+msgstr "Selectie wissen"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Copy To New Layer"
+#, kde-format
 msgid "Copy To New Layer"
 msgstr "Naar nieuwe laag kopiëren"
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Crop to Selection"
+#, kde-format
 msgid "Crop to Selection"
 msgstr "Uitsnijden op selectie"
 

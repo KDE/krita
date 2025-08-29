@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -13509,6 +13509,18 @@ msgstr "&Izmijeni"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Četkice i ostalo"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 1"
+msgstr "Stop boja."
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 2"
+msgstr "Stop boja."
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

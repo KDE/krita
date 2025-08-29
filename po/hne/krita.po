@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -13282,6 +13282,16 @@ msgstr "संपादन (&E)"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "ब्रुस अउ चीज मन ल"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+msgid "Custom toolbar 1"
+msgstr "स्टाप रंग:"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+msgid "Custom toolbar 2"
+msgstr "स्टाप रंग:"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

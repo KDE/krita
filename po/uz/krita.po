@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -13187,6 +13187,16 @@ msgstr "Palitrani tahrirlash..."
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Choʻtka va boshqa ish qurollari"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+msgid "Custom toolbar 1"
+msgstr "Chizish: Rang"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+msgid "Custom toolbar 2"
+msgstr "Chizish: Rang"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

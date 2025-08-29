@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -13414,6 +13414,18 @@ msgstr "संपादन (&E)"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "कुंचले व तत्सम"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 1"
+msgstr "रंग थांबवा."
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 2"
+msgstr "रंग थांबवा."
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

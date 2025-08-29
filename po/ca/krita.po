@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
-"PO-Revision-Date: 2025-08-27 13:38+0200\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
+"PO-Revision-Date: 2025-08-28 13:40+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -13093,6 +13093,18 @@ msgstr "Edita"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Pinzells i emplenat"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 1"
+msgstr "Color personalitzat"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 2"
+msgstr "Color personalitzat"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -34255,36 +34267,27 @@ msgid "Select All"
 msgstr "Selecciona-ho tot"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
 msgstr "Inverteix la selecció"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Fill Selection with Color"
+#, kde-format
 msgid "Fill Selection with Color"
 msgstr "Omple la selecció amb color"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Selecció suau"
+msgstr "Neteja la selecció"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Copy To New Layer"
+#, kde-format
 msgid "Copy To New Layer"
 msgstr "Copia a una capa nova"
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Crop to Selection"
+#, kde-format
 msgid "Crop to Selection"
 msgstr "Escapça a la selecció"
 

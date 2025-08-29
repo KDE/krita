@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -13258,6 +13258,16 @@ msgstr "&ویرایش‌"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "قلم‌موها و ماده"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+msgid "Custom toolbar 1"
+msgstr "خط: رنگ"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+msgid "Custom toolbar 2"
+msgstr "خط: رنگ"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

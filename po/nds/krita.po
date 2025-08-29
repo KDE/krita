@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -13454,6 +13454,18 @@ msgstr "&Bewerken"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Pinsel un mehr"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 1"
+msgstr "Stopklöör"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 2"
+msgstr "Stopklöör"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

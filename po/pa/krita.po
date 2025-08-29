@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -13961,6 +13961,18 @@ msgstr "ਸਥਿਤੀ"
 #| msgid "Set border"
 msgid "Brushes and Stuff"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Line Color"
+msgid "Custom toolbar 1"
+msgstr "ਰੇਖਾ ਰੰਗ"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Line Color"
+msgid "Custom toolbar 2"
+msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

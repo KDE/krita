@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -13443,6 +13443,18 @@ msgstr "تەھرىر(&E)"
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "رادىئۇس:"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 1"
+msgstr "توختاش رەڭگى."
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 2"
+msgstr "توختاش رەڭگى."
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

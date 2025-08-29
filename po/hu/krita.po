@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -13444,6 +13444,18 @@ msgstr "S&zerkesztés"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Ecsetek és anyagok"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 1"
+msgstr "Befejező szín:"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Custom toolbar 2"
+msgstr "Befejező szín:"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

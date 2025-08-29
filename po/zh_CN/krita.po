@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -13036,6 +13036,18 @@ msgstr "编辑"
 msgid "Brushes and Stuff"
 msgstr "笔刷及其他"
 
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 1"
+msgstr "自定义颜色"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 2"
+msgstr "自定义颜色"
+
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
 #, kde-format
@@ -14943,7 +14955,7 @@ msgstr "选择"
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
-msgstr "全部选择(&A)"
+msgstr "选择全部(&A)"
 
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
@@ -14953,7 +14965,7 @@ msgstr "全部选择(&A)"
 #, kde-format
 msgctxt "action"
 msgid "Select All"
-msgstr "全部选择"
+msgstr "选择全部"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1381
@@ -24228,7 +24240,7 @@ msgstr "取消删除"
 #: libs/ui/actions/kis_selection_action_factories.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Select All"
-msgstr "全部选择"
+msgstr "选择全部"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
 #: libs/ui/KisView.cpp:779
@@ -29500,7 +29512,7 @@ msgstr "画布缩放操作使用水平轴"
 #: libs/ui/forms/wdggeneralsettings.ui:1036
 #, kde-format
 msgid "Selection Actions Bar"
-msgstr ""
+msgstr "选区操作栏"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29508,13 +29520,13 @@ msgstr ""
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
-msgstr ""
+msgstr "启用后，任意选区都会显示包含选区相关操作的小型浮动面板。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
 #, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr ""
+msgstr "启用选区操作栏"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -33731,40 +33743,32 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
-msgstr "全部选择"
+msgstr "选择全部"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
-msgstr "反向选择"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "选择颜色"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "羽化选区"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
+#, kde-format
 msgid "Copy To New Layer"
-msgstr "复制图层"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgid "Crop to Selection"
-msgstr "裁剪选区"
+msgstr ""
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -39659,7 +39663,7 @@ msgstr ""
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
-msgstr "全部选择(&S)"
+msgstr "选择全部(&S)"
 
 #: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format

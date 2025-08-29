@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 02:11+0000\n"
-"PO-Revision-Date: 2025-08-16 10:39+0200\n"
+"POT-Creation-Date: 2025-08-29 02:00+0000\n"
+"PO-Revision-Date: 2025-08-27 07:53+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.07.90\n"
+"X-Generator: Lokalize 25.08.0\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -13186,6 +13186,18 @@ msgstr "Modifier"
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Brosses et compagnie"
+
+#: krita/krita5.xmlgui:454
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 1"
+msgstr "Couleur personnalisée"
+
+#: krita/krita5.xmlgui:457
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Custom toolbar 2"
+msgstr "Couleur personnalisée"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -66277,11 +66289,9 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Tourner de 90° vers la gauche"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
+#, kde-format
 msgid "Keep Aspect Ratio"
-msgstr "Conserver le ratio"
+msgstr "Conserver le ratio d'aspect"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:138
 #, kde-format

@@ -28,13 +28,13 @@ TabButton {
         color: checked? control.palette.window: Qt.darker(parent.palette.window, 1.1);
         border.color: Qt.darker(parent.palette.window, 1.4);
         radius: 2;
-        y: checked ? 2 : 4;
+        y: checked ? 0 : 2;
         height: control.height+5;
         Rectangle {
             x: 1; y: 1
             width: parent.width - 2
             height: parent.height - 2
-            border.color: control.palette.window;
+            border.color: control.palette.light.hslLightness > 0.63? control.palette.window: control.palette.light;
             color: parent.color;
             radius: parent.radius+1;
         }

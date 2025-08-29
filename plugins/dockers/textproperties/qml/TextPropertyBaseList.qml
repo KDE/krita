@@ -362,6 +362,13 @@ ColumnLayout {
                         }
                     }
 
+                    Keys.onDownPressed: {
+                        addPropertyCmb.incrementCurrentIndex();
+                    }
+                    Keys.onUpPressed: {
+                        addPropertyCmb.decrementCurrentIndex();
+                    }
+
                     onAccepted: {
                         blockSignals = true;
                         let name = filteredConfigModel.filteredNames[addPropertyCmb.highlightedIndex]

@@ -105,6 +105,9 @@ TextPropertyBase {
                     if (!blockSignals) {
                         localeHandler.searchString = text;
                         if (text !== "") {
+                            if (!filterPopup.visible) {
+                                filteredLanguages.currentIndex = 0;
+                            }
                             filterPopup.open();
                         }
                     }
@@ -119,6 +122,17 @@ TextPropertyBase {
                     blockSignals = false;
                 }
 
+                Keys.onDownPressed: {
+                    if (filterPopup.visible) {
+                        filteredLanguages.currentIndex += 1;
+                    }
+                }
+                Keys.onUpPressed: {
+                    if (filterPopup.visible) {
+                        filteredLanguages.currentIndex -= 1;
+                    }
+                }
+
                 function finalize() {
                     localeHandler.searchString = "";
                     filterPopup.close();
@@ -131,6 +145,7 @@ TextPropertyBase {
                     padding: 0;
                     width: languageTxtEdit.width;
                     height: Math.min(contentItem.implicitHeight, 300);
+                    palette: languageCmb.palette;
 
                     contentItem: ListView {
                         id: filteredLanguages;
@@ -145,16 +160,22 @@ TextPropertyBase {
                             text: model.display + " ("+model.code+")";
                             width: filterPopup.width;
                             hoverEnabled: true;
-                            highlighted: hovered;
+                            highlighted: filteredLanguages.currentIndex === model.index;
+                            onHoveredChanged: {
+                                if (hovered) {
+                                    filteredLanguages.currentIndex = model.index;
+                                }
+                            }
 
                             background: Rectangle {
                                 color: languageDelegate.highlighted? languageDelegate.palette.highlight: "transparent";
                             }
                             palette: filterPopup.palette;
 
-                            ToolTip.text: text;
-                            ToolTip.visible: hovered;
-                            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                            Kis.ToolTipBase {
+                                text: languageDelegate.text;
+                                visible: languageDelegate.hovered
+                            }
 
                             onClicked: {
                                 localeHandler.language = model.code;
@@ -184,6 +205,7 @@ TextPropertyBase {
 
                 contentItem: RowLayout {
                     CheckBox {
+                        id: languageCbx;
                         Component.onCompleted: {
                             checked = favoriteDelegate.model.favorite;
                         }
@@ -192,9 +214,10 @@ TextPropertyBase {
                         hoverEnabled: true;
                         padding: 0;
 
-                        ToolTip.text: i18nc("@info:tooltip", "Store this language between sessions.");
-                        ToolTip.visible: hovered;
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                        Kis.ToolTipBase {
+                            text: i18nc("@info:tooltip", "Store this language between sessions.");
+                            visible: languageCbx.hovered
+                        }
                     }
                     Label {
                         text: favoriteDelegate.model.display + " ("+favoriteDelegate.model.code+")";

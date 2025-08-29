@@ -35,9 +35,10 @@ Control {
     property bool enableMouseEvents: true;
 
     property alias containsMouse: mouseArea.containsMouse;
+    property bool highlighted: false;
 
     background: Rectangle {
-        color: containsMouse? palette.highlight: "transparent";
+        color: highlighted? palette.highlight: "transparent";
     }
 
     signal featureClicked (QtObject mouse);
@@ -54,12 +55,12 @@ Control {
             text: "`"+root.tag+"`";
             Layout.preferredHeight: implicitHeight;
             Layout.maximumWidth: contentWidth;
-            color: root.containsMouse? palette.highlightedText: palette.text;
+            color: root.highlighted? palette.highlightedText: palette.text;
         }
 
         ToolSeparator {
             Layout.fillHeight: true;
-            palette.window: root.containsMouse? root.palette.highlight: root.palette.window;
+            palette.window: root.highlighted? root.palette.highlight: root.palette.window;
         }
 
         ColumnLayout {
@@ -74,7 +75,7 @@ Control {
                 elide: Text.ElideRight;
                 Layout.fillWidth: true;
                 Layout.preferredHeight: implicitHeight
-                color: root.containsMouse? palette.highlightedText: palette.text;
+                color: root.highlighted? palette.highlightedText: palette.text;
             }
 
             Kis.SvgTextLabel {

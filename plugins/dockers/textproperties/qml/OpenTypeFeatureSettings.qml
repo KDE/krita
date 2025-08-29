@@ -221,6 +221,7 @@ TextPropertyBase {
                     fontFeatureModel.addFeature(tag);
                     cmbAvailableFeatures.popup.close();
                 }
+                highlighted: cmbAvailableFeatures.highlightedIndex === index;
             }
 
             contentItem: TextField {
@@ -244,10 +245,24 @@ TextPropertyBase {
                 onTextChanged: {
                     if (text !== "") {
                         filterModel.setFilterRegularExpression(text);
+                        if (!completerPopup.visible) {
+                            completerListView.currentIndex = 0;
+                        }
                         completerPopup.open();
                     } else {
                         completerPopup.close();
                         filterModel.setFilterRegularExpression(text);
+                    }
+                }
+
+                Keys.onDownPressed: {
+                    if (completerPopup.visible) {
+                        completerListView.currentIndex += 1;
+                    }
+                }
+                Keys.onUpPressed: {
+                    if (completerPopup.visible) {
+                        completerListView.currentIndex -= 1;
                     }
                 }
 
@@ -272,8 +287,10 @@ TextPropertyBase {
                     padding: 0;
                     width: featureTxtEdit.width;
                     height: contentItem.implicitHeight;
+                    palette: cmbAvailableFeatures.palette;
                     property string highlightedTag;
                     contentItem: ListView {
+                        id: completerListView;
                         model: featureTxtEdit.filterModel;
                         clip: true;
                         implicitHeight: Math.min(contentHeight, 300);
@@ -301,6 +318,12 @@ TextPropertyBase {
                                                   fontFeatureModel.addFeature(tag);
                                                   featureTxtEdit.finalize();
                                               }
+                            onContainsMouseChanged: {
+                                if (containsMouse) {
+                                    completerListView.currentIndex = index;
+                                }
+                            }
+                            highlighted: completerListView.currentIndex === index;
                         }
                     }
                 }

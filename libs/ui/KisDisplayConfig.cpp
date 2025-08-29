@@ -44,6 +44,13 @@ KisDisplayConfig::KisDisplayConfig(int screen, const KisConfig &config)
 {
 }
 
+KisDisplayConfig::KisDisplayConfig(const KoColorProfile *_profileOverride, const KisConfig &config)
+    : profile(_profileOverride)
+    , intent(renderingIntentFromConfig(config))
+    , conversionFlags(conversionFlagsFromConfig(config))
+{
+}
+
 KisDisplayConfig::KisDisplayConfig(const KoColorProfile *_profile,
                                    KoColorConversionTransformation::Intent _intent,
                                    KoColorConversionTransformation::ConversionFlags _conversionFlags)

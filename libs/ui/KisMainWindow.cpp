@@ -155,6 +155,11 @@
 #include "KisToolBarStateModel.h"
 #include <config-qmdiarea-always-show-subwindow-title.h>
 
+// surface color management
+#include <kpluginfactory.h>
+#include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
+#include <KisSRGBSurfaceColorSpaceManager.h>
+
 #include <mutex>
 
 class ToolDockerFactory : public KoDockFactoryBase
@@ -308,6 +313,9 @@ public:
     QUuid workspaceBorrowedBy;
 
     KateCommandBar *commandBar {nullptr};
+
+    // lifetime is managed by the QObject hierarchy
+    QPointer<KisSRGBSurfaceColorSpaceManager> surfaceColorSpaceManager;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -654,6 +662,30 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     applyMainWindowSettings(d->windowStateConfig);
+
+    /**
+     * Load platform plugin for surface color management and set
+     * the surface color space to sRGB exactly
+     */
+    {
+        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
+            std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
+            "Krita/PlatformPlugin");
+
+        if (factory) {
+            QWindow *nativeWindow = this->window()->windowHandle();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(nativeWindow);
+
+            QVariantList args = {QVariant::fromValue(nativeWindow)};
+
+            std::unique_ptr<KisSurfaceColorManagerInterface> iface(
+                factory->create<KisSurfaceColorManagerInterface>(nullptr, args));
+
+            if (iface) {
+                d->surfaceColorSpaceManager = new KisSRGBSurfaceColorSpaceManager(iface.release(), this);
+            }
+        }
+    }
 
 }
 
@@ -3190,6 +3222,11 @@ bool KisMainWindow::checkPaintOpAvailable()
 {
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     return (rserver->resourceCount() > 0);
+}
+
+const KoColorProfile* KisMainWindow::managedSurfaceProfile() const
+{
+    return d->surfaceColorSpaceManager ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : nullptr;
 }
 
 #include <moc_KisMainWindow.cpp>

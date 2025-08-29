@@ -26,6 +26,7 @@ public:
     KisDisplayConfig(const KoColorProfile *_profile,
                      KoColorConversionTransformation::Intent _intent,
                      KoColorConversionTransformation::ConversionFlags _conversionFlags);
+    KisDisplayConfig(const KoColorProfile *_profileOverride, const KisConfig &config);
     bool operator==(const KisDisplayConfig &rhs) const;
 
     const KoColorProfile *profile;

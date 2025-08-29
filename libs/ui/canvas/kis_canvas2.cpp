@@ -94,6 +94,11 @@
 #include "KisDisplayConfig.h"
 #include "config-qt-patches-present.h"
 
+#include <KoPluginLoader.h>
+#include <kpluginfactory.h>
+#include <KisCanvasSurfaceColorSpaceManager.h>
+#include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -192,6 +197,8 @@ public:
 
     QRect renderingLimit;
     int isBatchUpdateActive = 0;
+
+    QScopedPointer<KisCanvasSurfaceColorSpaceManager> surfaceColorManager;
 
     bool effectiveLodAllowedInImage() const {
         return lodPreferredInImage && !bootstrapLodBlocked;
@@ -383,6 +390,43 @@ void KisCanvas2::setCanvasWidget(KisAbstractCanvasWidget *widget)
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller && controller->canvas() == this) {
         controller->changeCanvasWidget(widget->widget());
+    }
+
+    /**
+     * Load platform plugin for surface color management and set
+     * the surface color space to sRGB exactly
+     */
+    {
+        m_d->surfaceColorManager.reset();
+
+        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
+            std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
+            "Krita/PlatformPlugin");
+
+        if (factory) {
+            QWindow *mainWindowNativeWindow = m_d->view->mainWindow()->windowHandle();
+            QWindow *nativeWindow = widget->widget()->windowHandle();
+
+            if (nativeWindow && nativeWindow != mainWindowNativeWindow) {
+                QVariantList args = {QVariant::fromValue(nativeWindow)};
+
+                std::unique_ptr<KisSurfaceColorManagerInterface> iface(
+                    factory->create<KisSurfaceColorManagerInterface>(nullptr, args));
+
+                if (iface) {
+                    m_d->surfaceColorManager.reset(new KisCanvasSurfaceColorSpaceManager(iface.release(), this));
+
+                    m_d->surfaceColorManager->setProofingConfiguration(m_d->proofingConfig);
+                    setDisplayConfig(m_d->surfaceColorManager->displayConfig());
+
+                    connect(m_d->surfaceColorManager.data(), &KisCanvasSurfaceColorSpaceManager::sigDisplayConfigChanged,
+                            this, &KisCanvas2::setDisplayConfig);
+                }
+            } else {
+                qWarning() << "WARNING: created non-native Krita canvas on managed platform,"
+                           << "its color space will be limited to sRGB";
+            }
+        }
     }
 }
 
@@ -587,7 +631,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     }
 
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
-    m_d->displayColorConverter.setDisplayConfig(KisDisplayConfig(canvasScreenNumber, cfg));
+    m_d->displayColorConverter.setDisplayConfig(KisDisplayConfig(effectiveDisplayProfile(canvasScreenNumber, cfg), cfg));
 
     if (useOpenGL && !KisOpenGL::hasOpenGL()) {
         warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
@@ -784,8 +828,11 @@ void KisCanvas2::updateProofingState()
         displayFlags.setFlag(KoColorConversionTransformation::GamutCheck, imageView()->gamutCheck());
     }
     m_d->proofingConfig->displayFlags = displayFlags;
-
     m_d->proofingConfigUpdated = true;
+
+    if (m_d->surfaceColorManager) {
+        m_d->surfaceColorManager->setProofingConfiguration(m_d->proofingConfig);
+    }
 }
 
 void KisCanvas2::slotSoftProofing()
@@ -1264,21 +1311,44 @@ void KisCanvas2::slotConfigChanged()
     initializeFpsDecoration();
 }
 
+const KoColorProfile* KisCanvas2::effectiveDisplayProfile(int screenNumber, const KisConfig &config) const
+{
+    if (m_d->surfaceColorManager) {
+        /// When the surface's color space is managed locally, the profile is
+        /// set by the surface color space manager
+        return m_d->surfaceColorManager->displayConfig().profile;
+
+    } else if (auto *managedProfile = m_d->view->mainWindow()->managedSurfaceProfile()) {
+        /// If surface color space is managed globally, just return the
+        /// globally managed profile
+        return managedProfile;
+    }
+
+    return config.displayProfile(screenNumber);
+}
+
 void KisCanvas2::slotScreenChanged(QScreen *screen)
 {
     /**
-     * We cannot use KisPortingUtils::getScreenNumberForWidget(mainWindow) here,
-     * because this data is not yet ready when screenChanged signal is delivered.
+     * In managed surface colorspace mode, the display screen migrations
+     * are managed by the manager itself
      */
+    if (!m_d->surfaceColorManager) {
+        /**
+         * We cannot use KisPortingUtils::getScreenNumberForWidget(mainWindow) here,
+         * because this data is not yet ready when screenChanged signal is delivered.
+         */
 
-    const int canvasScreenNumber = qApp->screens().indexOf(screen);
+        const int canvasScreenNumber = qApp->screens().indexOf(screen);
 
-    if (canvasScreenNumber != -1) {
-        // If profile is the same, then setDisplayProfile does nothing
-        KisConfig cfg(true);
-        setDisplayConfig(KisDisplayConfig(canvasScreenNumber, cfg));
-    } else {
-        warnUI << "Failed to get screenNumber for updating display profile.";
+        if (canvasScreenNumber != -1) {
+            // If profile is the same, then setDisplayProfile does nothing
+            KisConfig cfg(true);
+            setDisplayConfig(
+                KisDisplayConfig(effectiveDisplayProfile(canvasScreenNumber, cfg), cfg));
+        } else {
+            warnUI << "Failed to get screenNumber for updating display profile.";
+        }
     }
 }
 

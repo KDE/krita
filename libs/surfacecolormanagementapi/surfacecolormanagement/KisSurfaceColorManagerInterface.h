@@ -103,6 +103,14 @@ public:
     virtual std::optional<KisSurfaceColorimetry::SurfaceDescription> surfaceDescription() const = 0;
 
     /**
+     * \return the current rendering intent assign to the  surface
+     *
+     * It can return std::nullopt if the surface discription is unset or
+     * if the connection to the compositor has been lost.
+     */
+    virtual std::optional<KisSurfaceColorimetry::RenderIntent> renderingIntent() const = 0;
+
+    /**
      * \return the preferred description for the underlying surface
      *         from the viewpoint of the compositor
      *

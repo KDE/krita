@@ -650,6 +650,15 @@ if(WIN32)
     )
 endif()
 
+if (HAVE_WAYLAND)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+
+        KisSRGBSurfaceColorSpaceManager.cpp
+        KisCanvasSurfaceColorSpaceManager.cpp
+    )
+endif()
+
 
 kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS})
 
@@ -683,6 +692,13 @@ target_link_libraries(kritaui
         kritawidgetutils
         kritaresources
 )
+
+if (HAVE_WAYLAND)
+    target_link_libraries(kritaui
+        PRIVATE
+            kritasurfacecolormanagementapi
+    )
+endif()
 
 if(WIN32)
     # Private headers are needed for:

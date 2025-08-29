@@ -322,6 +322,8 @@ private:
     void resetCanvas(bool useOpenGL);
     void setDisplayConfig(const KisDisplayConfig &config);
 
+    const KoColorProfile* effectiveDisplayProfile(int screenNumber, const KisConfig &config) const;
+
     void notifyLevelOfDetailChange();
 
     // Completes construction of canvas.

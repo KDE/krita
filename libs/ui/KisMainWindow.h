@@ -178,6 +178,22 @@ public:
      */
     QImage layoutThumbnail();
 
+    /**
+     * If Krita runs under a system that manages surface color space
+     * for us, then managedSurfaceProfile() returns the profile associated
+     * with the surface of the main window (and, therefore, of all its non-native
+     * widgets).
+     *
+     * Krita will usually just select sRGB for the surface of the main
+     * window, if the surface is managed. And the canvas will create its
+     * own surface with the custom space. Though this behavior is a subject
+     * to change in the future.
+     *
+     * If Krita runs in an unmanaged environment (e.g. X11 or Windows with
+     * ACM disabled), then the function returns nullptr.
+     */
+    const KoColorProfile* managedSurfaceProfile() const;
+
 Q_SIGNALS:
 
     /**

@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
-"PO-Revision-Date: 2025-08-27 11:10-0300\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"PO-Revision-Date: 2025-08-29 16:38-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -13087,16 +13087,14 @@ msgid "Brushes and Stuff"
 msgstr "Pincéis"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Cor personalizada"
+msgstr "Barra de ferramentas personalizada 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Cor personalizada"
+msgstr "Barra de ferramentas personalizada 1"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -34163,36 +34161,27 @@ msgid "Select All"
 msgstr "Selecionar tudo"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
-msgstr "Inverter Seleção"
+msgstr "Inverter seleção"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Fill Selection with Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "Preencher seleção com uma cor"
+msgstr "Preencher seleção com cor"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Seleção da suavização"
+msgstr "Limpar seleção"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Copy To New Layer"
+#, kde-format
 msgid "Copy To New Layer"
 msgstr "Copiar para nova camada"
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Crop to Selection"
+#, kde-format
 msgid "Crop to Selection"
 msgstr "Recortar para seleção"
 
@@ -65759,13 +65748,13 @@ msgstr "Aplicar"
 msgid "Transform Tool Actions"
 msgstr "Ações da ferramenta de transformação"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "O tipo de camada não pode usar a ferramenta de transformação"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65773,7 +65762,7 @@ msgstr ""
 "O tipo de camada não pode usar a ferramenta de transformação. Ao invés "
 "disto, use a máscara de transformação."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65783,20 +65772,20 @@ msgstr ""
 "A camada tem filhos com máscaras de transformação. Desative-os antes de "
 "fazer a transformação."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "As seleções não são usadas na edição das máscaras de transformação "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Não é possível transformar uma camada vazia "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

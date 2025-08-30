@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
-"PO-Revision-Date: 2025-08-28 13:40+0200\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"PO-Revision-Date: 2025-08-29 09:15+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -13090,16 +13090,14 @@ msgid "Brushes and Stuff"
 msgstr "Pinzells i emplenat"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Color personalitzat"
+msgstr "Barra d'eines personalitzada 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Color personalitzat"
+msgstr "Barra d'eines personalitzada 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -65925,13 +65923,13 @@ msgstr "Aplica"
 msgid "Transform Tool Actions"
 msgstr "Accions de l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "El tipus de capa no pot utilitzar l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65939,7 +65937,7 @@ msgstr ""
 "El tipus de capa no pot utilitzar l'eina de transformació. En el seu lloc "
 "utilitzeu la màscara de transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65949,20 +65947,20 @@ msgstr ""
 "La capa té fills amb màscares de transformació. Per favor, inhabiliteu-los "
 "abans de fer la transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Les seleccions no s'utilitzen en editar les màscares de transformació "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "No es pot transformar una capa buida "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

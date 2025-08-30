@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -67225,13 +67225,13 @@ msgstr "적용"
 msgid "Transform Tool Actions"
 msgstr "변형 도구 동작"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "레이어 형식에서 변형 도구를 사용할 수 없음"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -67239,7 +67239,7 @@ msgstr ""
 "레이어 형식에서 변형 도구를 사용할 수 없습니다. 대신 변형 마스크를 사용하십시"
 "오."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -67249,20 +67249,20 @@ msgstr ""
 "레이어에 변형 마스크가 있는 자식 레이어가 있습니다. 변형을 실행하기 전에 비활"
 "성화하십시오."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "변형 마스크를 편집할 때는 선택 항목이 사용되지 않습니다 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "빈 레이어를 변환할 수 없음 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

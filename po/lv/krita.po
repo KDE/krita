@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -64527,19 +64527,19 @@ msgstr "Pielietot masku"
 msgid "Transform Tool Actions"
 msgstr "Transformēt"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Kustība Slānis"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Kustība Slānis"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -64547,20 +64547,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Transformēt"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

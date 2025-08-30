@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
-"PO-Revision-Date: 2025-08-28 13:11+0300\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"PO-Revision-Date: 2025-08-29 19:29+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -13069,16 +13069,14 @@ msgid "Brushes and Stuff"
 msgstr "Пензлі та інше"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Нетиповий колір"
+msgstr "Нетипова панель інструментів 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Нетиповий колір"
+msgstr "Нетипова панель інструментів 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -66492,13 +66490,13 @@ msgstr "Застосувати"
 msgid "Transform Tool Actions"
 msgstr "Дії з інструментом перетворення"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "У цьому типі шарів не можна використовувати інструмент перетворення"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -66506,7 +66504,7 @@ msgstr ""
 "У цьому типі шарів не можна використовувати інструмент перетворення. "
 "Скористайтеся замість нього маскою перетворення."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -66516,20 +66514,20 @@ msgstr ""
 "У шару є дочірні об'єкти із масками перетворення. Будь ласка, вимкніть їх, "
 "перш ніж виконувати перетворення."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Під час редагування масок перетворення позначення не використовуються "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Перетворення порожнього шару неможливе "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

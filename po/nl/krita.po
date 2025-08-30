@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
-"PO-Revision-Date: 2025-08-28 13:17+0200\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"PO-Revision-Date: 2025-08-29 19:06+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -13162,16 +13162,14 @@ msgid "Brushes and Stuff"
 msgstr "Penselen en dergelijke"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Aangepaste kleur"
+msgstr "Aangepaste werkbalk 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Aangepaste kleur"
+msgstr "Aangepaste werkbalk 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -65904,13 +65902,13 @@ msgstr "Toepassen"
 msgid "Transform Tool Actions"
 msgstr "Acties voor transformatiehulpmiddel"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Type laag kn transformatiehulpmiddel niet gebruiken"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65920,7 +65918,7 @@ msgstr ""
 
 # zie:
 # https://mycardsrouwkaarten.nl/rouwkaarten/rouwkaarten-maken/rouwkaart-met-penseelstrepen-modern
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65930,20 +65928,20 @@ msgstr ""
 "Laag heeft dochters met transformatiemaskers. Schakel deze uit voordat u een "
 "transformatie uitvoert."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Selecties worden niet gebruikt bij bewerken van transformatiemaskers "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Lege laag transformeren kan niet "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

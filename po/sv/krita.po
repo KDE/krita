@@ -52,8 +52,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-29 02:00+0000\n"
-"PO-Revision-Date: 2025-08-26 20:54+0200\n"
+"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"PO-Revision-Date: 2025-08-29 08:14+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -13108,16 +13108,14 @@ msgid "Brushes and Stuff"
 msgstr "Penslar med mera"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Egen färg"
+msgstr "Egen verktygsrad 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Egen färg"
+msgstr "Egen verktygsrad 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -29811,10 +29809,9 @@ msgstr "Använd horisontella axeln för dukens zoomåtgärd"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Markeringsåtgärder"
+msgstr "Markeringsåtgärdsrad"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29823,13 +29820,14 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"När aktiverat skapar alla markeringar en liten flytande panel med användbara "
+"markeringsrelaterade åtgärder."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Markeringsåtgärder"
+msgstr "Aktivera markeringsåtgärdsrad"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -34121,37 +34119,29 @@ msgid "Select All"
 msgstr "Markera alla"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
 msgstr "Invertera markering"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "Välj en färg"
+msgstr "Fyll markering med färg"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Vävning av markeringen"
+msgstr "Rensa markering"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
+#, kde-format
 msgid "Copy To New Layer"
-msgstr "Kopiera lager"
+msgstr "Kopiera till nytt lager"
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgid "Crop to Selection"
-msgstr "Beskär markeringar"
+msgstr "Beskär till markering"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -65584,13 +65574,13 @@ msgstr "Tillämpa"
 msgid "Transform Tool Actions"
 msgstr "Transformeringsverktygsåtgärder"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:914
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Lagertypen kan inte använda transformeringsverktyget"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:921
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -65598,7 +65588,7 @@ msgstr ""
 "Lagertyp kan inte använda transformeringsverktyget. Använd "
 "transformeringsmasken istället."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:941
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -65608,20 +65598,20 @@ msgstr ""
 "Lagret har underliggande lager med transformeringsmasker. Inaktivera dem "
 "innan transformeringen utförs."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:955
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Markeringar används inte när transformeringsmasker redigeras "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1040
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1079
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan inte transformera tomt lager "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1066
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

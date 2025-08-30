@@ -324,6 +324,11 @@ bool KoPointerEvent::isTabletEvent()
     return d->eventPtr.index() == 1;
 }
 
+bool KoPointerEvent::isTouchEvent()
+{
+    return d->eventPtr.index() == 2;
+}
+
 Qt::KeyboardModifiers KoPointerEvent::modifiers() const
 {
     struct Visitor {

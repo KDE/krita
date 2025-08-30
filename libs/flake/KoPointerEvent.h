@@ -187,6 +187,11 @@ public:
      */
     bool isTabletEvent();
 
+    /**
+     * Returns if the event comes from a touch
+     */
+    bool isTouchEvent();
+
 public:
     static void copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst);
     static void copyQtPointerEvent(const QTabletEvent *event, QScopedPointer<QEvent> &dst);

@@ -454,6 +454,14 @@ void KisToolTransform::endAlternateAction(KoPointerEvent *event, AlternateAction
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
+    // When using touch drawing, we only ever receive move events after the
+    // finger has pressed down. This confuses the strategies greatly, since they
+    // expect to receive a hover to tell which anchor the user wants to
+    // manipulate or similar. So in this case, we send an artificial hover.
+    if (event->isTouchEvent() && this->mode() != KisTool::PAINT_MODE) {
+        currentStrategy()->hoverActionCommon(event);
+        setFunctionalCursor();
+    }
     KisTool::mousePressEvent(event);
 }
 

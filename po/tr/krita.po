@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-30 02:04+0000\n"
-"PO-Revision-Date: 2025-08-27 09:21+0300\n"
+"PO-Revision-Date: 2025-08-30 18:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13064,16 +13064,14 @@ msgid "Brushes and Stuff"
 msgstr "Fırçalar ve Doldurma"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Özel renk"
+msgstr "Özel araç çubuğu 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Özel renk"
+msgstr "Özel araç çubuğu 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -34102,38 +34100,29 @@ msgid "Select All"
 msgstr "Tümünü Seç"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
 msgstr "Seçimi Tersine Çevir"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Fill Selection with Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "Seçimi renkle doldur"
+msgstr "Seçimi Renkle Doldur"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Seçimi Yumuşat"
+msgstr "Seçimi Temizle"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Copy To New Layer"
+#, kde-format
 msgid "Copy To New Layer"
-msgstr "Yeni katmana kopyala"
+msgstr "Yeni Katmana Kopyala"
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "tooltip"
-#| msgid "Crop to Selection"
+#, kde-format
 msgid "Crop to Selection"
-msgstr "Seçime kırp"
+msgstr "Seçime Kırp"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format

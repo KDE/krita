@@ -13039,12 +13039,12 @@ msgstr "笔刷及其他"
 #: krita/krita5.xmlgui:454
 #, kde-format
 msgid "Custom toolbar 1"
-msgstr ""
+msgstr "自定义工具栏 1"
 
 #: krita/krita5.xmlgui:457
 #, kde-format
 msgid "Custom toolbar 2"
-msgstr ""
+msgstr "自定义工具栏 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4

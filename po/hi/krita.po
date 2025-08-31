@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 04:02+0000\n"
+"POT-Creation-Date: 2025-08-31 03:36+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -59562,13 +59562,13 @@ msgstr "लागू करें"
 msgid "Transform Tool Actions"
 msgstr "रूपांतरण साधन क्रियाएं"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "परत का प्रकार रूपांतरण साधन का उपयोग नहीं कर सकता है।"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:878
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59576,7 +59576,7 @@ msgstr ""
 "परत का प्रकार रूपांतरण साधन का उपयोग नहीं कर सकता है। इसकी जगह रूपांतरण मास्क का "
 "इस्तेमाल करें।"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59584,20 +59584,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:995
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "खाली परत का रूपांतरण नहीं हो सकता"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 04:02+0000\n"
+"POT-Creation-Date: 2025-08-31 03:36+0000\n"
 "PO-Revision-Date: 2025-07-07 09:33+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -60549,13 +60549,13 @@ msgstr "Appliquer"
 msgid "Transform Tool Actions"
 msgstr "Actions des outils de transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Le type de calque ne peut être utilisé par l'outil de transformation."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:878
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60563,7 +60563,7 @@ msgstr ""
 "Le type de calque ne peut être utiliser par l'outil de transformation. "
 "Utiliser le masque de transformation à la place."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60573,7 +60573,7 @@ msgstr ""
 "Le calque possède des enfants avec des masques de transformation. Veuillez "
 "les désactiver avant de procéder à la transformation."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -60581,14 +60581,14 @@ msgstr ""
 "Les sélections ne sont pas utilisées lors de l'édition de masques de "
 "transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:995
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossible transformer un calque vide "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

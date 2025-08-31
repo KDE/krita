@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 04:02+0000\n"
+"POT-Creation-Date: 2025-08-31 03:36+0000\n"
 "PO-Revision-Date: 2025-07-27 20:31+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -59664,13 +59664,13 @@ msgstr "Ezarri"
 msgid "Transform Tool Actions"
 msgstr "Eraldatze-tresnaren ekintzak"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Geruza motak ezin du eraldatze-tresna erabili"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:878
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59678,7 +59678,7 @@ msgstr ""
 "Geruza motak ezin du erabili eraldatze-tresna. Horren ordez erabili "
 "eraldatze-maskara."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59688,20 +59688,20 @@ msgstr ""
 "Geruzak eraldatzeko maskarak dituzten haurrak ditu. Mesedez, ezgaitu itzazu "
 "eraldatu aurretik."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Hautapenak ez dira erabiltzen eraldatze maskarak editatzean"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:995
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ezin eraldatu hutsik dauden geruzak "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

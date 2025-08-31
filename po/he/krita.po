@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 04:02+0000\n"
+"POT-Creation-Date: 2025-08-31 03:36+0000\n"
 "PO-Revision-Date: 2025-08-12 14:37+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -58735,19 +58735,19 @@ msgstr ""
 msgid "Transform Tool Actions"
 msgstr "שינוי"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "הסר שכבה"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:878
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "הסר שכבה"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -58755,20 +58755,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:995
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "כלי מ&חיקה"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

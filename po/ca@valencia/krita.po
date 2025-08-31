@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-15 04:02+0000\n"
+"POT-Creation-Date: 2025-08-31 03:36+0000\n"
 "PO-Revision-Date: 2025-07-12 11:08+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -8405,7 +8405,7 @@ msgstr "Mo&stra d'un color de la pantalla"
 #, kde-format
 msgctxt "action"
 msgid "Sample a color from the screen"
-msgstr "Seleccioneu un color des de la pantalla"
+msgstr "Trieu un color des de la pantalla"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
@@ -10108,7 +10108,7 @@ msgstr "Mode de barreja anterior"
 #, kde-format
 msgctxt "action"
 msgid "Select Normal Blending Mode"
-msgstr "Selecciona el mode de barreja Normal"
+msgstr "Tria el mode de barreja Normal"
 
 #. i18n: context: text @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10120,7 +10120,7 @@ msgstr "Selecciona el mode de barreja Normal"
 #, kde-format
 msgctxt "action"
 msgid "Select Dissolve Blending Mode"
-msgstr "Selecciona el mode de barreja Dissolució"
+msgstr "Tria el mode de barreja Dissolució"
 
 #. i18n: context: text @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10132,7 +10132,7 @@ msgstr "Selecciona el mode de barreja Dissolució"
 #, kde-format
 msgctxt "action"
 msgid "Select Behind Blending Mode"
-msgstr "Selecciona el mode de barreja Darrere"
+msgstr "Tria el mode de barreja Darrere"
 
 #. i18n: context: text @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10144,7 +10144,7 @@ msgstr "Selecciona el mode de barreja Darrere"
 #, kde-format
 msgctxt "action"
 msgid "Select Clear Blending Mode"
-msgstr "Selecciona el mode de barreja Neteja"
+msgstr "Tria el mode de barreja Neteja"
 
 #. i18n: context: text @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10156,7 +10156,7 @@ msgstr "Selecciona el mode de barreja Neteja"
 #, kde-format
 msgctxt "action"
 msgid "Select Darken Blending Mode"
-msgstr "Selecciona el mode de barreja Fosca"
+msgstr "Tria el mode de barreja Fosca"
 
 #. i18n: context: text @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10168,7 +10168,7 @@ msgstr "Selecciona el mode de barreja Fosca"
 #, kde-format
 msgctxt "action"
 msgid "Select Multiply Blending Mode"
-msgstr "Selecciona el mode de barreja Multiplica"
+msgstr "Tria el mode de barreja Multiplica"
 
 #. i18n: context: text @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10180,7 +10180,7 @@ msgstr "Selecciona el mode de barreja Multiplica"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Burn Blending Mode"
-msgstr "Selecciona el mode de barreja Cremat del color"
+msgstr "Tria el mode de barreja Cremat del color"
 
 #. i18n: context: text @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10192,7 +10192,7 @@ msgstr "Selecciona el mode de barreja Cremat del color"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Burn Blending Mode"
-msgstr "Selecciona el mode de barreja Cremat lineal"
+msgstr "Tria el mode de barreja Cremat lineal"
 
 #. i18n: context: text @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10204,7 +10204,7 @@ msgstr "Selecciona el mode de barreja Cremat lineal"
 #, kde-format
 msgctxt "action"
 msgid "Select Lighten Blending Mode"
-msgstr "Selecciona el mode de barreja Aclarit"
+msgstr "Tria el mode de barreja Aclarit"
 
 #. i18n: context: text @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10216,7 +10216,7 @@ msgstr "Selecciona el mode de barreja Aclarit"
 #, kde-format
 msgctxt "action"
 msgid "Select Screen Blending Mode"
-msgstr "Selecciona el mode de barreja Pantalla"
+msgstr "Tria el mode de barreja Pantalla"
 
 #. i18n: context: text @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10228,7 +10228,7 @@ msgstr "Selecciona el mode de barreja Pantalla"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
-msgstr "Selecciona el mode de barreja Esvaïment del color"
+msgstr "Tria el mode de barreja Esvaïment del color"
 
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10240,7 +10240,7 @@ msgstr "Selecciona el mode de barreja Esvaïment del color"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
-msgstr "Selecciona el mode de barreja Esvaïment lineal"
+msgstr "Tria el mode de barreja Esvaïment lineal"
 
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10252,7 +10252,7 @@ msgstr "Selecciona el mode de barreja Esvaïment lineal"
 #, kde-format
 msgctxt "action"
 msgid "Select Overlay Blending Mode"
-msgstr "Selecciona el mode de barreja Superposició"
+msgstr "Tria el mode de barreja Superposició"
 
 #. i18n: context: text @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10264,7 +10264,7 @@ msgstr "Selecciona el mode de barreja Superposició"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Overlay Blending Mode"
-msgstr "Selecciona el mode de barreja Superposició forta"
+msgstr "Tria el mode de barreja Superposició forta"
 
 #. i18n: context: text @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10276,7 +10276,7 @@ msgstr "Selecciona el mode de barreja Superposició forta"
 #, kde-format
 msgctxt "action"
 msgid "Select Soft Light Blending Mode"
-msgstr "Selecciona el mode de barreja Llum suau"
+msgstr "Tria el mode de barreja Llum suau"
 
 #. i18n: context: text @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10288,7 +10288,7 @@ msgstr "Selecciona el mode de barreja Llum suau"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Light Blending Mode"
-msgstr "Selecciona el mode de barreja Llum forta"
+msgstr "Tria el mode de barreja Llum forta"
 
 #. i18n: context: text @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10300,7 +10300,7 @@ msgstr "Selecciona el mode de barreja Llum forta"
 #, kde-format
 msgctxt "action"
 msgid "Select Vivid Light Blending Mode"
-msgstr "Selecciona el mode de barreja Llum vívida"
+msgstr "Tria el mode de barreja Llum vívida"
 
 #. i18n: context: text @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10312,7 +10312,7 @@ msgstr "Selecciona el mode de barreja Llum vívida"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Light Blending Mode"
-msgstr "Selecciona el mode de barreja Llum lineal"
+msgstr "Tria el mode de barreja Llum lineal"
 
 #. i18n: context: text @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10324,7 +10324,7 @@ msgstr "Selecciona el mode de barreja Llum lineal"
 #, kde-format
 msgctxt "action"
 msgid "Select Pin Light Blending Mode"
-msgstr "Selecciona el mode de barreja Llum focal"
+msgstr "Tria el mode de barreja Llum focal"
 
 #. i18n: context: text @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10336,7 +10336,7 @@ msgstr "Selecciona el mode de barreja Llum focal"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Mix Blending Mode"
-msgstr "Selecciona el mode de barreja Mescla forta"
+msgstr "Tria el mode de barreja Mescla forta"
 
 #. i18n: context: text @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10348,7 +10348,7 @@ msgstr "Selecciona el mode de barreja Mescla forta"
 #, kde-format
 msgctxt "action"
 msgid "Select Difference Blending Mode"
-msgstr "Selecciona el mode de barreja Diferència"
+msgstr "Tria el mode de barreja Diferència"
 
 #. i18n: context: text @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10360,7 +10360,7 @@ msgstr "Selecciona el mode de barreja Diferència"
 #, kde-format
 msgctxt "action"
 msgid "Select Exclusion Blending Mode"
-msgstr "Selecciona el mode de barreja Exclusió"
+msgstr "Tria el mode de barreja Exclusió"
 
 #. i18n: context: text @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10372,7 +10372,7 @@ msgstr "Selecciona el mode de barreja Exclusió"
 #, kde-format
 msgctxt "action"
 msgid "Select Hue Blending Mode"
-msgstr "Selecciona el mode de barreja To"
+msgstr "Tria el mode de barreja To"
 
 #. i18n: context: text @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10384,7 +10384,7 @@ msgstr "Selecciona el mode de barreja To"
 #, kde-format
 msgctxt "action"
 msgid "Select Saturation Blending Mode"
-msgstr "Selecciona el mode de barreja Saturació"
+msgstr "Tria el mode de barreja Saturació"
 
 #. i18n: context: text @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10396,7 +10396,7 @@ msgstr "Selecciona el mode de barreja Saturació"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Blending Mode"
-msgstr "Selecciona el mode de barreja Color"
+msgstr "Tria el mode de barreja Color"
 
 #. i18n: context: text @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10408,7 +10408,7 @@ msgstr "Selecciona el mode de barreja Color"
 #, kde-format
 msgctxt "action"
 msgid "Select Luminosity Blending Mode"
-msgstr "Selecciona el mode de barreja Lluminositat"
+msgstr "Tria el mode de barreja Lluminositat"
 
 #. i18n: context: text @ Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1839
@@ -11793,7 +11793,7 @@ msgstr "Totes les capes"
 #, kde-format
 msgctxt "action"
 msgid "Select all layers"
-msgstr "Selecciona totes les capes"
+msgstr "Tria totes les capes"
 
 #. i18n: context: text @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2884
@@ -11810,7 +11810,7 @@ msgstr "Capes visibles"
 #, kde-format
 msgctxt "action"
 msgid "Select all visible layers"
-msgstr "Selecciona totes les capes visibles"
+msgstr "Tria totes les capes visibles"
 
 #. i18n: context: text @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2896
@@ -11827,7 +11827,7 @@ msgstr "Capes bloquejades"
 #, kde-format
 msgctxt "action"
 msgid "Select all locked layers"
-msgstr "Selecciona totes les capes bloquejades"
+msgstr "Tria totes les capes bloquejades"
 
 #. i18n: context: text @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2908
@@ -11844,7 +11844,7 @@ msgstr "Capes invisibles"
 #, kde-format
 msgctxt "action"
 msgid "Select all invisible layers"
-msgstr "Selecciona totes les capes invisibles"
+msgstr "Tria totes les capes invisibles"
 
 #. i18n: context: text @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2920
@@ -11861,7 +11861,7 @@ msgstr "Capes desbloquejades"
 #, kde-format
 msgctxt "action"
 msgid "Select all unlocked layers"
-msgstr "Selecciona totes les capes desbloquejades"
+msgstr "Tria totes les capes desbloquejades"
 
 #. i18n: context: text @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2932
@@ -12860,7 +12860,7 @@ msgstr "Con&vertix"
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
-msgstr "&Selecciona"
+msgstr "&Tria"
 
 #: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1234
 #, kde-format
@@ -12891,7 +12891,7 @@ msgstr "&Dividix l'alfa"
 #: krita/krita5.xmlgui:338
 #, kde-format
 msgid "Select &Opaque"
-msgstr "Selecciona l'&opac"
+msgstr "Tria l'&opac"
 
 #: krita/krita5.xmlgui:353
 #, kde-format
@@ -13691,7 +13691,7 @@ msgstr "Traça les formes seleccionades"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "Selecciona el &traç…"
+msgstr "Tria el &traç…"
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -13701,7 +13701,7 @@ msgstr "Selecciona el &traç…"
 #, kde-format
 msgctxt "action"
 msgid "Stroke selection"
-msgstr "Seleccioneu el traç"
+msgstr "Trieu el traç"
 
 #. i18n: context: text @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
@@ -14846,7 +14846,7 @@ msgstr "Descompon la imatge"
 #, kde-format
 msgctxt "action"
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1369
@@ -14863,7 +14863,7 @@ msgstr "Seleccion&a-ho tot"
 #, kde-format
 msgctxt "action"
 msgid "Select All"
-msgstr "Selecciona-ho tot"
+msgstr "Tria-ho tot"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1381
@@ -14968,7 +14968,7 @@ msgstr "Convertix les formes a selecció amb vectors"
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
-msgstr "&Selecciona suau…"
+msgstr "&Tria suau…"
 
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
@@ -15036,7 +15036,7 @@ msgstr "Seleccions des d'un interval de color"
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
-msgstr "Selecciona l'&opac (substituïx)"
+msgstr "Tria l'&opac (substituïx)"
 
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
@@ -15046,14 +15046,14 @@ msgstr "Selecciona l'&opac (substituïx)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
-msgstr "Selecciona l'opac"
+msgstr "Tria l'opac"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
-msgstr "Selecciona l'opac (&afig)"
+msgstr "Tria l'opac (&afig)"
 
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
@@ -15063,14 +15063,14 @@ msgstr "Selecciona l'opac (&afig)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
-msgstr "Selecciona l'opac (afig)"
+msgstr "Tria l'opac (afig)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
-msgstr "Selecciona l'opac (&sostrau)"
+msgstr "Tria l'opac (&sostrau)"
 
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
@@ -15080,14 +15080,14 @@ msgstr "Selecciona l'opac (&sostrau)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
-msgstr "Selecciona l'opac (sostrau)"
+msgstr "Tria l'opac (sostrau)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
-msgstr "Selecciona l'opac (&intersecció)"
+msgstr "Tria l'opac (&intersecció)"
 
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
@@ -15097,7 +15097,7 @@ msgstr "Selecciona l'opac (&intersecció)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
-msgstr "Selecciona l'opac (intersecció)"
+msgstr "Tria l'opac (intersecció)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1549
@@ -15138,7 +15138,7 @@ msgstr "Fa encollir la selecció"
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "Selecciona les &vores…"
+msgstr "Tria les &vores…"
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
@@ -15736,7 +15736,7 @@ msgstr "Tria el &color de primer pla"
 #, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr "Seleccioneu el color de primer pla"
+msgstr "Trieu el color de primer pla"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1981
@@ -15753,7 +15753,7 @@ msgstr "Tria el &color de fons"
 #, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
-msgstr "Seleccioneu el color de fons"
+msgstr "Trieu el color de fons"
 
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -15832,7 +15832,7 @@ msgstr "Disposicions"
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
-msgstr "Seleccioneu la disposició"
+msgstr "Trieu la disposició"
 
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -17530,7 +17530,7 @@ msgstr "Invertix la selecció"
 #: libs/image/kis_selection_filters.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
-msgstr "Seleccioneu l'antialiàsing"
+msgstr "Trieu l'antialiàsing"
 
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
@@ -20388,7 +20388,7 @@ msgstr "Desfés la supressió"
 #: libs/ui/actions/kis_selection_action_factories.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Select All"
-msgstr "Selecciona-ho tot"
+msgstr "Tria-ho tot"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
 #: libs/ui/KisView.cpp:792
@@ -20610,7 +20610,7 @@ msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"FFmpeg indicat pareix que no és vàlid. Seleccioneu la ubicació correcta de "
+"FFmpeg indicat pareix que no és vàlid. Trieu la ubicació correcta de "
 "l'executable en este sistema."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -20717,7 +20717,7 @@ msgstr "No s'han pogut exportar els fotogrames des del vídeo"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
 #, kde-format
 msgid "Select your Video File"
-msgstr "Seleccioneu el fitxer de vídeo"
+msgstr "Trieu el fitxer de vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
 #, kde-format
@@ -21962,14 +21962,14 @@ msgid ""
 "Select the file format for the image sequence. If you want to render to "
 "video or animated gif, you can only select PNG"
 msgstr ""
-"Seleccioneu el format de fitxer de la seqüència d'imatges. Si voleu "
-"representar a un vídeo o un GIF animat, només podeu seleccionar PNG"
+"Trieu el format de fitxer de la seqüència d'imatges. Si voleu representar a "
+"un vídeo o un GIF animat, només podeu seleccionar PNG"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:74
 #, kde-format
 msgid "Select the frame export options"
-msgstr "Seleccioneu les opcions d'exportació del fotograma"
+msgstr "Trieu les opcions d'exportació del fotograma"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/wdg_animationrenderer.ui:86
@@ -22019,7 +22019,7 @@ msgstr "Renderitza com a:"
 #: libs/ui/animation/wdg_animationrenderer.ui:210
 #, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Seleccioneu les opcions de renderització de FFmpeg."
+msgstr "Trieu les opcions de renderització de FFmpeg."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -22461,7 +22461,7 @@ msgid ""
 "li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
 "sharp results. May produce aerials.</li></ul></p>"
 msgstr ""
-"<p>Seleccioneu el mode de filtratge:\n"
+"<p>Trieu el mode de filtratge:\n"
 "<ul><li><b>Veí més proper</b> per a l'art de píxels. No produïx cap color "
 "nou.</li><li><b>Bilineal</b> per a àrees amb color uniforme per a evitar "
 "defectes</li><li><b>Bicúbic</b> per a resultats més suaus</"
@@ -22757,7 +22757,7 @@ msgstr "Estil nou"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:395
 #, kde-format
 msgid "Select ASL file"
-msgstr "Selecciona un fitxer ASL"
+msgstr "Tria un fitxer ASL"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:353
 #, kde-format
@@ -22998,7 +22998,7 @@ msgstr "Targeta SD"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:520
 #, kde-format
 msgid "Choose Manually"
-msgstr "Seleccioneu manualment"
+msgstr "Trieu manualment"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:585
 #, kde-format
@@ -23029,7 +23029,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:906
 #, kde-format
 msgid "Select a Background Image"
-msgstr "Selecciona una imatge de fons"
+msgstr "Tria una imatge de fons"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:918
 #: libs/ui/KisTemplateCreateDia.cpp:390
@@ -23484,7 +23484,7 @@ msgstr "Configuració avançada de la tauleta"
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:24
 #, kde-format
 msgid "Select area your tablet is mapped to:"
-msgstr "Seleccioneu l'àrea a la qual està mapada la tauleta:"
+msgstr "Trieu l'àrea a la qual està mapada la tauleta:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMapAsWintab)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:30
@@ -25152,7 +25152,7 @@ msgstr "Crea una màscara de filtratge"
 #: libs/ui/forms/wdgfilterselector.ui:30
 #, kde-format
 msgid "Filter selection"
-msgstr "Seleccioneu el filtratge"
+msgstr "Trieu el filtratge"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkRememberPreset)
 #: libs/ui/forms/wdgfilterselector.ui:120
@@ -25188,7 +25188,7 @@ msgstr "XML"
 #: libs/ui/forms/wdgfullscreensettings.ui:25
 #, kde-format
 msgid "Select which parts of Krita will be hidden in canvas-only mode."
-msgstr "Selecciona quines parts de Krita s'amagaran en el mode només el llenç."
+msgstr "Tria quines parts de Krita s'amagaran en el mode només el llenç."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMenu)
 #: libs/ui/forms/wdgfullscreensettings.ui:35
@@ -25239,7 +25239,7 @@ msgstr "Canvia la màscara de gamma"
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "Selecciona una màscara en l'acoblador «Màscares de gamma»"
+msgstr "Tria una màscara en l'acoblador «Màscares de gamma»"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdggeneralsettings.ui:49
@@ -26351,7 +26351,7 @@ msgstr "Propietats"
 #: libs/ui/forms/wdglayerproperties.ui:258
 #, kde-format
 msgid "Select the set of active channels."
-msgstr "Seleccioneu el conjunt de canals actius."
+msgstr "Trieu el conjunt de canals actius."
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, grpActiveChannels)
 #: libs/ui/forms/wdglayerproperties.ui:261
@@ -26360,8 +26360,8 @@ msgid ""
 "Select the set of active channels. Only active channels will be visible, "
 "filtered or affected by painting."
 msgstr ""
-"Selecciona el conjunt de canals actius. Només seran visibles els canals "
-"actius, filtrats o afectats pel dibuix."
+"Tria el conjunt de canals actius. Només seran visibles els canals actius, "
+"filtrats o afectats pel dibuix."
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpActiveChannels)
 #: libs/ui/forms/wdglayerproperties.ui:264
@@ -26373,19 +26373,19 @@ msgstr "&Activa els canals"
 #: libs/ui/forms/wdgmaskfromselection.ui:21
 #, kde-format
 msgid "Source Selection"
-msgstr "Seleccioneu la font"
+msgstr "Trieu la font"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLocal)
 #: libs/ui/forms/wdgmaskfromselection.ui:27
 #, kde-format
 msgid "&Layer Selection"
-msgstr "Seleccioneu la &capa"
+msgstr "Trieu la &capa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkImage)
 #: libs/ui/forms/wdgmaskfromselection.ui:34
 #, kde-format
 msgid "&Image Selection"
-msgstr "Seleccioneu la &imatge"
+msgstr "Trieu la &imatge"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgmaskfromselection.ui:44
@@ -27454,7 +27454,7 @@ msgid ""
 "information, such as the preset being a special effects brush, or just using "
 "tilt, or angled in some way.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Seleccioneu la icona opcional de l'emblema que indica "
+"<html><head/><body><p>Trieu la icona opcional de l'emblema que indica "
 "informació extra, com el predefinit que és un pinzell d'efectes especials, o "
 "només utilitzant inclinació, o angle d'alguna manera.</p></body></html>"
 
@@ -28559,48 +28559,48 @@ msgstr "Reinicia el gir"
 #: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
-msgstr "Seleccioneu la capa"
+msgstr "Trieu la capa"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
 #, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Selecciona les capes davall la posició del cursor"
+msgstr "Tria les capes davall la posició del cursor"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
 #, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Selecciona la capa superior (substituïx la selecció)"
+msgstr "Tria la capa superior (substituïx la selecció)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
 #, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Selecciona totes les capes (substituïx la selecció)"
+msgstr "Tria totes les capes (substituïx la selecció)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
 #, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Selecciona a partir del menú (substituïx la selecció)"
+msgstr "Tria a partir del menú (substituïx la selecció)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr "Selecciona la capa superior (afig a la selecció)"
+msgstr "Tria la capa superior (afig a la selecció)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
 #, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Selecciona totes les capes (afig a la selecció)"
+msgstr "Tria totes les capes (afig a la selecció)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
 #, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "Selecciona a partir del menú (afig a la selecció)"
+msgstr "Tria a partir del menú (afig a la selecció)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:247
 #, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
-msgstr "Selecciona totes les capes"
+msgstr "Tria totes les capes"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -29049,7 +29049,7 @@ msgstr "%1 (Qt)"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:18
 #, kde-format
 msgid "Choose screen resolution"
-msgstr "Seleccioneu la resolució de la pantalla"
+msgstr "Trieu la resolució de la pantalla"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleMessage)
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:24
@@ -29061,7 +29061,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>El controlador per a la tauleta de dibuix i Windows no "
 "estan d'acord en la mida de la pantalla a la qual està connectada la "
-"tauleta. Seleccioneu l'opció correcta.</p></body></html>"
+"tauleta. Trieu l'opció correcta.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioManual)
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:56
@@ -29261,7 +29261,7 @@ msgstr "Importa una imatge"
 #: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
 #, kde-format
 msgid "Select a Color"
-msgstr "Selecciona un color"
+msgstr "Tria un color"
 
 #: libs/ui/kis_layer_manager.cc:191
 #, kde-format
@@ -29801,27 +29801,27 @@ msgstr "Formes del traç"
 #: libs/ui/kis_selection_manager.cc:712
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
-msgstr "Selecciona l'opac (afig)"
+msgstr "Tria l'opac (afig)"
 
 #: libs/ui/kis_selection_manager.cc:715
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
-msgstr "Selecciona l'opac (sostrau)"
+msgstr "Tria l'opac (sostrau)"
 
 #: libs/ui/kis_selection_manager.cc:718
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
-msgstr "Selecciona l'opac (intersecció)"
+msgstr "Tria l'opac (intersecció)"
 
 #: libs/ui/kis_selection_manager.cc:721
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
-msgstr "Selecciona l'opac (diferència simètrica)"
+msgstr "Tria l'opac (diferència simètrica)"
 
 #: libs/ui/kis_selection_manager.cc:724
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
-msgstr "Selecciona l'opac"
+msgstr "Tria l'opac"
 
 #: libs/ui/kis_splash_screen.cpp:155
 #, kde-format
@@ -30403,7 +30403,7 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
-"Si seleccioneu «Cancel·la», es mantindran tots els fitxers recuperables.\n"
+"Si trieu «Cancel·la», es mantindran tots els fitxers recuperables.\n"
 "Si premeu «D'acord», es recuperaran els fitxers seleccionats, els fitxers no "
 "seleccionats seran rebutjats."
 
@@ -30972,7 +30972,7 @@ msgid ""
 "please select a space to convert to for editing: \n"
 msgstr ""
 "La imatge té un perfil adjuntat amb el qual Krita no pot editar les imatges "
-"a («%1»). Seleccioneu un espai al qual convertir per a editar: \n"
+"a («%1»). Trieu un espai al qual convertir per a editar: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -31047,7 +31047,7 @@ msgstr ""
 "S'està guardant un fitxer mentre encara s'està renderitzant la imatge. El "
 "fitxer guardat podria ser incomplet o corromput.\n"
 "\n"
-"Seleccioneu una ubicació a on se sobreescriga el fitxer original!"
+"Trieu una ubicació a on se sobreescriga el fitxer original!"
 
 #: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
@@ -31414,7 +31414,7 @@ msgstr "Personalitzada:"
 #: libs/ui/KisTemplateCreateDia.cpp:141
 #, kde-format
 msgid "&Select..."
-msgstr "&Selecciona…"
+msgstr "&Tria…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
 #, kde-format
@@ -31434,7 +31434,7 @@ msgstr "Esteu segur/a de voler sobreescriure la plantilla existent «%1»?"
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
 msgid "Select an image"
-msgstr "Selecciona una imatge"
+msgstr "Tria una imatge"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407 libs/ui/KisTemplateCreateDia.cpp:410
 #, kde-format
@@ -32044,7 +32044,7 @@ msgstr "Canals:"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:188
 #, kde-format
 msgid "Choose channels to blend"
-msgstr "Seleccioneu els canals que s'han de barrejar"
+msgstr "Trieu els canals que s'han de barrejar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannel1_2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannel2_2)
@@ -32807,8 +32807,8 @@ msgid ""
 "This tool cannot paint on clone layers.  Please select a paint or vector "
 "layer or mask."
 msgstr ""
-"Esta eina no pot pintar sobre capes clonades. Seleccioneu una pintura, una "
-"capa vectorial o una màscara."
+"Esta eina no pot pintar sobre capes clonades. Trieu una pintura, una capa "
+"vectorial o una màscara."
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
@@ -33156,13 +33156,13 @@ msgstr "Posició: "
 #, kde-format
 msgctxt "Action to select previous handle in the segment gradient editor"
 msgid "Select previous handle"
-msgstr "Selecciona l'ansa anterior"
+msgstr "Tria l'ansa anterior"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:44
 #, kde-format
 msgctxt "Action to select next handle in the segment gradient editor"
 msgid "Select next handle"
-msgstr "Selecciona l'ansa següent"
+msgstr "Tria l'ansa següent"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:48
 #, kde-format
@@ -33278,13 +33278,13 @@ msgstr "Trieu un color"
 #, kde-format
 msgctxt "Button to select previous stop in the stop gradient editor"
 msgid "Select previous stop"
-msgstr "Selecciona la parada anterior"
+msgstr "Tria la parada anterior"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:40
 #, kde-format
 msgctxt "Button to select next stop in the stop gradient editor"
 msgid "Select next stop"
-msgstr "Selecciona la parada següent"
+msgstr "Tria la parada següent"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:44
 #, kde-format
@@ -34162,7 +34162,7 @@ msgstr "Cap etiqueta"
 #: libs/ui/widgets/kis_color_space_selector.cc:217
 #, kde-format
 msgid "Select a Color Space"
-msgstr "Seleccioneu un espai de color"
+msgstr "Trieu un espai de color"
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:116
 #, kde-format
@@ -34478,20 +34478,21 @@ msgstr "Difumina la selecció segons la quantitat establida"
 #: libs/ui/widgets/kis_selection_options.cc:242
 #, kde-format
 msgid "Select regions found from the active layer"
-msgstr "Selecciona regions trobades a partir de la capa activa"
+msgstr "Selecciona les regions trobades a partir de la capa activa"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
 #, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Selecciona regions trobades a partir de la fusió de totes les capes"
+msgstr ""
+"Selecciona les regions trobades a partir de la fusió de totes les capes"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
-"Selecciona regions trobades a partir de les capes amb etiquetes de colors "
-"específics"
+"Selecciona les regions trobades a partir de les capes amb etiquetes de "
+"colors específics"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -35160,12 +35161,12 @@ msgstr "V:"
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
 msgid "Select a file to load..."
-msgstr "Seleccioneu un fitxer que s'haja de carregar…"
+msgstr "Trieu un fitxer que s'haja de carregar…"
 
 #: libs/widgets/kis_file_name_requester.cpp:90
 #, kde-format
 msgid "Select a directory to load..."
-msgstr "Seleccioneu un directori que s'haja de carregar…"
+msgstr "Trieu un directori que s'haja de carregar…"
 
 #: libs/widgets/kis_palette_view.cpp:106
 #, kde-format
@@ -35370,7 +35371,7 @@ msgstr "Recent:"
 #: libs/widgets/KoColorSetWidget.cpp:94
 #, kde-format
 msgid "Choose palette"
-msgstr "Seleccioneu la paleta"
+msgstr "Trieu la paleta"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:66
 #, kde-format
@@ -35665,7 +35666,7 @@ msgstr "Nom de fitxer seleccionat"
 #: libs/widgets/wdg_file_name_requester.ui:46
 #, kde-format
 msgid "Select file name..."
-msgstr "Seleccioneu el nom de fitxer…"
+msgstr "Trieu el nom de fitxer…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
@@ -35985,7 +35986,7 @@ msgstr "&Zoom…"
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
 msgid "Select zoom level"
-msgstr "Seleccioneu el nivell de zoom"
+msgstr "Trieu el nivell de zoom"
 
 #: libs/widgetutils/config/kstandardaction_p.h:62
 #, kde-format
@@ -36291,7 +36292,7 @@ msgstr ""
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
-msgstr "&Selecciona-ho tot"
+msgstr "&Tria-ho tot"
 
 #: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
@@ -36874,8 +36875,8 @@ msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
-"<qt>La combinació de tecles «%1» ja l'utilitza l'acció <b>%2</b>."
-"<br>Seleccioneu-ne una de diferent.</qt>"
+"<qt>La combinació de tecles «%1» ja l'utilitza l'acció <b>%2</b>.<br>Trieu-"
+"ne una de diferent.</qt>"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
@@ -37012,7 +37013,7 @@ msgstr "Canvi de l'idioma de l'aplicació"
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
-msgstr "Seleccioneu l'idioma que s'ha d'utilitzar en esta aplicació:"
+msgstr "Trieu l'idioma que s'ha d'utilitzar en esta aplicació:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, kde-format
@@ -37355,7 +37356,7 @@ msgstr "Regle infinit"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
 #, kde-format
 msgid "Select an Assistant"
-msgstr "Seleccioneu un assistent"
+msgstr "Trieu un assistent"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
 #, kde-format
@@ -38899,7 +38900,7 @@ msgstr "Inseriu un nom"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
-msgstr "Seleccioneu un directori"
+msgstr "Trieu un directori"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
@@ -39348,7 +39349,7 @@ msgstr "Sí"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:59
 #, kde-format
 msgid "Select the blending mode for the layer."
-msgstr "Selecciona el mode de barreja per a la capa."
+msgstr "Tria el mode de barreja per a la capa."
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, doubleOpacity)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:120
@@ -39510,18 +39511,18 @@ msgstr "Gestioneu la LUT"
 #: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
-msgstr "Seleccioneu un fitxer de configuració personalitzat."
+msgstr "Trieu un fitxer de configuració personalitzat."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:109
 #: plugins/dockers/lut/lutdocker_dock.cpp:615
 #, kde-format
 msgid "Select LUT file"
-msgstr "Selecciona un fitxer LUT"
+msgstr "Tria un fitxer LUT"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:122
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
-msgstr "Selecciona l'exposició (parades) de les imatges en HDR."
+msgstr "Tria l'exposició (parades) de les imatges en HDR."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:132
 #, kde-format
@@ -39529,8 +39530,8 @@ msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr ""
-"Seleccioneu la quantitat de modificació de gamma que es visualitzaran. Açò "
-"no afecta els píxels de la imatge."
+"Trieu la quantitat de modificació de gamma que es visualitzaran. Açò no "
+"afecta els píxels de la imatge."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:262
 #, kde-format
@@ -39557,7 +39558,7 @@ msgstr ""
 #: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, kde-format
 msgid "Select OpenColorIO Configuration"
-msgstr "Seleccioneu la configuració d'OpenColorIO"
+msgstr "Trieu la configuració d'OpenColorIO"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, kde-format
@@ -39855,7 +39856,7 @@ msgid ""
 "its location manually"
 msgstr ""
 "No s'ha pogut detectar la ubicació de l'executable de FFmpeg, instal·leu-lo "
-"o seleccioneu manualment la seua ubicació"
+"o trieu manualment la seua ubicació"
 
 #: plugins/dockers/recorder/recorder_export.cpp:173
 #, kde-format
@@ -39909,7 +39910,7 @@ msgstr "No hi ha cap fotograma que s'haja d'explorar."
 #: plugins/dockers/recorder/recorder_export.cpp:531
 #, kde-format
 msgid "Select FFmpeg Executable File"
-msgstr "Seleccioneu el fitxer executable de FFmpeg"
+msgstr "Trieu el fitxer executable de FFmpeg"
 
 #: plugins/dockers/recorder/recorder_export.cpp:577
 #, kde-format
@@ -40034,7 +40035,7 @@ msgstr "Estén el resultat per a:"
 #, kde-format
 msgid "Select a file location for the exported timelapse video"
 msgstr ""
-"Seleccioneu una ubicació de fitxer per a exportar el vídeo de la filmació a "
+"Trieu una ubicació de fitxer per a exportar el vídeo de la filmació a "
 "intervals"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
@@ -40223,12 +40224,12 @@ msgstr "S'està explorant…"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
-msgstr "Selecciona-ho tot"
+msgstr "Tria-ho tot"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
-msgstr "Selecciona res"
+msgstr "Tria res"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
@@ -40258,7 +40259,7 @@ msgstr "S'està explorant…"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
 #, kde-format
 msgid "Please select recordings to remove"
-msgstr "Seleccioneu les gravacions que s'han d'eliminar"
+msgstr "Trieu les gravacions que s'han d'eliminar"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpaceTitle)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
@@ -40289,7 +40290,7 @@ msgstr "Gestiona les gravacions…"
 #: plugins/dockers/recorder/recorderdocker.ui:130
 #, kde-format
 msgid "Select the recordings directory..."
-msgstr "Seleccioneu la carpeta de gravacions…"
+msgstr "Trieu la carpeta de gravacions…"
 
 #. i18n: ectx: property (text), widget (QLabel, labelCaptureRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
@@ -40482,7 +40483,7 @@ msgstr "Gravador"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgid "Select a Directory for Recordings"
-msgstr "Seleccioneu una carpeta per a les gravacions"
+msgstr "Trieu una carpeta per a les gravacions"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:472
 #, kde-format
@@ -40619,8 +40620,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #, kde-format
 msgid "Please choose svg file to specify the layout for exporting."
-msgstr ""
-"Seleccioneu el fitxer SVG per a especificar la disposició que s'exportarà."
+msgstr "Trieu el fitxer SVG per a especificar la disposició que s'exportarà."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
 #, kde-format
@@ -40628,8 +40628,8 @@ msgid ""
 "The SVG file to specify layout doesn't exist. Please choose an existing SVG "
 "file."
 msgstr ""
-"El fitxer SVG per a especificar la disposició no existix. Seleccioneu un "
-"fitxer SVG existent."
+"El fitxer SVG per a especificar la disposició no existix. Trieu un fitxer "
+"SVG existent."
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -41024,7 +41024,7 @@ msgstr "Selecció…"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
 #, kde-format
 msgid "Selection Color Space:"
-msgstr "Seleccioneu l'espai de color:"
+msgstr "Trieu l'espai de color:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
@@ -41555,7 +41555,7 @@ msgstr "Preferències de columna"
 #: plugins/extensions/colorrange/colorrange.xmlgui:4
 #, kde-format
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgColorRange)
 #: plugins/extensions/colorrange/dlg_colorrange.cc:52
@@ -41957,7 +41957,7 @@ msgstr "Paleta que s'ha d'utilitzar per a anomenar les capes:"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:103
 #, kde-format
 msgid "Choose Palette"
-msgstr "Seleccioneu la paleta"
+msgstr "Trieu la paleta"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:111
@@ -43110,7 +43110,7 @@ msgstr "Pàgina:"
 #: plugins/extensions/pykrita/plugin/info.ui:269
 #, kde-format
 msgid "Select a Plugin or Built-in Module"
-msgstr "Seleccioneu un connector o un mòdul integrat"
+msgstr "Trieu un connector o un mòdul integrat"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ExceptHookDialog)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
@@ -43431,12 +43431,12 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:207
 #, kde-format
 msgid "Choose the resource library to import"
-msgstr "Trieu la biblioteca de recursos que s'ha d'importar"
+msgstr "Trieu la biblioteca de recursos a importar"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #, kde-format
 msgid "Select the bundle"
-msgstr "Selecciona el paquet"
+msgstr "Tria el paquet"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:227
 #, kde-format
@@ -43517,12 +43517,12 @@ msgstr "No s'ha pogut obrir «%1» per a guardar."
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
 #, kde-format
 msgid "Select a directory to save the bundle"
-msgstr "Seleccioneu un directori a on s'ha de guardar el paquet"
+msgstr "Trieu un directori a on s'ha de guardar el paquet"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:557
 #, kde-format
 msgid "Select file to use as bundle icon"
-msgstr "Seleccioneu un fitxer que s'ha d'utilitzar com a icona del paquet"
+msgstr "Trieu un fitxer que s'ha d'utilitzar com a icona del paquet"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
 #, kde-format
@@ -43742,7 +43742,7 @@ msgstr "Disponible"
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:193
 #, kde-format
 msgid "Selected"
-msgstr "Seleccionat"
+msgstr "Triat"
 
 #. i18n: ectx: property (text), widget (QLabel, bundleName)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:163
@@ -48421,7 +48421,7 @@ msgid ""
 "chooses), 0 to 3 to set a strength."
 msgstr ""
 "Nivell del filtre de manteniment de les vores, de -1 a 3. Utilitzeu -1 de "
-"manera predeterminada (el codificador tria), 0 a 3 per a establir una "
+"manera predeterminada (tria el codificador), 0 a 3 per a establir una "
 "intensitat."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
@@ -49715,7 +49715,7 @@ msgid ""
 "RawTherapee project.</li></ul></p><p>Note: some methods can be unavailable "
 "if RAW decoder have been built without extension packs.</p>"
 msgstr ""
-"<title>Qualitat (interpolació)</title><p>Seleccioneu ací el mètode de "
+"<title>Qualitat (interpolació)</title><p>Trieu ací el mètode de "
 "reconstrucció de color en descodificar les imatges RAW. L'algorisme de "
 "reconstrucció de color és un procés digital de la imatge utilitzat per a "
 "interpolar una imatge completa des de dades parcials en brut rebudes del "
@@ -49939,9 +49939,9 @@ msgid ""
 "for a gradual fade to white</li><li><emphasis strong='true'>Rebuild</"
 "emphasis>: reconstruct highlights using a level value</li></ul></p>"
 msgstr ""
-"<title>Llums intenses</title><p>Seleccioneu ací el mètode per a escurçar les "
-"llums intenses:</p><p><ul><li><emphasis strong='true'>Blanc sòlid</"
-"emphasis>: escurça les llums intenses al blanc sòlid</li><li><emphasis "
+"<title>Llums intenses</title><p>Trieu ací el mètode per a escurçar les llums "
+"intenses:</p><p><ul><li><emphasis strong='true'>Blanc sòlid</emphasis>: "
+"escurça les llums intenses al blanc sòlid</li><li><emphasis "
 "strong='true'>Sense escurçar</emphasis>: deixa les llums intenses en "
 "diverses tonalitats de rosa</li><li><emphasis strong='true'>Barreja</"
 "emphasis>: barreja els valors escurçats i els no escurçats fent un "
@@ -50176,19 +50176,18 @@ msgid ""
 "li><li><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse noise "
 "suppression. It's applied after interpolation.</li></ul></p>"
 msgstr ""
-"<title>Reducció del soroll</title><p>Seleccioneu ací el mètode de reducció "
-"de soroll que s'aplicarà durant la descodificació RAW.</"
-"p><p><ul><li><emphasis strong='true'>Sense</emphasis>: No hi ha reducció del "
-"soroll.</li><li><emphasis strong='true'>Ondetes</emphasis>: La correcció per "
-"ondetes per a suprimir el soroll mantenint el detall real. S'aplica després "
-"de la interpolació.</li><li><emphasis strong='true'>FBDD</emphasis>: La "
-"reducció del soroll abans de la reconstrucció de color («Fake Before "
-"Demosaicing Denoising»). S'aplica abans de la interpolació.</"
-"li><li><emphasis strong='true'>Reducció de soroll CFA</emphasis>: La "
-"reducció del soroll per bandes. S'aplica després de la interpolació.</"
-"li><li><emphasis strong='true'>Reducció del soroll per impulsos</emphasis>: "
-"La reducció del soroll per impulsos. S'aplica després de la interpolació.</"
-"li></ul></p>"
+"<title>Reducció del soroll</title><p>Trieu ací el mètode de reducció de "
+"soroll que s'aplicarà durant la descodificació RAW.</p><p><ul><li><emphasis "
+"strong='true'>Sense</emphasis>: No hi ha reducció del soroll.</"
+"li><li><emphasis strong='true'>Ondetes</emphasis>: La correcció per ondetes "
+"per a suprimir el soroll mantenint el detall real. S'aplica després de la "
+"interpolació.</li><li><emphasis strong='true'>FBDD</emphasis>: La reducció "
+"del soroll abans de la reconstrucció de color («Fake Before Demosaicing "
+"Denoising»). S'aplica abans de la interpolació.</li><li><emphasis "
+"strong='true'>Reducció de soroll CFA</emphasis>: La reducció del soroll per "
+"bandes. S'aplica després de la interpolació.</li><li><emphasis "
+"strong='true'>Reducció del soroll per impulsos</emphasis>: La reducció del "
+"soroll per impulsos. S'aplica després de la interpolació.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
 #, kde-format
@@ -50302,14 +50301,13 @@ msgid ""
 "if it exists.</li><li><emphasis strong='true'>Custom</emphasis>: use a "
 "custom input color space profile.</li></ul></p>"
 msgstr ""
-"<title>Perfil de la càmera</title><p>Seleccioneu ací l'espai de color "
-"d'entrada utilitzat per a descodificar les dades RAW.</"
-"p><p><ul><li><emphasis strong='true'>Cap</emphasis>: no s'utilitza cap "
-"perfil de color per a l'entrada durant la descodificació RAW.</"
-"li><li><emphasis strong='true'>Incrustat</emphasis>: utilitza el perfil de "
-"color incrustat en el fitxer RAW si existix.</li><li><emphasis "
-"strong='true'>A mida</emphasis>: utilitza un perfil d'espai de color "
-"d'entrada personalitzat.</li></ul></p>"
+"<title>Perfil de la càmera</title><p>Trieu ací l'espai de color d'entrada "
+"utilitzat per a descodificar les dades RAW.</p><p><ul><li><emphasis "
+"strong='true'>Cap</emphasis>: no s'utilitza cap perfil de color per a "
+"l'entrada durant la descodificació RAW.</li><li><emphasis "
+"strong='true'>Incrustat</emphasis>: utilitza el perfil de color incrustat en "
+"el fitxer RAW si existix.</li><li><emphasis strong='true'>A mida</emphasis>: "
+"utilitza un perfil d'espai de color d'entrada personalitzat.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
 #, kde-format
@@ -50378,7 +50376,7 @@ msgid ""
 "in mind.</li><li><emphasis strong='true'>Custom</emphasis>: use a custom "
 "output color space profile.</li></ul></p>"
 msgstr ""
-"<title>Espai de treball</title><p>Seleccioneu ací l'espai de color d'eixida "
+"<title>Espai de treball</title><p>Trieu ací l'espai de color d'eixida "
 "utilitzat per a descodificar les dades RAW.</p><p><ul><li><emphasis "
 "strong='true'>RAW (sense perfil)</emphasis>: en este mode, no s'utilitza cap "
 "espai de color d'eixida durant la descodificació RAW.</li><li><emphasis "
@@ -51611,8 +51609,8 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Pinzell de clonat:</"
-"span></p><p>Seleccioneu el punt d'origen de la capa actual amb «Ctrl+clic». "
-"Utilitzeu «Ctrl+Alt+clic» per a seleccionar un origen de la capa triada "
+"span></p><p>Trieu el punt d'origen de la capa actual amb «Ctrl+clic». "
+"Utilitzeu «Ctrl+Alt+clic» per a triar un origen des de la capa seleccionada "
 "anteriorment.</p></body></html>"
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
@@ -52447,7 +52445,7 @@ msgstr "Mescla amb el color de fons"
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:41
 #, kde-format
 msgid "Selected:"
-msgstr "Seleccionat:"
+msgstr "Triat:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEraser)
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:85
@@ -54079,8 +54077,8 @@ msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
-"Selecciona com es distribuïxen les partícules com una funció de l'angle al "
-"centre de l'àrea de ruixat."
+"Tria com es distribuïxen les partícules com una funció de l'angle al centre "
+"de l'àrea de ruixat."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:66
 #, kde-format
@@ -54125,8 +54123,8 @@ msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
-"Selecciona com es distribuïxen les partícules com una funció de la distància "
-"des del centre de l'àrea de ruixat."
+"Tria com es distribuïxen les partícules com una funció de la distància des "
+"del centre de l'àrea de ruixat."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:81
 #, kde-format
@@ -54746,7 +54744,7 @@ msgstr "S'han convertit els documents seleccionats."
 #: plugins/python/colorspace/uicolorspace.py:131
 #: plugins/python/documenttools/uidocumenttools.py:106
 msgid "Select at least one document."
-msgstr "Seleccioneu un document com a mínim."
+msgstr "Trieu un document com a mínim."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:32
 msgid "Adjust Working File"
@@ -55596,7 +55594,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
-msgstr "Seleccioneu el fitxer JSON de configuració del còmic."
+msgstr "Trieu el fitxer JSON de configuració del còmic."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
@@ -55774,7 +55772,7 @@ msgid ""
 "Please choose a different folder."
 msgstr ""
 "Krita no té accés d'escriptura a esta carpeta, per tant, no es poden crear "
-"fitxers. Seleccioneu una carpeta diferent."
+"fitxers. Trieu una carpeta diferent."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:64
 msgid "Comic Project Setup"
@@ -55933,7 +55931,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:161
 msgid "Select background color"
-msgstr "Selecciona el color de fons"
+msgstr "Tria el color de fons"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:219
 msgid "Margins"
@@ -56280,11 +56278,11 @@ msgstr "Extensions de les imatges:"
 
 #: plugins/python/exportlayers/uiexportlayers.py:137
 msgid "Select one document."
-msgstr "Seleccioneu un document."
+msgstr "Trieu un document."
 
 #: plugins/python/exportlayers/uiexportlayers.py:139
 msgid "Select the initial directory."
-msgstr "Seleccioneu el directori d'inici."
+msgstr "Trieu el directori d'inici."
 
 #: plugins/python/exportlayers/uiexportlayers.py:142
 msgid "All layers have been exported."
@@ -56292,7 +56290,7 @@ msgstr "S'han exportat totes les capes."
 
 #: plugins/python/exportlayers/uiexportlayers.py:209
 msgid "Select a Folder"
-msgstr "Seleccioneu una carpeta"
+msgstr "Trieu una carpeta"
 
 #: plugins/python/filtermanager/filtermanager.py:16
 #: plugins/python/filtermanager/uifiltermanager.py:54
@@ -56893,14 +56891,14 @@ msgstr ""
 
 #: plugins/python/tenbrushes/uitenbrushes.py:28
 msgid "&Select freehand brush tool when pressing a shortcut"
-msgstr "&Selecciona l'eina del pinzell a mà alçada en prémer una drecera"
+msgstr "&Tria l'eina del pinzell a mà alçada en prémer una drecera"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:47
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr ""
-"Seleccioneu el pinzell predefinit, després cliqueu damunt del botó que voleu "
+"Trieu el pinzell predefinit, després cliqueu damunt del botó que voleu "
 "utilitzar per a seleccionar el predefinit."
 
 #: plugins/python/tenbrushes/uitenbrushes.py:50
@@ -57013,7 +57011,7 @@ msgstr "Camí seleccionat"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Select the script"
-msgstr "Seleccioneu l'script"
+msgstr "Trieu l'script"
 
 #: plugins/python/tenscripts/uitenscripts.py:90
 msgid "Python files (*.py)"
@@ -58172,7 +58170,7 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:98
 #, kde-format
 msgid "Select a Reference Image"
-msgstr "Seleccioneu una imatge de referència"
+msgstr "Trieu una imatge de referència"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
 #, kde-format
@@ -58270,7 +58268,7 @@ msgstr "Ubicació de guardada:"
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
 #, kde-format
 msgid "Add/Select an image to show options"
-msgstr "Afig/Selecciona una imatge per a mostrar les opcions"
+msgstr "Afig/Tria una imatge per a mostrar les opcions"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -58459,7 +58457,7 @@ msgstr "Cal·ligrafia"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:59
 #, kde-format
 msgid "Contiguous Area Selection"
-msgstr "Seleccioneu un àrea contigua"
+msgstr "Trieu un àrea contigua"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:110
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:232
@@ -58491,7 +58489,7 @@ msgstr "Utilitza la selecció com a límit"
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
-"Selecciona regions similars en color a la regió en la qual s'ha fet clic"
+"Selecciona les regions similars en color a la regió en la qual s'ha fet clic"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
@@ -58576,7 +58574,7 @@ msgstr "Eina de selecció a mà alçada"
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:28
 #, kde-format
 msgid "Select path"
-msgstr "Selecciona el camí"
+msgstr "Tria el camí"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:157
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:170
@@ -58624,13 +58622,13 @@ msgstr "Eina de selecció rectangular"
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
-msgstr "Seleccioneu un color similar"
+msgstr "Trieu un color similar"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
-msgstr "Selecciona un color similar"
+msgstr "Tria un color similar"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, kde-format
@@ -60178,13 +60176,13 @@ msgstr "Aplica"
 msgid "Transform Tool Actions"
 msgstr "Accions de l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "El tipus de capa no pot utilitzar l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:878
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60192,7 +60190,7 @@ msgstr ""
 "El tipus de capa no pot utilitzar l'eina de transformació. En el seu lloc "
 "utilitzeu la màscara de transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60202,20 +60200,20 @@ msgstr ""
 "La capa té fills amb màscares de transformació. Per favor, inhabiliteu-los "
 "abans de fer la transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:912
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Les seleccions no s'utilitzen en editar les màscares de transformació "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:995
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "No es pot transformar una capa buida "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

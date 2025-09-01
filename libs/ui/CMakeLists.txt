@@ -650,7 +650,7 @@ if(WIN32)
     )
 endif()
 
-if (HAVE_WAYLAND)
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
 
@@ -693,7 +693,7 @@ target_link_libraries(kritaui
         kritaresources
 )
 
-if (HAVE_WAYLAND)
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
     target_link_libraries(kritaui
         PRIVATE
             kritasurfacecolormanagementapi

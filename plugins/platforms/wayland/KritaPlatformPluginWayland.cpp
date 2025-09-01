@@ -9,6 +9,11 @@
 #include <kis_assert.h>
 
 #include <KisExtendedModifiersMapperWayland.h>
+
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
 #include <waylandcolormanagement/KisWaylandSurfaceColorManager.h>
 #include <waylandcolormanagement/KisWaylandOutputColorInfo.h>
 
@@ -30,11 +35,15 @@ public:
 
 } // namespace detail
 
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
 K_PLUGIN_FACTORY_WITH_JSON(KritaPlatformPluginWaylandFactory, "kritaplatformwayland.json",
     (
-        registerPlugin<KisExtendedModifiersMapperWayland>(),
-        registerPlugin<detail::KisWaylandSurfaceColorManagerWrapper>(),
-        registerPlugin<KisWaylandOutputColorInfo>()
+        registerPlugin<KisExtendedModifiersMapperWayland>()
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+        , registerPlugin<detail::KisWaylandSurfaceColorManagerWrapper>()
+        , registerPlugin<KisWaylandOutputColorInfo>()
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
     );)
 
 #include <KritaPlatformPluginWayland.moc>

@@ -155,10 +155,17 @@
 #include "KisToolBarStateModel.h"
 #include <config-qmdiarea-always-show-subwindow-title.h>
 
+
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
 // surface color management
 #include <kpluginfactory.h>
 #include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
 #include <KisSRGBSurfaceColorSpaceManager.h>
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 #include <mutex>
 
@@ -314,8 +321,10 @@ public:
 
     KateCommandBar *commandBar {nullptr};
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
     // lifetime is managed by the QObject hierarchy
     QPointer<KisSRGBSurfaceColorSpaceManager> surfaceColorSpaceManager;
+#endif
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -663,6 +672,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     applyMainWindowSettings(d->windowStateConfig);
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
     /**
      * Load platform plugin for surface color management and set
      * the surface color space to sRGB exactly
@@ -686,6 +696,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
             }
         }
     }
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 }
 
@@ -3226,7 +3237,11 @@ bool KisMainWindow::checkPaintOpAvailable()
 
 const KoColorProfile* KisMainWindow::managedSurfaceProfile() const
 {
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
     return d->surfaceColorSpaceManager ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : nullptr;
+#else
+    return nullptr;
+#endif
 }
 
 #include <moc_KisMainWindow.cpp>

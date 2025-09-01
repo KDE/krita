@@ -24,6 +24,6 @@ add_subdirectory( resourcewidgets )
 add_subdirectory( psd )
 add_subdirectory( multiarch )
 
-if (NOT ANDROID AND HAVE_WAYLAND)
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
    add_subdirectory( surfacecolormanagementapi )
 endif()

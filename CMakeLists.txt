@@ -256,7 +256,7 @@ add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
             message(WARNING "Linker Security Flags not enabled!")
         endif (USE_MINGW_HARDENING_LINKER)
 
-        # Clang does not generate DWARF aranges data by default, which makes
+        # Clang does not generate DWARF arranges data by default, which makes
         # DrMingw not able to parse the DWARF debug symbols. Add -gdwarf-aranges
         # explicitly.
         # See: https://github.com/jrfonseca/drmingw/issues/42#issuecomment-516614561
@@ -856,9 +856,9 @@ endif()
 
 # Force enable a good many optimizations
 if (MSVC AND NOT BUILD_TESTING)
-    # Aggresive inlining (Release)
+    # Aggressive inlining (Release)
     string(REPLACE "Ob2" "Ob3" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-    # Aggresive inlining (RelWithDebInfo)
+    # Aggressive inlining (RelWithDebInfo)
     string(REPLACE "Ob1" "Ob3" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
     # Whole program optimization
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
@@ -1223,7 +1223,7 @@ endif()
 find_package(Mlt7)
 set_package_properties(Mlt7 PROPERTIES DESCRIPTION "Media Lovin' Toolkit (Multimedia Framework)"
                 URL "https://mltframework.org/"
-                PURPOSE "Required to do audio/video syncrhonization and processing. No MLT = No Audio! ")
+                PURPOSE "Required to do audio/video synchronization and processing. No MLT = No Audio! ")
 if (Mlt7_FOUND)
     find_package(SDL2 REQUIRED)
     set_package_properties(SDL2 PROPERTIES DESCRIPTION "Simple DirectMedia Layer 2"

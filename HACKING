@@ -313,8 +313,8 @@ QML Notes:
     is already set to the contentHeight, so doesn't need to be set (and can in fact lead to slowdowns).
     Conversely, if no implicit height is set on the content item, the content item will take the height
     and width from the parent button or popup.
-    - Similarly, ListViews are not supossed to instatiate delegates outside of their views, but if a ListViews
-    is instatiated with their height set to contentHeight, then, even as the ListView resizes itself later, it
+    - Similarly, ListViews are not supposed to instantiate delegates outside of their views, but if a ListViews
+    is instantiated with their height set to contentHeight, then, even as the ListView resizes itself later, it
     will instantiate a delegate for every single item it could lay out upon the ListView itself be instantiated.
     It's better to set the default height of the ListView to something bounded, like the fontSize * 3, and then
     ensure it is resized later.

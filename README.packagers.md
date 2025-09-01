@@ -20,7 +20,7 @@ We have chosen to ship G’MIC-Qt as a library because of two longstanding
 bugs.
 
 The Krita host for G’MIC-Qt relies on `QSharedMemory`, i.e. a shared
-memory segment, on wich a pipe is instantiated to pass messages to and
+memory segment, on which a pipe is instantiated to pass messages to and
 from the host app. Firstly, this approach made opening two simultaneous
 G’MIC-Qt instances (each paired to its own Krita instance) impossible
 [^1]. Secondly, it also forbade using G’MIC-Qt with Krita on CentOS, as

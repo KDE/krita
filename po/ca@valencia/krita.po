@@ -15035,7 +15035,7 @@ msgstr "Seleccion&a-ho tot"
 #, kde-format
 msgctxt "action"
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1381
@@ -15320,7 +15320,7 @@ msgstr "Tria les &vores…"
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
-msgstr "Trieu les vores"
+msgstr "Seleccioneu les vores"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1585
@@ -21559,7 +21559,7 @@ msgstr "Dilata la selecció"
 #: libs/image/kis_selection_filters.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Border Selection"
-msgstr "Tria les vores"
+msgstr "Selecciona les vores"
 
 #: libs/image/kis_selection_filters.cpp:499
 msgctxt "(qtundo-format)"
@@ -24537,7 +24537,7 @@ msgstr "Desfés la supressió"
 #: libs/ui/actions/kis_selection_action_factories.cpp:156
 msgctxt "(qtundo-format)"
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
 #: libs/ui/KisView.cpp:779
@@ -34258,7 +34258,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
 #, kde-format
@@ -37279,8 +37279,8 @@ msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
-"L'eina de pinzell no pot pintar en esta capa. Trieu una capa de pintura o "
-"una màscara."
+"L'eina de pinzell no pot pintar en esta capa. Seleccioneu una capa de "
+"pintura o una màscara."
 
 #: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
@@ -38970,20 +38970,21 @@ msgstr "Difumina la selecció segons la quantitat establida"
 #: libs/ui/widgets/kis_selection_options.cc:244
 #, kde-format
 msgid "Select regions found from the active layer"
-msgstr "Tria les regions trobades a partir de la capa activa"
+msgstr "Selecciona les regions trobades a partir de la capa activa"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Tria les regions trobades a partir de la fusió de totes les capes"
+msgstr ""
+"Selecciona les regions trobades a partir de la fusió de totes les capes"
 
 #: libs/ui/widgets/kis_selection_options.cc:248
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
-"Tria les regions trobades a partir de les capes amb etiquetes de colors "
-"específics"
+"Selecciona les regions trobades a partir de les capes amb etiquetes de "
+"colors específics"
 
 #: libs/ui/widgets/kis_selection_options.cc:256
 #, kde-format
@@ -40363,7 +40364,7 @@ msgstr ""
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
-msgstr "&Tria-ho tot"
+msgstr "&Selecciona-ho tot"
 
 #: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
@@ -47317,7 +47318,7 @@ msgstr "Valor"
 #: plugins/extensions/modify_selection/dlg_border_selection.cc:20
 #, kde-format
 msgid "Border Selection"
-msgstr "Trieu les vores"
+msgstr "Seleccioneu les vores"
 
 #: plugins/extensions/modify_selection/dlg_feather_selection.cc:20
 #, kde-format
@@ -47861,7 +47862,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:209
 #, kde-format
 msgid "Choose the resource library to import"
-msgstr "Trieu la biblioteca de recursos a importar"
+msgstr "Trieu la biblioteca de recursos que s'ha d'importar"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:213
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:280
@@ -53384,7 +53385,7 @@ msgid ""
 "chooses), 0 to 3 to set a strength."
 msgstr ""
 "Nivell del filtre de manteniment de les vores, de -1 a 3. Utilitzeu -1 de "
-"manera predeterminada (el codificador tria), 0 a 3 per a establir una "
+"manera predeterminada (tria el codificador), 0 a 3 per a establir una "
 "intensitat."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
@@ -56771,7 +56772,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Pinzell de clonat:</"
 "span></p><p>Trieu el punt d'origen de la capa actual amb «Ctrl+clic». "
-"Utilitzeu «Ctrl+Alt+clic» per a seleccionar un origen de la capa triada "
+"Utilitzeu «Ctrl+Alt+clic» per a triar un origen des de la capa seleccionada "
 "anteriorment.</p></body></html>"
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
@@ -64054,7 +64055,7 @@ msgstr "Trieu un àrea contigua"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:235
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
-msgstr "Tria una àrea contigua"
+msgstr "Selecciona una àrea contigua"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
 #, kde-format
@@ -64081,12 +64082,13 @@ msgstr "Utilitza la selecció com a límit"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr "Tria les regions similars en color a la regió en la qual s'ha fet clic"
+msgstr ""
+"Selecciona les regions similars en color a la regió en la qual s'ha fet clic"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
 #, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Tria totes les regions fins a un color de límit específic"
+msgstr "Selecciona totes les regions fins a un color de límit específic"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
@@ -64146,7 +64148,7 @@ msgstr "Selecció el·líptica"
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
-msgstr "Tria una el·lipse"
+msgstr "Selecciona una el·lipse"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
 #, kde-format
@@ -64189,7 +64191,7 @@ msgstr "Selecció poligonal"
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:70
 msgctxt "(qtundo-format)"
 msgid "Select Polygon"
-msgstr "Trieu un polígon"
+msgstr "Seleccioneu un polígon"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
 #, kde-format
@@ -64205,7 +64207,7 @@ msgstr "Selecció rectangular"
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:72
 msgctxt "(qtundo-format)"
 msgid "Select Rectangle"
-msgstr "Tria un rectangle"
+msgstr "Selecciona un rectangle"
 
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
 #, kde-format
@@ -65803,7 +65805,7 @@ msgstr "Eina de polilínies. «Majús+clic» acaba la polilínia."
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:134
 #, kde-format
 msgid "Select a paint layer to use this tool"
-msgstr "Trieu una capa de pintura per a utilitzar esta eina"
+msgstr "Seleccioneu una capa de pintura per a utilitzar esta eina"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:173
 msgctxt "(qtundo-format)"

@@ -262,16 +262,24 @@ Control {
 
             ToolButton {
                 id: importResource;
-                palette: control.palette;
                 icon.source: "qrc:///light_document-import-16.svg";
                 icon.width: 16;
-                icon.color: palette.text;
+                icon.color: palette.buttonText;
                 hoverEnabled: true;
-                ToolTip.text: i18nc("@info:tooltip", "Import Resource");
+
                 display: AbstractButton.IconOnly;
-                text: ToolTip.text;
-                ToolTip.visible: hovered;
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                text: i18nc("@info:tooltip, %1 is resource type name", "Import %1", modelWrapper.resourceTypeName);
+                enabled: modelWrapper.importEnabled;
+
+                Kis.ThemedControl {
+                    id: importPal;
+                }
+                palette: importPal.palette;
+
+                Kis.ToolTipBase {
+                    text: importResource.text;
+                    visible: importResource.hovered;
+                }
 
                 onClicked: modelWrapper.importResource();
 
@@ -283,11 +291,13 @@ Control {
                 icon.width: 16;
                 icon.color: palette.text;
                 hoverEnabled: true;
-                ToolTip.text: i18nc("@info:tooltip", "Remove Resource");
                 display: AbstractButton.IconOnly;
-                text: ToolTip.text;
-                ToolTip.visible: hovered;
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                text: i18nc("@info:tooltip, %1 is resource type name", "Remove %1", modelWrapper.resourceTypeName);
+
+                Kis.ToolTipBase {
+                    text: removeResource.text;
+                    visible: removeResource.hovered;
+                }
 
                 onClicked: modelWrapper.removeResource();
             }

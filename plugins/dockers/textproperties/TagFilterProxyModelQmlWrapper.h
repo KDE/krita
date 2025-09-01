@@ -23,6 +23,8 @@ class TagFilterProxyModelQmlWrapper : public QObject
     Q_PROPERTY(QAbstractItemModel *tagModel READ tagModel NOTIFY tagModelChanged)
 
     Q_PROPERTY(QString resourceType READ resourceType WRITE setResourceType NOTIFY resourceTypeChanged)
+    Q_PROPERTY(QString resourceTypeName READ resourceTypeName NOTIFY resourceTypeChanged)
+    Q_PROPERTY(bool importEnabled READ importEnabled NOTIFY resourceTypeChanged);
 
     Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
     Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
@@ -51,6 +53,13 @@ public:
      * related models.
      */
     void setResourceType(const QString &type);
+
+    /// The property translated name for the current resource type.
+    /// This might assert if there's no proper translated name.
+    QString resourceTypeName() const;
+
+    /// Returns whether the current resource has a ResourceLocator.
+    bool importEnabled() const;
 
     /// Select tag at row in tag model.
     void tagActivated(const int &row);

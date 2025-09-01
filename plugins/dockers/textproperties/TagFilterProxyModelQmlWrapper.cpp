@@ -94,6 +94,18 @@ void TagFilterProxyModelQmlWrapper::setResourceType(const QString &type)
     emit currentResourceChanged();
 }
 
+QString TagFilterProxyModelQmlWrapper::resourceTypeName() const
+{
+    if (d->resourceType.isEmpty()) return i18n("Resource");
+    // TODO: We should have separate translated entries for singular.
+    return ResourceName::resourceTypeToName(d->resourceType);
+}
+
+bool TagFilterProxyModelQmlWrapper::importEnabled() const
+{
+    return KisResourceLoaderRegistry::instance()->resourceTypes().contains(d->resourceType);
+}
+
 void TagFilterProxyModelQmlWrapper::tagActivated(const int &row)
 {
     if (!d->tagModel || !d->tagFilterProxyModel) return;

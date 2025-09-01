@@ -76,6 +76,10 @@ KisWaylandAPIColorManager::KisWaylandAPIColorManager()
 To test if your app handles the disconnection signal correctly just run:
 
 ```bash
+# ensure Qt tries to reconnect on the server restart
+export QT_WAYLAND_RECONNECT=1
+
+# restart the compositor
 kwin_wayland --replace
 ```
 

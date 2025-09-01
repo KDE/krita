@@ -76,9 +76,6 @@ public:
     /// Untag the resource
     Q_INVOKABLE void untagResource(const int &tagIndex, const int &resourceIndex);
 
-    /// Get localized name for index, retrieved from the resource metadata.
-    Q_INVOKABLE static QString localizedNameFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
-
     /// Get localized sample string based on scripts of locale.
     Q_INVOKABLE static QString localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
 
@@ -132,6 +129,8 @@ private:
 class FontFamilyTagFilterModel: public KisTagFilterResourceProxyModel {
 public:
     FontFamilyTagFilterModel(QObject *parent = nullptr);
+
+    QVariant data(const QModelIndex &index, int role) const override;
 
     bool additionalResourceNameChecks(const QModelIndex &index, const KisResourceSearchBoxFilter *filter) const override;
 };

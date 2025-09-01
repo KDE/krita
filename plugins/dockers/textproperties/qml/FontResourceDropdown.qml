@@ -156,7 +156,6 @@ Button {
 
             function updateNameAndSample() {
                 if (typeof metadata == "undefined") return;
-                fontName = modelWrapper.localizedNameFromMetadata(metadata, familyCmb.locales, name);
                 sample = modelWrapper.localizedSampleFromMetadata(metadata, familyCmb.locales, "");
             }
 

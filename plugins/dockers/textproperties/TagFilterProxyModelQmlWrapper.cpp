@@ -190,29 +190,6 @@ void TagFilterProxyModelQmlWrapper::untagResource(const int &tagIndex, const int
     }
 }
 
-QString TagFilterProxyModelQmlWrapper::localizedNameFromMetadata(
-        const QMap<QString, QVariant> &metadata,
-        const QStringList &locales,
-        const QString &fallBack)
-{
-    const QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
-    QString name = fallBack.isEmpty()? localizedNames.value("en").toString(): fallBack;
-
-    Q_FOREACH(const QString locale, locales) {
-        const QLocale l(locale);
-        bool found = false;
-        Q_FOREACH(const QString key, localizedNames.keys()) {
-            if (QLocale(key) == l) {
-                name = localizedNames.value(key, name).toString();
-                found = true;
-                break;
-            }
-        }
-        if (found) break;
-    }
-    return name;
-}
-
 #include <KoWritingSystemUtils.h>
 QString TagFilterProxyModelQmlWrapper::localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack)
 {
@@ -362,6 +339,35 @@ void TagFilterProxyModelQmlWrapper::setSearchTextOnModel()
 FontFamilyTagFilterModel::FontFamilyTagFilterModel(QObject *parent)
     : KisTagFilterResourceProxyModel(ResourceType::FontFamilies, parent)
 {
+}
+
+QVariant FontFamilyTagFilterModel::data(const QModelIndex &index, int role) const
+{
+    QModelIndex sourceIdx = mapToSource(index);
+    if (sourceIdx.isValid()) {
+        if (role == (Qt::UserRole + KisAbstractResourceModel::Name)) {
+            const int resourceId = sourceModel()->data(sourceIdx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+            const QVariantMap localizedNames = KisResourceModelProvider::resourceMetadataModel()->metaDataValue(resourceId, "localized_font_family").toMap();
+            const QString fallBack = sourceModel()->data(sourceIdx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+            QString name = fallBack.isEmpty()? localizedNames.value("en").toString(): fallBack;
+
+            Q_FOREACH(const QLocale locale, KLocalizedString::languages()) {
+                bool found = false;
+                Q_FOREACH(const QString key, localizedNames.keys()) {
+                    if (QLocale(key) == locale) {
+                        name = localizedNames.value(key, name).toString();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+            return name;
+        } else {
+            return sourceModel()->data(sourceIdx, role);
+        }
+    }
+    return QVariant();
 }
 
 bool FontFamilyTagFilterModel::additionalResourceNameChecks(const QModelIndex &index, const KisResourceSearchBoxFilter *filter) const

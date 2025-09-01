@@ -121,7 +121,6 @@ Control {
                     property var resourceTaggedModel : [];
                     enabled: resourceIndex >= 0;
                     onResourceIndexChanged: {
-                        resourceName = modelWrapper.localizedNameFromMetadata(modelWrapper.metadataForIndex(tagActionsContextMenu.resourceIndex), locales, resourceName);
                         updateResourceTaggedModel();
                     }
                     function updateResourceTaggedModel() {

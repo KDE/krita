@@ -14863,7 +14863,7 @@ msgstr "Seleccion&a-ho tot"
 #, kde-format
 msgctxt "action"
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1381
@@ -20388,7 +20388,7 @@ msgstr "Desfés la supressió"
 #: libs/ui/actions/kis_selection_action_factories.cpp:149
 msgctxt "(qtundo-format)"
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
 #: libs/ui/KisView.cpp:792
@@ -36292,7 +36292,7 @@ msgstr ""
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
-msgstr "&Tria-ho tot"
+msgstr "&Selecciona-ho tot"
 
 #: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
@@ -40224,7 +40224,7 @@ msgstr "S'està explorant…"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
@@ -43431,7 +43431,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:207
 #, kde-format
 msgid "Choose the resource library to import"
-msgstr "Trieu la biblioteca de recursos a importar"
+msgstr "Trieu la biblioteca de recursos que s'ha d'importar"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #, kde-format

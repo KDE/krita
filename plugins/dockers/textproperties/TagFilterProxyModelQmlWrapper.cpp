@@ -202,24 +202,6 @@ void TagFilterProxyModelQmlWrapper::untagResource(const int &tagIndex, const int
     }
 }
 
-#include <KoWritingSystemUtils.h>
-QString TagFilterProxyModelQmlWrapper::localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack)
-{
-    QString sample = fallBack;
-    QVariantMap samples = metadata.value("sample_svg").toMap();
-    if (!samples.isEmpty()) sample = samples.value("s_Latn", samples.values().first()).toString();
-    if (!locales.isEmpty()) {
-        Q_FOREACH(const QString locale, locales) {
-            const QString tag = KoWritingSystemUtils::sampleTagForQLocale(QLocale (locale));
-            if (samples.keys().contains(tag) ) {
-                sample = samples.value(tag).toString();
-                break;
-            }
-        }
-    }
-    return sample;
-}
-
 QVariantList TagFilterProxyModelQmlWrapper::taggedResourceModel (const int &resourceIndex) const
 {
     QVariantList taggedResourceModel;

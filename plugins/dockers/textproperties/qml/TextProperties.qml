@@ -27,6 +27,9 @@ Control {
         id: focusChecker;
         onInFocusChanged: canvasObserver.hasFocus = inFocus;
     }
+    Kis.FontFunctions {
+        id: fontFunctions;
+    }
 
     property TextPropertyConfigModel configModel : canvasObserver.textPropertyConfig;
     property double canvasDPI: canvasObserver.dpi;
@@ -156,7 +159,7 @@ Control {
                                 id: missingFamily;
                                 visible: typeof presetDelegate.meta.primary_font_family !== 'undefined'?
                                              presetDelegate.meta.primary_font_family !== ""
-                                             && mainWindow.wwsFontFamilyName(presetDelegate.meta.primary_font_family, true) === "": false;
+                                             && typeof fontFunctions.wwsFontFamilyNameVariant(presetDelegate.meta.primary_font_family) === 'undefined': false;
                                 icon.source: palette.window.hslLightness < 0.5? "qrc:///16_light_warning.svg": "qrc:///16_dark_warning.svg";
                                 icon.height: 8;
                                 icon.width: 8;

@@ -84,13 +84,3 @@ QColor TextPropertiesDock::modalColorDialog(QColor oldColor)
     QColor c = QColorDialog::getColor(oldColor);
     return c.isValid()? c: oldColor;
 }
-
-#include <KoFontRegistry.h>
-QString TextPropertiesDock::wwsFontFamilyName(QString familyName, bool returnEmptyWhenMissing)
-{
-    std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName);
-    if (!name) {
-        return returnEmptyWhenMissing? QString(): familyName;
-    }
-    return name.value();
-}

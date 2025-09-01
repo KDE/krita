@@ -30,8 +30,6 @@ public:
     void unsetCanvas() override;
 
 public Q_SLOTS:
-    QString wwsFontFamilyName(QString familyName, bool returnEmptyWhenMissing = false);
-
     QColor modalColorDialog(QColor oldColor);
 
 

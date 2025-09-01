@@ -138,15 +138,6 @@ QColor CssStylePresetEditDialog::modalColorDialog(QColor oldColor)
     return c.isValid()? c: oldColor;
 }
 
-QString CssStylePresetEditDialog::wwsFontFamilyName(QString familyName)
-{
-    std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName);
-    if (!name) {
-        return familyName;
-    }
-    return name.value();
-}
-
 void CssStylePresetEditDialog::slotUpdateDirty() {
     bool isDirty = m_currentResource->isDirty();
     const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();

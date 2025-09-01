@@ -19,6 +19,8 @@ if (QT_MAJOR_VERSION STREQUAL "6")
             KisCubicCurveQMLWrapper.h
             KisTheme.cpp
             KisTheme.h
+            KisFontFunctions.cpp
+            KisFontFunctions.h
     )
 
 else ()
@@ -40,6 +42,8 @@ else ()
             KisCubicCurveQMLWrapper.h
             KisTheme.cpp
             KisTheme.h
+            KisFontFunctions.cpp
+            KisFontFunctions.h
     )
 
 endif ()

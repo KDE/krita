@@ -37,6 +37,9 @@ Button {
         id: palControl;
     }
     palette: palControl.palette;
+    Kis.FontFunctions {
+        id: fontFunctions;
+    }
 
     /// Ideally we'd have the max popup height be Window-height - y-pos-of-item-to-window.
     /// But that's pretty hard to calculate (map to global is screen relative, but there's
@@ -79,9 +82,9 @@ Button {
         warningTimeOut: activeFocus? 1000: 0;
 
         function testInput() {
-            let test = mainWindow.wwsFontFamilyName(text, true);
+            let test = fontFunctions.wwsFontFamilyNameVariant(text);
 
-            if (test === "") {
+            if (typeof test === 'undefined') {
                 if (!activeFocus) {
                     startWarning();
                 }
@@ -147,16 +150,39 @@ Button {
             property string sample: "";
 
             onMetadataChanged: {
-                updateNameAndSample();
+                updateSample();
             }
 
             Component.onCompleted: {
-                updateNameAndSample();
+                updateSample();
             }
 
-            function updateNameAndSample() {
-                if (typeof metadata == "undefined") return;
-                sample = modelWrapper.localizedSampleFromMetadata(metadata, familyCmb.locales, "");
+            function updateSample() {
+                if (typeof metadata === "undefined") return;
+                let samples = fontFunctions.getMapFromQVariant(metadata.sample_svg);
+                let sampleKeys = Object.keys(samples);
+                sample = "";
+                const latn = samples["s_Latn"];
+                if (sampleKeys.length > 0) {
+                    if (latn) {
+                        sample = latn;
+                    } else {
+                        let tag = sampleKeys[0];
+                        sample = samples[tag];
+                    }
+                }
+                if (familyCmb.locales.length > 0) {
+                    for (const locale of familyCmb.locales) {
+                        let tag = fontFunctions.sampleTagForQLocale(Qt.locale(locale));
+                        let svg = samples[tag];
+                        if (svg) {
+                            sample = svg;
+                            break;
+                        }
+
+
+                    }
+                }
             }
 
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
@@ -206,6 +232,7 @@ Button {
                             fillColor: delegateControl.highlighted? familyCmb.palette.highlight: familyCmb.palette.window;
                             fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
                             padding: nameLabel.height;
+
 
                             Row {
                                 id: featureRow;
@@ -311,7 +338,7 @@ Button {
                 preventStealing: true;
                 onClicked: {
                     if (mouse.button === Qt.RightButton) {
-                        resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
+                        resourceView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.index);
                     } else {
                         resourceView.applyHighlightedIndex();
                         familyCmb.activated();

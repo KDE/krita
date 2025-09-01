@@ -184,8 +184,8 @@ QPair<QString, QString> KoFontFamily::resourceType() const
 void KoFontFamily::updateThumbnail()
 {
     QHash<QString, QVariant> samples = metadata().value(SAMPLE_STRING).toHash();
-    QHash<QString, QVariant> sampleSVG;
-    QHash<QString, QVariant> sampleSVGBbox;
+    QMap<QString, QVariant> sampleSVG;
+    QMap<QString, QVariant> sampleSVGBbox;
 
     Q_FOREACH (const QString key, samples.keys()) {
         QString sample = samples.value(key).toString();

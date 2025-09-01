@@ -24,7 +24,7 @@ class TagFilterProxyModelQmlWrapper : public QObject
 
     Q_PROPERTY(QString resourceType READ resourceType WRITE setResourceType NOTIFY resourceTypeChanged)
     Q_PROPERTY(QString resourceTypeName READ resourceTypeName NOTIFY resourceTypeChanged)
-    Q_PROPERTY(bool importEnabled READ importEnabled NOTIFY resourceTypeChanged);
+    Q_PROPERTY(bool importEnabled READ importEnabled NOTIFY resourceTypeChanged)
 
     Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
     Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
@@ -84,9 +84,6 @@ public:
 
     /// Untag the resource
     Q_INVOKABLE void untagResource(const int &tagIndex, const int &resourceIndex);
-
-    /// Get localized sample string based on scripts of locale.
-    Q_INVOKABLE static QString localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack = "");
 
     /// Get a variantlist with the tags for the given resource index.
     Q_INVOKABLE QVariantList taggedResourceModel (const int &resourceIndex) const;

@@ -102,7 +102,7 @@ Control {
                 palette: control.palette;
                 function hideShowMenu() {
                     if (!tagActionsContextMenu.visible) {
-                        tagActionsContextMenu.resourceIndex = control.highlightedIndex;
+                        tagActionsContextMenu.resourceIndex = modelWrapper.currentIndex;
                         tagActionsContextMenu.popup(tagMenuButton,
                                                     tagActionsContextMenu.width - tagMenuButton.width,
                                                     tagMenuButton.height - 1);

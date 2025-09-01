@@ -13,6 +13,7 @@
 #include <KisNumParser.h>
 #include <KisCubicCurveQMLWrapper.h>
 #include <KisTheme.h>
+#include <KisFontFunctions.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #error "This plugin implementation is to be used with Qt5 only!\n"
@@ -41,6 +42,7 @@ void KritaQmlComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<KisCubicCurveQml>(uri, 1, 0, "KisCubicCurve");
     qmlRegisterType<KisTheme>(uri, 1, 0, "Theme");
     qmlRegisterUncreatableType<KisThemeColorGroup>(uri, 1, 0, "ThemeColorGroup", "Use Theme instead");
+    qmlRegisterType<KisFontFunctions>(uri, 1, 0, "FontFunctions");
 }
 
 #include "KritaQmlComponentsPlugin.moc"

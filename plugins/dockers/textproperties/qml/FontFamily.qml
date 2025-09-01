@@ -61,6 +61,10 @@ CollapsibleGroupProperty {
         }
     }
 
+    Kis.FontFunctions {
+        id: fontFunctions;
+    }
+
     titleItem: RowLayout {
         width: parent.width;
         height: childrenRect.height;
@@ -84,7 +88,7 @@ CollapsibleGroupProperty {
                 }
             }
             function updateCurrentIndex() {
-                var name = mainWindow.wwsFontFamilyName(fontFamilies[0]);
+                var name = fontFunctions.wwsFontFamilyName(fontFamilies[0]);
                 if (name !== modelWrapper.resourceFilename) {
                     modelWrapper.currentTag = 0;
                     modelWrapper.currentIndex = -1;
@@ -131,10 +135,10 @@ CollapsibleGroupProperty {
                         Component.onCompleted: {
                             if (fontListDelegate.dIndex === 0) {
                                 modelWrapper = mainFamilyCmb.modelWrapper;
-                                fontFileName = mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
+                                fontFileName = fontFunctions.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
                             }
                         }
-                        fontFileName: mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
+                        fontFileName: fontFunctions.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
                     }
                     ToolButton {
                         id: removeFont;

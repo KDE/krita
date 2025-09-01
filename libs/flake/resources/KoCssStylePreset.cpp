@@ -8,6 +8,7 @@
 #include <KoShapePainter.h>
 #include <KoSvgTextShape.h>
 #include <KoDocumentResourceManager.h>
+#include <KLocalizedString>
 
 #include <SvgWriter.h>
 #include <SvgParser.h>
@@ -29,7 +30,7 @@ const QString PRIMARY_FONT_FAMILY = "primary_font_family";
 
 const QString STYLE_TYPE_PARAGRAPH = "paragraph";
 const QString STYLE_TYPE_CHARACTER = "character";
-const QString SAMPLE_PLACEHOLDER = i18nc("info:placeholder", "Style Sample");
+const KLocalizedString SAMPLE_PLACEHOLDER = ki18nc("info:placeholder", "Style Sample");
 
 struct KoCssStylePreset::Private {
 
@@ -40,7 +41,7 @@ struct KoCssStylePreset::Private {
 
     KoSvgTextProperties properties;
     QString beforeText;
-    QString sample = SAMPLE_PLACEHOLDER;
+    QString sample = SAMPLE_PLACEHOLDER.toString();
     QString afterText;
 };
 
@@ -156,7 +157,7 @@ KoShape* KoCssStylePreset::generateSampleShape() const
     const QString before = d->beforeText;
 
     QScopedPointer<KoSvgTextShape> sampleText(new KoSvgTextShape());
-    sampleText->insertText(0, sample.isEmpty()? name().isEmpty()? SAMPLE_PLACEHOLDER: name(): sample);
+    sampleText->insertText(0, sample.isEmpty()? name().isEmpty()? SAMPLE_PLACEHOLDER.toString(): name(): sample);
     const QString type = styleType().isEmpty()? STYLE_TYPE_CHARACTER: styleType();
 
     bool removeParagraph = type == STYLE_TYPE_CHARACTER;

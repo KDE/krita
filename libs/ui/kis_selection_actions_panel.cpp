@@ -74,14 +74,18 @@ struct KisSelectionActionsPanel::Private {
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
 };
 
-KisSelectionActionsPanel::KisSelectionActionsPanel()
-    : d(new Private)
+KisSelectionActionsPanel::KisSelectionActionsPanel(QObject *parent)
+    : QObject(parent)
+    , d(new Private)
 {
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
 {
-    delete d;
+    // buttons are children of the canvas, but we should still delete
+    // them to make sure they are not accessed after the decoration dies
+    qDeleteAll(d->m_buttons);
+    d->m_buttons.clear();
 }
 
 void KisSelectionActionsPanel::setViewManager(KisViewManager *viewManager)

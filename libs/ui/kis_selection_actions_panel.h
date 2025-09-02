@@ -31,7 +31,7 @@ class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
 {
     Q_OBJECT
 public:
-    KisSelectionActionsPanel();
+    KisSelectionActionsPanel(QObject *parent);
     ~KisSelectionActionsPanel();
     void drawDecoration(QPainter &gc,
                         const KisCoordinatesConverter *converter,
@@ -46,7 +46,7 @@ public:
 
 private:
     struct Private;
-    Private *const d;
+    QScopedPointer<Private> d;
 
 Q_SIGNALS:
 };

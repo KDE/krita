@@ -28,6 +28,11 @@ if (ANDROID)
     endif()
 endif()
 
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    target_link_libraries(kritabuginfo kritasurfacecolormanagementapi)
+endif()
+
+
 install(TARGETS kritabuginfo  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES  buginfo.xmlgui  DESTINATION ${KDE_INSTALL_DATADIR}/kritaplugins)

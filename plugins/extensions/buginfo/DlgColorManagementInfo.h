@@ -12,6 +12,7 @@
 
 
 class QSettings;
+class KisOutputColorInfoInterface;
 
 class DlgColorManagementInfo: public DlgBugInfo
 {
@@ -27,6 +28,9 @@ public:
     QString replacementWarningText() override;
     QString captionText() override;
     QString infoText(QSettings& kritarc) override;
+
+private:
+    QScopedPointer<KisOutputColorInfoInterface> m_outputColorInfoInterface;
 };
 
 #endif // DLG_COLORMANAGEMENTINFO_H

@@ -9,11 +9,36 @@
 
 #include <KisMainWindow.h>
 
+#include <KoPluginLoader.h>
+#include <kpluginfactory.h>
+#include <surfacecolormanagement/KisOutputColorInfoInterface.h>
+
 
 DlgColorManagementInfo::DlgColorManagementInfo(QWidget *parent)
     : DlgBugInfo(parent)
 {
     initialize();
+
+    KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
+        std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
+        "Krita/PlatformPlugin");
+
+    if (factory) {
+        m_outputColorInfoInterface.reset(
+            factory->create<KisOutputColorInfoInterface>(nullptr));
+
+        if (m_outputColorInfoInterface) {
+            connect(m_outputColorInfoInterface.data(), &KisOutputColorInfoInterface::sigReadyChanged,
+                    this, &DlgColorManagementInfo::initializeText);
+
+            connect(m_outputColorInfoInterface.data(), &KisOutputColorInfoInterface::sigOutputDescriptionChanged,
+                    this, [this] () {
+                        if (m_outputColorInfoInterface->isReady()) {
+                            initializeText();
+                        }
+                    });
+        }
+    }
 }
 
 QString DlgColorManagementInfo::originalFileName()
@@ -60,6 +85,7 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
     s << Qt::endl;
 
     s.noquote().nospace() << mainWindow->colorManagementReport();
+    s.space().quote();
     s << Qt::endl;
 
     if (mainWindow->viewManager()->document()) {
@@ -80,8 +106,33 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
         }
         s << Qt::endl;
 
-
         s.noquote().nospace() << canvas->colorManagementReport();
+        s.space().quote();
+
+        Q_FOREACH (QScreen *screen, qApp->screens()) {
+            s << Qt::endl;
+            s << "Screen:" << screen->name() << screen->manufacturer() << screen->model();
+            if (screen == mainWindow->screen()) {
+                s << "[CURRENT]";
+            }
+            s << Qt::endl;
+            s << "===" << Qt::endl;
+            s << Qt::endl;
+
+            std::optional<KisSurfaceColorimetry::SurfaceDescription> desc;
+
+            if (m_outputColorInfoInterface && m_outputColorInfoInterface->isReady()) {
+                desc = m_outputColorInfoInterface->outputDescription(screen);
+            }
+
+            if (desc) {
+                s.noquote().nospace() << desc->makeTextReport();
+                s.space().quote();
+            } else {
+                s << "<no information available>";
+            }
+            s << Qt::endl;
+        }
     }
 
     return report;

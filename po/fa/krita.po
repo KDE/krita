@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"POT-Creation-Date: 2025-09-02 02:22+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -16711,7 +16711,7 @@ msgstr "عرض:"
 msgid "Fit Height"
 msgstr "متناسب عرض صفحه"
 
-#: libs/flake/resources/KoCssStylePreset.cpp:32
+#: libs/flake/resources/KoCssStylePreset.cpp:33
 #, fuzzy, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
@@ -24274,6 +24274,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:673
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:99
 #, fuzzy, kde-format
 msgid "Resource"
 msgstr "&منابع‌"
@@ -24336,7 +24337,7 @@ msgstr "حذف"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"

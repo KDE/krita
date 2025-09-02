@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"POT-Creation-Date: 2025-09-02 02:22+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16513,7 +16513,7 @@ msgstr "テキストの幅に合わせる"
 msgid "Fit Height"
 msgstr "ビューの高さに合わせる"
 
-#: libs/flake/resources/KoCssStylePreset.cpp:32
+#: libs/flake/resources/KoCssStylePreset.cpp:33
 #, fuzzy, kde-format
 #| msgid "Style Sheet"
 msgctxt "info:placeholder"
@@ -24131,6 +24131,7 @@ msgid "Tag Url"
 msgstr "タグ URL"
 
 #: libs/resources/KisTagResourceModel.cpp:673
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:99
 #, kde-format
 msgid "Resource"
 msgstr "リソース"
@@ -24192,7 +24193,7 @@ msgstr "リソースを削除"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"

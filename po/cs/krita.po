@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"POT-Creation-Date: 2025-09-02 02:22+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -13078,16 +13078,14 @@ msgid "Brushes and Stuff"
 msgstr "Štětce a další"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Vlastní barva"
+msgstr ""
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Vlastní barva"
+msgstr ""
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -16467,7 +16465,7 @@ msgstr "Přizpůsobit šířce"
 msgid "Fit Height"
 msgstr ""
 
-#: libs/flake/resources/KoCssStylePreset.cpp:32
+#: libs/flake/resources/KoCssStylePreset.cpp:33
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
@@ -23849,6 +23847,7 @@ msgid "Tag Url"
 msgstr "URL značky"
 
 #: libs/resources/KisTagResourceModel.cpp:673
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:99
 #, kde-format
 msgid "Resource"
 msgstr "Zdroj"
@@ -23909,7 +23908,7 @@ msgstr "Smazat zdroj"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"
@@ -33533,38 +33532,29 @@ msgid "Select All"
 msgstr "Vybrat vše"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
 msgstr "Obrátit výběr"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Similar Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "Vybrat podobnou barvu"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Scale Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Změnit měřítko výběru"
+msgstr "Smazat výběr"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
+#, kde-format
 msgid "Copy To New Layer"
-msgstr "Kopírovat vrstvu"
+msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgid "Crop to Selection"
-msgstr "Ořezat výběr"
+msgstr "Oříznout k výběru"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format

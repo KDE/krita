@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"POT-Creation-Date: 2025-09-02 02:22+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -16513,7 +16513,7 @@ msgstr "Širina:"
 msgid "Fit Height"
 msgstr "Sljedeća stranica"
 
-#: libs/flake/resources/KoCssStylePreset.cpp:32
+#: libs/flake/resources/KoCssStylePreset.cpp:33
 #, fuzzy, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
@@ -23992,6 +23992,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:673
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:99
 #, fuzzy, kde-format
 msgid "Resource"
 msgstr "Svojstva uređaja"
@@ -24052,7 +24053,7 @@ msgstr "Ukloni tekst"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, fuzzy, kde-format
 msgctxt "@title:window"

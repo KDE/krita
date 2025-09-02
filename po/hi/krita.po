@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 02:04+0000\n"
+"POT-Creation-Date: 2025-09-02 02:22+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16600,7 +16600,7 @@ msgstr "चौडाईः"
 msgid "Fit Height"
 msgstr "पृष्ठ ऊँचाई के अनुरूप"
 
-#: libs/flake/resources/KoCssStylePreset.cpp:32
+#: libs/flake/resources/KoCssStylePreset.cpp:33
 #, fuzzy, kde-format
 #| msgid "Style Sheet"
 msgctxt "info:placeholder"
@@ -24206,6 +24206,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:673
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:99
 #, fuzzy, kde-format
 msgid "Resource"
 msgstr "संसाधन (&R)"
@@ -24271,7 +24272,7 @@ msgstr "संसाधन मिटाएँ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
 #: libs/ui/KisMainWindow.cpp:2637
-#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:325
+#: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
 msgctxt "@title:window"

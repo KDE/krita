@@ -134,7 +134,7 @@ public:
      * to the passed points exactly! The still point may be offset by at most
      * (0.5 * sqrt(2) / devicePixelRatio()) due to hardware pixel alignment.
      *
-     * This alignement is the reason why we pass both document and view points
+     * This alignment is the reason why we pass both document and view points
      * as a still point, because both values should be kept constant during iterative
      * zoom operations. Otherwise the canvas will drift to the side because of the
      * pixel alignmentl.
@@ -248,7 +248,7 @@ public:
 
     /**
      * \brief Creates a still point that links the \p docPoint of the image
-     *        (in document pixels!) to the curresponding point on the screen
+     *        (in document pixels!) to the corresponding point on the screen
      *        (in the canvas widget).
      *
      * The link is "baked" in KoViewTransformStillPoint object, hence

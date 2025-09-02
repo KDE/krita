@@ -27,7 +27,7 @@ KisImportExportErrorCode workaroundUnsuitableImageColorSpace(KisImageSP image,
     const KoColorProfile *profile = colorSpace->profile();
 
     if (profile && !profile->isSuitableForOutput()) {
-        /// The profile has no reverse mapping into for the descriped color space,
+        /// The profile has no reverse mapping into for the described color space,
         /// so we cannot use it in Krita. We need to ask the user to convert the image
         /// right on loading
 

@@ -395,7 +395,7 @@ void KisCoordinatesConverter::setCanvasWidgetSizeKeepZoom(const QSizeF &size)
     } else {
         /**
          * WARNING: we can safely call setZoom() after changing widget size **only**
-         * for non-constant modes, becasue they have no still points, they always
+         * for non-constant modes, because they have no still points, they always
          * align to the center of the widget. Constant mode, reads the state of the
          * canvas before transformation to calculate the position of the still point,
          * hence we cannot change the state separately.

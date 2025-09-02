@@ -13,7 +13,7 @@ import org.krita.components 1.0
 /*
     \qmltype ParseSpinBoxContentItem
     A FocusScope that allows for parsing math expressions via KisNumParser,
-    in addtion to allowing for suffix and prefix.
+    in addition to allowing for suffix and prefix.
 
     When the math expression is incorrect, a WarningOverlay will be drawn.
 

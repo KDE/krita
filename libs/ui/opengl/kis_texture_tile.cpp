@@ -186,7 +186,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
      *
      * Another case is when the user has Bilinear or
      * Nearest Neighbour filtering selected and tries to use LoD
-     * funcionality in animation. glTexSubImage2D() and textureLod()
+     * functionality in animation. glTexSubImage2D() and textureLod()
      * are defined only when all the planes were explicitly initialized
      * with glTexImage2D(), which doesn't happen in case of bilinear- or
      * nn-filtering. In this case !m_mipmapHasBeenAllocated condition

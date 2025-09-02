@@ -458,7 +458,7 @@ void KisViewManager::setCurrentView(KisView *view)
 
     if (imageView) {
         /// idle tasks managed should be reconnected to the new image the first,
-        /// because other dockers may request it to recalcualte stuff
+        /// because other dockers may request it to recalculate stuff
         d->idleTasksManager.setImage(d->currentImageView->image());
 
         d->softProof->setChecked(imageView->softProofing());

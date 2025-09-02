@@ -106,7 +106,7 @@ struct FrameRenderingStats
 
 }
 /**
- *  This static funciton responds to MLT consumer requests for frames. This may
+ *  This static function responds to MLT consumer requests for frames. This may
  *  continue to be called even when playback is stopped due to it running
  *  simultaneously in a separate thread.
  */

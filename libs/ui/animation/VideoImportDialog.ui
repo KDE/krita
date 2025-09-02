@@ -582,7 +582,7 @@ The higher the sensitivity, the more frames are added to Krita.</string>
           <item row="2" column="0">
            <widget class="QLabel" name="videoScaleFilterLabel">
             <property name="text">
-             <string comment="Resize intepolation method list label">Filter:</string>
+             <string comment="Resize interpolation method list label">Filter:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

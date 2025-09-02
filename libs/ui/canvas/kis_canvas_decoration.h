@@ -87,7 +87,7 @@ protected:
      */
     void setPriority(int value);
 
-    // returns the minimum decoration thickness, somewhat equivelant to the display scaling.
+    // returns the minimum decoration thickness, somewhat equivalent to the display scaling.
     int decorationThickness() const;
 
 private:

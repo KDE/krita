@@ -584,7 +584,7 @@ QString KisConfig::monitorProfile(int screen) const
 
     /**
      * Screen identifier may be empty (e.g. on macOS), so the identifier
-     * key will be plain 'monitorProfile', which is the key fot the **first**
+     * key will be plain 'monitorProfile', which is the key for the **first**
      * display's profile, so we shouldn't fall into this trap...
      */
     if (!screenIdentifier.isEmpty() && m_cfg.hasKey(screenIdentifierKey)) {

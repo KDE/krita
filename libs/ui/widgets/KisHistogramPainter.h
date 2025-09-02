@@ -139,7 +139,7 @@ public:
      * all the histogram, this can make its interesting parts too small to take
      * any valuable information from them. This function will try to come up
      * with a scale value that favors those interesting parts over the long
-     * peaks, which will be pushed and will look cutted
+     * peaks, which will be pushed and will look cut
      * @see scale
      * @see setScale
      * @see setScaleToFit

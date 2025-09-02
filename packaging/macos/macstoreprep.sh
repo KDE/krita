@@ -19,7 +19,7 @@ if [[ -z $BUILDROOT ]]; then
     exit 1
 fi
 
-#recieves a path without filename
+# receives a path without filename
 get_absolute_path() {
     local origLoc="$(pwd)"
 

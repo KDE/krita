@@ -53,7 +53,7 @@ public:
      * @brief Get the current gradient
      * 
      * A clone is returned so that any changes in the returned gradient
-     * won't change the editor gradient and viceversa
+     * won't change the editor gradient and vice-versa
      * @return A clone of the current gradient
      * @see setGradient(KoAbstractGradientSP)
      */
@@ -132,7 +132,7 @@ public Q_SLOTS:
      * @brief Set the gradient
      * 
      * This editor makes a clone os the gradient passed so that any changes
-     * made in the editor won't change the passed gradient and viceversa
+     * made in the editor won't change the passed gradient and vice-versa
      * @param newGradient The new gradient
      * @see gradient()
      */

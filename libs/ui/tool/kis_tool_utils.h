@@ -79,7 +79,7 @@ QPainterPath KRITAUI_EXPORT shapeHoverInfoCrossLayer(KoCanvasBase *canvas, const
  * @param canvas -- the current canvas.
  * @param point -- the point in document coordinates.
  * @param shapeType -- the required shapeId, if empty, selects any koshape.
- * @return whether a shape was succesfully selected.
+ * @return whether a shape was successfully selected.
  */
 bool KRITAUI_EXPORT selectShapeCrossLayer(KoCanvasBase *canvas, const QPointF &point,
                                           const QString &shapeType = QString(), bool skipCurrentShapes = true);

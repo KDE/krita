@@ -11,14 +11,14 @@ supportedPlatforms = ['linux', 'windows', 'macos-universal', 'android-x86_64', '
 
 # Capture our command line parameters
 parser = argparse.ArgumentParser(description='A script for building Krita Windows package on CI')
-parser.add_argument('--platform', type=str, choices=supportedPlatforms, required=True, help='The platform pacakge is built for')
+parser.add_argument('--platform', type=str, choices=supportedPlatforms, required=True, help='The platform package is built for')
 parser.add_argument('--folder', type=str, required=True, help='The folder where to search for packages')
 arguments = parser.parse_args()
 
 skipUploadingNightlyPackages = os.environ.get('KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE', 'False')
 
 if skipUploadingNightlyPackages.lower() in ['true', '1', 't', 'y', 'yes']:
-    print('## KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE is set. Skiping uploading nightly packages...')
+    print('## KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE is set. Skipping uploading nightly packages...')
     sys.exit(0)
 
 if not 'KRITACI_PUBLISH_BUILD_CONFIG' in os.environ:

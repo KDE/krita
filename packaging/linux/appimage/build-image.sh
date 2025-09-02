@@ -38,7 +38,7 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
-# add our own linuxdeployqt to our PATH environemnt if available
+# add our own linuxdeployqt to our PATH environment if available
 if [ -d $DEPS_INSTALL_PREFIX/appimage-tools/bin ]; then
   export PATH=$DEPS_INSTALL_PREFIX/appimage-tools/bin/:$PATH
 fi

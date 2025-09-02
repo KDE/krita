@@ -320,7 +320,7 @@ void KisCutCopyActionFactory::run(Flags flags, KisViewManager *view)
         // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         /**
-         * Make sure that we use tryBarrierLock() here becasue it does **not**
+         * Make sure that we use tryBarrierLock() here because it does **not**
          * cause requestStrokeEnd() to be called in the tools, hence does not
          * prevent disruptions in the text tool.
          */

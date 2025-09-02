@@ -9,7 +9,7 @@ import QtQuick 2.15
     \qmltype SliderOverlay
     This item is an overlay that draws the slider in slider spinboxes.
 
-    It can show two seperate bars. Each can have a separate width, however
+    It can show two separate bars. Each can have a separate width, however
     only one can be active. This bar will be shown wider than the inactive bar.
  */
 Item {

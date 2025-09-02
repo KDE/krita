@@ -185,7 +185,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="scaleFilterLabel">
         <property name="text">
-         <string comment="Resize intepolation method list label">Filter:</string>
+         <string comment="Resize interpolation method list label">Filter:</string>
         </property>
        </widget>
       </item>

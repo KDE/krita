@@ -172,7 +172,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     qreal secondSquareDistance = std::numeric_limits<qreal>::max();
 
     if (!d->snapOnlyOneAssistant || !d->firstAssistant) {
-        // In these cases the best assistant meeds to be determined.
+        // In these cases the best assistant needs to be determined.
         int numSuitableAssistants = 0;
         KisPaintingAssistantSP bestAssistant;
 

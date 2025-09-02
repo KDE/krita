@@ -462,8 +462,8 @@ void KisCoordinatesConverterTest::testOffsetLimitsCropping()
     QCOMPARE(converter.imageToWidget(QPointF(1000,1000)), QPointF(500,500));
 
     // This mirror operation cause clipping of the offset, since
-    // the left edge of the document shoudl appear at position
-    // 480, which is higer than the limit of 450.
+    // the left edge of the document should appear at position
+    // 480, which is higher than the limit of 450.
     converter.mirror(converter.makeViewStillPoint(QPointF(490, 0)), true, false);
 
     QCOMPARE(converter.documentOffset(), QPoint(-450,0));
@@ -585,7 +585,7 @@ void KisCoordinatesConverterTest::testZoomMode_data()
         << unusedNewConstantZoom
         << unusedWidgetStillPoint
         << 2.0 * defaultDisplayResolution
-        << 0.35 // the only difference is that the percieved zoom is halved
+        << 0.35 // the only difference is that the perceived zoom is halved
         << PointPairs{
                         {{0,0},     {0,-100}}, // the left image border is aligned to the left
                         {{100,100}, {70,-30}},
@@ -674,7 +674,7 @@ void KisCoordinatesConverterTest::testZoomMode_data()
         << unusedNewConstantZoom
         << unusedWidgetStillPoint
         << 2.0 * defaultDisplayResolution
-        << 0.25 // the only difference is that the percieved zoom is halved
+        << 0.25 // the only difference is that the perceived zoom is halved
         << PointPairs{
                     {{0,0},     {100,0}}, // the top image border is aligned to the top
                     {{100,100}, {150,50}},
@@ -763,7 +763,7 @@ void KisCoordinatesConverterTest::testZoomMode_data()
         << unusedNewConstantZoom
         << unusedWidgetStillPoint
         << 2.0 * defaultDisplayResolution
-        << 0.25 // the only difference is that the percieved zoom is halved
+        << 0.25 // the only difference is that the perceived zoom is halved
         << PointPairs{
             {{0,0},     {100,0}}, // the top image border is aligned to the top
             {{100,100}, {150,50}},
@@ -829,7 +829,7 @@ void KisCoordinatesConverterTest::testZoomMode_data()
         << unusedNewConstantZoom
         << unusedWidgetStillPoint
         << 2.0 * defaultDisplayResolution
-        << 0.35 // the only difference is that the percieved zoom is halved
+        << 0.35 // the only difference is that the perceived zoom is halved
         << PointPairs{
             {{0,0},     {0,50}}, // the left image border is aligned to the left
             {{100,100}, {70,120}},

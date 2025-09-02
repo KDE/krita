@@ -16,7 +16,7 @@ class KisViewManager;
 
 namespace KisAnimationRender {
     /** Render an animation to file on disk.
-     *  returns TRUE on success, FALSE on error or cancelation.
+     *  returns TRUE on success, FALSE on error or cancellation.
     **/
     KRITAUI_EXPORT bool render(KisDocument *doc, KisViewManager* viewManager, KisAnimationRenderingOptions encoderOptions);
 

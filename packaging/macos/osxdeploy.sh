@@ -508,7 +508,7 @@ krita_create_PyKrita() {
     local fmwk_name="PyKrita"
     local fmwk_version=${KRITA_VERSION%%-*}
 
-    # asume we are not in frameworks
+    # assume we are not in frameworks
     local old_pwd=$(pwd)
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks/
 

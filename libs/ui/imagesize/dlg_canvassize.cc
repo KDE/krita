@@ -265,7 +265,7 @@ void DlgCanvasSize::slotAnchorButtonClicked(int id)
 
 void DlgCanvasSize::slotWidthChanged(double v)
 {
-    //this slot receiv values in pt from the unitspinbox, so just use the resolution.
+    //this slot receives values in pt from the unitspinbox, so just use the resolution.
     const double resValue = v*_widthUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
     m_newWidth = qRound(resValue);
 
@@ -286,7 +286,7 @@ void DlgCanvasSize::slotWidthChanged(double v)
 
 void DlgCanvasSize::slotHeightChanged(double v)
 {
-    //this slot receiv values in pt from the unitspinbox, so just use the resolution.
+    //this slot receives values in pt from the unitspinbox, so just use the resolution.
     const double resValue = v*_heightUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
     m_newHeight = qRound(resValue);
 
@@ -307,7 +307,7 @@ void DlgCanvasSize::slotHeightChanged(double v)
 
 void DlgCanvasSize::slotXOffsetChanged(double v)
 {
-    //this slot receiv values in pt from the unitspinbox, so just use the resolution.
+    //this slot receives values in pt from the unitspinbox, so just use the resolution.
     const double resValue = v*_xOffsetUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
     m_xOffset = qRound(resValue);
 
@@ -320,7 +320,7 @@ void DlgCanvasSize::slotXOffsetChanged(double v)
 
 void DlgCanvasSize::slotYOffsetChanged(double v)
 {
-    //this slot receiv values in pt from the unitspinbox, so just use the resolution.
+    //this slot receives values in pt from the unitspinbox, so just use the resolution.
     const double resValue = v*_xOffsetUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
     m_yOffset = qRound(resValue);
 

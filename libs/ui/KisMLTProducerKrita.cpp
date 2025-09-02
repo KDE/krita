@@ -313,7 +313,7 @@ extern "C" void* producer_krita_init(mlt_profile profile,
                  * Disable caching of frames in avformat producer
                  *
                  * Caching in MLT library is broken. When a frame is taken from the
-                 * cache its "audio" property is not resotred. It breaks the work
+                 * cache its "audio" property is not restored. It breaks the work
                  * of "read-ahead" consumer thread, which also temporarily stores
                  * this frame.
                  */

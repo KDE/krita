@@ -1331,8 +1331,8 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
     }
 
     /**
-     * This lock will later release()'ed when we start he backgroud thread,
-     * it means that the ownership is transferred to the backgroud thread
+     * This lock will later release() when we start the background thread,
+     * it means that the ownership is transferred to the background thread
      */
     std::unique_lock<QMutex> savingMutexLock(d->savingMutex, std::adopt_lock);
 
@@ -1379,7 +1379,7 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
     /**
      * From now on **no** return statements are allowed, even inside
      * asserts, since the ownership over the saving mutex has already
-     * been passed to the backgroud thread.
+     * been passed to the background thread.
      *
      * The cancellation process should go through
      * slotChildCompletedSavingInBackground(), which will unlock the

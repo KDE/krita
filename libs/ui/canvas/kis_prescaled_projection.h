@@ -82,7 +82,7 @@ public Q_SLOTS:
     /**
      * Called whenever the size of the KisImage changes.
      * It is a part of a complex update ritual, when the size
-     * fo the image changes. This method just resizes the storage
+     * of the image changes. This method just resizes the storage
      * for the image cache, it doesn't update any cached data.
      */
     void slotImageSizeChanged(qint32 w, qint32 h);

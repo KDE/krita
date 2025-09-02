@@ -161,7 +161,7 @@ KisFilterStrategy *DlgLayerSize::filterType()
 void DlgLayerSize::slotWidthChanged(double w)
 {
 
-    //this slot receiv values in pt from the unitspinbox, so just use the resolution.
+    //this slot receives values in pt from the unitspinbox, so just use the resolution.
     const double resValue = w*_widthUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
     m_width = qRound(resValue);
 
@@ -178,7 +178,7 @@ void DlgLayerSize::slotWidthChanged(double w)
 void DlgLayerSize::slotHeightChanged(double h)
 {
 
-    //this slot receiv values in pt from the unitspinbox, so just use the resolution.
+    //this slot receives values in pt from the unitspinbox, so just use the resolution.
     const double resValue = h*_heightUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
     m_height = qRound(resValue);
 

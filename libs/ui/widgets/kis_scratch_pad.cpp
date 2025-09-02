@@ -263,8 +263,8 @@ void KisScratchPad::wheelDelta(QWheelEvent *event)
     // matching cursor position in document (taking in account scale + translate)
     QPointF docPosition = widgetToDocument().map(position);
 
-    // loop manage case where angleDelta is greated than one mouse wheel tick  and allows to refresh zoom smoothly
-    // in this case
+    // loop manage case where angleDelta is greater than one mouse wheel tick
+    // and allows to refresh zoom smoothly in this case
     //      if angleDelta = 360, 360/120 = 3, then scale will be refreshed 3 times
     // m_accumulatedMouseDelta allow to manage the case where angleDelta in not equal QWheelEvent::DefaultDeltasPerStep
     while (qAbs(m_accumulatedMouseDelta) >= QWheelEvent::DefaultDeltasPerStep) {
@@ -461,7 +461,7 @@ void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
     // linked to it
     //
     // Otherwise do nothing
-    // If zoom on scratchPad have to be updated, then it have to be udpated manually through setScale() method
+    // If zoom on scratchPad has to be updated, then it has to be updated manually through setScale() method
 
     // value not changed? do nothing
     if (qFuzzyCompare(scaleX, m_canvasScaleX) && qFuzzyCompare(scaleY, m_canvasScaleY)) return;

@@ -30,7 +30,7 @@ import "overlays"
 
             /// Assume this does something more useful than check
             /// if text is literally the string "Valid".
-            funcion validate(text) {
+            function validate(text) {
                 text == "Valid";
             }
         }

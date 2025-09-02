@@ -187,9 +187,9 @@ KisPaintingAssistant::Private::Private(const Private &rhs)
 
 void KisPaintingAssistant::copySharedData(KisPaintingAssistantSP assistant)
 {
-    /*Clones do not get a copy of the shared data, so this function is nessesary to copy
-    the SharedData struct from the old assistant to this one. The function returns a reference to
-    a new SharedData object copied from the original*/
+    // Clones do not get a copy of the shared data, so this function is necessary to copy
+    // the SharedData struct from the old assistant to this one. The function returns a
+    // reference to a new SharedData object copied from the original
     this->d->s = (QSharedPointer<KisPaintingAssistant::Private::SharedData>)new KisPaintingAssistant::Private::SharedData;
     QSharedPointer<KisPaintingAssistant::Private::SharedData> sd = assistant->d->s;
     *this->d->s = *sd;

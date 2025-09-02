@@ -117,7 +117,7 @@ void PlaybackDriver::updatePlaybackLoopInterval(const int &in_fps, const qreal &
 // ======
 
 /** @brief Struct used to keep track of all frame time variance
- * and acommodate for skipped frames. Also tracks whether a frame
+ * and accommodate for skipped frames. Also tracks whether a frame
  * is still being loaded by the display proxy.
  *
  * Only allocated when playback begins.

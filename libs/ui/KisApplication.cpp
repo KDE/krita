@@ -871,7 +871,7 @@ bool KisApplication::isStoreApplication()
 #ifdef Q_OS_WIN
     // This is also true for user-installed MSIX, but that's
     // likely only true in institutional situations, where
-    // we don't want to show the beggin banner either.
+    // we don't want to show the beggining banner either.
     if (KisWindowsPackageUtils::isRunningInPackage()) {
         return true;
     }
@@ -890,7 +890,7 @@ bool KisApplication::isStoreApplication()
 void KisApplication::verifyMetatypeRegistration()
 {
     /**
-     * Veryfy that all our statically registered types are actually registered.
+     * Verify that all our statically registered types are actually registered.
      * This check is skipped in release builds, when HIDE_SAFE_ASSERTS is defined
      */
 #if !defined(HIDE_SAFE_ASSERTS) || defined(CRASH_ON_SAFE_ASSERTS)

@@ -288,7 +288,7 @@ void KisWorkspaceChooser::windowLayoutSelected(KoResourceSP resource)
     layout->applyLayout();
 }
 
-// WORKAROUND: setting the row height of the resource chooser get's overriden somehow
+// WORKAROUND: setting the row height of the resource chooser gets overridden somehow
 // so set it again here
 void KisWorkspaceChooser::showEvent(QShowEvent* event)
 {

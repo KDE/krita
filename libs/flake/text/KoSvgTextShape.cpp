@@ -1286,7 +1286,7 @@ void KoSvgTextShape::notifyMarkupChanged()
     }
 }
 
-void KoSvgTextShape::convertCharTransformsToPreformatted(const bool makeInlineSize)
+void KoSvgTextShape::convertCharTransformsToPreformatted(bool makeInlineSize)
 {
     const int inlineSize = writingMode() == KoSvgText::HorizontalTB? outlineRect().width(): outlineRect().height();
     d->applyWhiteSpace(d->textData, true);
@@ -1296,7 +1296,8 @@ void KoSvgTextShape::convertCharTransformsToPreformatted(const bool makeInlineSi
     KoSvgTextProperties props = this->propertiesForPos(-1);
     if (makeInlineSize) {
         KoSvgText::AutoValue val;
-        val.customValue = inlineSize;
+        // Using QCeil here because otherwise the text will layout too tight.
+        val.customValue = qCeil(inlineSize);
         val.isAuto = false;
         if (!props.hasProperty(KoSvgTextProperties::InlineSizeId)) {
             props.setProperty(KoSvgTextProperties::InlineSizeId, QVariant::fromValue(val));
@@ -1721,6 +1722,26 @@ KoShape * KoSvgTextShape::textOutline() const
     }
 
     return shape;
+}
+
+KoSvgTextShape::TextType KoSvgTextShape::textType() const
+{
+    KoSvgText::AutoValue inlineSize = d->textData.childBegin()->properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    if (!d->shapesInside.isEmpty()) {
+        return TextType::TextInShape;
+    } else if (!inlineSize.isAuto) {
+        return TextType::InlineWrap;
+    } else {
+        bool textSpaceCollapse = false;
+        for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+            KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(it->properties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
+            if (collapse == KoSvgText::Collapse || collapse == KoSvgText::PreserveSpaces) {
+                textSpaceCollapse = true;
+                break;
+            }
+        }
+        return textSpaceCollapse? TextType::PrePositionedText: TextType::PreformattedText;
+    }
 }
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)

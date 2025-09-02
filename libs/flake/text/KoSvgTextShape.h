@@ -65,6 +65,26 @@ public:
      */
     KoShape * textOutline() const;
 
+    enum TextType {
+        PrePositionedText = 0, ///< SVG 1.1 text, white spaces are collapsed
+                               ///< or only spaces are preserved. Identical to PreformattedText otherwise.
+        PreformattedText, ///< No wrapping, but preserves spaces and linebreaks.
+                         ///< Text-on-Path falls under this or PrePositionedText depending on collapse of lines.
+        InlineWrap, ///< Uses inline size to wrap and preserves spaces.
+        TextInShape ///< Uses shape-inside to wrap and preserves spaces.
+    };
+    /**
+     * @brief textType
+     * This enum gives an indication of what kind of text this shape is.
+     * The different text types are a bit blurry as SVG allows a mixutre to
+     * provide fallback information. When such fallback is in place, this will
+     * only return the primary text type, that is, TextInShape before InlineWrap
+     * and InlineWrap before PrePositioned/Preformatted.
+     * This primarily exists to give UI feedback.
+     * @return estimated TextType
+     */
+    TextType textType() const;
+
     /**
      * @brief setShapesInside
      * @param shapesInside the list of shapes to make up the content area.
@@ -442,13 +462,16 @@ public:
 
     /**
      * @brief convertCharTransformsToPreformatted
-     *
+     * Converts the text to a preformatted SVG 2.0 text.
+     * This changes the textType();
      * @param makeInlineSize -- whether to have inline size applied.
      */
-    void convertCharTransformsToPreformatted(const bool makeInlineSize = false);
+    void convertCharTransformsToPreformatted(bool makeInlineSize = false);
 
     /**
      * @brief setCharacterTransformsFromLayout
+     * Converts the text to a prepositioned SVG 1.1 text.
+     * This changes the textType();
      */
     void setCharacterTransformsFromLayout();
 

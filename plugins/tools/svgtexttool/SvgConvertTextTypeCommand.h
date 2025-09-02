@@ -28,7 +28,7 @@ public:
         ToCharTransforms ///< This applies SVG 1.1 char transforms and sets whitespace to normal.
     };
 
-    SvgConvertTextTypeCommand(KoSvgTextShape *shape, ConversionType type, KUndo2Command *parent = 0);
+    SvgConvertTextTypeCommand(KoSvgTextShape *shape, ConversionType type, int pos, KUndo2Command *parent = 0);
     ~SvgConvertTextTypeCommand() override = default;
 
     void redo() override;
@@ -43,6 +43,7 @@ private:
     KoSvgTextShapeMementoSP m_textData;
 
     ConversionType m_conversionType;
+    int m_pos;
 };
 
 #endif // SVGCONVERTTEXTTYPECOMMAND_H

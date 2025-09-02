@@ -156,9 +156,8 @@ private Q_SLOTS:
      */
     void slotUpdateCursorDecoration(QRectF updateRect);
 
-    void slotConvertToPreformatted();
-    void slotConvertToInlineSize();
-    void slotConvertToSVGCharTransforms();
+    void slotTextTypeUpdated();
+    void slotConvertType(int index);
 
 
 private:
@@ -187,6 +186,7 @@ private:
     QButtonGroup *m_defAlignment {nullptr};
     QButtonGroup *m_defWritingMode {nullptr};
     QButtonGroup *m_defDirection {nullptr};
+    QButtonGroup *m_convertType {nullptr};
     KConfigGroup m_configGroup;
     SvgTextCursor m_textCursor;
     KisSignalAutoConnectionsStore m_canvasConnections;
@@ -195,6 +195,7 @@ private:
     QPainterPath m_hoveredShapeHighlightRect;
 
     Ui_WdgSvgTextOptionWidget optionUi;
+    bool m_optionUiInitialized {false};
 
     QCursor m_base_cursor;
     QCursor m_text_inline_horizontal;

@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>452</width>
-    <height>435</height>
+    <height>463</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -336,27 +336,36 @@
    <item row="4" column="0">
     <widget class="QGroupBox" name="groupBoxConvert">
      <property name="title">
-      <string>Convert...</string>
+      <string>Text Type</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QPushButton" name="convertPreFormatBtn">
         <property name="text">
-         <string>Convert to Preformatted</string>
+         <string>Preformatted</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="convertInlineBtn">
         <property name="text">
-         <string>Convert to Inline Wrapped</string>
+         <string>Inline Wrapped</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="convertToSvg1_1">
         <property name="text">
-         <string>Convert to SVG 1.1</string>
+         <string>Prepositioned</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

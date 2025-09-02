@@ -108,6 +108,9 @@ SvgTextTool::~SvgTextTool()
         m_glyphPalette->close();
     }
     delete m_defAlignment;
+    delete m_defWritingMode;
+    delete m_defDirection;
+    delete m_convertType;
 }
 
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
@@ -270,9 +273,13 @@ QWidget *SvgTextTool::createOptionWidget()
     connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditorSvgSource()));
     connect(optionUi.btnGlyphPalette, SIGNAL(clicked(bool)), SLOT(showGlyphPalette()));
 
-    connect(optionUi.convertPreFormatBtn, SIGNAL(clicked(bool)), this, SLOT(slotConvertToPreformatted()));
-    connect(optionUi.convertInlineBtn, SIGNAL(clicked(bool)), this, SLOT(slotConvertToInlineSize()));
-    connect(optionUi.convertToSvg1_1, SIGNAL(clicked(bool)), this, SLOT(slotConvertToSVGCharTransforms()));
+    m_convertType = new QButtonGroup();
+    m_convertType->setExclusive(true);
+    m_convertType->addButton(optionUi.convertPreFormatBtn, KoSvgTextShape::PreformattedText);
+    m_convertType->addButton(optionUi.convertInlineBtn, KoSvgTextShape::InlineWrap);
+    m_convertType->addButton(optionUi.convertToSvg1_1, KoSvgTextShape::PrePositionedText);
+    connect(m_convertType, SIGNAL(idClicked(int)), this, SLOT(slotConvertType(int)));
+    slotTextTypeUpdated();
 
     return optionWidget;
 }
@@ -471,6 +478,7 @@ void SvgTextTool::slotShapeSelectionChanged()
             setTextMode(false);
         }
     }
+    slotTextTypeUpdated();
 }
 
 void SvgTextTool::copy() const
@@ -541,26 +549,37 @@ void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
     }
 }
 
-void SvgTextTool::slotConvertToPreformatted() {
+void SvgTextTool::slotTextTypeUpdated()
+{
+    if (!m_convertType) return;
     if (selectedShape()) {
-        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToPreFormatted);
-        canvas()->addCommand(cmd);
+        KoSvgTextShape::TextType type = selectedShape()->textType();
+        if (m_convertType->button(type)) {
+            m_convertType->button(type)->setChecked(true);
+        } else {
+            Q_FOREACH(QAbstractButton *button, m_convertType->buttons()) {
+                m_convertType->button(type)->setChecked(false);
+            }
+        }
     }
 }
 
-void SvgTextTool::slotConvertToInlineSize()
-{
+void SvgTextTool::slotConvertType(int index) {
     if (selectedShape()) {
-        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToInlineSize);
-        canvas()->addCommand(cmd);
-    }
-}
-
-void SvgTextTool::slotConvertToSVGCharTransforms()
-{
-    if (selectedShape()) {
-        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), SvgConvertTextTypeCommand::ToCharTransforms);
-        canvas()->addCommand(cmd);
+        if (index == selectedShape()->textType()) return;
+        SvgConvertTextTypeCommand::ConversionType type = SvgConvertTextTypeCommand::ToPreFormatted;
+        if (index == KoSvgTextShape::InlineWrap) {
+            type = SvgConvertTextTypeCommand::ToInlineSize;
+        } else if (index == KoSvgTextShape::PrePositionedText) {
+            type = SvgConvertTextTypeCommand::ToCharTransforms;
+        }
+        KUndo2Command *parentCommand = new KUndo2Command();
+        new KoKeepShapesSelectedCommand({selectedShape()}, {}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
+        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), type, m_textCursor.getPos(), parentCommand);
+        parentCommand->setText(cmd->text());
+        new KoKeepShapesSelectedCommand({}, {selectedShape()}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
+        canvas()->addCommand(parentCommand);
+        slotTextTypeUpdated();
     }
 }
 

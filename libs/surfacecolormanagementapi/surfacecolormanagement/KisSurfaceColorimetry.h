@@ -29,7 +29,7 @@ namespace KisSurfaceColorimetry
         transfer_function_gamma22 = 2, // supported by KDE
         transfer_function_gamma28 = 3,
         transfer_function_ext_linear = 5, // supported by KDE
-        transfer_function_srgb = 9, // supported by KDE
+        transfer_function_srgb = 9, // supported by KDE, but broken and deprecated
         transfer_function_ext_srgb = 10,
         transfer_function_st2084_pq = 11, // supported by KDE
         transfer_function_st428 = 12,

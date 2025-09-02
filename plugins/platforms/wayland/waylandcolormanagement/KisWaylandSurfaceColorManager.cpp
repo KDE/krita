@@ -229,6 +229,19 @@ bool KisWaylandSurfaceColorManager::supportsSurfaceDescription(const KisSurfaceC
     if (std::holds_alternative<KisSurfaceColorimetry::NamedTransferFunction>(desc.colorSpace.transferFunction)) {
         auto waylandTransferFunction = transferFunctionKritaToWayland(std::get<KisSurfaceColorimetry::NamedTransferFunction>(desc.colorSpace.transferFunction));
 
+        /**
+         * For some obscure reason Wayland compositors implemented transfer_function_srgb
+         * as gamma-2.2 transfer function, which caused a lot of confustion. Hence the enum
+         * is going to be deprecated in the upcoming version of the protocol.
+         *
+         * https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/442
+         */
+        if (waylandTransferFunction == QtWayland::wp_color_manager_v1::transfer_function_srgb ||
+            waylandTransferFunction == QtWayland::wp_color_manager_v1::transfer_function_ext_srgb) {
+
+            return false;
+        }
+
         if (!m_waylandManager->isTransferFunctionNamedSupported(waylandTransferFunction))
             return false;
     }

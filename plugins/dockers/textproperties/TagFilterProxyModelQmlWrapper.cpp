@@ -345,10 +345,12 @@ QVariant FontFamilyTagFilterModel::data(const QModelIndex &index, int role) cons
             const QString fallBack = sourceModel()->data(sourceIdx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
             QString name = fallBack.isEmpty()? localizedNames.value("en").toString(): fallBack;
 
-            Q_FOREACH(const QLocale locale, KLocalizedString::languages()) {
+            // the return type of KLocalizedString::languages() is different
+            // between Qt5 and Qt6, so just use `auto` to ignore that
+            for (const auto &locale : KLocalizedString::languages()) {
                 bool found = false;
                 Q_FOREACH(const QString key, localizedNames.keys()) {
-                    if (QLocale(key) == locale) {
+                    if (QLocale(key) == QLocale(locale)) {
                         name = localizedNames.value(key, name).toString();
                         found = true;
                         break;

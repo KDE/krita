@@ -42,6 +42,11 @@ QString KisCanvasSurfaceColorSpaceManager::colorManagementReport() const
     str << "(canvas surface color manager)" << Qt::endl;
     str << Qt::endl;
 
+    if (!m_interface->isReady()) {
+        str << "WARNING: surface color management interface is not ready!" << Qt::endl;
+        str << Qt::endl;
+    }
+
     using KisSurfaceColorimetry::RenderIntent;
     using KisSurfaceColorimetry::SurfaceDescription;
     using KisSurfaceColorimetry::NamedPrimaries;

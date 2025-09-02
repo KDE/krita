@@ -230,16 +230,47 @@ void KisDlgImageProperties::setProofingConfig()
 
 void KisDlgImageProperties::updateProofingWidgets()
 {
-    m_page->chkSaveProofing->setChecked(d->proofingModel.storeSoftproofingInsideImage());
+    /// TODO: Use proper KisWidgetConnectionUtils to connect the individual
+    /// controls to the model instead of updating them in bulk
 
-    m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(d->proofingModel.proofingModel(), d->proofingModel.proofingDepth(), d->proofingModel.proofingProfile()));
+    {
+        QSignalBlocker b(m_page->chkSaveProofing);
+        m_page->chkSaveProofing->setChecked(d->proofingModel.storeSoftproofingInsideImage());
+    }
 
-    m_page->cmbDisplayTransformState->setCurrentIndex(m_page->cmbDisplayTransformState->findData(int(d->proofingModel.displayTransformState()), Qt::UserRole));
+    {
+        QSignalBlocker b(m_page->proofSpaceSelector);
+        m_page->proofSpaceSelector->setCurrentColorSpace(
+            KoColorSpaceRegistry::instance()->colorSpace(d->proofingModel.proofingModel(),
+                                                         d->proofingModel.proofingDepth(),
+                                                         d->proofingModel.proofingProfile()));
+    }
 
-    m_page->cmbIntent->setCurrentIndex(m_page->cmbIntent->findData(int(d->proofingModel.conversionIntent()), Qt::UserRole));
-    m_page->cmbDisplayIntent->setCurrentIndex(m_page->cmbDisplayIntent->findData(int(d->proofingModel.effectiveDisplayIntent()), Qt::UserRole));
-    m_page->chkDisplayBlackPointCompensation->setChecked(d->proofingModel.effectiveDispBlackPointCompensation());
-    m_page->sldAdaptationState->setValue(d->proofingModel.effectiveAdaptationState());
+    {
+        QSignalBlocker b(m_page->cmbDisplayTransformState);
+        m_page->cmbDisplayTransformState->setCurrentIndex(
+            m_page->cmbDisplayTransformState->findData(int(d->proofingModel.displayTransformState()), Qt::UserRole));
+    }
+
+    {
+        QSignalBlocker b(m_page->cmbIntent);
+        m_page->cmbIntent->setCurrentIndex(
+            m_page->cmbIntent->findData(int(d->proofingModel.conversionIntent()), Qt::UserRole));
+    }
+    {
+        QSignalBlocker b(m_page->cmbDisplayIntent);
+        m_page->cmbDisplayIntent->setCurrentIndex(
+            m_page->cmbDisplayIntent->findData(int(d->proofingModel.effectiveDisplayIntent()), Qt::UserRole));
+    }
+    {
+        QSignalBlocker b(m_page->chkDisplayBlackPointCompensation);
+        m_page->chkDisplayBlackPointCompensation->setChecked(d->proofingModel.effectiveDispBlackPointCompensation());
+    }
+
+    {
+        QSignalBlocker b(m_page->sldAdaptationState);
+        m_page->sldAdaptationState->setValue(d->proofingModel.effectiveAdaptationState());
+    }
 }
 
 void KisDlgImageProperties::updateDisplayConfigInfo()

@@ -3244,4 +3244,15 @@ const KoColorProfile* KisMainWindow::managedSurfaceProfile() const
 #endif
 }
 
+QString KisMainWindow::colorManagementReport() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return d->surfaceColorSpaceManager ?
+        d->surfaceColorSpaceManager->colorManagementReport() :
+        QString("Surface color management is not supported on this platform");
+#else
+    return "Surface color management is disabled";
+#endif
+}
+
 #include <moc_KisMainWindow.cpp>

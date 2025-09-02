@@ -118,6 +118,8 @@ namespace KisSurfaceColorimetry
             return colorSpace == other.colorSpace &&
                    masteringInfo == other.masteringInfo;
         }
+
+        QString makeTextReport() const;
     };
 
     KRITASURFACECOLORMANAGEMENTAPI_EXPORT QDebug operator<<(QDebug debug, const NamedPrimaries &value);

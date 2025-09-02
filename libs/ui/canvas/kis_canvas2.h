@@ -214,6 +214,14 @@ public: // KisCanvas2 methods
      * @return a reference to alter this canvas' input action groups mask
      */
     KisInputActionGroupsMaskInterface::SharedInterface inputActionGroupsMaskInterface();
+
+    /**
+     * Return user-facing information about color management status of the
+     * main window surface. The information is intentionally left untranslated,
+     * since it is supposed to be used for bugreports.
+     */
+    QString colorManagementReport() const;
+
 Q_SIGNALS:
     void sigCanvasEngineChanged();
 

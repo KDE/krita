@@ -6,6 +6,7 @@
 
 #include "KisCanvasSurfaceColorSpaceManager.h"
 
+#include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_config.h>
@@ -31,6 +32,92 @@ KisCanvasSurfaceColorSpaceManager::KisCanvasSurfaceColorSpaceManager(KisSurfaceC
 
 KisCanvasSurfaceColorSpaceManager::~KisCanvasSurfaceColorSpaceManager()
 {
+}
+
+QString KisCanvasSurfaceColorSpaceManager::colorManagementReport() const
+{
+    QString report;
+    QDebug str(&report);
+
+    str << "(canvas surface color manager)" << Qt::endl;
+    str << Qt::endl;
+
+    using KisSurfaceColorimetry::RenderIntent;
+    using KisSurfaceColorimetry::SurfaceDescription;
+    using KisSurfaceColorimetry::NamedPrimaries;
+    using KisSurfaceColorimetry::NamedTransferFunction;
+
+    RenderIntent preferredIntent = calculateConfigIntent(m_currentConfig);
+    str << "Configured intent:" << preferredIntent << "supported:" << m_interface->supportsRenderIntent(preferredIntent) << Qt::endl;
+
+    str << "Proofing intent:";
+    if (m_proofingIntentOverride) {
+        str << *m_proofingIntentOverride << "supported:" << m_interface->supportsRenderIntent(*m_proofingIntentOverride) << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+
+    str << "Actual intent:";
+    if (m_interface->renderingIntent()) {
+        str << *m_interface->renderingIntent() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+    str << Qt::endl;
+
+    str << "Active surface description:";
+    if (m_interface->surfaceDescription()) {
+        str << Qt::endl;
+        str.noquote() << m_interface->surfaceDescription()->makeTextReport() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+    str << Qt::endl;
+
+    str << "Selected Profile:";
+    if (m_currentConfig.profile) {
+        auto profile = m_currentConfig.profile;
+
+        str << profile->name() << Qt::endl;
+        str << "    primaries:" << KoColorProfile::getColorPrimariesName(profile->getColorPrimaries()) << Qt::endl;
+        str << "    transfer: " << KoColorProfile::getTransferCharacteristicName(profile->getTransferCharacteristics()) << Qt::endl;
+        str << Qt::endl;
+
+        {
+            auto colVec = profile->getColorantsxyY();
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(colVec.size() == 9, report);
+            KisColorimetryUtils::xyY colR{colVec[0], colVec[1], colVec[2]};
+            KisColorimetryUtils::xyY colG{colVec[3], colVec[4], colVec[5]};
+            KisColorimetryUtils::xyY colB{colVec[6], colVec[7], colVec[8]};
+
+            str << "    red:  " << colR << Qt::endl;
+            str << "    green:" << colG << Qt::endl;
+            str << "    blue: " << colB << Qt::endl;
+        }
+
+        {
+            auto whiteVec = profile->getWhitePointxyY();
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(whiteVec.size() == 3, report);
+            KisColorimetryUtils::xyY white{whiteVec[0], whiteVec[1], whiteVec[2]};
+
+            str << "    white: " << white << Qt::endl;
+            str << Qt::endl;
+        }
+
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+
+    str << "Compositor preferred surface description:";
+    if (m_interface->preferredSurfaceDescription()) {
+        str << Qt::endl;
+        str.noquote() << m_interface->preferredSurfaceDescription()->makeTextReport() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+    str << Qt::endl;
+
+    return report;
 }
 
 KisSurfaceColorimetry::RenderIntent KisCanvasSurfaceColorSpaceManager::calculateConfigIntent(int kritaIntent, bool useBlackPointCompensation)
@@ -200,8 +287,12 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription()
             requestedDescription.colorSpace.transferFunction = NamedTransferFunction::transfer_function_srgb;
 
             if (!m_interface->supportsSurfaceDescription(requestedDescription)) {
-                qWarning() << "WARNING: failed to find a suitable surface format for the compositor";
-                return; // TODO: extra signals?
+                requestedDescription.colorSpace.transferFunction = NamedTransferFunction::transfer_function_gamma22;
+
+                if (!m_interface->supportsSurfaceDescription(requestedDescription)) {
+                    qWarning() << "WARNING: failed to find a suitable surface format for the compositor";
+                    return; // TODO: extra signals?
+                }
             }
         }
 

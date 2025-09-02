@@ -25,6 +25,49 @@ KisSRGBSurfaceColorSpaceManager::~KisSRGBSurfaceColorSpaceManager()
 {
 }
 
+QString KisSRGBSurfaceColorSpaceManager::colorManagementReport() const
+{
+    QString report;
+    QDebug str(&report);
+
+    str << "(sRGB surface color manager)" << Qt::endl;
+    str << Qt::endl;
+
+    using KisSurfaceColorimetry::RenderIntent;
+    using KisSurfaceColorimetry::SurfaceDescription;
+    using KisSurfaceColorimetry::NamedPrimaries;
+    using KisSurfaceColorimetry::NamedTransferFunction;
+
+    RenderIntent preferredIntent = calculateConfigIntent();
+    str << "Requested intent:" << preferredIntent << "supported:" << m_interface->supportsRenderIntent(preferredIntent) << Qt::endl;
+    str << "Actual intent:";
+    if (m_interface->renderingIntent()) {
+        str << *m_interface->renderingIntent() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+    str << Qt::endl;
+
+    str << "Active surface description:";
+    if (m_interface->surfaceDescription()) {
+        str << Qt::endl;
+        str.noquote() << m_interface->surfaceDescription()->makeTextReport() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+    str << Qt::endl;
+
+    str << "Compositor preferred surface description:";
+    if (m_interface->preferredSurfaceDescription()) {
+        str << Qt::endl;
+        str.noquote() << m_interface->preferredSurfaceDescription()->makeTextReport() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+
+    return report;
+}
+
 KisSurfaceColorimetry::RenderIntent KisSRGBSurfaceColorSpaceManager::calculateConfigIntent() {
     using KisSurfaceColorimetry::RenderIntent;
 
@@ -87,6 +130,11 @@ void KisSRGBSurfaceColorSpaceManager::reinitializeSurfaceDescription() {
     SurfaceDescription preferredDescription;
     preferredDescription.colorSpace.primaries = NamedPrimaries::primaries_srgb;
     preferredDescription.colorSpace.transferFunction = NamedTransferFunction::transfer_function_srgb;
+
+
+    if (!m_interface->supportsSurfaceDescription(preferredDescription)) {
+        preferredDescription.colorSpace.transferFunction = NamedTransferFunction::transfer_function_gamma22;
+    }
 
     if (m_interface->supportsSurfaceDescription(preferredDescription)) {
         auto future = m_interface->setSurfaceDescription(preferredDescription, preferredIntent);

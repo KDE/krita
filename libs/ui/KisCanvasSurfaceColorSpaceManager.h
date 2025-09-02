@@ -26,6 +26,8 @@ public:
 
     KisDisplayConfig displayConfig() const;
 
+    QString colorManagementReport() const;
+
     void setProofingConfiguration(KisProofingConfigurationSP proofingConfig);
 
 Q_SIGNALS:

@@ -13,6 +13,10 @@ if (WIN32 OR ANDROID)
     set(kritabuginfo_SOURCES ${kritabuginfo_SOURCES} DlgCrashLog.cpp)
 endif()
 
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    set(kritabuginfo_SOURCES ${kritabuginfo_SOURCES} DlgColorManagementInfo.cpp)
+endif()
+
 ki18n_wrap_ui(kritabuginfo_SOURCES wdg_buginfo.ui )
 
 kis_add_library(kritabuginfo MODULE ${kritabuginfo_SOURCES})

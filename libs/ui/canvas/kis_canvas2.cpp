@@ -1539,3 +1539,14 @@ KisInputActionGroupsMaskInterface::SharedInterface KisCanvas2::inputActionGroups
 {
     return m_d->inputActionGroupsMaskInterface;
 }
+
+QString KisCanvas2::colorManagementReport() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return m_d->surfaceColorManager ?
+        m_d->surfaceColorManager->colorManagementReport() :
+        QString("Surface color management is not supported on this platform");
+#else
+    return "Surface color management is disabled";
+#endif
+}

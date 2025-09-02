@@ -25,8 +25,11 @@
 #include "DlgCrashLog.h"
 #endif
 
-K_PLUGIN_FACTORY_WITH_JSON(BugInfoFactory, "kritabuginfo.json", registerPlugin<BugInfo>();)
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+#include "DlgColorManagementInfo.h"
+#endif
 
+K_PLUGIN_FACTORY_WITH_JSON(BugInfoFactory, "kritabuginfo.json", registerPlugin<BugInfo>();)
 
 
 BugInfo::BugInfo(QObject *parent, const QVariantList &)
@@ -36,6 +39,11 @@ BugInfo::BugInfo(QObject *parent, const QVariantList &)
     KisAction *actionSys  = createAction("sysinfo");
     connect(actionBug, SIGNAL(triggered()), this, SLOT(slotKritaLog()));
     connect(actionSys, SIGNAL(triggered()), this, SLOT(slotSysInfo()));
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    KisAction *actionColorManagement  = createAction("color_management_report");
+    connect(actionColorManagement, SIGNAL(triggered()), this, SLOT(slotColorManagement()));
+#endif
 
 #ifdef Q_OS_ANDROID
     KisAction *actionLogcatdump = createAction("logcatdump");
@@ -78,6 +86,14 @@ void BugInfo::slotCrashLog()
 {
     DlgCrashLog dlgCrashLog(viewManager()->mainWindowAsQWidget());
     dlgCrashLog.exec();
+}
+#endif
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+void BugInfo::slotColorManagement()
+{
+    DlgColorManagementInfo dlg(viewManager()->mainWindowAsQWidget());
+    dlg.exec();
 }
 #endif
 

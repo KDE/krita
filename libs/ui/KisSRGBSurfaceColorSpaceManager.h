@@ -20,6 +20,8 @@ public:
     KisSRGBSurfaceColorSpaceManager(KisSurfaceColorManagerInterface *interface, QObject *parent = nullptr);
     ~KisSRGBSurfaceColorSpaceManager();
 
+    QString colorManagementReport() const;
+
 protected:
     static KisSurfaceColorimetry::RenderIntent calculateConfigIntent();
 

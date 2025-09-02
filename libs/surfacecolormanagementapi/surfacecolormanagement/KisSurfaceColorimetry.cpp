@@ -151,6 +151,55 @@ QDebug operator<<(QDebug debug, const KisSurfaceColorimetry::RenderIntent &value
     return debug;
 }
 
+QString SurfaceDescription::makeTextReport() const
+{
+    QString report;
+    QDebug str(&report);
+
+    str << "  Color Space:" << Qt::endl;
+
+    if (std::holds_alternative<KisSurfaceColorimetry::NamedPrimaries>(this->colorSpace.primaries)) {
+        str << "    Primaries: " << std::get<KisSurfaceColorimetry::NamedPrimaries>(this->colorSpace.primaries) << Qt::endl;
+    } else {
+        auto col = std::get<KisSurfaceColorimetry::Colorimetry>(this->colorSpace.primaries);
+        str << "    Primaries: " << Qt::endl;
+        str << "        Red: " << col.red().toxy() << Qt::endl;
+        str << "        Green: " << col.green().toxy() << Qt::endl;
+        str << "        Blue: " << col.blue().toxy() << Qt::endl;
+        str << "        White: " << col.white().toxy() << Qt::endl;
+    }
+
+    if (std::holds_alternative<KisSurfaceColorimetry::NamedTransferFunction>(this->colorSpace.transferFunction)) {
+        str << "    Transfer Function: " << std::get<KisSurfaceColorimetry::NamedTransferFunction>(this->colorSpace.transferFunction) << Qt::endl;
+    } else {
+        const uint32_t rawValue = std::get<uint32_t>(this->colorSpace.transferFunction);
+        str << "    Transfer Function (gamma): " << rawValue << "(" << qreal(rawValue) / 10000.0 << ")" << Qt::endl;
+    }
+
+    if (this->colorSpace.luminance) {
+        str << "    Luminance: " << *this->colorSpace.luminance << Qt::endl;
+    } else {
+        str << "    Luminance: " << "<none>" << Qt::endl;
+    }
+
+    if (this->masteringInfo) {
+        str << "  Mastering Info:" << Qt::endl;
+        auto col = this->masteringInfo->primaries;
+        str << "    Primaries: " << Qt::endl;
+        str << "        Red: " << col.red().toxy() << Qt::endl;
+        str << "        Green: " << col.green().toxy() << Qt::endl;
+        str << "        Blue: " << col.blue().toxy() << Qt::endl;
+        str << "        White: " << col.white().toxy() << Qt::endl;
+        str << "    Luminance: " << this->masteringInfo->luminance << Qt::endl;
+        str << "    Max CLL: " << (this->masteringInfo->maxCll ? QString::number(*this->masteringInfo->maxCll) : "<none>") << Qt::endl;
+        str << "    Max FALL: " << (this->masteringInfo->maxFall ? QString::number(*this->masteringInfo->maxFall) : "<none>") << Qt::endl;
+    } else {
+        str << "  Mastering Info: <none>" << Qt::endl;
+    }
+
+    return report;
+}
+
 } // namespace KisSurfaceColorimetry
 
 /* KISSURFACECOLORIMETRY_H */

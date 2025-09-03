@@ -148,6 +148,7 @@ void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
     QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_canvas->canvasWidget());
+
     if (obj != canvasWidget)
         return false;
 
@@ -156,10 +157,10 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
     if (clickEvent) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QRect dragRect(d->m_dragRectPosition, QSize(25 * (d->m_buttonCount), 25));
-
         if (dragRect.contains(mouseEvent->pos())) {
             d->m_dragging = true;
             d->m_dragStartOffset = mouseEvent->pos() - d->m_dragRectPosition;
+
             return true;
         }
     }
@@ -173,6 +174,7 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         // bound actionBar to stay within canvas space
         d->m_dragRectPosition = updateCanvasBoundaries(newPos, canvasWidget);
         canvasWidget->update();
+
         return true;
     }
 
@@ -180,6 +182,7 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 
     if (releaseEvent) {
         d->m_dragging = false;
+
         return true;
     }
 

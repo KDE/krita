@@ -1046,7 +1046,7 @@
           <string>Enable Selection Actions Bar</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1216,7 +1216,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>695</width>
+            <width>1675</width>
             <height>609</height>
            </rect>
           </property>

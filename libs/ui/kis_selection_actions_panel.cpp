@@ -164,7 +164,9 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    if (event->type() == QEvent::MouseMove && d->m_dragging) {
+    bool dragEvent = event->type() == QEvent::MouseMove && d->m_dragging;
+
+    if (dragEvent) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QPoint newPos = mouseEvent->pos() - d->m_dragStartOffset;
 

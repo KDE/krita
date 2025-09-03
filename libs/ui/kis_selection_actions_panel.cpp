@@ -151,7 +151,9 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
     if (obj != canvasWidget)
         return false;
 
-    if (event->type() == QEvent::MouseButtonPress) {
+    bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress;
+
+    if (clickEvent) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QRect dragRect(d->m_dragRectPosition, QSize(25 * (d->m_buttonCount), 25));
 
@@ -172,7 +174,9 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         return true;
     }
 
-    if (event->type() == QEvent::MouseButtonRelease && d->m_dragging) {
+    bool releaseEvent = (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease) && d->m_dragging;
+
+    if (releaseEvent) {
         d->m_dragging = false;
         return true;
     }

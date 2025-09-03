@@ -153,8 +153,9 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        QRect rect(d->m_dragRectPosition, QSize(25 * (d->m_buttonCount), 25));
-        if (rect.contains(mouseEvent->pos())) {
+        QRect dragRect(d->m_dragRectPosition, QSize(25 * (d->m_buttonCount), 25));
+
+        if (dragRect.contains(mouseEvent->pos())) {
             d->m_dragging = true;
             d->m_dragStartOffset = mouseEvent->pos() - d->m_dragRectPosition;
             return true;

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-02 02:22+0000\n"
+"POT-Creation-Date: 2025-09-03 02:07+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -15960,8 +15960,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:452
-#: libs/ui/KisApplication.cpp:730
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:728
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23340,10 +23340,10 @@ msgstr "本地资源"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1113
-#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1132
-#: libs/ui/KisApplication.cpp:1164 libs/ui/KisApplication.cpp:1178
-#: libs/ui/KisApplication.cpp:1206 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1114 libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1162 libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1204 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:970 libs/ui/KisMainWindow.cpp:1040
@@ -25714,15 +25714,16 @@ msgstr "高度："
 msgid "Import Video Scale"
 msgstr "导入视频缩放选项"
 
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
+#: libs/ui/imagesize/wdg_layersize.ui:119
 #, kde-format
-msgctxt "Resize intepolation method list label"
+msgctxt "Resize interpolation method list label"
 msgid "Filter:"
-msgstr "缩放插值方式："
+msgstr "平滑算法："
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
@@ -31565,7 +31566,7 @@ msgid "HSV CCW"
 msgstr "HSV 逆时针色相"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:391
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:390
 #, kde-format
 msgid "Sessions"
 msgstr "会话管理"
@@ -31960,13 +31961,6 @@ msgstr "宽度(&T)："
 #, kde-format
 msgid "Adjust print size separately"
 msgstr "单独调整打印尺寸"
-
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
-#: libs/ui/imagesize/wdg_layersize.ui:119
-#, kde-format
-msgctxt "Resize interpolation method list label"
-msgid "Filter:"
-msgstr "平滑算法："
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
@@ -33053,7 +33047,7 @@ msgstr "打开背景色拾色器(&O)"
 msgid "&Docker Box"
 msgstr "面板框(&D)"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:387
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:386
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33067,8 +33061,8 @@ msgstr "图案"
 msgid "Custom Pattern"
 msgstr "自定义图案"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:372
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:371
+#: libs/ui/KisApplication.cpp:372
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34009,20 +34003,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "缩放：%1 %"
 
-#: libs/ui/KisApplication.cpp:364
+#: libs/ui/KisApplication.cpp:363
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "笔刷预设"
 
-#: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
-#: libs/ui/KisApplication.cpp:369 libs/ui/KisApplication.cpp:370
+#: libs/ui/KisApplication.cpp:366 libs/ui/KisApplication.cpp:367
+#: libs/ui/KisApplication.cpp:368 libs/ui/KisApplication.cpp:369
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "笔尖"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:374
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34030,7 +34024,7 @@ msgstr "笔尖"
 msgid "Palettes"
 msgstr "色板"
 
-#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:387 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34038,44 +34032,39 @@ msgstr "色板"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: libs/ui/KisApplication.cpp:389
+#: libs/ui/KisApplication.cpp:388
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "矢量图形库"
 
-#: libs/ui/KisApplication.cpp:390 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:389 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "窗口布局"
 
-#: libs/ui/KisApplication.cpp:392
+#: libs/ui/KisApplication.cpp:391
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域蒙版"
 
-#: libs/ui/KisApplication.cpp:394
+#: libs/ui/KisApplication.cpp:393
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr 脚本"
 
-#: libs/ui/KisApplication.cpp:399
+#: libs/ui/KisApplication.cpp:398
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "图层样式"
 
-#: libs/ui/KisApplication.cpp:402
-#, kde-format
-msgid "Font Families"
-msgstr "字体系列"
-
-#: libs/ui/KisApplication.cpp:403
+#: libs/ui/KisApplication.cpp:401
 #, kde-format
 msgid "Style Presets"
 msgstr "样式预设"
 
-#: libs/ui/KisApplication.cpp:415
+#: libs/ui/KisApplication.cpp:413
 #, kde-format
 msgid ""
 "%1\n"
@@ -34086,13 +34075,13 @@ msgstr ""
 "\n"
 "Krita 将会立即退出。"
 
-#: libs/ui/KisApplication.cpp:415 libs/ui/KisApplication.cpp:421
+#: libs/ui/KisApplication.cpp:413 libs/ui/KisApplication.cpp:419
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita：发生严重错误"
 
-#: libs/ui/KisApplication.cpp:421
+#: libs/ui/KisApplication.cpp:419
 #, kde-format
 msgid ""
 "\n"
@@ -34103,7 +34092,7 @@ msgstr ""
 "\n"
 "Krita 将会立即退出。"
 
-#: libs/ui/KisApplication.cpp:453
+#: libs/ui/KisApplication.cpp:451
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34114,65 +34103,65 @@ msgstr ""
 "这将导致程序性能低下，或者引发其他问题。\n"
 "请下载并安装 64 位版本的 Krita。"
 
-#: libs/ui/KisApplication.cpp:470
+#: libs/ui/KisApplication.cpp:468
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "正在初始化全局参数..."
 
-#: libs/ui/KisApplication.cpp:502
+#: libs/ui/KisApplication.cpp:500
 #, kde-format
 msgid "Adding resource types..."
 msgstr "正在添加资源类型..."
 
-#: libs/ui/KisApplication.cpp:506
+#: libs/ui/KisApplication.cpp:504
 #, kde-format
 msgid "Loading plugins..."
 msgstr "正在加载插件..."
 
-#: libs/ui/KisApplication.cpp:512
+#: libs/ui/KisApplication.cpp:510
 #, kde-format
 msgid "Loading resources..."
 msgstr "正在加载资源..."
 
-#: libs/ui/KisApplication.cpp:521
+#: libs/ui/KisApplication.cpp:519
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "正在加载主窗口..."
 
-#: libs/ui/KisApplication.cpp:553
+#: libs/ui/KisApplication.cpp:551
 #, kde-format
 msgid "Launching..."
 msgstr "正在启动..."
 
-#: libs/ui/KisApplication.cpp:622
+#: libs/ui/KisApplication.cpp:620
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "无法找到 MIME 类型，请尝试使用 -mimetype 选项"
 
-#: libs/ui/KisApplication.cpp:683
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "动画帧处理失败。"
 
-#: libs/ui/KisApplication.cpp:711 libs/ui/KisApplication.cpp:984
+#: libs/ui/KisApplication.cpp:709 libs/ui/KisApplication.cpp:982
 #, kde-format
 msgid "File layer"
 msgstr "文件图层"
 
-#: libs/ui/KisApplication.cpp:719 libs/ui/KisApplication.cpp:724
-#: libs/ui/KisApplication.cpp:978 libs/ui/KisApplication.cpp:992
-#: libs/ui/KisApplication.cpp:997
+#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:722
+#: libs/ui/KisApplication.cpp:976 libs/ui/KisApplication.cpp:990
+#: libs/ui/KisApplication.cpp:995
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:720 libs/ui/KisApplication.cpp:993
+#: libs/ui/KisApplication.cpp:718 libs/ui/KisApplication.cpp:991
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "无法将 %1 添加为文件图层：该文件不存在。"
 
-#: libs/ui/KisApplication.cpp:725
+#: libs/ui/KisApplication.cpp:723
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34191,7 +34180,7 @@ msgstr ""
 "如果您想要将文件图层添加到某个已经在运行的 Krita 实例，请检查是否在设置 (菜单"
 "栏 -> 设置 -> 配置 Krita -> 常规 -> 窗口) 中勾选了“只允许一个 Krita 实例”。"
 
-#: libs/ui/KisApplication.cpp:731
+#: libs/ui/KisApplication.cpp:729
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34201,32 +34190,32 @@ msgstr ""
 "无法添加文件图层：没有已打开的图像。\n"
 "您可以使用 --new-image 参数新建一个图像，也可以打开一个已有图像。"
 
-#: libs/ui/KisApplication.cpp:979
+#: libs/ui/KisApplication.cpp:977
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "无法打开图像 %1"
 
-#: libs/ui/KisApplication.cpp:998
+#: libs/ui/KisApplication.cpp:996
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "无法添加文件图层：没有已打开的图像。"
 
-#: libs/ui/KisApplication.cpp:1114
+#: libs/ui/KisApplication.cpp:1112
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到适用于 %1 的模板"
 
-#: libs/ui/KisApplication.cpp:1117
+#: libs/ui/KisApplication.cpp:1115
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "适用于 %1 的模板过多"
 
-#: libs/ui/KisApplication.cpp:1133
+#: libs/ui/KisApplication.cpp:1131
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "模板 %1 加载失败。"
 
-#: libs/ui/KisApplication.cpp:1165
+#: libs/ui/KisApplication.cpp:1163
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34241,7 +34230,7 @@ msgstr ""
 "\n"
 "请重新启动 Krita 使更改生效。"
 
-#: libs/ui/KisApplication.cpp:1179
+#: libs/ui/KisApplication.cpp:1177
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34252,7 +34241,7 @@ msgstr ""
 "\n"
 "请确保没有其他程序正在使用该文件，然后重试。"
 
-#: libs/ui/KisApplication.cpp:1207
+#: libs/ui/KisApplication.cpp:1205
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "您想要清除设置文件吗？"
@@ -60179,6 +60168,11 @@ msgstr "度数："
 msgid "Scale"
 msgstr "缩放"
 
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
+msgctxt "Resize intepolation method list label"
+msgid "Filter:"
+msgstr "缩放插值方式："
+
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "所选文档已被修改。"
@@ -65416,3 +65410,6 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Font Families"
+#~ msgstr "字体系列"

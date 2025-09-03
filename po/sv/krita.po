@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-02 02:22+0000\n"
+"POT-Creation-Date: 2025-09-03 02:07+0000\n"
 "PO-Revision-Date: 2025-08-29 08:14+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -16038,8 +16038,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:452
-#: libs/ui/KisApplication.cpp:730
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:728
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23552,10 +23552,10 @@ msgstr "Lokala resurser"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1113
-#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1132
-#: libs/ui/KisApplication.cpp:1164 libs/ui/KisApplication.cpp:1178
-#: libs/ui/KisApplication.cpp:1206 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1111
+#: libs/ui/KisApplication.cpp:1114 libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1162 libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1204 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:970 libs/ui/KisMainWindow.cpp:1040
@@ -25950,13 +25950,14 @@ msgstr "Höjd:"
 msgid "Import Video Scale"
 msgstr "Importera videoskala"
 
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
+#: libs/ui/imagesize/wdg_layersize.ui:119
 #, kde-format
-msgctxt "Resize intepolation method list label"
+msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Filter:"
 
@@ -31914,7 +31915,7 @@ msgid "HSV CCW"
 msgstr "HSV moturs"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:391
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:390
 #, kde-format
 msgid "Sessions"
 msgstr "Sessioner"
@@ -32320,13 +32321,6 @@ msgstr "Bre&dd:"
 #, kde-format
 msgid "Adjust print size separately"
 msgstr "Justera utskriftsstorlek separat"
-
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
-#: libs/ui/imagesize/wdg_layersize.ui:119
-#, kde-format
-msgctxt "Resize interpolation method list label"
-msgid "Filter:"
-msgstr "Filter:"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
@@ -33418,7 +33412,7 @@ msgstr "Ö&ppna bakgrundsfärgväljare"
 msgid "&Docker Box"
 msgstr "&Panelruta"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:387
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:386
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33432,8 +33426,8 @@ msgstr "Mönster"
 msgid "Custom Pattern"
 msgstr "Egna mönster"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:372
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:371
+#: libs/ui/KisApplication.cpp:372
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34384,20 +34378,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zoom: %1 %"
 
-#: libs/ui/KisApplication.cpp:364
+#: libs/ui/KisApplication.cpp:363
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Penselförinställningar"
 
-#: libs/ui/KisApplication.cpp:367 libs/ui/KisApplication.cpp:368
-#: libs/ui/KisApplication.cpp:369 libs/ui/KisApplication.cpp:370
+#: libs/ui/KisApplication.cpp:366 libs/ui/KisApplication.cpp:367
+#: libs/ui/KisApplication.cpp:368 libs/ui/KisApplication.cpp:369
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Penselspetsar"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:374
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34405,7 +34399,7 @@ msgstr "Penselspetsar"
 msgid "Palettes"
 msgstr "Paletter"
 
-#: libs/ui/KisApplication.cpp:388 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:387 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34413,44 +34407,39 @@ msgstr "Paletter"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: libs/ui/KisApplication.cpp:389
+#: libs/ui/KisApplication.cpp:388
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG-symbolbibliotek"
 
-#: libs/ui/KisApplication.cpp:390 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:389 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Fönsterlayouter"
 
-#: libs/ui/KisApplication.cpp:392
+#: libs/ui/KisApplication.cpp:391
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Färgomfångsmasker"
 
-#: libs/ui/KisApplication.cpp:394
+#: libs/ui/KisApplication.cpp:393
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr-skript"
 
-#: libs/ui/KisApplication.cpp:399
+#: libs/ui/KisApplication.cpp:398
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Lagerstilar"
 
-#: libs/ui/KisApplication.cpp:402
-#, kde-format
-msgid "Font Families"
-msgstr "Teckenfamiljer"
-
-#: libs/ui/KisApplication.cpp:403
+#: libs/ui/KisApplication.cpp:401
 #, kde-format
 msgid "Style Presets"
 msgstr "Stilförinställningar"
 
-#: libs/ui/KisApplication.cpp:415
+#: libs/ui/KisApplication.cpp:413
 #, kde-format
 msgid ""
 "%1\n"
@@ -34461,13 +34450,13 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:415 libs/ui/KisApplication.cpp:421
+#: libs/ui/KisApplication.cpp:413 libs/ui/KisApplication.cpp:419
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Allvarligt fel"
 
-#: libs/ui/KisApplication.cpp:421
+#: libs/ui/KisApplication.cpp:419
 #, kde-format
 msgid ""
 "\n"
@@ -34478,7 +34467,7 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:453
+#: libs/ui/KisApplication.cpp:451
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34489,65 +34478,65 @@ msgstr ""
 "Det rekommenderas inte.\n"
 "Ladda ner och installera x64-programmet istället."
 
-#: libs/ui/KisApplication.cpp:470
+#: libs/ui/KisApplication.cpp:468
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Initierar globala värden..."
 
-#: libs/ui/KisApplication.cpp:502
+#: libs/ui/KisApplication.cpp:500
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Lägger till resurstyper..."
 
-#: libs/ui/KisApplication.cpp:506
+#: libs/ui/KisApplication.cpp:504
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Läser in insticksmoduler..."
 
-#: libs/ui/KisApplication.cpp:512
+#: libs/ui/KisApplication.cpp:510
 #, kde-format
 msgid "Loading resources..."
 msgstr "Läser in resurser..."
 
-#: libs/ui/KisApplication.cpp:521
+#: libs/ui/KisApplication.cpp:519
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Laddar huvudfönster..."
 
-#: libs/ui/KisApplication.cpp:553
+#: libs/ui/KisApplication.cpp:551
 #, kde-format
 msgid "Launching..."
 msgstr "Startar..."
 
-#: libs/ui/KisApplication.cpp:622
+#: libs/ui/KisApplication.cpp:620
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mime-typ hittades inte, försök använda väljaren -mimetyp"
 
-#: libs/ui/KisApplication.cpp:683
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Misslyckades återge animeringsbildrutor."
 
-#: libs/ui/KisApplication.cpp:711 libs/ui/KisApplication.cpp:984
+#: libs/ui/KisApplication.cpp:709 libs/ui/KisApplication.cpp:982
 #, kde-format
 msgid "File layer"
 msgstr "Arkivlager"
 
-#: libs/ui/KisApplication.cpp:719 libs/ui/KisApplication.cpp:724
-#: libs/ui/KisApplication.cpp:978 libs/ui/KisApplication.cpp:992
-#: libs/ui/KisApplication.cpp:997
+#: libs/ui/KisApplication.cpp:717 libs/ui/KisApplication.cpp:722
+#: libs/ui/KisApplication.cpp:976 libs/ui/KisApplication.cpp:990
+#: libs/ui/KisApplication.cpp:995
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Varning"
 
-#: libs/ui/KisApplication.cpp:720 libs/ui/KisApplication.cpp:993
+#: libs/ui/KisApplication.cpp:718 libs/ui/KisApplication.cpp:991
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Kan inte lägga till %1 som ett arkivlager: filen finns inte."
 
-#: libs/ui/KisApplication.cpp:725
+#: libs/ui/KisApplication.cpp:723
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34568,7 +34557,7 @@ msgstr ""
 "instans av Krita som redan kör, markera kryssrutan \"Tillåt bara en instans "
 "av Krita\" i inställningarna (Inställningar -> Allmänt -> Fönster)."
 
-#: libs/ui/KisApplication.cpp:731
+#: libs/ui/KisApplication.cpp:729
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34579,32 +34568,32 @@ msgstr ""
 "Du kan antingen skapa en ny fil genom att använda väljaren --new-image, "
 "eller öppna en befintlig fil."
 
-#: libs/ui/KisApplication.cpp:979
+#: libs/ui/KisApplication.cpp:977
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Kunde inte öppna filen %1"
 
-#: libs/ui/KisApplication.cpp:998
+#: libs/ui/KisApplication.cpp:996
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Kan inte lägga till arkivlagret: inget dokument är öppet."
 
-#: libs/ui/KisApplication.cpp:1114
+#: libs/ui/KisApplication.cpp:1112
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ingen mall hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:1117
+#: libs/ui/KisApplication.cpp:1115
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "För många mallar hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:1133
+#: libs/ui/KisApplication.cpp:1131
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallen %1 kunde inte läsas in."
 
-#: libs/ui/KisApplication.cpp:1165
+#: libs/ui/KisApplication.cpp:1163
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34619,7 +34608,7 @@ msgstr ""
 "\n"
 "Starta om Krita för att ändringarna ska få effekt."
 
-#: libs/ui/KisApplication.cpp:1179
+#: libs/ui/KisApplication.cpp:1177
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34630,7 +34619,7 @@ msgstr ""
 "\n"
 "Försäkra dig om att inget annat program använder filen och försök igen."
 
-#: libs/ui/KisApplication.cpp:1207
+#: libs/ui/KisApplication.cpp:1205
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Vill du verkligen tömma inställningsfilen?"
@@ -61061,6 +61050,11 @@ msgstr "Grader:"
 msgid "Scale"
 msgstr "Skala"
 
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
+msgctxt "Resize intepolation method list label"
+msgid "Filter:"
+msgstr "Filter:"
+
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "De markerade dokumenten har ändrats."
@@ -66373,6 +66367,9 @@ msgstr "Zoomverktyg"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
+
+#~ msgid "Font Families"
+#~ msgstr "Teckenfamiljer"
 
 #, fuzzy
 #~| msgid "Select All"

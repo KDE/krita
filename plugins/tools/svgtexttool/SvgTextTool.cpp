@@ -558,7 +558,7 @@ void SvgTextTool::slotTextTypeUpdated()
             m_convertType->button(type)->setChecked(true);
         } else {
             Q_FOREACH(QAbstractButton *button, m_convertType->buttons()) {
-                m_convertType->button(type)->setChecked(false);
+                button->setChecked(false);
             }
         }
     }

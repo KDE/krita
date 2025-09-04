@@ -117,9 +117,17 @@
 #include <config-seexpr.h>
 #include <config-safe-asserts.h>
 
-#include <kpluginfactory.h>
 #include <input/KisExtendedModifiersMapperPluginInterface.h>
+#include <KisPlatformPluginInterfaceFactory.h>
 
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+#include <QPlatformSurfaceEvent>
+#include <KisSRGBSurfaceColorSpaceManager.h>
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -260,18 +268,49 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
      * Load platform plugin for modifiers fetching
      */
     {
-        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
-            std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
-            "Krita/PlatformPlugin");
-
-        if (factory) {
-            d->extendedModifiersPluginInterface.reset(factory->create<KisExtendedModifiersMapperPluginInterface>());
-        }
+        d->extendedModifiersPluginInterface.reset(KisPlatformPluginInterfaceFactory::createExtendedModifiersMapper());
     }
 
     // store the style name
     qApp->setProperty(currentUnderlyingStyleNameProperty, style()->objectName());
     KisSynchronizedConnectionBase::registerSynchronizedEventBarrier(std::bind(&KisApplication::processPostponedSynchronizationEvents, this));
+
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+    /**
+     * Automatically assign sRGB color space to all Krita windows,
+     * which are not marked with a special tag.
+     */
+    struct PlatformWindowCreationFilter : QObject
+    {
+        using QObject::QObject;
+
+        bool eventFilter(QObject *watched, QEvent *event) override {
+            if (event->type() == QEvent::PlatformSurface) {
+                QWidget *widget = qobject_cast<QWidget*>(watched);
+                if (!widget) return false;
+
+                /**
+                 * Check for the special tag that is set for the windows that handle
+                 * their color space themselves
+                 */
+                if (watched->property("krita_skip_srgb_surface_manager_assignment").toBool()) {
+                    return false;
+                }
+
+                QPlatformSurfaceEvent *surfaceEvent = static_cast<QPlatformSurfaceEvent*>(event);
+                if (surfaceEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
+                    KisSRGBSurfaceColorSpaceManager::tryCreateForCurrentPlatform(widget);
+                }
+            }
+
+            return false;
+        }
+    };
+
+    this->installEventFilter(new PlatformWindowCreationFilter(this));
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)

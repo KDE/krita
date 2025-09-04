@@ -82,6 +82,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
+    setProperty("krita_skip_srgb_surface_manager_assignment", true);
+
     KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 

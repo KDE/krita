@@ -6,10 +6,14 @@
 
 #include "KisSRGBSurfaceColorSpaceManager.h"
 
+#include <QWidget>
+#include <QWindow>
+
 #include <kis_assert.h>
 #include <kis_config.h>
 #include <kis_config_notifier.h>
 
+#include <KisPlatformPluginInterfaceFactory.h>
 #include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
 
 
@@ -172,6 +176,21 @@ void KisSRGBSurfaceColorSpaceManager::reinitializeSurfaceDescription() {
         qWarning() << "WARNING: failed to set sRGB color space for the surface,"
                    << "the color space is unsupported by compositor";
     }
+}
+
+KisSRGBSurfaceColorSpaceManager* KisSRGBSurfaceColorSpaceManager::tryCreateForCurrentPlatform(QWidget *widget)
+{
+    QWindow *nativeWindow = widget->windowHandle();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(widget->windowHandle(), nullptr);
+
+    std::unique_ptr<KisSurfaceColorManagerInterface> iface(
+        KisPlatformPluginInterfaceFactory::createSurfaceColorManager(widget->windowHandle()));
+
+    if (iface) {
+        return new KisSRGBSurfaceColorSpaceManager(iface.release(), nativeWindow);
+    }
+
+    return nullptr;
 }
 
 #include <moc_KisSRGBSurfaceColorSpaceManager.cpp>

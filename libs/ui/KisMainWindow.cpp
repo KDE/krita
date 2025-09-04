@@ -160,9 +160,6 @@
 
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
-// surface color management
-#include <kpluginfactory.h>
-#include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
 #include <KisSRGBSurfaceColorSpaceManager.h>
 
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
@@ -362,6 +359,10 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
+    // Krita's main window handles sRGB space itself, exclude that
+    // from auto-srgb-assignment
+    setProperty("krita_skip_srgb_surface_manager_assignment", true);
+
     KAcceleratorManager::setNoAccel(this);
 
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
@@ -677,25 +678,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
      * Load platform plugin for surface color management and set
      * the surface color space to sRGB exactly
      */
-    {
-        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
-            std::make_pair("X-Krita-PlatformId", QGuiApplication::platformName()),
-            "Krita/PlatformPlugin");
 
-        if (factory) {
-            QWindow *nativeWindow = this->window()->windowHandle();
-            KIS_SAFE_ASSERT_RECOVER_RETURN(nativeWindow);
-
-            QVariantList args = {QVariant::fromValue(nativeWindow)};
-
-            std::unique_ptr<KisSurfaceColorManagerInterface> iface(
-                factory->create<KisSurfaceColorManagerInterface>(nullptr, args));
-
-            if (iface) {
-                d->surfaceColorSpaceManager = new KisSRGBSurfaceColorSpaceManager(iface.release(), this);
-            }
-        }
-    }
+    d->surfaceColorSpaceManager = KisSRGBSurfaceColorSpaceManager::tryCreateForCurrentPlatform(this);
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 }

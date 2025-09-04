@@ -65410,6 +65410,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Font Families"
-#~ msgstr "字体系列"

@@ -783,4 +783,6 @@ private:
     bool m_readOnly;
 };
 
+Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceMode)
+
 #endif // KIS_CONFIG_H_

@@ -147,11 +147,6 @@ void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
-    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_canvas->canvasWidget());
-
-    if (obj != canvasWidget)
-        return false;
-
     bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress;
 
     if (clickEvent) {
@@ -172,6 +167,10 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         QPoint newPos = mouseEvent->pos() - d->m_dragStartOffset;
 
         // bound actionBar to stay within canvas space
+        QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_canvas->canvasWidget());
+
+        if (obj != canvasWidget)
+            return false;
         d->m_dragHandlePosition = updateCanvasBoundaries(newPos, canvasWidget);
         canvasWidget->update();
 

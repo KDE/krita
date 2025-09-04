@@ -9,6 +9,7 @@
 #include <QWindow>
 #include <QPromise>
 #include <QFuture>
+#include <QPlatformSurfaceEvent>
 
 #include <qpa/qplatformnativeinterface.h>
 #include <qpa/qplatformwindow_p.h>
@@ -74,39 +75,30 @@ void KisWaylandSurfaceColorManager::setReadyImpl(bool value)
     Q_EMIT sigReadyChanged(m_isReady);
 }
 
-#include <QPlatformSurfaceEvent>
-
-class WindowIdEventFilter : public QObject
+class PlatformWindowDetectionEventFilter : public QObject
 {
     Q_OBJECT
 public:
-    WindowIdEventFilter(QObject *watched, QObject *parent = nullptr)
+    PlatformWindowDetectionEventFilter(QObject *watched, QObject *parent = nullptr)
         : QObject(parent)
         , m_watched(watched)
     {
-        // TODO: autoinstall the filter
     }
 
 Q_SIGNALS:
-    void sigWindowIdChanged();
+    void sigPlatformWindowCreated();
+    void sigPlatformWindowDestroyed();
 
 private:
     bool eventFilter(QObject *watched, QEvent *event) override {
-        if (watched == m_watched) {
-            qDebug() << watched->objectName() << event->type();
-        }
+        if (watched != m_watched) return false;
 
-        if (watched == m_watched && event->type() == QEvent::PlatformSurface) {
+        if (event->type() == QEvent::PlatformSurface) {
             QPlatformSurfaceEvent *pevent = static_cast<QPlatformSurfaceEvent*>(event);
             if (pevent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
-                ENTER_FUNCTION() << "found the event";
-                Q_EMIT sigWindowIdChanged();
-
-                // we allow only one-shot
-                m_watched = nullptr;
-
-                // dispose of ourselves
-                this->deleteLater();
+                Q_EMIT sigPlatformWindowCreated();
+            } else if (pevent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceAboutToBeDestroyed) {
+                Q_EMIT sigPlatformWindowDestroyed();
             }
         }
 
@@ -119,51 +111,22 @@ private:
 
 void KisWaylandSurfaceColorManager::reinitialize()
 {
-    ENTER_FUNCTION() << ppVar(m_waylandManager->isReady()) << ppVar(m_window);
-
     if (!m_waylandManager->isReady()) {
-        m_surface.reset();
-        m_preferredDescription = std::nullopt;
-        m_currentDescription = std::nullopt;
-        m_renderingIntent = std::nullopt;
+        auto newState = tryDeinitialize(std::nullopt);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(newState == WaylandSurfaceState::Disconnected);
         setReadyImpl(false);
         return;
     }
 
-    auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
-
-    ENTER_FUNCTION() << ppVar(m_window) << ppVar(m_window->handle()) << ppVar(waylandWindow);
-
-    if (!waylandWindow) {
-        // the window has not completed its creation yet, just wait a little bit
-        auto *filter = new WindowIdEventFilter(m_window, this);
-        connect(filter, &WindowIdEventFilter::sigWindowIdChanged, this, &KisWaylandSurfaceColorManager::reinitialize);
-        m_window->installEventFilter(filter);
-        return;
+    if (m_currentState > WaylandSurfaceState::Disconnected) {
+        qWarning() << "WARNING: KisWaylandSurfaceColorManager::reinitialize(): received unbalanced connectionActive(true) signal!";
+        qWarning() << "    " << ppVar(m_currentState);
+        m_currentState = tryDeinitialize(std::nullopt);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentState == WaylandSurfaceState::Connected);
     }
 
-    auto initializeWaylandSurface = [this, waylandWindow]() {
-        disconnect(m_windowConnection);
-        if (m_surface) {
-            qWarning() << "WARNING: KisWaylandSurfaceColorManager::reinitialize(): surfaceCreated signal got delivered twice!";
-            return;
-        }
-
-        auto feedback = std::make_unique<KisWaylandAPISurfaceFeedback>(m_waylandManager->get_surface_feedback(waylandWindow->surface()));
-        connect(feedback.get(), &KisWaylandAPISurfaceFeedback::preferredChanged, this, &KisWaylandSurfaceColorManager::slotPreferredChanged);
-        m_surface = std::make_unique<KisWaylandAPISurface>(m_waylandManager->get_surface(waylandWindow->surface()), std::move(feedback));
-    };
-
-    if (waylandWindow->surface()) {
-        initializeWaylandSurface();
-    } else {
-        /**
-         * In case the Wayland server got disconnected, wait until the Qt
-         * surface is actually created.
-         */
-        m_windowConnection =
-            connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, initializeWaylandSurface);
-    }
+    m_currentState = tryInitilize();
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_currentState < WaylandSurfaceState::PreferredDescriptionReceived);
 }
 
 bool KisWaylandSurfaceColorManager::isReady() const
@@ -293,7 +256,7 @@ QFuture<bool> KisWaylandSurfaceColorManager::setSurfaceDescription(const KisSurf
 
     connect(descriptionObject.get(), &KisWaylandAPIImageDescription::sigDescriptionConstructed,
             this,
-            [promise = std::move(imageDescriptionPromise)] (bool success) mutable {
+            [promise = std::move(imageDescriptionPromise), descriptionObject] (bool success) mutable {
                 promise.start();
                 promise.addResult(success);
                 promise.finish();
@@ -350,16 +313,203 @@ std::optional<KisSurfaceColorimetry::SurfaceDescription> KisWaylandSurfaceColorM
 
 void KisWaylandSurfaceColorManager::slotPreferredChanged()
 {
-    auto waylandDesc = m_surface->m_feedback->m_preferred->info.m_data;
-    m_preferredDescription = waylandDesc.toSurfaceDescription();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentState >= WaylandSurfaceState::APIFeedbackCreated);
 
-    ENTER_FUNCTION() << ppVar(m_window) << ppVar(m_preferredDescription);
+    auto newState = tryInitilize();
 
-    if (!m_isReady) {
-        setReadyImpl(true);
-    } else {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(newState == WaylandSurfaceState::PreferredDescriptionReceived);
+
+    if (newState == m_currentState) {
         Q_EMIT sigPreferredSurfaceDescriptionChanged(*m_preferredDescription);
+    } else {
+        m_currentState = newState;
+        setReadyImpl(true);
     }
+}
+
+void KisWaylandSurfaceColorManager::slotPlatformWindowCreated()
+{
+    if (m_currentState > WaylandSurfaceState::Connected) {
+        qWarning() << "WARNING: KisWaylandSurfaceColorManager::slotPlatformWindowCreated(): received unbalanced window created signal!";
+        qWarning() << "    " << ppVar(m_currentState);
+        m_currentState = tryDeinitialize(WaylandSurfaceState::Connected);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentState == WaylandSurfaceState::Connected);
+    }
+
+    auto newState = tryInitilize();
+
+    if (newState < WaylandSurfaceState::WaylandWindowCreated) {
+        qWarning() << "WARNING: KisWaylandSurfaceColorManager::slotPlatformWindowCreated(): failed to reach WaylandWindowCreated state";
+    }
+
+    m_currentState = newState;
+}
+
+void KisWaylandSurfaceColorManager::slotPlatformWindowDestroyed()
+{
+    auto newState = tryDeinitialize(WaylandSurfaceState::Connected);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(newState <= WaylandSurfaceState::Connected);
+    m_currentState = newState;
+}
+
+void KisWaylandSurfaceColorManager::slotWaylandSurfaceCreated()
+{
+    if (m_currentState > WaylandSurfaceState::WaylandWindowCreated) {
+        qWarning() << "WARNING: KisWaylandSurfaceColorManager::slotWaylandSurfaceCreated(): received unbalanced surface created signal!";
+        qWarning() << "    " << ppVar(m_currentState);
+        m_currentState = tryDeinitialize(WaylandSurfaceState::WaylandWindowCreated);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentState == WaylandSurfaceState::WaylandWindowCreated);
+    }
+
+    auto newState = tryInitilize();
+
+    if (newState < WaylandSurfaceState::WaylandSurfaceCreated) {
+        qWarning() << "WARNING: KisWaylandSurfaceColorManager::slotWaylandSurfaceCreated(): failed to reach WaylandSurfaceCreated state";
+    }
+    m_currentState = newState;
+}
+
+void KisWaylandSurfaceColorManager::slotWaylandSurfaceDestroyed()
+{
+    auto newState = tryDeinitialize(WaylandSurfaceState::WaylandWindowCreated);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(newState <= WaylandSurfaceState::WaylandWindowCreated);
+    m_currentState = newState;
+}
+
+KisWaylandSurfaceColorManager::WaylandSurfaceState
+KisWaylandSurfaceColorManager::tryInitilize()
+{
+    /**
+     * Initialization of the managed happens sequentially by transitioning through
+     * a set of states. Some states may be transitioned asynchronously, e.g. when
+     * Qt creates a platform windows or when it creates or recreates a surface.
+     */
+
+    WaylandSurfaceState currentState = WaylandSurfaceState::Disconnected;
+
+    if (m_waylandManager->isReady()) {
+        currentState = WaylandSurfaceState::Connected;
+    }
+
+    if (currentState == WaylandSurfaceState::Connected) {
+        if (!m_platformWindowStateDetector) {
+            auto *filter = new PlatformWindowDetectionEventFilter(m_window, this);
+            connect(filter,
+                    &PlatformWindowDetectionEventFilter::sigPlatformWindowCreated,
+                    this,
+                    &KisWaylandSurfaceColorManager::slotPlatformWindowCreated);
+            connect(filter,
+                    &PlatformWindowDetectionEventFilter::sigPlatformWindowDestroyed,
+                    this,
+                    &KisWaylandSurfaceColorManager::slotPlatformWindowDestroyed);
+            m_window->installEventFilter(filter);
+            m_platformWindowStateDetector = filter;
+        }
+
+        auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
+        if (waylandWindow) {
+            currentState = WaylandSurfaceState::WaylandWindowCreated;
+        }
+    }
+
+    if (currentState == WaylandSurfaceState::WaylandWindowCreated) {
+        auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
+
+        if (!m_surfaceCreatedConnection) {
+            m_surfaceCreatedConnection = connect(waylandWindow,
+                                                 &QNativeInterface::Private::QWaylandWindow::surfaceCreated,
+                                                 this,
+                                                 &KisWaylandSurfaceColorManager::slotWaylandSurfaceCreated);
+        }
+
+        if (!m_surfaceDestroyedConnection) {
+            m_surfaceDestroyedConnection = connect(waylandWindow,
+                                                   &QNativeInterface::Private::QWaylandWindow::surfaceDestroyed,
+                                                   this,
+                                                   &KisWaylandSurfaceColorManager::slotWaylandSurfaceDestroyed);
+        }
+
+        if (waylandWindow->surface()) {
+            currentState = WaylandSurfaceState::WaylandSurfaceCreated;
+        }
+    }
+
+    if (currentState == WaylandSurfaceState::WaylandSurfaceCreated) {
+        auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
+
+        if (!m_surface) {
+            auto feedback = std::make_unique<KisWaylandAPISurfaceFeedback>(
+                m_waylandManager->get_surface_feedback(waylandWindow->surface()));
+            connect(feedback.get(),
+                    &KisWaylandAPISurfaceFeedback::preferredChanged,
+                    this,
+                    &KisWaylandSurfaceColorManager::slotPreferredChanged);
+            m_surface = std::make_unique<KisWaylandAPISurface>(m_waylandManager->get_surface(waylandWindow->surface()),
+                                                               std::move(feedback));
+        }
+
+        currentState = WaylandSurfaceState::APIFeedbackCreated;
+    }
+
+    if (currentState == WaylandSurfaceState::APIFeedbackCreated) {
+        if (m_surface->m_feedback->m_preferred->info.isReady()) {
+            auto waylandDesc = m_surface->m_feedback->m_preferred->info.m_data;
+            m_preferredDescription = waylandDesc.toSurfaceDescription();
+
+            currentState = WaylandSurfaceState::PreferredDescriptionReceived;
+        }
+    }
+
+    return currentState;
+}
+
+KisWaylandSurfaceColorManager::WaylandSurfaceState
+KisWaylandSurfaceColorManager::tryDeinitialize(std::optional<KisWaylandSurfaceColorManager::WaylandSurfaceState> targetState)
+{
+    WaylandSurfaceState currentState = WaylandSurfaceState::PreferredDescriptionReceived;
+
+    if (!targetState || *targetState < currentState) {
+        m_currentDescription = std::nullopt;
+        m_renderingIntent = std::nullopt;
+        m_preferredDescription = std::nullopt;
+
+        currentState = WaylandSurfaceState::APIFeedbackCreated;
+    }
+
+    auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
+
+    if (!waylandWindow || !waylandWindow->surface() ||
+        (targetState && *targetState < currentState)) {
+
+        m_surface.reset();
+        currentState = WaylandSurfaceState::WaylandSurfaceCreated;
+    }
+
+    if (!waylandWindow || !waylandWindow->surface() ||
+        (targetState && *targetState < currentState)) {
+
+        currentState = WaylandSurfaceState::WaylandWindowCreated;
+    }
+
+    if (!waylandWindow || (targetState && *targetState < currentState)) {
+        if (m_surfaceCreatedConnection) {
+            disconnect(m_surfaceCreatedConnection);
+        }
+        if (m_surfaceDestroyedConnection) {
+            disconnect(m_surfaceDestroyedConnection);
+        }
+        currentState = WaylandSurfaceState::Connected;
+    }
+
+    if (!m_waylandManager->isReady() || (targetState && *targetState < currentState)) {
+        m_window->removeEventFilter(m_platformWindowStateDetector);
+        m_platformWindowStateDetector->deleteLater();
+        m_platformWindowStateDetector = nullptr;
+
+        currentState = WaylandSurfaceState::Disconnected;
+    }
+
+    return currentState;
 }
 
 #include <moc_KisWaylandSurfaceColorManager.cpp>

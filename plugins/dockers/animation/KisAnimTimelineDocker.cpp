@@ -617,63 +617,43 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     // Connect playback-related actions..
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->playPause();
-    });
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(togglePlayback()));
 
     action = actionManager->createAction("stop_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->stop();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(stop()));
 
     action = actionManager->createAction("previous_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousFrame();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousFrame()));
 
     action = actionManager->createAction("next_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextFrame();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextFrame()));
 
     action = actionManager->createAction("previous_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousKeyframe()));
 
     action = actionManager->createAction("next_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextKeyframe()));
 
     action = actionManager->createAction("previous_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousMatchingKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousMatchingKeyframe()));
 
     action = actionManager->createAction("next_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextMatchingKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextMatchingKeyframe()));
 
     action = actionManager->createAction("previous_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousUnfilteredKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousUnfilteredKeyframe()));
 
     action = actionManager->createAction("next_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextUnfilteredKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextUnfilteredKeyframe()));
 
     action = actionManager->createAction("first_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -721,18 +701,42 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     if (!playbackEngine) return;
 
     // Connect transport controls..
-    connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()));
-    connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()));
-    connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()));
-    connect(m_d->titlebar->transport, SIGNAL(playPause()), playbackEngine, SLOT(playPause()));
-    connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()));
-    connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
+    connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(playPause()), this, SLOT(togglePlayback()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()), Qt::UniqueConnection);
 
-    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
+    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)), Qt::UniqueConnection);
 
     m_d->controlsModel.connectPlaybackEngine(playbackEngine);
 
     m_d->playbackEngine = playbackEngine;
+}
+
+void KisAnimTimelineDocker::togglePlayback()
+{
+    m_d->playbackEngine->playPause();
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    KisCanvasAnimationState *animState = m_d->canvas->animationState();
+
+    if (!animInterface || !animState) return;
+
+    if (animState->playbackState() == PlaybackState::PAUSED) {
+        QModelIndexList selectedIndices = m_d->framesView->selectionModel()->selectedIndexes();
+        QModelIndex currentIndex = m_d->framesView->currentIndex();
+        const int pausedTime = animInterface->currentTime();
+
+        QModelIndex pauseIndex = m_d->framesModel->index(currentIndex.row(), pausedTime);
+
+        if (!pauseIndex.isValid()) return;
+
+        if (!selectedIndices.contains(pauseIndex)) {
+            m_d->framesView->setCurrentIndex(pauseIndex);
+        }
+    }
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

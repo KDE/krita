@@ -21,6 +21,7 @@ public:
     ~KisSRGBSurfaceColorSpaceManager();
 
     QString colorManagementReport() const;
+    QString osPreferredColorSpaceReport() const;
 
 protected:
     static KisSurfaceColorimetry::RenderIntent calculateConfigIntent();

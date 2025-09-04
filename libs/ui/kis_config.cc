@@ -573,6 +573,54 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
     m_cfg.writeEntry("mdiBackgroundImage", filename);
 }
 
+bool KisConfig::enableCanvasSurfaceColorSpaceManagement(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("enableCanvasSurfaceColorSpaceManagement",true));
+}
+
+void KisConfig::setEnableCanvasSurfaceColorSpaceManagement(bool value)
+{
+    m_cfg.writeEntry("enableCanvasSurfaceColorSpaceManagement", value);
+}
+
+KisConfig::CanvasSurfaceMode KisConfig::canvasSurfaceColorSpaceManagementMode(bool defaultValue) const {
+    QString modeStr = defaultValue ? "preferred" : m_cfg.readEntry("canvasSurfaceColorSpaceManagementMode", "preferred");
+
+    if (modeStr == "preferred") {
+        return CanvasSurfaceMode::Preferred;
+    } else if (modeStr == "rec709g22") {
+        return CanvasSurfaceMode::Rec709g22;
+    } else if (modeStr == "rec709g10") {
+        return CanvasSurfaceMode::Rec709g10;
+    } else if (modeStr == "unmanaged") {
+        return CanvasSurfaceMode::Unmanaged;
+    } else {
+        return CanvasSurfaceMode::Preferred;
+    }
+}
+
+void KisConfig::setCanvasSurfaceColorSpaceManagementMode(KisConfig::CanvasSurfaceMode value) {
+    QString modeStr;
+
+    switch (value) {
+        case CanvasSurfaceMode::Preferred:
+            modeStr = "preferred";
+            break;
+        case CanvasSurfaceMode::Rec709g22:
+            modeStr = "rec709g22";
+            break;
+        case CanvasSurfaceMode::Rec709g10:
+            modeStr = "rec709g10";
+            break;
+        case CanvasSurfaceMode::Unmanaged:
+            modeStr = "unmanaged";
+            break;
+    }
+
+    m_cfg.writeEntry("canvasSurfaceColorSpaceManagementMode", modeStr);
+}
+
+
 QString KisConfig::monitorProfile(int screen) const
 {
     // Note: keep this in sync with the default profile for the RGB colorspaces!

@@ -198,6 +198,12 @@ public:
     QList<QLabel*> m_monitorProfileLabels;
     QList<KisSqueezedComboBox*> m_monitorProfileWidgets;
     QScopedPointer<KisProofingConfigModel> m_proofModel;
+
+    using CanvasSurfaceMode = KisConfig::CanvasSurfaceMode;
+
+    bool m_colorManagedByOS {false};
+    QPointer<QCheckBox> m_chkEnableCanvasColorSpaceManagement;
+    QPointer<KisSqueezedComboBox> m_canvasSurfaceColorSpace;
 };
 
 //=======================

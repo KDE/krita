@@ -1089,8 +1089,14 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisConfig cfg(true);
 
-    m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
-    connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    m_colorManagedByOS = mainWindow->managedSurfaceProfile();
+
+    if (!m_colorManagedByOS) {
+        m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
+        connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
+    }
+    m_page->chkUseSystemMonitorProfile->setVisible(!m_colorManagedByOS);
 
     m_page->useDefColorSpace->setChecked(cfg.useDefaultColorSpace());
     connect(m_page->useDefColorSpace, SIGNAL(toggled(bool)), this, SLOT(toggleUseDefaultColorSpace(bool)));
@@ -1106,8 +1112,11 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
     m_page->cmbWorkingColorSpace->setEnabled(cfg.useDefaultColorSpace());
 
-    m_page->bnAddColorProfile->setIcon(koIcon("document-import-16"));
-    connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
+    if (!m_colorManagedByOS) {
+        m_page->bnAddColorProfile->setIcon(koIcon("document-import-16"));
+        connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
+    }
+    m_page->bnAddColorProfile->setVisible(!m_colorManagedByOS);
 
     {
         QStringList profiles;
@@ -1130,31 +1139,98 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     }
 
 
-    QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
-    monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
-    for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
-        QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
-        lbl->setWordWrap(true);
-        m_monitorProfileLabels << lbl;
-        KisSqueezedComboBox *cmb = new KisSqueezedComboBox();
-        cmb->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        monitorProfileGrid->addRow(lbl, cmb);
-        m_monitorProfileWidgets << cmb;
-    }
+    if (!m_colorManagedByOS) {
+        QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
+        monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
+        for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
+            QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
+            lbl->setWordWrap(true);
+            m_monitorProfileLabels << lbl;
+            KisSqueezedComboBox *cmb = new KisSqueezedComboBox();
+            cmb->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            monitorProfileGrid->addRow(lbl, cmb);
+            m_monitorProfileWidgets << cmb;
+        }
 
-// disable if not Linux as KisColorManager is not yet implemented outside Linux
+        // disable if not Linux as KisColorManager is not yet implemented outside Linux
 #ifndef Q_OS_LINUX
-    m_page->chkUseSystemMonitorProfile->setChecked(false);
-    m_page->chkUseSystemMonitorProfile->setDisabled(true);
-    m_page->chkUseSystemMonitorProfile->setHidden(true);
+        m_page->chkUseSystemMonitorProfile->setChecked(false);
+        m_page->chkUseSystemMonitorProfile->setDisabled(true);
+        m_page->chkUseSystemMonitorProfile->setHidden(true);
 #endif
 
-    refillMonitorProfiles(KoID("RGBA"));
+        refillMonitorProfiles(KoID("RGBA"));
 
-    for(int i = 0; i < QApplication::screens().count(); ++i) {
-        if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
-            m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
+        for(int i = 0; i < QApplication::screens().count(); ++i) {
+            if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
+                m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
+            }
         }
+    } else {
+        QVBoxLayout *vboxLayout = new QVBoxLayout(m_page->monitorprofileholder);
+        vboxLayout->setContentsMargins(0, 0, 0, 0);
+        vboxLayout->addItem(new QSpacerItem(20,20));
+
+        QGroupBox *groupBox = new QGroupBox(i18n("Display's color space is managed by the operating system"));
+        vboxLayout->addWidget(groupBox);
+
+        QFormLayout *monitorProfileGrid = new QFormLayout(groupBox);
+        monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
+
+        m_chkEnableCanvasColorSpaceManagement =
+            new QCheckBox(i18n("Enable canvas color management"), this);
+
+        m_chkEnableCanvasColorSpaceManagement->setToolTip(
+            i18n("<p>Enabling canvas color management automatically creates "
+                 "a separate native surface for the canvas. It might cause "
+                 "performance issues on some systems.</p"
+                 ""
+                 "<p>If color management is disabled, Krita will render "
+                 "the canvas into the surface of the main window, which "
+                 "is considered sRGB. It will cause two limitations:"
+                 ""
+                 "<ol>"
+                 "    <li>the color gamut will be limited to sRGB</li>"
+                 "    <li>color proofing mode will be limited to \"use global display settings\", "
+                 "        i.e. paper white proofing will become impossible</li>"
+                 "</ol>"
+                "</p>"));
+
+        monitorProfileGrid->addRow(m_chkEnableCanvasColorSpaceManagement);
+
+        m_canvasSurfaceColorSpace = new KisSqueezedComboBox();
+            m_canvasSurfaceColorSpace->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        QLabel *canvasSurfaceColorSpaceLbl = new QLabel(i18n("Canvas surface color space:"), this);
+        monitorProfileGrid->addRow(canvasSurfaceColorSpaceLbl, m_canvasSurfaceColorSpace);
+
+        m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Preferred by operating system"), QVariant::fromValue(CanvasSurfaceMode::Preferred));
+        m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Rec 709 Gamma 2.2"), QVariant::fromValue(CanvasSurfaceMode::Rec709g22));
+        m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Rec 709 Linear"), QVariant::fromValue(CanvasSurfaceMode::Rec709g10));
+        m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Unmanaged (testing only)"), QVariant::fromValue(CanvasSurfaceMode::Unmanaged));
+
+        m_canvasSurfaceColorSpace->setToolTip(
+            i18n("<p>Color space of the pixels that are transferred to the "
+                 "window compositor. Use \"preferred\" space unless you know "
+                 "what you are doing</p>"));
+
+        vboxLayout->addItem(new QSpacerItem(20,20));
+
+        QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", mainWindow->osPreferredColorSpaceReport()), this);
+        vboxLayout->addWidget(preferredLbl);
+
+        m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement());
+        auto mode = cfg.canvasSurfaceColorSpaceManagementMode();
+        int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
+        KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+            index = 0;
+        }
+        m_canvasSurfaceColorSpace->setCurrentIndex(index);
+
+        connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, m_canvasSurfaceColorSpace, &QWidget::setEnabled);
+        m_canvasSurfaceColorSpace->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
+
+        connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, canvasSurfaceColorSpaceLbl, &QWidget::setEnabled);
+        canvasSurfaceColorSpaceLbl->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
     }
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
@@ -1214,12 +1290,15 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         button->setChecked(true);
     }
 
-    toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
-
+    if (!m_colorManagedByOS) {
+        toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
+    }
 }
 
 void ColorSettingsTab::installProfile()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_colorManagedByOS);
+
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
@@ -1252,6 +1331,8 @@ void ColorSettingsTab::installProfile()
 
 void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_colorManagedByOS);
+
     KisConfig cfg(true);
 
     if (useSystemProfile) {
@@ -1294,9 +1375,20 @@ void ColorSettingsTab::setDefault()
     const QString defaultProfile = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
     m_page->cmbColorProfileForEXR->setCurrent(defaultProfile);
 
-    refillMonitorProfiles(KoID("RGBA"));
-
     KisConfig cfg(true);
+
+    if (!m_colorManagedByOS) {
+        refillMonitorProfiles(KoID("RGBA"));
+    } else {
+        m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement(true));
+        auto mode = cfg.canvasSurfaceColorSpaceManagementMode(true);
+        int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
+        KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+            index = 0;
+        }
+        m_canvasSurfaceColorSpace->setCurrentIndex(index);
+    }
+
     KisImageConfig cfgImage(true);
     KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration(true);
     m_proofModel->data.set(*proofingConfig.data());
@@ -1312,7 +1404,9 @@ void ColorSettingsTab::setDefault()
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
     m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors(true));
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent(true));
-    m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile(true));
+    if (!m_colorManagedByOS) {
+        m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile(true));
+    }
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour(true));
     Q_ASSERT(button);
     if (button) {
@@ -1323,6 +1417,8 @@ void ColorSettingsTab::setDefault()
 
 void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_colorManagedByOS);
+
     for (int i = 0; i < QApplication::screens().count(); ++i) {
         m_monitorProfileWidgets[i]->clear();
     }
@@ -2552,18 +2648,22 @@ bool KisDlgPreferences::editPreferences()
         KisImageConfig(true).setRenameDuplicatedLayers(m_general->renameDuplicatedLayers());
 
         // Color settings
-        cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-        for (int i = 0; i < QApplication::screens().count(); ++i) {
-            if (m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
-                int currentIndex = m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
-                QString monitorid = m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
-                cfg.setMonitorForScreen(i, monitorid);
+        if (!m_colorSettings->m_colorManagedByOS) {
+            cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
+            for (int i = 0; i < QApplication::screens().count(); ++i) {
+                if (m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
+                    int currentIndex = m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
+                    QString monitorid = m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
+                    cfg.setMonitorForScreen(i, monitorid);
+                } else {
+                    cfg.setMonitorProfile(i,
+                                          m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText(),
+                                          m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
+                }
             }
-            else {
-                cfg.setMonitorProfile(i,
-                                      m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText(),
-                                      m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-            }
+        } else {
+            cfg.setEnableCanvasSurfaceColorSpaceManagement(m_colorSettings->m_chkEnableCanvasColorSpaceManagement->isChecked());
+            cfg.setCanvasSurfaceColorSpaceManagementMode(m_colorSettings->m_canvasSurfaceColorSpace->currentData().value<ColorSettingsTab::CanvasSurfaceMode>());
         }
         cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
         if (cfg.useDefaultColorSpace())

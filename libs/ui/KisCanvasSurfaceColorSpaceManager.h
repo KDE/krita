@@ -12,6 +12,7 @@
 
 #include <KisDisplayConfig.h>
 #include <kis_types.h>
+#include <kis_config.h>
 
 
 class KoColorProfile;
@@ -49,6 +50,7 @@ private:
     QScopedPointer<KisSurfaceColorManagerInterface> m_interface;
     KisDisplayConfig m_currentConfig;
     std::optional<KisSurfaceColorimetry::RenderIntent> m_proofingIntentOverride;
+    KisConfig::CanvasSurfaceMode m_surfaceMode = KisConfig::CanvasSurfaceMode::Preferred;
 };
 
 #endif /* KISCANVASSURFACECOLORSPACEMANAGER_H */

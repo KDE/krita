@@ -729,10 +729,18 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     if (!m_d->canvasWidget) {
         return;
     }
+
     KisConfig cfg(true);
+
+    const bool canvasHasNativeSurface = bool(m_d->canvasWidget->widget()->windowHandle());
+    const bool canvasNeedsNativeSurface =
+        cfg.enableCanvasSurfaceColorSpaceManagement() &&
+        bool(m_d->view->mainWindow()->managedSurfaceProfile());
+
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
-         m_d->openGLFilterMode != cfg.openGLFilteringMode());
+         m_d->openGLFilterMode != cfg.openGLFilteringMode()) ||
+         canvasHasNativeSurface != canvasNeedsNativeSurface;
 
     if (needReset) {
         createCanvas(useOpenGL);

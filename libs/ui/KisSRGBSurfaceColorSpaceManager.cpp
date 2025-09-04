@@ -25,6 +25,26 @@ KisSRGBSurfaceColorSpaceManager::~KisSRGBSurfaceColorSpaceManager()
 {
 }
 
+QString KisSRGBSurfaceColorSpaceManager::osPreferredColorSpaceReport() const
+{
+    QString report;
+    QDebug str(&report);
+
+    if (!m_interface->isReady()) {
+        str << "WARNING: surface color management interface is not ready!" << Qt::endl;
+        str << Qt::endl;
+    }
+
+    if (m_interface->preferredSurfaceDescription()) {
+        str << Qt::endl;
+        str.noquote() << m_interface->preferredSurfaceDescription()->makeTextReport() << Qt::endl;
+    } else {
+        str << "<none>" << Qt::endl;
+    }
+
+    return report;
+}
+
 QString KisSRGBSurfaceColorSpaceManager::colorManagementReport() const
 {
     QString report;

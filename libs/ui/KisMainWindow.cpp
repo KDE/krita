@@ -3255,4 +3255,15 @@ QString KisMainWindow::colorManagementReport() const
 #endif
 }
 
+QString KisMainWindow::osPreferredColorSpaceReport() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return d->surfaceColorSpaceManager ?
+        d->surfaceColorSpaceManager->osPreferredColorSpaceReport() :
+        QString("Surface color management is not supported on this platform\n");
+#else
+    return "Surface color management is disabled\n";
+#endif
+}
+
 #include <moc_KisMainWindow.cpp>

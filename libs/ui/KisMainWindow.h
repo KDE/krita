@@ -201,6 +201,13 @@ public:
      */
     QString colorManagementReport() const;
 
+    /**
+     * Return user-facing information about the preferred color space of the
+     * operating system. This information is supposed to be used in the
+     * preferences dialog, so it is supposed to be translated.
+     */
+    QString osPreferredColorSpaceReport() const;
+
 Q_SIGNALS:
 
     /**

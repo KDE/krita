@@ -701,14 +701,14 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     if (!playbackEngine) return;
 
     // Connect transport controls..
-    connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()));
-    connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()));
-    connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()));
-    connect(m_d->titlebar->transport, SIGNAL(playPause()), this, SLOT(togglePlayback()));
-    connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()));
-    connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
+    connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(playPause()), this, SLOT(togglePlayback()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()), Qt::UniqueConnection);
+    connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()), Qt::UniqueConnection);
 
-    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
+    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)), Qt::UniqueConnection);
 
     m_d->controlsModel.connectPlaybackEngine(playbackEngine);
 

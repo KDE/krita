@@ -96,7 +96,7 @@ public:
     //Set the selected file type filter
     void selectNameFilter(const QString &filter);
 
-    /// Show the file dialog and return mulitple file names the user selected
+    /// Show the file dialog and return multiple file names the user selected
     QStringList filenames();
 
     /// Show the file dialog and return the file name the user selected

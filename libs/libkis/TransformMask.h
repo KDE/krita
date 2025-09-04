@@ -45,7 +45,7 @@ public Q_SLOTS:
 
     /**
      * @brief toXML
-     * @return a string containing XML formated transform parameters.
+     * @return a string containing XML formatted transform parameters.
      */
     QString toXML() const;
 
@@ -82,7 +82,7 @@ public Q_SLOTS:
   </data>
 </transform_params>
 @endcode
-     * @param xml a valid formated XML string with proper main and data elements.
+     * @param xml a valid formatted XML string with proper main and data elements.
      * @return a true response if successful, a false response if failed.
      */
     bool fromXML(const QString &xml);

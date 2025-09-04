@@ -934,7 +934,7 @@ print(root.childNodes())
      * - document is read-only
      *
      * Being able to deactivate autosave on a document can make sense when a plugin use internal document
-     * (document is not exposed in a view, only created for intenal process purposes)
+     * (document is not exposed in a view, only created for internal process purposes)
      *
      * @param active True to activate autosave
      */
@@ -1025,7 +1025,7 @@ newDoc.setGridConfig(newDocGrid)
 
     /**
      * @brief Set current audio level for document
-     * @param level Audio volumne between 0.0 and 1.0 (1.0 = 100%)
+     * @param level Audio volume between 0.0 and 1.0 (1.0 = 100%)
      */
     void setAudioLevel(const qreal level);
 

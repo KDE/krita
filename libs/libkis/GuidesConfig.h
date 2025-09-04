@@ -122,7 +122,7 @@ public Q_SLOTS:
 
     /**
      * @brief Returns guides visibility status.
-     * @return True if guides are visibles, otherwise False
+     * @return True if guides are visible, otherwise False
      */
     bool visible() const;
 

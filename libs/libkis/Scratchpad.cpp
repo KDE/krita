@@ -77,7 +77,7 @@ bool Scratchpad::canvasZoomLink()
 
 qreal Scratchpad::scale()
 {
-    // return scale X only, consider zoom X/Y will alway be the same
+    // return scale X only, consider zoom X/Y will always be the same
     return d->scratchpad->scaleX();
 }
 

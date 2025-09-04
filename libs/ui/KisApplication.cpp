@@ -195,6 +195,7 @@ public:
 
         if (m_splash) {
             m_splash->hide();
+            m_splash->deleteLater();
         }
     }
 

@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-03 02:07+0000\n"
+"POT-Creation-Date: 2025-09-05 02:01+0000\n"
 "PO-Revision-Date: 2025-08-12 14:37+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -41441,31 +41441,31 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "הבא שכבה מעלה"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "הזן שם לקבוצה:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "הסר שכבה נוכחית"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "הבא שכבה מעלה"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

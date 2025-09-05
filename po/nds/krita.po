@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-03 02:07+0000\n"
+"POT-Creation-Date: 2025-09-05 02:01+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -42658,31 +42658,31 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Koppelnaam ingeven:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Aktuell Akschoon wegmaken"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

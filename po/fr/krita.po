@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-03 02:07+0000\n"
+"POT-Creation-Date: 2025-09-05 02:01+0000\n"
 "PO-Revision-Date: 2025-08-30 20:24+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -42831,30 +42831,30 @@ msgstr ""
 "Zoom de la frise chronologique. Maintenir enfoncé et faire glisser à gauche "
 "ou à droite."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Insérer ou supprimer des images de continuité"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Saisir le nombre d'images "
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Modifier les images :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Images clés"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

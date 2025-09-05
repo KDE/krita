@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-03 02:07+0000\n"
+"POT-Creation-Date: 2025-09-05 02:01+0000\n"
 "PO-Revision-Date: 2025-08-14 09:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -43493,14 +43493,14 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "غيّر مستوى تقريب الخطّ الزّمنيّ. أبقِه منقورًا واسحب لليمين أو اليسار."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "أدرِج اسمًا"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Enter new style name"
@@ -43508,20 +43508,20 @@ msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "أدخِل اسم النّمط الجديد"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Switch Frames"
 msgid "Edit Frames:"
 msgstr "تبديل الإطارات"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "أطر رئيسة"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, fuzzy, kde-format
 #| msgid "Drop Frames"
 msgctxt "@item:inmenu"

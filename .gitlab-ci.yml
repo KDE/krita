@@ -57,6 +57,7 @@ variables:
       - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
       - "**/appium_artifact_*"
       - "*.log"
+      - "_build/CMakeFiles/CMakeConfigureLog.yaml"
       # Windows packages
       - "krita-*.zip"
       - "krita-*-setup.exe"

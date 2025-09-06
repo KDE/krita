@@ -29512,7 +29512,7 @@ msgstr "画布缩放操作使用水平轴"
 #: libs/ui/forms/wdggeneralsettings.ui:1036
 #, kde-format
 msgid "Selection Actions Bar"
-msgstr "选区操作栏"
+msgstr "选区操作浮动工具条"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29526,7 +29526,7 @@ msgstr "启用后，任意选区都会显示包含选区相关操作的小型浮
 #: libs/ui/forms/wdggeneralsettings.ui:1046
 #, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "启用选区操作栏"
+msgstr "启用选区操作浮动工具条"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057

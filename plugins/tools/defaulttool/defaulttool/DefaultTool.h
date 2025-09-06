@@ -230,9 +230,12 @@ public:
     DefaultToolTextPropertiesInterface(DefaultTool *parent);
     ~DefaultToolTextPropertiesInterface();
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
+    virtual QList<KoSvgTextProperties> getCharacterProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
+    virtual void setCharacterPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
     virtual bool spanSelection() override;
+    virtual bool characterPropertiesEnabled() override;
 
     virtual void notifyCursorPosChanged(int pos, int anchor) override;
     virtual void notifyMarkupChanged() override;

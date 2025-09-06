@@ -31,6 +31,7 @@ class TextPropertiesCanvasObserver : public QObject, public KisMainwindowObserve
     Q_PROPERTY(qreal dpi READ dpi() NOTIFY dpiChanged)
     Q_PROPERTY(QStringList locales READ locales() NOTIFY localesChanged)
     Q_PROPERTY(KoSvgTextPropertiesModel *textProperties READ textProperties NOTIFY textPropertiesChanged)
+    Q_PROPERTY(KoSvgTextPropertiesModel *characterProperties READ characterProperties NOTIFY characterPropertiesChanged)
     Q_PROPERTY(TextPropertyConfigModel *textPropertyConfig READ textPropertyConfig NOTIFY textPropertyConfigChanged)
     /*
      * \qmlproperty hasFocus
@@ -52,6 +53,7 @@ public:
     qreal dpi() const;
     QStringList locales() const;
     KoSvgTextPropertiesModel *textProperties() const;
+    KoSvgTextPropertiesModel *characterProperties() const;
     TextPropertyConfigModel *textPropertyConfig() const;
 
     bool hasFocus() const;
@@ -59,7 +61,9 @@ public:
 
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
+    void slotCanvasCharacterPropertiesChanged();
     void slotTextPropertiesChanged();
+    void slotCharacterPropertiesChanged();
 
     void callModalTextPropertyConfigDialog();
 
@@ -72,6 +76,7 @@ Q_SIGNALS:
     void localesChanged();
     void textPropertiesChanged();
     void textPropertyConfigChanged();
+    void characterPropertiesChanged();
     void hasFocusChanged();
 private:
     struct Private;

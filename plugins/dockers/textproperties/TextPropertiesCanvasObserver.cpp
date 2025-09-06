@@ -23,13 +23,16 @@
 struct TextPropertiesCanvasObserver::Private {
 
     Private(QObject *parent = nullptr)
-        : modelToProviderCompressor(KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, parent)) {
+        : textToProviderCompressor(KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, parent))
+        , characterToProviderCompressor(KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, parent)){
 
     }
 
-    KisSignalCompressor modelToProviderCompressor;
+    KisSignalCompressor textToProviderCompressor;
+    KisSignalCompressor characterToProviderCompressor;
 
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
+    KoSvgTextPropertiesModel *characterModel {new KoSvgTextPropertiesModel()};
     KisCanvasResourceProvider *provider{nullptr};
     TextPropertyConfigModel *textPropertyConfigModel {nullptr};
     qreal currentDpi{72.0};
@@ -51,10 +54,15 @@ TextPropertiesCanvasObserver::TextPropertiesCanvasObserver(QObject *parent)
     d->locales = wellFormedBCPNames;
 
     connect(d->textModel, SIGNAL(textPropertyChanged()),
-            &d->modelToProviderCompressor, SLOT(start()));
-    connect(&d->modelToProviderCompressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
+            &d->textToProviderCompressor, SLOT(start()));
+    connect(d->characterModel, SIGNAL(textPropertyChanged()),
+            &d->characterToProviderCompressor, SLOT(start()));
+    connect(&d->textToProviderCompressor, SIGNAL(timeout()), this, SLOT(slotTextPropertiesChanged()));
+    connect(&d->characterToProviderCompressor, SIGNAL(timeout()), this, SLOT(slotCharacterPropertiesChanged()));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SIGNAL(textPropertiesChanged()));
+    connect(d->characterModel, SIGNAL(textPropertyChanged()),
+            this, SIGNAL(characterPropertiesChanged()));
 }
 
 TextPropertiesCanvasObserver::~TextPropertiesCanvasObserver()
@@ -68,11 +76,16 @@ void TextPropertiesCanvasObserver::setViewManager(KisViewManager *kisview)
     if (d->provider) {
         connect(d->provider, SIGNAL(sigTextPropertiesChanged()),
                 this, SLOT(slotCanvasTextPropertiesChanged()));
+        connect(d->provider, SIGNAL(sigCharacterPropertiesChanged()),
+                this, SLOT(slotCanvasCharacterPropertiesChanged()));
 
         // This initializes the docker to an empty entry;
         KoSvgTextPropertyData textData;
         textData.inheritedProperties = KoSvgTextProperties();
+        textData.enabled = true;
         d->provider->setTextPropertyData(textData);
+        textData.enabled = false;
+        d->provider->setCharacterPropertyData(textData);
     }
 }
 
@@ -117,6 +130,11 @@ KoSvgTextPropertiesModel *TextPropertiesCanvasObserver::textProperties() const
     return d->textModel;
 }
 
+KoSvgTextPropertiesModel *TextPropertiesCanvasObserver::characterProperties() const
+{
+    return d->characterModel;
+}
+
 TextPropertyConfigModel *TextPropertiesCanvasObserver::textPropertyConfig() const
 {
     return d->textPropertyConfigModel;
@@ -137,10 +155,20 @@ void TextPropertiesCanvasObserver::setHasFocus(const bool focus)
 void TextPropertiesCanvasObserver::slotCanvasTextPropertiesChanged()
 {
     KoSvgTextPropertyData data = d->provider->textPropertyData();
-    const bool shouldSet = d->hasFocus? !d->modelToProviderCompressor.isActive(): true;
+    const bool shouldSet = d->hasFocus? !d->textToProviderCompressor.isActive(): true;
     if (d->textModel->textData.get() != data && shouldSet) {
         d->textModel->textData.set(data);
         Q_EMIT textPropertiesChanged();
+    }
+}
+
+void TextPropertiesCanvasObserver::slotCanvasCharacterPropertiesChanged()
+{
+    KoSvgTextPropertyData data = d->provider->characterTextPropertyData();
+    const bool shouldSet = d->hasFocus? !d->characterToProviderCompressor.isActive(): true;
+    if (d->characterModel->textData.get() != data && shouldSet) {
+        d->characterModel->textData.set(data);
+        Q_EMIT characterPropertiesChanged();
     }
 }
 
@@ -150,6 +178,15 @@ void TextPropertiesCanvasObserver::slotTextPropertiesChanged()
     debugFlake << Q_FUNC_INFO << textData;
     if (d->provider && d->provider->textPropertyData() != textData) {
         d->provider->setTextPropertyData(textData);
+    }
+}
+
+void TextPropertiesCanvasObserver::slotCharacterPropertiesChanged()
+{
+    KoSvgTextPropertyData characterData = d->characterModel->textData.get();
+    debugFlake << Q_FUNC_INFO << characterData;
+    if (d->provider && d->provider->characterTextPropertyData() != characterData) {
+        d->provider->setCharacterPropertyData(characterData);
     }
 }
 
@@ -167,18 +204,20 @@ void TextPropertiesCanvasObserver::applyPreset(KoResourceSP resource)
 {
     KoCssStylePresetSP preset = resource.staticCast<KoCssStylePreset>();
     if (!preset) return;
-    KoSvgTextPropertyData textData = d->textModel->textData.get();
+    KoSvgTextPropertiesModel *model = d->characterModel->enabled() && d->characterModel->spanSelection()? d->characterModel: d->textModel;
+    KoSvgTextPropertyData textData = model->textData.get();
     KoSvgTextProperties properties = preset->properties(d->currentDpi, true);
     Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
         textData.commonProperties.setProperty(p, properties.property(p));
     }
-    d->textModel->textData.set(textData);
+    model->textData.set(textData);
 }
 
 bool TextPropertiesCanvasObserver::createNewPresetFromSettings()
 {
     KoCssStylePresetSP preset(new KoCssStylePreset(QString()));
-    KoSvgTextPropertyData textData = d->textModel->textData.get();
+    KoSvgTextPropertiesModel *model = d->characterModel->enabled() && d->characterModel->spanSelection()? d->characterModel: d->textModel;
+    KoSvgTextPropertyData textData = model->textData.get();
     preset->setProperties(textData.commonProperties);
     preset->setName(i18nc("@info:placeholder", "New Style Preset"));
     preset->setStyleType("character");

@@ -65,6 +65,7 @@ enum CanvasResourceId {
     UsingOtherColor,    ///<- a boolean that is controlled by the tool invocation action
     ColorHistory, ///< Color history if not per document
     SvgTextPropertyData, ///< KoSvgTextPropertyDataStruct
+    SvgCharacterTextPropertyData, ///< KoSvgTextPropertyDataStruct
 };
 
 }

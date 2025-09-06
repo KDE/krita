@@ -29,6 +29,12 @@ public:
     virtual QList<KoSvgTextProperties> getSelectedProperties() = 0;
 
     /**
+     * @brief getSelectedProperties
+     * @return all KoSvgTextProperties for the given character selection.
+     */
+    virtual QList<KoSvgTextProperties> getCharacterProperties()  = 0;
+
+    /**
      * @brief getInheritedProperties
      * The properties that should be visible when a given property
      * isn't available in common properties. This is typically the
@@ -36,18 +42,37 @@ public:
      * @return what counts as the inherited properties for the given selection.
      */
     virtual KoSvgTextProperties getInheritedProperties() = 0;
+
     /**
      * @brief setPropertiesOnSelected
      * This sets the properties on the selection. The implementation is responsible
      * for handling the undo states.
      * @param properties -- the properties to set.
+     * @param removeProperties -- properties to remove.
      */
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) = 0;
 
+    /**
+     * @brief setCharacterPropertiesOnSelected
+     * This sets the properties for a character selection instead of the full
+     * text shape. Typically the selection of characters.
+     * The implementation is responsible for handling the undo states.
+     * @param properties -- the properties to set.
+     * @param removeProperties -- properties to remove.
+     */
+    virtual void setCharacterPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) = 0;
+
     /// Whether the tool is currently selecting a set of characters instead of whole paragraphs.
     virtual bool spanSelection() = 0;
+
+    /// Whether character selections are possible at all.
+    virtual bool characterPropertiesEnabled() = 0;
 Q_SIGNALS:
+    /// Emit to signal to KisTextPropertiesManager to call getSelectedProperties
     void textSelectionChanged();
+    /// Emit to signal to KisTextPropertiesManager to call getCharacterProperties
+    /// and getInheritedProperties.
+    void textCharacterSelectionChanged();
 };
 
 

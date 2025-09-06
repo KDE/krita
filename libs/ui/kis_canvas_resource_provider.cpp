@@ -558,6 +558,17 @@ KoSvgTextPropertyData KisCanvasResourceProvider::textPropertyData() const
     return m_resourceManager->resource(KoCanvasResource::SvgTextPropertyData).value<KoSvgTextPropertyData>();
 }
 
+void KisCanvasResourceProvider::setCharacterPropertyData(KoSvgTextPropertyData data)
+{
+    m_resourceManager->setResource(KoCanvasResource::SvgCharacterTextPropertyData, QVariant::fromValue(data));
+    Q_EMIT sigCharacterPropertiesChanged();
+}
+
+KoSvgTextPropertyData KisCanvasResourceProvider::characterTextPropertyData() const
+{
+    return m_resourceManager->resource(KoCanvasResource::SvgCharacterTextPropertyData).value<KoSvgTextPropertyData>();
+}
+
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResourceSP workspace)
 {
     Q_EMIT sigLoadingWorkspace(workspace);

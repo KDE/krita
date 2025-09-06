@@ -22,6 +22,8 @@ QDebug operator<<(QDebug dbg, const KoSvgTextPropertyData &prop)
     dbg.nospace() << "TextPropertyData(";
     dbg.nospace() << " Common properties:" << prop.commonProperties.convertParagraphProperties() << prop.commonProperties.convertToSvgTextAttributes();
     dbg.nospace() << " Tristate:" << prop.tristate;
+    dbg.nospace() << " SpanSelection:" << prop.spanSelection;
+    dbg.nospace() << " Enabled:" << prop.enabled;
     dbg.nospace() << " )";
     return dbg.space();
 }

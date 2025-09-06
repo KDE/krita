@@ -44,7 +44,9 @@ public:
 
 private Q_SLOTS:
     void slotInterfaceSelectionChanged();
+    void slotCharacterInterfaceSelectionChanged();
     void slotTextPropertiesChanged();
+    void slotCharacterPropertiesChanged();
 private:
 
     struct Private;

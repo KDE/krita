@@ -304,6 +304,7 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(shapePaddingState) {textData.zoom(propertyModifyState(KoSvgTextProperties::ShapePaddingId))}
     , LAGER_QT(shapeMarginState) {textData.zoom(propertyModifyState(KoSvgTextProperties::ShapeMarginId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
+    , LAGER_QT(enabled) {textData[&KoSvgTextPropertyData::enabled]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));
     lager::watch(fontSizeData, std::bind(&KoSvgTextPropertiesModel::fontSizeChanged, this));

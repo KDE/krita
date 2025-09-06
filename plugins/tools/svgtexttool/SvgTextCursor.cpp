@@ -230,6 +230,7 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
     d->anchor = 0;
     updateCursor(true);
     updateSelection();
+    d->interface->emitSelectionChange();
 }
 
 void SvgTextCursor::setCaretSetting(int cursorWidth, int cursorFlash, int cursorFlashLimit, bool drawCursorInAdditionToSelection)
@@ -597,19 +598,25 @@ QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
     if (!d->shape) return QList<KoSvgTextProperties>();
     int start = -1;
     int end = -1;
-    if (d->pos != d->anchor) {
+    //if (d->pos != d->anchor) {
         start = qMin(d->pos, d->anchor);
         end = qMax(d->pos, d->anchor);
-    }
+    //}
     return d->shape->propertiesForRange(start, end);
 }
 
-void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties)
+QList<KoSvgTextProperties> SvgTextCursor::propertiesForShape() const
+{
+    if (!d->shape) return QList<KoSvgTextProperties>();
+    return {d->shape->propertiesForRange(-1, -1)};
+}
+
+void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties, bool paragraphOnly)
 {
     if (d->shape) {
         int start = -1;
         int end = -1;
-        if (hasSelection()) {
+        if (!paragraphOnly) {
             start = d->pos;
             end = d->anchor;
         }
@@ -1218,7 +1225,7 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
         }
     }
     if (!props.isEmpty()) {
-        mergePropertiesIntoSelection(props);
+        mergePropertiesIntoSelection(props, QSet<KoSvgTextProperties::PropertyId>(), false);
     }
 }
 
@@ -1316,6 +1323,7 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
 void SvgTextCursor::notifyMarkupChanged()
 {
     d->interface->emitSelectionChange();
+    d->interface->emitCharacterSelectionChange();
     updateTypeSettingDecoration();
 }
 
@@ -1633,7 +1641,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
     updateCanvasResources();
-    d->interface->emitSelectionChange();
+    d->interface->emitCharacterSelectionChange();
     if (!(d->canvas->canvasWidget() && d->canvas->canvasController())) {
         // Mockcanvas in the tests has neither.
         return;
@@ -1939,15 +1947,18 @@ void SvgTextCursor::updateCanvasResources()
 struct SvgTextCursorPropertyInterface::Private {
     Private(SvgTextCursor *parent)
         : parent(parent)
-        , compressor(10, KisSignalCompressor::POSTPONE){}
+        , compressor(10, KisSignalCompressor::POSTPONE)
+        , characterCompressor(10, KisSignalCompressor::POSTPONE){}
     SvgTextCursor *parent{nullptr};
     KisSignalCompressor compressor;
+    KisSignalCompressor characterCompressor;
 };
 
 SvgTextCursorPropertyInterface::SvgTextCursorPropertyInterface(SvgTextCursor *parent)
     : KoSvgTextPropertiesInterface(parent), d(new Private(parent))
 {
     connect(&d->compressor, SIGNAL(timeout()), this, SIGNAL(textSelectionChanged()));
+    connect(&d->characterCompressor, SIGNAL(timeout()), this, SIGNAL(textCharacterSelectionChanged()));
 }
 
 SvgTextCursorPropertyInterface::~SvgTextCursorPropertyInterface()
@@ -1956,6 +1967,11 @@ SvgTextCursorPropertyInterface::~SvgTextCursorPropertyInterface()
 }
 QList<KoSvgTextProperties> SvgTextCursorPropertyInterface::getSelectedProperties()
 {
+    return d->parent->propertiesForShape();
+}
+
+QList<KoSvgTextProperties> SvgTextCursorPropertyInterface::getCharacterProperties()
+{
     return d->parent->propertiesForRange();
 }
 
@@ -1963,17 +1979,27 @@ KoSvgTextProperties SvgTextCursorPropertyInterface::getInheritedProperties()
 {
     // 9 times out of 10 this is correct, though we could do better by actually
     // getting inherited properties for the range and not just defaulting to the paragraph.
-    return (d->parent->shape() && spanSelection())? d->parent->shape()->textProperties(): KoSvgTextProperties();
+    return (d->parent->shape())? d->parent->shape()->textProperties(): KoSvgTextProperties();
 }
 
 void SvgTextCursorPropertyInterface::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
-    d->parent->mergePropertiesIntoSelection(properties, removeProperties);
+    d->parent->mergePropertiesIntoSelection(properties, removeProperties, true);
+}
+
+void SvgTextCursorPropertyInterface::setCharacterPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
+{
+    d->parent->mergePropertiesIntoSelection(properties, removeProperties, false);
 }
 
 bool SvgTextCursorPropertyInterface::spanSelection()
 {
     return d->parent->hasSelection();
+}
+
+bool SvgTextCursorPropertyInterface::characterPropertiesEnabled()
+{
+    return true;
 }
 
 void SvgTextCursorPropertyInterface::emitSelectionChange()
@@ -1982,4 +2008,9 @@ void SvgTextCursorPropertyInterface::emitSelectionChange()
     // this is so we can use the text properties last used to create new texts.
     if (!d->parent->shape()) return;
     d->compressor.start();
+}
+
+void SvgTextCursorPropertyInterface::emitCharacterSelectionChange()
+{
+    d->characterCompressor.start();
 }

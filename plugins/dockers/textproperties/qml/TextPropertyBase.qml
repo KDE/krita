@@ -33,7 +33,7 @@ Column {
     property var propertyState: []; /// All property states related to the current property.
 
     function setVisibleFromProperty() {
-        if (propertyType !== parentPropertyType && propertyType !== TextPropertyConfigModel.Mixed) {
+        if (propertyType !== parentPropertyType && propertyType === TextPropertyConfigModel.Paragraph) {
             visible = false;
             return;
         }

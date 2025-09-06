@@ -2367,6 +2367,11 @@ QList<KoSvgTextProperties> DefaultToolTextPropertiesInterface::getSelectedProper
     return props;
 }
 
+QList<KoSvgTextProperties> DefaultToolTextPropertiesInterface::getCharacterProperties()
+{
+    return QList<KoSvgTextProperties>();
+}
+
 KoSvgTextProperties DefaultToolTextPropertiesInterface::getInheritedProperties()
 {
     return KoSvgTextProperties();
@@ -2381,7 +2386,19 @@ void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProper
     }
 }
 
+void DefaultToolTextPropertiesInterface::setCharacterPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
+{
+    Q_UNUSED(properties)
+    Q_UNUSED(removeProperties)
+    return;
+}
+
 bool DefaultToolTextPropertiesInterface::spanSelection()
+{
+    return false;
+}
+
+bool DefaultToolTextPropertiesInterface::characterPropertiesEnabled()
 {
     return false;
 }

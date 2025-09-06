@@ -226,8 +226,6 @@ bool TextPropertyConfigFilterModel::filterAcceptsRow(int source_row, const QMode
     const TextPropertyConfigModel::PropertyType type = TextPropertyConfigModel::PropertyType(sourceModel()->data(idx, TextPropertyConfigModel::Type).toInt());
     if (type == TextPropertyConfigModel::Paragraph && !m_showParagraphProperties) {
         return false;
-    } else if (type == TextPropertyConfigModel::Character && m_showParagraphProperties) {
-        return false;
     }
 
     const QString name = sourceModel()->data(idx, Qt::DisplayRole).toString();

@@ -232,6 +232,9 @@ public:
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 
+    // Check if this model is abled at all.
+    LAGER_QT_CURSOR(bool, enabled);
+
     /**
      * @brief resolvedFontSize
      * this returns the resolved font (em) size, needed for unit conversion for em.

@@ -200,8 +200,9 @@ public:
     QPair<KoSvgTextProperties, KoSvgTextProperties> currentTextProperties() const;
 
     QList<KoSvgTextProperties> propertiesForRange() const;
+    QList<KoSvgTextProperties> propertiesForShape() const;
 
-    void mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>());
+    void mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>(), bool paragraphOnly = false);
 
     /**
      * @brief removeSelection
@@ -332,10 +333,14 @@ public:
     SvgTextCursorPropertyInterface(SvgTextCursor *parent);
     ~SvgTextCursorPropertyInterface();
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
+    virtual QList<KoSvgTextProperties> getCharacterProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
+    virtual void setCharacterPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
     virtual bool spanSelection() override;
+    virtual bool characterPropertiesEnabled() override;
     void emitSelectionChange();
+    void emitCharacterSelectionChange();
 private:
     struct Private;
     const QScopedPointer<Private> d;

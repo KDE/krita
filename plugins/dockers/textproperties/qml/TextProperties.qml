@@ -84,7 +84,8 @@ Control {
             configModel: root.configModel;
             canvasDPI: root.canvasDPI;
             locales: canvasObserver.locales;
-            propertiesModel: canvasObserver.textProperties;
+            enabled: canvasObserver.characterProperties.enabled;
+            propertiesModel: canvasObserver.characterProperties;
 
             onCallPropertyVisibilityConfig: canvasObserver.callModalTextPropertyConfigDialog();
         }

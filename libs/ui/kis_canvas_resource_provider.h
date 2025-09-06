@@ -134,6 +134,9 @@ public:
     void setTextPropertyData(KoSvgTextPropertyData data);
     KoSvgTextPropertyData textPropertyData() const;
 
+    void setCharacterPropertyData(KoSvgTextPropertyData data);
+    KoSvgTextPropertyData characterTextPropertyData() const;
+
     ///Notify that the workspace is saved and settings should be saved to it
     void notifySavingWorkspace(KisWorkspaceResourceSP workspace);
 
@@ -191,6 +194,7 @@ Q_SIGNALS:
     void sigGamutMaskDeactivated();
 
     void sigTextPropertiesChanged();
+    void sigCharacterPropertiesChanged();
 
 private:
 

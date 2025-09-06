@@ -20,6 +20,11 @@ ColumnLayout {
 
     property alias textConfigButtonVisible: configButton.visible;
 
+    enabled: propertiesModel.enabled;
+    onEnabledChanged: {
+        updatePropertyVisibilityState();
+    }
+
     ListModel {
         id: propertyList;
     }

@@ -38,6 +38,15 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+# Detect Python version; for example 'python3.13'
+export PYTHON_VER=`find $DEPS_INSTALL_PREFIX/lib -maxdepth 1 -name 'python*' -type d`
+export PYTHON_VER=`basename $PYTHON_VER`
+if [ -d $DEPS_INSTALL_PREFIX/lib/$PYTHON_VER/site-packages/PyQt5/ ]; then
+  export PYQT_VER=PyQt5
+else
+  export PYQT_VER=PyQt6
+fi
+
 # add our own linuxdeployqt to our PATH environment if available
 if [ -d $DEPS_INSTALL_PREFIX/appimage-tools/bin ]; then
   export PATH=$DEPS_INSTALL_PREFIX/appimage-tools/bin/:$PATH
@@ -153,7 +162,7 @@ else
     cp -r $DEPS_INSTALL_PREFIX/share/kf6 $APPDIR/usr/share
 fi
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
-cp -r $DEPS_INSTALL_PREFIX/lib/python3.10 $APPDIR/usr/lib
+cp -r $DEPS_INSTALL_PREFIX/lib/$PYTHON_VER $APPDIR/usr/lib
 if [ -d $DEPS_INSTALL_PREFIX/share/sip ] ; then
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 fi
@@ -176,15 +185,15 @@ mkdir $BUILD_PREFIX/krita-apprun-build
 )
 rm -rf $BUILD_PREFIX/krita-apprun-build
 
-if [ -d $APPDIR/usr/lib/python3.10/site-packages ]; then
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/packaging*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/pip*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/pyparsing*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/PyQt_builder*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/setuptools*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/sip*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/toml*
-    rm -rf $APPDIR/usr/lib/python3.10/site-packages/easy-install.pth
+if [ -d $APPDIR/usr/lib/$PYTHON_VER/site-packages ]; then
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/packaging*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/pip*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/pyparsing*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/PyQt_builder*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/setuptools*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/sip*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/toml*
+    rm -rf $APPDIR/usr/lib/$PYTHON_VER/site-packages/easy-install.pth
 fi
 
 ## Font related deps are explicitly ignored by AppImage build script,
@@ -245,13 +254,13 @@ for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib;
 done
 
-if [ -d $APPDIR/usr/lib/python3.10/site-packages/PyQt5/ ] ; then
-  for lib in $APPDIR/usr/lib/python3.10/site-packages/PyQt5/*.so*; do
+if [ -d $APPDIR/usr/lib/$PYTHON_VER/site-packages/$PYQT_VER/ ] ; then
+  for lib in $APPDIR/usr/lib/$PYTHON_VER/site-packages/$PYQT_VER/*.so*; do
     patchelf --set-rpath '$ORIGIN/../..' $lib;
   done
 fi
 
-for lib in $APPDIR/usr/lib/python3.10/lib-dynload/*.so*; do
+for lib in $APPDIR/usr/lib/$PYTHON_VER/lib-dynload/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib;
 done
 
@@ -261,8 +270,8 @@ else
   patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
 fi
 
-if [ -f $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so ] ; then
-patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so
+if [ -f $APPDIR/usr/lib/$PYTHON_VER/site-packages/$PYQT_VER/sip.so ] ; then
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/$PYTHON_VER/site-packages/$PYQT_VER/sip.so
 fi
 
 # Step 4: Update version and update information
@@ -312,7 +321,7 @@ if [ -n "$STRIP_APPIMAGE" ]; then
     function find-elf-files {
         # * python libraries are not strippable (strip fails with error)
         # * AppImage packages should not be stripped, because it breaks them
-        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.10/*" -not -name "AppImageUpdate" -not -name "libstdc++.so.6.*" -exec sh -c '
+        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.*/*" -not -name "AppImageUpdate" -not -name "libstdc++.so.6.*" -exec sh -c '
             case "$(head -n 1 "$1")" in
             ?ELF*) exit 0;;
             esac

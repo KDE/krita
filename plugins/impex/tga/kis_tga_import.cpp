@@ -152,6 +152,11 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
             uint count = (c & 0x7f) + 1;
             num -= count * pixel_size;
 
+            if (num < 0) {
+                dbgFile << "This TGA file is broken: the number of pixels left to read and the number of RLE pixels do not agree" << ppVar(num) << ppVar(count) << ppVar(pixel_size);
+                return false;
+            }
+
             if (c & 0x80) {
                 // RLE pixels.
                 Q_ASSERT(pixel_size <= 8);

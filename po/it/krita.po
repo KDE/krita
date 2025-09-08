@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-05 02:01+0000\n"
-"PO-Revision-Date: 2025-08-15 17:44+0200\n"
+"PO-Revision-Date: 2025-08-31 00:39+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -13122,16 +13122,14 @@ msgid "Brushes and Stuff"
 msgstr "Pennelli e altro"
 
 #: krita/krita5.xmlgui:454
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 1"
-msgstr "Colore personalizzato"
+msgstr "Barra degli strumenti personalizzata 1"
 
 #: krita/krita5.xmlgui:457
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Custom toolbar 2"
-msgstr "Colore personalizzato"
+msgstr "Barra degli strumenti personalizzata 2"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -29913,10 +29911,9 @@ msgstr "Usa l'asse orizzontale per l'azione di ingrandimento sulla tela"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Selection Actions Bar"
-msgstr "Azioni di selezione"
+msgstr "Barra Azioni di selezione"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1043
@@ -29925,13 +29922,14 @@ msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
 "selection-related actions."
 msgstr ""
+"Se attivata, qualsiasi selezione produrrà un piccolo pannello mobile con "
+"azioni utili relative alla selezione."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1046
-#, fuzzy, kde-format
-#| msgid "Selection Actions"
+#, kde-format
 msgid "Enable Selection Actions Bar"
-msgstr "Azioni di selezione"
+msgstr "Abilita barra Azioni di selezione"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
 #: libs/ui/forms/wdggeneralsettings.ui:1057
@@ -34260,37 +34258,29 @@ msgid "Select All"
 msgstr "Seleziona tutto"
 
 #: libs/ui/kis_selection_actions_panel.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Invert Selection"
 msgstr "Inverti la selezione"
 
 #: libs/ui/kis_selection_actions_panel.cpp:66
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgid "Fill Selection with Color"
-msgstr "Seleziona un colore"
+msgstr "Riempi la selezione con colore"
 
 #: libs/ui/kis_selection_actions_panel.cpp:67
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Clear Selection"
-msgstr "Sfumatura selezione"
+msgstr "Cancella la selezione"
 
 #: libs/ui/kis_selection_actions_panel.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Layer"
+#, kde-format
 msgid "Copy To New Layer"
-msgstr "Copia livello"
+msgstr "Copia in un altro livello"
 
 #: libs/ui/kis_selection_actions_panel.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgid "Crop to Selection"
-msgstr "Ritaglia le selezioni"
+msgstr "Ritaglia alla selezione"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -65955,9 +65945,7 @@ msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Ruota di 90° in senso antiorario"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
+#, kde-format
 msgid "Keep Aspect Ratio"
 msgstr "Mantieni le proporzioni"
 

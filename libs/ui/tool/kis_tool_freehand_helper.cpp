@@ -241,6 +241,18 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
+    // When using touch drawing, we only get coordinates when the finger is
+    // actually pressed down, never when the finger is in the air. That means we
+    // have to clear the distance and speed information in this case, otherwise
+    // strokes start in a state depending on where the last stroke left off,
+    // which is useless. Resetting these at least makes it predictable. This
+    // can't sensibly be done in endPaint since there can be stylus or mouse
+    // events in the meantime, whose distance and speed is also unrelated.
+    if (event->isTouchEvent()) {
+        m_d->lastCursorPos.reset(pixelCoords);
+        m_d->infoBuilder->reset();
+    }
+
     QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelCoords, currentZoom());
     m_d->strokeTime.start();
     KisPaintInformation pi =

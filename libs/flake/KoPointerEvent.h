@@ -187,12 +187,12 @@ public:
     /**
      * Returns if the event comes from a tablet
      */
-    bool isTabletEvent();
+    bool isTabletEvent() const;
 
     /**
      * Returns if the event comes from a touch
      */
-    bool isTouchEvent();
+    bool isTouchEvent() const;
 
 public:
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

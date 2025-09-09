@@ -406,12 +406,12 @@ ulong KoPointerEvent::time() const
     return visit(Visitor(), d->eventPtr);
 }
 
-bool KoPointerEvent::isTabletEvent()
+bool KoPointerEvent::isTabletEvent() const
 {
     return d->eventPtr.index() == 1;
 }
 
-bool KoPointerEvent::isTouchEvent()
+bool KoPointerEvent::isTouchEvent() const
 {
     return d->eventPtr.index() == 2;
 }

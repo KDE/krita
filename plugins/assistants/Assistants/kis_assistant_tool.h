@@ -173,7 +173,6 @@ protected:
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);
-
     PerspectiveAssistantEditionMode m_internalMode { MODE_CREATION };
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_highlightedNode;
     int m_assistantHelperYOffset {10}; // used by the assistant editor icons for placement on the canvas.

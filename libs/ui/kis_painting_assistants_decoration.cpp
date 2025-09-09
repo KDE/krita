@@ -7,6 +7,7 @@
 
 #include "kis_painting_assistants_decoration.h"
 
+#include <cstdint>
 #include <limits>
 
 #include <QList>
@@ -102,6 +103,21 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
     Q_EMIT assistantChanged();
+}
+
+// bring assistant to front of assistants list effectively making assistant render above the others
+void KisPaintingAssistantsDecoration::raiseAssistant(KisPaintingAssistantSP assistant)
+{
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    assistants.removeOne(assistant);
+
+    if(!assistant) return;
+    assistants.append(assistant);
+
+    view()->document()->setAssistants(assistants);
+    setVisible(!assistants.isEmpty());
+    Q_EMIT assistantChanged();
+
 }
 
 void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistantSP assistant)

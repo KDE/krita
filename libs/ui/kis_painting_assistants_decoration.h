@@ -76,6 +76,7 @@ public:
     KisPaintingAssistantsDecoration(QPointer<KisView> parent);
     ~KisPaintingAssistantsDecoration() override;
     void addAssistant(KisPaintingAssistantSP assistant);
+    void raiseAssistant(KisPaintingAssistantSP assistant);
     void removeAssistant(KisPaintingAssistantSP assistant);
     void removeAll();
     void setAssistants(const QList<KisPaintingAssistantSP> &assistants);

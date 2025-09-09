@@ -151,6 +151,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                     m_handleDrag = handle;
 
                     assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+                    m_canvas->paintingAssistantsDecoration()->raiseAssistant(assistant);
                 }
             }
         }
@@ -338,21 +339,49 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
     }
 
     m_assistantDrag.clear();
-        Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-        AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
-        
-        
-        const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    
+    // list will contain the assistants whos editor widgets are affected by the click event...
+    QList<KisPaintingAssistantSP> assistantsPressed;
 
-        // This code contains the click event behavior.
-        QTransform initialTransform = converter->documentToWidgetTransform();
+    // data for calculating mouse intersection with editor widget.
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    QTransform initialTransform = converter->documentToWidgetTransform();
+    // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
+    // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
+    QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
+    
+    // find editor widgets pressed...
+    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+        
+        QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, globalEditorWidgetData.boundingSize));
+                
+        // first, we must find if the click event intersects any assistant editor widget rectangles.
+        // as it is possible for editor widgets to overlap, we must then determine which editor widget is actually being clicked based on the 
+        // order of the assistants, which represent the z position hierarchy of their respective editor widgets.
+      
+        // calculate widget rect bound
+        const int widgetOffset = 10;
+        QPointF actionsBGRectangle(actionsPosition + QPointF(widgetOffset, widgetOffset));
+        QRectF editorWidget = QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), globalEditorWidgetData.boundingSize.width(), globalEditorWidgetData.boundingSize.height());
+        // add all assistants that intersect the mouse to a list.
+        if(editorWidget.contains(uiMousePosition)){
+            assistantsPressed.push_back(assistant);
+        }
+     
+    }
+    
+    // get assistant pressed...
+    if(!assistantsPressed.isEmpty()){
+        KisPaintingAssistantSP assistant = assistantsPressed.last();
+        // move assistant to front of assistants list.
+        m_canvas->paintingAssistantsDecoration()->raiseAssistant(assistant);
+
+        assistantSelected(assistant);
+
         QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, globalEditorWidgetData.boundingSize));
 
-        // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
-        // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
-        QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
-        
-        //loop through all activated buttons and see if any are being clicked
+        // loop through all activated buttons and see if any are being clicked
         if(globalEditorWidgetData.moveButtonActivated) {
             QPointF iconMovePosition(actionsPosition + globalEditorWidgetData.moveIconPosition);
             QRectF moveRect(iconMovePosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
@@ -422,6 +451,8 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                     m_newAssistant.clear();
                     m_cursorStart = event->point;
                     m_internalMode = MODE_EDITING;
+                    m_dragStart = event->point;
+                    m_dragEnd = event->point;
                 }
                 
                 updateToolOptionsUI(); 
@@ -452,7 +483,8 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
             m_dragEnd = event->point;
             
         } 
-        
+
+
     }
 
     if (newAssistantAllowed==true) {//don't make a new assistant when I'm just toggling visibility//
@@ -527,6 +559,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
         m_assistantDrag->uncache();
         m_currentAdjustment = newAdjustment;
         m_canvas->updateCanvas();
+        m_dragEnd = event->point;
 
     } else if (m_internalMode == MODE_DRAGGING_EDITOR_WIDGET) {
 
@@ -708,6 +741,10 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
         KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
         selectedAssistant->setDuplicating(false);
         assistantDuplicatingFlag = false;
+        if(m_dragEnd == m_dragStart){
+            QPointF currentOffset = selectedAssistant->editorWidgetOffset();
+            selectedAssistant->setEditorWidgetOffset(currentOffset + QPointF(1,1));
+        }
     }
 
     if (m_handleDrag || m_assistantDrag) {

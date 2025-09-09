@@ -8,6 +8,7 @@
 
 #include "kis_touch_shortcut.h"
 #include "kis_abstract_input_action.h"
+#include "kis_config.h"
 
 #include <QTouchEvent>
 
@@ -18,11 +19,13 @@ public:
         : minTouchPoints(0)
         , maxTouchPoints(0)
         , type(type)
+        , disableOnTouchPainting(false)
     { }
 
     int minTouchPoints;
     int maxTouchPoints;
     GestureAction type;
+    bool disableOnTouchPainting;
 };
 
 KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type)
@@ -52,6 +55,11 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
+void KisTouchShortcut::setDisableOnTouchPainting(bool disableOnTouchPainting)
+{
+    d->disableOnTouchPainting = disableOnTouchPainting;
+}
+
 bool KisTouchShortcut::matchTapType(QTouchEvent *event)
 {
     return matchTouchPoint(event)
@@ -72,5 +80,6 @@ bool KisTouchShortcut::matchDragType(QTouchEvent *event)
 
 bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)
 {
-    return event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
+    return (!d->disableOnTouchPainting || KisConfig(true).disableTouchOnCanvas())
+        && event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
 }

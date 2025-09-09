@@ -55,6 +55,11 @@ void KisConfigNotifier::notifyColorHistoryModeChanged()
     Q_EMIT colorHistoryModeChanged();
 }
 
+void KisConfigNotifier::notifyTouchPaintingChanged()
+{
+    Q_EMIT touchPaintingChanged();
+}
+
 void KisConfigNotifier::notifyColorThemeChanged(const QString &filename)
 {
     Q_EMIT signalColorThemeChanged(filename);

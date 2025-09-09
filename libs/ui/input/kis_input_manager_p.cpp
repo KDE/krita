@@ -557,11 +557,11 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
 #ifndef Q_OS_MACOS
     case KisShortcutConfiguration::OneFingerTap:
     case KisShortcutConfiguration::OneFingerDrag:
-        // Allow single finger panning if touch drawing is disabled
-        if (KisConfig(true).disableTouchOnCanvas()) { 
-            shortcut->setMinimumTouchPoints(1);
-            shortcut->setMaximumTouchPoints(1);
-        }
+        // Touch painting takes precedence over one-finger touch shortcuts, so
+        // disable this type of shortcut when touch painting is active.
+        shortcut->setDisableOnTouchPainting(true);
+        shortcut->setMinimumTouchPoints(1);
+        shortcut->setMaximumTouchPoints(1);
         break;
     case KisShortcutConfiguration::TwoFingerTap:
     case KisShortcutConfiguration::TwoFingerDrag:

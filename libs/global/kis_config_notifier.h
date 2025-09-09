@@ -36,6 +36,7 @@ public:
     void notifyDropFramesModeChanged();
     void notifyPixelGridModeChanged();
     void notifyColorHistoryModeChanged();
+    void notifyTouchPaintingChanged();
 
     void notifyColorThemeChanged(const QString &filename);
 
@@ -47,6 +48,7 @@ Q_SIGNALS:
     void dropFramesModeChanged();
     void pixelGridModeChanged();
     void colorHistoryModeChanged();
+    void touchPaintingChanged();
     void signalColorThemeChanged(const QString &filename);
 private:
     KisConfigNotifier(const KisConfigNotifier&);

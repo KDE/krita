@@ -39,6 +39,7 @@
 // Krita/ui
 #include "kis_abstract_perspective_grid.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_image_config.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
@@ -59,7 +60,9 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor,
 {
 
     setSupportOutline(true);
-    setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
+    updateMaskSyntheticEventsFromTouch();
+    connect(KisConfigNotifier::instance(), SIGNAL(touchPaintingChanged()),
+            SLOT(updateMaskSyntheticEventsFromTouch()));
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_helper = new KisToolFreehandHelper(m_infoBuilder, canvas->resourceManager(), transactionText,
@@ -468,6 +471,11 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
         }
     }
     return perspective;
+}
+
+void KisToolFreehand::updateMaskSyntheticEventsFromTouch()
+{
+    setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas());
 }
 
 void KisToolFreehand::explicitUpdateOutline()

@@ -101,6 +101,9 @@ private:
      */
     qreal calculatePerspective(const QPointF &documentPoint);
 
+private Q_SLOTS:
+    void updateMaskSyntheticEventsFromTouch();
+
 protected:
     friend class KisViewManager;
     friend class KisView;

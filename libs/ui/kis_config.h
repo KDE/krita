@@ -43,8 +43,15 @@ public Q_SLOTS:
     void logImportantSettings() const;
 public:
 
-    bool disableTouchOnCanvas(bool defaultValue = false) const;
-    void setDisableTouchOnCanvas(bool value) const;
+    enum TouchPainting {
+        TOUCH_PAINTING_AUTO,
+        TOUCH_PAINTING_ENABLED,
+        TOUCH_PAINTING_DISABLED,
+    };
+
+    TouchPainting touchPainting(bool defaultValue = false) const;
+    void setTouchPainting(TouchPainting value) const;
+    bool disableTouchOnCanvas() const;
 
     // XXX Unused?
     bool useProjections(bool defaultValue = false) const;

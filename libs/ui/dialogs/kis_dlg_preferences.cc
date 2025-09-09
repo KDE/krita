@@ -50,6 +50,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoConfigAuthorPage.h>
 #include <KoConfig.h>
+#include <KoPointerEvent.h>
 
 #include <KoFileDialog.h>
 #include "KoID.h"
@@ -323,11 +324,16 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     cmbFlowMode->setCurrentIndex((int)!cfg.readEntry<bool>("useCreamyAlphaDarken", true));
     cmbCmykBlendingMode->setCurrentIndex((int)!cfg.readEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
-    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+    cmbTouchPainting->addItem(
+        KoPointerEvent::tabletInputReceived() ? i18nc("touch painting", "Auto (Disabled)")
+                                              : i18nc("touch painting", "Auto (Enabled)"));
+    cmbTouchPainting->addItem(i18nc("touch painting", "Enabled"));
+    cmbTouchPainting->addItem(i18nc("touch painting", "Disabled"));
+    cmbTouchPainting->setCurrentIndex(int(cfg.touchPainting()));
     chkTouchPressureSensitivity->setChecked(cfg.readEntry("useTouchPressureSensitivity", true));
-    connect(chkEnableTouch, SIGNAL(toggled(bool)),
-            chkTouchPressureSensitivity, SLOT(setEnabled(bool)));
-    chkTouchPressureSensitivity->setEnabled(chkEnableTouch->isChecked());
+    connect(cmbTouchPainting, SIGNAL(currentIndexChanged(int)),
+            SLOT(updateTouchPressureSensitivityEnabled(int)));
+    updateTouchPressureSensitivityEnabled(cmbTouchPainting->currentIndex());
 
     chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
     chkZoomHorizontally->setChecked(cfg.zoomHorizontal());
@@ -759,7 +765,7 @@ void GeneralTab::setDefault()
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
     intZoomMarginSize->setValue(cfg.zoomMarginSize(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
-    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
+    cmbTouchPainting->setCurrentIndex(int(cfg.touchPainting(true)));
     chkTouchPressureSensitivity->setChecked(true);
     chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
     chkZoomHorizontally->setChecked(cfg.zoomHorizontal(true));
@@ -1019,6 +1025,11 @@ void GeneralTab::checkResourcePath()
 void GeneralTab::enableSubWindowOptions(int mdi_mode)
 {
     group_subWinMode->setEnabled(mdi_mode == QMdiArea::SubWindowView);
+}
+
+void GeneralTab::updateTouchPressureSensitivityEnabled(int touchPainting)
+{
+    chkTouchPressureSensitivity->setEnabled(touchPainting != int(KisConfig::TOUCH_PAINTING_DISABLED));
 }
 
 
@@ -2619,7 +2630,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setZoomMarginSize(m_general->zoomMarginSize());
 
         cfg.setSwitchSelectionCtrlAlt(m_general->switchSelectionCtrlAlt());
-        cfg.setDisableTouchOnCanvas(!m_general->chkEnableTouch->isChecked());
+        cfg.setTouchPainting(KisConfig::TouchPainting(m_general->cmbTouchPainting->currentIndex()));
         cfg.writeEntry("useTouchPressureSensitivity", m_general->chkTouchPressureSensitivity->isChecked());
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());

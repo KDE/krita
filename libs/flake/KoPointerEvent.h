@@ -194,6 +194,11 @@ public:
      */
     bool isTouchEvent() const;
 
+    /**
+     * Whether we ever had any tablet inputs this session
+     */
+    static bool tabletInputReceived();
+
 public:
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     static void copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst);

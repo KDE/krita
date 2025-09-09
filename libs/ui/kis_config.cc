@@ -26,6 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
+#include <KoPointerEvent.h>
 
 #include <kis_debug.h>
 #include <kis_types.h>
@@ -133,15 +134,35 @@ void KisConfig::logImportantSettings() const
 
 }
 
-bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
+KisConfig::TouchPainting KisConfig::touchPainting(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("disableTouchOnCanvas", false));
+    if (defaultValue) {
+        return TOUCH_PAINTING_AUTO;
+    } else {
+        int value = m_cfg.readEntry("touchPainting", int(TOUCH_PAINTING_AUTO));
+        return TouchPainting(value);
+    }
 }
 
-void KisConfig::setDisableTouchOnCanvas(bool value) const
+void KisConfig::setTouchPainting(TouchPainting value) const
 {
-    m_cfg.writeEntry("disableTouchOnCanvas", value);
+    m_cfg.writeEntry("touchPainting", int(value));
     KisConfigNotifier::instance()->notifyTouchPaintingChanged();
+}
+
+bool KisConfig::disableTouchOnCanvas() const
+{
+    switch (touchPainting()) {
+    case TOUCH_PAINTING_ENABLED:
+        return false;
+    case TOUCH_PAINTING_DISABLED:
+        return true;
+    default:
+        // Automatic detection: enable or disable touch input based on whether
+        // we've received a tablet input during this session and therefore know
+        // that the user has a pen available.
+        return KoPointerEvent::tabletInputReceived();
+    }
 }
 
 bool KisConfig::useProjections(bool defaultValue) const

@@ -108,6 +108,7 @@ private Q_SLOTS:
     void clearBackgroundImage();
     void checkResourcePath();
     void enableSubWindowOptions(int);
+    void updateTouchPressureSensitivityEnabled(int);
     void showAdvancedCumulativeUndoSettings();
 
 public:

@@ -98,7 +98,10 @@ public:
     }
 
     boost::variant2::variant<QMouseEvent*, QTabletEvent*, QTouchEvent*> eventPtr;
+    static bool s_tabletInputReceived;
 };
+
+bool KoPointerEvent::Private::s_tabletInputReceived;
 
 KoPointerEvent::KoPointerEvent(QMouseEvent *ev, const QPointF &pnt)
     : point(pnt),
@@ -110,6 +113,10 @@ KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
     : point(pnt),
       d(new Private(ev))
 {
+    if (!Private::s_tabletInputReceived) {
+        Private::s_tabletInputReceived = true;
+        KisConfigNotifier::instance()->notifyTouchPaintingChanged();
+    }
 }
 
 KoPointerEvent::KoPointerEvent(QTouchEvent* ev, const QPointF &pnt)
@@ -414,6 +421,11 @@ bool KoPointerEvent::isTabletEvent() const
 bool KoPointerEvent::isTouchEvent() const
 {
     return d->eventPtr.index() == 2;
+}
+
+bool KoPointerEvent::tabletInputReceived()
+{
+    return Private::s_tabletInputReceived;
 }
 
 Qt::KeyboardModifiers KoPointerEvent::modifiers() const

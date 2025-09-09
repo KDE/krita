@@ -969,10 +969,10 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="chkEnableTouch">
+       <item row="4" column="0">
+        <widget class="QLabel" name="lblTouchPainting">
          <property name="text">
-          <string>Enable Touch Painting</string>
+          <string>Touch Painting:</string>
          </property>
         </widget>
        </item>
@@ -1049,6 +1049,9 @@
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="cmbTouchPainting"/>
        </item>
       </layout>
      </widget>

@@ -513,6 +513,4 @@ KisWaylandSurfaceColorManager::tryDeinitialize(std::optional<KisWaylandSurfaceCo
 }
 
 #include <moc_KisWaylandSurfaceColorManager.cpp>
-
-// TODO: remove
 #include <KisWaylandSurfaceColorManager.moc>

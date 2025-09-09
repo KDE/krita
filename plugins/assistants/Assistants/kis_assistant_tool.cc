@@ -340,25 +340,25 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
 
     m_assistantDrag.clear();
     
-    // list will contain the assistants whos editor widgets are affected by the click event...
+    // list will contain the assistants whose control widgets are affected by the click event...
     QList<KisPaintingAssistantSP> assistantsPressed;
 
-    // data for calculating mouse intersection with editor widget.
+    // data for calculating mouse intersection with control widget.
     AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
     const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
     QTransform initialTransform = converter->documentToWidgetTransform();
-    // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
+    // for UI control widget options with move, show, and delete -- disregard document transforms like rotating and mirroring.
     // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
     QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
     
-    // find editor widgets pressed...
+    // find control widgets pressed...
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         
         QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, globalEditorWidgetData.boundingSize));
                 
-        // first, we must find if the click event intersects any assistant editor widget rectangles.
-        // as it is possible for editor widgets to overlap, we must then determine which editor widget is actually being clicked based on the 
-        // order of the assistants, which represent the z position hierarchy of their respective editor widgets.
+        // first we must find if the click event intersects any assistant control widget rectangles.
+        // as it is possible for control widgets to overlap, we must then determine which control widget is actually being clicked based on the 
+        // order of the assistants, which represent the z position hierarchy of their respective control widgets.
       
         // calculate widget rect bound
         const int widgetOffset = 10;
@@ -373,6 +373,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
     
     // get assistant pressed...
     if(!assistantsPressed.isEmpty()){
+        // get closest assistant
         KisPaintingAssistantSP assistant = assistantsPressed.last();
         // move assistant to front of assistants list.
         m_canvas->paintingAssistantsDecoration()->raiseAssistant(assistant);
@@ -439,7 +440,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
                 assistantDuplicatingFlag = true;
                 
-                // if assistant is locked simply move the editor widget, not the entire assistant
+                // if assistant is locked simply move the control widget, not the entire assistant
                 if(assistant->isLocked()) {
                     newAssistantAllowed = false;
                     m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
@@ -474,7 +475,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
             }
 
         }
-        //if user clicking editor widget background.
+        // if user clicking control widget background.
         if((QRectF(actionsPosition + QPointF(10, 10), globalEditorWidgetData.boundingSize).adjusted(-2, -2, 2, 2).contains(uiMousePosition))) {
             newAssistantAllowed = false;
             m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
@@ -736,11 +737,12 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
 void KisAssistantTool::endActionImpl(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
-    //release duplication button flag
+    // release duplication button flag
     if(assistantDuplicatingFlag) {
         KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
         selectedAssistant->setDuplicating(false);
         assistantDuplicatingFlag = false;
+        // offset control widget if user simple click-releases duplication button
         if(m_dragEnd == m_dragStart){
             QPointF currentOffset = selectedAssistant->editorWidgetOffset();
             selectedAssistant->setEditorWidgetOffset(currentOffset + QPointF(1,1));
@@ -998,7 +1000,7 @@ void KisAssistantTool::updateToolOptionsUI()
          m_options.subdivisionsSpinbox->setVisible(isRulerAssistant || isPerspectiveAssistant);
          m_options.minorSubdivisionsSpinbox->setVisible(isRulerAssistant);
          m_options.fixedLengthCheckbox->setVisible(isRulerAssistant);
-         //show checkboxes for controlling which editor widget buttons are visible
+         // show checkboxes for controlling which control widget buttons are visible
          m_options.showMove->setVisible(true);
          m_options.showSnap->setVisible(true);
          m_options.showLock->setVisible(true);
@@ -1806,9 +1808,9 @@ QWidget *KisAssistantTool::createOptionWidget()
 
         connect(m_options.localAssistantCheckbox, SIGNAL(stateChanged(int)), SLOT(slotLocalAssistantCheckboxChanged()));
 
-        //Show panel for docker tool option visibility
+        // show panel for docker tool option visibility
         connect(m_options.showDockerOptionsButton, SIGNAL(clicked()), this, SLOT(slotToggleDockToolOptionsVisible()));
-        //set editor widget buttons on first startup.
+        // set control widget buttons on first startup.
         AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
 
 

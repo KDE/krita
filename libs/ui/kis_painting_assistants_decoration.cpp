@@ -105,7 +105,7 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
     Q_EMIT assistantChanged();
 }
 
-// bring assistant to front of assistants list effectively making assistant render above the others
+// bring assistant to front of assistants list, effectively causing assistant to be rendered above the others
 void KisPaintingAssistantsDecoration::raiseAssistant(KisPaintingAssistantSP assistant)
 {
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();

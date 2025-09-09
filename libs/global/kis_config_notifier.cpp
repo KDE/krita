@@ -49,3 +49,8 @@ void KisConfigNotifier::notifyPixelGridModeChanged()
 {
     Q_EMIT pixelGridModeChanged();
 }
+
+void KisConfigNotifier::notifyTouchPaintingChanged()
+{
+    Q_EMIT touchPaintingChanged();
+}

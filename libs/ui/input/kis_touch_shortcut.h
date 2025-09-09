@@ -30,6 +30,7 @@ class KisTouchShortcut : public KisAbstractShortcut
 
         void setMinimumTouchPoints( int min );
         void setMaximumTouchPoints( int max );
+        void setDisableOnTouchPainting(bool disableOnTouchPainting);
 
         bool matchTapType(QTouchEvent *event);
         bool matchDragType(QTouchEvent *event);

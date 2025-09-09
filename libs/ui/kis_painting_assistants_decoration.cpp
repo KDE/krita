@@ -560,7 +560,6 @@ QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QP
 
 void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
 {
-    const int widgetOffset = 10;
     if (!assistant->isAssistantComplete() || !globalEditorWidgetData.widgetActivated) {
         return;
     }
@@ -570,7 +569,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
     //draw editor widget background
     QBrush backgroundColor = d->m_canvas->viewManager()->mainWindowAsQWidget()->palette().window();
-    QPointF actionsBGRectangle(actionsPosition + QPointF(widgetOffset, widgetOffset));
+    QPointF actionsBGRectangle(actionsPosition + QPointF(globalEditorWidgetData.widgetOffset,globalEditorWidgetData.widgetOffset));
     QPen stroke(QColor(60, 60, 60, 80), 2);
 
     gc.setRenderHint(QPainter::Antialiasing);
@@ -599,9 +598,9 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     QColor dragDecorationColor(150,150,150,255);
 
     QPainterPath dragRect;
-    int width = actionsPosition.x()+globalEditorWidgetData.boundingSize.width()-globalEditorWidgetData.dragDecorationWidth+widgetOffset;
-    int height = actionsPosition.y()+globalEditorWidgetData.boundingSize.height()+widgetOffset;
-    dragRect.addRect(QRectF(width,actionsPosition.y()+widgetOffset,globalEditorWidgetData.dragDecorationWidth,globalEditorWidgetData.boundingSize.height()));
+    int width = actionsPosition.x()+globalEditorWidgetData.boundingSize.width()-globalEditorWidgetData.dragDecorationWidth+globalEditorWidgetData.widgetOffset;
+    int height = actionsPosition.y()+globalEditorWidgetData.boundingSize.height()+globalEditorWidgetData.widgetOffset;
+    dragRect.addRect(QRectF(width,actionsPosition.y()+globalEditorWidgetData.widgetOffset,globalEditorWidgetData.dragDecorationWidth,globalEditorWidgetData.boundingSize.height()));
 
     gc.fillPath(bgPath.intersected(dragRect),dragDecorationColor);
 
@@ -617,7 +616,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     dragRectDots.addEllipse(-3,7.5,dotSize,dotSize);
     dragRectDots.addEllipse(-3,-2.5,dotSize,dotSize);
     dragRectDots.addEllipse(-3,-7.5,dotSize,dotSize);
-    dragRectDots.translate((globalEditorWidgetData.dragDecorationWidth/2)+width,(globalEditorWidgetData.boundingSize.height()/2)+actionsPosition.y()+widgetOffset);
+    dragRectDots.translate((globalEditorWidgetData.dragDecorationWidth/2)+width,(globalEditorWidgetData.boundingSize.height()/2)+actionsPosition.y()+globalEditorWidgetData.widgetOffset);
     gc.fillPath(dragRectDots,dragDecorationDotsColor);
 
 

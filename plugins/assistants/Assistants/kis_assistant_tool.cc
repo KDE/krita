@@ -361,8 +361,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         // order of the assistants, which represent the z position hierarchy of their respective control widgets.
       
         // calculate widget rect bound
-        const int widgetOffset = 10;
-        QPointF actionsBGRectangle(actionsPosition + QPointF(widgetOffset, widgetOffset));
+        QPointF actionsBGRectangle(actionsPosition + QPointF(globalEditorWidgetData.widgetOffset,globalEditorWidgetData.widgetOffset));
         QRectF editorWidget = QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), globalEditorWidgetData.boundingSize.width(), globalEditorWidgetData.boundingSize.height());
         // add all assistants that intersect the mouse to a list.
         if(editorWidget.contains(uiMousePosition)){

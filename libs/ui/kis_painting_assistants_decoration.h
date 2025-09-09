@@ -36,6 +36,7 @@ struct AssistantEditorData {
     bool duplicateButtonActivated = true;
     bool deleteButtonActivated = true;
     bool widgetActivated = true;
+    const int widgetOffset = 10;
     //padding for dynamic positioning between buttons
     const int buttonPadding = 7;
     //button positions

@@ -44,6 +44,7 @@ KoColorConversionTransformation::ConversionFlags KisProofingConfiguration::deter
         flags = displayFlags;
     }
     flags.setFlag(KoColorConversionTransformation::GamutCheck, displayFlags.testFlag(KoColorConversionTransformation::GamutCheck));
+    flags.setFlag(KoColorConversionTransformation::SoftProofing, displayFlags.testFlag(KoColorConversionTransformation::SoftProofing));
     return flags;
 }
 

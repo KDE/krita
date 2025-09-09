@@ -551,6 +551,15 @@ if (TARGET Qt::WaylandClient)
     set(HAVE_WAYLAND TRUE)
 endif()
 
+option(KRITA_USE_SURFACE_COLOR_MANAGEMENT_API "Use per-surface color management API (e.g. when using Wayland)" ${HAVE_WAYLAND})
+add_feature_info("Enable per-surface color management API" KRITA_USE_SURFACE_COLOR_MANAGEMENT_API "adds support for an independent color space management for the canvas")
+
+if (NOT HAVE_WAYLAND AND KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    message(WARNING "KRITA_USE_SURFACE_COLOR_MANAGEMENT_API was set when there is no Wayland support, surface management will be useless as no plugins are built")
+endif()
+
+configure_file(config-use-surface-color-management-api.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-use-surface-color-management-api.h)
+
 #
 # Check for the presence of custom patches in Qt
 #

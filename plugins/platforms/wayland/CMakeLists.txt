@@ -38,13 +38,36 @@ set(kritaplatformpluginwayland_LIB_SRCS
     KisWaylandKeyboardWatcher.cpp
     KisExtendedModifiersMapperWayland.cpp
     KritaPlatformPluginWayland.cpp
+
+
 )
+
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    list(APPEND kritaplatformpluginwayland_LIB_SRCS
+         waylandcolormanagement/KisWaylandAPIColorManager.cpp
+         waylandcolormanagement/KisWaylandAPIImageDescription.cpp
+         waylandcolormanagement/KisWaylandAPIImageDescriptionCreatorParams.cpp
+         waylandcolormanagement/KisWaylandAPIOutput.cpp
+         waylandcolormanagement/KisWaylandAPISurface.cpp
+         waylandcolormanagement/KisWaylandOutputColorInfo.cpp
+         waylandcolormanagement/KisWaylandSurfaceColorimetry.cpp
+         waylandcolormanagement/KisWaylandSurfaceColorManager.cpp)
+endif()
 
 kis_add_library(kritaplatformpluginwayland MODULE ${kritaplatformpluginwayland_LIB_SRCS})
 
+set(kritaplatformpluginwayland_WAYLAND_PROTOCOLS
+    "${CMAKE_CURRENT_SOURCE_DIR}/protocols/wayland.xml"
+)
+
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    list(APPEND kritaplatformpluginwayland_WAYLAND_PROTOCOLS
+         "${CMAKE_CURRENT_SOURCE_DIR}/protocols/color-management-v1.xml")
+endif()
+
 qt6_generate_wayland_protocol_client_sources(kritaplatformpluginwayland
     FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/protocols/wayland.xml"
+    ${kritaplatformpluginwayland_WAYLAND_PROTOCOLS}
 )
 
 set_source_files_properties(
@@ -61,7 +84,14 @@ target_link_libraries(kritaplatformpluginwayland
         Qt::WaylandClient
         kritaglobal
         kritaui
+)
+
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    target_link_libraries(kritaplatformpluginwayland
+        PRIVATE
+        kritasurfacecolormanagementapi
     )
+endif()
 
 install(TARGETS kritaplatformpluginwayland DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

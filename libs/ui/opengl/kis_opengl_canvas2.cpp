@@ -18,6 +18,7 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include <KisViewManager.h>
+#include <KisMainWindow.h>
 #include "KisRepaintDebugger.h"
 
 #include "KisOpenGLModeProber.h"
@@ -81,6 +82,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
+    setProperty("krita_skip_srgb_surface_manager_assignment", true);
+
     KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
@@ -103,15 +106,11 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
-    static int useNativeSurfaceForCanvas = -1;
-    if (useNativeSurfaceForCanvas < 0) {
-        if (!qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
-            // currently, the default value is "non-native"
-            useNativeSurfaceForCanvas = 0;
-        } else {
-            useNativeSurfaceForCanvas = qEnvironmentVariableIntValue("KRITA_USE_NATIVE_CANVAS_SURFACE");
-        }
-        qDebug() << "FPS-DEBUG: Krita canvas mode:" << (useNativeSurfaceForCanvas ? "native surface" : "legacy mode") << useNativeSurfaceForCanvas << qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE");
+    const bool osManagedSurfacePresent = canvas->viewManager()->mainWindow()->managedSurfaceProfile();
+    bool useNativeSurfaceForCanvas = osManagedSurfacePresent && cfg.enableCanvasSurfaceColorSpaceManagement();
+    if (qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
+        useNativeSurfaceForCanvas = qEnvironmentVariableIntValue("KRITA_USE_NATIVE_CANVAS_SURFACE");
+        qDebug() << "FPS-DEBUG: Krita canvas mode is overridden:" << (useNativeSurfaceForCanvas ? "native surface" : "legacy mode") << useNativeSurfaceForCanvas << qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE");
     }
 
     if (useNativeSurfaceForCanvas) {

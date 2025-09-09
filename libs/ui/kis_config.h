@@ -130,6 +130,32 @@ public:
     QRect colorPreviewRect() const;
     void setColorPreviewRect(const QRect &rect);
 
+    /**
+     * Controls if the canvas should have a separate color managed surface.
+     * Even though the surface can be created on any platform the proper
+     * color management support for it may be not present
+     * (currently supported on Wayland only). To check if the current
+     * platform supports surface management mode, test if
+     * KisMainWindow::managedSurfaceProfile() is not null.
+     */
+    bool enableCanvasSurfaceColorSpaceManagement(bool defaultValue = false) const;
+    void setEnableCanvasSurfaceColorSpaceManagement(bool value);
+
+    enum class CanvasSurfaceMode {
+        Preferred = 0,
+        Rec709g22,
+        Rec709g10,
+        Unmanaged
+    };
+
+    /**
+     * The user-selected mode for the canvas color management mode. The value
+     * is meaningful when the operating system supports managed surfaces mode
+     * and if the canvas has native surface under it.
+     */
+    CanvasSurfaceMode canvasSurfaceColorSpaceManagementMode(bool defaultValue = false) const;
+    void setCanvasSurfaceColorSpaceManagementMode(CanvasSurfaceMode value);
+
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
     void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;
@@ -756,5 +782,7 @@ private:
     mutable KConfigGroup m_cfg;
     bool m_readOnly;
 };
+
+Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceMode)
 
 #endif // KIS_CONFIG_H_

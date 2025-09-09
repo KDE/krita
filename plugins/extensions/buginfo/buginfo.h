@@ -9,6 +9,7 @@
 
 #include <QVariant>
 #include <KisActionPlugin.h>
+#include <config-use-surface-color-management-api.h>
 
 class KUndo2MagicString;
 
@@ -30,6 +31,10 @@ public Q_SLOTS:
 
 #if defined(Q_OS_WIN) || defined(Q_OS_ANDROID)
     void slotCrashLog();
+#endif
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    void slotColorManagement();
 #endif
 };
 

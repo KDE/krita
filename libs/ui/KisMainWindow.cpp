@@ -155,6 +155,15 @@
 #include "KisToolBarStateModel.h"
 #include <config-qmdiarea-always-show-subwindow-title.h>
 
+
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+#include <KisSRGBSurfaceColorSpaceManager.h>
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
 #include <mutex>
 
 class ToolDockerFactory : public KoDockFactoryBase
@@ -309,6 +318,11 @@ public:
 
     KateCommandBar *commandBar {nullptr};
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    // lifetime is managed by the QObject hierarchy
+    QPointer<KisSRGBSurfaceColorSpaceManager> surfaceColorSpaceManager;
+#endif
+
     KisActionManager * actionManager() {
         return viewManager->actionManager();
     }
@@ -345,6 +359,10 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
+    // Krita's main window handles sRGB space itself, exclude that
+    // from auto-srgb-assignment
+    setProperty("krita_skip_srgb_surface_manager_assignment", true);
+
     KAcceleratorManager::setNoAccel(this);
 
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
@@ -654,6 +672,15 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     applyMainWindowSettings(d->windowStateConfig);
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    /**
+     * Load platform plugin for surface color management and set
+     * the surface color space to sRGB exactly
+     */
+
+    d->surfaceColorSpaceManager = KisSRGBSurfaceColorSpaceManager::tryCreateForCurrentPlatform(this);
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 }
 
@@ -3190,6 +3217,37 @@ bool KisMainWindow::checkPaintOpAvailable()
 {
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     return (rserver->resourceCount() > 0);
+}
+
+const KoColorProfile* KisMainWindow::managedSurfaceProfile() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return d->surfaceColorSpaceManager ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : nullptr;
+#else
+    return nullptr;
+#endif
+}
+
+QString KisMainWindow::colorManagementReport() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return d->surfaceColorSpaceManager ?
+        d->surfaceColorSpaceManager->colorManagementReport() :
+        QString("Surface color management is not supported on this platform\n");
+#else
+    return "Surface color management is disabled\n";
+#endif
+}
+
+QString KisMainWindow::osPreferredColorSpaceReport() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return d->surfaceColorSpaceManager ?
+        d->surfaceColorSpaceManager->osPreferredColorSpaceReport() :
+        QString("Surface color management is not supported on this platform\n");
+#else
+    return "Surface color management is disabled\n";
+#endif
 }
 
 #include <moc_KisMainWindow.cpp>

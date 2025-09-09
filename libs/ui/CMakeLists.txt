@@ -413,6 +413,7 @@ set(kritaui_LIB_SRCS
     kcanvaspreview.cc
     kis_abstract_perspective_grid.cpp
 
+    KisPlatformPluginInterfaceFactory.cpp
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
@@ -650,6 +651,15 @@ if(WIN32)
     )
 endif()
 
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+
+        KisSRGBSurfaceColorSpaceManager.cpp
+        KisCanvasSurfaceColorSpaceManager.cpp
+    )
+endif()
+
 
 kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS})
 
@@ -683,6 +693,13 @@ target_link_libraries(kritaui
         kritawidgetutils
         kritaresources
 )
+
+if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
+    target_link_libraries(kritaui
+        PRIVATE
+            kritasurfacecolormanagementapi
+    )
+endif()
 
 if(WIN32)
     # Private headers are needed for:

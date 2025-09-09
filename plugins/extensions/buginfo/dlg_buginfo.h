@@ -38,7 +38,8 @@ public:
     virtual QString originalFileName() = 0;
     virtual QString captionText() = 0;
     virtual QString replacementWarningText() = 0;
-    QString infoText(QSettings& kritarc);
+
+    virtual QString infoText(QSettings& kritarc);
 
     QString basicSystemInformationReplacementText();
 

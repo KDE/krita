@@ -182,6 +182,16 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="color_management_report">
+      <icon/>
+      <text>Show color management information</text>
+      <whatsThis/>
+      <toolTip>Show color management information for the surface of the current image</toolTip>
+      <iconText>Show system information for bug reports</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="logcatdump">
       <icon/>
       <text>Show Android log for bug reports.</text>

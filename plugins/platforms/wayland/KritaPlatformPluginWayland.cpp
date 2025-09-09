@@ -6,8 +6,44 @@
 
 #include <kpluginfactory.h>
 
+#include <kis_assert.h>
+
 #include <KisExtendedModifiersMapperWayland.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(KritaPlatformPluginWaylandFactory, "kritaplatformwayland.json", registerPlugin<KisExtendedModifiersMapperWayland>();)
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+#include <waylandcolormanagement/KisWaylandSurfaceColorManager.h>
+#include <waylandcolormanagement/KisWaylandOutputColorInfo.h>
+
+#include <QWindow>
+
+namespace detail {
+
+// just a simple wrapper that unpacks arguments from a QVariantList into
+// a proper interface for KisWaylandSurfaceColorManager
+class KisWaylandSurfaceColorManagerWrapper: public KisWaylandSurfaceColorManager
+{
+public:
+    KisWaylandSurfaceColorManagerWrapper(QObject *parent, const QVariantList &args)
+        : KisWaylandSurfaceColorManager(args.first().value<QWindow*>(), parent)
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(args.size() == 1);
+    }
+};
+
+} // namespace detail
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
+K_PLUGIN_FACTORY_WITH_JSON(KritaPlatformPluginWaylandFactory, "kritaplatformwayland.json",
+    (
+        registerPlugin<KisExtendedModifiersMapperWayland>()
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+        , registerPlugin<detail::KisWaylandSurfaceColorManagerWrapper>()
+        , registerPlugin<KisWaylandOutputColorInfo>()
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+    );)
 
 #include <KritaPlatformPluginWayland.moc>

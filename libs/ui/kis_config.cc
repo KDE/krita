@@ -118,6 +118,7 @@ bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
 void KisConfig::setDisableTouchOnCanvas(bool value) const
 {
     m_cfg.writeEntry("disableTouchOnCanvas", value);
+    KisConfigNotifier::instance()->notifyTouchPaintingChanged();
 }
 
 bool KisConfig::useProjections(bool defaultValue) const

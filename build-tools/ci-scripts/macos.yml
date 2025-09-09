@@ -89,8 +89,8 @@ macos-build-qt6-nightly:
     # TODO: Gmic still doesn't build for Qt6
     KRITACI_SKIP_BUILD_3RDPARTY_PLUGINS: True
     KRITACI_ALLOW_NO_PYQT: True
-    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
-    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/python-313-qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/python-313-qt6
     MACOSX_DEPLOYMENT_TARGET: "12"
     QMAKE_MACOSX_DEPLOYMENT_TARGET: "12"
     KDECI_EXTRA_CMAKE_ARGS: >

@@ -6,14 +6,14 @@ variables:
   DEBIAN_FRONTEND: "noninteractive"
   release_branch_pattern: '/^release\/.*/'
 
-  DEPS_BRANCH_NAME_WINDOWS: 'master'
-  DEPS_BRANCH_NAME_LINUX: 'master'
-  DEPS_BRANCH_NAME_MACOS: 'master'
+  DEPS_BRANCH_NAME_WINDOWS: 'transition.now/python-313-qt5'
+  DEPS_BRANCH_NAME_LINUX: 'transition.now/python-313-qt5'
+  DEPS_BRANCH_NAME_MACOS: 'transition.now/python-313-qt5'
   DEPS_BRANCH_NAME_ANDROID: 'master'
 
-  DEPS_REPO_BRANCH_NAME_WINDOWS: 'master'
-  DEPS_REPO_BRANCH_NAME_LINUX: 'master'
-  DEPS_REPO_BRANCH_NAME_MACOS: 'master'
+  DEPS_REPO_BRANCH_NAME_WINDOWS: 'transition.now/python-313-qt5'
+  DEPS_REPO_BRANCH_NAME_LINUX: 'transition.now/python-313-qt5'
+  DEPS_REPO_BRANCH_NAME_MACOS: 'transition.now/python-313-qt5'
   DEPS_REPO_BRANCH_NAME_ANDROID: 'master'
 
   VM_IMAGE_NAME_WINDOWS: 'storage.kde.org/vm-images/krita-windows-clang18-twinpy'

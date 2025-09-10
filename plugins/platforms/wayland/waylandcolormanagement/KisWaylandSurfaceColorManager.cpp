@@ -266,6 +266,11 @@ QFuture<bool> KisWaylandSurfaceColorManager::setSurfaceDescription(const KisSurf
         future.then([this, desc, descriptionObject, waylandIntent, intent] (QFuture<bool> future) {
             if (!future.result()) return false;
 
+            if (!m_surface) {
+                qWarning() << "WARNING: the surface has been desctroyed while its format was being set!";
+                return false;
+            }
+
 #ifdef USE_KWIN_BUG_WORKAROUND
             // WARNING: KWin <= 6.4.4 doesn't handle intent changes properly
             if (m_currentDescription && m_currentDescription == desc &&
@@ -334,6 +339,7 @@ void KisWaylandSurfaceColorManager::slotPlatformWindowCreated()
         qWarning() << "    " << ppVar(m_currentState);
         m_currentState = tryDeinitialize(WaylandSurfaceState::Connected);
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentState == WaylandSurfaceState::Connected);
+        setReadyImpl(false);
     }
 
     auto newState = tryInitilize();
@@ -350,6 +356,7 @@ void KisWaylandSurfaceColorManager::slotPlatformWindowDestroyed()
     auto newState = tryDeinitialize(WaylandSurfaceState::Connected);
     KIS_SAFE_ASSERT_RECOVER_NOOP(newState <= WaylandSurfaceState::Connected);
     m_currentState = newState;
+    setReadyImpl(false);
 }
 
 void KisWaylandSurfaceColorManager::slotWaylandSurfaceCreated()
@@ -359,6 +366,7 @@ void KisWaylandSurfaceColorManager::slotWaylandSurfaceCreated()
         qWarning() << "    " << ppVar(m_currentState);
         m_currentState = tryDeinitialize(WaylandSurfaceState::WaylandWindowCreated);
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentState == WaylandSurfaceState::WaylandWindowCreated);
+        setReadyImpl(false);
     }
 
     auto newState = tryInitilize();
@@ -374,6 +382,7 @@ void KisWaylandSurfaceColorManager::slotWaylandSurfaceDestroyed()
     auto newState = tryDeinitialize(WaylandSurfaceState::WaylandWindowCreated);
     KIS_SAFE_ASSERT_RECOVER_NOOP(newState <= WaylandSurfaceState::WaylandWindowCreated);
     m_currentState = newState;
+    setReadyImpl(false);
 }
 
 KisWaylandSurfaceColorManager::WaylandSurfaceState

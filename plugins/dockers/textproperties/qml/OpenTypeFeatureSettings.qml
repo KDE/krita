@@ -141,6 +141,7 @@ TextPropertyBase {
                     }
 
                     Kis.ToolTipBase {
+                        parent: activeFeatureControl;
                         text: activeFeatureDelegate.toolTip;
                         visible: activeFeatureControl.hovered;
                     }
@@ -148,6 +149,7 @@ TextPropertyBase {
                     delegate: OpenTypeFeatureDelegate {
                         width: ListView.view.width;
                         required property var modelData;
+                        required property int index;
                         name: modelData.display;
                         toolTip: name;
                         sample: activeFeatureDelegate.sample;
@@ -163,6 +165,7 @@ TextPropertyBase {
                             activeFeatureControl.currentIndex = index;
                             activeFeatureControl.popup.close();
                         }
+                        highlighted: activeFeatureControl.highlightedIndex === index;
                     }
 
                     onCurrentValueChanged: {

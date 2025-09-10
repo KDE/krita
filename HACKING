@@ -318,3 +318,5 @@ QML Notes:
     will instantiate a delegate for every single item it could lay out upon the ListView itself be instantiated.
     It's better to set the default height of the ListView to something bounded, like the fontSize * 3, and then
     ensure it is resized later.
+    - Comboboxes expect their delegates to be a ItemDelegate or AbstractButton. The Qt Docs imply this is because
+    those call activated(), but Combobox.highlightedIndex being set on hover also only works together ItemDelegate.

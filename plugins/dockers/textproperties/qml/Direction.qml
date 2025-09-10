@@ -35,11 +35,31 @@ TextPropertyBase {
         function onDirectionStateChanged() {
             updateVisibility();
         }
+        function onUnicodeBidiStateChanged() {
+            updateVisibility();
+        }
+
+        function onSpanSelectionChanged() {
+            testEnabled();
+        }
     }
     onPropertiesChanged: {
         updateDirection();
         updateUnicodeBidi();
         updateVisibility();
+        testEnabled();
+    }
+    onParentPropertyTypeChanged: {
+        unicodeBidiCmb.visible = parentPropertyType === TextPropertyConfigModel.Character;
+        testEnabled();
+    }
+
+    function testEnabled() {
+        if (parentPropertyType === TextPropertyConfigModel.Character) {
+            enabled = properties.spanSelection;
+        } else {
+            enabled = properties.spanSelection? false: true;
+        }
     }
 
     function updateDirection() {
@@ -55,7 +75,6 @@ TextPropertyBase {
     }
 
     function updateVisibility() {
-        enabled = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
         propertyState = [properties.directionState];
         setVisibleFromProperty();
     }
@@ -116,7 +135,7 @@ TextPropertyBase {
         }
 
         RevertPropertyButton {
-            visible: parentPropertyType === TextPropertyBase.Character;
+            visible: unicodeBidiCmb.visible;
             revertState: properties.unicodeBidiState;
             onClicked: properties.unicodeBidiState = KoSvgTextPropertiesModel.PropertyUnset;
         }
@@ -125,14 +144,13 @@ TextPropertyBase {
             text: i18nc("@label:listbox", "Unicode-Bidi");
             elide: Text.ElideRight;
             Layout.fillWidth: true;
-            visible: parentPropertyType === TextPropertyBase.Character;
+            visible: unicodeBidiCmb.visible;
             font.italic: properties.unicodeBidiState === KoSvgTextPropertiesModel.PropertyTriState;
             palette: unicodeBidiCmbPalette.palette;
         }
 
         ComboBox {
-            id: unicodeBidiCmb
-            visible: parentPropertyType === TextPropertyBase.Character;
+            id: unicodeBidiCmb;
             Layout.fillWidth: true;
             model: [
                 {text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.BidiNormal},

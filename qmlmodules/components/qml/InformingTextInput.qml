@@ -93,6 +93,7 @@ TextField {
     Kis.Theme {
         id: theme;
         window.state: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
+        view.state: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
         button.state: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
         selection.state: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
     }

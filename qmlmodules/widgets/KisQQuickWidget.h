@@ -24,6 +24,8 @@ public:
     KisQQuickWidget(QWidget *parent = nullptr);
 
     ~KisQQuickWidget();
+private Q_SLOTS:
+    void updatePaletteFromConfig();
 };
 
 #endif // KISQQUICKWIDGET_H

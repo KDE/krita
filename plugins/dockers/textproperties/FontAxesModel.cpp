@@ -216,12 +216,10 @@ void FontAxesModel::setAxisValues(const QVariantMap &newAxisValues)
     if (!d->blockAxesValuesUpdate) {
         emit axisValuesChanged();
     }
-    if (!d->axes.isEmpty()) {
-        QModelIndex idx1 = index(0, 0, QModelIndex());
-        QModelIndex idx2 = index(d->axes.size()-1, 0, QModelIndex());
-        if (idx1.isValid() && idx2.isValid()) {
-            emit dataChanged(idx1, idx2, {Qt::EditRole});
-        }
-    }
 
+    QModelIndex idx1 = index(0, 0, QModelIndex());
+    QModelIndex idx2 = index(rowCount(QModelIndex())-1, 0, QModelIndex());
+    if (idx1.isValid() && idx2.isValid()) {
+        emit dataChanged(idx1, idx2, {Qt::EditRole});
+    }
 }

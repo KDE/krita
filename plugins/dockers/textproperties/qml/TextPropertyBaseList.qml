@@ -12,7 +12,7 @@ import org.krita.components 1.0 as Kis
 
 ColumnLayout {
     id: propertyBaseList;
-    property int propertyType: TextPropertyConfigModel.Character;
+    required property int propertyType;
     property TextPropertyConfigModel configModel;
     property double canvasDPI: 72.0;
     property KoSvgTextPropertiesModel propertiesModel;

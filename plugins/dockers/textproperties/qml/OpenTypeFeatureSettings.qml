@@ -126,7 +126,7 @@ TextPropertyBase {
                     currentIndex: activeFeatureDelegate.model.edit;
 
                     contentItem: OpenTypeFeatureDelegate {
-                        display: activeFeatureControl.currentText;
+                        name: activeFeatureControl.currentText;
                         toolTip: activeFeatureDelegate.toolTip;
                         sample: activeFeatureDelegate.sample;
                         tag: activeFeatureDelegate.tag;
@@ -148,8 +148,8 @@ TextPropertyBase {
                     delegate: OpenTypeFeatureDelegate {
                         width: ListView.view.width;
                         required property var modelData;
-                        display: modelData.display;
-                        toolTip: display;
+                        name: modelData.display;
+                        toolTip: name;
                         sample: activeFeatureDelegate.sample;
                         tag: activeFeatureDelegate.tag;
                         fontFamilies: properties.fontFamilies;
@@ -204,7 +204,7 @@ TextPropertyBase {
             delegate: OpenTypeFeatureDelegate {
                 required property var model;
                 required property int index;
-                display: model.display;
+                name: model.display;
                 toolTip: model.toolTip;
                 sample: model.sample;
                 width: ListView.view.width;
@@ -216,7 +216,7 @@ TextPropertyBase {
                 fontWidth: properties.fontWidth;
                 fontAxesValues: properties.axisValues;
                 featureValue: 0;
-                onFeatureClicked: (mouse) => {
+                onFeatureClicked: {
                     cmbAvailableFeatures.currentIndex = index;
                     fontFeatureModel.addFeature(tag);
                     cmbAvailableFeatures.popup.close();
@@ -302,7 +302,7 @@ TextPropertyBase {
                         delegate: OpenTypeFeatureDelegate {
                             required property var model;
                             required property int index;
-                            display: model.display;
+                            name: model.display;
                             toolTip: model.toolTip;
                             sample: model.sample;
                             width: ListView.view.width;
@@ -314,12 +314,12 @@ TextPropertyBase {
                             fontWidth: properties.fontWidth;
                             fontAxesValues: properties.axisValues;
                             featureValue: 0;
-                            onFeatureClicked: (mouse) => {
+                            onFeatureClicked: {
                                                   fontFeatureModel.addFeature(tag);
                                                   featureTxtEdit.finalize();
                                               }
-                            onContainsMouseChanged: {
-                                if (containsMouse) {
+                            onHoveredChanged: {
+                                if (hovered) {
                                     completerListView.currentIndex = index;
                                 }
                             }

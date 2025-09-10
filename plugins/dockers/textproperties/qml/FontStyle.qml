@@ -23,10 +23,10 @@ CollapsibleGroupProperty {
     property alias fontWidth: fontStretchSpn.value;
     property alias fontSlantSlope: fontSlantSpn.value;
     property int fontSlant: CssFontStyleModel.StyleNormal;
+    property alias axisValues: axesModelId.axisValues;
 
     property FontAxesModel axesModel: FontAxesModel {
-        // TODO: handle locales.
-        onAxisValuesChanged: properties.axisValues = axisValues;
+        id: axesModelId;
     }
     property FontStyleModel stylesModel: FontStyleModel {
 
@@ -98,6 +98,7 @@ CollapsibleGroupProperty {
         }
 
         function onAxisValuesStateChanged() {
+            updateAxisValues();
             updateVisibility();
         }
     }
@@ -157,7 +158,7 @@ CollapsibleGroupProperty {
 
     function updateAxisValues() {
         blockSignals = true;
-        axesModel.axisValues = properties.axisValues;
+        axisValues = properties.axisValues;
         blockSignals = false;
     }
 
@@ -214,6 +215,12 @@ CollapsibleGroupProperty {
     onFontSynthesizeWeightChanged:  {
         if (!blockSignals) {
             properties.fontSynthesisWeight = fontSynthesizeWeight;
+        }
+    }
+
+    onAxisValuesChanged: {
+        if (!blockSignals) {
+            properties.axisValues = axisValues;
         }
     }
 
@@ -437,10 +444,13 @@ CollapsibleGroupProperty {
                 required property bool axishidden;
                 required property var model;
 
+                // Somewhat complex, but data needs to be set on model.edit, and read from edit.
+                required property double edit;
+                onEditChanged: dValue = edit;
+
                 prefix: display + ": ";
                 dFrom: axismin;
                 dTo: axismax;
-                dValue: model.edit;
                 onDValueChanged: model.edit = dValue;
 
                 width: ListView.view.width;

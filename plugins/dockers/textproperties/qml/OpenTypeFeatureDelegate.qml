@@ -9,13 +9,12 @@ import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
-Control {
+ItemDelegate {
     id: root;
 
     height: implicitHeight;
-    implicitHeight: layout.height + padding*2;
     clip: true;
-    required property string display;
+    required property string name;
     required property string tag;
     required property string sample;
     required property string toolTip;
@@ -34,16 +33,18 @@ Control {
 
     property bool enableMouseEvents: true;
 
-    property alias containsMouse: mouseArea.containsMouse;
-    property bool highlighted: false;
+    hoverEnabled: enableMouseEvents;
 
     background: Rectangle {
-        color: highlighted? palette.highlight: "transparent";
+        color: root.palette.highlight;
+        visible: root.highlighted;
     }
 
-    signal featureClicked (QtObject mouse);
+    onClicked: featureClicked();
 
-    RowLayout {
+    signal featureClicked ();
+
+    contentItem: RowLayout {
         id: layout;
         width: parent.availableWidth;
 
@@ -71,7 +72,7 @@ Control {
             Layout.bottomMargin: layout.spacing;
             Label {
                 id: displayLabel;
-                text: root.display;
+                text: root.name;
                 elide: Text.ElideRight;
                 Layout.fillWidth: true;
                 Layout.preferredHeight: implicitHeight
@@ -86,7 +87,7 @@ Control {
                 Layout.preferredHeight: displayLabel.height * 2;
                 Layout.preferredWidth: (displayLabel.height * 2) * (implicitWidth/implicitHeight);
                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter;
-                textColor: root.containsMouse? root.palette.highlightedText: root.palette.text;
+                textColor: root.highlighted? root.palette.highlightedText: root.palette.text;
                 fillColor: "transparent";
                 fontFamilies: root.fontFamilies;
                 fontSize: root.fontSize;
@@ -109,17 +110,9 @@ Control {
             }
         }
     }
-    MouseArea {
-        id: mouseArea;
-        anchors.fill: parent;
-        hoverEnabled: root.enableMouseEvents;
-        enabled: root.enableMouseEvents;
-        onClicked: (mouse)=>{ featureClicked(mouse); }
-        Kis.ToolTipBase {
-            parent: mouseArea;
-            text: root.toolTip;
-            visible: mouseArea.containsMouse;
-        }
+    Kis.ToolTipBase {
+        parent: root;
+        text: root.toolTip;
+        visible: root.highlighted;
     }
-
 }

@@ -16,6 +16,7 @@
 
 #include <KoResourcePaths.h>
 #include <KisSurfaceColorSpaceWrapper.h>
+#include <kis_config_notifier.h>
 
 KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
 {
@@ -43,6 +44,7 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
 
     // Clear color is the 'default background color', which, in qwidget context is the window bg.
     setClearColor(palette().window().color());
+    connect(KisConfigNotifier::instance(), SIGNAL(signalColorThemeChanged(QString)), this, SLOT(updatePaletteFromConfig()));
 
     // Default to fusion style unless the user forces another style
     const QString fusion = "Fusion";
@@ -81,4 +83,9 @@ KisQQuickWidget::~KisQQuickWidget()
     ///   * https://invent.kde.org/graphics/krita/-/commit/d8676f4e9cac1a8728e73fec3ff1df1763c713b7
     ///   * https://bugreports.qt.io/browse/QTBUG-81247
     setParent(nullptr);
+}
+
+void KisQQuickWidget::updatePaletteFromConfig()
+{
+    setClearColor(palette().window().color());
 }

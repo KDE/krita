@@ -124,6 +124,7 @@
 
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
+#include <QWindow>
 #include <QPlatformSurfaceEvent>
 #include <KisSRGBSurfaceColorSpaceManager.h>
 
@@ -302,7 +303,12 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
                 QPlatformSurfaceEvent *surfaceEvent = static_cast<QPlatformSurfaceEvent*>(event);
                 if (surfaceEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
-                    KisSRGBSurfaceColorSpaceManager::tryCreateForCurrentPlatform(widget);
+                    QWindow *nativeWindow = widget->windowHandle();
+                    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(widget->windowHandle(), false);
+
+                    if (!nativeWindow->findChild<KisSRGBSurfaceColorSpaceManager*>()) {
+                        KisSRGBSurfaceColorSpaceManager::tryCreateForCurrentPlatform(widget);
+                    }
                 }
             }
 

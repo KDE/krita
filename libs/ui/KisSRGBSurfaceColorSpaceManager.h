@@ -16,6 +16,7 @@ class KisSurfaceColorManagerInterface;
 
 class KisSRGBSurfaceColorSpaceManager : public QObject
 {
+    Q_OBJECT
 public:
     KisSRGBSurfaceColorSpaceManager(KisSurfaceColorManagerInterface *interface, QObject *parent = nullptr);
     ~KisSRGBSurfaceColorSpaceManager();
@@ -23,7 +24,7 @@ public:
     QString colorManagementReport() const;
     QString osPreferredColorSpaceReport() const;
 
-    static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);
+    static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);   
 
 protected:
     static KisSurfaceColorimetry::RenderIntent calculateConfigIntent();

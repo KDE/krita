@@ -1183,7 +1183,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_chkEnableCanvasColorSpaceManagement->setToolTip(
             i18n("<p>Enabling canvas color management automatically creates "
                  "a separate native surface for the canvas. It might cause "
-                 "performance issues on some systems.</p"
+                 "performance issues on some systems.</p>"
                  ""
                  "<p>If color management is disabled, Krita will render "
                  "the canvas into the surface of the main window, which "

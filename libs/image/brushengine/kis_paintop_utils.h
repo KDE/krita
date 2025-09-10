@@ -143,6 +143,12 @@ public:
         return result;
     }
 
+    void reset(const QPointF &pt)
+    {
+        m_first = pt;
+        m_second = pt;
+    }
+
 private:
     QPointF m_first;
     QPointF m_second;

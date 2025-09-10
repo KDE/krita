@@ -771,13 +771,18 @@ KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos
                                                       const KoPointerEvent *event,
                                                       KisPaintOpSettings::OutlineMode outlineMode)
 {
-    Q_UNUSED(event);
-
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     KIS_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
     const QPointF pixelPos = convertToPixelCoord(documentPos);
+    // When touch drawing, a "hover" event means the finger was just pressed
+    // down. The last cursor position is invalid with regards to distance and
+    // speed, since it isn't updated while the finger isn't down, so reset it.
+    if (event && event->isTouchEvent() && mode() == HOVER_MODE) {
+        m_d->lastCursorPos.reset(pixelPos);
+    }
+
     KisPaintInformation info(pixelPos);
     info.setCanvasMirroredH(canvas2->coordinatesConverter()->xAxisMirrored());
     info.setCanvasMirroredV(canvas2->coordinatesConverter()->yAxisMirrored());

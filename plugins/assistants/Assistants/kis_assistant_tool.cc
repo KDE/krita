@@ -741,10 +741,19 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
         KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
         selectedAssistant->setDuplicating(false);
         assistantDuplicatingFlag = false;
+            
         // offset control widget if user simple click-releases duplication button
         if(m_dragEnd == m_dragStart){
+            // calculate offset independent from canvas resolution and zoom
+            const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+            // create offset unit, considering canvas resolution
+            const int offset = 20;
+            const float offsetUnit = offset / m_canvas->image()->xRes();
+            // use unit to calculate final offset, considering canvas zoom
+            QPointF widgetDuplicationOffset = QPointF(offsetUnit / converter->effectiveZoom(),offsetUnit / converter->effectiveZoom());
+            // apply offset to control widget
             QPointF currentOffset = selectedAssistant->editorWidgetOffset();
-            selectedAssistant->setEditorWidgetOffset(currentOffset + QPointF(1,1));
+            selectedAssistant->setEditorWidgetOffset(currentOffset + widgetDuplicationOffset);
         }
     }
 

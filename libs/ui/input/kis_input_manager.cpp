@@ -798,6 +798,14 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
             d->previousPos = {0, 0};
             d->touchStrokeStarted = false; // stroke ended
+        } else if (!KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
+                   && touchEvent->touchPoints().count() == 1) {
+            // If no stroke has been started while touch painting is enabled,
+            // the user tapped with one finger, but didn't make any motion that
+            // caused us to start a stroke. We produce a press and release in
+            // response so that the tool responds to their input.
+            d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
+            d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
         }
 
         endTouch();

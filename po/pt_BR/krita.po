@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-10 01:57+0000\n"
-"PO-Revision-Date: 2025-08-29 16:38-0300\n"
+"POT-Creation-Date: 2025-09-11 01:56+0000\n"
+"PO-Revision-Date: 2025-09-10 07:35-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -8258,12 +8258,10 @@ msgstr "Mostrar informação do sistema para reportar bugs."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Informações do documento"
+msgstr "Mostrar informações de gerenciamento de cor"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
@@ -8271,15 +8269,14 @@ msgstr "Informações do documento"
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
 msgstr ""
+"Mostra informações de gerenciamento de cor para a superfície da imagem atual"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Mostrar informação do sistema para reportar bugs."
+msgstr "Mostrar informações do sistema para relatórios de bugs"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -16042,8 +16039,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espaços de trabalho"
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:490
-#: libs/ui/KisApplication.cpp:768
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:496
+#: libs/ui/KisApplication.cpp:774
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23576,10 +23573,10 @@ msgstr "Recursos locais"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1151
-#: libs/ui/KisApplication.cpp:1154 libs/ui/KisApplication.cpp:1170
-#: libs/ui/KisApplication.cpp:1202 libs/ui/KisApplication.cpp:1216
-#: libs/ui/KisApplication.cpp:1244 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1157
+#: libs/ui/KisApplication.cpp:1160 libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1208 libs/ui/KisApplication.cpp:1222
+#: libs/ui/KisApplication.cpp:1250 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
@@ -27097,51 +27094,66 @@ msgstr "Tela %1 (%2):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr ""
+msgstr "O espaço de cor do monitor é gerenciado pelo sistema operacional"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1181
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Gerenciamento de cor"
+msgstr "Habilitar gerenciamento de cor da tela"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1184
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Enabling canvas color management automatically creates a separate "
+#| "native surface for the canvas. It might cause performance issues on some "
+#| "systems.</p<p>If color management is disabled, Krita will render the "
+#| "canvas into the surface of the main window, which is considered sRGB. It "
+#| "will cause two limitations:<ol>    <li>the color gamut will be limited to "
+#| "sRGB</li>    <li>color proofing mode will be limited to \"use global "
+#| "display settings\",         i.e. paper white proofing will become "
+#| "impossible</li></ol></p>"
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
 "surface for the canvas. It might cause performance issues on some systems.</"
-"p<p>If color management is disabled, Krita will render the canvas into the "
+"p><p>If color management is disabled, Krita will render the canvas into the "
 "surface of the main window, which is considered sRGB. It will cause two "
 "limitations:<ol>    <li>the color gamut will be limited to sRGB</li>    "
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>Habilitar o gerenciamento de cor da tela cria automaticamente uma "
+"superfície nativa separada para a tela. Isso pode causar problemas de "
+"desempenho em alguns sistemas.</p<p>Se o gerenciamento de cor estiver "
+"desabilitado, o Krita renderizará a tela na superfície da janela principal, "
+"que é considerada sRGB. Isso causará duas limitações:<ol> <li>a gama de "
+"cores será limitada a sRGB</li>    <li>o modo de prova de cor será limitado "
+"a \"usar configurações globais de exibição\", ou seja, a prova em papel "
+"branco se tornará impossível</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
-#, fuzzy, kde-format
-#| msgid "Uncalibrated color space"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "espaço de cor não calibrado"
+msgstr "Espaço de cor da superfície da tela:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1206
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "Preferido pelo sistema operacional"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1207
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rec 709 Gama 2.2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1208
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rec 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1209
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "Não gerenciado (somente teste)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1212
 #, kde-format
@@ -27149,6 +27161,9 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>Espaço de cor dos pixels que são transferidos para o compositor de "
+"janelas. Use o espaço \"preferido\", a menos que você saiba o que está "
+"fazendo</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
@@ -27156,6 +27171,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"Espaço de cor preferido pelo sistema operacional:\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -32037,7 +32054,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:430
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:436
 #, kde-format
 msgid "Sessions"
 msgstr "Sessões"
@@ -33540,7 +33557,7 @@ msgstr "&Abrir o seletor de cor de fundo"
 msgid "&Docker Box"
 msgstr "Áreas a&copláveis "
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:432
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33554,8 +33571,8 @@ msgstr "Padrões"
 msgid "Custom Pattern"
 msgstr "Padrão Personalizado"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:411
-#: libs/ui/KisApplication.cpp:412
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:417
+#: libs/ui/KisApplication.cpp:418
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34508,20 +34525,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zoom: %1 %"
 
-#: libs/ui/KisApplication.cpp:403
+#: libs/ui/KisApplication.cpp:409
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Predefinições do pincel"
 
-#: libs/ui/KisApplication.cpp:406 libs/ui/KisApplication.cpp:407
-#: libs/ui/KisApplication.cpp:408 libs/ui/KisApplication.cpp:409
+#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:414 libs/ui/KisApplication.cpp:415
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Pontas de pincel"
 
-#: libs/ui/KisApplication.cpp:414
+#: libs/ui/KisApplication.cpp:420
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34529,7 +34546,7 @@ msgstr "Pontas de pincel"
 msgid "Palettes"
 msgstr "Paletas"
 
-#: libs/ui/KisApplication.cpp:427 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:433 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34537,39 +34554,39 @@ msgstr "Paletas"
 msgid "Workspaces"
 msgstr "Espaços de trabalho"
 
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:434
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "Bibliotecas de símbolos SVG"
 
-#: libs/ui/KisApplication.cpp:429 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:435 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Layouts de janelas"
 
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:437
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Máscaras Gamut"
 
-#: libs/ui/KisApplication.cpp:433
+#: libs/ui/KisApplication.cpp:439
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "Scripts SeExpr"
 
-#: libs/ui/KisApplication.cpp:438
+#: libs/ui/KisApplication.cpp:444
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Estilos da camada"
 
-#: libs/ui/KisApplication.cpp:441
+#: libs/ui/KisApplication.cpp:447
 #, kde-format
 msgid "Style Presets"
 msgstr "Predefinições de Estilo"
 
-#: libs/ui/KisApplication.cpp:453
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid ""
 "%1\n"
@@ -34580,13 +34597,13 @@ msgstr ""
 "\n"
 "O Krita irá sair agora."
 
-#: libs/ui/KisApplication.cpp:453 libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:459 libs/ui/KisApplication.cpp:465
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Erro fatal"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:465
 #, kde-format
 msgid ""
 "\n"
@@ -34597,7 +34614,7 @@ msgstr ""
 "\n"
 "O Krita irá sair agora."
 
-#: libs/ui/KisApplication.cpp:491
+#: libs/ui/KisApplication.cpp:497
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34608,66 +34625,66 @@ msgstr ""
 "Isto não é recomendado.\n"
 "Baixe e instale a versão x64."
 
-#: libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:514
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Inicialização dos valores globais..."
 
-#: libs/ui/KisApplication.cpp:540
+#: libs/ui/KisApplication.cpp:546
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Adicionando os tipos de recursos..."
 
-#: libs/ui/KisApplication.cpp:544
+#: libs/ui/KisApplication.cpp:550
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Carregando plugins..."
 
-#: libs/ui/KisApplication.cpp:550
+#: libs/ui/KisApplication.cpp:556
 #, kde-format
 msgid "Loading resources..."
 msgstr "Carregando recursos..."
 
-#: libs/ui/KisApplication.cpp:559
+#: libs/ui/KisApplication.cpp:565
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Carregando a janela principal..."
 
-#: libs/ui/KisApplication.cpp:591
+#: libs/ui/KisApplication.cpp:597
 #, kde-format
 msgid "Launching..."
 msgstr "Iniciando..."
 
-#: libs/ui/KisApplication.cpp:660
+#: libs/ui/KisApplication.cpp:666
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Tipo MIME não encontrado. Tente usar a opção -mimetype"
 
-#: libs/ui/KisApplication.cpp:721
+#: libs/ui/KisApplication.cpp:727
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Falha ao renderizar quadros da animação!"
 
-#: libs/ui/KisApplication.cpp:749 libs/ui/KisApplication.cpp:1022
+#: libs/ui/KisApplication.cpp:755 libs/ui/KisApplication.cpp:1028
 #, kde-format
 msgid "File layer"
 msgstr "Camada de arquivo"
 
-#: libs/ui/KisApplication.cpp:757 libs/ui/KisApplication.cpp:762
-#: libs/ui/KisApplication.cpp:1016 libs/ui/KisApplication.cpp:1030
-#: libs/ui/KisApplication.cpp:1035
+#: libs/ui/KisApplication.cpp:763 libs/ui/KisApplication.cpp:768
+#: libs/ui/KisApplication.cpp:1022 libs/ui/KisApplication.cpp:1036
+#: libs/ui/KisApplication.cpp:1041
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Aviso"
 
-#: libs/ui/KisApplication.cpp:758 libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:764 libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 "Não foi possível adicionar %1 como camada de arquivo: o arquivo não existe."
 
-#: libs/ui/KisApplication.cpp:763
+#: libs/ui/KisApplication.cpp:769
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34689,7 +34706,7 @@ msgstr ""
 "do Krita já em execução, verifique se a opção \"Permitir apenas uma "
 "instância do Krita\" nas configurações (Configurações -> Geral -> Janela)."
 
-#: libs/ui/KisApplication.cpp:769
+#: libs/ui/KisApplication.cpp:775
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34701,33 +34718,33 @@ msgstr ""
 "Você pode criar um novo documento usando a opção --new-image, ou pode abrir "
 "um arquivo existente."
 
-#: libs/ui/KisApplication.cpp:1017
+#: libs/ui/KisApplication.cpp:1023
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Não foi possível abrir o arquivo %1"
 
-#: libs/ui/KisApplication.cpp:1036
+#: libs/ui/KisApplication.cpp:1042
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "Não foi possível adicionar a camada de arquivo: nenhum documento está aberto."
 
-#: libs/ui/KisApplication.cpp:1152
+#: libs/ui/KisApplication.cpp:1158
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Nenhum modelo encontrado para: %1"
 
-#: libs/ui/KisApplication.cpp:1155
+#: libs/ui/KisApplication.cpp:1161
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Muitos modelos encontrados para: %1"
 
-#: libs/ui/KisApplication.cpp:1171
+#: libs/ui/KisApplication.cpp:1177
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Falha ao carregar modelo %1."
 
-#: libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1209
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34742,7 +34759,7 @@ msgstr ""
 "\n"
 "Reinicie o Krita para as alterações terem efeito."
 
-#: libs/ui/KisApplication.cpp:1217
+#: libs/ui/KisApplication.cpp:1223
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34754,7 +34771,7 @@ msgstr ""
 "Certifique-se de que nenhum outro programa está usando o arquivo e tente "
 "novamente."
 
-#: libs/ui/KisApplication.cpp:1245
+#: libs/ui/KisApplication.cpp:1251
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Deseja limpar o arquivo de configurações?"
@@ -45816,17 +45833,15 @@ msgid "Krita Logcat Dump: please paste this information to the bug report"
 msgstr "Despejo do Logcat do Krita: cole esta informação no relatório de bug"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with system information for bug reports"
-#| msgid ""
-#| "Krita System Information: please paste this information to the bug report"
+#, kde-format
 msgctxt ""
 "Caption of the dialog with color management information for bug reports"
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Informações do sistema do Krita: cole essas informações no relatório de erros"
+"Informações do gerenciamento de cor do Krita: cole essas informações no "
+"relatório de erros"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format

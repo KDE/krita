@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-10 01:57+0000\n"
+"POT-Creation-Date: 2025-09-11 01:56+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16020,8 +16020,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "作業空間"
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:490
-#: libs/ui/KisApplication.cpp:768
+#: krita/main.cc:748 libs/ui/KisApplication.cpp:496
+#: libs/ui/KisApplication.cpp:774
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23574,10 +23574,10 @@ msgstr "本機資源"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1151
-#: libs/ui/KisApplication.cpp:1154 libs/ui/KisApplication.cpp:1170
-#: libs/ui/KisApplication.cpp:1202 libs/ui/KisApplication.cpp:1216
-#: libs/ui/KisApplication.cpp:1244 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1157
+#: libs/ui/KisApplication.cpp:1160 libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1208 libs/ui/KisApplication.cpp:1222
+#: libs/ui/KisApplication.cpp:1250 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
@@ -27053,7 +27053,7 @@ msgstr "色彩管理"
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
 "surface for the canvas. It might cause performance issues on some systems.</"
-"p<p>If color management is disabled, Krita will render the canvas into the "
+"p><p>If color management is disabled, Krita will render the canvas into the "
 "surface of the main window, which is considered sRGB. It will cause two "
 "limitations:<ol>    <li>the color gamut will be limited to sRGB</li>    "
 "<li>color proofing mode will be limited to \"use global display settings"
@@ -31887,7 +31887,7 @@ msgid "HSV CCW"
 msgstr "HSV 逆時針方向"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:430
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:436
 #, kde-format
 msgid "Sessions"
 msgstr "工作階段"
@@ -33375,7 +33375,7 @@ msgstr "開啟背景色選取工具"
 msgid "&Docker Box"
 msgstr "工具面板(&D)"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:432
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33389,8 +33389,8 @@ msgstr "圖案"
 msgid "Custom Pattern"
 msgstr "自訂圖案"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:411
-#: libs/ui/KisApplication.cpp:412
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:417
+#: libs/ui/KisApplication.cpp:418
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34355,20 +34355,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "縮放：%1 %"
 
-#: libs/ui/KisApplication.cpp:403
+#: libs/ui/KisApplication.cpp:409
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "筆刷預設"
 
-#: libs/ui/KisApplication.cpp:406 libs/ui/KisApplication.cpp:407
-#: libs/ui/KisApplication.cpp:408 libs/ui/KisApplication.cpp:409
+#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:414 libs/ui/KisApplication.cpp:415
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "筆尖"
 
-#: libs/ui/KisApplication.cpp:414
+#: libs/ui/KisApplication.cpp:420
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34376,7 +34376,7 @@ msgstr "筆尖"
 msgid "Palettes"
 msgstr "調色板"
 
-#: libs/ui/KisApplication.cpp:427 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:433 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34384,40 +34384,40 @@ msgstr "調色板"
 msgid "Workspaces"
 msgstr "作業空間"
 
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:434
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG 符號庫"
 
-#: libs/ui/KisApplication.cpp:429 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:435 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "視窗版面配置"
 
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:437
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域遮罩"
 
-#: libs/ui/KisApplication.cpp:433
+#: libs/ui/KisApplication.cpp:439
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr 指令稿"
 
-#: libs/ui/KisApplication.cpp:438
+#: libs/ui/KisApplication.cpp:444
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "圖層樣式"
 
-#: libs/ui/KisApplication.cpp:441
+#: libs/ui/KisApplication.cpp:447
 #, fuzzy, kde-format
 #| msgid "Style Sheet"
 msgid "Style Presets"
 msgstr "樣式表"
 
-#: libs/ui/KisApplication.cpp:453
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid ""
 "%1\n"
@@ -34428,13 +34428,13 @@ msgstr ""
 "\n"
 "Krita 將立刻離開。"
 
-#: libs/ui/KisApplication.cpp:453 libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:459 libs/ui/KisApplication.cpp:465
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita：嚴重錯誤"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:465
 #, kde-format
 msgid ""
 "\n"
@@ -34445,7 +34445,7 @@ msgstr ""
 "\n"
 "Krita 將立刻退出。"
 
-#: libs/ui/KisApplication.cpp:491
+#: libs/ui/KisApplication.cpp:497
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34456,65 +34456,65 @@ msgstr ""
 "我們不建議此做法。\n"
 "請下載並安裝 x64 版本的 Krita 應用程式。"
 
-#: libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:514
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "正在初始化全域參數…"
 
-#: libs/ui/KisApplication.cpp:540
+#: libs/ui/KisApplication.cpp:546
 #, kde-format
 msgid "Adding resource types..."
 msgstr "正在新增資源類型…"
 
-#: libs/ui/KisApplication.cpp:544
+#: libs/ui/KisApplication.cpp:550
 #, kde-format
 msgid "Loading plugins..."
 msgstr "正在載入外掛程式…"
 
-#: libs/ui/KisApplication.cpp:550
+#: libs/ui/KisApplication.cpp:556
 #, kde-format
 msgid "Loading resources..."
 msgstr "正在載入資源…"
 
-#: libs/ui/KisApplication.cpp:559
+#: libs/ui/KisApplication.cpp:565
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "正在載入主視窗…"
 
-#: libs/ui/KisApplication.cpp:591
+#: libs/ui/KisApplication.cpp:597
 #, kde-format
 msgid "Launching..."
 msgstr "正在啟動…"
 
-#: libs/ui/KisApplication.cpp:660
+#: libs/ui/KisApplication.cpp:666
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "無法找到 MIME 類型，請嘗試使用 -mimetype 選項"
 
-#: libs/ui/KisApplication.cpp:721
+#: libs/ui/KisApplication.cpp:727
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "動畫影格繪製失敗！"
 
-#: libs/ui/KisApplication.cpp:749 libs/ui/KisApplication.cpp:1022
+#: libs/ui/KisApplication.cpp:755 libs/ui/KisApplication.cpp:1028
 #, kde-format
 msgid "File layer"
 msgstr "檔案圖層"
 
-#: libs/ui/KisApplication.cpp:757 libs/ui/KisApplication.cpp:762
-#: libs/ui/KisApplication.cpp:1016 libs/ui/KisApplication.cpp:1030
-#: libs/ui/KisApplication.cpp:1035
+#: libs/ui/KisApplication.cpp:763 libs/ui/KisApplication.cpp:768
+#: libs/ui/KisApplication.cpp:1022 libs/ui/KisApplication.cpp:1036
+#: libs/ui/KisApplication.cpp:1041
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:758 libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:764 libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "無法新增 %1 為檔案圖層：檔案不存在。"
 
-#: libs/ui/KisApplication.cpp:763
+#: libs/ui/KisApplication.cpp:769
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34533,7 +34533,7 @@ msgstr ""
 "如果您想改新增檔案圖層至執行中 Krita 實體中的文件，請核取設定中的「只允許一"
 "個 Krita 實體」(設定 -> 一般 -> 視窗)。"
 
-#: libs/ui/KisApplication.cpp:769
+#: libs/ui/KisApplication.cpp:775
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34543,32 +34543,32 @@ msgstr ""
 "無法新增檔案圖層：未開啟檔案。\n"
 "您可使用 --new-image 選項建立新檔案，或者是開啟現有檔案。"
 
-#: libs/ui/KisApplication.cpp:1017
+#: libs/ui/KisApplication.cpp:1023
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "無法開啟檔案「%1」"
 
-#: libs/ui/KisApplication.cpp:1036
+#: libs/ui/KisApplication.cpp:1042
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "無法新增檔案圖層：未開啟檔案。"
 
-#: libs/ui/KisApplication.cpp:1152
+#: libs/ui/KisApplication.cpp:1158
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到適用於 %1 的範本"
 
-#: libs/ui/KisApplication.cpp:1155
+#: libs/ui/KisApplication.cpp:1161
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "適用於 %1 的範本過多"
 
-#: libs/ui/KisApplication.cpp:1171
+#: libs/ui/KisApplication.cpp:1177
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "範本 %1 載入失敗。"
 
-#: libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1209
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34583,7 +34583,7 @@ msgstr ""
 "\n"
 "請重新啟動 Krita 以套用變更。"
 
-#: libs/ui/KisApplication.cpp:1217
+#: libs/ui/KisApplication.cpp:1223
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34594,7 +34594,7 @@ msgstr ""
 "\n"
 "請確保沒有其他程式正在使用該檔案並重試。"
 
-#: libs/ui/KisApplication.cpp:1245
+#: libs/ui/KisApplication.cpp:1251
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "要清空設定檔嗎？"

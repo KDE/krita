@@ -8,6 +8,7 @@
 package org.krita.android;
 
 import android.app.ForegroundServiceStartNotAllowedException;
+import android.app.ServiceStartNotAllowedException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -119,13 +120,20 @@ public class MainActivity extends QtActivity {
     @RequiresApi(api = Build.VERSION_CODES.S)
     void startForegroundServiceS(Intent intent) {
         try {
-            startForegroundService(intent);
-        } catch (ForegroundServiceStartNotAllowedException e) {
-            Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + e);
+            try {
+                startForegroundService(intent);
+            } catch (ForegroundServiceStartNotAllowedException e) {
+                Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + e);
 
-            // The service is already running, so maybe try saving without trying to put it in
-            // foreground. According to docs we should have a couple of minutes of runtime.
-            startService(intent);
+                // The service is already running, so maybe try saving without trying to put it in
+                // foreground. According to docs we should have a couple of minutes of runtime.
+                startService(intent);
+            }
+        } catch (ServiceStartNotAllowedException e) {
+            // We may not be allowed to start a background service either,
+            // probably because onPause is called on an already-paused
+            // application that is beyond the "couple of minutes" cutoff.
+            Log.w(TAG, "ServiceStartNotAllowedException: " + e);
         }
     }
 

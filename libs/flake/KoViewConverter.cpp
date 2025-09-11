@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoViewConverter.h"
+#include "KoViewTransformStillPoint.h"
 
 #include <QPointF>
 #include <QRectF>
@@ -95,6 +96,16 @@ void KoViewConverter::setZoom(qreal zoom)
 qreal KoViewConverter::zoom() const
 {
     return m_zoomLevel;
+}
+
+KoViewTransformStillPoint KoViewConverter::makeWidgetStillPoint(const QPointF &viewPoint) const
+{
+    return { viewToDocument(widgetToView().map(viewPoint)), viewPoint };
+}
+
+KoViewTransformStillPoint KoViewConverter::makeDocStillPoint(const QPointF &docPoint) const
+{
+    return {docPoint, viewToWidget().map(documentToView(docPoint))};
 }
 
 QTransform KoViewConverter::documentToView() const

@@ -73,7 +73,7 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
         d->previousAngle = 0;
         d->initialReferenceAngle = 0;
         d->accumRotationAngle = 0;
-        d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(d->lastPosition);
+        d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(d->lastPosition);
     }
 }
 

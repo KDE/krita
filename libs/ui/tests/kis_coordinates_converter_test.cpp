@@ -214,7 +214,7 @@ void KisCoordinatesConverterTest::testMirroring()
 //    QTransform flakeToWidget;
 //    QTransform viewportToWidget;
 
-    converter.mirror(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), true, false);
+    converter.mirror(converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()), true, false);
 
     // image pixels == flake pixels
 
@@ -248,7 +248,7 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
 //    QTransform flakeToWidget;
 //    QTransform viewportToWidget;
 
-    converter.mirror(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), true, false);
+    converter.mirror(converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()), true, false);
 
     // image pixels == flake pixels
 
@@ -464,7 +464,7 @@ void KisCoordinatesConverterTest::testOffsetLimitsCropping()
     // This mirror operation cause clipping of the offset, since
     // the left edge of the document should appear at position
     // 480, which is higher than the limit of 450.
-    converter.mirror(converter.makeViewStillPoint(QPointF(490, 0)), true, false);
+    converter.mirror(converter.makeWidgetStillPoint(QPointF(490, 0)), true, false);
 
     QCOMPARE(converter.documentOffset(), QPoint(-450,0));
     QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(950,0));
@@ -478,7 +478,7 @@ void KisCoordinatesConverterTest::testOffsetLimitsCropping()
 
     // Now mirror on the left side. The offset should be corrected
     // to the right
-    converter.mirror(converter.makeViewStillPoint(QPointF(10, 0)), false, false);
+    converter.mirror(converter.makeWidgetStillPoint(QPointF(10, 0)), false, false);
 
     QCOMPARE(converter.documentOffset(), QPoint(450,0));
     QCOMPARE(converter.imageToWidget(QPointF(0,0)), QPointF(-450,0));
@@ -897,7 +897,7 @@ void KisCoordinatesConverterTest::testZoomMode()
         }
     }
 
-    const KoViewTransformStillPoint stillPoint = converter.makeViewStillPoint(widgetStillPoint);
+    const KoViewTransformStillPoint stillPoint = converter.makeWidgetStillPoint(widgetStillPoint);
     converter.setZoom(newZoomMode, newConstantZoom, newScreenResolution.x(), newScreenResolution.y(), stillPoint);
 
     QCOMPARE(converter.zoom(), expectedZoom);
@@ -1380,7 +1380,7 @@ void KisCoordinatesConverterTest::testResolutionModes()
         }
     }
 
-    const KoViewTransformStillPoint stillPoint = converter.makeViewStillPoint(-originalOffset);
+    const KoViewTransformStillPoint stillPoint = converter.makeWidgetStillPoint(-originalOffset);
 
     // that should be exactly the topleft of the document
     QCOMPARE(stillPoint.docPoint(), QPointF());
@@ -1863,7 +1863,7 @@ void KisCoordinatesConverterTest::testZoomLimitsEnforcement()
 
     converter.setZoom(requestedZoomMode, requestedZoom,
         converter.resolutionX(), converter.resolutionY(),
-        converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()));
+        converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()));
 
     QCOMPARE(converter.zoomMode(), expectedFinalZoomMode);
     QCOMPARE(converter.zoom(), expectedFinalZoom);
@@ -2073,11 +2073,11 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
     switch (testingMode) {
         case ZoomPageTo7:
             converter.setZoom(KoZoomMode::ZOOM_CONSTANT, 0.17,
-                converter.resolutionX(), converter.resolutionY(), converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()));
+                converter.resolutionX(), converter.resolutionY(), converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()));
             break;
         case ZoomPageToWidth:
             converter.setZoom(KoZoomMode::ZOOM_WIDTH, 1.0,
-                converter.resolutionX(), converter.resolutionY(), converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()));
+                converter.resolutionX(), converter.resolutionY(), converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()));
             break;
         case ScrollToFraction:
             converter.setDocumentOffset(QPointF(-100.33, -200.77));
@@ -2096,10 +2096,10 @@ void KisCoordinatesConverterTest::testHiDPIOffsetSnapping()
             converter.zoomTo(QRectF(13.33, 17.77, 333.17, 234.13));
             break;
         case Rotate:
-            converter.rotate(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), 17.3);
+            converter.rotate(converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()), 17.3);
             break;
         case RotateOrthogonal:
-            converter.rotate(converter.makeViewStillPoint(converter.imageCenterInWidgetPixel()), 90.0);
+            converter.rotate(converter.makeWidgetStillPoint(converter.imageCenterInWidgetPixel()), 90.0);
             break;
     }
 
@@ -2161,7 +2161,7 @@ void KisCoordinatesConverterTest::testPreferredCenterTransformations()
         expectedStillPoint = {converter.imageRectInDocumentPixels().center(), converter.imageCenterInWidgetPixel()};
         realStillPoint = std::nullopt;
     } else {
-        expectedStillPoint = converter.makeViewStillPoint({100.0,100.0});
+        expectedStillPoint = converter.makeWidgetStillPoint({100.0,100.0});
         realStillPoint = expectedStillPoint;
     }
 

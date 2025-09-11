@@ -41,7 +41,7 @@ void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     auto makeStillPoint = [&] () -> KoViewTransformStillPoint {
         const QPointF center = pixelRect.center();
-        return { m_controller->canvas()->viewConverter()->viewToDocument(center), center };
+        return m_controller->canvas()->viewConverter()->makeWidgetStillPoint(center);
     };
 
     if (m_zoomOut) {

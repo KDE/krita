@@ -122,7 +122,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             d->startZoom = inputManager()->canvas()->coordinatesConverter()->zoom();
             d->mode = (Shortcuts)shortcut;
             d->lastPosition = QPoint();
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(eventPosF(event));
             break;
         }
         case DiscreteZoomModeShortcut:
@@ -130,7 +130,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             d->startZoom = inputManager()->canvas()->coordinatesConverter()->zoom();
             d->lastDiscreteZoomDistance = 0;
             d->mode = (Shortcuts)shortcut;
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(eventPosF(event));
             break;
         case ZoomInShortcut:
         case ZoomOutShortcut:
@@ -152,13 +152,13 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
                 if (pt.isNull()) {
                     controller->zoomIn();
                 } else {
-                    controller->zoomIn(inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(pt));
+                    controller->zoomIn(inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(pt));
                 }
             } else {
                 if (pt.isNull()) {
                     controller->zoomOut();
                 } else {
-                    controller->zoomOut(inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(pt));
+                    controller->zoomOut(inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(pt));
                 }
             }
             break;

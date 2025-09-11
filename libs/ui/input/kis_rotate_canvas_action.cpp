@@ -100,7 +100,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             const qreal startRotation = inputManager()->canvas()->rotationAngle();
             d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
             canvasController->beginCanvasRotation();
-            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeViewStillPoint(eventPosF(event));
+            d->actionStillPoint = inputManager()->canvas()->coordinatesConverter()->makeWidgetStillPoint(eventPosF(event));
             break;
         }
         case RotateLeftShortcut:

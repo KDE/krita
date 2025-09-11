@@ -964,7 +964,7 @@ qreal KisCoordinatesConverter::findPrevZoom(qreal currentZoom, const QVector<qre
     return KoZoomMode::findPrevZoom(currentZoom, zoomLevels);
 }
 
-KoViewTransformStillPoint KisCoordinatesConverter::makeViewStillPoint(const QPointF &viewPoint) const
+KoViewTransformStillPoint KisCoordinatesConverter::makeWidgetStillPoint(const QPointF &viewPoint) const
 {
     return {widgetToDocument(viewPoint), viewPoint};
 }

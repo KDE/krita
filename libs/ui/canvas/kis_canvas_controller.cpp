@@ -252,7 +252,7 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
     std::optional<KoViewTransformStillPoint> stillPoint;
 
     if (canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
-        stillPoint = m_d->coordinatesConverter->makeViewStillPoint(cursorPosWidget);
+        stillPoint = m_d->coordinatesConverter->makeWidgetStillPoint(cursorPosWidget);
     }
 
     mirrorCanvasImpl(stillPoint, enable);
@@ -486,7 +486,7 @@ void KisCanvasController::syncOnImageResolutionChange()
                                             m_d->coordinatesConverter->zoom(),
                                             effectiveCanvasResolutionX(),
                                             effectiveCanvasResolutionY(),
-                                            m_d->coordinatesConverter->makeViewStillPoint(
+                                            m_d->coordinatesConverter->makeWidgetStillPoint(
                                                 m_d->coordinatesConverter->imageCenterInWidgetPixel()));
     }
 

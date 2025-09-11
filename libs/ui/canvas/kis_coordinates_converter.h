@@ -237,24 +237,8 @@ public:
     static qreal findNextZoom(qreal currentZoom, const QVector<qreal> &zoomLevels);
     static qreal findPrevZoom(qreal currentZoom, const QVector<qreal> &zoomLevels);
 
-    /**
-     * \brief Creates a still point that links the \p viewPoint of the widget
-     *        to the corresponding point of the image.
-     *
-     * The link is "baked" in KoViewTransformStillPoint object, hence
-     * intermediate transformations will not affect it.
-     */
-    KoViewTransformStillPoint makeViewStillPoint(const QPointF &viewPoint) const;
-
-    /**
-     * \brief Creates a still point that links the \p docPoint of the image
-     *        (in document pixels!) to the corresponding point on the screen
-     *        (in the canvas widget).
-     *
-     * The link is "baked" in KoViewTransformStillPoint object, hence
-     * intermediate transformations will not affect it.
-     */
-    KoViewTransformStillPoint makeDocStillPoint(const QPointF &docPoint) const;
+    KoViewTransformStillPoint makeWidgetStillPoint(const QPointF &viewPoint) const override;
+    KoViewTransformStillPoint makeDocStillPoint(const QPointF &docPoint) const override;
 
 public:
     // overrides from KoViewConverter

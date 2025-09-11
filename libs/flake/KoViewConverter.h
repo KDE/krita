@@ -11,6 +11,7 @@
 
 #include <QtGlobal>
 
+class KoViewTransformStillPoint;
 class QPointF;
 class QRectF;
 class QSizeF;
@@ -115,6 +116,29 @@ public:
      * Return the current zoom level. 1.0 is 100%.
      */
     qreal zoom() const;
+
+    /**
+     * \brief Creates a still point that links the \p viewPoint of the widget
+     *        to the corresponding point of the image.
+     *
+     * The link is "baked" in KoViewTransformStillPoint object, hence
+     * intermediate transformations will not affect it.
+     *
+     * Reimplemented in KisCoordinatesConverter.
+     */
+    virtual KoViewTransformStillPoint makeWidgetStillPoint(const QPointF &viewPoint) const;
+
+    /**
+     * \brief Creates a still point that links the \p docPoint of the image
+     *        (in document pixels!) to the corresponding point on the screen
+     *        (in the canvas widget).
+     *
+     * The link is "baked" in KoViewTransformStillPoint object, hence
+     * intermediate transformations will not affect it.
+     *
+     * Reimplemented in KisCoordinatesConverter.
+     */
+    virtual KoViewTransformStillPoint makeDocStillPoint(const QPointF &docPoint) const;
 
     QTransform documentToView() const;
     QTransform viewToDocument() const;

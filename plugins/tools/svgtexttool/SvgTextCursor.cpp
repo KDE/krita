@@ -598,10 +598,8 @@ QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
     if (!d->shape) return QList<KoSvgTextProperties>();
     int start = -1;
     int end = -1;
-    //if (d->pos != d->anchor) {
-        start = qMin(d->pos, d->anchor);
-        end = qMax(d->pos, d->anchor);
-    //}
+    start = qMin(d->pos, d->anchor);
+    end = qMax(d->pos, d->anchor);
     return d->shape->propertiesForRange(start, end);
 }
 
@@ -611,7 +609,7 @@ QList<KoSvgTextProperties> SvgTextCursor::propertiesForShape() const
     return {d->shape->propertiesForRange(-1, -1)};
 }
 
-void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties, bool paragraphOnly)
+void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties, bool paragraphOnly, bool selectWord)
 {
     if (d->shape) {
         int start = -1;
@@ -619,6 +617,11 @@ void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props
         if (!paragraphOnly) {
             start = d->pos;
             end = d->anchor;
+        }
+        if (selectWord && d->pos == d->anchor) {
+            const int finalPos = d->shape->posForIndex(d->shape->plainText().size());
+            start = qBound(0, moveModeResult(MoveWordStart, d->pos, d->visualNavigation), finalPos);
+            end = qBound(0, moveModeResult(MoveWordEnd, d->pos, d->visualNavigation), finalPos);
         }
         KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, start, end, removeProperties);
         addCommandToUndoAdapter(cmd);
@@ -1225,7 +1228,7 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
         }
     }
     if (!props.isEmpty()) {
-        mergePropertiesIntoSelection(props, QSet<KoSvgTextProperties::PropertyId>(), false);
+        mergePropertiesIntoSelection(props, QSet<KoSvgTextProperties::PropertyId>(), !hasSelection());
     }
 }
 
@@ -1793,7 +1796,7 @@ void SvgTextCursor::addCommandToUndoAdapter(KUndo2Command *cmd)
     }
 }
 
-int SvgTextCursor::moveModeResult(SvgTextCursor::MoveMode &mode, int &pos, bool visual) const
+int SvgTextCursor::moveModeResult(const SvgTextCursor::MoveMode mode, int &pos, bool visual) const
 {
     int newPos = pos;
     switch (mode) {
@@ -1989,7 +1992,7 @@ void SvgTextCursorPropertyInterface::setPropertiesOnSelected(KoSvgTextProperties
 
 void SvgTextCursorPropertyInterface::setCharacterPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
-    d->parent->mergePropertiesIntoSelection(properties, removeProperties, false);
+    d->parent->mergePropertiesIntoSelection(properties, removeProperties, false, true);
 }
 
 bool SvgTextCursorPropertyInterface::spanSelection()

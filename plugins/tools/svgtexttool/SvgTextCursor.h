@@ -202,7 +202,7 @@ public:
     QList<KoSvgTextProperties> propertiesForRange() const;
     QList<KoSvgTextProperties> propertiesForShape() const;
 
-    void mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>(), bool paragraphOnly = false);
+    void mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>(), bool paragraphOnly = false, bool selectWord = false);
 
     /**
      * @brief removeSelection
@@ -315,7 +315,7 @@ private:
     void updateTypeSettingDecoration();
     void addCommandToUndoAdapter(KUndo2Command *cmd);
 
-    int moveModeResult(MoveMode &mode, int &pos, bool visual = false) const;
+    int moveModeResult(const MoveMode mode, int &pos, bool visual = false) const;
     bool acceptableInput(const QKeyEvent *event) const;
 
     void commitIMEPreEdit();

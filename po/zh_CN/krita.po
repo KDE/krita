@@ -8246,21 +8246,21 @@ msgstr "显示系统信息"
 #, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr ""
+msgstr "显示色彩管理信息"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
 #, kde-format
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
-msgstr ""
+msgstr "显示当前图像表面的色彩管理信息"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
 #, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr ""
+msgstr "显示用于程序缺陷报告的系统信息"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -26832,12 +26832,12 @@ msgstr "显示器 %1 (%2)："
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr ""
+msgstr "由操作系统管理的显示器色彩空间"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1181
 #, kde-format
 msgid "Enable canvas color management"
-msgstr ""
+msgstr "启用画布色彩管理"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1184
 #, kde-format
@@ -26854,27 +26854,27 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #, kde-format
 msgid "Canvas surface color space:"
-msgstr ""
+msgstr "画布表面色彩空间："
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1206
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "操作系统首选色彩空间"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1207
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rec 709 Gamma 2.2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1208
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rec 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1209
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "不进行色彩管理 (仅用于测试)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1212
 #, kde-format
@@ -26882,6 +26882,8 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>传输到窗口合成器中像素的色彩空间。除非您清楚自己在做什么，否则请使用“操作"
+"系统首选”色彩空间。</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
@@ -26889,6 +26891,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"操作系统首选色彩空间：\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -45135,7 +45139,7 @@ msgctxt ""
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
-msgstr ""
+msgstr "Krita 色彩管理信息：请将此信息粘贴到程序缺陷报告中"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format

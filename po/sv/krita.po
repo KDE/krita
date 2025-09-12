@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 01:56+0000\n"
-"PO-Revision-Date: 2025-08-29 08:14+0200\n"
+"PO-Revision-Date: 2025-09-11 21:45+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -8290,28 +8290,24 @@ msgstr "Visa systeminformation för felrapporter."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Dokumentinformation"
+msgstr "Visa färghanteringsinformation"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
 #, kde-format
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
-msgstr ""
+msgstr "Visa färghanteringsinformation för den aktuella bildens yta"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Visa systeminformation för felrapporter."
+msgstr "Visa systeminformation för felrapporter"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -27083,13 +27079,12 @@ msgstr "Skärm %1 (%2):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr ""
+msgstr "Skärmens färgrymd hanteras av operativsystemet"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1181
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Färghantering"
+msgstr "Aktivera färghantering för duken"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1184
 #, kde-format
@@ -27102,32 +27097,38 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>Att aktivera färghantering för duken skapar automatiskt en separat, "
+"inbyggd yta för duken. Det kan orsaka prestandaproblem på vissa system.</"
+"p><p>Om färghanteringen är inaktiverad återger Krita duken på huvudfönstrets "
+"yta, vilket anses vara sRGB. Det orsakar två begränsningar:<ol> "
+"<li>färgomfånget begränsas till sRGB</li> <li>färgkorrekturläget begränsas "
+"till \"använd globala visningsinställningar\", dvs. pappersvit korrektur "
+"blir omöjligt</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
-#, fuzzy, kde-format
-#| msgid "Change colorspace"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "Ändra färgrymd"
+msgstr "Färgrymd för dukens yta:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1206
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "Föredras av operativsystemet"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1207
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rek 709 Gamma 2.2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1208
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rek 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1209
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "Ohanterad (bara för testning)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1212
 #, kde-format
@@ -27135,6 +27136,8 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>Färgrymden för bildpunkterna som överförs till fönstersammansättningen. "
+"Använd \"föredragen\" rymd om du inte vet vad du gör.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
@@ -27142,6 +27145,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"Färgrymd som föredras av operativsystemet:\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -45723,17 +45728,15 @@ msgid "Krita Logcat Dump: please paste this information to the bug report"
 msgstr "Krita Logcat-dump: klistra in den här informationen i felrapporten"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with system information for bug reports"
-#| msgid ""
-#| "Krita System Information: please paste this information to the bug report"
+#, kde-format
 msgctxt ""
 "Caption of the dialog with color management information for bug reports"
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Krita systeminformation: klistra in den här informationen i felrapporten"
+"Kritas färghanteringsinformation: klistra in den här informationen i "
+"felrapporten"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format

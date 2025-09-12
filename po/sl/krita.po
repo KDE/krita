@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 01:56+0000\n"
-"PO-Revision-Date: 2025-08-30 10:08+0200\n"
+"PO-Revision-Date: 2025-09-11 00:03+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -8262,28 +8262,24 @@ msgstr "Pokaži sistemske podatke za poročila o napaki."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Podatki o dokumentu"
+msgstr "Pokaži podatke o upravljanju barv"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
 #, kde-format
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
-msgstr ""
+msgstr "Prikaz podatke o upravljanju barv za površino trenutne slike"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Pokaži sistemske podatke za poročila o napaki."
+msgstr "Pokaži sistemske podatke za poročila o napaki"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -27044,16 +27040,24 @@ msgstr "Zaslon %1 (%2):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr ""
+msgstr "Barvni prostor zaslona upravlja operacijski sistem"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1181
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Upravljanje z barvami"
+msgstr "Omogoči upravljanje barv platna"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1184
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Enabling canvas color management automatically creates a separate "
+#| "native surface for the canvas. It might cause performance issues on some "
+#| "systems.</p<p>If color management is disabled, Krita will render the "
+#| "canvas into the surface of the main window, which is considered sRGB. It "
+#| "will cause two limitations:<ol>    <li>the color gamut will be limited to "
+#| "sRGB</li>    <li>color proofing mode will be limited to \"use global "
+#| "display settings\",         i.e. paper white proofing will become "
+#| "impossible</li></ol></p>"
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
 "surface for the canvas. It might cause performance issues on some systems.</"
@@ -27063,32 +27067,38 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>Če omogočite upravljanje barv platna, samodejno ustvarite ločeno izvorno "
+"površino za platno. To lahko povzroči težave z učinkovitostjo delovanja na "
+"nekaterih sistemih.<p>Če je upravljanje barv onemogočeno, bo Krita upodobila "
+"platno na površino glavnega okna, ki se šteje za sRGB. To bo povzročilo dve "
+"omejitvi:<ol>    <li>barvna lestvica bo omejena na sRGB,</li>    <li>način "
+"preverjanja barv bo omejen na »Uporabi splošne nastavitve zaslona«, kar npr. "
+"pomeni, da bo beli preskus papirja postal nemogoč.</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
-#, fuzzy, kde-format
-#| msgid "Uncalibrated color space"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "Nekalibriran barvni prostor"
+msgstr "Barvni prostor površine platna:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1206
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "Prednostni glede na operacijski sistem"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1207
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rec 709 gama 2,2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1208
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rec 709 linearno"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1209
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "Neupravljano (samo za preskušanje)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1212
 #, kde-format
@@ -27096,6 +27106,8 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>Barvni prostor slikovnih točk, ki se prenesejo v sestavljalnik oken. "
+"Uporabite »prednostni« prostor, razen če veste, kaj počnete</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
@@ -27103,6 +27115,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"Barvni prostor, ki ga prednostno uporablja operacijski sistem:\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -45742,17 +45756,15 @@ msgstr ""
 "poročilo o napaki"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with system information for bug reports"
-#| msgid ""
-#| "Krita System Information: please paste this information to the bug report"
+#, kde-format
 msgctxt ""
 "Caption of the dialog with color management information for bug reports"
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Sistemske informacije Krita: prilepite te informacije k poročilu o napaki"
+"Podatki o upravljanju barv Krite: prilepite te informacije v poročilo o "
+"napaki"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format
@@ -66501,6 +66513,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Font Families"
-#~ msgstr "Družine pisav"

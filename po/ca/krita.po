@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 01:56+0000\n"
-"PO-Revision-Date: 2025-08-29 09:15+0200\n"
+"PO-Revision-Date: 2025-09-10 09:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8260,12 +8260,10 @@ msgstr "Mostra la informació del sistema per als informes d'error."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Informació del document"
+msgstr "Mostra la informació de gestió del color"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
@@ -8273,15 +8271,14 @@ msgstr "Informació del document"
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
 msgstr ""
+"Mostra la informació de gestió del color de la superfície de la imatge actual"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Mostra la informació del sistema per als informes d'error."
+msgstr "Mostra la informació del sistema per als informes d'error"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -27189,13 +27186,12 @@ msgstr "Pantalla %1 (%2):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr ""
+msgstr "L'espai de color de la pantalla està gestionat pel sistema operatiu"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1181
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Gestió del color"
+msgstr "Activa la gestió del color del llenç"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1184
 #, kde-format
@@ -27208,32 +27204,39 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>Activant la gestió del color del llenç crea automàticament una superfície "
+"nativa separada per al llenç. Pot causar problemes de rendiment en alguns "
+"sistemes.</p><p>Si la gestió del color està desactivada, el Krita mostrarà "
+"el llenç a la superfície de la finestra principal, la qual es considera "
+"sRGB. Provocarà dues limitacions:<ol>    <li>la gamma de color es limitarà a "
+"sRGB</li>    <li>el mode de provatura de color es limitarà a «utilitzar la "
+"configuració de visualització global\",        és a dir, la provatura de "
+"paper blanc de paper serà impossible</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
-#, fuzzy, kde-format
-#| msgid "Uncalibrated color space"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "Espai de color sense calibrar"
+msgstr "Espai de color de la superfície del llenç:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1206
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "Preferit pel sistema operatiu"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1207
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rec 709 Gamma 2.2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1208
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rec 709 Lineal"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1209
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "Sense gestionar (només proves)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1212
 #, kde-format
@@ -27241,6 +27244,8 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>Espai de color dels píxels que es transfereixen al compositor de "
+"finestres. Useu l'espai «preferit» tret que sapigueu el que esteu fent</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
@@ -27248,6 +27253,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"Espai de color preferit pel sistema operatiu:\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -45946,18 +45953,15 @@ msgstr ""
 "l'informe d'error"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with system information for bug reports"
-#| msgid ""
-#| "Krita System Information: please paste this information to the bug report"
+#, kde-format
 msgctxt ""
 "Caption of the dialog with color management information for bug reports"
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Informació del sistema per al Krita: si us plau, enganxeu aquesta informació "
-"a l'informe d'error"
+"Informació de la gestió del color del Krita: enganxeu aquesta informació a "
+"l'informe d'error"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format

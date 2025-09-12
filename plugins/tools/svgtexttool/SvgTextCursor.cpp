@@ -1975,6 +1975,11 @@ QList<KoSvgTextProperties> SvgTextCursorPropertyInterface::getSelectedProperties
 
 QList<KoSvgTextProperties> SvgTextCursorPropertyInterface::getCharacterProperties()
 {
+    // When there's only a single node, its best to only return empty properties, as paragraph properties handle that single node.
+    if (!d->parent->shape()) return QList<KoSvgTextProperties>();
+    if (d->parent->shape()->singleNode()) {
+        return {KoSvgTextProperties()};
+    }
     return d->parent->propertiesForRange();
 }
 

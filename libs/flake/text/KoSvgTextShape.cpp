@@ -1593,6 +1593,12 @@ KoSvgText::WritingMode KoSvgTextShape::writingMode() const
     return KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 }
 
+bool KoSvgTextShape::singleNode() const
+{
+    if (d->textData.empty()) return false;
+    return (KisForestDetail::size(d->textData) == 1);
+}
+
 void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
 {
     if (d->isLoading) {

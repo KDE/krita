@@ -563,6 +563,14 @@ public:
      */
     KoSvgText::WritingMode writingMode() const;
 
+    /**
+     * @brief singleNode
+     * Sometimes it is useful to know whether there's only a single text node
+     * for UX purposes.
+     * @return whether there's only a single root node, or there's a full fledged tree.
+     */
+    bool singleNode() const;
+
     /// ShapeChangeListener so we can inform any text cursors that the cursor needs updating.
     struct KRITAFLAKE_EXPORT TextCursorChangeListener : public ShapeChangeListener {
         void notifyShapeChanged(ChangeType type, KoShape *shape) override;

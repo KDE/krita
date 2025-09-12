@@ -767,7 +767,8 @@ void KoSvgTextShape::Private::relayout()
     QVector<CursorPos> cursorPos;
     for (auto chunk = textChunks.begin(); chunk != textChunks.end(); chunk++) {
         const int j = chunk->text.size();
-        for (int i = globalIndex; i < globalIndex + j; i++) {
+        chunk->associatedLeaf->finalResultIndex = (globalIndex+j);
+        for (int i = globalIndex; i < chunk->associatedLeaf->finalResultIndex; i++) {
             if (result.at(i).addressable && !result.at(i).middle) {
 
                 if (result.at(i).plaintTextIndex > -1) {
@@ -829,6 +830,7 @@ void KoSvgTextShape::Private::relayout()
             cursorPos.append(pos);
             if (!textChunks.isEmpty()) {
                 textChunks.last().associatedLeaf->associatedOutline.addRect(result.at(dummyIndex).finalTransform().mapRect(result[dummyIndex].inkBoundingBox));
+                textChunks.last().associatedLeaf->finalResultIndex = result.size();
             }
         }
     }
@@ -844,6 +846,7 @@ void KoSvgTextShape::Private::clearAssociatedOutlines()
     for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
         it->associatedOutline = QPainterPath();
         it->textDecorations.clear();
+        it->finalResultIndex = -1;
     }
 }
 
@@ -851,6 +854,8 @@ void KoSvgTextShape::Private::clearAssociatedOutlines()
  * @brief KoSvgTextShape::Private::resolveTransforms
  * This resolves transforms and applies whitespace collapse.
  */
+
+const QString bidiControls = "\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069";
 void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps) {
 
     QVector<KoSvgText::CharTransformation> local = currentTextElement->localTransformations;
@@ -867,8 +872,8 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
             if (k >= text.size()) {
                 continue;
             }
-            bool bidi = (text.at(k).unicode() >= 8234 && text.at(k).unicode() <= 8238)
-                    || (text.at(k).unicode() >= 8294 && text.at(k).unicode() <= 8297);
+
+            bool bidi = bidiControls.contains(text.at(k));
             bool softHyphen = text.at(k) == QChar::SoftHyphen;
 
             // Apparantly when there's bidi controls in the text, they participate in line-wrapping,

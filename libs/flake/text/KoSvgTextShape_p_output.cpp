@@ -174,7 +174,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         if (it.state() == KisForestDetail::Enter) {
 
             if (childCount(siblingCurrent(it)) == 0) {
-                const int j = currentIndex + it->numChars(true);
+                if (it->finalResultIndex < 0) continue;
+                const int j = it->finalResultIndex;//currentIndex + it->numChars(true);
 
                 const QRect shapeGlobalClipRect = painter.transform().mapRect(it->associatedOutline.boundingRect().adjusted(-insets.left, -insets.top, insets.right, insets.bottom)).toAlignedRect();
 
@@ -442,7 +443,8 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             if (childCount(siblingCurrent(it)) == 0) {
                 QPainterPath chunk;
 
-                const int j = currentIndex + it->numChars(true);
+                const int j = it->finalResultIndex;
+                if (j < 0 || j > result.size()) continue;
                 for (int i = currentIndex; i < j; i++) {
                     if (result.at(i).addressable && !result.at(i).hidden) {
                         const QTransform tf = result.at(i).finalTransform();
@@ -587,7 +589,9 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
 {
 
     for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
-        const int j = currentIndex + it->numChars(true);
+        const int j = it->finalResultIndex;
+        if (currentIndex > result.size()) continue;
+        if (j < 0 || j > result.size()) continue;
 
         const QRect shapeGlobalClipRect = painter.transform().mapRect(it->associatedOutline.boundingRect()).toAlignedRect();
 

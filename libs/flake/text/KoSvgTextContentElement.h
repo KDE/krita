@@ -36,6 +36,7 @@ public:
         , lengthAdjust(rhs.lengthAdjust)
         , textDecorations(rhs.textDecorations)
         , text(rhs.text)
+        , finalResultIndex(rhs.finalResultIndex)
         , associatedOutline(rhs.associatedOutline)
     {
         if (rhs.textPath) {
@@ -67,6 +68,11 @@ public:
 
     /// Plain text of the current node. Use insertText and removeText to manipulate it.
     QString text;
+
+    /// Set during layout, finalResultIndex determines the size of the iterator
+    /// on result after going over this contentElement. Once layout has been set
+    /// this is less fiddly than using numChars which requires resolving properties.
+    int finalResultIndex = -1;
 
     /// The associated outline. Currently only a bounding box.
     QPainterPath associatedOutline;

@@ -460,9 +460,9 @@ QString KoCssTextUtils::getBidiOpening(bool ltr, KoSvgText::UnicodeBidi bidi)
         if (bidi == BidiEmbed) {
             result = BIDI_CONTROL_LRE;
         } else if (bidi == BidiOverride) {
-            result = BIDI_CONTROL_LRI;
-        } else if (bidi == BidiIsolate) {
             result = BIDI_CONTROL_LRO;
+        } else if (bidi == BidiIsolate) {
+            result = BIDI_CONTROL_LRI;
         } else if (bidi == BidiIsolateOverride) {
             result = UNICODE_BIDI_ISOLATE_OVERRIDE_LR_START;
         } else if (bidi == BidiPlainText) {
@@ -472,9 +472,9 @@ QString KoCssTextUtils::getBidiOpening(bool ltr, KoSvgText::UnicodeBidi bidi)
         if (bidi == BidiEmbed) {
             result = BIDI_CONTROL_RLE;
         } else if (bidi == BidiOverride) {
-            result = BIDI_CONTROL_RLI;
-        } else if (bidi == BidiIsolate) {
             result = BIDI_CONTROL_RLO;
+        } else if (bidi == BidiIsolate) {
+            result = BIDI_CONTROL_RLI;
         } else if (bidi == BidiIsolateOverride) {
             result = UNICODE_BIDI_ISOLATE_OVERRIDE_RL_START;
         } else if (bidi == BidiPlainText) {

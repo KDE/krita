@@ -38,28 +38,14 @@ TextPropertyBase {
         function onUnicodeBidiStateChanged() {
             updateVisibility();
         }
-
-        function onSpanSelectionChanged() {
-            testEnabled();
-        }
     }
     onPropertiesChanged: {
         updateDirection();
         updateUnicodeBidi();
         updateVisibility();
-        testEnabled();
     }
     onParentPropertyTypeChanged: {
         unicodeBidiCmb.visible = parentPropertyType === TextPropertyConfigModel.Character;
-        testEnabled();
-    }
-
-    function testEnabled() {
-        if (parentPropertyType === TextPropertyConfigModel.Character) {
-            enabled = properties.spanSelection;
-        } else {
-            enabled = properties.spanSelection? false: true;
-        }
     }
 
     function updateDirection() {
@@ -111,7 +97,6 @@ TextPropertyBase {
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.directionState === KoSvgTextPropertiesModel.PropertyTriState;
-            palette: directionCmbPalette.palette;
         }
 
         SqueezedComboBox {
@@ -128,10 +113,6 @@ TextPropertyBase {
             iconSize: 16;
             onActivated: direction = currentValue;
             wheelEnabled: true;
-            Kis.ThemedControl {
-                id: directionCmbPalette;
-            }
-            palette: directionCmbPalette.palette;
         }
 
         RevertPropertyButton {
@@ -146,7 +127,6 @@ TextPropertyBase {
             Layout.fillWidth: true;
             visible: unicodeBidiCmb.visible;
             font.italic: properties.unicodeBidiState === KoSvgTextPropertiesModel.PropertyTriState;
-            palette: unicodeBidiCmbPalette.palette;
         }
 
         ComboBox {
@@ -164,11 +144,6 @@ TextPropertyBase {
             valueRole: "value";
             onActivated: unicodeBidi = currentValue;
             wheelEnabled: true;
-
-            Kis.ThemedControl {
-                id: unicodeBidiCmbPalette;
-            }
-            palette: unicodeBidiCmbPalette.palette;
         }
     }
 }

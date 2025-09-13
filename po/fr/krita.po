@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 01:56+0000\n"
-"PO-Revision-Date: 2025-08-30 20:24+0200\n"
+"PO-Revision-Date: 2025-09-11 12:22+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -8351,12 +8351,10 @@ msgstr "Afficher les informations système pour les rapports de bogues."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Informations sur le document"
+msgstr "Afficher les informations de gestion des couleurs"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
@@ -8364,15 +8362,15 @@ msgstr "Informations sur le document"
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
 msgstr ""
+"Afficher les informations de gestion des couleurs pour la surface de l'image "
+"courante"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Afficher les informations système pour les rapports de bogues."
+msgstr "Afficher les informations sur le système dans les rapports de bogues."
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -14350,7 +14348,7 @@ msgstr "Ajuster un tableau à la vue"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Ajuster à la hauteur de la vue"
+msgstr "Ajuster à la largeur de la vue"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
@@ -27295,12 +27293,12 @@ msgstr "Écran %1 (%2) :"
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr ""
+"L'espace colorimétrique de l'écran est géré par le système d'exploitation"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1181
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Gestion des couleurs"
+msgstr "Activer la gestion des couleurs du canevas"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1184
 #, kde-format
@@ -27315,30 +27313,29 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
-#, fuzzy, kde-format
-#| msgid "Change colorspace"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "Changer la palette de couleurs"
+msgstr "Espace colorimétrique pour la surface du canevas :"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1206
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "Préféré par le système d'exploitation"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1207
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rec 709 Gamma 2.2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1208
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rec 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1209
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "Non géré (Pour tests uniquement)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1212
 #, kde-format
@@ -27346,6 +27343,9 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>Espace colorimétrique des pixels qui sont transférés vers le compositeur "
+"de fenêtre. Utilisez l'espace « Préféré » à moins que vous ne sachiez ce que "
+"vous faites</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
@@ -27353,6 +27353,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"Espace colorimétrique préféré par le système d'exploitation :\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -34091,7 +34093,7 @@ msgstr "Affichage en miroir"
 #: libs/ui/kis_mirror_manager.cpp:43
 #, kde-format
 msgid "Mirror View Around Cursor"
-msgstr "Vue en miroir autour du pointure"
+msgstr "Vue en miroir autour du pointeur"
 
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
@@ -46205,18 +46207,15 @@ msgstr ""
 "rapport de bogue."
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with system information for bug reports"
-#| msgid ""
-#| "Krita System Information: please paste this information to the bug report"
+#, kde-format
 msgctxt ""
 "Caption of the dialog with color management information for bug reports"
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Informations système pour Krita : veuillez copier ces informations dans le "
-"rapport de bogue."
+"Informations sur la gestion des couleurs sous Krita : veuillez copier ces "
+"informations dans le rapport de bogue."
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format
@@ -53313,7 +53312,7 @@ msgstr ""
 "préférable pour les images « naturelles », telles que les photographies et "
 "les images avec beaucoup de dégradés et textures. </p><p><span style=\" font-"
 "size:14pt; text-decoration: underline;\">Paramètres modulaires :</span></"
-"p><p>Paramètres pour lemode modulaire - optimisé pour le contenu graphique, "
+"p><p>Paramètres pour le mode modulaire - optimisé pour le contenu graphique, "
 "les illustrations et la compression sans perte. </p><p><br/></p><p><br/></"
 "p></body></html>"
 
@@ -53697,7 +53696,7 @@ msgstr ""
 "<html><head/><body><p>Identifie les éléments répétés (Comme les caractères "
 "de texte ou les icônes) et les enregistre une fois, en les référençant "
 "ailleurs. Améliore la compression pour les illustrations numériques et les "
-"copiesd'écran.</p></body></html>"
+"copies d'écran.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514

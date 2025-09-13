@@ -26850,6 +26850,11 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>启用画布色彩管理会自动为画布创建一个单独的本地表面。这可能会在某些系统上造"
+"成性能问题。</p><p>如果禁用色彩管理，Krita 将把画布渲染到主窗口的表面，该表面"
+"被视作 sRGB 色彩空间。这会带来两个限制：<ol><li>色域将被限制为 sRGB</li><li>"
+"色彩校样模式将被限制为“使用全局显示设置”，导致无法针对纸张白点进行校样等情"
+"况。</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #, kde-format

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-31 03:36+0000\n"
-"PO-Revision-Date: 2025-07-07 09:33+0200\n"
+"PO-Revision-Date: 2025-09-11 12:22+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -14160,7 +14160,7 @@ msgstr "Ajuster un tableau à la vue"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Ajuster à la hauteur de la vue"
+msgstr "Ajuster à la largeur de la vue"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
@@ -29613,7 +29613,7 @@ msgstr "Affichage en miroir"
 #: libs/ui/kis_mirror_manager.cpp:43
 #, kde-format
 msgid "Mirror View Around Cursor"
-msgstr "Vue en miroir autour du pointure"
+msgstr "Vue en miroir autour du pointeur"
 
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
@@ -35874,7 +35874,7 @@ msgstr "Ajuster la vue"
 #: libs/widgets/KoZoomMode.cpp:15
 #, kde-format
 msgid "Fit View Width"
-msgstr "Ajuster à largeur de la vue"
+msgstr "Ajuster à la largeur de la vue"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -36211,7 +36211,7 @@ msgstr "Zoomer pour que la page occupe toute la fenêtre en largeur"
 #: libs/widgetutils/config/kstandardaction_p.h:58
 #, kde-format
 msgid "Fit to Page &Height"
-msgstr "Ajuster à la hauteur de page"
+msgstr "Ajuster à la &hauteur de page"
 
 #: libs/widgetutils/config/kstandardaction_p.h:58
 #, kde-format

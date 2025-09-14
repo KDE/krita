@@ -12001,7 +12001,7 @@ msgstr "Guarda la capa/màscara"
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
-msgstr "Guarda la capa vectorial com a SVG…"
+msgstr "Anomena i guarda la capa vectorial com a SVG…"
 
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
@@ -12011,7 +12011,7 @@ msgstr "Guarda la capa vectorial com a SVG…"
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
-msgstr "Guarda la capa vectorial com a SVG"
+msgstr "Anomeneu i guardeu la capa vectorial com a SVG"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3034

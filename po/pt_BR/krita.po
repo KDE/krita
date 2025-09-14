@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 01:56+0000\n"
-"PO-Revision-Date: 2025-09-11 07:24-0300\n"
+"PO-Revision-Date: 2025-09-13 14:33-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -13991,21 +13991,21 @@ msgstr "Mostrar Somente a Tela"
 #, kde-format
 msgctxt "action"
 msgid "F&ull Screen Mode"
-msgstr "&Modo de tela inteira"
+msgstr "&Modo de tela cheia"
 
 #. i18n: context: toolTip @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:630
 #, kde-format
 msgctxt "action"
 msgid "Display the window in full screen"
-msgstr "Mostra a janela em tela inteira"
+msgstr "Mostra a janela em tela cheia"
 
 #. i18n: context: iconText @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:631
 #, kde-format
 msgctxt "action"
 msgid "Full Screen Mode"
-msgstr "Modo de Tela Inteira"
+msgstr "Modo de tela cheia"
 
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
@@ -29407,7 +29407,7 @@ msgstr "Barras de rolagem"
 #, kde-format
 msgid "Titlebar (hiding the titlebar will make Krita go full-screen)"
 msgstr ""
-"Barra de título (ocultar a barra de título deixará o Krita em tela inteira)"
+"Barra de título (ocultar a barra de título deixará o Krita em tela cheia)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkStatusbar)
 #: libs/ui/forms/wdgfullscreensettings.ui:70

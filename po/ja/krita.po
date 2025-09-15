@@ -9,6 +9,7 @@
 # bbch <suzihi248@ruru.be>, 2020, 2022.
 # Shizuku Hagoromo <Lemonade.flash.1164@gmail.com>, 2023.
 # Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022, 2023, 2024.
+# Jun Shiozawa <haresecret@gmail.com>, 2025.
 # --- kritalibs
 # Translation of koffice into Japanese.
 # This file is distributed under the same license as the koffice package.
@@ -35,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-31 03:36+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
-"Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
+"Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -4028,7 +4029,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-2_Fineliner.kpp"
 msgid "d) Ink-2 Fineliner"
-msgstr "d) インク-2 サインペン"
+msgstr "d) インク-2 ロットリング"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -20500,11 +20501,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "ファイルを上書きしますか？"
+msgstr "ビデオを上書きしますか？"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20514,6 +20513,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"ビデオの出力先に既にファイルが存在します [%1]... \n"
+"                                                              既存のファイル"
+"を上書きしますか？"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -36079,10 +36081,9 @@ msgid "About &KDE"
 msgstr "KDE について(&K)"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "単位:"
+msgstr "単位"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -38082,8 +38083,7 @@ msgid "Bluer/Yellower: "
 msgstr "青みを増す/黄みを増す: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "リセット"
@@ -60639,29 +60639,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html>KDE ソフトウェアは今までも、そしてこれからも無償で配布されますが、そ"
-#~ "の開発には費用がかかります。<br /><br />開発支援のため、KDE コミュニティ"
-#~ "は KDE e.V というドイツで法律に基づき設立された非営利組織を結成していま"
-#~ "す。KDE e.V についての詳しい情報は<a href=\"%1\">%1</a>をご覧ください<br /"
-#~ "><br />KDE は資金的なものも含めた様々な種類の貢献から利益を得ています。"
-#~ "KDE はそれによって得られた資金を KDE のメンバーやその他の人々が KDE に貢献"
-#~ "する際に支払った費用の払い戻しに使っています。その他の資金は法的支援や会議"
-#~ "を行うのに使われています。<br /> <br /><a href=\"%2\">%2</a>で説明されてい"
-#~ "る方法を使って我々の成果を寄付によって皆さんが支援していただけたなら我々は"
-#~ "嬉しく思います。<br /><br />いささか早とちりではありますが皆さんの支援に感"
-#~ "謝します。</html>"

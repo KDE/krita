@@ -440,19 +440,21 @@ public:
 
     Private() = default;
 
+    enum InternalShapeState {
+        Decorative,
+        ShapeInside,
+        ShapeSubtract,
+        TextPath
+    };
+
     Private(const Private &rhs)
         : textData(rhs.textData) {
-        Q_FOREACH (KoShape *shape, rhs.shapesInside) {
+
+        Q_FOREACH (KoShape *shape, rhs.internalShapes.keys()) {
             KoShape *clonedShape = shape->cloneShape();
             KIS_ASSERT_RECOVER(clonedShape) { continue; }
 
-            shapesInside.append(clonedShape);
-        }
-        Q_FOREACH (KoShape *shape, rhs.shapesSubtract) {
-            KoShape *clonedShape = shape->cloneShape();
-            KIS_ASSERT_RECOVER(clonedShape) { continue; }
-
-            shapesSubtract.append(clonedShape);
+            internalShapes.insert(clonedShape, rhs.internalShapes.value(shape));
         }
         yRes = rhs.yRes;
         xRes = rhs.xRes;
@@ -470,14 +472,34 @@ public:
     }
 
     ~Private() {
-        qDeleteAll(shapesInside);
-        qDeleteAll(shapesSubtract);
+        QList<KoShape*> internalShapeList = internalShapes.keys();
+        internalShapes.clear();
+        qDeleteAll(internalShapeList);
     }
 
     int xRes = 72;
     int yRes = 72;
-    QList<KoShape*> shapesInside;
-    QList<KoShape*> shapesSubtract;
+
+    QMap<KoShape*, InternalShapeState> internalShapes;
+
+    QList<KoShape*> shapesInside() {
+        QList<KoShape*> shapes;
+        Q_FOREACH(KoShape *shape, internalShapes.keys()) {
+            if (internalShapes.value(shape) == InternalShapeState::ShapeInside) {
+                shapes.append(shape);
+            }
+        }
+        return shapes;
+    }
+    QList<KoShape*> shapesSubtract() {
+        QList<KoShape*> shapes;
+        Q_FOREACH(KoShape *shape, internalShapes.keys()) {
+            if (internalShapes.value(shape) == InternalShapeState::ShapeSubtract) {
+                shapes.append(shape);
+            }
+        }
+        return shapes;
+    }
 
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.

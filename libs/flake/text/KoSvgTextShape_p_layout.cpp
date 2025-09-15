@@ -241,7 +241,7 @@ void KoSvgTextShape::Private::relayout()
     // to consider it anything but required to have both shaping and bidi-reorder break.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
     globalIndex = 0;
-    bool wrapped = !(inlineSize.isAuto && this->shapesInside.isEmpty());
+    bool wrapped = !(inlineSize.isAuto && this->shapesInside().isEmpty());
     if (!resolvedTransforms.isEmpty()) {
         resolvedTransforms[0].xPos = 0;
         resolvedTransforms[0].yPos = 0;
@@ -644,8 +644,8 @@ void KoSvgTextShape::Private::relayout()
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
-    if (!this->shapesInside.isEmpty()) {
-        QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, rootProperties);
+    if (!this->shapesInside().isEmpty()) {
+        QList<QPainterPath> shapes = getShapes(this->shapesInside(), this->shapesSubtract(), rootProperties);
         this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos, resHandler);
     } else {
         this->lineBoxes = breakLines(rootProperties, logicalToVisual, result, startPos, resHandler);
@@ -655,7 +655,7 @@ void KoSvgTextShape::Private::relayout()
     globalIndex = 0;
     this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal, KoSvgTextProperties::defaultProperties());
 
-    if (inlineSize.isAuto && this->shapesInside.isEmpty()) {
+    if (inlineSize.isAuto && this->shapesInside().isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
         debugFlake << "4. Adjust positions: dx, dy";
         // 4. Adjust positions: dx, dy

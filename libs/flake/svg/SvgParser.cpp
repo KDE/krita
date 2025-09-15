@@ -2273,6 +2273,7 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
             const QTransform absTf = s->absoluteTransformation();
             KoShape *cloned = s->cloneShape();
             cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+            if (cloned) cloned->setVisible(false);
             return cloned;
         }
     } else if (value.startsWith("circle(")) {
@@ -2315,7 +2316,9 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
     }
 
     el.setAttribute("fill-rule", fillRule);
-    return createShapeFromElement(el, context);
+    KoShape *shape = createShapeFromElement(el, context);
+    if (shape) shape->setVisible(false);
+    return shape;
 }
 
 QList<KoShape *> SvgParser::createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)

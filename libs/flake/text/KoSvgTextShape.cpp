@@ -163,7 +163,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
     KoShape::shapeChanged(type, shape);
 
-    if ((d->shapesInside.contains(shape) || d->shapesSubtract.contains(shape))
+    if ((d->internalShapes.contains(shape))
             && (type == PositionChanged
                 || type == RotationChanged
                 || type == ScaleChanged
@@ -1015,7 +1015,7 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
     bool changed = false;
     int currentIndex = 0;
     KoSvgText::AutoValue inlineSize = d->textData.childBegin()->properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
-    bool isWrapping = !d->shapesInside.isEmpty() || !inlineSize.isAuto;
+    bool isWrapping = !d->shapesInside().isEmpty() || !inlineSize.isAuto;
     for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
         if (KoSvgTextShape::Private::childCount(siblingCurrent(it)) > 0) {
             continue;
@@ -1784,6 +1784,23 @@ bool KoSvgTextShape::fontMatchingDisabled() const
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
+    if (!d->internalShapes.isEmpty()) {
+        Q_FOREACH (KoShape* shape, d->internalShapes.keys()) {
+            if (!shape->isVisible(false)) continue;
+            painter.save();
+            painter.setTransform(shape->transformation() * painter.transform());
+            Q_FOREACH(const KoShape::PaintOrder p, shape->paintOrder()) {
+                if (p == KoShape::Fill) {
+                    shape->paint(painter);
+                } else if (p == KoShape::Stroke) {
+                    shape->paintStroke(painter);
+                } else if (p == KoShape::Markers)  {
+                    shape->paintMarkers(painter);
+                }
+            }
+            painter.restore();
+        }
+    }
     KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(textProperties().propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
     if (textRendering == KoSvgText::RenderingOptimizeSpeed || !painter.testRenderHint(QPainter::Antialiasing)) {
         // also apply antialiasing only if antialiasing is active on provided target QPainter
@@ -1816,9 +1833,9 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 
 QPainterPath KoSvgTextShape::outline() const {
     QPainterPath result;
-    if (!d->shapesInside.isEmpty()) {
+    if (!d->internalShapes.isEmpty()) {
         //TODO: what about shape subtract?
-        Q_FOREACH(KoShape *shape, d->shapesInside) {
+        Q_FOREACH(KoShape *shape, d->internalShapes.keys()) {
             result.addPath(shape->transformation().map(shape->outline()));
         }
     } else {
@@ -1840,31 +1857,36 @@ QRectF KoSvgTextShape::outlineRect() const
 QRectF KoSvgTextShape::boundingRect() const
 {
     QRectF result;
-    QList<KoShapeStrokeModelSP> parentStrokes;
-    for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
-        if (it.state() == KisForestDetail::Enter) {
-            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-                parentStrokes.append(it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property);
-            }
-        } else {
-            KoShapeStrokeModelSP stroke = parentStrokes.size() > 0? parentStrokes.last(): nullptr;
-            QRectF bb = it->associatedOutline.boundingRect();
-            QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
-            for (int i = 0; i < decorations.values().size(); ++i) {
-                bb |= decorations.values().at(i).boundingRect();
-            }
-            if (!bb.isEmpty()) {
-                if (stroke) {
-                    KoInsets insets;
-                    stroke->strokeInsets(this, insets);
-                    result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
-                } else {
-                    result |= bb;
+    if (!d->internalShapes.isEmpty()) {
+        //TODO: what about invisible shapes?
+        result = KoShape::boundingRect(d->internalShapes.keys());
+    } else {
+        QList<KoShapeStrokeModelSP> parentStrokes;
+        for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
+            if (it.state() == KisForestDetail::Enter) {
+                if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                    parentStrokes.append(it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property);
                 }
-            }
-            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-                // reset stroke to use parent stroke.
-                parentStrokes.pop_back();
+            } else {
+                KoShapeStrokeModelSP stroke = parentStrokes.size() > 0? parentStrokes.last(): nullptr;
+                QRectF bb = it->associatedOutline.boundingRect();
+                QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
+                for (int i = 0; i < decorations.values().size(); ++i) {
+                    bb |= decorations.values().at(i).boundingRect();
+                }
+                if (!bb.isEmpty()) {
+                    if (stroke) {
+                        KoInsets insets;
+                        stroke->strokeInsets(this, insets);
+                        result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+                    } else {
+                        result |= bb;
+                    }
+                }
+                if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                    // reset stroke to use parent stroke.
+                    parentStrokes.pop_back();
+                }
             }
         }
     }
@@ -1886,11 +1908,8 @@ void KoSvgTextShape::setSize(const QSizeF &size)
     const qreal scaleX = size.width() / oldSize.width();
     const qreal scaleY = size.height() / oldSize.height();
 
-    if (!d->shapesInside.isEmpty()) {
-        Q_FOREACH(KoShape *shape, d->shapesInside) {
-            KoFlake::resizeShapeCommon(shape, scaleX, scaleY, shape->boundingRect().topLeft() - oRect.topLeft(), false, false, this->transformation());
-        }
-        Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+    if (!d->internalShapes.isEmpty()) {
+        Q_FOREACH(KoShape *shape, d->internalShapes.keys()) {
             KoFlake::resizeShapeCommon(shape, scaleX, scaleY, shape->boundingRect().topLeft() - oRect.topLeft(), false, false, this->transformation());
         }
     } else {
@@ -1900,7 +1919,6 @@ void KoSvgTextShape::setSize(const QSizeF &size)
         notifyChanged();
         shapeChangedPriv(ScaleChanged);
     }
-
 }
 
 void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements) const
@@ -1914,12 +1932,12 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
         }
 
         //Debug shape outlines.
-        Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
+        Q_FOREACH (KoShape *shapeInside, d->shapesInside()) {
             QPainterPath p = shapeInside->outline();
             p = shapeInside->transformation().map(p);
             painter.strokePath(p, QPen(Qt::green));
         }
-        Q_FOREACH (KoShape *shapeInside, d->shapesSubtract) {
+        Q_FOREACH (KoShape *shapeInside, d->shapesSubtract()) {
             QPainterPath p = shapeInside->outline();
             p = shapeInside->transformation().map(p);
             painter.strokePath(p, QPen(Qt::red));
@@ -1991,11 +2009,14 @@ KoSvgTextShape::TextType KoSvgTextShape::textType() const
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
 {
-    Q_FOREACH(KoShape *shape, d->shapesInside) {
-        shape->removeDependee(this);
+    Q_FOREACH(KoShape *shape, d->internalShapes.keys()) {
+        if (d->internalShapes.value(shape) == KoSvgTextShape::Private::InternalShapeState::ShapeInside) {
+            shape->removeDependee(this);
+            d->internalShapes.remove(shape);
+        }
     }
-    d->shapesInside = shapesInside;
-    Q_FOREACH(KoShape *shape, d->shapesInside) {
+    Q_FOREACH(KoShape *shape, shapesInside) {
+        d->internalShapes.insert(shape, KoSvgTextShape::Private::InternalShapeState::ShapeInside);
         shape->addDependee(this);
     }
     shapeChangedPriv(ContentChanged);
@@ -2003,16 +2024,19 @@ void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const
 {
-    return d->shapesInside;
+    return d->shapesInside();
 }
 
 void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 {
-    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
-        shape->removeDependee(this);
+    Q_FOREACH(KoShape *shape, d->internalShapes.keys()) {
+        if (d->internalShapes.value(shape) == KoSvgTextShape::Private::InternalShapeState::ShapeSubtract) {
+            shape->removeDependee(this);
+            d->internalShapes.remove(shape);
+        }
     }
-    d->shapesSubtract = shapesSubtract;
-    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+    Q_FOREACH(KoShape *shape, shapesSubtract) {
+        d->internalShapes.insert(shape, KoSvgTextShape::Private::InternalShapeState::ShapeSubtract);
         shape->addDependee(this);
     }
     shapeChangedPriv(ContentChanged);
@@ -2020,23 +2044,23 @@ void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const
 {
-    return d->shapesSubtract;
+    return d->shapesSubtract();
 }
 
 QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext &context) const
 {
     QMap<QString, QString> map = this->textProperties().convertParagraphProperties();
-    if (!d->shapesInside.isEmpty()) {
+    if (!d->shapesInside().isEmpty()) {
         QStringList shapesInsideList;
-        Q_FOREACH(KoShape* shape, d->shapesInside) {
+        Q_FOREACH(KoShape* shape, d->shapesInside()) {
             QString id = SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-inside", shapesInsideList.join(" "));
     }
-    if (!d->shapesSubtract.isEmpty()) {
+    if (!d->shapesSubtract().isEmpty()) {
         QStringList shapesInsideList;
-        Q_FOREACH(KoShape* shape, d->shapesSubtract) {
+        Q_FOREACH(KoShape* shape, d->shapesSubtract()) {
             QString id = SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 01:56+0000\n"
-"PO-Revision-Date: 2025-09-13 14:33-0300\n"
+"PO-Revision-Date: 2025-09-14 15:39-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -9827,7 +9827,7 @@ msgstr "Ruído aleatório"
 #, kde-format
 msgctxt "action"
 msgid "Colo&r Balance..."
-msgstr "Balanceamento de co&r..."
+msgstr "Balanço de co&r..."
 
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
@@ -9837,7 +9837,7 @@ msgstr "Balanceamento de co&r..."
 #, kde-format
 msgctxt "action"
 msgid "Color Balance"
-msgstr "Balanceamento de cor"
+msgstr "Balanço de cor"
 
 #. i18n: context: text @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1342
@@ -38034,15 +38034,15 @@ msgstr ""
 "O <b>L</b> significa Lightness, os componentes <b>a</b> e <b>b</b> "
 "representam os canais de cores. <br/>L*a*b é um modelo especial para a "
 "correção de cores. Baseia-se na percepção humana, o que significa que tenta "
-"codificar as diferenças de luminosidade, balanceamento vermelho-verde e "
-"balanceamento amarelo-azul. Isso torna-se útil para a correção de cores, mas "
-"a grande maioria das fórmulas matemáticas de cores nos modos de mistura "
-"<b>não</b> funcionam como esperado.<br/>De forma semelhante, o Krita não "
-"oferece suporte para HDR no LAB, o que significa que as imagens HDR "
-"convertidas para LAB perdem a informação das cores. Esse espaço de cor "
-"<b>não</b> é recomendado para pinturas, nem para exportação, mas é melhor "
-"como um espaço para fazer algum pós-processamento. A TRC (Tone Response "
-"Curve) assume-se como sendo a do L*."
+"codificar as diferenças de luminosidade, balanço de vermelho-verde e balanço "
+"de amarelo-azul. Isso torna-se útil para a correção de cores, mas a grande "
+"maioria das fórmulas matemáticas de cores nos modos de mistura <b>não</b> "
+"funcionam como esperado.<br/>De forma semelhante, o Krita não oferece "
+"suporte para HDR no LAB, o que significa que as imagens HDR convertidas para "
+"LAB perdem a informação das cores. Esse espaço de cor <b>não</b> é "
+"recomendado para pinturas, nem para exportação, mas é melhor como um espaço "
+"para fazer algum pós-processamento. A TRC (Tone Response Curve) assume-se "
+"como sendo a do L*."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
 #, kde-format
@@ -38060,10 +38060,10 @@ msgstr ""
 "Chroma, Red Chroma ou Luminosidade, Croma Azul, Croma Vermelho, em "
 "português), é um modelo projetado para codificação de vídeo. Ele é baseado "
 "na percepção humana, o que significa que tenta codificar a diferença de "
-"luminosidade, no balanceamento entre verde-vermelho e amarelo-azul. O croma, "
-"neste caso, é apenas uma palavra que corresponde a um tipo especial de "
-"saturação, sendo nestes casos a saturação de Vermelho e Azul, dos quais as "
-"versões não-saturadas correspondem ao Verde e ao Amarelo, respectivamente."
+"luminosidade, no balanço entre verde-vermelho e amarelo-azul. O croma, neste "
+"caso, é apenas uma palavra que corresponde a um tipo especial de saturação, "
+"sendo nestes casos a saturação de Vermelho e Azul, dos quais as versões não-"
+"saturadas correspondem ao Verde e ao Amarelo, respectivamente."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
 #, kde-format
@@ -38349,7 +38349,7 @@ msgstr ""
 "incluir todas as cores imprimíveis e a maioria das cores do mundo real. "
 "Inclui algumas cores imaginárias e exclui alguns dos tons de azul e violeta "
 "que podem ser capturados pelas câmeras digitais. Também exclui alguns tons "
-"de amarelo muito saturados 'capturados pela câmara', da forma como são "
+"de amarelo muito saturados 'capturados pela câmera', da forma como são "
 "interpretados por alguns (provavelmente muitos) perfis de entrada matriciais "
 "das câmaras.<p>As cores primárias do ProPhotoRGB estão codificadas de forma "
 "fixa nos produtos da Adobe, como o Lightroom e o Dng-DCP, como 'perfis' de "
@@ -47076,7 +47076,7 @@ msgstr "Forte"
 #, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "White &balance:"
-msgstr "Balanceamento de &branco:"
+msgstr "Balanço de &branco:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editWhiteBalance)
 #: plugins/extensions/metadataeditor/editors/exif.ui:787
@@ -48716,7 +48716,7 @@ msgstr "Inclinação, Deslocamento, Força (ASC-CDL)"
 #: plugins/filters/asccdl/wdg_asccdl.ui:42
 #, kde-format
 msgid "ASC-CDL  color balance"
-msgstr "Balanceamento de cor (ASC-CDL)"
+msgstr "Balanço de cor (ASC-CDL)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPower)
 #: plugins/filters/asccdl/wdg_asccdl.ui:56
@@ -49030,12 +49030,12 @@ msgstr "Contraste automático"
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
 msgid "&Color Balance..."
-msgstr "Balanceamento de &cor..."
+msgstr "Balanço de &cor..."
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.h:39
 #, kde-format
 msgid "Color Balance"
-msgstr "Balanceamento de cor"
+msgstr "Balanço de cor"
 
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:326
 #, kde-format
@@ -54957,15 +54957,15 @@ msgid ""
 "averaging the entire image.</li><li><emphasis strong='true'>Manual</"
 "emphasis>: Set a custom temperature and green level values.</li></ul></p>"
 msgstr ""
-"<title>Balanceamento de branco</title><p>Configure o balanceamento de branco "
-"puro:</p><p><ul><li><emphasis strong='true'>D65 padrão</emphasis>: Usa um "
-"balanceamento de branco padrão da luz do dia D65.</li><li><emphasis "
-"strong='true'>Câmera</emphasis>: Usa o balanceamento de branco especificado "
-"pela câmera. Se não estiver disponível, reverte para o balanceamento de "
-"branco neutro padrão.</li><li><emphasis strong='true'>Automático</emphasis>: "
-"Calcula um balanceamento de branco automático que faz a média da imagem "
-"inteira.</li><li><emphasis strong='true'>Manual</emphasis>: Define uma "
-"temperatura e valores dos níveis de verde personalizados.</li></ul></p>"
+"<title>Balanço de branco</title><p>Configure o balanço de branco puro:</"
+"p><p><ul><li><emphasis strong='true'>D65 padrão</emphasis>: Usa um balanço "
+"de branco padrão da luz do dia D65.</li><li><emphasis strong='true'>Câmera</"
+"emphasis>: Usa o balanço de branco especificado pela câmera. Se não estiver "
+"disponível, reverte para o balanço de branco neutro padrão.</"
+"li><li><emphasis strong='true'>Automático</emphasis>: Calcula um balanço de "
+"branco automático que faz a média da imagem inteira.</li><li><emphasis "
+"strong='true'>Manual</emphasis>: Define uma temperatura e valores dos níveis "
+"de verde personalizados.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:482
 #, kde-format
@@ -55221,7 +55221,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
-msgstr "Balanceamento de branco"
+msgstr "Balanço de branco"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:631
 #, kde-format

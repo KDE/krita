@@ -111,7 +111,7 @@ void KisPaintingAssistantsDecoration::raiseAssistant(KisPaintingAssistantSP assi
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
     assistants.removeOne(assistant);
 
-    if(!assistant) return;
+    if (!assistant) return;
     assistants.append(assistant);
 
     view()->document()->setAssistants(assistants);

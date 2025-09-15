@@ -364,14 +364,14 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         QPointF actionsBGRectangle(actionsPosition + QPointF(globalEditorWidgetData.widgetOffset,globalEditorWidgetData.widgetOffset));
         QRectF editorWidget = QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), globalEditorWidgetData.boundingSize.width(), globalEditorWidgetData.boundingSize.height());
         // add all assistants that intersect the mouse to a list.
-        if(editorWidget.contains(uiMousePosition)){
+        if (editorWidget.contains(uiMousePosition)) {
             assistantsPressed.push_back(assistant);
         }
      
     }
     
     // get assistant pressed...
-    if(!assistantsPressed.isEmpty()){
+    if (!assistantsPressed.isEmpty()) {
         // get closest assistant
         KisPaintingAssistantSP assistant = assistantsPressed.last();
         // move assistant to front of assistants list.
@@ -743,7 +743,7 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
         assistantDuplicatingFlag = false;
             
         // offset control widget if user simple click-releases duplication button
-        if(m_dragEnd == m_dragStart){
+        if (m_dragEnd == m_dragStart) {
             // calculate offset independent from canvas resolution and zoom
             const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
             // create offset unit, considering canvas resolution

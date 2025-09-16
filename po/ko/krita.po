@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-11 01:56+0000\n"
+"POT-Creation-Date: 2025-09-16 02:04+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -21675,7 +21675,7 @@ msgstr "크기"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1699
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1710
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -22001,7 +22001,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1>(임베드됨)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:533
+#: libs/ui/dialogs/kis_dlg_preferences.cc:539
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -24588,7 +24588,7 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:992
+#: libs/ui/dialogs/kis_dlg_preferences.cc:998
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
@@ -24612,8 +24612,8 @@ msgstr "로컬 리소스"
 #: libs/ui/KisWelcomePageWidget.cpp:739 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1582
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -24884,8 +24884,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2066
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2070
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25739,7 +25739,7 @@ msgstr ""
 "50 fps로 지정합니다.</p></body></html>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2079
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2090
 #, kde-format
 msgid "Warning(s):"
 msgstr "경고:"
@@ -26745,8 +26745,8 @@ msgstr "마스터 디스플레이:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2365
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2367
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -26847,8 +26847,8 @@ msgstr "비디오 애니메이션 가져오기"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2335
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2346
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2348
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27693,7 +27693,7 @@ msgid "Set color used for warning"
 msgstr "경고에 사용할 색상 설정"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1254
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1265
 #, fuzzy, kde-format
 #| msgid "Perceptual"
 msgctxt "Color conversion intent"
@@ -27701,7 +27701,7 @@ msgid "Perceptual"
 msgstr "인식"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1255
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1266
 #, fuzzy, kde-format
 #| msgid "Relative Colorimetric"
 msgctxt "Color conversion intent"
@@ -27709,7 +27709,7 @@ msgid "Relative Colorimetric"
 msgstr "상대적 색도계"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1267
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "Color conversion intent"
@@ -27717,7 +27717,7 @@ msgid "Saturation"
 msgstr "채도"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1257
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1268
 #, fuzzy, kde-format
 #| msgid "Absolute Colorimetric"
 msgctxt "Color conversion intent"
@@ -27725,7 +27725,7 @@ msgid "Absolute Colorimetric"
 msgstr "절대적 색도계"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1260
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1271
 #, fuzzy, kde-format
 #| msgid "Dynamics settings"
 msgctxt "Display Mode"
@@ -27733,14 +27733,14 @@ msgid "Use global display settings"
 msgstr "다이나믹 설정"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1261
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1272
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1262
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1273
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Display Mode"
@@ -27829,12 +27829,12 @@ msgstr "레이어 속성"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1612
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1616
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1620
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1705
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2130
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2188 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1623
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1627
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1631
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1716
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2199 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27996,17 +27996,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "(다중 선택)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "No Cursor"
 msgstr "커서 없음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #, kde-format
 msgid "Tool Icon"
 msgstr "도구 아이콘"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -28015,134 +28015,161 @@ msgstr "도구 아이콘"
 msgid "Arrow"
 msgstr "화살표"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
 msgid "Small Circle"
 msgstr "작은 원"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "십자선"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "삼각형(오른손)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "삼각형(왼손)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "Black Pixel"
 msgstr "검정 픽셀"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:225
 #, kde-format
 msgid "White Pixel"
 msgstr "흰색 픽셀"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "외곽선 사용 안 함"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Circle Outline"
 msgstr "원 외곽선"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "Preview Outline"
 msgstr "미리 보기 외곽선"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:231
 #, kde-format
 msgid "Tilt Outline"
 msgstr "기울기 외곽선"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:254
+#: libs/ui/dialogs/kis_dlg_preferences.cc:255
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "지우개"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:328
+#, fuzzy, kde-format
+#| msgid "Cut Off Disabled"
+msgctxt "touch painting"
+msgid "Auto (Disabled)"
+msgstr "차단 비활성화"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:329
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgctxt "touch painting"
+msgid "Auto (Enabled)"
+msgstr "활성화"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:330
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgctxt "touch painting"
+msgid "Enabled"
+msgstr "활성화"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:331
+#, fuzzy, kde-format
+msgctxt "touch painting"
+msgid "Disabled"
+msgstr "사용 안 함"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:343
 #, kde-format
 msgid "On Touch Drag"
 msgstr "터치 드래그"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:338
+#: libs/ui/dialogs/kis_dlg_preferences.cc:344
 #, kde-format
 msgid "On Click Drag"
 msgstr "클릭 드래그"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:339
+#: libs/ui/dialogs/kis_dlg_preferences.cc:345
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "마우스 가운데 단추를 클릭하면서 드래그"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:389
+#: libs/ui/dialogs/kis_dlg_preferences.cc:395
 #, fuzzy, kde-format
 #| msgid "All supported formats"
 msgid "All Supported Files"
 msgstr "모든 지원하는 형식"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:424
+#: libs/ui/dialogs/kis_dlg_preferences.cc:430
 #, kde-format
 msgid "Open default window"
 msgstr "기본 창 열기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:425
+#: libs/ui/dialogs/kis_dlg_preferences.cc:431
 #, kde-format
 msgid "Load previous session"
 msgstr "이전 세션 불러오기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:426
+#: libs/ui/dialogs/kis_dlg_preferences.cc:432
 #, kde-format
 msgid "Show session manager"
 msgstr "세션 관리자 표시"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:498
+#: libs/ui/dialogs/kis_dlg_preferences.cc:504
 #, fuzzy, kde-format
 #| msgid "Note: Krita will need to be restarted for changes to take effect"
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "참고: 변경 사항을 적용하려면 Krita를 다시 시작해야 합니다"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:504
+#: libs/ui/dialogs/kis_dlg_preferences.cc:510
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:536
+#: libs/ui/dialogs/kis_dlg_preferences.cc:542
 #, fuzzy, kde-format
 #| msgid "Internal error"
 msgid "Internal Storage"
 msgstr "내부 오류"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:538
+#: libs/ui/dialogs/kis_dlg_preferences.cc:544
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:576
+#: libs/ui/dialogs/kis_dlg_preferences.cc:582
 #, fuzzy, kde-format
 #| msgid "User Manual"
 msgid "Choose Manually"
 msgstr "사용자 설명서"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:641
+#: libs/ui/dialogs/kis_dlg_preferences.cc:647
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -28157,27 +28184,27 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:980
+#: libs/ui/dialogs/kis_dlg_preferences.cc:986
 #, kde-format
 msgid "Select a Background Image"
 msgstr "배경 이미지 선택"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:992
+#: libs/ui/dialogs/kis_dlg_preferences.cc:998
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1은(는) 올바른 이미지 파일이 아닙니다!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1012
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1018
 #, fuzzy, kde-format
 #| msgid "2. The resource location at %1 is not writable."
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "2. 리소스 위치 %1에 쓸 수 없습니다."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1146
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1345
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1356
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -28185,18 +28212,18 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "화면 %1(%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1174
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1185
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1181
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1192
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Enable canvas color management"
 msgstr "색 관리"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1184
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1195
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -28208,59 +28235,59 @@ msgid ""
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1214
 #, fuzzy, kde-format
 #| msgid "Uncalibrated color space"
 msgid "Canvas surface color space:"
 msgstr "교정되지 않은 색 공간"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1206
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
 msgid "Preferred by operating system"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1207
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1219
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1220
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1223
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1229
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1303
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1314
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "색 프로필 설치"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1537
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1540
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1551
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -28269,7 +28296,7 @@ msgstr ""
 "브러시 속도에 태블릿 드라이버 타임스탬프 사용(WinTab 태블릿 API 사용 시 아티"
 "팩트가 발생할 수 있음)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1542
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1553
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "브러시 속도에 태블릿 드라이버 타임스탬프 사용"
@@ -28277,7 +28304,7 @@ msgstr "브러시 속도에 태블릿 드라이버 타임스탬프 사용"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1552
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1563
 #, fuzzy, kde-format
 #| msgid "Maximum brush size:"
 msgid "Maximum brush speed: {n} px/ms"
@@ -28287,7 +28314,7 @@ msgstr[0] "최대 브러시 크기:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1561
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1572
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Brush Smoothing: Disabled"
@@ -28295,7 +28322,7 @@ msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "손떨림 보정: 사용 안 함"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1568
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1579
 #, fuzzy, kde-format
 #| msgctxt "Context: dynamic sensors"
 #| msgid "Tilt direction"
@@ -28303,13 +28330,13 @@ msgid "Pen tilt direction offset: "
 msgstr "기울기 방향"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1666
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1677
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1687
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1698
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -28318,30 +28345,30 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "초"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1690
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1701
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "소프트웨어 렌더러(매우 느림)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1945
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11(ANGLE 사용)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
 #, fuzzy, kde-format
 #| msgctxt "canvas renderer"
 #| msgid "OpenGL ES"
@@ -28349,159 +28376,159 @@ msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1944
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1955
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1964
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1975
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "자동(%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2041
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2052
 #, kde-format
 msgid "Display Id: %1"
 msgstr "디스플레이 ID: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2042
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2053
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "디스플레이 이름: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2043
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2054
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "최소 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2044
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "최대 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2045
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "최대 풀 프레임 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "기본 빨간색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2047
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2058
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "기본 녹색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2048
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "기본 파란색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2049
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "백색 점: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
 #, fuzzy, kde-format
 #| msgid "WARNING: current display doesn't support HDR rendering"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "경고: 현재 디스플레이에서 HDR 렌더링을 지원하지 않음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2328
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2339
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2345
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2356
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2347
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2358
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2357
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2368
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "캔버스 입력 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2358
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2369
 #, kde-format
 msgid "Canvas Input"
 msgstr "캔버스 입력"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2386
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "색 관리"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "색상"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2387
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2396
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2398
 #, kde-format
 msgid "Performance"
 msgstr "성능"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2395
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2406
 #, kde-format
 msgid "Tablet settings"
 msgstr "태블릿 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2397
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2408
 #, kde-format
 msgid "Tablet"
 msgstr "태블릿"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2405
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2416
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "캔버스만 보기 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2407
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2418
 #, kde-format
 msgid "Canvas-only"
 msgstr "캔버스만 보기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2417
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2426
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2428
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "팝업 팔레트"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2425
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2436
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2427
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2438
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2445
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -30280,7 +30307,7 @@ msgstr "전체 불투명도:"
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:513
-#: libs/ui/forms/wdggeneralsettings.ui:1185
+#: libs/ui/forms/wdggeneralsettings.ui:1188
 #, kde-format
 msgid "Miscellaneous"
 msgstr "기타"
@@ -30839,7 +30866,7 @@ msgstr "(Hi-DPI)실수배 크기 조정 배율 사용"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:598
-#: libs/ui/forms/wdggeneralsettings.ui:1622
+#: libs/ui/forms/wdggeneralsettings.ui:1625
 #, fuzzy, kde-format
 #| msgid "(Needs restart)"
 msgid "(needs restart)"
@@ -30998,10 +31025,11 @@ msgstr "Hard(Krita 4.1 및 이전 버전)"
 msgid "Switch Control/Alt Selection Modifiers"
 msgstr "Ctrl/Alt 키로 선택 모드 전환"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
+#. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, kde-format
-msgid "Enable Touch Painting"
+#, fuzzy, kde-format
+#| msgid "Enable Touch Painting"
+msgid "Touch Painting:"
 msgstr "터치 페인팅 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
@@ -31060,20 +31088,20 @@ msgid "Enable Selection Actions Bar"
 msgstr "선택 작업"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1057
+#: libs/ui/forms/wdggeneralsettings.ui:1060
 #, kde-format
 msgid "Animation"
 msgstr "애니메이션"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
-#: libs/ui/forms/wdggeneralsettings.ui:1063
+#: libs/ui/forms/wdggeneralsettings.ui:1066
 #, fuzzy, kde-format
 #| msgid "Animation settings menu"
 msgid "Animation Settings"
 msgstr "애니메이션 설정 메뉴"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1069
+#: libs/ui/forms/wdggeneralsettings.ui:1072
 #, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
@@ -31083,13 +31111,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1072
+#: libs/ui/forms/wdggeneralsettings.ui:1075
 #, kde-format
 msgid "Automatically pin new layers to timeline"
 msgstr "자동으로 새 레이어를 타임라인에 고정"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1079
+#: libs/ui/forms/wdggeneralsettings.ui:1082
 #, kde-format
 msgid ""
 "When checked, this option automatically adjusts the document's \"start\" and "
@@ -31099,14 +31127,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1082
+#: libs/ui/forms/wdggeneralsettings.ui:1085
 #, fuzzy, kde-format
 #| msgid "Adapt playback range to keyframes"
 msgid "Automatically adapt playback range to keyframes"
 msgstr "재생 범위를 키프레임에 따라 조정"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1089
+#: libs/ui/forms/wdggeneralsettings.ui:1092
 #, kde-format
 msgid ""
 "When checked, this option will automatically scale the Animation Timeline "
@@ -31116,84 +31144,84 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1092
+#: libs/ui/forms/wdggeneralsettings.ui:1095
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1129
+#: libs/ui/forms/wdggeneralsettings.ui:1132
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "리소스"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1135
+#: libs/ui/forms/wdggeneralsettings.ui:1138
 #, kde-format
 msgid "Resource Folder:"
 msgstr "리소스 폴더:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1239
+#: libs/ui/forms/wdggeneralsettings.ui:1242
 #, kde-format
 msgid "When Krita starts:"
 msgstr "Krita를 시작할 때:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1256
+#: libs/ui/forms/wdggeneralsettings.ui:1259
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "Krita를 종료할 때 세션 저장"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1263
+#: libs/ui/forms/wdggeneralsettings.ui:1266
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr "이미지를 레이어로 가져올 때 이미지의 색 공간 변환하기"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1276
-#: libs/ui/forms/wdggeneralsettings.ui:1286
+#: libs/ui/forms/wdggeneralsettings.ui:1279
+#: libs/ui/forms/wdggeneralsettings.ui:1289
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "새로 연 이미지에만 적용됩니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1279
+#: libs/ui/forms/wdggeneralsettings.ui:1282
 #, kde-format
 msgid "Undo stack size:"
 msgstr "실행 취소 스택 크기:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1307
+#: libs/ui/forms/wdggeneralsettings.ui:1310
 #, fuzzy, kde-format
 #| msgid "Disable Cumulative Undo"
 msgid "Use cumulative undo"
 msgstr "누적 실행 취소 사용 안함"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1327
+#: libs/ui/forms/wdggeneralsettings.ui:1330
 #, kde-format
 msgid "Advanced..."
 msgstr "고급..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1336
+#: libs/ui/forms/wdggeneralsettings.ui:1339
 #, kde-format
 msgid "Show root layer"
 msgstr "루트 레이어 표시"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1343
+#: libs/ui/forms/wdggeneralsettings.ui:1346
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "버그 보고에 사용할 로그 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1374
+#: libs/ui/forms/wdggeneralsettings.ui:1377
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -31203,14 +31231,14 @@ msgstr ""
 "를 보고하지 마십시오."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1377
+#: libs/ui/forms/wdggeneralsettings.ui:1380
 #, fuzzy, kde-format
 #| msgid "Enable Cumulative Undo"
 msgid "Enable native file dialogs"
 msgstr "누적 실행 취소 사용"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1400
+#: libs/ui/forms/wdggeneralsettings.ui:1403
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enable native file dialogs (warning: may not work correctly on some "
@@ -31221,39 +31249,39 @@ msgstr ""
 "음)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1410
+#: libs/ui/forms/wdggeneralsettings.ui:1413
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "최대 브러시 크기:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1438
+#: libs/ui/forms/wdggeneralsettings.ui:1441
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "픽셀 단위 최대 브러시 지름입니다."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1441
+#: libs/ui/forms/wdggeneralsettings.ui:1444
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "픽셀"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1476
+#: libs/ui/forms/wdggeneralsettings.ui:1479
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(다시 시작 필요)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1486
+#: libs/ui/forms/wdggeneralsettings.ui:1489
 #, fuzzy, kde-format
 #| msgid "Font DPI workaround"
 msgid "Font DPI Workaround"
 msgstr "글꼴 DPI 둘러가기"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1501
+#: libs/ui/forms/wdggeneralsettings.ui:1504
 #, fuzzy, kde-format
 #| msgid ""
 #| "In some Krita versions before 5.0 text size could be dependent on the "
@@ -31292,7 +31320,7 @@ msgstr ""
 "Krita 5.0에서 파일을 한 번 이상 저장했다면 더 이상 변환하지 않아도 됩니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1504
+#: libs/ui/forms/wdggeneralsettings.ui:1507
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -31300,7 +31328,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1513
+#: libs/ui/forms/wdggeneralsettings.ui:1516
 #, fuzzy, kde-format
 #| msgid ""
 #| "In some versions of Krita before 4.4.3 text size could be dependent on "
@@ -31322,44 +31350,44 @@ msgstr ""
 "제로 사용할 글꼴 표시 DPI를 지정할 수 있습니다."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1526
+#: libs/ui/forms/wdggeneralsettings.ui:1529
 #, fuzzy, kde-format
 #| msgid "Automatic hyphenation"
 msgid "Automatic layer naming"
 msgstr "자동 하이픈 삽입"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1532
+#: libs/ui/forms/wdggeneralsettings.ui:1535
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1539
+#: libs/ui/forms/wdggeneralsettings.ui:1542
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1546
+#: libs/ui/forms/wdggeneralsettings.ui:1549
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1556
+#: libs/ui/forms/wdggeneralsettings.ui:1559
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "키네틱 스크롤링(다시 시작 필요)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1571
+#: libs/ui/forms/wdggeneralsettings.ui:1574
 #, kde-format
 msgid "Sensitivity:"
 msgstr "민감도:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1596
+#: libs/ui/forms/wdggeneralsettings.ui:1599
 #, fuzzy, kde-format
 #| msgid ""
 #| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
@@ -31367,7 +31395,7 @@ msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "키네틱 스크롤 사용 시 도커 스크롤 바 숨기기(다시 시작해야 함)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1648
+#: libs/ui/forms/wdggeneralsettings.ui:1651
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -31378,7 +31406,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1651
+#: libs/ui/forms/wdggeneralsettings.ui:1654
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr ""
@@ -38433,7 +38461,7 @@ msgstr "그룹을 편집할 수 없습니다."
 msgid "Local selection is locked."
 msgstr "로컬 선택이 잠겨 있습니다."
 
-#: libs/ui/tool/kis_tool_freehand.cc:212
+#: libs/ui/tool/kis_tool_freehand.cc:215
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -38442,7 +38470,7 @@ msgstr ""
 "브러시 도구로 이 레이어에 칠할 수 없습니다. 칠하기 레이어 또는 마스크를 선택"
 "하십시오."
 
-#: libs/ui/tool/kis_tool_freehand.cc:217
+#: libs/ui/tool/kis_tool_freehand.cc:220
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -42589,46 +42617,46 @@ msgstr "무한 눈금자 도우미"
 msgid "Infinite Ruler"
 msgstr "무한 눈금자"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1437
 #, kde-format
 msgid "Select an Assistant"
 msgstr "도우미 선택"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1585
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "오류가 발생했습니다. 모든 도우미를 성공적으로 불러오지 못했습니다."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1673
 #, kde-format
 msgid "Save Assistant"
 msgstr "도우미 저장"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1768
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1774
 #, kde-format
 msgid "Opacity: "
 msgstr "불투명도: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1781
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1785
 #, kde-format
 msgid "Density: "
 msgstr "밀도: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1790
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "세분:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1794
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "세분:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:190
+#: plugins/assistants/Assistants/kis_assistant_tool.h:189
 #, kde-format
 msgid "Assistant Tool"
 msgstr "도우미 도구"

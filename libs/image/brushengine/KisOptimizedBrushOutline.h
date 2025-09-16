@@ -10,6 +10,7 @@
 #include <QPolygonF>
 #include <QTransform>
 #include <boost/iterator/iterator_facade.hpp>
+#include <optional>
 #include <kritaimage_export.h>
 
 class QPainterPath;
@@ -61,8 +62,8 @@ public:
 
 public:
     KisOptimizedBrushOutline();
-    KisOptimizedBrushOutline(const QPainterPath &path);
-    KisOptimizedBrushOutline(const QVector<QPolygonF> &subpaths);
+    KisOptimizedBrushOutline(const QPainterPath &path, const std::optional<QRectF> &bounds = std::nullopt);
+    KisOptimizedBrushOutline(const QVector<QPolygonF> &subpaths, const std::optional<QRectF> &bounds = std::nullopt);
 
     QRectF boundingRect() const;
 
@@ -109,6 +110,7 @@ public:
 private:
     QVector<QPolygonF> m_subpaths;
     QVector<QPolygonF> m_additionalDecorations;
+    std::optional<QRectF> m_explicitBounds;
     QTransform m_transform;
     mutable QRectF m_cachedBoundingRect;
 };

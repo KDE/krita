@@ -192,6 +192,11 @@ public:
      */
     bool isTouchEvent() const;
 
+    /**
+     * Whether we ever had any tablet inputs this session
+     */
+    static bool tabletInputReceived();
+
 public:
     static void copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst);
     static void copyQtPointerEvent(const QTabletEvent *event, QScopedPointer<QEvent> &dst);

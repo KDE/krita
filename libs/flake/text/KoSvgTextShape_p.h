@@ -12,6 +12,8 @@
 
 #include "KoSvgText.h"
 #include "KoSvgTextContentElement.h"
+#include <KoShapePainter.h>
+#include <KoShapeManager.h>
 
 #include "KoCssTextUtils.h"
 
@@ -438,7 +440,9 @@ public:
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
 
-    Private() = default;
+    Private(): internalShapesPainter(new KoShapePainter) {
+
+    }
 
     enum InternalShapeState {
         Decorative,
@@ -448,14 +452,14 @@ public:
     };
 
     Private(const Private &rhs)
-        : textData(rhs.textData) {
+        : internalShapesPainter(new KoShapePainter)
+        , textData(rhs.textData) {
 
-        Q_FOREACH (KoShape *shape, rhs.internalShapes.keys()) {
-            KoShape *clonedShape = shape->cloneShape();
-            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+        cloneShapes(rhs.shapesInside, shapesInside);
+        cloneShapes(rhs.shapesSubtract, shapesSubtract);
+        cloneShapes(rhs.textPaths, textPaths);
+        updateInternalShapesList();
 
-            internalShapes.insert(clonedShape, rhs.internalShapes.value(shape));
-        }
         yRes = rhs.yRes;
         xRes = rhs.xRes;
         result = rhs.result;
@@ -471,35 +475,42 @@ public:
         disableFontMatching = rhs.disableFontMatching;
     }
 
+    void cloneShapes(const QList<KoShape*> &sourceShapeList, QList<KoShape*> &destinationShapeList) {
+        Q_FOREACH (KoShape *shape, sourceShapeList) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+            destinationShapeList.append(clonedShape);
+        }
+    }
+
     ~Private() {
-        QList<KoShape*> internalShapeList = internalShapes.keys();
-        internalShapes.clear();
-        qDeleteAll(internalShapeList);
+        qDeleteAll(shapesInside);
+        shapesInside.clear();
+        qDeleteAll(shapesSubtract);
+        shapesSubtract.clear();
+        qDeleteAll(textPaths);
+        textPaths.clear();
     }
 
     int xRes = 72;
     int yRes = 72;
 
-    QMap<KoShape*, InternalShapeState> internalShapes;
+    QScopedPointer<KoShapePainter> internalShapesPainter;
 
-    QList<KoShape*> shapesInside() {
-        QList<KoShape*> shapes;
-        Q_FOREACH(KoShape *shape, internalShapes.keys()) {
-            if (internalShapes.value(shape) == InternalShapeState::ShapeInside) {
-                shapes.append(shape);
-            }
-        }
-        return shapes;
+    QList<KoShape*> internalShapes() const {
+        return internalShapesPainter->internalShapeManager()->shapes();
     }
-    QList<KoShape*> shapesSubtract() {
-        QList<KoShape*> shapes;
-        Q_FOREACH(KoShape *shape, internalShapes.keys()) {
-            if (internalShapes.value(shape) == InternalShapeState::ShapeSubtract) {
-                shapes.append(shape);
-            }
-        }
-        return shapes;
+
+    void updateInternalShapesList() {
+        QList<KoShape*> total = shapesInside;
+        total.append(shapesSubtract);
+        total.append(textPaths);
+        internalShapesPainter->setShapes(total);
     }
+
+    QList<KoShape*> shapesInside;
+    QList<KoShape*> shapesSubtract;
+    QList<KoShape*> textPaths;
 
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.

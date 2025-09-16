@@ -120,7 +120,6 @@ KoShapePainter::KoShapePainter()
 
 KoShapePainter::~KoShapePainter()
 {
-    delete d;
 }
 
 void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
@@ -204,4 +203,9 @@ QRectF KoShapePainter::contentRect() const
             bound = bound.united(shapeRect);
     }
     return bound;
+}
+
+KoShapeManager *KoShapePainter::internalShapeManager() const
+{
+    return d->canvas->shapeManager();
 }

@@ -32,6 +32,7 @@ public:
         : properties(rhs.properties)
         , localTransformations(rhs.localTransformations)
         , textPathInfo(rhs.textPathInfo)
+        , textPathId(rhs.textPathId)
         , textLength(rhs.textLength)
         , lengthAdjust(rhs.lengthAdjust)
         , textDecorations(rhs.textDecorations)
@@ -57,6 +58,7 @@ public:
 
     /// The textpath, if any. Defaults to null.
     QScopedPointer<KoShape> textPath{nullptr};
+    QString textPathId;
 
     /// the value 'textLength' attribute of the associated dom element
     KoSvgText::AutoValue textLength;
@@ -92,7 +94,7 @@ public:
 
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 
-    bool saveSvg(SvgSavingContext &context, bool rootText, bool saveText, QMap<QString, QString> shapeSpecificAttributes);
+    bool saveSvg(SvgSavingContext &context, bool rootText, bool saveText, QMap<QString, QString> shapeSpecificAttributes, KoShape *textPath = nullptr);
 
     /**
      * The number of characters contained in the currentChunk.

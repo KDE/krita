@@ -1546,9 +1546,26 @@ void KoSvgTextShape::setCharacterTransformsFromLayout()
 }
 
 #include "KoXmlWriter.h"
+#include "SvgWriter.h"
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {
     bool success = false;
+
+    QList<KoShape*> visibleShapes;
+    Q_FOREACH(KoShape *shape, d->internalShapes()) {
+        if (shape->isVisible(false)) {
+            visibleShapes.append(shape);
+        }
+    }
+    if (!visibleShapes.isEmpty()) {
+        context.shapeWriter().startElement("g", false);
+        context.shapeWriter().addAttribute("id", context.createUID("group"));
+        context.shapeWriter().addAttribute(KoSvgTextShape_TEXTCONTOURGROUP, "true");
+
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+        SvgWriter writer(visibleShapes);
+        writer.saveDetached(context);
+    }
     for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
         if (it.state() == KisForestDetail::Enter) {
             bool isTextPath = false;
@@ -1567,7 +1584,9 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                     // 3: Wrong font-size-adjust.
                     context.shapeWriter().addAttribute("krita:textVersion", 3);
 
-                    SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+                    if (visibleShapes.isEmpty()) {
+                        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+                    }
                     SvgStyleWriter::saveSvgStyle(this, context);
                 } else {
                     SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
@@ -1591,16 +1610,21 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 
             }
 
+            KoShape *textPath = d->textPathByName(it->textPathId);
             success = it->saveSvg(context,
                                   it == d->textData.compositionBegin(),
                                   d->childCount(siblingCurrent(it)) == 0,
-                                  shapeSpecificStyles);
+                                  shapeSpecificStyles,
+                                  textPath);
         } else {
             if (it == d->textData.compositionBegin()) {
                 SvgStyleWriter::saveMetadata(this, context);
             }
             context.shapeWriter().endElement();
         }
+    }
+    if (!visibleShapes.isEmpty()) {
+        context.shapeWriter().endElement();
     }
     return success;
 }
@@ -2030,7 +2054,7 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
     if (!d->shapesInside.isEmpty()) {
         QStringList shapesInsideList;
         Q_FOREACH(KoShape* shape, d->shapesInside) {
-            QString id = SvgStyleWriter::embedShape(shape, context);
+            QString id = shape->isVisible(false)? context.getID(shape): SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-inside", shapesInsideList.join(" "));
@@ -2038,7 +2062,7 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
     if (!d->shapesSubtract.isEmpty()) {
         QStringList shapesInsideList;
         Q_FOREACH(KoShape* shape, d->shapesSubtract) {
-            QString id = SvgStyleWriter::embedShape(shape, context);
+            QString id = shape->isVisible(false)? context.getID(shape): SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-subtract", shapesInsideList.join(" "));

@@ -512,6 +512,12 @@ public:
     QList<KoShape*> shapesSubtract;
     QList<KoShape*> textPaths;
 
+
+    KoShape *textPathByName(QString name) {
+        auto it = std::find_if(textPaths.begin(), textPaths.end(), [&name](const KoShape *s) -> bool {return s->name() == name;});
+        return it != textPaths.end()? *it: nullptr;
+    }
+
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.
 
@@ -561,7 +567,7 @@ public:
                                            bool isHorizontal,
                                            qreal offset,
                                            bool isClosed);
-    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps);
+    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps, Private *d);
     static void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
                             const KoSvgText::FontMetrics &parentBaselineTable, const KoSvgText::Baseline parentBaseline,
                             const QPointF superScript,
@@ -586,7 +592,7 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping,
-                                const KoSvgTextProperties resolvedProps);
+                                const KoSvgTextProperties resolvedProps, Private *d);
     QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const int &start, const int &end,
                                                                           const KoSvgText::ResolutionHandler resHandler,
                                                                           const QVector<CharacterResult> &result,

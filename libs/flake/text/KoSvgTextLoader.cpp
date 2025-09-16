@@ -31,6 +31,7 @@ KoSvgTextLoader::KoSvgTextLoader(KoSvgTextShape *shape)
 KoSvgTextLoader::~KoSvgTextLoader()
 {
     // run clean-up after parsing to remove empty spans and the like.
+    d->shape->d->updateInternalShapesList();
     d->shape->cleanUp();
     d->shape->d->isLoading = false;
 }
@@ -115,8 +116,9 @@ void KoSvgTextLoader::setStyleInfo(KoShape *s)
 
 void KoSvgTextLoader::setTextPathOnCurrentNode(KoShape *s)
 {
-    if (!KisForestDetail::isEnd(d->currentNode)) {
-        d->currentNode->textPath.reset(s);
+    if (!KisForestDetail::isEnd(d->currentNode) && s) {
+        d->currentNode->textPathId = s->name();
+        d->shape->d->textPaths.append(s);
     }
 }
 

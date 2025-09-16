@@ -268,13 +268,14 @@ bool KoSvgTextContentElement::loadSvgTextNode(const QDomText &text, SvgLoadingCo
 bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
                                       bool rootText,
                                       bool saveText,
-                                      QMap<QString, QString> shapeSpecificAttributes)
+                                      QMap<QString, QString> shapeSpecificAttributes,
+                                      KoShape *textPath)
 {
     if (textPath) {
         if (textPath) {
             // we'll always save as an embedded shape as "path" is an svg 2.0
             // feature.
-            QString id = SvgStyleWriter::embedShape(textPath.data(), context);
+            QString id = textPath->isVisible(false)? context.getID(textPath): SvgStyleWriter::embedShape(textPath, context);
             // inkscape can only read 'xlink:href'
             if (!id.isEmpty()) {
                 context.shapeWriter().addAttribute("xlink:href", "#" + id);

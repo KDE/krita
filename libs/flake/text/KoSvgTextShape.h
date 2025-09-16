@@ -23,6 +23,7 @@ struct KoSvgTextCharacterInfo;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
+#define KoSvgTextShape_TEXTCONTOURGROUP "krita:textContourGroup"
 /**
  * KoSvgTextShape is a root chunk of the \<text\> element subtree.
  */

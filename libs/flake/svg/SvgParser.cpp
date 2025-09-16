@@ -1759,6 +1759,18 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
     // handle id
     applyId(b.attribute("id"), group);
 
+    if (b.hasAttribute(KoSvgTextShape_TEXTCONTOURGROUP)) {
+        Q_FOREACH(KoShape *shape, childShapes) {
+            if (shape->shapeId() == KoSvgTextShape_SHAPEID) {
+                shape->setTransformation(group->transformation());
+
+                if (createContext) {
+                    m_context.popGraphicsContext();
+                }
+                return shape;
+            }
+        }
+    }
     addToGroup(childShapes, group);
 
     applyCurrentStyle(group, extraOffset); // apply style to this group after size is set
@@ -1795,9 +1807,10 @@ KoShape* SvgParser::getTextPath(const QDomElement &e) {
         if (!pathId.isNull()) {
             KoShape *s = m_context.shapeById(pathId);
             if (s) {
-                const QTransform absTf = s->absoluteTransformation();
                 KoShape *cloned = s->cloneShape();
+                const QTransform absTf = s->absoluteTransformation();
                 cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+                if(cloned && s->parent()) cloned->setVisible(false);
                 return cloned;
             }
         }
@@ -2273,7 +2286,9 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
             const QTransform absTf = s->absoluteTransformation();
             KoShape *cloned = s->cloneShape();
             cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
-            if (cloned) cloned->setVisible(false);
+            // When we have a parent, the shape is inside the defs, but when not,
+            // it's in the group we're in the currently parsing.
+            if (cloned && s->parent()) cloned->setVisible(false);
             return cloned;
         }
     } else if (value.startsWith("circle(")) {

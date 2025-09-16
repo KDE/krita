@@ -317,11 +317,21 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     cmbFlowMode->setCurrentIndex((int)!cfg.readEntry<bool>("useCreamyAlphaDarken", true));
     cmbCmykBlendingMode->setCurrentIndex((int)!cfg.readEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
-    cmbTouchPainting->addItem(
-        KoPointerEvent::tabletInputReceived() ? i18nc("touch painting", "Auto (Disabled)")
-                                              : i18nc("touch painting", "Auto (Enabled)"));
-    cmbTouchPainting->addItem(i18nc("touch painting", "Enabled"));
-    cmbTouchPainting->addItem(i18nc("touch painting", "Disabled"));
+
+    // BEGIN DIRTY HACK: use sticky strings for 5.2.13 release
+
+    // cmbTouchPainting->addItem(
+    //     KoPointerEvent::tabletInputReceived() ? i18nc("touch painting", "Auto (Disabled)")
+    //                                           : i18nc("touch painting", "Auto (Enabled)"));
+    // cmbTouchPainting->addItem(i18nc("touch painting", "Enabled"));
+    // cmbTouchPainting->addItem(i18nc("touch painting", "Disabled"));
+
+    cmbTouchPainting->addItem(i18nc("Automatic", "Auto"));
+    cmbTouchPainting->addItem(i18nc("JPEG-XL encoder options", "Enabled"));
+    cmbTouchPainting->addItem(i18nc("JPEG-XL encoder options", "Disabled"));
+
+    // END OF DIRTY HACK
+
     cmbTouchPainting->setCurrentIndex(int(cfg.touchPainting()));
 
     chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());

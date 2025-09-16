@@ -14,15 +14,16 @@ KisOptimizedBrushOutline::KisOptimizedBrushOutline()
 {
 }
 
-KisOptimizedBrushOutline::KisOptimizedBrushOutline(const QPainterPath &path)
-    : m_subpaths(path.toSubpathPolygons().toVector())
+KisOptimizedBrushOutline::KisOptimizedBrushOutline(const QPainterPath &path, const std::optional<QRectF> &bounds)
+    : KisOptimizedBrushOutline(path.toSubpathPolygons().toVector(), bounds)
 {
     // storing in a form of a QVector is much more efficient
     // than in a QList
 }
 
-KisOptimizedBrushOutline::KisOptimizedBrushOutline(const QVector<QPolygonF> &subpaths)
+KisOptimizedBrushOutline::KisOptimizedBrushOutline(const QVector<QPolygonF> &subpaths, const std::optional<QRectF> &bounds)
     : m_subpaths(subpaths)
+    , m_explicitBounds(bounds)
 {
 }
 
@@ -62,6 +63,11 @@ QRectF KisOptimizedBrushOutline::boundingRect() const
 
     QRectF result;
     bool resultInitialized = false;
+
+    if (m_explicitBounds && !m_explicitBounds->isEmpty()) {
+        result = m_transform.mapRect(*m_explicitBounds);
+        resultInitialized = true;
+    }
 
     for (auto polyIt = m_subpaths.cbegin(); polyIt != m_subpaths.cend(); ++polyIt) {
         /**

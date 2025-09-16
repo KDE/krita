@@ -108,7 +108,7 @@ KisOptimizedBrushOutline* outlineFactory(const KisBrush *brush) {
 
     KisBoundary boundary(dev);
     boundary.generateBoundary();
-    return new KisOptimizedBrushOutline(boundary.path());
+    return new KisOptimizedBrushOutline(boundary.path(), dev->bounds());
 }
 }
 

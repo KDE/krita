@@ -20,6 +20,7 @@
 #include "SvgTextEditor.h"
 #include "SvgTextRemoveCommand.h"
 #include "SvgConvertTextTypeCommand.h"
+#include "SvgTextShortCuts.h"
 
 #include <QPainterPath>
 #include <QGridLayout>
@@ -88,6 +89,13 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
                                  , qApp->cursorFlashTime()
                                  , cursorFlashLimit);
     connect(&m_textCursor, SIGNAL(updateCursorDecoration(QRectF)), this, SLOT(slotUpdateCursorDecoration(QRectF)));
+
+    Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {
+        QAction *a = action(name);
+        if(m_textCursor.registerPropertyAction(a, name)) {
+            qDebug() << "registered" << name << a->shortcut();
+        }
+    }
 
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);

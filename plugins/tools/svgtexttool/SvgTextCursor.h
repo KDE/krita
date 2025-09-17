@@ -21,6 +21,7 @@ class SvgTextRemoveCommand;
 class KUndo2Command;
 class QKeyEvent;
 class QInputMethodEvent;
+class QAction;
 
 /**
  * @brief The SvgTextCursor class
@@ -190,6 +191,8 @@ public:
     /// Stops blinking cursor.
     void focusOut();
 
+    bool registerPropertyAction(QAction *action, const QString &name);
+
     KoSvgTextPropertiesInterface *textPropertyInterface();
 
 Q_SIGNALS:
@@ -203,6 +206,7 @@ private Q_SLOTS:
     void updateInputMethodItemTransform();
     void canvasResourceChanged(int key, const QVariant &value);
     void toggleProperty(KoSvgTextProperties::PropertyId property);
+    void propertyAction();
 
 private:
 

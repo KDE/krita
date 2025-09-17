@@ -11,6 +11,7 @@
 #include "SvgTextMergePropertiesRangeCommand.h"
 #include "SvgTextRemoveCommand.h"
 #include "SvgTextShapeManagerBlocker.h"
+#include "SvgTextShortCuts.h"
 
 #include "KoSvgTextShapeMarkupConverter.h"
 #include "KoSvgPaste.h"
@@ -139,6 +140,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     bool blockQueryUpdates = false; ///< Block qApp->inputMethod->update(), enabled during the inputmethod event flow.
 
     SvgTextCursorPropertyInterface *interface{nullptr};
+
+    QList<QAction*> actions;
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
@@ -928,6 +931,17 @@ void SvgTextCursor::toggleProperty(KoSvgTextProperties::PropertyId property)
     }
 }
 
+void SvgTextCursor::propertyAction()
+{
+    QAction *action = dynamic_cast<QAction*>(QObject::sender());
+    if (!action || !d->shape) return;
+
+    QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
+    KoSvgTextProperties properties = SvgTextShortCuts::getModifiedProperties(action, p);
+    if (properties.isEmpty()) return;
+    mergePropertiesIntoSelection(properties);
+}
+
 bool SvgTextCursor::hasSelection()
 {
     return d->pos != d->anchor;
@@ -1082,15 +1096,12 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
     // keys, as one of the standard keys for deleting a line is ctrl+u
     // which would probably be expected to do underline before deleting.
 
-    if (testSequence == QKeySequence::Bold) {
-        toggleProperty(KoSvgTextProperties::FontWeightId);
-        event->accept();
-    } else if (testSequence == QKeySequence::Italic) {
-        toggleProperty(KoSvgTextProperties::FontStyleId);
-        event->accept();
-    } else if (testSequence == QKeySequence::Underline) {
-        toggleProperty(KoSvgTextProperties::TextDecorationLineId);
-        event->accept();
+    Q_FOREACH(QAction *action, d->actions) {
+        if (action->shortcut() == testSequence) {
+            event->accept();
+            action->trigger();
+            break;
+        }
     }
     if (event->isAccepted()) return;
 
@@ -1211,6 +1222,16 @@ void SvgTextCursor::focusIn()
 void SvgTextCursor::focusOut()
 {
     stopBlinkCursor();
+}
+
+bool SvgTextCursor::registerPropertyAction(QAction *action, const QString &name)
+{
+    if (SvgTextShortCuts::configureAction(action, name)) {
+        d->actions.append(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(propertyAction()));
+        return true;
+    }
+    return false;
 }
 
 KoSvgTextPropertiesInterface *SvgTextCursor::textPropertyInterface()
@@ -1439,6 +1460,11 @@ void SvgTextCursor::updateCanvasResources()
             c.setOpacity(1.0);
             if (c != d->canvas->resourceManager()->backgroundColor()) {
                 d->canvas->resourceManager()->setBackgroundColor(c);
+            }
+        }
+        Q_FOREACH (QAction *action, d->actions) {
+            if (action->isCheckable()) {
+                action->setChecked(SvgTextShortCuts::actionEnabled(action, {props}));
             }
         }
     }

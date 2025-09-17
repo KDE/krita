@@ -9,9 +9,11 @@
 
 #include "KoSvgTextShape.h"
 #include "SvgTextTool.h"
+#include "SvgTextShortCuts.h"
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
+#include <kis_action_registry.h>
 
 SvgTextToolFactory::SvgTextToolFactory()
     : KoToolFactoryBase("SvgTextTool")
@@ -30,5 +32,14 @@ SvgTextToolFactory::~SvgTextToolFactory()
 KoToolBase *SvgTextToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new SvgTextTool(canvas);
+}
+
+QList<QAction *> SvgTextToolFactory::createActionsImpl()
+{
+    QList<QAction *> actions;
+    Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {
+        actions << KisActionRegistry::instance()->makeQAction(name, this);
+    }
+    return actions;
 }
 

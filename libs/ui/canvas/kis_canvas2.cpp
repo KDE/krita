@@ -223,6 +223,9 @@ public:
 
     KisOpenGLCanvas2::BitDepthMode preferredBitDepthMode(bool compositorPrefersHdr) const {
         KisConfig cfg(true);
+
+        if (!cfg.enableCanvasSurfaceColorSpaceManagement()) return KisOpenGLCanvas2::BitDepthMode::Depth8Bit;
+
         return KisOpenGLCanvas2::bitDepthForUserSetting(cfg.canvasSurfaceColorSpaceManagementMode(),
                                                         cfg.canvasSurfaceBitDepthMode(),
                                                         compositorPrefersHdr);

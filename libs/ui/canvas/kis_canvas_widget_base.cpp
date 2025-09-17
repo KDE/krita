@@ -252,3 +252,8 @@ KisAbstractCanvasWidget::BitDepthMode KisCanvasWidgetBase::currentBitDepthMode()
 {
     return BitDepthMode::Depth8Bit;
 }
+
+QString KisCanvasWidgetBase::currentBitDepthUserReport() const
+{
+    return QString("Canvas bit depth management is not supported\n");
+}

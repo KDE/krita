@@ -70,6 +70,7 @@ public: // KisAbstractCanvasWidget
     using KisAbstractCanvasWidget::updateCanvasProjection;
 
     BitDepthMode currentBitDepthMode() const override;
+    QString currentBitDepthUserReport() const override;
 
 protected:
     KisCanvas2 *canvas() const;

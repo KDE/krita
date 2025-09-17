@@ -1601,9 +1601,24 @@ KisInputActionGroupsMaskInterface::SharedInterface KisCanvas2::inputActionGroups
 QString KisCanvas2::colorManagementReport() const
 {
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
-    return m_d->surfaceColorManager ?
-        m_d->surfaceColorManager->colorManagementReport() :
-        QString("Surface color management is not supported on this platform\n");
+    QString report;
+    QDebug str(&report);
+
+    if (m_d->canvasWidget) {
+        str << "(canvas bit depth report)" << Qt::endl;
+        str << Qt::endl;
+        str.noquote().nospace() << m_d->canvasWidget->currentBitDepthUserReport();
+    }
+
+    str << Qt::endl;
+
+    if (m_d->surfaceColorManager) {
+        str.noquote().nospace() << m_d->surfaceColorManager->colorManagementReport();
+    } else {
+        str.noquote().nospace() << QString("Surface color management is not supported on this platform\n");
+    }
+
+    return report;
 #else
     return "Surface color management is disabled\n";
 #endif

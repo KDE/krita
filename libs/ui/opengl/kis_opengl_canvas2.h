@@ -98,6 +98,7 @@ public: // Implement kis_abstract_canvas_widget interface
     KisOpenGLImageTexturesSP openGLImageTextures() const;
 
     BitDepthMode currentBitDepthMode() const override;
+    QString currentBitDepthUserReport() const override;
 
 public Q_SLOTS:
     void slotConfigChanged();

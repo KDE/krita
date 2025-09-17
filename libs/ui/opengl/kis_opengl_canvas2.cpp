@@ -493,3 +493,48 @@ KisOpenGLCanvas2::BitDepthMode KisOpenGLCanvas2::currentBitDepthMode() const
             BitDepthMode::Depth10Bit :
             BitDepthMode::Depth8Bit;
 }
+
+QString KisOpenGLCanvas2::currentBitDepthUserReport() const {
+    QString report;
+    QDebug str(&report);
+
+    str << "Texture Format: " << Qt::hex << Qt::showbase << textureFormat() << Qt::reset;
+
+    switch (textureFormat()) {
+        case GL_RGB10_A2:
+            str << " (" << "GL_RGB10_A2" << ")";
+            break;
+        case GL_RGB10:
+            str << " (" << "GL_RGB10" << ")";
+            break;
+        case GL_RGB12:
+            str << " (" << "GL_RGB12" << ")";
+            break;
+        case GL_RGBA16:
+            str << " (" << "GL_RGBA16" << ")";
+            break;
+        case GL_RGB16:
+            str << " (" << "GL_RGB16" << ")";
+            break;
+        case GL_RGBA16F:
+            str << " (" << "GL_RGBA16F" << ")";
+            break;
+        case GL_RGB8:
+            str << " (" << "GL_RGB8" << ")";
+            break;
+        case GL_RGBA8:
+            str << " (" << "GL_RGBA8" << ")";
+            break;
+        default:
+            str << " (" << "<unknown>" << ")";
+            break;
+    }
+    str << Qt::endl;
+
+    str << "Red Buffer Size: " << format().redBufferSize() << Qt::endl;
+    str << "Green Buffer Size: " << format().greenBufferSize() << Qt::endl;
+    str << "Blue Buffer Size: " << format().blueBufferSize() << Qt::endl;
+    str << "Alpha Buffer Size: " << format().alphaBufferSize() << Qt::endl;
+
+    return report;
+}

@@ -97,6 +97,8 @@ public:
     virtual void setLodResetInProgress(bool value) = 0;
 
     virtual BitDepthMode currentBitDepthMode() const = 0;
+
+    virtual QString currentBitDepthUserReport() const = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

@@ -341,6 +341,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QPushButton" name="convertPreFormatBtn">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The text will not wrap and preserves spaces and new lines. A line break is inserted so the lines from wrapping or positioning remain separated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Preformatted</string>
         </property>
@@ -351,6 +354,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="convertInlineBtn">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Text wraps inside a fixed length, spaces and new lines are preserved. New lines are not removed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Inline Wrapped</string>
         </property>
@@ -361,6 +367,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="convertToSvg1_1">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Text uses SVG 1.1 character transforms to position each line. Spaces and new lines are collapsed. This is for backward compatibility with SVG 1.1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Prepositioned</string>
         </property>

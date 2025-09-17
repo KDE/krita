@@ -30,7 +30,7 @@ public:
     ~KisMacosSecurityBookmarkManager();
     /**
      * @return Return true if file is contained within a directory with permissions
-     * previouly granted by NSOpenPanel
+     * previously granted by NSOpenPanel
      *
      */
     bool parentDirHasPermissions(const QString &path);
@@ -39,7 +39,7 @@ public:
      * Creates a bookmark security scope for diven path
      * @param path File path returned from NSOpenPanel
      * @param refpath If non empty creates the security key relative to the
-     *          reference path. This is useful for documents refering to other documents
+     *          reference path. This is useful for documents referring to other documents
      */
     void createBookmarkFromPath(const QString &path, const QString &refpath,SecurityBookmarkType type = SecurityBookmarkType::File);
     

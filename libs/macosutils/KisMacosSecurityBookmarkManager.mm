@@ -190,7 +190,7 @@ bool KisMacosSecurityBookmarkManager::requestAccessToDir(const QString &path)
 #ifdef KIS_STANDALONE
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setAlertStyle:NSAlertStyleInformational];
-    [alert setMessageText:[NSString stringWithFormat:@"The file %@ is located in a directory where the application has no permission, please give the permission to the container folder or a higher one to allow krita to save temporary bakcups next to your file", [nsStdPath lastPathComponent]]];
+    [alert setMessageText:[NSString stringWithFormat:@"The file %@ is located in a directory where the application has no permission, please give the permission to the container folder or a higher one to allow krita to save temporary backups next to your file", [nsStdPath lastPathComponent]]];
     [alert runModal];
 
 
@@ -239,7 +239,7 @@ void KisMacosSecurityBookmarkManager::addBookmarkAndCheckParentDir(const QUrl &u
     qDebug() << "1 inserting to sandbox" << url << path;
     if (!parentDirHasPermissions(path)) {
         // we can't force the user to select a directory in particular
-        // we add the bookmark even if the file root directory was seleted
+        // we add the bookmark even if the file root directory was selected
         createBookmarkFromPath(path, QString());
 
         requestAccessToDir(path);

@@ -793,5 +793,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceMode)
+Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceBitDepthMode)
 
 #endif // KIS_CONFIG_H_

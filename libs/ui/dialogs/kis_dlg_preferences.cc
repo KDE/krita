@@ -1198,6 +1198,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
         monitorProfileGrid->addRow(m_chkEnableCanvasColorSpaceManagement);
 
+        // surface color space
         m_canvasSurfaceColorSpace = new KisSqueezedComboBox();
             m_canvasSurfaceColorSpace->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         QLabel *canvasSurfaceColorSpaceLbl = new QLabel(i18n("Canvas surface color space:"), this);
@@ -1213,24 +1214,57 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
                  "window compositor. Use \"preferred\" space unless you know "
                  "what you are doing</p>"));
 
+        // surface bit depth
+        m_canvasSurfaceBitDepth = new KisSqueezedComboBox();
+            m_canvasSurfaceBitDepth->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        QLabel *canvasSurfaceBitDepthLbl = new QLabel(i18n("Canvas surface bit depth:"), this);
+        monitorProfileGrid->addRow(canvasSurfaceBitDepthLbl, m_canvasSurfaceBitDepth);
+
+        m_canvasSurfaceBitDepth->addSqueezedItem(i18n("Auto"), QVariant::fromValue(CanvasSurfaceBitDepthMode::DepthAuto));
+        m_canvasSurfaceBitDepth->addSqueezedItem(i18n("8-bit"), QVariant::fromValue(CanvasSurfaceBitDepthMode::Depth8Bit));
+        m_canvasSurfaceBitDepth->addSqueezedItem(i18n("10-bit"), QVariant::fromValue(CanvasSurfaceBitDepthMode::Depth10Bit));
+
+        m_canvasSurfaceBitDepth->setToolTip(
+            i18n("<p>The bit depth of the color that is passed to the window "
+                 "compositor. When using \"Auto\" Krita will automatically select "
+                 "10-bit for HDR modes and will keep 8-bit in SDR mode</p>"));
+
         vboxLayout->addItem(new QSpacerItem(20,20));
 
         QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", mainWindow->osPreferredColorSpaceReport()), this);
         vboxLayout->addWidget(preferredLbl);
 
         m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement());
-        auto mode = cfg.canvasSurfaceColorSpaceManagementMode();
-        int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
-        KIS_SAFE_ASSERT_RECOVER(index >= 0) {
-            index = 0;
+
+        {
+            auto mode = cfg.canvasSurfaceColorSpaceManagementMode();
+            int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceColorSpace->setCurrentIndex(index);
         }
-        m_canvasSurfaceColorSpace->setCurrentIndex(index);
+
+        {
+            auto mode = cfg.canvasSurfaceBitDepthMode();
+            int index = m_canvasSurfaceBitDepth->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceBitDepth->setCurrentIndex(index);
+        }
 
         connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, m_canvasSurfaceColorSpace, &QWidget::setEnabled);
         m_canvasSurfaceColorSpace->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
 
         connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, canvasSurfaceColorSpaceLbl, &QWidget::setEnabled);
         canvasSurfaceColorSpaceLbl->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
+
+        connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, m_canvasSurfaceBitDepth, &QWidget::setEnabled);
+        m_canvasSurfaceBitDepth->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
+
+        connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, canvasSurfaceBitDepthLbl, &QWidget::setEnabled);
+        canvasSurfaceBitDepthLbl->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
     }
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
@@ -1381,12 +1415,24 @@ void ColorSettingsTab::setDefault()
         refillMonitorProfiles(KoID("RGBA"));
     } else {
         m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement(true));
-        auto mode = cfg.canvasSurfaceColorSpaceManagementMode(true);
-        int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
-        KIS_SAFE_ASSERT_RECOVER(index >= 0) {
-            index = 0;
+
+        {
+            auto mode = cfg.canvasSurfaceColorSpaceManagementMode(true);
+            int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceColorSpace->setCurrentIndex(index);
         }
-        m_canvasSurfaceColorSpace->setCurrentIndex(index);
+
+        {
+            auto mode = cfg.canvasSurfaceBitDepthMode(true);
+            int index = m_canvasSurfaceBitDepth->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceBitDepth->setCurrentIndex(index);
+        }
     }
 
     KisImageConfig cfgImage(true);
@@ -2664,6 +2710,7 @@ bool KisDlgPreferences::editPreferences()
         } else {
             cfg.setEnableCanvasSurfaceColorSpaceManagement(m_colorSettings->m_chkEnableCanvasColorSpaceManagement->isChecked());
             cfg.setCanvasSurfaceColorSpaceManagementMode(m_colorSettings->m_canvasSurfaceColorSpace->currentData().value<ColorSettingsTab::CanvasSurfaceMode>());
+            cfg.setCanvasSurfaceBitDepthMode(m_colorSettings->m_canvasSurfaceBitDepth->currentData().value<ColorSettingsTab::CanvasSurfaceBitDepthMode>());
         }
         cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
         if (cfg.useDefaultColorSpace())

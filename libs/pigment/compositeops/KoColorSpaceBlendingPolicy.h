@@ -47,7 +47,7 @@ struct KoSubtractiveBlendingPolicy
 };
 
 /**
- * @return false if the user seleceted the legacy behavior of the blendmodes in CMYK color spaces
+ * @return false if the user selected the legacy behavior of the blendmodes in CMYK color spaces
  */
 KRITAPIGMENT_EXPORT
 bool useSubtractiveBlendingForCmykColorSpaces();

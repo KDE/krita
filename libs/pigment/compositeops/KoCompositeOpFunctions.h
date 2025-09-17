@@ -60,7 +60,7 @@ struct CFReorientedNormalMapCombine : KoClampedSourceAndDestinationCompositeOpGe
 
         /**
          * If the source vector has zero height, then we should just
-         * skip all the changes (with seems to be the bahavior of the
+         * skip all the changes (with seems to be the behavior of the
          * formula around the null point)
          */
         if (isZeroValueFuzzy(srcB)) {

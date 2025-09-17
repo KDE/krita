@@ -43,7 +43,7 @@ bool containerContains(const C &container, T &&value) {
 void TestCompositeOpInversion::test()
 {
     /**
-     * Comparing of CMYK against RGB would be more preferrable, but it just
+     * Comparing of CMYK against RGB would be more preferable, but it just
      * doesn't work, the color space difference is too high. So we use an
      * alternative approach and just compare, which blend modes are invariant
      * to channel inversion.
@@ -58,7 +58,7 @@ void TestCompositeOpInversion::test()
      *  - COMPOSITE_DESTINATION_ATOP;
      *  - COMPOSITE_DISSOLVE;
      *
-     *  All other blendmodes have too comlicated formulas (or alpha-composition),
+     *  All other blendmodes have complex formulas (or alpha-composition),
      *  so they change their look on subtracted color spaces. Which means that
      *  all the blendmodes except the listed ones should be subjected to conversion
      *  to additive color space in CMYK mode.

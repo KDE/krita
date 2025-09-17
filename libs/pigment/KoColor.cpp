@@ -594,7 +594,7 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
             QString iccprofilename = values.first().split("(").last();
             values.removeFirst();
 
-            // svg11 docs say that searching the name should be caseinsentive.
+            // svg11 docs say that searching the name should be case-insensitive.
             QStringList entry = QStringList(profileList.keys()).filter(iccprofilename, Qt::CaseInsensitive);
             if (entry.empty()) {
                 continue;

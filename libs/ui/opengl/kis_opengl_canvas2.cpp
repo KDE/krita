@@ -54,6 +54,9 @@ protected:
     QColor borderColor() const override {
         return m_canvas->borderColor();
     }
+    GLenum internalTextureFormat() const override {
+        return m_canvas->textureFormat();
+    }
 };
 
 struct KisOpenGLCanvas2::Private
@@ -73,11 +76,33 @@ public:
     KisRepaintDebugger repaintDbg;
 };
 
+KisOpenGLCanvas2::BitDepthMode
+KisOpenGLCanvas2::bitDepthForUserSetting(KisConfig::CanvasSurfaceMode surfaceMode,
+                                         KisConfig::CanvasSurfaceBitDepthMode bitDepthMode,
+                                         bool surfaceIsHDR)
+{
+    switch (bitDepthMode) {
+    case KisConfig::CanvasSurfaceBitDepthMode::DepthAuto:
+if (surfaceMode == KisConfig::CanvasSurfaceMode::Preferred) {
+        return surfaceIsHDR ? BitDepthMode::Depth10Bit : BitDepthMode::Depth8Bit;
+} else {
+            return BitDepthMode::Depth8Bit;
+        }
+    case KisConfig::CanvasSurfaceBitDepthMode::Depth8Bit:
+        return BitDepthMode::Depth8Bit;
+    case KisConfig::CanvasSurfaceBitDepthMode::Depth10Bit:
+        return BitDepthMode::Depth10Bit;
+    }
+
+    Q_UNREACHABLE_RETURN(BitDepthMode::Depth8Bit);
+}
+
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                    KisCoordinatesConverter *coordinatesConverter,
                                    QWidget *parent,
                                    KisImageWSP image,
-                                   KisDisplayColorConverter *colorConverter)
+                                   KisDisplayColorConverter *colorConverter,
+                                   BitDepthMode bitDepthRequest)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
@@ -124,6 +149,15 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     if (KisOpenGLModeProber::instance()->useHDRMode()) {
         setTextureFormat(GL_RGBA16F);
     } else {
+        if (bitDepthRequest == BitDepthMode::Depth10Bit) {
+            QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+            format.setRedBufferSize(10);
+            format.setGreenBufferSize(10);
+            format.setBlueBufferSize(10);
+            format.setAlphaBufferSize(2);
+            setFormat(format);
+            setTextureFormat(GL_RGB10_A2);
+        } else {
         /**
          * When in pure OpenGL mode, the canvas surface will have alpha
          * channel. Therefore, if our canvas blending algorithm produces
@@ -136,6 +170,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
         if (!KisOpenGL::hasOpenGLES()) {
             setTextureFormat(GL_RGB8);
         }
+    }
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -446,4 +481,15 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const
 {
     return d->renderer->openGLImageTextures();
+}
+
+KisOpenGLCanvas2::BitDepthMode KisOpenGLCanvas2::currentBitDepthMode() const 
+{
+    return
+        textureFormat() == GL_RGB10_A2 &&
+        format().redBufferSize() == 10 &&
+        format().greenBufferSize() == 10 &&
+        format().blueBufferSize() == 10 ?
+            BitDepthMode::Depth10Bit :
+            BitDepthMode::Depth8Bit;
 }

@@ -621,6 +621,38 @@ void KisConfig::setCanvasSurfaceColorSpaceManagementMode(KisConfig::CanvasSurfac
 }
 
 
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(bool defaultValue) const {
+    QString modeStr = defaultValue ? "auto" : m_cfg.readEntry("canvasSurfaceBitDepthMode", "auto");
+
+    if (modeStr == "auto") {
+        return CanvasSurfaceBitDepthMode::DepthAuto;
+    } else if (modeStr == "8bit") {
+        return CanvasSurfaceBitDepthMode::Depth8Bit;
+    } else if (modeStr == "10bit") {
+        return CanvasSurfaceBitDepthMode::Depth10Bit;
+    }
+
+    return CanvasSurfaceBitDepthMode::DepthAuto;
+}
+
+void KisConfig::setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value) {
+    QString modeStr;
+
+    switch (value) {
+        case CanvasSurfaceBitDepthMode::DepthAuto:
+            modeStr = "auto";
+            break;
+        case CanvasSurfaceBitDepthMode::Depth8Bit:
+            modeStr = "8bit";
+            break;
+        case CanvasSurfaceBitDepthMode::Depth10Bit:
+            modeStr = "10bit";
+            break;
+    }
+
+    m_cfg.writeEntry("canvasSurfaceBitDepthMode", modeStr);
+}
+
 QString KisConfig::monitorProfile(int screen) const
 {
     // Note: keep this in sync with the default profile for the RGB colorspaces!

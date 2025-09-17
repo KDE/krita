@@ -26,6 +26,8 @@ public:
 
     static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);   
 
+    bool compositorPrefersHDR() const;
+
 protected:
     static KisSurfaceColorimetry::RenderIntent calculateConfigIntent();
 

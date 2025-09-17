@@ -136,6 +136,7 @@ protected:
     virtual qreal devicePixelRatioF() const = 0;
     virtual KisCoordinatesConverter *coordinatesConverter() const = 0;
     virtual QColor borderColor() const = 0;
+    virtual GLenum internalTextureFormat() const = 0;
 };
 
 #endif // KIS_OPENGL_CANVAS_RENDERER_H

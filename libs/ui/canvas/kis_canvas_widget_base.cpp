@@ -247,3 +247,8 @@ void KisCanvasWidgetBase::processFocusOutEvent(QFocusEvent *event)
 {
     m_d->toolProxy->focusOutEvent(event);
 }
+
+KisAbstractCanvasWidget::BitDepthMode KisCanvasWidgetBase::currentBitDepthMode() const
+{
+    return BitDepthMode::Depth8Bit;
+}

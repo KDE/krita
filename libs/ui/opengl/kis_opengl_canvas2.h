@@ -35,8 +35,17 @@ class KRITAUI_EXPORT KisOpenGLCanvas2
     Q_OBJECT
 
 public:
+    static BitDepthMode bitDepthForUserSetting(KisConfig::CanvasSurfaceMode surfaceMode,
+                                               KisConfig::CanvasSurfaceBitDepthMode bitDepthMode,
+                                               bool surfaceIsHDR);
 
-    KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter);
+public:
+
+    KisOpenGLCanvas2(KisCanvas2 *canvas,
+        KisCoordinatesConverter *coordinatesConverter,
+        QWidget *parent, KisImageWSP image,
+        KisDisplayColorConverter *colorConverter,
+        BitDepthMode bitDepthRequest);
 
     ~KisOpenGLCanvas2() override;
 
@@ -87,6 +96,8 @@ public: // Implement kis_abstract_canvas_widget interface
     void setLodResetInProgress(bool value) override;
 
     KisOpenGLImageTexturesSP openGLImageTextures() const;
+
+    BitDepthMode currentBitDepthMode() const override;
 
 public Q_SLOTS:
     void slotConfigChanged();

@@ -3250,4 +3250,14 @@ QString KisMainWindow::osPreferredColorSpaceReport() const
 #endif
 }
 
+bool KisMainWindow::compositorPrefersHDR() const
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    return d->surfaceColorSpaceManager &&
+        d->surfaceColorSpaceManager->compositorPrefersHDR();
+#else
+    return false;
+#endif
+}
+
 #include <moc_KisMainWindow.cpp>

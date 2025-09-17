@@ -220,6 +220,13 @@ public:
     void setActiveShapeManager(KoShapeManager *shapeManager);
 
     QRect docUpdateRectToWidget(const QRectF &docRect);
+
+    KisOpenGLCanvas2::BitDepthMode preferredBitDepthMode(bool compositorPrefersHdr) const {
+        KisConfig cfg(true);
+        return KisOpenGLCanvas2::bitDepthForUserSetting(cfg.canvasSurfaceColorSpaceManagementMode(),
+                                                        cfg.canvasSurfaceBitDepthMode(),
+                                                        compositorPrefersHdr);
+    }
 };
 
 namespace {
@@ -280,7 +287,9 @@ void KisCanvas2::setup()
     m_d->lodPreferredInImage = cfg.levelOfDetailEnabled();
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
-    createCanvas(cfg.useOpenGL());
+    // we don't yet have a surface, so ask main window about
+    // compositor's preferences
+    createCanvas(cfg.useOpenGL(), m_d->view->mainWindow()->compositorPrefersHDR());
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
     
@@ -423,8 +432,10 @@ void KisCanvas2::setCanvasWidget(KisAbstractCanvasWidget *widget)
 
                 if (iface) {
                     m_d->surfaceColorManager.reset(new KisCanvasSurfaceColorSpaceManager(iface.release(), this));
-
                     m_d->surfaceColorManager->setProofingConfiguration(m_d->proofingConfig);
+                    // TODO: initial configuration is **not** HDR, it is rec709-srgbtrc,
+                    // so we end up calling setDisplayConfig() twice. Ideally, we should
+                    // avoid that
                     setDisplayConfig(m_d->surfaceColorManager->displayConfig());
 
                     connect(m_d->surfaceColorManager.data(), &KisCanvasSurfaceColorSpaceManager::sigDisplayConfigChanged,
@@ -612,19 +623,24 @@ void KisCanvas2::createQPainterCanvas()
     setCanvasWidget(canvasWidget);
 }
 
-void KisCanvas2::createOpenGLCanvas()
+void KisCanvas2::createOpenGLCanvas(bool compositorPrefersHdr)
 {
     KisConfig cfg(true);
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->view->image(), &m_d->displayColorConverter);
+    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this,
+                                                          m_d->coordinatesConverter,
+                                                          0,
+                                                          m_d->view->image(),
+                                                          &m_d->displayColorConverter,
+                                                          m_d->preferredBitDepthMode(compositorPrefersHdr));
     m_d->frameCache = KisAnimationFrameCache::getFrameCache(canvasWidget->openGLImageTextures());
 
     setCanvasWidget(canvasWidget);
 }
 
-void KisCanvas2::createCanvas(bool useOpenGL)
+void KisCanvas2::createCanvas(bool useOpenGL, bool compositorPrefersHdr)
 {
     // deinitialize previous canvas structures
     m_d->prescaledProjection = 0;
@@ -650,7 +666,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL);
 
     if (useOpenGL) {
-        createOpenGLCanvas();
+        createOpenGLCanvas(compositorPrefersHdr);
         if (cfg.canvasState() == "OPENGL_FAILED") {
             // Creating the opengl canvas failed, fall back
             warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
@@ -722,7 +738,7 @@ void KisCanvas2::connectCurrentCanvas()
     Q_EMIT sigCanvasEngineChanged();
 }
 
-void KisCanvas2::resetCanvas(bool useOpenGL)
+void KisCanvas2::resetCanvas(bool useOpenGL, bool compositorPrefersHdr)
 {
     // we cannot reset the canvas before it's created, but this method might be called,
     // for instance when setting the monitor profile.
@@ -736,14 +752,16 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     const bool canvasNeedsNativeSurface =
         cfg.enableCanvasSurfaceColorSpaceManagement() &&
         bool(m_d->view->mainWindow()->managedSurfaceProfile());
+    const bool bitDepthModeIsInconsistent = 
+        m_d->canvasWidget->currentBitDepthMode() != m_d->preferredBitDepthMode(compositorPrefersHdr);
 
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
-         m_d->openGLFilterMode != cfg.openGLFilteringMode()) ||
+         (m_d->openGLFilterMode != cfg.openGLFilteringMode() || bitDepthModeIsInconsistent)) ||
          canvasHasNativeSurface != canvasNeedsNativeSurface;
 
     if (needReset) {
-        createCanvas(useOpenGL);
+        createCanvas(useOpenGL, compositorPrefersHdr);
         connectCurrentCanvas();
         slotEffectiveZoomChanged(m_d->coordinatesConverter->effectiveZoom());
     }
@@ -1317,7 +1335,16 @@ void KisCanvas2::slotConfigChanged()
     KisConfig cfg(true);
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
-    resetCanvas(cfg.useOpenGL());
+    // when config is changed we might either have or not have the
+    // surface, so request the value from wherever it is possible
+    auto effectiveCompositorPrefersHdr =
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+        m_d->surfaceColorManager && m_d->surfaceColorManager->isReady() ?
+            m_d->surfaceColorManager->displayConfig().isHDR :
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+            m_d->view->mainWindow()->compositorPrefersHDR();
+
+    resetCanvas(cfg.useOpenGL(), effectiveCompositorPrefersHdr);
 
     QWidget *mainWindow = m_d->view->mainWindow();
     KIS_SAFE_ASSERT_RECOVER_RETURN(mainWindow);
@@ -1394,6 +1421,21 @@ void KisCanvas2::setDisplayConfig(const KisDisplayConfig &config)
 {
     if (m_d->displayColorConverter.displayConfig() == config) return;
 
+    if (m_d->currentCanvasIsOpenGL) {
+        if (m_d->canvasWidget->currentBitDepthMode() < m_d->preferredBitDepthMode(config.isHDR)) {
+            // 1) When bit depth mode has changed, there is no use in
+            //    updating the config, just recreate the widget; the config
+            //    will be updated automatically during the widget initialization
+            //    process
+            // 2) Since the call to setDisplayConfig() can come directly from
+            //    the surface color manager, we shouldn't try to destroy the canvas
+            //    (and its manager) directly from this function. Just postpone it
+            //    till we exit the call
+            QTimer::singleShot(0, this, [this, isHDR = config.isHDR]() { resetCanvas(true, isHDR); });
+            return;
+        }
+    }
+
     m_d->displayColorConverter.setDisplayConfig(config);
 
     {
@@ -1403,6 +1445,14 @@ void KisCanvas2::setDisplayConfig(const KisDisplayConfig &config)
     }
 
     refetchDataFromImage();
+
+    /**
+     * When the widget has a native window, the whole widget
+     * should be updated to fix background color
+     */
+    if (m_d->canvasWidget->widget()->windowHandle()) {
+        updateCanvas();
+    }
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecorationSP deco)

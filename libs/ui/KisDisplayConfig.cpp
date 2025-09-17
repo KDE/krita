@@ -7,6 +7,7 @@
 
 #include <KoColorProfile.h>
 #include <kis_config.h>
+#include <opengl/KisOpenGLModeProber.h>
 
 namespace {
 KoColorConversionTransformation::Intent
@@ -41,6 +42,7 @@ KisDisplayConfig::KisDisplayConfig(int screen, const KisConfig &config)
     : profile(config.displayProfile(screen))
     , intent(renderingIntentFromConfig(config))
     , conversionFlags(conversionFlagsFromConfig(config))
+    , isHDR(KisOpenGLModeProber::instance()->useHDRMode())
 {
 }
 
@@ -48,15 +50,18 @@ KisDisplayConfig::KisDisplayConfig(const KoColorProfile *_profileOverride, const
     : profile(_profileOverride)
     , intent(renderingIntentFromConfig(config))
     , conversionFlags(conversionFlagsFromConfig(config))
+    , isHDR(KisOpenGLModeProber::instance()->useHDRMode())
 {
 }
 
 KisDisplayConfig::KisDisplayConfig(const KoColorProfile *_profile,
                                    KoColorConversionTransformation::Intent _intent,
-                                   KoColorConversionTransformation::ConversionFlags _conversionFlags)
+                                   KoColorConversionTransformation::ConversionFlags _conversionFlags,
+                                   bool _isHDR)
     : profile(_profile)
     , intent(_intent)
     , conversionFlags(_conversionFlags)
+    , isHDR(_isHDR)
 {
 }
 
@@ -64,5 +69,24 @@ bool KisDisplayConfig::operator==(const KisDisplayConfig &rhs) const
 {
     return profile == rhs.profile &&
             intent == rhs.intent &&
-            conversionFlags == rhs.conversionFlags;
+            conversionFlags == rhs.conversionFlags && 
+            isHDR == rhs.isHDR;
+}
+
+QDebug operator<<(QDebug debug, const KisDisplayConfig &value) {
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "KisDisplayConfig(";
+
+    debug.nospace() << "profile: " << value.profile;
+
+    if (value.profile) {
+        debug.nospace() << " (" << value.profile->name() << ")";
+    }
+    debug.nospace() << ", ";
+    debug.nospace() << "intent: " << value.intent << ", ";
+    debug.nospace() << "conversionFlags: " << value.conversionFlags << ", ";
+    debug.nospace() << "isHDR: " << value.isHDR;
+
+    debug.nospace() << ")";
+    return debug;
 }

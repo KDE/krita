@@ -156,6 +156,15 @@ public:
     CanvasSurfaceMode canvasSurfaceColorSpaceManagementMode(bool defaultValue = false) const;
     void setCanvasSurfaceColorSpaceManagementMode(CanvasSurfaceMode value);
 
+    enum class CanvasSurfaceBitDepthMode {
+        DepthAuto = 0,
+        Depth8Bit,
+        Depth10Bit
+    };
+
+    CanvasSurfaceBitDepthMode canvasSurfaceBitDepthMode(bool defaultValue = false) const;
+    void setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value);
+
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
     void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;

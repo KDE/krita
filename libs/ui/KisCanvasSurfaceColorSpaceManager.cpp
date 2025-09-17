@@ -185,6 +185,7 @@ void KisCanvasSurfaceColorSpaceManager::slotConfigChanged()
     }
 
     config.profile = m_currentConfig.profile;
+    config.isHDR = m_currentConfig.isHDR;
 
     if (config != oldDisplayConfig) {
         m_currentConfig = config;
@@ -279,12 +280,20 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription()
         } else if (m_surfaceMode == KisConfig::CanvasSurfaceMode::Rec709g22) {
             requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_srgb;
             requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_gamma22;
+            if (compositorPreferred->colorSpace.luminance) {
+                // rec709-g22 is considered as SDR in lcms, so we should our space to SDR range
+                requestedDescription->colorSpace.luminance = 
+                    compositorPreferred->colorSpace.luminance->clipToSdr();
+            }
         } else if (m_surfaceMode == KisConfig::CanvasSurfaceMode::Rec709g10) {
             requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_srgb;
             requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_ext_linear;
+            if (compositorPreferred->colorSpace.luminance) {
+                // rec709-g22 is considered as SDR in lcms, so we should our space to SDR range
+                requestedDescription->colorSpace.luminance = 
+                    compositorPreferred->colorSpace.luminance->clipToSdr();
+            }
         }
-
-        // TODO: should we also set the HDR lightness properties?
 
         if (std::holds_alternative<NamedPrimaries>(requestedDescription->colorSpace.primaries) &&
             std::get<NamedPrimaries>(requestedDescription->colorSpace.primaries) == NamedPrimaries::primaries_unknown) {
@@ -361,7 +370,7 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription()
     KIS_SAFE_ASSERT_RECOVER_RETURN(profile);
     KIS_SAFE_ASSERT_RECOVER_RETURN(!requestedDescription || m_interface->supportsSurfaceDescription(*requestedDescription));
 
-    if (true || m_interface->surfaceDescription() != requestedDescription ||
+    if (m_interface->surfaceDescription() != requestedDescription ||
         m_interface->renderingIntent() != preferredIntent) {
 
         if (requestedDescription) {
@@ -378,12 +387,19 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription()
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_currentConfig.profile);
+    const bool requestedDescriptionIsHDR = requestedDescription && requestedDescription->colorSpace.isHDR();
 
-    if (*m_currentConfig.profile != *profile) {
+    if (*m_currentConfig.profile != *profile || m_currentConfig.isHDR != requestedDescriptionIsHDR) {
         m_currentConfig.profile = profile;
+        m_currentConfig.isHDR = requestedDescriptionIsHDR;
         Q_EMIT sigDisplayConfigChanged(m_currentConfig);
     }
 
+}
+
+bool KisCanvasSurfaceColorSpaceManager::isReady() const
+{
+    return m_interface->isReady();
 }
 
 KisDisplayConfig KisCanvasSurfaceColorSpaceManager::displayConfig() const

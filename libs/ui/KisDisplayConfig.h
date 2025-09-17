@@ -25,13 +25,17 @@ public:
     KisDisplayConfig(int screen, const KisConfig &config);
     KisDisplayConfig(const KoColorProfile *_profile,
                      KoColorConversionTransformation::Intent _intent,
-                     KoColorConversionTransformation::ConversionFlags _conversionFlags);
+                     KoColorConversionTransformation::ConversionFlags _conversionFlags,
+                     bool _isHDR = false);
     KisDisplayConfig(const KoColorProfile *_profileOverride, const KisConfig &config);
     bool operator==(const KisDisplayConfig &rhs) const;
 
     const KoColorProfile *profile;
     KoColorConversionTransformation::Intent intent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
+    bool isHDR { false };
 };
+
+KRITAUI_EXPORT QDebug operator<<(QDebug debug, const KisDisplayConfig &value);
 
 #endif // KISDISPLAYCONFIG_H

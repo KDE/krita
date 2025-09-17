@@ -25,6 +25,7 @@ public:
     KisCanvasSurfaceColorSpaceManager(KisSurfaceColorManagerInterface *interface, QObject *parent = nullptr);
     ~KisCanvasSurfaceColorSpaceManager();
 
+    bool isReady() const;
     KisDisplayConfig displayConfig() const;
 
     QString colorManagementReport() const;

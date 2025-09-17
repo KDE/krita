@@ -208,6 +208,11 @@ public:
      */
     QString osPreferredColorSpaceReport() const;
 
+    /**
+     * Returns if the compositor prefers HDR space for the surface
+     */
+    bool compositorPrefersHDR() const;
+
 Q_SIGNALS:
 
     /**

@@ -42,13 +42,10 @@ struct KisDisplayColorConverter::Private
           resourceManager(_resourceManager),
           nodeColorSpace(0),
           paintingColorSpace(0),
-          monitorProfile(0),
-          renderingIntent(KoColorConversionTransformation::internalRenderingIntent()),
-          conversionFlags(KoColorConversionTransformation::internalConversionFlags()),
           displayFilter(0),
           displayRenderer(new DisplayRenderer(_q, _resourceManager))
     {
-        useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();
+        useLegacyHDRMode = KisOpenGLModeProber::instance()->useHDRMode();
     }
 
     KisDisplayColorConverter *const q;
@@ -78,11 +75,11 @@ struct KisDisplayColorConverter::Private
     }
 
     const KoColorProfile* qtWidgetsProfile() const {
-        return useHDRMode ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : monitorProfile;
+        return useLegacyHDRMode ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : displayConfig.profile;
     }
 
     const KoColorProfile* openGLSurfaceProfile() const {
-        return useHDRMode && openGLCanvasIsActive ? KisOpenGLModeProber::instance()->rootSurfaceColorProfile() : monitorProfile;
+        return useLegacyHDRMode && openGLCanvasIsActive ? KisOpenGLModeProber::instance()->rootSurfaceColorProfile() : displayConfig.profile;
     }
 
     const KoColorProfile* ocioInputProfile() const {
@@ -153,10 +150,7 @@ struct KisDisplayColorConverter::Private
                                     KoColorSpaceRegistry::instance()->p2020G10Profile()));
     }
 
-    const KoColorProfile *monitorProfile;
-
-    KoColorConversionTransformation::Intent renderingIntent;
-    KoColorConversionTransformation::ConversionFlags conversionFlags;
+    KisDisplayConfig displayConfig;
 
     QSharedPointer<KisDisplayFilter> displayFilter;
 
@@ -164,7 +158,7 @@ struct KisDisplayColorConverter::Private
     KisNodeSP connectedNode;
     KisImageSP image;
 
-    bool useHDRMode = false;
+    bool useLegacyHDRMode = false;
     bool openGLCanvasIsActive = false;
 
     inline KoColor approximateFromQColor(const QColor &qcolor);
@@ -417,14 +411,12 @@ void KisDisplayColorConverter::setDisplayConfig(const KisDisplayConfig &config)
 {
     const KoColorProfile *monitorProfile = config.profile;
 
-    if (m_d->useHDRMode) {
+    if (m_d->useLegacyHDRMode) {
         // we don't use ICC color management in HDR mode
         monitorProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     }
 
-    m_d->monitorProfile = monitorProfile;
-    m_d->renderingIntent = config.intent;
-    m_d->conversionFlags = config.conversionFlags;
+    m_d->displayConfig = config;
 
     m_d->notifyDisplayConfigurationChanged();
 }
@@ -458,7 +450,7 @@ void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter>
 
 KisDisplayConfig KisDisplayColorConverter::displayConfig() const
 {
-    return KisDisplayConfig(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+    return m_d->displayConfig;
 }
 
 QSharedPointer<KisDisplayFilter> KisDisplayColorConverter::displayFilter() const
@@ -468,12 +460,14 @@ QSharedPointer<KisDisplayFilter> KisDisplayColorConverter::displayFilter() const
 
 KisDisplayConfig KisDisplayColorConverter::openGLCanvasSurfaceDisplayConfig() const
 {
-    return KisDisplayConfig(m_d->openGLSurfaceProfile(), m_d->renderingIntent, m_d->conversionFlags);
+    KisDisplayConfig config = m_d->displayConfig;
+    config.profile = m_d->openGLSurfaceProfile();
+    return config;
 }
 
 bool KisDisplayColorConverter::isHDRMode() const
 {
-    return  m_d->useHDRMode;
+    return  m_d->useLegacyHDRMode;
 }
 
 void KisDisplayColorConverter::notifyOpenGLCanvasIsActive(bool value)
@@ -488,7 +482,7 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor, bool proofToP
     KoColor c(srcColor);
 
     if (proofToPaintColors && m_d->needsColorProofing(c.colorSpace())) {
-        c.convertTo(m_d->paintingColorSpace, m_d->renderingIntent, m_d->conversionFlags);
+        c.convertTo(m_d->paintingColorSpace, m_d->displayConfig.intent, m_d->displayConfig.conversionFlags);
     }
 
     if (m_d->useOcio()) {
@@ -506,7 +500,7 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor, bool proofToP
         return QColor(Qt::red);
     }
 
-    c.convertTo(m_d->qtWidgetsColorSpace(), m_d->renderingIntent, m_d->conversionFlags);
+    c.convertTo(m_d->qtWidgetsColorSpace(), m_d->displayConfig.intent, m_d->displayConfig.conversionFlags);
     const quint8 *p = c.data();
     return QColor(p[2], p[1], p[0], p[3]);
 }
@@ -526,7 +520,7 @@ KoColor KisDisplayColorConverter::applyDisplayFiltering(const KoColor &srcColor,
         c.setProfile(m_d->ocioOutputProfile());
     }
 
-    c.convertTo(m_d->openGLSurfaceColorSpace(bitDepthId), m_d->renderingIntent, m_d->conversionFlags);
+    c.convertTo(m_d->openGLSurfaceColorSpace(bitDepthId), m_d->displayConfig.intent, m_d->displayConfig.conversionFlags);
     return c;
 }
 
@@ -555,7 +549,7 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice, bool proof
     if (bounds.isEmpty()) return QImage();
 
     if (proofPaintColors && m_d->needsColorProofing(srcDevice->colorSpace())) {
-        srcDevice->convertTo(paintingColorSpace(), m_d->renderingIntent, m_d->conversionFlags);
+        srcDevice->convertTo(paintingColorSpace(), m_d->displayConfig.intent, m_d->displayConfig.conversionFlags);
     }
 
     if (m_d->useOcio()) {
@@ -583,7 +577,8 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice, bool proof
 
     return device->convertToQImage(m_d->qtWidgetsProfile(),
                                    bounds,
-                                   m_d->renderingIntent, m_d->conversionFlags);
+                                   m_d->displayConfig.intent,
+                                   m_d->displayConfig.conversionFlags);
 }
 
 QImage KisDisplayColorConverter::toQImage(const KoColorSpace *srcColorSpace, const quint8 *data, QSize size, bool proofPaintColors) const
@@ -601,8 +596,8 @@ QImage KisDisplayColorConverter::toQImage(const KoColorSpace *srcColorSpace, con
         colorSpace->convertPixelsTo(pixels, proofBuffer.data(),
                                       paintingColorSpace(),
                                       numPixels,
-                                      m_d->renderingIntent,
-                                      m_d->conversionFlags);
+                                      m_d->displayConfig.intent,
+                                      m_d->displayConfig.conversionFlags);
         colorSpace = paintingColorSpace();
         pixels = proofBuffer.data();
     }
@@ -614,18 +609,20 @@ QImage KisDisplayColorConverter::toQImage(const KoColorSpace *srcColorSpace, con
         colorSpace->convertPixelsTo(pixels, ocioBuffer.data(),
                                       m_d->ocioInputColorSpace(),
                                       numPixels,
-                                      m_d->renderingIntent,
-                                      m_d->conversionFlags);
+                                      m_d->displayConfig.intent,
+                                      m_d->displayConfig.conversionFlags);
         m_d->displayFilter->filter(ocioBuffer.data(), numPixels);
 
         return m_d->ocioOutputColorSpace()->convertToQImage(ocioBuffer.data(), size.width(), size.height(),
                                                             m_d->qtWidgetsProfile(),
-                                                            m_d->renderingIntent, m_d->conversionFlags);
+                                                            m_d->displayConfig.intent,
+                                                            m_d->displayConfig.conversionFlags);
     }
 
     return colorSpace->convertToQImage(pixels, size.width(), size.height(),
                                           m_d->qtWidgetsProfile(),
-                                          m_d->renderingIntent, m_d->conversionFlags);
+                                          m_d->displayConfig.intent,
+                                          m_d->displayConfig.conversionFlags);
 }
 
 void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP device,

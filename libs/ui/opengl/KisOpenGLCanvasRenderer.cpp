@@ -360,9 +360,7 @@ void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
 
     if (KisOpenGL::useFBOForToolOutlineRendering()) {
         QOpenGLFramebufferObjectFormat format;
-        if (KisOpenGLModeProber::instance()->useHDRMode()) {
-            format.setInternalTextureFormat(GL_RGBA16F);
-        }
+        format.setInternalTextureFormat(d->canvasBridge->internalTextureFormat());
         d->canvasFBO.reset(new QOpenGLFramebufferObject(d->viewportDevicePixelSize, format));
     }
 }

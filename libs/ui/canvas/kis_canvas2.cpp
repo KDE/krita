@@ -32,6 +32,7 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KisReferenceImagesLayer.h>
+#include <KoSvgTextShape.h>
 
 #include <KisUsageLogger.h>
 
@@ -189,6 +190,7 @@ public:
     KoShapeManager shapeManager;
     KisSelectedShapesProxy selectedShapesProxy;
     bool currentCanvasIsOpenGL = true;
+    bool textShapeManagerEnabled = false;
     int openGLFilterMode = 0;
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
@@ -574,10 +576,32 @@ KoShapeManager* KisCanvas2::globalShapeManager() const
     return &m_d->shapeManager;
 }
 
+bool KisCanvas2::textShapeManagerEnabled() const
+{
+    return m_d->textShapeManagerEnabled;
+}
+
+void KisCanvas2::setTextShapeManagerEnabled(const bool enable)
+{
+    if (m_d->textShapeManagerEnabled == enable) return;
+    m_d->textShapeManagerEnabled = enable;
+    slotTrySwitchShapeManager();
+}
+
 KoShapeManager *KisCanvas2::localShapeManager() const
 {
     KisNodeSP node = m_d->view->currentNode();
     KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
+
+    if (m_d->textShapeManagerEnabled) {
+        Q_FOREACH(KoShape*shape, localShapeManager->selection()->selectedEditableShapes()) {
+            KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+            if (text) {
+                localShapeManager = text->internalShapeManager();
+                break;
+            }
+        }
+    }
 
     if (localShapeManager != m_d->currentlyActiveShapeManager) {
         m_d->setActiveShapeManager(localShapeManager);
@@ -1292,12 +1316,16 @@ KisPopupPalette *KisCanvas2::popupPalette()
 
 void KisCanvas2::slotTrySwitchShapeManager()
 {
+    // Just call localShapeManager to sync the shape manager.
+    localShapeManager();
+    /*
     KisNodeSP node = m_d->view->currentNode();
 
     QPointer<KoShapeManager> newManager;
     newManager = fetchShapeManagerFromNode(node);
 
     m_d->setActiveShapeManager(newManager);
+    */
 }
 
 void KisCanvas2::notifyLevelOfDetailChange()

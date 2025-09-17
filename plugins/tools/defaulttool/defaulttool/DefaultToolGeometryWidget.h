@@ -54,6 +54,8 @@ private Q_SLOTS:
     void slotPaintOrderChanged();
     void slotUpdatePaintOrder();
 
+    void slotUpdateInternalShapes();
+
 private:
     KoInteractionTool *m_tool;
     QScopedPointer<KisAspectRatioLocker> m_sizeAspectLocker;

@@ -174,6 +174,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         // update shape. relayout.
         //TODO: also handle type == Deleted. Need to figure out the order of operations though.
         relayout();
+        this->updateAbsolute(boundingRect());
     }
     if ((!shape || shape == this) && (type == ContentChanged || type == ChildChanged)) {
         relayout();
@@ -2046,6 +2047,11 @@ void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const
 {
     return d->shapesSubtract;
+}
+
+KoShapeManager *KoSvgTextShape::internalShapeManager() const
+{
+    return d->internalShapesPainter->internalShapeManager();
 }
 
 QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext &context) const

@@ -42,6 +42,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_signals_blocker.h"
 #include "kis_icon.h"
+#include <kis_canvas2.h>
 
 
 DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent)
@@ -111,6 +112,8 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-marker-fill-stroke"), i18n("Markers, Fill, Stroke"));
     cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-marker-stroke-fill"), i18n("Markers, Stroke, Fill"));
     connect(cmbPaintOrder, SIGNAL(currentIndexChanged(int)), SLOT(slotPaintOrderChanged()));
+
+    connect(btnInternalShapes, SIGNAL(toggled(bool)), this, SLOT(slotUpdateInternalShapes()));
 
 
     dblOpacity->setRange(0.0, 1.0, 2);
@@ -363,6 +366,15 @@ void DefaultToolGeometryWidget::slotUpdatePaintOrder() {
             index = paintOrder.at(1) == KoShape::Fill? 4: 5;
         }
         cmbPaintOrder->setCurrentIndex(index);
+    }
+}
+
+
+void DefaultToolGeometryWidget::slotUpdateInternalShapes()
+{
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    if (canvas) {
+        canvas->setTextShapeManagerEnabled(btnInternalShapes->isChecked());
     }
 }
 

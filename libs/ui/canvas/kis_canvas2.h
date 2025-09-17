@@ -109,6 +109,9 @@ public: // KoCanvasBase implementation
      */
     KoShapeManager *globalShapeManager() const;
 
+    bool textShapeManagerEnabled() const;
+    void setTextShapeManagerEnabled(const bool enable);
+
     /**
      * Return shape manager associated with the currently active node.
      * If current node has no internal shape manager, return null.

@@ -115,6 +115,12 @@ public:
      */
     QList<KoShape*> shapesSubtract() const;
 
+    /**
+     * @brief internalShapeManager
+     * @return access the internal shapes manager for the contour shapes.
+     */
+    KoShapeManager *internalShapeManager() const;
+
     QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const;
 
     void setResolution(qreal xRes, qreal yRes) override;

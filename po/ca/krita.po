@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-16 02:04+0000\n"
-"PO-Revision-Date: 2025-09-10 09:56+0200\n"
+"PO-Revision-Date: 2025-09-16 12:00+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27068,33 +27068,28 @@ msgid "Eraser"
 msgstr "Esborrador"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:328
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Retall desactivat"
+msgstr "Automàtic (desactivat)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:329
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Activada"
+msgstr "Automàtic (activat)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:330
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
-msgstr "Activada"
+msgstr "Activat"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:331
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
-msgstr "Desactivada"
+msgstr "Desactivat"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:343
 #, kde-format
@@ -30008,10 +30003,9 @@ msgstr "Canvia la selecció de modificadors Control/Alt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Activa el pintat tàctil"
+msgstr "Pintat tàctil:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:982

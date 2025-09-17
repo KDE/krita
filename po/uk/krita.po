@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-16 02:04+0000\n"
-"PO-Revision-Date: 2025-09-11 08:40+0300\n"
+"PO-Revision-Date: 2025-09-16 09:58+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -27261,30 +27261,25 @@ msgid "Eraser"
 msgstr "Гумка"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:328
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Обрізання вимкнено"
+msgstr "Автоматично (вимкнено)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:329
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Увімкнено"
+msgstr "Автоматично (увімкнено)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:330
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Увімкнено"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:331
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Вимкнено"
@@ -30210,10 +30205,9 @@ msgstr "Перемкнути модифікатори позначення Ctrl/
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Увімкнути сенсорне малювання"
+msgstr "Сенсорне малювання:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:982

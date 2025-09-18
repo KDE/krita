@@ -484,6 +484,7 @@ public:
     }
 
     ~Private() {
+        internalShapesPainter.reset();
         qDeleteAll(shapesInside);
         shapesInside.clear();
         qDeleteAll(shapesSubtract);

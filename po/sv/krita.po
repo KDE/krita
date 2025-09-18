@@ -52,8 +52,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-16 02:04+0000\n"
-"PO-Revision-Date: 2025-09-11 21:45+0200\n"
+"POT-Creation-Date: 2025-09-18 02:01+0000\n"
+"PO-Revision-Date: 2025-09-17 21:58+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -20265,30 +20265,30 @@ msgid "Character Variant %1"
 msgstr "Teckenvariant %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1750
+#: libs/flake/text/KoSvgTextShape.cpp:1817
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Platsmarkeringstext"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1729
+#: libs/flake/text/KoSvgTextShape.cpp:1796
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1731
-#: libs/flake/text/KoSvgTextShape.cpp:1739
+#: libs/flake/text/KoSvgTextShape.cpp:1798
+#: libs/flake/text/KoSvgTextShape.cpp:1806
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-textform"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1737
+#: libs/flake/text/KoSvgTextShape.cpp:1804
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1760
+#: libs/flake/text/KoSvgTextShape.cpp:1827
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -26962,30 +26962,25 @@ msgid "Eraser"
 msgstr "Radering"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:328
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Avskärning inaktiverad"
+msgstr "Automatisk (inaktiverad)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:329
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Aktiverad"
+msgstr "Automatisk (aktiverad)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:330
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Aktiverad"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:331
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Inaktiverad"
@@ -29891,10 +29886,9 @@ msgstr "Byt väljartangenterna Ctrl och Alt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Aktivera pekmålning"
+msgstr "Pekmålning"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:982
@@ -64256,6 +64250,14 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Alla glyfer"
 
+#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Image Type"
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "Konvertera bildtyp"
+
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -64354,7 +64356,7 @@ msgstr "100 %"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:150
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:164
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Bokstavsmellanrum"
@@ -64822,7 +64824,7 @@ msgstr ""
 "Använd SVG CSS `white-space: pre` hård radbrytning, med `inline-size` som "
 "definierar textbredden."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:303
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -64876,77 +64878,137 @@ msgstr "SVG-källa"
 msgid "SVG"
 msgstr "SVG"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
+#, kde-format
+msgid "Glyph Palette"
+msgstr "Glyfpalett"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
+#, kde-format
+msgid "Edit SVG Source"
+msgstr "Redigera SVG-källa"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:74
 #, kde-format
 msgid "Edit Text"
 msgstr "Redigera text"
 
 #. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:67
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Skapa nya texter med..."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:95
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Ankra text till vänster."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:104
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:118
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ankra text i mitten."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:141
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ankra text till höger."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:170
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:184
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
 msgstr "Text flödar horisontellt, uppifrån och ner."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:210
 #, kde-format
 msgid "Text flows vertical, right to left."
 msgstr "Text flödar vertikalt, från höger till vänster."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:222
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:236
 #, kde-format
 msgid "Text flows vertical, left to right."
 msgstr "Text flödar vertikalt, från vänster till höger."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:255
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:269
 #, kde-format
 msgid "Left to right text direction."
 msgstr "Vänster till höger textriktning."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:281
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:295
 #, kde-format
 msgid "Right to left text direction."
 msgstr "Höger till vänster textriktning."
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:325
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "Redigera SVG-källa"
+#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
+#, fuzzy, kde-format
+#| msgid "Text Shape"
+msgid "Text Type"
+msgstr "Textform"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
 #, kde-format
-msgid "Glyph Palette"
-msgstr "Glyfpalett"
+msgid ""
+"<html><head/><body><p>The text will not wrap and preserves spaces and new "
+"lines. A line break is inserted so the lines from wrapping or positioning "
+"remain separated.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
+#, fuzzy, kde-format
+#| msgid "Performance"
+msgid "Preformatted"
+msgstr "Prestanda"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
+#| "</p></body></html>"
+msgid ""
+"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
+"are preserved. New lines are not removed.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Använd ritplattans lutning för att bestämma "
+"normalvektorer.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Sine Wave Lines"
+#| msgid "Sine Wave"
+msgid "Inline Wrapped"
+msgstr "Sinusvågor"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
+#, kde-format
+msgid ""
+"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+"each line. Spaces and new lines are collapsed. This is for backward "
+"compatibility with SVG 1.1.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Prepositioned"
+msgstr "Position"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -70718,9 +70780,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "A shape that shows text"
 #~ msgstr "En form som visar text"
 
-#~ msgid "Text Shape"
-#~ msgstr "Textform"
-
 #~ msgid "Variable"
 #~ msgstr "Variabel"
 
@@ -71204,10 +71263,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Show Decorations"
 #~ msgstr "Visa dekorationer"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Convert Image Type"
-#~ msgstr "Konvertera bildtyp"
 
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> This "

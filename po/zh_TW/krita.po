@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-16 02:04+0000\n"
+"POT-Creation-Date: 2025-09-18 02:01+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -20275,7 +20275,7 @@ msgid "Character Variant %1"
 msgstr "變種 (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1750
+#: libs/flake/text/KoSvgTextShape.cpp:1817
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -20283,24 +20283,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>佔位文字</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1729
+#: libs/flake/text/KoSvgTextShape.cpp:1796
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1731
-#: libs/flake/text/KoSvgTextShape.cpp:1739
+#: libs/flake/text/KoSvgTextShape.cpp:1798
+#: libs/flake/text/KoSvgTextShape.cpp:1806
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形狀"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1737
+#: libs/flake/text/KoSvgTextShape.cpp:1804
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1760
+#: libs/flake/text/KoSvgTextShape.cpp:1827
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -63747,6 +63747,14 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "全部頁面(&G)"
 
+#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Convert to Shape"
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "轉成形狀"
+
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -63845,7 +63853,7 @@ msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:150
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:164
 #, kde-format
 msgid "Letter Spacing"
 msgstr "字距"
@@ -64317,7 +64325,7 @@ msgstr ""
 "使用 SVG 格式中的 CSS 樣式 `white-space: pre-wrap` 作自動換行，並以 `inline-"
 "size` 指定文字寛度。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:303
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -64371,78 +64379,137 @@ msgstr "SVG 原始碼"
 msgid "SVG"
 msgstr "SVG"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Palette"
+msgid "Glyph Palette"
+msgstr "調色板"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
+#, kde-format
+msgid "Edit SVG Source"
+msgstr "編輯 SVG 原始碼"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:74
 #, kde-format
 msgid "Edit Text"
 msgstr "編輯文字"
 
 #. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:67
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Create new texts with..."
 msgstr "建立新文字自…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:95
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "將文字錨定到左側。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:104
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:118
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "將文字錨定到中間。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:141
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "將文字錨定到右側。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:170
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:184
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
 msgstr "橫式書寫文字，由上至下排列。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:210
 #, kde-format
 msgid "Text flows vertical, right to left."
 msgstr "直式書寫文字，由右至左排行。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:222
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:236
 #, kde-format
 msgid "Text flows vertical, left to right."
 msgstr "直式書寫文字，由左至右排行。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:255
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:269
 #, kde-format
 msgid "Left to right text direction."
 msgstr "左至右書寫方向。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:281
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:295
 #, kde-format
 msgid "Right to left text direction."
 msgstr "右至左書寫方向。"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:325
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "編輯 SVG 原始碼"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
+#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
 #, fuzzy, kde-format
-#| msgid "Palette"
-msgid "Glyph Palette"
-msgstr "調色板"
+#| msgid "Text Tool"
+msgid "Text Type"
+msgstr "文字工具"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
+#, kde-format
+msgid ""
+"<html><head/><body><p>The text will not wrap and preserves spaces and new "
+"lines. A line break is inserted so the lines from wrapping or positioning "
+"remain separated.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
+#, fuzzy, kde-format
+#| msgid "Performance"
+msgid "Preformatted"
+msgstr "效能"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
+#| "</p></body></html>"
+msgid ""
+"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
+"are preserved. New lines are not removed.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>使用數位板的壓感筆傾斜度決定法線。</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Sine Wave Lines"
+#| msgid "Sine Wave"
+msgid "Inline Wrapped"
+msgstr "正弦波紋"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
+#, kde-format
+msgid ""
+"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+"each line. Spaces and new lines are collapsed. This is for backward "
+"compatibility with SVG 1.1.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Prepositioned"
+msgstr "位置"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33

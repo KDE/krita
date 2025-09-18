@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-16 02:04+0000\n"
+"POT-Creation-Date: 2025-09-18 02:01+0000\n"
 "PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -20353,30 +20353,30 @@ msgid "Character Variant %1"
 msgstr "Variante de carácter %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1750
+#: libs/flake/text/KoSvgTextShape.cpp:1817
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Texto de exemplo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1729
+#: libs/flake/text/KoSvgTextShape.cpp:1796
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1731
-#: libs/flake/text/KoSvgTextShape.cpp:1739
+#: libs/flake/text/KoSvgTextShape.cpp:1798
+#: libs/flake/text/KoSvgTextShape.cpp:1806
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1737
+#: libs/flake/text/KoSvgTextShape.cpp:1804
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1760
+#: libs/flake/text/KoSvgTextShape.cpp:1827
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -64485,6 +64485,14 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Todos os símbolos"
 
+#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Image Type"
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "Converter o tipo de imaxe"
+
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -64583,7 +64591,7 @@ msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:150
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:164
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Espazo entre letras"
@@ -65052,7 +65060,7 @@ msgstr ""
 "Usar o modo de axuste duro `white-space: pre-wrap` de CSS de SVG, coa "
 "anchura do texto definida con `inline-size`."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:303
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -65106,77 +65114,137 @@ msgstr "Fonte de SVG"
 msgid "SVG"
 msgstr "SVG"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
+#, kde-format
+msgid "Glyph Palette"
+msgstr "Paleta de símbolos"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
+#, kde-format
+msgid "Edit SVG Source"
+msgstr "Editar a fonte do SVG"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:74
 #, kde-format
 msgid "Edit Text"
 msgstr "Editar o texto"
 
 #. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:67
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Crear novos textos con…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:95
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Ancorar o texto á esquerda."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:104
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:118
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ancorar o texto ao medio."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:141
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ancorar o texto á dereita."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:170
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:184
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
 msgstr "O texto flúe horizontalmente, de arriba a abaixo."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:210
 #, kde-format
 msgid "Text flows vertical, right to left."
 msgstr "O texto flúe verticalmente, de dereita a esquerda."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:222
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:236
 #, kde-format
 msgid "Text flows vertical, left to right."
 msgstr "O texto flúe verticalmente, de esquerda a dereita."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:255
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:269
 #, kde-format
 msgid "Left to right text direction."
 msgstr "Dirección do texto de esquerda a dereita."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:281
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:295
 #, kde-format
 msgid "Right to left text direction."
 msgstr "Dirección do texto de dereita a esquerda."
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:325
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "Editar a fonte do SVG"
+#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
+#, fuzzy, kde-format
+#| msgid "Text Shape"
+msgid "Text Type"
+msgstr "Forma de texto"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
 #, kde-format
-msgid "Glyph Palette"
-msgstr "Paleta de símbolos"
+msgid ""
+"<html><head/><body><p>The text will not wrap and preserves spaces and new "
+"lines. A line break is inserted so the lines from wrapping or positioning "
+"remain separated.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
+#, fuzzy, kde-format
+#| msgid "Performance"
+msgid "Preformatted"
+msgstr "Rendemento"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
+#| "</p></body></html>"
+msgid ""
+"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
+"are preserved. New lines are not removed.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Usar a inclinación da tableta para determinar as "
+"normais.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Sine Wave Lines"
+#| msgid "Sine Wave"
+msgid "Inline Wrapped"
+msgstr "Onda sinusoidal"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
+#, kde-format
+msgid ""
+"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+"each line. Spaces and new lines are collapsed. This is for backward "
+"compatibility with SVG 1.1.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Prepositioned"
+msgstr "Posición"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -71386,9 +71454,6 @@ msgstr "Ferramenta de imaxes de referencia"
 #~ msgid "A shape that shows text"
 #~ msgstr "Unha forma que contén texto"
 
-#~ msgid "Text Shape"
-#~ msgstr "Forma de texto"
-
 #~ msgid "Variable"
 #~ msgstr "Variábel"
 
@@ -71874,10 +71939,6 @@ msgstr "Ferramenta de imaxes de referencia"
 
 #~ msgid "Show Decorations"
 #~ msgstr "Mostrar as decoracións"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Convert Image Type"
-#~ msgstr "Converter o tipo de imaxe"
 
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> This "

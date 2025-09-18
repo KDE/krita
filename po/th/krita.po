@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-16 02:04+0000\n"
+"POT-Creation-Date: 2025-09-18 02:01+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -20192,30 +20192,30 @@ msgid "Character Variant %1"
 msgstr "อยู่เหนือ %1 ตัวปัจจุบัน"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1750
+#: libs/flake/text/KoSvgTextShape.cpp:1817
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1729
+#: libs/flake/text/KoSvgTextShape.cpp:1796
 #, fuzzy, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "สี"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1731
-#: libs/flake/text/KoSvgTextShape.cpp:1739
+#: libs/flake/text/KoSvgTextShape.cpp:1798
+#: libs/flake/text/KoSvgTextShape.cpp:1806
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "ความแหลม:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1737
+#: libs/flake/text/KoSvgTextShape.cpp:1804
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "สี"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1760
+#: libs/flake/text/KoSvgTextShape.cpp:1827
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -63065,6 +63065,12 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "รูปภาพ"
 
+#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "แปลงชนิดภาพ"
+
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -63166,7 +63172,7 @@ msgstr "  100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:150
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:164
 #, fuzzy, kde-format
 msgid "Letter Spacing"
 msgstr "ช่องว่าง:"
@@ -63635,7 +63641,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:303
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -63690,78 +63696,129 @@ msgstr "รูปภาพ"
 msgid "SVG"
 msgstr "HSV"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Open palette"
+msgid "Glyph Palette"
+msgstr "เปิดจานสี"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
+#, fuzzy, kde-format
+msgid "Edit SVG Source"
+msgstr "รูปภาพ"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:74
 #, fuzzy, kde-format
 msgid "Edit Text"
 msgstr "ข้อความ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:67
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, fuzzy, kde-format
 msgid "Create new texts with..."
 msgstr "เปิดเอกสารเปล่า"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:95
 #, fuzzy, kde-format
 msgid "Anchor text to the left."
 msgstr "อยู่เหนือ %1 ตัวปัจจุบัน"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:104
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:118
 #, fuzzy, kde-format
 msgid "Anchor text to the middle."
 msgstr "อยู่เหนือ %1 ตัวปัจจุบัน"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:141
 #, fuzzy, kde-format
 msgid "Anchor text to the right."
 msgstr "อยู่เหนือ %1 ตัวปัจจุบัน"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:170
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:184
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:210
 #, kde-format
 msgid "Text flows vertical, right to left."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:222
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:236
 #, kde-format
 msgid "Text flows vertical, left to right."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:255
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:269
 #, fuzzy, kde-format
 msgid "Left to right text direction."
 msgstr "ความอิ่มสี"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:281
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:295
 #, fuzzy, kde-format
 msgid "Right to left text direction."
 msgstr "การเลือก"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:325
+#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
 #, fuzzy, kde-format
-msgid "Edit SVG Source"
-msgstr "รูปภาพ"
+msgid "Text Type"
+msgstr "ความแหลม:"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
+#, kde-format
+msgid ""
+"<html><head/><body><p>The text will not wrap and preserves spaces and new "
+"lines. A line break is inserted so the lines from wrapping or positioning "
+"remain separated.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
 #, fuzzy, kde-format
-#| msgid "Open palette"
-msgid "Glyph Palette"
-msgstr "เปิดจานสี"
+#| msgid "Performance"
+msgid "Preformatted"
+msgstr "ประสิทธิภาพ"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
+#, kde-format
+msgid ""
+"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
+"are preserved. New lines are not removed.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
+#, fuzzy, kde-format
+msgid "Inline Wrapped"
+msgstr "ลิงค์"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
+#, kde-format
+msgid ""
+"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+"each line. Spaces and new lines are collapsed. This is for backward "
+"compatibility with SVG 1.1.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
+#, fuzzy, kde-format
+msgid "Prepositioned"
+msgstr "การเพิ่ม"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -69291,10 +69348,6 @@ msgstr "ลบรูปภาพ"
 #~ msgid "A shape that shows text"
 #~ msgstr "เครื่องมือวาดสี่เ&หลี่ยม"
 
-#, fuzzy
-#~ msgid "Text Shape"
-#~ msgstr "ความแหลม:"
-
 #~ msgid "Variable"
 #~ msgstr "ตัวแปร"
 
@@ -69744,11 +69797,6 @@ msgstr "ลบรูปภาพ"
 #, fuzzy
 #~ msgid "Show Decorations"
 #~ msgstr "ซ่อนส่วนที่เลือก"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Convert Image Type"
-#~ msgstr "แปลงชนิดภาพ"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

@@ -379,7 +379,7 @@ void KisConfig::setNewCursorStyle(CursorStyle style)
 QColor KisConfig::getCursorMainColor(bool defaultValue) const
 {
     QColor col;
-    col.setRgbF(0.501961, 1.0, 0.501961);
+    col.setRgbF(1.0, 0.0, 1.0);
     return (defaultValue ? col : m_cfg.readEntry("cursorMaincColor", col));
 }
 

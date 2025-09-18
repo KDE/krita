@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 03:22+0000\n"
-"PO-Revision-Date: 2025-07-03 10:52+0200\n"
+"PO-Revision-Date: 2025-09-17 16:51+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -22933,30 +22933,25 @@ msgid "Eraser"
 msgstr "Radering"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:321
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Avskärning inaktiverad"
+msgstr "Automatisk (inaktiverad)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Aktiverad"
+msgstr "Automatisk (aktiverad)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Aktiverad"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Inaktiverad"
@@ -25492,10 +25487,9 @@ msgstr "Byt väljartangenterna Ctrl och Alt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:710
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Aktivera pekmålning"
+msgstr "Pekmålning:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717

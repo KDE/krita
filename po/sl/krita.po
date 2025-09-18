@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 03:22+0000\n"
-"PO-Revision-Date: 2025-07-03 10:48+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"PO-Revision-Date: 2025-09-17 20:42+0200\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20514,7 +20514,7 @@ msgstr "bilinearno"
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
-msgstr "Lanczos3"
+msgstr "lanczos3"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:98
 #, kde-format
@@ -21880,13 +21880,13 @@ msgstr "FFmpeg"
 #: libs/ui/animation/VideoImportDialog.ui:607
 #, kde-format
 msgid "FFmpeg path:"
-msgstr "Pot FFMpeg"
+msgstr "Pot FFMpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
 #, kde-format
 msgid "FFprobe path:"
-msgstr "Pot FFProbe"
+msgstr "Pot FFprobe:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -22008,7 +22008,7 @@ msgstr "Mesto FFmpeg:"
 #: libs/ui/animation/wdg_animationrenderer.ui:249
 #, kde-format
 msgid "FFmpeg version:"
-msgstr "Različica FFMpeg: "
+msgstr "Različica FFMpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22901,30 +22901,25 @@ msgid "Eraser"
 msgstr "Radirka"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:321
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Porezava onemogočena"
+msgstr "Samodejno (onemogočeno)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Omogočeno"
+msgstr "Samodejno (omogočeno)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Omogočeno"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Onemogočeno"
@@ -25460,10 +25455,9 @@ msgstr "Preklopi spremenilnika izbiranja krmilko/izmenjalko"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:710
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Omogoči slikanje na dotik"
+msgstr "Slikanje na dotik:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
@@ -25543,7 +25537,7 @@ msgstr " minut"
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
-msgstr " "
+msgstr "Vsakih "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
 #: libs/ui/forms/wdggeneralsettings.ui:902
@@ -26606,7 +26600,7 @@ msgid ""
 "reconfigured in `Image > Properties.`"
 msgstr ""
 "Uporabi barvo ozadja in prekrivnost kot osnovno barvo platna. To lahko znova "
-"prilagodite pod Slika > Lastnosti."
+"prilagodite pod `Slika > Lastnosti`."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -27600,7 +27594,7 @@ msgstr "Desna barva:"
 #, kde-format
 msgctxt "Edit interpolation of segment in segment editor"
 msgid "Interpolation:"
-msgstr "interpolacija:"
+msgstr "Interpolacija:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentInterpolationTypeComboBox)
@@ -33094,7 +33088,7 @@ msgstr "Prosojno"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, kde-format
 msgid "Opacity: "
-msgstr "Prekrivnost:"
+msgstr "Prekrivnost: "
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:99
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:161
@@ -38343,7 +38337,7 @@ msgstr "Nemo"
 #, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Glasnost:"
+msgstr "Glasnost: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
 #, kde-format
@@ -41100,13 +41094,13 @@ msgstr "koncu interakcije"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
 #, kde-format
 msgid "Line Count:"
-msgstr "Število vrstic: "
+msgstr "Število vrstic:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
 #, kde-format
 msgid "Line Height:"
-msgstr "Višina vrstice: "
+msgstr "Višina vrstice:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
@@ -46473,7 +46467,7 @@ msgstr "Barve"
 #, kde-format
 msgctxt "Line color"
 msgid "Lines: "
-msgstr "Črte:"
+msgstr "Črte: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:119
@@ -46607,7 +46601,7 @@ msgstr "Vrsta vzorca screentone"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:112
 #, kde-format
 msgid "Interpolation:"
-msgstr "interpolacija:"
+msgstr "Interpolacija:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEqualize)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:129
@@ -52924,7 +52918,7 @@ msgstr "Vir"
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
 #, kde-format
 msgid "Strength: "
-msgstr "Moč:"
+msgstr "Moč: "
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:69
 #, kde-format
@@ -60800,30 +60794,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html>Programska oprema KDE je in bo vedno na voljo brezplačno, vendar "
-#~ "ustvarjanje ni brezplačno.<br /><br />Za podporo razvoju je KDE skupnost "
-#~ "ustanovila KDE e.V., neprofitno organizacijo, ki je zakonito ustanovljena "
-#~ "v Nemčiji. KDE e.V. predstavlja skupnost KDE v pravnih in finančnih "
-#~ "zadevah. Za informacije o KDE e.V glejte <a href=\"%1\">%1</a>.<br /><br /"
-#~ ">KDE ima koristi od številnih vrst prispevkov, vključno s finančnimi. "
-#~ "Sredstva uporabljamo za povračilo stroškov, ki jih imajo člani in drugi "
-#~ "pri prispevanju k projektu. Dodatna sredstva se uporabljajo za pravno "
-#~ "podporo in organizacijo konferenc in sestankov. <br /> <br />Spodbujamo "
-#~ "vas, da podprete naša prizadevanja s finančno donacijo, pri tem pa "
-#~ "uporabite enega od načinov, opisanih na <a href=\"%2\">%2</a>.<br /><br /"
-#~ ">Najlepša hvala vnapej za vašo podporo.</html>"

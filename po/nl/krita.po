@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 03:22+0000\n"
-"PO-Revision-Date: 2025-07-18 23:25+0200\n"
+"PO-Revision-Date: 2025-09-17 11:26+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: \n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -22981,30 +22981,25 @@ msgid "Eraser"
 msgstr "Gum"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:321
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Afsnijden uitgeschakeld"
+msgstr "Automatisch (uitgeschakeld)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Ingeschakeld"
+msgstr "Automatisch (ingeschakeld)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -25552,10 +25547,9 @@ msgstr "Schakel wijzigen van selectie met Control/Alt om"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:710
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Tekenen met aanraking inschakelen"
+msgstr "Tekenen met aanraking:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 03:22+0000\n"
-"PO-Revision-Date: 2025-09-14 15:43-0300\n"
+"PO-Revision-Date: 2025-09-17 05:19-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -22924,30 +22924,25 @@ msgid "Eraser"
 msgstr "Borracha"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:321
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Corte desativado"
+msgstr "Automático (desativado)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Habilitado"
+msgstr "Automático (ativado)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
-msgstr "Habilitado"
+msgstr "Ativado"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Desativado"
@@ -25486,10 +25481,9 @@ msgstr "Mudar os modificadores de seleção Control/Alt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:710
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Ativar Pintura de Toque"
+msgstr "Pintura de toque:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717

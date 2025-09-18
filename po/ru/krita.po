@@ -76,13 +76,14 @@
 # Alexander Yavorsky <kekcuha@gmail.com>, 2020, 2023.
 # Мария Шикунова <mariia@basealt.ru>, 2020, 2021.
 # SPDX-FileCopyrightText: 2022, 2023, 2024 Olesya Gerasimenko <translation-team@basealt.ru>
+# SPDX-FileCopyrightText: 2025 Alevtina <alevkarash@altlinux.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 03:22+0000\n"
-"PO-Revision-Date: 2024-05-17 11:21+0300\n"
-"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"PO-Revision-Date: 2025-09-17 12:11+0300\n"
+"Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -7940,12 +7941,10 @@ msgstr "Разбить в точке"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Разбить на сегменты"
+msgstr "Разбить по выделению"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -12633,12 +12632,10 @@ msgstr "Преобразовать цветовое пространство с�
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Преобразовать цветовое пространство слоя"
+msgstr "Унифицировать цветовое пространство слоёв"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -12648,6 +12645,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Преобразует все слои в цветовое пространство изображения (если они оказались "
+"в другом цветовом пространстве)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
@@ -16597,18 +16596,16 @@ msgstr ""
 "точку."
 
 #: libs/flake/tools/KoPathTool.cpp:708
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Чтобы разбить контур в выбранной точке, нажмите клавишу «B»."
+msgstr "Чтобы разбить контур в выбранной точке, нажмите %1."
 
 #: libs/flake/tools/KoPathTool.cpp:710
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Нажмите клавишу «B», чтобы разбить контур на выбранные сегменты."
+msgstr "Чтобы разбить контур на выбранные сегменты, нажмите %1."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -17495,14 +17492,11 @@ msgstr ""
 "преобразование цветового пространства проекции"
 
 #: libs/image/kis_image.cc:1397
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
-"Преобразование цветового пространства слоя\n"
-"преобразование цветового пространства слоя"
+"Унификация цветового пространства слоёв\n"
+"унификация цветового пространства слоёв"
 
 #: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
@@ -20815,11 +20809,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Заменить файл?"
+msgstr "Перезаписать существующее видео?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20829,6 +20821,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Файл уже существует по пути, по которому вы хотите выполнить обработку видео "
+"[%1]... \n"
+"                                                              Вы уверены, "
+"что хотите перезаписать существующий файл?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -23268,30 +23264,25 @@ msgid "Eraser"
 msgstr "Ластик"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:321
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Ограничение отключено"
+msgstr "Авто (отключено)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Включено"
+msgstr "Авто (включено)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Включено"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Отключено"
@@ -25854,10 +25845,9 @@ msgstr "Переключение модификаторов выделения �
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:710
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Включить рисование касанием"
+msgstr "Рисование касанием:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
@@ -26173,12 +26163,18 @@ msgid ""
 "function keys, and you wish to use them, try disabling this option, but take "
 "this potential problem into account."
 msgstr ""
+"Некоторые приложения могут эмулировать нажатие функциональных клавиш с "
+"высокими номерами (например, F22), чтобы вывести себя на первый план. Это "
+"может нарушить работу системы горячих клавиш и действий Krita. Если у вас "
+"есть клавиатура с функциональными клавишами F13 или выше, и вы хотите их "
+"использовать, попробуйте отключить этот параметр, но учтите эту "
+"потенциальную проблему."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1311
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
-msgstr ""
+msgstr "Игнорировать высокие функциональные клавиши (F13-F24)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1318
@@ -29459,13 +29455,12 @@ msgstr ""
 "импорт анимации"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Ожидание завершения операции с изображением..."
+msgstr "Ожидание завершения операции..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -30296,14 +30291,9 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:222
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Последние файлы</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Работа с Krita</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:229
 #, kde-format
@@ -30311,6 +30301,8 @@ msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Поддержите разработку Krita</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:230
 #, kde-format
@@ -30318,6 +30310,8 @@ msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Веб-сайт Krita</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
@@ -30326,6 +30320,9 @@ msgid ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
 "span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Начало работы</"
+"span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
@@ -30333,16 +30330,14 @@ msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Руководство</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Последние файлы</span></"
-"b></p>"
+"<p><span style=\" color:%1;\"><b>Участие в разработке Krita</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
@@ -30350,6 +30345,8 @@ msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">Сообщество пользователей</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
@@ -30357,6 +30354,8 @@ msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Исходный код</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
@@ -30364,22 +30363,18 @@ msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">API сценариев</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:241
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
-"<html><head/><body><p>Информация о том, как писать сценарии Krita, "
-"представлена в <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">Школе "
-"создания сценариев Krita</span></a>!</p></body></html>"
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Школа создания сценариев</span></"
+"a></p>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -30907,20 +30902,14 @@ msgstr ""
 "сохранения."
 
 #: libs/ui/KisDocument.cpp:844
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Не удалось сохранить как svg: %1"
+msgstr "Не удалось начать сохранение %1. Изображение занято."
 
 #: libs/ui/KisDocument.cpp:849
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Не удалось начать сохранение %1. Дождитесь завершения текущей операции "
-"сохранения."
+msgstr "Не удалось начать сохранение %1. Произошла неизвестная ошибка."
 
 #: libs/ui/KisDocument.cpp:989
 #, kde-format
@@ -31343,6 +31332,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Попытка выполнить дополнительный экспорт изображения, содержащего <b>слой "
+"фильтра</b>. Перед изменением размера изображение будет <b>сведено</b>."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -31351,6 +31342,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Попытка выполнить дополнительный экспорт изображения, содержащего <b>маску "
+"фильтра</b>. Перед изменением размера изображение будет <b>сведено</b>."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -31359,6 +31352,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Попытка выполнить дополнительный экспорт изображения, содержащего <b>стиль "
+"слоя</b>. Перед изменением размера изображение будет <b>сведено</b>."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -35576,47 +35571,40 @@ msgid "Color name:"
 msgstr "Название цвета:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "H:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "В:"
+msgstr "Т:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "ОС:"
+msgstr "Н:"
 
 #: libs/widgets/kis_color_input.cpp:499
-#, fuzzy, kde-format
-#| msgid "L"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr "L"
+msgstr "С:"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
-msgstr "Y:"
+msgstr "О:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "Идентификатор:"
+msgstr "И:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Кол.:"
+msgstr "З:"
 
 # BUGME: remove ellispsis --aspotashev
 #: libs/widgets/kis_file_name_requester.cpp:86
@@ -36660,10 +36648,9 @@ msgid "About &KDE"
 msgstr "О &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Единица:"
+msgstr "Единица"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -36886,6 +36873,12 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Программное обеспечение KDE всегда было и будет доступно бесплатно, "
+"однако его создание не является бесплатным.<br /><br />Для поддержки "
+"разработки сообщество KDE создало KDE e.V., некоммерческую организацию, "
+"официально зарегистрированную в Германии. KDE e.V. представляет сообщество "
+"KDE в юридических и финансовых вопросах. См. <a href=\"%1\">%1</a> для "
+"получения информации о KDE e.V.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36895,6 +36888,10 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE зависит от разных видов поддержки, включая финансовую. Мы используем "
+"средства для возмещения расходов участников и других лиц, понесённых ими при "
+"оказании поддержки. Дополнительные средства используются для юридической "
+"поддержки и организации конференций и встреч.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:126
 #, kde-format
@@ -36902,6 +36899,8 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Мы хотели бы призвать вас поддержать наши усилия финансовым "
+"пожертвованием одним из следующих способов <a href=\"%1\">%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
 #, kde-format
@@ -38682,8 +38681,7 @@ msgid "Bluer/Yellower: "
 msgstr "Синее/Желтее: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Сброс"
@@ -40760,9 +40758,9 @@ msgid "File extension:"
 msgstr "Расширение файла:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clean Up"
-msgstr "Очистить: "
+msgstr "Очистить"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
@@ -54051,10 +54049,9 @@ msgstr "CW оттенок"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50% активного цвета)"
+msgstr "(0% активного цвета)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -61712,7 +61709,6 @@ msgstr "Эталонные изображения"
 #~ "%1;\">Школа создания сценариев</span></a></p></td></table></body></html>"
 
 #, fuzzy
-#~| msgid "Brush Smoothing:"
 #~ msgctxt "action"
 #~ msgid "Brush Smoothing: Pixel"
 #~ msgstr "Сглаживание кисти:"

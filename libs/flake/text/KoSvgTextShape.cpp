@@ -139,6 +139,9 @@ KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     , d(new Private(*rhs.d))
 {
     setShapeId(KoSvgTextShape_SHAPEID);
+    Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
+        shape->addDependee(this);
+    }
 }
 
 KoSvgTextShape::~KoSvgTextShape()
@@ -163,6 +166,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
     KoShape::shapeChanged(type, shape);
 
+    qDebug() << shape << type;
     if ((d->shapesInside.contains(shape) || d->shapesSubtract.contains(shape) || d->textPaths.contains(shape))
             && (type == PositionChanged
                 || type == RotationChanged
@@ -175,10 +179,15 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         //TODO: also handle type == Deleted. Need to figure out the order of operations though.
         relayout();
         this->updateAbsolute(boundingRect());
+        qDebug() << "child updated";
     }
-    if ((!shape || shape == this) && (type == ContentChanged || type == ChildChanged)) {
-        relayout();
-        d->updateInternalShapesList();
+    if ((!shape || shape == this)) {
+        qDebug() << "text updated";
+        if ((type == ContentChanged)) {
+            relayout();
+        } else {
+            d->shapeGroup->setTransformation(this->transformation());
+        }
     }
 }
 
@@ -1810,7 +1819,12 @@ bool KoSvgTextShape::fontMatchingDisabled() const
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
+
+    painter.setTransform(this->absoluteTransformation().inverted()*painter.transform());
     d->internalShapesPainter->paint(painter);
+    painter.restore();
+
+    painter.save();
     KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(textProperties().propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
     if (textRendering == KoSvgText::RenderingOptimizeSpeed || !painter.testRenderHint(QPainter::Antialiasing)) {
         // also apply antialiasing only if antialiasing is active on provided target QPainter
@@ -1865,7 +1879,7 @@ QRectF KoSvgTextShape::outlineRect() const
 
 QRectF KoSvgTextShape::boundingRect() const
 {
-    QRectF result = d->internalShapesPainter->contentRect();
+    QRectF result;
 
     QList<KoShapeStrokeModelSP> parentStrokes;
     for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
@@ -1896,7 +1910,7 @@ QRectF KoSvgTextShape::boundingRect() const
         }
     }
 
-    return this->absoluteTransformation().mapRect(result);
+    return d->internalShapesPainter->contentRect().united(this->absoluteTransformation().mapRect(result));
 }
 
 QSizeF KoSvgTextShape::size() const
@@ -2020,10 +2034,11 @@ void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
         delete shape;
     }
     d->shapesInside = shapesInside;
-    Q_FOREACH(KoShape *shape, d->shapesInside) {
+    d->updateShapeGroup();
+    Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
         shape->addDependee(this);
     }
-    shapeChangedPriv(ChildChanged);
+    shapeChangedPriv(ContentChanged);
 }
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const
@@ -2038,10 +2053,11 @@ void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
         delete shape;
     }
     d->shapesSubtract = shapesSubtract;
-    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+    d->updateShapeGroup();
+    Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
         shape->addDependee(this);
     }
-    shapeChangedPriv(ChildChanged);
+    shapeChangedPriv(ContentChanged);
 }
 
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const

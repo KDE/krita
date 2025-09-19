@@ -31,7 +31,7 @@ KoSvgTextLoader::KoSvgTextLoader(KoSvgTextShape *shape)
 KoSvgTextLoader::~KoSvgTextLoader()
 {
     // run clean-up after parsing to remove empty spans and the like.
-    d->shape->d->updateInternalShapesList();
+    d->shape->d->updateShapeGroup();
     d->shape->cleanUp();
     d->shape->d->isLoading = false;
 }

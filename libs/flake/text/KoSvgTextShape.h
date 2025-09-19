@@ -550,7 +550,6 @@ public:
 protected:
 
     void shapeChanged(ChangeType type, KoShape *shape) override;
-
 private:
     friend class TestSvgText;
     friend class KoSvgTextLoader;

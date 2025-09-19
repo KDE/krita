@@ -92,7 +92,11 @@ void KoSelection::select(KoShape *shape)
 
     // find the topmost parent to select
     while (KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(shape->parent())) {
-        shape = parentGroup;
+        if (parentGroup && parentGroup->isSelectable()) {
+            shape = parentGroup;
+        } else {
+            break;
+        }
     }
 
     d->selectedShapes << shape;

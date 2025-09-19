@@ -16,6 +16,9 @@
 #include <KoShapeManager.h>
 
 #include "KoCssTextUtils.h"
+#include <KoShapeGroup.h>
+#include <commands/KoShapeGroupCommand.h>
+#include <commands/KoShapeUngroupCommand.h>
 
 #include <kis_assert.h>
 #include <KisForest.h>
@@ -440,8 +443,8 @@ public:
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
 
-    Private(): internalShapesPainter(new KoShapePainter) {
-
+    Private(): internalShapesPainter(new KoShapePainter), shapeGroup(new KoShapeGroup) {
+        shapeGroup->setSelectable(false);
     }
 
     enum InternalShapeState {
@@ -455,9 +458,12 @@ public:
         : internalShapesPainter(new KoShapePainter)
         , textData(rhs.textData) {
 
-        cloneShapes(rhs.shapesInside, shapesInside);
-        cloneShapes(rhs.shapesSubtract, shapesSubtract);
-        cloneShapes(rhs.textPaths, textPaths);
+        KoShapeGroup *g = dynamic_cast<KoShapeGroup*>(rhs.shapeGroup.data()->cloneShape());
+        shapeGroup.reset(g);
+        shapeGroup->setSelectable(false);
+        handleShapes(shapeGroup->shapes(), rhs.shapeGroup->shapes(), rhs.shapesInside, shapesInside);
+        handleShapes(shapeGroup->shapes(), rhs.shapeGroup->shapes(), rhs.shapesSubtract, shapesSubtract);
+        handleShapes(shapeGroup->shapes(), rhs.shapeGroup->shapes(), rhs.textPaths, textPaths);
         updateInternalShapesList();
 
         yRes = rhs.yRes;
@@ -475,16 +481,21 @@ public:
         disableFontMatching = rhs.disableFontMatching;
     }
 
-    void cloneShapes(const QList<KoShape*> &sourceShapeList, QList<KoShape*> &destinationShapeList) {
-        Q_FOREACH (KoShape *shape, sourceShapeList) {
-            KoShape *clonedShape = shape->cloneShape();
-            KIS_ASSERT_RECOVER(clonedShape) { continue; }
-            destinationShapeList.append(clonedShape);
+    void handleShapes(const QList<KoShape*> &sourceShapeList, const QList<KoShape*> referenceList2, const QList<KoShape*> referenceShapeList, QList<KoShape*> &destinationShapeList) {
+        for (int i = 0; i<sourceShapeList.size(); i++) {
+            if (referenceShapeList.contains(referenceList2.at(i))) {
+                destinationShapeList.append(sourceShapeList.at(i));
+            }
         }
     }
 
     ~Private() {
+
         internalShapesPainter.reset();
+        Q_FOREACH(KoShape *shape, shapeGroup->shapes()) {
+            shapeGroup->removeShape(shape);
+        }
+        shapeGroup.reset();
         qDeleteAll(shapesInside);
         shapesInside.clear();
         qDeleteAll(shapesSubtract);
@@ -497,16 +508,28 @@ public:
     int yRes = 72;
 
     QScopedPointer<KoShapePainter> internalShapesPainter;
+    QScopedPointer<KoShapeGroup> shapeGroup;
 
     QList<KoShape*> internalShapes() const {
         return internalShapesPainter->internalShapeManager()->shapes();
     }
 
-    void updateInternalShapesList() {
+    void updateShapeGroup() {
         QList<KoShape*> total = shapesInside;
         total.append(shapesSubtract);
         total.append(textPaths);
-        internalShapesPainter->setShapes(total);
+        KUndo2Command *parentCmd = new KUndo2Command();
+        if (!shapeGroup->shapes().isEmpty()) {
+            qWarning() << "shapes are not empty, might leak!";
+            new KoShapeUngroupCommand(shapeGroup.data(), shapeGroup->shapes(), QList<KoShape*>(), parentCmd);
+        }
+        new KoShapeGroupCommand(shapeGroup.data(), total, false, parentCmd);
+        parentCmd->redo();
+        updateInternalShapesList();
+    }
+    void updateInternalShapesList() {
+        qDebug() << Q_FUNC_INFO << shapesInside.size() << shapeGroup->shapes().size();
+        internalShapesPainter->setShapes(shapeGroup->shapes());
     }
 
     QList<KoShape*> shapesInside;

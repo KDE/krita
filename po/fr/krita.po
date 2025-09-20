@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-18 02:01+0000\n"
-"PO-Revision-Date: 2025-09-11 12:22+0200\n"
+"PO-Revision-Date: 2025-09-17 08:47+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -27171,30 +27171,25 @@ msgid "Eraser"
 msgstr "Gomme"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:328
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Découpage désactivé"
+msgstr "Auto (Désactivé)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:329
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Activé"
+msgstr "Auto (Activé)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:330
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Activé"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:331
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Désactivé"
@@ -27340,6 +27335,15 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>L'activation de la gestion des couleurs du canevas crée automatiquement "
+"une surface native séparée du canevas. Cela pourrait causer des problèmes de "
+"performance sur certains systems. </p<p>Si la gestion des couleurs est "
+"désactivée, Krita effectuera le rendu du canevas dans la surface de la "
+"fenêtre principale, considérée comme espace « sRGB ». Cela conduira à deux "
+"limitations :<ol>   <li>Le gamut de couleurs sera limité à « sRGB »,</li>    "
+"<li>Le mode de vérification des couleurs sera limité à « Utiliser la "
+"configuration globale pour l’affichage », c’est-à-dire que l’épreuvage blanc "
+"sur papier deviendra impossible</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1214
 #, kde-format
@@ -30136,10 +30140,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Activer la peinture au doigt"
+msgstr "Peinture au doigt :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:982

@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-18 02:01+0000\n"
-"PO-Revision-Date: 2025-09-16 06:07+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
-"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2025-09-19 09:59+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -64229,12 +64229,9 @@ msgid "All glyphs"
 msgstr "Tüm Glifler"
 
 #: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert to Shape"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr "Şekle Dönüştür"
+msgstr "Metin Türünü Dönüştür"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -64929,10 +64926,9 @@ msgstr "Sağdan sola metin yönü."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
-#, fuzzy, kde-format
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Type"
-msgstr "Metin Aracı"
+msgstr "Metin Türü"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
@@ -64942,34 +64938,31 @@ msgid ""
 "lines. A line break is inserted so the lines from wrapping or positioning "
 "remain separated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Metin kaydırılmaz ve boşlukları ve yeni satırları "
+"korur. Bir satır sonu girilir; böylece satırlar, kaydırmadan veya "
+"konumlandırmadan eksik kalırlar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Preformatted"
-msgstr "Başarım"
+msgstr "Önceden Biçimlendirilmiş"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
 "are preserved. New lines are not removed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Normların belirlenmesi için tabletin eğimini kullanın."
-"</p></body></html>"
+"<html><head/><body><p>Metin sabit bir uzunluğun içinde kaydırılır; boşluklar "
+"ve yeni satırlar korunur. Yeni satırlar kaldırılmaz.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgid "Inline Wrapped"
-msgstr "Sinüs Dalgası"
+msgstr "Satır İçi Kaydırılmış"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
@@ -64979,13 +64972,15 @@ msgid ""
 "each line. Spaces and new lines are collapsed. This is for backward "
 "compatibility with SVG 1.1.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Metin, her bir satırı konumlandırmak için SVG 1.1 "
+"karakter dönüşümlerini kullanır. Bu, SVG 1.1 ile geriye dönük uyumluluğu "
+"korumak içindir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Prepositioned"
-msgstr "Konum"
+msgstr "Önceden Konumlandırılmış"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33

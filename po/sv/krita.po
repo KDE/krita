@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-18 02:01+0000\n"
-"PO-Revision-Date: 2025-09-17 21:58+0200\n"
+"PO-Revision-Date: 2025-09-20 10:24+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -64251,12 +64251,9 @@ msgid "All glyphs"
 msgstr "Alla glyfer"
 
 #: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr "Konvertera bildtyp"
+msgstr "Konvertera texttyp"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -64952,10 +64949,9 @@ msgstr "Höger till vänster textriktning."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
-#, fuzzy, kde-format
-#| msgid "Text Shape"
+#, kde-format
 msgid "Text Type"
-msgstr "Textform"
+msgstr "Texttyp"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
@@ -64965,34 +64961,31 @@ msgid ""
 "lines. A line break is inserted so the lines from wrapping or positioning "
 "remain separated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Texten radbryts inte och behåller mellanslag och "
+"nyrader. En radbrytning infogas så att raderna förblir separerade efter "
+"radbrytning eller positionering.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Preformatted"
-msgstr "Prestanda"
+msgstr "Förformaterad"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
 "are preserved. New lines are not removed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Använd ritplattans lutning för att bestämma "
-"normalvektorer.</p></body></html>"
+"<html><head/><body><p>Text radbryts inom en fast längd, mellanslag och "
+"nyrader bevaras. Nyrader tas inte bort.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgid "Inline Wrapped"
-msgstr "Sinusvågor"
+msgstr "Radbruten på plats"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
@@ -65002,13 +64995,15 @@ msgid ""
 "each line. Spaces and new lines are collapsed. This is for backward "
 "compatibility with SVG 1.1.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Text använder teckentransformeringar i SVG 1.1 för att "
+"placera varje rad. Mellanslag och nyrader är dras ihop. Det är till för "
+"bakåtkompatibilitet med SVG 1.1.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Prepositioned"
-msgstr "Position"
+msgstr "Förplacerad"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33

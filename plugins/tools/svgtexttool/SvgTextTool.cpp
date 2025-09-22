@@ -97,6 +97,13 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
         }
     }
 
+    const QString glyphName = "svg_insert_special_character";
+    QAction *glyphAction = action(glyphName);
+    if (glyphAction) {
+        m_textCursor.registerPropertyAction(glyphAction, glyphName);
+        connect(&m_textCursor, SIGNAL(sigOpenGlyphPalette()), this, SLOT(showGlyphPalette()));
+    }
+
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
     m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);

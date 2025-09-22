@@ -1230,6 +1230,10 @@ bool SvgTextCursor::registerPropertyAction(QAction *action, const QString &name)
         d->actions.append(action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(propertyAction()));
         return true;
+    } else if (name == "svg_insert_special_character") {
+        d->actions.append(action);
+        connect(action, SIGNAL(triggered(bool)), this, SIGNAL(sigOpenGlyphPalette()));
+        return true;
     }
     return false;
 }

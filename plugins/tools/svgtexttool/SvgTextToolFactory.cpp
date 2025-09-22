@@ -40,6 +40,7 @@ QList<QAction *> SvgTextToolFactory::createActionsImpl()
     Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {
         actions << KisActionRegistry::instance()->makeQAction(name, this);
     }
+    actions << KisActionRegistry::instance()->makeQAction("svg_insert_special_character", this);
     return actions;
 }
 

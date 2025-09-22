@@ -199,6 +199,8 @@ Q_SIGNALS:
 
     void updateCursorDecoration(QRectF updateRect);
     void selectionChanged();
+
+    void sigOpenGlyphPalette();
 private Q_SLOTS:
     void blinkCursor();
     void stopBlinkCursor();

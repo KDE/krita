@@ -86,6 +86,27 @@ const QMap<QString, SvgTextShortcutInfo> textShortCuts = {
     },
 
     {
+        "svg_weight_normal",
+        SvgTextShortcutInfo::propertySet(KoSvgTextProperties::FontWeightId,
+        QVariant(400))
+    },
+    {
+        "svg_weight_demi",
+        SvgTextShortcutInfo::propertySet(KoSvgTextProperties::FontWeightId,
+        QVariant(600))
+    },
+    {
+        "svg_weight_black",
+        SvgTextShortcutInfo::propertySet(KoSvgTextProperties::FontWeightId,
+        QVariant(900))
+    },
+    {
+        "svg_weight_light",
+        SvgTextShortcutInfo::propertySet(KoSvgTextProperties::FontWeightId,
+        QVariant(300))
+    },
+
+    {
         "svg_format_italic",
         SvgTextShortcutInfo::propertyToggle(KoSvgTextProperties::FontStyleId,
         QVariant::fromValue(KoSvgText::CssFontStyleData(QFont::StyleNormal)),
@@ -109,6 +130,11 @@ const QMap<QString, SvgTextShortcutInfo> textShortCuts = {
         "svg_format_underline",
         SvgTextShortcutInfo::propertyToggle(KoSvgTextProperties::TextDecorationLineId,
         QVariant(true), QVariant(false), QVariant(KoSvgText::DecorationUnderline))
+    },
+    {
+        "svg_format_strike_through",
+        SvgTextShortcutInfo::propertyToggle(KoSvgTextProperties::TextDecorationLineId,
+        QVariant(true), QVariant(false), QVariant(KoSvgText::DecorationLineThrough))
     },
     {
         "svg_font_kerning",
@@ -223,6 +249,122 @@ bool SvgTextShortCuts::actionEnabled(QAction *action, const QList<KoSvgTextPrope
     return false;
 }
 
+/**
+ * @brief toggleProperty
+ * Handles toggling properties for getModifiedProperties
+ * split out to make code easier to navigate.
+ */
+QVariant toggleProperty(SvgTextShortcutInfo info, QList<KoSvgTextProperties> currentProperties) {
+    QVariant newVal;
+    for(auto properties = currentProperties.begin(); properties != currentProperties.end(); properties++) {
+        QVariant oldValue = properties->propertyOrDefault(info.propertyId);
+
+        if (oldValue.canConvert<KoSvgText::TextDecorations>() && info.propertyId == KoSvgTextProperties::TextDecorationLineId) {
+            KoSvgText::TextDecoration decor = KoSvgText::TextDecoration(info.testValue.toInt());
+            KoSvgText::TextDecorations oldDecor = oldValue.value<KoSvgText::TextDecorations>();
+            KoSvgText::TextDecorations newDecor;
+            newDecor.setFlag(decor, !oldDecor.testFlag(decor));
+            newVal = QVariant::fromValue(newDecor);
+            if (oldDecor.testFlag(decor)) {
+                break;
+            }
+        } else if (oldValue.canConvert<KoSvgText::CssFontStyleData>() && info.propertyId == KoSvgTextProperties::FontStyleId) {
+            KoSvgText::CssFontStyleData testVal = info.testValue.value<KoSvgText::CssFontStyleData>();
+            KoSvgText::CssFontStyleData currentVal = oldValue.value<KoSvgText::CssFontStyleData>();
+            if (currentVal.style == testVal.style) {
+                newVal = info.value2;
+                break;
+            } else {
+                newVal = info.value1;
+            }
+        } else if (oldValue.canConvert<KoSvgText::AutoValue>() && info.propertyId == KoSvgTextProperties::KerningId) {
+            bool testVal = info.testValue.toBool();
+            KoSvgText::AutoValue currentVal = oldValue.value<KoSvgText::AutoValue>();
+            if (currentVal.isAuto == testVal) {
+                currentVal.customValue = 0.0;
+                currentVal.isAuto = info.value2.toBool();
+                newVal = QVariant::fromValue(currentVal);
+                break;
+            } else {
+                currentVal.isAuto = info.value1.toBool();
+                newVal = QVariant::fromValue(currentVal);
+            }
+        } else if (oldValue.canConvert<double>()) {
+            if (oldValue.toDouble() > info.testValue.toDouble()) {
+                newVal = info.value1;
+                break;
+            } else {
+                newVal = info.value2;
+            }
+        } else if (oldValue.canConvert<int>()) {
+            if (oldValue.toInt() > info.testValue.toInt()) {
+                newVal = info.value1;
+                break;
+            } else {
+                newVal = info.value2;
+            }
+        }
+    }
+    return newVal;
+}
+
+/**
+ * @brief adjustValue
+ * Handles increase/decrease value for getModifiedProperties,
+ * split out to make code easier to navigate.
+ *
+ * TODO: handle max/min.
+ */
+QVariant adjustValue(SvgTextShortcutInfo info, QVariant oldValue) {
+    QVariant newVal;
+
+    if (oldValue.canConvert<KoSvgText::CssLengthPercentage>()) {
+        KoSvgText::CssLengthPercentage length = oldValue.value<KoSvgText::CssLengthPercentage>();
+        if (info.type == SvgTextShortcutInfo::Increase) {
+            length.value += info.value1.toDouble();
+        } else {
+            length.value -= info.value1.toDouble();
+        }
+        newVal = QVariant::fromValue(length);
+    } else if (oldValue.canConvert<KoSvgText::AutoLengthPercentage>()) {
+        KoSvgText::AutoLengthPercentage length = oldValue.value<KoSvgText::AutoLengthPercentage>();
+        length.isAuto = false;
+        if (info.type == SvgTextShortcutInfo::Increase) {
+            length.length.value += info.value1.toDouble();
+        } else {
+            length.length.value -= info.value1.toDouble();
+        }
+        newVal = QVariant::fromValue(length);
+    } else if (oldValue.canConvert<KoSvgText::AutoValue>()) {
+        KoSvgText::AutoValue value = oldValue.value<KoSvgText::AutoValue>();
+        value.isAuto = false;
+        if (info.type == SvgTextShortcutInfo::Increase) {
+            value.customValue += info.value1.toDouble();
+        } else {
+            value.customValue -= info.value1.toDouble();
+        }
+        newVal = QVariant::fromValue(value);
+    } else if (oldValue.canConvert<double>()) {
+        double value = oldValue.toDouble();
+        if (info.type == SvgTextShortcutInfo::Increase) {
+            value += info.value1.toDouble();
+        } else {
+            value -= info.value1.toDouble();
+        }
+        newVal = QVariant::fromValue(value);
+    } else if (oldValue.canConvert<int>()) {
+        int value = oldValue.toInt();
+        if (info.type == SvgTextShortcutInfo::Increase) {
+            value += info.value1.toInt();
+        } else {
+            value -= info.value1.toInt();
+        }
+        newVal = QVariant::fromValue(value);
+    }
+
+    return newVal;
+}
+
 KoSvgTextProperties SvgTextShortCuts::getModifiedProperties(const QAction *action, QList<KoSvgTextProperties> currentProperties)
 {
     if (!action || !action->data().canConvert<SvgTextShortcutInfo>() || currentProperties.isEmpty()) return KoSvgTextProperties();
@@ -230,55 +372,7 @@ KoSvgTextProperties SvgTextShortCuts::getModifiedProperties(const QAction *actio
 
     QVariant newVal;
     if (info.type == SvgTextShortcutInfo::Toggle) {
-        for(auto properties = currentProperties.begin(); properties != currentProperties.end(); properties++) {
-            QVariant oldValue = properties->propertyOrDefault(info.propertyId);
-
-            if (oldValue.canConvert<KoSvgText::TextDecorations>() && info.propertyId == KoSvgTextProperties::TextDecorationLineId) {
-                KoSvgText::TextDecoration decor = KoSvgText::TextDecoration(info.testValue.toInt());
-                KoSvgText::TextDecorations oldDecor = oldValue.value<KoSvgText::TextDecorations>();
-                KoSvgText::TextDecorations newDecor;
-                newDecor.setFlag(decor, !oldDecor.testFlag(decor));
-                newVal = QVariant::fromValue(newDecor);
-                if (oldDecor.testFlag(decor)) {
-                    break;
-                }
-            } else if (oldValue.canConvert<KoSvgText::CssFontStyleData>() && info.propertyId == KoSvgTextProperties::FontStyleId) {
-                KoSvgText::CssFontStyleData testVal = info.testValue.value<KoSvgText::CssFontStyleData>();
-                KoSvgText::CssFontStyleData currentVal = oldValue.value<KoSvgText::CssFontStyleData>();
-                if (currentVal.style == testVal.style) {
-                    newVal = info.value2;
-                    break;
-                } else {
-                    newVal = info.value1;
-                }
-            } else if (oldValue.canConvert<KoSvgText::AutoValue>() && info.propertyId == KoSvgTextProperties::KerningId) {
-                bool testVal = info.testValue.toBool();
-                KoSvgText::AutoValue currentVal = oldValue.value<KoSvgText::AutoValue>();
-                if (currentVal.isAuto == testVal) {
-                    currentVal.customValue = 0.0;
-                    currentVal.isAuto = info.value2.toBool();
-                    newVal = QVariant::fromValue(currentVal);
-                    break;
-                } else {
-                    currentVal.isAuto = info.value1.toBool();
-                    newVal = QVariant::fromValue(currentVal);
-                }
-            } else if (oldValue.canConvert<double>()) {
-                if (oldValue.toDouble() > info.testValue.toDouble()) {
-                    newVal = info.value1;
-                    break;
-                } else {
-                    newVal = info.value2;
-                }
-            } else if (oldValue.canConvert<int>()) {
-                if (oldValue.toInt() > info.testValue.toInt()) {
-                    newVal = info.value1;
-                    break;
-                } else {
-                    newVal = info.value2;
-                }
-            }
-        }
+        newVal = toggleProperty(info, currentProperties);
     } else if (info.type == SvgTextShortcutInfo::Set) {
         KoSvgTextProperties properties = currentProperties.first();
         QVariant oldValue = properties.propertyOrDefault(info.propertyId);
@@ -290,24 +384,7 @@ KoSvgTextProperties SvgTextShortCuts::getModifiedProperties(const QAction *actio
         KoSvgTextProperties properties = currentProperties.first();
         QVariant oldValue = properties.propertyOrDefault(info.propertyId);
 
-        if (oldValue.canConvert<KoSvgText::CssLengthPercentage>()) {
-            KoSvgText::CssLengthPercentage length = oldValue.value<KoSvgText::CssLengthPercentage>();
-            if (info.type == SvgTextShortcutInfo::Increase) {
-                length.value += info.value1.toDouble();
-            } else {
-                length.value -= info.value1.toDouble();
-            }
-            newVal = QVariant::fromValue(length);
-        } else if (oldValue.canConvert<KoSvgText::AutoLengthPercentage>()) {
-            KoSvgText::AutoLengthPercentage length = oldValue.value<KoSvgText::AutoLengthPercentage>();
-            length.isAuto = false;
-            if (info.type == SvgTextShortcutInfo::Increase) {
-                length.length.value += info.value1.toDouble();
-            } else {
-                length.length.value -= info.value1.toDouble();
-            }
-            newVal = QVariant::fromValue(length);
-        }
+        newVal = adjustValue(info, oldValue);
     }
     KoSvgTextProperties newProperties;
     newProperties.setProperty(info.propertyId, newVal);

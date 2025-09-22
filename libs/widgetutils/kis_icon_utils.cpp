@@ -218,4 +218,20 @@ void updateIcon(QTabBar *tabBar)
     }
 }
 
+QStringList allUniqueLoadedIconNames()
+{
+    // Take a snapshot of current values to avoid modification during iteration
+    const auto valuesCopy = s_icons.values();
+
+    QSet<QString> uniq(valuesCopy.cbegin(), valuesCopy.cend());
+    QStringList list = QStringList(uniq.cbegin(), uniq.cend());
+    list.sort();
+
+    qDebug() << "Unique icons loaded count:" << list.size();
+    for (const QString &name : list) {
+        qDebug().noquote() << name;
+    }
+    return list;
+}
+
 }

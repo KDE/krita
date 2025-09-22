@@ -593,6 +593,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setXMLFile(":/kxmlgui5/krita5.xmlgui");
 
     guiFactory()->addClient(this);
+    applyIconOverridesFromLocalXML();
     connect(guiFactory(), SIGNAL(makingChanges(bool)), SLOT(slotXmlGuiMakingChanges(bool)));
 
     // Create and plug toolbar list for Settings menu
@@ -2317,6 +2318,7 @@ void KisMainWindow::slotNewToolbarConfig()
 
     plugActionList("toolbarlist", d->toolbarList);
     applyToolBarLayout();
+    applyIconOverridesFromLocalXML();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
@@ -3248,6 +3250,35 @@ QString KisMainWindow::osPreferredColorSpaceReport() const
 #else
     return "Surface color management is disabled\n";
 #endif
+}
+
+void KisMainWindow::applyIconOverridesFromLocalXML()
+{
+    QString xmlPath = KoResourcePaths::locateLocal("data", "krita5.xmlgui");
+    QFile file(xmlPath);
+    if (!file.exists()) {
+        return;
+    }
+
+    QDomDocument doc;
+    if (!file.open(QIODevice::ReadOnly) || !doc.setContent(&file)) {
+        return;
+    }
+
+    QDomNodeList actions = doc.elementsByTagName(QStringLiteral("Action"));
+    for (int i = 0; i < actions.count(); ++i) {
+        QDomElement el = actions.at(i).toElement();
+        if (!el.isNull()) {
+            QString name = el.attribute(QStringLiteral("name"));
+            QString iconName = el.attribute(QStringLiteral("icon"));
+            if (!name.isEmpty() && !iconName.isEmpty()) {
+                QAction *act = actionCollection()->action(name);
+                if (act) {
+                    act->setIcon(KisIconUtils::loadIcon(iconName));
+                }
+            }
+        }
+    }
 }
 
 #include <moc_KisMainWindow.cpp>

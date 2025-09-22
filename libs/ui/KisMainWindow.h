@@ -522,6 +522,9 @@ private:
 
     QString m_errorMessage;
     bool m_dieOnError;
+
+private:
+    void applyIconOverridesFromLocalXML();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

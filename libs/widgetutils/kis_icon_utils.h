@@ -18,6 +18,7 @@ class QTabWidget;
 
 #include <QIcon>
 #include <QString>
+#include <QStringList>
 
 namespace KisIconUtils
 {
@@ -81,6 +82,8 @@ namespace KisIconUtils
      * Update the iconst of the \p tabBar according to the current theme
      */
     KRITAWIDGETUTILS_EXPORT void updateIcon(QTabBar *tabBar);
+
+    KRITAWIDGETUTILS_EXPORT QStringList allUniqueLoadedIconNames();
 }
 
 #endif /* __KIS_ICON_UTILS_H */

@@ -1134,6 +1134,20 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
 
     Q_EMIT guiLoadingFinished();
 
+#ifdef Q_OS_ANDROID
+    // HACK: When opening documents on some Android devices (Samsung, possibly
+    // others), the main window sometimes fails to update until the application
+    // is shunted to the background and brought back or the menu bar is fiddled
+    // with. This slight resize and back fixes this and has no apparent visual
+    // effect. This seems to be an OpenGL issue, since if we switch the QtQuick
+    // backend to hardware, it also fixes the issue (but introduces a bunch of
+    // brutal stacking order problems instead, so software mode it is.)
+    QSize originalSize = size();
+    resize(originalSize.width() + 1, originalSize.height());
+    QCoreApplication::processEvents();
+    resize(originalSize);
+#endif
+
     return view;
 }
 

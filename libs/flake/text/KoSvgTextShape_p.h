@@ -951,7 +951,7 @@ public:
                                             QVector<KoSvgText::CharTransformation> &resolvedTransforms,
                                             bool &inTextPath) {
 
-        inTextPath = (current->textPath);
+        inTextPath = (!current->textPath.isNull());
         auto base = current.base();
         base--;
         if(base != siblingEnd(base)) {

@@ -215,6 +215,14 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         return boost::none;
     }
 
+    if (context.format().redBufferSize() != format.redBufferSize() ||
+        context.format().greenBufferSize() != format.greenBufferSize() ||
+        context.format().blueBufferSize() != format.blueBufferSize()) {
+
+        dbgOpenGL << "Failed to create an OpenGL context with requested bit depth. Requested:" << format.redBufferSize() << "Actual:" << context.format().redBufferSize();
+        return boost::none;
+    }
+
     Result result(context);
 
     dbgOpenGL << "Probe returned" << result.rendererString() << result.driverVersionString() << result.isOpenGLES();
@@ -231,18 +239,23 @@ bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpaceWrap
           rhs == KisSurfaceColorSpaceWrapper::sRGBColorSpace));
 }
 
-void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
+void KisOpenGLModeProber::initSurfaceFormatFromConfig(std::pair<KisSurfaceColorSpaceWrapper, int> rootSurfaceFormat,
                                                       QSurfaceFormat *format)
 {
-#ifdef HAVE_HDR
-    if (config == KisConfig::BT2020_PQ) {
+if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 10);
+}
 
+#ifdef HAVE_HDR
+    if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::bt2020PQColorSpace) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 10);
         format->setRedBufferSize(10);
         format->setGreenBufferSize(10);
         format->setBlueBufferSize(10);
         format->setAlphaBufferSize(2);
         format->setColorSpace(KisSurfaceColorSpaceWrapper(KisSurfaceColorSpaceWrapper::bt2020PQColorSpace));
-    } else if (config == KisConfig::BT709_G10) {
+    } else if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 16);
         format->setRedBufferSize(16);
         format->setGreenBufferSize(16);
         format->setBlueBufferSize(16);
@@ -250,14 +263,26 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setColorSpace(KisSurfaceColorSpaceWrapper(KisSurfaceColorSpaceWrapper::scRGBColorSpace));
     } else
 #else
-    if (config == KisConfig::BT2020_PQ) {
+    if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::bt2020PQColorSpace) {
         qWarning() << "WARNING: Bt.2020 PQ surface type is not supported by this build of Krita";
-    } else if (config == KisConfig::BT709_G10) {
+        rootSurfaceFormat.first = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
+    } else if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
         qWarning() << "WARNING: scRGB surface type is not supported by this build of Krita";
+        rootSurfaceFormat.first = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
     }
 #endif
 
-    {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::DefaultColorSpace);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 8 || rootSurfaceFormat.second == 10);
+
+    if (rootSurfaceFormat.second == 10) {
+        format->setRedBufferSize(10);
+        format->setGreenBufferSize(10);
+        format->setBlueBufferSize(10);
+        format->setAlphaBufferSize(2);
+        // TODO: check if we can use real sRGB space here
+        format->setColorSpace(KisSurfaceColorSpaceWrapper());
+    } else {
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);

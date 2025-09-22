@@ -41,6 +41,7 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 #include <KisCumulativeUndoData.h>
+#include <QSurfaceFormat>
 
 #if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #  include <QtGui/private/qguiapplication_p.h>
@@ -621,8 +622,9 @@ void KisConfig::setCanvasSurfaceColorSpaceManagementMode(KisConfig::CanvasSurfac
 }
 
 
-KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(bool defaultValue) const {
-    QString modeStr = defaultValue ? "auto" : m_cfg.readEntry("canvasSurfaceBitDepthMode", "auto");
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(QSettings *settings, bool defaultValue)
+{
+    QString modeStr = defaultValue ? "auto" : settings->value("canvasSurfaceBitDepthMode", "auto").toString();
 
     if (modeStr == "auto") {
         return CanvasSurfaceBitDepthMode::DepthAuto;
@@ -635,7 +637,8 @@ KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(bool d
     return CanvasSurfaceBitDepthMode::DepthAuto;
 }
 
-void KisConfig::setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value) {
+void KisConfig::setCanvasSurfaceBitDepthMode(QSettings *settings, CanvasSurfaceBitDepthMode value)
+{
     QString modeStr;
 
     switch (value) {
@@ -650,8 +653,41 @@ void KisConfig::setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value) {
             break;
     }
 
-    m_cfg.writeEntry("canvasSurfaceBitDepthMode", modeStr);
+    settings->setValue("canvasSurfaceBitDepthMode", modeStr);
 }
+
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(bool defaultValue) const
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    return canvasSurfaceBitDepthMode(&kritarc, defaultValue);
+}
+
+void KisConfig::setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value)
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    setCanvasSurfaceBitDepthMode(&kritarc, value);
+}
+
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::effectiveCanvasSurfaceBitDepthMode(const QSurfaceFormat &format) const
+{
+    auto mode = canvasSurfaceBitDepthMode();
+
+    if (mode == CanvasSurfaceBitDepthMode::DepthAuto) {
+        if (format.redBufferSize() == 10 &&
+            format.greenBufferSize() == 10 &&
+            format.blueBufferSize() == 10) {
+
+            mode = CanvasSurfaceBitDepthMode::Depth10Bit;
+        } else {
+            mode = CanvasSurfaceBitDepthMode::Depth8Bit;
+        }
+    }
+
+    return mode;
+}
+
 
 QString KisConfig::monitorProfile(int screen) const
 {

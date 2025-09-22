@@ -322,12 +322,12 @@ private:
 
     void requestCanvasUpdateMaybeCompressed();
     void connectCurrentCanvas();
-    void createCanvas(bool useOpenGL, bool compositorPrefersHdr);
+    void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
-    void createOpenGLCanvas(bool compositorPrefersHdr);
+    void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
     void setCanvasWidget(KisAbstractCanvasWidget *widget);
-    void resetCanvas(bool useOpenGL, bool compositorPrefersHdr);
+    void resetCanvas(bool useOpenGL);
     void setDisplayConfig(const KisDisplayConfig &config);
 
     const KoColorProfile* effectiveDisplayProfile(int screenNumber, const KisConfig &config) const;

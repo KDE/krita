@@ -35,11 +35,6 @@ class KRITAUI_EXPORT KisOpenGLCanvas2
     Q_OBJECT
 
 public:
-    static BitDepthMode bitDepthForUserSetting(KisConfig::CanvasSurfaceMode surfaceMode,
-                                               KisConfig::CanvasSurfaceBitDepthMode bitDepthMode,
-                                               bool surfaceIsHDR);
-
-public:
 
     KisOpenGLCanvas2(KisCanvas2 *canvas,
         KisCoordinatesConverter *coordinatesConverter,

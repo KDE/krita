@@ -63,6 +63,7 @@ public:
 public:
     static RendererConfig selectSurfaceConfig(KisOpenGL::OpenGLRenderer preferredRenderer,
                                               KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
+                                              KisConfig::CanvasSurfaceBitDepthMode preferredCanvasSurfaceBitMode,
                                               bool enableDebug);
 
     static void setDefaultSurfaceConfig(const RendererConfig &config);

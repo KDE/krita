@@ -7,6 +7,8 @@
 
 #define GL_GLEXT_PROTOTYPES
 
+#include <QWindow>
+
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/KisOpenGLCanvasRenderer.h"
 #include "opengl/KisOpenGLSync.h"
@@ -76,27 +78,6 @@ public:
     KisRepaintDebugger repaintDbg;
 };
 
-KisOpenGLCanvas2::BitDepthMode
-KisOpenGLCanvas2::bitDepthForUserSetting(KisConfig::CanvasSurfaceMode surfaceMode,
-                                         KisConfig::CanvasSurfaceBitDepthMode bitDepthMode,
-                                         bool surfaceIsHDR)
-{
-    switch (bitDepthMode) {
-    case KisConfig::CanvasSurfaceBitDepthMode::DepthAuto:
-if (surfaceMode == KisConfig::CanvasSurfaceMode::Preferred) {
-        return surfaceIsHDR ? BitDepthMode::Depth10Bit : BitDepthMode::Depth8Bit;
-} else {
-            return BitDepthMode::Depth8Bit;
-        }
-    case KisConfig::CanvasSurfaceBitDepthMode::Depth8Bit:
-        return BitDepthMode::Depth8Bit;
-    case KisConfig::CanvasSurfaceBitDepthMode::Depth10Bit:
-        return BitDepthMode::Depth10Bit;
-    }
-
-    Q_UNREACHABLE_RETURN(BitDepthMode::Depth8Bit);
-}
-
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                    KisCoordinatesConverter *coordinatesConverter,
                                    QWidget *parent,
@@ -150,27 +131,27 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
         setTextureFormat(GL_RGBA16F);
     } else {
         if (bitDepthRequest == BitDepthMode::Depth10Bit) {
-            QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-            format.setRedBufferSize(10);
-            format.setGreenBufferSize(10);
-            format.setBlueBufferSize(10);
-            format.setAlphaBufferSize(2);
-            setFormat(format);
+            if (QSurfaceFormat::defaultFormat().redBufferSize() < 10) {
+                warnOpenGL <<
+                    "WARNING: KisOpenGLCanvas2 was created with a 10-bit surface, "
+                    "while the global surface format is still set to 8-bit. Expect "
+                    "color banding to appear";
+            }
             setTextureFormat(GL_RGB10_A2);
         } else {
-        /**
-         * When in pure OpenGL mode, the canvas surface will have alpha
-         * channel. Therefore, if our canvas blending algorithm produces
-         * semi-transparent pixels (and it does), then Krita window itself
-         * will become transparent. Which is not good.
-         *
-         * In Angle mode, GL_RGB8 is not available (and the transparence effect
-         * doesn't exist at all).
-         */
-        if (!KisOpenGL::hasOpenGLES()) {
-            setTextureFormat(GL_RGB8);
+            /**
+             * When in pure OpenGL mode, the canvas surface will have alpha
+             * channel. Therefore, if our canvas blending algorithm produces
+             * semi-transparent pixels (and it does), then Krita window itself
+             * will become transparent. Which is not good.
+             *
+             * In Angle mode, GL_RGB8 is not available (and the transparence effect
+             * doesn't exist at all).
+             */
+            if (!KisOpenGL::hasOpenGLES()) {
+                setTextureFormat(GL_RGB8);
+            }
         }
-    }
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -531,10 +512,28 @@ QString KisOpenGLCanvas2::currentBitDepthUserReport() const {
     }
     str << Qt::endl;
 
-    str << "Red Buffer Size: " << format().redBufferSize() << Qt::endl;
-    str << "Green Buffer Size: " << format().greenBufferSize() << Qt::endl;
-    str << "Blue Buffer Size: " << format().blueBufferSize() << Qt::endl;
-    str << "Alpha Buffer Size: " << format().alphaBufferSize() << Qt::endl;
+    str << "FBO Buffer Size: "
+        << "R: " << format().redBufferSize() << " "
+        << "G: " << format().greenBufferSize() << " "
+        << "B: " << format().blueBufferSize() << " "
+        << "A: " << format().alphaBufferSize() << Qt::endl;
+
+    QWindow *win = windowHandle();
+    if (win) {
+        str << "Window Buffer Size: "
+        << "R: " << win->format().redBufferSize() << " "
+        << "G: " << win->format().greenBufferSize() << " "
+        << "B: " << win->format().blueBufferSize() << " "
+        << "A: " << win->format().alphaBufferSize() << Qt::endl;
+    }
+
+    if (win) {
+        str << "Global Buffer Size: "
+        << "R: " << QSurfaceFormat::defaultFormat().redBufferSize() << " "
+        << "G: " << QSurfaceFormat::defaultFormat().greenBufferSize() << " "
+        << "B: " << QSurfaceFormat::defaultFormat().blueBufferSize() << " "
+        << "A: " << QSurfaceFormat::defaultFormat().alphaBufferSize() << Qt::endl;
+    }
 
     return report;
 }

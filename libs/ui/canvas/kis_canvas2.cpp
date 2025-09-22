@@ -93,6 +93,7 @@
 #include "KisSnapPixelStrategy.h"
 #include "KisDisplayConfig.h"
 #include "config-qt-patches-present.h"
+#include <KoIcon.h>
 
 #include <config-use-surface-color-management-api.h>
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
@@ -220,16 +221,6 @@ public:
     void setActiveShapeManager(KoShapeManager *shapeManager);
 
     QRect docUpdateRectToWidget(const QRectF &docRect);
-
-    KisOpenGLCanvas2::BitDepthMode preferredBitDepthMode(bool compositorPrefersHdr) const {
-        KisConfig cfg(true);
-
-        if (!cfg.enableCanvasSurfaceColorSpaceManagement()) return KisOpenGLCanvas2::BitDepthMode::Depth8Bit;
-
-        return KisOpenGLCanvas2::bitDepthForUserSetting(cfg.canvasSurfaceColorSpaceManagementMode(),
-                                                        cfg.canvasSurfaceBitDepthMode(),
-                                                        compositorPrefersHdr);
-    }
 };
 
 namespace {
@@ -290,12 +281,10 @@ void KisCanvas2::setup()
     m_d->lodPreferredInImage = cfg.levelOfDetailEnabled();
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
-    // we don't yet have a surface, so ask main window about
-    // compositor's preferences
-    createCanvas(cfg.useOpenGL(), m_d->view->mainWindow()->compositorPrefersHDR());
+    createCanvas(cfg.useOpenGL());
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
-    
+
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveViewportOffset(QPointF, QPointF)), SLOT(viewportOffsetMoved(QPointF, QPointF)));
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(effectiveZoomChanged(qreal)), SLOT(slotEffectiveZoomChanged(qreal)));
     connect(m_d->view->canvasController()->proxyObject, &KoCanvasControllerProxyObject::canvasStateChanged, this, &KisCanvas2::slotCanvasStateChanged);
@@ -626,24 +615,30 @@ void KisCanvas2::createQPainterCanvas()
     setCanvasWidget(canvasWidget);
 }
 
-void KisCanvas2::createOpenGLCanvas(bool compositorPrefersHdr)
+void KisCanvas2::createOpenGLCanvas()
 {
     KisConfig cfg(true);
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
+
+    auto bitDepthMode =
+        cfg.effectiveCanvasSurfaceBitDepthMode(QSurfaceFormat::defaultFormat())
+            == KisConfig::CanvasSurfaceBitDepthMode::Depth10Bit ?
+        KisOpenGLCanvas2::BitDepthMode::Depth10Bit :
+        KisOpenGLCanvas2::BitDepthMode::Depth8Bit;
 
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this,
                                                           m_d->coordinatesConverter,
                                                           0,
                                                           m_d->view->image(),
                                                           &m_d->displayColorConverter,
-                                                          m_d->preferredBitDepthMode(compositorPrefersHdr));
+                                                          bitDepthMode);
     m_d->frameCache = KisAnimationFrameCache::getFrameCache(canvasWidget->openGLImageTextures());
 
     setCanvasWidget(canvasWidget);
 }
 
-void KisCanvas2::createCanvas(bool useOpenGL, bool compositorPrefersHdr)
+void KisCanvas2::createCanvas(bool useOpenGL)
 {
     // deinitialize previous canvas structures
     m_d->prescaledProjection = 0;
@@ -669,7 +664,7 @@ void KisCanvas2::createCanvas(bool useOpenGL, bool compositorPrefersHdr)
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL);
 
     if (useOpenGL) {
-        createOpenGLCanvas(compositorPrefersHdr);
+        createOpenGLCanvas();
         if (cfg.canvasState() == "OPENGL_FAILED") {
             // Creating the opengl canvas failed, fall back
             warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
@@ -741,7 +736,7 @@ void KisCanvas2::connectCurrentCanvas()
     Q_EMIT sigCanvasEngineChanged();
 }
 
-void KisCanvas2::resetCanvas(bool useOpenGL, bool compositorPrefersHdr)
+void KisCanvas2::resetCanvas(bool useOpenGL)
 {
     // we cannot reset the canvas before it's created, but this method might be called,
     // for instance when setting the monitor profile.
@@ -755,16 +750,14 @@ void KisCanvas2::resetCanvas(bool useOpenGL, bool compositorPrefersHdr)
     const bool canvasNeedsNativeSurface =
         cfg.enableCanvasSurfaceColorSpaceManagement() &&
         bool(m_d->view->mainWindow()->managedSurfaceProfile());
-    const bool bitDepthModeIsInconsistent = 
-        m_d->canvasWidget->currentBitDepthMode() != m_d->preferredBitDepthMode(compositorPrefersHdr);
 
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
-         (m_d->openGLFilterMode != cfg.openGLFilteringMode() || bitDepthModeIsInconsistent)) ||
+         m_d->openGLFilterMode != cfg.openGLFilteringMode()) ||
          canvasHasNativeSurface != canvasNeedsNativeSurface;
 
     if (needReset) {
-        createCanvas(useOpenGL, compositorPrefersHdr);
+        createCanvas(useOpenGL);
         connectCurrentCanvas();
         slotEffectiveZoomChanged(m_d->coordinatesConverter->effectiveZoom());
     }
@@ -1338,16 +1331,7 @@ void KisCanvas2::slotConfigChanged()
     KisConfig cfg(true);
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
-    // when config is changed we might either have or not have the
-    // surface, so request the value from wherever it is possible
-    auto effectiveCompositorPrefersHdr =
-#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
-        m_d->surfaceColorManager && m_d->surfaceColorManager->isReady() ?
-            m_d->surfaceColorManager->displayConfig().isHDR :
-#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
-            m_d->view->mainWindow()->compositorPrefersHDR();
-
-    resetCanvas(cfg.useOpenGL(), effectiveCompositorPrefersHdr);
+    resetCanvas(cfg.useOpenGL());
 
     QWidget *mainWindow = m_d->view->mainWindow();
     KIS_SAFE_ASSERT_RECOVER_RETURN(mainWindow);
@@ -1425,17 +1409,17 @@ void KisCanvas2::setDisplayConfig(const KisDisplayConfig &config)
     if (m_d->displayColorConverter.displayConfig() == config) return;
 
     if (m_d->currentCanvasIsOpenGL) {
-        if (m_d->canvasWidget->currentBitDepthMode() < m_d->preferredBitDepthMode(config.isHDR)) {
-            // 1) When bit depth mode has changed, there is no use in
-            //    updating the config, just recreate the widget; the config
-            //    will be updated automatically during the widget initialization
-            //    process
-            // 2) Since the call to setDisplayConfig() can come directly from
-            //    the surface color manager, we shouldn't try to destroy the canvas
-            //    (and its manager) directly from this function. Just postpone it
-            //    till we exit the call
-            QTimer::singleShot(0, this, [this, isHDR = config.isHDR]() { resetCanvas(true, isHDR); });
-            return;
+        if (config.isHDR &&
+            m_d->canvasWidget->currentBitDepthMode() < KisOpenGLCanvas2::BitDepthMode::Depth10Bit) {
+
+            const QString warningMessage = i18n(
+                "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
+                "Please activate 10-bit mode in Krita's Preferences dialog and restart"
+                "Krita to avoid color banding!");
+
+            m_d->view->showFloatingMessage(warningMessage, koIcon("warning"), 7000, KisFloatingMessage::High);
+            warnOpenGL.noquote() << QString(warningMessage).replace('\n', ' ');
+            warnOpenGL << ppVar(QSurfaceFormat::defaultFormat());
         }
     }
 

@@ -41,7 +41,7 @@ public:
     static QString angleRendererToString(KisOpenGL::AngleRenderer renderer);
 
 public:
-    static void initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
+    static void initSurfaceFormatFromConfig(std::pair<KisSurfaceColorSpaceWrapper, int> rootSurfaceFormat,
                                             QSurfaceFormat *format);
     static bool isFormatHDR(const QSurfaceFormat &format);
 };

@@ -1217,7 +1217,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         // surface bit depth
         m_canvasSurfaceBitDepth = new KisSqueezedComboBox();
             m_canvasSurfaceBitDepth->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        QLabel *canvasSurfaceBitDepthLbl = new QLabel(i18n("Canvas surface bit depth:"), this);
+        QLabel *canvasSurfaceBitDepthLbl = new QLabel(i18n("Canvas surface bit depth (needs restart):"), this);
         monitorProfileGrid->addRow(canvasSurfaceBitDepthLbl, m_canvasSurfaceBitDepth);
 
         m_canvasSurfaceBitDepth->addSqueezedItem(i18n("Auto"), QVariant::fromValue(CanvasSurfaceBitDepthMode::DepthAuto));
@@ -1226,8 +1226,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
         m_canvasSurfaceBitDepth->setToolTip(
             i18n("<p>The bit depth of the color that is passed to the window "
-                 "compositor. When using \"Auto\" Krita will automatically select "
-                 "10-bit for HDR modes and will keep 8-bit in SDR mode</p>"));
+                 "compositor. You should switch into 10-bit mode if you want to use "
+                 "HDR capabilities of your display</p>"));
+
+        const QString currentBitBepthString = QSurfaceFormat::defaultFormat().redBufferSize() == 10 ? i18n("10-bit") : i18n("8-bit");
+        QLabel *currentCanvasSurfaceBitDepthLbl = new QLabel(i18n("Current canvas surface bit depth:"), this);
+        QLabel *currentCanvasSurfaceBitDepth = new QLabel(currentBitBepthString, this);
+        monitorProfileGrid->addRow(currentCanvasSurfaceBitDepthLbl, currentCanvasSurfaceBitDepth);
 
         vboxLayout->addItem(new QSpacerItem(20,20));
 

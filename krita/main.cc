@@ -428,8 +428,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 #endif
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
 
+        const KisConfig::CanvasSurfaceBitDepthMode bitDepthMode =
+            KisConfig::canvasSurfaceBitDepthMode(&kritarc);
+
         const KisOpenGL::RendererConfig config =
-            KisOpenGL::selectSurfaceConfig(preferredRenderer, rootSurfaceFormat, enableOpenGLDebug);
+            KisOpenGL::selectSurfaceConfig(preferredRenderer, rootSurfaceFormat, bitDepthMode, enableOpenGLDebug);
 
         KisOpenGL::setDefaultSurfaceConfig(config);
         KisOpenGL::setDebugSynchronous(openGLDebugSynchronous);

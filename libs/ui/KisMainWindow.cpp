@@ -1124,6 +1124,20 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
 
     Q_EMIT guiLoadingFinished();
 
+#ifdef Q_OS_ANDROID
+    // HACK: When opening documents on Android, the main window sometimes fails
+    // to update until the application is shunted to the background and brought
+    // back or the menu bar is fiddled with. Flickering the window fixes this.
+    // Having a docker that uses QML somehow also fixes this, so this hack is
+    // gone again in 5.3 with the introduction of the text properties docker.
+    QTimer::singleShot(0, this, [this] {
+        hide();
+        QTimer::singleShot(0, this, [this] {
+            show();
+        });
+    });
+#endif
+
     return view;
 }
 

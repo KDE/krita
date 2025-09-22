@@ -930,7 +930,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     if (!info) {
         // try software rasterizer (WARP)
         defaultConfig = generateSurfaceConfig(KisOpenGL::RendererSoftware,
-                                              KisConfig::BT709_G22, false);
+                                              makeDefaultSurfaceFormatPair(), false);
         info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
 
         if (!info) {

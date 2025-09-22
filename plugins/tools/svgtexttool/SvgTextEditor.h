@@ -30,29 +30,11 @@ public:
     SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~SvgTextEditor();
 
-    //tiny enum to keep track of the tab on which editor something happens while keeping the code readable.
-    enum Editor {
-        Richtext, // 0
-        SVGsource // 1
-    };
-
     void setInitialShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
-    /**
-     * switch the text editor tab.
-     */
-    void switchTextEditorTab(bool convertData = true);
 
     void slotCloseEditor();
-
-    /**
-     * in rich text, check the current format, and toggle the given buttons.
-     */
-    void checkFormat();
-    void checkDocumentFormat();
-
-    void slotFixUpEmptyTextBlock();
 
     void save();
 
@@ -73,47 +55,8 @@ private Q_SLOTS:
 
     void zoomOut();
     void zoomIn();
-#ifndef Q_OS_WIN
-    void showInsertSpecialCharacterDialog();
-    void insertCharacter(const QChar &c);
-#endif
-    void setTextBold(QFont::Weight weight = QFont::Bold);
-    void setTextWeightLight();
-    void setTextWeightNormal();
-    void setTextWeightDemi();
-    void setTextWeightBlack();
-
-    void setTextItalic(QFont::Style style = QFont::StyleOblique);
-    void setTextDecoration(KoSvgText::TextDecoration decor);
-    void setTextUnderline();
-    void setTextOverline();
-    void setTextStrikethrough();
-    void setTextSubscript();
-    void setTextSuperScript();
-    void increaseTextSize();
-    void decreaseTextSize();
-
-    void setLineHeight(double lineHeightPercentage);
-    void setLetterSpacing(double letterSpacing);
-    void alignLeft();
-    void alignRight();
-    void alignCenter();
-    void alignJustified();
-
-    void setFont(const QString &fontName);
-    void setFontSize(qreal size);
-    void setBaseline(KoSvgText::BaselineShiftMode baseline);
-    void setKerning(bool enable);
-
-    void setWrappingLegacy();
-    void setWrappingPre();
-    void setWrappingPreWrap();
 
     void setSettings();
-    void slotToolbarToggled(bool);
-
-    void setFontColor(const KoColor &c);
-    void setBackgroundColor(const KoColor &c);
 
     void setModified(bool modified);
     void dialogButtonClicked(QAbstractButton *button);
@@ -125,11 +68,6 @@ Q_SIGNALS:
 protected:
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    /**
-     * Selects all if there is no selection
-     * @returns a copy of the previous cursor.
-     */
-    QTextCursor setTextSelection();
 
 private:
     void applySettings();
@@ -137,21 +75,13 @@ private:
     QAction *createAction(const QString &name,
                           const char *member);
     void createActions();
-    void enableRichTextActions(bool enable);
-    void enableSvgTextActions(bool enable);
-    bool isRichTextEditorTabActive();
-    bool isSvgSourceEditorTabActive();
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
-    QList<QAction*> m_richTextActions;
     QList<QAction*> m_svgTextActions;
 
     KoSvgTextShape *m_shape {0};
-#ifndef Q_OS_WIN
-    KoDialog *m_charSelectDialog {0};
-#endif
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -16,58 +16,31 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="textTab">
+    <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <property name="tabBarAutoHide">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="richTab">
+     <widget class="QWidget" name="tabSvgTextEdit">
       <attribute name="title">
-       <string>Rich text</string>
+       <string>SVG</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="SvgRichTextCtrl" name="richTextEdit"/>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QTextEdit" name="svgTextEdit">
+         <property name="acceptRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="svgTab">
+     <widget class="QWidget" name="tabSvgStylesEdit">
       <attribute name="title">
-       <string>SVG source</string>
+       <string>Styles</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="tabSvgTextEdit">
-          <attribute name="title">
-           <string>SVG</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout">
-           <item column="0" row="0">
-            <widget class="QTextEdit" name="svgTextEdit">
-             <property name="acceptRichText">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tabSvgStylesEdit">
-          <attribute name="title">
-           <string>Styles</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item column="0" row="0">
-            <widget class="QTextEdit" name="svgStylesEdit"/>
-           </item>
-          </layout>
-         </widget>
-        </widget>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QTextEdit" name="svgStylesEdit"/>
        </item>
       </layout>
      </widget>
@@ -82,13 +55,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>SvgRichTextCtrl</class>
-   <extends>QTextEdit</extends>
-   <header>SvgRichTextCtrl.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

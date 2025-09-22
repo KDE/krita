@@ -29,43 +29,6 @@
       <Action name="view_zoom_out"/>
       <Action name="view_zoom_in"/>
     </Menu>
-    <Menu name="insert">
-      <text>&amp;Insert</text>
-      <Action name="svg_insert_special_character"/>
-    </Menu>
-    <Menu name="format">
-      <text>&amp;Format</text>
-      <Action name="svg_weight_bold"/>
-      <Action name="svg_format_italic"/>
-      <Action name="svg_format_underline"/>
-      <Action name="svg_format_strike_through"/>
-      <Action name="svg_format_superscript"/>
-      <Action name="svg_format_subscript"/>
-      <Menu name="weight">
-        <text>&amp;Weight</text>
-        <Action name="svg_weight_light"/>
-        <Action name="svg_weight_normal"/>
-        <Action name="svg_weight_bold"/>
-        <Action name="svg_weight_demi_bold"/>
-        <Action name="svg_weight_black"/>
-      </Menu>
-      <Separator/>
-      <Action name="svg_increase_text_size"/>
-      <Action name="svg_decrease_text_size"/>
-      <Separator/>
-      <Action name="svg_align_left"/>
-      <Action name="svg_align_center"/>
-      <Action name="svg_align_right"/>
-      <!--Action name="svg_align_justified"/-->
-      <Separator/>
-      <Action name="svg_font_kerning"/>
-      <Menu name="svg_text_wrapping">
-        <text>Text W&amp;rapping</text>
-        <Action name="svg_text_wrapping_legacy"/>
-        <Action name="svg_text_wrapping_css_pre"/>
-        <Action name="svg_text_wrapping_css_pre_wrap"/>
-      </Menu>
-    </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
       <Action name="svg_settings"/>
@@ -82,34 +45,4 @@
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
   </ToolBar>
-    
-  <ToolBar name="fontSettings" newline="true" >
-    <Text>Font Settings</Text>
-    <Action name="svg_font"/>
-    <Action name="svg_font_size"/>
-    <Action name="svg_font_color"/>
-    <Action name="svg_format_textcolor"/>
-    <Action name="svg_sample_color"/>
-  </ToolBar>
-  
-  <ToolBar name="formatting" newline="true" >
-    <Text>Formatting</Text>
-    <Action name="svg_weight_bold"/>
-    <Action name="svg_format_italic"/>
-    <Action name="svg_format_underline"/>
-    <Action name="svg_align_left"/>
-    <Action name="svg_align_center"/>
-    <Action name="svg_align_right"/>
-    <Action name="svg_line_height"/>
-    <Action name="svg_letter_spacing"/>
-    <Action name="svg_font_kerning"/>
-    <Menu name="svg_text_wrapping">
-      <text>Text W&amp;rapping</text>
-      <Action name="svg_text_wrapping_legacy"/>
-      <Action name="svg_text_wrapping_css_pre"/>
-      <Action name="svg_text_wrapping_css_pre_wrap"/>
-    </Menu>
-  </ToolBar>
-  
-  
 </kpartgui>

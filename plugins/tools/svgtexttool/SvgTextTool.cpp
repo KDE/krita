@@ -277,8 +277,7 @@ QWidget *SvgTextTool::createOptionWidget()
     connect(optionUi.defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
     connect(optionUi.defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
 
-    connect(optionUi.btnEdit, SIGNAL(clicked(bool)), SLOT(showEditor()));
-    connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditorSvgSource()));
+    connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditor()));
     connect(optionUi.btnGlyphPalette, SIGNAL(clicked(bool)), SLOT(showGlyphPalette()));
 
     m_convertType = new QButtonGroup();
@@ -338,15 +337,6 @@ void SvgTextTool::showEditor()
 #endif
         m_editor->show();
     }
-}
-
-void SvgTextTool::showEditorSvgSource()
-{
-    KoSvgTextShape *shape = selectedShape();
-    if (!shape) {
-        return;
-    }
-    showEditor();
 }
 
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs)

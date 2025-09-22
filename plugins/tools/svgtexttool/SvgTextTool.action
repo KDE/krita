@@ -12,46 +12,6 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="svg_format_textcolor">
-      <iconText>Text Color</iconText>
-      <shortcut/>
-      <toolTip>Text Color...</toolTip>
-      <icon>format-text-color</icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Text Color</text>
-    </Action>
-    <Action name="svg_background_color">
-      <iconText>Background</iconText>
-      <shortcut/>
-      <toolTip>Background Color...</toolTip>
-      <icon>format-fill-color</icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Background</text>
-    </Action>
-    <Action name="svg_font_size">
-      <iconText>Font Size</iconText>
-      <shortcut/>
-      <toolTip>Font Size</toolTip>
-      <icon/>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Font Size</text>
-    </Action>
-    <Action name="svg_font">
-      <iconText>Font...</iconText>
-      <shortcut>Ctrl+Alt+F</shortcut>
-      <toolTip>Change character size, font, boldface, italics etc.</toolTip>
-      <icon/>
-      <whatsThis>Change the attributes of the currently selected characters.</whatsThis>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Font...</text>
-    </Action>
     <Action name="svg_insert_special_character">
       <iconText>Special Character...</iconText>
       <shortcut>Alt+Shift+C</shortcut>
@@ -222,16 +182,6 @@
       <isCheckable>true</isCheckable>
       <text>Light</text>
     </Action>
-    <Action name="svg_line_height">
-      <iconText>Line Height</iconText>
-      <shortcut>Ctrl+H</shortcut>
-      <toolTip>Line Height in em</toolTip>
-      <icon></icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Line Height</text>
-    </Action>
     <Action name="svg_settings">
       <iconText>Settings</iconText>
       <shortcut></shortcut>
@@ -242,16 +192,6 @@
       <isCheckable>false</isCheckable>
       <text context="Text Editor Settings label">Settings...</text>
     </Action>
-    <Action name="svg_sample_color">
-      <iconText>Color Sampler</iconText>
-      <shortcut></shortcut>
-      <toolTip>Sample a color from the screen</toolTip>
-      <icon></icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>false</isCheckable>
-      <text>Color Sampler</text>
-    </Action>
     <Action name="svg_font_kerning">
       <iconText>Kerning</iconText>
       <shortcut></shortcut>
@@ -261,36 +201,6 @@
       <statusTip/>
       <isCheckable>true</isCheckable>
       <text>Kerning</text>
-    </Action>
-    <Action name="svg_text_wrapping_legacy">
-      <iconText>Legacy Hard Wrap</iconText>
-      <shortcut></shortcut>
-      <toolTip>Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines are explicitly positioned, but the line height may be slightly inaccurate.</toolTip>
-      <icon></icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>true</isCheckable>
-      <text>Legacy Hard Wrap</text>
-    </Action>
-    <Action name="svg_text_wrapping_css_pre">
-      <iconText>SVG Hard Wrap</iconText>
-      <shortcut></shortcut>
-      <toolTip>Use SVG's CSS `white-space: pre` hard-wrapping mode.</toolTip>
-      <icon></icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>true</isCheckable>
-      <text>SVG Hard Wrap</text>
-    </Action>
-    <Action name="svg_text_wrapping_css_pre_wrap">
-      <iconText>SVG Auto Wrap with Fixed Width</iconText>
-      <shortcut></shortcut>
-      <toolTip>Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` defining the text width.</toolTip>
-      <icon></icon>
-      <whatsThis/>
-      <statusTip/>
-      <isCheckable>true</isCheckable>
-      <text>SVG Auto Wrap with Fixed Width</text>
     </Action>
   </Actions>
 </ActionCollection>

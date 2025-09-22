@@ -21,7 +21,6 @@ set (SvgTextTool_SRCS
     SvgTextCursor.cpp
     SvgTextTool.cpp
     SvgTextToolFactory.cpp
-    FontSizeAction.cpp
     SvgTextShapeManagerBlocker.cpp
     SvgConvertTextTypeCommand.cpp
     SvgTextShortCuts.cpp

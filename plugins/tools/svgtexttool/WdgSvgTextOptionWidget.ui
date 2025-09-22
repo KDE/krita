@@ -15,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="6" column="0">
+   <item row="5" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -28,50 +28,65 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="btnGlyphPalette">
-     <property name="text">
-      <string>Glyph Palette</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QPushButton" name="btnEditSvg">
      <property name="text">
       <string>Edit SVG Source</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QGroupBox" name="groupBoxDebug">
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBoxConvert">
      <property name="title">
-      <string notr="true">Debug Tools</string>
+      <string>Text Type</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QCheckBox" name="chkDbgCharBbox">
-        <property name="text">
-         <string notr="true">Show char bounding boxes</string>
+       <widget class="QPushButton" name="convertPreFormatBtn">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The text will not wrap and preserves spaces and new lines. A line break is inserted so the lines from wrapping or positioning remain separated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-        <property name="checked">
+        <property name="text">
+         <string>Preformatted</string>
+        </property>
+        <property name="checkable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkDbgLineBox">
+       <widget class="QPushButton" name="convertInlineBtn">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Text wraps inside a fixed length, spaces and new lines are preserved. New lines are not removed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
-         <string notr="true">Show line boxes</string>
+         <string>Inline Wrapped</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="convertToSvg1_1">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Text uses SVG 1.1 character transforms to position each line. Spaces and new lines are collapsed. This is for backward compatibility with SVG 1.1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Prepositioned</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="btnEdit">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="btnGlyphPalette">
      <property name="text">
-      <string>Edit Text</string>
+      <string>Glyph Palette</string>
      </property>
     </widget>
    </item>
@@ -334,47 +349,25 @@
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QGroupBox" name="groupBoxConvert">
+    <widget class="QGroupBox" name="groupBoxDebug">
      <property name="title">
-      <string>Text Type</string>
+      <string notr="true">Debug Tools</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QPushButton" name="convertPreFormatBtn">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The text will not wrap and preserves spaces and new lines. A line break is inserted so the lines from wrapping or positioning remain separated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
+       <widget class="QCheckBox" name="chkDbgCharBbox">
         <property name="text">
-         <string>Preformatted</string>
+         <string notr="true">Show char bounding boxes</string>
         </property>
-        <property name="checkable">
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="convertInlineBtn">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Text wraps inside a fixed length, spaces and new lines are preserved. New lines are not removed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
+       <widget class="QCheckBox" name="chkDbgLineBox">
         <property name="text">
-         <string>Inline Wrapped</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="convertToSvg1_1">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Text uses SVG 1.1 character transforms to position each line. Spaces and new lines are collapsed. This is for backward compatibility with SVG 1.1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="text">
-         <string>Prepositioned</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+         <string notr="true">Show line boxes</string>
         </property>
        </widget>
       </item>

@@ -18,6 +18,7 @@ class QWidget;
 class KisApplicationArguments;
 class KisAutoSaveRecoveryDialog;
 class KisExtendedModifiersMapperPluginInterface;
+class KisAndroidDonations;
 
 #include <KisImportExportManager.h>
 
@@ -94,6 +95,10 @@ public:
     static void verifyMetatypeRegistration();
 
     KisExtendedModifiersMapperPluginInterface* extendedModifiersPluginInterface();
+
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations *androidDonations();
+#endif
 
 public Q_SLOTS:
 

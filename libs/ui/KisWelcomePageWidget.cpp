@@ -71,19 +71,16 @@
 #include <kis_image_config.h>
 #include "opengl/kis_opengl.h"
 
-#ifdef Q_OS_ANDROID
-#include <QtAndroid>
-
-QPushButton* KisWelcomePageWidget::donationLink {nullptr};
-QLabel* KisWelcomePageWidget::donationBannerImage {nullptr};
-#endif
-
 #ifdef Q_OS_WIN
 #include <KisWindowsPackageUtils.h>
 #endif
 
 #ifdef Q_OS_MACOS
 #include "libs/macosutils/KisMacosEntitlements.h"
+#endif
+
+#ifdef Q_OS_ANDROID
+#include "KisAndroidDonations.h"
 #endif
 
 // Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
@@ -168,6 +165,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     btnNewsOptions->setMenu(newsOptionsMenu);
 
     labelSupportText->setFont(largerFont());
+    donationLink->setFont(largerFont());
 
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
@@ -180,38 +178,10 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
 #endif
 
-#if defined Q_OS_ANDROID && defined DISABLED_FOR_BEING_BROKEN
-    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-    donationLink = new QPushButton(dropFrameBorder);
-    donationLink->setFlat(true);
-    QFont f = font();
-    f.setPointSize(15);
-    f.setUnderline(true);
-    donationLink->setFont(f);
-    donationLink->setStyleSheet("padding-left: 5px; padding-right: 5px;");
-
-    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
-
-    horizontalSpacer_19->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    horizontalSpacer_20->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    horizontalLayout_9->addWidget(donationLink);
-
-    donationBannerImage = new QLabel(dropFrameBorder);
-    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
-    donationBannerImage->setPixmap(QPixmap(bannerPath));
-
-    verticalLayout->addWidget(donationBannerImage);
-
-    donationLink->show();
-    donationBannerImage->hide();
-
-    // this will asynchronously lead to donationSuccessful (i.e if it *is* successful) which will hide the
-    // link and enable the donation banner.
-    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "checkBadgePurchased",
-                                              "()V");
+    donationLink->hide();
+    supporterBadge->hide();
+#ifdef Q_OS_ANDROID
+    initDonations();
 #endif
 
     // configure the News area
@@ -423,8 +393,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #endif
 
 #ifdef Q_OS_ANDROID
-    // donationLink->setStyleSheet(blendedStyle);
-    // donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
+    donationLink->setText(
+        QStringLiteral("<a href=\"#\">%1</a>").arg(QString(i18n("Get your Krita Supporter Badge here!"))));
 #endif
 
 #ifdef Q_OS_MACOS
@@ -435,16 +405,10 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
         labelSupportText->hide();
         kritaWebsiteLink->hide();
         kritaWebsiteIcon->hide();
+        donationLink->hide();
     }
 #endif
 }
-
-#ifdef Q_OS_ANDROID
-void KisWelcomePageWidget::slotStartDonationFlow()
-{
-    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "startBillingFlow", "()V");
-}
-#endif
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -512,6 +476,7 @@ void KisWelcomePageWidget::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
         labelSupportText->setFont(largerFont());
+        donationLink->setFont(largerFont());
     }
 }
 
@@ -803,13 +768,43 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
 #endif
 
 #ifdef Q_OS_ANDROID
-extern "C" JNIEXPORT void JNICALL
-Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
-                                                      jobject /*obj*/,
-                                                      jint    /*n*/)
+void KisWelcomePageWidget::initDonations()
 {
-     KisWelcomePageWidget::donationLink->hide();
-     KisWelcomePageWidget::donationBannerImage->show();
+    KisAndroidDonations *androidDonations = KisAndroidDonations::instance();
+    if (!androidDonations) {
+        qWarning("KisWelcomePage::initDonations: androidDonations is null");
+        return;
+    }
+
+    connect(donationLink, SIGNAL(linkActivated(QString)), androidDonations, SLOT(slotStartDonationFlow()));
+
+    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
+    QPixmap pixmap(bannerPath);
+    if (pixmap.isNull()) {
+        qWarning("KisWelcomePage::initDonations: failed to load banner from '%s'", qUtf8Printable(bannerPath));
+    } else {
+        supporterBadge->setPixmap(QPixmap(bannerPath));
+    }
+
+    connect(androidDonations, SIGNAL(sigStateChanged()), this, SLOT(slotUpdateDonationState()));
+    slotUpdateDonationState();
+}
+
+void KisWelcomePageWidget::slotUpdateDonationState()
+{
+    bool linkVisible = false;
+    bool badgeVisible = false;
+
+    KisAndroidDonations *androidDonations = KisAndroidDonations::instance();
+    if (androidDonations) {
+        linkVisible = androidDonations->shouldShowDonationLink();
+        badgeVisible = androidDonations->shouldShowSupporterBadge();
+    } else {
+        qWarning("KisWelcomePageWidget::slotUpdateDonationState: android donations is null");
+    }
+
+    donationLink->setVisible(linkVisible);
+    supporterBadge->setVisible(badgeVisible);
 }
 #endif
 

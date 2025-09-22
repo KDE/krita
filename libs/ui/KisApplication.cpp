@@ -19,6 +19,10 @@
 #include "KisMacosEntitlements.h"
 #endif
 
+#ifdef Q_OS_ANDROID
+#include "KisAndroidDonations.h"
+#endif
+
 #include <QStandardPaths>
 #include <QScreen>
 #include <QDir>
@@ -184,6 +188,9 @@ public:
     QVector<QByteArray> earlyRemoteArguments;
     QVector<QString> earlyFileOpenEvents;
     QScopedPointer<KisExtendedModifiersMapperPluginInterface> extendedModifiersPluginInterface;
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations *androidDonations {nullptr};
+#endif
 };
 
 class KisApplication::ResetStarting
@@ -1278,3 +1285,14 @@ KisExtendedModifiersMapperPluginInterface* KisApplication::extendedModifiersPlug
 {
     return d->extendedModifiersPluginInterface.data();
 }
+
+#ifdef Q_OS_ANDROID
+KisAndroidDonations *KisApplication::androidDonations()
+{
+    if (!d->androidDonations) {
+        d->androidDonations = new KisAndroidDonations(this);
+        d->androidDonations->syncState();
+    }
+    return d->androidDonations;
+}
+#endif

@@ -19,6 +19,10 @@
 #include "KisMacosEntitlements.h"
 #endif
 
+#ifdef Q_OS_ANDROID
+#include "KisAndroidDonations.h"
+#endif
+
 #include <QStandardPaths>
 #include <QDesktopWidget>
 #include <QDir>
@@ -168,6 +172,9 @@ public:
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
     QVector<QString> earlyFileOpenEvents;
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations *androidDonations {nullptr};
+#endif
 };
 
 class KisApplication::ResetStarting
@@ -1128,3 +1135,14 @@ void KisApplication::askResetConfig()
         resetConfig();
     }
 }
+
+#ifdef Q_OS_ANDROID
+KisAndroidDonations *KisApplication::androidDonations()
+{
+    if (!d->androidDonations) {
+        d->androidDonations = new KisAndroidDonations(this);
+        d->androidDonations->syncState();
+    }
+    return d->androidDonations;
+}
+#endif

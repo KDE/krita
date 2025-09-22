@@ -19,7 +19,7 @@ class JNIWrappers {
     public static native boolean exitFullScreen();
 
     public static native boolean hasMainWindowLoaded();
-    public static native void donationSuccessful();
+    public static native void donationStateUpdated(int state);
     public static native void openFileFromIntent(String uri);
 }
 

@@ -18,6 +18,7 @@ class KisApplicationPrivate;
 class QWidget;
 class KisApplicationArguments;
 class KisAutoSaveRecoveryDialog;
+class KisAndroidDonations;
 
 #include <KisImportExportManager.h>
 
@@ -90,6 +91,10 @@ public:
 
     /// @return true if Krita has been acquired through an app store
     bool isStoreApplication();
+
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations *androidDonations();
+#endif
 
 public Q_SLOTS:
 

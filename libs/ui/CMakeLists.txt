@@ -563,6 +563,10 @@ if(APPLE)
     )
 endif()
 
+if(ANDROID)
+    list(APPEND kritaui_LIB_SRCS KisAndroidDonations.cpp)
+endif()
+
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
     widgets/KoStrokeConfigWidget.ui

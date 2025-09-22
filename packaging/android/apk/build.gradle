@@ -181,6 +181,8 @@ android {
             applicationIdSuffix ".next"
         }
         debug {
+            // Comment this out when testing in-app purchases. The package name
+            // must not have a suffix for those to work properly.
             applicationIdSuffix ".debug"
         }
     }
@@ -246,7 +248,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:7.1.1'
+    implementation 'com.android.billingclient:billing:8.0.0'
     implementation 'androidx.annotation:annotation:1.9.0'
     implementation files("libs/SDL2Android.jar")
 }

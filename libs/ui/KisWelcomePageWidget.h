@@ -56,10 +56,6 @@ public Q_SLOTS:
     void slotShowUpdaterErrorDetails();
 #endif
 
-#ifdef Q_OS_ANDROID
-    void slotStartDonationFlow();
-#endif
-
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
@@ -77,6 +73,10 @@ private Q_SLOTS:
 #ifdef ENABLE_UPDATERS
     void slotRunVersionUpdate();
     void slotToggleUpdateChecks(bool state);
+#endif
+
+#ifdef Q_OS_ANDROID
+    void slotUpdateDonationState();
 #endif
 
     bool isDevelopmentBuild();
@@ -103,6 +103,10 @@ private:
     void updateVersionUpdaterFrame();
 #endif
 
+#ifdef Q_OS_ANDROID
+    void initDonations();
+#endif
+
     KisMainWindow *m_mainWindow {nullptr};
 
     /// help us see how many people are clicking startup screen links
@@ -124,11 +128,6 @@ private:
 #endif
     bool m_networkIsAllowed {false};
 
-#ifdef Q_OS_ANDROID
-public:
-    static QPushButton* donationLink;
-    static QLabel* donationBannerImage;
-#endif
     QScopedPointer<RecentItemDelegate> recentItemDelegate;
 
 };

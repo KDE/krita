@@ -35,7 +35,7 @@ https://docs.krita.org/en/untranslatable_pages.html
 
 Apidox:
 
-https://api.kde.org/krita/html/index.html
+https://api.kde.org/legacy/krita/html/index.html
 
 ### Bugs and Wishes
 

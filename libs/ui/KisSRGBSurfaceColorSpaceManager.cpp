@@ -29,14 +29,6 @@ KisSRGBSurfaceColorSpaceManager::~KisSRGBSurfaceColorSpaceManager()
 {
 }
 
-bool KisSRGBSurfaceColorSpaceManager::compositorPrefersHDR() const
-{
-    if (!m_interface->isReady()) return false;
-
-    auto surfaceDescription = m_interface->preferredSurfaceDescription();
-    return surfaceDescription && surfaceDescription->colorSpace.isHDR();
-}
-
 QString KisSRGBSurfaceColorSpaceManager::osPreferredColorSpaceReport() const
 {
     QString report;

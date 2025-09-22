@@ -24,9 +24,7 @@ public:
     QString colorManagementReport() const;
     QString osPreferredColorSpaceReport() const;
 
-    static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);   
-
-    bool compositorPrefersHDR() const;
+    static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);
 
 protected:
     static KisSurfaceColorimetry::RenderIntent calculateConfigIntent();

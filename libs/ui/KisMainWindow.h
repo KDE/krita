@@ -524,7 +524,7 @@ private:
     bool m_dieOnError;
 
 private:
-    void applyIconOverridesFromLocalXML();
+    void applyActionIconOverridesFromLocalXML();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

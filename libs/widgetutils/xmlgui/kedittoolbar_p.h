@@ -221,6 +221,9 @@ Q_SIGNALS:
      */
     void enableOk(bool);
 
+public Q_SLOTS:
+    void slotChangeIconButton();
+
 private:
     Q_PRIVATE_SLOT(d, void slotToolBarSelected(int index))
 

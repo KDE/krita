@@ -593,7 +593,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setXMLFile(":/kxmlgui5/krita5.xmlgui");
 
     guiFactory()->addClient(this);
-    applyIconOverridesFromLocalXML();
+    applyActionIconOverridesFromLocalXML();
     connect(guiFactory(), SIGNAL(makingChanges(bool)), SLOT(slotXmlGuiMakingChanges(bool)));
 
     // Create and plug toolbar list for Settings menu
@@ -2318,7 +2318,7 @@ void KisMainWindow::slotNewToolbarConfig()
 
     plugActionList("toolbarlist", d->toolbarList);
     applyToolBarLayout();
-    applyIconOverridesFromLocalXML();
+    applyActionIconOverridesFromLocalXML();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)
@@ -3252,7 +3252,13 @@ QString KisMainWindow::osPreferredColorSpaceReport() const
 #endif
 }
 
-void KisMainWindow::applyIconOverridesFromLocalXML()
+// One action has only one icon override, local XML contains ActionIconOverrides like so:
+// <ActionIconOverrides>
+//    <Action name="erase_action" icon="wheel-sectors"/>
+//    <Action name="about_krita" icon="application-exit"/>
+// </ActionIconOverrides>
+// This function will rerender the actions with icons in UI (toolbars, shortcuts options etc.)
+void KisMainWindow::applyActionIconOverridesFromLocalXML()
 {
     QString xmlPath = KoResourcePaths::locateLocal("data", "krita5.xmlgui");
     QFile file(xmlPath);
@@ -3265,16 +3271,18 @@ void KisMainWindow::applyIconOverridesFromLocalXML()
         return;
     }
 
-    QDomNodeList actions = doc.elementsByTagName(QStringLiteral("Action"));
-    for (int i = 0; i < actions.count(); ++i) {
-        QDomElement el = actions.at(i).toElement();
-        if (!el.isNull()) {
-            QString name = el.attribute(QStringLiteral("name"));
-            QString iconName = el.attribute(QStringLiteral("icon"));
-            if (!name.isEmpty() && !iconName.isEmpty()) {
-                QAction *act = actionCollection()->action(name);
-                if (act) {
-                    act->setIcon(KisIconUtils::loadIcon(iconName));
+    QDomNodeList overridesList = doc.elementsByTagName(QStringLiteral("ActionIconOverrides"));
+    if (!overridesList.isEmpty()) {
+        QDomElement overridesElement = overridesList.at(0).toElement();
+        QDomNodeList actions = overridesElement.elementsByTagName(QStringLiteral("Action"));
+        for (int i = 0; i < actions.count(); ++i) {
+            QDomElement actionElement = actions.at(i).toElement();
+            QString name = actionElement.attribute(QStringLiteral("name"));
+            QString icon = actionElement.attribute(QStringLiteral("icon"));
+            if (!name.isEmpty() && !icon.isEmpty()) {
+                QAction *qa = actionCollection()->action(name);
+                if (qa) {
+                    qa->setIcon(KisIconUtils::loadIcon(icon));
                 }
             }
         }

@@ -798,6 +798,11 @@ KisKEditToolBarWidget::~KisKEditToolBarWidget()
     delete d;
 }
 
+void KisKEditToolBarWidget::slotChangeIconButton()
+{
+    d->slotChangeIconButton();
+}
+
 void KisKEditToolBarWidget::load(const QString &file, bool global, const QString &defaultToolBar)
 {
     d->initOldStyle(file, global, defaultToolBar);
@@ -1064,13 +1069,14 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
     // Edit Icon Button under active actions
     m_changeIconAction = new QToolButton(m_widget);
     m_changeIconAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("preferences-desktop-icons")));
-    m_changeIconAction->setText(i18n("Change Icon"));
+    m_changeIconAction->setText(i18n("Change Icon..."));
     m_changeIconAction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_changeIconAction->setEnabled(false);
 
-    QObject::connect(m_changeIconAction, &QToolButton::clicked, m_widget, [this]() {
-        this->slotChangeIconButton();
-    });
+    QObject::connect(m_changeIconAction,
+                 &QToolButton::clicked,
+                 m_widget,
+                 &KisKEditToolBarWidget::slotChangeIconButton);
 
     KListWidgetSearchLine *activeListSearchLine = new KListWidgetSearchLine(m_widget, m_activeList);
     activeListSearchLine->setPlaceholderText(i18n("Filter"));
@@ -1599,8 +1605,7 @@ void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
     QObject::connect(backButton, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
     // Filter logic
-    QObject::connect(filterEdit, &QLineEdit::textChanged,
-                     [&list](const QString &text) {
+    QObject::connect(filterEdit, &QLineEdit::textChanged, m_widget, [&list](const QString &text) {
         for (int i = 0; i < list->count(); ++i) {
             QListWidgetItem *item = list->item(i);
             bool match = item->text().contains(text, Qt::CaseInsensitive);
@@ -1621,12 +1626,42 @@ void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
     if (dialog.exec() == QDialog::Accepted && list->currentItem()) {
         QString chosenIconName = list->currentItem()->data(Qt::UserRole).toString();
 
-        // Update XML in the toolbar DOM
-        elem.setAttribute(QStringLiteral("icon"), chosenIconName);
         toolitem->setIcon(KisIconUtils::loadIcon(chosenIconName));
+
+        // Update XML in the toolbar DOM
+        // Ensure (ActionIconOverrides) exist
+        QDomDocument doc = m_widget->domDocument();
+        QDomElement root = doc.documentElement();
+        QDomElement overridesElem = root.namedItem(QStringLiteral("ActionIconOverrides")).toElement();
+        if (overridesElem.isNull()) {
+            overridesElem = doc.createElement(QStringLiteral("ActionIconOverrides"));
+            root.appendChild(overridesElem);
+        }
+
+        // Find Action in overrides or create new
+        QString actionName = toolitem->internalName();
+        QDomElement overrideAction;
+        for (QDomNode child = overridesElem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+            QDomElement childElement = child.toElement();
+            if (childElement.attribute(QStringLiteral("name")) == actionName) {
+                overrideAction = childElement;
+                break;
+            }
+        }
+        if (overrideAction.isNull()) {
+            overrideAction = doc.createElement(QStringLiteral("Action"));
+            overrideAction.setAttribute(QStringLiteral("name"), actionName);
+            overridesElem.appendChild(overrideAction);
+        }
+
+        // Set icon override
+        overrideAction.setAttribute(QStringLiteral("icon"), chosenIconName);
+
+        // Mark document modified
         m_currentToolBarElem.setAttribute(QStringLiteral("noMerge"), QLatin1String("1"));
         updateLocal(m_currentToolBarElem);
         m_currentXmlData->m_isModified = true;
+        m_activeList->update();
 
         Q_EMIT m_widget->enableOk(true);
     }

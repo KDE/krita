@@ -1036,7 +1036,10 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(Eigen3 5 NO_MODULE)
+if(NOT Eigen3_FOUND)
+    find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+endif()
 set_package_properties(Eigen3 PROPERTIES
     DESCRIPTION "C++ template library for linear algebra"
     URL "http://eigen.tuxfamily.org"

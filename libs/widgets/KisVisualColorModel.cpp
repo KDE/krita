@@ -253,7 +253,9 @@ KoColor KisVisualColorModel::convertChannelValuesToKoColor(const QVector4D &valu
     }
 
     if (m_d->exposureSupported) {
-        baseValues *= m_d->channelMaxValues;
+        for (int i = 0; i < m_d->colorChannelCount; i++) {
+            baseValues[i] *= m_d->channelMaxValues[i];
+        }
     }
 
     for (int i=0; i<m_d->colorChannelCount; i++) {
@@ -281,7 +283,9 @@ QVector4D KisVisualColorModel::convertKoColorToChannelValues(KoColor c) const
     }
 
     if (m_d->exposureSupported) {
-        channelValuesDisplay /= m_d->channelMaxValues;
+        for (int i = 0; i < m_d->colorChannelCount; i++) {
+            channelValuesDisplay[i] /= m_d->channelMaxValues[i];
+        }
     }
     if (m_d->model != ColorModel::Channel && m_d->isRGBA) {
         if (m_d->applyGamma) {

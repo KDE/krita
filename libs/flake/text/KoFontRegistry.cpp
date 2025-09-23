@@ -1131,14 +1131,14 @@ int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_
 
 void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, QString *foundPostScriptName, QString *cssFontFamily, int &cssFontWeight, int &cssFontWidth, bool &cssItalic)
 {
-    FcPatternUP p(FcPatternCreate());
+    FcPatternSP p(FcPatternCreate());
     QByteArray utfData = postScriptName.toUtf8();
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
     FcPatternAddString(p.data(), FC_POSTSCRIPT_NAME, vals);
     FcDefaultSubstitute(p.data());
 
     FcResult result = FcResultNoMatch;
-    FcPatternUP match(FcFontMatch(FcConfigGetCurrent(), p.data(), &result));
+    FcPatternSP match(FcFontMatch(FcConfigGetCurrent(), p.data(), &result));
     if (result != FcResultNoMatch) {
         FcChar8 *fileValue = nullptr;
         if (FcPatternGetString(match.data(), FC_FAMILY, 0, &fileValue) == FcResultMatch) {

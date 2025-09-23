@@ -2263,7 +2263,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
 }
 
 
-
+#include <KoCSSFontInfo.h>
 void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QVariantList &fontSet,
                  QVector<int> &lengths, QVector<int> &fontIndices) {
     if (cssStyles.contains("font-family")) {
@@ -2272,13 +2272,16 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QVa
         int fontWeight = cssStyles.value("font-weight", "400").toInt();
         int fontWidth = cssStyles.value("font-stretch", "100").toInt();
 
-        const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(families, lengths,
-                                                      QMap<QString, qreal>(),
-                                                      text, 72, 72, fontSize, 1.0,
-                                                      fontWeight, fontWidth, false, 0, "");
+        KoCSSFontInfo fontInfo;
+        fontInfo.families = families;
+        fontInfo.size = fontSize;
+        fontInfo.weight = fontWeight;
+        fontInfo.width = fontWidth;
+        const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(lengths, fontInfo,
+                                                      text, 72, 72);
 
         for (uint i = 0; i < faces.size(); i++) {
-            const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
+            const FT_FaceSP &face = faces.at(static_cast<size_t>(i));
             QString postScriptName = face->family_name;
             if (FT_Get_Postscript_Name(face.data())) {
                 postScriptName = FT_Get_Postscript_Name(face.data());

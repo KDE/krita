@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-17 03:22+0000\n"
+"POT-Creation-Date: 2025-09-24 03:26+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17411,8 +17411,8 @@ msgid "Processing"
 msgstr "正在处理"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
-#: libs/ui/KisMainWindow.cpp:1745 libs/ui/KisMainWindow.cpp:1758
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1383
+#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18141,8 +18141,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV 文档"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2128
+#: libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid "Import frames"
 msgstr "导入帧"
@@ -19450,11 +19450,11 @@ msgstr "本地资源"
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
-#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
-#: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
-#: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1184
+#: libs/ui/KisMainWindow.cpp:1281 libs/ui/KisMainWindow.cpp:1990
+#: libs/ui/KisMainWindow.cpp:1999 libs/ui/KisMainWindow.cpp:2136
+#: libs/ui/KisMainWindow.cpp:2197 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2831 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19956,7 +19956,7 @@ msgid "Delete resource"
 msgstr "删除资源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2628
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20425,7 +20425,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "渲染动画帧失败。输出文件不完整。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2226
+#: libs/ui/KisMainWindow.cpp:2240
 #, kde-format
 msgid "Render Animation"
 msgstr "导出动画"
@@ -22459,7 +22459,7 @@ msgid "Numerical"
 msgstr "按数字顺序"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1149
 #, kde-format
 msgid "Import Images"
 msgstr "导入图像"
@@ -22608,7 +22608,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "输入新样式名称"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30744,12 +30744,12 @@ msgstr "另存为 %1"
 msgid "The file %1 does not exist."
 msgstr "文件 %1 不存在。"
 
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1149
 #, kde-format
 msgid "Open Images"
 msgstr "打开图像"
 
-#: libs/ui/KisMainWindow.cpp:1268
+#: libs/ui/KisMainWindow.cpp:1282
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30761,45 +30761,45 @@ msgstr ""
 "\n"
 "为保险起见，请将图像另存到不会覆盖原始图像的位置。"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1338
 #, kde-format
 msgid "Exporting"
 msgstr "正在导出"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1338
 #, kde-format
 msgid "Saving As"
 msgstr "正在保存为"
 
-#: libs/ui/KisMainWindow.cpp:1724
+#: libs/ui/KisMainWindow.cpp:1738
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "新建图像"
 
-#: libs/ui/KisMainWindow.cpp:1748
+#: libs/ui/KisMainWindow.cpp:1762
 #, kde-format
 msgid "Custom Document"
 msgstr "新建图像 - 自定义"
 
-#: libs/ui/KisMainWindow.cpp:1760
+#: libs/ui/KisMainWindow.cpp:1774
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "新建图像 - 剪贴板"
 
-#: libs/ui/KisMainWindow.cpp:1945
+#: libs/ui/KisMainWindow.cpp:1959
 #, kde-format
 msgid "Layers/Masks"
 msgstr "图层/蒙版"
 
-#: libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1985
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "尚未启用任何资源包"
 
-#: libs/ui/KisMainWindow.cpp:1975
+#: libs/ui/KisMainWindow.cpp:1989
 #, kde-format
 msgid ""
 "\n"
@@ -30809,7 +30809,7 @@ msgstr ""
 "\n"
 "无可用笔刷预设。请在继续操作之前重新启用一些资源包。\n"
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1999
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30820,7 +30820,7 @@ msgstr ""
 "\n"
 "仅本地资源可用。"
 
-#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2136 libs/ui/KisMainWindow.cpp:2218
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30829,59 +30829,59 @@ msgstr ""
 "无法完成导入动画：\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2183
+#: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "创建新图像失败。动画导入已中止。"
 
-#: libs/ui/KisMainWindow.cpp:2605
+#: libs/ui/KisMainWindow.cpp:2619
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "导入工作区(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2634
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新建工作区(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2638
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新建工作区..."
 
-#: libs/ui/KisMainWindow.cpp:2668
+#: libs/ui/KisMainWindow.cpp:2682
 #, kde-format
 msgid "&%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2671
+#: libs/ui/KisMainWindow.cpp:2685
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2840
+#: libs/ui/KisMainWindow.cpp:2854
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "未安装 Krita 的 LittleCMS 色彩管理插件。Krita 将立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:2856
+#: libs/ui/KisMainWindow.cpp:2870
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安装错误"
 
-#: libs/ui/KisMainWindow.cpp:2966
+#: libs/ui/KisMainWindow.cpp:2980
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "界面颜色(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3025
+#: libs/ui/KisMainWindow.cpp:3039
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "<<--- 空白占位符 (自动伸展) --->>"

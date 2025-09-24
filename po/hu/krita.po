@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-18 02:01+0000\n"
+"POT-Creation-Date: 2025-09-24 02:00+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -7507,9 +7507,9 @@ msgstr "Előrehozás"
 #: krita/data/actions/InteractionTool.action:16
 #: krita/data/actions/InteractionTool.action:18
 #: krita/data/actions/InteractionTool.action:23
-#: plugins/tools/svgtexttool/SvgTextTool.action:66
-#: plugins/tools/svgtexttool/SvgTextTool.action:68
-#: plugins/tools/svgtexttool/SvgTextTool.action:73
+#: plugins/tools/svgtexttool/SvgTextTool.action:26
+#: plugins/tools/svgtexttool/SvgTextTool.action:28
+#: plugins/tools/svgtexttool/SvgTextTool.action:33
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Align Right"
@@ -7616,9 +7616,9 @@ msgstr "Csoport:"
 #: krita/data/actions/InteractionTool.action:76
 #: krita/data/actions/InteractionTool.action:78
 #: krita/data/actions/InteractionTool.action:83
-#: plugins/tools/svgtexttool/SvgTextTool.action:76
-#: plugins/tools/svgtexttool/SvgTextTool.action:78
-#: plugins/tools/svgtexttool/SvgTextTool.action:83
+#: plugins/tools/svgtexttool/SvgTextTool.action:36
+#: plugins/tools/svgtexttool/SvgTextTool.action:38
+#: plugins/tools/svgtexttool/SvgTextTool.action:43
 #, fuzzy, kde-format
 #| msgid "Alignment"
 msgctxt "action"
@@ -8724,10 +8724,7 @@ msgid "&Sample Screen Color"
 msgstr "Hasonló színek kijelölése"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#: krita/krita.action:313 plugins/tools/svgtexttool/SvgTextTool.action:248
+#: krita/krita.action:313
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Sample a color from the screen"
@@ -13442,7 +13439,7 @@ msgstr "&Eszközök"
 msgid "Scripts"
 msgstr "Szkriptek"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
+#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "&Beállítások"
@@ -13455,7 +13452,7 @@ msgstr "&Súgó"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:104
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "Fájl"
@@ -15937,7 +15934,7 @@ msgstr "A legutóbbi G'Mic-Qt művelet alkalmazása ismét"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
 #: krita/kritamenu.action:1736
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
-#: plugins/tools/svgtexttool/SvgTextTool.action:236
+#: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
 msgctxt "action"
 msgid "Settings"
@@ -21069,7 +21066,6 @@ msgstr "alapértelmezett"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:60
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
 #, kde-format
 msgid "Size"
 msgstr "Méret"
@@ -24260,7 +24256,7 @@ msgstr "Erőforráscsomagok kezelése…"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -27410,7 +27406,6 @@ msgstr "Réteg tulajdonságai"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
 #, kde-format
@@ -30941,7 +30936,6 @@ msgstr "Előtérszín"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
 #, kde-format
 msgid "Background Color"
 msgstr "Háttérszín"
@@ -36113,13 +36107,13 @@ msgid "Wor&kspace"
 msgstr "Mun&katerület"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:318
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Alapréteg megjelenítése"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gördítősávok elrejtése"
@@ -37605,7 +37599,7 @@ msgstr "Réteghatások"
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgStylesEdit)
 #: libs/ui/layerstyles/wdglayerstyles.ui:34
 #: libs/ui/layerstyles/wdgstylesselector.ui:21
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:62
+#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:39
 #, fuzzy, kde-format
 msgid "Styles"
 msgstr "Stílus"
@@ -46754,7 +46748,7 @@ msgstr "Fájlnév"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:135
 #, kde-format
 msgid "Comment"
 msgstr "Megjegyzés"
@@ -52110,10 +52104,8 @@ msgctxt "Connector Lines in Multigridpattern"
 msgid "Connector Lines"
 msgstr "Kapcsolódási pont"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:100
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
 #, kde-format
 msgid "Colors"
 msgstr "Színek"
@@ -60785,11 +60777,11 @@ msgstr "Betűtípus beállítása"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:127
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:155
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Bold"
@@ -60802,11 +60794,11 @@ msgstr "Félkövér"
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:134
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:162
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Italic"
@@ -65622,98 +65614,42 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "A lista módosítása"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, fuzzy, kde-format
 msgid "Text Tool"
 msgstr "Szöveg eszköz"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
 #, fuzzy, kde-format
 #| msgid "Connection Point"
 msgid "Conversion failed"
 msgstr "Kapcsolódási pont"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
 #, kde-format
 msgid "Find Text"
 msgstr "Keresés"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
 #, kde-format
 msgid "Find:"
 msgstr "Keresés:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
 #, kde-format
 msgid "Replace:"
 msgstr "Csere:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
-
-#. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
-#, kde-format
-msgid "Rich text"
-msgstr "Rich text"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
-#, kde-format
-msgid "SVG Source"
-msgstr "SVG forrás"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
-#, kde-format
-msgid "Font"
-msgstr "Betűtípus"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
-#, kde-format
-msgid "Text Color"
-msgstr "Szövegszín"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
-#, fuzzy, kde-format
-#| msgid "Select similar colors"
-msgid "Sample a Color"
-msgstr "Hasonló színek kijelölése"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
-#, fuzzy, kde-format
-msgid "Line height"
-msgstr "Nyomtatási magasság:"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
-#, fuzzy, kde-format
-#| msgid "Normal"
-msgctxt "Default line height for text"
-msgid "Normal"
-msgstr "Normál"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
-#, fuzzy, kde-format
-#| msgid "100%"
-msgctxt "line height for text"
-msgid "100%"
-msgstr "100%"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:164
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
-msgid "Letter Spacing"
-msgstr "Sor ritkítás"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:20
 #, fuzzy
@@ -65762,102 +65698,27 @@ msgctxt "action"
 msgid "Text Tool"
 msgstr "Szöveg eszköz"
 
-#. i18n: context: iconText @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:16
 #: plugins/tools/svgtexttool/SvgTextTool.action:23
-#, kde-format
-msgctxt "action"
-msgid "Text Color"
-msgstr "Szövegszín"
-
-#. i18n: context: toolTip @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:18
-#, kde-format
-msgctxt "action"
-msgid "Text Color..."
-msgstr "Szövegszín…"
-
-#. i18n: context: iconText @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:26
-#: plugins/tools/svgtexttool/SvgTextTool.action:33
-#, kde-format
-msgctxt "action"
-msgid "Background"
-msgstr "Háttér"
-
-#. i18n: context: toolTip @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:28
-#, kde-format
-msgctxt "action"
-msgid "Background Color..."
-msgstr "Háttérszín…"
-
-#. i18n: context: iconText @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: toolTip @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: toolTip @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:36
-#: plugins/tools/svgtexttool/SvgTextTool.action:38
-#: plugins/tools/svgtexttool/SvgTextTool.action:43
-#, kde-format
-msgctxt "action"
-msgid "Font Size"
-msgstr "Betűméret"
-
-#. i18n: context: iconText @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:46
-#: plugins/tools/svgtexttool/SvgTextTool.action:53
 #, fuzzy, kde-format
+#| msgid "Open palette"
 msgctxt "action"
-msgid "Font..."
-msgstr "Betűkészlet:"
-
-#. i18n: context: toolTip @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:48
-#, kde-format
-msgctxt "action"
-msgid "Change character size, font, boldface, italics etc."
-msgstr ""
-
-#. i18n: context: whatsThis @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:50
-#, fuzzy, kde-format
-#| msgid "Duplicate the currently selected action"
-msgctxt "action"
-msgid "Change the attributes of the currently selected characters."
-msgstr "A jelenleg kijelölt művelet kettőzése"
-
-#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:56
-#: plugins/tools/svgtexttool/SvgTextTool.action:63
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Special Character..."
-msgstr "&Réteg méretezése…"
+msgid "Glyph Palette..."
+msgstr "Paletta megnyitása"
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:58
+#: plugins/tools/svgtexttool/SvgTextTool.action:18
 #, kde-format
 msgctxt "action"
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr ""
 
 #. i18n: context: whatsThis @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:60
+#: plugins/tools/svgtexttool/SvgTextTool.action:20
 #, kde-format
 msgctxt "action"
 msgid "Insert one or more symbols or characters not found on the keyboard."
@@ -65869,9 +65730,9 @@ msgstr ""
 #. i18n: context: iconText @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:86
-#: plugins/tools/svgtexttool/SvgTextTool.action:88
-#: plugins/tools/svgtexttool/SvgTextTool.action:93
+#: plugins/tools/svgtexttool/SvgTextTool.action:46
+#: plugins/tools/svgtexttool/SvgTextTool.action:48
+#: plugins/tools/svgtexttool/SvgTextTool.action:53
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Align Block"
@@ -65883,9 +65744,9 @@ msgstr "Medencefenék"
 #. i18n: context: iconText @ Action (svg_align_center), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_align_center), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_align_center), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:96
-#: plugins/tools/svgtexttool/SvgTextTool.action:98
-#: plugins/tools/svgtexttool/SvgTextTool.action:103
+#: plugins/tools/svgtexttool/SvgTextTool.action:56
+#: plugins/tools/svgtexttool/SvgTextTool.action:58
+#: plugins/tools/svgtexttool/SvgTextTool.action:63
 #, kde-format
 msgctxt "action"
 msgid "Align Center"
@@ -65897,9 +65758,9 @@ msgstr "Középre igazítás"
 #. i18n: context: iconText @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:106
-#: plugins/tools/svgtexttool/SvgTextTool.action:108
-#: plugins/tools/svgtexttool/SvgTextTool.action:113
+#: plugins/tools/svgtexttool/SvgTextTool.action:66
+#: plugins/tools/svgtexttool/SvgTextTool.action:68
+#: plugins/tools/svgtexttool/SvgTextTool.action:73
 #, kde-format
 msgctxt "action"
 msgid "Decrease Font Size"
@@ -65911,9 +65772,9 @@ msgstr "Betűméret csökkentése"
 #. i18n: context: iconText @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:116
-#: plugins/tools/svgtexttool/SvgTextTool.action:118
-#: plugins/tools/svgtexttool/SvgTextTool.action:123
+#: plugins/tools/svgtexttool/SvgTextTool.action:76
+#: plugins/tools/svgtexttool/SvgTextTool.action:78
+#: plugins/tools/svgtexttool/SvgTextTool.action:83
 #, kde-format
 msgctxt "action"
 msgid "Increase Font Size"
@@ -65925,9 +65786,9 @@ msgstr "Betűméret növelése"
 #. i18n: context: iconText @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:126
-#: plugins/tools/svgtexttool/SvgTextTool.action:128
-#: plugins/tools/svgtexttool/SvgTextTool.action:133
+#: plugins/tools/svgtexttool/SvgTextTool.action:86
+#: plugins/tools/svgtexttool/SvgTextTool.action:88
+#: plugins/tools/svgtexttool/SvgTextTool.action:93
 #, kde-format
 msgctxt "action"
 msgid "Subscript"
@@ -65939,9 +65800,9 @@ msgstr "Alsó index"
 #. i18n: context: iconText @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:136
-#: plugins/tools/svgtexttool/SvgTextTool.action:138
-#: plugins/tools/svgtexttool/SvgTextTool.action:143
+#: plugins/tools/svgtexttool/SvgTextTool.action:96
+#: plugins/tools/svgtexttool/SvgTextTool.action:98
+#: plugins/tools/svgtexttool/SvgTextTool.action:103
 #, kde-format
 msgctxt "action"
 msgid "Superscript"
@@ -65953,9 +65814,9 @@ msgstr "Felső index"
 #. i18n: context: iconText @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:146
-#: plugins/tools/svgtexttool/SvgTextTool.action:148
-#: plugins/tools/svgtexttool/SvgTextTool.action:153
+#: plugins/tools/svgtexttool/SvgTextTool.action:106
+#: plugins/tools/svgtexttool/SvgTextTool.action:108
+#: plugins/tools/svgtexttool/SvgTextTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "Underline"
@@ -65967,9 +65828,9 @@ msgstr "Aláhúzott"
 #. i18n: context: iconText @ Action (svg_format_strike_through), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_strike_through), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_strike_through), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:156
-#: plugins/tools/svgtexttool/SvgTextTool.action:158
-#: plugins/tools/svgtexttool/SvgTextTool.action:163
+#: plugins/tools/svgtexttool/SvgTextTool.action:116
+#: plugins/tools/svgtexttool/SvgTextTool.action:118
+#: plugins/tools/svgtexttool/SvgTextTool.action:123
 #, kde-format
 msgctxt "action"
 msgid "Strikethrough"
@@ -65981,9 +65842,9 @@ msgstr "Áthúzott"
 #. i18n: context: iconText @ Action (svg_weight_bold), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_bold), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_bold), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:166
-#: plugins/tools/svgtexttool/SvgTextTool.action:168
-#: plugins/tools/svgtexttool/SvgTextTool.action:173
+#: plugins/tools/svgtexttool/SvgTextTool.action:126
+#: plugins/tools/svgtexttool/SvgTextTool.action:128
+#: plugins/tools/svgtexttool/SvgTextTool.action:133
 #, kde-format
 msgctxt "action"
 msgid "Bold"
@@ -65995,9 +65856,9 @@ msgstr "Félkövér"
 #. i18n: context: iconText @ Action (svg_format_italic), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_italic), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_italic), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:176
-#: plugins/tools/svgtexttool/SvgTextTool.action:178
-#: plugins/tools/svgtexttool/SvgTextTool.action:183
+#: plugins/tools/svgtexttool/SvgTextTool.action:136
+#: plugins/tools/svgtexttool/SvgTextTool.action:138
+#: plugins/tools/svgtexttool/SvgTextTool.action:143
 #, kde-format
 msgctxt "action"
 msgid "Italic"
@@ -66009,9 +65870,9 @@ msgstr "Dőlt"
 #. i18n: context: iconText @ Action (svg_weight_normal), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_normal), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_normal), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:186
-#: plugins/tools/svgtexttool/SvgTextTool.action:188
-#: plugins/tools/svgtexttool/SvgTextTool.action:193
+#: plugins/tools/svgtexttool/SvgTextTool.action:146
+#: plugins/tools/svgtexttool/SvgTextTool.action:148
+#: plugins/tools/svgtexttool/SvgTextTool.action:153
 #, kde-format
 msgctxt "action"
 msgid "Normal"
@@ -66023,9 +65884,9 @@ msgstr "Normál"
 #. i18n: context: iconText @ Action (svg_weight_demi), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_demi), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_demi), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:196
-#: plugins/tools/svgtexttool/SvgTextTool.action:198
-#: plugins/tools/svgtexttool/SvgTextTool.action:203
+#: plugins/tools/svgtexttool/SvgTextTool.action:156
+#: plugins/tools/svgtexttool/SvgTextTool.action:158
+#: plugins/tools/svgtexttool/SvgTextTool.action:163
 #, kde-format
 msgctxt "action"
 msgid "Demi"
@@ -66037,9 +65898,9 @@ msgstr ""
 #. i18n: context: iconText @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:206
-#: plugins/tools/svgtexttool/SvgTextTool.action:208
-#: plugins/tools/svgtexttool/SvgTextTool.action:213
+#: plugins/tools/svgtexttool/SvgTextTool.action:166
+#: plugins/tools/svgtexttool/SvgTextTool.action:168
+#: plugins/tools/svgtexttool/SvgTextTool.action:173
 #, kde-format
 msgctxt "action"
 msgid "Black"
@@ -66051,34 +65912,16 @@ msgstr "Fekete"
 #. i18n: context: iconText @ Action (svg_weight_light), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_light), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_light), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:216
-#: plugins/tools/svgtexttool/SvgTextTool.action:218
-#: plugins/tools/svgtexttool/SvgTextTool.action:223
+#: plugins/tools/svgtexttool/SvgTextTool.action:176
+#: plugins/tools/svgtexttool/SvgTextTool.action:178
+#: plugins/tools/svgtexttool/SvgTextTool.action:183
 #, kde-format
 msgctxt "action"
 msgid "Light"
 msgstr "Világos"
 
-#. i18n: context: iconText @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:226
-#: plugins/tools/svgtexttool/SvgTextTool.action:233
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Line Height"
-msgstr "Nyomtatási magasság:"
-
-#. i18n: context: toolTip @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:228
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Line Height in em"
-msgstr "Nyomtatási magasság:"
-
 #. i18n: context: toolTip @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:238
+#: plugins/tools/svgtexttool/SvgTextTool.action:188
 #, fuzzy, kde-format
 #| msgid "Filter Settings"
 msgctxt "action"
@@ -66086,243 +65929,60 @@ msgid "Text Editor Settings"
 msgstr "Szűrőbeállítások"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:243
+#: plugins/tools/svgtexttool/SvgTextTool.action:193
 #, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
 msgstr "Beállítások…"
 
-#. i18n: context: iconText @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:246
-#: plugins/tools/svgtexttool/SvgTextTool.action:253
-#: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Color Sampler"
-msgstr "Színválasztó"
-
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:256
-#: plugins/tools/svgtexttool/SvgTextTool.action:258
-#: plugins/tools/svgtexttool/SvgTextTool.action:263
+#: plugins/tools/svgtexttool/SvgTextTool.action:196
+#: plugins/tools/svgtexttool/SvgTextTool.action:198
+#: plugins/tools/svgtexttool/SvgTextTool.action:203
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "action"
 msgid "Kerning"
 msgstr "Figyelem"
 
-#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:266
-#: plugins/tools/svgtexttool/SvgTextTool.action:273
-#, kde-format
-msgctxt "action"
-msgid "Legacy Hard Wrap"
-msgstr ""
-
-#. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:268
-#, kde-format
-msgctxt "action"
-msgid ""
-"Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
-"are explicitly positioned, but the line height may be slightly inaccurate."
-msgstr ""
-
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:276
-#: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, kde-format
-msgctxt "action"
-msgid "SVG Hard Wrap"
-msgstr ""
-
-#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:278
-#, kde-format
-msgctxt "action"
-msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr ""
-
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:286
-#: plugins/tools/svgtexttool/SvgTextTool.action:293
-#, kde-format
-msgctxt "action"
-msgid "SVG Auto Wrap with Fixed Width"
-msgstr ""
-
-#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:288
-#, kde-format
-msgctxt "action"
-msgid ""
-"Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
-"defining the text width."
-msgstr ""
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:329
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
 msgstr "Krita - Szöveg szerkesztése"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:33
-#, fuzzy, kde-format
-#| msgid "Insert"
-msgid "&Insert"
-msgstr "Beszúrás"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:37
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Format"
-msgid "&Format"
-msgstr "Formátum"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:45
-#, fuzzy, kde-format
-#| msgid "Height:"
-msgid "&Weight"
-msgstr "Magasság:"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
-#, fuzzy, kde-format
-#| msgid "Text editing"
-msgid "Text W&rapping"
-msgstr "Szövegszerkesztés"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
-#, kde-format
-msgid "Font Settings"
-msgstr "Betűtípus-beállítások"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
-#, kde-format
-msgid "Formatting"
-msgstr "Formázás"
-
-#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:19
+#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:21
 #, fuzzy, kde-format
 msgid "SVG Text Tool"
 msgstr "Szöveg eszköz"
 
-#. i18n: ectx: attribute (title), widget (QWidget, svgTab)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:38
-#, kde-format
-msgid "SVG source"
-msgstr "SVG forrás"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:48
+#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
 #, kde-format
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Open palette"
-msgid "Glyph Palette"
-msgstr "Paletta megnyitása"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
 #, fuzzy, kde-format
 #| msgid "SVG Source"
 msgid "Edit SVG Source"
 msgstr "SVG forrás"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:74
-#, fuzzy, kde-format
-msgid "Edit Text"
-msgstr "Szöveg"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
-#, fuzzy, kde-format
-msgid "Create new texts with..."
-msgstr "Nemrég használt dokumentumok"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:95
-#, fuzzy, kde-format
-msgid "Anchor text to the left."
-msgstr "Erősség:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:118
-#, fuzzy, kde-format
-msgid "Anchor text to the middle."
-msgstr "Erősség:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:141
-#, fuzzy, kde-format
-msgid "Anchor text to the right."
-msgstr "Erősség:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:184
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:210
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:236
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:269
-#, fuzzy, kde-format
-msgid "Left to right text direction."
-msgstr "Irány:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:295
-#, fuzzy, kde-format
-msgid "Right to left text direction."
-msgstr "Képfelbontás módosítása"
-
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "Text Type"
 msgstr "Szöveg alakzat"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
 #, kde-format
 msgid ""
 "<html><head/><body><p>The text will not wrap and preserves spaces and new "
@@ -66331,14 +65991,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
 #, fuzzy, kde-format
 #| msgid "Performance"
 msgid "Preformatted"
 msgstr "Teljesítmény"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
 #, fuzzy, kde-format
 msgid ""
 "<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
@@ -66346,14 +66006,14 @@ msgid ""
 msgstr "<html><head/><body><p>Művelet leírás</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
 #, fuzzy, kde-format
 #| msgid "Sine"
 msgid "Inline Wrapped"
 msgstr "Szinusz"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
 #, kde-format
 msgid ""
 "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
@@ -66362,62 +66022,115 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
 #, fuzzy, kde-format
 msgid "Prepositioned"
 msgstr "Összetétel"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
+#, fuzzy, kde-format
+#| msgid "Open palette"
+msgid "Glyph Palette"
+msgstr "Paletta megnyitása"
+
+#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
+#, fuzzy, kde-format
+msgid "Create new texts with..."
+msgstr "Nemrég használt dokumentumok"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
+#, fuzzy, kde-format
+msgid "Anchor text to the left."
+msgstr "Erősség:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
+#, fuzzy, kde-format
+msgid "Anchor text to the middle."
+msgstr "Erősség:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
+#, fuzzy, kde-format
+msgid "Anchor text to the right."
+msgstr "Erősség:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
+#, fuzzy, kde-format
+#| msgid "Line Spacing"
+msgid "Letter Spacing"
+msgstr "Sor ritkítás"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
+#, kde-format
+msgid "Text flows horizontal, top to bottom."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
+#, kde-format
+msgid "Text flows vertical, right to left."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
+#, kde-format
+msgid "Text flows vertical, left to right."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
+#, fuzzy, kde-format
+msgid "Left to right text direction."
+msgstr "Irány:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
+#, fuzzy, kde-format
+msgid "Right to left text direction."
+msgstr "Képfelbontás módosítása"
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
 msgid "Keyword"
 msgstr "Kulcsszó"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:51
 #, kde-format
 msgid "Element"
 msgstr "Elem"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:79
 #, kde-format
 msgid "Attribute"
 msgstr "Attribútum"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:107
 #, kde-format
 msgctxt "The Value label used by SVG Text Tool"
 msgid "Value"
 msgstr "Érték"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:163
 #, kde-format
 msgid "Editor text color"
 msgstr "Szerkesztő szövegszíne"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:183
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
 #, kde-format
 msgid "Editor background:"
 msgstr "Szerkesztő háttérszíne:"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:209
-#, kde-format
-msgid "Fonts"
-msgstr "Betűtípusok"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:215
-#, kde-format
-msgid ""
-"<html><head/><body><p>Which writing system should the fonts chooser show the "
-"fonts of? No writing system selected will have all fonts shown.</p></body></"
-"html>"
-msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:111
@@ -67785,6 +67498,16 @@ msgctxt "action"
 msgid "Select Shapes Tool"
 msgstr "Alakzatkijelölő eszköz"
 
+#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:74 plugins/tools/tools.action:77
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Color Sampler"
+msgstr "Színválasztó"
+
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
 #, kde-format
@@ -67950,6 +67673,122 @@ msgstr "Nagyító eszköz"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenciaképek eszköz"
+
+#~ msgid "Rich text"
+#~ msgstr "Rich text"
+
+#~ msgid "SVG Source"
+#~ msgstr "SVG forrás"
+
+#~ msgid "Font"
+#~ msgstr "Betűtípus"
+
+#~ msgid "Text Color"
+#~ msgstr "Szövegszín"
+
+#, fuzzy
+#~| msgid "Select similar colors"
+#~ msgid "Sample a Color"
+#~ msgstr "Hasonló színek kijelölése"
+
+#, fuzzy
+#~ msgid "Line height"
+#~ msgstr "Nyomtatási magasság:"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "Default line height for text"
+#~ msgid "Normal"
+#~ msgstr "Normál"
+
+#, fuzzy
+#~| msgid "100%"
+#~ msgctxt "line height for text"
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgctxt "action"
+#~ msgid "Text Color"
+#~ msgstr "Szövegszín"
+
+#~ msgctxt "action"
+#~ msgid "Text Color..."
+#~ msgstr "Szövegszín…"
+
+#~ msgctxt "action"
+#~ msgid "Background"
+#~ msgstr "Háttér"
+
+#~ msgctxt "action"
+#~ msgid "Background Color..."
+#~ msgstr "Háttérszín…"
+
+#~ msgctxt "action"
+#~ msgid "Font Size"
+#~ msgstr "Betűméret"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Font..."
+#~ msgstr "Betűkészlet:"
+
+#, fuzzy
+#~| msgid "Duplicate the currently selected action"
+#~ msgctxt "action"
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "A jelenleg kijelölt művelet kettőzése"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Special Character..."
+#~ msgstr "&Réteg méretezése…"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Line Height"
+#~ msgstr "Nyomtatási magasság:"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Line Height in em"
+#~ msgstr "Nyomtatási magasság:"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgid "&Insert"
+#~ msgstr "Beszúrás"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Format"
+#~ msgid "&Format"
+#~ msgstr "Formátum"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "&Weight"
+#~ msgstr "Magasság:"
+
+#, fuzzy
+#~| msgid "Text editing"
+#~ msgid "Text W&rapping"
+#~ msgstr "Szövegszerkesztés"
+
+#~ msgid "Font Settings"
+#~ msgstr "Betűtípus-beállítások"
+
+#~ msgid "Formatting"
+#~ msgstr "Formázás"
+
+#~ msgid "SVG source"
+#~ msgstr "SVG forrás"
+
+#, fuzzy
+#~ msgid "Edit Text"
+#~ msgstr "Szöveg"
+
+#~ msgid "Fonts"
+#~ msgstr "Betűtípusok"
 
 #, fuzzy
 #~| msgid "Font Family"

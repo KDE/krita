@@ -17,16 +17,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-18 02:01+0000\n"
-"PO-Revision-Date: 2025-09-18 00:05-0300\n"
-"Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
+"POT-Creation-Date: 2025-09-24 02:00+0000\n"
+"PO-Revision-Date: 2025-09-23 18:22-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7245,9 +7245,9 @@ msgstr "&Elevar"
 #: krita/data/actions/InteractionTool.action:16
 #: krita/data/actions/InteractionTool.action:18
 #: krita/data/actions/InteractionTool.action:23
-#: plugins/tools/svgtexttool/SvgTextTool.action:66
-#: plugins/tools/svgtexttool/SvgTextTool.action:68
-#: plugins/tools/svgtexttool/SvgTextTool.action:73
+#: plugins/tools/svgtexttool/SvgTextTool.action:26
+#: plugins/tools/svgtexttool/SvgTextTool.action:28
+#: plugins/tools/svgtexttool/SvgTextTool.action:33
 #, kde-format
 msgctxt "action"
 msgid "Align Right"
@@ -7352,9 +7352,9 @@ msgstr "Agrupar"
 #: krita/data/actions/InteractionTool.action:76
 #: krita/data/actions/InteractionTool.action:78
 #: krita/data/actions/InteractionTool.action:83
-#: plugins/tools/svgtexttool/SvgTextTool.action:76
-#: plugins/tools/svgtexttool/SvgTextTool.action:78
-#: plugins/tools/svgtexttool/SvgTextTool.action:83
+#: plugins/tools/svgtexttool/SvgTextTool.action:36
+#: plugins/tools/svgtexttool/SvgTextTool.action:38
+#: plugins/tools/svgtexttool/SvgTextTool.action:43
 #, kde-format
 msgctxt "action"
 msgid "Align Left"
@@ -8426,10 +8426,7 @@ msgid "&Sample Screen Color"
 msgstr "&Amostra da cor da tela"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#: krita/krita.action:313 plugins/tools/svgtexttool/SvgTextTool.action:248
+#: krita/krita.action:313
 #, kde-format
 msgctxt "action"
 msgid "Sample a color from the screen"
@@ -9359,8 +9356,8 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
-"Mostra a seleção global como uma máscara de seleção normal na área de "
-"<interface>Camadas</interface>"
+"Mostra a seleção global como uma máscara de seleção normal na área acoplável "
+"de <interface>Camadas</interface>"
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1030
@@ -13080,7 +13077,7 @@ msgstr "Ferramen&tas"
 msgid "Scripts"
 msgstr "Scripts"
 
-#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
+#: krita/krita5.xmlgui:381 plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
 msgid "Setti&ngs"
 msgstr "Co&nfigurações"
@@ -13093,7 +13090,7 @@ msgstr "&Ajuda"
 
 #: krita/krita5.xmlgui:427 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:104
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:40
 #, kde-format
 msgid "File"
 msgstr "Arquivo"
@@ -15533,7 +15530,7 @@ msgstr "Aplica a última ação G'Mic-Qt novamente"
 #. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
 #: krita/kritamenu.action:1736
 #: plugins/extensions/dbexplorer/dbexplorer.action:4
-#: plugins/tools/svgtexttool/SvgTextTool.action:236
+#: plugins/tools/svgtexttool/SvgTextTool.action:186
 #, kde-format
 msgctxt "action"
 msgid "Settings"
@@ -15633,7 +15630,7 @@ msgstr "Mostrar as áreas acopláveis"
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr "Most&rar barras de título acopláveis"
+msgstr "Most&rar barras de título das áreas acopláveis"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -15643,7 +15640,7 @@ msgstr "Most&rar barras de título acopláveis"
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr "Mostrar barras de título acopláveis"
+msgstr "Mostrar barras de título das áreas acopláveis"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1809
@@ -20629,7 +20626,7 @@ msgstr "Unidade não suportada"
 #, kde-format
 msgctxt "Category of brush engines"
 msgid "Brush engines"
-msgstr "Mecanismos de pincéis"
+msgstr "Motores de pincéis"
 
 #: libs/image/brushengine/kis_paintop_registry.cc:126
 #, kde-format
@@ -20642,7 +20639,6 @@ msgstr "padrão"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:60
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
 #, kde-format
 msgid "Size"
 msgstr "Tamanho"
@@ -23625,7 +23621,7 @@ msgstr "Recursos locais"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -26503,8 +26499,8 @@ msgid ""
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
 "Além de filtrar o quadro atualmente visível, \n"
-"filtrar todos os outros quadros-chave (keyframes) selecionados na janela de "
-"encaixe Linha do tempo da animação."
+"filtrar todos os outros quadros-chave (keyframes) selecionados na área "
+"acoplável de Linha do tempo da animação."
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:139
 #, kde-format
@@ -26775,7 +26771,6 @@ msgstr "Propriedades da Camada"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
 #, kde-format
@@ -26886,7 +26881,7 @@ msgstr "Difusão:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Missing Color Profile"
-msgstr "Faltando Perfil de Cor"
+msgstr "Faltando perfil de cor"
 
 #: libs/ui/dialogs/kis_dlg_paste_format.cpp:18
 #, kde-format
@@ -29418,7 +29413,7 @@ msgstr "Barras de ferramentas"
 #: libs/ui/forms/wdgfullscreensettings.ui:49
 #, kde-format
 msgid "Toolbox and dockers"
-msgstr "Caixa de ferramentas e janelas de encaixe"
+msgstr "Caixa de ferramentas e áreas acopláveis"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScrollbars)
 #: libs/ui/forms/wdgfullscreensettings.ui:56
@@ -29450,7 +29445,7 @@ msgstr "Alternar máscara de gama"
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "Selecione uma máscara na janela de encaixe \"Máscaras de Gama\""
+msgstr "Selecione uma máscara na área acoplável de \"Máscaras de gamute\""
 
 #. i18n: ectx: attribute (title), widget (QWidget, File)
 #: libs/ui/forms/wdggeneralsettings.ui:52
@@ -30029,10 +30024,10 @@ msgid ""
 "range will cause the timeline to zoom out."
 msgstr ""
 "Quando marcada, esta opção dimensionará automaticamente a visualização de "
-"quadros do Docker da Linha do Tempo da Animação para melhor se ajustar ao "
-"intervalo de reprodução do documento. Um intervalo de reprodução menor fará "
-"com que a linha do tempo seja ampliada, enquanto um intervalo de reprodução "
-"maior fará com que a linha do tempo seja reduzida."
+"quadros da área acoplável da Linha do Tempo da Animação para melhor se "
+"ajustar ao intervalo de reprodução do documento. Um intervalo de reprodução "
+"menor fará com que a linha do tempo seja ampliada, enquanto um intervalo de "
+"reprodução maior fará com que a linha do tempo seja reduzida."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1095
@@ -30263,7 +30258,7 @@ msgstr "Sensibilidade:"
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
-"Ocultar barras de rolagem da janela de encaixe se a rolagem cinética estiver "
+"Ocultar barras de rolagem da área acoplável se a rolagem cinética estiver "
 "ativada"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
@@ -30318,7 +30313,6 @@ msgstr "Cor do primeiro plano"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
 #, kde-format
 msgid "Background Color"
 msgstr "Cor de Fundo"
@@ -31065,7 +31059,7 @@ msgstr "Salvar"
 #: libs/ui/forms/wdgpaintopsettings.ui:230
 #, kde-format
 msgid "Current Brush Engine"
-msgstr "Motor do Pincel Atual"
+msgstr "Motor do pincel atual"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:368
@@ -35523,13 +35517,13 @@ msgid "Wor&kspace"
 msgstr "Espaço de &Trabalho"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:318
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostrar barra de ferramentas %1"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Ocultar barra de ferramentas %1"
@@ -37005,7 +36999,7 @@ msgstr "Ativar efeitos"
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgStylesEdit)
 #: libs/ui/layerstyles/wdglayerstyles.ui:34
 #: libs/ui/layerstyles/wdgstylesselector.ui:21
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:62
+#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:39
 #, kde-format
 msgid "Styles"
 msgstr "Estilos"
@@ -39344,30 +39338,30 @@ msgstr "Para Baixo"
 #: libs/ui/widgets/KisDockerHud.cpp:60
 #, kde-format
 msgid "Configure docker panel"
-msgstr "Configurar o painel de docker"
+msgstr "Configurar o painel da área acoplável"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr "O Docker está aberto em %1. Feche %1 para mostrar aqui."
+msgstr "A área acoplável está aberta em %1. Feche %1 para mostrar aqui."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Configurar %1 dockers"
+msgstr "Configurar %1 áreas acopláveis"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Available dockers"
-msgstr "Dockers disponíveis"
+msgstr "Áreas acopláveis disponíveis"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
 msgid "Current dockers"
-msgstr "Dockers atuais"
+msgstr "Áreas acopláveis atuais"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -40079,7 +40073,7 @@ msgstr "Área acoplável flutuante"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Fechar a área acoplável"
+msgstr "Fechar área acoplável"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
@@ -42037,7 +42031,7 @@ msgstr "Comportamento"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:274
 #, kde-format
 msgid "When Docker Resizes: "
-msgstr "Quando a área é redimensionada: "
+msgstr "Quando a área acoplável é redimensionada: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:294
@@ -42945,7 +42939,7 @@ msgstr "Preferências da roda de cores"
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
 #, kde-format
 msgid "Docker settings"
-msgstr "Configurações do Docker"
+msgstr "Configurações da área acoplável"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -43381,8 +43375,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"Mostra a seleção global como uma máscara de seleção usual na janela de "
-"encaixe <b>Camadas</b>"
+"Mostra a seleção global como uma máscara de seleção usual na área acoplável "
+"de <b>Camadas</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
 #, kde-format
@@ -43804,7 +43798,7 @@ msgstr "Ver:"
 #: plugins/dockers/lut/wdglut.ui:296
 #, kde-format
 msgid "Color Engine:"
-msgstr "Mecanismo de cor:"
+msgstr "Motor de cor:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:310
@@ -44818,7 +44812,7 @@ msgstr "Remover instantâneo selecionado"
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:81
 #, kde-format
 msgid "Snapshot Docker"
-msgstr "Painel de instantâneos"
+msgstr "Área acoplável de Instantâneos"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
 #, kde-format
@@ -45366,7 +45360,7 @@ msgstr "Configuração da propriedade do texto"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Tocar Docker"
+msgstr "Área acoplável de Toque"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -46126,7 +46120,7 @@ msgstr "Nome do arquivo"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:135
 #, kde-format
 msgid "Comment"
 msgstr "Comentário"
@@ -48039,7 +48033,7 @@ msgstr "Excluir recursos"
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
-msgstr "Motor:"
+msgstr "Motor: "
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:21
 #, kde-format
@@ -51230,10 +51224,8 @@ msgctxt "Connector Lines in Multigridpattern"
 msgid "Connector Lines"
 msgstr "Linhas conectoras"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:100
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
 #, kde-format
 msgid "Colors"
 msgstr "Cores"
@@ -59562,7 +59554,7 @@ msgstr "Pressão à Tangente"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:33
 #, kde-format
 msgid "A Brush Engine for Drawing 3d Tangent Normal Maps"
-msgstr "Um mecanismo de pincéis para desenhar mapas da normal à tangente em 3D"
+msgstr "Um motor de pincéis para desenhar mapas da normal à tangente em 3D"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TangentEncoding)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:43
@@ -59857,7 +59849,7 @@ msgstr "Profundidade de Cor:"
 
 #: plugins/python/colorspace/uicolorspace.py:73
 msgid "Color profile:"
-msgstr "Perfil de Cor:"
+msgstr "Perfil de cor:"
 
 #: plugins/python/colorspace/uicolorspace.py:140
 msgid "The selected documents have been converted."
@@ -60090,11 +60082,11 @@ msgstr "Usar fonte"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:127
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:155
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
 #, kde-format
 msgid "Bold"
 msgstr "Negrito "
@@ -60105,11 +60097,11 @@ msgstr "Negrito "
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:134
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:162
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:40
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:96
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:124
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:152
 #, kde-format
 msgid "Italic"
 msgstr "Itálico "
@@ -61532,7 +61524,7 @@ msgstr "E&xtensão"
 #: plugins/python/krita_script_starter/bbdkss.ui:129
 #, kde-format
 msgid "&Docker"
-msgstr "Áreas a&copláveis "
+msgstr "Área a&coplável"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:152
@@ -61545,8 +61537,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Se isto estiver marcado, seu script será "
 "automaticamente ativado no Krita. Ele será mostrado no menu Scripts ou na "
-"lista do docker. Caso contrário, você precisará ativar o script manualmente "
-"usando o menu Configurações do Krita. </p></body></html>"
+"lista da área acoplável. Caso contrário, você precisará ativar o script "
+"manualmente usando o menu Configurações do Krita. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -61562,7 +61554,7 @@ msgstr "Criar Script"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
-msgstr "Janela Acoplável de Últimos Documentos"
+msgstr "Área acoplável de Últimos documentos"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
@@ -61570,7 +61562,7 @@ msgstr "Alterar configurações"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr "Docker do misturador de barras"
+msgstr "Área acoplável de Misturador de barras"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -61871,7 +61863,7 @@ msgstr "Arquivos Zip"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:36
 msgid "Quick Settings Docker"
-msgstr "Docker de Configurações Rápidas"
+msgstr "Área acoplável de Configurações rápidas"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -61879,7 +61871,7 @@ msgstr "Adicionar Script"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Área Acoplável de Script"
+msgstr "Área acoplável de Script"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -64439,93 +64431,41 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Alterar ferramenta de texto SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
 msgid "Text Tool"
 msgstr "Ferramenta de texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
 #, kde-format
 msgid "Conversion failed"
 msgstr "Conversão falhou"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
 #, kde-format
 msgid "Find Text"
 msgstr "Localizar texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
 #, kde-format
 msgid "Find:"
 msgstr "Localizar:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Encontrar e Substituir tudo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
 #, kde-format
 msgid "Replace:"
 msgstr "Substituir:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Você modificou o texto. Descartar as mudanças?"
-
-#. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
-#, kde-format
-msgid "Rich text"
-msgstr "Texto formato RTF"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
-#, kde-format
-msgid "SVG Source"
-msgstr "Fonte SVG"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
-#, kde-format
-msgid "Font"
-msgstr "Fonte"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
-#, kde-format
-msgid "Text Color"
-msgstr "Cor do Texto "
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
-#, kde-format
-msgid "Sample a Color"
-msgstr "Selecionar uma cor"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
-#, kde-format
-msgid "Line height"
-msgstr "Altura da linha"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
-#, kde-format
-msgctxt "Default line height for text"
-msgid "Normal"
-msgstr "Normal"
-
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
-#, kde-format
-msgctxt "line height for text"
-msgid "100%"
-msgstr "100%"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:164
-#, kde-format
-msgid "Letter Spacing"
-msgstr "Espaçamento entre letras"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -64568,101 +64508,27 @@ msgctxt "action"
 msgid "Text Tool"
 msgstr "Ferramenta de texto"
 
-#. i18n: context: iconText @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:16
 #: plugins/tools/svgtexttool/SvgTextTool.action:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Glyph Palette"
 msgctxt "action"
-msgid "Text Color"
-msgstr "Cor do texto"
-
-#. i18n: context: toolTip @ Action (svg_format_textcolor), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:18
-#, kde-format
-msgctxt "action"
-msgid "Text Color..."
-msgstr "Cor do texto..."
-
-#. i18n: context: iconText @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:26
-#: plugins/tools/svgtexttool/SvgTextTool.action:33
-#, kde-format
-msgctxt "action"
-msgid "Background"
-msgstr "Plano de fundo"
-
-#. i18n: context: toolTip @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:28
-#, kde-format
-msgctxt "action"
-msgid "Background Color..."
-msgstr "Cor de fundo..."
-
-#. i18n: context: iconText @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: toolTip @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: toolTip @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:36
-#: plugins/tools/svgtexttool/SvgTextTool.action:38
-#: plugins/tools/svgtexttool/SvgTextTool.action:43
-#, kde-format
-msgctxt "action"
-msgid "Font Size"
-msgstr "Tamanho da fonte"
-
-#. i18n: context: iconText @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:46
-#: plugins/tools/svgtexttool/SvgTextTool.action:53
-#, kde-format
-msgctxt "action"
-msgid "Font..."
-msgstr "Fonte..."
-
-#. i18n: context: toolTip @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:48
-#, kde-format
-msgctxt "action"
-msgid "Change character size, font, boldface, italics etc."
-msgstr "Alterar o tamanho, tipo, negrito ou itálico do texto, etc."
-
-#. i18n: context: whatsThis @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:50
-#, kde-format
-msgctxt "action"
-msgid "Change the attributes of the currently selected characters."
-msgstr "Mudar os atributos dos caracteres selecionados atualmente."
-
-#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:56
-#: plugins/tools/svgtexttool/SvgTextTool.action:63
-#, kde-format
-msgctxt "action"
-msgid "Special Character..."
-msgstr "Caractere especial..."
+msgid "Glyph Palette..."
+msgstr "Paleta de Glifos"
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:58
+#: plugins/tools/svgtexttool/SvgTextTool.action:18
 #, kde-format
 msgctxt "action"
 msgid "Insert one or more symbols or characters not found on the keyboard"
 msgstr "Inserir um ou mais símbolos ou caracteres inexistentes no teclado"
 
 #. i18n: context: whatsThis @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:60
+#: plugins/tools/svgtexttool/SvgTextTool.action:20
 #, kde-format
 msgctxt "action"
 msgid "Insert one or more symbols or characters not found on the keyboard."
@@ -64674,9 +64540,9 @@ msgstr "Inserir um ou mais símbolos ou caracteres inexistentes no teclado."
 #. i18n: context: iconText @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:86
-#: plugins/tools/svgtexttool/SvgTextTool.action:88
-#: plugins/tools/svgtexttool/SvgTextTool.action:93
+#: plugins/tools/svgtexttool/SvgTextTool.action:46
+#: plugins/tools/svgtexttool/SvgTextTool.action:48
+#: plugins/tools/svgtexttool/SvgTextTool.action:53
 #, kde-format
 msgctxt "action"
 msgid "Align Block"
@@ -64688,9 +64554,9 @@ msgstr "Alinhar ao bloco"
 #. i18n: context: iconText @ Action (svg_align_center), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_align_center), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_align_center), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:96
-#: plugins/tools/svgtexttool/SvgTextTool.action:98
-#: plugins/tools/svgtexttool/SvgTextTool.action:103
+#: plugins/tools/svgtexttool/SvgTextTool.action:56
+#: plugins/tools/svgtexttool/SvgTextTool.action:58
+#: plugins/tools/svgtexttool/SvgTextTool.action:63
 #, kde-format
 msgctxt "action"
 msgid "Align Center"
@@ -64702,9 +64568,9 @@ msgstr "Centralizar"
 #. i18n: context: iconText @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:106
-#: plugins/tools/svgtexttool/SvgTextTool.action:108
-#: plugins/tools/svgtexttool/SvgTextTool.action:113
+#: plugins/tools/svgtexttool/SvgTextTool.action:66
+#: plugins/tools/svgtexttool/SvgTextTool.action:68
+#: plugins/tools/svgtexttool/SvgTextTool.action:73
 #, kde-format
 msgctxt "action"
 msgid "Decrease Font Size"
@@ -64716,9 +64582,9 @@ msgstr "Diminuir tamanho da fonte"
 #. i18n: context: iconText @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:116
-#: plugins/tools/svgtexttool/SvgTextTool.action:118
-#: plugins/tools/svgtexttool/SvgTextTool.action:123
+#: plugins/tools/svgtexttool/SvgTextTool.action:76
+#: plugins/tools/svgtexttool/SvgTextTool.action:78
+#: plugins/tools/svgtexttool/SvgTextTool.action:83
 #, kde-format
 msgctxt "action"
 msgid "Increase Font Size"
@@ -64730,9 +64596,9 @@ msgstr "Aumentar tamanho da fonte"
 #. i18n: context: iconText @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:126
-#: plugins/tools/svgtexttool/SvgTextTool.action:128
-#: plugins/tools/svgtexttool/SvgTextTool.action:133
+#: plugins/tools/svgtexttool/SvgTextTool.action:86
+#: plugins/tools/svgtexttool/SvgTextTool.action:88
+#: plugins/tools/svgtexttool/SvgTextTool.action:93
 #, kde-format
 msgctxt "action"
 msgid "Subscript"
@@ -64744,9 +64610,9 @@ msgstr "Subscrito"
 #. i18n: context: iconText @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:136
-#: plugins/tools/svgtexttool/SvgTextTool.action:138
-#: plugins/tools/svgtexttool/SvgTextTool.action:143
+#: plugins/tools/svgtexttool/SvgTextTool.action:96
+#: plugins/tools/svgtexttool/SvgTextTool.action:98
+#: plugins/tools/svgtexttool/SvgTextTool.action:103
 #, kde-format
 msgctxt "action"
 msgid "Superscript"
@@ -64758,9 +64624,9 @@ msgstr "Sobrescrito"
 #. i18n: context: iconText @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:146
-#: plugins/tools/svgtexttool/SvgTextTool.action:148
-#: plugins/tools/svgtexttool/SvgTextTool.action:153
+#: plugins/tools/svgtexttool/SvgTextTool.action:106
+#: plugins/tools/svgtexttool/SvgTextTool.action:108
+#: plugins/tools/svgtexttool/SvgTextTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "Underline"
@@ -64772,9 +64638,9 @@ msgstr "Sublinhado"
 #. i18n: context: iconText @ Action (svg_format_strike_through), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_strike_through), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_strike_through), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:156
-#: plugins/tools/svgtexttool/SvgTextTool.action:158
-#: plugins/tools/svgtexttool/SvgTextTool.action:163
+#: plugins/tools/svgtexttool/SvgTextTool.action:116
+#: plugins/tools/svgtexttool/SvgTextTool.action:118
+#: plugins/tools/svgtexttool/SvgTextTool.action:123
 #, kde-format
 msgctxt "action"
 msgid "Strikethrough"
@@ -64786,9 +64652,9 @@ msgstr "Tachado"
 #. i18n: context: iconText @ Action (svg_weight_bold), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_bold), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_bold), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:166
-#: plugins/tools/svgtexttool/SvgTextTool.action:168
-#: plugins/tools/svgtexttool/SvgTextTool.action:173
+#: plugins/tools/svgtexttool/SvgTextTool.action:126
+#: plugins/tools/svgtexttool/SvgTextTool.action:128
+#: plugins/tools/svgtexttool/SvgTextTool.action:133
 #, kde-format
 msgctxt "action"
 msgid "Bold"
@@ -64800,9 +64666,9 @@ msgstr "Negrito"
 #. i18n: context: iconText @ Action (svg_format_italic), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_italic), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_format_italic), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:176
-#: plugins/tools/svgtexttool/SvgTextTool.action:178
-#: plugins/tools/svgtexttool/SvgTextTool.action:183
+#: plugins/tools/svgtexttool/SvgTextTool.action:136
+#: plugins/tools/svgtexttool/SvgTextTool.action:138
+#: plugins/tools/svgtexttool/SvgTextTool.action:143
 #, kde-format
 msgctxt "action"
 msgid "Italic"
@@ -64814,9 +64680,9 @@ msgstr "Itálico"
 #. i18n: context: iconText @ Action (svg_weight_normal), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_normal), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_normal), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:186
-#: plugins/tools/svgtexttool/SvgTextTool.action:188
-#: plugins/tools/svgtexttool/SvgTextTool.action:193
+#: plugins/tools/svgtexttool/SvgTextTool.action:146
+#: plugins/tools/svgtexttool/SvgTextTool.action:148
+#: plugins/tools/svgtexttool/SvgTextTool.action:153
 #, kde-format
 msgctxt "action"
 msgid "Normal"
@@ -64828,9 +64694,9 @@ msgstr "Normal "
 #. i18n: context: iconText @ Action (svg_weight_demi), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_demi), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_demi), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:196
-#: plugins/tools/svgtexttool/SvgTextTool.action:198
-#: plugins/tools/svgtexttool/SvgTextTool.action:203
+#: plugins/tools/svgtexttool/SvgTextTool.action:156
+#: plugins/tools/svgtexttool/SvgTextTool.action:158
+#: plugins/tools/svgtexttool/SvgTextTool.action:163
 #, kde-format
 msgctxt "action"
 msgid "Demi"
@@ -64842,9 +64708,9 @@ msgstr "Demi"
 #. i18n: context: iconText @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:206
-#: plugins/tools/svgtexttool/SvgTextTool.action:208
-#: plugins/tools/svgtexttool/SvgTextTool.action:213
+#: plugins/tools/svgtexttool/SvgTextTool.action:166
+#: plugins/tools/svgtexttool/SvgTextTool.action:168
+#: plugins/tools/svgtexttool/SvgTextTool.action:173
 #, kde-format
 msgctxt "action"
 msgid "Black"
@@ -64856,273 +64722,73 @@ msgstr "Preto "
 #. i18n: context: iconText @ Action (svg_weight_light), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_light), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_weight_light), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:216
-#: plugins/tools/svgtexttool/SvgTextTool.action:218
-#: plugins/tools/svgtexttool/SvgTextTool.action:223
+#: plugins/tools/svgtexttool/SvgTextTool.action:176
+#: plugins/tools/svgtexttool/SvgTextTool.action:178
+#: plugins/tools/svgtexttool/SvgTextTool.action:183
 #, kde-format
 msgctxt "action"
 msgid "Light"
 msgstr "Leve"
 
-#. i18n: context: iconText @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:226
-#: plugins/tools/svgtexttool/SvgTextTool.action:233
-#, kde-format
-msgctxt "action"
-msgid "Line Height"
-msgstr "Altura da linha:"
-
-#. i18n: context: toolTip @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:228
-#, kde-format
-msgctxt "action"
-msgid "Line Height in em"
-msgstr "Altura da linha em:"
-
 #. i18n: context: toolTip @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:238
+#: plugins/tools/svgtexttool/SvgTextTool.action:188
 #, kde-format
 msgctxt "action"
 msgid "Text Editor Settings"
 msgstr "Configurações do Editor de Texto"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:243
+#: plugins/tools/svgtexttool/SvgTextTool.action:193
 #, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
 msgstr "Configurações..."
 
-#. i18n: context: iconText @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:246
-#: plugins/tools/svgtexttool/SvgTextTool.action:253
-#: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, kde-format
-msgctxt "action"
-msgid "Color Sampler"
-msgstr "Selecionar cor"
-
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:256
-#: plugins/tools/svgtexttool/SvgTextTool.action:258
-#: plugins/tools/svgtexttool/SvgTextTool.action:263
+#: plugins/tools/svgtexttool/SvgTextTool.action:196
+#: plugins/tools/svgtexttool/SvgTextTool.action:198
+#: plugins/tools/svgtexttool/SvgTextTool.action:203
 #, kde-format
 msgctxt "action"
 msgid "Kerning"
 msgstr "Kerning"
 
-#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:266
-#: plugins/tools/svgtexttool/SvgTextTool.action:273
-#, kde-format
-msgctxt "action"
-msgid "Legacy Hard Wrap"
-msgstr "Quebra rígida legada"
-
-#. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:268
-#, kde-format
-msgctxt "action"
-msgid ""
-"Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
-"are explicitly positioned, but the line height may be slightly inaccurate."
-msgstr ""
-"Use o modo de quebra rígido legado (o mesmo do Krita 5.1 e versões "
-"anteriores). Cada linha é posicionada explicitamente, mas a altura da linha "
-"pode ser ligeiramente imprecisa."
-
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:276
-#: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, kde-format
-msgctxt "action"
-msgid "SVG Hard Wrap"
-msgstr "Quebra rígida SVG"
-
-#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:278
-#, kde-format
-msgctxt "action"
-msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr "Use o modo de quebra rígido CSS `white-space: pre` do SVG."
-
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:286
-#: plugins/tools/svgtexttool/SvgTextTool.action:293
-#, kde-format
-msgctxt "action"
-msgid "SVG Auto Wrap with Fixed Width"
-msgstr "Quebra automática de SVG com largura fixa"
-
-#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
-#: plugins/tools/svgtexttool/SvgTextTool.action:288
-#, kde-format
-msgctxt "action"
-msgid ""
-"Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
-"defining the text width."
-msgstr ""
-"Usa o modo de quebra CSS `white-space: pre-wrap` do SVG, com `inline-size` "
-"definindo a largura do texto."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:329
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
 msgstr "Krita - Editar Texto"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:33
-#, kde-format
-msgid "&Insert"
-msgstr "&Inserir"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:37
-#, kde-format
-msgid "&Format"
-msgstr "&Formato"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:45
-#, kde-format
-msgid "&Weight"
-msgstr "&Altura"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
-#, kde-format
-msgid "Text W&rapping"
-msgstr "Queb&ra de texto"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
-#, kde-format
-msgid "Font Settings"
-msgstr "Configurações das Fontes"
-
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
-#, kde-format
-msgid "Formatting"
-msgstr "Formatação"
-
-#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:19
+#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:21
 #, kde-format
 msgid "SVG Text Tool"
 msgstr "Ferramenta de Texto SVG"
 
-#. i18n: ectx: attribute (title), widget (QWidget, svgTab)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:38
-#, kde-format
-msgid "SVG source"
-msgstr "Fonte SVG"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:48
+#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
 #, kde-format
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, kde-format
-msgid "Glyph Palette"
-msgstr "Paleta de Glifos"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
 #, kde-format
 msgid "Edit SVG Source"
 msgstr "Editar fonte SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:74
-#, kde-format
-msgid "Edit Text"
-msgstr "Editar Texto"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
-#, kde-format
-msgid "Create new texts with..."
-msgstr "Criar novos textos com..."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:95
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "Ancorar texto à esquerda."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:118
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "Ancorar texto no meio."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:141
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "Ancorar texto à direita."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:184
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr "O texto flui horizontalmente, de cima para baixo."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:210
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr "O texto flui verticalmente, da direita para a esquerda."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:236
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr "O texto flui verticalmente, da esquerda para a direita."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:269
-#, kde-format
-msgid "Left to right text direction."
-msgstr "Direção do texto da esquerda para a direita."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:295
-#, kde-format
-msgid "Right to left text direction."
-msgstr "Direção do texto da direita para a esquerda."
-
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:339
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
 #, kde-format
 msgid "Text Type"
 msgstr "Tipo de texto"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:345
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
 #, kde-format
 msgid ""
 "<html><head/><body><p>The text will not wrap and preserves spaces and new "
@@ -65134,13 +64800,13 @@ msgstr ""
 "posicionamento permaneçam separadas.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:348
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
 #, kde-format
 msgid "Preformatted"
 msgstr "Pré-formatado"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:358
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
 #, kde-format
 msgid ""
 "<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
@@ -65151,13 +64817,13 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:361
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
 #, kde-format
 msgid "Inline Wrapped"
 msgstr "Envolvido em linha"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:371
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
 #, kde-format
 msgid ""
 "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
@@ -65169,65 +64835,113 @@ msgstr ""
 "para compatibilidade com versões anteriores do SVG 1.1.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:374
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
 #, kde-format
 msgid "Prepositioned"
 msgstr "Preposicionado"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
+#, kde-format
+msgid "Glyph Palette"
+msgstr "Paleta de Glifos"
+
+#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
+#, kde-format
+msgid "Create new texts with..."
+msgstr "Criar novos textos com..."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
+#, kde-format
+msgid "Anchor text to the left."
+msgstr "Ancorar texto à esquerda."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
+#, kde-format
+msgid "Anchor text to the middle."
+msgstr "Ancorar texto no meio."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
+#, kde-format
+msgid "Anchor text to the right."
+msgstr "Ancorar texto à direita."
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
+#, kde-format
+msgid "Letter Spacing"
+msgstr "Espaçamento entre letras"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
+#, kde-format
+msgid "Text flows horizontal, top to bottom."
+msgstr "O texto flui horizontalmente, de cima para baixo."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
+#, kde-format
+msgid "Text flows vertical, right to left."
+msgstr "O texto flui verticalmente, da direita para a esquerda."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
+#, kde-format
+msgid "Text flows vertical, left to right."
+msgstr "O texto flui verticalmente, da esquerda para a direita."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
+#, kde-format
+msgid "Left to right text direction."
+msgstr "Direção do texto da esquerda para a direita."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
+#, kde-format
+msgid "Right to left text direction."
+msgstr "Direção do texto da direita para a esquerda."
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
 msgid "Keyword"
 msgstr "Palavra-chave"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:51
 #, kde-format
 msgid "Element"
 msgstr "Elemento"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:79
 #, kde-format
 msgid "Attribute"
 msgstr "Atributo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:107
 #, kde-format
 msgctxt "The Value label used by SVG Text Tool"
 msgid "Value"
 msgstr "Valor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:163
 #, kde-format
 msgid "Editor text color"
 msgstr "Cor de texto do Editor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:183
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
 #, kde-format
 msgid "Editor background:"
 msgstr "Plano de fundo do Editor"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:209
-#, kde-format
-msgid "Fonts"
-msgstr "Fontes"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:215
-#, kde-format
-msgid ""
-"<html><head/><body><p>Which writing system should the fonts chooser show the "
-"fonts of? No writing system selected will have all fonts shown.</p></body></"
-"html>"
-msgstr ""
-"<html><head/><body><p>Qual sistema de escrita o seletor de fontes deve "
-"mostrar em fontes de? Nenhum sistema de escrita selecionado terá todas as "
-"fontes mostradas.</p></body></html>"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:111
@@ -66573,6 +66287,16 @@ msgctxt "action"
 msgid "Select Shapes Tool"
 msgstr "Ferramenta de Seleção de Formas"
 
+#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:74 plugins/tools/tools.action:77
+#, kde-format
+msgctxt "action"
+msgid "Color Sampler"
+msgstr "Selecionar cor"
+
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
 #, kde-format
@@ -66740,6 +66464,145 @@ msgstr "Ferramenta Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
+
+#~ msgid "Rich text"
+#~ msgstr "Texto formato RTF"
+
+#~ msgid "SVG Source"
+#~ msgstr "Fonte SVG"
+
+#~ msgid "Font"
+#~ msgstr "Fonte"
+
+#~ msgid "Text Color"
+#~ msgstr "Cor do Texto "
+
+#~ msgid "Sample a Color"
+#~ msgstr "Selecionar uma cor"
+
+#~ msgid "Line height"
+#~ msgstr "Altura da linha"
+
+#~ msgctxt "Default line height for text"
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgctxt "line height for text"
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgctxt "action"
+#~ msgid "Text Color"
+#~ msgstr "Cor do texto"
+
+#~ msgctxt "action"
+#~ msgid "Text Color..."
+#~ msgstr "Cor do texto..."
+
+#~ msgctxt "action"
+#~ msgid "Background"
+#~ msgstr "Plano de fundo"
+
+#~ msgctxt "action"
+#~ msgid "Background Color..."
+#~ msgstr "Cor de fundo..."
+
+#~ msgctxt "action"
+#~ msgid "Font Size"
+#~ msgstr "Tamanho da fonte"
+
+#~ msgctxt "action"
+#~ msgid "Font..."
+#~ msgstr "Fonte..."
+
+#~ msgctxt "action"
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr "Alterar o tamanho, tipo, negrito ou itálico do texto, etc."
+
+#~ msgctxt "action"
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "Mudar os atributos dos caracteres selecionados atualmente."
+
+#~ msgctxt "action"
+#~ msgid "Special Character..."
+#~ msgstr "Caractere especial..."
+
+#~ msgctxt "action"
+#~ msgid "Line Height"
+#~ msgstr "Altura da linha:"
+
+#~ msgctxt "action"
+#~ msgid "Line Height in em"
+#~ msgstr "Altura da linha em:"
+
+#~ msgctxt "action"
+#~ msgid "Legacy Hard Wrap"
+#~ msgstr "Quebra rígida legada"
+
+#~ msgctxt "action"
+#~ msgid ""
+#~ "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
+#~ "are explicitly positioned, but the line height may be slightly inaccurate."
+#~ msgstr ""
+#~ "Use o modo de quebra rígido legado (o mesmo do Krita 5.1 e versões "
+#~ "anteriores). Cada linha é posicionada explicitamente, mas a altura da "
+#~ "linha pode ser ligeiramente imprecisa."
+
+#~ msgctxt "action"
+#~ msgid "SVG Hard Wrap"
+#~ msgstr "Quebra rígida SVG"
+
+#~ msgctxt "action"
+#~ msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
+#~ msgstr "Use o modo de quebra rígido CSS `white-space: pre` do SVG."
+
+#~ msgctxt "action"
+#~ msgid "SVG Auto Wrap with Fixed Width"
+#~ msgstr "Quebra automática de SVG com largura fixa"
+
+#~ msgctxt "action"
+#~ msgid ""
+#~ "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
+#~ "defining the text width."
+#~ msgstr ""
+#~ "Usa o modo de quebra CSS `white-space: pre-wrap` do SVG, com `inline-"
+#~ "size` definindo a largura do texto."
+
+#~ msgid "&Insert"
+#~ msgstr "&Inserir"
+
+#~ msgid "&Format"
+#~ msgstr "&Formato"
+
+#~ msgid "&Weight"
+#~ msgstr "&Altura"
+
+#~ msgid "Text W&rapping"
+#~ msgstr "Queb&ra de texto"
+
+#~ msgid "Font Settings"
+#~ msgstr "Configurações das Fontes"
+
+#~ msgid "Formatting"
+#~ msgstr "Formatação"
+
+#~ msgid "SVG source"
+#~ msgstr "Fonte SVG"
+
+#~ msgid "Edit Text"
+#~ msgstr "Editar Texto"
+
+#~ msgid "Fonts"
+#~ msgstr "Fontes"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Which writing system should the fonts chooser show "
+#~ "the fonts of? No writing system selected will have all fonts shown.</p></"
+#~ "body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Qual sistema de escrita o seletor de fontes deve "
+#~ "mostrar em fontes de? Nenhum sistema de escrita selecionado terá todas as "
+#~ "fontes mostradas.</p></body></html>"
 
 #~ msgid "Font Families"
 #~ msgstr "Famílias da fonte"

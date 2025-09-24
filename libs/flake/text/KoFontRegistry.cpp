@@ -1129,8 +1129,9 @@ int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_
     return faceLoadFlags;
 }
 
-void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, QString *foundPostScriptName, QString *cssFontFamily, int &cssFontWeight, int &cssFontWidth, bool &cssItalic)
+KoCSSFontInfo KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, QString *foundPostScriptName)
 {
+    KoCSSFontInfo info;
     FcPatternSP p(FcPatternCreate());
     QByteArray utfData = postScriptName.toUtf8();
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
@@ -1142,9 +1143,9 @@ void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, Q
     if (result != FcResultNoMatch) {
         FcChar8 *fileValue = nullptr;
         if (FcPatternGetString(match.data(), FC_FAMILY, 0, &fileValue) == FcResultMatch) {
-            *cssFontFamily = QString(reinterpret_cast<char *>(fileValue));
+            info.families << QString(reinterpret_cast<char *>(fileValue));
         } else {
-            *cssFontFamily = postScriptName;
+            info.families << postScriptName;
         }
         if (FcPatternGetString(match.data(), FC_POSTSCRIPT_NAME, 0, &fileValue) == FcResultMatch) {
             *foundPostScriptName = QString(reinterpret_cast<char *>(fileValue));
@@ -1153,17 +1154,18 @@ void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, Q
         }
         int value;
         if (FcPatternGetInteger(match.data(), FC_WEIGHT, 0, &value) == FcResultMatch) {
-            cssFontWeight = FcWeightToOpenType(value);
+            info.weight = FcWeightToOpenType(value);
         }
         if (FcPatternGetInteger(match.data(), FC_WIDTH, 0, &value) == FcResultMatch) {
-            cssFontWidth = value;
+            info.width = value;
         }
         if (FcPatternGetInteger(match.data(), FC_SLANT, 0, &value) == FcResultMatch) {
-            cssItalic = value != FC_SLANT_ROMAN;
+            info.slantMode = value != FC_SLANT_ROMAN? value != FC_SLANT_ITALIC? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
         }
     } else {
-        *cssFontFamily = postScriptName;
+        info.families << postScriptName;
     }
+    return info;
 }
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)

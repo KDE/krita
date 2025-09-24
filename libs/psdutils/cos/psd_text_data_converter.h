@@ -16,6 +16,9 @@
 class KoSvgTextShape;
 class KoColorSpace;
 class KoShape;
+class KoCSSFontInfo;
+class KoSvgTextProperties;
+class QDomElement;
 
 /**
  * @brief The PsdTextDataConverter class
@@ -56,6 +59,16 @@ public:
      */
     QStringList warnings() const;
 private:
+
+    QColor colorFromPSDStyleSheet(QVariantHash color, const KoColorSpace *imageCs);
+    QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<int, KoCSSFontInfo> fontNames, QTransform scale, const KoColorSpace *imageCs);
+    QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QString &lang, QMap<int, KoCSSFontInfo> fontNames, QTransform scaleToPt, const KoColorSpace *imageCs);
+
+    QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles, QVariantHash parentStyle, QTransform scaleToPx);
+    QVariantHash gatherParagraphStyle(QDomElement el, QVariantHash defaultProperties, bool &isHorizontal, QString *inlineSize, QTransform scaleToPx);
+    void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QVariantList &fontSet,
+                     QVector<int> &lengths, QVector<int> &fontIndices);
+    void gatherStyles(QDomElement el, QString &text, QVariantHash parentStyle, QMap<QString, QString> parentCssStyles, QVariantList &styles, QVariantList &fontSet, QTransform scaleToPx);
     struct Private;
     const QScopedPointer<Private> d;
 };

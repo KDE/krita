@@ -33,14 +33,15 @@ struct EnumMapping {
 typedef QHash<QString, EnumMapping> MapHashEnum;
 
 struct UnitFloatMapping {
+    UnitFloatMapping() {
+
+    }
     UnitFloatMapping(const QString &_unit, ASLCallbackDouble _map)
-        : unit(_unit)
-        , map(_map)
     {
+        unitMap.insert(_unit, _map);
     }
 
-    QString unit;
-    ASLCallbackDouble map;
+    QMap<QString, ASLCallbackDouble> unitMap;
 };
 
 struct UnitRectMapping {
@@ -147,10 +148,11 @@ void KisAslCallbackObjectCatcher::addUnitFloat(const QString &path, const QStrin
 {
     MapHashUnitFloat::const_iterator it = m_d->mapUnitFloat.constFind(path);
     if (it != m_d->mapUnitFloat.constEnd()) {
-        if (it->unit == unit) {
-            it->map(value);
+        if (it->unitMap.contains(unit)) {
+            ASLCallbackDouble map = it->unitMap.value(unit);
+            map(value);
         } else {
-            warnKrita << "KisAslCallbackObjectCatcher::addUnitFloat: inconsistent unit" << ppVar(unit) << ppVar(it->unit);
+            warnKrita << "KisAslCallbackObjectCatcher::addUnitFloat: inconsistent unit" << ppVar(unit) << ppVar(it->unitMap.keys());
         }
     }
 }
@@ -256,7 +258,13 @@ void KisAslCallbackObjectCatcher::subscribeEnum(const QString &path, const QStri
 
 void KisAslCallbackObjectCatcher::subscribeUnitFloat(const QString &path, const QString &unit, ASLCallbackDouble callback)
 {
-    m_d->mapUnitFloat.insert(path, UnitFloatMapping(unit, callback));
+    if (m_d->mapUnitFloat.contains(path)) {
+        UnitFloatMapping mapping = m_d->mapUnitFloat.value(path);
+        mapping.unitMap.insert(unit, callback);
+        m_d->mapUnitFloat.insert(path, mapping);
+    } else {
+        m_d->mapUnitFloat.insert(path, UnitFloatMapping(unit, callback));
+    }
 }
 
 void KisAslCallbackObjectCatcher::subscribeText(const QString &path, ASLCallbackString callback)

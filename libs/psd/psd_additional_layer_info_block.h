@@ -887,10 +887,18 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
         catcher.subscribeInteger(path + "/TxLr/TextIndex", std::bind(&psd_layer_type_shape::setIndex, data, std::placeholders::_1));
         catcher.subscribeRawData(path + "/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, data, std::placeholders::_1));
         catcher.subscribeEnum(path + "/TxLr/Ornt", "Ornt", std::bind(&psd_layer_type_shape::setWritingMode, data, std::placeholders::_1));
+
+        // Older psd use Pnt as the unit, even though its pixel.
         catcher.subscribeUnitFloat(path + "/TxLr/bounds/Left", "#Pnt", std::bind(&psd_layer_type_shape::setLeft, data, std::placeholders::_1));
         catcher.subscribeUnitFloat(path + "/TxLr/bounds/Top ", "#Pnt", std::bind(&psd_layer_type_shape::setTop, data, std::placeholders::_1));
         catcher.subscribeUnitFloat(path + "/TxLr/bounds/Rght", "#Pnt", std::bind(&psd_layer_type_shape::setRight, data, std::placeholders::_1));
         catcher.subscribeUnitFloat(path + "/TxLr/bounds/Btom", "#Pnt", std::bind(&psd_layer_type_shape::setBottom, data, std::placeholders::_1));
+
+        // Newer photoshop files use pxl as the unit, which is correct...
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Left", "#Pxl", std::bind(&psd_layer_type_shape::setLeft, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Top ", "#Pxl", std::bind(&psd_layer_type_shape::setTop, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Rght", "#Pxl", std::bind(&psd_layer_type_shape::setRight, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Btom", "#Pxl", std::bind(&psd_layer_type_shape::setBottom, data, std::placeholders::_1));
     }
 
     QDomDocument textDataASLXML() {

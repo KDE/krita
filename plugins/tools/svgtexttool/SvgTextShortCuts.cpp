@@ -10,7 +10,6 @@
 #include <KisStaticInitializer.h>
 
 class SvgTextShortcutInfo;
-Q_DECLARE_METATYPE(SvgTextShortcutInfo)
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<SvgTextShortcutInfo>("SvgTextShortcutInfo");
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -75,6 +74,8 @@ struct SvgTextShortcutInfo : public boost::equality_comparable<SvgTextShortcutIn
                 && testValue == other.testValue);
     }
 };
+
+Q_DECLARE_METATYPE(SvgTextShortcutInfo)
 
 
 

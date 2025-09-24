@@ -25,7 +25,6 @@
 #include <kis_transparency_mask.h>
 #include <kis_shape_layer.h>
 #include <KoSvgTextShape.h>
-#include <KoSvgTextShapeMarkupConverter.h>
 #include <KoShapeBackground.h>
 #include <KoColorBackground.h>
 #include <KoPatternBackground.h>
@@ -35,6 +34,7 @@
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeManager.h>
+#include <KoSvgTextShapeMarkupConverter.h>
 
 #include "kis_dom_utils.h"
 
@@ -49,6 +49,7 @@
 #include <asl/kis_offset_on_exit_verifier.h>
 #include <kis_asl_layer_style_serializer.h>
 #include <cos/kis_txt2_utls.h>
+#include <cos/psd_text_data_converter.h>
 
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader &header)
     : globalInfoSection(header)
@@ -737,10 +738,11 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                     if (shapeLayer->shapes().size() == 1) {
                         KoSvgTextShape * text = dynamic_cast<KoSvgTextShape*>(shapeLayer->shapes().first());
                         if (text) {
-                            KoSvgTextShapeMarkupConverter convert(text);
+                            PsdTextDataConverter convert(text);
+                            KoSvgTextShapeMarkupConverter svgConverter(text);
                             QString svgtext;
                             QString styles;
-                            convert.convertToSvg(&svgtext, &styles);
+                            svgConverter.convertToSvg(&svgtext, &styles);
                             // unsure about the boundingBox, needs more research.
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();

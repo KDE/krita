@@ -42,6 +42,7 @@
 
 #include <kis_asl_layer_style_serializer.h>
 #include <asl/kis_asl_xml_parser.h>
+#include <cos/psd_text_data_converter.h>
 #include "KisResourceServerProvider.h"
 
 #include "psd.h"
@@ -480,7 +481,9 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisAslXmlParser parser;
                 parser.parseXML(layerRecord->infoBlocks.textData, catcher);
                 KoSvgTextShape *shape = new KoSvgTextShape();
-                KoSvgTextShapeMarkupConverter converter(shape);
+                PsdTextDataConverter converter(shape);
+                KoSvgTextShapeMarkupConverter svgConverter(shape);
+
                 QString svg;
                 QString styles;
                 // This is to align inlinesize appropriately.
@@ -500,7 +503,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 if (!res || !converter.errors().isEmpty()) {
                     qDebug() << converter.errors();
                 }
-                converter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
+                svgConverter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
                 if (offsetByAscent) {
                     QPointF offset2 = QPointF() - shape->outlineRect().topLeft();
                     if (text.isHorizontal) {

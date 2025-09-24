@@ -1,6 +1,6 @@
 PRAGMA foreign_keys=off;
 
--- Create a new table with the contraints set
+-- Create a new table with the constraints set
 CREATE TABLE metadata_new (
     id INTEGER PRIMARY KEY
 ,   foreign_id INTEGER

@@ -71,7 +71,7 @@ void KisResourceItemListWidget::setListViewMode(ListViewMode viewMode)
         setFlow(Flow::LeftToRight);
         setWrapping(false);
 
-        // this is the only way to hide it and not have it ocupy space
+        // this is the only way to hide it and not have it occupy space
         horizontalScrollBar()->setStyleSheet("QScrollBar::horizontal {height: 0px;}");
         setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
         break;

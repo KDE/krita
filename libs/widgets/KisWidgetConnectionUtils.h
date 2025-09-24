@@ -132,7 +132,7 @@ using DoubleSpinBoxState = SpinBoxState<qreal>;
  *                          (via lager::reader); the type of the property should be a "state",
  *                          e.g. `CheckBoxState`.
  * \param writeProperty the qt-property of the model where the user-selected value will be written
- *                      to (should be either lager::cursor or lager::wirter); the type of the property
+ *                      to (should be either lager::cursor or lager::writer); the type of the property
  *                      should coincide with the value type of the widget, e.g. `bool` for `QCheckBox`
  */
 void KRITAWIDGETS_EXPORT connectControl(QAbstractButton *button, QObject *source, const char *property);

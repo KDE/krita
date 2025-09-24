@@ -291,7 +291,7 @@ void KisScreenColorSampler::continueUpdateColorSampling(const QPoint &globalPos)
 {
     const KoColor color = grabScreenColor(globalPos);
     // QTBUG-39792, do not change standard, custom color selectors while moving as
-    // otherwise it is not possible to pre-select a custom cell for assignment.
+    // otherwise it is not possible to preselect a custom cell for assignment.
     setCurrentColor(color);
     Q_EMIT sigNewColorHovered(currentColor());
     updateColorLabelText(globalPos);

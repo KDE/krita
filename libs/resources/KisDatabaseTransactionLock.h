@@ -34,7 +34,7 @@ private:
 /**
  * A RAII-style class for managing transactions over a database.
  *
- * When the lock is created (and locked) a transacion is started. If the
+ * When the lock is created (and locked) a transaction is started. If the
  * lock is destroyed before the commit() is explicitly called, then the
  * transaction is **rolled back**.
  *
@@ -67,7 +67,7 @@ private:
  *
  * NOTE:
  *
- * As a rule of thumb, always wrap the actions performing mutliple
+ * As a rule of thumb, always wrap the actions performing multiple
  * database-modifying steps into a transaction. It will perform
  * much (~10 times) faster in SQLite, because otherwise SQLite will
  * implicitly wrap every single action into its own transaction and

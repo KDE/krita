@@ -142,7 +142,7 @@ protected:
  * @brief This is a simple input levels slider that has no gamma handle. Use it
  * if you want to show a simple mapping or contrast adjustment. The handles
  * are constrained so that the black point handle can not pass the white point
- * handle and viceversa
+ * handle and vice-versa
  */
 class KRITAWIDGETS_EXPORT KisInputLevelsSlider : public KisLevelsSlider
 {
@@ -215,7 +215,7 @@ protected:
 /**
  * @brief This is a input levels slider that has a gamma handle. The handles
  * are constrained so that the black point handle can not pass the white point
- * handle and viceversa
+ * handle and vice-versa
  */
 class KRITAWIDGETS_EXPORT KisInputLevelsSliderWithGamma : public KisInputLevelsSlider
 {
@@ -294,19 +294,19 @@ public Q_SLOTS:
     /**
      * @brief Sets the black point. For this slider the black and the white
      * points are always in the same position, so changing the black point will
-     * also change the white point and viceversa
+     * also change the white point and vice-versa
      */
     void setHandlePosition(int handleIndex, qreal newPosition) override;
     /**
      * @brief Sets the black point. For this slider the black and the white
      * points are always in the same position, so changing the black point will
-     * also change the white point and viceversa
+     * also change the white point and vice-versa
      */
     void setBlackPoint(qreal newBlackPoint) override;
     /**
      * @brief Sets the white point. For this slider the black and the white
      * points are always in the same position, so changing the black point will
-     * also change the white point and viceversa
+     * also change the white point and vice-versa
      */
     void setWhitePoint(qreal newWhitePoint) override;
     void reset(qreal newBlackPoint, qreal newWhitePoint) override;

@@ -37,7 +37,7 @@ template <typename T>
 constexpr inline const T &kisBoundFast(const T &min, const T &val, const T &max)
 {
     /**
-     * This is a fork of an old verion of qBound. It has the following properties:
+     * This is a fork of an old version of qBound. It has the following properties:
      * 1) Does **not** have asserts (we cannot have them in blendmodes)
      * 2) Does not have automatic type deduction. The user must explicitly type the
      *    common type in case of ambiguity.

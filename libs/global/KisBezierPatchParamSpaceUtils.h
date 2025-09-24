@@ -59,7 +59,7 @@ struct Range
      * Returns the "forward distance" between `*this` and `rhs`. The forward
      * distance is undefined if the ranges overlap.
      *
-     * - if the ranges overlap ot touch each other with at least one
+     * - if the ranges overlap or touch each other with at least one
      *   point, then std::nullopt is returned
      *
      * - if `*this` is placed to the _left_ of `rhs`, then the distance
@@ -126,7 +126,7 @@ QDebug operator<<(QDebug dbg, const Range &r)
  *             the source space
  * @param srcPrecision src-space precision at which the search is stopped
  * @param squeezeRange when doing iterational search, pass the opposite-axis
- *                     range of the rectange
+ *                     range of the rectangle
  * @return a pair of {externalRange, internalRange} which "covers" and "is covered"
  *         by the rectangle correspondingly
  *

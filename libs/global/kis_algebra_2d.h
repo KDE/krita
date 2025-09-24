@@ -839,7 +839,7 @@ QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
  * @param pt point in question, tied to points \p base, \p anchorPoints
  *           using springs
  * @param base initial position of the dragged point
- * @param newBase final position of tht dragged point
+ * @param newBase final position of the dragged point
  * @param anchorPoints anchor points
  * @return the new position of \p pt
  *

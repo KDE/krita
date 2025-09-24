@@ -17,7 +17,7 @@
  * `unlock()` and (optionally) `try_lock()` interface and
  * pass it to `KisAdaptedLock`. The resulting class will
  * behave as normal `std::unique_lock` and lock/unlock the
- * object as you intructed it.
+ * object as you instructed it.
  *
  * See examples in `KisCursorOverrideLockAdapter` and
  * `KisLockFrameGenerationLock`

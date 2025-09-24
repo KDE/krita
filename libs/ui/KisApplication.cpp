@@ -931,7 +931,7 @@ bool KisApplication::isStoreApplication()
 #ifdef Q_OS_WIN
     // This is also true for user-installed MSIX, but that's
     // likely only true in institutional situations, where
-    // we don't want to show the beggining banner either.
+    // we don't want to show the beginning banner either.
     if (KisWindowsPackageUtils::isRunningInPackage()) {
         return true;
     }

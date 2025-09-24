@@ -425,10 +425,10 @@ inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() const noexcept, MemTy
  *
  *        std::vector<Struct> vec({{0},{1},{2},{3}});
  *
- *        // find the first element, whose 'id' is not less that 1
+ *        // find the first element, whose 'id' is not less than 1
  *        auto it1 = std::lower_bound(vec.begin(), vec.end(), 1, kismpl::mem_less(&Struct::id));
  *
- *        // find the first element, whose 'id' retunred by 'idConstFunc()' is not less that 1
+ *        // find the first element, whose 'id' returned by 'idConstFunc()' is not less than 1
  *        auto it2 = std::lower_bound(vec.begin(), vec.end(), 1, kismpl::mem_less(&Struct::idConstFunc, 1));
  *
  *        // the functor can automatically dereference pointers and shared pointers

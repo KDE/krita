@@ -26,7 +26,7 @@ public:
     static void close();
 
     /// basic system information
-    ///    (there is other information spreaded in the code
+    ///    (there is other information spread in the code
     ///     check usages of writeSysInfo for details)
     static QString basicSystemInfo();
 

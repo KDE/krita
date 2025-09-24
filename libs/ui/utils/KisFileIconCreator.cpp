@@ -123,7 +123,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             }
         } else if (mimeType == "image/tiff" || mimeType == "image/x-tiff" || mimeType == "image/jxl") {
             // Workaround for a bug in Qt tiff QImageIO plugin
-            // XXX: Also for JPEG-XL if KImageFormats haven't updated to accomodate libjxl >= v0.9.0 API changes.
+            // XXX: Also for JPEG-XL if KImageFormats haven't updated to accommodate libjxl >= v0.9.0 API changes.
             QScopedPointer<KisDocument> doc(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);
             bool r = doc->openPath(path, KisDocument::DontAddToRecent);

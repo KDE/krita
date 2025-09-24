@@ -56,7 +56,7 @@ public:
      * actions are executed in the GUI thread, and (usually) don't have an event
      * loop at all
      *
-     * Defautl value: false
+     * Default value: false
      */
     static void setAutoModeForUnittestsEnabled(bool value);
     static bool isAutoModeForUnittestsEnabled();

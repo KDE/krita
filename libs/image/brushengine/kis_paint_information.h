@@ -302,7 +302,7 @@ public:
     // TODO: Refactor the static mix functions to non-static in-place mutation
     //       versions like mixOtherOnlyPosition and mixOtherWithoutTime.
     // Heap allocation on Windows is awfully slow and will fragment the memory
-    // badly. Since KisPaintInformation allocates on the heap, we should re-use
+    // badly. Since KisPaintInformation allocates on the heap, we should reuse
     // existing instance whenever possible, especially in loops.
     // Ref: https://phabricator.kde.org/D6578
 

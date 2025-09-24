@@ -227,7 +227,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     d->ui->lineWidth->preventDecimalsChangeFromUnitManager(true);
     d->ui->lineWidth->setUnit(KoUnit(KoUnit::Point));
     // if someone wants 0, just set to "none" on UI
-    // note: when intialized, there's probably no document opened or even if some documents are opened, the resolution
+    // note: when initialized, there's probably no document opened or even if some documents are opened, the resolution
     //       of document may not be the same...
     //       min/max/step are then defined in Pt - values here are considered @600dpi; 0.10px = 0.03Pt / 1000px = 240.00pt
     d->ui->lineWidth->setMinMaxStep(0.03, 240.0, 0.01);

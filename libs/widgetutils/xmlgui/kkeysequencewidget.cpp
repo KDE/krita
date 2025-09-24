@@ -885,7 +885,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
         // We now have a valid key press.
         if (keyQt) {
             /**
-             * Here is the trap, which is different on every OS. On Widnows Qt
+             * Here is the trap, which is different on every OS. On Windows, Qt
              * has incomprehensible rules on translating AltGr-related key
              * sequences into shortcuts. On macOS symbols may confuse Qt when
              * using Cmd+Shift-based shortcuts. * So we should just ask Qt

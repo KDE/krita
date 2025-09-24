@@ -970,7 +970,7 @@ QString KisResourceLocator::filePathForResource(KoResourceSP resource)
 void KisResourceLocator::updateFontStorage()
 {
     if (!KisResourceCacheDb::synchronizeStorage(fontStorage())) {
-        qWarning() << i18n("Could not synchronize updated font registery with the database");
+        qWarning() << i18n("Could not synchronize updated font registry with the database");
     } else {
         Q_EMIT storageResynchronized(fontStorage()->location(), false);
     }

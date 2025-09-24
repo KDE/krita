@@ -1605,7 +1605,7 @@ void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
     QObject::connect(backButton, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
     // Filter logic
-    QObject::connect(filterEdit, &QLineEdit::textChanged, m_widget, [&list](const QString &text) {
+    QObject::connect(filterEdit, &QLineEdit::textChanged, this, [&list](const QString &text) {
         for (int i = 0; i < list->count(); ++i) {
             QListWidgetItem *item = list->item(i);
             bool match = item->text().contains(text, Qt::CaseInsensitive);

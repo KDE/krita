@@ -33,6 +33,8 @@
 #include <KoShapeStroke.h>
 
 #include <KoPathShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeManager.h>
 
 #include "kis_dom_utils.h"
 
@@ -436,12 +438,60 @@ void addBackgroundIfNeeded(KisNodeSP root, QList<FlattenedNode> &nodes)
     }
 }
 
+void flattenShapes(const KisShapeLayer* parentShapeLayer, QList<KoShape*> shapes, QList<FlattenedNode> &nodes) {
+    Q_FOREACH (KoShape *shape, shapes) {
+        const QString name = shape->name().isEmpty()? "shape "+QString::number(nodes.size()): shape->name();
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+        if (group) {
+            KisGroupLayerSP newGroup(new KisGroupLayer(parentShapeLayer->image(),
+                                                       name,
+                                                       (1.0-shape->transparency(false))*255,
+                                                       parentShapeLayer->colorSpace()));
+            newGroup->setVisible(shape->isVisible(false));
+            newGroup->setOpacity(shape->transparency(false)*255);
+            {
+                FlattenedNode item;
+                item.node = newGroup;
+                item.type = FlattenedNode::SECTION_DIVIDER;
+                nodes << item;
+            }
+            flattenShapes(parentShapeLayer, group->shapes(), nodes);
+            {
+                FlattenedNode item;
+                item.node = newGroup;
+                item.type = FlattenedNode::FOLDER_CLOSED;
+                nodes << item;
+            }
+        } else {
+            KisShapeLayerSP newLayer(new KisShapeLayer(nullptr,
+                                                       parentShapeLayer->image(),
+                                                       name,
+                                                       (1.0-shape->transparency(false))*255));
+            KoShape *newShape = shape->cloneShape();
+            newShape->setTransparency(0.0);
+            newShape->setTransformation(shape->absoluteTransformation());
+            newLayer->setVisible(newShape->isVisible(false));
+            newShape->setVisible(true);
+            newLayer->shapeManager()->addShape(newShape, KoShapeManager::AddWithoutRepaint);
+            newLayer->addShape(newShape);
+
+            {
+                FlattenedNode item;
+                item.node = newLayer;
+                item.type = FlattenedNode::RASTER_LAYER;
+                nodes << item;
+            }
+        }
+    }
+}
+
 void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
 {
     KisNodeSP child = node->firstChild();
     while (child) {
         const bool isLayer = child->inherits("KisLayer");
         const bool isGroupLayer = child->inherits("KisGroupLayer");
+        const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(child.data());
 
         if (isGroupLayer) {
             {
@@ -457,6 +507,27 @@ void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
                 FlattenedNode item;
                 item.node = child;
                 item.type = FlattenedNode::FOLDER_OPEN;
+                nodes << item;
+            }
+        } else if (shapeLayer) {
+            if (shapeLayer->shapes().size() > 1) {
+                {
+                    FlattenedNode item;
+                    item.node = child;
+                    item.type = FlattenedNode::SECTION_DIVIDER;
+                    nodes << item;
+                }
+                flattenShapes(shapeLayer, shapeLayer->shapes(), nodes);
+                {
+                    FlattenedNode item;
+                    item.node = child;
+                    item.type = FlattenedNode::FOLDER_CLOSED;
+                    nodes << item;
+                }
+            } else {
+                FlattenedNode item;
+                item.node = child;
+                item.type = FlattenedNode::RASTER_LAYER;
                 nodes << item;
             }
         } else if (isLayer) {

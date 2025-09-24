@@ -218,7 +218,7 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
     // Compromise: At the tile size 64 px and the gap size 32 px, the guard band must be
     // 31 px at most, because opacity is sampled in gap size + 1 radius, which could be two tiles
     // away and that tile might not have been loaded yet. To avoid loading one row of that tile,
-    // we can clamp the guard band to 31. The error intruduced by it should not be noticeable.
+    // we can clamp the guard band to 31. The error introduced by it should not be noticeable.
 
     const int guardBandVertical = qMin(guardBand, 31);
     const int y1       = tileOpaqueTopLeft    || tileOpaqueTop    ? qMax(0, rect.top() - guardBandVertical) : rect.top();

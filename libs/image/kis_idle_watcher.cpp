@@ -35,7 +35,7 @@ struct KisIdleWatcher::Private
     /**
      * We wait until the counter reaches IDLE_CHECK_COUNT, then consider the
      * image to be really "idle". If the counter is negative, it means that
-     * "no delay" update is triggered, which desables couting and the event
+     * "no delay" update is triggered, which disables counting and the event
      * is triggered on the next non-busy tick.
      */
     int idleCheckCounter;

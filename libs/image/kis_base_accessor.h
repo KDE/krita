@@ -22,9 +22,8 @@ public:
     virtual const quint8 * oldRawData() const = 0;
 
     /**
-     * @return a pointer to the most actual pixel data,
-     * this points to te same data as rawData() method of
-     * a writable accessor
+     * @return a pointer to the most actual pixel data, this points to the same data as rawData()
+     * method of a writable accessor.
      */
     virtual const quint8 * rawDataConst() const = 0;
 

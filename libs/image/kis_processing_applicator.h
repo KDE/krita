@@ -91,7 +91,7 @@ public:
 
     /**
      * @brief runSingleCommandStroke creates a stroke and runs \p cmd in it.
-     *        The text() field fo \p cmd is used as a title of the stroke.
+     *        The text() field of \p cmd is used as a title of the stroke.
      * @param image the image to run the stroke on
      * @param cmd the command to be executed
      * @param sequentiality sequentiality property of the command being executed (see strokes documentation)

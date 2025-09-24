@@ -2179,7 +2179,7 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, co
          * We should also take into account the change rect of all the layers that lay
          * above the "dirty" pass-through group (i.e. convert the change rect of the
          * child into a change rect of the parent). That is required for a case,
-         * when threre are adjustment layers laying above the pass-through group.
+         * when there are adjustment layers laying above the pass-through group.
          */
         QVector<QRect> changeRects = requestedRects;
         KisProjectionLeafSP leaf = root->projectionLeaf()->nextSibling();

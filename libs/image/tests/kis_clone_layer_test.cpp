@@ -536,7 +536,7 @@ void KisCloneLayerTest::testUpdatesWhileHidden()
          * area is not vidible. To fix this, we need to perform "change-rect-based"-
          * update instead of "dirty-rect-based"-update. In the current terms, it means
          * that we should do refreshGraphAsync() on any visibility change. But our system
-         * is not fully designed to encorporate that. We usually keep the content of the
+         * is not fully designed to incorporate that. We usually keep the content of the
          * group layers updated, even when the group itself is hidden. So we need to
          * do a significant design change for that.
          */
@@ -851,7 +851,7 @@ void KisCloneLayerTest::testCloneOfGroupWithClones()
     image->waitForDone();
 
     /**
-     * If the image is successfully renderred and **not** stuck in the infinite
+     * If the image is successfully rendered and **not** stuck in the infinite
      * loop in the clone layers triggering each other, then the test is passed.
      */
 

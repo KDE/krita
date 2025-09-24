@@ -139,7 +139,7 @@ public:
      * generation methods.
      *
      * This method is **not** blocking, it just forbids further
-     * actions. If there is any backround action is running, it
+     * actions. If there is any background action running, it
      * continues to run. Use lockFrameGeneration() to wait
      * for completion of such actions.
      *

@@ -250,7 +250,7 @@ public:
      * Create a list of jobs that will fill synchronously all the pixels of the
      * @ref outSelection device inside @ref rect if the corresponding pixels
      * on @ref referenceDevice are similar to @ref referenceColor. @ref rect
-     * is splitted into smaller rects if needed, and the painting of each one
+     * is split into smaller rects if needed, and the painting of each one
      * is distributed on several jobs
      *
      * @param outSelection the selection where the values are written to

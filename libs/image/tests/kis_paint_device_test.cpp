@@ -1652,7 +1652,7 @@ void KisPaintDeviceTest::testFramesSignals()
                 QVERIFY(ch == channel);
 
                 /**
-                 * The signal should come **after** the frame has beed added
+                 * The signal should come **after** the frame has been added
                  */
 
                 KisKeyframeSP keyframe = ch->keyframeAt(time);
@@ -1677,7 +1677,7 @@ void KisPaintDeviceTest::testFramesSignals()
                 QVERIFY(ch == channel);
 
                 /**
-                 * The signal should come **before** the frame has beed removed
+                 * The signal should come **before** the frame has been removed
                  */
 
                 KisKeyframeSP keyframe = ch->keyframeAt(time);
@@ -1701,7 +1701,7 @@ void KisPaintDeviceTest::testFramesSignals()
                 QVERIFY(ch == channel);
 
                 /**
-                 * The signal should come **after** the frame has beed removed
+                 * The signal should come **after** the frame has been removed
                  */
 
                 KisKeyframeSP keyframe = ch->keyframeAt(time);

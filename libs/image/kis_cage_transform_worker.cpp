@@ -44,7 +44,7 @@ struct Q_DECL_HIDDEN KisCageTransformWorker::Private
     QVector<QPointF> validPoints;
 
     /**
-     * Contains all points fo the grid including non-defined
+     * Contains all points of the grid including non-defined
      * points (the ones which are placed outside the cage).
      */
     QVector<QPointF> allSrcPoints;

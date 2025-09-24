@@ -427,7 +427,7 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
 
         /**
          * 1) We can cancel only cancellable strokes
-         * 2) We can only cancel a continuos set of strokes
+         * 2) We can only cancel a continuous set of strokes
          *
          * Basically, a non-cancellable stroke adds a barrier
          * wall into the strokes queue, preventing cancellation

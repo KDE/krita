@@ -1064,7 +1064,7 @@ bool KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
                                   const QRect& rect) const
 {
 #if 0
-    // These assers affect the performance.
+    // These asserts affect the performance.
     KIS_SAFE_ASSERT_RECOVER_RETURN((m_d->boundingRect.left() == 0) && (m_d->boundingRect.top() == 0) &&
                "FATAL: The fill bounds must start at (0,0)");
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->boundingRect.contains(rect) &&

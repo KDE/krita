@@ -138,23 +138,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
 
     guiFactory()->addClient(this);
 
-    // Create and plug toolbar list for Settings menu
-    QList<QAction *> toolbarList;
-    Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
-        KisToolBar * toolBar = ::qobject_cast<KisToolBar *>(it);
-        if (toolBar) {
-            toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-            KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
-            actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
-            act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
-            connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-            act->setChecked(!toolBar->isHidden());
-            toolbarList.append(act);
-        }
-    }
-
-    plugActionList("toolbarlist", toolbarList);
-
     applySettings();
 
 }

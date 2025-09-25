@@ -189,7 +189,7 @@ bool SvgTextShortCuts::actionEnabled(QAction *action, const QList<KoSvgTextPrope
     if (!action || !action->isCheckable() || !action->data().canConvert<SvgTextShortcutInfo>()) return false;
     SvgTextShortcutInfo info = action->data().value<SvgTextShortcutInfo>();
 
-    if (info.type != SvgTextShortcutInfo::Toggle || info.type != SvgTextShortcutInfo::Set) {
+    if (info.type != SvgTextShortcutInfo::Toggle && info.type != SvgTextShortcutInfo::Set) {
         return false;
     }
     const QVariant testValue = info.type == SvgTextShortcutInfo::Toggle? info.testValue: info.value1;

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-24 02:00+0000\n"
-"PO-Revision-Date: 2025-09-17 08:47+0200\n"
+"PO-Revision-Date: 2025-09-19 09:44+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -64962,12 +64962,9 @@ msgid "All glyphs"
 msgstr "Tous les glyphes"
 
 #: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr "Convertir le type de l'image"
+msgstr "Convertir le type de texte"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -65339,10 +65336,9 @@ msgstr "Éditer la source SVG"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, fuzzy, kde-format
-#| msgid "Text Shape"
+#, kde-format
 msgid "Text Type"
-msgstr "Texte"
+msgstr "Type de texte"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
@@ -65352,34 +65348,33 @@ msgid ""
 "lines. A line break is inserted so the lines from wrapping or positioning "
 "remain separated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Le texte ne reviendra pas à la ligne automatiquement "
+"mais préservera les espaces et les nouvelles lignes. Un saut de ligne est "
+"inséré afin que les lignes avec retour automatique  ou positionnement "
+"restent séparées.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Preformatted"
-msgstr "Performance"
+msgstr "Pré-formaté"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
 "are preserved. New lines are not removed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Utilisez le tilt de la tablette pour déterminer les "
-"normales.</p></body></html>"
+"<html><head/><body><p>Le texte fait un retour à la ligne selon une longueur "
+"spécifiée. Les espaces et les retours à la ligne seront préservées. Les "
+"nouvelles lignes seront supprimées.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgid "Inline Wrapped"
-msgstr "Onde sinusoïdale"
+msgstr "En retour automatique intégré"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
@@ -65389,13 +65384,16 @@ msgid ""
 "each line. Spaces and new lines are collapsed. This is for backward "
 "compatibility with SVG 1.1.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Le texte utilise les transformations de caractères "
+"« SVG » en version 1.1 pour le positionnement de chaque ligne. Les espaces "
+"et les nouvelles lignes sont réduits. Il s'agit d'une rétrocompatibilité "
+"avec le format « SVG » en version 1.1.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Prepositioned"
-msgstr "Position"
+msgstr "Pré-positionné"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89

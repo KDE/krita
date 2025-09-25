@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-24 02:00+0000\n"
-"PO-Revision-Date: 2025-09-18 20:31+0300\n"
+"PO-Revision-Date: 2025-09-24 20:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -65248,11 +65248,10 @@ msgstr "Інструмент «Текст»"
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:16
 #: plugins/tools/svgtexttool/SvgTextTool.action:23
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr "Палітра гліфів"
+msgstr "Палітра гліфів…"
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18

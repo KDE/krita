@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-24 02:00+0000\n"
-"PO-Revision-Date: 2025-08-31 00:39+0200\n"
+"PO-Revision-Date: 2025-09-20 20:30+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -8284,12 +8284,10 @@ msgstr "Mostra le informazioni di sistema per le segnalazioni di errore."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Informazioni sul documento"
+msgstr "Mostra informazioni sulla gestione dei colori"
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
@@ -8297,15 +8295,15 @@ msgstr "Informazioni sul documento"
 msgctxt "action"
 msgid "Show color management information for the surface of the current image"
 msgstr ""
+"Mostra le informazioni sulla gestione dei colori per la superficie "
+"dell'immagine corrente"
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Mostra le informazioni di sistema per le segnalazioni di errore."
+msgstr "Mostra informazioni di sistema per le segnalazioni di errore"
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -27047,30 +27045,25 @@ msgid "Eraser"
 msgstr "Gomma"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:328
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Taglio disabilitato"
+msgstr "Automatico (disabilitato)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:329
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Abilitato"
+msgstr "Automatico (abilitato)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:330
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Abilitato"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:331
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Disabilitato"
@@ -27193,13 +27186,12 @@ msgstr "Schermo %1 (%2):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1185
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr ""
+msgstr "Lo spazio dei colori dello schermo è gestito dal sistema operativo"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1192
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Gestione dei colori"
+msgstr "Abilita la gestione dei colori della tela"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1195
 #, kde-format
@@ -27212,32 +27204,40 @@ msgid ""
 "<li>color proofing mode will be limited to \"use global display settings"
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
+"<p>L'attivazione della gestione dei colori della tela crea automaticamente "
+"una superficie nativa separata per la tela. Potrebbe causare problemi di "
+"prestazioni in qualche sistema.</p><p>Se la gestione dei colori è "
+"disattivata, Krita renderà la tela all'interno della superficie della "
+"finestra principale, che è considerata sRGB. Questo produrrà due limitazioni:"
+"<ol>    <li>il gamut dei colori sarà limitato a sRGB</li>    <li>la modalità "
+"prova colore sarà limitata a «Usa le impostazioni globali di "
+"visualizzazione», ossia la prova della carta bianca diverrà impossibile da "
+"eseguire</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1214
-#, fuzzy, kde-format
-#| msgid "Change colorspace"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "Cambia spazio dei colori"
+msgstr "Spazio dei colori superficie della tela:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
 msgid "Preferred by operating system"
-msgstr ""
+msgstr "Preferito dal sistema operativo"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
-msgstr ""
+msgstr "Rec 709 Gamma 2.2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1219
 #, kde-format
 msgid "Rec 709 Linear"
-msgstr ""
+msgstr "Rec 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1220
 #, kde-format
 msgid "Unmanaged (testing only)"
-msgstr ""
+msgstr "Non gestito (solo per prova)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1223
 #, kde-format
@@ -27245,6 +27245,9 @@ msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
+"<p>Lo spazio dei colori dei pixel che sono trasferiti al compositore delle "
+"finestre. Usa lo spazio «preferito» a meno che tu non sappia cosa stai "
+"facendo</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
 #, kde-format
@@ -27252,6 +27255,8 @@ msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
+"Spazio dei colori preferito dal sistema operativo:\n"
+"%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1314
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
@@ -29980,10 +29985,9 @@ msgstr "Alterna i modificatori di selezione Ctrl/Alt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Abilita pittura con tocco"
+msgstr "Pittura con tocco:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:982
@@ -45979,18 +45983,15 @@ msgstr ""
 "segnalazione di errore"
 
 #: plugins/extensions/buginfo/DlgColorManagementInfo.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with system information for bug reports"
-#| msgid ""
-#| "Krita System Information: please paste this information to the bug report"
+#, kde-format
 msgctxt ""
 "Caption of the dialog with color management information for bug reports"
 msgid ""
 "Krita Color Management Information: please paste this information to the bug "
 "report"
 msgstr ""
-"Informazioni di sistema di Krita: incolla queste informazioni nella tua "
-"segnalazione di errore"
+"Informazioni sulla gestione dei colori di Krita: incolla queste informazioni "
+"nella tua segnalazione di errore"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format
@@ -64634,12 +64635,9 @@ msgid "All glyphs"
 msgstr "Tutti i glifi"
 
 #: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr "Converti il tipo di immagine"
+msgstr "Converti il tipo di testo"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -65008,10 +65006,9 @@ msgstr "Modifica sorgente SVG"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, fuzzy, kde-format
-#| msgid "Text Shape"
+#, kde-format
 msgid "Text Type"
-msgstr "Figura di testo"
+msgstr "Tipo di testo"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
@@ -65021,34 +65018,32 @@ msgid ""
 "lines. A line break is inserted so the lines from wrapping or positioning "
 "remain separated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Il testo non va a capo, sono mantenuti gli spazi e le "
+"nuove righe. Viene inserita un'interruzione di riga in modo che le righe in "
+"precedenza mandate a capo o posizionate restino separate.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Preformatted"
-msgstr "Prestazioni"
+msgstr "Preformattato"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
 "are preserved. New lines are not removed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Usa l'inclinazione della tavoletta per determinare le "
-"normali.</p></body></html>"
+"<html><head/><body><p>Il testo va a capo all'interno di una lunghezza "
+"predefinita, sono mantenuti gli spazi e le nuove righe. Le nuove righe non "
+"vengono rimosse.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgid "Inline Wrapped"
-msgstr "Onda sinusoidale"
+msgstr "A capo in linea"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
@@ -65058,13 +65053,15 @@ msgid ""
 "each line. Spaces and new lines are collapsed. This is for backward "
 "compatibility with SVG 1.1.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Il testo utilizza le trasformazioni di carattere SVG "
+"1.1 per posizionare ciascuna riga. Gli spazi e le nuove righe vengono "
+"ridotti. Utilizzato per retrocompatibilità con SVG 1.1.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Prepositioned"
-msgstr "Posizione"
+msgstr "Preposizionato"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-24 02:00+0000\n"
-"PO-Revision-Date: 2025-09-23 18:22-0300\n"
+"PO-Revision-Date: 2025-09-24 12:05-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -80,7 +80,7 @@ msgstr "Cruz07"
 #, kde-format
 msgctxt "./krita/data/patterns/Crumpled_Paper.pat"
 msgid "Canvas 04"
-msgstr "Tela 04"
+msgstr "Tela de pintura 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
@@ -537,13 +537,13 @@ msgstr "Zigzag04"
 #, kde-format
 msgctxt "./krita/data/patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 tela"
+msgstr "01 tela de pintura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/02_rough-canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 tela bruta"
+msgstr "02 telas de pintura brutas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2108,7 +2108,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_blur_light.kpp"
 msgid "FX blur light"
-msgstr "Efeito luz borrada"
+msgstr "Efeito luz desfocada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2332,7 +2332,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Move_tool.kpp"
 msgid "Move tool"
-msgstr "Ferramenta Mover"
+msgstr "Ferramenta de mover"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2881,7 +2881,7 @@ msgstr "Pintura VFX"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 tela"
+msgstr "01 tela de de pintura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2889,7 +2889,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 tela-bruta"
+msgstr "02 telas de pintura brutas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3113,7 +3113,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Canvas_Hard."
 "pat"
 msgid "Canvas 01"
-msgstr "Tela 01"
+msgstr "Tela de pintura 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3121,7 +3121,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_covered.pat"
 msgid "Canvas Covered"
-msgstr "Tela recoberta"
+msgstr "Tela de pintura recoberta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3129,7 +3129,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_small_01.pat"
 msgid "Canvas 02"
-msgstr "Tela 02"
+msgstr "Tela de pintura 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3137,7 +3137,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_small_02.pat"
 msgid "Canvas 03"
-msgstr "Tela 03"
+msgstr "Tela de pintura 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3194,7 +3194,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
 msgid "Canvas 04"
-msgstr "Tela 04"
+msgstr "Tela pintura 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4350,7 +4350,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Blur.kpp"
 msgid "k) Blender Blur"
-msgstr "k) Borrão misturado"
+msgstr "k) Desfoque misturado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4897,7 +4897,7 @@ msgstr "z) Carimbo água"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 tela"
+msgstr "01 tela de pintura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4905,7 +4905,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 tela bruta"
+msgstr "02 telas de pintura brutas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5178,7 +5178,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
 msgid "Canvas 04"
-msgstr "Tela 04"
+msgstr "Tela pintura 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8104,7 +8104,7 @@ msgstr "Mostrar barra de ferramentas de arquivo"
 #, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "Travar barras de ferramentas"
+msgstr "Bloquear barras de ferramentas"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -8122,7 +8122,7 @@ msgstr "Travar barras de ferramentas"
 #, kde-format
 msgctxt "action"
 msgid "Show color selector"
-msgstr "Mostrar o seletor de cores"
+msgstr "Mostrar o seletor de cor"
 
 #. i18n: context: text @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
@@ -8182,7 +8182,7 @@ msgstr "Mostrar o histórico de cores"
 #, kde-format
 msgctxt "action"
 msgid "Show common colors"
-msgstr "Mostrar as cores comuns"
+msgstr "Mostrar cores comuns"
 
 #. i18n: context: text @ Action (show_tool_options), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_tool_options), Actions (General), ActionCollection (Krita)
@@ -8194,7 +8194,7 @@ msgstr "Mostrar as cores comuns"
 #, kde-format
 msgctxt "action"
 msgid "Show Tool Options"
-msgstr "Mostrar as opções da ferramenta"
+msgstr "Mostrar opções da ferramenta"
 
 #. i18n: context: text @ Action (show_brush_editor), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_brush_editor), Actions (General), ActionCollection (Krita)
@@ -8218,7 +8218,7 @@ msgstr "Mostrar o editor do Pincel"
 #, kde-format
 msgctxt "action"
 msgid "Show Brush Presets"
-msgstr "Mostrar as predefinições do Pincel"
+msgstr "Mostrar predefinições do pincel"
 
 #. i18n: context: text @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
@@ -8230,7 +8230,7 @@ msgstr "Mostrar as predefinições do Pincel"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Tablet Debugger"
-msgstr "Alternar o depurador da mesa digitalizadora"
+msgstr "Alternar depurador da mesa digitalizadora"
 
 #. i18n: context: text @ Action (buginfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (buginfo), Actions (General), ActionCollection (Krita)
@@ -8368,21 +8368,21 @@ msgstr "Usar múltiplos de 2 para escalar pixels"
 #, kde-format
 msgctxt "action"
 msgid "&Invert Selection"
-msgstr "&Inverter a seleção"
+msgstr "&Inverter seleção"
 
 #. i18n: context: toolTip @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:265
 #, kde-format
 msgctxt "action"
 msgid "Invert current selection"
-msgstr "Inverte a seleção atual"
+msgstr "Inverte seleção atual"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:266
 #, kde-format
 msgctxt "action"
 msgid "Invert Selection"
-msgstr "Inverter Seleção"
+msgstr "Inverter seleção"
 
 #. i18n: context: text @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
@@ -8444,7 +8444,7 @@ msgstr "Amostra da cor da tela"
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr "&Amostra da cor da tela (amostra da tela real)"
+msgstr "&Amostra da cor da tela (amostra da tela de pintura real)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:323
@@ -8454,15 +8454,15 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
-"Amostra uma cor da tela enquanto amostra uma cor real da tela se o cursor "
-"estiver sobre ela"
+"Amostra uma cor da tela enquanto amostra uma cor real da tela de pintura se "
+"o cursor estiver sobre ela"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:324
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr "Amostra da cor da tela (amostra da tela real)"
+msgstr "Amostra da cor da tela (amostra da tela de pintura real)"
 
 #. i18n: context: text @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
@@ -8474,7 +8474,7 @@ msgstr "Amostra da cor da tela (amostra da tela real)"
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Mostrar as áreas acopláveis"
+msgstr "Mostrar áreas acopláveis"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:343
@@ -8749,7 +8749,7 @@ msgstr "Diminuir força de dispersamento do pincel"
 #, kde-format
 msgctxt "action"
 msgid "Set eraser mode"
-msgstr "Aplicar o modo de borracha"
+msgstr "Aplicar modo de borracha"
 
 #. i18n: context: text @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -8938,7 +8938,7 @@ msgstr "Mover para o centro Y da tela de pintura"
 #, kde-format
 msgctxt "action"
 msgid "&Toggle Selection Display Mode"
-msgstr "Al&ternar o modo de exibição em seleção"
+msgstr "Al&ternar modo de exibição em seleção"
 
 #. i18n: context: toolTip @ Action (toggle-selection-overlay-mode), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle-selection-overlay-mode), Actions (Painting), ActionCollection (Krita)
@@ -8948,7 +8948,7 @@ msgstr "Al&ternar o modo de exibição em seleção"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Selection Display Mode"
-msgstr "Alternar o modo de exibição em seleção"
+msgstr "Alternar modo de exibição em seleção"
 
 #. i18n: context: text @ Action (next_favorite_preset), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (next_favorite_preset), Actions (Painting), ActionCollection (Krita)
@@ -9113,7 +9113,7 @@ msgstr "Modo de seleção: Substituir"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Weighted"
-msgstr "Suavização do Pincel: Ponderada"
+msgstr "Suavização do pincel: Ponderada"
 
 #. i18n: context: text @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9125,7 +9125,7 @@ msgstr "Suavização do Pincel: Ponderada"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Disabled"
-msgstr "Suavização do Pincel: Desativada"
+msgstr "Suavização do pincel: Desativada"
 
 #. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9137,7 +9137,7 @@ msgstr "Suavização do Pincel: Desativada"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Suavização do Pincel: Pixel"
+msgstr "Suavização do pincel: Pixel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9149,7 +9149,7 @@ msgstr "Suavização do Pincel: Pixel"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "Suavização do Pincel: Estabilizadora"
+msgstr "Suavização do pincel: Estabilizadora"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9173,7 +9173,7 @@ msgstr "Diminuir tamanho do pincel"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Basic"
-msgstr "Suavização do Pincel: Básica"
+msgstr "Suavização do pincel: Básica"
 
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9545,7 +9545,7 @@ msgstr "Remoção mediana"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "Borrão &gaussiano..."
+msgstr "Desfoque &gaussiano..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9555,7 +9555,7 @@ msgstr "Borrão &gaussiano..."
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Blur"
-msgstr "Borrão gaussiano"
+msgstr "Desfoque gaussiano"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1150
@@ -9647,7 +9647,7 @@ msgstr "Onda"
 #, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
-msgstr "Borrão por &movimento..."
+msgstr "Desfoque por &movimento..."
 
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
@@ -9657,7 +9657,7 @@ msgstr "Borrão por &movimento..."
 #, kde-format
 msgctxt "action"
 msgid "Motion Blur"
-msgstr "Borrão por movimento"
+msgstr "Desfoque por movimento"
 
 #. i18n: context: text @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1222
@@ -9749,7 +9749,7 @@ msgstr "Detecção de contorno esquerdo"
 #, kde-format
 msgctxt "action"
 msgid "&Blur..."
-msgstr "&Borrar..."
+msgstr "&Desfocar..."
 
 #. i18n: context: text @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
@@ -9766,7 +9766,7 @@ msgstr "&Borrar..."
 #, kde-format
 msgctxt "action"
 msgid "Blur"
-msgstr "Borrar"
+msgstr "Desfocar"
 
 #. i18n: context: text @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1294
@@ -9909,7 +9909,7 @@ msgstr "Em relevo apenas na vertical"
 #, kde-format
 msgctxt "action"
 msgid "&Lens Blur..."
-msgstr "Borrão de &lentes..."
+msgstr "Desfoque de &lente..."
 
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
@@ -9919,7 +9919,7 @@ msgstr "Borrão de &lentes..."
 #, kde-format
 msgctxt "action"
 msgid "Lens Blur"
-msgstr "Borrão de lentes"
+msgstr "Desfoque de lente"
 
 #. i18n: context: text @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1402
@@ -10715,7 +10715,7 @@ msgstr "Adicionar uma imagem duplicada"
 #, kde-format
 msgctxt "action"
 msgid "Toggle onion skin"
-msgstr "Alternar a casca de cebola"
+msgstr "Alternar casca de cebola"
 
 #. i18n: context: text @ Action (first_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2064
@@ -11575,7 +11575,7 @@ msgstr "Seleção Local"
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
-msgstr "&Isolar a camada ativa"
+msgstr "&Isolar camada ativa"
 
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
@@ -11585,14 +11585,14 @@ msgstr "&Isolar a camada ativa"
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
-msgstr "Isolar a camada ativa"
+msgstr "Isolar camada ativa"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2746
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Group"
-msgstr "&Isolar o grupo ativo"
+msgstr "&Isolar grupo ativo"
 
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
@@ -11602,7 +11602,7 @@ msgstr "&Isolar o grupo ativo"
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Group"
-msgstr "Isolar o grupo ativo"
+msgstr "Isolar grupo ativo"
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2758
@@ -11626,7 +11626,7 @@ msgstr "Alterna o bloqueio de camada"
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &visibility"
-msgstr "Alternar a &visibilidade da camada"
+msgstr "Alternar &visibilidade da camada"
 
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
@@ -11668,7 +11668,7 @@ msgstr "Alternar camada isolada"
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &alpha"
-msgstr "Alternar o &alfa da camada"
+msgstr "Alternar &alfa da camada"
 
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
@@ -11685,7 +11685,7 @@ msgstr "Alterna o alfa da camada"
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha &inheritance"
-msgstr "Alternar a &herança alfa da camada"
+msgstr "Alternar &herança alfa da camada"
 
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
@@ -11702,21 +11702,21 @@ msgstr "Alterna a herança alfa da camada"
 #, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
-msgstr "Adicionar &camada de tinta"
+msgstr "Adicionar &camada de pintura"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2820
 #, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
-msgstr "Adiciona uma nova camada de tinta"
+msgstr "Adiciona uma nova camada de pintura"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2821
 #, kde-format
 msgctxt "action"
 msgid "Paint Layer"
-msgstr "Pintar camada"
+msgstr "Camada de pintura"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2830
@@ -12113,7 +12113,7 @@ msgstr "Importar camada"
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
-msgstr "como C&amada de Pintura..."
+msgstr "como c&amada de pintura..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12123,14 +12123,14 @@ msgstr "como C&amada de Pintura..."
 #, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
-msgstr "como Camada de Pintura"
+msgstr "como camada de pintura"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3106
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
-msgstr "como Máscara de &Transparência..."
+msgstr "como máscara de &transparência..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -12140,14 +12140,14 @@ msgstr "como Máscara de &Transparência..."
 #, kde-format
 msgctxt "action"
 msgid "as Transparency Mask"
-msgstr "como Máscara de Transparência"
+msgstr "como máscara de transparência"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3118
 #, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
-msgstr "como Máscara de &Filtro..."
+msgstr "como máscara de &filtro..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12157,14 +12157,14 @@ msgstr "como Máscara de &Filtro..."
 #, kde-format
 msgctxt "action"
 msgid "as Filter Mask"
-msgstr "como Máscara de Filtro..."
+msgstr "como máscara de filtro..."
 
 #. i18n: context: text @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3130
 #, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
-msgstr "como Máscara de &Seleção..."
+msgstr "como máscara de &seleção..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
@@ -12174,14 +12174,14 @@ msgstr "como Máscara de &Seleção..."
 #, kde-format
 msgctxt "action"
 msgid "as Selection Mask"
-msgstr "como Máscara de Seleção"
+msgstr "como máscara de seleção"
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3142
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
-msgstr "Converter para camada de &tinta"
+msgstr "Converter para camada de &pintura"
 
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12191,7 +12191,7 @@ msgstr "Converter para camada de &tinta"
 #, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
-msgstr "para a Camada de Pintura"
+msgstr "para a camada de pintura"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3154
@@ -12317,7 +12317,7 @@ msgstr "Dividir camada"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr "Decompor Wavelet..."
+msgstr "Decompor em wavelet..."
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -12712,7 +12712,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
-msgstr "&Mesclar com a camada inferior"
+msgstr "&Mesclar com camada inferior"
 
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
@@ -12722,14 +12722,14 @@ msgstr "&Mesclar com a camada inferior"
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
-msgstr "Mesclar com a camada inferior"
+msgstr "Mesclar com camada inferior"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3526
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
-msgstr "A&chatar Camada"
+msgstr "A&chatar camada"
 
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
@@ -12924,7 +12924,7 @@ msgid ""
 "Force the color selector to only select colors in the currently selected "
 "palette."
 msgstr ""
-"Força o seletor de cores a selecionar apenas cores na paleta atualmente "
+"Força o seletor de cor a selecionar apenas cores na paleta atualmente "
 "selecionada."
 
 #. i18n: context: iconText @ Action (force_palette_colors), Actions (Layers), ActionCollection (Krita)
@@ -12953,7 +12953,7 @@ msgstr "&Editar"
 #: krita/krita5.xmlgui:70
 #, kde-format
 msgid "Fill Special"
-msgstr "Preenchimento Especial"
+msgstr "Preenchimento especial"
 
 #: krita/krita5.xmlgui:86 libs/widgetutils/xmlgui/ui_standards.xmlgui:101
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:28
@@ -13744,7 +13744,7 @@ msgstr "Colar estilo da forma"
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "Colar como Imagem de Referência"
+msgstr "Colar como imagem de referência"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13754,7 +13754,7 @@ msgstr "Colar como Imagem de Referência"
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "Colar como Imagem de Referência"
+msgstr "Colar como imagem de referência"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -13829,7 +13829,7 @@ msgstr "Preencher com a cor do plano de fundo"
 #, kde-format
 msgctxt "action"
 msgid "F&ill with Pattern"
-msgstr "Pre&encher com Padrão"
+msgstr "Pre&encher com padrão"
 
 #. i18n: context: toolTip @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
@@ -13839,14 +13839,14 @@ msgstr "Pre&encher com Padrão"
 #, kde-format
 msgctxt "action"
 msgid "Fill with Pattern"
-msgstr "Preencher com Padrão"
+msgstr "Preencher com padrão"
 
 #. i18n: context: text @ Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:495
 #, kde-format
 msgctxt "action"
 msgid "Fill Special"
-msgstr "Preenchimento Especial"
+msgstr "Preenchimento especial"
 
 #. i18n: context: text @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:535
@@ -13967,21 +13967,21 @@ msgstr "Exibir"
 #, kde-format
 msgctxt "action"
 msgid "&Show Canvas Only"
-msgstr "Mo&strar somente a tela"
+msgstr "Mo&strar somente a tela de pintura"
 
 #. i18n: context: toolTip @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:618
 #, kde-format
 msgctxt "action"
 msgid "Show just the canvas or the whole window"
-msgstr "Mostra apenas a tela ou toda a janela"
+msgstr "Mostra apenas a tela de pintura ou toda a janela"
 
 #. i18n: context: iconText @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:619
 #, kde-format
 msgctxt "action"
 msgid "Show Canvas Only"
-msgstr "Mostrar Somente a Tela"
+msgstr "Mostrar somente a tela de pintura"
 
 #. i18n: context: text @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:628
@@ -14012,14 +14012,14 @@ msgstr "Modo de tela cheia"
 #, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr "Desanexar tela"
+msgstr "Desanexar tela de pintura"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
 #, kde-format
 msgctxt "action"
 msgid "Show the canvas on a separate window"
-msgstr "Mostrar a tela numa janela separada"
+msgstr "Mostrar a tela de pintura numa janela separada"
 
 #. i18n: context: text @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:652
@@ -14169,7 +14169,7 @@ msgstr "Visão espelhada ao redor do cursor"
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Espelho ao redor da tela"
+msgstr "Espelho ao redor da tela de pintura"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -14231,7 +14231,7 @@ msgstr "Ajustar à visualização"
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Ajustar tela à visualização"
+msgstr "Ajustar tela de pintura à visualização"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
@@ -14248,7 +14248,7 @@ msgstr "Ajustar à largura da visualização"
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Ajustar a tela à largura da visualização"
+msgstr "Ajustar a tela de pintura à largura da visualização"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
@@ -14265,7 +14265,7 @@ msgstr "Ajustar à altura da visualização"
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Ajustar a tela à altura da visualização"
+msgstr "Ajustar a tela de pintura à altura da visualização"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14285,7 +14285,7 @@ msgstr "Alternar ajuste à visualização"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr "Girar a área para a &direita"
+msgstr "Girar tela de pintura para a &direita"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14295,14 +14295,14 @@ msgstr "Girar a área para a &direita"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr "Girar a área para a direita"
+msgstr "Girar tela de pintura para a direita"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr "Girar a área para a &esquerda"
+msgstr "Girar tela de pintura para a &esquerda"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14312,7 +14312,7 @@ msgstr "Girar a área para a &esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr "Girar a área para a esquerda"
+msgstr "Girar tela de pintura para a esquerda"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14325,7 +14325,7 @@ msgstr "Girar a área para a esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr "Reiniciar rotação da área de desenho"
+msgstr "Reiniciar rotação da tela de pintura"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
@@ -14360,8 +14360,8 @@ msgstr "Mostrar tamanho da impressão"
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
-"Mapeia a exibição da tela para o tamanho da impressão, com base na resolução "
-"da imagem."
+"Mapeia a exibição da tela de pintura para o tamanho da impressão, com base "
+"na resolução da imagem."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -14380,7 +14380,7 @@ msgid ""
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
 "As réguas mostram as posições horizontal e vertical do mouse na imagem e "
-"podem ser usadas para posicinar seu mouse no lugar certo na área de desenho. "
+"podem ser usadas para posicinar seu mouse no lugar certo na tela de pintura. "
 "<p>Desabilite para esconder as réguas.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -14671,7 +14671,7 @@ msgstr "Mostrar os assistentes de pintura"
 #, kde-format
 msgctxt "action"
 msgid "Show &Assistant Previews"
-msgstr "Mostrar as visualizações do &assistente"
+msgstr "Mostrar visualizações do &assistente"
 
 #. i18n: context: toolTip @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
@@ -14681,7 +14681,7 @@ msgstr "Mostrar as visualizações do &assistente"
 #, kde-format
 msgctxt "action"
 msgid "Show Assistant Previews"
-msgstr "Mostrar as visualizações do assistente"
+msgstr "Mostrar visualizações do assistente"
 
 #. i18n: context: text @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1132
@@ -14971,7 +14971,7 @@ msgstr "Deslocar imagem"
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
-msgstr "R&edimensionar a área de desenho..."
+msgstr "R&edimensionar tela de pintura..."
 
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
@@ -14981,7 +14981,7 @@ msgstr "R&edimensionar a área de desenho..."
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
-msgstr "Redimensionar a área de desenho"
+msgstr "Redimensionar tela de pintura"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1341
@@ -15355,7 +15355,7 @@ msgstr "Filtro"
 #, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
-msgstr "&Aplicar o filtro novamente"
+msgstr "&Aplicar filtro novamente"
 
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
@@ -15382,7 +15382,7 @@ msgstr "Aplicar filtro novamente (novo prompt)"
 #, kde-format
 msgctxt "action"
 msgid "Reapply Last Used Filter with Prompt for Configuration"
-msgstr "Reaplicar o último filtro usado com prompt para configuração"
+msgstr "Reaplicar último filtro usado com prompt para configuração"
 
 #. i18n: context: text @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
@@ -15510,7 +15510,7 @@ msgstr "Iniciar G'Mic-Qt"
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
-msgstr "Reaplicar o último filtro G'MIC"
+msgstr "Reaplicar último filtro G'MIC"
 
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
@@ -15613,7 +15613,7 @@ msgstr "Mudar o idioma do aplicativo"
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
-msgstr "Mo&strar as áreas acopláveis"
+msgstr "Mo&strar áreas acopláveis"
 
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
@@ -15623,7 +15623,7 @@ msgstr "Mo&strar as áreas acopláveis"
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
-msgstr "Mostrar as áreas acopláveis"
+msgstr "Mostrar áreas acopláveis"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1797
@@ -20563,7 +20563,7 @@ msgstr "Krita: Erro interno"
 #: libs/global/kis_dom_utils.cpp:128
 #, kde-format
 msgid "Could not find \"%1\" XML tag in \"%2\""
-msgstr "Não foi possível encontrar a marca de XML \"%1\" em \"%2\""
+msgstr "Não foi possível encontrar a etiqueta de XML \"%1\" em \"%2\""
 
 #: libs/global/kis_dom_utils.cpp:158
 #, kde-format
@@ -20897,7 +20897,7 @@ msgstr "Mudar a hora atual"
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr "Alternar o tempo atual para o quadro-chave"
+msgstr "Alternar tempo atual para o quadro-chave"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -20938,7 +20938,7 @@ msgstr "Artístico"
 #, kde-format
 msgctxt "The category of blur filters, like gaussian blur. Verb."
 msgid "Blur"
-msgstr "Borrar"
+msgstr "Desfocar"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:14
 #, kde-format
@@ -21131,7 +21131,7 @@ msgstr "Plano de fundo"
 #: libs/image/kis_image.cc:740 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
-msgstr "Pintar camada"
+msgstr "Camada de pintura"
 
 #: libs/image/kis_image.cc:839
 msgctxt "(qtundo-format)"
@@ -21470,7 +21470,7 @@ msgstr "Dividir o Alfa para uma Máscara"
 #: libs/image/kis_layer_utils.cpp:2407
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
-msgstr "Converter para a camada de pintura"
+msgstr "Converter para uma camada de pintura"
 
 #: libs/image/kis_processing_visitor.cpp:24
 #, kde-format
@@ -22004,7 +22004,7 @@ msgid ""
 "The image is not tagged as <b>non-linear gamma sRGB</b>. The image will be "
 "converted to sRGB."
 msgstr ""
-"A imagem não está marcada como <b>gama sRGB não linear</b>. A imagem será "
+"A imagem não está etiquetada como <b>gama sRGB não linear</b>. A imagem será "
 "convertida para sRGB."
 
 #: libs/koplugin/KisMimeDatabase.cpp:169
@@ -22029,7 +22029,7 @@ msgstr "Biblioteca de pincéis da Adobe"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Brush Preset"
-msgstr "Predefinições de pincel do Krita"
+msgstr "Predefinições do pincel do Krita"
 
 #: libs/koplugin/KisMimeDatabase.cpp:189
 #, kde-format
@@ -22155,7 +22155,7 @@ msgstr "Coleção de Imagens de Referência do Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Gamut Mask"
-msgstr "Máscaras Gamut do Krita"
+msgstr "Máscaras de gamute do Krita"
 
 #: libs/koplugin/KisMimeDatabase.cpp:294
 #, kde-format
@@ -23901,7 +23901,7 @@ msgstr "Inválida"
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
-msgstr "Predefinições de pincel"
+msgstr "Predefinições do pincel"
 
 #: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
@@ -23991,7 +23991,7 @@ msgstr "Famílias da fonte"
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Predefinições de Estilo"
+msgstr "Predefinições do estilo"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -24044,7 +24044,7 @@ msgstr "Tudo"
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, kde-format
 msgid "All Untagged"
-msgstr "Todos não marcados"
+msgstr "Todos não etiquetados"
 
 #: libs/resources/KisTagModel.cpp:304
 #, kde-format
@@ -24054,7 +24054,7 @@ msgstr "Todos os recursos"
 #: libs/resources/KisTagModel.cpp:314
 #, kde-format
 msgid "All Untagged Resources"
-msgstr "Todos os recursos não marcados"
+msgstr "Todos os recursos não etiquetados"
 
 #: libs/resources/KisTagResourceModel.cpp:667
 #, kde-format
@@ -24315,14 +24315,14 @@ msgstr "Etiqueta"
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:73
 #, kde-format
 msgid "Tag options"
-msgstr "Opções de tag/etiqueta"
+msgstr "Opções da etiqueta"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:144
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:305
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
-msgstr "Não é possível renomear a tag"
+msgstr "Não é possível renomear a etiqueta"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:144
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:277
@@ -24330,13 +24330,13 @@ msgstr "Não é possível renomear a tag"
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
-msgstr "Você não pode usar este nome para suas tags personalizadas."
+msgstr "Você não pode usar este nome para suas etiquetas personalizadas."
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:157
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
-msgstr "Remover tag existente com esse nome?"
+msgstr "Remover etiqueta existente com esse nome?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:159
 #, kde-format
@@ -24350,10 +24350,10 @@ msgid ""
 "Tag to be removed: %1\n"
 "Tag's unique name: %2"
 msgstr ""
-"Já existe uma tag com este nome exclusivo. Para continuar renomeando, a tag "
-"existente precisa ser removida. Quer continuar?\n"
-"Marca a ser removida: %1\n"
-"Nome exclusivo da tag: %2"
+"Já existe uma etiqueta com este nome exclusivo. Para continuar renomeando, a "
+"etiqueta existente precisa ser removida. Quer continuar?\n"
+"Etiqueta a ser removida: %1\n"
+"Nome exclusivo da etiqueta: %2"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:265
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
@@ -24362,28 +24362,28 @@ msgctxt ""
 "Option in a dialog to undelete (reactivate) existing tag with its old "
 "assigned resources"
 msgid "Restore previous tag"
-msgstr "Restaurar tag anterior"
+msgstr "Restaurar etiqueta anterior"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
-msgstr "Use tag existente"
+msgstr "Usar etiqueta existente"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:268
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:107
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
-msgstr "Substituir tag?"
+msgstr "Substituir etiqueta?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:108
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
-msgstr "Já existe uma tag com este nome exclusivo. Quer substituir?"
+msgstr "Já existe uma etiqueta com este nome exclusivo. Quer substituir?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
@@ -24392,7 +24392,7 @@ msgctxt ""
 "Option in a dialog to discard the previously existing tag and creating a new "
 "one in its place"
 msgid "Replace (overwrite) tag"
-msgstr "Substituir (sobrescrever) tag"
+msgstr "Substituir (sobrescrever) etiqueta"
 
 #. i18n: ectx: property (text), widget (QPushButton, btCancel)
 #. i18n: ectx: property (text), widget (QPushButton, cancelBrushNameUpdateButton)
@@ -24421,7 +24421,7 @@ msgstr "Cancelar"
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"
-msgstr "Não é possível criar a tag"
+msgstr "Não foi possível criar a etiqueta"
 
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:45
 #, kde-format
@@ -24442,13 +24442,13 @@ msgctxt ""
 "It appears in the checkbox next to the filter box in resources dockers; must "
 "be short."
 msgid "Filter in Tag"
-msgstr "Filtro na tag"
+msgstr "Filtrar na etiqueta"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr "<qt>Mostra as opções da área de etiquetas.</qt>"
+msgstr "<qt>Mostra as opções da caixa de etiquetas.</qt>"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
@@ -27118,7 +27118,7 @@ msgstr "O espaço de cor do monitor é gerenciado pelo sistema operacional"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1192
 #, kde-format
 msgid "Enable canvas color management"
-msgstr "Habilitar gerenciamento de cor da tela"
+msgstr "Habilitar gerenciamento de cor da tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1195
 #, kde-format
@@ -27132,18 +27132,18 @@ msgid ""
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
 "<p>Habilitar o gerenciamento de cor da tela cria automaticamente uma "
-"superfície nativa separada para a tela. Isso pode causar problemas de "
-"desempenho em alguns sistemas.</p><p>Se o gerenciamento de cor estiver "
-"desabilitado, o Krita renderizará a tela na superfície da janela principal, "
-"que é considerada sRGB. Isso causará duas limitações:<ol> <li>a gama de "
-"cores será limitada a sRGB</li>    <li>o modo de prova de cor será limitado "
-"a \"usar configurações globais de exibição\", ou seja, a prova em papel "
-"branco se tornará impossível</li></ol></p>"
+"superfície nativa separada para a tela de pintura. Isso pode causar "
+"problemas de desempenho em alguns sistemas.</p><p>Se o gerenciamento de cor "
+"estiver desabilitado, o Krita renderizará a tela na superfície da janela "
+"principal, que é considerada sRGB. Isso causará duas limitações:<ol> <li>o "
+"gamute de cor será limitado a sRGB</li>    <li>o modo de prova de cor será "
+"limitado a \"usar configurações globais de exibição\", ou seja, a prova em "
+"papel branco se tornará impossível</li></ol></p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1214
 #, kde-format
 msgid "Canvas surface color space:"
-msgstr "Espaço de cor da superfície da tela:"
+msgstr "Espaço de cor da superfície da tela de pintura:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
@@ -27369,12 +27369,12 @@ msgstr "Atalhos"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2368
 #, kde-format
 msgid "Canvas Input Settings"
-msgstr "Configurações da interação da área de desenho"
+msgstr "Configurações da interação da tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2369
 #, kde-format
 msgid "Canvas Input"
-msgstr "Interação da área de desenho"
+msgstr "Interação da tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2386
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
@@ -27407,18 +27407,18 @@ msgstr "Mesa digitalizadora"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2416
 #, kde-format
 msgid "Canvas-only settings"
-msgstr "Configurações do modo somente a tela"
+msgstr "Configurações do modo somente tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2418
 #, kde-format
 msgid "Canvas-only"
-msgstr "Somente a tela"
+msgstr "Somente a tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2426
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2428
 #, kde-format
 msgid "Pop-up Palette"
-msgstr "Paleta Pop-up"
+msgstr "Paleta instantânea"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2436
 #, kde-format
@@ -27763,7 +27763,7 @@ msgstr "Linhas de amostras no grupo:"
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:70
 #, kde-format
 msgid "Save New Brush Preset"
-msgstr "Salvar as predefinições do Novo Pincel"
+msgstr "Salvar as predefinições do novo pincel"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:79
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:75
@@ -27776,7 +27776,7 @@ msgstr "Copiar"
 #: libs/ui/forms/wdgsavebrushpreset.ui:24
 #, kde-format
 msgid "Save Brush Preset"
-msgstr "Salvar Predefinições do Pincel"
+msgstr "Salvar predefinições do pincel"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:133
 #, kde-format
@@ -28890,13 +28890,13 @@ msgstr "&Adicionar aos padrões predefinidos"
 #: libs/ui/forms/wdgdisplaysettings.ui:46
 #, kde-format
 msgid "Canvas Acceleration"
-msgstr "Aceleração da Tela de Pintura"
+msgstr "Aceleração da tela de pintura"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Aceleração &Gráfica da Tela de Pintura"
+msgstr "Aceleração &gráfica da tela de pintura"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -29030,7 +29030,7 @@ msgstr "Formato de saída preferido:"
 #: libs/ui/forms/wdgdisplaysettings.ui:315
 #, kde-format
 msgid "Canvas Decorations"
-msgstr "Decorações de telas"
+msgstr "Decorações da tela de pintura"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:321
@@ -29069,7 +29069,7 @@ msgstr "Tamanho:"
 #: libs/ui/forms/wdgdisplaysettings.ui:384
 #, kde-format
 msgid "Canvas Border Color:"
-msgstr "Cor do Contorno da Tela:"
+msgstr "Cor do contorno da tela de pintura:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:404
@@ -29200,7 +29200,7 @@ msgstr "Diversos"
 #: libs/ui/forms/wdgdisplaysettings.ui:532
 #, kde-format
 msgid "Hide Canvas Scrollbars"
-msgstr "Ocultar barras de rolagem da tela"
+msgstr "Ocultar barras de rolagem da tela de pintura"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:542
@@ -29231,7 +29231,8 @@ msgstr "Ativar a seleção com suavização de curvas do contorno"
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr ""
-"Se estiver assinalado, o padrão em xadrez irá mover-se ao deslocar a tela."
+"Se estiver assinalado, o padrão em xadrez irá mover-se ao deslocar a tela de "
+"pintura."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:576
@@ -29239,7 +29240,9 @@ msgstr ""
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
 "together with the canvas"
-msgstr "Determina se o xadrez irá ficar fixo ou se deslocará junto com a tela"
+msgstr ""
+"Determina se o xadrez irá ficar fixo ou se deslocará junto com a tela de "
+"pintura"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:579
@@ -29395,7 +29398,8 @@ msgstr "XML"
 #, kde-format
 msgid "Select which parts of Krita will be hidden in canvas-only mode."
 msgstr ""
-"Selecione as partes do Krita que ficarão ocultas no modo somente a tela."
+"Selecione as partes do Krita que ficarão ocultas no modo somente tela de "
+"pintura."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMenu)
 #: libs/ui/forms/wdgfullscreensettings.ui:35
@@ -29604,8 +29608,8 @@ msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
-"Nota: Isto se aplica quando o conteúdo é solto na janela Info, área de "
-"desenho, e ações de colagem."
+"Nota: Isto se aplica quando o conteúdo é solto na janela de informações, "
+"tela de pintura, e ações de colagem."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:270
@@ -29667,7 +29671,7 @@ msgstr "Abas"
 #: libs/ui/forms/wdggeneralsettings.ui:341
 #, kde-format
 msgid "Show on-canvas popup messages"
-msgstr "Mostrar mensagens pop-up na tela de pintura"
+msgstr "Mostrar mensagens instantâneas na tela de pintura"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:348
@@ -29937,7 +29941,7 @@ msgstr "Passos de zoom entre potências de 2"
 #: libs/ui/forms/wdggeneralsettings.ui:1016
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr "Usar o eixo horizontal para a ação de zoom da tela"
+msgstr "Usar o eixo horizontal para a ação de zoom da tela de pintura"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1036
@@ -30947,14 +30951,14 @@ msgid ""
 "Use background color and opacity as the base canvas color. This can be "
 "reconfigured in `Image > Properties.`"
 msgstr ""
-"Use a cor de fundo e a opacidade como a base para a cor da tela. Isso pode "
-"ser reconfigurado em 'Imagem> Propriedades'."
+"Use a cor de fundo e a opacidade como a base para a cor da tela de pintura. "
+"Isso pode ser reconfigurado em 'Imagem> Propriedades'."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
 #, kde-format
 msgid "As can&vas color"
-msgstr "Como na cor da $tela de desenho"
+msgstr "Como na cor da &tela de pintura"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsFill)
 #: libs/ui/forms/wdgnewimage.ui:583
@@ -31601,9 +31605,9 @@ msgid ""
 "body></html>"
 msgstr ""
 "<html><head/><body><p>Adiciona área extra para a região de interesse de cada "
-"lado da tela.</p><p><span style=\" font-weight:600;\">Valor recomendado:</"
-"span> 25%. A região de interesse será estendida em 25% de cada lado.</p></"
-"body></html>"
+"lado da tela de pintura.</p><p><span style=\" font-weight:600;\">Valor "
+"recomendado:</span> 25%. A região de interesse será estendida em 25% de cada "
+"lado.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:529
@@ -31740,7 +31744,7 @@ msgstr "Tamanho da paleta:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:82
 #, kde-format
 msgid "Color Selector:"
-msgstr "Seletor de cores:"
+msgstr "Seletor de cor:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
@@ -32313,7 +32317,7 @@ msgstr "Abrir testador de mesa digitalizadora..."
 #: libs/ui/imagesize/dlg_canvassize.cc:40
 #, kde-format
 msgid "Resize Canvas"
-msgstr "Redimensionar a área de desenho"
+msgstr "Redimensionar tela de pintura"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
 #: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
@@ -32344,7 +32348,7 @@ msgstr "Escalonar Seleção"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:16
 #, kde-format
 msgid "Canvas Size"
-msgstr "Tamanho da Área de Desenho"
+msgstr "Tamanho da tela de pintura"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupNewSize)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -32593,7 +32597,7 @@ msgstr "Perfil de Entrada"
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
 #, kde-format
 msgid "Manage canvas input profiles"
-msgstr "Gerenciar perfis de entrada de tela"
+msgstr "Gerenciar perfis de entrada da tela de pintura"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, warningConflictButton)
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:27
@@ -32705,7 +32709,7 @@ msgid ""
 msgstr ""
 "A <i>invocação alternada</i> executa uma ação alternada em relação à "
 "ferramenta atual. Por exemplo, ao usar a ferramenta de pincel, ele pega uma "
-"cor da tela."
+"cor da tela de pintura."
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:32
 #, kde-format
@@ -32796,7 +32800,8 @@ msgstr "Exposição e Gama"
 #, kde-format
 msgid ""
 "The <i>Exposure and Gamma</i> action changes the display mode of the canvas."
-msgstr "A ação <i>Exposição e Gama</i> altera o modo de exibição da área."
+msgstr ""
+"A ação <i>Exposição e Gama</i> altera o modo de exibição da tela de pintura."
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:66
 #, kde-format
@@ -32856,14 +32861,14 @@ msgstr "Restaurar Exposição e Gama"
 #: libs/ui/input/kis_pan_action.cpp:40
 #, kde-format
 msgid "Pan Canvas"
-msgstr "Deslocamento da tela"
+msgstr "Deslocamento da tela da pintura"
 
 #: libs/ui/input/kis_pan_action.cpp:41
 #, kde-format
 msgid "The <i>Pan Canvas</i> action pans the canvas."
 msgstr ""
-"A ação <i>Deslocar área de desenho</i> efetua a deslocamento da área de "
-"desenho."
+"A ação <i>Deslocar tela de pintura</i> efetua a deslocamento da tela de "
+"pintura."
 
 #: libs/ui/input/kis_pan_action.cpp:44
 #, kde-format
@@ -32893,12 +32898,12 @@ msgstr "Deslocar para baixo"
 #: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #, kde-format
 msgid "Rotate Canvas"
-msgstr "Girar tela"
+msgstr "Girar tela de pintura"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
-msgstr "A ação <i>Girar área de desenho</i> gira a área de desenho."
+msgstr "A ação <i>Girar tela de pintura</i> gira a tela de pintura."
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:41
@@ -33285,14 +33290,14 @@ msgstr "Ativar com outra cor"
 #: libs/ui/input/kis_zoom_action.cpp:68
 #, kde-format
 msgid "Zoom Canvas"
-msgstr "Zoom da tela"
+msgstr "Zoom da tela de pintura"
 
 #: libs/ui/input/kis_zoom_action.cpp:69
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
-"A ação <i>Ampliar área de desenho</i> amplia/reduz o conteúdo da área de "
-"desenho."
+"A ação <i>Zoom da tela de pintura</i> amplia/reduz o conteúdo da tela de "
+"pintura."
 
 #: libs/ui/input/kis_zoom_action.cpp:72
 #, kde-format
@@ -33357,12 +33362,12 @@ msgstr "Ajustar à altura da visualização"
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Zoom and Rotate Canvas"
-msgstr "Dar Zoom e Girar tela de pintura"
+msgstr "Dar zoom e girar a tela de pintura"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
 msgid "Toggle Canvas Only"
-msgstr "Alternar apenas tela"
+msgstr "Alternar apenas tela de pintura"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:18
 #, kde-format
@@ -33370,18 +33375,18 @@ msgid ""
 "The Toggle Canvas Only action switches between full interface and canvas "
 "only mode"
 msgstr ""
-"A ação Alternar apenas a tela alterna entre a interface completa e o modo "
-"somente tela"
+"A ação de alternar apenas tela de pintura alterna entre a interface completa "
+"e o modo somente tela de pintura"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:44
 #, kde-format
 msgid "Show Popup Widget"
-msgstr "Mostrar widget pop-up"
+msgstr "Mostrar widget instantâneo"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:45
 #, kde-format
 msgid "Show the current tool's popup widget."
-msgstr "Mostra o widget pop-up da ferramenta atual."
+msgstr "Mostra o widget instantâneo da ferramenta atual."
 
 #: libs/ui/input/KisTouchGestureAction.cpp:17
 #, kde-format
@@ -33398,7 +33403,7 @@ msgstr ""
 #: libs/ui/input/KisTouchGestureAction.cpp:23
 #, kde-format
 msgid "Toggle Canvas Only Mode"
-msgstr "Alternar modo apenas tela"
+msgstr "Alternar modo apenas tela de pintura"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:24
 #, kde-format
@@ -33676,7 +33681,7 @@ msgstr "Mesclar o grupo"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
-msgstr "Mesclar com a Camada Inferior"
+msgstr "Mesclar com camada inferior"
 
 #: libs/ui/kis_layer_manager.cc:217
 #, kde-format
@@ -33856,7 +33861,7 @@ msgstr "Visualização espelhada ao redor do cursor"
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "Visualização espelhada ao redor da tela"
+msgstr "Espelhar visualização ao redor da tela de pintura"
 
 #: libs/ui/kis_node_manager.cpp:485
 #, kde-format
@@ -33900,7 +33905,8 @@ msgstr ""
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr ""
-"Não foi possível criar a imagem de referência a partir da tela visível."
+"Não foi possível criar a imagem de referência a partir da tela de pintura "
+"visível."
 
 #: libs/ui/kis_node_manager.cpp:1027
 #, kde-format
@@ -34210,7 +34216,7 @@ msgstr "Pincel mascarado"
 #: libs/ui/kis_popup_palette.cpp:134
 #, kde-format
 msgid "Popup Palette"
-msgstr "Paleta Pop-up"
+msgstr "Paleta instantânea"
 
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
@@ -34220,7 +34226,7 @@ msgstr "Limpar histórico de cores"
 #: libs/ui/kis_popup_palette.cpp:176
 #, kde-format
 msgid "Mirror Canvas"
-msgstr "Espelhar a tela"
+msgstr "Espelhar tela de pintura"
 
 #: libs/ui/kis_popup_palette.cpp:185
 #, kde-format
@@ -34241,7 +34247,7 @@ msgstr "100%"
 #: libs/ui/kis_popup_palette.cpp:198
 #, kde-format
 msgid "Fit Canvas to View"
-msgstr "Ajustar tela à visualização"
+msgstr "Ajustar tela de pintura à visualização"
 
 #: libs/ui/kis_popup_palette.cpp:873
 #, kde-format
@@ -34577,7 +34583,7 @@ msgstr "Layouts de janelas"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
-msgstr "Máscaras Gamut"
+msgstr "Máscaras de gamute"
 
 #: libs/ui/KisApplication.cpp:439
 #, kde-format
@@ -34593,7 +34599,7 @@ msgstr "Estilos da camada"
 #: libs/ui/KisApplication.cpp:447
 #, kde-format
 msgid "Style Presets"
-msgstr "Predefinições de Estilo"
+msgstr "Predefinições do estilo"
 
 #: libs/ui/KisApplication.cpp:459
 #, kde-format
@@ -34839,7 +34845,7 @@ msgstr "O nome da sessão para abrir o Krita"
 #: libs/ui/KisApplicationArguments.cpp:87
 #, kde-format
 msgid "Start Krita in canvas-only mode"
-msgstr "Iniciar o Krita em modo tela de pintura apenas"
+msgstr "Iniciar o Krita em modo apenas tela de pintura"
 
 #: libs/ui/KisApplicationArguments.cpp:88
 #, kde-format
@@ -35514,7 +35520,7 @@ msgstr "Nova &visão"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
-msgstr "Espaço de &Trabalho"
+msgstr "Espaço de &trabalho"
 
 #: libs/ui/KisMainWindow.cpp:603
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
@@ -35639,13 +35645,13 @@ msgstr "&Importar espaços de trabalho..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
-msgstr "&Novo Espaço de Trabalho..."
+msgstr "&Novo espaço de trabalho..."
 
 #: libs/ui/KisMainWindow.cpp:2674
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
-msgstr "Novo Espaço de Trabalho..."
+msgstr "Novo espaço de trabalho..."
 
 #: libs/ui/KisMainWindow.cpp:2718
 #, kde-format
@@ -36103,7 +36109,7 @@ msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
-"Indo para o modo somente a tela.\n"
+"Indo para o modo apenas tela de pintura.\n"
 "Pressione %1 para voltar."
 
 #: libs/ui/KisViewManager.cpp:1491
@@ -37218,7 +37224,7 @@ msgid ""
 "\n"
 " Krita will disable OpenGL and close now."
 msgstr ""
-"O Krita não conseguiu inicializar a área de desenho OpenGL:\n"
+"O Krita não conseguiu inicializar a tela de pintura em OpenGL:\n"
 "\n"
 "%1\n"
 "\n"
@@ -37505,7 +37511,7 @@ msgstr "Adicionar o gradiente atual para as predefinições"
 #, kde-format
 msgctxt "Show the gradient preset chooser as a pop-up in a button or inline"
 msgid "Use a pop-up gradient preset chooser"
-msgstr "Use um seletor de predefinição de gradiente pop-up"
+msgstr "Use um seletor de predefinição de gradiente instantâneo"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:182
 #, kde-format
@@ -38845,7 +38851,7 @@ msgstr "Alternar mostrando predefinições"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
 #, kde-format
 msgid "Toggle showing scratchpad"
-msgstr "Alternar a exibição do bloco de anotações"
+msgstr "Alternar exibição do bloco de anotações"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
 #, kde-format
@@ -38959,7 +38965,7 @@ msgstr "Parar de crescer nos pixels mais escuros e/ou opacos"
 #: libs/ui/widgets/kis_selection_options.cc:241
 #, kde-format
 msgid "Blur the selection by the set amount"
-msgstr "Embaçar a seleção pela quantidade definida"
+msgstr "Desfocar a seleção pela quantidade definida"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
 #, kde-format
@@ -39901,7 +39907,7 @@ msgstr "Luma:"
 #: libs/widgets/KisTagSelectionWidget.cpp:58
 #, kde-format
 msgid "Remove from tag"
-msgstr "Remover da tag (etiqueta)"
+msgstr "Remover da etiqueta"
 
 #: libs/widgets/KoColorSetWidget.cpp:76
 #, kde-format
@@ -40134,7 +40140,7 @@ msgstr "Alterar a cor da sombra"
 #: libs/widgets/KoShadowConfigWidget.ui:71
 #, kde-format
 msgid "Blur:"
-msgstr "Borrar:"
+msgstr "Desfocar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -40168,7 +40174,7 @@ msgid ""
 "Map the displayed canvas size between pixel size or print size\n"
 "Current Mapping: %1"
 msgstr ""
-"Mapeie o tamanho da área de desenho exibida entre tamanho de pixel e tamanho "
+"Mapeie o tamanho da tela de pintura exibida entre tamanho de pixel e tamanho "
 "de impressão\n"
 "Mapeamento Atual: %1"
 
@@ -41467,7 +41473,7 @@ msgstr "Subdivisões menores: "
 #: plugins/assistants/Assistants/kis_assistant_tool.h:189
 #, kde-format
 msgid "Assistant Tool"
-msgstr "Ferramenta Assistente"
+msgstr "Ferramenta de assistente"
 
 #. i18n: context: text @ Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: text @ Actions (tool-shortcuts), ActionCollection (Tools)
@@ -41540,7 +41546,7 @@ msgstr "Atalhos das ferramentas"
 #, kde-format
 msgctxt "action"
 msgid "Assistant Tool"
-msgstr "Ferramenta Assistente "
+msgstr "Ferramenta de assistente"
 
 #: plugins/assistants/Assistants/ParallelRulerAssistant.cc:28
 #, kde-format
@@ -41827,7 +41833,7 @@ msgstr "Limpar todo histórico de cores"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:43
 #, kde-format
 msgid "Advanced Color Selector"
-msgstr "Seletor de cores avançado"
+msgstr "Seletor de cor avançado"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
 #, kde-format
@@ -41884,7 +41890,7 @@ msgstr "Não mostrar"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:24
 #, kde-format
 msgid "Color Selector Settings"
-msgstr "Configurações do seletor de cores"
+msgstr "Configurações do seletor de cor"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:270
 #, kde-format
@@ -41952,13 +41958,13 @@ msgstr "Área acoplável:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
 #, kde-format
 msgid "Color Selector"
-msgstr "Seletor de cores"
+msgstr "Seletor de cor"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
 #, kde-format
 msgid "Show color selector"
-msgstr "Mostrar o seletor de cores"
+msgstr "Mostrar o seletor de cor"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
@@ -42019,7 +42025,7 @@ msgstr "Use uma cor personalizada para o seletor da cor de fundo."
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
-msgstr "O seletor de cores usa um espaço de cor diferente da ima&gem"
+msgstr "O seletor de cor usa um espaço de cor diferente da ima&gem"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
@@ -42227,7 +42233,7 @@ msgstr "Cores da imagem"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:838
 #, kde-format
 msgid "Show Colors from the ima&ge"
-msgstr "Mostrar as cores da ima&gem"
+msgstr "Mostrar cores da ima&gem"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, commonColorsAutoUpdate)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1022
@@ -42831,7 +42837,7 @@ msgstr "Organizar"
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:66
 #, kde-format
 msgid "Artistic Color Selector"
-msgstr "Seletor de cores artísticas"
+msgstr "Seletor de cor artístico"
 
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:113
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:114
@@ -42957,7 +42963,7 @@ msgstr "Restaurar para o padrão"
 #, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor de Pincel na Tela"
+msgstr "Editor de pincel na tela de pintura"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -43120,7 +43126,7 @@ msgstr "Edite a máscara de gama"
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:59
 #, kde-format
 msgid "Gamut Masks"
-msgstr "Máscaras Gamut"
+msgstr "Máscaras de gamute"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:128
 #, kde-format
@@ -43484,7 +43490,7 @@ msgstr "Cancelar Máscara de Seleção Rápida "
 #: plugins/dockers/layerdocker/LayerBox.cpp:1240
 #, kde-format
 msgid "&Toggle Locks && Visibility"
-msgstr "Al&ternar entre Bloqueios e Visibilidade"
+msgstr "Al&ternar bloqueios e visibilidade"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1247
 #: plugins/dockers/layerdocker/LayerBox.cpp:1271
@@ -43635,7 +43641,7 @@ msgstr "Configurações da mesa digitalizadora "
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #, kde-format
 msgid "GPU Canvas"
-msgstr "GPU da Tela"
+msgstr "Tela de pintura na GPU"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnToggle)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:46
@@ -43843,7 +43849,7 @@ msgstr "Configura os pontos preto e branco da exibição"
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
 msgid "Overview"
-msgstr "Introdução"
+msgstr "Visão geral"
 
 #: plugins/dockers/overview/overviewdocker_page.cpp:159
 #, kde-format
@@ -43920,7 +43926,7 @@ msgstr "Bloqueia a paleta atual."
 #, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
-msgstr "Predefinições de pincel"
+msgstr "Predefinições do pincel"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:49
 #, kde-format
@@ -44763,9 +44769,9 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 "Aviso de baixo desempenho. O gravador não consegue gravar todos os quadros "
-"em tempo durante o modo Captura em Tempo Real.\n"
+"em tempo durante o modo de captura em tempo real.\n"
 "Tente reduzir a taxa de quadros para a exportação ffmpeg ou reduzir a "
-"filtragem de escala nas configurações de aceleração da tela."
+"filtragem de escala nas configurações de aceleração da tela de pintura."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:719
 #, kde-format
@@ -44778,12 +44784,12 @@ msgstr ""
 "Aviso de baixo desempenho. O gravador não consegue gravar todos os quadros a "
 "tempo.\n"
 "Tente aumentar o intervalo de captura ou reduzir a filtragem de escala nas "
-"configurações de aceleração da tela."
+"configurações de aceleração da tela de pintura."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
 msgid "Small Color Selector"
-msgstr "Seletor de cores pequeno"
+msgstr "Seletor de cor pequeno"
 
 #: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
 #, kde-format
@@ -44822,7 +44828,7 @@ msgstr "HSY"
 #: plugins/dockers/specificcolorselector/specificcolorselector_dock.cc:22
 #, kde-format
 msgid "Specific Color Selector"
-msgstr "Seletor de cores específico"
+msgstr "Seletor de cor específico"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, colorspacePopupButton)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44
@@ -44834,7 +44840,7 @@ msgstr "Selecionar o espaço de cor"
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
 #, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "Travar ao espaço de cor da camada atual"
+msgstr "Bloquear ao espaço de cor da camada atual"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
@@ -45438,13 +45444,13 @@ msgstr "Prova de cores para espaço de cor de pintura"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr "Pop-ups"
+msgstr "Widgets instantâneos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
 #, kde-format
 msgid "Pop-up size:"
-msgstr "Tamanho do pop-up:"
+msgstr "Tamanho do widget instantâneo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
@@ -45639,14 +45645,14 @@ msgstr "Visualização:"
 #, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Ações do seletor de cores WG"
+msgstr "Ações do seletor de cor WG"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Mostrar o seletor de cores de amplo gama"
+msgstr "Mostrar o seletor de cor de amplo gamute"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
@@ -45833,7 +45839,7 @@ msgstr "Impossível abrir o arquivo"
 #: plugins/extensions/buginfo/DlgAndroidLogcatDumper.cpp:30
 #, kde-format
 msgid "Toggle Logging"
-msgstr "Alternar o registro de Log"
+msgstr "Alternar registro de Log"
 
 #: plugins/extensions/buginfo/DlgAndroidLogcatDumper.cpp:98
 #, kde-format
@@ -48285,14 +48291,14 @@ msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
 "on upgrading Krita"
 msgstr ""
-"Faça uma cópia de segurança de todas as suas tags na pasta de recursos para "
-"que não se percam ao atualizar o Krita"
+"Faça uma cópia de segurança de todas as suas etiquetas na pasta de recursos "
+"para que não se percam ao atualizar o Krita"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
 #, kde-format
 msgid "Save Tags to Folder"
-msgstr "Salvar tags na pasta"
+msgstr "Salvar etiquetas na pasta"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
@@ -48310,7 +48316,7 @@ msgstr "Nome do arquivo:"
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:254
 #, kde-format
 msgid "Tags:"
-msgstr "Tags/Etiquetas:"
+msgstr "Etiquetas:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/wdgresourcepreview.ui:107
@@ -48585,7 +48591,7 @@ msgstr "Gesto na S-Pen de círculo no sentido anti-horário"
 #, kde-format
 msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
-msgstr "Alternar a paleta com a S-Pen"
+msgstr "Alternar paleta instantânea com a S-Pen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
@@ -48751,42 +48757,42 @@ msgstr "Inclinação:"
 #: plugins/filters/blur/kis_blur_filter.cpp:27
 #, kde-format
 msgid "&Blur..."
-msgstr "&Borrar..."
+msgstr "&Desfocar..."
 
 #: plugins/filters/blur/kis_blur_filter.h:26
 #, kde-format
 msgid "Blur"
-msgstr "Borrar"
+msgstr "Desfocar"
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "Desfocagem de &Gaussian..."
+msgstr "Desfoque &gaussiano..."
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
 msgid "Gaussian Blur"
-msgstr "Borrão gaussiano"
+msgstr "Desfoque gaussiano"
 
 #: plugins/filters/blur/kis_lens_blur_filter.cpp:33
 #, kde-format
 msgid "&Lens Blur..."
-msgstr "Borrão de &lentes..."
+msgstr "Desfoque de &lente..."
 
 #: plugins/filters/blur/kis_lens_blur_filter.h:30
 #, kde-format
 msgid "Lens Blur"
-msgstr "Borrão de lentes"
+msgstr "Desfoque de lente"
 
 #: plugins/filters/blur/kis_motion_blur_filter.cpp:33
 #, kde-format
 msgid "&Motion Blur..."
-msgstr "Borrão por &movimento..."
+msgstr "Desfoque por &movimento..."
 
 #: plugins/filters/blur/kis_motion_blur_filter.h:30
 #, kde-format
 msgid "Motion Blur"
-msgstr "Borrão por movimento"
+msgstr "Desfoque por movimento"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbHShape)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbVShape)
@@ -48946,22 +48952,22 @@ msgstr "Cor para Alfa"
 #: plugins/filters/colors/kis_minmax_filters.cpp:58
 #, kde-format
 msgid "M&aximize Channel"
-msgstr "M&aximizar Canal"
+msgstr "M&aximizar canal"
 
 #: plugins/filters/colors/kis_minmax_filters.cpp:96
 #, kde-format
 msgid "M&inimize Channel"
-msgstr "M&inimizar Canal"
+msgstr "M&inimizar canal"
 
 #: plugins/filters/colors/kis_minmax_filters.h:27
 #, kde-format
 msgid "Maximize Channel"
-msgstr "Maximizar Canal"
+msgstr "Maximizar canal"
 
 #: plugins/filters/colors/kis_minmax_filters.h:44
 #, kde-format
 msgid "Minimize Channel"
-msgstr "Minimizar Canal"
+msgstr "Minimizar canal"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
 #, kde-format
@@ -49400,7 +49406,7 @@ msgstr "XYZ"
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:48
 #, kde-format
 msgid "&Sharpen"
-msgstr "Em &Relevo"
+msgstr "&Nitidez"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:62
 #, kde-format
@@ -49417,24 +49423,24 @@ msgstr "Elevar (Laplaciano)"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:53
 #, kde-format
 msgid "Emboss in All Directions"
-msgstr "Em Relevo em Todas Direções"
+msgstr "Em relevo em todas direções"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:106
 #, kde-format
 msgid "Emboss Horizontal && Vertical"
-msgstr "Em Relevo Horizontal e Vertical"
+msgstr "Em relevo horizontal e vertical"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:121
 #: plugins/filters/convolutionfilters/convolutionfilters.h:73
 #, kde-format
 msgid "Emboss Vertical Only"
-msgstr "Em Relevo Somente Vertical"
+msgstr "Em relevo somente vertical"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:136
 #: plugins/filters/convolutionfilters/convolutionfilters.h:83
 #, kde-format
 msgid "Emboss Horizontal Only"
-msgstr "Em Relevo Somente Horizontal"
+msgstr "Em relevo somente horizontal"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:151
 #, kde-format
@@ -49444,7 +49450,7 @@ msgstr "Detecção de Contorno Superior"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:22
 #, kde-format
 msgid "Sharpen"
-msgstr "Em Relevo"
+msgstr "Nitidez"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:33
 #, kde-format
@@ -49454,12 +49460,12 @@ msgstr "Remoção Mediana"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:63
 #, kde-format
 msgid "Emboss Horizontal & Vertical"
-msgstr "Em Relevo Horizontal e Vertical"
+msgstr "Em relevo horizontal e vertical"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:93
 #, kde-format
 msgid "Emboss Diagonal"
-msgstr "Em Relevo Diagonal"
+msgstr "Em relevo diagonal"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
 #, kde-format
@@ -49559,7 +49565,7 @@ msgstr "Saída:"
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:43
 #, kde-format
 msgid "&Emboss with Variable Depth..."
-msgstr "&Em Relevo com Profundidade Variável..."
+msgstr "&Em relevo com profundidade variável..."
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:144
 #, kde-format
@@ -49580,12 +49586,12 @@ msgstr "Inverter"
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
 #, kde-format
 msgid "&Color Transfer..."
-msgstr "Transferência de &Cores..."
+msgstr "Transferência de &cores..."
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.h:35
 #, kde-format
 msgid "Color Transfer"
-msgstr "Transferência de Cores"
+msgstr "Transferência de cores"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/filters/fastcolortransfer/wdgfastcolortransfer.ui:36
@@ -50068,7 +50074,7 @@ msgstr "Filtro normalizar"
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:44
 #, kde-format
 msgid "&Oilpaint..."
-msgstr "Pintura à Óle&o..."
+msgstr "Pintura à óle&o..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
@@ -50285,8 +50291,8 @@ msgid ""
 "Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is "
 "parallel."
 msgstr ""
-"Inclinação da luz. 90° corresponde a uma posição perpendicular à tela, "
-"enquanto 0° está paralela."
+"Inclinação da luz. 90° corresponde a uma posição perpendicular à tela de "
+"pintura, enquanto 0° está paralela."
 
 #. i18n: ectx: property (text), widget (QLabel, inclinationLabel4)
 #. i18n: ectx: property (text), widget (QLabel, inclinationLabel2)
@@ -50494,7 +50500,7 @@ msgstr "Propagar filtro de cores"
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
 msgid "&Raindrops..."
-msgstr "&Pingos de Chuva..."
+msgstr "&Pingos de chuva..."
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
 #, kde-format
@@ -53846,7 +53852,7 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 "O arquivo contém uma camada de clone que possui uma ID de nó de origem "
-"incorreto. Essa camada será convertida em uma camada de pintura bitmapeada."
+"incorreto. Essa camada será convertida em uma camada de pintura."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
 #, kde-format
@@ -57899,7 +57905,7 @@ msgstr "Deslocamento horizontal:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304
 #, kde-format
 msgid "Invert Pattern"
-msgstr "Inverter Padrão: "
+msgstr "Inverter padrão"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoInvertOnErase)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
@@ -58727,7 +58733,7 @@ msgstr "Valor base:"
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, kde-format
 msgid "MyPaint Brush Presets"
-msgstr "Predefinições de pincel MyPaint"
+msgstr "Predefinições do pincel MyPaint"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:186
 #, kde-format
@@ -60116,7 +60122,7 @@ msgstr "Texto Normal"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:376
 msgid "Inverted Text"
-msgstr "Texto Invertido"
+msgstr "Texto invertido"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:391
 msgid "Document Info"
@@ -61124,7 +61130,7 @@ msgstr "Produtor de livros"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Blurb writer"
-msgstr "Escritor da Sinopse"
+msgstr "Escritor da sinopse"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 msgid "Binder"
@@ -61774,7 +61780,7 @@ msgstr "Filtrar imagens por palavras..."
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
 #, kde-format
 msgid "Scale To Canvas"
-msgstr "Escala para tela"
+msgstr "Escala para tela de pintura"
 
 #: plugins/python/plugin_importer/plugin_downloader.py:72
 msgid "Could not determine download link from URL"
@@ -62122,7 +62128,9 @@ msgstr "&Selecione a ferramenta pincel à mão livre ao pressionar um atalho"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:39
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Mostrar mensagem pop-up na tela ao ativar a predefinição de pincel"
+msgstr ""
+"Mostrar mensagem &instantânea na tela de pintura ao ativar a predefinição de "
+"pincel"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:58
 msgid ""
@@ -62319,7 +62327,7 @@ msgstr "Selecionar uma predefinição de pincel:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:207
 msgid "Brush preset name"
-msgstr "Nome da predefinições do pincel"
+msgstr "Nome da predefinição do pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 msgid "Select the brush preset"
@@ -62453,7 +62461,7 @@ msgstr "Pixel"
 #: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Brush Smoothing:"
-msgstr "Suavização do Pincel: "
+msgstr "Suavização do pincel: "
 
 #: plugins/tools/basictools/kis_tool_brush.cc:482
 #, kde-format
@@ -62561,7 +62569,7 @@ msgstr "Ferramenta de traços livres de pincel"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:121
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Ferramenta seletor de cores"
+msgstr "Ferramenta seletor de cor"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -62653,7 +62661,7 @@ msgstr "Reiniciar"
 #: plugins/tools/basictools/kis_tool_fill.cc:640
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Preencher a seleção ativa ou toda a tela"
+msgstr "Preencher a seleção ativa ou toda a tela de pintura"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
 #, kde-format
@@ -62764,7 +62772,7 @@ msgstr "Aumenta ou diminui o preenchimento pela quantidade definida"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:573
 #, kde-format
 msgid "Blur the fill by the set amount"
-msgstr "Embaçar o preenchimento pela quantidade definida"
+msgstr "Desfoca o preenchimento pela quantidade definida"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:666
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:575
@@ -62861,7 +62869,7 @@ msgstr "Modo de arrasto de preenchimento"
 #: plugins/tools/basictools/kis_tool_fill.h:242
 #, kde-format
 msgid "Fill Tool"
-msgstr "Ferramenta de Preenchimento"
+msgstr "Ferramenta de preenchimento"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:166
 msgctxt "(qtundo-format)"
@@ -62883,7 +62891,7 @@ msgstr "Pontilhamento"
 #: plugins/tools/basictools/kis_tool_gradient.h:106
 #, kde-format
 msgid "Gradient Tool"
-msgstr "Ferramenta Gradiente"
+msgstr "Ferramenta de gradiente"
 
 #: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
@@ -63014,7 +63022,7 @@ msgstr "Ferramenta multi-pincel"
 #: plugins/tools/basictools/kis_tool_pan.cpp:81
 #, kde-format
 msgid "Pan Tool"
-msgstr "Ferramenta de Posicionamento (Pan)"
+msgstr "Ferramenta de deslocamento"
 
 #: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
@@ -63025,7 +63033,7 @@ msgstr "Desenhar uma curva Bezier"
 #, kde-format
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr ""
-"Ferramenta Curvas Bezier: Clicar com o mouse e com o Shift pressionado "
+"Ferramenta de curvas Bezier: Clicar com o mouse e com o Shift pressionado "
 "termina a curva."
 
 #: plugins/tools/basictools/kis_tool_pencil.cc:133
@@ -63065,7 +63073,7 @@ msgstr "Ferramenta de curva Bezier"
 msgctxt "action"
 msgid "Bezier Curve Tool. Shift-mouseclick or double-click ends the curve."
 msgstr ""
-"Ferramenta de Curvas Bezier. Shift+Clique do Mouse ou duplo clique para "
+"Ferramenta de curvas Bezier. Shift+Clique do Mouse ou duplo clique para "
 "finalizar a curva."
 
 #. i18n: context: text @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -63113,7 +63121,7 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr> Determina se o selecionador de cores irá amostrar as cores </nobr> de "
+"<nobr> Determina se o selecionador de cor irá amostrar as cores </nobr> de "
 "todas as camadas visíveis ou apenas da camada atualmente selecionada."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
@@ -63335,7 +63343,7 @@ msgstr "&y:"
 #: plugins/tools/basictools/wdgmovetool.ui:322
 #, kde-format
 msgid "Show coordinates on canvas"
-msgstr "Mostrar coordenadas na tela"
+msgstr "Mostrar coordenadas na tela de pintura"
 
 #. i18n: ectx: property (text), widget (QLabel, brushesLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
@@ -63506,7 +63514,7 @@ msgstr "Operações Lógicas"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, kde-format
 msgid "Select Shapes Tool"
-msgstr "Ferramenta de Selecionar Formas"
+msgstr "Ferramenta de selecionar formas"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:107
 #, kde-format
@@ -63733,7 +63741,7 @@ msgstr "Criar imagem de referência a partir da camada ativa"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
 #, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Criar imagem de referência a partir da tela visível"
+msgstr "Criar imagem de referência a partir da tela de pintura visível"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -64330,7 +64338,7 @@ msgstr "Opções de caminho"
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
 msgid "Magnetic Selection Tool"
-msgstr "Ferramenta de Seleção Magnética"
+msgstr "Ferramenta de seleção magnética"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -64492,7 +64500,7 @@ msgstr "Remover texto"
 #, kde-format
 msgctxt "action"
 msgid "SVG Text Tool"
-msgstr "Ferramenta de Texto SVG"
+msgstr "Ferramenta de texto SVG"
 
 #. i18n: context: text @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -64514,11 +64522,10 @@ msgstr "Ferramenta de texto"
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:16
 #: plugins/tools/svgtexttool/SvgTextTool.action:23
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr "Paleta de Glifos"
+msgstr "Paleta de Glifos..."
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18
@@ -64767,7 +64774,7 @@ msgstr "Krita - Editar Texto"
 #: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:21
 #, kde-format
 msgid "SVG Text Tool"
-msgstr "Ferramenta de Texto SVG"
+msgstr "Ferramenta de texto SVG"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -65006,14 +65013,14 @@ msgstr ""
 #: plugins/tools/tool_crop/kis_tool_crop.h:215
 #, kde-format
 msgid "Crop Tool"
-msgstr "Ferramenta de Recorte"
+msgstr "Ferramenta de recorte"
 
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
 msgctxt "action"
 msgid "Crop Tool"
-msgstr "Ferramenta de Recorte"
+msgstr "Ferramenta de recorte"
 
 #. i18n: context: toolTip @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65088,7 +65095,7 @@ msgstr "Bloqueia a taxa de proporção"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:405
 #, kde-format
 msgid "Canvas"
-msgstr "Área de desenho"
+msgstr "Tela de pintura"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:415
@@ -65831,14 +65838,14 @@ msgstr "Desbloquear os pontos"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
-msgstr "Criar 3 pontos na área de desenho para começar"
+msgstr "Criar 3 pontos na tela de pintura para começar"
 
 #. i18n: context: text @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:7
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool"
-msgstr "Ferramenta de Transformação"
+msgstr "Ferramenta de transformação"
 
 #. i18n: context: toolTip @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -65959,7 +65966,7 @@ msgstr "Inclinar"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:711
 #, kde-format
 msgid "off canvas"
-msgstr "área de desenho desligada"
+msgstr "fora da tela de pintura"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
@@ -66285,7 +66292,7 @@ msgstr "Ferramenta de posicionamento"
 #, kde-format
 msgctxt "action"
 msgid "Select Shapes Tool"
-msgstr "Ferramenta de Seleção de Formas"
+msgstr "Ferramenta de seleção de formas"
 
 #. i18n: context: text @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66312,7 +66319,7 @@ msgstr "Faça uma amostra de uma cor da imagem ou da camada atual"
 #, kde-format
 msgctxt "action"
 msgid "Fill Tool"
-msgstr "Ferramenta Preenchimento"
+msgstr "Ferramenta de preenchimento"
 
 #. i18n: context: toolTip @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:86
@@ -66450,7 +66457,7 @@ msgstr "Ferramenta edição de formas"
 #, kde-format
 msgctxt "action"
 msgid "Zoom Tool"
-msgstr "Ferramenta Zoom"
+msgstr "Ferramenta de zoom"
 
 #. i18n: context: text @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66463,7 +66470,7 @@ msgstr "Ferramenta Zoom"
 #, kde-format
 msgctxt "action"
 msgid "Reference Images Tool"
-msgstr "Ferramenta Imagens de Referência"
+msgstr "Ferramenta de imagens de referência"
 
 #~ msgid "Rich text"
 #~ msgstr "Texto formato RTF"

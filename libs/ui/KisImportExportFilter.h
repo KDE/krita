@@ -116,6 +116,14 @@ public:
      */
     virtual QMap<QString, KisExportCheckBase*> exportChecks();
 
+    /**
+     * @brief exportSupportsGuides
+     * Because guides are in the document and not the image,
+     * checking for guides cannot be made an exportCheck.
+     * @return whether this filter supports exporting guides
+     */
+    virtual bool exportSupportsGuides() const;
+
     /// Override and return false for the filters that use a library that cannot handle file handles, only file names.
     virtual bool supportsIO() const { return true; }
 

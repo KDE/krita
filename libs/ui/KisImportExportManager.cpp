@@ -565,7 +565,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
     if (m_document->referenceImagesLayer() && m_document->referenceImagesLayer()->shapeCount() > 0 && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>reference images</b>. The reference images will not be saved."));
     }
-    if (m_document->guidesConfig().hasGuides() && to != m_document->nativeFormatMimeType()) {
+    if (m_document->guidesConfig().hasGuides() && !filter->exportSupportsGuides()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>guides</b>. The guides will not be saved."));
     }
     if (!m_document->gridConfig().isDefault() && to != m_document->nativeFormatMimeType()) {

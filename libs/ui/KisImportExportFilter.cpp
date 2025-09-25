@@ -153,6 +153,11 @@ QMap<QString, KisExportCheckBase *> KisImportExportFilter::exportChecks()
     return d->capabilities;
 }
 
+bool KisImportExportFilter::exportSupportsGuides() const
+{
+    return false;
+}
+
 QString KisImportExportFilter::verify(const QString &fileName) const
 {
     QFileInfo fi(fileName);

@@ -28,6 +28,7 @@
 #include <NodeTypeCheck.h>
 #include <PSDLayerStylesCheck.h>
 #include <sRGBProfileCheck.h>
+#include <ShapeLayerTypeCheck.h>
 
 #include <QGlobalStatic>
 
@@ -133,6 +134,24 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
         chkFactory = new FillLayerTypeCheckFactory(generatorId);
         add(chkFactory->id(), chkFactory);
     }
+
+    // Vector shapes
+    chkFactory = new ShapeLayerTypeCheckFactory("KoPathShape");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("KoPathShape", "RectangleShape");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("KoPathShape", "EllipseShape");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("KoPathShape", "StarShape");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("KoPathShape", "SpiralShape");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("ImageShape");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("KoShapeGroup");
+    add(chkFactory->id(), chkFactory);
+    chkFactory = new ShapeLayerTypeCheckFactory("KoSvgTextShapeID");
+    add(chkFactory->id(), chkFactory);
 }
 
 KisExportCheckRegistry::~KisExportCheckRegistry ()

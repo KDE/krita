@@ -8,17 +8,14 @@
 
 #include <QObject>
 
-#include <surfacecolormanagement/KisSurfaceColorimetry.h>
-
 #include <KisDisplayConfig.h>
 #include <kis_types.h>
 #include <kis_config.h>
 
-
 class KoColorProfile;
 class KisSurfaceColorManagerInterface;
 
-class KisCanvasSurfaceColorSpaceManager : public QObject
+class KRITAUI_EXPORT KisCanvasSurfaceColorSpaceManager : public QObject
 {
     Q_OBJECT
 public:
@@ -35,10 +32,6 @@ public:
 Q_SIGNALS:
     void sigDisplayConfigChanged(const KisDisplayConfig &config);
 
-private:
-    static KisSurfaceColorimetry::RenderIntent calculateConfigIntent(int intent, bool useBlackPointCompensation);
-    static KisSurfaceColorimetry::RenderIntent calculateConfigIntent(const KisDisplayConfig &config);
-
 private Q_SLOTS:
     void slotConfigChanged();
     void slotInterfaceReadyChanged(bool isReady);
@@ -48,10 +41,8 @@ private:
     void reinitializeSurfaceDescription();
 
 private:
-    QScopedPointer<KisSurfaceColorManagerInterface> m_interface;
-    KisDisplayConfig m_currentConfig;
-    std::optional<KisSurfaceColorimetry::RenderIntent> m_proofingIntentOverride;
-    KisConfig::CanvasSurfaceMode m_surfaceMode = KisConfig::CanvasSurfaceMode::Preferred;
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif /* KISCANVASSURFACECOLORSPACEMANAGER_H */

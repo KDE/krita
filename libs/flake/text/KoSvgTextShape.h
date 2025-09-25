@@ -18,7 +18,9 @@
 #include <QFlags>
 
 class KoSvgTextShapeMemento;
+class KoSvgTextNodeEditor;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
+typedef QSharedPointer<KoSvgTextNodeEditor> KoSvgTextNodeEditorSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
@@ -373,53 +375,31 @@ public:
     void cleanUp();
 
 /*****************************************************************************
- * Tree Index functions.
+ * KoSvgTextNodeEditor functions.
  *
  * SVG Text is internally a tree of nodes, with each node having text
  * properties, and the child nodes furthest from the root having text content.
  * While we can access the latter by using ranges, and we can easily access
  * the root node by using -1, there's no way to access the nodes that may
- * be inbetween. Tree index allows accessing these nodes.
- *
- * Each entry in the index is represents the index it is in the parent's list
- * of child nodes. This means that the root index is always {0}. The second
- * child of the root would be represented as {0, 1}, and the first child of
- * the second child of the root as {0, 1, 0}, etc.
+ * be inbetween. KoSvgTextNodeEditor allows accessing these nodes.
  *
  ****************************************************************************/
 
     /**
-     * @brief findTreeIndexForPropertyId
-     * @return the tree index of the first content element found with a given property id.
-     *     Empty vector means none was found.
+     * @brief findNodeEditorForPropertyId
+     * @return the nodeEditor of the first content element found with a given property id.
      * @propertyId -- id to search for.
      */
-    QVector<int> findTreeIndexForPropertyId(KoSvgTextProperties::PropertyId propertyId);
+    KoSvgTextNodeEditorSP findNodeEditorForPropertyId(KoSvgTextProperties::PropertyId propertyId);
 
     /**
-     * @brief propertiesForTreeIndex
-     * @param treeIndex -- vector representing the tree index.
-     * @return properties at the given tree index. If the tree index is wrong, empty properties will be returned.
-     */
-    KoSvgTextProperties propertiesForTreeIndex(const QVector<int> &treeIndex) const;
-
-    /**
-     * @brief setPropertiesAtTreeIndex
-     * @param treeIndex -- set text properties at given tree index.
-     * @return if successful.
-     */
-    bool setPropertiesAtTreeIndex(const QVector<int> treeIndex, const KoSvgTextProperties props);
-
-    /**
-     * @brief findStartAndEndPosForTreeIndex
-     * Find the start and end cursor position for a given tree index.
-     * @param treeIndex the tree index to find the range for. This range will encompass any children.
-     * The treeindex will always start with the index of the paragraph (0)
-     * and an empty tree index is considered invalid.
+     * @brief findRangeForNodeEditor
+     * Find the start and end cursor position for a given nodeEditor.
+     * @param node the tree index to find the range for.
      * @return A QPair<int,int> describing cursor position range encompassed by the tree index and it's children.
      * Will return {-1, -1} when the tree index is invalid.
      */
-    QPair<int, int> findRangeForTreeIndex(const QVector<int> treeIndex) const;
+    QPair<int, int> findRangeForNodeEditor(KoSvgTextNodeEditorSP node) const;
 
     /*--------------- Properties ---------------*/
 
@@ -571,7 +551,45 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KoSvgTextShape::DebugElements)
 class KRITAFLAKE_EXPORT KoSvgTextShapeMemento {
 public:
     KoSvgTextShapeMemento() {}
-    virtual ~KoSvgTextShapeMemento() {};
+    virtual ~KoSvgTextShapeMemento() {}
+private:
+    friend class KoSvgTextShape;
+};
+
+/**
+ * @brief The KoSvgTextNodeEditor class
+ *
+ * Because SVG text is a tree, it is not always
+ * possible to edit nodes by range. This class can
+ * be used to access a node in the tree directly,
+ * allow the direct editing of properties or any
+ * text path on the given node.
+ */
+class KRITAFLAKE_EXPORT KoSvgTextNodeEditor {
+public:
+    KoSvgTextNodeEditor () {}
+    virtual ~KoSvgTextNodeEditor() {}
+
+    /**
+     * @brief properties
+     * The properties for this node as a pointer.
+     * @return properties for this node.
+     */
+    virtual KoSvgTextProperties *properties() {return nullptr;}
+
+    /**
+     * @brief textPathInfo
+     * the text path info for this node as a pointer.
+     * @return the current text path info.
+     */
+    virtual KoSvgText::TextOnPathInfo *textPathInfo() {return nullptr;}
+
+    /**
+     * @brief textPath
+     * @return the textPath of this node, may be null.
+     */
+    virtual KoShape *textPath() {return nullptr;}
+
 private:
     friend class KoSvgTextShape;
 };

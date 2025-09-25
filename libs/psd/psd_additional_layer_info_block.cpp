@@ -656,7 +656,7 @@ void PsdAdditionalLayerInfoBlock::writeVectorMaskImpl(QIODevice &io, psd_vector_
     Q_FOREACH(psd_path_sub_path subPath, mask.path.subPaths) {
         recordType = subPath.isClosed? 0: 3;
         quint16 length = subPath.nodes.size();
-        qDebug() << "writing subpath" << subPath.nodes.size();
+        dbgFile << "writing subpath" << subPath.nodes.size();
         SAFE_WRITE_EX(byteOrder, io, recordType);
         SAFE_WRITE_EX(byteOrder, io, length);
         // 22 empty bits

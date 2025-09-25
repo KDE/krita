@@ -738,7 +738,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                     if (shapeLayer->shapes().size() == 1) {
                         KoSvgTextShape * text = dynamic_cast<KoSvgTextShape*>(shapeLayer->shapes().first());
                         if (text) {
-                            PsdTextDataConverter convert(text);
+                            PsdTextDataConverter convert;
                             KoSvgTextShapeMarkupConverter svgConverter(text);
                             QString svgtext;
                             QString styles;
@@ -747,7 +747,12 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();
 
-                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, text->shapesInside(), globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);
+                            bool res = convert.convertToPSDTextEngineData(svgtext, textData.bounds, text->shapesInside(), globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);
+                            if (!res && !convert.errors().isEmpty()) {
+                                qWarning() << convert.errors();
+
+                            }
+                            dbgFile << convert.warnings();
                             textData.engineData = KisTxt2Utils::tyShFromTxt2(globalInfoSection.txt2Data, FlaketoPixels.mapRect(textData.boundingBox), textData.textIndex);
                             textCount += 1;
                             if (!text->shapesInside().isEmpty()) {

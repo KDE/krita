@@ -26,9 +26,6 @@
 #include <QXmlStreamWriter>
 #include <QtMath>
 struct PsdTextDataConverter::Private {
-    Private(KoSvgTextShape *_shape) : shape(_shape) {}
-
-    KoSvgTextShape *shape;
 
     QStringList errors;
     QStringList warnings;
@@ -38,8 +35,8 @@ struct PsdTextDataConverter::Private {
         warnings.clear();
     }
 };
-PsdTextDataConverter::PsdTextDataConverter(KoSvgTextShape *shape)
-    : d(new Private(shape))
+PsdTextDataConverter::PsdTextDataConverter()
+    : d(new Private)
 {
 
 }

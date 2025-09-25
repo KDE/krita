@@ -481,7 +481,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisAslXmlParser parser;
                 parser.parseXML(layerRecord->infoBlocks.textData, catcher);
                 KoSvgTextShape *shape = new KoSvgTextShape();
-                PsdTextDataConverter converter(shape);
+                PsdTextDataConverter converter;
                 KoSvgTextShapeMarkupConverter svgConverter(shape);
 
                 QString svg;
@@ -501,8 +501,9 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                                                                    offset1, offsetByAscent,
                                                                    text.isHorizontal, scaleToPt);
                 if (!res || !converter.errors().isEmpty()) {
-                    qDebug() << converter.errors();
+                    qWarning() << converter.errors();
                 }
+                dbgFile << converter.warnings();
                 svgConverter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
                 if (offsetByAscent) {
                     QPointF offset2 = QPointF() - shape->outlineRect().topLeft();

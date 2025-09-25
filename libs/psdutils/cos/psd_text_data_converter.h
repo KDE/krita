@@ -28,7 +28,7 @@ class QDomElement;
 class KRITAPSDUTILS_EXPORT PsdTextDataConverter
 {
 public:
-    PsdTextDataConverter(KoSvgTextShape *shape);
+    PsdTextDataConverter();
     ~PsdTextDataConverter();
 
     bool convertPSDTextEngineDataToSVG(const QVariantHash tySh,

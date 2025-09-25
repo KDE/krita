@@ -447,15 +447,15 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
          * it may cause flickering :)
          */
         if (!qEnvironmentVariableIsSet("QT_USE_PREMATURE_RESIZE_EVENTS")) {
-            qInfo() << "INFO: activateing QT_USE_PREMATURE_RESIZE_EVENTS...";
+            qInfo() << "INFO: activating QT_USE_PREMATURE_RESIZE_EVENTS...";
             qputenv("QT_USE_PREMATURE_RESIZE_EVENTS", "1");
         }
         if (!qEnvironmentVariableIsSet("QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE")) {
-            qInfo() << "INFO: activateing QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE...";
+            qInfo() << "INFO: activating QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE...";
             qputenv("QT_ANGLE_MANUALLY_UPDATE_SURFACE_SIZE", "1");
         }
         if (!qEnvironmentVariableIsSet("QT_PREFILL_RHI_SURFACE")) {
-            qInfo() << "INFO: activateing QT_PREFILL_RHI_SURFACE...";
+            qInfo() << "INFO: activating QT_PREFILL_RHI_SURFACE...";
             qputenv("QT_PREFILL_RHI_SURFACE", "1");
         }
     }

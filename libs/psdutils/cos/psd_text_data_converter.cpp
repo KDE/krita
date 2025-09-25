@@ -525,7 +525,7 @@ QString PsdTextDataConverter::stylesForPSDStyleSheet(QString &lang, QVariantHash
             int flags = PSDStyleSheet.value(key).toInt();
             for (int i = 1; i <= 20; i++) {
                 const int bit = 2^(i-1);
-                const QString tag = i > 9? QString("ss%").arg(i):QString("ss0%").arg(i);
+                const QString tag = i > 9? QString("ss%1").arg(i):QString("ss0%1").arg(i);
                 if (flags & bit) {
                     fontFeatureSettings.append(QString("\'%1\' 1").arg(tag));
                 }

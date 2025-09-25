@@ -9,14 +9,6 @@
 
 #include <KisStaticInitializer.h>
 
-class SvgTextShortcutInfo;
-KIS_DECLARE_STATIC_INITIALIZER {
-    qRegisterMetaType<SvgTextShortcutInfo>("SvgTextShortcutInfo");
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QMetaType::registerEqualsComparator<SvgTextShortcutInfo>();
-#endif
-}
-
 /**
  * @brief The SvgTextShortcutInfo class
  * This
@@ -77,7 +69,12 @@ struct SvgTextShortcutInfo : public boost::equality_comparable<SvgTextShortcutIn
 
 Q_DECLARE_METATYPE(SvgTextShortcutInfo)
 
-
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<SvgTextShortcutInfo>("SvgTextShortcutInfo");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QMetaType::registerEqualsComparator<SvgTextShortcutInfo>();
+#endif
+}
 
 const QMap<QString, SvgTextShortcutInfo> textShortCuts = {
     {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-24 02:00+0000\n"
+"POT-Creation-Date: 2025-09-26 02:01+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -23840,7 +23840,7 @@ msgstr "ឯកសារ​ប្រភព ៖"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -35449,13 +35449,11 @@ msgid "Wor&kspace"
 msgstr "តំបន់​ធ្វើ​ការ​"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "បង្ហាញ​ស្រទាប់ root"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "ឧបករណ៍"
@@ -64125,33 +64123,33 @@ msgstr "ផ្លាស់ប្ដូរ​តម្រង"
 msgid "Text Tool"
 msgstr "អត្ថបទ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, fuzzy, kde-format
 msgid "Conversion failed"
 msgstr "ការ​ជ្រើស​ផ្ទៃ​ដែល​ជាប់​គ្នា"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
 #, fuzzy, kde-format
 msgid "Find Text"
 msgstr "អត្ថបទ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
 #, kde-format
 msgid "Find:"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
 #, fuzzy, kde-format
 msgid "Replace:"
 msgstr "រលក​..."
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""

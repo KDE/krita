@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-24 02:00+0000\n"
+"POT-Creation-Date: 2025-09-26 02:01+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23409,7 +23409,7 @@ msgstr "本地资源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -35073,13 +35073,11 @@ msgid "Wor&kspace"
 msgstr "工作区(&K)"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "显示%1工具栏"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隐藏%1工具栏"
@@ -63327,33 +63325,33 @@ msgstr "SVG 文字工具更改"
 msgid "Text Tool"
 msgstr "文字工具"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, kde-format
 msgid "Conversion failed"
 msgstr "转换失败"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
 #, kde-format
 msgid "Find Text"
 msgstr "查找文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
 #, kde-format
 msgid "Find:"
 msgstr "查找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
 #, kde-format
 msgid "Find and Replace all"
 msgstr "查找并替换全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
 #, kde-format
 msgid "Replace:"
 msgstr "替换："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。您想要放弃更改吗？"
@@ -63408,7 +63406,7 @@ msgstr "文字工具"
 #, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr ""
+msgstr "字符表..."
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-24 02:00+0000\n"
+"POT-Creation-Date: 2025-09-26 02:01+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -23805,7 +23805,7 @@ msgstr "Lokálne zdroje"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -35857,13 +35857,11 @@ msgid "Wor&kspace"
 msgstr "Pracovná plocha"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Zobraziť panel nástrojov %1"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skryť panel nástrojov %1"
@@ -64970,33 +64968,33 @@ msgstr "Zmeniť SvgTextTool"
 msgid "Text Tool"
 msgstr "Textový nástroj"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, kde-format
 msgid "Conversion failed"
 msgstr "Konverzia zlyhala"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
 #, kde-format
 msgid "Find Text"
 msgstr "Nájsť text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
 #, kde-format
 msgid "Find:"
 msgstr "Nájsť:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Nájsť a nahradiť všetko"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
 #, kde-format
 msgid "Replace:"
 msgstr "Nahradiť:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Zmenili ste text. Zahodiť zmeny?"

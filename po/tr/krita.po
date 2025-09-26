@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-24 02:00+0000\n"
+"POT-Creation-Date: 2025-09-26 02:01+0000\n"
 "PO-Revision-Date: 2025-09-24 09:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -23594,7 +23594,7 @@ msgstr "Yerel Özkaynaklar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -35447,13 +35447,11 @@ msgid "Wor&kspace"
 msgstr "&Çalışma Alanı"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Göster"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Gizle"
@@ -50136,7 +50134,7 @@ msgstr "Işığın yönü, kadranın ucu ışığın geldiği yeri ifade eder."
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:783
 #, kde-format
 msgid "Azimuth:"
-msgstr "Güney açısı:"
+msgstr "Yanca:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, inclinationLabel4)
 #. i18n: ectx: property (toolTip), widget (QLabel, inclinationLabel2)
@@ -64245,33 +64243,33 @@ msgstr "SVG Metni Değiştir Aracı"
 msgid "Text Tool"
 msgstr "Metin Aracı"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, kde-format
 msgid "Conversion failed"
 msgstr "Dönüşüm başarısız"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
 #, kde-format
 msgid "Find Text"
 msgstr "Metin Bul"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
 #, kde-format
 msgid "Find:"
 msgstr "Bul:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Tümünü Bul ve Değiştir"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
 #, kde-format
 msgid "Replace:"
 msgstr "Değiştir:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Metin üzerinde değişiklik yaptınız. Değişikliklerden vazgeçilsin mi?"
@@ -66260,142 +66258,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
-
-#~ msgid "Rich text"
-#~ msgstr "Zengin Metin"
-
-#~ msgid "SVG Source"
-#~ msgstr "SVG Kaynağı"
-
-#~ msgid "Font"
-#~ msgstr "Yazıtipi"
-
-#~ msgid "Text Color"
-#~ msgstr "Metin Rengi"
-
-#~ msgid "Sample a Color"
-#~ msgstr "Renk Örnekle"
-
-#~ msgid "Line height"
-#~ msgstr "Çizgi yüksekliği"
-
-#~ msgctxt "Default line height for text"
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgctxt "line height for text"
-#~ msgid "100%"
-#~ msgstr "%​100"
-
-#~ msgctxt "action"
-#~ msgid "Text Color"
-#~ msgstr "Metin Aracı"
-
-#~ msgctxt "action"
-#~ msgid "Text Color..."
-#~ msgstr "Metin Rengi…"
-
-#~ msgctxt "action"
-#~ msgid "Background"
-#~ msgstr "Arka Plan"
-
-#~ msgctxt "action"
-#~ msgid "Background Color..."
-#~ msgstr "Arka Plan Rengi…"
-
-#~ msgctxt "action"
-#~ msgid "Font Size"
-#~ msgstr "Yazıtipi Boyutu"
-
-#~ msgctxt "action"
-#~ msgid "Font..."
-#~ msgstr "Yazıtipi…"
-
-#~ msgctxt "action"
-#~ msgid "Change character size, font, boldface, italics etc."
-#~ msgstr "Karakter boyutu, kalınlığı, yatıklığı, yazıtipi vb. değiştir."
-
-#~ msgctxt "action"
-#~ msgid "Change the attributes of the currently selected characters."
-#~ msgstr "Şu anda seçili karakterlerin özniteliklerini değiştirin."
-
-#~ msgctxt "action"
-#~ msgid "Special Character..."
-#~ msgstr "Özel Karakter…"
-
-#~ msgctxt "action"
-#~ msgid "Line Height"
-#~ msgstr "Çizgi Yüksekliği"
-
-#~ msgctxt "action"
-#~ msgid "Line Height in em"
-#~ msgstr "Çizgi Yüksekliği (em olarak)"
-
-#~ msgctxt "action"
-#~ msgid "Legacy Hard Wrap"
-#~ msgstr "Eski Mutlak Kaydırma"
-
-#~ msgctxt "action"
-#~ msgid ""
-#~ "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
-#~ "are explicitly positioned, but the line height may be slightly inaccurate."
-#~ msgstr ""
-#~ "Eski tip mutlak kaydırma kipini kullanın (Krita 5.1 ve eski sürümler). "
-#~ "Tüm satırlar mutlak olarak konumlandırılırlar; ancak satır yüksekliği çok "
-#~ "hafif yanlış olabilir."
-
-#~ msgctxt "action"
-#~ msgid "SVG Hard Wrap"
-#~ msgstr "SVG Mutlak Kaydırma"
-
-#~ msgctxt "action"
-#~ msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-#~ msgstr "SVG’nin CSS `white-space: pre` mutlak kaydırma kipini kullanın."
-
-#~ msgctxt "action"
-#~ msgid "SVG Auto Wrap with Fixed Width"
-#~ msgstr "Sabit Genişlikli SVG Kendiliğinden Kaydırma"
-
-#~ msgctxt "action"
-#~ msgid ""
-#~ "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
-#~ "defining the text width."
-#~ msgstr ""
-#~ "SVG’nin CSS `white-space: pre` mutlak kaydırma kipini, metin genişliğini "
-#~ "tanımlayan `inline-size` ile kullanın."
-
-#~ msgid "&Insert"
-#~ msgstr "&Ekle"
-
-#~ msgid "&Format"
-#~ msgstr "&Biçim"
-
-#~ msgid "&Weight"
-#~ msgstr "&Ağırlık"
-
-#~ msgid "Text W&rapping"
-#~ msgstr "Metin &Kaydırma"
-
-#~ msgid "Font Settings"
-#~ msgstr "Yazıtipi Ayarları"
-
-#~ msgid "Formatting"
-#~ msgstr "Biçimlendirme"
-
-#~ msgid "SVG source"
-#~ msgstr "SVG kaynağı"
-
-#~ msgid "Edit Text"
-#~ msgstr "Metni Düzenle"
-
-#~ msgid "Fonts"
-#~ msgstr "Yazıtipleri"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Which writing system should the fonts chooser show "
-#~ "the fonts of? No writing system selected will have all fonts shown.</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Yazıtipi seçici, hangi yazı sisteminin "
-#~ "yazıtiplerini göstermeli? Seçilen hiçbir yazı sistemi tüm yazıtiplerini "
-#~ "göstermez.</p></body></html>"

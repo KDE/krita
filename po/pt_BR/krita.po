@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-24 02:00+0000\n"
-"PO-Revision-Date: 2025-09-24 12:05-0300\n"
+"POT-Creation-Date: 2025-09-26 02:01+0000\n"
+"PO-Revision-Date: 2025-09-25 17:41-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -10164,7 +10164,7 @@ msgstr "Ajuste do HSV"
 #, kde-format
 msgctxt "action"
 msgid "Blending Modes"
-msgstr "Modos de mistura"
+msgstr "Modos de mesclagem"
 
 #. i18n: context: text @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10176,7 +10176,7 @@ msgstr "Modos de mistura"
 #, kde-format
 msgctxt "action"
 msgid "Next Blending Mode"
-msgstr "Modo de mistura seguinte"
+msgstr "Modo de mesclagem seguinte"
 
 #. i18n: context: text @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10188,7 +10188,7 @@ msgstr "Modo de mistura seguinte"
 #, kde-format
 msgctxt "action"
 msgid "Previous Blending Mode"
-msgstr "Modo de mistura anterior"
+msgstr "Modo de mesclagem anterior"
 
 #. i18n: context: text @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10200,7 +10200,7 @@ msgstr "Modo de mistura anterior"
 #, kde-format
 msgctxt "action"
 msgid "Select Normal Blending Mode"
-msgstr "Selecionar o modo de mistura normal"
+msgstr "Selecionar o modo de mesclagem normal"
 
 #. i18n: context: text @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10212,7 +10212,7 @@ msgstr "Selecionar o modo de mistura normal"
 #, kde-format
 msgctxt "action"
 msgid "Select Dissolve Blending Mode"
-msgstr "Selecionar o modo de mistura por dissolução"
+msgstr "Selecionar o modo de mesclagem por dissolução"
 
 #. i18n: context: text @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10224,7 +10224,7 @@ msgstr "Selecionar o modo de mistura por dissolução"
 #, kde-format
 msgctxt "action"
 msgid "Select Behind Blending Mode"
-msgstr "Selecionar o modo de mistura para trás"
+msgstr "Selecionar o modo de mesclagem para trás"
 
 #. i18n: context: text @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10236,7 +10236,7 @@ msgstr "Selecionar o modo de mistura para trás"
 #, kde-format
 msgctxt "action"
 msgid "Select Clear Blending Mode"
-msgstr "Selecionar o modo de mistura limpa"
+msgstr "Selecionar o modo de mesclagem limpa"
 
 #. i18n: context: text @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10248,7 +10248,7 @@ msgstr "Selecionar o modo de mistura limpa"
 #, kde-format
 msgctxt "action"
 msgid "Select Darken Blending Mode"
-msgstr "Selecionar o modo de mistura por escurecimento"
+msgstr "Selecionar o modo de mesclagem por escurecimento"
 
 #. i18n: context: text @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10260,7 +10260,7 @@ msgstr "Selecionar o modo de mistura por escurecimento"
 #, kde-format
 msgctxt "action"
 msgid "Select Multiply Blending Mode"
-msgstr "Selecionar o modo de mistura por multiplicação"
+msgstr "Selecionar o modo de mesclagem por multiplicação"
 
 #. i18n: context: text @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10272,7 +10272,7 @@ msgstr "Selecionar o modo de mistura por multiplicação"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Burn Blending Mode"
-msgstr "Selecionar o modo de mistura por queima de cores"
+msgstr "Selecionar o modo de mesclagem por queima de cores"
 
 #. i18n: context: text @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10284,7 +10284,7 @@ msgstr "Selecionar o modo de mistura por queima de cores"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Burn Blending Mode"
-msgstr "Selecionar o modo de mistura por queima linear"
+msgstr "Selecionar o modo de mesclagem por queima linear"
 
 #. i18n: context: text @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10296,7 +10296,7 @@ msgstr "Selecionar o modo de mistura por queima linear"
 #, kde-format
 msgctxt "action"
 msgid "Select Lighten Blending Mode"
-msgstr "Selecionar o modo de mistura por clareamento"
+msgstr "Selecionar o modo de mesclagem por clareamento"
 
 #. i18n: context: text @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10308,7 +10308,7 @@ msgstr "Selecionar o modo de mistura por clareamento"
 #, kde-format
 msgctxt "action"
 msgid "Select Screen Blending Mode"
-msgstr "Selecionar o modo de mistura de tela"
+msgstr "Selecionar o modo de mesclagem de tela"
 
 #. i18n: context: text @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10320,7 +10320,7 @@ msgstr "Selecionar o modo de mistura de tela"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
-msgstr "Selecionar o modo de mistura por desvio de cores"
+msgstr "Selecionar o modo de mesclagem por desvio de cores"
 
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10332,7 +10332,7 @@ msgstr "Selecionar o modo de mistura por desvio de cores"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
-msgstr "Selecionar o modo de mistura por desvio linear"
+msgstr "Selecionar o modo de mesclagem por desvio linear"
 
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10344,7 +10344,7 @@ msgstr "Selecionar o modo de mistura por desvio linear"
 #, kde-format
 msgctxt "action"
 msgid "Select Overlay Blending Mode"
-msgstr "Selecionar o modo de mistura por camada"
+msgstr "Selecionar o modo de mesclagem por camada"
 
 #. i18n: context: text @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10356,7 +10356,7 @@ msgstr "Selecionar o modo de mistura por camada"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Overlay Blending Mode"
-msgstr "Selecionar o modo de combinação de mistura forte"
+msgstr "Selecionar o modo de mesclagem de mistura forte"
 
 #. i18n: context: text @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10368,7 +10368,7 @@ msgstr "Selecionar o modo de combinação de mistura forte"
 #, kde-format
 msgctxt "action"
 msgid "Select Soft Light Blending Mode"
-msgstr "Selecionar o modo de mistura por luz suave"
+msgstr "Selecionar o modo de mesclagem por luz suave"
 
 #. i18n: context: text @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10380,7 +10380,7 @@ msgstr "Selecionar o modo de mistura por luz suave"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Light Blending Mode"
-msgstr "Selecionar o modo de mistura por luz forte"
+msgstr "Selecionar o modo de mesclagem por luz forte"
 
 #. i18n: context: text @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10392,7 +10392,7 @@ msgstr "Selecionar o modo de mistura por luz forte"
 #, kde-format
 msgctxt "action"
 msgid "Select Vivid Light Blending Mode"
-msgstr "Selecionar o modo de mistura por luz viva"
+msgstr "Selecionar o modo de mesclagem por luz viva"
 
 #. i18n: context: text @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10404,7 +10404,7 @@ msgstr "Selecionar o modo de mistura por luz viva"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Light Blending Mode"
-msgstr "Selecionar o modo de mistura por luz linear"
+msgstr "Selecionar o modo de mesclagem por luz linear"
 
 #. i18n: context: text @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10416,7 +10416,7 @@ msgstr "Selecionar o modo de mistura por luz linear"
 #, kde-format
 msgctxt "action"
 msgid "Select Pin Light Blending Mode"
-msgstr "Selecionar o modo de mistura por luz pontual"
+msgstr "Selecionar o modo de mesclagem por luz pontual"
 
 #. i18n: context: text @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10428,7 +10428,7 @@ msgstr "Selecionar o modo de mistura por luz pontual"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Mix Blending Mode"
-msgstr "Selecionar o modo de mistura por mistura forte"
+msgstr "Selecionar o modo de mesclagem por mistura forte"
 
 #. i18n: context: text @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10440,7 +10440,7 @@ msgstr "Selecionar o modo de mistura por mistura forte"
 #, kde-format
 msgctxt "action"
 msgid "Select Difference Blending Mode"
-msgstr "Selecionar o modo de mistura por diferença"
+msgstr "Selecionar o modo de mesclagem por diferença"
 
 #. i18n: context: text @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10452,7 +10452,7 @@ msgstr "Selecionar o modo de mistura por diferença"
 #, kde-format
 msgctxt "action"
 msgid "Select Exclusion Blending Mode"
-msgstr "Selecionar o modo de mistura por exclusão"
+msgstr "Selecionar o modo de mesclagem por exclusão"
 
 #. i18n: context: text @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10464,7 +10464,7 @@ msgstr "Selecionar o modo de mistura por exclusão"
 #, kde-format
 msgctxt "action"
 msgid "Select Hue Blending Mode"
-msgstr "Selecionar o modo de mistura por matiz"
+msgstr "Selecionar o modo de mesclagem por matiz"
 
 #. i18n: context: text @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10476,7 +10476,7 @@ msgstr "Selecionar o modo de mistura por matiz"
 #, kde-format
 msgctxt "action"
 msgid "Select Saturation Blending Mode"
-msgstr "Selecionar o modo de mistura por saturação"
+msgstr "Selecionar o modo de mesclagem por saturação"
 
 #. i18n: context: text @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10488,7 +10488,7 @@ msgstr "Selecionar o modo de mistura por saturação"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Blending Mode"
-msgstr "Selecionar o modo de mistura por cor"
+msgstr "Selecionar o modo de mesclagem por cor"
 
 #. i18n: context: text @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10500,7 +10500,7 @@ msgstr "Selecionar o modo de mistura por cor"
 #, kde-format
 msgctxt "action"
 msgid "Select Luminosity Blending Mode"
-msgstr "Selecionar o modo de mistura por luminosidade"
+msgstr "Selecionar o modo de mesclagem por luminosidade"
 
 #. i18n: context: text @ Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1905
@@ -21299,7 +21299,7 @@ msgstr "%1%"
 #: plugins/paintops/libpaintop/KisCompositeOpOptionWidget.cpp:30
 #, kde-format
 msgid "Blending Mode"
-msgstr "Modo de mistura"
+msgstr "Modo de mesclagem"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
 #, kde-format
@@ -23621,7 +23621,7 @@ msgstr "Recursos locais"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -30630,7 +30630,7 @@ msgstr "&Opacidade:"
 #: libs/ui/forms/wdglayerproperties.ui:80
 #, kde-format
 msgid "Blending mode:"
-msgstr "Modo de mistura:"
+msgstr "Modo de mesclagem:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorSpaceTitle)
 #: libs/ui/forms/wdglayerproperties.ui:109
@@ -35523,13 +35523,11 @@ msgid "Wor&kspace"
 msgstr "Espaço de &trabalho"
 
 #: libs/ui/KisMainWindow.cpp:603
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:147
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostrar barra de ferramentas %1"
 
 #: libs/ui/KisMainWindow.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:149
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Ocultar barra de ferramentas %1"
@@ -36497,13 +36495,13 @@ msgstr "Modo d&e sombra:"
 #: libs/ui/layerstyles/wdglayerstyles.ui:39
 #, kde-format
 msgid "Blending Options"
-msgstr "Opções de mistura"
+msgstr "Opções de mesclagem"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpGeneralBlending)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:27
 #, kde-format
 msgid "General Blending"
-msgstr "Mistura geral"
+msgstr "Mesclagem geral"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:33
@@ -36520,7 +36518,7 @@ msgstr "&Modo de mistura:"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:91
 #, kde-format
 msgid "Advanced Blending"
-msgstr "Mistura avançada"
+msgstr "Mesclagem avançada"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:97
@@ -36610,7 +36608,7 @@ msgid ""
 "Blend inner glow, satin, and overlay with layer before blending with "
 "document."
 msgstr ""
-"Mistura o brilho interior, suaviza e sobrepõe com a camada, antes de se "
+"Mescla o brilho interior, suaviza e sobrepõe com a camada, antes de se "
 "misturar com o documento."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_7)
@@ -36623,7 +36621,7 @@ msgstr "Misturar os efeitos &interiores como um grupo"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:248
 #, kde-format
 msgid "Blend clipping group before blending with document"
-msgstr "Misturar o grupo de recorte antes de misturar com o documento"
+msgstr "Mescla o grupo de recorte antes de misturar com o documento"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_8)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:251
@@ -38056,11 +38054,11 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. "
 "O <b>L</b> significa Lightness, os componentes <b>a</b> e <b>b</b> "
-"representam os canais de cores. <br/>L*a*b é um modelo especial para a "
+"representam os canais de cor. <br/>L*a*b é um modelo especial para a "
 "correção de cores. Baseia-se na percepção humana, o que significa que tenta "
 "codificar as diferenças de luminosidade, balanço de vermelho-verde e balanço "
 "de amarelo-azul. Isso torna-se útil para a correção de cores, mas a grande "
-"maioria das fórmulas matemáticas de cores nos modos de mistura <b>não</b> "
+"maioria das fórmulas matemáticas de cores nos modos de mesclagem <b>não</b> "
 "funcionam como esperado.<br/>De forma semelhante, o Krita não oferece "
 "suporte para HDR no LAB, o que significa que as imagens HDR convertidas para "
 "LAB perdem a informação das cores. Esse espaço de cor <b>não</b> é "
@@ -38118,7 +38116,7 @@ msgid ""
 msgstr ""
 "<b>16 bits inteiro</b>: Também conhecidos como 'cores profundas'. O modo de "
 "16 bits é ideal para edição de imagens com uma TRC linear, um espaço de "
-"cores abrangente ou quando precisar de uma mistura de cores mais precisa. "
+"cores abrangente ou quando precisar de uma mesclagem de cor mais precisa. "
 "Este modo ocupa o dobro de espaço em RAM e disco que uma imagem equivalente "
 "de 8 bits e, em alguns casos, precisa de muito mais capacidade de "
 "processamento. Recomendamos que monitore o uso de RAM do arquivo com cuidado "
@@ -38143,7 +38141,7 @@ msgstr ""
 "<b>16 bits ponto flutuante</b>: Também conhecido como 'Ponto Semi-Flutuante' "
 "e é o padrão nas imagens de indústria VFX. O modo de 16 bits flutuante é "
 "ideal para edição de imagens com uma TRC linear, um espaço de cor abrangente "
-"ou quando precisar de uma mistura de cores mais precisa. O fato de ser em "
+"ou quando precisar de uma mesclagem de cor mais precisa. O fato de ser em "
 "ponto flutuante é um requisito absoluto para imagens de Referência de Cenas "
 "(HDR). Este modo ocupa o dobro de espaço em RAM e disco que uma imagem "
 "equivalente de 8 bits e, em alguns casos, precisa de muito mais capacidade "
@@ -38165,13 +38163,13 @@ msgid ""
 msgstr ""
 "<b>32 bits ponto flutuante</b>: Também conhecido como 'Ponto Flutuante "
 "Total'. O modo de 32 bits flutuante é ideal para edição de imagens com uma "
-"TRC linear, um espaço de cor abrangente ou quando precisar de uma mistura de "
-"cores mais precisa. O fato de ser em ponto flutuante é um requisito absoluto "
-"para imagens de Referência de Cenas (HDR). Este modo ocupa quatro vezes o "
-"espaço em RAM e disco que uma imagem equivalente de 8 bits e, em alguns "
-"casos, precisa de muito mais capacidade de processamento. Recomendamos que "
-"monitore o uso de RAM do arquivo com cuidado ou use 8 bits se o seu "
-"computador se tornar mais lento."
+"TRC linear, um espaço de cor abrangente ou quando precisar de uma mesclagem "
+"de cor mais precisa. O fato de ser em ponto flutuante é um requisito "
+"absoluto para imagens de Referência de Cenas (HDR). Este modo ocupa quatro "
+"vezes o espaço em RAM e disco que uma imagem equivalente de 8 bits e, em "
+"alguns casos, precisa de muito mais capacidade de processamento. "
+"Recomendamos que monitore o uso de RAM do arquivo com cuidado ou use 8 bits "
+"se o seu computador se tornar mais lento."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
@@ -43399,7 +43397,7 @@ msgstr "Indentação em árvore"
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Estilo de mistura de informações"
+msgstr "Estilo de mesclagem de informações"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
@@ -43517,7 +43515,7 @@ msgstr "Sim"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:59
 #, kde-format
 msgid "Select the blending mode for the layer."
-msgstr "Selecione o modo de mistura da camada."
+msgstr "Selecione o modo de mesclagem da camada."
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, doubleOpacity)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:120
@@ -57566,7 +57564,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:116
 #, kde-format
 msgid "Available Blending Modes"
-msgstr "Modo de mistura disponíveis"
+msgstr "Modos de mesclagem disponíveis"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxUseCurve)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:52
@@ -58399,7 +58397,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
 msgid "Blending Mode:"
-msgstr "Modo de Mistura:"
+msgstr "Modo de mesclagem:"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionData.h:34
 #, kde-format
@@ -63110,8 +63108,8 @@ msgid ""
 "mixed with your current brush color. A full blending value samples colors "
 "completely, ignoring brush color."
 msgstr ""
-"<nobr>A Mistura controla a porcentagem de cor escolhida </nobr> e mescla com "
-"a cor de seu pincel atual. Um valor de mistura completo escolhe cores "
+"<nobr>A mesclagem controla a porcentagem de cor escolhida </nobr> e mescla "
+"com a cor de seu pincel atual. Um valor de mesclagem completo escolhe cores "
 "completamente, ignorando a cor do pincel."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbSources)
@@ -64444,33 +64442,33 @@ msgstr "Alterar ferramenta de texto SVG"
 msgid "Text Tool"
 msgstr "Ferramenta de texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:187
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, kde-format
 msgid "Conversion failed"
 msgstr "Conversão falhou"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:240
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
 #, kde-format
 msgid "Find Text"
 msgstr "Localizar texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:243
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:286
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
 #, kde-format
 msgid "Find:"
 msgstr "Localizar:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:265
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Encontrar e Substituir tudo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
 #, kde-format
 msgid "Replace:"
 msgstr "Substituir:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:388
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Você modificou o texto. Descartar as mudanças?"

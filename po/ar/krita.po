@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-24 03:26+0000\n"
-"PO-Revision-Date: 2025-08-14 09:44+0400\n"
+"PO-Revision-Date: 2025-09-25 21:36+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -21666,7 +21666,7 @@ msgstr ""
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "مرماز:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
@@ -23739,30 +23739,25 @@ msgid "Eraser"
 msgstr "ممحاة"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:321
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "معطّل"
+msgstr "آلي (معطّل)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "ممكّن"
+msgstr "آلي (ممكّن)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "ممكّن"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "معطّل"
@@ -26337,10 +26332,9 @@ msgstr "كقناع تحديد"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:710
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "مكّن الطّلاء باللمس"
+msgstr "الطّلاء باللمس:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
@@ -36375,10 +36369,9 @@ msgid "Fit View"
 msgstr "منظور"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "لائم إلى عرض الصّفحة"
+msgstr "لائم لعرض المنظور"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -36391,10 +36384,9 @@ msgid "Fit Text Width"
 msgstr "لائم إلى عرض النّصّ"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit to Page &Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "لائم إلى ارت&فاع الصّفحة"
+msgstr "لائم لارتفاع المنظور"
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, fuzzy, kde-format
@@ -36904,10 +36896,9 @@ msgid "Configure &Notifications..."
 msgstr "ا&ضبط الإشعارات..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:93
-#, fuzzy, kde-format
-#| msgid "Configuration:"
+#, kde-format
 msgid "Reset Configurations"
-msgstr "الضّبط:"
+msgstr "صفّر الإعدادات"
 
 #: libs/widgetutils/config/kstandardaction_p.h:99
 #, kde-format
@@ -61540,11 +61531,9 @@ msgid "Mirror Horizontal"
 msgstr "اعكس أفقيًّا"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:133
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
+#, kde-format
 msgid "Mirror Vertical"
-msgstr "اعكس رأسيًّا"
+msgstr "اعكس رأسيًا"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, fuzzy, kde-format
@@ -62019,9 +62008,9 @@ msgstr "قوّة المرب&ط:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1485
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor Points"
-msgstr "أضف/حرّر نقاط المرابط"
+msgstr "نقاط إرساء"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520

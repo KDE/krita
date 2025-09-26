@@ -70,6 +70,8 @@ public:
      */
     KoShapeManager *internalShapeManager() const;
 
+    void setUpdateFunction(std::function<void(const QRectF&)> function);
+
 private:
     class Private;
     QScopedPointer<Private> d;

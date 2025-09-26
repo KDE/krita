@@ -149,11 +149,11 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
         QList<QPointF> newPos {QPointF()};
         QList<KoShape*> shapes{m_flowShape};
         new KoShapeMoveCommand(shapes, pos, newPos, KoFlake::TopLeft, parentCommand);
-        new SvgChangeTextContoursCommand(textShape, shapes, parentCommand);
         if (m_flowShape->parent()) {
             // text is not a shape container, but we do need to remove the shape from the canvas properly.
             tool->canvas()->shapeController()->removeShape(m_flowShape, parentCommand);
         }
+        new SvgChangeTextContoursCommand(textShape, shapes, parentCommand);
     }
 
     new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);

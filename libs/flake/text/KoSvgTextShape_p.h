@@ -17,8 +17,6 @@
 
 #include "KoCssTextUtils.h"
 #include <KoShapeGroup.h>
-#include <commands/KoShapeGroupCommand.h>
-#include <commands/KoShapeUngroupCommand.h>
 
 #include <kis_assert.h>
 #include <KisForest.h>
@@ -515,16 +513,18 @@ public:
     }
 
     void updateShapeGroup() {
-        QList<KoShape*> total = shapesInside;
-        total.append(shapesSubtract);
-        total.append(textPaths);
-        KUndo2Command *parentCmd = new KUndo2Command();
-        if (!shapeGroup->shapes().isEmpty()) {
-            qWarning() << "shapes are not empty, might leak!";
-            new KoShapeUngroupCommand(shapeGroup.data(), shapeGroup->shapes(), QList<KoShape*>(), parentCmd);
+        Q_FOREACH(KoShape *shape, shapeGroup->shapes()) {
+            shapeGroup->removeShape(shape);
         }
-        new KoShapeGroupCommand(shapeGroup.data(), total, false, parentCmd);
-        parentCmd->redo();
+        Q_FOREACH(KoShape *shape, shapesInside) {
+            shapeGroup->addShape(shape);
+        }
+        Q_FOREACH(KoShape *shape, shapesSubtract) {
+            shapeGroup->addShape(shape);
+        }
+        Q_FOREACH(KoShape *shape, textPaths) {
+            shapeGroup->addShape(shape);
+        }
         updateInternalShapesList();
     }
     void updateInternalShapesList() {

@@ -42,6 +42,7 @@
 #include <QtMath>
 
 #include <FlakeDebug.h>
+#include <functional>
 
 // Memento pointer to hold data for Undo commands.
 
@@ -131,7 +132,9 @@ KoSvgTextShape::KoSvgTextShape()
     , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
+    d->shapeGroup->setTransformation(this->transformation());
     d->textData.insert(d->textData.childBegin(), KoSvgTextContentElement());
+    d->internalShapesPainter->setUpdateFunction(std::bind(&KoSvgTextShape::updateAbsolute, this, std::placeholders::_1));
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
@@ -139,6 +142,8 @@ KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     , d(new Private(*rhs.d))
 {
     setShapeId(KoSvgTextShape_SHAPEID);
+    d->shapeGroup->setTransformation(this->transformation());
+    d->internalShapesPainter->setUpdateFunction(std::bind(&KoSvgTextShape::updateAbsolute, this, std::placeholders::_1));
     Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
         shape->addDependee(this);
     }
@@ -174,11 +179,12 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
                 || type == ShearChanged
                 || type == SizeChanged
                 || type == GenericMatrixChange
-                || type == ParameterChanged)) {
+                || type == ParameterChanged
+                || type == ParentChanged)) {
         // update shape. relayout.
         //TODO: also handle type == Deleted. Need to figure out the order of operations though.
         relayout();
-        this->updateAbsolute(boundingRect());
+        this->notifyChanged();
         qDebug() << "child updated";
     }
     if ((!shape || shape == this)) {
@@ -186,6 +192,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         if ((type == ContentChanged)) {
             relayout();
         } else {
+            qDebug() << "update transform";
             d->shapeGroup->setTransformation(this->transformation());
         }
     }
@@ -1820,7 +1827,7 @@ void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
 
-    painter.setTransform(this->absoluteTransformation().inverted()*painter.transform());
+    painter.setTransform(d->shapeGroup->absoluteTransformation().inverted()*painter.transform());
     d->internalShapesPainter->paint(painter);
     painter.restore();
 
@@ -2030,15 +2037,19 @@ KoSvgTextShape::TextType KoSvgTextShape::textType() const
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
 {
     Q_FOREACH(KoShape *shape, d->shapesInside) {
-        shape->removeDependee(this);
-        delete shape;
+        if (shape) {
+            shape->removeDependee(this);
+        }
+        d->shapeGroup->removeShape(shape);
     }
     d->shapesInside = shapesInside;
-    d->updateShapeGroup();
-    Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
+    Q_FOREACH(KoShape *shape, d->shapesInside) {
+        d->shapeGroup->addShape(shape);
         shape->addDependee(this);
     }
+    d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
+    update();
 }
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const
@@ -2049,15 +2060,19 @@ QList<KoShape *> KoSvgTextShape::shapesInside() const
 void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 {
     Q_FOREACH(KoShape *shape, d->shapesSubtract) {
-        shape->removeDependee(this);
-        delete shape;
+        if (shape) {
+            shape->removeDependee(this);
+        }
+        d->shapeGroup->removeShape(shape);
     }
     d->shapesSubtract = shapesSubtract;
-    d->updateShapeGroup();
-    Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
+    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
+        d->shapeGroup->addShape(shape);
         shape->addDependee(this);
     }
+    d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
+    update();
 }
 
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const

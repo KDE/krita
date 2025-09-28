@@ -276,7 +276,7 @@ class PluginImporterTestCase(TestCase):
             importer.import_all()
 
     def test_missing_keys_in_desktop_file(self):
-        """Test: Import plugin whose destkop file is missing needed keys."""
+        """Test: Import plugin whose destktop file is missing needed keys."""
 
         self.zip_plugin('fail_missing_keys_desktop_file')
         importer = PluginImporter(self.zip_filename,
@@ -287,7 +287,7 @@ class PluginImporterTestCase(TestCase):
             importer.import_all()
 
     def test_no_matching_plugindir(self):
-        """Test: Import plugin whose destkop file is missing needed keys."""
+        """Test: Import plugin whose destktop file is missing needed keys."""
 
         self.zip_plugin('fail_no_matching_plugindir')
         importer = PluginImporter(self.zip_filename,

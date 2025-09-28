@@ -23,7 +23,7 @@ This will generate a code that performs two things for you:
 1) Destruction of the Wayland's C-style object in the destructor of
    the C++-object
 
-2) Destruction of the Wayland's C-style object when the extenstion
+2) Destruction of the Wayland's C-style object when the extension
    gets inactive, i.e. when the connection is lost.
 
 ## Active and non-active states
@@ -35,7 +35,7 @@ expose ready and non-ready states (see below).
 
 ## Ready and non-ready states
 
-The Wayland protocol is asyncronous. It means thet when we request some
+The Wayland protocol is asynchronous. It means that when we request some
 information from the compositor we do not get the reply immediately. Instead
 we should wait untit the compositor sends us an event with the reply.
 

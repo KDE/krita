@@ -694,7 +694,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
                  << "length: " << attribute.length << "val: " << attribute.value;
         // Text Format is about setting the look of the preedit string, and there can be multiple per event
         // we primarily interpret the underline. When a background color is set, we increase the underline
-        // thickness, as that's what is actually supossed to happen according to the comments in the
+        // thickness, as that's what is actually supposed to happen according to the comments in the
         // platform input contexts for both macOS and Windows.
 
         if (attribute.type == QInputMethodEvent::TextFormat) {
@@ -791,7 +791,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             }
 
         // QInputMethodEvent::Language is about setting the locale on the given  preedit string, which is not possible yet.
-        // QInputMethodEvent::Ruby is supossedly ruby info for the preedit string, but none of the platform integrations
+        // QInputMethodEvent::Ruby is supposedly ruby info for the preedit string, but none of the platform integrations
         // actually implement this at time of writing, and it may have been something from a previous live of Qt's.
         } else if (attribute.type == QInputMethodEvent::Cursor) {
             if (d->preEditStart < 0) {

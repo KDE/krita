@@ -97,7 +97,7 @@ void KisCurveOptionDataTest::testSerializeNoSensors()
 
     /**
      * When Krita loads a configuration with no sensors
-     * available, it automatically acitvates a pressure
+     * available, it automatically activates a pressure
      * sensors with the default curve.
      */
 

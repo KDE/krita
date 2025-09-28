@@ -50,7 +50,7 @@ public:
 public Q_SLOTS:
     /**
      * @brief setSearchText
-     * @param text -- if the text starts with "U+", the consequetive characters are interpreted as a hex value.
+     * @param text -- if the text starts with "U+", the consecutive characters are interpreted as a hex value.
      * Otherwise, the first codepoint of text is searched upon.
      */
     void setSearchText(const QString &text);

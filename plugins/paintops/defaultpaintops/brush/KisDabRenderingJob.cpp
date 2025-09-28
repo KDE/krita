@@ -53,7 +53,7 @@ KisDabRenderingJob &KisDabRenderingJob::operator=(const KisDabRenderingJob &rhs)
 QPoint KisDabRenderingJob::dstDabOffset() const
 {
     /// Recenter generated low-res dab around the center
-    /// of the idel theoretical dab rect
+    /// of the idle theoretical dab rect
     const QPoint p1 = generationInfo.dstDabRect.topLeft();
     const QPoint s1 = QPoint(generationInfo.dstDabRect.width(),
                              generationInfo.dstDabRect.height());

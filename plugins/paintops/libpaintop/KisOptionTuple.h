@@ -15,7 +15,7 @@ namespace detail {
 BOOST_TTI_HAS_STATIC_MEMBER_DATA(supports_prefix)
 
 /**
- * A simple metafunction that detects the precence of
+ * A simple metafunction that detects the presence of
  * 'supports_prefix' and checks its value.
  */
 template <typename T, bool has_member = has_static_member_data_supports_prefix<T, const bool>::value>

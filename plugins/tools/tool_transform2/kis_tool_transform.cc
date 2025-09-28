@@ -223,7 +223,7 @@ void KisToolTransform::convexHullCalculationRequested()
 {
     if (m_strokeId && !m_transaction.rootNodes().isEmpty()) {
         /**
-         * Free transform strategy issues the recalcualtion request every time
+         * Free transform strategy issues the recalculation request every time
          * the user performs a bounds rotation action, so we should skip actual
          * recalculation, when it is not necessary anymore
          */

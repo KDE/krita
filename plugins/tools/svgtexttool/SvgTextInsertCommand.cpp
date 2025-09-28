@@ -24,8 +24,8 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
     // - carriage return
     // - linefeed-carriage return
     // - carriage return-linefeed
-    // - line seperator
-    // - paragraph seperator
+    // - line separator
+    // - paragraph separator
     // - vertical tab/line tab
     // with a single linefeed to avoid them from being added to the textShape.
     exp.setPattern("[\\r|\\r\\n|\\x2029|\\x2028\\x000b]");

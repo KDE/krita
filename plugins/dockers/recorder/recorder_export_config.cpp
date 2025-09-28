@@ -38,7 +38,7 @@ const QList<RecorderProfile> defaultProfiles = {
       /* Filter documentation https://trac.ffmpeg.org/wiki/FilteringGuide
        * Inside the complex filter command each line is a different filter that is applied to an input stream.
        * The input stream to transform is specified at the start of each line in the format '[$STREAM_NAME]' (ex. [p1], [v1], [v2]).
-       * Immediatly following the input stream name will be the filter to apply (ex: trim, scale, loop)
+       * Immediately following the input stream name will be the filter to apply (ex: trim, scale, loop)
        * Depending on the filter it may or may have various options set
        * After all options for the filter a name can be specified that will correspond to the output stream of the filter. If no name is specified it will be used as the final result for the output file.
        */

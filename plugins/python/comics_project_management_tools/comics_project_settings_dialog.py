@@ -90,7 +90,7 @@ class path_select(QWidget):
 
 
 """
-Dialog for editing basic proect details like the project name, default template,
+Dialog for editing basic project details like the project name, default template,
 template location, etc.
 """
 

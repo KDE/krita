@@ -76,7 +76,7 @@ ComboBox {
         }
 
         // To get the pop-up to be the same size as the maximum view, we first need to calculate
-        // the implict width via text-metrics, because icon label elides by default.
+        // the implicit width via text-metrics, because icon label elides by default.
         // then, on completed, we need to set the neededwidth to the max of all completed items.
         // then, we need to set the width to the max of implicit and parent width, so the item fills.
         Component.onCompleted: view.neededWidth = Math.max(view.neededWidth, implicitWidth);

@@ -114,7 +114,7 @@ void WaveletDecompose::slotWaveletDecompose()
         
         KisGroupLayerSP baseGroup = image->rootLayer();
 
-        //add layer goup              
+        //add layer group              
         KisGroupLayerSP grp = new KisGroupLayer(image, i18n("Wavelet decompose"), OPACITY_OPAQUE_U8);
         adapter.addNode(grp, baseGroup, baseGroup->lastChild());
         baseGroup = grp;

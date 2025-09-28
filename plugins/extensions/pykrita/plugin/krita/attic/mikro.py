@@ -128,7 +128,7 @@ def wrap(obj, force=False):
     If a class is not known by PyQt it will be automatically
     casted to a known wrapped super class.
 
-    But that limits access to methods and propperties of this super class.
+    But that limits access to methods and properties of this super class.
     So instead this functions returns a wrapper class (PyQtClass)
     which queries the metaObject and provides access to
     all slots and all properties.

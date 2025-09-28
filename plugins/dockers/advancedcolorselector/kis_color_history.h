@@ -35,7 +35,7 @@ public Q_SLOTS:
     void colorHistoryChanged(const QList<KoColor> &history);
 
 private:
-    // Get reference to the relevant color history, either from resource provider or doucment.
+    // Get reference to the relevant color history, either from resource provider or document.
     QList<KoColor> colorHistory();
 
     // Write the changed color history where it is stored, depending on the settings.

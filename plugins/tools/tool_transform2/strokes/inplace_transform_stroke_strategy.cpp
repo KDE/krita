@@ -476,7 +476,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         // When dealing with animated transform mask layers, create keyframe and save the command for undo.
         // NOTE: for transform masks we create a keyframe no matter what the user
-        //       settigs are
+        //       settings are
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
             if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
                 if (KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(transformMask)) {

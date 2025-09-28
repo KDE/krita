@@ -202,7 +202,7 @@ struct KisMaskingBrushOption::Private
     lager::reader<qreal> masterBrushSize;
     MaskingBrushModel maskingModel;
 
-    /// we don't use precison data, we just need it to pass
+    /// we don't use precision data, we just need it to pass
     /// to the brush selection widget
     lager::state<KisBrushModel::PrecisionData, lager::automatic_tag> brushPrecisionData;
 };

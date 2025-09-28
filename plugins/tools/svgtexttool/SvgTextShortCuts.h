@@ -15,7 +15,7 @@ class KoSvgTextProperties;
  *
  * Class to handle text property shortcuts generically.
  *
- * Many text property shorcuts are about toggling/enabling a single property.
+ * Many text property shortcuts are about toggling/enabling a single property.
  * Given there's a huge amount of them, it thus makes sense to generalize the
  * actions by adding a special QVariant to them and using that QVariant to
  * determine which property adjustment is at play.

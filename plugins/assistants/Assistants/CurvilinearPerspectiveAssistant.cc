@@ -67,15 +67,15 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
          * 
          * Create guidelines by selecting incremental multipliers for the assistant size between [-1, 1),
          * and calculating the center location and radius of the circle to include the point 
-         * at the location specified by the multiplier (the "arbitary point").
+         * at the location specified by the multiplier (the "arbitrary point").
          * 
          * Formulas: 
          * Radius^2 = HalfHandleDist^2 + CenterDist^2 (b.c. The circle must include both vanishing points.)
          * Radius^2 = (CenterDist + Multiplier * HalfHandleDist)^2 (b.c. The circle must include the arbitrary point)
          * 
          * Solve for CenterDist and Radius:
-         * CenterDist = HalfHandleDist * (1 - Multipler * Multiplier) / ( 2 * Multiplier)
-         * Radius     = HalfHandleDist * (1 + Multipler * Multiplier) / ( 2 * Multiplier)
+         * CenterDist = HalfHandleDist * (1 - Multiplier * Multiplier) / ( 2 * Multiplier)
+         * Radius     = HalfHandleDist * (1 + Multiplier * Multiplier) / ( 2 * Multiplier)
          * 
          */
         

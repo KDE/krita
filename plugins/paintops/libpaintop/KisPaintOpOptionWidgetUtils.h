@@ -136,7 +136,7 @@ Widget* createOptionWidget(Data&& data, Args... args)
 template <typename Widget, typename Data, typename... Args>
 Widget* createOptionWidgetWithLodLimitations(Data&& data, Args... args)
 {
-    static_assert(detail::has_member_function_lodLimitations<KisPaintopLodLimitations (Data::*)() const>::value, "Data must have Data::lodLomitations() member function defined to use a widget with lod limitaitons generation");
+    static_assert(detail::has_member_function_lodLimitations<KisPaintopLodLimitations (Data::*)() const>::value, "Data must have Data::lodLomitations() member function defined to use a widget with lod limitations generation");
     return new detail::WidgetWrapperWithLodLimitations<Widget, Data, Args...>(std::forward<Data>(data), std::forward<Args>(args)...);
 }
 

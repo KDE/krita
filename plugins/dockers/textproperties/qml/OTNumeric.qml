@@ -15,7 +15,7 @@ TextPropertyBase {
     toolTip: i18nc("@info:tooltip",
                    "Enable number-related glyph forms on the text.");
     searchTerms: i18nc("comma separated search terms for the font-variant-numeric property, matching is case-insensitive",
-                       "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed zero, fractions");
+                       "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed zero, fractions");
 
     property int figureStyleType;
     property int figureSpacingType;

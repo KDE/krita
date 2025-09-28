@@ -60,8 +60,8 @@ public:
         Em, ///< FontSize
         Ex, ///< Font x-height
         Cap,///< Cap height
-        Ch, ///< avarage proportional advance
-        Ic, ///< avarage full-width advance
+        Ch, ///< average proportional advance
+        Ic, ///< average full-width advance
         Lh, ///< line-height
         // unique for certain properties
         Lines,  ///< Used by lineHeight

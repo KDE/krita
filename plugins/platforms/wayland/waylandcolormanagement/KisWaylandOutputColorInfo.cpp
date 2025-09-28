@@ -76,7 +76,7 @@ void KisWaylandOutputColorInfo::initScreenConnection(QScreen *screen)
 {
     auto waylandScreen = screen->nativeInterface<QNativeInterface::QWaylandScreen>();
 
-    // the sceen may have no wayland screen if it is a fake placeholder screen
+    // the screen may have no wayland screen if it is a fake placeholder screen
     // that was created by Qt while compositor restart
     if (!waylandScreen) return;
 

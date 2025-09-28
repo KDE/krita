@@ -26959,7 +26959,7 @@ msgstr "Etkin"
 #, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
-msgstr "Devre Dışı"
+msgstr "Devre dışı"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:343
 #, kde-format
@@ -28147,7 +28147,7 @@ msgstr "&Konu:"
 #: libs/widgets/KoConfigAuthorPage.ui:117
 #, kde-format
 msgid "Nickname:"
-msgstr "Takma Ad:"
+msgstr "Takma ad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblfirstname)
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:38
@@ -29802,7 +29802,7 @@ msgstr "Araçlar"
 #: libs/ui/forms/wdggeneralsettings.ui:900
 #, kde-format
 msgid "Tool Options Location (needs restart)"
-msgstr "Araç Seçenekleri Konumu (yeniden başlatmayı gerektirir)"
+msgstr "Araç Seçenekleri Konumu (Yeniden başlatma gerektirir)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
 #: libs/ui/forms/wdggeneralsettings.ui:906
@@ -29814,7 +29814,7 @@ msgstr "&Panelde"
 #: libs/ui/forms/wdggeneralsettings.ui:913
 #, kde-format
 msgid "I&n Toolbar"
-msgstr "Araç Çubu&klarında"
+msgstr "Araç çubu&klarında"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:926
@@ -29856,7 +29856,7 @@ msgstr "Toplamalı (Krita 5.1 ve önceki sürümler)"
 #: libs/ui/forms/wdggeneralsettings.ui:968
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Kontrol/Seçenek Seçim Niteleyicilerini Değiştir"
+msgstr "Kontrol/Seçenek seçim niteleyicilerini kendi arasında değiştir"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
@@ -29886,7 +29886,7 @@ msgstr "Dokunmatik basınç hassaslığını etkinleştir (bozuk olabilir)"
 #: libs/ui/forms/wdggeneralsettings.ui:992
 #, kde-format
 msgid "Activate transform tool after pasting"
-msgstr "Yapıştırdıktan Sonra Dönüşüm Aracını Etkinleştir"
+msgstr "Yapıştırdıktan sonra dönüşüm aracını etkinleştir"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
 #: libs/ui/forms/wdggeneralsettings.ui:999
@@ -30202,7 +30202,7 @@ msgstr "Çoğaltılan katmanların önüne “Kopya” iliştir"
 #: libs/ui/forms/wdggeneralsettings.ui:1559
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
-msgstr "Devinimsel Sarma (yeniden başlatma gerektirir)"
+msgstr "Devinimsel sarma (yeniden başlatma gerektirir)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:1574
@@ -31489,7 +31489,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:467
 #, kde-format
 msgid "On-disk"
-msgstr "Disk Üzerinde"
+msgstr "Disk üzerinde"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/forms/wdgperformancesettings.ui:477
@@ -32172,7 +32172,7 @@ msgstr "0,0"
 #: libs/ui/forms/wdgtabletsettings.ui:130
 #, kde-format
 msgid "Tablet Input API (changing this requires restarting Krita)"
-msgstr "Tablet Girdi API (değiştirilirse yeniden başlatmayı gerektirir)"
+msgstr "Tablet Girdi API (değiştirilirse yeniden başlatma gerektirir)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWintab)
 #: libs/ui/forms/wdgtabletsettings.ui:138
@@ -32220,7 +32220,7 @@ msgid ""
 "devices, needs restart)"
 msgstr ""
 "Sağ ve orta tıklamalar için fare olaylarını kullan (dönüştürülebilir "
-"aygıtlar için geçici çözüm, yeniden başlatmayı gerektirir)"
+"aygıtlar için geçici çözüm, yeniden başlatma gerektirir)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:200
@@ -39822,7 +39822,7 @@ msgstr "Yeni çizer profili ekle (geçerlinin bir kopyasıyla başlar)"
 #: libs/widgets/KoConfigAuthorPage.cpp:69
 #, kde-format
 msgid "Delete the author profile"
-msgstr "Çizer Profilini Sil"
+msgstr "Çizer profilini sil"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:78
 #, kde-format
@@ -39930,7 +39930,7 @@ msgstr "İletişim Bilgisi Ekle"
 #: libs/widgets/KoConfigAuthorPage.ui:157
 #, kde-format
 msgid "Remove contact info"
-msgstr "İletişim bilgisini kaldır"
+msgstr "İletişim Bilgisini Kaldır"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/widgets/KoConfigAuthorPage.ui:164

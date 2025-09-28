@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-26 02:01+0000\n"
-"PO-Revision-Date: 2025-09-25 17:41-0300\n"
+"PO-Revision-Date: 2025-09-27 20:03-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -1828,7 +1828,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_default.kpp"
 msgid "Basic tip default"
-msgstr "Dica básica padrão"
+msgstr "Ponta básica padrão"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1836,7 +1836,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_gaussian.kpp"
 msgid "Basic tip gaussian"
-msgstr "Dica básica gaussiana"
+msgstr "Ponta básica gaussiana"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1844,7 +1844,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_soft.kpp"
 msgid "Basic tip soft"
-msgstr "Dica básica suave"
+msgstr "Ponta básica suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8679,14 +8679,14 @@ msgstr "Diminuir fluxo do pincel"
 #, kde-format
 msgctxt "action"
 msgid "Increase Fade"
-msgstr "Aumentar desvanecimento"
+msgstr "Aumentar esmaecimento"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:500
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "Aumentar desvanecimento do pincel"
+msgstr "Aumentar esmaecimento do pincel"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
@@ -8696,14 +8696,14 @@ msgstr "Aumentar desvanecimento do pincel"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Fade"
-msgstr "Diminuir desvanecimento"
+msgstr "Diminuir esmaecimento"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:512
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "Diminuir desvanecimento do pincel"
+msgstr "Diminuir esmaecimento do pincel"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
@@ -13372,7 +13372,7 @@ msgstr "Renderizar animação novamente"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Version"
-msgstr "Salvar uma &versão incremental"
+msgstr "Salvar &versão incremental"
 
 #. i18n: context: toolTip @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
@@ -13382,14 +13382,14 @@ msgstr "Salvar uma &versão incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Version"
-msgstr "Salvar uma versão incremental"
+msgstr "Salvar versão incremental"
 
 #. i18n: context: text @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:177
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Backup"
-msgstr "Sa&lvar uma cópia de segurança incremental"
+msgstr "Sa&lvar backup incremental"
 
 #. i18n: context: toolTip @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
@@ -13399,7 +13399,7 @@ msgstr "Sa&lvar uma cópia de segurança incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Backup"
-msgstr "Salvar uma cópia de segurança incremental"
+msgstr "Salvar backup incremental"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
@@ -21087,7 +21087,7 @@ msgstr "Campainha"
 #: libs/image/kis_filter_strategy.h:135
 #, kde-format
 msgid "BSpline"
-msgstr "BSpline"
+msgstr "CurvaB"
 
 #: libs/image/kis_filter_strategy.h:146
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
@@ -21151,7 +21151,7 @@ msgstr "Recortar máscara"
 #: libs/image/kis_image.cc:973
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
-msgstr "Escalar imagem"
+msgstr "Dimensionar imagem"
 
 #: libs/image/kis_image.cc:974
 msgctxt "(qtundo-format)"
@@ -23635,7 +23635,7 @@ msgid ""
 "and create a new database."
 msgstr ""
 "O esquema do banco de dados de recursos mudou. Krita irá fazer backup do seu "
-"banco de dadose criar um novo banco de dados."
+"banco de dados e criar um novo banco de dados."
 
 #: libs/resources/KisResourceLocator.cpp:90
 #, kde-format
@@ -24645,7 +24645,7 @@ msgstr "vizinho"
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
-msgstr "spline"
+msgstr "curva"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:105
 #, kde-format
@@ -24758,7 +24758,7 @@ msgstr ""
 #, kde-format
 msgctxt "An interpolation method"
 msgid "Spline"
-msgstr "Spline"
+msgstr "Curva"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #, kde-format
@@ -29493,7 +29493,7 @@ msgstr "Arquivos de salvamento automático sem nome estão ocultos por padrão"
 #: libs/ui/forms/wdggeneralsettings.ui:109
 #, kde-format
 msgid "Create a Backup File on Saving"
-msgstr "Criar cópia de segurança ao salvar"
+msgstr "Criar backup ao salvar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:118
@@ -29575,13 +29575,13 @@ msgstr "Comprimir mais os arquivos .kra (atrasa a leitura/gravação)"
 #: libs/ui/forms/wdggeneralsettings.ui:207
 #, kde-format
 msgid "Trim files before saving"
-msgstr "Cortar arquivos antes de salvar"
+msgstr "Recortar arquivos antes de salvar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimFramesImport)
 #: libs/ui/forms/wdggeneralsettings.ui:217
 #, kde-format
 msgid "Trim frames when importing animations"
-msgstr "Cortar quadros ao importar animações"
+msgstr "Recortar quadros ao importar animações"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:230
@@ -33499,7 +33499,7 @@ msgstr "Fluxo: %1%"
 #, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
-msgstr "Desvanecer: %1"
+msgstr "Esmaecer: %1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:380
 #, kde-format
@@ -36093,13 +36093,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
-msgstr "Não foi possível salvar uma versão incremental"
+msgstr "Não foi possível salvar versão incremental"
 
 #: libs/ui/KisViewManager.cpp:1173
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
-msgstr "Não foi possível salvar um backup incremental"
+msgstr "Não foi possível salvar backup incremental"
 
 #: libs/ui/KisViewManager.cpp:1430
 #, kde-format
@@ -38029,7 +38029,7 @@ msgid ""
 "depth.<br/>Grayscale is useful for inking and grayscale images. In Krita, "
 "you can mix Grayscale and RGB layers in the same image."
 msgstr ""
-"<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Os Tons de cinza</a></"
+"<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Os tons de cinza</a></"
 "b> só permitem valores em cinza e transparentes. As imagens em tons de cinza "
 "usam metade da memória e espaço em disco, se comparadas a imagens RGB com a "
 "mesma profundidade de bit.<br/>Os tons de cinza são úteis para pinturas e "
@@ -41599,7 +41599,7 @@ msgstr "Assistente de curvas"
 #, kde-format
 msgctxt "A type of drawing assistants"
 msgid "Spline"
-msgstr "Spline"
+msgstr "Curva"
 
 #: plugins/assistants/Assistants/TwoPointAssistant.cc:27
 #, kde-format
@@ -41614,12 +41614,12 @@ msgstr "Perspectiva de 2 pontos"
 #: plugins/assistants/Assistants/VanishingPointAssistant.cc:27
 #, kde-format
 msgid "Vanishing Point assistant"
-msgstr "Assistente do ponto de desaparecimento"
+msgstr "Assistente do ponto de fuga"
 
 #: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
-msgstr "Ponto de desaparecimento"
+msgstr "Ponto de fuga"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_17)
@@ -48289,8 +48289,8 @@ msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
 "on upgrading Krita"
 msgstr ""
-"Faça uma cópia de segurança de todas as suas etiquetas na pasta de recursos "
-"para que não se percam ao atualizar o Krita"
+"Faça uma backup de todas as suas etiquetas na pasta de recursos para que não "
+"se percam ao atualizar o Krita"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
@@ -50851,7 +50851,7 @@ msgstr "Forma Espiral"
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:34
 #, kde-format
 msgid "Fade:"
-msgstr "Desvanecer:"
+msgstr "Esmaecer:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:60
@@ -55064,7 +55064,7 @@ msgstr ""
 "strong='true'>Retirar o recorte</emphasis>: deixa os tons claros não-"
 "recortados, em vários tons de rosa</li><li><emphasis strong='true'>Misturar</"
 "emphasis>: mistura os valores recortados e não-recortados, para obter um "
-"desvanecimento gradual para branco</li><li><emphasis "
+"esmaecimento gradual para branco</li><li><emphasis "
 "strong='true'>Reconstruir</emphasis>: reconstrói os tons claros, usando um "
 "nível predefinido</li></ul></p>"
 
@@ -57446,7 +57446,7 @@ msgstr "Fator:"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:227
 #, kde-format
 msgid "Fade"
-msgstr "Desvanecer"
+msgstr "Esmaecer"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalFade)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
@@ -57627,7 +57627,7 @@ msgstr ""
 "<p>valor máximo</p><p> (0,7 pressão), (0,3 velocidade) = 0,7 <br/></p> \n"
 "<p> valor mínimo </p> <p> (0,7 pressão), (0,3 velocidade) = 0,3 <br/></p>\n"
 "<p> diferença entre os valores mínimo e máximo </p><p> (0,8 pressão), (0,3 "
-"velocidade),(0,6 fade) = 0,5 </p></body></html>"
+"velocidade),(0,6 esmaecimento) = 0,5 </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -58310,7 +58310,7 @@ msgstr "Velocidade"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fade"
-msgstr "Desvanecer"
+msgstr "Esmaecer"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:15
 #, kde-format
@@ -58523,7 +58523,7 @@ msgstr "Tamanho -> Difusão (sensor)"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
-msgstr "Tamanho -> Desvanecimento (sensor)"
+msgstr "Tamanho -> Esmaecimento (sensor)"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format

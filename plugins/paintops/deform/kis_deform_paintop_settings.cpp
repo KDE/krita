@@ -151,13 +151,13 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                 [](KisUniformPaintOpProperty *prop) {
                     KisDeformOptionData option;
                     option.read(prop->settings().data());
-                    prop->setValue(int(option.deformAction));
+                    prop->setValue(int(option.deformAction) - 1); // DeformModes start at 1, combobox indices start at 0
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisDeformOptionData option;
                     option.read(prop->settings().data());
-                    option.deformAction = (DeformModes)prop->value().toInt();
+                    option.deformAction = (DeformModes)(prop->value().toInt() + 1); // Combobox indices start at 0, DeformModes start at 1
                     option.write(prop->settings().data());
                 });
 

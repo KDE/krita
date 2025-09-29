@@ -39,6 +39,7 @@ Name[uk]=Текстури
 Name[zh_CN]=纹理
 Name[zh_TW]=紋理
 Comment=Textured Brush Presets
+Comment[ar]=اضبط مسبّقًا لفرش الأنسجة
 Comment[bg]=Текстурни четки
 Comment[ca]=Textures dels pinzells predefinits
 Comment[ca@valencia]=Textures dels pinzells predefinits

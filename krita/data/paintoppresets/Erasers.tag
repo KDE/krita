@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Erasers
+Name[ar]=المماحي
 Name[bg]=Гуми за изтриване
 Name[ca]=Esborradors
 Name[ca@valencia]=Esborradors
@@ -35,6 +36,7 @@ Name[uk]=Гумки
 Name[zh_CN]=橡皮擦
 Name[zh_TW]=橡皮擦
 Comment=Eraser Brush Presets
+Comment[ar]=اضبط مسبّقًا لفرش الممحاة
 Comment[bg]=Набор от гуми за изтриване
 Comment[ca]=Pinzells predefinits per a esborrar.
 Comment[ca@valencia]=Pinzells predefinits per a esborrar.

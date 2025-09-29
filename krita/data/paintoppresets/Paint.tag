@@ -39,6 +39,7 @@ Name[uk]=Малювання
 Name[zh_CN]=绘画
 Name[zh_TW]=塗繪
 Comment=Paint Brushes
+Comment[ar]=فرش الطلاء
 Comment[bg]=Четки за рисуване
 Comment[ca]=Pinzells
 Comment[ca@valencia]=Pinzells

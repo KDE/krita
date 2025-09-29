@@ -39,6 +39,7 @@ Name[uk]=Чорнило
 Name[zh_CN]=勾线
 Name[zh_TW]=上墨
 Comment=Inking Brush Presets
+Comment[ar]=اضبط مسبّقًا لفرش التحبير
 Comment[bg]=Мастилени четки
 Comment[ca]=Pinzells predefinits de tinta.
 Comment[ca@valencia]=Pinzells predefinits de tinta.

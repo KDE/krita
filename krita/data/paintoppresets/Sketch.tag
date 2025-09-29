@@ -38,6 +38,7 @@ Name[uk]=Ескіз
 Name[zh_CN]=草稿
 Name[zh_TW]=草圖
 Comment=Sketching brush presets
+Comment[ar]=اضبط مسبّقًا لفرش التخطيط
 Comment[bg]=Четки за скициране
 Comment[ca]=Esbossos dels pinzells predefinits
 Comment[ca@valencia]=Esbossos dels pinzells predefinits

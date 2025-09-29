@@ -37,6 +37,7 @@ Name[uk]=★ Мої улюблені
 Name[zh_CN]=★ 常用预设
 Name[zh_TW]=★ 最愛
 Comment=Your favorite brush presets
+Comment[ar]=اضبط مسبّقًا لفرشِكَ المفضّلة
 Comment[bg]=Вашите любими четки
 Comment[ca]=Els pinzells predefinits preferits.
 Comment[ca@valencia]=Els pinzells predefinits preferits.

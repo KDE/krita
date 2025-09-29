@@ -35,6 +35,7 @@ Name[uk]=Піксельна графіка
 Name[zh_CN]=像素画
 Name[zh_TW]=像素畫
 Comment=Presets for working with individual pixels
+Comment[ar]=اضبط مسبّقًا للعمل بالبكسلات الفرديّة
 Comment[bg]=Предварителни настройки за работа с отделни пиксели
 Comment[ca]=Predefinits per a treballar amb píxels individuals
 Comment[ca@valencia]=Predefinits per a treballar amb píxels individuals

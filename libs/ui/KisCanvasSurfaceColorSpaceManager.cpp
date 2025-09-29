@@ -59,9 +59,6 @@ QString KisCanvasSurfaceColorSpaceManager::colorManagementReport() const
     QString report;
     QDebug str(&report);
 
-    str << "(canvas surface color manager)" << Qt::endl;
-    str << Qt::endl;
-
     if (!m_d->interface->isReady()) {
         str << "WARNING: surface color management interface is not ready!" << Qt::endl;
         str << Qt::endl;
@@ -71,6 +68,8 @@ QString KisCanvasSurfaceColorSpaceManager::colorManagementReport() const
     using KisSurfaceColorimetry::SurfaceDescription;
     using KisSurfaceColorimetry::NamedPrimaries;
     using KisSurfaceColorimetry::NamedTransferFunction;
+
+    str << "Configured mode:" << m_d->surfaceMode << Qt::endl;
 
     RenderIntent preferredIntent = Private::calculateConfigIntent(m_d->currentConfig.options());
     str << "Configured intent:" << preferredIntent << "supported:" << m_d->interface->supportsRenderIntent(preferredIntent) << Qt::endl;

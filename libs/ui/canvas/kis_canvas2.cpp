@@ -1622,6 +1622,8 @@ QString KisCanvas2::colorManagementReport() const
     str << Qt::endl;
 
     if (m_d->surfaceColorManager) {
+        str.noquote().nospace() << QString("(canvas surface color manager)\n");
+        str.noquote().nospace() << QString("\n");
         str.noquote().nospace() << m_d->surfaceColorManager->colorManagementReport();
     } else {
         str.noquote().nospace() << QString("Surface color management is not supported on this platform\n");

@@ -802,3 +802,9 @@ Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceMode)
 Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceBitDepthMode)
 
 #endif // KIS_CONFIG_H_
+
+KRITAUI_EXPORT
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceMode &mode);
+
+KRITAUI_EXPORT
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceBitDepthMode &mode);

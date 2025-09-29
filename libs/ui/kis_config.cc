@@ -2819,3 +2819,58 @@ QList<KoColor> KisConfig::readKoColors(const QString& name) const
 
     return colors;
 }
+
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceMode &mode)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "CanvasSurfaceMode(";
+
+    switch (mode) {
+        case KisConfig::CanvasSurfaceMode::Preferred:
+            debug.nospace() << "Preferred";
+            break;
+        case KisConfig::CanvasSurfaceMode::Rec709g22:
+            debug.nospace() << "Rec709g22";
+            break;
+        case KisConfig::CanvasSurfaceMode::Rec709g10:
+            debug.nospace() << "Rec709g10";
+            break;
+        case KisConfig::CanvasSurfaceMode::Unmanaged:
+            debug.nospace() << "Unmanaged";
+            break;
+        default:
+            debug.nospace() << "unknown(" << static_cast<int>(mode) << ")";
+            break;
+    }
+
+    debug.nospace() << ")";
+
+    return debug.space();
+}
+
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceBitDepthMode &mode)
+{
+
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "CanvasSurfaceBitDepthMode(";
+
+    switch (mode) {
+        case KisConfig::CanvasSurfaceBitDepthMode::DepthAuto:
+            debug.nospace() << "DepthAuto";
+            break;
+        case KisConfig::CanvasSurfaceBitDepthMode::Depth8Bit:
+            debug.nospace() << "Depth8Bit";
+            break;
+        case KisConfig::CanvasSurfaceBitDepthMode::Depth10Bit:
+            debug.nospace() << "Depth10Bit";
+            break;
+        default:
+            debug.nospace() << "unknown(" << static_cast<int>(mode) << ")";
+            break;
+    }
+
+    debug.nospace() << ")";
+
+    return debug.space();
+}
+

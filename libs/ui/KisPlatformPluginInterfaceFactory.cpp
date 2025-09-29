@@ -18,6 +18,40 @@
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
 #include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
+#include <surfacecolormanagement/KisSurfaceColorManagementInfo.h>
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
+Q_GLOBAL_STATIC(KisPlatformPluginInterfaceFactory, s_instance)
+
+KisPlatformPluginInterfaceFactory::KisPlatformPluginInterfaceFactory()
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+    auto fetchSurfaceColorManagedByOS = []() {
+        KPluginFactory *factory = KoPluginLoader::instance()->loadSinglePlugin(
+            std::make_pair("X-Krita-PlatformId", QApplication::platformName()),
+            "Krita/PlatformPlugin");
+
+        if (factory) {
+            auto interface = factory->create<KisSurfaceColorManagementInfo>();
+            return interface && interface->surfaceColorManagedByOS();
+        }
+
+        return false;
+    };
+
+    m_surfaceColorManagedByOS = fetchSurfaceColorManagedByOS();
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+}
+
+KisPlatformPluginInterfaceFactory* KisPlatformPluginInterfaceFactory::instance()
+{
+    return s_instance;
+}
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
 KisSurfaceColorManagerInterface* KisPlatformPluginInterfaceFactory::createSurfaceColorManager(QWindow *nativeWindow)
 {
@@ -34,6 +68,11 @@ KisSurfaceColorManagerInterface* KisPlatformPluginInterfaceFactory::createSurfac
     }
 
     return nullptr;
+}
+
+bool KisPlatformPluginInterfaceFactory::surfaceColorManagedByOS()
+{
+    return m_surfaceColorManagedByOS;
 }
 
 #endif

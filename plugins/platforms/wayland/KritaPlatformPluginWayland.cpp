@@ -16,6 +16,7 @@
 
 #include <waylandcolormanagement/KisWaylandSurfaceColorManager.h>
 #include <waylandcolormanagement/KisWaylandOutputColorInfo.h>
+#include <surfacecolormanagement/KisSurfaceColorManagementInfo.h>
 
 #include <QWindow>
 
@@ -35,6 +36,15 @@ public:
 
 } // namespace detail
 
+class KisWaylandSurfaceColorManagementInfo : public KisSurfaceColorManagementInfo
+{
+public:
+    using KisSurfaceColorManagementInfo::KisSurfaceColorManagementInfo;
+    bool surfaceColorManagedByOS() override {
+        return true;
+    }
+};
+
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaPlatformPluginWaylandFactory, "kritaplatformwayland.json",
@@ -43,6 +53,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KritaPlatformPluginWaylandFactory, "kritaplatformwayl
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
         , registerPlugin<detail::KisWaylandSurfaceColorManagerWrapper>()
         , registerPlugin<KisWaylandOutputColorInfo>()
+        , registerPlugin<KisWaylandSurfaceColorManagementInfo>()
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
     );)
 

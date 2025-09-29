@@ -184,7 +184,7 @@ KisSRGBSurfaceColorSpaceManager* KisSRGBSurfaceColorSpaceManager::tryCreateForCu
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(widget->windowHandle(), nullptr);
 
     std::unique_ptr<KisSurfaceColorManagerInterface> iface(
-        KisPlatformPluginInterfaceFactory::createSurfaceColorManager(widget->windowHandle()));
+        KisPlatformPluginInterfaceFactory::instance()->createSurfaceColorManager(widget->windowHandle()));
 
     if (iface) {
         return new KisSRGBSurfaceColorSpaceManager(iface.release(), nativeWindow);

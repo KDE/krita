@@ -138,6 +138,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
+    KisMultiSurfaceStateManager.cpp
     KisLayerThumbnailCache.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp

@@ -17,9 +17,9 @@ class KoToolProxy;
 #include <kis_canvas_decoration.h>
 
 class KisDisplayFilter;
-class KisDisplayColorConverter;
 class QBitArray;
 class KoColorSpace;
+class KisDisplayConfig;
 
 #include "kis_types.h"
 #include "kis_ui_types.h"
@@ -70,8 +70,7 @@ public:
     // Called from KisCanvas2::channelSelectionChanged
     virtual void channelSelectionChanged(const QBitArray &channelFlags) = 0;
 
-    // Called from KisCanvas2::slotSetDisplayProfile
-    virtual void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) = 0;
+    virtual void setDisplayConfig(const KisDisplayConfig &config) = 0;
 
     // Called from KisCanvas2::finishResizingImage
     virtual void finishResizingImage(qint32 w, qint32 h) = 0;

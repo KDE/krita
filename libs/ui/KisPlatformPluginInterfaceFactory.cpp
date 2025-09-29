@@ -70,12 +70,14 @@ KisSurfaceColorManagerInterface* KisPlatformPluginInterfaceFactory::createSurfac
     return nullptr;
 }
 
+#endif
+
 bool KisPlatformPluginInterfaceFactory::surfaceColorManagedByOS()
 {
     return m_surfaceColorManagedByOS;
 }
 
-#endif
+
 
 KisExtendedModifiersMapperPluginInterface* KisPlatformPluginInterfaceFactory::createExtendedModifiersMapper()
 {

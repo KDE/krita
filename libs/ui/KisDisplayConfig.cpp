@@ -65,6 +65,12 @@ KisDisplayConfig::KisDisplayConfig(const KoColorProfile *_profile,
 {
 }
 
+KisDisplayConfig::Options KisDisplayConfig::optionsFromKisConfig(const KisConfig &cfg)
+{
+    return {renderingIntentFromConfig(cfg),
+            conversionFlagsFromConfig(cfg)};
+}
+
 bool KisDisplayConfig::operator==(const KisDisplayConfig &rhs) const
 {
     return profile == rhs.profile &&
@@ -89,4 +95,15 @@ QDebug operator<<(QDebug debug, const KisDisplayConfig &value) {
 
     debug.nospace() << ")";
     return debug;
+}
+
+
+bool KisMultiSurfaceDisplayConfig::operator==(const KisMultiSurfaceDisplayConfig &rhs) const
+{
+    return
+        uiProfile == rhs.uiProfile &&
+        canvasProfile == rhs.canvasProfile &&
+        intent == rhs.intent &&
+        conversionFlags == rhs.conversionFlags &&
+        isCanvasHDR == rhs.isCanvasHDR;
 }

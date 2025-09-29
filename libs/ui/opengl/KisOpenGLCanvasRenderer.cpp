@@ -14,7 +14,6 @@
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_display_filter.h"
-#include "canvas/kis_display_color_converter.h"
 #include "canvas/kis_canvas_widget_base.h"
 #include "KisOpenGLModeProber.h"
 #include "kis_canvas_resource_provider.h"
@@ -142,12 +141,13 @@ public:
 
 KisOpenGLCanvasRenderer::KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge,
                                                  KisImageWSP image,
-                                                 KisDisplayColorConverter *colorConverter)
+                                                 const KisDisplayConfig &displayConfig,
+                                                 QSharedPointer<KisDisplayFilter> displayFilter)
     : d(new Private())
 {
     d->canvasBridge = canvasBridge;
 
-    const KisDisplayConfig config = colorConverter->openGLCanvasSurfaceDisplayConfig();
+    const KisDisplayConfig &config = displayConfig;
 
     d->openGLImageTextures =
             KisOpenGLImageTextures::getImageTextures(image,
@@ -156,7 +156,7 @@ KisOpenGLCanvasRenderer::KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge,
                                                      config.conversionFlags);
 
 
-    setDisplayFilterImpl(colorConverter->displayFilter(), true);
+    setDisplayFilterImpl(displayFilter, true);
 }
 
 KisOpenGLCanvasRenderer::~KisOpenGLCanvasRenderer()
@@ -1089,10 +1089,8 @@ void KisOpenGLCanvasRenderer::renderCanvasGL(const QRect &updateRect)
     }
 }
 
-void KisOpenGLCanvasRenderer::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
+void KisOpenGLCanvasRenderer::setDisplayConfig(const KisDisplayConfig &config)
 {
-    const KisDisplayConfig config = colorConverter->openGLCanvasSurfaceDisplayConfig();
-
     d->openGLImageTextures->setMonitorProfile(config.profile,
                                               config.intent,
                                               config.conversionFlags);

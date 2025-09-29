@@ -23,7 +23,6 @@
 
 class KisCanvas2;
 class KisCoordinatesConverter;
-class KisDisplayColorConverter;
 class KisDisplayFilter;
 class QOpenGLShaderProgram;
 class QPainterPath;
@@ -47,7 +46,10 @@ class KisOpenGLCanvasRenderer
 public:
     class CanvasBridge;
 
-    KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge, KisImageWSP image, KisDisplayColorConverter *colorConverter);
+    KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge,
+                            KisImageWSP image,
+                            const KisDisplayConfig &displayConfig,
+                            QSharedPointer<KisDisplayFilter> displayFilter);
 
     ~KisOpenGLCanvasRenderer();
 
@@ -78,7 +80,7 @@ public:
     WrapAroundAxis wrapAroundViewingModeAxis() const;
 
     void channelSelectionChanged(const QBitArray &channelFlags);
-    void setDisplayColorConverter(KisDisplayColorConverter *colorConverter);
+    void setDisplayConfig(const KisDisplayConfig &config);
     void finishResizingImage(qint32 w, qint32 h);
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc);
     QRect updateCanvasProjection(KisUpdateInfoSP info);

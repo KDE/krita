@@ -37,7 +37,7 @@ public:
     KisProofingConfigModel(lager::cursor<KisProofingConfiguration> _data = lager::make_state(KisProofingConfiguration(), lager::automatic_tag{}));
     ~KisProofingConfigModel();
     lager::cursor<KisProofingConfiguration> data;
-    lager::sensor<KisDisplayConfig> displayConfigCursor;
+    lager::sensor<KisDisplayConfig::Options> displayConfigOptionsCursor;
 
     LAGER_QT_CURSOR(KoColor, warningColor); ///< Warning color for out-of-gamut checks.
     LAGER_QT_CURSOR(QString, proofingProfile);
@@ -63,7 +63,7 @@ public:
     LAGER_QT_CONST(int, adaptationRangeMax)
     LAGER_QT_READER(int, effectiveAdaptationState);
 
-    void updateDisplayConfig(KisDisplayConfig config);
+    void updateDisplayConfigOptions(KisDisplayConfig::Options options);
 
     LAGER_QT_READER(bool, enableDisplayToggles);
     LAGER_QT_READER(bool, enableAdaptationSlider);
@@ -72,7 +72,7 @@ Q_SIGNALS:
     void modelChanged();
 
 private:
-    KisDisplayConfig m_displayConfig;
+    KisDisplayConfig::Options m_displayConfigOptions;
 };
 
 #endif // KISPROOFINGCONFIGMODEL_H

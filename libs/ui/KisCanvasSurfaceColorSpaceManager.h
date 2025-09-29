@@ -10,6 +10,8 @@
 
 #include <KisDisplayConfig.h>
 #include <kis_types.h>
+
+// TODO: remove
 #include <kis_config.h>
 
 class KoColorProfile;
@@ -19,26 +21,29 @@ class KRITAUI_EXPORT KisCanvasSurfaceColorSpaceManager : public QObject
 {
     Q_OBJECT
 public:
-    KisCanvasSurfaceColorSpaceManager(KisSurfaceColorManagerInterface *interface, QObject *parent = nullptr);
+    KisCanvasSurfaceColorSpaceManager(KisSurfaceColorManagerInterface *interface,
+                                      const KisConfig::CanvasSurfaceMode surfaceMode,
+                                      const KisDisplayConfig::Options &options,
+                                      QObject *parent = nullptr);
     ~KisCanvasSurfaceColorSpaceManager();
+
+    void setDisplayConfigOptions(const KisConfig::CanvasSurfaceMode surfaceMode, const KisDisplayConfig::Options &options);
+    void setDisplayConfigOptions(const KisDisplayConfig::Options &options);
 
     bool isReady() const;
     KisDisplayConfig displayConfig() const;
 
     QString colorManagementReport() const;
 
-    void setProofingConfiguration(KisProofingConfigurationSP proofingConfig);
-
 Q_SIGNALS:
     void sigDisplayConfigChanged(const KisDisplayConfig &config);
 
 private Q_SLOTS:
-    void slotConfigChanged();
     void slotInterfaceReadyChanged(bool isReady);
     void slotInterfacePreferredDescriptionChanged();
 
 private:
-    void reinitializeSurfaceDescription();
+    void reinitializeSurfaceDescription(const KisDisplayConfig::Options &newOptions);
 
 private:
     struct Private;

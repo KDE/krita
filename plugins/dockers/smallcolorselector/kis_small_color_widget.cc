@@ -29,6 +29,13 @@
 #include <opengl/KisOpenGLModeProber.h>
 #include <KisDisplayConfig.h>
 
+#include <config-use-surface-color-management-api.h>
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+#include <KisPlatformPluginInterfaceFactory.h>
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
 
 struct KisSmallColorWidget::Private {
     qreal hue; // 0 ... 1.0
@@ -54,11 +61,30 @@ struct KisSmallColorWidget::Private {
         return hasHDR ? currentRelativeDynamicRange : 1.0;
     }
 
+    const KoColorProfile *outputColorProfile() {
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+        if (KisOpenGLModeProber::instance()->useHDRMode()) {
+            profile = KisOpenGLModeProber::instance()->rootSurfaceColorProfile();
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+        } else if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+            // TODO: actually fetch from the main window
+            profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+        } else {
+            // we are a normal QWidget's surface
+            profile = displayColorConverter->displayConfig().profile;
+        }
+
+        return profile;
+    }
+
     const KoColorSpace *outputColorSpace() {
         return
             KoColorSpaceRegistry::instance()->
-                colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
-                           displayColorConverter->openGLCanvasSurfaceDisplayConfig().profile);
+                colorSpace(RGBAColorModelID.id(),
+                           Float32BitsColorDepthID.id(),
+                           outputColorProfile());
     }
 
     const KoColorSpace *generationColorSpace() {
@@ -131,6 +157,15 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     connect(d->valueWidget, SIGNAL(selected(const QPointF&)), SLOT(slotValueSliderChanged(const QPointF&)));
 
     d->hasHardwareHDR = KisOpenGLModeProber::instance()->useHDRMode();
+
+#if defined KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+        /**
+         * If the platform is managed, then it can potentially be HDR
+         */
+        d->hasHardwareHDR = true;
+    }
+#endif
 
     if (d->hasHardwareHDR) {
         d->dynamicRange = new KisSliderSpinBox(this);
@@ -326,22 +361,21 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
             }
         }
 
-        d->displayColorConverter->applyDisplayFilteringF32(device, Float32BitsColorDepthID);
+        // TODO: should we add caching for this space fetching?
+        const KoColorSpace *dstColorSpace =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Float16BitsColorDepthID.id(),
+                d->outputColorProfile());
 
-        half *imagePtr = image.data();
-        devicePtr = reinterpret_cast<float*>(device->data());
+        d->displayColorConverter->applyDisplayFilteringF32(device, dstColorSpace);
 
-        for (int y = 0; y < image.height(); y++) {
-            for (int x = 0; x < image.width(); x++) {
-                imagePtr[0] = devicePtr[0];
-                imagePtr[1] = devicePtr[1];
-                imagePtr[2] = devicePtr[2];
-                imagePtr[3] = devicePtr[3];
+        // the output device must have float16/rgba space
+        KIS_SAFE_ASSERT_RECOVER_RETURN(device->pixelSize() == 8);
 
-                devicePtr += 4;
-                imagePtr += 4;
-            }
-        }
+        memcpy(image.data(),
+               device->data(),
+               device->pixelSize() * device->bounds().width() * device->bounds().height());
     }
 
     widget->loadImage(image);

@@ -19,6 +19,7 @@ class KoColor;
 class KoColorProfile;
 class KoCanvasResourceProvider;
 class KisDisplayConfig;
+class KisMultiSurfaceDisplayConfig;
 class KoID;
 
 /**
@@ -51,7 +52,7 @@ public:
 
     const KoColorSpace* paintingColorSpace() const;
     const KoColorSpace* nodeColorSpace() const;
-    void setDisplayConfig(const KisDisplayConfig &config);
+    void setMultiSurfaceDisplayConfig(const KisMultiSurfaceDisplayConfig &config);
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
 
     QColor toQColor(const KoColor &c, bool proofToPaintColors = false) const;
@@ -59,7 +60,13 @@ public:
 
     bool canSkipDisplayConversion(const KoColorSpace *cs) const;
     KoColor applyDisplayFiltering(const KoColor &srcColor, const KoID &bitDepthId) const;
-    void applyDisplayFilteringF32(KisFixedPaintDeviceSP device, const KoID &bitDepthId) const;
+
+    /**
+     * Apply display filtering and convert \p device into \p dstColorSpace on exiting
+     * the function. The conversion can actually change the bit-depth of the device if
+     * necessary
+     */
+    void applyDisplayFilteringF32(KisFixedPaintDeviceSP device, const KoColorSpace *dstColorSpace) const;
 
 
     /**
@@ -86,10 +93,11 @@ public:
     KisDisplayConfig displayConfig() const;
 
     QSharedPointer<KisDisplayFilter> displayFilter() const;
-    KisDisplayConfig openGLCanvasSurfaceDisplayConfig() const;
-    bool isHDRMode() const;
+    KisMultiSurfaceDisplayConfig multiSurfaceDisplayConfig() const;
 
-    void notifyOpenGLCanvasIsActive(bool value);
+    using ConversionOptions = std::pair<KoColorConversionTransformation::Intent, KoColorConversionTransformation::ConversionFlags>;
+    ConversionOptions conversionOptions() const;
+
 
 Q_SIGNALS:
     void displayConfigurationChanged();

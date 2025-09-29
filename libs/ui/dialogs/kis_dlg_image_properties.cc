@@ -275,7 +275,7 @@ void KisDlgImageProperties::updateProofingWidgets()
 
 void KisDlgImageProperties::updateDisplayConfigInfo()
 {
-    d->proofingModel.updateDisplayConfig(d->colorConverter->displayConfig());
+    d->proofingModel.updateDisplayConfigOptions(d->colorConverter->conversionOptions());
 }
 
 void KisDlgImageProperties::proofingDisplayModeUpdated()

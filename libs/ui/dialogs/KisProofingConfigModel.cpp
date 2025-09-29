@@ -8,6 +8,7 @@
 #include <KisZug.h>
 
 #include <kis_display_color_converter.h>
+#include <lager/lenses/tuple.hpp>
 
 const int ADAPTATION_MULTIPLIER = 20;
 
@@ -54,7 +55,7 @@ int calcEffectiveAdaptation(KisProofingConfiguration::DisplayTransformState disp
 
 KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfiguration> _data)
     : data(_data)
-    , displayConfigCursor(lager::make_sensor([&]{return m_displayConfig;}))
+    , displayConfigOptionsCursor(lager::make_sensor([&]{return m_displayConfigOptions;}))
     , LAGER_QT(warningColor) {data[&KisProofingConfiguration::warningColor]}
     , LAGER_QT(proofingProfile) {data[&KisProofingConfiguration::proofingProfile]}
     , LAGER_QT(proofingModel) {data[&KisProofingConfiguration::proofingModel]}
@@ -69,13 +70,15 @@ KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfigur
     , LAGER_QT(effectiveDisplayIntent) {
         lager::with(LAGER_QT(displayTransformState),
                     LAGER_QT(displayIntent),
-                    displayConfigCursor[&KisDisplayConfig::intent])
+                    displayConfigOptionsCursor
+                        .zoom(lager::lenses::first))
                 .map(&calcEffectiveDisplayIntent)}
 
     , LAGER_QT(effectiveDispBlackPointCompensation) {
         lager::with(LAGER_QT(displayTransformState),
                     LAGER_QT(dispBlackPointCompensation),
-                    displayConfigCursor[&KisDisplayConfig::conversionFlags]
+                    displayConfigOptionsCursor
+                        .zoom(lager::lenses::second)
                         .zoom(conversionFlag(KoColorConversionTransformation::BlackpointCompensation)))
                 .map(&calcEffectiveUseBPC)}
     , LAGER_QT(adaptationState) {data[&KisProofingConfiguration::adaptationState].zoom(kislager::lenses::scale_real_to_int(ADAPTATION_MULTIPLIER))}
@@ -89,16 +92,16 @@ KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfigur
     , LAGER_QT(enableDisplayBlackPointCompensation) {LAGER_QT(displayIntent).xform(kiszug::map_not_equal<int>(KoColorConversionTransformation::IntentAbsoluteColorimetric))}
 {
     lager::watch(data, std::bind(&KisProofingConfigModel::modelChanged, this));
-    lager::watch(displayConfigCursor, std::bind(&KisProofingConfigModel::modelChanged, this));
+    lager::watch(displayConfigOptionsCursor, std::bind(&KisProofingConfigModel::modelChanged, this));
 }
 
 KisProofingConfigModel::~KisProofingConfigModel()
 {
 }
 
-void KisProofingConfigModel::updateDisplayConfig(KisDisplayConfig config)
+void KisProofingConfigModel::updateDisplayConfigOptions(KisDisplayConfig::Options options)
 {
-    if (m_displayConfig == config) return;
-    m_displayConfig = config;
-    lager::commit(displayConfigCursor);
+    if (m_displayConfigOptions == options) return;
+    m_displayConfigOptions = options;
+    lager::commit(displayConfigOptionsCursor);
 }

@@ -1520,10 +1520,11 @@ void ColorSettingsTab::proofingDisplayIntentUpdated() {
 }
 
 void ColorSettingsTab::updateProofingDisplayInfo() {
-    KisDisplayConfig displayInfo;
-    displayInfo.intent = KoColorConversionTransformation::Intent(m_page->cmbMonitorIntent->currentIndex());
-    displayInfo.conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->chkBlackpoint->isChecked());
-    m_proofModel->updateDisplayConfig(displayInfo);
+    KisDisplayConfig::Options options;
+    options.first = KoColorConversionTransformation::Intent(m_page->cmbMonitorIntent->currentIndex());
+    options.second = KoColorConversionTransformation::internalConversionFlags();
+    options.second.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->chkBlackpoint->isChecked());
+    m_proofModel->updateDisplayConfigOptions(options);
 }
 
 //---------------------------------------------------------------------------------------------------

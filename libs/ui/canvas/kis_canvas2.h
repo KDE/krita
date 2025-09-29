@@ -328,9 +328,7 @@ private:
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
     void setCanvasWidget(KisAbstractCanvasWidget *widget);
     void resetCanvas(bool useOpenGL);
-    void setDisplayConfig(const KisDisplayConfig &config);
-
-    const KoColorProfile* effectiveDisplayProfile(int screenNumber, const KisConfig &config) const;
+    void slotSurfaceFormatChanged(const KisDisplayConfig &config);
 
     void notifyLevelOfDetailChange();
 

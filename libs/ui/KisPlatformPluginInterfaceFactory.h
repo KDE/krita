@@ -32,9 +32,9 @@ public:
      * If the current platform plugin doesn't profide this interface, returns nullptr
      */
     KisSurfaceColorManagerInterface *createSurfaceColorManager(QWindow *nativeWindow);
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
     bool surfaceColorManagedByOS();
-#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
     /**
      * Creates an instance of the extended modifiers interface using the platform plugin
@@ -44,9 +44,7 @@ public:
     KisExtendedModifiersMapperPluginInterface* createExtendedModifiersMapper();
 
 private:
-#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
     bool m_surfaceColorManagedByOS {false};
-#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 };
 
 #endif // KISPLATFORMPLUGININTERFACEFACTORY_H

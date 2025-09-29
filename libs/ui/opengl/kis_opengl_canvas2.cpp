@@ -82,7 +82,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                    KisCoordinatesConverter *coordinatesConverter,
                                    QWidget *parent,
                                    KisImageWSP image,
-                                   KisDisplayColorConverter *colorConverter,
+                                   const KisDisplayConfig &displayConfig,
+                                   QSharedPointer<KisDisplayFilter> displayFilter,
                                    BitDepthMode bitDepthRequest)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
@@ -93,7 +94,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
-    d->renderer = new KisOpenGLCanvasRenderer(new CanvasBridge(this), image, colorConverter);
+    d->renderer = new KisOpenGLCanvasRenderer(new CanvasBridge(this), image, displayConfig, displayFilter);
 
     connect(d->renderer->openGLImageTextures().data(),
             SIGNAL(sigShowFloatingMessage(QString, int, bool)),
@@ -409,10 +410,10 @@ void KisOpenGLCanvas2::showEvent(QShowEvent *e)
     notifyDecorationsWindowMinimized(false);
 }
 
-void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
+void KisOpenGLCanvas2::setDisplayConfig(const KisDisplayConfig &config)
 {
     KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
-    d->renderer->setDisplayColorConverter(colorConverter);
+    d->renderer->setDisplayConfig(config);
 }
 
 void KisOpenGLCanvas2::channelSelectionChanged(const QBitArray &channelFlags)

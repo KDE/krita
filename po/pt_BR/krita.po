@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-26 02:01+0000\n"
-"PO-Revision-Date: 2025-09-27 20:03-0300\n"
+"PO-Revision-Date: 2025-09-28 11:19-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -13300,7 +13300,7 @@ msgstr "Exportação avançada"
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames..."
-msgstr "Importar imagens da animação..."
+msgstr "Importar quadros da animação..."
 
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
@@ -13310,7 +13310,7 @@ msgstr "Importar imagens da animação..."
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames"
-msgstr "Importar imagens da animação"
+msgstr "Importar quadros da animação"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
@@ -31075,7 +31075,7 @@ msgstr "Salvar nova predefinição de pincel..."
 #: libs/ui/forms/wdgpaintopsettings.ui:387
 #, kde-format
 msgid "Overwrite Brush Preset"
-msgstr "Substituir a predefinição de pincel"
+msgstr "Substituir predefinição de pincel"
 
 #. i18n: ectx: property (text), widget (QLabel, presetsSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:455
@@ -31117,7 +31117,7 @@ msgstr "Mudança de opacidade da borracha"
 #: libs/ui/forms/wdgpaintopsettings.ui:681
 #, kde-format
 msgid "Temporarily Save Tweaks To Presets"
-msgstr "Salvar temporariamente os ajustes nas predefinições"
+msgstr "Salvar temporariamente ajustes nas predefinições"
 
 #. i18n: ectx: property (text), widget (QLabel, scratchpadSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:808
@@ -33658,7 +33658,7 @@ msgstr "Aplicar Filtro Novamente: %1"
 #: libs/ui/kis_image_manager.cc:107
 #, kde-format
 msgid "Import Image"
-msgstr "Importar Imagem"
+msgstr "Importar imagem"
 
 #: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:92
 #, kde-format
@@ -42869,7 +42869,7 @@ msgstr "Mostrar escala de valores numerados"
 #: plugins/python/colorspace/uicolorspace.py:85
 #, kde-format
 msgid "Color Space"
-msgstr "Espaço de cor: "
+msgstr "Espaço de cor"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsy)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:52
@@ -47541,7 +47541,7 @@ msgstr "Exceção"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
 #, kde-format
 msgid "Script Editor"
-msgstr "Editor de Script"
+msgstr "Editor de script"
 
 #. i18n: ectx: property (title), widget (QMenu, menu_New)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
@@ -57792,7 +57792,7 @@ msgstr "Preservar configurações predefinidas de pincel"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
 #, kde-format
 msgid "Reset Predefined Tip"
-msgstr "Restaurar as dicas predefinidas"
+msgstr "Restaurar ponta predefinida"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
@@ -59127,7 +59127,7 @@ msgstr "Escala dy:"
 #: plugins/paintops/roundmarker/roundmarker_paintop_plugin.cpp:30
 #, kde-format
 msgid "Quick Brush"
-msgstr "Pincel Rápido"
+msgstr "Pincel rápido"
 
 #: plugins/paintops/sketch/KisSketchOpOptionData.cpp:60
 #, kde-format
@@ -61297,7 +61297,7 @@ msgstr "Escritor de conteúdo textual suplementar"
 #: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
 msgid "Document Tools"
-msgstr "Ferramentas do Documento"
+msgstr "Ferramentas do documento"
 
 #: plugins/python/documenttools/documenttools.py:19
 msgid "Plugin to manipulate properties of selected documents."
@@ -61339,7 +61339,7 @@ msgstr "Os documentos selecionados foram modificados."
 #: plugins/python/exportlayers/exportlayers.py:17
 #: plugins/python/exportlayers/uiexportlayers.py:122
 msgid "Export Layers"
-msgstr "Exportar Camadas"
+msgstr "Exportar camadas"
 
 #: plugins/python/exportlayers/exportlayers.py:18
 msgid "Plugin to export layers from a document."
@@ -61416,7 +61416,7 @@ msgstr "Selecionar uma Pasta"
 #: plugins/python/filtermanager/filtermanager.py:17
 #: plugins/python/filtermanager/uifiltermanager.py:60
 msgid "Filter Manager"
-msgstr "Gerenciador de Filtros"
+msgstr "Gerenciador de filtros"
 
 #: plugins/python/filtermanager/filtermanager.py:18
 msgid "Plugin to filters management."
@@ -61892,7 +61892,7 @@ msgstr "Depurador"
 #: plugins/python/scripter/scripter.py:24
 #: plugins/python/scripter/uicontroller.py:96
 msgid "Scripter"
-msgstr "Editor de Script"
+msgstr "Editor de script"
 
 #: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
 msgid "Do you want to save the current document?"
@@ -62019,7 +62019,7 @@ msgstr "salvar"
 #, kde-format
 msgctxt "action"
 msgid "Ten Brushes"
-msgstr "Dez Pincéis"
+msgstr "Dez pincéis"
 
 #. i18n: context: text @ Action (activate_preset_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:21
@@ -62093,7 +62093,7 @@ msgstr "Ativar predefinição de pincel 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Ten Brushes"
-msgstr "Dez Pincéis"
+msgstr "Dez pincéis"
 
 #: plugins/python/tenbrushes/tenbrushes.py:35
 msgid "Assign ten brush presets to ten shortcuts."
@@ -62152,7 +62152,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
-msgstr "Dez Scripts"
+msgstr "Dez scripts"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:7
@@ -62226,7 +62226,7 @@ msgstr "Executar Script 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
-msgstr "Dez Scripts"
+msgstr "Dez scripts"
 
 #: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."

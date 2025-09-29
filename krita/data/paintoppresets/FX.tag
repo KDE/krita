@@ -38,6 +38,7 @@ Name[uk]=Ефекти
 Name[zh_CN]=特效
 Name[zh_TW]=特效
 Comment=Special Effects.kpp
+Comment[ar]=تأثيرات خاصّة.kpp
 Comment[bg]=Special Effects.kpp
 Comment[ca]=Efectes especials «.kpp»
 Comment[ca@valencia]=Efectes especials «.kpp»

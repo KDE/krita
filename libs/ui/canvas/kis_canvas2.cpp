@@ -776,7 +776,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     const bool canvasHasNativeSurface = bool(m_d->canvasWidget->widget()->windowHandle());
     const bool canvasNeedsNativeSurface =
         cfg.enableCanvasSurfaceColorSpaceManagement() &&
-        bool(m_d->view->mainWindow()->managedSurfaceProfile());
+        KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS();
 
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&

@@ -20,11 +20,11 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include <KisViewManager.h>
-#include <KisMainWindow.h>
 #include "KisRepaintDebugger.h"
 
 #include "KisOpenGLModeProber.h"
 #include "KisOpenGLContextSwitchLock.h"
+#include <KisPlatformPluginInterfaceFactory.h>
 
 #include "config-qt-patches-present.h"
 
@@ -113,7 +113,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
-    const bool osManagedSurfacePresent = canvas->viewManager()->mainWindow()->managedSurfaceProfile();
+    const bool osManagedSurfacePresent = KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS();
     bool useNativeSurfaceForCanvas = osManagedSurfacePresent && cfg.enableCanvasSurfaceColorSpaceManagement();
     if (qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
         useNativeSurfaceForCanvas = qEnvironmentVariableIntValue("KRITA_USE_NATIVE_CANVAS_SURFACE");

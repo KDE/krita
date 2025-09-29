@@ -85,6 +85,7 @@
 #include "kis_file_name_requester.h"
 #include <KisWidgetConnectionUtils.h>
 #include <dialogs/KisFrameRateLimitModel.h>
+#include <KisPlatformPluginInterfaceFactory.h>
 
 #include "slider_and_spin_box_sync.h"
 
@@ -1089,8 +1090,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisConfig cfg(true);
 
-    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    m_colorManagedByOS = mainWindow->managedSurfaceProfile();
+    m_colorManagedByOS = KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS();
 
     if (!m_colorManagedByOS) {
         m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
@@ -1236,6 +1236,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
         vboxLayout->addItem(new QSpacerItem(20,20));
 
+        KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
         QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", mainWindow->osPreferredColorSpaceReport()), this);
         vboxLayout->addWidget(preferredLbl);
 

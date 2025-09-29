@@ -1948,7 +1948,6 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     m_isInsideTextSubtree = false;
 
     //rootTextShape->debugParsing();
-    rootTextShape->relayout();
 
 
     return rootTextShape;

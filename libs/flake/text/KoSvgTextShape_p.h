@@ -441,7 +441,10 @@ public:
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
 
-    Private(): internalShapesPainter(new KoShapePainter), shapeGroup(new KoShapeGroup) {
+    Private()
+        : internalShapesPainter(new KoShapePainter)
+        , shapeGroup(new KoShapeGroup)
+    {
         shapeGroup->setSelectable(false);
     }
 
@@ -454,7 +457,8 @@ public:
 
     Private(const Private &rhs)
         : internalShapesPainter(new KoShapePainter)
-        , textData(rhs.textData) {
+        , textData(rhs.textData)
+    {
 
         KoShapeGroup *g = dynamic_cast<KoShapeGroup*>(rhs.shapeGroup.data()->cloneShape());
         shapeGroup.reset(g);
@@ -477,6 +481,8 @@ public:
 
         isLoading = rhs.isLoading;
         disableFontMatching = rhs.disableFontMatching;
+
+        currentTextWrappingAreas = rhs.currentTextWrappingAreas;
     }
 
     void handleShapes(const QList<KoShape*> &sourceShapeList, const QList<KoShape*> referenceList2, const QList<KoShape*> referenceShapeList, QList<KoShape*> &destinationShapeList) {
@@ -525,17 +531,29 @@ public:
         Q_FOREACH(KoShape *shape, textPaths) {
             shapeGroup->addShape(shape);
         }
+        qDebug() << "updateing contours";
+        updateTextWrappingAreas();
         updateInternalShapesList();
     }
     void updateInternalShapesList() {
-        qDebug() << Q_FUNC_INFO << shapesInside.size() << shapeGroup->shapes().size();
-        internalShapesPainter->setShapes(shapeGroup->shapes());
+        if (shapeGroup) {
+            qDebug() << Q_FUNC_INFO << shapesInside.size() << shapeGroup->shapes().size();
+            internalShapesPainter->setShapes(shapeGroup->shapes());
+        }
     }
 
     QList<KoShape*> shapesInside;
     QList<KoShape*> shapesSubtract;
     QList<KoShape*> textPaths;
 
+    QList<QPainterPath> currentTextWrappingAreas;
+
+    /**
+     * @brief updateShapeContours
+     * The current shape contours can be slow to compute, so this function
+     * calls computing them, and then calls relayout();
+     */
+    void updateTextWrappingAreas();
 
     KoShape *textPathByName(QString name) {
         auto it = std::find_if(textPaths.begin(), textPaths.end(), [&name](const KoShape *s) -> bool {return s->name() == name;});
@@ -1164,7 +1182,7 @@ public:
                     if (!isEnd(siblingPrev)
                             && siblingPrev != siblingCurrent(it)
                             && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                            && (!siblingPrev->textPath && !it->textPath)
+                            && (siblingPrev->textPathId.isEmpty() && !it->textPathId.isEmpty())
                             && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
                             && (siblingPrev->properties == it->properties)
                             && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)) {

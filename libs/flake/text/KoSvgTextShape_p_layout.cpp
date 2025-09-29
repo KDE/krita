@@ -109,6 +109,15 @@ QString langToLibUnibreakLang(const QString lang) {
     return lang;
 }
 
+
+void KoSvgTextShape::Private::updateTextWrappingAreas()
+{
+    KoSvgTextProperties rootProperties = textData.empty()? KoSvgTextProperties::defaultProperties(): textData.childBegin()->properties;
+    currentTextWrappingAreas = getShapes(shapesInside, shapesSubtract, rootProperties);
+    if (!isLoading) {
+        relayout();
+    }
+}
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::relayout()
 {
@@ -644,9 +653,8 @@ void KoSvgTextShape::Private::relayout()
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
-    if (!this->shapesInside.isEmpty()) {
-        QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, rootProperties);
-        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos, resHandler);
+    if (!this->currentTextWrappingAreas.isEmpty()) {
+        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, this->currentTextWrappingAreas, startPos, resHandler);
     } else {
         this->lineBoxes = breakLines(rootProperties, logicalToVisual, result, startPos, resHandler);
     }

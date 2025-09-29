@@ -151,6 +151,9 @@ KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
 
 KoSvgTextShape::~KoSvgTextShape()
 {
+    Q_FOREACH(KoShape *shape, internalShapeManager()->shapes()) {
+        shape->removeDependee(this);
+    }
 }
 
 const QString &KoSvgTextShape::defaultPlaceholderText()
@@ -171,19 +174,37 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
     KoShape::shapeChanged(type, shape);
 
+    const QVector<ChangeType> transformationTypes = {PositionChanged, RotationChanged, ScaleChanged, ShearChanged, SizeChanged, GenericMatrixChange};
+
     qDebug() << shape << type;
     if ((d->shapesInside.contains(shape) || d->shapesSubtract.contains(shape) || d->textPaths.contains(shape))
-            && (type == PositionChanged
-                || type == RotationChanged
-                || type == ScaleChanged
-                || type == ShearChanged
-                || type == SizeChanged
-                || type == GenericMatrixChange
+            && (transformationTypes.contains(type)
                 || type == ParameterChanged
-                || type == ParentChanged)) {
-        // update shape. relayout.
-        //TODO: also handle type == Deleted. Need to figure out the order of operations though.
-        relayout();
+                || type == ParentChanged
+                || type == Deleted)) {
+        if (type == Deleted) {
+            if (d->shapesInside.contains(shape)) {
+                d->shapesInside.removeAll(shape);
+            }
+            if (d->shapesSubtract.contains(shape)) {
+                d->shapesSubtract.removeAll(shape);
+            }
+            if (d->textPaths.contains(shape)) {
+                d->textPaths.removeAll(shape);
+                // TODO: remove ID from relevant text content element.
+            }
+            if (d->shapeGroup && d->shapeGroup->shapes().contains(shape)) {
+                d->shapeGroup->removeShape(shape);
+            }
+            d->updateInternalShapesList();
+        }
+
+        // Updates the contours and calls relayout.
+        // Would be great if we could compress the updates here somehow...
+        // TODO: when shapeMargin or Padding is changed, this also needs to be called...
+        d->updateTextWrappingAreas();
+
+        // NotifyChanged ensures that boundingRect() is called on this shape.
         this->notifyChanged();
         qDebug() << "child updated";
     }
@@ -191,7 +212,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         qDebug() << "text updated";
         if ((type == ContentChanged)) {
             relayout();
-        } else {
+        } else if (transformationTypes.contains(type)) {
             qDebug() << "update transform";
             d->shapeGroup->setTransformation(this->transformation());
         }
@@ -2047,6 +2068,7 @@ void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
         d->shapeGroup->addShape(shape);
         shape->addDependee(this);
     }
+    d->updateTextWrappingAreas();
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();
@@ -2070,6 +2092,7 @@ void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
         d->shapeGroup->addShape(shape);
         shape->addDependee(this);
     }
+    d->updateTextWrappingAreas();
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();

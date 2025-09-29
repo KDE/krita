@@ -34,6 +34,7 @@ KoSvgTextLoader::~KoSvgTextLoader()
     d->shape->d->updateShapeGroup();
     d->shape->cleanUp();
     d->shape->d->isLoading = false;
+    d->shape->relayout();
 }
 
 void KoSvgTextLoader::enterNodeSubtree()

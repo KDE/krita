@@ -47,6 +47,7 @@ class KisCoordinatesConverter;
 class KoViewConverter;
 class KisAbstractCanvasWidget;
 class KisPopupPalette;
+class KoSvgTextShape;
 
 
 /**
@@ -109,8 +110,8 @@ public: // KoCanvasBase implementation
      */
     KoShapeManager *globalShapeManager() const;
 
-    bool textShapeManagerEnabled() const;
-    void setTextShapeManagerEnabled(const bool enable);
+    KoSvgTextShape *textShapeManagerEnabled() const override;
+    void setTextShapeManagerEnabled(KoSvgTextShape *source) override;
 
     /**
      * Return shape manager associated with the currently active node.

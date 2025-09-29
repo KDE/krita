@@ -237,16 +237,6 @@
     <widget class="QComboBox" name="cmbPaintOrder"/>
    </item>
    <item>
-    <widget class="QPushButton" name="btnInternalShapes">
-     <property name="text">
-      <string>Internal Shapes</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="KisShapePropertySlider" name="dblOpacity" native="true"/>
    </item>
    <item>

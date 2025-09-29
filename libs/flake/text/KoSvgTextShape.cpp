@@ -2098,6 +2098,11 @@ void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
     update();
 }
 
+QList<QPainterPath> KoSvgTextShape::textWrappingAreas() const
+{
+    return d->currentTextWrappingAreas;
+}
+
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const
 {
     return d->shapesSubtract;

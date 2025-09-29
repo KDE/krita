@@ -18,6 +18,7 @@
 #include <QCursor>
 #include <KoShapeFillResourceConnector.h>
 #include "KoPathPointTypeCommand.h"
+#include <KoSvgTextShapeOutlineHelper.h>
 
 class QActionGroup;
 class QButtonGroup;
@@ -140,6 +141,7 @@ private:
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
     QScopedPointer<QMenu> m_contextMenu;
+    QScopedPointer<KoSvgTextShapeOutlineHelper> m_textOutlineHelper;
     KisSignalAutoConnectionsStore m_canvasConnections;
     KoShapeFillResourceConnector m_shapeFillResourceConnector;
 

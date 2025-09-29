@@ -110,6 +110,18 @@ public:
     void setShapesSubtract(QList<KoShape*> shapesSubtract);
 
     /**
+     * @brief textWrappingAreas
+     * The text wrapping areas are computed from shapesInside()
+     * and shapesSubtract(), as well as the text properties
+     * ShapeMargin and ShapePadding. This returns the computed
+     * wrapping areas, in the local coordinates of the shape.
+     *
+     * @seealso outline()
+     * @return a list of computed text wrapping areas.
+     */
+    QList<QPainterPath> textWrappingAreas() const;
+
+    /**
      * @brief shapesSubtract
      * @return list of subtract shapes.
      */

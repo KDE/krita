@@ -86,6 +86,7 @@ struct KoPathTool::PathSegment {
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
+    , m_textOutlineHelper(new KoSvgTextShapeOutlineHelper(canvas))
 {
     m_actionPathPointCorner = action("pathpoint-corner");
     m_actionPathPointSmooth = action("pathpoint-smooth");
@@ -104,6 +105,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m_actionConvertToPath = action("convert-to-path");
 
     m_contextMenu.reset(new QMenu());
+    m_textOutlineHelper->setDrawBoundingRect(true);
+    m_textOutlineHelper->setDrawShapeOutlines(false);
 
     m_selectCursor = QCursor(QIcon(":/cursor-needle.svg").pixmap(32), 0, 0);
     m_moveCursor = QCursor(QIcon(":/cursor-needle-move.svg").pixmap(32), 0, 0);
@@ -437,6 +440,9 @@ void KoPathTool::breakAtSegment()
 void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoToolBase);
+    m_textOutlineHelper->setDecorationThickness(decorationThickness());
+    m_textOutlineHelper->setHandleRadius(handleRadius());
+    m_textOutlineHelper->paint(&painter, converter);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KisHandlePainterHelper helper =
@@ -533,6 +539,8 @@ QRectF KoPathTool::decorationsRect() const
         newDecorationsRect |= kisGrowRect(rect, handleDocRadius());
     }
 
+    newDecorationsRect |= m_textOutlineHelper->decorationRect();
+
     return newDecorationsRect;
 }
 
@@ -551,10 +559,15 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
         mouseMoveEvent(event);
     }
 
+    if (KoSvgTextShape *shape = m_textOutlineHelper->contourModeButtonHovered(event->point)) {
+        m_textOutlineHelper->toggleTextContourMode(shape);
+        event->accept();
+    }
     // we are moving if we hit a point and use the left mouse button
     if (m_activeHandle) {
         m_currentStrategy.reset(m_activeHandle->handleMousePress(event));
     } else {
+
         if (event->button() & Qt::LeftButton) {
 
             // check if we hit a path segment

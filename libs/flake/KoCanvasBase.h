@@ -27,6 +27,7 @@ class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
 class KoSelectedShapesProxy;
+class KoSvgTextShape;
 
 class QWidget;
 class QCursor;
@@ -115,6 +116,17 @@ public:
      */
     virtual KoSelectedShapesProxy *selectedShapesProxy() const = 0;
 
+    /**
+     * @brief textShapeManagerEnabled
+     * textShape for which we're currently editing the child shapes.
+     * @return KoSvgTextShape that is currently set.
+     */
+    virtual KoSvgTextShape *textShapeManagerEnabled() const {
+        return nullptr;
+    }
+    virtual void setTextShapeManagerEnabled(KoSvgTextShape *source) {
+        Q_UNUSED(source)
+    }
     /**
      * Tell the canvas to repaint the specified rectangle. The coordinates
      * are document coordinates, not view coordinates.

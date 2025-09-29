@@ -190,7 +190,7 @@ public:
     KoShapeManager shapeManager;
     KisSelectedShapesProxy selectedShapesProxy;
     bool currentCanvasIsOpenGL = true;
-    bool textShapeManagerEnabled = false;
+    KoSvgTextShape *textShape = nullptr;
     int openGLFilterMode = 0;
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
@@ -576,15 +576,15 @@ KoShapeManager* KisCanvas2::globalShapeManager() const
     return &m_d->shapeManager;
 }
 
-bool KisCanvas2::textShapeManagerEnabled() const
+KoSvgTextShape *KisCanvas2::textShapeManagerEnabled() const
 {
-    return m_d->textShapeManagerEnabled;
+    return m_d->textShape;
 }
 
-void KisCanvas2::setTextShapeManagerEnabled(const bool enable)
+void KisCanvas2::setTextShapeManagerEnabled(KoSvgTextShape *source)
 {
-    if (m_d->textShapeManagerEnabled == enable) return;
-    m_d->textShapeManagerEnabled = enable;
+    if (m_d->textShape == source) return;
+    m_d->textShape = source;
     slotTrySwitchShapeManager();
 }
 
@@ -593,13 +593,11 @@ KoShapeManager *KisCanvas2::localShapeManager() const
     KisNodeSP node = m_d->view->currentNode();
     KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
 
-    if (m_d->textShapeManagerEnabled) {
-        Q_FOREACH(KoShape*shape, localShapeManager->selection()->selectedEditableShapes()) {
-            KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
-            if (text) {
-                localShapeManager = text->internalShapeManager();
-                break;
-            }
+    if (m_d->textShape) {
+        if (localShapeManager && localShapeManager->shapes().contains(m_d->textShape)) {
+            localShapeManager = m_d->textShape->internalShapeManager();
+        } else {
+            m_d->textShape = nullptr;
         }
     }
 

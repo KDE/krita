@@ -13,6 +13,8 @@
 #include <KoToolBase.h>
 #include <QPointer>
 
+#include <KoSvgTextShapeOutlineHelper.h>
+
 #include <kis_signal_auto_connection.h>
 #include <KisSignalMapper.h>
 
@@ -218,6 +220,7 @@ private:
 
 
     SvgTextCursor m_textCursor;
+    QScopedPointer<KoSvgTextShapeOutlineHelper> m_textOutlineHelper;
     KisSignalAutoConnectionsStore m_canvasConnections;
 
     QPainterPath m_hoveredShapeHighlightRect;

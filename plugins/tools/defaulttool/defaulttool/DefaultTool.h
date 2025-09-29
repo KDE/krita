@@ -14,6 +14,7 @@
 #include <commands/KoShapeAlignCommand.h>
 #include <commands/KoShapeReorderCommand.h>
 #include "SelectionDecorator.h"
+#include <KoSvgTextShapeOutlineHelper.h>
 #include "KoShapeMeshGradientHandles.h"
 #include <KoSvgTextPropertiesInterface.h>
 
@@ -185,6 +186,7 @@ private:
     QPointF m_lastPoint;
 
     QScopedPointer<SelectionDecorator> m_decorator;
+    QScopedPointer<KoSvgTextShapeOutlineHelper> m_textOutlineHelper;
 
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
     KoShapeMeshGradientHandles::Handle m_hoveredMeshHandle;

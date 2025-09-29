@@ -53,6 +53,7 @@
 #include "KisTextPropertiesManager.h"
 #include <kis_signal_compressor.h>
 #include <KoInteractionStrategyFactory.h>
+#include <KisHandlePainterHelper.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
 
@@ -417,6 +418,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
+    , m_textOutlineHelper(new KoSvgTextShapeOutlineHelper(canvas))
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
     , m_textPropertyInterface(new DefaultToolTextPropertiesInterface(this))
@@ -471,6 +473,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), m_textPropertyInterface, SLOT(slotSelectionChanged()));
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     }
+
+    m_textOutlineHelper->setDrawBoundingRect(false);
+    m_textOutlineHelper->setDrawShapeOutlines(true);
 }
 
 DefaultTool::~DefaultTool()
@@ -859,6 +864,8 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
             KisNodeSP node = kisCanvas->viewManager()->nodeManager()->activeNode();
             const bool isSelectionMask = node && node->inherits("KisSelectionMask");
             m_decorator->setForceShapeOutlines(isSelectionMask);
+
+
         }
 
         m_decorator->setSelection(selection);
@@ -870,6 +877,10 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         m_decorator->setCurrentMeshGradientHandles(m_selectedMeshHandle, m_hoveredMeshHandle);
         m_decorator->paint(painter, converter);
     }
+
+    m_textOutlineHelper->setHandleRadius(handleRadius());
+    m_textOutlineHelper->setDecorationThickness(decorationThickness());
+    m_textOutlineHelper->paint(&painter, converter);
 
     KoInteractionTool::paint(painter, converter);
 
@@ -903,6 +914,12 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
         return;
     }
 
+    if (KoSvgTextShape *shape = m_textOutlineHelper->contourModeButtonHovered(event->point)) {
+        m_textOutlineHelper->toggleTextContourMode(shape);
+        event->accept();
+        updateCursor();
+        return;
+    }
     KoInteractionTool::mousePressEvent(event);
     updateCursor();
 }
@@ -1046,6 +1063,7 @@ QRectF DefaultTool::decorationsRect() const
     if (canvas()->snapGuide()->isSnapping()) {
         dirtyRect |= canvas()->snapGuide()->boundingRect();
     }
+    dirtyRect |= m_textOutlineHelper->decorationRect();
 
     return dirtyRect;
 }

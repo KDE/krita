@@ -97,6 +97,7 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_textCursor(canvas)
     , m_optionManager(new SvgTextToolOptionsManager(this))
+    , m_textOutlineHelper(new KoSvgTextShapeOutlineHelper(canvas))
 {
      // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
     const int cursorFlashLimit = 5000;
@@ -142,6 +143,8 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_left_1_px", Qt::Key_Left);
     addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_right_1_px", Qt::Key_Right);
 
+    m_textOutlineHelper->setDrawBoundingRect(false);
+    m_textOutlineHelper->setDrawTextWrappingArea(true);
 
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
@@ -168,8 +171,9 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
     KoToolBase::activate(shapes);
     m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
-    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    KisCanvas2 *canvas2 = qobject_cast<KisCanvas2 *>(this->canvas());
     if (canvas2) {
+        canvas2->setTextShapeManagerEnabled(nullptr);
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(m_textCursor.textPropertyInterface());
         QDockWidget *docker = canvas2->viewManager()->mainWindow()->dockWidget("TextProperties");
         if (docker && m_optionManager) {
@@ -644,6 +648,8 @@ QRectF SvgTextTool::decorationsRect() const
 
     rect |= m_hoveredShapeHighlightRect.boundingRect();
 
+    rect |= m_textOutlineHelper->decorationRect();
+
     return rect;
 }
 
@@ -699,6 +705,9 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius() * 0.75);
     }
 
+    m_textOutlineHelper->setDecorationThickness(decorationThickness());
+    m_textOutlineHelper->setHandleRadius(handleRadius());
+    m_textOutlineHelper->paint(&gc, converter);
     gc.setTransform(converter.documentToView(), true);
     {
         KisHandlePainterHelper handlePainter(&gc, handleRadius(), decorationThickness());
@@ -710,7 +719,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         }
     }
     if (shape) {
-            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight), decorationThickness(), handleRadius());
+        m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight), decorationThickness(), handleRadius());
     }
     if (m_interactionStrategy) {
         gc.save();
@@ -741,6 +750,12 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
     KoSvgTextShape *selectedShape = this->selectedShape();
 
     if (selectedShape) {
+        if (m_textOutlineHelper->contourModeButtonHovered(event->point)) {
+            m_textOutlineHelper->toggleTextContourMode(selectedShape);
+            event->accept();
+            KoToolManager::instance()->switchToolRequested("InteractionTool");
+            return;
+        }
         if (m_highlightItem == HighlightItem::TypeSettingHandle) {
             SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
             if (handle != SvgTextCursor::NoHandle) {

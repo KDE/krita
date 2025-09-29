@@ -57,7 +57,7 @@ QString KisImportExportComplexError::qtErrorMessage() const
 KisImportExportErrorCannotRead::KisImportExportErrorCannotRead() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotRead::KisImportExportErrorCannotRead(QFileDevice::FileError error) : KisImportExportComplexError(error) {
-    KIS_ASSERT_RECOVER_NOOP(error != QFileDevice::NoError);
+    KIS_SAFE_ASSERT_RECOVER(error != QFileDevice::NoError) {m_error = QFileDevice::ReadError; }
 }
 
 QString KisImportExportErrorCannotRead::errorMessage() const
@@ -73,7 +73,7 @@ bool KisImportExportErrorCannotRead::operator==(KisImportExportErrorCannotRead o
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite(QFileDevice::FileError error) : KisImportExportComplexError(error) {
-    KIS_ASSERT_RECOVER_NOOP(error != QFileDevice::NoError);
+    KIS_SAFE_ASSERT_RECOVER(error != QFileDevice::NoError) {m_error = QFileDevice::WriteError; }
 }
 
 QString KisImportExportErrorCannotWrite::errorMessage() const

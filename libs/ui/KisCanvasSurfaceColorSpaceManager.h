@@ -34,6 +34,7 @@ public:
     KisDisplayConfig displayConfig() const;
 
     QString colorManagementReport() const;
+    QString osPreferredColorSpaceReport() const;
 
 Q_SIGNALS:
     void sigDisplayConfigChanged(const KisDisplayConfig &config);

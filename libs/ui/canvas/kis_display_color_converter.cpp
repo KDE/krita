@@ -29,7 +29,6 @@
 #include "kis_paint_device.h"
 #include "kis_iterator_ng.h"
 #include "kis_fixed_paint_device.h"
-#include "opengl/KisOpenGLModeProber.h"
 #include "KisDisplayConfig.h"
 
 Q_GLOBAL_STATIC(KisDisplayColorConverter, s_instance)

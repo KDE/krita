@@ -69,14 +69,6 @@ QString DlgColorManagementInfo::replacementWarningText()
 #include <kis_canvas2.h>
 #include <KisPlatformPluginInterfaceFactory.h>
 
-#include <config-use-surface-color-management-api.h>
-
-#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
-
-#include <KisRootSurfaceInfoProxy.h>
-
-#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
-
 QString DlgColorManagementInfo::infoText(QSettings& kritarc)
 {
     Q_UNUSED(kritarc)

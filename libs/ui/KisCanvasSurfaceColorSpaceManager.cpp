@@ -26,7 +26,6 @@ struct KRITAUI_NO_EXPORT KisCanvasSurfaceColorSpaceManager::Private
     std::optional<KisSurfaceColorimetry::RenderIntent> proofingIntentOverride;
     KisConfig::CanvasSurfaceMode surfaceMode = KisConfig::CanvasSurfaceMode::Preferred;
 
-    static KisSurfaceColorimetry::RenderIntent calculateConfigIntent(int intent, bool useBlackPointCompensation);
     static KisSurfaceColorimetry::RenderIntent calculateConfigIntent(const KisDisplayConfig::Options &options);
 };
 

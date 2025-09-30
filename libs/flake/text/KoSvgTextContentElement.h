@@ -40,9 +40,7 @@ public:
         , finalResultIndex(rhs.finalResultIndex)
         , associatedOutline(rhs.associatedOutline)
     {
-        if (rhs.textPath) {
-        textPath.reset(rhs.textPath.data()->cloneShape());
-        }
+
     }
 
     ~KoSvgTextContentElement() = default;
@@ -56,8 +54,7 @@ public:
     /// Text path info for the text-on-path algorithm
     KoSvgText::TextOnPathInfo textPathInfo;
 
-    /// The textpath, if any. Defaults to null.
-    QScopedPointer<KoShape> textPath{nullptr};
+    /// The textpath's name, if any.
     QString textPathId;
 
     /// the value 'textLength' attribute of the associated dom element

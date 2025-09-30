@@ -119,6 +119,7 @@ void KoSvgTextLoader::setTextPathOnCurrentNode(KoShape *s)
 {
     if (!KisForestDetail::isEnd(d->currentNode) && s) {
         d->currentNode->textPathId = s->name();
+        s->addDependee(d->shape);
         d->shape->d->textPaths.append(s);
     }
 }

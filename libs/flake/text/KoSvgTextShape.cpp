@@ -1608,7 +1608,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
         if (it.state() == KisForestDetail::Enter) {
             bool isTextPath = false;
             QMap<QString, QString> shapeSpecificStyles;
-            if (it->textPath) {
+            if (!it->textPathId.isEmpty()) {
                 isTextPath = true;
             }
             if (it == d->textData.compositionBegin()) {
@@ -1648,7 +1648,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 
             }
 
-            KoShape *textPath = d->textPathByName(it->textPathId);
+            KoShape *textPath = KoSvgTextShape::Private::textPathByName(it->textPathId, d->textPaths);
             success = it->saveSvg(context,
                                   it == d->textData.compositionBegin(),
                                   d->childCount(siblingCurrent(it)) == 0,
@@ -1813,7 +1813,7 @@ void KoSvgTextShape::debugParsing()
             qDebug() << QString(spaces + "| Opacity: ") << it->properties.property(KoSvgTextProperties::Opacity);
             qDebug() << QString(spaces + "| PaintOrder: ") << it->properties.hasProperty(KoSvgTextProperties::PaintOrder);
             qDebug() << QString(spaces + "| Visibility set: ") << it->properties.hasProperty(KoSvgTextProperties::Visibility);
-            qDebug() << QString(spaces + "| TextPath set: ") << (!it->textPath.isNull());
+            qDebug() << QString(spaces + "| TextPath set: ") << it->textPathId;
             qDebug() << QString(spaces + "| Transforms set: ") << it->localTransformations;
             spaces.append(" ");
         }

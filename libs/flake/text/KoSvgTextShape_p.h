@@ -555,7 +555,7 @@ public:
      */
     void updateTextWrappingAreas();
 
-    KoShape *textPathByName(QString name) {
+    static KoShape *textPathByName(QString name, QList<KoShape*> textPaths) {
         auto it = std::find_if(textPaths.begin(), textPaths.end(), [&name](const KoShape *s) -> bool {return s->name() == name;});
         return it != textPaths.end()? *it: nullptr;
     }
@@ -609,7 +609,7 @@ public:
                                            bool isHorizontal,
                                            qreal offset,
                                            bool isClosed);
-    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps, Private *d);
+    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps, QList<KoShape*> textPaths);
     static void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
                             const KoSvgText::FontMetrics &parentBaselineTable, const KoSvgText::Baseline parentBaseline,
                             const QPointF superScript,
@@ -634,7 +634,7 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping,
-                                const KoSvgTextProperties resolvedProps, Private *d);
+                                const KoSvgTextProperties resolvedProps, QList<KoShape*> textPaths);
     QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const int &start, const int &end,
                                                                           const KoSvgText::ResolutionHandler resHandler,
                                                                           const QVector<CharacterResult> &result,
@@ -756,7 +756,7 @@ public:
             // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
 
             if (siblingCurrent(contentElement) != tree.childBegin()
-                    && !contentElement->textPath
+                    && contentElement->textPathId.isEmpty()
                     && contentElement->textLength.isAuto
                     && contentElement->localTransformations.isEmpty()) {
                 contentElement->removeText(zero, start);
@@ -1049,7 +1049,7 @@ public:
                                             QVector<KoSvgText::CharTransformation> &resolvedTransforms,
                                             bool &inTextPath) {
 
-        inTextPath = (!current->textPath.isNull());
+        inTextPath = (!current->textPathId.isEmpty());
         auto base = current.base();
         base--;
         if(base != siblingEnd(base)) {
@@ -1113,7 +1113,7 @@ public:
                                      int &globalIndex, bool isHorizontal) {
         KoSvgTextProperties props = current->properties;
         props.inheritFrom(parentProps);
-        if (current->textPath) return; // When we're doing text-on-path, we're already in preformatted mode.
+        if (!current->textPathId.isEmpty()) return; // When we're doing text-on-path, we're already in preformatted mode.
         for (auto it = childBegin(current); it!= childEnd(current); it++) {
             setTransformsFromLayoutImpl(it, props, layout, globalIndex, isHorizontal);
         }
@@ -1171,7 +1171,7 @@ public:
 
                 // Remove empty leafs that are not the root or text paths.
                 const int length = it->numChars(false);
-                if (length == 0 && siblingCurrent(it) != tree.childBegin() && !it->textPath) {
+                if (length == 0 && siblingCurrent(it) != tree.childBegin() && it->textPathId.isEmpty()) {
                     tree.erase(siblingCurrent(it));
                 } else {
                     // check if siblings are similar.
@@ -1182,7 +1182,7 @@ public:
                     if (!isEnd(siblingPrev)
                             && siblingPrev != siblingCurrent(it)
                             && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                            && (siblingPrev->textPathId.isEmpty() && !it->textPathId.isEmpty())
+                            && (siblingPrev->textPathId.isEmpty() && it->textPathId.isEmpty())
                             && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
                             && (siblingPrev->properties == it->properties)
                             && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)) {
@@ -1195,7 +1195,7 @@ public:
                 // merge single children into parents if possible.
                 auto child = childBegin(siblingCurrent(it));
                 if ((child->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                        && (!child->textPath && !it->textPath)
+                        && (child->textPathId.isEmpty() && it->textPathId.isEmpty())
                         && (child->textLength.isAuto && it->textLength.isAuto)
                         && (!child->properties.hasNonInheritableProperties() || !it->properties.hasNonInheritableProperties())) {
                     if (it->properties.hasNonInheritableProperties()) {

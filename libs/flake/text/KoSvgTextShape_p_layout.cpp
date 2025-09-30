@@ -747,12 +747,12 @@ void KoSvgTextShape::Private::relayout()
                                   globalIndex,
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
-                                  false, KoSvgTextProperties::defaultProperties(), this);
+                                  false, KoSvgTextProperties::defaultProperties(), this->textPaths);
 
         // 8. Position on path
 
         debugFlake << "8. Position on path";
-        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos, KoSvgTextProperties::defaultProperties(), this);
+        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos, KoSvgTextProperties::defaultProperties(), this->textPaths);
     } else {
         globalIndex = 0;
         debugFlake << "Computing text-decorationsfor inline-size";
@@ -766,7 +766,7 @@ void KoSvgTextShape::Private::relayout()
                                   globalIndex,
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
-                                  true, KoSvgTextProperties::defaultProperties(), this);
+                                  true, KoSvgTextProperties::defaultProperties(), this->textPaths);
     }
 
     // 9. return result.
@@ -1260,7 +1260,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     bool ltr,
     bool wrapping,
     const KoSvgTextProperties resolvedProps,
-                                                     Private *d)
+                                                     QList<KoShape *> textPaths)
 {
 
     const int i = currentIndex;
@@ -1271,7 +1271,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     qreal currentTextPathOffset = textPathoffset;
     bool textPathSide = side;
     if (!wrapping) {
-        KoShape *cTextPath = d->textPathByName(currentTextElement->textPathId);
+        KoShape *cTextPath = KoSvgTextShape::Private::textPathByName(currentTextElement->textPathId, textPaths);
         currentTextPath = textPath ? textPath : dynamic_cast<KoPathShape *>(cTextPath);
 
         if (cTextPath) {
@@ -1303,7 +1303,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                                isHorizontal,
                                ltr,
                                wrapping,
-                               properties, d
+                               properties, textPaths
                                );
     }
 
@@ -1834,7 +1834,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
                                             QVector<CharacterResult> &result,
                                             bool isHorizontal,
                                             QPointF &startPos,
-                                            const KoSvgTextProperties resolvedProps, Private *d)
+                                            const KoSvgTextProperties resolvedProps, QList<KoShape *> textPaths)
 {
     // Unlike all the other applying functions, this one only iterates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
@@ -1846,7 +1846,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
     for (auto textShapeElement = KisForestDetail::childBegin(root); textShapeElement != KisForestDetail::childEnd(root); textShapeElement++) {
         int endIndex = currentIndex + numChars(textShapeElement, true, resolvedProps);
 
-        KoShape *cTextPath = d->textPathByName(textShapeElement->textPathId);
+        KoShape *cTextPath = KoSvgTextShape::Private::textPathByName(textShapeElement->textPathId, textPaths);
         KoPathShape *shape = dynamic_cast<KoPathShape *>(cTextPath);
         if (shape) {
             QPainterPath path = shape->outline();

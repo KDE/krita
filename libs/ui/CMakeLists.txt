@@ -658,6 +658,7 @@ if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
 
         KisSRGBSurfaceColorSpaceManager.cpp
         KisCanvasSurfaceColorSpaceManager.cpp
+        KisRootSurfaceInfoProxy.cpp
     )
 endif()
 

@@ -9,7 +9,7 @@
 #include <KisCanvasSurfaceColorSpaceManager.h>
 
 
-class KisSRGBSurfaceColorSpaceManager : public KisCanvasSurfaceColorSpaceManager
+class KRITAUI_EXPORT KisSRGBSurfaceColorSpaceManager : public KisCanvasSurfaceColorSpaceManager
 {
     Q_OBJECT
 public:

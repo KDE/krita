@@ -11,7 +11,10 @@
 
 #include <config-use-surface-color-management-api.h>
 
+class QString;
+class QWidget;
 class QWindow;
+
 class KisSurfaceColorManagerInterface;
 class KisExtendedModifiersMapperPluginInterface;
 
@@ -34,7 +37,27 @@ public:
     KisSurfaceColorManagerInterface *createSurfaceColorManager(QWindow *nativeWindow);
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
+    /**
+     * Returns true if Krita is running on a system that manages the color
+     * space of the underlying surface. If it is true, the canvas should use
+     * KisCanvasSurfaceColorSpaceManager and all other windows should use
+     * KisSRGBSurfaceColorSpaceManager to set up the color space properly.
+     */
     bool surfaceColorManagedByOS();
+
+    /**
+     * Return user-facing information about color management status of the
+     * main window surface. The information is intentionally left untranslated,
+     * since it is supposed to be used for bugreports.
+     */
+    QString colorManagementReport(QWidget *widget);
+
+    /**
+     * Return user-facing information about the preferred color space of the
+     * operating system. This information is supposed to be used in the
+     * preferences dialog, so it is supposed to be translated.
+     */
+    QString osPreferredColorSpaceReport(QWidget *widget);
 
     /**
      * Creates an instance of the extended modifiers interface using the platform plugin

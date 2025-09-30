@@ -67,6 +67,15 @@ QString DlgColorManagementInfo::replacementWarningText()
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <kis_canvas2.h>
+#include <KisPlatformPluginInterfaceFactory.h>
+
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+#include <KisRootSurfaceInfoProxy.h>
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 QString DlgColorManagementInfo::infoText(QSettings& kritarc)
 {
@@ -84,7 +93,7 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
     s << "Native window handle:" << mainWindow->windowHandle() << Qt::endl;
     s << Qt::endl;
 
-    s.noquote().nospace() << mainWindow->colorManagementReport();
+    s.noquote().nospace() << KisPlatformPluginInterfaceFactory::instance()->colorManagementReport(mainWindow);
     s.space().quote();
     s << Qt::endl;
 
@@ -99,7 +108,7 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
         s << "Native window handle:" << canvas->canvasWidget()->windowHandle() << Qt::endl;
 
 
-        if (mainWindow->managedSurfaceProfile() &&
+        if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS() &&
             canvas->canvasWidget()->windowHandle() == mainWindow->windowHandle()) {
 
                 s << "WARNING: the canvas shares the surface with the main window on a platform with managed surface color space!";

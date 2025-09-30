@@ -10,7 +10,16 @@
 #include <KisDisplayConfig.h>
 #include <KisProofingConfiguration.h>
 
-class KisView;
+#include <config-use-surface-color-management-api.h>
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+
+#include <QPointer>
+class KisRootSurfaceInfoProxy;
+
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
+
 
 /**
  * On some systems the canvas may have a surface format different
@@ -64,7 +73,12 @@ public:
     };
 
 public:
-    KisMultiSurfaceStateManager(KisView *view);
+    KisMultiSurfaceStateManager();
+    ~KisMultiSurfaceStateManager();
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    void setRootSurfaceInfoProxy(KisRootSurfaceInfoProxy *proxy);
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
     State createInitializingConfig(bool isCanvasOpenGL, int screenId, KisProofingConfigurationSP proofingConfig) const;
 
@@ -87,7 +101,9 @@ private:
     KisDisplayConfig::Options overriddenWithProofingConfig(const KisDisplayConfig::Options &options, KisProofingConfigurationSP proofingConfig) const;
 
 private:
-    KisView *m_view { nullptr };
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    QPointer<KisRootSurfaceInfoProxy> m_rootSurfaceInfoProxy;
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 };
 
 

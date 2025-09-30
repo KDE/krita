@@ -33,6 +33,7 @@
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
 #include <KisPlatformPluginInterfaceFactory.h>
+#include <KisRootSurfaceInfoProxy.h>
 
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
@@ -57,6 +58,10 @@ struct KisSmallColorWidget::Private {
     bool hasHDR = false;
     bool hasHardwareHDR = false;
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    KisRootSurfaceInfoProxy *rootSurfaceInfoProxy = nullptr;
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
     qreal effectiveRelativeDynamicRange() const {
         return hasHDR ? currentRelativeDynamicRange : 1.0;
     }
@@ -68,8 +73,8 @@ struct KisSmallColorWidget::Private {
             profile = KisOpenGLModeProber::instance()->rootSurfaceColorProfile();
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
         } else if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
-            // TODO: actually fetch from the main window
-            profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(rootSurfaceInfoProxy, profile);
+            profile = rootSurfaceInfoProxy->rootSurfaceProfile();
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
         } else {
             // we are a normal QWidget's surface
@@ -164,6 +169,9 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
          * If the platform is managed, then it can potentially be HDR
          */
         d->hasHardwareHDR = true;
+        d->rootSurfaceInfoProxy = new KisRootSurfaceInfoProxy(this, this);
+        connect(d->rootSurfaceInfoProxy, &KisRootSurfaceInfoProxy::sigRootSurfaceProfileChanged,
+                this, &KisSmallColorWidget::slotDisplayConfigurationChanged);
     }
 #endif
 

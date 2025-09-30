@@ -101,6 +101,7 @@
 #include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
 #include <KisCanvasSurfaceColorSpaceManager.h>
 #include <KisPlatformPluginInterfaceFactory.h>
+#include <KisRootSurfaceInfoProxy.h>
 
 #endif
 
@@ -134,8 +135,10 @@ class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
     }; // class CanvasInputActionGroupsMask
 
 public:
-
-    KisCanvas2Private(KisCanvas2 *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceProvider* resourceManager)
+    KisCanvas2Private(KisCanvas2 *parent,
+                      KisCoordinatesConverter *coordConverter,
+                      QPointer<KisView> view,
+                      KoCanvasResourceProvider *resourceManager)
         : q(parent)
         , coordinatesConverter(coordConverter)
         , view(view)
@@ -147,8 +150,22 @@ public:
         , inputActionGroupsMaskInterface(new CanvasInputActionGroupsMaskInterface(this))
         , regionOfInterestUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , referencesBoundsUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
-        , multiSurfaceSetupManager(view)
     {
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+        if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+            rootSurfaceInfoProxy = new KisRootSurfaceInfoProxy(view, q);
+            multiSurfaceSetupManager.setRootSurfaceInfoProxy(rootSurfaceInfoProxy);
+            connect(rootSurfaceInfoProxy,
+                    &KisRootSurfaceInfoProxy::sigRootSurfaceProfileChanged,
+                    parent,
+                    [this](const KoColorProfile *profile) {
+                        if (!multiSurfaceState)
+                            return;
+                        auto newState = multiSurfaceSetupManager.onGuiSurfaceFormatChanged(*multiSurfaceState, profile);
+                        assignChangedMultiSurfaceState(newState);
+                    });
+        }
+#endif
     }
 
     ~KisCanvas2Private()
@@ -208,11 +225,13 @@ public:
     QRect renderingLimit;
     int isBatchUpdateActive = 0;
 
-    KisMultiSurfaceStateManager multiSurfaceSetupManager;
-    std::optional<KisMultiSurfaceStateManager::State> multiSurfaceState;
+
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
     QScopedPointer<KisCanvasSurfaceColorSpaceManager> surfaceColorManager;
+    KisRootSurfaceInfoProxy *rootSurfaceInfoProxy;
 #endif
+    KisMultiSurfaceStateManager multiSurfaceSetupManager;
+    std::optional<KisMultiSurfaceStateManager::State> multiSurfaceState;
 
     bool effectiveLodAllowedInImage() const {
         return lodPreferredInImage && !bootstrapLodBlocked;
@@ -1363,9 +1382,6 @@ void KisCanvas2::slotConfigChanged()
 
     QWidget *topLevelWidget = mainWindow->topLevelWidget();
     KIS_SAFE_ASSERT_RECOVER_RETURN(topLevelWidget);
-
-    auto options = KisDisplayConfig::optionsFromKisConfig(cfg);
-    ENTER_FUNCTION() << ppVar(options);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->multiSurfaceState);
     auto newState = m_d->multiSurfaceSetupManager.onConfigChanged(*m_d->multiSurfaceState,

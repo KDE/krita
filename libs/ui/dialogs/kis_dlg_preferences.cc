@@ -1237,7 +1237,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         vboxLayout->addItem(new QSpacerItem(20,20));
 
         KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-        QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", mainWindow->osPreferredColorSpaceReport()), this);
+        QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", KisPlatformPluginInterfaceFactory::instance()->osPreferredColorSpaceReport(mainWindow)), this);
         vboxLayout->addWidget(preferredLbl);
 
         m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement());

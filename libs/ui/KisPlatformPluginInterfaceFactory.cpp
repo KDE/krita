@@ -17,6 +17,7 @@
 
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
+#include <KisRootSurfaceInfoProxy.h>
 #include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
 #include <surfacecolormanagement/KisSurfaceColorManagementInfo.h>
 
@@ -77,6 +78,35 @@ bool KisPlatformPluginInterfaceFactory::surfaceColorManagedByOS()
     return m_surfaceColorManagedByOS;
 }
 
+QString KisPlatformPluginInterfaceFactory::colorManagementReport(QWidget *widget)
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+        KisRootSurfaceInfoProxy proxy(widget);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(proxy.isReady());
+        return proxy.colorManagementReport();
+    } else {
+        return "Surface color management is not supported on this platform\n";
+    }
+#else
+    return "Surface color management is disabled\n";
+#endif
+}
+
+QString KisPlatformPluginInterfaceFactory::osPreferredColorSpaceReport(QWidget *widget)
+{
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+        KisRootSurfaceInfoProxy proxy(widget);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(proxy.isReady());
+        return proxy.osPreferredColorSpaceReport();
+    } else {
+        return "Surface color management is not supported on this platform\n";
+    }
+#else
+    return "Surface color management is disabled\n";
+#endif
+}
 
 
 KisExtendedModifiersMapperPluginInterface* KisPlatformPluginInterfaceFactory::createExtendedModifiersMapper()

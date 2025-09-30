@@ -11,12 +11,20 @@
 #include <opengl/KisOpenGLModeProber.h>
 #include <KisPlatformPluginInterfaceFactory.h>
 
-// TODO: remove
-#include <KisMainWindow.h>
+#include <KisRootSurfaceInfoProxy.h>
 
-KisMultiSurfaceStateManager::KisMultiSurfaceStateManager(KisView *view)
-    : m_view(view)
+
+KisMultiSurfaceStateManager::KisMultiSurfaceStateManager()
 {
+}
+
+KisMultiSurfaceStateManager::~KisMultiSurfaceStateManager()
+{
+}
+
+void KisMultiSurfaceStateManager::setRootSurfaceInfoProxy(KisRootSurfaceInfoProxy *proxy)
+{
+    m_rootSurfaceInfoProxy = proxy;
 }
 
 KisMultiSurfaceStateManager::State KisMultiSurfaceStateManager::createInitializingConfig(bool isCanvasOpenGL, int screenId, KisProofingConfigurationSP proofingConfig) const
@@ -39,8 +47,17 @@ KisMultiSurfaceStateManager::State KisMultiSurfaceStateManager::createInitializi
         multiConfig.uiProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
     } else if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
-        multiConfig.canvasProfile = this->m_view->mainWindow()->managedSurfaceProfile();
-        multiConfig.uiProfile = this->m_view->mainWindow()->managedSurfaceProfile(); // TODO: updates
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_rootSurfaceInfoProxy);
+        if (m_rootSurfaceInfoProxy) {
+            multiConfig.canvasProfile = m_rootSurfaceInfoProxy->rootSurfaceProfile();
+            multiConfig.uiProfile = m_rootSurfaceInfoProxy->rootSurfaceProfile();
+        }
+#else
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "managed surface mode is active, but Krita is compiled without it!");
+        multiConfig.canvasProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+        multiConfig.uiProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
     } else {
         const KoColorProfile *profile = cfg.displayProfile(screenId);
         KIS_SAFE_ASSERT_RECOVER(profile) {

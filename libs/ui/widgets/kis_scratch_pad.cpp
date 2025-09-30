@@ -50,6 +50,11 @@
 #include <KisScreenMigrationTracker.h>
 #include <kis_config_notifier.h>
 
+#include <KisPlatformPluginInterfaceFactory.h>
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+#include <KisRootSurfaceInfoProxy.h>
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
+
 namespace {
 class KisUpdateSchedulerLockAdapter
 {
@@ -152,7 +157,6 @@ private:
     const KisScratchPad *m_scratchPad;
 };
 
-
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)
     , m_toolMode(HOVERING)
@@ -201,10 +205,29 @@ KisScratchPad::KisScratchPad(QWidget *parent)
 
     connect(m_screenMigrationTracker.data(), &KisScreenMigrationTracker::sigScreenChanged,
             this, &KisScratchPad::slotScreenChanged);
-    slotScreenChanged(m_screenMigrationTracker->currentScreenSafe());
 
     connect(KisConfigNotifier::instance(), &KisConfigNotifier::configChanged,
             this, &KisScratchPad::slotConfigChanged);
+
+    QScreen *screen = m_screenMigrationTracker->currentScreenSafe();
+    const int canvasScreenNumber = qApp->screens().indexOf(screen);
+
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+        // proxy's lifetime is managed by QObject hierarchy
+        KisRootSurfaceInfoProxy *rootSurfaceInfoProxy = new KisRootSurfaceInfoProxy(this, this);
+        m_multiSurfaceStateManager.setRootSurfaceInfoProxy(rootSurfaceInfoProxy);
+        connect(rootSurfaceInfoProxy,
+                &KisRootSurfaceInfoProxy::sigRootSurfaceProfileChanged,
+                parent,
+                [this] (const KoColorProfile *profile) {
+                    auto newState = m_multiSurfaceStateManager.onGuiSurfaceFormatChanged(m_multiSurfaceState, profile);
+                    assignNewSurfaceState(newState);
+                });
+    }
+#endif
+
+    m_multiSurfaceState = m_multiSurfaceStateManager.createInitializingConfig(false, canvasScreenNumber, nullptr);
 }
 
 KisScratchPad::~KisScratchPad()
@@ -681,17 +704,30 @@ void KisScratchPad::slotUpdateCanvas(const QRect &rect)
     update(rect);
 }
 
+void KisScratchPad::assignNewSurfaceState(const KisMultiSurfaceStateManager::State &newState)
+{
+    m_multiSurfaceState = newState;
+
+    if (newState.multiConfig.uiDisplayConfig() != m_displayConfig) {
+        m_displayConfig = newState.multiConfig.uiDisplayConfig();
+        update();
+    }
+}
+
 void KisScratchPad::slotConfigChanged()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_screenMigrationTracker);
 
     KisConfig cfg(true);
+
     QScreen *screen = m_screenMigrationTracker->currentScreenSafe();
-    const int canvasScreenNumber = qApp->screens().indexOf(screen);
-    KisDisplayConfig newConfig(canvasScreenNumber, cfg);
-    if (newConfig != m_displayConfig) {
-        slotScreenChanged(screen);
-    }
+    const int screenId = qApp->screens().indexOf(screen);
+
+    auto newState = m_multiSurfaceStateManager.onConfigChanged(m_multiSurfaceState,
+                                                               screenId,
+                                                               cfg.canvasSurfaceColorSpaceManagementMode(),
+                                                               KisDisplayConfig::optionsFromKisConfig(cfg));
+    assignNewSurfaceState(newState);
 }
 
 void KisScratchPad::paintEvent ( QPaintEvent * event ) {
@@ -944,10 +980,10 @@ void KisScratchPad::paintPresetImage()
 
 void KisScratchPad::slotScreenChanged(QScreen *screen)
 {
-    KisConfig cfg(true);
-    const int canvasScreenNumber = qApp->screens().indexOf(screen);
-    m_displayConfig = KisDisplayConfig(canvasScreenNumber, cfg);
-    update();
+    const int screenId = qApp->screens().indexOf(screen);
+
+    auto newState = m_multiSurfaceStateManager.onScreenChanged(m_multiSurfaceState, screenId);
+    assignNewSurfaceState(newState);
 }
 
 void KisScratchPad::fillDefault()

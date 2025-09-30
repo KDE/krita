@@ -35,22 +35,7 @@ KisDisplayConfig::KisDisplayConfig()
     : profile(nullptr)
     , intent(KoColorConversionTransformation::internalRenderingIntent())
     , conversionFlags(KoColorConversionTransformation::internalConversionFlags())
-{
-}
-
-KisDisplayConfig::KisDisplayConfig(int screen, const KisConfig &config)
-    : profile(config.displayProfile(screen))
-    , intent(renderingIntentFromConfig(config))
-    , conversionFlags(conversionFlagsFromConfig(config))
-    , isHDR(KisOpenGLModeProber::instance()->useHDRMode())
-{
-}
-
-KisDisplayConfig::KisDisplayConfig(const KoColorProfile *_profileOverride, const KisConfig &config)
-    : profile(_profileOverride)
-    , intent(renderingIntentFromConfig(config))
-    , conversionFlags(conversionFlagsFromConfig(config))
-    , isHDR(KisOpenGLModeProber::instance()->useHDRMode())
+    , isHDR(false)
 {
 }
 

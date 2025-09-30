@@ -25,12 +25,10 @@ public:
 
 public:
     KisDisplayConfig();
-    KisDisplayConfig(int screen, const KisConfig &config);
     KisDisplayConfig(const KoColorProfile *_profile,
                      KoColorConversionTransformation::Intent _intent,
                      KoColorConversionTransformation::ConversionFlags _conversionFlags,
                      bool _isHDR = false);
-    KisDisplayConfig(const KoColorProfile *_profileOverride, const KisConfig &config);
     bool operator==(const KisDisplayConfig &rhs) const;
 
     Options options() const {

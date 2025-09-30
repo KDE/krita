@@ -32,6 +32,7 @@
 #include <QVector3D>
 #include "kis_painting_tweaks.h"
 #include "KisOpenGLBufferCreationGuard.h"
+#include <KisPlatformPluginInterfaceFactory.h>
 
 /// we use Angle's EGL on Windows, so we need access to
 /// EGL_ANGLE_platform_angle definition
@@ -155,6 +156,9 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
     if (cfg.useOcio()) return false;
     if (KisPart::instance()->mainwindowCount() == 1) return true;
     if (QGuiApplication::screens().count() == 1) return true;
+    // Disable sharing in managed mode, since we need to handle the transitions in some
+    // clever way when the window is moved to a different screen
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) return false;
     for (int i = 1; i < QGuiApplication::screens().count(); i++) {
         if (cfg.displayProfile(i) != cfg.displayProfile(i - 1)) {
             return false;

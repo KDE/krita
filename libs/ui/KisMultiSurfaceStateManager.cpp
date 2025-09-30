@@ -22,10 +22,12 @@ KisMultiSurfaceStateManager::~KisMultiSurfaceStateManager()
 {
 }
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 void KisMultiSurfaceStateManager::setRootSurfaceInfoProxy(KisRootSurfaceInfoProxy *proxy)
 {
     m_rootSurfaceInfoProxy = proxy;
 }
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
 KisMultiSurfaceStateManager::State KisMultiSurfaceStateManager::createInitializingConfig(bool isCanvasOpenGL, int screenId, KisProofingConfigurationSP proofingConfig) const
 {

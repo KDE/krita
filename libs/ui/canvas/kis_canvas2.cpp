@@ -95,16 +95,18 @@
 #include "config-qt-patches-present.h"
 #include <KoIcon.h>
 
+
+
 #include <config-use-surface-color-management-api.h>
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
 #include <surfacecolormanagement/KisSurfaceColorManagerInterface.h>
 #include <KisCanvasSurfaceColorSpaceManager.h>
-#include <KisPlatformPluginInterfaceFactory.h>
 #include <KisRootSurfaceInfoProxy.h>
 
-#endif
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
+#include <KisPlatformPluginInterfaceFactory.h>
 #include <KisMultiSurfaceStateManager.h>
 
 

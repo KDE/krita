@@ -29,10 +29,11 @@
 #include <opengl/KisOpenGLModeProber.h>
 #include <KisDisplayConfig.h>
 
+#include <KisPlatformPluginInterfaceFactory.h>
+
 #include <config-use-surface-color-management-api.h>
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
 
-#include <KisPlatformPluginInterfaceFactory.h>
 #include <KisRootSurfaceInfoProxy.h>
 
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
@@ -163,7 +164,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
 
     d->hasHardwareHDR = KisOpenGLModeProber::instance()->useHDRMode();
 
-#if defined KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
     if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
         /**
          * If the platform is managed, then it can potentially be HDR

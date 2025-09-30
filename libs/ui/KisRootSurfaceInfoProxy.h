@@ -17,6 +17,31 @@ class QWindow;
 class QEvent;
 class KoColorProfile;
 
+/**
+ * KisRootSurfaceInfoProxy is a special proxy object for the
+ * surface color management information of the widget.
+ *
+ * When created, the proxy does the following:
+ *
+ * 1) Finds the top-level widget that \p watched belongs to.
+ *    (is \p watched changed its parent in the meantime, e.g.
+ *     during construction, then the proxy will handle that
+ *     as well)
+ *
+ * 2) Finds the QWindow that this toplevel widget is painted on
+ *    (if platform window is not created yet, subscribes to
+ *     QPlatformSurfaceEvent to attach when platform window is
+ *     finally created)
+ *
+ * 3) Finds KisSRGBSurfaceColorSpaceManager object attached to
+ *    this window. This object is usually attached with an event
+ *    filter in KisApplication to all windows not having a special
+ *    property (if the manager is not yet attached, tracks its
+ *    addition by filtering QChildEvent)
+ *
+ * 4) Finally, connects to the manager and forwards its
+ *    sigDisplayConfigChanged() to local sigRootSurfaceProfileChanged()
+ */
 class KRITAUI_EXPORT KisRootSurfaceInfoProxy : public QObject
 {
     Q_OBJECT

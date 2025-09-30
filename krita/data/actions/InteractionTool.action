@@ -327,5 +327,35 @@
   <statusTip></statusTip>
   <isCheckable>true</isCheckable>
 </Action>
-  </Actions>
+
+<Action name="add_shape_to_flow_area">
+  <text>Flow Text in Shape</text>
+  <toolTip>Make the first selected text flow in shape.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+</Action>
+
+<Action name="subtract_shape_from_flow_area">
+  <text>Subtract Shape from Text Flow Area</text>
+  <toolTip>Make shapes part of the subtracted shapes of the first selected text.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+</Action>
+
+<Action name="remove_shapes_from_text_flow">
+  <text>Remove Shapes from Text Flow</text>
+  <toolTip>Remove shapes from text flow and add them to the layer.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+</Action>
+</Actions>
 </ActionCollection>

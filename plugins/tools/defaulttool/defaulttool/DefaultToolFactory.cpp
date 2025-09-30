@@ -77,6 +77,10 @@ QList<QAction *> DefaultToolFactory::createActionsImpl()
     actions << actionRegistry->makeQAction("text_type_pre_positioned", this);
     actions << actionRegistry->makeQAction("text_type_inline_wrap", this);
 
+    actions << actionRegistry->makeQAction("add_shape_to_flow_area", this);
+    actions << actionRegistry->makeQAction("subtract_shape_from_flow_area", this);
+    actions << actionRegistry->makeQAction("remove_shapes_from_text_flow", this);
+
     return actions;
 
 }

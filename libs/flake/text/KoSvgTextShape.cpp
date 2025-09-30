@@ -56,7 +56,8 @@ public:
                               const QMap<int, int> &logicalToVisualCursorPos,
                               const QString &plainText,
                               const bool &isBidi,
-                              const QPointF &initialTextPosition)
+                              const QPointF &initialTextPosition,
+                              const QList<KoShape*> textPaths)
         : KoSvgTextShapeMemento()
         , textData(textData)
         , result(result)
@@ -66,10 +67,13 @@ public:
         , plainText(plainText)
         , isBidi(isBidi)
         , initialTextPosition(initialTextPosition)
+        , textPaths(textPaths)
     {
     }
 
-    ~KoSvgTextShapeMementoImpl() {}
+    ~KoSvgTextShapeMementoImpl() {
+        qDeleteAll(textPaths);
+    }
 
 private:
     friend class KoSvgTextShape;
@@ -83,6 +87,8 @@ private:
     QString plainText;
     bool isBidi = false;
     QPointF initialTextPosition = QPointF();
+
+    QList<KoShape *> textPaths;
 };
 
 struct KoSvgTextNodeIndex::Private {
@@ -1766,7 +1772,8 @@ KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
                                                                  d->logicalToVisualCursorPos,
                                                                  d->plainText,
                                                                  d->isBidi,
-                                                                 d->initialTextPosition));
+                                                                 d->initialTextPosition,
+                                                                 d->textPaths));
 }
 
 void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
@@ -1781,6 +1788,15 @@ void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
         d->plainText = impl->plainText;
         d->isBidi = impl->isBidi;
         d->initialTextPosition = impl->initialTextPosition;
+        d->textPaths = impl->textPaths;
+        Q_FOREACH(KoShape * shape, d->textPaths) {
+            if (!shape->hasDependee(this)) {
+                shape->addDependee(this);
+            }
+            if (!d->shapeGroup->shapes().contains(shape)) {
+                d->shapeGroup->addShape(shape);
+            }
+        }
     }
 }
 
@@ -2057,21 +2073,66 @@ KoSvgTextShape::TextType KoSvgTextShape::textType() const
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
 {
-    Q_FOREACH(KoShape *shape, d->shapesInside) {
-        if (shape) {
-            shape->removeDependee(this);
+    removeShapesFromContours(d->shapesInside, false);
+    addShapeContours(shapesInside, true);
+}
+
+void KoSvgTextShape::addShapeContours(QList<KoShape *> shapes, const bool inside)
+{
+    Q_FOREACH(KoShape *shape, shapes) {
+        if (d->textPaths.contains(shape)) {
+            d->removeTextPathId(d->textData.childBegin(), shape->name());
+            d->cleanUp(d->textData);
+            d->textPaths.removeAll(shape);
         }
-        d->shapeGroup->removeShape(shape);
-    }
-    d->shapesInside = shapesInside;
-    Q_FOREACH(KoShape *shape, d->shapesInside) {
-        d->shapeGroup->addShape(shape);
-        shape->addDependee(this);
+
+        if (inside) {
+            if (d->shapesSubtract.contains(shape)) {
+                d->shapesSubtract.removeAll(shape);
+            }
+            d->shapesInside.append(shape);
+        } else {
+            if (d->shapesInside.contains(shape)) {
+                d->shapesInside.removeAll(shape);
+            }
+            d->shapesSubtract.append(shape);
+        }
+        if (!d->shapeGroup->shapes().contains(shape)) {
+            d->shapeGroup->addShape(shape);
+            shape->addDependee(this);
+        }
     }
     d->updateTextWrappingAreas();
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();
+}
+
+bool KoSvgTextShape::shapeInContours(KoShape *shape)
+{
+    return (shape->parent() == d->shapeGroup.data());
+}
+
+void KoSvgTextShape::removeShapesFromContours(QList<KoShape *> shapes, bool callUpdate)
+{
+    Q_FOREACH(KoShape *shape, shapes) {
+        if (shape) {
+            d->removeTextPathId(d->textData.childBegin(), shape->name());
+            d->cleanUp(d->textData);
+            shape->removeDependee(this);
+            d->shapesInside.removeAll(shape);
+            d->shapesSubtract.removeAll(shape);
+            d->textPaths.removeAll(shape);
+
+        }
+        d->shapeGroup->removeShape(shape);
+    }
+    if (callUpdate) {
+        d->updateTextWrappingAreas();
+        d->updateInternalShapesList();
+        shapeChangedPriv(ContentChanged);
+        update();
+    }
 }
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const
@@ -2081,21 +2142,8 @@ QList<KoShape *> KoSvgTextShape::shapesInside() const
 
 void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 {
-    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
-        if (shape) {
-            shape->removeDependee(this);
-        }
-        d->shapeGroup->removeShape(shape);
-    }
-    d->shapesSubtract = shapesSubtract;
-    Q_FOREACH(KoShape *shape, d->shapesSubtract) {
-        d->shapeGroup->addShape(shape);
-        shape->addDependee(this);
-    }
-    d->updateTextWrappingAreas();
-    d->updateInternalShapesList();
-    shapeChangedPriv(ContentChanged);
-    update();
+    removeShapesFromContours(d->shapesSubtract, false);
+    addShapeContours(shapesSubtract, false);
 }
 
 QList<QPainterPath> KoSvgTextShape::textWrappingAreas() const

@@ -98,6 +98,30 @@ public:
     void setShapesInside(QList<KoShape*> shapesInside);
 
     /**
+     * @brief addShapesContours
+     * Add shapes to the contours that make up the wrapping area.
+     * @param shapes -- shapes to add.
+     * @param inside -- whether to add to shapesInside or shapesSubtract.
+     * If a shape is already in one list, adding them will cause them to be
+     * moved to the other list.
+     */
+    void addShapeContours(QList<KoShape*> shapes, const bool inside = true);
+    /**
+     * @brief shapeInContours
+     * @param shape
+     * @return whether a shape is in any contour.
+     */
+    bool shapeInContours(KoShape *shape);
+
+    /**
+     * @brief removeShapesFromContours
+     * Remove list of shapes from any of the internal lists.
+     * @param shapes -- shapes to remove.
+     * @param update -- whether to call an update.
+     */
+    void removeShapesFromContours(QList<KoShape*> shapes, bool callUpdate = true);
+
+    /**
      * @brief shapesInside
      * @return the list of shapes that make up the content area.
      */

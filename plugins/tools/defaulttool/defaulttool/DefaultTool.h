@@ -122,6 +122,9 @@ private Q_SLOTS:
     void slotResetMeshGradientState();
 
     void slotChangeTextType(int index);
+    void slotAddShapesToFlow();
+    void slotSubtractShapesFromFlow();
+    void slotRemoveShapesFromFlow();
 
 protected Q_SLOTS:
     /// Update actions on selection change

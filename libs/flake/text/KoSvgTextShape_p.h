@@ -1245,6 +1245,19 @@ public:
     }
 
     static KoSvgTextNodeIndex createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement);
+
+    /**
+     * @brief removeTextPathId
+     * Remove the text path id with the given name from the toplevel elements.
+     */
+    static void removeTextPathId(KisForest<KoSvgTextContentElement>::child_iterator parent, const QString &name) {
+        for (auto it = childBegin(parent); it != childEnd(parent); it++) {
+            if (it->textPathId == name) {
+                it->textPathId = QString();
+                break;
+            }
+        }
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

@@ -14,5 +14,6 @@
         <file alias="GlyphPalette.qml">glyphpalette/GlyphPalette.qml</file>
         <file alias="GlyphDelegate.qml">glyphpalette/GlyphDelegate.qml</file>
         <file alias="GlyphPaletteAlts.qml">glyphpalette/GlyphPaletteAlts.qml</file>
+        <file>SvgTextToolOptions.qml</file>
     </qresource>
 </RCC>

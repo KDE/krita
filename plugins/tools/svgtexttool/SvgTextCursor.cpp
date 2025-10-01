@@ -203,6 +203,11 @@ void SvgTextCursor::setVisualMode(bool visualMode)
     d->visualNavigation = visualMode;
 }
 
+void SvgTextCursor::setPasteRichTextByDefault(const bool pasteRichText)
+{
+    d->pasteRichText = pasteRichText;
+}
+
 int SvgTextCursor::getPos()
 {
     return d->pos;
@@ -1516,5 +1521,8 @@ bool SvgTextCursorPropertyInterface::spanSelection()
 
 void SvgTextCursorPropertyInterface::emitSelectionChange()
 {
+    // Don't bother updating the selection when there's no shape
+    // this is so we can use the text properties last used to create new texts.
+    if (d->parent->shape()) return;
     d->compressor.start();
 }

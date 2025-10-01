@@ -24,8 +24,26 @@ public:
     KisQQuickWidget(QWidget *parent = nullptr);
 
     ~KisQQuickWidget();
+
+    /**
+     * @brief connectMinimumHeightToRootObject
+     * By default we scale rootObject to widget, but in some situations we need
+     * the widget to have the minimum required height of the root object. This
+     * sets up a connection that links the minimum height to the root object
+     * implicitHeight.
+     */
+    void connectMinimumHeightToRootObject();
+    /**
+     * @brief connectMinimumWidthToRootObject
+     * Same as for connectMinimumHeightToRootObject,
+     * but then for width.
+     */
+    void connectMinimumWidthToRootObject();
 private Q_SLOTS:
     void updatePaletteFromConfig();
+
+    void setMinimumHeightFromRoot();
+    void setMinimumWidthFromRoot();
 };
 
 #endif // KISQQUICKWIDGET_H

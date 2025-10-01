@@ -8,17 +8,15 @@
 #ifndef SVG_TEXT_TOOL
 #define SVG_TEXT_TOOL
 
-#include "ui_WdgSvgTextOptionWidget.h"
 
 #include <KConfigGroup>
 #include <KoToolBase.h>
-#include <QFontComboBox>
 #include <QPointer>
-#include <QDoubleSpinBox>
 
 #include <kis_signal_auto_connection.h>
 
 #include "SvgTextCursor.h"
+#include "SvgTextToolOptionsManager.h"
 #include "glyphpalette/GlyphPaletteDialog.h"
 
 #include <memory>
@@ -98,10 +96,7 @@ protected:
 private:
     qreal grabSensitivityInPt() const;
 
-    QFont defaultFont() const;
-    Qt::Alignment horizontalAlign() const;
-    int writingMode() const;
-    bool isRtl() const;
+    KoSvgText::WritingMode writingMode() const;
 
 private Q_SLOTS:
 
@@ -130,17 +125,15 @@ private Q_SLOTS:
     /**
      * @brief generateDefs
      * This generates a defs section with the appropriate
-     * css and css strings assigned. This allows the artist
-     * to select settings that new texts will be created with.
-     * @return a string containing the defs.
+     * css and css strings assigned.
      */
-    QString generateDefs(const QString &extraProperties = QString());
+    QString generateDefs(const KoSvgTextProperties &properties = KoSvgTextProperties());
 
     /**
-     * @brief storeDefaults
-     * store default font and point size when they change.
+     * @brief propertiesForNewText
+     * get the text properties that should be used for new text.
      */
-    void storeDefaults();
+    KoSvgTextProperties propertiesForNewText() const;
 
     /**
      * @brief selectionChanged
@@ -155,9 +148,29 @@ private Q_SLOTS:
      */
     void slotUpdateCursorDecoration(QRectF updateRect);
 
-    void slotTextTypeUpdated();
+    /**
+     * @brief slotConvertType
+     * @param index
+     */
     void slotConvertType(int index);
 
+    /**
+     * @brief slotUpdateVisualCursor
+     * update the visual cursor mode on the text cursor.
+     */
+    void slotUpdateVisualCursor();
+
+    /**
+     * @brief slotUpdateTextPasteBehaviour
+     * update the default text paste behaviour.
+     */
+    void slotUpdateTextPasteBehaviour();
+
+    /**
+     * @brief slotTextTypeUpdated
+     * Update the text type in the tool options.
+     */
+    void slotTextTypeUpdated();
 
 private:
     enum class DragMode {
@@ -174,6 +187,7 @@ private:
         MoveBorder,
     };
 
+    QScopedPointer<SvgTextToolOptionsManager>m_optionManager;
     QPointer<SvgTextEditor> m_editor;
     QPointer<GlyphPaletteDialog> m_glyphPalette;
     QPointF m_lastMousePos;
@@ -182,19 +196,11 @@ private:
     HighlightItem m_highlightItem {HighlightItem::None};
     bool m_strategyAddingCommand {false};
 
-    QButtonGroup *m_defAlignment {nullptr};
-    QButtonGroup *m_defWritingMode {nullptr};
-    QButtonGroup *m_defDirection {nullptr};
-    QButtonGroup *m_convertType {nullptr};
-    KConfigGroup m_configGroup;
+
     SvgTextCursor m_textCursor;
     KisSignalAutoConnectionsStore m_canvasConnections;
 
-
     QPainterPath m_hoveredShapeHighlightRect;
-
-    Ui_WdgSvgTextOptionWidget optionUi;
-    bool m_optionUiInitialized {false};
 
     QCursor m_base_cursor;
     QCursor m_text_inline_horizontal;

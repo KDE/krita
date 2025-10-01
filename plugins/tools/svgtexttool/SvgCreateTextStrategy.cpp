@@ -7,8 +7,7 @@
 #include "SvgCreateTextStrategy.h"
 #include "SvgTextTool.h"
 
-#include <QFontDatabase>
-#include <QRectF>
+#include <KoFontRegistry.h>
 
 #include "KisHandlePainterHelper.h"
 #include "KoCanvasBase.h"
@@ -29,8 +28,11 @@ SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &c
     , m_dragStart(clicked)
     , m_dragEnd(clicked)
 {
-    const QFontMetrics fontMetrics = QFontMetrics(tool->defaultFont());
-    double lineHeight = (fontMetrics.lineSpacing() / fontMetrics.fontDpi()) * 72.0;
+    KoSvgTextProperties properties = tool->propertiesForNewText();
+    properties.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
+    const KoSvgText::FontMetrics fontMetrics = properties.metrics(true);
+    const qreal ftMultiplier = properties.fontSize().value / fontMetrics.fontSize;
+    const double lineHeight = (fontMetrics.lineGap+fontMetrics.ascender+fontMetrics.descender)*ftMultiplier;
     m_minSizeInline = {lineHeight, lineHeight};
 }
 
@@ -59,40 +61,54 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
 
-    const QFontMetrics fontMetrics = QFontMetrics(tool->defaultFont());
-    double ascender = fontMetrics.ascent();
-    ascender += fontMetrics.leading()/2;
-    ascender = (ascender / fontMetrics.fontDpi()) * 72.0; // 72 points in an inch.
-    double lineHeight = (fontMetrics.lineSpacing() / fontMetrics.fontDpi()) * 72.0;
-    const KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(tool->writingMode());
+    KoSvgTextProperties properties = tool->propertiesForNewText();
+    KoSvgTextProperties resolvedProperties = properties;
+    resolvedProperties.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
+
+    const KoSvgText::FontMetrics fontMetrics = properties.metrics(true);
+    const qreal ftMultiplier = resolvedProperties.fontSize().value / fontMetrics.fontSize;
+    double ascender = fontMetrics.ascender;
+    ascender += fontMetrics.lineGap/2;
+    ascender *= ftMultiplier;
+    const double lineHeight = m_minSizeInline.width();
+    const KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 
     bool unwrappedText = m_modifiers.testFlag(Qt::ControlModifier);
     if (rectangle.width() < m_minSizeInline.width() && rectangle.height() < m_minSizeInline.height()) {
         unwrappedText = true;
     }
-    QString extraProperties;
     if (!unwrappedText) {
-        if (writingMode == KoSvgText::HorizontalTB) {
-            extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.width()));
-        } else {
-            extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.height()));
-        }
+        KoSvgText::AutoValue val;
+        val.isAuto = false;
+        val.customValue = writingMode == KoSvgText::HorizontalTB? rectangle.width(): rectangle.height();
+        properties.setProperty(KoSvgTextProperties::InlineSizeId, QVariant::fromValue(val));
     }
+    if (writingMode != KoSvgText::HorizontalTB) {
+        properties.setProperty(KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationUpright);
+    }
+    // Ensure white space is set to pre-wrap if unspecified.
+    if (!properties.hasProperty(KoSvgTextProperties::TextCollapseId)) {
+        properties.setProperty(KoSvgTextProperties::TextCollapseId, KoSvgText::Preserve);
+    }
+    if (!properties.hasProperty(KoSvgTextProperties::TextWrapId)) {
+        properties.setProperty(KoSvgTextProperties::TextWrapId, KoSvgText::Wrap);
+    }
+
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
     KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
-    params->setProperty("defs", QVariant(tool->generateDefs(extraProperties)));
+    params->setProperty("defs", QVariant(tool->generateDefs(properties)));
 
     QPointF origin = rectangle.topLeft();
 
     {
-        const Qt::Alignment halign = tool->horizontalAlign();
-        const bool isRtl = tool->isRtl();
+        const KoSvgText::TextAnchor halign = KoSvgText::TextAnchor(properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+        const bool isRtl = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt()) == KoSvgText::DirectionRightToLeft;
 
         if (writingMode == KoSvgText::HorizontalTB) {
             origin.setY(rectangle.top() + ascender);
-            if (halign & Qt::AlignCenter) {
+            if (halign == KoSvgText::AnchorMiddle) {
                 origin.setX(rectangle.center().x());
-            } else if ((halign & Qt::AlignRight && !isRtl) || (halign & Qt::AlignLeft && isRtl)) {
+            } else if ((halign == KoSvgText::AnchorEnd && !isRtl) || (halign == KoSvgText::AnchorStart && isRtl)) {
                 origin.setX(rectangle.right());
             }
         } else {
@@ -102,9 +118,9 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
                 origin.setX(rectangle.left() + (lineHeight*0.5));
             }
 
-            if (halign & Qt::AlignCenter) {
+            if (halign == KoSvgText::AnchorMiddle) {
                 origin.setY(rectangle.center().y());
-            } else if (halign & Qt::AlignRight) {
+            } else if (halign == KoSvgText::AnchorEnd) {
                 origin.setY(rectangle.bottom());
             }
         }

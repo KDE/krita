@@ -95,7 +95,13 @@ public:
      * This right now primarily affects Bidirectional text.
      * @param mode whether to turn off visual mode.
      */
-    void setVisualMode(bool visualMode = true);
+    void setVisualMode(const bool visualMode = true);
+
+    /**
+     * @brief setPasteRichText
+     * @param pasteRichText -- whether to paste rich text when possible.
+     */
+    void setPasteRichTextByDefault(const bool pasteRichText = true);
 
     /// Get the current position.
     int getPos();

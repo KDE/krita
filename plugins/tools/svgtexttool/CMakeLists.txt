@@ -24,6 +24,9 @@ set (SvgTextTool_SRCS
     SvgTextShapeManagerBlocker.cpp
     SvgConvertTextTypeCommand.cpp
     SvgTextShortCuts.cpp
+    SvgTextToolOptionsData.cpp
+    SvgTextToolOptionsModel.cpp
+    SvgTextToolOptionsManager.cpp
 
     glyphpalette/GlyphPaletteDialog.cpp
     glyphpalette/GlyphPaletteProxyModel.cpp

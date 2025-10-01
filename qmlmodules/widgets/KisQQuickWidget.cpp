@@ -9,6 +9,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QQuickItem>
 #include <QQmlFileSelector>
 #include <QFileSelector>
 
@@ -85,7 +86,37 @@ KisQQuickWidget::~KisQQuickWidget()
     setParent(nullptr);
 }
 
+void KisQQuickWidget::connectMinimumHeightToRootObject()
+{
+    if (rootObject()) {
+        connect(rootObject(), SIGNAL(implicitHeightChanged()), this, SLOT(setMinimumHeightFromRoot()));
+        setMinimumHeightFromRoot();
+    }
+}
+
+void KisQQuickWidget::connectMinimumWidthToRootObject()
+{
+    if (rootObject()) {
+        connect(rootObject(), SIGNAL(implicitWidthChanged()), this, SLOT(setMinimumWidthFromRoot()));
+        setMinimumWidthFromRoot();
+    }
+}
+
 void KisQQuickWidget::updatePaletteFromConfig()
 {
     setClearColor(palette().window().color());
+}
+
+void KisQQuickWidget::setMinimumHeightFromRoot()
+{
+    if (rootObject()) {
+        setMinimumHeight(rootObject()->implicitHeight());
+    }
+}
+
+void KisQQuickWidget::setMinimumWidthFromRoot()
+{
+    if (rootObject()) {
+        setMinimumWidth(rootObject()->implicitWidth());
+    }
 }

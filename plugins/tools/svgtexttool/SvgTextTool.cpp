@@ -21,16 +21,14 @@
 #include "SvgTextRemoveCommand.h"
 #include "SvgConvertTextTypeCommand.h"
 #include "SvgTextShortCuts.h"
+#include "SvgTextToolOptionsModel.h"
 
 #include <QPainterPath>
-#include <QGridLayout>
-#include <QVBoxLayout>
 #include <QDesktopServices>
 #include <QApplication>
-#include <QGroupBox>
-#include <QFontDatabase>
-#include <QButtonGroup>
-#include <QMenuBar>
+#include <QStyle>
+#include <QDockWidget>
+#include <QQuickItem>
 
 #include <klocalizedstring.h>
 
@@ -57,8 +55,17 @@
 #include <KoPathShape.h>
 #include <KoPathSegment.h>
 
-#include <KisViewManager.h>
+#include <KisResourceModelProvider.h>
+#include <KoCssStylePreset.h>
+#include <KoSvgTextPropertyData.h>
+#include <KoColorBackground.h>
+#include <KisResourceModel.h>
+
 #include <KisTextPropertiesManager.h>
+#include <KisViewManager.h>
+#include <KisQQuickWidget.h>
+#include <QQmlError>
+#include <KisMainWindow.h>
 
 #include "KisHandlePainterHelper.h"
 #include "kis_tool_utils.h"
@@ -83,6 +90,7 @@ static bool debugEnabled()
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_textCursor(canvas)
+    , m_optionManager(new SvgTextToolOptionsManager(this))
 {
      // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
     int cursorFlashLimit = 5000;
@@ -123,10 +131,6 @@ SvgTextTool::~SvgTextTool()
     if(m_glyphPalette) {
         m_glyphPalette->close();
     }
-    delete m_defAlignment;
-    delete m_defWritingMode;
-    delete m_defDirection;
-    delete m_convertType;
 }
 
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
@@ -137,6 +141,10 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
     const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
     if (canvas2) {
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(m_textCursor.textPropertyInterface());
+        QDockWidget *docker = canvas2->viewManager()->mainWindow()->dockWidget("TextProperties");
+        if (docker && m_optionManager) {
+            m_optionManager->setTextPropertiesOpen(docker->isVisible());
+        }
     }
 
     useCursor(m_base_cursor);
@@ -182,118 +190,36 @@ void SvgTextTool::inputMethodEvent(QInputMethodEvent *event)
 
 QWidget *SvgTextTool::createOptionWidget()
 {
-    QWidget *optionWidget = new QWidget();
-    optionUi.setupUi(optionWidget);
+    KisQQuickWidget *optionWidget = new KisQQuickWidget();
+    optionWidget->setMinimumWidth(100);
+    optionWidget->setMinimumHeight(100);
 
-    if (!debugEnabled()) {
-        optionUi.groupBoxDebug->hide();
-    }
+    optionWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    optionWidget->setSource(QUrl("qrc:/SvgTextToolOptions.qml"));
 
-    m_configGroup = KSharedConfig::openConfig()->group(toolId());
-
-    QString storedFont = m_configGroup.readEntry<QString>("defaultFont", QApplication::font().family());
-    optionUi.defFont->setCurrentFont(QFont(storedFont));
-    Q_FOREACH (int size, QFontDatabase::standardSizes()) {
-        optionUi.defPointSize->addItem(QString::number(size)+" pt");
-    }
-    int storedSize = m_configGroup.readEntry<int>("defaultSize", QApplication::font().pointSize());
-#ifdef Q_OS_ANDROID
-    // HACK: on some devices where android.R.styleable exists, Qt's platform
-    // plugin sets the pixelSize of a font, which returns -1 when asked for pointSize.
-    //
-    // The way to fetch font in Qt from SDK is deprecated in newer Android versions.
-    if (storedSize <= 0) {
-        storedSize = 18;  // being one of the standardSizes
-    }
-#endif
-    int sizeIndex = 0;
-    if (QFontDatabase::standardSizes().contains(storedSize)) {
-        sizeIndex = QFontDatabase::standardSizes().indexOf(storedSize);
-    }
-    optionUi.defPointSize->setCurrentIndex(sizeIndex);
-
-    int checkedAlignment = m_configGroup.readEntry<int>("defaultAlignment", 0);
-
-    m_defAlignment = new QButtonGroup();
-    optionUi.alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
-    m_defAlignment->addButton(optionUi.alignLeft, 0);
-
-    optionUi.alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
-    m_defAlignment->addButton(optionUi.alignCenter, 1);
-
-    optionUi.alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
-    m_defAlignment->addButton(optionUi.alignRight, 2);
-
-    m_defAlignment->setExclusive(true);
-    if (checkedAlignment<1) {
-        optionUi.alignLeft->setChecked(true);
-    } else if (checkedAlignment==1) {
-        optionUi.alignCenter->setChecked(true);
-    } else if (checkedAlignment==2) {
-        optionUi.alignRight->setChecked(true);
+    m_optionManager->setShowDebug(debugEnabled());
+    if (optionWidget->errors().isEmpty()) {
+        optionWidget->rootObject()->setProperty("manager", QVariant::fromValue(m_optionManager.data()));
+        optionWidget->connectMinimumHeightToRootObject();
     } else {
-        optionUi.alignLeft->setChecked(true);
+        qWarning() << optionWidget->errors();
     }
 
-    int checkedWritingMode = m_configGroup.readEntry<int>("defaultWritingMode", 0);
 
-    m_defWritingMode = new QButtonGroup();
-    optionUi.modeHorizontalTb->setIcon(KisIconUtils::loadIcon("format-text-direction-horizontal-tb"));
-    m_defWritingMode->addButton(optionUi.modeHorizontalTb, 0);
+    connect(m_optionManager.data(), SIGNAL(openTextEditor()), SLOT(showEditor()));
+    connect(m_optionManager.data(), SIGNAL(openGlyphPalette()), SLOT(showGlyphPalette()));
 
-    optionUi.modeVerticalRl->setIcon(KisIconUtils::loadIcon("format-text-direction-vertical-rl"));
-    m_defWritingMode->addButton(optionUi.modeVerticalRl, 1);
-
-    optionUi.modeVerticalLr->setIcon(KisIconUtils::loadIcon("format-text-direction-vertical-lr"));
-    m_defWritingMode->addButton(optionUi.modeVerticalLr, 2);
-
-    m_defWritingMode->setExclusive(true);
-    if (checkedWritingMode<1) {
-        optionUi.modeHorizontalTb->setChecked(true);
-    } else if (checkedWritingMode==1) {
-        optionUi.modeVerticalRl->setChecked(true);
-    } else if (checkedWritingMode==2) {
-        optionUi.modeVerticalLr->setChecked(true);
-    } else {
-        optionUi.modeHorizontalTb->setChecked(true);
+    connect(m_optionManager.data(), SIGNAL(convertTextType(int)), SLOT(slotConvertType(int)));
+    connect(m_optionManager->optionsModel(), SIGNAL(useVisualBidiCursorChanged(bool)), this, SLOT(slotUpdateVisualCursor()));
+    connect(m_optionManager->optionsModel(), SIGNAL(pasteRichtTextByDefaultChanged(bool)), this, SLOT(slotUpdateTextPasteBehaviour()));
+    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    if (canvas2 && canvas2->viewManager()->mainWindow()) {
+        QDockWidget *docker = canvas2->viewManager()->mainWindow()->dockWidget("TextProperties");
+        m_optionManager->setShowTextPropertyButton((docker));
+        connect(m_optionManager.data(), SIGNAL(openTextPropertiesDocker(bool)), docker, SLOT(setVisible(bool)));
     }
-
-    bool rtl = m_configGroup.readEntry<int>("defaultWritingDirection", false);
-    m_defDirection = new QButtonGroup();
-
-    optionUi.directionLtr->setIcon(KisIconUtils::loadIcon("format-text-direction-ltr"));
-    m_defDirection->addButton(optionUi.directionLtr, 0);
-
-    optionUi.directionRtl->setIcon(KisIconUtils::loadIcon("format-text-direction-rtl"));
-    m_defDirection->addButton(optionUi.directionRtl, 1);
-    m_defDirection->setExclusive(true);
-    optionUi.directionLtr->setChecked(!rtl);
-    optionUi.directionRtl->setChecked(rtl);
-
-    bool directionEnabled = !bool(m_defWritingMode->checkedId());
-    optionUi.directionLtr->setEnabled(directionEnabled);
-    optionUi.directionRtl->setEnabled(directionEnabled);
-
-    double storedLetterSpacing = m_configGroup.readEntry<double>("defaultLetterSpacing", 0.0);
-    optionUi.defLetterSpacing->setValue(storedLetterSpacing);
-
-    connect(m_defAlignment, SIGNAL(idClicked(int)), this, SLOT(storeDefaults()));
-    connect(m_defWritingMode, SIGNAL(idClicked(int)), this, SLOT(storeDefaults()));
-    connect(m_defDirection, SIGNAL(idClicked(int)), this, SLOT(storeDefaults()));
-
-    connect(optionUi.defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
-    connect(optionUi.defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
-    connect(optionUi.defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
-
-    connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditor()));
-    connect(optionUi.btnGlyphPalette, SIGNAL(clicked(bool)), SLOT(showGlyphPalette()));
-
-    m_convertType = new QButtonGroup();
-    m_convertType->setExclusive(true);
-    m_convertType->addButton(optionUi.convertPreFormatBtn, KoSvgTextShape::PreformattedText);
-    m_convertType->addButton(optionUi.convertInlineBtn, KoSvgTextShape::InlineWrap);
-    m_convertType->addButton(optionUi.convertToSvg1_1, KoSvgTextShape::PrePositionedText);
-    connect(m_convertType, SIGNAL(idClicked(int)), this, SLOT(slotConvertType(int)));
+    slotUpdateVisualCursor();
+    slotUpdateTextPasteBehaviour();
     slotTextTypeUpdated();
 
     return optionWidget;
@@ -401,52 +327,49 @@ void SvgTextTool::slotTextEditorClosed()
     KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
-QString SvgTextTool::generateDefs(const QString &extraProperties)
+QString SvgTextTool::generateDefs(const KoSvgTextProperties &properties)
 {
-    QString font = optionUi.defFont->currentFont().family();
-    QString size = QString::number(QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
-
-    QString textAnchor = "middle";
-    if (m_defAlignment->button(0)->isChecked()) {
-        textAnchor = "start";
+    QStringList propStrings;
+    QMap<QString, QString> paraProps = properties.convertParagraphProperties();
+    for (auto it = paraProps.constBegin(); it != paraProps.constEnd(); it++) {
+        propStrings.append(QString("%1: %2;").arg(it.key()).arg(it.value()));
     }
-    if (m_defAlignment->button(2)->isChecked()) {
-        textAnchor = "end";
-    }
-
-    QString direction = "ltr";
-    QString writingMode = "horizontal-tb";
-    QString textOrientation = "text-orientation: upright";
-    if (m_defWritingMode->button(1)->isChecked()) {
-        writingMode = "vertical-rl;" + textOrientation;
-    } else if (m_defWritingMode->button(2)->isChecked()) {
-        writingMode = "vertical-lr;" + textOrientation;
-    } else {
-        direction = m_defDirection->button(0)->isChecked()? "ltr" : "rtl";
+    paraProps = properties.convertToSvgTextAttributes();
+    for (auto it = paraProps.constBegin(); it != paraProps.constEnd(); it++) {
+        propStrings.append(QString("%1: %2;").arg(it.key()).arg(it.value()));
     }
 
-    QString fontColor = (canvas()->resourceManager()->isUsingOtherColor()
-                ? canvas()->resourceManager()->backgroundColor()
-                : canvas()->resourceManager()->foregroundColor()).toQColor().name();
-    QString letterSpacing = QString::number(optionUi.defLetterSpacing->value());
-
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5; writing-mode:%6; direction: %7; %8\n  white-space:pre-wrap;\n  }\n </style>\n</defs>")
-            .arg(font, size, fontColor, textAnchor, letterSpacing, writingMode, direction, extraProperties);
+    return QString("<defs>\n <style>\n  text {\n   %1\n  }\n </style>\n</defs>").arg(propStrings.join("\n   "));
 }
 
-void SvgTextTool::storeDefaults()
+KoSvgTextProperties SvgTextTool::propertiesForNewText() const
 {
-    m_configGroup = KSharedConfig::openConfig()->group(toolId());
-    m_configGroup.writeEntry("defaultFont", optionUi.defFont->currentFont().family());
-    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
-    m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
-    m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
-    m_configGroup.writeEntry("defaultWritingMode", m_defWritingMode->checkedId());
-    m_configGroup.writeEntry("defaultWritingDirection", m_defDirection->checkedId());
+    const bool useCurrent = m_optionManager->optionsModel()->useCurrentTextProperties();
+    const QString presetName = m_optionManager->optionsModel()->cssStylePresetName();
 
-    bool directionEnabled = !bool(m_defWritingMode->checkedId());
-    optionUi.directionLtr->setEnabled(directionEnabled);
-    optionUi.directionRtl->setEnabled(directionEnabled);
+    KoSvgTextProperties props;
+    if (useCurrent || presetName.isEmpty()) {
+        KoSvgTextPropertyData textData = canvas()->resourceManager()->resource(KoCanvasResource::SvgTextPropertyData).value<KoSvgTextPropertyData>();
+        props = textData.commonProperties;
+    } else {
+        KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::CssStyles);
+        QVector<KoResourceSP> res = model->resourcesForName(presetName);
+        if (res.first()) {
+            KoCssStylePresetSP style = res.first().staticCast<KoCssStylePreset>();
+            if (style) {
+                props = style->properties();
+            }
+        }
+    }
+
+    QColor fontColor = (canvas()->resourceManager()->isUsingOtherColor()
+                ? canvas()->resourceManager()->backgroundColor()
+                : canvas()->resourceManager()->foregroundColor()).toQColor();
+    QSharedPointer<KoColorBackground> bg(new KoColorBackground());
+    bg->setColor(fontColor);
+    KoSvgText::BackgroundProperty bgProp(bg);
+    props.setProperty(KoSvgTextProperties::FillId, QVariant::fromValue(bgProp));
+    return props;
 }
 
 void SvgTextTool::slotShapeSelectionChanged()
@@ -555,21 +478,6 @@ void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
     }
 }
 
-void SvgTextTool::slotTextTypeUpdated()
-{
-    if (!m_convertType) return;
-    if (selectedShape()) {
-        KoSvgTextShape::TextType type = selectedShape()->textType();
-        if (m_convertType->button(type)) {
-            m_convertType->button(type)->setChecked(true);
-        } else {
-            Q_FOREACH(QAbstractButton *button, m_convertType->buttons()) {
-                button->setChecked(false);
-            }
-        }
-    }
-}
-
 void SvgTextTool::slotConvertType(int index) {
     if (selectedShape()) {
         if (index == selectedShape()->textType()) return;
@@ -589,33 +497,24 @@ void SvgTextTool::slotConvertType(int index) {
     }
 }
 
-QFont SvgTextTool::defaultFont() const
+void SvgTextTool::slotUpdateVisualCursor()
 {
-    int size = QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0);
-    QFont font = optionUi.defFont->currentFont();
-    font.setPointSize(size);
-    return font;
+    m_textCursor.setVisualMode(m_optionManager->optionsModel()->useVisualBidiCursor());
 }
 
-Qt::Alignment SvgTextTool::horizontalAlign() const
+void SvgTextTool::slotUpdateTextPasteBehaviour()
 {
-    if (m_defAlignment->button(1)->isChecked()) {
-        return Qt::AlignHCenter;
+    m_textCursor.setPasteRichTextByDefault(m_optionManager->optionsModel()->pasteRichtTextByDefault());
+}
+
+void SvgTextTool::slotTextTypeUpdated()
+{
+    KoSvgTextShape *shape = selectedShape();
+    if (shape && m_optionManager) {
+        m_optionManager->convertToTextType(int(shape->textType()));
+    } else {
+        m_optionManager->convertToTextType(-1);
     }
-    if (m_defAlignment->button(2)->isChecked()) {
-        return Qt::AlignRight;
-    }
-    return Qt::AlignLeft;
-}
-
-int SvgTextTool::writingMode() const
-{
-    return m_defWritingMode->checkedId();
-}
-
-bool SvgTextTool::isRtl() const
-{
-    return m_defDirection->checkedId();
 }
 
 QRectF SvgTextTool::decorationsRect() const
@@ -721,10 +620,10 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         gc.save();
         using Element = KoSvgTextShape::DebugElement;
         KoSvgTextShape::DebugElements el{};
-        if (optionUi.chkDbgCharBbox->isChecked()) {
+        if (m_optionManager->showCharacterDebug()) {
             el |= Element::CharBbox;
         }
-        if (optionUi.chkDbgLineBox->isChecked()) {
+        if (m_optionManager->showLineDebug()) {
             el |= Element::LineBox;
         }
 
@@ -1034,5 +933,11 @@ qreal SvgTextTool::grabSensitivityInPt() const
 {
     const int sensitivity = grabSensitivity();
     return canvas()->viewConverter()->viewToDocumentX(sensitivity);
+}
+
+KoSvgText::WritingMode SvgTextTool::writingMode() const
+{
+    KoSvgTextProperties props = propertiesForNewText();
+    return KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 }
 

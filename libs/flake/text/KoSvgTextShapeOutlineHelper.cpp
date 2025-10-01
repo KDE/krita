@@ -92,7 +92,43 @@ void KoSvgTextShapeOutlineHelper::paintTextShape(QPainter *painter, const KoView
         }
     }
     if (d->drawTextWrappingArea) {
-        Q_FOREACH(const QPainterPath path, text->textWrappingAreas()) {
+        QList<QPainterPath> areas = text->textWrappingAreas();
+        if (areas.size() > 1) {
+            for (int i = 1; i < areas.size(); i++) {
+                const QPainterPath previous = areas.at(i-1);
+                const QPainterPath next = areas.at(i);
+                const bool overlap = previous.intersects(next);
+                QLineF arrow(previous.boundingRect().center(), next.boundingRect().center());
+                if (!overlap) {
+
+                    Q_FOREACH (QPolygonF p, previous.toSubpathPolygons()) {
+                        if (p.size() == 1) continue;
+                        for (int j = 1; j < p.size(); j++) {
+                            QLineF l2(p.at(j-1), p.at(j));
+                            QPointF intersect;
+                            if (l2.intersects(arrow, &intersect) == QLineF::BoundedIntersection) {
+                                arrow.setP1(intersect);
+                                break;
+                            }
+                        }
+                    }
+                    Q_FOREACH (QPolygonF p, next.toSubpathPolygons()) {
+                        if (p.size() == 1) continue;
+                        for (int j = 1; j < p.size(); j++) {
+                            QLineF l2(p.at(j-1), p.at(j));
+                            QPointF intersect;
+                            if (l2.intersects(arrow, &intersect) == QLineF::BoundedIntersection) {
+                                arrow.setP2(intersect);
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                helper.drawGradientArrow(arrow.p1(), arrow.p2(), 1.5 * d->handleRadius);
+            }
+        }
+        Q_FOREACH(const QPainterPath path, areas) {
             helper.drawPath(path);
         }
     }

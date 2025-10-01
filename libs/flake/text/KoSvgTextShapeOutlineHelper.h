@@ -45,8 +45,9 @@ public:
 
     /**
      * @brief setDrawTextWrappingArea
-     * draw the wrapping area. The wrapping area is computer from
+     * draw the wrapping area. The wrapping area is computed from
      * the shapes as well as padding and margin.
+     * This also draws connection lines.
      */
     void setDrawTextWrappingArea(bool enable);
     bool drawTextWrappingArea() const;

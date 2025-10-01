@@ -28467,7 +28467,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:114
 #, kde-format
 msgid "Use Blackpoint Compensation"
-msgstr "Siyah Nokta Karşılaması Kullan"
+msgstr "Siyah nokta karşılaması kullan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:124
@@ -28486,7 +28486,7 @@ msgid ""
 "Enforce palette colors: always select the nearest color from the active "
 "palette."
 msgstr ""
-"Palet renklerini güçlendir: her zaman etkin paletten en yakın rengi seç."
+"Palet renklerini güçlendir: Her zaman etkin paletten en yakın rengi seç"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEXRImportColorSpace)
 #: libs/ui/forms/wdgcolorsettings.ui:159
@@ -28577,7 +28577,7 @@ msgstr "Sunum amacı:"
 #: libs/ui/forms/wdgimageproperties.ui:347
 #, kde-format
 msgid "Black Point Compensation"
-msgstr "Siyah Nokta Telafisi"
+msgstr "Siyah nokta telafisi"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
 #: libs/ui/forms/wdgcolorsettings.ui:350
@@ -28786,7 +28786,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid "Use Blackpoint &Compensation"
-msgstr "Siyah Nokta &Karşılaması Kullan"
+msgstr "Siyah nokta &karşılaması kullan"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgconvertcolorspace.ui:140
@@ -29179,7 +29179,7 @@ msgstr "Katman küçük görseli açılır penceresini gizle"
 #: libs/ui/forms/wdgdisplaysettings.ui:556
 #, kde-format
 msgid "Color channels in color"
-msgstr "Renklerdeki renk kanalları"
+msgstr "Renkli renk kanalları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:566
@@ -29308,7 +29308,7 @@ msgstr "Önizleme"
 #: libs/ui/forms/wdgfilterdialog.ui:74
 #, kde-format
 msgid "Multiframe"
-msgstr "Çoklu Kare"
+msgstr "Çok kareli"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonCreateMaskEffect)
 #: libs/ui/forms/wdgfilterdialog.ui:97

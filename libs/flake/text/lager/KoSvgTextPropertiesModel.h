@@ -49,6 +49,8 @@ class KRITAFLAKE_EXPORT KoSvgTextPropertiesModel : public QObject
     Q_PROPERTY(FontVariantLigaturesModel *fontVariantLigatures READ fontVariantLigatures NOTIFY fontVariantLigaturesChanged)
     Q_PROPERTY(FontVariantNumericModel *fontVariantNumeric READ fontVariantNumeric NOTIFY fontVariantNumericChanged)
     Q_PROPERTY(FontVariantEastAsianModel *fontVariantEastAsian READ fontVariantEastAsian NOTIFY fontVariantEastAsianChanged)
+    Q_PROPERTY(CssLengthPercentageModel *shapePadding READ shapePadding NOTIFY shapePaddingChanged)
+    Q_PROPERTY(CssLengthPercentageModel *shapeMargin READ shapeMargin NOTIFY shapeMarginChanged)
 public:
     KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData = lager::make_state(KoSvgTextPropertyData(), lager::automatic_tag{}));
 
@@ -66,6 +68,8 @@ public:
     lager::cursor<KoSvgText::FontFeatureLigatures> fontVariantLigaturesData;
     lager::cursor<KoSvgText::FontFeatureNumeric> fontVariantNumericData;
     lager::cursor<KoSvgText::FontFeatureEastAsian> fontVariantEastAsianData;
+    lager::cursor<KoSvgText::CssLengthPercentage> shapePaddingData;
+    lager::cursor<KoSvgText::CssLengthPercentage> shapeMarginData;
 
 
     CssLengthPercentageModel fontSizeModel;
@@ -83,6 +87,9 @@ public:
     FontVariantLigaturesModel fontVariantLigaturesModel;
     FontVariantNumericModel fontVariantNumericModel;
     FontVariantEastAsianModel fontVariantEastAsianModel;
+
+    CssLengthPercentageModel shapePaddingModel;
+    CssLengthPercentageModel shapeMarginModel;
 
     // Whether a given property is set, unset or tristate.
     enum PropertyState {
@@ -217,6 +224,11 @@ public:
     LAGER_QT_CURSOR(int, textRendering);
     LAGER_QT_CURSOR(PropertyState, textRenderingState);
 
+    CssLengthPercentageModel *shapePadding();
+    LAGER_QT_CURSOR(PropertyState, shapePaddingState);
+    CssLengthPercentageModel *shapeMargin();
+    LAGER_QT_CURSOR(PropertyState, shapeMarginState);
+
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 
@@ -255,6 +267,9 @@ Q_SIGNALS:
     void fontVariantLigaturesChanged();
     void fontVariantNumericChanged();
     void fontVariantEastAsianChanged();
+
+    void shapePaddingChanged();
+    void shapeMarginChanged();
 };
 
 #endif // KOSVGTEXTPROPERTIESMODEL_H

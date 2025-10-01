@@ -207,11 +207,14 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 
         // Updates the contours and calls relayout.
         // Would be great if we could compress the updates here somehow...
-        // TODO: when shapeMargin or Padding is changed, this also needs to be called...
         d->updateTextWrappingAreas();
-
         // NotifyChanged ensures that boundingRect() is called on this shape.
         this->notifyChanged();
+        if (d->shapesSubtract.contains(shape)) {
+            // Shape subtract will otherwise only
+            // update it's own bounding rect.
+            this->update();
+        }
         qDebug() << "child updated";
     }
     if ((!shape || shape == this)) {
@@ -221,6 +224,10 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         } else if (transformationTypes.contains(type)) {
             qDebug() << "update transform";
             d->shapeGroup->setTransformation(this->transformation());
+        } else if (type == TextRunAroundChanged) {
+            // Hack: we don't use runaround else where, so we're using it for padding and margin.
+            qDebug() << "update wrapping areas";
+            d->updateTextWrappingAreas();
         }
     }
 }
@@ -1048,7 +1055,20 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
             }
         }
         notifyChanged();
-        shapeChangedPriv(ContentChanged);
+        if (properties.hasProperty(KoSvgTextProperties::ShapePaddingId)
+                || properties.hasProperty(KoSvgTextProperties::ShapeMarginId)
+                || removeProperties.contains(KoSvgTextProperties::ShapePaddingId)
+                || removeProperties.contains(KoSvgTextProperties::ShapeMarginId)) {
+            shapeChangedPriv(TextRunAroundChanged);
+        } else {
+            shapeChangedPriv(ContentChanged);
+        }
+        if (properties.hasProperty(KoSvgTextProperties::FillId)) {
+            shapeChangedPriv(BackgroundChanged);
+        }
+        if (properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            shapeChangedPriv(StrokeChanged);
+        }
         return;
     }
     const int startIndex = d->cursorPos.at(startPos).index;

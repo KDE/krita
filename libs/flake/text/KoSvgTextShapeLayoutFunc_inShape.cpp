@@ -30,8 +30,11 @@ getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const 
     qreal scale = 64.0;
     QTransform precisionTF = QTransform::fromScale(scale, scale);
 
-    qreal shapePadding = scale * properties.propertyOrDefault(KoSvgTextProperties::ShapePaddingId).toReal();
-    qreal shapeMargin = scale * properties.propertyOrDefault(KoSvgTextProperties::ShapeMarginId).toReal();
+    KoSvgTextProperties resolved = properties;
+    resolved.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
+
+    qreal shapePadding = scale * resolved.propertyOrDefault(KoSvgTextProperties::ShapePaddingId).value<KoSvgText::CssLengthPercentage>().value;
+    qreal shapeMargin = scale * resolved.propertyOrDefault(KoSvgTextProperties::ShapeMarginId).value<KoSvgText::CssLengthPercentage>().value;
 
     QPainterPath subtract;
     Q_FOREACH(const KoShape *shape, shapesSubtract) {

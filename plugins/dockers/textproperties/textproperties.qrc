@@ -60,5 +60,6 @@
         <file alias="TextRendering.qml">qml/TextRendering.qml</file>
         <file alias="TextPropertyConfigDialog.qml">qml/TextPropertyConfigDialog.qml</file>
         <file alias="CssStylePresetEdit.qml">qml/CssStylePresetEdit.qml</file>
+        <file alias="TextAreaOptions.qml">qml/TextAreaOptions.qml</file>
     </qresource>
 </RCC>

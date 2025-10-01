@@ -924,18 +924,15 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         const KoPathShape *hoveredFlowShape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
         if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
-            cursor = selectedShape->writingMode() == KoSvgText::HorizontalTB? m_ibeam_horizontal: m_ibeam_vertical;
-        } else if (hoveredShape && selectedShape != hoveredShape) {
-            if (!hoveredShape->shapesInside().isEmpty()) {
-                QPainterPath paths;
-                Q_FOREACH(KoShape *s, hoveredShape->shapesInside()) {
-                    KoPathShape *path = dynamic_cast<KoPathShape *>(s);
-                    if (path) {
-                        paths.addPath(hoveredShape->absoluteTransformation().map(path->absoluteTransformation().map(path->outline())));
-                    }
-                }
-                if (!paths.isEmpty()) {
-                    m_hoveredShapeHighlightRect = paths;
+            if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
+                cursor = m_ibeam_horizontal;
+            } else {
+                cursor = m_ibeam_vertical;
+            }
+        } else if (hoveredShape) {
+            if (!hoveredShape->textWrappingAreas().isEmpty()) {
+                Q_FOREACH(QPainterPath path, hoveredShape->textWrappingAreas()) {
+                    m_hoveredShapeHighlightRect.addPath(hoveredShape->absoluteTransformation().map(path));
                 }
             } else {
                 m_hoveredShapeHighlightRect.addRect(hoveredShape->boundingRect());

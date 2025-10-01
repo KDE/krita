@@ -2344,8 +2344,11 @@ void DefaultToolTextPropertiesInterface::slotSelectionChanged()
         if (!shape) continue;
         shape->removeShapeChangeListener(this);
     }
-    QList<KoShape*> shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedEditableShapes();
-    d->shapes = shapes;
+    if (d->parent->canvas()->textShapeManagerEnabled()) {
+        d->shapes = {d->parent->canvas()->textShapeManagerEnabled()};
+    } else {
+        d->shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedEditableShapes();
+    }
 
     Q_FOREACH(KoShape *shape, d->shapes) {
         if (!shape) continue;

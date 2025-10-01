@@ -125,6 +125,8 @@ private Q_SLOTS:
     void slotAddShapesToFlow();
     void slotSubtractShapesFromFlow();
     void slotRemoveShapesFromFlow();
+    void slotToggleFlowShapeType();
+    void slotReorderFlowShapes(int type);
 
 protected Q_SLOTS:
     /// Update actions on selection change
@@ -209,6 +211,7 @@ private:
     KisSignalMapper *m_transformSignalsMapper {0};
     KisSignalMapper *m_booleanSignalsMapper {0};
     KisSignalMapper *m_textTypeSignalsMapper {0};
+    KisSignalMapper *m_textFlowSignalsMapper {0};
 
     DefaultToolTextPropertiesInterface *m_textPropertyInterface{0};
 };

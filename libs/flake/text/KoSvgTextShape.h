@@ -122,6 +122,17 @@ public:
     void removeShapesFromContours(QList<KoShape*> shapes, bool callUpdate = true);
 
     /**
+     * @brief moveShapeInsideToIndex
+     * Because the order of shapes inside shape-inside affects the text layout,
+     * it can be useful to be able to reorder them.
+     * @param shapeInside -- shape from the shapesInside list. This function will do nothing
+     * @param index -- new index to move the shape inside to. Will be bound to the list size.
+     *
+     * @seealso shapesInside();
+     */
+    void moveShapeInsideToIndex(KoShape* shapeInside, const int index);
+
+    /**
      * @brief shapesInside
      * @return the list of shapes that make up the content area.
      */

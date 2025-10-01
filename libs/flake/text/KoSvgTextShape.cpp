@@ -2135,6 +2135,19 @@ void KoSvgTextShape::removeShapesFromContours(QList<KoShape *> shapes, bool call
     }
 }
 
+void KoSvgTextShape::moveShapeInsideToIndex(KoShape *shapeInside, const int index)
+{
+    const int oldIndex = d->shapesInside.indexOf(shapeInside);
+    if (oldIndex < 0) return;
+
+    // Update.
+    d->shapesInside.move(oldIndex, index);
+    d->updateTextWrappingAreas();
+    d->updateInternalShapesList();
+    shapeChangedPriv(ContentChanged);
+    update();
+}
+
 QList<KoShape *> KoSvgTextShape::shapesInside() const
 {
     return d->shapesInside;

@@ -357,5 +357,53 @@
   <statusTip></statusTip>
   <isCheckable>false</isCheckable>
 </Action>
-</Actions>
+
+<Action name="flow_shape_type_toggle">
+  <iconText>Toggle Flow Shape Type</iconText>
+  <toolTip>Switch the current Flow Shape between Inside or Subtract mode</toolTip>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+  <text>Toggle Flow Shape Type</text>
+</Action>
+
+<Action name="flow_shape_order_back">
+  <iconText>Set Flow Shape as Last</iconText>
+  <toolTip>Make this flow shape the last in the flow shape order as used by text layout.</toolTip>
+  <icon>object-order-back-calligra</icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+  <text>Set Flow Shape as Last</text>
+</Action>
+<Action name="flow_shape_order_earlier">
+  <iconText>Decrease Flow Shape Index</iconText>
+  <toolTip>Make this flow shape be evaluated later.</toolTip>
+  <icon>object-order-raise-calligra</icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+  <text>Decrease Flow Shape Index</text>
+</Action>
+<Action name="flow_shape_order_later">
+  <iconText>Increase Flow Shape Index</iconText>
+  <toolTip>Make this flow shape be evaluated later.</toolTip>
+  <icon>object-order-lower-calligra</icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+  <text>Increase Flow Shape Index</text>
+</Action>
+<Action name="flow_shape_order_front">
+  <iconText>Set Flow Shape as First</iconText>
+  <toolTip>Make this flow shape the first in the flow shape order as used by text layout.</toolTip>
+  <icon>object-order-front-calligra</icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+  <text>Set Flow Shape as First</text>
+</Action>
+
+  </Actions>
 </ActionCollection>

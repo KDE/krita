@@ -174,6 +174,8 @@ set(kritaflake_SRCS
     commands/KoSvgConvertTextTypeCommand.cpp
     commands/KoSvgChangeTextContoursCommand.cpp
     commands/KoSvgTextAddRemoveShapeCommands.cpp
+    commands/KoSvgTextReorderShapeInsideCommand.cpp
+    commands/KoSvgTextFlipShapeContourTypeCommand.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp

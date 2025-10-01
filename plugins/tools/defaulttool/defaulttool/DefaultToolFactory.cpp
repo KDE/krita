@@ -81,6 +81,12 @@ QList<QAction *> DefaultToolFactory::createActionsImpl()
     actions << actionRegistry->makeQAction("subtract_shape_from_flow_area", this);
     actions << actionRegistry->makeQAction("remove_shapes_from_text_flow", this);
 
+    actions << actionRegistry->makeQAction("flow_shape_type_toggle", this);
+    actions << actionRegistry->makeQAction("flow_shape_order_back", this);
+    actions << actionRegistry->makeQAction("flow_shape_order_earlier", this);
+    actions << actionRegistry->makeQAction("flow_shape_order_later", this);
+    actions << actionRegistry->makeQAction("flow_shape_order_front", this);
+
     return actions;
 
 }

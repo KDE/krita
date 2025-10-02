@@ -447,31 +447,44 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
     QJsonObject resultJsonObj;
     QStringList proposedPaths;
 
+    // User-specified..
     if (!customLocation.isEmpty()) {
         proposedPaths << customLocation;
         proposedPaths << customLocation + '/' + processName;
     }
 
+    // Krita-bundled..
+    proposedPaths << KoResourcePaths::getApplicationRoot() + '/' + "bin" + '/' + processName;
+
+    // OS-specific..
+#ifdef Q_OS_WIN
+    // TODO: look for winget-installed packages
+    // list winget packages @ C:\users\username\appdata\local\microsoft\winget\packages\
+    // filter packages for ones containing name "ffmpeg"
+    // from package root add relative path, .\FFMPEGVERSIONNAME\bin
+#endif
+
 #ifdef Q_OS_MACOS
     proposedPaths << QCoreApplication::applicationDirPath() + '/' + processName;
 #endif
-    proposedPaths << KoResourcePaths::getApplicationRoot()
-                   + '/' + "bin" + '/' + processName;
 
 #ifndef Q_OS_WIN
     proposedPaths << QDir::homePath() + "/bin/" + processName;
     proposedPaths << "/usr/bin/" + processName;
     proposedPaths << "/usr/local/bin/" + processName;
 #endif
+
     dbgFile << proposedPaths;
     for (int i = 0; i != proposedPaths.size(); ++i) {
         if (proposedPaths[i].isEmpty()) continue;
 
 #ifdef Q_OS_WIN
         proposedPaths[i] = QDir::toNativeSeparators(QDir::cleanPath(proposedPaths[i]));
+
         if (proposedPaths[i].endsWith('/')) {
             continue;
         }
+
         if (!proposedPaths[i].endsWith(".exe", Qt::CaseInsensitive)) {
             if (!QFile::exists(proposedPaths[i])) {
                 proposedPaths[i] += ".exe";

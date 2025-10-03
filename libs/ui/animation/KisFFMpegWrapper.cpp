@@ -458,10 +458,18 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
 
     // OS-specific..
 #ifdef Q_OS_WIN
-    // TODO: look for winget-installed packages
-    // list winget packages @ C:\users\username\appdata\local\microsoft\winget\packages\
-    // filter packages for ones containing name "ffmpeg"
-    // from package root add relative path, .\FFMPEGVERSIONNAME\bin
+    // Look for winget-installed ffmpeg packages in C:\users\USERNAME\appdata\local\microsoft\winget\packages\FFMPEGVERSION\bin
+    QDir wingetPackageDir = QDir(QDir::homePath() + "/AppData/Local/Microsoft/WinGet/Packages/");
+    QStringList wingetPackageFolderNames = wingetPackageDir.entryList();
+    for (const auto &folderName : wingetPackageFolderNames) {
+        if (folderName.contains("ffmpeg", Qt::CaseInsensitive)) {
+            QDir ffmpegPackageFolder = QDir(wingetPackageDir.path() + "/" + folderName);
+            QStringList ffmpegRootNames = ffmpegPackageFolder.entryList();
+            for (const auto &ffmpegRootName : ffmpegRootNames) {
+                proposedPaths << ffmpegPackageFolder.path() + "/" + ffmpegRootName + "/bin/";
+            }
+        }
+    }
 #endif
 
 #ifdef Q_OS_MACOS

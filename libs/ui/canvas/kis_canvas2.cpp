@@ -57,6 +57,7 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_image_config.h"
+#include <KisImageConfigNotifier.h>
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
 #include "kis_display_color_converter.h"
@@ -94,8 +95,6 @@
 #include "KisDisplayConfig.h"
 #include "config-qt-patches-present.h"
 #include <KoIcon.h>
-
-
 
 #include <config-use-surface-color-management-api.h>
 #if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
@@ -250,19 +249,6 @@ public:
 
     QRect docUpdateRectToWidget(const QRectF &docRect);
 
-    KisDisplayConfig::Options overriddenWithProofingConfig(const KisDisplayConfig::Options &options) const {
-        if (proofingConfig && proofingConfig->displayFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
-            return { proofingConfig->determineDisplayIntent(options.first),
-                     proofingConfig->determineDisplayFlags(options.second) };
-        }
-
-        return options;
-    }
-
-    KisDisplayConfig::Options effectiveDisplayConfigOptions(const KisConfig &cfg) const {
-        return overriddenWithProofingConfig(KisDisplayConfig::optionsFromKisConfig(cfg));
-    }
-
     int currentScreenId() const {
         int canvasScreenNumber = qApp->screens().indexOf(view->currentScreen());
 
@@ -344,6 +330,8 @@ void KisCanvas2::setup()
     connect(m_d->view->canvasController()->proxyObject, &KoCanvasControllerProxyObject::canvasStateChanged, this, &KisCanvas2::slotCanvasStateChanged);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(KisImageConfigNotifier::instance(), &KisImageConfigNotifier::globalProofingConfigChanged,
+            this, &KisCanvas2::slotChangeGlobalProofingConfig);
 
     /**
      * We switch the shape manager every time vector layer or
@@ -925,6 +913,15 @@ void KisCanvas2::slotGamutCheck()
     updateProofingState();
     if (imageView()->softProofing()) {
         refetchDataFromImage();
+    }
+}
+
+void KisCanvas2::slotChangeGlobalProofingConfig()
+{
+    if (image() && !image()->proofingConfiguration()) {
+        // global config should be updated only when
+        // the image doesn't have its own config
+        slotChangeProofingConfig();
     }
 }
 

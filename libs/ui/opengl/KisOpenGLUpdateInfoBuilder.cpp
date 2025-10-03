@@ -85,7 +85,6 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                                              displayIntent,
                                              m_d->proofingConfig->useBlackPointCompensationFirstTransform,
                                              m_d->proofingConfig->warningColor,
-                                             m_d->proofingConfig->determineAdaptationState(),
                                              displayFlags));
         }
     }

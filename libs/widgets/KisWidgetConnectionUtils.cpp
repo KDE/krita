@@ -438,6 +438,7 @@ void connectControlState(QAbstractButton *button, QObject *source, const char *r
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStatePropertyName));
+    Q_ASSERT(readStateProp.isValid());
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
 
@@ -457,6 +458,7 @@ void connectControlState(QAbstractButton *button, QObject *source, const char *r
     helper->updateState(readStateProp.read(source).value<CheckBoxState>());
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
+    Q_ASSERT(writeProp.isValid());
     if (writeProp.isWritable()) {
         button->connect(button, &QAbstractButton::toggled,
                         source, [writeProp, source] (bool value) { writeProp.write(source, value); });

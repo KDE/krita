@@ -25,10 +25,6 @@ public:
                                             const KoColorSpace *dstCs,
                                             const KoColorSpace *proofingSpace,
                                             Intent renderingIntent,
-                                            Intent proofingIntent,
-                                            bool bcpFirstTransform,
-                                            quint8 *gamutWarning,
-                                            double adaptationState,
                                             ConversionFlags conversionFlags);
     ~KoColorProofingConversionTransformation() override;
 
@@ -41,12 +37,7 @@ public:
     const KoColorSpace *proofingSpace() const;
 
 private:
-
-    Intent m_proofingIntent;
-    quint8 *m_gamutWarning;
-    double m_adaptationState;
     const KoColorSpace *m_proofingSpace;
-    bool m_firstTransformBCP;
 };
 
 #endif

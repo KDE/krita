@@ -37,6 +37,9 @@ public:
         }
         conversionFlags |= KoColorConversionTransformation::CopyAlpha;
 
+        // unset Krita-only flag
+        conversionFlags.setFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent, false);
+
         m_transform = cmsCreateTransform(srcProfile->lcmsProfile(),
                                          srcColorSpaceType,
                                          dstProfile->lcmsProfile(),
@@ -75,10 +78,9 @@ public:
                                                 Intent proofingIntent,
                                                 bool bpcFirstTransform,
                                                 quint8 *gamutWarning,
-                                                double adaptationState,
                                                 ConversionFlags displayConversionFlags
                                                 )
-        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, bpcFirstTransform, gamutWarning, adaptationState, displayConversionFlags)
+        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, displayConversionFlags)
         , m_transform(0)
     {
         Q_ASSERT(srcCs);
@@ -93,6 +95,11 @@ public:
             displayConversionFlags |= KoColorConversionTransformation::NoOptimization;
         }
         displayConversionFlags |= KoColorConversionTransformation::CopyAlpha;
+
+        const double adaptationState = displayConversionFlags.testFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent) ? 0.0 : 1.0;
+
+        // unset Krita-only flag
+        displayConversionFlags.setFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent, false);
 
         quint16 alarm[cmsMAXCHANNELS];//this seems to be bgr???
         alarm[0] = (cmsUInt16Number)gamutWarning[2]*256;
@@ -268,7 +275,6 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                                                                                                 KoColorConversionTransformation::Intent proofingIntent,
                                                                                                 bool firstTransformBPC,
                                                                                                 quint8 *gamutWarning,
-                                                                                                double adaptationState,
                                                                                                 KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
 {
     KIS_ASSERT(srcColorSpace);
@@ -280,7 +286,7 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
                 dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, firstTransformBPC, gamutWarning,
-                adaptationState, displayConversionFlags
+                displayConversionFlags
                 );
 }
 

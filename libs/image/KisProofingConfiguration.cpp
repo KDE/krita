@@ -16,8 +16,6 @@ KisProofingConfiguration::KisProofingConfiguration()
       proofingProfile("Chemical proof"),
       proofingModel("CMYKA"),
       proofingDepth("U8"),
-      adaptationState(1.0),
-      storeSoftproofingInsideImage(false),
       displayMode(Paper)
 {
 }
@@ -38,8 +36,10 @@ KoColorConversionTransformation::ConversionFlags KisProofingConfiguration::deter
     KoColorConversionTransformation::ConversionFlags flags;
     if (displayMode == Monitor) {
         flags = monitorDisplayFlags;
+        flags.setFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent, false);
     } else if (displayMode == Paper) {
         flags = KoColorConversionTransformation::HighQuality;
+        flags.setFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent, false);
     } else {
         flags = displayFlags;
     }
@@ -48,9 +48,18 @@ KoColorConversionTransformation::ConversionFlags KisProofingConfiguration::deter
     return flags;
 }
 
-double KisProofingConfiguration::determineAdaptationState()
-{
-    if (displayMode == Paper) return 0.0;
-    return adaptationState;
+bool KisProofingConfiguration::operator==(const KisProofingConfiguration &other) const {
+    return conversionIntent == other.conversionIntent &&
+           displayIntent == other.displayIntent &&
+           useBlackPointCompensationFirstTransform == other.useBlackPointCompensationFirstTransform &&
+           displayFlags == other.displayFlags &&
+           warningColor == other.warningColor &&
+           proofingProfile == other.proofingProfile &&
+           proofingModel == other.proofingModel &&
+           proofingDepth == other.proofingDepth &&
+           displayMode == other.displayMode;
 }
 
+bool KisProofingConfiguration::operator!=(const KisProofingConfiguration &other) const {
+    return !(*this == other);
+}

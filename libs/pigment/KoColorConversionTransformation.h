@@ -46,7 +46,9 @@ public:
         NoWhiteOnWhiteFixup     = 0x0004,    // Don't fix scum dot
         HighQuality             = 0x0400,    // Use more memory to give better accuracy
         LowQuality              = 0x0800,    // Use less memory to minimize resources
-        CopyAlpha               = 0x04000000 //Let LCMS handle the alpha. Should always be on.
+        CopyAlpha               = 0x04000000, //Let LCMS handle the alpha. Should always be on.
+        NoAdaptationAbsoluteIntent = 01000000 // Krita-only flag, should be stripped off before passing to lcms (proofing only)
+
     };
     Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
 

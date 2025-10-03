@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>449</width>
-    <height>377</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
             <string>Width:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -71,7 +71,7 @@
             <string>Height:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -94,7 +94,7 @@
             <string>Resolution:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -126,7 +126,7 @@
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -150,7 +150,7 @@
             <string comment="The background color of the image's projection">Background Color:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -189,7 +189,7 @@
             <string>Background Opacity:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -229,10 +229,10 @@
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
+          <enum>QSizePolicy::Policy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -255,7 +255,7 @@
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -280,131 +280,17 @@
         </widget>
        </item>
        <item>
-        <widget class="KisColorSpaceSelector" name="proofSpaceSelector" native="true"/>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Rendering Intent</string>
-         </property>
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0" colspan="2">
-           <widget class="QComboBox" name="cmbIntent">
-            <property name="currentIndex">
-             <number>-1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="ckbBlackPointComp">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Black Point compensation matches the darkest color of the source device to the darkest color of the destination device. Relative Colorimetric without Black Point Compensation will show the difference between the darkest values. With blackpoint compensation, black is black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Black Point Compensation</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_6">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Display Mode:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="cmbDisplayTransformState">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="grbDisplayConversion">
-         <layout class="QFormLayout" name="formLayout_3">
-          <item row="2" column="1">
-           <widget class="QComboBox" name="cmbDisplayIntent"/>
-          </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="chkDisplayBlackPointCompensation">
-            <property name="text">
-             <string>Black Point Compensation</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Rendering Intent:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSlider" name="sldAdaptationState">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set how much you wish to correct the adaptation state. This will affect how &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt; changes the whites of your image. In Layman's terms: how much do you wish to have the color management correct the paper-color to screen white while using &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt;?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lblAdaptationState">
-            <property name="text">
-             <string>Adaptation State:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="lblGamutWarning">
-           <property name="text">
-            <string>Gamut Warning:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KisColorButton" name="gamutAlarm">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="KisProofingOptionsWidget" name="wdgProofingOptions" native="true"/>
        </item>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -458,12 +344,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
@@ -475,9 +355,21 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisWarningWidget</class>
    <extends>QWidget</extends>
    <header>widgets/KisWarningWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisProofingOptionsWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">KisProofingOptionsWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

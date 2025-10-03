@@ -32,6 +32,12 @@ public:
      */
     void notifyAutoKeyFrameConfigurationChanged();
 
+    /**
+     * Notify that the global proofing configuration stored in
+     * KisImageConfig has been changed
+     */
+    void notifyGlobalProofingConfigChanged();
+
 Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
@@ -39,9 +45,14 @@ Q_SIGNALS:
     void configChanged(void);
 
     /**
-     * This signal is emitted whenever notifyConfigChanged() is called.
+     * This signal is also emitted whenever notifyConfigChanged() is called.
      */
     void autoKeyFrameConfigurationChanged();
+
+    /**
+     * This signal is also emitted whenever notifyConfigChanged() is called.
+     */
+    void globalProofingConfigChanged();
 
 private:
     Q_DISABLE_COPY(KisImageConfigNotifier)

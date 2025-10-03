@@ -185,10 +185,6 @@ private Q_SLOTS:
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
     void toggleUseDefaultColorSpace(bool useDefColorSpace);
 
-    void updateProofingWidgets();
-    void proofingDisplayModeUpdated();
-    void proofingConversionIntentUpdated();
-    void proofingDisplayIntentUpdated();
     void updateProofingDisplayInfo();
 
 public:

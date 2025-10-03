@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>616</width>
-    <height>424</height>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -138,7 +138,7 @@
        <item row="6" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -251,7 +251,7 @@
        <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -267,42 +267,21 @@
       <attribute name="title">
        <string>Soft Proofing</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_4">
-       <item row="0" column="0" colspan="2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Note: these are the default proofing settings for new images.</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="KisColorSpaceSelector" name="proofingSpaceSelector" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>100</height>
-          </size>
-         </property>
-        </widget>
+       <item>
+        <widget class="KisProofingOptionsWidget" name="wdgProofingOptions" native="true"/>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lblGamutWarning">
-         <property name="text">
-          <string>Gamut Warning:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="KisColorButton" name="gamutAlarm">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0" colspan="2">
+       <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -312,82 +291,6 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="gbxProofingTransform">
-         <property name="title">
-          <string>Proofing transform</string>
-         </property>
-         <layout class="QFormLayout" name="formLayout_5">
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblProofingIntent">
-            <property name="text">
-             <string>Rendering Intent:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="cmbProofingIntent"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="ckbProofBlackPoint">
-            <property name="text">
-             <string>Black Point Compensation</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="7" column="0" colspan="2">
-        <widget class="QGroupBox" name="gbxDisplayTransform">
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QFormLayout" name="formLayout_6">
-          <item row="2" column="0">
-           <widget class="QLabel" name="lblAdaptationState">
-            <property name="text">
-             <string>Adaptation State:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSlider" name="sldAdaptationState">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="cmbDisplayIntent"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="chkDispBlackPoint">
-            <property name="text">
-             <string>Black Point Compensation</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblRenderingIntent_2">
-            <property name="text">
-             <string>Rendering Intent:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QComboBox" name="cmbDisplayMode"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Display Mode:</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </widget>
@@ -396,14 +299,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisColorSpaceSelector</class>
+   <class>KisProofingOptionsWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/kis_color_space_selector.h</header>
+   <header location="global">KisProofingOptionsWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

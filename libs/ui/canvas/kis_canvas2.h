@@ -257,6 +257,7 @@ public Q_SLOTS:
     bool yAxisMirrored() const;
     void slotSoftProofing();
     void slotGamutCheck();
+    void slotChangeGlobalProofingConfig();
     void slotChangeProofingConfig();
     void slotPopupPaletteRequestedZoomChange(int zoom);
 

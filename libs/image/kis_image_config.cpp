@@ -14,6 +14,7 @@
 #include <KoColorConversionTransformation.h>
 #include <kis_properties_configuration.h>
 
+#include <KisImageConfigNotifier.h>
 #include "kis_debug.h"
 
 #include <QThread>
@@ -530,36 +531,29 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration(bool req
         col.fromQColor(def);
         col.setOpacity(1.0);
         proofingConfig->warningColor = col;
-        proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
+        proofingConfig->setLegacyAdaptationState(m_config.readEntry("defaultProofingAdaptationState", 1.0));
     }
     return toQShared(proofingConfig);
 }
 
-void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
-                                              int renderingIntent,
-                                              bool blackPointCompensation,
-                                              KoColor warningColor,
-                                              double adaptationState,
-                                              bool displayBlackPointCompensation,
-                                              int proofingIntent,
-                                              KisProofingConfiguration::DisplayTransformState proofingDisplayMode)
+void KisImageConfig::setDefaultProofingConfig(const KisProofingConfiguration &config)
 {
-    if (!proofingSpace || !proofingSpace->profile()) {
-        return;
-    }
-    m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
-    m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
-    m_config.writeEntry("defaultProofingProfileDepth", proofingSpace->colorDepthId().id());
-    m_config.writeEntry("defaultProofingConversionIntent", renderingIntent);
-    m_config.writeEntry("defaultProofingBlackpointCompensation", blackPointCompensation);
-    QColor c;
-    c = warningColor.toQColor();
-    m_config.writeEntry("defaultProofingGamutwarning", c);
-    m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
+    if (*defaultProofingconfiguration() == config) return;
 
-    m_config.writeEntry("defaultProofingDisplayBlackpointCompensation", displayBlackPointCompensation);
-    m_config.writeEntry("defaultProofingProfileIntent", proofingIntent);
-    m_config.writeEntry("defaultProofingDisplayMode", int(proofingDisplayMode));
+    m_config.writeEntry("defaultProofingProfileName", config.proofingProfile);
+    m_config.writeEntry("defaultProofingProfileModel", config.proofingModel);
+    m_config.writeEntry("defaultProofingProfileDepth", config.proofingDepth);
+    m_config.writeEntry("defaultProofingConversionIntent", int(config.conversionIntent));
+    m_config.writeEntry("defaultProofingBlackpointCompensation", config.useBlackPointCompensationFirstTransform);
+    QColor c;
+    c = config.warningColor.toQColor();
+    m_config.writeEntry("defaultProofingGamutwarning", c);
+    m_config.writeEntry("defaultProofingAdaptationState", config.legacyAdaptationState());
+    m_config.writeEntry("defaultProofingDisplayBlackpointCompensation", config.displayFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+    m_config.writeEntry("defaultProofingProfileIntent", int(config.displayIntent));
+    m_config.writeEntry("defaultProofingDisplayMode", int(config.displayMode));
+
+    KisImageConfigNotifier::instance()->notifyGlobalProofingConfigChanged();
 }
 
 bool KisImageConfig::useLodForColorizeMask(bool requestDefault) const

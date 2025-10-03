@@ -414,7 +414,7 @@ public:
                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                              KoColorConversionTransformation::Intent proofingIntent,
                                                              bool bpcFirstTransform,
-                                                             quint8 *gamutWarning, double adaptationState,
+                                                             quint8 *gamutWarning,
                                                              KoColorConversionTransformation::ConversionFlags displayConversionFlags) const;
     /**
      * @brief proofPixelsTo

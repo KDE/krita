@@ -34,9 +34,14 @@ KoColorConversionTransformation::Intent calcEffectiveDisplayIntent(KisProofingCo
 }
 
 CheckBoxState calcEffectiveUseBPCState(KisProofingConfiguration::DisplayTransformState displayMode,
+                                       KoColorConversionTransformation::Intent effectiveDisplayIntent,
                                        bool localUseBPC,
-                        bool globalUseBPC)
+                                       bool globalUseBPC)
 {
+    if (effectiveDisplayIntent != KoColorConversionTransformation::IntentRelativeColorimetric) {
+        return {false, false};
+    }
+
     switch (displayMode) {
     case KisProofingConfiguration::Monitor:
         return {globalUseBPC, false};
@@ -141,6 +146,7 @@ KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfigur
     , LAGER_QT(dispBlackPointCompensation) {data[&KisProofingConfiguration::displayFlags].zoom(conversionFlag(KoColorConversionTransformation::BlackpointCompensation))}
     , LAGER_QT(effectiveDispBlackPointCompensationState) {
         lager::with(LAGER_QT(displayTransformMode),
+                    LAGER_QT(effectiveDisplayIntent),
                     LAGER_QT(dispBlackPointCompensation),
                     displayConfigOptions
                         .zoom(lager::lenses::second)

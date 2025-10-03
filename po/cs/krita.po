@@ -8285,12 +8285,10 @@ msgstr "Zobrazit informace o systému pro hlášení chyb."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Document Information"
+#, kde-format
 msgctxt "action"
 msgid "Show color management information"
-msgstr "Informace o dokumentu"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:189
@@ -8301,12 +8299,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show system information for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports"
-msgstr "Zobrazit informace o systému pro hlášení chyb."
+msgstr ""
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -26644,34 +26640,28 @@ msgid "Eraser"
 msgstr "Guma"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:328
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
-msgstr "Zakázáno"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:329
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
-msgstr "Povoleno"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:330
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
-msgstr "Povoleno"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:331
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
-msgstr "Zakázáno"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:343
 #, kde-format
@@ -26782,10 +26772,9 @@ msgid "Display's color space is managed by the operating system"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1192
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Enable canvas color management"
-msgstr "Správa barev"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1195
 #, kde-format
@@ -26800,10 +26789,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1214
-#, fuzzy, kde-format
-#| msgid "Uncalibrated color space"
+#, kde-format
 msgid "Canvas surface color space:"
-msgstr "Nekalibrovaný barevný prostor"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
@@ -29454,10 +29442,9 @@ msgstr "Přepnout modifikátory výběru Control/Alt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
 #: libs/ui/forms/wdggeneralsettings.ui:975
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Touch Painting:"
-msgstr "Povolit malbu dotykem"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:982
@@ -62360,12 +62347,9 @@ msgid "All glyphs"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert to Shape"
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
-msgstr "Převést na tvar"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -62465,11 +62449,10 @@ msgstr "Nástroj na text"
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:16
 #: plugins/tools/svgtexttool/SvgTextTool.action:23
-#, fuzzy, kde-format
-#| msgid "Popup Palette"
+#, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr "Vyskakovací paleta"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18
@@ -62734,10 +62717,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, fuzzy, kde-format
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Type"
-msgstr "Nástroj na text"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
@@ -62750,10 +62732,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Preformatted"
-msgstr "Výkon"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
@@ -62765,10 +62746,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, fuzzy, kde-format
-#| msgid "Inline"
+#, kde-format
 msgid "Inline Wrapped"
-msgstr "Vložené"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
@@ -62781,10 +62761,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Prepositioned"
-msgstr "Pozice"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
@@ -64374,90 +64353,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Rich text"
-#~ msgstr "Formátovaný text"
-
-#~ msgid "SVG Source"
-#~ msgstr "Zdroj SVG"
-
-#~ msgid "Font"
-#~ msgstr "Písmo"
-
-#~ msgid "Text Color"
-#~ msgstr "Barva textu"
-
-#~ msgid "Line height"
-#~ msgstr "Tloušťka čáry"
-
-#~ msgctxt "Default line height for text"
-#~ msgid "Normal"
-#~ msgstr "Normální"
-
-#~ msgctxt "line height for text"
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#~ msgctxt "action"
-#~ msgid "Text Color"
-#~ msgstr "Barva textu"
-
-#~ msgctxt "action"
-#~ msgid "Text Color..."
-#~ msgstr "Barva textu..."
-
-#~ msgctxt "action"
-#~ msgid "Background"
-#~ msgstr "Pozadí"
-
-#~ msgctxt "action"
-#~ msgid "Background Color..."
-#~ msgstr "Barva pozadí..."
-
-#~ msgctxt "action"
-#~ msgid "Font Size"
-#~ msgstr "Velikost písma"
-
-#~ msgctxt "action"
-#~ msgid "Font..."
-#~ msgstr "Písmo..."
-
-#~ msgctxt "action"
-#~ msgid "Change character size, font, boldface, italics etc."
-#~ msgstr "Změnit velikost, písmo, tučnost, šikmost, aj. písma"
-
-#~ msgctxt "action"
-#~ msgid "Change the attributes of the currently selected characters."
-#~ msgstr "Změnit atributy nyní vybraných znaků."
-
-#~ msgctxt "action"
-#~ msgid "Special Character..."
-#~ msgstr "Speciální znak..."
-
-#~ msgctxt "action"
-#~ msgid "Line Height"
-#~ msgstr "Tloušťka čáry"
-
-#~ msgid "&Insert"
-#~ msgstr "Vlož&it"
-
-#~ msgid "&Format"
-#~ msgstr "&Formát"
-
-#~ msgid "&Weight"
-#~ msgstr "&Váha"
-
-#~ msgid "Font Settings"
-#~ msgstr "Nastavení písem"
-
-#~ msgid "Formatting"
-#~ msgstr "Formátování"
-
-#~ msgid "SVG source"
-#~ msgstr "Zdroj SVG"
-
-#~ msgid "Edit Text"
-#~ msgstr "Upravit text"
-
-#~ msgid "Fonts"
-#~ msgstr "Písma"

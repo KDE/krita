@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-26 02:01+0000\n"
-"PO-Revision-Date: 2025-09-24 09:06+0300\n"
+"PO-Revision-Date: 2025-10-02 06:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Poedit 3.7\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -28943,7 +28943,7 @@ msgstr "Büyük piksel eşlemi önbelleği"
 #: libs/ui/forms/wdgdisplaysettings.ui:203
 #, kde-format
 msgid "Preferred Renderer (needs restart):"
-msgstr "Tercih edilen sunucu (yeniden başlatma gerektirir):"
+msgstr "Yeğlenen sunucu (yeniden başlatma gerektirir):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgdisplaysettings.ui:220
@@ -37117,7 +37117,7 @@ msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
-"Tercih edilen sunucu istenen yüzey biçimini desteklemiyor. Başka bir sunucu "
+"Yeğlenen sunucu istenen yüzey biçimini desteklemiyor. Başka bir sunucu "
 "seçildi."
 
 #: libs/ui/opengl/kis_opengl.cpp:1060

@@ -28,7 +28,7 @@ public:
         SendToBack
     };
 
-    KoSvgTextReorderShapeInsideCommand(KoSvgTextShape* textShape, KoShape *shape, MoveShapeType type, KUndo2Command *parent = nullptr);
+    KoSvgTextReorderShapeInsideCommand(KoSvgTextShape* textShape, QList<KoShape*> shape, MoveShapeType type, KUndo2Command *parent = nullptr);
     ~KoSvgTextReorderShapeInsideCommand();
 
     void redo() override;

@@ -221,9 +221,9 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         qDebug() << "text updated";
         if ((type == ContentChanged)) {
             relayout();
-        } else if (transformationTypes.contains(type)) {
-            qDebug() << "update transform";
-            d->shapeGroup->setTransformation(this->transformation());
+        } else if (transformationTypes.contains(type) || type == ParentChanged) {
+            qDebug() << "update transform" << this->absoluteTransformation();
+            d->shapeGroup->setTransformation(this->absoluteTransformation());
         } else if (type == TextRunAroundChanged) {
             // Hack: we don't use runaround else where, so we're using it for padding and margin.
             qDebug() << "update wrapping areas";
@@ -1926,11 +1926,12 @@ QPainterPath KoSvgTextShape::outline() const {
         Q_FOREACH(KoShape *shape, d->internalShapes()) {
             result.addPath(shape->transformation().map(shape->outline()));
         }
-    }
-    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
-        result.addPath(it->associatedOutline);
-        for (int i = 0; i < it->textDecorations.values().size(); ++i) {
-            result.addPath(it->textDecorations.values().at(i));
+    } else {
+        for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+            result.addPath(it->associatedOutline);
+            for (int i = 0; i < it->textDecorations.values().size(); ++i) {
+                result.addPath(it->textDecorations.values().at(i));
+            }
         }
     }
 
@@ -1943,6 +1944,9 @@ QRectF KoSvgTextShape::outlineRect() const
 
 QRectF KoSvgTextShape::boundingRect() const
 {
+    if (d->internalShapesPainter->contentRect().isValid()) {
+        return d->internalShapesPainter->contentRect();
+    }
     QRectF result;
 
     QList<KoShapeStrokeModelSP> parentStrokes;
@@ -1974,7 +1978,7 @@ QRectF KoSvgTextShape::boundingRect() const
         }
     }
 
-    return d->internalShapesPainter->contentRect().united(this->absoluteTransformation().mapRect(result));
+    return this->absoluteTransformation().mapRect(result);
 }
 
 QSizeF KoSvgTextShape::size() const
@@ -1993,13 +1997,14 @@ void KoSvgTextShape::setSize(const QSizeF &size)
     const qreal scaleY = size.height() / oldSize.height();
 
     if (!d->internalShapes().isEmpty()) {
+        const bool usePostScaling = (d->internalShapes().size() > 1);
         Q_FOREACH(KoShape *shape, d->internalShapes()) {
-            KoFlake::resizeShapeCommon(shape, scaleX, scaleY, shape->boundingRect().topLeft() - oRect.topLeft(), false, false, this->transformation());
+            QPointF topLeft = shape->transformation().map(shape->outlineRect().topLeft());
+            KoFlake::resizeShapeCommon(shape, scaleX, scaleY, topLeft - oRect.topLeft(), false, usePostScaling, this->transformation());
         }
     } else {
         this->scale(scaleX, scaleY);
         //TODO: use scaling function for kosvgtextproperties when styles presets are merged.
-        //TODO: Support text-on-path
         notifyChanged();
         shapeChangedPriv(ScaleChanged);
     }

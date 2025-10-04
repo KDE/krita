@@ -583,16 +583,10 @@ void DefaultTool::slotAddShapesToFlow()
 
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, shapes) {
-        QPointF pos  = shape->absolutePosition(KoFlake::TopLeft);
-        QList<KoShape*> shapes{shape};
-
         if(shape->parent()) {
             canvas()->shapeController()->removeShape(shape, parentCommand);
         }
         new KoSvgTextAddShapeCommand(textShape, shape, true, parentCommand);
-
-        pos = shape->absolutePosition(KoFlake::TopLeft) - pos;
-        new KoShapeMoveCommand(shapes, pos, parentCommand);
     }
     new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
 
@@ -627,16 +621,10 @@ void DefaultTool::slotSubtractShapesFromFlow()
 
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, shapes) {
-        QPointF pos  = shape->absolutePosition(KoFlake::TopLeft);
-        QList<KoShape*> shapes{shape};
-
         if (shape->parent()) {
             canvas()->shapeController()->removeShape(shape, parentCommand);
         }
         new KoSvgTextAddShapeCommand(textShape, shape, false, parentCommand);
-
-        pos = shape->absolutePosition(KoFlake::TopLeft) - pos;
-        new KoShapeMoveCommand(shapes, pos, parentCommand);
     }
     new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
 
@@ -660,12 +648,8 @@ void DefaultTool::slotRemoveShapesFromFlow()
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, selectedShapes) {
         if (!textShape->shapeInContours(shape)) continue;
-        QPointF pos = shape->absolutePosition(KoFlake::TopLeft);
         new KoSvgTextRemoveShapeCommand(textShape, shape, parentCommand);
         canvas()->shapeController()->addShape(shape, textShape->parent(), parentCommand);
-        pos = shape->absolutePosition(KoFlake::TopLeft) - pos;
-        QList<KoShape*> shapes{shape};
-        new KoShapeMoveCommand(shapes, pos, parentCommand);
     }
     canvas()->addCommand(parentCommand);
 }
@@ -714,14 +698,14 @@ void DefaultTool::slotReorderFlowShapes(int type)
         parentCommand->setText(kundo2_i18n("Set Flow Shape as Last"));
     }
 
-    bool addToCanvas = false;
+    QList<KoShape *> shapesInside;
     Q_FOREACH(KoShape *shape, selectedShapes) {
         if (!textShape->shapesInside().contains(shape)) continue;
-        new KoSvgTextReorderShapeInsideCommand(textShape, shape, KoSvgTextReorderShapeInsideCommand::MoveShapeType(type), parentCommand);
-        addToCanvas = true;
+        shapesInside.append(shape);
     }
 
-    if (addToCanvas) {
+    if (!shapesInside.isEmpty()) {
+        new KoSvgTextReorderShapeInsideCommand(textShape, shapesInside, KoSvgTextReorderShapeInsideCommand::MoveShapeType(type), parentCommand);
         canvas()->addCommand(parentCommand);
     }
 }

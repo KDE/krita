@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-26 02:01+0000\n"
+"POT-Creation-Date: 2025-10-05 01:52+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -25027,7 +25027,7 @@ msgstr "動画情報の読み込みに失敗しました"
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg が停止しました"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:671
+#: libs/ui/animation/KisFFMpegWrapper.cpp:692
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."

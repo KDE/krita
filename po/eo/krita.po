@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-26 02:01+0000\n"
+"POT-Creation-Date: 2025-10-05 01:52+0000\n"
 "PO-Revision-Date: 2025-03-30 23:35+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -24834,7 +24834,7 @@ msgstr "Malsukcesis ŝargi videoinformojn"
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg paneis"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:671
+#: libs/ui/animation/KisFFMpegWrapper.cpp:692
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."

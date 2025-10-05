@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-26 02:01+0000\n"
-"PO-Revision-Date: 2025-09-28 11:19-0300\n"
+"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"PO-Revision-Date: 2025-10-04 16:31-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -1570,7 +1570,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "S_Smudge_Cheese.gbr"
 msgid "S_Smudge Cheese"
-msgstr "S_Queijo manchado"
+msgstr "Queijo S_Borrado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2588,7 +2588,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_block_tilt.kpp"
 msgid "Smudge block tilt"
-msgstr "Manchar em bloco inclinado"
+msgstr "Borrão em bloco inclinado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2596,7 +2596,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_rake.kpp"
 msgid "Smudge rake"
-msgstr "Rake manchado"
+msgstr "Rake borrado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2604,7 +2604,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_rake_2.kpp"
 msgid "Smudge rake 2"
-msgstr "Rake manchado 2"
+msgstr "Rake borrado 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2612,7 +2612,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_soft.kpp"
 msgid "Smudge soft"
-msgstr "Mancha suave"
+msgstr "Borrão suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2620,7 +2620,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_textured.kpp"
 msgid "Smudge textured"
-msgstr "Mancha texturizada"
+msgstr "Borrão texturizado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14116,7 +14116,7 @@ msgstr "Ligar simulação de tela"
 #, kde-format
 msgctxt "action"
 msgid "Out of Gamut Warnings"
-msgstr "Avisos para Cores fora da Gama"
+msgstr "Avisos para cores fora do gamute"
 
 #. i18n: context: toolTip @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
@@ -14129,8 +14129,8 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
-"Liga os avisos de cores fora da gama de cores nas impressões gráficas, é "
-"necessário ligar a simulação de tela."
+"Liga os avisos de cores fora do gamute de cor nas impressões gráficas, é "
+"necessário ligar a prova de tela."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -14621,7 +14621,7 @@ msgstr "Interseção do ajuste"
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr "Ajustar caixa de delimitação"
+msgstr "Ajustar caixa delimitadora"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -23955,7 +23955,7 @@ msgstr "Sessões"
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
-msgstr "Máscaras de gama"
+msgstr "Máscaras de gamute"
 
 #: libs/resources/KisResourceTypes.cpp:55
 #, kde-format
@@ -24950,7 +24950,7 @@ msgstr "Falha ao carregar as informações do vídeo"
 msgid "FFMpeg Crashed"
 msgstr "Falha no FFMpeg:"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:671
+#: libs/ui/animation/KisFFMpegWrapper.cpp:692
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -26307,7 +26307,7 @@ msgstr "Interseção"
 #: libs/ui/canvas/kis_guides_manager.cpp:785
 #, kde-format
 msgid "Bounding Box"
-msgstr "Caixa de delimitação"
+msgstr "Caixa delimitadora"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
@@ -28368,8 +28368,8 @@ msgid ""
 "Within and outside gamut; same as Absolute Colorimetric. White point changed "
 "to result in neutral grays."
 msgstr ""
-"Dentro e fora do intervalo; o mesmo da Métrica de Cor Absoluta. Pontos em "
-"branco mudados para resultar em cinzas neutros."
+"Dentro e fora do gamute; o mesmo da Colorimétrica Absoluta. Pontos em branco "
+"mudados para resultar em cinzas neutros."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
@@ -28409,8 +28409,8 @@ msgid ""
 "is sacrificed. White point for source and destination; unchanged. Intended "
 "for spot colors (Pantone, TruMatch, logo colors, ...)"
 msgstr ""
-"Dentro do intervalo do dispositivo destino; matiz, brilho e saturação são "
-"mantidos. Fora do intervalo; matiz e brilho são mantidos, saturação é "
+"Dentro do gamute do dispositivo destino; matiz, brilho e saturação são "
+"mantidos. Fora do gamute; matiz e brilho são mantidos, saturação é "
 "sacrificada. Pontos em branco da fonte e destino; mantidos. Ideal para "
 "destacar cores (Pantone, TruMatch, cores de logotipo, ...)"
 
@@ -28588,7 +28588,7 @@ msgstr ""
 #: libs/ui/forms/wdgimageproperties.ui:386
 #, kde-format
 msgid "Gamut Warning:"
-msgstr "Aviso de Gama:"
+msgstr "Aviso de gamute:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
@@ -28762,9 +28762,9 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"Dentro e fora do intervalo; o mesmo da Métrica\n"
-"de Cor Absoluta. Pontos em branco mudados para\n"
-"resultar em cinzas neutros.\n"
+"Dentro e fora do gamute; o mesmo da Colorimétrica\n"
+"Absoluta. Pontos em branco mudados para resultar\n"
+"em cinzas neutros.\n"
 "\n"
 "Se a tabela adequada estiver presente no perfil,\n"
 "ela é usada. Caso contrário aplica o porcentual\n"
@@ -28815,8 +28815,8 @@ msgid ""
 "and destination; unchanged. Intended for spot\n"
 "colors (Pantone, TruMatch, logo colors, ...)"
 msgstr ""
-"Dentro do intervalo do dispositivo destino; matiz,\n"
-"brilho e saturação são mantidos. Fora do intervalo;\n"
+"Dentro do gamute do dispositivo destino; matiz,\n"
+"brilho e saturação são mantidos. Fora do gamute;\n"
 "matiz e brilho são mantidos, saturação é sacrificada.\n"
 "Pontos em branco da fonte e destino; mantidos. Ideal\n"
 "para destacar cores (Pantone, Correspondência Real,\n"
@@ -29442,7 +29442,7 @@ msgstr "Barra de estado"
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:51
 #, kde-format
 msgid "Toggle gamut mask"
-msgstr "Alternar máscara de gama"
+msgstr "Alternar máscara de gamute"
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
@@ -31757,7 +31757,7 @@ msgstr "Triângulo seletor sRGB"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:65
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Seletor amplo gama"
+msgstr "Seletor de amplo gamute"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:103
@@ -33446,13 +33446,13 @@ msgstr "Ativar a camada anterior"
 #: libs/ui/input/KisTouchGestureAction.cpp:31
 #, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "Ativar ferramenta de traços livres de pincel"
+msgstr "Ativar ferramenta de pincel à mão livre"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
-msgstr "Ferramenta de seleção livre"
+msgstr "Ferramenta de seleção à mão livre"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
@@ -36055,12 +36055,12 @@ msgstr "Simulação de tela (Soft Proofing) desligada."
 #: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
-msgstr "Avisos de Cores fora de Gama não funciona em ponto flutuante."
+msgstr "Avisos de cores fora do gamute não funciona em ponto flutuante."
 
 #: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings turned on."
-msgstr "Avisos de Cores fora de Gama ligados."
+msgstr "Avisos de cores fora do gamute ligados."
 
 #: libs/ui/KisView.cpp:1382
 #, kde-format
@@ -36070,7 +36070,7 @@ msgstr "Mas a simulação de tela continua desligada."
 #: libs/ui/KisView.cpp:1385
 #, kde-format
 msgid "Gamut Warnings turned off."
-msgstr "Avisos de Cores fora de Gama desligados."
+msgstr "Avisos de cores fora do gamute desligados."
 
 #: libs/ui/KisViewManager.cpp:803
 #, kde-format
@@ -38242,8 +38242,8 @@ msgid ""
 "just barely outside the area of real colors humans can see</p>"
 msgstr ""
 "<p>O espaço de cor ACEScg é menor que o espaço de cor ACES, mas é grande o "
-"suficiente para conter a 'gama Rec-2020 e DCI-P3'. Ao contrário do espaço de "
-"cor ACES, ele não tem valores negativos e contém apenas algumas cores que "
+"suficiente para conter o 'gamute Rec-2020 e DCI-P3'. Ao contrário do espaço "
+"de cor ACES, ele não tem valores negativos e contém apenas algumas cores que "
 "ultrapassam um pouco o espectro das cores que os humanos conseguem ver.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
@@ -38266,14 +38266,14 @@ msgstr ""
 "o 'ClayRGB' (com base no ArgyllCMS) como nome de base para esses perfis. "
 "Como é usado abaixo, o 'Compatível com o Adobe RGB 1998' é uma terminologia "
 "sugerida no preâmbulo para a especificação do espaço de cor AdobeRGB 1998.</"
-"p><p>A gama de cores do Adobe RGB 1998 cobre uma maior porcentagem dos "
+"p><p>O gamute de cor do Adobe RGB 1998 cobre uma maior porcentagem dos "
 "cianos, verdes e verdes-amarelados reais que o sRGB, mas ainda não inclui "
 "todos os cianos, verdes e verdes-amarelados que podem ser impressos, "
-"especialmente ao usar impressoras jato-de-tinta de alto desempenho, com gama "
-"de cores mais ampla. O BetaRGB (não incluído no pacote de perfis) e a "
-"Rec.2020 correspondem melhor para as gamas de cores das impressoras de gama "
-"de cores ampla dos dias atuais.</p><p>A gama de cores do Adobe RGB 1998 é "
-"uma aproximação razoável para alguns dos monitores de gama de cores ampla de "
+"especialmente ao usar impressoras jato-de-tinta de alto desempenho, com "
+"gamute de cor mais amplo. O BetaRGB (não incluído no pacote de perfis) e a "
+"Rec.2020 correspondem melhor para os gamutes de cor das impressoras de "
+"gamute amplo dos dias atuais.</p><p>O gamute de cor do Adobe RGB 1998 é uma "
+"aproximação razoável para alguns dos monitores de gamute de cor amplo de "
 "alto desempenho dos dias atuais.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
@@ -38293,10 +38293,10 @@ msgid ""
 "needs to make sure your color space really does hold all possible real "
 "colors.</p>"
 msgstr ""
-"<p>A gama de cores deste perfil é aproximadamente do mesmo tamanho e forma "
+"<p>O gamute de cor deste perfil é aproximadamente do mesmo tamanho e forma "
 "do espaço de cor do ACES e, como acontece nesse espaço de cor, o "
 "AllColorsRGB contém todas as cores reais possíveis. Porém, o AllColorsRGB "
-"tem uma gama de cores ligeiramente maior (para capturar alguma cores "
+"tem um gamute de cor ligeiramente maior (para capturar alguma cores "
 "marginais que não se qualificam como reais, quando vistas por um observador "
 "padrão) e usa o ponto branco D50.</p><p>Como no espaço de cor ACES, o "
 "AllColorsRGB possui uma grande porcentagem de cores imaginárias. Leia o <a "
@@ -38367,7 +38367,7 @@ msgid ""
 msgstr ""
 "<p>Para evitar possíveis problemas com infração de direitos autorais, foi "
 "usado o 'LargeRGB' (que segue o RawTherapee) como nome de base para estes "
-"perfis.<p>A Kodak desenhou a gama de cores RIMM/ROMM (ProPhotoRGB) para "
+"perfis.<p>A Kodak desenhou o gamute de cor RIMM/ROMM (ProPhotoRGB) para "
 "incluir todas as cores imprimíveis e a maioria das cores do mundo real. "
 "Inclui algumas cores imaginárias e exclui alguns dos tons de azul e violeta "
 "que podem ser capturados pelas câmeras digitais. Também exclui alguns tons "
@@ -38421,23 +38421,23 @@ msgid ""
 "all the other the RGB profiles provided in my profile pack) is a matrix "
 "profile, and matrix profiles don't have perceptual intent tables.</p>"
 msgstr ""
-"<p>A Hewlett-Packard e a Microsoft projetaram o sRGB para corresponder à "
-"gama de cores para os monitores CRT da década de 1990. O sRGB é o espaço de "
-"cores padrão da Internet e continua sendo melhor escolha para exportar "
-"imagens para a Internet.</p><p>A gama de cores do sRGB era uma boa "
-"correspondência para os CRTs de boa qualidade calibrados. Contudo, o sRGB "
-"não é uma boa aposta para muitos monitores LCD mais simples, que muitas "
-"vezes não mostram os azuis e magentas mais saturados do sRGB (a boa notícia: "
-"à medida que a tecnologia evolui, gamas de cores mais amplas estão sendo "
-"cada vez mais utilizados por esses monitores).</p><p>As gamas de cores das "
-"impressoras podem facilmente exceder a gama de cores do sRGB, no que se "
-"refere aos cianos, verdes e verdes-amarelados. As cores dos arquivos RAW "
-"interpolados das câmeras digitais também normalmente excedem a gama de cores "
-"sRGB.</p><p>Como ponto relevante, o uso da percepção ao converter para o "
-"sRGB não faz automaticamente com que as cores fora da gama sejam "
-"incorporadas na gama de cores sRGB! O espaço de cor padrão do sRGB (em "
-"conjunto com todos os outros perfis RGB fornecidos pelo pacote de perfis) é "
-"um perfil matriz e estes perfis não têm tabelas de intenção de percepção.</p>"
+"<p>A Hewlett-Packard e a Microsoft projetaram o sRGB para corresponder ao "
+"gamute de cor para os monitores CRT da década de 1990. O sRGB é o espaço de "
+"cor padrão da Internet e continua sendo melhor escolha para exportar imagens "
+"para a Internet.</p><p>O gamute de cor do sRGB era uma boa correspondência "
+"para os CRTs de boa qualidade calibrados. Contudo, o sRGB não é uma boa "
+"aposta para muitos monitores LCD mais simples, que muitas vezes não mostram "
+"os azuis e magentas mais saturados do sRGB (a boa notícia: à medida que a "
+"tecnologia evolui, gamutes de cor mais amplos estão sendo cada vez mais "
+"utilizados por esses monitores).</p><p>Os gamutes de cor das impressoras "
+"podem facilmente exceder o gamute de cor do sRGB, no que se refere aos "
+"cianos, verdes e verdes-amarelados. As cores dos arquivos RAW interpolados "
+"das câmeras digitais também normalmente excedem o gamute de cor sRGB.</"
+"p><p>Como ponto relevante, o uso da percepção ao converter para o sRGB não "
+"faz automaticamente com que as cores fora do gamute sejam incorporadas no "
+"gamute de cor sRGB! O espaço de cor padrão do sRGB (em conjunto com todos os "
+"outros perfis RGB fornecidos pelo pacote de perfis) é um perfil matriz e "
+"estes perfis não têm tabelas de intenção de percepção.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
@@ -38453,11 +38453,11 @@ msgid ""
 msgstr ""
 "<p>Para evitar possíveis problemas com infração de direitos autorais, usamos "
 "o nome 'WideRGB' como nome base para estes perfis.</p><p>O WideGamutRGB foi "
-"projetado pela Adobe para ser um espaço de cor de gama de cores ampla que "
-"usa cores espectrais como cores primárias. Os valores primários de Pascale "
-"produzem um perfil que corresponde aos perfis antigos V2 Widegamut da Adobe "
-"e da Canon. É um espaço de cor interessante, mas logo após a sua introdução, "
-"a Adobe mudou a ênfase para o espaço de cor ProPhotoRGB.</p>"
+"projetado pela Adobe para ser um espaço de cor de gamute amplo que usa cores "
+"espectrais como cores primárias. Os valores primários de Pascale produzem um "
+"perfil que corresponde aos perfis antigos V2 Widegamut da Adobe e da Canon. "
+"É um espaço de cor interessante, mas logo após a sua introdução, a Adobe "
+"mudou a ênfase para o espaço de cor ProPhotoRGB.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
 #, kde-format
@@ -38535,11 +38535,11 @@ msgid ""
 msgstr ""
 "<p>Ao editar imagens de 8 bits, você deve usar um perfil com uma gama de "
 "cores pequena e uma TRC uniforme de forma aproximada ou exata. Dos perfis "
-"fornecidos no meu pacote, só os espaços de cores sRGB e AdobeRGB1998 "
-"(ClayRGB) são pequenos o suficiente para edição em 8 bits. Mesmo com o "
-"espaço de cor AdobeRGB1998, é preciso ter cuidado para não criar um efeito "
-"de poster. Obviamente, você também não poderá usar as versões de gama linear "
-"destes perfis para edição em 8 bits.</p>"
+"fornecidos no meu pacote, só os espaços de cor sRGB e AdobeRGB1998 (ClayRGB) "
+"são pequenos o suficiente para edição em 8 bits. Mesmo com o espaço de cor "
+"AdobeRGB1998, é preciso ter cuidado para não criar um efeito de poster. "
+"Obviamente, você também não poderá usar as versões de gama linear destes "
+"perfis para edição em 8 bits.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
 #, kde-format
@@ -42436,7 +42436,7 @@ msgstr "Tangentes de interpolação suaves."
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:527
 #, kde-format
 msgid "Zoom view to fit channel range."
-msgstr "Vista de zoom para caber na faixa do canal."
+msgstr "Visualizar zoom para caber na faixa do canal."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:534
 #, kde-format
@@ -42889,13 +42889,13 @@ msgstr "HS&Y"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:256
 #, kde-format
 msgid "Gamut Mask Behavior"
-msgstr "Comportamento da máscara de gama"
+msgstr "Comportamento da máscara de gamute"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enforceGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:264
 #, kde-format
 msgid "Enforce gamut &mask"
-msgstr "Aplicar &máscara de gama"
+msgstr "Forçar &máscara de gamute"
 
 #. i18n: ectx: property (text), widget (QRadioButton, permissiveGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:271
@@ -43117,7 +43117,7 @@ msgstr "Remover máscara selecionada"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:126
 #, kde-format
 msgid "Edit the gamut mask"
-msgstr "Edite a máscara de gama"
+msgstr "Edite a máscara de gamute"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:56
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
@@ -43129,7 +43129,7 @@ msgstr "Máscaras de gamute"
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:128
 #, kde-format
 msgid "Could not open gamut mask for editing."
-msgstr "Não foi possível abrir a máscara de gama para edição."
+msgstr "Não foi possível abrir a máscara de gamute para edição."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:129
 #, kde-format
@@ -43139,7 +43139,7 @@ msgstr "O modelo do editor não foi encontrado."
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:262
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
-msgstr "O salvamento da máscara de gama '%1' foi cancelado."
+msgstr "O salvamento da máscara de gamute '%1' foi cancelado."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
@@ -43155,7 +43155,7 @@ msgstr ""
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
 #, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
-msgstr "Máscara Gama <b>'%1'</b> foi modificada."
+msgstr "A máscara de gamute <b>'%1'</b> foi modificada."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, kde-format
@@ -45657,7 +45657,7 @@ msgstr "Mostrar o seletor de cor de amplo gamute"
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Mostrar o seletor de sombras de amplo gama"
+msgstr "Mostrar o seletor de sombras de amplo gamute"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -45800,7 +45800,7 @@ msgstr "Desvia o matiz da cor selecionada no sentido anti-horário"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
 #, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Seletor de cor de amplo gama"
+msgstr "Seletor de cor de amplo gamute"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
 #, kde-format
@@ -45811,7 +45811,7 @@ msgstr "Configurar..."
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Configurações do seletor de cor de amplo gama"
+msgstr "Configurações do seletor de cor de amplo gamute"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
@@ -55460,7 +55460,7 @@ msgstr "RGB da Adobe"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
-msgstr "Gama de cores ampla"
+msgstr "Gamute amplo"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
 #, kde-format
@@ -55503,10 +55503,10 @@ msgstr ""
 "destinadas à Web e aos retratos fotográficos.</li><li><emphasis "
 "strong='true'>RGB da Adobe</emphasis>: este espaço de cor é um espaço de cor "
 "RGB desenvolvido pela Adobe, que é usado em aplicativos de fotografia como a "
-"publicidade e a arte.</li><li><emphasis strong='true'>Gama de cores ampla</"
+"publicidade e a arte.</li><li><emphasis strong='true'>Gamute amplo</"
 "emphasis>: este espaço de cor é uma versão expandida do espaço de cor RGB da "
 "Adobe.</li><li><emphasis strong='true'>Pro-Photo</emphasis>: este espaço de "
-"cor é um espaço RGB, desenvolvido pela Kodak, que oferece uma gama "
+"cor é um espaço RGB, desenvolvido pela Kodak, que oferece um gamute "
 "especialmente grande, desenhado para ser usado com resultados fotográficos "
 "em mente.</li><li><emphasis strong='true'>Personalizado</emphasis>: usar um "
 "perfil de espaço de cor com resultado personalizado.</li></ul></p>"
@@ -56366,14 +56366,14 @@ msgstr "IPTC"
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
 #, kde-format
 msgid "Color Smudge"
-msgstr "Borrão em cores"
+msgstr "Borrão colorido"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSmudgeMode)
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:41
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
 #, kde-format
 msgid "Smudge Mode"
-msgstr "Modo Mancha"
+msgstr "Modo Borrão"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
@@ -56436,8 +56436,8 @@ msgstr "Substituir (suavizar quando baixo) a espessura da tinta existente"
 #, kde-format
 msgid "Paint over existing paint thickness (controlled by Smudge Length)"
 msgstr ""
-"Pinte sobre a espessura da tinta existente (controlado pelo comprimento da "
-"mancha)"
+"Pinte sobre a espessura da tinta existente (controlado pelo comprimento do "
+"borrão)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:47
 #, kde-format
@@ -56457,12 +56457,12 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
 #, kde-format
 msgid "Smudge Length"
-msgstr "Comprimento da mancha"
+msgstr "Comprimento do borrão"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:59
 #, kde-format
 msgid "Smudge mode:"
-msgstr "Modo Mancha:"
+msgstr "Modo borrão:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
 #, kde-format
@@ -56472,7 +56472,7 @@ msgstr "Manchar alfa:"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr "Use o novo algoritmo de manchar:"
+msgstr "Use o novo algoritmo de borrar:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
 #, kde-format
@@ -56516,7 +56516,7 @@ msgid ""
 msgstr ""
 "Pinta sobre a camada atual\n"
 "\n"
-"mas usa todas as camadas atualmente visíveis para a manhca\n"
+"mas usa todas as camadas atualmente visíveis para borrar\n"
 "\n"
 "NOTA: Este modo só é capaz de funcionar corretamente com um pano de fundo "
 "completamente opaco"
@@ -56531,7 +56531,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
 msgid "Smudge Radius"
-msgstr "Raio da mancha"
+msgstr "Raio do borrão"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:72
 #, kde-format
@@ -58773,7 +58773,7 @@ msgstr "Rastreamento"
 #, kde-format
 msgctxt "Option Category"
 msgid "Smudge"
-msgstr "Mancha"
+msgstr "Borrão"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:210
 #, kde-format
@@ -58994,27 +58994,27 @@ msgstr "Rastreamento do ruído"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
 #, kde-format
 msgid "Smudge"
-msgstr "Manchar"
+msgstr "Borrão"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, kde-format
 msgid "Smudge Radius Log"
-msgstr "Registro do raio da mancha"
+msgstr "Registro do raio do borrão"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
 #, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Multiplicador de comprimento da mancha"
+msgstr "Multiplicador de comprimento do borrão"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
 #, kde-format
 msgid "Smudge Bucket"
-msgstr "Balde de manchas"
+msgstr "Balde de borrões"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, kde-format
 msgid "Smudge Transparency"
-msgstr "Transparência da mancha"
+msgstr "Transparência do borrão"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -62404,7 +62404,7 @@ msgstr "Abra a janela de configurações dos botões do fluxo de trabalho"
 #: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
-msgstr "Traços livres de pincel"
+msgstr "Traços de pincel à mão livre"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:216
 #, kde-format
@@ -62562,7 +62562,7 @@ msgstr "Habilitar ajuste ao usar borrachas"
 #: plugins/tools/basictools/kis_tool_brush.h:146
 #, kde-format
 msgid "Freehand Brush Tool"
-msgstr "Ferramenta de traços livres de pincel"
+msgstr "Ferramenta de pincel à mão livre"
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:121
 #, kde-format
@@ -63037,12 +63037,12 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_pencil.cc:133
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
-msgstr "Desenhar um caminho livre à mão"
+msgstr "Desenhar um caminho à mão livre"
 
 #: plugins/tools/basictools/kis_tool_pencil.h:76
 #, kde-format
 msgid "Freehand Path Tool"
-msgstr "Ferramenta de caminho livre à mão"
+msgstr "Ferramenta de caminho à mão livre"
 
 #: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
@@ -63086,7 +63086,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Freehand Path Tool"
-msgstr "Ferramenta de caminho livre à mão"
+msgstr "Ferramenta de caminho à mão livre"
 
 #: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
 msgctxt "(qtundo-format)"
@@ -64102,13 +64102,13 @@ msgstr "Ferramenta de seleção elíptica"
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
 #, kde-format
 msgid "Freehand Selection"
-msgstr "Seleção livre"
+msgstr "Seleção à mão livre"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:63
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:86
 msgctxt "(qtundo-format)"
 msgid "Freehand Selection"
-msgstr "Seleção livre"
+msgstr "Seleção à mão livre"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:28
 #, kde-format
@@ -64350,7 +64350,7 @@ msgstr "Ferramenta de seleção magnética"
 #, kde-format
 msgctxt "action"
 msgid "Freehand Selection Tool"
-msgstr "Ferramenta de seleção livre"
+msgstr "Ferramenta de seleção à mão livre"
 
 #. i18n: context: text @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66365,7 +66365,7 @@ msgstr "Ferramenta de elipse"
 #, kde-format
 msgctxt "action"
 msgid "Freehand Brush Tool"
-msgstr "Ferramenta de traços livres de pincel"
+msgstr "Ferramenta de pincel à mão livre"
 
 #. i18n: context: text @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)

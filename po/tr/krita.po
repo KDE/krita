@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-26 02:01+0000\n"
-"PO-Revision-Date: 2025-10-02 06:36+0300\n"
+"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"PO-Revision-Date: 2025-10-03 06:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -24919,7 +24919,7 @@ msgstr "Video bilgisi yüklenemedi"
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg Çöktü"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:671
+#: libs/ui/animation/KisFFMpegWrapper.cpp:692
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -31071,7 +31071,7 @@ msgstr "İnce ayarları geçici olarak önayarlara kaydet"
 #: libs/ui/forms/wdgpaintopsettings.ui:808
 #, kde-format
 msgid "Scratchpad"
-msgstr "Eskiz Defteri"
+msgstr "Karalama Defteri"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
 #: libs/ui/forms/wdgpaintopsettings.ui:871
@@ -31904,7 +31904,7 @@ msgstr "Var Olan Küçük Görseli Yükle"
 #: libs/ui/forms/wdgsavebrushpreset.ui:150
 #, kde-format
 msgid "Load Scratchpad Thumbnail"
-msgstr "Eskiz Defteri Küçük Görselini Yükle"
+msgstr "Karalama Defteri Küçük Görselini Yükle"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadImageIntoThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:157
@@ -38749,7 +38749,7 @@ msgstr "Önayar gösterimini aç/kapat"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
 #, kde-format
 msgid "Toggle showing scratchpad"
-msgstr "Eskiz defteri gösterimini aç/kapat"
+msgstr "Karalama defteri gösterimini aç/kapat"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
 #, kde-format
@@ -57870,19 +57870,19 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
-msgstr "Nötr nokta:"
+msgstr "Nötr nokta: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
-msgstr "Parlaklık:"
+msgstr "Parlaklık: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
-msgstr "Karşıtlık:"
+msgstr "Karşıtlık: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
 #, kde-format
@@ -59035,7 +59035,7 @@ msgstr ""
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
 #, kde-format
 msgid "Repeat: "
-msgstr "Yinele:"
+msgstr "Yinele: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:73
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:109
@@ -60392,7 +60392,7 @@ msgid ""
 "conversion."
 msgstr ""
 "Çizgi roman veri tabanında bir kayıt varsa bu buraya eklenmelidir. Sıfırdan "
-"bir çizgi roman için etken olması muhtemelen değildir, ancak geri dönüş "
+"bir çizgi roman için etken olması muhtemelen değildir; ancak geri dönüş "
 "yaparken faydalıdır."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
@@ -62447,7 +62447,7 @@ msgstr "Genişlet: "
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
-msgstr "Yumuşat:"
+msgstr "Yumuşat: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
@@ -64056,7 +64056,7 @@ msgstr "Manyetik Seçim"
 #, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
-msgstr "Süzgeç yarıçapı:"
+msgstr "Süzgeç yarıçapı: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
 #, kde-format
@@ -65045,7 +65045,7 @@ msgstr "Genişlet: "
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
-msgstr "Yumuşat:"
+msgstr "Yumuşat: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format

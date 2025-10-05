@@ -39,6 +39,7 @@ public:
     void notifyTouchPaintingChanged();
 
     void notifyColorThemeChanged(const QString &filename);
+    void notifyLongPressChanged(bool enabled);
 
 Q_SIGNALS:
     /**
@@ -50,6 +51,7 @@ Q_SIGNALS:
     void colorHistoryModeChanged();
     void touchPaintingChanged();
     void signalColorThemeChanged(const QString &filename);
+    void sigLongPressChanged(bool enabled);
 private:
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);

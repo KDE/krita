@@ -170,6 +170,7 @@ set(kritaui_LIB_SRCS
     KisIdleTaskStrokeStrategy.cpp
     KisImageThumbnailStrokeStrategy.cpp
     KisTextPropertiesManager.cpp
+    KisLongPressEventFilter.cpp
 
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp

@@ -85,6 +85,7 @@ public:
     bool useZip64();
     bool toolOptionsInDocker();
     int zoomSteps();
+    bool longPressEnabled();
     bool kineticScrollingEnabled();
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();

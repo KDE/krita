@@ -102,6 +102,9 @@ public Q_SLOTS:
     void fileOpenRequested(const QString & url);
     void setSplashScreenLoadingText(const QString&);
 
+private Q_SLOTS:
+    void slotSetLongPress(bool enabled);
+
 private:
     /// @return the number of autosavefiles opened
     void checkAutosaveFiles();

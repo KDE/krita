@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -1554,6 +1554,13 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
             </widget>
            </item>
            <item row="13" column="0" colspan="2">
+            <widget class="QCheckBox" name="chkEnableLongPress">
+             <property name="text">
+              <string>Long-press to open context menus</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="0" colspan="2">
             <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
              <property name="title">
               <string>Kinetic Scrolling (needs restart)</string>
@@ -1632,7 +1639,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="14" column="0" colspan="2">
+           <item row="15" column="0" colspan="2">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>

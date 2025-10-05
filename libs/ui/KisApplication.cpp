@@ -57,6 +57,7 @@
 #include <kis_icon.h>
 #include "kis_splash_screen.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -102,6 +103,7 @@
 
 #include "widgets/KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
+#include "KisLongPressEventFilter.h"
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 #include <kis_image_animation_interface.h>
@@ -176,6 +178,7 @@ public:
     Private() {}
     QPointer<KisSplashScreen> splashScreen;
     KisAutoSaveRecoveryDialog *autosaveDialog {0};
+    KisLongPressEventFilter *longPressEventFilter {nullptr};
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
@@ -633,6 +636,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
+    // Long-press emulation.
+    connect(KisConfigNotifier::instance(), &KisConfigNotifier::sigLongPressChanged, this, &KisApplication::slotSetLongPress);
+    slotSetLongPress(cfg.longPressEnabled());
+
     // Create a new image, if needed
     if (doNewImage) {
         KisDocument *doc = args.createDocumentFromArguments();
@@ -1075,6 +1082,18 @@ void KisApplication::fileOpenRequested(const QString &url)
     d->mainWindow->openDocument(url, flags);
 }
 
+
+void KisApplication::slotSetLongPress(bool enabled)
+{
+    if (enabled && !d->longPressEventFilter) {
+        d->longPressEventFilter = new KisLongPressEventFilter(this);
+        installEventFilter(d->longPressEventFilter);
+    } else if (!enabled && d->longPressEventFilter) {
+        removeEventFilter(d->longPressEventFilter);
+        d->longPressEventFilter->deleteLater();
+        d->longPressEventFilter = nullptr;
+    }
+}
 
 void KisApplication::checkAutosaveFiles()
 {

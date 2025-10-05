@@ -64,3 +64,8 @@ void KisConfigNotifier::notifyColorThemeChanged(const QString &filename)
 {
     Q_EMIT signalColorThemeChanged(filename);
 }
+
+void KisConfigNotifier::notifyLongPressChanged(bool enabled)
+{
+    Q_EMIT sigLongPressChanged(enabled);
+}

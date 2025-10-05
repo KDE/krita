@@ -757,6 +757,9 @@ public:
     AssistantsDrawMode assistantsDrawMode(bool defaultValue = false) const;
     void setAssistantsDrawMode(AssistantsDrawMode value);
 
+    bool longPressEnabled(bool defaultValue = false) const;
+    void setLongPressEnabled(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

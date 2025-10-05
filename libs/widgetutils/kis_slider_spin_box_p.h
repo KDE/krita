@@ -71,9 +71,6 @@ public:
         m_widgetRangeToggle->hide();
         m_widgetRangeToggle->installEventFilter(this);
 
-        m_timerStartEditing.setSingleShot(true);
-        connect(&m_timerStartEditing, &QTimer::timeout, this, &KisSliderSpinBoxPrivate::startEditing);
-
         m_sliderAnimation.setStartValue(0.0);
         m_sliderAnimation.setEndValue(1.0);
         m_sliderAnimation.setEasingCurve(QEasingCurve(QEasingCurve::InOutCubic));
@@ -718,21 +715,22 @@ public:
         return !isEditModeActive();
     }
 
-    bool lineEditMousePressEvent(QMouseEvent *e)
+    bool lineEditMousePressEvent(QMouseEvent *e, bool edit)
     {
         if (!m_q->isEnabled()) {
             return false;
         }
         if (!isEditModeActive()) {
-            // Pressing and holding the left button in the lineedit in slider
-            // mode starts a timer which makes the lineedit enter
-            // edition mode if it is completed
             if (e->button() == Qt::LeftButton) {
                 m_lastMousePressPosition = e->pos();
                 const QPoint currentValuePosition = pointForValue(m_q->value());
                 m_relativeDraggingOffset = currentValuePosition.x() - e->x();
                 m_useRelativeDragging = (e->modifiers() & Qt::ShiftModifier);
-                m_timerStartEditing.start(qApp->styleHints()->mousePressAndHoldInterval());
+                if (edit) {
+                    QTimer::singleShot(0, &m_startEditingSignalProxy, SLOT(start()));
+                } else {
+                    lineEditMouseMoveEvent(e);
+                }
             }
             return true;
         }
@@ -753,12 +751,10 @@ public:
                 // to Qt further and generate ContextEvent on Windows.
                 // Therefore we should call it from a normal timer event.
                 QTimer::singleShot(0, &m_startEditingSignalProxy, SLOT(start()));
-            // Releasing the left mouse button stops the dragging and also
-            // the "enter edition mode" timer. If signals must be blocked when
-            // dragging then we set the value here and Q_EMIT a signal
+            // Releasing the left mouse button stops the dragging. If signals
+            // must be blocked when dragging then we set the value here and
+            // Q_EMIT a signal
             } else if (e->button() == Qt::LeftButton) {
-                m_timerStartEditing.stop();
-
                 if (m_blockUpdateSignalOnDrag) {
                     const QPoint p(m_useRelativeDragging ? e->pos().x() + m_relativeDraggingOffset : e->pos().x(),
                                    e->pos().y());
@@ -784,23 +780,7 @@ public:
         }
         if (!isEditModeActive()) {
             if (e->buttons() & Qt::LeftButton) {
-                // If the timer is active that means we pressed the button in
-                // slider mode
-                if (m_timerStartEditing.isActive()) {
-                    const int dx = e->pos().x() - m_lastMousePressPosition.x();
-                    const int dy = e->pos().y() - m_lastMousePressPosition.y();
-                    // If the mouse position is still close to the point where
-                    // we pressed, then we still wait for the "enter edit mode"
-                    // timer to complete
-                    if (dx * dx + dy * dy <= startDragDistanceSquared) {
-                        return true;
-                    // If the mouse moved far from where we first pressed, then
-                    // stop the timer and start dragging
-                    } else {
-                        m_timerStartEditing.stop();
-                        m_isDragging = true;
-                    }
-                }
+                m_isDragging = true;
                 // At this point we are dragging so record the position and set
                 // the value
                 const QPoint p(m_useRelativeDragging ? e->pos().x() + m_relativeDraggingOffset : e->pos().x(),
@@ -902,7 +882,8 @@ public:
         } else if (o == m_lineEdit) {
             switch (e->type()) {
                 case QEvent::Paint : return lineEditPaintEvent(static_cast<QPaintEvent*>(e));
-                case QEvent::MouseButtonPress : return lineEditMousePressEvent(static_cast<QMouseEvent*>(e));
+                case QEvent::MouseButtonPress : return lineEditMousePressEvent(static_cast<QMouseEvent*>(e), false);
+                case QEvent::MouseButtonDblClick : return lineEditMousePressEvent(static_cast<QMouseEvent*>(e), true);
                 case QEvent::MouseButtonRelease : return lineEditMouseReleaseEvent(static_cast<QMouseEvent*>(e));
                 case QEvent::MouseMove : return lineEditMouseMoveEvent(static_cast<QMouseEvent*>(e));
                 default: break;
@@ -920,9 +901,6 @@ public:
     }
 
 private:
-    // Distance that the pointer must move to start dragging
-    static constexpr int startDragDistance{2};
-    static constexpr int startDragDistanceSquared{startDragDistance * startDragDistance};
     // Margin around the spinbox for which the dragging gives same results,
     // regardless of the vertical distance
     static constexpr double constantDraggingMargin{32.0};
@@ -938,7 +916,6 @@ private:
     SpinBoxType *m_q {nullptr};
     QLineEdit *m_lineEdit {nullptr};
     QWidget *m_widgetRangeToggle {nullptr};
-    QTimer m_timerStartEditing;
     ValueType m_softMinimum {static_cast<ValueType>(0)};
     ValueType m_softMaximum {static_cast<ValueType>(0)};
     double m_exponentRatio {1.0};

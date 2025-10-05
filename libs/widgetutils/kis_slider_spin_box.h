@@ -25,7 +25,7 @@ class KisSliderSpinBoxPrivate;
  * 
  * The value can be set by click and dragging with the mouse or pen or by
  * typing in with the keyboard. To enter the edit mode, in which the keyboard
- * can be used, one has to right-click inside the spinbox or click and hold
+ * can be used, one has to right-click inside the spinbox or double-click
  * the pointer inside or press the enter key. To leave the edit mode, one
  * can press the enter key again, in which case the value is committed, or
  * press the escape key, in which case the value is rejected.

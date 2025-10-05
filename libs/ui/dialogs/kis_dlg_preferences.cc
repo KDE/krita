@@ -326,6 +326,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
 
+    chkEnableLongPress->setChecked(cfg.longPressEnabled());
+
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled());
 
     m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
@@ -703,6 +705,7 @@ void GeneralTab::setDefault()
     chkUsageLogging->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     cmbFlowMode->setCurrentIndex(0);
+    chkEnableLongPress->setChecked(cfg.longPressEnabled(true));
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
     spnZoomSteps->setValue(cfg.zoomSteps(true));
@@ -845,6 +848,11 @@ bool GeneralTab::toolOptionsInDocker()
 int GeneralTab::zoomSteps()
 {
     return spnZoomSteps->value();
+}
+
+bool GeneralTab::longPressEnabled()
+{
+    return chkEnableLongPress->isChecked();
 }
 
 bool GeneralTab::kineticScrollingEnabled()
@@ -2355,6 +2363,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", (bool)!m_general->cmbCmykBlendingMode->currentIndex());
 
         cfg.setZoomSteps(m_general->zoomSteps());
+        cfg.setLongPressEnabled(m_general->longPressEnabled());
         cfg.setKineticScrollingEnabled(m_general->kineticScrollingEnabled());
         cfg.setKineticScrollingGesture(m_general->kineticScrollingGesture());
         cfg.setKineticScrollingSensitivity(m_general->kineticScrollingSensitivity());

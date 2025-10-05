@@ -2545,6 +2545,26 @@ void  KisConfig::setAssistantsDrawMode(AssistantsDrawMode value)
     m_cfg.writeEntry("assistantsDrawMode", static_cast<int>(value));
 }
 
+bool KisConfig::longPressEnabled(bool defaultValue) const
+{
+#ifdef Q_OS_ANDROID
+    bool defaultEnabled = true;
+#else
+    bool defaultEnabled = false;
+#endif
+    if (defaultValue) {
+        return defaultEnabled;
+    } else {
+        return m_cfg.readEntry("longPressEnabled", defaultEnabled);
+    }
+}
+
+void KisConfig::setLongPressEnabled(bool value)
+{
+    m_cfg.writeEntry("longPressEnabled", value);
+    KisConfigNotifier::instance()->notifyLongPressChanged(value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

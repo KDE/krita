@@ -1527,6 +1527,13 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </item>
             </layout>
            </item>
+           <item row="14" column="0" colspan="2">
+            <widget class="QCheckBox" name="chkEnableLongPress">
+             <property name="text">
+              <string>Long-press to open context menus</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </widget>

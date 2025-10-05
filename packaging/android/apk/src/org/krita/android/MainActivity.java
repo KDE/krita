@@ -29,9 +29,10 @@ import org.libsdl.app.SDLAudioManager;
 
 public class MainActivity extends QtActivity {
 
+    private static final String TAG = "krita.MainActivity";
+
     private boolean haveLibsLoaded = false;
     private boolean serviceStarted = false;
-    private final String TAG = "MainActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,5 +178,14 @@ public class MainActivity extends QtActivity {
     }
 
     public void onUserInteraction() {
+    }
+
+    public static int getLongPressTimeout() {
+        try {
+            return ViewConfiguration.get(QtNative.activity()).getLongPressTimeout();
+        } catch (Exception|UnsatisfiedLinkError e) {
+            Log.e(TAG, "Exception getting long press timeout", e);
+            return 500;
+        }
     }
 }

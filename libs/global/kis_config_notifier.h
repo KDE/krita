@@ -37,6 +37,8 @@ public:
     void notifyPixelGridModeChanged();
     void notifyTouchPaintingChanged();
 
+    void notifyLongPressChanged(bool enabled);
+
 Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
@@ -45,6 +47,7 @@ Q_SIGNALS:
     void dropFramesModeChanged();
     void pixelGridModeChanged();
     void touchPaintingChanged();
+    void sigLongPressChanged(bool enabled);
 private:
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);

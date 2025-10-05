@@ -54,3 +54,8 @@ void KisConfigNotifier::notifyTouchPaintingChanged()
 {
     Q_EMIT touchPaintingChanged();
 }
+
+void KisConfigNotifier::notifyLongPressChanged(bool enabled)
+{
+    Q_EMIT sigLongPressChanged(enabled);
+}

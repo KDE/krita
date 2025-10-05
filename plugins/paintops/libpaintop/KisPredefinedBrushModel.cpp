@@ -23,15 +23,15 @@ ComboBoxState calcApplicationSwitchState(enumBrushType brushType, bool supportsH
 {
     QStringList values;
     QStringList toolTips;
-    values << i18n("Alpha Mask");
+    values << i18n("Alpha mask");
     toolTips << i18nc("@info:tooltip", "Luminosity of the brush tip image is used as alpha channel for the stroke");
     if (brushType == IMAGE || brushType == PIPE_IMAGE) {
-        values << i18n("Color Image");
+        values << i18n("Color image");
         toolTips << i18nc("@info:tooltip", "The brush tip image is painted as it is");
         if (supportsHSLBrushTips) {
-            values << i18n("Lightness Map");
+            values << i18n("Lightness map");
             toolTips << i18nc("@info:tooltip", "Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke");
-            values << i18n("Gradient Map");
+            values << i18n("Gradient map");
             toolTips << i18nc("@info:tooltip", "The brush tip maps its value to the currently selected gradient. Alpha channel of the brush tip image is used as alpha for the final stroke");
         }
     }
@@ -54,13 +54,13 @@ QString calcBrushDetails(PredefinedBrushData data)
     } else if (data.brushType == IMAGE) {
         brushTypeString = i18n("Image");
     } else if (data.brushType == PIPE_MASK ) {
-        brushTypeString = i18n("Animated Mask"); // GIH brush
+        brushTypeString = i18n("Animated mask"); // GIH brush
         animatedBrushTipSelectionMode = data.parasiteSelection;
     } else if (data.brushType == PIPE_IMAGE ) {
-        brushTypeString = i18n("Animated Image");
+        brushTypeString = i18n("Animated image");
     }
 
-    const QString brushDetailsText = QString("%1 (%2 x %3) %4")
+    const QString brushDetailsText = QString("%1 (%2 × %3) %4")
             .arg(brushTypeString)
             .arg(data.baseSize.width())
             .arg(data.baseSize.height())

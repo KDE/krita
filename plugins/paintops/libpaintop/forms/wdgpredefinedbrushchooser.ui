@@ -189,7 +189,7 @@
        <item row="4" column="0" colspan="2">
         <widget class="QCheckBox" name="preserveBrushPresetSettings">
          <property name="text">
-          <string>Preserve Brush Preset Settings</string>
+          <string>Preserve brush preset settings</string>
          </property>
          <property name="checked">
           <bool>true</bool>

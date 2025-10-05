@@ -70,7 +70,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Contrast:</string>
+              <string>Contrast: </string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -80,7 +80,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="lblNeutralPoint">
              <property name="text">
-              <string>Neutral Point:</string>
+              <string>Neutral point: </string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -96,7 +96,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Brightness:</string>
+              <string>Brightness: </string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -112,7 +112,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Scale:</string>
+              <string>Scale: </string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

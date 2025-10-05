@@ -149,7 +149,7 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::StatusTipRole: // fallthrough
             case Qt::WhatsThisRole:
             case Qt::UserRole + Name:
-                return i18n("All Untagged");
+                return i18n("All untagged");
             case Qt::UserRole + Id:
                 return QString::number(KisAllTagsModel::AllUntagged);
             case Qt::UserRole + Url: {
@@ -301,17 +301,17 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
             tag->setName(i18n("All"));
             tag->setResourceType(d->resourceType);
             tag->setUrl(urlAll());
-            tag->setComment(i18n("All Resources"));
+            tag->setComment(i18n("All resources"));
             tag->setId(KisAllTagsModel::All);
             tag->setActive(true);
             tag->setValid(true);
         }
         else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             tag.reset(new KisTag());
-            tag->setName(i18n("All Untagged"));
+            tag->setName(i18n("All untagged"));
             tag->setResourceType(d->resourceType);
             tag->setUrl(urlAllUntagged());
-            tag->setComment(i18n("All Untagged Resources"));
+            tag->setComment(i18n("All untagged resources"));
             tag->setId(KisAllTagsModel::AllUntagged);
             tag->setActive(true);
             tag->setValid(true);

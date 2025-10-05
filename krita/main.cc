@@ -301,7 +301,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     }
 
     KisAndroidCrashHandler::handler_init();
-    qputenv("QT_ANDROID_ENABLE_RIGHT_MOUSE_FROM_LONG_PRESS", "1");
 
     qputenv("FONTCONFIG_PATH",
             QFile::encodeName(KoResourcePaths::getApplicationRoot()) + "/share/etc/fonts/");

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2025-09-25 23:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -22554,6 +22554,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "Histograma L*a*b* genérico"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
 msgid "Alpha mask"
 msgstr "Máscara alfa"
@@ -24060,18 +24061,21 @@ msgid "All"
 msgstr "Todas"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
-#, kde-format
-msgid "All Untagged"
+#, fuzzy, kde-format
+#| msgid "All Untagged"
+msgid "All untagged"
 msgstr "Todas sin etiquetar"
 
 #: libs/resources/KisTagModel.cpp:304
-#, kde-format
-msgid "All Resources"
+#, fuzzy, kde-format
+#| msgid "All Resources"
+msgid "All resources"
 msgstr "Todos los recursos"
 
 #: libs/resources/KisTagModel.cpp:314
-#, kde-format
-msgid "All Untagged Resources"
+#, fuzzy, kde-format
+#| msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "Todos los recursos sin etiquetar"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -26581,7 +26585,6 @@ msgstr ""
 "predeterminada para convertir de escena a pantalla lineal.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26589,7 +26592,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "Brillo:"
@@ -30429,14 +30431,12 @@ msgstr "Rotar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "Escala:"
@@ -49732,7 +49732,6 @@ msgstr "Mapa de de&gradado…"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
 msgid "Gradient Map"
 msgstr "Mapa de degradado"
@@ -51595,10 +51594,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "Invertir:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "Contraste:"
@@ -53028,6 +53025,7 @@ msgstr "Imagen aplanada"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, kde-format
 msgid "Animated image"
 msgstr "Imagen animada"
@@ -57911,8 +57909,9 @@ msgstr "Detalles del pincel"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, kde-format
-msgid "Preserve Brush Preset Settings"
+#, fuzzy, kde-format
+#| msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "Preservar los ajustes predefinidos del pincel"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -57965,11 +57964,36 @@ msgstr "usar solo una letra a la vez"
 msgid "Pipe mode"
 msgstr "Modo tubería"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
+msgid "Contrast: "
+msgstr "Contraste: "
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, kde-format
-msgid "Neutral Point:"
-msgstr "Punto neutral:"
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
+msgid "Neutral point: "
+msgstr "Punto neutral: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
+msgid "Brightness: "
+msgstr "Brillo: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgid "Scale:"
+msgid "Scale: "
+msgstr "Escala:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -58543,11 +58567,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr "Solo es posible el modo de lavado cuando se usa un pincel enmascarado."
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, kde-format
-msgid "Alpha Mask"
-msgstr "Máscara alfa"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58558,8 +58577,9 @@ msgstr ""
 "para el trazo"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, kde-format
-msgid "Color Image"
+#, fuzzy, kde-format
+#| msgid "Color Image"
+msgid "Color image"
 msgstr "Imagen de color"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -58569,8 +58589,9 @@ msgid "The brush tip image is painted as it is"
 msgstr "La imagen de la puta del pincel se dibuja como es"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, kde-format
-msgid "Lightness Map"
+#, fuzzy, kde-format
+#| msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "Mapa de claridad"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -58585,6 +58606,12 @@ msgstr ""
 "claridad del color usado para dibujar. El canal alfa de la imagen de la "
 "punta del pincel se usa como alfa para el trazo final."
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+#| msgid "Gradient Map"
+msgid "Gradient map"
+msgstr "Mapa de degradado"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58597,14 +58624,10 @@ msgstr ""
 "alfa para el trazo final."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, kde-format
-msgid "Animated Mask"
+#, fuzzy, kde-format
+#| msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "Máscara animada"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, kde-format
-msgid "Animated Image"
-msgstr "Imagen animada"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -66623,3 +66646,12 @@ msgstr "Herramienta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
+
+#~ msgid "Neutral Point:"
+#~ msgstr "Punto neutral:"
+
+#~ msgid "Alpha Mask"
+#~ msgstr "Máscara alfa"
+
+#~ msgid "Animated Image"
+#~ msgstr "Imagen animada"

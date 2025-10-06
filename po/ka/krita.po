@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2025-04-26 07:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -22303,6 +22303,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "ზოგადი L*a*b* ჰისტოგრამა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
 msgid "Alpha mask"
 msgstr "ალფას ნიღაბი"
@@ -23807,18 +23808,20 @@ msgstr "ყველა"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, kde-format
-msgid "All Untagged"
+msgid "All untagged"
 msgstr ""
 
 #: libs/resources/KisTagModel.cpp:304
-#, kde-format
-msgid "All Resources"
+#, fuzzy, kde-format
+#| msgid "All Resources"
+msgid "All resources"
 msgstr "ყველა რესურსი"
 
 #: libs/resources/KisTagModel.cpp:314
-#, kde-format
-msgid "All Untagged Resources"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "All Resources"
+msgid "All untagged resources"
+msgstr "ყველა რესურსი"
 
 #: libs/resources/KisTagResourceModel.cpp:667
 #, kde-format
@@ -26191,7 +26194,6 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26199,7 +26201,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "სიკაშკაშე:"
@@ -29799,14 +29800,12 @@ msgstr "შემობრუნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "გაფართოება:"
@@ -48256,7 +48255,6 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
 msgid "Gradient Map"
 msgstr "გრადიენტის რუკა"
@@ -50109,10 +50107,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "ინვერსია:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "კონტრასტი:"
@@ -51444,6 +51440,7 @@ msgstr "გამოსახულების გაბრტყელებ�
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 #| msgctxt "description of a file type"
 #| msgid "Animated PNG Image"
@@ -55837,9 +55834,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, kde-format
-msgid "Preserve Brush Preset Settings"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Current brush preset"
+msgid "Preserve brush preset settings"
+msgstr "მიმდინარე ფუნჯის პრესეტი"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
@@ -55890,11 +55888,38 @@ msgstr ""
 msgid "Pipe mode"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
+msgid "Contrast: "
+msgstr "კონტრასტი: "
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, kde-format
-msgid "Neutral Point:"
-msgstr ""
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Set point type"
+msgid "Neutral point: "
+msgstr "წერტილის ტიპის დაყენება"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
+msgid "Brightness: "
+msgstr "სიკაშკაშე: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The pattern 'scale' spinbox prefix in enclose and fill tool options"
+#| msgid "Scale: "
+msgid "Scale: "
+msgstr "მასშტაბი: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -56428,11 +56453,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, kde-format
-msgid "Alpha Mask"
-msgstr ""
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -56441,9 +56461,10 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, kde-format
-msgid "Color Image"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Color Range"
+msgid "Color image"
+msgstr "ფერების დიაპაზონი"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
 #, kde-format
@@ -56452,9 +56473,10 @@ msgid "The brush tip image is painted as it is"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, kde-format
-msgid "Lightness Map"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Lightness"
+msgid "Lightness map"
+msgstr "სიკაშკაშე"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
 #, kde-format
@@ -56465,6 +56487,12 @@ msgid ""
 "the final stroke"
 msgstr ""
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+#| msgid "Gradient Map"
+msgid "Gradient map"
+msgstr "გრადიენტის რუკა"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -56474,14 +56502,11 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, kde-format
-msgid "Animated Mask"
-msgstr ""
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, kde-format
-msgid "Animated Image"
-msgstr ""
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "Animated PNG Image"
+msgid "Animated mask"
+msgstr "ანიმირებული PNG გამოსახულება"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -64685,11 +64710,6 @@ msgstr ""
 
 #~ msgid "Recorder is active"
 #~ msgstr "ჩამწერი აქტიურია"
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "მასშტაბი: "
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"

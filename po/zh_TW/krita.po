@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -22529,6 +22529,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "一般 L*a*b* 色階分佈圖"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
 msgid "Alpha mask"
 msgstr "Alpha 遮罩"
@@ -24044,18 +24045,21 @@ msgid "All"
 msgstr "全部"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
-#, kde-format
-msgid "All Untagged"
+#, fuzzy, kde-format
+#| msgid "All Untagged"
+msgid "All untagged"
 msgstr "所有無標籤項目"
 
 #: libs/resources/KisTagModel.cpp:304
-#, kde-format
-msgid "All Resources"
+#, fuzzy, kde-format
+#| msgid "All Resources"
+msgid "All resources"
 msgstr "所有資源"
 
 #: libs/resources/KisTagModel.cpp:314
-#, kde-format
-msgid "All Untagged Resources"
+#, fuzzy, kde-format
+#| msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "所有無標籤資源"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -26506,7 +26510,6 @@ msgstr ""
 "p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26514,7 +26517,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "亮度："
@@ -30261,14 +30263,12 @@ msgstr "旋轉："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "縮放："
@@ -49231,7 +49231,6 @@ msgstr "漸變映射(&G)…"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
 msgid "Gradient Map"
 msgstr "漸變映射"
@@ -51109,10 +51108,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "反轉："
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "對比度："
@@ -52485,6 +52482,7 @@ msgstr "平整影像"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 #| msgid "Animated Image"
 msgid "Animated image"
@@ -57124,8 +57122,9 @@ msgstr "筆刷詳情"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, kde-format
-msgid "Preserve Brush Preset Settings"
+#, fuzzy, kde-format
+#| msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "保留筆刷預設選項"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -57177,11 +57176,38 @@ msgstr "一次僅輸出一個字母"
 msgid "Pipe mode"
 msgstr "隊列模式"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
+msgid "Contrast: "
+msgstr "對比度："
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, kde-format
-msgid "Neutral Point:"
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
+msgid "Neutral point: "
 msgstr "中性點："
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
+msgid "Brightness: "
+msgstr "亮度："
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The pattern 'scale' spinbox prefix in enclose and fill tool options"
+#| msgid "Scale: "
+msgid "Scale: "
+msgstr "縮放："
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -57750,11 +57776,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr "使用遮罩筆刷時，只可使用沖刷模式。"
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, kde-format
-msgid "Alpha Mask"
-msgstr "透明度遮罩"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -57763,8 +57784,9 @@ msgid ""
 msgstr "筆尖光度將用作筆跡的 Alpha (透明度) 通道"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, kde-format
-msgid "Color Image"
+#, fuzzy, kde-format
+#| msgid "Color Image"
+msgid "Color image"
 msgstr "為影像上色"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -57774,8 +57796,9 @@ msgid "The brush tip image is painted as it is"
 msgstr "筆尖影像將會照原樣繪出"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, kde-format
-msgid "Lightness Map"
+#, fuzzy, kde-format
+#| msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "亮度映射"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -57789,6 +57812,12 @@ msgstr ""
 "筆尖光度將用作調整筆刷色彩的亮度。筆尖影像的 Alpha (透明度) 通道將用作筆跡的 "
 "Alpha。"
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+#| msgid "Gradient Map"
+msgid "Gradient map"
+msgstr "漸變映射"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -57800,14 +57829,10 @@ msgstr ""
 "Alpha。"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, kde-format
-msgid "Animated Mask"
+#, fuzzy, kde-format
+#| msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "動畫遮罩"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, kde-format
-msgid "Animated Image"
-msgstr "動畫影像"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -65778,6 +65803,15 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
 
+#~ msgid "Neutral Point:"
+#~ msgstr "中性點："
+
+#~ msgid "Alpha Mask"
+#~ msgstr "透明度遮罩"
+
+#~ msgid "Animated Image"
+#~ msgstr "動畫影像"
+
 #~ msgid "Rich text"
 #~ msgstr "富文字"
 
@@ -66497,11 +66531,6 @@ msgstr "參考圖工具"
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
 #~ msgstr "擴散幅度："
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "縮放："
 
 #~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 #~ msgid "Spread: "

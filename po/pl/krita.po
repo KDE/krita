@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2025-04-12 10:50+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -22682,6 +22682,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "Zwykły histogram L*a*b*"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
 msgid "Alpha mask"
 msgstr "Maska alfy"
@@ -24190,18 +24191,21 @@ msgid "All"
 msgstr "Wszystkie"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
-#, kde-format
-msgid "All Untagged"
+#, fuzzy, kde-format
+#| msgid "All Untagged"
+msgid "All untagged"
 msgstr "Wszystkie nieoznaczone"
 
 #: libs/resources/KisTagModel.cpp:304
-#, kde-format
-msgid "All Resources"
+#, fuzzy, kde-format
+#| msgid "All Resources"
+msgid "All resources"
 msgstr "Wszystkie zasoby"
 
 #: libs/resources/KisTagModel.cpp:314
-#, kde-format
-msgid "All Untagged Resources"
+#, fuzzy, kde-format
+#| msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "Wszystkie nieoznaczone zasoby"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -26710,7 +26714,6 @@ msgstr ""
 "aby przekształcać do wyświetlacza liniowo.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26718,7 +26721,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "Jasność względna:"
@@ -30530,14 +30532,12 @@ msgstr "Obróć:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "Skala:"
@@ -49819,7 +49819,6 @@ msgstr "Mapa &gradientu..."
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
 msgid "Gradient Map"
 msgstr "Mapa gradientu"
@@ -51685,10 +51684,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "Odwróć:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "Kontrast:"
@@ -53097,6 +53094,7 @@ msgstr "Spłaszcz obraz"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 #| msgid "Animated Image"
 msgid "Animated image"
@@ -57892,8 +57890,9 @@ msgstr "Szczegóły pędzla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, kde-format
-msgid "Preserve Brush Preset Settings"
+#, fuzzy, kde-format
+#| msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "Zachowaj ustawienia pędzla z nastaw"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -57945,11 +57944,38 @@ msgstr "użyj tylko jednej litery na raz"
 msgid "Pipe mode"
 msgstr "Tryb rurki"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
+msgid "Contrast: "
+msgstr "Kontrast: "
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, kde-format
-msgid "Neutral Point:"
-msgstr "Punkt neutralny:"
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
+msgid "Neutral point: "
+msgstr "Punkt neutralny: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
+msgid "Brightness: "
+msgstr "Jasność względna: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The pattern 'scale' spinbox prefix in enclose and fill tool options"
+#| msgid "Scale: "
+msgid "Scale: "
+msgstr "Skala: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -58523,11 +58549,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr "Tylko tryb zmywania jest możliwy przy używaniu maskowanego pędzla."
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, kde-format
-msgid "Alpha Mask"
-msgstr "Maska alfa"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58538,8 +58559,9 @@ msgstr ""
 "pociągnięcia"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, kde-format
-msgid "Color Image"
+#, fuzzy, kde-format
+#| msgid "Color Image"
+msgid "Color image"
 msgstr "Barwny obraz"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -58549,8 +58571,9 @@ msgid "The brush tip image is painted as it is"
 msgstr "Obraz koniuszka pędzla jest malowany taki jakim jest"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, kde-format
-msgid "Lightness Map"
+#, fuzzy, kde-format
+#| msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "Mapa jasności barw"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -58565,6 +58588,12 @@ msgstr ""
 "jasności malowanej barwy. Kanał alfa obrazu koniuszka pędzla jest używany "
 "jako alfa dla końcowego pociągnięcia"
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+#| msgid "Gradient Map"
+msgid "Gradient map"
+msgstr "Mapa gradientu"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58577,14 +58606,10 @@ msgstr ""
 "pociągnięcia"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, kde-format
-msgid "Animated Mask"
+#, fuzzy, kde-format
+#| msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "Animowana maska"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, kde-format
-msgid "Animated Image"
-msgstr "Animowany obraz"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -66586,6 +66611,15 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Narzędzie obrazów wzorcowych"
 
+#~ msgid "Neutral Point:"
+#~ msgstr "Punkt neutralny:"
+
+#~ msgid "Alpha Mask"
+#~ msgstr "Maska alfa"
+
+#~ msgid "Animated Image"
+#~ msgstr "Animowany obraz"
+
 #~ msgid "Rich text"
 #~ msgstr "Formatowany tekst"
 
@@ -67324,11 +67358,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
 #~ msgstr "Rozstrzał: "
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "Skala: "
 
 #~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 #~ msgid "Spread: "

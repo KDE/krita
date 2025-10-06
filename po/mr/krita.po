@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -23001,6 +23001,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "L*a*b* हिस्टोग्रॅम"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, fuzzy, kde-format
 #| msgid "Alpha darken"
 msgid "Alpha mask"
@@ -24613,17 +24614,17 @@ msgstr "सर्व"
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, fuzzy, kde-format
 #| msgid "&All pages"
-msgid "All Untagged"
+msgid "All untagged"
 msgstr "सर्व पाने (&A)"
 
 #: libs/resources/KisTagModel.cpp:304
 #, fuzzy, kde-format
-msgid "All Resources"
+msgid "All resources"
 msgstr "संसाधने (&R)"
 
 #: libs/resources/KisTagModel.cpp:314
 #, fuzzy, kde-format
-msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "संसाधने (&R)"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -27125,7 +27126,6 @@ msgstr ""
 "<html><head/><body><p>पार्श्वभूमीचा रंग पारदर्शी पिक्सेलना बदलेल.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -27133,7 +27133,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, fuzzy, kde-format
 msgid "Brightness:"
 msgstr "प्रखरता"
@@ -30931,14 +30930,12 @@ msgstr "फिरवा (&R)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "प्रमाण :"
@@ -50209,7 +50206,6 @@ msgstr "ग्रेडियंटस् (&G)"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, fuzzy, kde-format
 msgid "Gradient Map"
 msgstr "ग्रेडियंट"
@@ -52182,10 +52178,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "उलट करा"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "विरोधाभास :"
@@ -53572,6 +53566,7 @@ msgstr "प्रतिमा सपाट करा (&F)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 #| msgid "Action program"
 msgid "Animated image"
@@ -58130,7 +58125,7 @@ msgstr "कुंचल्याची संयोजना"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
-msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "कुंचला पूर्व संयोजना"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -58184,12 +58179,32 @@ msgstr "एका वेळी एकच अक्षर वापरा"
 msgid "Pipe mode"
 msgstr "पाईप पद्धत"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgid "Contrast:"
+msgid "Contrast: "
+msgstr "विरोधाभास :"
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
 #, fuzzy, kde-format
 #| msgid "Target point:"
-msgid "Neutral Point:"
+msgid "Neutral point: "
 msgstr "लक्ष्य बिंदू :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+msgid "Brightness: "
+msgstr "प्रखरता"
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgid "Scale:"
+msgid "Scale: "
+msgstr "प्रमाण :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -58772,12 +58787,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, fuzzy, kde-format
-#| msgid "Alpha darken"
-msgid "Alpha Mask"
-msgstr "अल्फा गडद"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58788,7 +58797,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, fuzzy, kde-format
 #| msgid "Color Range"
-msgid "Color Image"
+msgid "Color image"
 msgstr "रंगांची श्रेणी"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -58799,7 +58808,7 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, fuzzy, kde-format
-msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "हलकेपणा"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -58810,6 +58819,11 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+msgid "Gradient map"
+msgstr "ग्रेडियंट"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
@@ -58822,14 +58836,8 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, fuzzy, kde-format
 #| msgid "Animated"
-msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "चलित"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, fuzzy, kde-format
-#| msgid "Action program"
-msgid "Animated Image"
-msgstr "कृती कार्यक्रम"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -67374,6 +67382,21 @@ msgid "Reference Images Tool"
 msgstr "25%"
 
 #, fuzzy
+#~| msgid "Target point:"
+#~ msgid "Neutral Point:"
+#~ msgstr "लक्ष्य बिंदू :"
+
+#, fuzzy
+#~| msgid "Alpha darken"
+#~ msgid "Alpha Mask"
+#~ msgstr "अल्फा गडद"
+
+#, fuzzy
+#~| msgid "Action program"
+#~ msgid "Animated Image"
+#~ msgstr "कृती कार्यक्रम"
+
+#, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Italic"
 #~ msgid "Rich text"
@@ -68044,13 +68067,6 @@ msgstr "25%"
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
 #~ msgstr "अपारदर्शकता :"
-
-#, fuzzy
-#~| msgid "Scale:"
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "प्रमाण :"
 
 #, fuzzy
 #~| msgid "Opacity:"

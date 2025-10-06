@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2025-04-07 22:41+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -23776,6 +23776,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "Geneerinen L*a*b*-histogrammi"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
 msgid "Alpha mask"
 msgstr "Alfapeite"
@@ -25382,19 +25383,19 @@ msgstr "Kaikki"
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, fuzzy, kde-format
 #| msgid "&All pages"
-msgid "All Untagged"
+msgid "All untagged"
 msgstr "K&aikki sivut"
 
 #: libs/resources/KisTagModel.cpp:304
 #, fuzzy, kde-format
-msgid "All Resources"
+msgid "All resources"
 msgstr "&Resurssit"
 
 #: libs/resources/KisTagModel.cpp:314
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Manage Resources"
-msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "Hallitse resursseja"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -28021,7 +28022,6 @@ msgid ""
 msgstr "<html><head/><body><p>Toiminnon kuvaus</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -28029,7 +28029,6 @@ msgstr "<html><head/><body><p>Toiminnon kuvaus</p></body></html>"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "Kirkkaus:"
@@ -31950,14 +31949,12 @@ msgstr "Pyöritä"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "Mittakaava:"
@@ -51808,7 +51805,6 @@ msgstr "&Väriliu’ut"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, fuzzy, kde-format
 msgid "Gradient Map"
 msgstr "Liukuväri"
@@ -53731,10 +53727,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "Käännä:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "Kontrasti:"
@@ -55115,6 +55109,7 @@ msgstr "Latista kuva"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 #| msgid "Animated Image"
 msgid "Animated image"
@@ -59956,8 +59951,9 @@ msgstr "Siveltimen tiedot"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, kde-format
-msgid "Preserve Brush Preset Settings"
+#, fuzzy, kde-format
+#| msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "Säilytä sivellinasetukset"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -60009,11 +60005,38 @@ msgstr "käytä vain yhtä kirjainta kerrallaan"
 msgid "Pipe mode"
 msgstr "Näytä"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
+msgid "Contrast: "
+msgstr "Kontrasti: "
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, kde-format
-msgid "Neutral Point:"
-msgstr "Neutraali piste:"
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
+msgid "Neutral point: "
+msgstr "Neutraali piste: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
+msgid "Brightness: "
+msgstr "Kirkkaus: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "The pattern 'scale' spinbox prefix in enclose and fill tool options"
+#| msgid "Scale: "
+msgid "Scale: "
+msgstr "Mittakaava: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -60555,11 +60578,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, kde-format
-msgid "Alpha Mask"
-msgstr "Alfapeite"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -60568,8 +60586,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, kde-format
-msgid "Color Image"
+#, fuzzy, kde-format
+#| msgid "Color Image"
+msgid "Color image"
 msgstr "Värikuva"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -60579,8 +60598,9 @@ msgid "The brush tip image is painted as it is"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, kde-format
-msgid "Lightness Map"
+#, fuzzy, kde-format
+#| msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "Kirkkauskartta"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -60592,6 +60612,11 @@ msgid ""
 "the final stroke"
 msgstr ""
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+msgid "Gradient map"
+msgstr "Liukuväri"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -60601,14 +60626,10 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, kde-format
-msgid "Animated Mask"
+#, fuzzy, kde-format
+#| msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "Animoitu peite"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, kde-format
-msgid "Animated Image"
-msgstr "Animoitu kuva"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -68638,6 +68659,15 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Viitekuvatyökalu"
 
+#~ msgid "Neutral Point:"
+#~ msgstr "Neutraali piste:"
+
+#~ msgid "Alpha Mask"
+#~ msgstr "Alfapeite"
+
+#~ msgid "Animated Image"
+#~ msgstr "Animoitu kuva"
+
 #~ msgid "Rich text"
 #~ msgstr "Muotoiltu teksti"
 
@@ -69333,11 +69363,6 @@ msgstr "Viitekuvatyökalu"
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
 #~ msgstr "Levitä:"
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "Mittakaava: "
 
 #~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 #~ msgid "Spread: "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -22733,6 +22733,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "អ៊ីស្តូក្រាម"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, fuzzy, kde-format
 msgid "Alpha mask"
 msgstr "អាល់ហ្វា​ស្រអាប់"
@@ -24272,17 +24273,17 @@ msgstr "ទាំង​អស់"
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, fuzzy, kde-format
 #| msgid "&All pages"
-msgid "All Untagged"
+msgid "All untagged"
 msgstr "ទំព័រ​ទាំងអស់"
 
 #: libs/resources/KisTagModel.cpp:304
 #, fuzzy, kde-format
-msgid "All Resources"
+msgid "All resources"
 msgstr "ធនធាន"
 
 #: libs/resources/KisTagModel.cpp:314
 #, fuzzy, kde-format
-msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "ធនធាន"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -26727,7 +26728,6 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26735,7 +26735,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, fuzzy, kde-format
 msgid "Brightness:"
 msgstr "ពន្លឺ ៖"
@@ -30478,14 +30477,12 @@ msgstr "បង្វិល"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, fuzzy, kde-format
 msgid "Scale:"
 msgstr "មាត្រដ្ឋាន ៖"
@@ -49370,7 +49367,6 @@ msgstr "ជម្រាល​"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, fuzzy, kde-format
 msgid "Gradient Map"
 msgstr "ជម្រាល​"
@@ -51281,10 +51277,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "បញ្ច្រាស"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "កម្រិត​ពន្លឺ ៖"
@@ -52648,6 +52642,7 @@ msgstr "ធ្វើ​ឲ្យ​រូបភាព​រាប​ស្មើ
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 #| msgid "Action program"
 msgid "Animated image"
@@ -57154,7 +57149,7 @@ msgstr "ការ​កំណត់​ជក់"
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
 #, fuzzy, kde-format
-msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "ទំហំ​ជក់"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -57207,11 +57202,31 @@ msgstr ""
 msgid "Pipe mode"
 msgstr "របៀប​​សាមញ្ញ"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgid "Contrast:"
+msgid "Contrast: "
+msgstr "កម្រិត​ពន្លឺ ៖"
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
 #, fuzzy, kde-format
-msgid "Neutral Point:"
+msgid "Neutral point: "
 msgstr "ចំណុច​ជម្រះ"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+msgid "Brightness: "
+msgstr "ពន្លឺ ៖"
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgid "Scale: "
+msgid "Scale: "
+msgstr "មាត្រដ្ឋាន ៖"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -57764,11 +57779,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, fuzzy, kde-format
-msgid "Alpha Mask"
-msgstr "អាល់ហ្វា​ស្រអាប់"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -57779,7 +57789,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, fuzzy, kde-format
 #| msgid "Color Range"
-msgid "Color Image"
+msgid "Color image"
 msgstr "ជួរ​ពណ៌​"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -57790,7 +57800,7 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, fuzzy, kde-format
-msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "ភាព​ភ្លឺ"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -57801,6 +57811,11 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+msgid "Gradient map"
+msgstr "ជម្រាល​"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
@@ -57813,14 +57828,8 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, fuzzy, kde-format
 #| msgid "Animated"
-msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "ដែល​មាន​ចលនា​"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, fuzzy, kde-format
-#| msgid "Action program"
-msgid "Animated Image"
-msgstr "កម្មវិធី​សកម្មភាព"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -66168,6 +66177,19 @@ msgid "Reference Images Tool"
 msgstr "រូបភាព​យោង ៖"
 
 #, fuzzy
+#~ msgid "Neutral Point:"
+#~ msgstr "ចំណុច​ជម្រះ"
+
+#, fuzzy
+#~ msgid "Alpha Mask"
+#~ msgstr "អាល់ហ្វា​ស្រអាប់"
+
+#, fuzzy
+#~| msgid "Action program"
+#~ msgid "Animated Image"
+#~ msgstr "កម្មវិធី​សកម្មភាព"
+
+#, fuzzy
 #~ msgid "Rich text"
 #~ msgstr "ដែក​ថែប​ត្រជាក់"
 
@@ -66807,13 +66829,6 @@ msgstr "រូបភាព​យោង ៖"
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
 #~ msgstr "ភាព​ស្រអាប់ ៖"
-
-#, fuzzy
-#~| msgid "Scale: "
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "មាត្រដ្ឋាន ៖"
 
 #, fuzzy
 #~| msgid "Opacity: "

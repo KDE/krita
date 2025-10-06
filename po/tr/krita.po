@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2025-10-03 06:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -22509,6 +22509,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "Genel  L*a*b* Sütun Grafiği"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
 msgid "Alpha mask"
 msgstr "Alpha maskesi"
@@ -24011,18 +24012,21 @@ msgid "All"
 msgstr "Tümü"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
-#, kde-format
-msgid "All Untagged"
+#, fuzzy, kde-format
+#| msgid "All Untagged"
+msgid "All untagged"
 msgstr "Tüm Künyesiz"
 
 #: libs/resources/KisTagModel.cpp:304
-#, kde-format
-msgid "All Resources"
+#, fuzzy, kde-format
+#| msgid "All Resources"
+msgid "All resources"
 msgstr "Tüm Özkaynaklar"
 
 #: libs/resources/KisTagModel.cpp:314
-#, kde-format
-msgid "All Untagged Resources"
+#, fuzzy, kde-format
+#| msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "Tüm Künyesiz Özkaynaklar"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -26523,7 +26527,6 @@ msgstr ""
 "ekrana dönüştürme için 1,2’dir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26531,7 +26534,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "Parlaklık:"
@@ -30331,14 +30333,12 @@ msgstr "Döndür:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "Ölçek:"
@@ -36915,7 +36915,7 @@ msgstr "Global ışığı kullan"
 #: libs/ui/layerstyles/wdglayerstyles.ui:23
 #, kde-format
 msgid "Enable Effects"
-msgstr "Efektleri Etkinleştir"
+msgstr "Efektleri etkinleştir"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpStyleSelector)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -49507,7 +49507,6 @@ msgstr "&Gradyan Eşlemi…"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
 msgid "Gradient Map"
 msgstr "Gradyan Eşlemi"
@@ -51363,10 +51362,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "Tersine çevir:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "Karşıtlık:"
@@ -51666,7 +51663,7 @@ msgstr "Rütbe"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2150
 #, kde-format
 msgid "Spacing:"
-msgstr "Boşluklandırma:"
+msgstr "Boşluk:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
@@ -52780,6 +52777,7 @@ msgstr "Düzleştirilmiş görsel"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, kde-format
 msgid "Animated image"
 msgstr "Hareketli görsel"
@@ -57604,9 +57602,10 @@ msgstr "Fırça Ayrıntıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, kde-format
-msgid "Preserve Brush Preset Settings"
-msgstr "Fırça Önayar Ayarlarını Koru"
+#, fuzzy, kde-format
+#| msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
+msgstr "Fırça önayar ayarlarını koru"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
@@ -57619,7 +57618,7 @@ msgstr "Önceden Tanımlanmış Ucu Sıfırla"
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
-msgstr "Fırça kipi"
+msgstr "Fırça Kipi"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
@@ -57657,11 +57656,36 @@ msgstr "her seferinde bir harf kullan"
 msgid "Pipe mode"
 msgstr "Boru kipi"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
+msgid "Contrast: "
+msgstr "Karşıtlık: "
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, kde-format
-msgid "Neutral Point:"
-msgstr "Nötr nokta:"
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
+msgid "Neutral point: "
+msgstr "Nötr nokta: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
+msgid "Brightness: "
+msgstr "Parlaklık: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+#| msgid "Scale:"
+msgid "Scale: "
+msgstr "Ölçek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -58235,11 +58259,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr "Maskeli fırça kullanılırken yalnızca yıkama kipi kullanılabilir."
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, kde-format
-msgid "Alpha Mask"
-msgstr "Alpha Maskesi"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58249,9 +58268,10 @@ msgstr ""
 "Fırça ucu görüntüsünün parlaklığı, vuruş için alfa kanalı olarak kullanılır"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, kde-format
-msgid "Color Image"
-msgstr "Renk Görseli"
+#, fuzzy, kde-format
+#| msgid "Color Image"
+msgid "Color image"
+msgstr "Renkli Görsel"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
 #, kde-format
@@ -58260,8 +58280,9 @@ msgid "The brush tip image is painted as it is"
 msgstr "Fırça ucu görseli olduğu gibi boyanır"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, kde-format
-msgid "Lightness Map"
+#, fuzzy, kde-format
+#| msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "Açıklık Eşlemi"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -58276,6 +58297,12 @@ msgstr ""
 "olarak kullanılır. Fırça ucu görüntüsünün alfa kanalı, son vuruş için alfa "
 "olarak kullanılır"
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+#| msgid "Gradient Map"
+msgid "Gradient map"
+msgstr "Gradyan Eşlemi"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -58287,14 +58314,10 @@ msgstr ""
 "görüntüsünün alfa kanalı, son vuruş için alfa olarak kullanılır"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, kde-format
-msgid "Animated Mask"
+#, fuzzy, kde-format
+#| msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "Canlandırılmış Maske"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, kde-format
-msgid "Animated Image"
-msgstr "Canlandırılmış Görsel"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -66258,3 +66281,12 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
+
+#~ msgid "Neutral Point:"
+#~ msgstr "Nötr nokta:"
+
+#~ msgid "Alpha Mask"
+#~ msgstr "Alfa Maskesi"
+
+#~ msgid "Animated Image"
+#~ msgstr "Canlandırılmış Görsel"

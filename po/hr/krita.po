@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-05 01:52+0000\n"
+"POT-Creation-Date: 2025-10-06 02:08+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -22462,6 +22462,7 @@ msgid "Generic L*a*b* Histogram"
 msgstr "Oduzmi"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, fuzzy, kde-format
 msgid "Alpha mask"
 msgstr "Alfa"
@@ -23979,17 +23980,17 @@ msgstr ""
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
 #, fuzzy, kde-format
-msgid "All Untagged"
+msgid "All untagged"
 msgstr "&Slika"
 
 #: libs/resources/KisTagModel.cpp:304
 #, fuzzy, kde-format
-msgid "All Resources"
+msgid "All resources"
 msgstr "Svojstva uređaja"
 
 #: libs/resources/KisTagModel.cpp:314
 #, fuzzy, kde-format
-msgid "All Untagged Resources"
+msgid "All untagged resources"
 msgstr "Svojstva uređaja"
 
 #: libs/resources/KisTagResourceModel.cpp:667
@@ -26392,7 +26393,6 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, labelBrightness)
@@ -26400,7 +26400,6 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, fuzzy, kde-format
 msgid "Brightness:"
 msgstr "Svjetlina / Kontrast"
@@ -30001,14 +30000,12 @@ msgstr "Rotiraj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
-#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeometryoptions.ui:127
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, fuzzy, kde-format
 msgid "Scale:"
 msgstr "Razmjer"
@@ -48579,7 +48576,6 @@ msgstr "Gradijent:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, fuzzy, kde-format
 msgid "Gradient Map"
 msgstr "Gradijent:"
@@ -50452,10 +50448,8 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "&inverzija..."
 
-#. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, fuzzy, kde-format
 msgid "Contrast:"
 msgstr "Uglovi:"
@@ -51789,6 +51783,7 @@ msgstr "Nova slika"
 
 #. i18n: ectx: property (text), widget (QRadioButton, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
 msgid "Animated image"
 msgstr "Promijeni veličinu slike"
@@ -56208,7 +56203,7 @@ msgstr "Postavke"
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
 #, fuzzy, kde-format
-msgid "Preserve Brush Preset Settings"
+msgid "Preserve brush preset settings"
 msgstr "Svojstva..."
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
@@ -56260,11 +56255,29 @@ msgstr ""
 msgid "Pipe mode"
 msgstr "Novi Sloj"
 
+#. i18n: ectx: property (text), widget (QLabel, lblAngle)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
+#, fuzzy, kde-format
+msgid "Contrast: "
+msgstr "Uglovi:"
+
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
 #, fuzzy, kde-format
-msgid "Neutral Point:"
+msgid "Neutral point: "
 msgstr "Cilj:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRatio)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
+#, fuzzy, kde-format
+msgid "Brightness: "
+msgstr "Svjetlina / Kontrast"
+
+#. i18n: ectx: property (text), widget (QLabel, lblDiameter)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
+#, fuzzy, kde-format
+msgid "Scale: "
+msgstr "Razmjer"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -56800,11 +56813,6 @@ msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
-#, fuzzy, kde-format
-msgid "Alpha Mask"
-msgstr "Alfa"
-
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
 msgctxt "@info:tooltip"
@@ -56814,7 +56822,7 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, fuzzy, kde-format
-msgid "Color Image"
+msgid "Color image"
 msgstr "Boje"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
@@ -56825,7 +56833,7 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, fuzzy, kde-format
-msgid "Lightness Map"
+msgid "Lightness map"
 msgstr "Svjetlina / Kontrast"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
@@ -56837,6 +56845,11 @@ msgid ""
 "the final stroke"
 msgstr ""
 
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
+#, fuzzy, kde-format
+msgid "Gradient map"
+msgstr "Gradijent:"
+
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
 msgctxt "@info:tooltip"
@@ -56847,13 +56860,8 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, fuzzy, kde-format
-msgid "Animated Mask"
+msgid "Animated mask"
 msgstr "Rotiraj"
-
-#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, fuzzy, kde-format
-msgid "Animated Image"
-msgstr "Promijeni veličinu slike"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, fuzzy, kde-format
@@ -64958,6 +64966,18 @@ msgid "Reference Images Tool"
 msgstr "Podešenja"
 
 #, fuzzy
+#~ msgid "Neutral Point:"
+#~ msgstr "Cilj:"
+
+#, fuzzy
+#~ msgid "Alpha Mask"
+#~ msgstr "Alfa"
+
+#, fuzzy
+#~ msgid "Animated Image"
+#~ msgstr "Promijeni veličinu slike"
+
+#, fuzzy
 #~ msgid "Rich text"
 #~ msgstr "Kurziv"
 
@@ -65545,12 +65565,6 @@ msgstr "Podešenja"
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
 #~ msgstr "Neprozirnost:"
-
-#, fuzzy
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "Razmjer"
 
 #, fuzzy
 #~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"

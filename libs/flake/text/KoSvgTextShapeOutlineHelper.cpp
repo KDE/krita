@@ -40,7 +40,7 @@ struct KoSvgTextShapeOutlineHelper::Private {
     KoSvgTextShape *getPotentialTextShape(const QPointF &point) {
         Q_FOREACH(KoShape*shape, canvas->shapeManager()->selection()->selectedEditableShapes()) {
             KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
-            if (text) {
+            if (text && !text->internalShapeManager()->shapes().isEmpty()) {
                 if (getButtonRectCorrected(text->boundingRect()).contains(point)) {
                     return text;
                 }
@@ -173,7 +173,9 @@ QRectF KoSvgTextShapeOutlineHelper::decorationRect()
     KoSvgTextShape *text = d->getTextModeShape();
     if (text) {
         QRectF base = text->boundingRect();
-        base |= d->getButtonRectCorrected(base);
+        if (!text->internalShapeManager()->shapes().isEmpty()) {
+            base |= d->getButtonRectCorrected(base);
+        }
         decorationRect = base;
     } else {
         Q_FOREACH(KoShape* shape, d->canvas->shapeManager()->selection()->selectedEditableShapes()) {
@@ -225,9 +227,10 @@ void KoSvgTextShapeOutlineHelper::setDecorationThickness(int thickness)
 
 KoSvgTextShape *KoSvgTextShapeOutlineHelper::contourModeButtonHovered(const QPointF &point)
 {
-    if (d->getTextModeShape()) {
-        if (d->getButtonRect(d->getTextModeShape()->boundingRect()).contains(point)) {
-            return d->getTextModeShape();
+    KoSvgTextShape *text = d->getTextModeShape();
+    if (text && !text->internalShapeManager()->shapes().isEmpty()) {
+        if (d->getButtonRect(text->boundingRect()).contains(point)) {
+            return text;
         }
     }
     return d->getPotentialTextShape(point);

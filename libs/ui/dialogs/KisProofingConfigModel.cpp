@@ -6,6 +6,7 @@
 #include "KisProofingConfigModel.h"
 #include <KisLager.h>
 #include <KisZug.h>
+#include <KisPortingUtils.h>
 
 #include <kis_display_color_converter.h>
 #include <lager/lenses/tuple.hpp>
@@ -74,7 +75,11 @@ ComboBoxState calcIntentComboBoxState(KoColorConversionTransformation::Intent in
     values << i18nc("Color conversion intent", "Absolute Colorimetric");
 
     // no tooltops for now
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    toolTips << "" << "" << "" << "";
+#else
     toolTips.resize(4);
+#endif
 
     return {values, static_cast<int>(intent), enabled, toolTips};
 }

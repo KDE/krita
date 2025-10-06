@@ -147,7 +147,8 @@ void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
-    bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress;
+    // Clicks...
+    bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress || event->type() == QEvent::TouchBegin;
 
     if (clickEvent) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -160,7 +161,8 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    bool dragEvent = event->type() == QEvent::MouseMove && d->m_dragging;
+    // Drags...
+    bool dragEvent = d->m_dragging && (event->type() == QEvent::MouseMove || event->type() == QEvent::TouchUpdate);
 
     if (dragEvent) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -177,7 +179,8 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         return true;
     }
 
-    bool releaseEvent = (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease) && d->m_dragging;
+    // Releases...
+    bool releaseEvent = d->m_dragging && (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease || event->type() == QEvent::TouchEnd);
 
     if (releaseEvent) {
         d->m_dragging = false;

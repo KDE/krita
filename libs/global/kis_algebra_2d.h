@@ -64,6 +64,12 @@ qreal norm(const T &a)
     return std::sqrt(pow2(a.x()) + pow2(a.y()));
 }
 
+template <class T>
+qreal normSquared(const T &a)
+{
+    return pow2(a.x()) + pow2(a.y());
+}
+
 template <class Point>
 Point normalize(const Point &a)
 {

@@ -824,7 +824,17 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
     QTemporaryFile file(QDir::tempPath() + "/.XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
-        KisImportExportErrorCannotWrite result(file.error() == QFileDevice::NoError ? QFileDevice::WriteError : file.error());
+        QFileDevice::FileError error = file.error();
+        if (file.error() == QFileDevice::NoError) {
+            /**
+             * On Android Qt's AndroidContentFileEngine::open may be not very
+             * accurate with setting a proper error code when requesting file
+             * descriptor from JNI and getting a refusal. We should handle this
+             * condition gracefully.
+             */
+            error = QFileDevice::OpenError;
+        }
+        KisImportExportErrorCannotWrite result(error);
 #ifdef USE_QSAVEFILE
         file.cancelWriting();
 #endif

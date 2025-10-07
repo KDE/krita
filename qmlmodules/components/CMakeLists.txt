@@ -21,6 +21,10 @@ if (QT_MAJOR_VERSION STREQUAL "6")
             KisTheme.h
             KisFontFunctions.cpp
             KisFontFunctions.h
+            KoShapeQtQuickLabel.cpp
+            KoShapeQtQuickLabel.h
+            TagFilterProxyModelQmlWrapper.cpp
+            TagFilterProxyModelQmlWrapper.h
     )
 
 else ()
@@ -44,6 +48,10 @@ else ()
             KisTheme.h
             KisFontFunctions.cpp
             KisFontFunctions.h
+            KoShapeQtQuickLabel.cpp
+            KoShapeQtQuickLabel.h
+            TagFilterProxyModelQmlWrapper.cpp
+            TagFilterProxyModelQmlWrapper.h
     )
 
 endif ()
@@ -104,6 +112,12 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/InformingTextInput.qml
 
     qml/WindowFocusChecker.qml
+
+    qml/ResourceView.qml
+    qml/ResourcePopup.qml
+    qml/resourceDelegates/ResourceDelegateBase.qml
+    qml/resourceDelegates/FontFamilyDelegate.qml
+    qml/resourceDelegates/CssStylePresetDelegate.qml
 
 )
 if (QT_MAJOR_VERSION STREQUAL "6")

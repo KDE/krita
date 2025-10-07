@@ -216,11 +216,15 @@ QWidget *SvgTextTool::createOptionWidget()
     if (canvas2 && canvas2->viewManager()->mainWindow()) {
         QDockWidget *docker = canvas2->viewManager()->mainWindow()->dockWidget("TextProperties");
         m_optionManager->setShowTextPropertyButton((docker));
-        connect(m_optionManager.data(), SIGNAL(openTextPropertiesDocker(bool)), docker, SLOT(setVisible(bool)));
+        if (docker) {
+            optionWidget->setPalette(docker->palette());
+            connect(m_optionManager.data(), SIGNAL(openTextPropertiesDocker(bool)), docker, SLOT(setVisible(bool)));
+        }
     }
     slotUpdateVisualCursor();
     slotUpdateTextPasteBehaviour();
     slotTextTypeUpdated();
+
 
     return optionWidget;
 }

@@ -21,6 +21,7 @@
 #include <QApplication>
 
 #include <resources/KoFontFamily.h>
+#include "KisFontFunctions.h"
 
 struct TagFilterProxyModelQmlWrapper::Private {
     Private(QObject *parent = nullptr)
@@ -281,9 +282,59 @@ QString TagFilterProxyModelQmlWrapper::resourceFilename()
     return d->currentResource? d->currentResource->filename(): "";
 }
 
+QString TagFilterProxyModelQmlWrapper::resourceName() const
+{
+    return d->currentResource? d->currentResource->name(): "";
+}
+
+void TagFilterProxyModelQmlWrapper::setResourceToName(const QString &name)
+{
+    if (!d->allResourceModel) return;
+    if (d->currentResource && d->currentResource->name() == name) return;
+    KoResourceSP resource = d->currentResource;
+    QVector<KoResourceSP> resources = d->allResourceModel->resourcesForName(name);
+    if (!resources.isEmpty()) {
+        resource = resources.first();
+    }
+    if (resource != d->currentResource) {
+        d->currentResource = resource;
+        emit currentResourceChanged();
+    }
+}
+
 KoResourceSP TagFilterProxyModelQmlWrapper::currentResource() const
 {
     return d->currentResource;
+}
+
+QVariant TagFilterProxyModelQmlWrapper::testFileName(const QString &name)
+{
+    if (resourceType() == ResourceType::FontFamilies) {
+        KisFontFunctions func;
+        return func.wwsFontFamilyNameVariant(name);
+    }
+    QVector<KoResourceSP> resources = d->allResourceModel->resourcesForFilename(name);
+    KoResourceSP resource;
+    if (!resources.isEmpty()) {
+        resource = resources.first();
+    }
+    if (resource) {
+        return resource->filename();
+    }
+    return QVariant();
+}
+
+QVariant TagFilterProxyModelQmlWrapper::testName(const QString &name)
+{
+    QVector<KoResourceSP> resources = d->allResourceModel->resourcesForName(name);
+    KoResourceSP resource;
+    if (!resources.isEmpty()) {
+        resource = resources.first();
+    }
+    if (resource) {
+        return resource->name();
+    }
+    return QVariant();
 }
 
 void TagFilterProxyModelQmlWrapper::importResource()

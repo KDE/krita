@@ -34,3 +34,18 @@ QVariantMap KisFontFunctions::getMapFromQVariant(QVariant var)
 {
     return var.toMap();
 }
+
+bool KisFontFunctions::isBitmapType(int type)
+{
+    return KoSvgText::FontFormatType(type) == KoSvgText::BDFFontType;
+}
+
+bool KisFontFunctions::isPostScriptType(int type)
+{
+    return KoSvgText::FontFormatType(type) == KoSvgText::Type1FontType;
+}
+
+bool KisFontFunctions::isOpenType(int type)
+{
+    return KoSvgText::FontFormatType(type) == KoSvgText::OpenTypeFontType;
+}

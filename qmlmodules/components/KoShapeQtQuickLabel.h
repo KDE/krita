@@ -26,6 +26,7 @@ class KoShapeQtQuickLabel: public QQuickPaintedItem
     Q_PROPERTY(QRectF documentRect READ documentRect WRITE setDocumentRect NOTIFY documentRectChanged)
     Q_PROPERTY(QRectF minimumRect READ minimumRect NOTIFY minimumRectChanged)
 
+    QML_NAMED_ELEMENT(KoShapeQtQuickLabel)
 public:
     KoShapeQtQuickLabel(QQuickItem *parent = nullptr);
     ~KoShapeQtQuickLabel();

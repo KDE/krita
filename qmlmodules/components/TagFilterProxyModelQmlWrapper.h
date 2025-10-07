@@ -7,6 +7,7 @@
 #define TAGFILTERPROXYMODELQMLWRAPPER_H
 
 #include <QObject>
+#include <QQmlEngine>
 #include <QAbstractItemModel>
 #include <KisTagFilterResourceProxyModel.h>
 
@@ -30,8 +31,12 @@ class TagFilterProxyModelQmlWrapper : public QObject
     Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
     Q_PROPERTY(bool searchInTag READ searchInTag WRITE setSearchInTag NOTIFY searchInTagChanged)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentResourceChanged)
+
+    Q_PROPERTY(QString resourceName READ resourceName WRITE setResourceToName NOTIFY currentResourceChanged)
     Q_PROPERTY(QString resourceFilename READ resourceFilename WRITE setResourceToFileName NOTIFY currentResourceChanged)
     Q_PROPERTY(KoResourceSP currentResource READ currentResource NOTIFY currentResourceChanged)
+
+    QML_NAMED_ELEMENT(TagFilterProxyModelQmlWrapper)
 public:
     TagFilterProxyModelQmlWrapper(QObject *parent = nullptr);
     ~TagFilterProxyModelQmlWrapper();
@@ -103,8 +108,18 @@ public:
     /// File name of the current resource.
     QString resourceFilename();
 
+    /// Name of current resource
+    QString resourceName() const;
+    void setResourceToName(const QString &name);
+
     /// current resource.
     KoResourceSP currentResource() const;
+
+    /// Test if the given filename is in the resources.
+    Q_INVOKABLE QVariant testFileName(const QString &name);
+
+    /// Test if the given name is in the resources.
+    Q_INVOKABLE QVariant testName(const QString &name);
 
     /// Import a resource with file picker.
     Q_INVOKABLE void importResource();

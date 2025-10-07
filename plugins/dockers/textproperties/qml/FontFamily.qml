@@ -82,9 +82,9 @@ CollapsibleGroupProperty {
             locales: root.locales;
             onActivated: {
                 if (fontFamilies.length >0) {
-                    fontFamilies[0] = fontFileName;
+                    fontFamilies[0] = resourceName;
                 } else {
-                    fontFamilies = [ fontFileName ];
+                    fontFamilies = [ resourceName ];
                 }
             }
             function updateCurrentIndex() {
@@ -93,7 +93,7 @@ CollapsibleGroupProperty {
                     modelWrapper.currentTag = 0;
                     modelWrapper.currentIndex = -1;
                 }
-                fontFileName = name;
+                resourceName = name;
             }
         }
     }
@@ -130,15 +130,15 @@ CollapsibleGroupProperty {
                         Layout.fillWidth: true;
                         locales: root.locales;
                         onActivated: {
-                            fontFamilies[fontListDelegate.dIndex] = fontFileName;
+                            fontFamilies[fontListDelegate.dIndex] = resourceName;
                         }
                         Component.onCompleted: {
                             if (fontListDelegate.dIndex === 0) {
                                 modelWrapper = mainFamilyCmb.modelWrapper;
-                                fontFileName = fontFunctions.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
+                                resourceName = fontFunctions.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
                             }
                         }
-                        fontFileName: fontFunctions.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
+                        resourceName: fontFunctions.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]);
                     }
                     ToolButton {
                         id: removeFont;

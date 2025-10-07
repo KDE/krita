@@ -35,6 +35,11 @@ public:
     /// QVariantHash, you can use this function to convert it to a QVariantMap.
     Q_INVOKABLE static QVariantMap getMapFromQVariant(QVariant var);
 
+    /// Because we can't register KoSvgText for qt 6 in this plugin, we'll test if the enum is valid here.
+    Q_INVOKABLE static bool isBitmapType(int type);
+    Q_INVOKABLE static bool isPostScriptType(int type);
+    Q_INVOKABLE static bool isOpenType(int type);
+
 };
 
 #endif // KISFONTFUNCTIONS_H

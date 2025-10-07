@@ -3,8 +3,6 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     TextPropertiesDock.cpp 
     FontStyleModel.cpp
     FontAxesModel.cpp
-    KoShapeQtQuickLabel.cpp
-    TagFilterProxyModelQmlWrapper.cpp
     OpenTypeFeatureModel.cpp
     LocaleHandler.cpp
     CssQmlUnitConverter.cpp

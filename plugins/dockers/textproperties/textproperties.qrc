@@ -59,7 +59,6 @@
         <file alias="FontSizeAdjust.qml">qml/FontSizeAdjust.qml</file>
         <file alias="TextRendering.qml">qml/TextRendering.qml</file>
         <file alias="TextPropertyConfigDialog.qml">qml/TextPropertyConfigDialog.qml</file>
-        <file alias="ResourceView.qml">qml/ResourceView.qml</file>
         <file alias="CssStylePresetEdit.qml">qml/CssStylePresetEdit.qml</file>
     </qresource>
 </RCC>

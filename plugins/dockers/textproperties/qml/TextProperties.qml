@@ -27,9 +27,6 @@ Control {
         id: focusChecker;
         onInFocusChanged: canvasObserver.hasFocus = inFocus;
     }
-    Kis.FontFunctions {
-        id: fontFunctions;
-    }
 
     property TextPropertyConfigModel configModel : canvasObserver.textPropertyConfig;
     property double canvasDPI: canvasObserver.dpi;
@@ -112,95 +109,16 @@ Control {
                 Layout.fillWidth: true;
             }
 
-            ResourceView {
+            Kis.ResourceView {
                 id: presetView;
                 resourceType: "css_styles";
                 Layout.fillHeight: true;
                 Layout.fillWidth: true;
 
-                signal applyPreset;
-                onApplyPreset: {
-                    canvasObserver.applyPreset(modelWrapper.currentResource);
-                }
-
-                resourceDelegate: ItemDelegate {
-                    id: presetDelegate;
-                    required property var model;
-                    property var meta: model.metadata;
-                    width: ListView.view.width;
-                    highlighted: presetView.highlightedIndex === model.index;
-                    property bool selected: presetView.modelWrapper.currentIndex === model.index;
-                    palette: presetView.palette;
-                    contentItem: KoShapeQtQuickLabel {
-                        implicitHeight: nameLabel.height * 4;
-                        padding: nameLabel.height;
-                        alignment: presetDelegate.meta.sample_align;
-                        scalingType: presetDelegate.meta.style_type === "paragraph"?
-                                         KoShapeQtQuickLabel.FitWidth: KoShapeQtQuickLabel.Fit;
-                        svgData: presetDelegate.meta.sample_svg;
-                        foregroundColor: presetDelegate.highlighted? palette.highlightedText: palette.text;
-
-                        Label {
-                            id: nameLabel;
-                            palette: presetDelegate.palette;
-                            text: presetDelegate.model.name;
-                            anchors.top: parent.top;
-                            anchors.left: parent.left;
-                            anchors.right: parent.right;
-                            elide: Text.ElideRight;
-                            color: presetDelegate.highlighted? palette.highlightedText: palette.text;
-                        }
-
-                        Row {
-                            anchors.bottom: parent.bottom;
-                            anchors.left: parent.left;
-                            anchors.right: parent.right;
-                            ToolButton {
-                                id: missingFamily;
-                                visible: typeof presetDelegate.meta.primary_font_family !== 'undefined'?
-                                             presetDelegate.meta.primary_font_family !== ""
-                                             && typeof fontFunctions.wwsFontFamilyNameVariant(presetDelegate.meta.primary_font_family) === 'undefined': false;
-                                icon.source: palette.window.hslLightness < 0.5? "qrc:///16_light_warning.svg": "qrc:///16_dark_warning.svg";
-                                icon.height: 8;
-                                icon.width: 8;
-                            }
-                        }
-                    }
-                    background: Rectangle {
-                        color: presetDelegate.highlighted? presetDelegate.palette.highlight: "transparent";
-                        border.color: presetDelegate.selected? presetDelegate.palette.highlight: presetDelegate.palette.mid;
-                        border.width: presetDelegate.selected? 2: 1;
-                    }
-
-                    MouseArea {
-                        id: delegateMouseArea;
-                        acceptedButtons: Qt.RightButton | Qt.LeftButton;
-                        anchors.fill: parent;
-                        hoverEnabled: true;
-                        preventStealing: true;
-                        onClicked: {
-                            if (mouse.button === Qt.RightButton) {
-                                presetView.openContextMenu(mouse.x, mouse.y, parent.model.name, parent.model.index);
-                            } else {
-                                presetView.applyHighlightedIndex();
-                            }
-                        }
-                        onDoubleClicked: {
-                            presetView.applyHighlightedIndex();
-                            presetView.applyPreset();
-                        }
-                        onContainsMouseChanged: {
-                            if (containsMouse) {
-                                presetView.highlightedIndex = parent.model.index;
-                            }
-                        }
-
-                        readonly property string missingFontName : i18nc("%1 is name of a font family", "Font Family \"%1\" is missing on this machine. This style preset may not work correctly.", presetDelegate.meta.primary_font_family);
-                        Kis.ToolTipBase {
-                            text: (typeof presetDelegate.meta.description !== 'undefined'? presetDelegate.model.name + "\n" + presetDelegate.meta.description: presetDelegate.model.name) + (missingFamily.visible?  "\n"+ delegateMouseArea.missingFontName: "");
-                            visible: delegateMouseArea.containsMouse;
-                        }
-
+                resourceDelegate: Kis.CssStylePresetDelegate {
+                    resourceView: presetView;
+                    onResourceDoubleClicked: {
+                        canvasObserver.applyPreset(presetView.modelWrapper.currentResource);
                     }
                 }
                 additionalAddResourceRow: RowLayout {

@@ -17,6 +17,7 @@
 
 #include "TextPropertiesDock.h"
 #include <KoDockRegistry.h>
+#include <QQmlEngine>
 
 #include <text/lager/KoSvgTextPropertiesModel.h>
 #include <text/lager/CssLengthPercentageModel.h>
@@ -31,9 +32,7 @@
 
 #include "FontStyleModel.h"
 #include "FontAxesModel.h"
-#include "KoShapeQtQuickLabel.h"
 #include "OpenTypeFeatureModel.h"
-#include "TagFilterProxyModelQmlWrapper.h"
 #include "LocaleHandler.h"
 #include "CssQmlUnitConverter.h"
 #include "TextPropertyConfigModel.h"
@@ -59,9 +58,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
     qmlRegisterType<OpenTypeFeatureFilterModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureFilterModel");
     qmlRegisterType<OpenTypeFeatureModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureModel");
-    qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
     qmlRegisterType<CssQmlUnitConverter>("org.krita.flake.text", 1, 0, "CssQmlUnitConverter");
-    qmlRegisterType<TagFilterProxyModelQmlWrapper>("org.krita.flake.text", 1, 0, "TagFilterProxyModelQmlWrapper");
     qmlRegisterType<LocaleHandler>("org.krita.flake.text", 1, 0, "LocaleHandler");
     qmlRegisterType<TextPropertyConfigModel>("org.krita.flake.text", 1, 0, "TextPropertyConfigModel");
     qmlRegisterType<TextPropertyConfigFilterModel>("org.krita.flake.text", 1, 0, "TextPropertyConfigFilterModel");

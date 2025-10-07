@@ -14,6 +14,8 @@
 #include <KisCubicCurveQMLWrapper.h>
 #include <KisTheme.h>
 #include <KisFontFunctions.h>
+#include <KoShapeQtQuickLabel.h>
+#include <TagFilterProxyModelQmlWrapper.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #error "This plugin implementation is to be used with Qt5 only!\n"
@@ -43,6 +45,9 @@ void KritaQmlComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<KisTheme>(uri, 1, 0, "Theme");
     qmlRegisterUncreatableType<KisThemeColorGroup>(uri, 1, 0, "ThemeColorGroup", "Use Theme instead");
     qmlRegisterType<KisFontFunctions>(uri, 1, 0, "FontFunctions");
+    qmlRegisterType<KoShapeQtQuickLabel>(uri, 1, 0, "KoShapeQtQuickLabel");
+    qmlRegisterType<TagFilterProxyModelQmlWrapper>(uri, 1, 0, "TagFilterProxyModelQmlWrapper");
+
 }
 
 #include "moc_KritaQmlComponentsPlugin.cpp"

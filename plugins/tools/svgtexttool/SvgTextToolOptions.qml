@@ -18,6 +18,7 @@ Control {
     onManagerChanged: {
         updateTextProperties()
         textType.updateTextTypes();
+        updatePresetName()
     }
 
     Connections {
@@ -39,7 +40,7 @@ Control {
             chkPasteRichTextByDefault.checked = manager.optionsModel.pasteRichtTextByDefault;
         }
         function onCssStylePresetNameChanged() {
-            // todo;
+            updatePresetName();
         }
         function onUseCurrentTextPropertiesChanged() {
             chkCurrentProperties.checked = manager.optionsModel.useCurrentTextProperties;
@@ -48,6 +49,10 @@ Control {
 
     function updateTextProperties() {
         btnTextProperties.checked = manager.textPropertiesOpen;
+    }
+
+    function updatePresetName() {
+        btnSelectCssStylePreset.resourceName = manager.optionsModel.cssStylePresetName;
     }
 
     Kis.ThemedControl {
@@ -78,13 +83,26 @@ Control {
                 visible: parent.hovered;
             }
         }
-
-        Button {
+        Kis.ResourcePopup {
             id: btnSelectCssStylePreset;
-            enabled: !chkCurrentProperties.checked;
-            text: "placeholder style presets";
             Layout.fillWidth: true;
-            // TODO: write KoCssStylePreset thing here.
+            enabled: !chkCurrentProperties.checked;
+            useFileName: false;
+
+            resourceType: "css_styles";
+            resourceDelegate: Kis.CssStylePresetDelegate {
+                id: presetDelegate;
+                resourceView: btnSelectCssStylePreset.view;
+                onResourceLeftClicked: {
+                    btnSelectCssStylePreset.activated();
+                }
+
+            }
+            view.preferredHeight: 256; /// roughly 3x preset delegate size;
+
+            onResourceNameChanged: {
+                manager.optionsModel.cssStylePresetName = btnSelectCssStylePreset.resourceName;
+            }
         }
 
         Kis.ToolSeparatorBase {

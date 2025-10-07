@@ -9,9 +9,13 @@ import QtQuick.Layouts 1.15
 import org.krita.flake.text 1.0
 import org.krita.components 1.0 as Kis
 
+/**
+  \qmltype ResourceView
+  This provides a resource selector complete with filters, tagging and more.
+  */
 Control {
     id: control;
-    property TagFilterProxyModelQmlWrapper modelWrapper: TagFilterProxyModelQmlWrapper {
+    property Kis.TagFilterProxyModelQmlWrapper modelWrapper: Kis.TagFilterProxyModelQmlWrapper {
         resourceType: control.resourceType;
     };
 
@@ -37,17 +41,50 @@ Control {
 
 
     /*
-
+        \qmlProperty highlightedIndex
+        The currently hovered index on the resource selector.
      */
     property alias highlightedIndex : view.currentIndex;
 
+    /*
+        \qmlProperty resourceDelegate
+        Resource Delegate. This is used to draw the delegates.
+     */
     property alias resourceDelegate : view.delegate;
 
+    property alias addResourceRowVisible: addResourceRow.visible;
+    /*
+        \qmlProperty resourceDelegate
+        The add resource row, this contains by default import and remove resource.
+     */
     property alias addResourceRow: addResourceRow;
+    /*
+        \qmlProperty additionalAddResourceRow
+        The additional resource row can be used to add extra toolbuttons.
+     */
     property alias additionalAddResourceRow: addResourceRow.data;
 
+    /*
+        \qmlProperty showTagging
+        Show tagging functionality, bool.
+     */
     property alias showTagging: tagAndConfig.visible;
+    /*
+        \qmlProperty showSearch
+        Show the search bar, bool.
+     */
     property alias showSearch: searchBar.visible;
+
+    /*
+      \qmlProperty viewPreferredHeight
+        Preferred height of the resource list view.
+     */
+    property int preferredHeight: font.pixelSize * 15;
+    /*
+      \qmlProperty viewMinimumHeight
+        Minimum height of the resource list view.
+     */
+    property int minimumHeight: font.pixelSize * 3;
 
     function downPress() {
         highlightedIndex += 1;
@@ -217,13 +254,25 @@ Control {
             }
         }
         Frame {
-            Layout.minimumHeight: font.pixelSize*3;
+            id:viewFrame;
+            Layout.minimumHeight: control.minimumHeight + bottomPadding + topPadding;
             Layout.fillWidth: true;
             Layout.fillHeight: true;
-            Layout.preferredHeight: font.pixelSize*15;
+            Layout.preferredHeight: control.preferredHeight + bottomPadding + topPadding;
+            Layout.maximumHeight: control.maximumHeight - (bottomPadding + topPadding);
             palette: control.palette;
-            clip: true;
+            padding: 1;
+            bottomPadding: padding;
+            topPadding: padding;
+
+            background: Rectangle {
+                border.color: palette.mid;
+                border.width: viewFrame.padding;
+                color: "transparent";
+            }
+
             ListView {
+                clip: true;
                 anchors.fill: parent;
                 id: view;
                 currentIndex: 0;

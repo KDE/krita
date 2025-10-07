@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-06 02:08+0000\n"
-"PO-Revision-Date: 2025-09-24 13:28+0200\n"
+"POT-Creation-Date: 2025-10-07 02:02+0000\n"
+"PO-Revision-Date: 2025-10-06 08:55+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16019,14 +16019,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Delovne površine"
 
-#: krita/main.cc:748 libs/ui/KisApplication.cpp:496
-#: libs/ui/KisApplication.cpp:774
+#: krita/main.cc:747 libs/ui/KisApplication.cpp:499
+#: libs/ui/KisApplication.cpp:781
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: opozorilo"
 
-#: krita/main.cc:749
+#: krita/main.cc:748
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20637,7 +20637,7 @@ msgstr "Velikost"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1710
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1718
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -20956,7 +20956,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (vdelano)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:539
+#: libs/ui/dialogs/kis_dlg_preferences.cc:541
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -23522,15 +23522,15 @@ msgstr "Krajevni viri"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:998
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1006
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1157
-#: libs/ui/KisApplication.cpp:1160 libs/ui/KisApplication.cpp:1176
-#: libs/ui/KisApplication.cpp:1208 libs/ui/KisApplication.cpp:1222
-#: libs/ui/KisApplication.cpp:1250 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1176
+#: libs/ui/KisApplication.cpp:1179 libs/ui/KisApplication.cpp:1195
+#: libs/ui/KisApplication.cpp:1227 libs/ui/KisApplication.cpp:1241
+#: libs/ui/KisApplication.cpp:1269 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:997 libs/ui/KisMainWindow.cpp:1067
@@ -23810,8 +23810,8 @@ msgstr "Manjkajo nekateri viri:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2066
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2070
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2078
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -23997,20 +23997,17 @@ msgid "All"
 msgstr "Vse"
 
 #: libs/resources/KisTagModel.cpp:152 libs/resources/KisTagModel.cpp:311
-#, fuzzy, kde-format
-#| msgid "All Untagged"
+#, kde-format
 msgid "All untagged"
 msgstr "Vsi neoznačeni"
 
 #: libs/resources/KisTagModel.cpp:304
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgid "All resources"
 msgstr "Vsi viri"
 
 #: libs/resources/KisTagModel.cpp:314
-#, fuzzy, kde-format
-#| msgid "All Untagged Resources"
+#, kde-format
 msgid "All untagged resources"
 msgstr "Vsi neoznačeni viri"
 
@@ -24630,7 +24627,7 @@ msgstr ""
 "zmanjšana na 50 sličic na sekundo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2090
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2098
 #, kde-format
 msgid "Warning(s):"
 msgstr "Opozorila:"
@@ -25597,8 +25594,8 @@ msgstr "Glavni zaslon:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2386
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25699,8 +25696,8 @@ msgstr "Uvoz video animacije"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2346
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2348
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2354
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2356
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26545,49 +26542,49 @@ msgid "Set color used for warning"
 msgstr "Določi barvo, uporabljeno za opozorila"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:109
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1265
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1273
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Zaznavno"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1266
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1274
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativne barvne vrednosti (kolorimetrično)"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1267
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1275
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Nasičenost"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1268
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1276
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absolutne barvne vrednosti (kolorimetrično)"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1271
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1279
 #, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
 msgstr "Uporabi globalne nastavitve zaslona"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:118
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1272
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1280
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr "Simuliraj beli in črni papir"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1273
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1281
 #, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
@@ -26679,12 +26676,12 @@ msgstr "Lastnosti plasti"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1623
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1627
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1631
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1716
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2199 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1724
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2149
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2207 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26943,47 +26940,47 @@ msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:343
+#: libs/ui/dialogs/kis_dlg_preferences.cc:345
 #, kde-format
 msgid "On Touch Drag"
 msgstr "ob dotiku povleci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:344
+#: libs/ui/dialogs/kis_dlg_preferences.cc:346
 #, kde-format
 msgid "On Click Drag"
 msgstr "ob kliku povleci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:345
+#: libs/ui/dialogs/kis_dlg_preferences.cc:347
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "ob srednjem kliku povleci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:395
+#: libs/ui/dialogs/kis_dlg_preferences.cc:397
 #, kde-format
 msgid "All Supported Files"
 msgstr "Vse podprte vrste datotek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:432
 #, kde-format
 msgid "Open default window"
 msgstr "Odpri privzeto okno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:433
 #, kde-format
 msgid "Load previous session"
 msgstr "Naloži prejšnjo sejo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:432
+#: libs/ui/dialogs/kis_dlg_preferences.cc:434
 #, kde-format
 msgid "Show session manager"
 msgstr "Pokaži upravitelja sej"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:504
+#: libs/ui/dialogs/kis_dlg_preferences.cc:506
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Za učinkovanje sprememb je Krito potrebno ponovno zagnati."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:510
+#: libs/ui/dialogs/kis_dlg_preferences.cc:512
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
@@ -26991,22 +26988,22 @@ msgstr ""
 "Shranjevanje na mestu, ki ste ga izbrali prek izbirnika datotek, lahko "
 "upočasni zagon!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:542
+#: libs/ui/dialogs/kis_dlg_preferences.cc:544
 #, kde-format
 msgid "Internal Storage"
 msgstr "Notranja shramba"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:544
+#: libs/ui/dialogs/kis_dlg_preferences.cc:546
 #, kde-format
 msgid "SD-Card"
 msgstr "Kartica SD"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:582
+#: libs/ui/dialogs/kis_dlg_preferences.cc:584
 #, kde-format
 msgid "Choose Manually"
 msgstr "Izberite ročno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:649
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -27031,26 +27028,26 @@ msgstr ""
 ">\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:994
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Izberi sliko za ozadje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:998
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1006
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ni veljavna slikovna datoteka!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1026
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Opozorilo:</b> na to mesto ni možno pisati."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1356
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1364
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1460
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27058,17 +27055,17 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Zaslon %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1185
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1193
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr "Barvni prostor zaslona upravlja operacijski sistem"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1192
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1200
 #, kde-format
 msgid "Enable canvas color management"
 msgstr "Omogoči upravljanje barv platna"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1195
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -27088,32 +27085,32 @@ msgstr ""
 "zaslona«, kar npr. pomeni, da bo beli preskus papirja postal nemogoč.</li></"
 "ol></p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1222
 #, kde-format
 msgid "Canvas surface color space:"
 msgstr "Barvni prostor površine platna:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1225
 #, kde-format
 msgid "Preferred by operating system"
 msgstr "Prednostni glede na operacijski sistem"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1226
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr "Rec 709 gama 2,2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1227
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr "Rec 709 linearno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1228
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr "Neupravljano (samo za preskušanje)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1231
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
@@ -27122,7 +27119,7 @@ msgstr ""
 "<p>Barvni prostor slikovnih točk, ki se prenesejo v sestavljalnik oken. "
 "Uporabite »prednostni« prostor, razen če veste, kaj počnete</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1237
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
@@ -27131,19 +27128,19 @@ msgstr ""
 "Barvni prostor, ki ga prednostno uporablja operacijski sistem:\n"
 "%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1314
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1322
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Namesti barvne profile"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1545
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr "API za vnos tabličnega računalnika (trenutno aktivni API: »%1«)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1551
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1559
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27152,7 +27149,7 @@ msgstr ""
 "Uporabi časovne žige gonilnika tablice za hitrost čopiča (lahko povzroči "
 "opazne artefakte pri uporabi API-ja za tablice WinTab)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1553
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1561
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Uporabi časovne žige gonilnika tablice za hitrost čopiča"
@@ -27160,7 +27157,7 @@ msgstr "Uporabi časovne žige gonilnika tablice za hitrost čopiča"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1563
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1571
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27172,7 +27169,7 @@ msgstr[3] "Največja velikost čopiča: {n} sl.t./ms"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1572
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1580
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -27181,19 +27178,19 @@ msgstr[1] "Hitrost glajenja čopiča: {n} vzorec"
 msgstr[2] "Hitrost glajenja čopiča: {n} vzorca"
 msgstr[3] "Hitrost glajenja čopiča: {n} vzorci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1579
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "Odmik smeri nagiba peresa: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1677
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1685
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1698
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1706
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27202,187 +27199,187 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1701
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1709
 #, kde-format
 msgid " fps"
 msgstr " sl/s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programski izrisovalnik/upodabljalnik (zelo počasi)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1945
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1953
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 prek ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1954
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL prek ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1955
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1963
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1975
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1983
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Samodejno (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2052
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ID zaslona: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2053
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2061
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Ime zaslona: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2054
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Najm. svetilnost: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Najv. svetilnost: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2064
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Največja svetilnost sličice polnega formata: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2065
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Primarna rdeča: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2058
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2066
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Primarna zelena: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Primarna modra: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Bela točka: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Opozorilo:</b> trenutni zaslon ne podpira upodabljanja HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2339
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2347
 #, kde-format
 msgid "Configure Krita"
 msgstr "Prilagodi Krito"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2356
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2364
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Tipke za bližnjice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2358
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2366
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Tipke za bližnjice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2368
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Nastavitve vnosa na platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2369
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
 #, kde-format
 msgid "Canvas Input"
 msgstr "Vnos na platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2386
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2394
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "Upravljanje z barvami"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2396
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Barva"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2396
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2398
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2404
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2406
 #, kde-format
 msgid "Performance"
 msgstr "Hitrost delovanja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2406
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2414
 #, kde-format
 msgid "Tablet settings"
 msgstr "Nastavitve tablice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2416
 #, kde-format
 msgid "Tablet"
 msgstr "Tablica"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2416
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2424
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Nastavitve samo za platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2418
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2426
 #, kde-format
 msgid "Canvas-only"
 msgstr "Samo za platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2426
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2428
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2436
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Pojavna paleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2436
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2444
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Avtor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2438
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2446
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "Avtor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2445
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2453
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -29695,7 +29692,7 @@ msgstr "Omogoči ulomljeni faktor spremembe merila"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:598
-#: libs/ui/forms/wdggeneralsettings.ui:1625
+#: libs/ui/forms/wdggeneralsettings.ui:1632
 #, kde-format
 msgid "(needs restart)"
 msgstr "(potreben je ponoven zagon)"
@@ -30181,26 +30178,32 @@ msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "Dodaj »Kopija« k imenu podvojenih plasti"
 
-#. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
 #: libs/ui/forms/wdggeneralsettings.ui:1559
+#, kde-format
+msgid "Long-press to open context menus"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
+#: libs/ui/forms/wdggeneralsettings.ui:1566
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "Kinetično drsenje (potrebuje ponoven zagon)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1574
+#: libs/ui/forms/wdggeneralsettings.ui:1581
 #, kde-format
 msgid "Sensitivity:"
 msgstr "Občutljivost:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1599
+#: libs/ui/forms/wdggeneralsettings.ui:1606
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "Skrij drsnike zloženih oken, če je omogočeno kinetično drsenje"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1651
+#: libs/ui/forms/wdggeneralsettings.ui:1658
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -30216,7 +30219,7 @@ msgstr ""
 "poskusiteonemogočiti to možnost, vendar se zavedajte morebitnih težav."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1654
+#: libs/ui/forms/wdggeneralsettings.ui:1661
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr "Prezri visoke funkcijske tipke (F13–F24)"
@@ -31996,7 +31999,7 @@ msgid "HSV CCW"
 msgstr "HSV NSUK"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:436
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:439
 #, kde-format
 msgid "Sessions"
 msgstr "Seje"
@@ -33495,7 +33498,7 @@ msgstr "&Odpri izbirnik barv ozadja"
 msgid "&Docker Box"
 msgstr "Polje &zloženega okna"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:432
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:435
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33509,8 +33512,8 @@ msgstr "Vzorci"
 msgid "Custom Pattern"
 msgstr "Vzorec po meri"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:417
-#: libs/ui/KisApplication.cpp:418
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:420
+#: libs/ui/KisApplication.cpp:421
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34466,20 +34469,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Povečava: %1 %"
 
-#: libs/ui/KisApplication.cpp:409
+#: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Prednastavitve čopiča"
 
-#: libs/ui/KisApplication.cpp:412 libs/ui/KisApplication.cpp:413
-#: libs/ui/KisApplication.cpp:414 libs/ui/KisApplication.cpp:415
+#: libs/ui/KisApplication.cpp:415 libs/ui/KisApplication.cpp:416
+#: libs/ui/KisApplication.cpp:417 libs/ui/KisApplication.cpp:418
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Konice čopiča"
 
-#: libs/ui/KisApplication.cpp:420
+#: libs/ui/KisApplication.cpp:423
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34487,7 +34490,7 @@ msgstr "Konice čopiča"
 msgid "Palettes"
 msgstr "Palete"
 
-#: libs/ui/KisApplication.cpp:433 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:436 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34495,39 +34498,39 @@ msgstr "Palete"
 msgid "Workspaces"
 msgstr "Delovni prostori"
 
-#: libs/ui/KisApplication.cpp:434
+#: libs/ui/KisApplication.cpp:437
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "Knjižnice simbolov SVG"
 
-#: libs/ui/KisApplication.cpp:435 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:438 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Postavitve oken"
 
-#: libs/ui/KisApplication.cpp:437
+#: libs/ui/KisApplication.cpp:440
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Maske gamuta"
 
-#: libs/ui/KisApplication.cpp:439
+#: libs/ui/KisApplication.cpp:442
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "Skripti SeExpr"
 
-#: libs/ui/KisApplication.cpp:444
+#: libs/ui/KisApplication.cpp:447
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Slogi plasti"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:450
 #, kde-format
 msgid "Style Presets"
 msgstr "Prednastavitve slogov"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:462
 #, kde-format
 msgid ""
 "%1\n"
@@ -34538,13 +34541,13 @@ msgstr ""
 "\n"
 "Krita se bo zdaj zaprla."
 
-#: libs/ui/KisApplication.cpp:459 libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:462 libs/ui/KisApplication.cpp:468
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: usodna napaka"
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:468
 #, kde-format
 msgid ""
 "\n"
@@ -34554,7 +34557,7 @@ msgstr ""
 "\n"
 "Krita se bo zdaj zaprla."
 
-#: libs/ui/KisApplication.cpp:497
+#: libs/ui/KisApplication.cpp:500
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34565,65 +34568,65 @@ msgstr ""
 "To ni priporočljivo.\n"
 "Namesto tega prenesite in namestite gradnjo x64."
 
-#: libs/ui/KisApplication.cpp:514
+#: libs/ui/KisApplication.cpp:517
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Inicializacija globalnih vrednosti …"
 
-#: libs/ui/KisApplication.cpp:546
+#: libs/ui/KisApplication.cpp:549
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Dodajanje vrst virov …"
 
-#: libs/ui/KisApplication.cpp:550
+#: libs/ui/KisApplication.cpp:553
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Nalaganje vstavkov ..."
 
-#: libs/ui/KisApplication.cpp:556
+#: libs/ui/KisApplication.cpp:559
 #, kde-format
 msgid "Loading resources..."
 msgstr "Nalaganje virov …"
 
-#: libs/ui/KisApplication.cpp:565
+#: libs/ui/KisApplication.cpp:568
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Nalaganje glavnega okna ..."
 
-#: libs/ui/KisApplication.cpp:597
+#: libs/ui/KisApplication.cpp:600
 #, kde-format
 msgid "Launching..."
 msgstr "Zaganjanje …"
 
-#: libs/ui/KisApplication.cpp:666
+#: libs/ui/KisApplication.cpp:673
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Vrste mime ni mogoče najti, poskusite z možnostjo -mimetype"
 
-#: libs/ui/KisApplication.cpp:727
+#: libs/ui/KisApplication.cpp:734
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Upodabljanja sličic animacije je spodletelo!"
 
-#: libs/ui/KisApplication.cpp:755 libs/ui/KisApplication.cpp:1028
+#: libs/ui/KisApplication.cpp:762 libs/ui/KisApplication.cpp:1035
 #, kde-format
 msgid "File layer"
 msgstr "Plast datoteke"
 
-#: libs/ui/KisApplication.cpp:763 libs/ui/KisApplication.cpp:768
-#: libs/ui/KisApplication.cpp:1022 libs/ui/KisApplication.cpp:1036
-#: libs/ui/KisApplication.cpp:1041
+#: libs/ui/KisApplication.cpp:770 libs/ui/KisApplication.cpp:775
+#: libs/ui/KisApplication.cpp:1029 libs/ui/KisApplication.cpp:1043
+#: libs/ui/KisApplication.cpp:1048
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: opozorilo"
 
-#: libs/ui/KisApplication.cpp:764 libs/ui/KisApplication.cpp:1037
+#: libs/ui/KisApplication.cpp:771 libs/ui/KisApplication.cpp:1044
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1 ni mogoče dodati kot plast datoteke: datoteka ne obstaja."
 
-#: libs/ui/KisApplication.cpp:769
+#: libs/ui/KisApplication.cpp:776
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34644,7 +34647,7 @@ msgstr ""
 "primerku programa Krita, v nastavitvah (Nastavitve -> Splošno -> Okno) "
 "preverite potrditveno polje »Dovoli samo en primerek Krite«."
 
-#: libs/ui/KisApplication.cpp:775
+#: libs/ui/KisApplication.cpp:782
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34655,32 +34658,32 @@ msgstr ""
 "Novo datoteko lahko ustvarite z možnostjo --new-image ali pa odprete "
 "obstoječo datoteko."
 
-#: libs/ui/KisApplication.cpp:1023
+#: libs/ui/KisApplication.cpp:1030
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Datoteke %1 ni mogoče odpreti"
 
-#: libs/ui/KisApplication.cpp:1042
+#: libs/ui/KisApplication.cpp:1049
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Plasti datoteke ni mogoče dodati: noben dokument ni odprt."
 
-#: libs/ui/KisApplication.cpp:1158
+#: libs/ui/KisApplication.cpp:1177
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ni najdene predloge za: %1"
 
-#: libs/ui/KisApplication.cpp:1161
+#: libs/ui/KisApplication.cpp:1180
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Preveč predlog najdenih za %1"
 
-#: libs/ui/KisApplication.cpp:1177
+#: libs/ui/KisApplication.cpp:1196
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Nalaganje predloge %1 je spodletelo."
 
-#: libs/ui/KisApplication.cpp:1209
+#: libs/ui/KisApplication.cpp:1228
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34695,7 +34698,7 @@ msgstr ""
 "\n"
 "Znova zaženite Krito, da spremembe začnejo veljati."
 
-#: libs/ui/KisApplication.cpp:1223
+#: libs/ui/KisApplication.cpp:1242
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34707,7 +34710,7 @@ msgstr ""
 "Prepričajte se, da noben drug program ne uporablja datoteke, in poskusite "
 "znova."
 
-#: libs/ui/KisApplication.cpp:1251
+#: libs/ui/KisApplication.cpp:1270
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ali želite počistiti datoteko z nastavitvami?"
@@ -40252,7 +40255,7 @@ msgstr "Slog pisave"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:375
+#: libs/widgetutils/kis_slider_spin_box_p.h:372
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -40265,19 +40268,19 @@ msgstr ""
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:545
+#: libs/widgetutils/kis_slider_spin_box_p.h:542
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "&Izberi vse"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:555
+#: libs/widgetutils/kis_slider_spin_box_p.h:552
 #, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "Po&višaj"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:557
+#: libs/widgetutils/kis_slider_spin_box_p.h:554
 #, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
@@ -57672,8 +57675,7 @@ msgstr "Podrobnosti čopiča"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, fuzzy, kde-format
-#| msgid "Preserve Brush Preset Settings"
+#, kde-format
 msgid "Preserve brush preset settings"
 msgstr "Ohrani prednastavitve čopiča"
 
@@ -57728,32 +57730,25 @@ msgstr "Način cevi"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Contrast: "
+#, kde-format
 msgid "Contrast: "
 msgstr "Kontrast: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Neutral point: "
+#, kde-format
 msgid "Neutral point: "
 msgstr "Nevtralna točka: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Brightness: "
+#, kde-format
 msgid "Brightness: "
 msgstr "Svetlost: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgid "Scale: "
 msgstr "Merilo:"
 
@@ -58335,8 +58330,7 @@ msgid ""
 msgstr "Svetilnost slike konice čopiča se uporablja kot kanal alfa za potezo"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, fuzzy, kde-format
-#| msgid "Color Image"
+#, kde-format
 msgid "Color image"
 msgstr "Barvna slika"
 
@@ -58347,8 +58341,7 @@ msgid "The brush tip image is painted as it is"
 msgstr "Slika konice čopiča je pobarvana tako, kot je"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, fuzzy, kde-format
-#| msgid "Lightness Map"
+#, kde-format
 msgid "Lightness map"
 msgstr "Preslikaj svetlost"
 
@@ -58365,8 +58358,7 @@ msgstr ""
 "potezo"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
-#, fuzzy, kde-format
-#| msgid "Gradient Map"
+#, kde-format
 msgid "Gradient map"
 msgstr "Preslikaj preliv"
 
@@ -58381,8 +58373,7 @@ msgstr ""
 "slike konice čopiča se uporablja kot alfa za končno potezo"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Animated Mask"
+#, kde-format
 msgid "Animated mask"
 msgstr "Animirana maska"
 
@@ -66336,12 +66327,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Neutral Point:"
-#~ msgstr "Nevtralna točka:"
-
-#~ msgid "Alpha Mask"
-#~ msgstr "Maska alfa"
-
-#~ msgid "Animated Image"
-#~ msgstr "Animirana slika"

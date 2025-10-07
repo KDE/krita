@@ -127,6 +127,7 @@ kis_add_tests(
     KisKeyframeAnimationInterfaceSignalTest.cpp
     KisOverlayPaintDeviceWrapperTest.cpp
     KisPaintOpPresetTest.cpp
+    KisFourPointInterpolatorTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
     NAME_PREFIX "libs-image-"
     )

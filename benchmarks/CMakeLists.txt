@@ -19,6 +19,7 @@ set(KisAnimationRenderingBenchmark_SRCS KisAnimationRenderingBenchmark.cpp)
 set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp)
 set(kis_thumbnail_benchmark_SRCS kis_thumbnail_benchmark.cpp)
 set(KisLiquifyTransformWorkerBenchmark_SRCS KisLiquifyTransformWorkerBenchmark.cpp)
+set(KisFourPointInterpolatorBenchmark_SRCS KisFourPointInterpolatorBenchmark.cpp)
 
 
 krita_add_benchmark(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
@@ -40,6 +41,7 @@ krita_add_benchmark(KisAnimationRenderingBenchmark TESTNAME krita-benchmarks-Kis
 krita_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
 krita_add_benchmark(KisThumbnailBenchmark TESTNAME krita-benchmarks-KisThumbnail ${kis_thumbnail_benchmark_SRCS})
 krita_add_benchmark(KisLiquifyTransformWorkerBenchmark TESTNAME krita-benchmarks-KisLiquifyTransformWorker ${KisLiquifyTransformWorkerBenchmark_SRCS})
+krita_add_benchmark(KisFourPointInterpolatorBenchmark TESTNAME krita-benchmarks-KisFourPointInterpolator ${KisFourPointInterpolatorBenchmark_SRCS})
 
 
 include_directories(${QUAZIP_INCLUDE_DIRS})
@@ -62,6 +64,7 @@ target_link_libraries(KisLowMemoryBenchmark  kritaimage  kritatestsdk)
 target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  kritatestsdk)
 target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  kritatestsdk)
 target_link_libraries(KisLiquifyTransformWorkerBenchmark   kritaimage  kritatestsdk ${QUAZIP_LIBRARIES})
+target_link_libraries(KisFourPointInterpolatorBenchmark   kritaimage  kritatestsdk)
 
 
 ko_compile_for_all_implementations_no_scalar(__per_arch_composition_objects kis_composition_benchmark.cpp)

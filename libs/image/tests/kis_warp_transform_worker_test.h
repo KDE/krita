@@ -15,11 +15,6 @@ class KisWarpTransformWorkerTest : public QObject
 private Q_SLOTS:
     void test();
     void testQImage();
-    void testForwardInterpolator();
-    void testBackwardInterpolatorXShear();
-    void testBackwardInterpolatorYShear();
-    void testBackwardInterpolatorXYShear();
-    void testBackwardInterpolatorRoundTrip();
     void testGridSize();
     void testBackwardInterpolatorExtrapolation();
 

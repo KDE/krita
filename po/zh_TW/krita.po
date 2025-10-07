@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-24 03:26+0000\n"
+"POT-Creation-Date: 2025-10-07 03:33+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -15801,13 +15801,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "作業空間"
 
-#: krita/main.cc:573
+#: krita/main.cc:572
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "嚴重錯誤"
 
-#: krita/main.cc:574
+#: krita/main.cc:573
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15816,14 +15816,14 @@ msgstr ""
 "Krita 不支援 Wayland 平台。如您希望在 Wayland 上執行 Krita，請使用 XWayland。"
 "Krita 現在會退出。"
 
-#: krita/main.cc:695 libs/ui/KisApplication.cpp:412
-#: libs/ui/KisApplication.cpp:684
+#: krita/main.cc:694 libs/ui/KisApplication.cpp:415
+#: libs/ui/KisApplication.cpp:691
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:696
+#: krita/main.cc:695
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15834,12 +15834,12 @@ msgstr ""
 "我們不建議這樣做，請勿為此報告問題。\n"
 "請升級到下列支援的 Windows 版本之一：Windows 7、8、8.1、10。"
 
-#: krita/main.cc:718 krita/main.cc:723
+#: krita/main.cc:717 krita/main.cc:722
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita 數位板支援"
 
-#: krita/main.cc:719
+#: krita/main.cc:718
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15849,7 +15849,7 @@ msgstr ""
 "無法載入 WinTab 驅動程式，且未發現 Windows Ink 手寫筆裝置。如果數位板已連接，"
 "請確保其驅動程式已正確安裝。"
 
-#: krita/main.cc:724
+#: krita/main.cc:723
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16695,7 +16695,7 @@ msgstr "大小"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1474
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1482
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16981,7 +16981,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (嵌入)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:484
+#: libs/ui/dialogs/kis_dlg_preferences.cc:486
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -19441,15 +19441,15 @@ msgstr "本機資源"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:933
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
-#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
-#: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
-#: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:996
+#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1034 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1082 libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:1124 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
@@ -19700,8 +19700,8 @@ msgstr "中繼資料"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1831
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1835
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20489,7 +20489,7 @@ msgid ""
 msgstr "動畫 GIF 影像的影格速率不能超過 50，因此影格速率將被降低到每秒 50 影格"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1851
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1859
 #, kde-format
 msgid "Warning(s):"
 msgstr "警告："
@@ -21437,8 +21437,8 @@ msgstr "主顯示器："
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2113
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2121
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2123
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21538,8 +21538,8 @@ msgstr "匯入影片動畫"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2083
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2091
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22656,10 +22656,10 @@ msgstr "已存在此名稱的圖層樣式庫。要覆蓋它嗎？"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1389
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1393
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1397
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1479
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1401
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1405
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1487
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -22822,63 +22822,63 @@ msgctxt "touch painting"
 msgid "Disabled"
 msgstr "停用"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:331
+#: libs/ui/dialogs/kis_dlg_preferences.cc:333
 #, kde-format
 msgid "On Touch Drag"
 msgstr "以觸控螢幕拖曳捲動"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:334
 #, kde-format
 msgid "On Click Drag"
 msgstr "點擊並拖曳捲動"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:333
+#: libs/ui/dialogs/kis_dlg_preferences.cc:335
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "按住中間鍵拖曳捲動"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:372
 #, kde-format
 msgid "Open default window"
 msgstr "開啟預設視窗"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:373
 #, kde-format
 msgid "Load previous session"
 msgstr "載入上一次工作階段"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:374
 #, kde-format
 msgid "Show session manager"
 msgstr "顯示工作階段管理器"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:449
+#: libs/ui/dialogs/kis_dlg_preferences.cc:451
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "必須重新啟動 Krita 才能使這些變更生效。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:455
+#: libs/ui/dialogs/kis_dlg_preferences.cc:457
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr "如將檔案儲存至一個經檔案選擇器選取的位置，可能會使程式啟動變得緩慢！"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:487
+#: libs/ui/dialogs/kis_dlg_preferences.cc:489
 #, kde-format
 msgid "Internal Storage"
 msgstr "內部儲存空間"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:489
+#: libs/ui/dialogs/kis_dlg_preferences.cc:491
 #, kde-format
 msgid "SD-Card"
 msgstr "SD 卡"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:527
+#: libs/ui/dialogs/kis_dlg_preferences.cc:529
 #, kde-format
 msgid "Choose Manually"
 msgstr "手動選擇"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:592
+#: libs/ui/dialogs/kis_dlg_preferences.cc:594
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -22901,26 +22901,26 @@ msgstr ""
 "<p><b>應用程式內部資料夾</b> (<a href=\"copyprivate\">複製</a>)：<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:913
+#: libs/ui/dialogs/kis_dlg_preferences.cc:921
 #, kde-format
 msgid "Select a Background Image"
 msgstr "選擇背景影像"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:933
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 不是有效的影像檔案！"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:945
+#: libs/ui/dialogs/kis_dlg_preferences.cc:953
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>警告：</b>此位置無法寫入。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1046
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1054
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -22928,14 +22928,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "顯示器 %1 (%2)："
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1115
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1123
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "安裝色彩特性檔案"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1333
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -22944,7 +22944,7 @@ msgstr ""
 "以數位板驅動程式提供的筆跡時間戳記來計算筆刷速度 (使用 WinTab 時可能會產生大"
 "量雜訊)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1327
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1335
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "以數位板驅動程式提供的筆跡時間戳記來計算筆刷速度"
@@ -22952,7 +22952,7 @@ msgstr "以數位板驅動程式提供的筆跡時間戳記來計算筆刷速度
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1345
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -22961,20 +22961,20 @@ msgstr[0] "筆刷最高速度：每微秒 {n} 個像素"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1346
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1354
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "筆刷速度值平滑化：{n} 個取樣值"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1451
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1464
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1472
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -22983,181 +22983,181 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " 秒"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1468
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1476
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1696
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1704
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1697
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1705
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "軟體繪製器 (非常慢)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1699
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1707
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "通過 ANGLE 實現的 Direct3D 11"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1701
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1709
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1708
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1716
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "未知"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1728
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1736
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "自動 (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1809
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1817
 #, kde-format
 msgid "Display Id: %1"
 msgstr "顯示器 ID：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1810
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "顯示器名稱：%1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1811
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1819
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "最小光度：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1812
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "最大光度：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1813
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1821
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "最大全影格光度：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1814
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1822
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "紅基色：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "綠基色：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "藍基色：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1817
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "白點：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1991
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>警告：</b>目前顯示器不支援 HDR 繪製"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
 #, kde-format
 msgid "Configure Krita"
 msgstr "設定 Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2101
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "鍵盤快捷鍵"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2103
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "快捷鍵"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2113
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "畫布輸入設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2106
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
 #, kde-format
 msgid "Canvas Input"
 msgstr "畫布輸入"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2123
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2131
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "色彩管理"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2133
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "色彩"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2133
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
 #, kde-format
 msgid "Performance"
 msgstr "效能"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
 #, kde-format
 msgid "Tablet settings"
 msgstr "數位板設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2145
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
 #, kde-format
 msgid "Tablet"
 msgstr "數位板"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "畫布獨佔模式設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2155
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
 #, kde-format
 msgid "Canvas-only"
 msgstr "畫布獨佔模式"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2165
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "浮動畫具板"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者檔案"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2175
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2182
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -25753,16 +25753,22 @@ msgstr "使用合併復原"
 msgid "Advanced..."
 msgstr "進階…"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
+#: libs/ui/forms/wdggeneralsettings.ui:1533
+#, kde-format
+msgid "Long-press to open context menus"
+msgstr ""
+
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1538
+#: libs/ui/forms/wdggeneralsettings.ui:1545
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "資源"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1544
+#: libs/ui/forms/wdggeneralsettings.ui:1551
 #, kde-format
 msgid "Resource Folder:"
 msgstr "資源目錄："
@@ -27450,7 +27456,7 @@ msgid "HSV CCW"
 msgstr "HSV 逆時針方向"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:354
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:357
 #, kde-format
 msgid "Sessions"
 msgstr "工作階段"
@@ -28924,7 +28930,7 @@ msgstr "開啟前景色選取工具(&O)"
 msgid "&Open Background color selector"
 msgstr "開啟背景色選取工具"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:353
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28937,8 +28943,8 @@ msgstr "圖案"
 msgid "Custom Pattern"
 msgstr "自訂圖案"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:338
+#: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29767,61 +29773,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "縮放：%1 %"
 
-#: libs/ui/KisApplication.cpp:327
+#: libs/ui/KisApplication.cpp:330
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr "筆刷預設"
 
-#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
-#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
+#: libs/ui/KisApplication.cpp:335 libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr "筆刷提示"
 
-#: libs/ui/KisApplication.cpp:338
+#: libs/ui/KisApplication.cpp:341
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "調色板"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "作業空間"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG 符號庫"
 
-#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:356 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "視窗版面配置"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:358
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域遮罩"
 
-#: libs/ui/KisApplication.cpp:357
+#: libs/ui/KisApplication.cpp:360
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr 指令稿"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:365
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "圖層樣式"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:378
 #, kde-format
 msgid ""
 "%1\n"
@@ -29832,13 +29838,13 @@ msgstr ""
 "\n"
 "Krita 將立刻離開。"
 
-#: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:378 libs/ui/KisApplication.cpp:384
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita：嚴重錯誤"
 
-#: libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:384
 #, kde-format
 msgid ""
 "\n"
@@ -29849,7 +29855,7 @@ msgstr ""
 "\n"
 "Krita 將立刻退出。"
 
-#: libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:416
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29860,65 +29866,65 @@ msgstr ""
 "我們不建議此做法。\n"
 "請下載並安裝 x64 版本的 Krita 應用程式。"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:433
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "正在初始化全域參數…"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:465
 #, kde-format
 msgid "Adding resource types..."
 msgstr "正在新增資源類型…"
 
-#: libs/ui/KisApplication.cpp:466
+#: libs/ui/KisApplication.cpp:469
 #, kde-format
 msgid "Loading plugins..."
 msgstr "正在載入外掛程式…"
 
-#: libs/ui/KisApplication.cpp:472
+#: libs/ui/KisApplication.cpp:475
 #, kde-format
 msgid "Loading resources..."
 msgstr "正在載入資源…"
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:484
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "正在載入主視窗…"
 
-#: libs/ui/KisApplication.cpp:513
+#: libs/ui/KisApplication.cpp:516
 #, kde-format
 msgid "Launching..."
 msgstr "正在啟動…"
 
-#: libs/ui/KisApplication.cpp:582
+#: libs/ui/KisApplication.cpp:589
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "無法找到 MIME 類型，請嘗試使用 -mimetype 選項"
 
-#: libs/ui/KisApplication.cpp:638
+#: libs/ui/KisApplication.cpp:645
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "動畫影格繪製失敗！"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:884
+#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:891
 #, kde-format
 msgid "File layer"
 msgstr "檔案圖層"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
-#: libs/ui/KisApplication.cpp:878 libs/ui/KisApplication.cpp:892
-#: libs/ui/KisApplication.cpp:897
+#: libs/ui/KisApplication.cpp:680 libs/ui/KisApplication.cpp:685
+#: libs/ui/KisApplication.cpp:885 libs/ui/KisApplication.cpp:899
+#: libs/ui/KisApplication.cpp:904
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:681 libs/ui/KisApplication.cpp:900
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "無法新增 %1 為檔案圖層：檔案不存在。"
 
-#: libs/ui/KisApplication.cpp:679
+#: libs/ui/KisApplication.cpp:686
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29937,7 +29943,7 @@ msgstr ""
 "如果您想改新增檔案圖層至執行中 Krita 實體中的文件，請核取設定中的「只允許一"
 "個 Krita 實體」(設定 -> 一般 -> 視窗)。"
 
-#: libs/ui/KisApplication.cpp:685
+#: libs/ui/KisApplication.cpp:692
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29947,32 +29953,32 @@ msgstr ""
 "無法新增檔案圖層：未開啟檔案。\n"
 "您可使用 --new-image 選項建立新檔案，或者是開啟現有檔案。"
 
-#: libs/ui/KisApplication.cpp:879
+#: libs/ui/KisApplication.cpp:886
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "無法開啟檔案「%1」"
 
-#: libs/ui/KisApplication.cpp:898
+#: libs/ui/KisApplication.cpp:905
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "無法新增檔案圖層：未開啟檔案。"
 
-#: libs/ui/KisApplication.cpp:1013
+#: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到適用於 %1 的範本"
 
-#: libs/ui/KisApplication.cpp:1016
+#: libs/ui/KisApplication.cpp:1035
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "適用於 %1 的範本過多"
 
-#: libs/ui/KisApplication.cpp:1032
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "範本 %1 載入失敗。"
 
-#: libs/ui/KisApplication.cpp:1064
+#: libs/ui/KisApplication.cpp:1083
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29987,7 +29993,7 @@ msgstr ""
 "\n"
 "請重新啟動 Krita 以套用變更。"
 
-#: libs/ui/KisApplication.cpp:1078
+#: libs/ui/KisApplication.cpp:1097
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29998,7 +30004,7 @@ msgstr ""
 "\n"
 "請確保沒有其他程式正在使用該檔案並重試。"
 
-#: libs/ui/KisApplication.cpp:1106
+#: libs/ui/KisApplication.cpp:1125
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "要清空設定檔嗎？"
@@ -35833,7 +35839,7 @@ msgstr "字型樣式"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:375
+#: libs/widgetutils/kis_slider_spin_box_p.h:372
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -35846,19 +35852,19 @@ msgstr ""
 "全範圍：[%1, %2]\n"
 "子範圍：[%3, %4]"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:545
+#: libs/widgetutils/kis_slider_spin_box_p.h:542
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "全部選取(&A)"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:555
+#: libs/widgetutils/kis_slider_spin_box_p.h:552
 #, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "上調(&S)"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:557
+#: libs/widgetutils/kis_slider_spin_box_p.h:554
 #, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"

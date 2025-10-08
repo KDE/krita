@@ -52,8 +52,8 @@ struct KisSelectionActionsPanel::Private {
     KisSelectionManager *m_selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
     QPoint m_dragHandlePosition = QPoint(0, 0);
-    bool m_dragging = false;
     QPoint m_dragStartOffset;
+    bool m_dragging = false;
     bool m_selectionActive = false;
 
     QVector<QPushButton *> m_buttons;

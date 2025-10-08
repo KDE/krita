@@ -48,11 +48,14 @@ struct KisSelectionActionsPanel::Private {
     Private()
     {
     }
+
     KisCanvas2 *m_canvas = 0;
     KisSelectionManager *m_selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
+
     QPoint m_dragHandlePosition = QPoint(0, 0);
     QPoint m_dragStartOffset;
+
     bool m_dragging = false;
     bool m_selectionActive = false;
 

@@ -54,14 +54,14 @@ Control {
             Layout.preferredHeight: implicitHeight;
             columns: 2;
 
-            KoShapeQtQuickLabel {
+            Kis.KoShapeQtQuickLabel {
                 id: presetSampleLabel;
                 Layout.fillWidth: true;
                 Layout.columnSpan: 2;
                 foregroundColor: palette.text;
                 fullColor: false;
 
-                scalingType: styleType === "paragraph"? KoShapeQtQuickLabel.FitWidth: KoShapeQtQuickLabel.Fit;
+                scalingType: styleType === "paragraph"? Kis.KoShapeQtQuickLabel.FitWidth: Kis.KoShapeQtQuickLabel.Fit;
                 Layout.preferredHeight: presetTitleField.height*4;
                 padding: presetTitleField.height;
 

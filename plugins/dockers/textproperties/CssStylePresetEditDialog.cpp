@@ -139,6 +139,7 @@ QColor CssStylePresetEditDialog::modalColorDialog(QColor oldColor)
 }
 
 void CssStylePresetEditDialog::slotUpdateDirty() {
+    if (!m_quickWidget->rootObject()) return;
     bool isDirty = m_currentResource->isDirty();
     const QString title = m_quickWidget->rootObject()->property("presetTitle").toString();
     if (!isDirty && m_quickWidget->rootObject()) {

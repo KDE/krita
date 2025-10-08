@@ -15,14 +15,7 @@ KisWaylandAPIImageDescriptionInfo::KisWaylandAPIImageDescriptionInfo(::wp_image_
 }
 KisWaylandAPIImageDescriptionInfo::~KisWaylandAPIImageDescriptionInfo()
 {
-    /**
-     * The description info objects are automatically destroyed on delivering done()
-     * event, so we shouldn't destroy them manually (or it can cause protocol error
-     * on hyprland)
-     */
-    if (!m_isReady) {
-        wp_image_description_info_v1_destroy(object());
-    }
+    wp_image_description_info_v1_destroy(object());
 }
 void KisWaylandAPIImageDescriptionInfo::wp_image_description_info_v1_done()
 {

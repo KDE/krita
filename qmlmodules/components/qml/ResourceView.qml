@@ -52,6 +52,10 @@ Control {
      */
     property alias resourceDelegate : view.delegate;
 
+    /*
+        \qmlProperty addResourceRowVisible
+        Whether the resource row should be visible.
+     */
     property alias addResourceRowVisible: addResourceRow.visible;
     /*
         \qmlProperty resourceDelegate

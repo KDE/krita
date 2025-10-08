@@ -21,14 +21,45 @@ Button {
 
     //--- Model setup. ---//
 
+    /*
+        \qmlProperty modelWrapper
+        The resource model wrapper of the resource view. Can be replaced
+        to have two resource views have the same model.
+     */
     property alias modelWrapper : resourceView.modelWrapper;
+
+    /*
+        \qmlProperty useFileName
+        whether to search against filename or regular name.
+     */
     property bool useFileName : true;
 
+    /*
+        \qmlProperty view
+        The resource view inside the popup.
+     */
     property alias view: resourceView;
+    /*
+        \qmlProperty resourceType
+        A string corresponding to KisResourceTypes.h ResourceType.
+     */
     property alias resourceType: resourceView.resourceType;
+    /*
+        \qmlProperty resourceDelegate
+        The delegate used for the list inside the resource view.
+     */
     property alias resourceDelegate: resourceView.resourceDelegate;
+    /*
+        \qmlProperty resourceDelegate
+        Whether the add-resource row is visible.
+        This contains the import and delete buttons.
+     */
     property alias addResourceRowVisible: resourceView.addResourceRowVisible;
 
+    /*
+        \qmlProperty placeholderText
+        The placeholder text when the text input is empty.
+     */
     property alias placeholderText: textInput.placeholderText;
 
     Connections {

@@ -11,9 +11,8 @@
 
 KisWaylandAPISurfaceFeedback::KisWaylandAPISurfaceFeedback(::wp_color_management_surface_feedback_v1 *obj)
     : QtWayland::wp_color_management_surface_feedback_v1(obj)
-    , m_preferred(std::make_unique<KisWaylandAPIImageDescription>(get_preferred()))
 {
-    connect(m_preferred.get(), &KisWaylandAPIImageDescription::done, this, &KisWaylandAPISurfaceFeedback::preferredChanged);
+    requestPreferredDescriptionInfo();
 }
 
 KisWaylandAPISurfaceFeedback::~KisWaylandAPISurfaceFeedback()
@@ -24,6 +23,11 @@ KisWaylandAPISurfaceFeedback::~KisWaylandAPISurfaceFeedback()
 void KisWaylandAPISurfaceFeedback::wp_color_management_surface_feedback_v1_preferred_changed(uint32_t identity)
 {
     Q_UNUSED(identity);
+    requestPreferredDescriptionInfo();
+}
+
+void KisWaylandAPISurfaceFeedback::requestPreferredDescriptionInfo()
+{
     m_preferred = std::make_unique<KisWaylandAPIImageDescription>(get_preferred());
     connect(m_preferred.get(), &KisWaylandAPIImageDescription::done, this, &KisWaylandAPISurfaceFeedback::preferredChanged);
 }

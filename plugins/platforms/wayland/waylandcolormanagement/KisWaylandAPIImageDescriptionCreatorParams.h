@@ -11,7 +11,7 @@
 #include <qwayland-color-management-v1.h>
 
 class KisWaylandAPIColorManager;
-class KisWaylandAPIImageDescription;
+class KisWaylandAPIImageDescriptionNoInfo;
 namespace KisSurfaceColorimetry {
     class WaylandSurfaceDescription;
 }
@@ -25,7 +25,7 @@ public:
 
     ~KisWaylandAPIImageDescriptionCreatorParams();
 
-    std::unique_ptr<KisWaylandAPIImageDescription> createImageDescription(const KisSurfaceColorimetry::WaylandSurfaceDescription &data);
+    std::unique_ptr<KisWaylandAPIImageDescriptionNoInfo> createImageDescription(const KisSurfaceColorimetry::WaylandSurfaceDescription &data);
 
 private:
     KisWaylandAPIColorManager *m_colorManager;

@@ -248,7 +248,7 @@ QFuture<bool> KisWaylandSurfaceColorManager::setSurfaceDescription(const KisSurf
     }
 
     KisWaylandAPIImageDescriptionCreatorParams creator(m_waylandManager.get());
-    std::shared_ptr<KisWaylandAPIImageDescription> descriptionObject =
+    std::shared_ptr<KisWaylandAPIImageDescriptionNoInfo> descriptionObject =
         creator.createImageDescription(waylandDescription);
 
     QPromise<bool> imageDescriptionPromise;

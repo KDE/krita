@@ -114,19 +114,17 @@ void KisWaylandAPIImageDescriptionInfo::wp_image_description_info_v1_icc_file(in
     qWarning() << "WARNING: wp_image_description_info_v1_icc_file was received, but we don't support ICC files for the surface description!";
 }
 
-KisWaylandAPIImageDescription::KisWaylandAPIImageDescription(::wp_image_description_v1 *descr)
+KisWaylandAPIImageDescriptionNoInfo::KisWaylandAPIImageDescriptionNoInfo(::wp_image_description_v1 *descr)
     : QtWayland::wp_image_description_v1(descr)
-    , info(get_information())
 {
-    connect(&info, &KisWaylandAPIImageDescriptionInfo::done, this, &KisWaylandAPIImageDescription::done);
 }
 
-KisWaylandAPIImageDescription::~KisWaylandAPIImageDescription()
+KisWaylandAPIImageDescriptionNoInfo::~KisWaylandAPIImageDescriptionNoInfo()
 {
     wp_image_description_v1_destroy(object());
 }
 
-void KisWaylandAPIImageDescription::wp_image_description_v1_failed(uint32_t cause, const QString &msg)
+void KisWaylandAPIImageDescriptionNoInfo::wp_image_description_v1_failed(uint32_t cause, const QString &msg)
 {
     using cause_type = QtWayland::wp_image_description_v1::cause;
 
@@ -149,13 +147,21 @@ void KisWaylandAPIImageDescription::wp_image_description_v1_failed(uint32_t caus
     }
 
     qWarning() << "KisWaylandImageDescription: Failed to create image description:" << causeText << ": " << msg;
+    m_error = realCause;
     Q_EMIT sigDescriptionConstructed(false);
 }
 
-void KisWaylandAPIImageDescription::wp_image_description_v1_ready(uint32_t identity)
+void KisWaylandAPIImageDescriptionNoInfo::wp_image_description_v1_ready(uint32_t identity)
 {
     m_identity = identity;
     Q_EMIT sigDescriptionConstructed(true);
+}
+
+KisWaylandAPIImageDescription::KisWaylandAPIImageDescription(::wp_image_description_v1 *descr)
+    : KisWaylandAPIImageDescriptionNoInfo(descr)
+    , info(get_information())
+{
+    connect(&info, &KisWaylandAPIImageDescriptionInfo::done, this, &KisWaylandAPIImageDescription::done);
 }
 
 #include "moc_KisWaylandAPIImageDescription.cpp"

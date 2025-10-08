@@ -3146,9 +3146,9 @@ void TestSvgText::testSearchingTreeIndex()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextNodeEditorSP node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
+    KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
 
-    QVERIFY(node->properties());
+    QVERIFY(node.properties());
 }
 
 /**
@@ -3163,8 +3163,8 @@ void TestSvgText::testRangeForTreeIndex()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextNodeEditorSP node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
-    QPair<int, int> range = textShape->findRangeForNodeEditor(node);
+    KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
+    QPair<int, int> range = textShape->findRangeForNodeIndex(node);
 
     QCOMPARE(range.first, 10);
     QCOMPARE(range.second, 15);
@@ -3182,15 +3182,15 @@ void TestSvgText::testSetPropertiesOnTreeIndex()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextNodeEditorSP node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
+    KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
 
-    QVERIFY(node->properties()->hasProperty(KoSvgTextProperties::FontStyleId));
+    QVERIFY(node.properties()->hasProperty(KoSvgTextProperties::FontStyleId));
 
-    node->properties()->setProperty(KoSvgTextProperties::FontWeightId, 700);
-    node->properties()->removeProperty(KoSvgTextProperties::FontStyleId);
+    node.properties()->setProperty(KoSvgTextProperties::FontWeightId, 700);
+    node.properties()->removeProperty(KoSvgTextProperties::FontStyleId);
 
-    QVERIFY(!node->properties()->hasProperty(KoSvgTextProperties::FontStyleId));
-    QVERIFY(node->properties()->hasProperty(KoSvgTextProperties::FontWeightId));
+    QVERIFY(!node.properties()->hasProperty(KoSvgTextProperties::FontStyleId));
+    QVERIFY(node.properties()->hasProperty(KoSvgTextProperties::FontWeightId));
 }
 
 void TestSvgText::testInsertTransforms_data()

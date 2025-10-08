@@ -18,9 +18,8 @@
 #include <QFlags>
 
 class KoSvgTextShapeMemento;
-class KoSvgTextNodeEditor;
+class KoSvgTextNodeIndex;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
-typedef QSharedPointer<KoSvgTextNodeEditor> KoSvgTextNodeEditorSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
@@ -390,7 +389,7 @@ public:
      * @return the nodeEditor of the first content element found with a given property id.
      * @propertyId -- id to search for.
      */
-    KoSvgTextNodeEditorSP findNodeEditorForPropertyId(KoSvgTextProperties::PropertyId propertyId);
+    KoSvgTextNodeIndex findNodeEditorForPropertyId(KoSvgTextProperties::PropertyId propertyId);
 
     /**
      * @brief findRangeForNodeEditor
@@ -399,7 +398,7 @@ public:
      * @return A QPair<int,int> describing cursor position range encompassed by the tree index and it's children.
      * Will return {-1, -1} when the tree index is invalid.
      */
-    QPair<int, int> findRangeForNodeEditor(KoSvgTextNodeEditorSP node) const;
+    QPair<int, int> findRangeForNodeIndex(const KoSvgTextNodeIndex &node) const;
 
     /*--------------- Properties ---------------*/
 
@@ -565,33 +564,39 @@ private:
  * allow the direct editing of properties or any
  * text path on the given node.
  */
-class KRITAFLAKE_EXPORT KoSvgTextNodeEditor {
+#include <KisForest.h>
+class KoSvgTextContentElement;
+class KRITAFLAKE_EXPORT KoSvgTextNodeIndex {
 public:
-    KoSvgTextNodeEditor () {}
-    virtual ~KoSvgTextNodeEditor() {}
+    KoSvgTextNodeIndex (KisForest<KoSvgTextContentElement>::child_iterator textElement);
+    KoSvgTextNodeIndex(const KoSvgTextNodeIndex &rhs);
+    ~KoSvgTextNodeIndex();
 
     /**
      * @brief properties
      * The properties for this node as a pointer.
      * @return properties for this node.
      */
-    virtual KoSvgTextProperties *properties() {return nullptr;}
+    KoSvgTextProperties *properties();
 
     /**
      * @brief textPathInfo
      * the text path info for this node as a pointer.
      * @return the current text path info.
      */
-    virtual KoSvgText::TextOnPathInfo *textPathInfo() {return nullptr;}
+    KoSvgText::TextOnPathInfo *textPathInfo();
 
     /**
      * @brief textPath
      * @return the textPath of this node, may be null.
      */
-    virtual KoShape *textPath() {return nullptr;}
+    KoShape *textPath();
 
 private:
     friend class KoSvgTextShape;
+    struct Private;
+    QScopedPointer<Private> d;
+
 };
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase

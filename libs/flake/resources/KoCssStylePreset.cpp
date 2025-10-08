@@ -422,10 +422,10 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         if (textShape) {
             setName(textShape->additionalAttribute(TITLE));
             addMetaData(DESCRIPTION, textShape->additionalAttribute(DESC));
-            KoSvgTextNodeEditorSP node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::KraTextStyleType);
+            KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::KraTextStyleType);
             QString styleType = STYLE_TYPE_PARAGRAPH;
-            if (node->properties()) {
-                KoSvgTextProperties props = *(node->properties());
+            if (node.properties()) {
+                KoSvgTextProperties props = *(node.properties());
                 styleType = props.property(KoSvgTextProperties::KraTextStyleType).toString();
                 if (props.hasProperty(KoSvgTextProperties::KraTextStyleResolution)) {
                     addMetaData(STORED_PPI, props.property(KoSvgTextProperties::KraTextStyleResolution));
@@ -436,7 +436,7 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                 }
                 setProperties(props);
 
-                QPair<int, int> pos = textShape->findRangeForNodeEditor(node);
+                QPair<int, int> pos = textShape->findRangeForNodeIndex(node);
                 pos.first = textShape->indexForPos(pos.first);
                 pos.second = textShape->indexForPos(pos.second);
 

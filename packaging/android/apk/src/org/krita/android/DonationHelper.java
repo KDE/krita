@@ -254,7 +254,7 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
             // This will "consume" the product, meaning the user will not have
             // it anymore and it will become available for purchase again.
             /////////////////////////////////////////////////////////////////////
-            // Log.w(TAG, "Developer consuming purchase " + purchaseToken);
+            // Log.w(TAG, "Developer consuming purchase " + purchase.getPurchaseToken());
             // mBillingClient.consumeAsync(
             //     com.android.billingclient.api.ConsumeParams.newBuilder()
             //         .setPurchaseToken(purchase.getPurchaseToken())

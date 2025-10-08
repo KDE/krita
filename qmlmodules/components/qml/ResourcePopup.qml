@@ -29,6 +29,8 @@ Button {
     property alias resourceDelegate: resourceView.resourceDelegate;
     property alias addResourceRowVisible: resourceView.addResourceRowVisible;
 
+    property alias placeholderText: textInput.placeholderText;
+
     Connections {
         target: modelWrapper;
         function onResourceFilenameChanged() {

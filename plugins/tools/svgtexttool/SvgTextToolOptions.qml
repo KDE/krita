@@ -89,6 +89,8 @@ Control {
             enabled: !chkCurrentProperties.checked;
             useFileName: false;
 
+            placeholderText: i18nc("@info:placeholder", "Select Style Preset")
+
             resourceType: "css_styles";
             resourceDelegate: Kis.CssStylePresetDelegate {
                 id: presetDelegate;

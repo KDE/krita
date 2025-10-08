@@ -29,6 +29,14 @@ Control {
         tooltip.state: colorGroup;
     }
 
+    Component.onCompleted: {
+        // for some reason palette doesn't get assigned when the qquickwidget has no parent,
+        // so instead we force slotUpdateThemes here. This is not an issue in qt6
+        if (visible && palette.buttonText !== theme.button.textColor) {
+            theme.slotUpdateThemes();
+        }
+    }
+
     palette.alternateBase: theme.view.alternateBackgroundColor;
     palette.base: theme.view.backgroundColor;
     palette.button: theme.button.backgroundColor;

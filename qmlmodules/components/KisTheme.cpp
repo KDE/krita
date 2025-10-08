@@ -119,8 +119,6 @@ KisTheme::KisTheme(QObject *parent)
     , selectionModel(KisThemeColorGroup(KColorScheme::Selection, this))
     , tooltipModel(KisThemeColorGroup(KColorScheme::Tooltip, this))
 {
-    slotUpdateThemes();
-
     connect(KisConfigNotifier::instance(), SIGNAL(signalColorThemeChanged(QString)), this, SLOT(slotUpdateThemes()));
 
     connect(&viewModel, SIGNAL(schemeChanged()), this, SIGNAL(viewChanged()));
@@ -128,6 +126,7 @@ KisTheme::KisTheme(QObject *parent)
     connect(&buttonModel, SIGNAL(schemeChanged()), this, SIGNAL(buttonChanged()));
     connect(&selectionModel, SIGNAL(schemeChanged()), this, SIGNAL(selectionChanged()));
     connect(&tooltipModel, SIGNAL(schemeChanged()), this, SIGNAL(tooltipChanged()));
+    slotUpdateThemes();
 }
 
 KisThemeColorGroup *KisTheme::view()

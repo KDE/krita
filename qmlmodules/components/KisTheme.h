@@ -115,7 +115,7 @@ public:
     KisThemeColorGroup *button();
     KisThemeColorGroup *selection();
     KisThemeColorGroup *tooltip();
-private Q_SLOTS:
+public Q_SLOTS:
     void slotUpdateThemes();
 Q_SIGNALS:
     void viewChanged();

@@ -360,8 +360,13 @@ KoSvgTextProperties SvgTextTool::propertiesForNewText() const
         QVector<KoResourceSP> res = model->resourcesForName(presetName);
         if (res.first()) {
             KoCssStylePresetSP style = res.first().staticCast<KoCssStylePreset>();
+            qreal dpi = 72;
+            KisCanvas2 *canvas2 = qobject_cast<KisCanvas2 *>(this->canvas());
+            if (canvas2) {
+                dpi = canvas2->image()->xRes() * 72.0;
+            }
             if (style) {
-                props = style->properties();
+                props = style->properties(dpi, true);
             }
         }
     }

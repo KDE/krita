@@ -8,6 +8,7 @@
 #include <QApplication>
 
 #include <QStack>
+#include <QMessageBox>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -245,6 +246,25 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
     QVector<LayerStyleMapping> allStylesXml;
     using namespace std::placeholders;
 
+    bool convertTextToShape = true;
+    for (int i = 0; i < layerSection.nLayers; i++) {
+        if (!layerSection.layers.at(i)->infoBlocks.textData.isNull()) {
+            KisImportUserFeedbackInterface::Result result =
+                    m_feedbackInterface->askUser([&] (QWidget *parent) {
+                    QMessageBox::StandardButton btn = QMessageBox::question(parent,
+                                                i18nc("@title:window PSD import question about text.", "Found Text Layers"),
+                                                i18nc("PSD import question about text",
+                                                      "Found text objects, do you wish to load them as editable text shapes? "
+                                                      "If not, they will be loaded as pixel data, which will be visually"
+                                                      " more accurate to the original file."));
+                    return (btn == QMessageBox::Yes);
+            });
+            convertTextToShape = (result == KisImportUserFeedbackInterface::Success
+                                  || result == KisImportUserFeedbackInterface::SuppressedByBatchMode);
+            break;
+        }
+    }
+
     // read the channels for the various layers
     for(int i = 0; i < layerSection.nLayers; ++i) {
 
@@ -473,7 +493,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 }
 
 
-            } else if (!layerRecord->infoBlocks.textData.isNull()) {
+            } else if (!layerRecord->infoBlocks.textData.isNull() && convertTextToShape) {
                 KisShapeLayerSP textLayer = new KisShapeLayer(m_doc->shapeController(), m_image, layerRecord->layerName, layerRecord->opacity);
                 KisAslCallbackObjectCatcher catcher;
                 psd_layer_type_shape text;

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-08 03:30+0000\n"
-"PO-Revision-Date: 2025-09-28 19:35+0400\n"
+"POT-Creation-Date: 2025-10-09 03:36+0000\n"
+"PO-Revision-Date: 2025-10-08 21:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -17429,7 +17429,7 @@ msgstr ""
 "أعلاه"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1559
+#: libs/ui/forms/KisWelcomePage.ui:1636
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -19513,7 +19513,7 @@ msgstr "متقدم..."
 #: libs/ui/forms/wdggeneralsettings.ui:1533
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "اضغط مطولاً لفتح قوائم السياق"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -34876,7 +34876,7 @@ msgstr "التصق بالبكسل"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, kde-format
 msgid "Pressure Gain"
-msgstr "الكسب بالضغط"
+msgstr "زيادة الضغط"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
 #, kde-format

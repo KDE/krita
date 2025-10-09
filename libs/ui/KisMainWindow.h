@@ -502,6 +502,7 @@ private:
 
     void setMainWindowLayoutForCurrentMainWidget(int widgetIndex, bool widgetIndexChanged);
     void adjustLayoutForWelcomePage();
+    void applyActionIconOverridesFromLocalXML();
 
 private:
 
@@ -522,9 +523,6 @@ private:
 
     QString m_errorMessage;
     bool m_dieOnError;
-
-private:
-    void applyActionIconOverridesFromLocalXML();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

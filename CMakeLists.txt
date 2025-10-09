@@ -783,7 +783,7 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF${KF_MAJOR}Crash PROPERTIES
         DESCRIPTION "KDE's Crash Handler"
-        URL "https://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
+        URL "https://api.kde.org/kcrash-index.html"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide crash reporting on Linux")
 
@@ -1195,7 +1195,7 @@ macro_bool_to_01(Python_Development_FOUND HAVE_PYTHONLIBS)
 find_package(SIP "4.19.13")
 set_package_properties(SIP PROPERTIES
     DESCRIPTION "Support for generating SIP Python bindings"
-    URL "https://www.riverbankcomputing.com/software/sip/download"
+    URL "https://github.com/Python-SIP/sip"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(SIP_FOUND HAVE_SIP)
@@ -1393,7 +1393,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     find_package(KDcrawQt6 5.0.0)
     set_package_properties(KDcrawQt6 PROPERTIES
         DESCRIPTION "A thread-safe wrapper around libraw"
-        URL "https://api.kde.org/libkdcraw/html/index.html"
+        URL "https://invent.kde.org/graphics/libkdcraw"
         TYPE OPTIONAL
         PURPOSE "Needed for reading RAW files"
     )
@@ -1401,7 +1401,7 @@ else()
     find_package(KF5KDcraw 5.0.0)
     set_package_properties(KF5KDcraw PROPERTIES
         DESCRIPTION "A thread-safe wrapper around libraw"
-        URL "https://api.kde.org/libkdcraw/html/index.html"
+        URL "https://invent.kde.org/graphics/libkdcraw"
         TYPE OPTIONAL
         PURPOSE "Needed for reading RAW files"
     )

@@ -221,9 +221,6 @@ Q_SIGNALS:
      */
     void enableOk(bool);
 
-public Q_SLOTS:
-    void slotChangeIconButton();
-
 private:
     Q_PRIVATE_SLOT(d, void slotToolBarSelected(int index))
 
@@ -236,6 +233,8 @@ private:
     Q_PRIVATE_SLOT(d, void slotDownButton())
 
     Q_PRIVATE_SLOT(d, void slotDropped(ToolBarListWidget *, int, ToolBarItem *, bool))
+
+    Q_PRIVATE_SLOT(d, void slotChangeIconButton())
 
 private:
     friend class KisKEditToolBarWidgetPrivate;

@@ -799,11 +799,6 @@ KisKEditToolBarWidget::~KisKEditToolBarWidget()
     delete d;
 }
 
-void KisKEditToolBarWidget::slotChangeIconButton()
-{
-    d->slotChangeIconButton();
-}
-
 void KisKEditToolBarWidget::load(const QString &file, bool global, const QString &defaultToolBar)
 {
     d->initOldStyle(file, global, defaultToolBar);
@@ -1074,10 +1069,7 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
     m_changeIconAction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_changeIconAction->setEnabled(false);
 
-    QObject::connect(m_changeIconAction,
-                 &QToolButton::clicked,
-                 m_widget,
-                 &KisKEditToolBarWidget::slotChangeIconButton);
+    QObject::connect(m_changeIconAction, SIGNAL(clicked()), m_widget, SLOT(slotChangeIconButton()));
 
     KListWidgetSearchLine *activeListSearchLine = new KListWidgetSearchLine(m_widget, m_activeList);
     activeListSearchLine->setPlaceholderText(i18n("Filter"));

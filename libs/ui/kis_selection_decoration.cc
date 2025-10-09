@@ -66,7 +66,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     // selections should be at the top of the stack
     setPriority(100);
 
-    m_selectionAssistantsDecoration = new KisSelectionActionsPanel(this->view()->viewManager(), this);
+    m_selectionActionsPanel = new KisSelectionActionsPanel(this->view()->viewManager(), this);
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()
@@ -192,7 +192,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_UNUSED(canvas);
 
     if (!selectionIsActive()) {
-        m_selectionAssistantsDecoration->drawDecoration(gc, converter, canvas, false);
+        m_selectionActionsPanel->drawDecoration(gc, converter, canvas, false);
         return;
     };
     if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
@@ -239,7 +239,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.restore();
 
     // render Selection Action Bar
-    m_selectionAssistantsDecoration->drawDecoration(gc, converter, canvas, m_selectionActionBarEnabled);
+    m_selectionActionsPanel->drawDecoration(gc, converter, canvas, m_selectionActionBarEnabled);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

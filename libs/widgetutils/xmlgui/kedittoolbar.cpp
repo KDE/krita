@@ -1558,6 +1558,12 @@ void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
     list->setIconSize(QSize(22, 22));
     list->setResizeMode(QListWidget::Adjust);
     list->setSelectionMode(QAbstractItemView::SingleSelection);
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(list);
+    if (scroller) {
+        QObject::connect(scroller, &QScroller::stateChanged, m_widget, [&](QScroller::State state) {
+            KisKineticScroller::updateCursor(m_widget, state);
+        });
+    }
 
     // Fill the list
     for (const QString &iconName : loadedIcons) {

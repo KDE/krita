@@ -31,8 +31,10 @@ class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
 {
     Q_OBJECT
 public:
-    KisSelectionActionsPanel(QObject *parent);
+    KisSelectionActionsPanel() = delete;
+    KisSelectionActionsPanel(KisViewManager *viewManager, QObject *parent);
     ~KisSelectionActionsPanel();
+
     void drawDecoration(QPainter &gc,
                         const KisCoordinatesConverter *converter,
                         KisCanvas2 *canvas,

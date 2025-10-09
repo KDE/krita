@@ -66,8 +66,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     // selections should be at the top of the stack
     setPriority(100);
 
-    m_selectionAssistantsDecoration = new KisSelectionActionsPanel(this);
-    m_selectionAssistantsDecoration->setViewManager(this->view()->viewManager());
+    m_selectionAssistantsDecoration = new KisSelectionActionsPanel(this->view()->viewManager(), this);
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()

@@ -44,6 +44,7 @@
 #include <kis_icon_utils.h>
 #include "kis_action_registry.h"
 #include <KisKineticScroller.h>
+#include <kis_assert.h>
 
 static const char separatorstring[] = QT_TRANSLATE_NOOP("KEditToolBar", "--- separator ---");
 
@@ -1479,18 +1480,11 @@ void KisKEditToolBarWidgetPrivate::removeActive(ToolBarItem *item)
 void KisKEditToolBarWidgetPrivate::slotUpButton()
 {
     ToolBarItem *item = m_activeList->currentItem();
-
-    if (!item) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(item);
 
     int row = item->listWidget()->row(item) - 1;
     // make sure we're not the top item already
-    if (row < 0) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(row >= 0);
 
     // we're modified, so let this change
     Q_EMIT m_widget->enableOk(true);
@@ -1532,18 +1526,11 @@ void KisKEditToolBarWidgetPrivate::moveActive(ToolBarItem *item, ToolBarItem *be
 void KisKEditToolBarWidgetPrivate::slotDownButton()
 {
     ToolBarItem *item = m_activeList->currentItem();
-
-    if (!item) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(item);
 
     // make sure we're not the bottom item already
     int newRow = item->listWidget()->row(item) + 1;
-    if (newRow >= item->listWidget()->count()) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(newRow < item->listWidget()->count());
 
     // we're modified, so let this change
     Q_EMIT m_widget->enableOk(true);
@@ -1554,16 +1541,10 @@ void KisKEditToolBarWidgetPrivate::slotDownButton()
 void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
 {
     ToolBarItem *toolitem = m_activeList->currentItem();
-    if (!toolitem || toolitem->isSeparator()) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(toolitem && !toolitem->isSeparator());
 
     QDomElement elem = findElementForToolBarItem(toolitem);
-    if (elem.isNull()) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!elem.isNull());
 
     QStringList loadedIcons = KisIconUtils::allUniqueLoadedIconNames();
 

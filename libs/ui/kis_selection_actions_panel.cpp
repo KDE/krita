@@ -98,7 +98,7 @@ void KisSelectionActionsPanel::setViewManager(KisViewManager *viewManager)
     d->m_selectionManager = viewManager->selectionManager();
 }
 
-void KisSelectionActionsPanel::drawDecoration(QPainter &gc,
+void KisSelectionActionsPanel::draw(QPainter &gc,
                                                       const KisCoordinatesConverter *converter,
                                                       KisCanvas2 *canvas,
                                                       bool selectionActionBarEnabled)

@@ -1099,12 +1099,12 @@ void KoSvgTextShape::cleanUp()
     shapeChangedPriv(ContentChanged);
 }
 
-KisForest<KoSvgTextContentElement>::child_iterator findNodeEditorForPropertyIdImpl(KisForest<KoSvgTextContentElement>::child_iterator parent, KoSvgTextProperties::PropertyId propertyId) {
+KisForest<KoSvgTextContentElement>::child_iterator findNodeIndexForPropertyIdImpl(KisForest<KoSvgTextContentElement>::child_iterator parent, KoSvgTextProperties::PropertyId propertyId) {
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
         if (child->properties.hasProperty(propertyId)) {
             return child;
         } else if (KisForestDetail::childBegin(child) != KisForestDetail::childEnd(child)) {
-            auto found = findNodeEditorForPropertyIdImpl(child, propertyId);
+            auto found = findNodeIndexForPropertyIdImpl(child, propertyId);
             if (found != child) {
                 return found;
             }
@@ -1113,13 +1113,13 @@ KisForest<KoSvgTextContentElement>::child_iterator findNodeEditorForPropertyIdIm
     return parent;
 }
 
-KoSvgTextNodeIndex KoSvgTextShape::findNodeEditorForPropertyId(KoSvgTextProperties::PropertyId propertyId)
+KoSvgTextNodeIndex KoSvgTextShape::findNodeIndexForPropertyId(KoSvgTextProperties::PropertyId propertyId)
 {
     for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
         if (it->properties.hasProperty(propertyId)) {
             return Private::createTextNodeIndex(it);
         } else if (KisForestDetail::childBegin(it) != KisForestDetail::childEnd(it)) {
-            auto found = findNodeEditorForPropertyIdImpl(it, propertyId);
+            auto found = findNodeIndexForPropertyIdImpl(it, propertyId);
             if (found != it) {
                 return Private::createTextNodeIndex(found);
             }

@@ -374,26 +374,26 @@ public:
     void cleanUp();
 
 /*****************************************************************************
- * KoSvgTextNodeEditor functions.
+ * KoSvgTextNodeIndex functions.
  *
  * SVG Text is internally a tree of nodes, with each node having text
  * properties, and the child nodes furthest from the root having text content.
  * While we can access the latter by using ranges, and we can easily access
  * the root node by using -1, there's no way to access the nodes that may
- * be inbetween. KoSvgTextNodeEditor allows accessing these nodes.
+ * be inbetween. KoSvgTextNodeIndex allows accessing these nodes.
  *
  ****************************************************************************/
 
     /**
-     * @brief findNodeEditorForPropertyId
-     * @return the nodeEditor of the first content element found with a given property id.
+     * @brief findNodeIndexForPropertyId
+     * @return the nodeIndex of the first content element found with a given property id.
      * @propertyId -- id to search for.
      */
-    KoSvgTextNodeIndex findNodeEditorForPropertyId(KoSvgTextProperties::PropertyId propertyId);
+    KoSvgTextNodeIndex findNodeIndexForPropertyId(KoSvgTextProperties::PropertyId propertyId);
 
     /**
-     * @brief findRangeForNodeEditor
-     * Find the start and end cursor position for a given nodeEditor.
+     * @brief findRangeForNodeIndex
+     * Find the start and end cursor position for a given nodeIndex.
      * @param node the tree index to find the range for.
      * @return A QPair<int,int> describing cursor position range encompassed by the tree index and it's children.
      * Will return {-1, -1} when the tree index is invalid.
@@ -556,7 +556,7 @@ private:
 };
 
 /**
- * @brief The KoSvgTextNodeEditor class
+ * @brief The KoSvgTextNodeIndex class
  *
  * Because SVG text is a tree, it is not always
  * possible to edit nodes by range. This class can

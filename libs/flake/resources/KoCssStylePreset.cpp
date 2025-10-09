@@ -422,7 +422,7 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         if (textShape) {
             setName(textShape->additionalAttribute(TITLE));
             addMetaData(DESCRIPTION, textShape->additionalAttribute(DESC));
-            KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::KraTextStyleType);
+            KoSvgTextNodeIndex node = textShape->findNodeIndexForPropertyId(KoSvgTextProperties::KraTextStyleType);
             QString styleType = STYLE_TYPE_PARAGRAPH;
             if (node.properties()) {
                 KoSvgTextProperties props = *(node.properties());

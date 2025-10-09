@@ -3146,7 +3146,7 @@ void TestSvgText::testSearchingTreeIndex()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
+    KoSvgTextNodeIndex node = textShape->findNodeIndexForPropertyId(KoSvgTextProperties::FontStyleId);
 
     QVERIFY(node.properties());
 }
@@ -3163,7 +3163,7 @@ void TestSvgText::testRangeForTreeIndex()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
+    KoSvgTextNodeIndex node = textShape->findNodeIndexForPropertyId(KoSvgTextProperties::FontStyleId);
     QPair<int, int> range = textShape->findRangeForNodeIndex(node);
 
     QCOMPARE(range.first, 10);
@@ -3182,7 +3182,7 @@ void TestSvgText::testSetPropertiesOnTreeIndex()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextNodeIndex node = textShape->findNodeEditorForPropertyId(KoSvgTextProperties::FontStyleId);
+    KoSvgTextNodeIndex node = textShape->findNodeIndexForPropertyId(KoSvgTextProperties::FontStyleId);
 
     QVERIFY(node.properties()->hasProperty(KoSvgTextProperties::FontStyleId));
 

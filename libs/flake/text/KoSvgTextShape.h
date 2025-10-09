@@ -564,11 +564,8 @@ private:
  * allow the direct editing of properties or any
  * text path on the given node.
  */
-#include <KisForest.h>
-class KoSvgTextContentElement;
 class KRITAFLAKE_EXPORT KoSvgTextNodeIndex {
 public:
-    KoSvgTextNodeIndex (KisForest<KoSvgTextContentElement>::child_iterator textElement);
     KoSvgTextNodeIndex(const KoSvgTextNodeIndex &rhs);
     ~KoSvgTextNodeIndex();
 
@@ -591,6 +588,10 @@ public:
      * @return the textPath of this node, may be null.
      */
     KoShape *textPath();
+
+private:
+    // for internal factory use only
+    KoSvgTextNodeIndex();
 
 private:
     friend class KoSvgTextShape;

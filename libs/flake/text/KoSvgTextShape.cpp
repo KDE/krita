@@ -90,10 +90,17 @@ struct KoSvgTextNodeIndex::Private {
     KisForest<KoSvgTextContentElement>::child_iterator textElement;
 };
 
-KoSvgTextNodeIndex::KoSvgTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement)
-    :  d(new Private(textElement))
+// for the use in KoSvgTextShape::Private::createTextNodeIndex() only
+KoSvgTextNodeIndex::KoSvgTextNodeIndex()
+    : d() // Private is **not** initialized, to be intialized by the factory method
 {
+}
 
+KoSvgTextNodeIndex KoSvgTextShape::Private::createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement)
+{
+    KoSvgTextNodeIndex index;
+    index.d.reset(new KoSvgTextNodeIndex::Private(textElement));
+    return index;
 }
 
 KoSvgTextNodeIndex::KoSvgTextNodeIndex(const KoSvgTextNodeIndex &rhs)
@@ -1110,15 +1117,15 @@ KoSvgTextNodeIndex KoSvgTextShape::findNodeEditorForPropertyId(KoSvgTextProperti
 {
     for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
         if (it->properties.hasProperty(propertyId)) {
-            return KoSvgTextNodeIndex(it);
+            return Private::createTextNodeIndex(it);
         } else if (KisForestDetail::childBegin(it) != KisForestDetail::childEnd(it)) {
             auto found = findNodeEditorForPropertyIdImpl(it, propertyId);
             if (found != it) {
-                return KoSvgTextNodeIndex(found);
+                return Private::createTextNodeIndex(found);
             }
         }
     }
-    return KoSvgTextNodeIndex(d->textData.childBegin());
+    return Private::createTextNodeIndex(d->textData.childBegin());
 }
 
 QPair<int, int> KoSvgTextShape::findRangeForNodeIndex(const KoSvgTextNodeIndex &node) const

@@ -1145,6 +1145,8 @@ public:
         }
         return false;
     }
+
+    static KoSvgTextNodeIndex createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement);
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

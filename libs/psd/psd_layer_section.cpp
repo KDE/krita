@@ -745,6 +745,18 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             svgConverter.convertToSvg(&svgtext, &styles);
                             // unsure about the boundingBox, needs more research.
                             textData.boundingBox = text->boundingRect().normalized();
+                            if (text->shapesInside().isEmpty()) {
+                                // Scale bbox to inline
+                                const KoSvgText::AutoValue inlineSizeProp =
+                                    text->textProperties().property(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+                                if (!inlineSizeProp.isAuto) {
+                                    if (text->writingMode() == KoSvgText::HorizontalTB) {
+                                        textData.boundingBox.setWidth(inlineSizeProp.customValue);
+                                    } else {
+                                        textData.boundingBox.setHeight(inlineSizeProp.customValue);
+                                    }
+                                }
+                            }
                             textData.bounds = text->outlineRect().normalized();
 
                             bool res = convert.convertToPSDTextEngineData(svgtext, textData.bounds, text->shapesInside(), globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);

@@ -1514,9 +1514,6 @@ void KisPaintopBox::slotEraserBrushOpacityToggled(bool value)
 
 void KisPaintopBox::slotUpdateSelectionIcon()
 {
-    m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
-    m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
-
     KisConfig cfg(true);
     if (!cfg.toolOptionsInDocker() && m_toolOptionsPopupButton) {
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
@@ -1525,9 +1522,6 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace-chooser"));
-
-    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    m_reloadAction->setIcon(KisIconUtils::loadIcon("reload-preset"));
 
     if (m_disablePressureAction->isChecked()) {
         m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));

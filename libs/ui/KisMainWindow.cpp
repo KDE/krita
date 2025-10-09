@@ -942,6 +942,8 @@ void KisMainWindow::slotThemeChanged()
         }
     }
 
+    applyActionIconOverridesFromLocalXML();
+
     Q_EMIT themeChanged();
 }
 

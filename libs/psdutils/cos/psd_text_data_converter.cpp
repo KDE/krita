@@ -874,7 +874,7 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
     QRectF bounds;
 
     // load text shape
-    KoPathShape *textShape = nullptr;
+    QScopedPointer<KoPathShape> textShape;
     double textPathStartOffset = -3;
     double shapePadding = 0.0;
     int textType = 0; ///< 0 = point text, 1 = paragraph text (including text in shape), 2 = text on path.
@@ -914,7 +914,7 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
                 //qDebug() << QJsonObject::fromVariantHash(textFrame);
 
                 if (textType > 0) {
-                    KoPathShape *textCurve = new KoPathShape();
+                    QScopedPointer<KoPathShape> textCurve(new KoPathShape());
                     QVariantHash data = textFrame.value("/Data").toHash();
                     QVariantList points = textFrame.value("/Bezier").toHash().value("/Points").toList();
                     QVariantList range = data.value("/TextOnPathTRange").toList();
@@ -964,7 +964,7 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
                         if (endPoint == startPoint) {
                             textCurve->closeMerge();
                         }
-                        textShape = textCurve;
+                        textShape.reset(textCurve.data());
                     }
                     if (!range.isEmpty()) {
                         textPathStartOffset = range[0].toDouble();
@@ -1617,11 +1617,11 @@ bool PsdTextDataConverter::convertToPSDTextEngineData(const QString &svgText, QR
 
     QList<QPointF> points;
 
-    KoPathShape *textShape = nullptr;
+    QScopedPointer<KoPathShape> textShape;
     Q_FOREACH(KoShape *shape, shapesInside) {
         KoPathShape *p = dynamic_cast<KoPathShape*>(shape);
         if (p) {
-            textShape = p;
+            textShape.reset(p);
             break;
         }
     }

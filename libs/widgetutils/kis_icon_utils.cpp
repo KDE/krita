@@ -227,10 +227,6 @@ QStringList allUniqueLoadedIconNames()
     QStringList list = QStringList(uniq.cbegin(), uniq.cend());
     list.sort();
 
-    qDebug() << "Unique icons loaded count:" << list.size();
-    for (const QString &name : list) {
-        qDebug().noquote() << name;
-    }
     return list;
 }
 

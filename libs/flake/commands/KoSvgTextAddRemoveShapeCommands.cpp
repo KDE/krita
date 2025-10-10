@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KoSvgTextAddRemoveShapeCommands.h"
+#include "kis_assert.h"
+#include <optional>
+#include "kis_debug.h"
 
 #include <KoSvgTextShape.h>
 #include <KoShapeContainer.h>
@@ -20,7 +23,7 @@ struct KoSvgTextAddRemoveShapeCommandImpl::Private {
     ~Private() {}
     KoSvgTextShape *textShape = nullptr;
     KoShape* shape = nullptr;
-    KoShapeContainer *originalShapeParent = nullptr;
+    std::optional<KoShapeContainer*> originalShapeParent;
     KoSvgTextShapeMementoSP memento;
     KoSvgTextAddRemoveShapeCommandImpl::ContourType type;
     bool removeCommand;
@@ -30,7 +33,20 @@ KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgText
     : KisCommandUtils::FlipFlopCommand(state, parent)
     , d(new Private(textShape, shape))
 {
+    /**
+     * 1) The shapes should belong to the same parent or have no parent at all.
+     * 2) The parent of the text shape is always preserved (null or non-null)
+     * 3) The parent of the contour shape is dropped, since it is put into
+     *    a virtual group created by the text shape
+     */
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!textShape->parent() || !shape->parent() || textShape->parent() == shape->parent());
+
     d->removeCommand = state == FINALIZING;
+
+    if (!d->removeCommand) {
+        d->originalShapeParent = shape->parent();
+    }
+
     if (type == Unknown) {
         if (d->textShape->shapesInside().contains(shape)) {
             d->type = Inside;
@@ -57,15 +73,20 @@ void KoSvgTextAddRemoveShapeCommandImpl::partB()
     QRectF updateRectText = d->textShape->boundingRect();
     QRectF updateRectShape = d->shape->boundingRect();
 
-    // Because "applyAbsoluteTransformation" applies ontop of the local transform, we want to get the minimal transfor difference.
-    QTransform removeFromAbsolute = d->originalShapeParent? d->originalShapeParent->absoluteTransformation() * d->shape->transformation(): d->shape->transformation();
-    QTransform absoluteTf = (d->shape->absoluteTransformation()*removeFromAbsolute.inverted());
+    KoShapeContainer *newParent = d->originalShapeParent.has_value() ? d->originalShapeParent.value() : d->textShape->parent();
+    const QTransform newParentTransform = newParent ? newParent->absoluteTransformation() : QTransform();
+    const QTransform absoluteTf = newParentTransform.inverted() * d->textShape->absoluteTransformation();
 
     d->textShape->removeShapesFromContours({d->shape}, true);
+    // by this time d->shape->parent() is set to nullptr
+
+    if (newParent) {
+        // set new parent if exists
+        d->shape->setParent(newParent);
+    }
 
     if (!d->removeCommand) {
         d->textShape->setMemento(d->memento);
-        d->shape->setParent(d->originalShapeParent);
     } else {
         d->textShape->relayout();
     }
@@ -81,10 +102,10 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
 {
     QRectF updateRect = d->textShape->boundingRect();
     updateRect |= d->shape->boundingRect();
-    if (!d->removeCommand) {
-        d->originalShapeParent = d->shape->parent();
-    }
-    QTransform absoluteTf = (d->shape->absoluteTransformation()*d->shape->transformation().inverted()) * d->textShape->absoluteTransformation().inverted();
+
+    KoShapeContainer *oldParent = d->shape->parent();
+    const QTransform oldParentTransform = oldParent ? oldParent->absoluteTransformation() : QTransform();
+    const QTransform absoluteTf = d->textShape->absoluteTransformation().inverted() * oldParentTransform;
 
     if (d->type == Inside) {
         d->textShape->addShapeContours({d->shape}, true);
@@ -118,7 +139,7 @@ KoSvgTextAddShapeCommand::~KoSvgTextAddShapeCommand()
 KoSvgTextRemoveShapeCommand::KoSvgTextRemoveShapeCommand(KoSvgTextShape *textShape, KoShape *shape, KUndo2Command *parentCommand)
 : KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, Unknown, FINALIZING, parentCommand)
 {
-
+    // the \p shape will be ungrouped into the parent of \p textShape
 }
 
 KoSvgTextRemoveShapeCommand::~KoSvgTextRemoveShapeCommand()

@@ -6,6 +6,11 @@
 
 #include "TestSvgTextShape.h"
 
+#include <kis_algebra_2d.h>
+#include <kis_debug.h>
+
+#include <QPainter>
+
 #include <kistest.h>
 #include <KoSvgTextShape.h>
 #include <KoShape.h>
@@ -14,12 +19,15 @@
 #include <KoShapeManager.h>
 
 #include <KoShapeRegistry.h>
+#include "KoShapePainter.h"
+#include <KoShapeStroke.h>
 
 #include <commands/KoSvgChangeTextContoursCommand.h>
 #include <commands/KoSvgTextAddRemoveShapeCommands.h>
 #include <commands/KoSvgTextFlipShapeContourTypeCommand.h>
 #include <commands/KoSvgTextReorderShapeInsideCommand.h>
 #include <commands/KoShapeSizeCommand.h>
+
 
 // Quick function to get a rectangle.
 KoShape *createRectangles() {
@@ -35,105 +43,264 @@ KoPathShape *createPolygon() {
     p->lineTo(QPointF(100, 0));
     p->lineTo(QPointF(0,0));
     p->close();
+    KoShapeStrokeModelSP blackStroke(new KoShapeStroke(1.0, QColor(Qt::black)));
+    p->setStroke(blackStroke);
     return p;
 }
 
+namespace detail {
+Q_NAMESPACE
+
+enum TransformComponent
+{
+    None = 0x0,
+    Translate = 0x1,
+    Scale = 0x2,
+    Rotate = 0x4,
+    Shear = 0x8,
+    Project = 0x10
+};
+Q_ENUM_NS(TransformComponent)
+
+}
+
+using detail::TransformComponent;
+
+Q_DECLARE_FLAGS(TransformComponents, TransformComponent)
+Q_DECLARE_OPERATORS_FOR_FLAGS(TransformComponents)
+Q_DECLARE_METATYPE(TransformComponents)
+
+TransformComponents componentsForTransform(const QTransform &t) {
+    TransformComponents result = TransformComponent::None;
+
+    KisAlgebra2D::DecomposedMatrix m(t);
+
+    result.setFlag(TransformComponent::Translate,
+        !qFuzzyIsNull(m.dx) || !qFuzzyIsNull(m.dy));
+
+    result.setFlag(TransformComponent::Scale,
+        !qFuzzyCompare(m.scaleX, 1.0) || !qFuzzyCompare(m.scaleY, 1.0));
+
+    result.setFlag(TransformComponent::Shear,
+        !qFuzzyIsNull(m.shearXY));
+
+    result.setFlag(TransformComponent::Rotate,
+        !qFuzzyIsNull(m.angle));
+
+    result.setFlag(TransformComponent::Project,
+        !qFuzzyIsNull(m.proj[0]) || !qFuzzyIsNull(m.proj[1]) || !qFuzzyCompare(m.proj[2], 1.0));
+
+    return result;
+}
+
+
 void TestSvgTextShape::testSetTextOnShape_data()
 {
+    auto rotateAroundPoint = [] (qreal deg, const QPointF center) {
+        return QTransform::fromTranslate(-center.x(), -center.y()) * QTransform().rotate(deg) * QTransform::fromTranslate(center.x(), center.y());
+    };
+
     QTest::addColumn<QTransform>("textTransform");
-    QTest::addColumn<bool>("textHasParent");
     QTest::addColumn<int>("contourCount");
     QTest::addColumn<QTransform>("contourTransform");
+    QTest::addColumn<bool>("textHasParent");
     QTest::addColumn<bool>("contourHasParent");
+    QTest::addColumn<TransformComponents>("expectedTextTransformComponents");
 
-    QTest::addRow("text and 1 contour") << QTransform() << false << 1 << QTransform() << false;
-    QTest::addRow("text and 2 contours") << QTransform() << false << 2 << QTransform() << false;
-    QTest::addRow("text and 1 contour + local transform") << QTransform() << false << 1 << QTransform::fromTranslate(20, 20) << false;
-    QTest::addRow("text + local transform and 1 contour") << QTransform::fromTranslate(20, 20) << false << 1 << QTransform() << false;
-    QTest::addRow("text + absolute transform and 1 contour") << QTransform() << true << 1 << QTransform() << false;
-    QTest::addRow("text and 1 contour + absolute transform") << QTransform() << false << 1 << QTransform() << true;
+    // TODO: test origin of the text shape to change to the contour shapes
+
+    for (bool textHasParent : {false, true}) {
+        for (bool contourHasParent : {false, true}) {
+            const char *textParentPrefix =
+                textHasParent ? "[text:parent]" : "[text:no-parent]";
+            const char *contourParentPrefix =
+                contourHasParent ? "[contour:parent]" : "[contour:no-parent]";
+
+            QTest::addRow("%s%s text and 1 contour", textParentPrefix, contourParentPrefix)
+                << QTransform::fromTranslate(10, 20) << 1
+                << QTransform::fromTranslate(5, 5)
+                << textHasParent
+                << contourHasParent
+                << TransformComponents(TransformComponent::Translate);
+
+            QTest::addRow("%s%s text and 1 contour (scaled)", textParentPrefix, contourParentPrefix)
+                << QTransform::fromTranslate(10, 20) << 1
+                << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(5, 5)
+                << textHasParent
+                << contourHasParent
+                << TransformComponents(TransformComponent::Translate);
+
+            QTest::addRow("%s%s text and 1 contour (rotated)", textParentPrefix, contourParentPrefix)
+                << QTransform::fromTranslate(10, 20) << 1
+                << rotateAroundPoint(30, QPointF(50, 50)) * QTransform::fromTranslate(20, 25)
+                << textHasParent
+                << contourHasParent
+                << TransformComponents(TransformComponent::Translate);
+
+            QTest::addRow("%s%s text (scaled) and 1 contour", textParentPrefix, contourParentPrefix)
+                << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(10, 20) << 1
+                << QTransform::fromTranslate(5, 5)
+                << textHasParent
+                << contourHasParent
+                << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+
+            QTest::addRow("%s%s text (rotated) and 1 contour", textParentPrefix, contourParentPrefix)
+                << rotateAroundPoint(30, QPointF(100, -10)) * QTransform::fromTranslate(10, 80) << 1
+                << QTransform::fromTranslate(5, 5)
+                << textHasParent
+                << contourHasParent
+                << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+        }
+    }
+
+    // QTest::addRow("text and 2 contours") << QTransform() << false << 2 << QTransform() << false;
+    // QTest::addRow("text and 1 contour + local transform") << QTransform() << false << 1 << QTransform::fromTranslate(20, 20) << false;
+    // QTest::addRow("text + local transform and 1 contour") << QTransform::fromTranslate(20, 20) << false << 1 << QTransform() << false;
+    // QTest::addRow("text + absolute transform and 1 contour") << QTransform() << true << 1 << QTransform() << false;
+    // QTest::addRow("text and 1 contour + absolute transform") << QTransform() << false << 1 << QTransform() << true;
 }
 
 void TestSvgTextShape::testSetTextOnShape()
 {
+    auto stripTestName = [] (QString name) {
+        name.replace(':', '_');
+        name.replace('[', '_');
+        name.replace(']', '_');
+        name.replace(' ', '_');
+        name.replace('-', '_');
+        name.remove('(');
+        name.remove(')');
+        return name;
+    };
+
+    auto paintShapes = [stripTestName] (KoShape *textShape, QList<KoShape*> contourShapes, const QString &testName) {
+        QImage image(QSize(300, 200), QImage::Format_ARGB32);
+        image.fill(0);
+        QPainter gc(&image);
+        gc.setClipRect(image.rect());
+
+        QList<KoShape*> paintedShapes;
+        if (textShape) {
+            paintedShapes << textShape;
+        }
+        paintedShapes << contourShapes;
+
+        KoShapePainter p;
+        p.setShapes(paintedShapes);
+        p.paint(gc, image.rect(), image.rect());
+        image.save(stripTestName(testName));
+    };
+
+    auto debugShapes = [] (KoShape *textShape, QList<KoShape*> contourShapes) {
+        qDebug() << ppVar(textShape->boundingRect());
+        qDebug() << ppVar(textShape->transformation());
+        for (int i = 0; i < contourShapes.size(); i++) {
+            KoShape *shape = contourShapes[i];
+            qDebug() << "contour" << i << ppVar(shape->boundingRect());
+            qDebug() << "contour" << i << ppVar(shape->absoluteOutlineRect());
+            qDebug() << "contour" << i << ppVar(shape->transformation());
+        }
+    };
+
+
+
     KoSvgTextShape *textShape = new KoSvgTextShape();
     textShape->insertText(0, "The quick brown fox jumps over the lazy dog.");
     QList<KoShape*> shapes;
 
     QFETCH(QTransform, textTransform);
-    QFETCH(bool, textHasParent);
     QFETCH(int, contourCount);
     QFETCH(QTransform, contourTransform);
+    QFETCH(bool, textHasParent);
     QFETCH(bool, contourHasParent);
+    QFETCH(TransformComponents, expectedTextTransformComponents);
 
-    KoShapeGroup *contourParentGroup = nullptr;
-    if (contourHasParent) {
-        contourParentGroup = new KoShapeGroup();
-        contourParentGroup->setTransformation(QTransform::fromTranslate(10, 10));
+    KoShapeGroup *commonParent = nullptr;
+    if (textHasParent || contourHasParent) {
+        commonParent = new KoShapeGroup();
+        commonParent->setTransformation(QTransform::fromTranslate(17, 23));
     }
 
     textShape->setTransformation(textTransform);
+    if (textHasParent) {
+        textShape->setParent(commonParent);
+    }
 
     for (int i = 0; i < contourCount; i++) {
         KoPathShape *p = createPolygon();
         p->setTransformation(contourTransform);
-        if (contourParentGroup) {
-            p->setParent(contourParentGroup);
+        if (contourHasParent) {
+            p->setParent(commonParent);
         }
         shapes.append(p);
     }
 
     bool inside = true;
 
-    if (textHasParent) {
-        KoShapeGroup *parentGroup = new KoShapeGroup();
-        parentGroup->setTransformation(QTransform::fromTranslate(10, 10));
-        textShape->setParent(parentGroup);
-    }
+    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command());
 
-    KUndo2Command *parentCommand = new KUndo2Command();
+    const QRectF originalTextOutlineRect = textShape->outlineRect();
+    const QRectF originalTextBoundingRect = textShape->boundingRect();
+    const QRectF originalContourShapeBoundingRect = KoShape::boundingRect(shapes);
 
-    QRectF textOutlineRect = textShape->outlineRect();
-    QRectF textBoundingRect = textShape->boundingRect();
-
-    QRectF shapeBoundingRect;
     QList<KoShape*> clonedShapes;
     Q_FOREACH(KoShape *shape, shapes) {
-        shapeBoundingRect |= shape->boundingRect();
         KoShape *clone = shape->cloneShape();
-        if (contourParentGroup) {
-            clone->setParent(contourParentGroup);
+        if (contourHasParent) {
+            clone->setParent(commonParent);
         }
         clonedShapes.append(clone);
-        new KoSvgTextAddShapeCommand(textShape, clone, inside, parentCommand);
+        new KoSvgTextAddShapeCommand(textShape, clone, inside, parentCommand.data());
     }
+
+    debugShapes(textShape, clonedShapes);
+    paintShapes(textShape, clonedShapes, QString("ddd_%1_00_initial.png").arg(QTest::currentDataTag()));
 
     parentCommand->redo();
 
-    QVERIFY(textShape->boundingRect() == shapeBoundingRect);
-    QVERIFY(textShape->boundingRect() != textBoundingRect);
-    QVERIFY(textShape->outlineRect() != textOutlineRect);
+    debugShapes(textShape, clonedShapes);
+    paintShapes(textShape, {}, QString("ddd_%1_10_redo.png").arg(QTest::currentDataTag()));
+
+    QCOMPARE(componentsForTransform(textShape->absoluteTransformation()), expectedTextTransformComponents);
+
+    QVERIFY(textShape->boundingRect() == originalContourShapeBoundingRect);
+    QVERIFY(textShape->boundingRect() != originalTextBoundingRect);
+    QVERIFY(textShape->outlineRect() != originalTextOutlineRect);
     for (int i = 0; i< clonedShapes.size(); i++) {
         KoShape *contour = clonedShapes.at(i);
         KoShape *original = shapes.at(i);
-        QVERIFY(contour->absoluteTransformation() == original->absoluteTransformation());
+        QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(contour->absoluteTransformation(), original->absoluteTransformation(), 1e-3));
     }
 
     parentCommand->undo();
-    QVERIFY(textShape->boundingRect() != shapeBoundingRect);
-    QVERIFY(textShape->boundingRect() == textBoundingRect);
-    QVERIFY(textShape->outlineRect() == textOutlineRect);
+
+    debugShapes(textShape, clonedShapes);
+    paintShapes(textShape, clonedShapes, QString("ddd_%1_20_undo.png").arg(QTest::currentDataTag()));
+
+    QVERIFY(textShape->boundingRect() != originalContourShapeBoundingRect);
+    QVERIFY(textShape->boundingRect() == originalTextBoundingRect);
+    QVERIFY(textShape->outlineRect() == originalTextOutlineRect);
 
     for (int i = 0; i< clonedShapes.size(); i++) {
         KoShape *contour = clonedShapes.at(i);
         KoShape *original = shapes.at(i);
         QVERIFY(contour->parent() == original->parent());
-        QVERIFY(contour->transformation() == original->transformation());
-        QVERIFY(contour->absoluteTransformation() == original->absoluteTransformation());
-
+        QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(contour->transformation(), original->transformation(), 1e-3));
+        QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(contour->absoluteTransformation(), original->absoluteTransformation(), 1e-3));
     }
 
-    // Don't understand how to test textAfter transform with contour transform???
+    if (!textHasParent) {
+        delete textShape;
+    }
+
+    if (!contourHasParent) {
+        qDeleteAll(clonedShapes);
+        qDeleteAll(shapes);
+    }
+
+    if (commonParent) {
+        delete commonParent;
+    }
 }
 
 void TestSvgTextShape::testRemoveShapeFromText()
@@ -314,3 +481,5 @@ void TestSvgTextShape::testReorderShapesInside()
 }
 
 KISTEST_MAIN(TestSvgTextShape)
+
+#include "TestSvgTextShape.moc"

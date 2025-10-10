@@ -154,7 +154,7 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
 
         auto recoverDeprecatedProperty = [] (auto data, KisPaintOpSettingsSP settings) {
             /// we just round-trip the save operation to save the property
-            /// out to json object
+            /// out to the json object
 
             data.read(settings.data());
             data.write(settings.data());

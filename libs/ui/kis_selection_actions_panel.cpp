@@ -81,7 +81,8 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager, 
     : QObject(parent)
     , d(new Private)
 {
-    setViewManager(viewManager);
+    d->m_viewManager = viewManager;
+    d->m_selectionManager = viewManager->selectionManager();
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -90,12 +91,6 @@ KisSelectionActionsPanel::~KisSelectionActionsPanel()
     // them to make sure they are not accessed after the decoration dies
     qDeleteAll(d->m_buttons);
     d->m_buttons.clear();
-}
-
-void KisSelectionActionsPanel::setViewManager(KisViewManager *viewManager)
-{
-    d->m_viewManager = viewManager;
-    d->m_selectionManager = viewManager->selectionManager();
 }
 
 void KisSelectionActionsPanel::draw(QPainter &gc,

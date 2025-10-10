@@ -39,7 +39,6 @@ public:
                 const KisCoordinatesConverter *converter,
                 KisCanvas2 *canvas,
                 bool selectionActionBarEnabled);
-    void setViewManager(KisViewManager *viewManager);
     bool eventFilter(QObject *obj, QEvent *event) override;
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
     QPushButton *createButton(const QString &iconName, const QString &tooltip);

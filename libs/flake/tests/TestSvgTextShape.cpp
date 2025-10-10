@@ -107,8 +107,6 @@ void TestSvgTextShape::testSetTextOnShape_data()
     QTest::addColumn<bool>("contourHasParent");
     QTest::addColumn<TransformComponents>("expectedTextTransformComponents");
 
-    // TODO: test origin of the text shape to change to the contour shapes
-
     for (bool textHasParent : {false, true}) {
         for (bool contourHasParent : {false, true}) {
             const char *textParentPrefix =

@@ -403,7 +403,7 @@ void KoToolProxy::touchEvent(QTouchEvent* event, const QPointF& point)
     switch (event->touchPointStates())
     {
     case Qt::TouchPointPressed:
-        d->activeTool->mousePressEvent(&ev);
+        countMultiClick(&ev, QEvent::TouchBegin);
         break;
     case Qt::TouchPointMoved:
         d->activeTool->mouseMoveEvent(&ev);

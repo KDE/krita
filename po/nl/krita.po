@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 02:06+0000\n"
-"PO-Revision-Date: 2025-10-08 11:46+0200\n"
+"PO-Revision-Date: 2025-10-09 22:16+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -28072,18 +28072,16 @@ msgid "Hang First"
 msgstr "Formaat opslaan"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
-#, fuzzy, kde-format
-#| msgid "Line:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Line End:"
 msgstr "Regeleinde:"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:132
-#, fuzzy, kde-format
-#| msgid "File Handling"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Bestandsverwerking"
+msgstr "Niets hangt"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
@@ -28132,12 +28130,10 @@ msgid "Store this language between sessions."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
-#, fuzzy, kde-format
-#| msgctxt "Script list label"
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script:"
-msgstr "&Script"
+msgstr "Script:"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, kde-format
@@ -28161,9 +28157,7 @@ msgid "letter-spacing, tracking, kerning"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Break"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Line Break"
 msgstr "Regelafbreking"
@@ -28211,11 +28205,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
-#, fuzzy, kde-format
-#| msgid "String"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Strict"
-msgstr "STRICT"
+msgstr "Strict"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:84
 #, kde-format
@@ -28257,27 +28250,22 @@ msgid "line-height, line-spacing"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "@option:check"
 msgid "Normal"
 msgstr "Normaal"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:14
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "OpenType Feature Tag"
+#, kde-format
 msgctxt "@label"
 msgid "OpenType Features"
-msgstr "Tag voor mogelijkheid Opentype"
+msgstr "Mogelijkheden van Opentype"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure the Table of Contents"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure Open Type features."
-msgstr "De inhoudsopgave instellen"
+msgstr "Mogelijkheden van Open Type configureren"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -28293,11 +28281,9 @@ msgid "No OpenType features are currently set."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
+#, kde-format
 msgid "Remove feature."
-msgstr "Sjabloon verwijderen"
+msgstr "Mogelijkheid verwijderen."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/dockers/textproperties/qml/ResourceView.qml:244
@@ -28308,12 +28294,10 @@ msgid "Search..."
 msgstr "Zoeken..."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:12
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Small Capitals"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr "Kleine hoofdletters"
+msgstr "Glyphs: hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
@@ -28330,50 +28314,40 @@ msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
-#, fuzzy, kde-format
-#| msgid "Small Caps"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Small Caps"
 msgstr "Kleine hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:79
-#, fuzzy, kde-format
-#| msgid "Small Caps"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Small Caps"
-msgstr "Kleine hoofdletters"
+msgstr "Alle kleine hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:80
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Petite Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
 msgstr "Zeer kleine hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:81
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Petite Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Petite Caps"
-msgstr "Zeer kleine hoofdletters"
+msgstr "Alle zeer kleine hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:82
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Unicase"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Unicase"
 msgstr "Letters met gelijke hoogte"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Titling"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
-msgstr "Titels toevoegen"
+msgstr "Hoofdletter voor titels"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:12
 #, kde-format
@@ -28404,42 +28378,34 @@ msgid "Variant:"
 msgstr "Variant"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:101
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS78 Forms"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS78"
-msgstr "<title>JIS</title>"
+msgstr "JIS78"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:102
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS83 Forms"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS83"
-msgstr "<title>JIS</title>"
+msgstr "JIS83"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:103
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS90 Forms"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS90"
-msgstr "<title>JIS</title>"
+msgstr "JIS90"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:104
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS04"
-msgstr "<title>JIS</title>"
+msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Simplified Forms"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Simplified"
-msgstr "Vereenvoudigde vormen"
+msgstr "Vereenvoudigd"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:106
 #, kde-format
@@ -28448,8 +28414,7 @@ msgid "Traditional"
 msgstr "Traditioneel"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Width:"
 msgstr "Breedte:"
@@ -28474,11 +28439,10 @@ msgid "Ruby"
 msgstr "Ruby"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:12
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr "Glyph-palet"
+msgstr "Glyphs: ligaturen"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
@@ -28497,8 +28461,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
-#, fuzzy, kde-format
-#| msgid "Common"
+#, kde-format
 msgctxt "@option:check"
 msgid "Common"
 msgstr "Algemeen"
@@ -28518,20 +28481,16 @@ msgid "Historical"
 msgstr "Historisch"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:125
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Contextual Swash"
+#, kde-format
 msgctxt "@option:check"
 msgid "Contextual"
-msgstr "Contextuele Swash"
+msgstr "Contextueel"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:12
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Alphanumeric"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr "Alfanumeriek"
+msgstr "Glyphs: numeriek"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
@@ -28557,23 +28516,19 @@ msgid "Style:"
 msgstr "Stijl:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
-#, fuzzy, kde-format
-#| msgid "Lightning"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lining"
-msgstr "Lightning"
+msgstr "Lining"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Oldstyle Figures"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr "Ouderwetse figuren"
+msgstr "Ouderwets"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Spacing:"
 msgstr "Spatiëring:"
@@ -28585,12 +28540,10 @@ msgid "Tabular"
 msgstr "Tabel"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Fractions"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Fractions:"
-msgstr "Breuken"
+msgstr "Fracties:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:156
 #, kde-format
@@ -28599,34 +28552,28 @@ msgid "Diagonal"
 msgstr "Diagonaal"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:157
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Stacked"
 msgstr "Gestapeld"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:173
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Ordinals"
+#, kde-format
 msgctxt "@option:check"
 msgid "Ordinals"
 msgstr "Rangtelwoorden"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:183
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Slashed Zero"
+#, kde-format
 msgctxt "@option:check"
 msgid "Slashed Zero"
 msgstr "Nul met streep"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Position"
-msgstr "Positie"
+msgstr "Glyphs: positie"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:16
 #, kde-format
@@ -28649,8 +28596,7 @@ msgid "Overflow Wrap:"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:100
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Tag"

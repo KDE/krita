@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 02:06+0000\n"
-"PO-Revision-Date: 2025-10-09 09:57+0300\n"
+"PO-Revision-Date: 2025-10-09 22:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -27932,6 +27932,8 @@ msgctxt ""
 "insensitive"
 msgid "font-family, typeface, font, fallback"
 msgstr ""
+"font-family, typeface, font, fallback, гарнітура шрифту, вигляд, шрифт, "
+"резерв"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
@@ -27944,18 +27946,15 @@ msgid "Family list is empty."
 msgstr "Список гарнітур порожній."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:171
-#, fuzzy, kde-format
-#| msgid "Add Fallback Language"
+#, kde-format
 msgid "Add Fallback Family"
-msgstr "Додати запасну мову"
+msgstr "Додати резервну гарнітуру"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@label"
 msgid "Font Kerning"
-msgstr "Кернінґ"
+msgstr "Кернінґ шрифту"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, kde-format
@@ -27974,9 +27973,7 @@ msgid "font-kerning, tracking"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size"
 msgstr "Розмір шрифту"
@@ -27985,7 +27982,7 @@ msgstr "Розмір шрифту"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr ""
+msgstr "Розмір шрифту надає змогу встановлювати розмір символів."
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -27993,15 +27990,13 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "size, small, big, medium, розмір, малий, великий, середній"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size Adjust"
-msgstr "Розмір шрифту"
+msgstr "Коригування розміру шрифту"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:17
 #, kde-format
@@ -28019,7 +28014,7 @@ msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:button"
 msgid "Calculate"
 msgstr "Обчислити"
@@ -28055,17 +28050,16 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
-msgstr "&Вага"
+msgstr "Вага: "
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:302
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr ""
+msgstr "Синтезувати напівжирний"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, kde-format
@@ -28074,27 +28068,25 @@ msgid "Width: "
 msgstr "Ширина: "
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:328
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr "Нахил"
+msgstr "Нахил:"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
 msgstr "Курсив"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:341
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oblique"
-msgstr "Похилий"
+msgstr "Нахилений"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:362
-#, fuzzy, kde-format
-#| msgid "°"
+#, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
 msgstr "°"
@@ -28103,7 +28095,7 @@ msgstr "°"
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr ""
+msgstr "Синтезувати нахилений"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
 #, kde-format
@@ -28114,15 +28106,13 @@ msgstr "Оптичний розмір"
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
 msgid "No extra variable axes in this font"
-msgstr ""
+msgstr "У цьому шрифті немає додаткових змінних осей"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "General Punctuation"
+#, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr "Загальна пунктуація"
+msgstr "Висяча пунктуація"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
 #, kde-format
@@ -28139,45 +28129,43 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "hanging-punctuation, burasagari, висяча пунктуація"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr ""
+msgstr "Провисання першого"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
-#, fuzzy, kde-format
-#| msgid "Line:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Line End:"
-msgstr "Кінчик лінії:"
+msgstr "Кінець рядка:"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:132
-#, fuzzy, kde-format
-#| msgid "File Handling"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Робота з файлами"
+msgstr "Без обвисання"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "Дозволити висячі коми"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "Примусові висячі коми"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr ""
+msgstr "Провисання останнього"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -28199,21 +28187,19 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "language, locale, bcp47, мова, локаль"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Store this language between sessions."
-msgstr ""
+msgstr "Зберігати цю мову між сеансами."
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
-#, fuzzy, kde-format
-#| msgctxt "Script list label"
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script:"
-msgstr "Скрипт:"
+msgstr "Писемність:"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, kde-format
@@ -28268,7 +28254,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr ""
+msgstr "Вільно"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
@@ -28285,8 +28271,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
-#, fuzzy, kde-format
-#| msgid "String"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Strict"
 msgstr "Строго"
@@ -28298,7 +28283,7 @@ msgid "Soft breaks will not be allowed before small kana."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Anywhere"
 msgstr "Будь-де"
@@ -28321,6 +28306,8 @@ msgstr "Висота рядка"
 msgctxt "@info:tooltip"
 msgid "Line Height controls the line height used for the range of text."
 msgstr ""
+"Висота рядка визначає висоту рядка, яку буде використано для фрагмента "
+"тексту."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:20
 #, kde-format
@@ -28328,30 +28315,25 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "line-height, line-spacing, висота рядка, інтервал між рядками"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "@option:check"
 msgid "Normal"
 msgstr "Звичайний"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:14
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "OpenType Feature Tag"
+#, kde-format
 msgctxt "@label"
 msgid "OpenType Features"
-msgstr "Мітка можливості OpenType"
+msgstr "Можливості OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "OpenType Feature Tag"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure Open Type features."
-msgstr "Мітка можливості OpenType"
+msgstr "Налаштувати можливості Open Type."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -28364,37 +28346,32 @@ msgstr ""
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "Зараз не встановлено жодних можливостей OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
+#, kde-format
 msgid "Remove feature."
-msgstr "Вилучити шаблон"
+msgstr "Вилучити можливість."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/dockers/textproperties/qml/ResourceView.qml:244
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Шукати…"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:12
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Small Capitals"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr "Мала капітель"
+msgstr "Гліфи: капітель"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable opentype features related to capitals"
-msgstr ""
+msgstr "Увімкнути можливості opentype, які пов'язано із капітеллю"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -28411,28 +28388,22 @@ msgid "Small Caps"
 msgstr "Малі прописні"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:79
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Small Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Small Caps"
-msgstr "Мала капітель"
+msgstr "Уся мала капітель"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:80
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Petite Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
-msgstr "Мініатюрна капітель"
+msgstr "Мініатюрні прописні"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:81
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Petite Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Petite Caps"
-msgstr "Мініатюрна капітель"
+msgstr "Усі мініатюрні прописні"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:82
 #, kde-format
@@ -28441,18 +28412,16 @@ msgid "Unicase"
 msgstr "Єдиний регістр"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Titling"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
-msgstr "Форми заголовків"
+msgstr "Заголовочні прописні"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr ""
+msgstr "Гліфи: східноазійські"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
@@ -28501,24 +28470,19 @@ msgid "JIS04"
 msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Simplified Forms"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Simplified"
 msgstr "Спрощений"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:106
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Traditional Forms"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Traditional"
 msgstr "Традиційний"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Width:"
 msgstr "Ширина:"
@@ -28531,30 +28495,29 @@ msgstr "Повна ширина"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional"
-msgstr "Пропорційний"
+msgstr "Пропорційна"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Ruby"
-msgstr "Ruby"
+msgstr "Рубінова"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:12
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr "Палітра гліфів"
+msgstr "Гліфи: лігатури"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
 msgstr ""
+"Увімкнути або вимкнути лігатури і контекстуальні альтернативи у тексті."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -28567,8 +28530,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "@option:check"
 msgid "Common"
 msgstr "Загальні"
@@ -28580,9 +28542,7 @@ msgid "Discretionary"
 msgstr "Дискреційні"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:117
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Historical Forms"
+#, kde-format
 msgctxt "@option:check"
 msgid "Historical"
 msgstr "Історичні"
@@ -28597,13 +28557,13 @@ msgstr "Контекстуальні"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr ""
+msgstr "Гліфи: числові"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "Увімкнути пов'язані з числами форми гліфів у тексті."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -28629,46 +28589,37 @@ msgid "Lining"
 msgstr "Вирівняні"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Oldstyle Figures"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr "Фігури у старовинному стилі"
+msgstr "Старовинний стиль"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Spacing:"
-msgstr "Проміжки: "
+msgstr "Інтервал:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:137
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Tabular Figures"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Tabular"
 msgstr "Табличні"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Fractions"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Fractions:"
-msgstr "Дроби"
+msgstr "Дроби:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:156
-#, fuzzy, kde-format
-#| msgid "Emboss Diagonal"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Diagonal"
 msgstr "Діагональні"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:157
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Stacked"
 msgstr "Двоповерхові"
@@ -28686,17 +28637,16 @@ msgid "Slashed Zero"
 msgstr "Перекреслений нуль"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Position"
-msgstr "Розташування"
+msgstr "Гліфи: розташування"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "Увімкнути верхні і нижні індекси у тексті."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -28710,64 +28660,55 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "Загортання при переповненні:"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:100
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Мітка"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:143
-#, fuzzy, kde-format
-#| msgid "Assign to tag"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Пов’язати з міткою"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:168
-#, fuzzy, kde-format
-#| msgid "New Name:"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
-msgstr "Нова назва мітки"
+msgstr "Назва нової мітки…"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:186
-#, fuzzy, kde-format
-#| msgid "Remove from this tag"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "Вилучити з цієї мітки"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:195
-#, fuzzy, kde-format
-#| msgid "Remove from other tag"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "Вилучити з іншої мітки"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:252
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Search Actions"
+#, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
-msgstr "Шукати дії"
+msgstr "Шукати у мітці"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:271
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
-msgstr "Імпортувати"
+msgstr "Імпортувати %1"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:295
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
-msgstr "Вилучити"
+msgstr "Вилучено %1"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
 #, kde-format
@@ -28776,14 +28717,14 @@ msgid ""
 "Revert property. Within the current selection, this property has different "
 "values."
 msgstr ""
+"Скасувати зміну властивості. У поточному позначеному фрагменті ця "
+"властивість має інші значення."
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:23
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure program"
-#| msgid "Aperture priority"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert property."
-msgstr "Пріоритет діафрагми"
+msgstr "Скасувати зміну властивості."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:14
 #, kde-format
@@ -28796,18 +28737,19 @@ msgstr "Розмір табуляції"
 msgctxt "@info:tooltip"
 msgid "Tab Size allows defining the size of tabulation characters."
 msgstr ""
+"За допомогою значення розміру табуляції можна визначити розмір символів "
+"табуляції."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr "Розмір табуляції"
+msgstr "tab-size, розмір табуляції"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
-#, fuzzy, kde-format
-#| msgid "Align"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Align"
 msgstr "Вирівнювання тексту"
@@ -28817,6 +28759,7 @@ msgstr "Вирівнювання тексту"
 msgctxt "@info:tooltip"
 msgid "Text Align sets the alignment for the given block of characters."
 msgstr ""
+"Вирівнювання тексту встановлює вирівнювання для заданого блоку символів."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -28825,19 +28768,18 @@ msgctxt ""
 "insensitive"
 msgid "text-align, justification, text-anchor"
 msgstr ""
+"text-align, justification, text-anchor, вирівнювання тексту, розподіл, "
+"прив'язка тексту"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
-#, fuzzy, kde-format
-#| msgid "Align"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Text Align:"
-msgstr "Вирівнювання тексту"
+msgstr "Вирівнювання тексту:"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:306
 #: plugins/dockers/textproperties/qml/TextAlign.qml:338
-#, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left"
 msgstr "Ліворуч"
@@ -28845,68 +28787,56 @@ msgstr "Ліворуч"
 #: plugins/dockers/textproperties/qml/TextAlign.qml:307
 #: plugins/dockers/textproperties/qml/TextAlign.qml:339
 #: plugins/dockers/textproperties/qml/TextAlign.qml:367
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Start"
 msgstr "Початок"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:308
 #: plugins/dockers/textproperties/qml/TextAlign.qml:340
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Center"
-msgstr "За центром"
+msgstr "Центр"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:309
 #: plugins/dockers/textproperties/qml/TextAlign.qml:341
 #: plugins/dockers/textproperties/qml/TextAlign.qml:369
-#, fuzzy, kde-format
-#| msgctxt "End position of the gradient"
-#| msgid "End:"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "End"
 msgstr "Кінець"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:310
 #: plugins/dockers/textproperties/qml/TextAlign.qml:342
-#, fuzzy, kde-format
-#| msgctxt "Right Mouse Button"
-#| msgid "Right"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right"
 msgstr "Праворуч"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:311
-#, fuzzy, kde-format
-#| msgctxt "Header title for last modified date/time column"
-#| msgid "Last Modified"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Justified"
-msgstr "По ширині"
+msgstr "За шириною"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Left"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Align Last:"
-msgstr "Вирівняти ліворуч"
+msgstr "Вирівнювання останнього:"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:357
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
-msgstr "прив'язка тексту"
+msgstr "Прив'язка тексту:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
-#, fuzzy, kde-format
-#| msgid "Decoration:"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Decoration"
-msgstr "оформлення"
+msgstr "Оформлення тексту"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
 #, kde-format
@@ -28915,6 +28845,8 @@ msgid ""
 "Text Decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"За допомогою оформлення тексту можна підкреслювати рядки, надкреслювати "
+"рядки та перекреслювати текст."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -28925,16 +28857,13 @@ msgid "underline, overline, strikethrough, line-through"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
-#, fuzzy, kde-format
-#| msgid "Line:"
+#, kde-format
 msgctxt "@title:group"
 msgid "Line:"
-msgstr "Лінія"
+msgstr "Лінія:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:177
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Underline"
+#, kde-format
 msgctxt "@option:check"
 msgid "Underline"
 msgstr "Підкреслити"
@@ -28943,15 +28872,13 @@ msgstr "Підкреслити"
 #, kde-format
 msgctxt "@option:check"
 msgid "Overline"
-msgstr "Надкреслений"
+msgstr "Надкреслити"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:205
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Strikethrough"
+#, kde-format
 msgctxt "@option:check"
 msgid "Line-through"
-msgstr "закреслений"
+msgstr "Закреслити"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:222
 #, kde-format
@@ -28960,44 +28887,40 @@ msgid "Color:"
 msgstr "Колір:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:255
-#, fuzzy, kde-format
-#| msgid "Solid"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Solid"
-msgstr "Суцільний"
+msgstr "Суцільна"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:256
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dotted"
-msgstr "Пунктирна"
+msgstr "Пунктир"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:257
-#, fuzzy, kde-format
-#| msgid "Dashed"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dashed"
 msgstr "Штрихова"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:258
-#, fuzzy, kde-format
-#| msgid "Double Press"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Double"
 msgstr "Подвійне"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:259
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Wavy"
-msgstr "Хвилястий"
+msgstr "Хвиляста"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:14
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Indent"
-msgstr "Відступ ліворуч"
+msgstr "Відступ"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
 #, kde-format
@@ -29008,47 +28931,42 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr "Відступ ліворуч"
+msgstr "text-indent, відступ"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
-#, fuzzy, kde-format
-#| msgid "Page Orientation:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Орієнтація сторінки:"
+msgstr "Висячий відступ"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
 msgctxt "@option:check"
 msgid "Indent after hardbreaks"
-msgstr ""
+msgstr "Відступ після жорсткого розриву рядка"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
-#, fuzzy, kde-format
-#| msgid "Characters:"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Character"
 msgstr "Символ"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
-#, fuzzy, kde-format
-#| msgid "Calligraphy"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Paragraph"
 msgstr "Абзац"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:73
-#, fuzzy, kde-format
-#| msgid "Preset"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Preset"
-msgstr "Шаблон"
+msgstr "Набір"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:198
 #, kde-format
@@ -29059,12 +28977,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:216
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Edit Style Preset"
+#, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr "Редагування набору стилів"
+msgstr "Додати набір стилів"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:229
 #, kde-format
@@ -29073,24 +28989,19 @@ msgid "Edit Style Preset"
 msgstr "Редагування набору стилів"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:248
-#, fuzzy, kde-format
-#| msgctxt "@info:placeholder"
-#| msgid "New Style Preset"
+#, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "Новий набір стилів"
+msgstr "Клонувати набір стилів"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
-#, fuzzy, kde-format
-#| msgid "Filter"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Фільтр"
+msgstr "Фільтр…"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:325
-#, fuzzy, kde-format
-#| msgctxt "Group as in Template Group"
-#| msgid "Add Group"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "Додати властивість"
@@ -29102,35 +29013,30 @@ msgid "Add Property..."
 msgstr "Додати властивість…"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:424
-#, fuzzy, kde-format
-#| msgctxt "Wide Gamut Color Selector"
-#| msgid "Configure..."
+#, kde-format
 msgctxt "@label:button"
 msgid "Configure"
 msgstr "Налаштувати"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:39
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
-msgstr "типова видимість"
+msgstr "Типова видимість:"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open Recent"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Relevant"
-msgstr "Відкрити недавні"
+msgstr "Якщо потрібно"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:47
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:108
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr ""
+msgstr "Якщо встановлено"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -29140,11 +29046,10 @@ msgid "Always Show"
 msgstr "Завжди показувати"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:106
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr "Типовий"
+msgstr "За типовим"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, kde-format
@@ -29153,11 +29058,10 @@ msgid "Never Show"
 msgstr "Ніколи не показувати"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:12
-#, fuzzy, kde-format
-#| msgid "Image Rendering"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Rendering"
-msgstr "Обробка зображення"
+msgstr "Обробка тексту"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, kde-format
@@ -29167,13 +29071,13 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
-#, fuzzy, kde-format
-#| msgid "Enable selection outline anti-aliasing"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr "Увімкнути згладжування контуру позначеного"
+msgstr ""
+"text-rendering, hinting, anti-aliasing, показ тексту, гінтінґ, згладжування"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -29184,18 +29088,16 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Speed"
 msgstr "Оптимізувати швидкість"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:84
-#, fuzzy, kde-format
-#| msgid "Enable curve anti-aliasing"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Renders without antialiasing."
-msgstr "Увімкнути згладжування кривих"
+msgstr "Обробляє без згладжування."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:85
 #, kde-format
@@ -29208,14 +29110,13 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
+"Використовує «легкий» гінтінґ по горизонталі і «повний» гінтінґ по вертикалі."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Geometric Precision"
-msgstr "Середнє геометричне"
+msgstr "Геометрична точність"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:88
 #, kde-format
@@ -29253,56 +29154,49 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
-msgstr ""
+msgstr "Регістр:"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Capital Spacing"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
 msgstr "З великої літери"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
 msgstr "Верхній регістр"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:107
-#, fuzzy, kde-format
-#| msgctxt "Lower HSV brightness"
-#| msgid "Lower value "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lower Case"
 msgstr "Нижній регістр"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:125
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Full Widths"
+#, kde-format
 msgctxt "@option:check"
 msgid "Full-width"
-msgstr "Максимальна ширина"
+msgstr "Повна ширина"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:136
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "Повнорозмірна кана"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
-#, fuzzy, kde-format
-#| msgid "Vertical Position"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Underline Position"
-msgstr "Вертикальне розташування"
+msgstr "Розташування підкреслювання"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:15
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "Вказати розташування підкреслювання для оформлення тексту."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -29313,32 +29207,28 @@ msgid "text-decoration-position, underline, left, right, under"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Bottom"
 msgstr "Знизу"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:109
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Left"
-msgstr "Вертикальні лінії"
+msgstr "Вертикально ліворуч"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:110
-#, fuzzy, kde-format
-#| msgid "Vertical Radius:"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Right"
-msgstr "Вертикальний радіус:"
+msgstr "Вертикально праворуч"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "White Space"
-msgstr "Будь-який пропуск"
+msgstr "Пробіл"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:15
 #, kde-format
@@ -29363,44 +29253,34 @@ msgid "Pre"
 msgstr "До"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:124
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr "Без повторення"
+msgstr "Без перенесення"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
-msgstr ""
+msgstr "Попереднє перенесення"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
-msgstr ""
-"Розбити підконтур\n"
-"розбиття підконтуру"
+msgstr "Розривати на пробілах"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Draw Line"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
-msgstr ""
-"Намалювати пряму\n"
-"малювання прямої"
+msgstr "Перед рядком"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/symbols/BalloonSymbols.svg"
-#| msgid "Word Balloons"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Word Break"
-msgstr "Мовні бульки"
+msgstr "Розривати між словами"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:16
 #, kde-format
@@ -29424,12 +29304,13 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "No additional adjustments are made to the regular line break algorithm."
 msgstr ""
+"Без додаткового коригування до звичайного алгоритму перенесення рядків."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "Зберігати усі"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
@@ -29442,11 +29323,10 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "Розривати усі"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
-#, fuzzy, kde-format
-#| msgid "Auto Spacing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Word Spacing"
 msgstr "Інтервал між словами"
@@ -29471,7 +29351,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Writing Mode"
-msgstr "Режим запису"
+msgstr "Режим письма"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, kde-format
@@ -29482,34 +29362,32 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
-#, fuzzy, kde-format
-#| msgid "Text flows horizontal, top to bottom."
+#, kde-format
 msgctxt ""
 "comma separated search terms for the writing-mode property, matching is case-"
 "insensitive"
 msgid "writing-mode, horizontal, vertical, top-to-bottom"
-msgstr "Текст розташовується горизонтально, згори вниз."
+msgstr ""
+"writing-mode, horizontal, vertical, top-to-bottom, режим письма, "
+"горизонтально, вертикально, згори вниз"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Horizontal"
-msgstr "Горизонтально"
+msgstr "Горизонтальний"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:78
-#, fuzzy, kde-format
-#| msgid "Right to Left"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
-msgstr "Справа ліворуч"
+msgstr "Вертикальний, справа ліворуч"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
-#, fuzzy, kde-format
-#| msgid "Left to Right"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
-msgstr "Зліва праворуч"
+msgstr "Вертикальний, зліва праворуч"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -42963,11 +42841,10 @@ msgid "Similar Color Selection Tool"
 msgstr "Інструмент «Вибір подібного кольору»"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:44
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
-msgstr "Альтернативне"
+msgstr "Альтернативи гліфу"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
 #, kde-format

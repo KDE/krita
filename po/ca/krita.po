@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 02:06+0000\n"
-"PO-Revision-Date: 2025-10-08 21:39+0200\n"
+"PO-Revision-Date: 2025-10-09 18:16+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -27455,7 +27455,7 @@ msgstr "Central"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box center."
-msgstr ""
+msgstr "Alinea al centre del quadre em ideogràfic."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
@@ -27469,7 +27469,7 @@ msgstr "Hanging"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
-msgstr ""
+msgstr "Alinea al diacrític com es fa servir en els alfabets bràmics del nord."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -27487,6 +27487,8 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
+"Alinea al centre entre la línia base alfabètica i l'alçada x quan es "
+"col·loca horitzontalment, en vertical aquesta és la línia base central."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
@@ -27501,6 +27503,8 @@ msgstr "Matemàtic"
 msgctxt "@info:tooltip"
 msgid "Align to the mathematical baseline, so that operator symbols align."
 msgstr ""
+"Alinea a la línia base matemàtica, de manera que els símbols de l'operador "
+"s'alineen."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
@@ -27514,7 +27518,7 @@ msgstr "Text superior"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
-msgstr ""
+msgstr "Alinea a l'ascensor."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
@@ -27528,7 +27532,7 @@ msgstr "Text inferior"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
-msgstr ""
+msgstr "Alinea al descensor."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
 #, kde-format
@@ -27543,6 +27547,8 @@ msgid ""
 "Baseline shift allows moving the text away from the baseline, either by "
 "predefined super and subscript values, or by a fixed amount."
 msgstr ""
+"El desplaçament de la línia base permet moure el text fora de la línia base, "
+"ja sigui per valors super i subíndex predefinits, o per una quantitat fixa."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:20
 #, kde-format
@@ -27550,7 +27556,7 @@ msgctxt ""
 "comma separated search terms for the baseline-shift property, matching is "
 "case-insensitive"
 msgid "baseline-shift, superscript, subscript"
-msgstr ""
+msgstr "desplaçament de línia base, superíndex, subíndex"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
@@ -27636,6 +27642,10 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
+"De manera predeterminada, els estils s'emmagatzemen en punts, el que "
+"significa que les mides en píxels seran diferents depenent de la resolució "
+"d'impressió del document. Activeu aquesta opció per a assegurar que l'estil "
+"mantindrà la mateixa mida de píxel en documents diferents."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
 #, kde-format
@@ -27672,6 +27682,7 @@ msgstr "Direcció"
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
 msgstr ""
+"La direcció estableix si el text és d'esquerra a dreta o de dreta a esquerra."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -27680,6 +27691,8 @@ msgctxt ""
 "insensitive"
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
+"de dreta a esquerra, rtl, direcció, bidireccional, aïllat, incrustat, "
+"sobreescrit"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:122
 #, kde-format
@@ -27697,7 +27710,7 @@ msgstr "De dreta a esquerra"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-Bidi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:156
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
@@ -27726,7 +27739,7 @@ msgstr "Incrustat"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Override"
-msgstr "Sobreescriu"
+msgstr "Sobreescrit"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:159
 #, kde-format
@@ -27738,7 +27751,7 @@ msgstr "Aïllat"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "Aïllat-Sobreescrit"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:161
 #, kde-format
@@ -27750,7 +27763,7 @@ msgstr "Text net"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Dominant Baseline"
-msgstr ""
+msgstr "Línia base dominant"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, kde-format
@@ -27759,6 +27772,8 @@ msgid ""
 "Dominant Baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
+"La línia base dominant especifica com s'alineen els fragments de text de "
+"mides diferents, també és la predeterminada per a la línia base d'alineació."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -27766,7 +27781,7 @@ msgctxt ""
 "comma separated search terms for the dominant-baseline property, matching is "
 "case-insensitive"
 msgid "dominant-baseline, mojisoroe"
-msgstr ""
+msgstr "línia base dominant, mojisoroe"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:80
 #: plugins/dockers/textproperties/qml/LineBreak.qml:77
@@ -27785,6 +27800,8 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"Alinea a la línia base alfabètica quan està disposada horitzontalment, "
+"alinea a la línia base central quan està disposada verticalment."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
@@ -27800,6 +27817,10 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
+"La família de lletra permet seleccionar una llista de lletres que s'han "
+"d'utilitzar al text actual. La primera família de lletra és la lletra "
+"principal utilitzada, mentre que cada família de lletra després d'això "
+"s'utilitza com a reserva."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -27807,7 +27828,7 @@ msgctxt ""
 "comma separated search terms for the font-family property, matching is case-"
 "insensitive"
 msgid "font-family, typeface, font, fallback"
-msgstr ""
+msgstr "família de lletra, família tipogràfica, lletra, reserva"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
@@ -27837,6 +27858,8 @@ msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments."
 msgstr ""
+"Activa o desactiva l'interlletratge de lletra. L'interlletratge de lletra "
+"permet ajustar l'espaiat per cada glif."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -27844,7 +27867,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr ""
+msgstr "interlletratge de lletra, seguiment"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -27856,7 +27879,7 @@ msgstr "Mida de la lletra"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr ""
+msgstr "La mida de la lletra permet establir la mida dels caràcters."
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -27864,7 +27887,7 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "mida, petita, gran, mitjana"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, kde-format
@@ -27878,6 +27901,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
+"L'ajust de la mida de la lletra permet establir una relació per la qual ha "
+"de coincidir l'alçada x."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -27885,7 +27910,7 @@ msgctxt ""
 "comma separated search terms for the fontsize adjust property, matching is "
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
-msgstr ""
+msgstr "mida, petita, gran, mitjana, ajust de la mida de la lletra"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -27898,6 +27923,8 @@ msgstr "Calcula"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
+"Calcula la relació alçada x a la mida de la lletra per a la primera família "
+"de la lletra."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
@@ -27912,6 +27939,8 @@ msgid ""
 "Font style allows setting the sub style of the given font family, such as "
 "italics and bold"
 msgstr ""
+"L'estil de la lletra permet establir el subestil de la família de la lletra "
+"indicada, com ara cursiva i negreta"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:20
 #, kde-format
@@ -27922,6 +27951,8 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"gruix, amplada, estil, cursiva, obliqua, estil de lletra, estirament de "
+"lletra, gruix de la lletra, negreta, mida òptica, variació"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
@@ -27933,7 +27964,7 @@ msgstr "Gruix: "
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr ""
+msgstr "Síntesi de negreta"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, kde-format
@@ -27945,7 +27976,7 @@ msgstr "Amplada: "
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr ""
+msgstr "Inclinació:"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
 #, kde-format
@@ -27969,7 +28000,7 @@ msgstr "°"
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr ""
+msgstr "Síntesi d'inclinació"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
 #, kde-format
@@ -27980,7 +28011,7 @@ msgstr "Mida òptica"
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
 msgid "No extra variable axes in this font"
-msgstr ""
+msgstr "No hi ha cap eix variable extra en aquesta lletra"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
 #, kde-format
@@ -27996,6 +28027,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
+"La puntuació Hanging permet l'obertura i el tancament de la puntuació "
+"«hanging», així com les comes. Aquesta implementació només implementa la "
+"puntuació «hanging» de l'estil asiàtic oriental."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -28003,13 +28037,13 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "puntuació hanging, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr ""
+msgstr "Primer Hang"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -28027,19 +28061,19 @@ msgstr "No Hanging"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "Permet les comes «hanging»"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "Força les comes «hanging»"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr ""
+msgstr "Últim Hang"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -28054,6 +28088,8 @@ msgid ""
 "The language of this text shape. Language affects a number of properties, "
 "like glyph shape, upper- and lowercase and line breaking"
 msgstr ""
+"L'idioma d'aquesta forma de text. L'idioma afecta diverses propietats, com "
+"la forma del glif, les majúscules i les minúscules i els salts de línia"
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
 #, kde-format
@@ -28061,13 +28097,13 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "idioma, locale, configuració regional, bcp47"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Store this language between sessions."
-msgstr ""
+msgstr "Emmagatzema aquest idioma entre sessions."
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
 #, kde-format
@@ -28087,6 +28123,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Letter spacing controls the spacing between visible clusters of characters."
 msgstr ""
+"L'espaiat de les lletres controla l'espaiat entre grups visibles de "
+"caràcters."
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:20
 #, kde-format
@@ -28094,7 +28132,7 @@ msgctxt ""
 "comma separated search terms for the letter-spacing property, matching is "
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
-msgstr ""
+msgstr "espaiat de lletres, seguiment, interlletratge"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -28109,6 +28147,9 @@ msgid ""
 "Line Break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
+"Salt de línia permet triar una rigidesa per a l'algorisme de salt de línia. "
+"S'utilitza principalment per a alfabets CJK, requereix que s'estableixi un "
+"idioma."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -28116,25 +28157,27 @@ msgctxt ""
 "comma separated search terms for the line-break property, matching is case-"
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
-msgstr ""
+msgstr "salt de línia, divisió de línia, rigidesa, kinsoku"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
-msgstr ""
+msgstr "No es fan ajustos particulars a l'algorisme de salt de línia"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr ""
+msgstr "Flexible"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
+"Tot i que normalment defineix un algorisme més flexible, actualment és el "
+"mateix que automàtic."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -28143,6 +28186,8 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"Igual que automàtic. Els salts suaus es permetran abans dels kana petits si "
+"l'idioma del text és japonès."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, kde-format
@@ -28154,7 +28199,7 @@ msgstr "Estricte"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr ""
+msgstr "Els salts suaus no es permetran abans del kana petit."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
@@ -28167,7 +28212,7 @@ msgstr "On sigui"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr ""
+msgstr "Es produiran salts suaus al llarg de qualsevol grafema."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
@@ -28180,6 +28225,8 @@ msgstr "Alçada de la línia"
 msgctxt "@info:tooltip"
 msgid "Line Height controls the line height used for the range of text."
 msgstr ""
+"L'alçada de la línia controla l'alçada de la línia utilitzada per a "
+"l'interval de text."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:20
 #, kde-format
@@ -28187,7 +28234,7 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "alçada de línia, espaiat de línia"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
 #, kde-format
@@ -28213,12 +28260,12 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "configuració de les característiques de lletra, OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "Actualment no s'ha establert cap característica d'OpenType."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -28243,7 +28290,7 @@ msgstr "Glifs: Majúscules"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable opentype features related to capitals"
-msgstr ""
+msgstr "Activa les característiques d'OpenType relacionades amb majúscules"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -28252,6 +28299,8 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"lletra variant majúscules, majúscules menudes, majúscules petites, caixa "
+"única, titulació, majúscules"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
@@ -28300,6 +28349,8 @@ msgstr "Glifs: Est d'Àsia"
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
 msgstr ""
+"Activa les formes de glif relacionades amb la disposició de text de l'Àsia "
+"Oriental."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -28310,6 +28361,8 @@ msgid ""
 "font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
 "full-width"
 msgstr ""
+"lletra variant d'àsia oriental, jis78, jis83, jis90, jis04, ruby, "
+"proporcional, amplada completa"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
 #, kde-format
@@ -28388,7 +28441,7 @@ msgstr "Glifs: Lligadures"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
-msgstr ""
+msgstr "Activa o desactiva lligadures i alternatives contextuals en el text."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -28399,6 +28452,8 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"lletra variant de lligadures, lligadures comunes, lligadures discrecionals, "
+"lligadures històriques, alternatives contextuals"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -28434,7 +28489,7 @@ msgstr "Glifs: Numèric"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "Activa les formes de glif relacionades amb els nombres en el text."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -28445,6 +28500,8 @@ msgid ""
 "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"lletra variant numèrica, nombres d'estil antic, nombres alineats, ordinals, "
+"zero barrat, fraccions"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -28517,7 +28574,7 @@ msgstr "Glifs: Posició"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "Activa els superíndex o subíndexs al text."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -28525,13 +28582,13 @@ msgctxt ""
 "comma separated search terms for the font-variant-position property, "
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
-msgstr ""
+msgstr "lletra variant de posició, superíndex, subíndex"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "Ajust de sobreeiximent:"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:100
 #, kde-format
@@ -28588,6 +28645,8 @@ msgid ""
 "Revert property. Within the current selection, this property has different "
 "values."
 msgstr ""
+"Reverteix la propietat. Dins de la selecció actual, aquesta propietat té "
+"valors diferents."
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:23
 #, kde-format
@@ -28599,13 +28658,14 @@ msgstr "Reverteix la propietat."
 #, kde-format
 msgctxt "@title:group"
 msgid "Tab Size"
-msgstr "Mida de la pestanya"
+msgstr "Mida de tabulació"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab Size allows defining the size of tabulation characters."
 msgstr ""
+"La mida de tabulació permet definir la mida dels caràcters de tabulació."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -28613,7 +28673,7 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr ""
+msgstr "mida de tabulació"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
@@ -28625,7 +28685,7 @@ msgstr "Alineació de text"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Text Align sets the alignment for the given block of characters."
-msgstr ""
+msgstr "Alineació de text estableix l'alineació del bloc indicat de caràcters."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -28633,7 +28693,7 @@ msgctxt ""
 "comma separated search terms for the text-anchor property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
-msgstr ""
+msgstr "alineació de text, justificació, àncora de text"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
@@ -28709,6 +28769,8 @@ msgid ""
 "Text Decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"La decoració del text permet dibuixar subratllats, sobreratllats i barrats "
+"al text."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -28716,7 +28778,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration property, matching is "
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
-msgstr ""
+msgstr "subratllat, sobreratllat, barrat, línia barrada"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -28791,6 +28853,8 @@ msgid ""
 "Text Indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"Sagnat de text permet establir el sagnat a l'inici de la línia. Només "
+"funciona quan el text s'ajusta."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -28798,7 +28862,7 @@ msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr "sagnat de text,indentació"
+msgstr "sagnat de text, indentació"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, kde-format
@@ -28810,7 +28874,7 @@ msgstr "Sagnat Hanging"
 #, kde-format
 msgctxt "@option:check"
 msgid "Indent after hardbreaks"
-msgstr ""
+msgstr "Sagnat després dels salts durs"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
 #, kde-format
@@ -28837,6 +28901,8 @@ msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
 msgstr ""
+"Falta la família de lletres «%1» en aquesta màquina. Aquest estil predefinit "
+"podria no funcionar correctament."
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:216
 #, kde-format
@@ -28898,7 +28964,7 @@ msgstr "Quan sigui rellevant"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr ""
+msgstr "Quan estigui definit"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -28931,6 +28997,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text Rendering controls the hinting and rendering style for the property"
 msgstr ""
+"La renderització de text controla l'estil de correcció de lletres i la "
+"renderització de la propietat"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -28947,6 +29015,8 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
+"Igual que la precisió geomètrica, no utilitza cap correcció de lletres i "
+"evita carregar mapes de bits interns."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
 #, kde-format
@@ -28964,13 +29034,15 @@ msgstr "Renderitza sense antialiàsing."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Legibility"
-msgstr ""
+msgstr "Optimitza la llegibilitat"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
+"Utilitza una correcció de lletres «suau» en horitzontal i una correcció de "
+"lletres «completa» en vertical."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
@@ -28984,6 +29056,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
 msgstr ""
+"No hi ha cap correcció de lletres i evita la càrrega de mides concretes de "
+"mapes de bits a menys que la lletra no tingui camins."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, kde-format
@@ -28999,6 +29073,9 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"La transformació de text permet transformar l'interval de caràcters indicat, "
+"per exemple, establint-los a majúscula o canviant les formes de mitja "
+"amplada per formes d'amplada completa."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -29009,6 +29086,8 @@ msgid ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana"
 msgstr ""
+"transformació de text, majúscules, posar en majúscules, minúscules, amplada "
+"completa, kana de mida completa"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
@@ -29056,7 +29135,7 @@ msgstr "Posició sota la línia"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "Especifica la posició del subratllat per a la decoració del text."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -29064,7 +29143,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration-position property, "
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
-msgstr ""
+msgstr "posició de la decoració de text, subratllat, esquerra, dreta, sota"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
@@ -29097,6 +29176,8 @@ msgid ""
 "The CSS white space rule controls how multiples of spaces are handled, and "
 "whether the text can wrap."
 msgstr ""
+"La regla d'espai en blanc CSS controla com es gestionen diversos espais i si "
+"el text pot ajustar-se."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
 #, kde-format
@@ -29104,7 +29185,7 @@ msgctxt ""
 "comma separated search terms for the white-space property, matching is case-"
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
-msgstr ""
+msgstr "espai en blanc, redueix, format previ"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -29116,19 +29197,19 @@ msgstr "Pre"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr ""
+msgstr "Sense ajustament"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
-msgstr ""
+msgstr "Ajustament previ"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
-msgstr "Espais de trencament"
+msgstr "Espais de divisió"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
 #, kde-format
@@ -29140,7 +29221,7 @@ msgstr "Línia pre"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Word Break"
-msgstr "Trencament de paraules"
+msgstr "Divisió de paraules"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:16
 #, kde-format
@@ -29150,6 +29231,9 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"La divisió de paraula permet ajustar el salt de línia alternant si només "
+"salta a les paraules o també es permet saltar als caràcters. Útil per al "
+"coreà o l'etíop."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -29157,19 +29241,19 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "divisió de paraula, salt de línia"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No additional adjustments are made to the regular line break algorithm."
-msgstr ""
+msgstr "No es fan ajustos addicionals a l'algorisme de salt de línia normal."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "Mantén-ho tot"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
@@ -29177,12 +29261,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
 msgstr ""
+"Les divisions suaus només es permetran dins de les paraules, normalment "
+"delimitades per espais."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "Divideix-ho tot"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
@@ -29197,6 +29283,8 @@ msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
 msgstr ""
+"L'espaiat de paraules controla la mida dels caràcters de divisió de "
+"paraules, com ara el caràcter d'espai."
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -29204,7 +29292,7 @@ msgctxt ""
 "comma separated search terms for the word-spacing property, matching is case-"
 "insensitive"
 msgid "word-spacing, tracking, white space,"
-msgstr ""
+msgstr "espaiat de paraules, seguiment, espai en blanc,"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -29219,6 +29307,9 @@ msgid ""
 "Writing Mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"El mode d'escriptura estableix si el text flueix horitzontalment o "
+"verticalment, i en aquest últim cas, si el bloc flueix de dreta a esquerra o "
+"d'esquerra a dreta."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -41261,7 +41352,7 @@ msgstr "Ajusta l'esborrador"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr "Habilita l'ajust quan s'usen esborradors"
+msgstr "Activa l'ajust quan s'usen esborradors"
 
 #: plugins/tools/basictools/kis_tool_brush.h:146
 #, kde-format
@@ -42684,6 +42775,9 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+"Cerca caràcters que coincideixin amb la primera lletra de la cadena. La "
+"cerca hexadecimal és possible quan s'anteposa amb «U+», (per exemple, U+0045 "
+"cercarà «E»)"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -59180,18 +59274,14 @@ msgstr ""
 #~ msgid "Font Families"
 #~ msgstr "Famílies dels tipus de lletres"
 
-#~| msgid "Select All"
 #~ msgctxt "tooltip"
 #~ msgid "Select All"
 #~ msgstr "Selecciona-ho tot"
 
-#~| msgctxt "action"
-#~| msgid "Invert Selection"
 #~ msgctxt "tooltip"
 #~ msgid "Invert Selection"
 #~ msgstr "Inverteix la selecció"
 
-#~| msgid "Deselect"
 #~ msgctxt "tooltip"
 #~ msgid "Deselect"
 #~ msgstr "Desselecciona"

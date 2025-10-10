@@ -218,7 +218,11 @@ QWidget *SvgTextTool::createOptionWidget()
         m_optionManager->setShowTextPropertyButton((docker));
         if (docker) {
             optionWidget->setPalette(docker->palette());
-            connect(m_optionManager.data(), SIGNAL(openTextPropertiesDocker(bool)), docker, SLOT(setVisible(bool)));
+            m_optionManager->setTextPropertiesOpen(docker->isVisible());
+            connect(m_optionManager.data(), &SvgTextToolOptionsManager::openTextPropertiesDocker, [docker](){
+                        docker->setVisible(!docker->isVisible());
+                    });
+            // Once we have docker toggling actions, we should revisit this.
         }
     }
     slotUpdateVisualCursor();

@@ -42,13 +42,6 @@ Control {
         function onCssStylePresetNameChanged() {
             updatePresetName();
         }
-        function onUseCurrentTextPropertiesChanged() {
-            chkCurrentProperties.checked = manager.optionsModel.useCurrentTextProperties;
-        }
-    }
-
-    function updateTextProperties() {
-        btnTextProperties.checked = manager.textPropertiesOpen;
     }
 
     function updatePresetName() {
@@ -115,10 +108,10 @@ Control {
         Button {
             id: btnTextProperties;
             text: i18nc("@label:button", "Open Text Properties");
-            checkable: true;
+            checkable: false;
             hoverEnabled: true;
-            onCheckedChanged: {
-                manager.textPropertiesOpen = checked;
+            onClicked: {
+                manager.textPropertiesOpen = !manager.textPropertiesOpen;
             }
             visible: manager.showTextPropertyButton;
             height: visible? implicitHeight: 0;

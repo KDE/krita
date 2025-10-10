@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 03:36+0000\n"
-"PO-Revision-Date: 2025-09-17 19:25+0300\n"
+"PO-Revision-Date: 2025-10-09 19:37+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19645,7 +19645,7 @@ msgstr "Додатково…"
 #: libs/ui/forms/wdggeneralsettings.ui:1533
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Довге натискання для відкриття контекстних меню"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)

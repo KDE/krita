@@ -35,17 +35,17 @@ public:
     KisSelectionActionsPanel(KisViewManager *viewManager, QObject *parent);
     ~KisSelectionActionsPanel();
 
-    void draw(QPainter &gc,
-                const KisCoordinatesConverter *converter,
-                KisCanvas2 *canvas,
-                bool selectionActionBarEnabled);
+    void draw(QPainter &painter,
+            const KisCoordinatesConverter *coordinatesConverter);
+    void setVisible(bool visible);
     bool eventFilter(QObject *obj, QEvent *event) override;
-    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
-    QPushButton *createButton(const QString &iconName, const QString &tooltip);
-    void setupButtons();
-    void drawActionBarBackground(QPainter &gc);
 
 private:
+    void setupButtons();
+    QPushButton *createButton(const QString &iconName, const QString &tooltip);
+    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
+    void drawActionBarBackground(QPainter &gc);
+
     struct Private;
     QScopedPointer<Private> d;
 

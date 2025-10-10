@@ -49,7 +49,7 @@ struct KisSelectionActionsPanel::Private {
     {
     }
 
-    KisCanvas2 *m_canvas = 0;
+    //KisCanvas2 *m_canvas = 0;
     KisSelectionManager *m_selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
 
@@ -57,7 +57,7 @@ struct KisSelectionActionsPanel::Private {
     QPoint m_dragStartOffset;
 
     bool m_dragging = false;
-    bool m_selectionActive = false;
+    //bool m_selectionActive = false;
 
     QVector<QPushButton *> m_buttons;
     static const QVector<ActionButtonData> &buttonData()
@@ -83,6 +83,13 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager, 
 {
     d->m_viewManager = viewManager;
     d->m_selectionManager = viewManager->selectionManager();
+
+    // Setup buttons...
+    for (const ActionButtonData &buttonData : Private::buttonData()) {
+        QPushButton *button = createButton(buttonData.iconName, buttonData.tooltip);
+        connect(button, &QPushButton::clicked, d->m_selectionManager, buttonData.slot);
+        d->m_buttons.append(button);
+    }
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
@@ -93,55 +100,62 @@ KisSelectionActionsPanel::~KisSelectionActionsPanel()
     d->m_buttons.clear();
 }
 
-void KisSelectionActionsPanel::draw(QPainter &gc,
-                                                      const KisCoordinatesConverter *converter,
-                                                      KisCanvas2 *canvas,
-                                                      bool selectionActionBarEnabled)
+void KisSelectionActionsPanel::draw(QPainter &painter,
+                                    const KisCoordinatesConverter *coordinatesConverter)
 {
-    d->m_canvas = canvas;
-    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_canvas->canvasWidget());
-    canvasWidget->installEventFilter(this);
 
     KisSelectionSP selection = d->m_viewManager->selection();
-    if (!d->m_selectionActive && selection) {
-        d->m_selectionActive = true;
-        QRectF selectionBounds = selection->selectedRect();
-        int selectionBottom = selectionBounds.bottom();
-        QPointF selectionCenter = selectionBounds.center();
 
-        QPointF bottomCenter(selectionCenter.x(), selectionBottom);
-
-        QPointF widgetBottomCenter = converter->imageToWidget(
-            bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
-
-        widgetBottomCenter.setX(widgetBottomCenter.x() - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
-        widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
-
-        d->m_dragHandlePosition = widgetBottomCenter.toPoint();
-    }
-
-    d->m_dragHandlePosition = updateCanvasBoundaries(d->m_dragHandlePosition, canvasWidget);
-
-    setupButtons();
-
-    for (int i = 0; i < d->m_buttons.size(); i++) {
-        QPushButton *btn = d->m_buttons[i];
-        if (canvasWidget && selectionActionBarEnabled) {
-            int buttonPosition = i * BUTTON_SIZE;
-            btn->setParent(canvasWidget);
-            btn->show();
-            btn->move(d->m_dragHandlePosition.x() + buttonPosition, d->m_dragHandlePosition.y());
-        } else {
-            btn->hide();
-        }
-    }
-
-    if (!selectionActionBarEnabled) {
-        d->m_selectionActive = false;
+    if (!selection) {
         return;
     }
 
-    drawActionBarBackground(gc);
+    QRectF selectionBounds = selection->selectedRect();
+    int selectionBottom = selectionBounds.bottom();
+    QPointF selectionCenter = selectionBounds.center();
+
+    QPointF bottomCenter(selectionCenter.x(), selectionBottom);
+
+    QPointF widgetBottomCenter = coordinatesConverter->imageToWidget(
+        bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
+
+    widgetBottomCenter.setX(widgetBottomCenter.x() - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
+    widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
+
+    d->m_dragHandlePosition = widgetBottomCenter.toPoint();
+
+    d->m_dragHandlePosition = updateCanvasBoundaries(d->m_dragHandlePosition, d->m_viewManager->canvas());
+
+    for (int i = 0; i < d->m_buttons.size(); i++) {
+        QPushButton *btn = d->m_buttons[i];
+        int buttonPosition = i * BUTTON_SIZE;
+        btn->move(d->m_dragHandlePosition.x() + buttonPosition, d->m_dragHandlePosition.y());
+    }
+
+    drawActionBarBackground(painter);
+}
+
+void KisSelectionActionsPanel::setVisible(bool visible)
+{
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
+    if (!canvasWidget) {
+        return;
+    }
+
+    if (visible) {
+        canvasWidget->installEventFilter(this);
+
+        for (QPushButton *button : d->m_buttons) {
+            button->setParent(canvasWidget);
+            button->show();
+        }
+    } else {
+        canvasWidget->removeEventFilter(this);
+
+        for (QPushButton *button : d->m_buttons) {
+            button->hide();
+        }
+    }
 }
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
@@ -168,7 +182,7 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
         QPoint newPos = mouseEvent->pos() - d->m_dragStartOffset;
 
         // bound actionBar to stay within canvas space
-        QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_canvas->canvasWidget());
+        QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
 
         if (obj != canvasWidget)
             return false;
@@ -215,18 +229,6 @@ QPushButton *KisSelectionActionsPanel::createButton(const QString &iconName, con
     button->setFixedSize(BUTTON_SIZE, BUTTON_SIZE);
     button->setToolTip(tooltip);
     return button;
-}
-
-void KisSelectionActionsPanel::setupButtons()
-{
-    if (!d->m_buttons.isEmpty())
-        return;
-
-    for (const ActionButtonData &buttonData : Private::buttonData()) {
-        QPushButton *button = createButton(buttonData.iconName, buttonData.tooltip);
-        connect(button, &QPushButton::clicked, d->m_selectionManager, buttonData.slot);
-        d->m_buttons.append(button);
-    }
 }
 
 void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter)

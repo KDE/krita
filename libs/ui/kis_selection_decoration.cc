@@ -145,6 +145,8 @@ void KisSelectionDecoration::selectionChanged()
         view()->canvasBase()->updateCanvas();
         m_antsTimer->stop();
     }
+
+    m_selectionActionsPanel->setVisible(selection != nullptr);
 }
 
 void KisSelectionDecoration::slotStartUpdateSelection()
@@ -191,10 +193,6 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
 
-    if (!selectionIsActive()) {
-        m_selectionActionsPanel->draw(gc, converter, canvas, false);
-        return;
-    };
     if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
         (m_mode == Mask && m_thumbnailImage.isNull())) return;
 
@@ -239,13 +237,15 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.restore();
 
     // render Selection Action Bar
-    m_selectionActionsPanel->draw(gc, converter, canvas, m_selectionActionBarEnabled);
+    m_selectionActionsPanel->draw(gc, converter);
 }
 
 void KisSelectionDecoration::setVisible(bool v)
 {
     KisCanvasDecoration::setVisible(v);
     selectionChanged();
+
+    m_selectionActionsPanel->setVisible(v);
 }
 
 void KisSelectionDecoration::notifyWindowMinimized(bool minimized)

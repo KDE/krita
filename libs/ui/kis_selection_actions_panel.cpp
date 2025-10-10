@@ -8,6 +8,7 @@
 
 #include <limits>
 
+#include "kis_canvas_widget_base.h"
 #include "KisDocument.h"
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
@@ -110,29 +111,14 @@ void KisSelectionActionsPanel::draw(QPainter &painter,
         return;
     }
 
-    QRectF selectionBounds = selection->selectedRect();
-    int selectionBottom = selectionBounds.bottom();
-    QPointF selectionCenter = selectionBounds.center();
-
-    QPointF bottomCenter(selectionCenter.x(), selectionBottom);
-
-    QPointF widgetBottomCenter = coordinatesConverter->imageToWidget(
-        bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
-
-    widgetBottomCenter.setX(widgetBottomCenter.x() - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
-    widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
-
-    d->m_dragHandlePosition = widgetBottomCenter.toPoint();
-
-    d->m_dragHandlePosition = updateCanvasBoundaries(d->m_dragHandlePosition, d->m_viewManager->canvas());
+    drawActionBarBackground(painter);
 
     for (int i = 0; i < d->m_buttons.size(); i++) {
-        QPushButton *btn = d->m_buttons[i];
+        QPushButton *button = d->m_buttons[i];
         int buttonPosition = i * BUTTON_SIZE;
-        btn->move(d->m_dragHandlePosition.x() + buttonPosition, d->m_dragHandlePosition.y());
+        button->move(d->m_dragHandlePosition.x() + buttonPosition, d->m_dragHandlePosition.y());
+        button->show();
     }
-
-    drawActionBarBackground(painter);
 }
 
 void KisSelectionActionsPanel::setVisible(bool visible)
@@ -147,8 +133,9 @@ void KisSelectionActionsPanel::setVisible(bool visible)
 
         for (QPushButton *button : d->m_buttons) {
             button->setParent(canvasWidget);
-            button->show();
         }
+
+        d->m_dragHandlePosition = initialDragHandlePosition();
     } else {
         canvasWidget->removeEventFilter(this);
 
@@ -204,7 +191,7 @@ bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
-QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget)
+QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const
 {
     QRect canvasBounds = canvasWidget->rect();
 
@@ -222,6 +209,34 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     return position;
 }
 
+QPoint KisSelectionActionsPanel::initialDragHandlePosition() const
+{
+    KisSelectionSP selection = d->m_viewManager->selection();
+
+    if (!selection) {
+        return QPoint(0,0);
+    }
+
+    QRectF selectionBounds = selection->selectedRect();
+    int selectionBottom = selectionBounds.bottom();
+    QPointF selectionCenter = selectionBounds.center();
+    QPointF bottomCenter(selectionCenter.x(), selectionBottom);
+
+    KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(d->m_viewManager->canvas());
+
+    if (!canvas) {
+        return QPoint(0,0);
+    }
+
+    QPointF widgetBottomCenter = canvas->coordinatesConverter()->imageToWidget(
+        bottomCenter); // converts current selection's QPointF into canvasWidget's QPointF space
+
+    widgetBottomCenter.setX(widgetBottomCenter.x() - (d->m_actionBarWidth / 2)); // centers toolbar midpoint with the selection center
+    widgetBottomCenter.setY(widgetBottomCenter.y() + BUFFER_SPACE);
+
+    return updateCanvasBoundaries(widgetBottomCenter.toPoint(), d->m_viewManager->canvas());
+}
+
 QPushButton *KisSelectionActionsPanel::createButton(const QString &iconName, const QString &tooltip)
 {
     QPushButton *button = new QPushButton();
@@ -231,7 +246,7 @@ QPushButton *KisSelectionActionsPanel::createButton(const QString &iconName, con
     return button;
 }
 
-void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter)
+void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
 {
     const int CORNER_RADIUS = 4;
     const int PEN_WIDTH = 5;

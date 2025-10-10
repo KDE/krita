@@ -43,8 +43,9 @@ public:
 private:
     void setupButtons();
     QPushButton *createButton(const QString &iconName, const QString &tooltip);
-    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
-    void drawActionBarBackground(QPainter &gc);
+    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
+    QPoint initialDragHandlePosition() const;
+    void drawActionBarBackground(QPainter &gc) const;
 
     struct Private;
     QScopedPointer<Private> d;

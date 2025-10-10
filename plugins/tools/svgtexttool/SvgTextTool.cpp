@@ -106,11 +106,19 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
         }
     }
 
-    const QString glyphName = "svg_insert_special_character";
-    QAction *glyphAction = action(glyphName);
-    if (glyphAction) {
-        m_textCursor.registerPropertyAction(glyphAction, glyphName);
-        connect(&m_textCursor, SIGNAL(sigOpenGlyphPalette()), this, SLOT(showGlyphPalette()));
+    const QStringList extraActions = {
+        "svg_insert_special_character",
+        "svg_paste_rich_text",
+        "svg_paste_plain_text"
+    };
+    connect(&m_textCursor, SIGNAL(sigOpenGlyphPalette()), this, SLOT(showGlyphPalette()));
+    Q_FOREACH (const QString name, extraActions) {
+        QAction *a = action(name);
+        if (a) {
+            if(!m_textCursor.registerPropertyAction(a, name)) {
+                qWarning() << "could not register" << name << a->shortcut();
+            }
+        }
     }
 
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);

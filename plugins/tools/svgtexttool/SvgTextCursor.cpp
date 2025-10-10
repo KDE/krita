@@ -420,12 +420,18 @@ void SvgTextCursor::copy() const
 
 bool SvgTextCursor::paste()
 {
+    bool success = d->pasteRichText? pasteRichText(): pastePlainText();
+    return success;
+}
+
+bool SvgTextCursor::pasteRichText()
+{
     bool success = false;
     if (d->shape) {
         QClipboard *cb = QApplication::clipboard();
         const QMimeData *mimeData = cb->mimeData();
         KoSvgPaste shapePaste;
-        if (d->pasteRichText && shapePaste.hasShapes()) {
+        if (shapePaste.hasShapes()) {
             QList<KoShape*> shapes = shapePaste.fetchShapes(d->shape->boundingRect(), 72.0);
             while (shapes.size() > 0) {
                 KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shapes.takeFirst());
@@ -434,7 +440,7 @@ bool SvgTextCursor::paste()
                     success = true;
                 }
             }
-        } else if (d->pasteRichText && mimeData->hasHtml()) {
+        } else if (mimeData->hasHtml()) {
             QString html = mimeData->html();
             KoSvgTextShape *insert = new KoSvgTextShape();
             KoSvgTextShapeMarkupConverter converter(insert);
@@ -447,10 +453,21 @@ bool SvgTextCursor::paste()
             }
         }
 
-        if (mimeData->hasText() && !success) {
-            insertText(mimeData->text());
-            success = true;
+        if (!success) {
+            success = pastePlainText();
         }
+    }
+    return success;
+}
+
+bool SvgTextCursor::pastePlainText()
+{
+    bool success = false;
+    QClipboard *cb = QApplication::clipboard();
+    const QMimeData *mimeData = cb->mimeData();
+    if (mimeData->hasText()) {
+        insertText(mimeData->text());
+        success = true;
     }
     return success;
 }
@@ -1238,6 +1255,14 @@ bool SvgTextCursor::registerPropertyAction(QAction *action, const QString &name)
     } else if (name == "svg_insert_special_character") {
         d->actions.append(action);
         connect(action, SIGNAL(triggered(bool)), this, SIGNAL(sigOpenGlyphPalette()));
+        return true;
+    } else if (name == "svg_paste_rich_text") {
+        d->actions.append(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(pasteRichText()));
+        return true;
+    } else if (name == "svg_paste_plain_text") {
+        d->actions.append(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(pastePlainText()));
         return true;
     }
     return false;

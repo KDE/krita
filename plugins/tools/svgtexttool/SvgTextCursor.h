@@ -161,9 +161,13 @@ public:
     void copy() const;
     /**
      * @brief paste
-     * @return pastes plain text in the clipboard at pos.
+     * pastes plain text in the clipboard at pos.
+     * Uses pasteRichTextByDefault to determine whether
+     * to try and paste rich text.
+     * @return true when successfull.
      */
     bool paste();
+
 
     void deselectText();
 
@@ -197,6 +201,7 @@ public:
     /// Stops blinking cursor.
     void focusOut();
 
+    /// Register an action.
     bool registerPropertyAction(QAction *action, const QString &name);
 
     KoSvgTextPropertiesInterface *textPropertyInterface();
@@ -215,6 +220,19 @@ private Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant &value);
     void toggleProperty(KoSvgTextProperties::PropertyId property);
     void propertyAction();
+
+    /**
+     * @brief pasteRichText
+     * @return try to paste rich text at pos.
+     */
+    bool pasteRichText();
+
+    /**
+     * @brief pastePlainText
+     * Explicitely paste plaintext at pos.
+     * @return true when successfull.
+     */
+    bool pastePlainText();
 
 private:
 

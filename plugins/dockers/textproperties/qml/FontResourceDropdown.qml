@@ -20,5 +20,5 @@ Kis.ResourcePopup {
             resourceCmb.activated();
         }
     }
-    view.preferredHeight: 300; // roughly 3.5 times the font delegate size;
+    view.preferredHeight: 200; // roughly 3.5 times the font delegate size;
 }

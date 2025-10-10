@@ -13,11 +13,14 @@ import org.krita.components 1.0 as Kis
   base for KoResource delegates.
   */
 ItemDelegate {
+    id: control;
     /*
         \qmlProperty model
         value automatically gained from the model and represents the model data.
      */
     required property var model;
+    property double preferredHeight;
+    property double minimumHeight;
     /*
         \qmlProperty resourceView
         the resource view this is set on.
@@ -36,4 +39,12 @@ ItemDelegate {
     property bool selected: resourceView.modelWrapper.currentIndex === model.index;
 
     palette: resourceView.palette;
+
+    contentItem: Label {
+        palette: control.palette;
+        text: control.model.name;
+        elide: Text.ElideRight;
+        anchors.fill: parent;
+        color: control.highlighted? palette.highlightedText: palette.text;
+    }
 }

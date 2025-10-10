@@ -29,6 +29,9 @@ ResourceDelegateBase {
     // TODO: change this to use the text locale, if possible.
     property string sample: "";
 
+    preferredHeight: nameLabel.height*3;
+    minimumHeight:nameLabel.height;
+
     onMetadataChanged: {
         updateSample();
     }
@@ -81,7 +84,7 @@ ResourceDelegateBase {
 
         property alias fontName: fontDelegateItem.fontName;
 
-        implicitHeight: nameLabel.height*4;
+        implicitHeight: Math.max(fontDelegateItem.minimumHeight, fontDelegateItem.preferredHeight);
 
         Loader {
             anchors.fill: parent;

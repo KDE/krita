@@ -88,12 +88,13 @@ Control {
             resourceDelegate: Kis.CssStylePresetDelegate {
                 id: presetDelegate;
                 resourceView: btnSelectCssStylePreset.view;
+                preferredHeight: minimumHeight;
                 onResourceLeftClicked: {
                     btnSelectCssStylePreset.activated();
                 }
 
             }
-            view.preferredHeight: 256; /// roughly 3x preset delegate size;
+            view.preferredHeight: 120; /// roughly 3x preset delegate size;
 
             onResourceNameChanged: {
                 manager.optionsModel.cssStylePresetName = btnSelectCssStylePreset.resourceName;

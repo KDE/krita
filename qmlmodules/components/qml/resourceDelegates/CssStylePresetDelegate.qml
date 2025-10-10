@@ -5,6 +5,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import org.krita.components 1.0 as Kis
 
 /**
@@ -15,35 +16,23 @@ ResourceDelegateBase {
 
     property var meta: model.metadata;
     width: ListView.view.width;
+    preferredHeight: minimumHeight * 3;
+    minimumHeight: Math.max(missingFamily.implicitHeight, nameLabel.implicitHeight);
 
     Kis.FontFunctions {
         id: fontFunctions;
     }
 
-    contentItem: Kis.KoShapeQtQuickLabel {
-        implicitHeight: nameLabel.height * 4;
-        padding: nameLabel.height;
-        alignment: presetDelegate.meta.sample_align;
-        scalingType: presetDelegate.meta.style_type === "paragraph"?
-                         Kis.KoShapeQtQuickLabel.FitWidth: Kis.KoShapeQtQuickLabel.Fit;
-        svgData: presetDelegate.meta.sample_svg;
-        foregroundColor: presetDelegate.highlighted? palette.highlightedText: palette.text;
-
-        Label {
-            id: nameLabel;
-            palette: presetDelegate.palette;
-            text: presetDelegate.model.name;
-            anchors.top: parent.top;
-            anchors.left: parent.left;
-            anchors.right: parent.right;
-            elide: Text.ElideRight;
-            color: presetDelegate.highlighted? palette.highlightedText: palette.text;
-        }
-
+    contentItem: GridLayout {
+        id: mainGrid;
+        implicitHeight: Math.max(presetDelegate.minimumHeight, presetDelegate.preferredHeight);
+        columns: implicitHeight < (presetDelegate.minimumHeight*2)? 2: 1;
         Row {
-            anchors.bottom: parent.bottom;
-            anchors.left: parent.left;
-            anchors.right: parent.right;
+            id: iconRow;
+            Layout.fillWidth: true;
+            Layout.maximumWidth: presetDelegate.width/mainGrid.columns;
+            Layout.minimumHeight: implicitHeight;
+            Layout.preferredHeight: implicitHeight;
             ToolButton {
                 id: missingFamily;
                 visible: typeof presetDelegate.meta.primary_font_family !== 'undefined'?
@@ -53,8 +42,29 @@ ResourceDelegateBase {
                 icon.height: 8;
                 icon.width: 8;
             }
+            Label {
+                id: nameLabel;
+                palette: presetDelegate.palette;
+                text: presetDelegate.model.name;
+                elide: Text.ElideRight;
+                width: (iconRow.width - (missingFamily.implicitWidth+iconRow.spacing));
+                color: presetDelegate.highlighted? palette.highlightedText: palette.text;
+            }
+        }
+        Kis.KoShapeQtQuickLabel {
+            id: styleSample;
+            Layout.fillHeight: true;
+            Layout.fillWidth: true;
+            Layout.minimumHeight: presetDelegate.minimumHeight;
+            Layout.maximumWidth: (mainGrid.columns == 1)? presetDelegate.width: Math.min(presetDelegate.width/mainGrid.columns, styleSample.height*(minimumRect.width/minimumRect.height));
+            alignment: presetDelegate.meta.sample_align;
+            scalingType: presetDelegate.meta.style_type === "paragraph"?
+                             Kis.KoShapeQtQuickLabel.FitWidth: Kis.KoShapeQtQuickLabel.Fit;
+            svgData: presetDelegate.meta.sample_svg;
+            foregroundColor: presetDelegate.highlighted? palette.highlightedText: palette.text;
         }
     }
+
     background: Rectangle {
         color: presetDelegate.highlighted? presetDelegate.palette.highlight: "transparent";
         border.color: presetDelegate.selected? presetDelegate.palette.highlight: presetDelegate.palette.mid;

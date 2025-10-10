@@ -583,9 +583,6 @@ void DefaultTool::slotAddShapesToFlow()
 
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, shapes) {
-        if(shape->parent()) {
-            canvas()->shapeController()->removeShape(shape, parentCommand);
-        }
         new KoSvgTextAddShapeCommand(textShape, shape, true, parentCommand);
     }
     new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
@@ -621,9 +618,6 @@ void DefaultTool::slotSubtractShapesFromFlow()
 
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, shapes) {
-        if (shape->parent()) {
-            canvas()->shapeController()->removeShape(shape, parentCommand);
-        }
         new KoSvgTextAddShapeCommand(textShape, shape, false, parentCommand);
     }
     new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
@@ -649,8 +643,9 @@ void DefaultTool::slotRemoveShapesFromFlow()
     Q_FOREACH(KoShape *shape, selectedShapes) {
         if (!textShape->shapeInContours(shape)) continue;
         new KoSvgTextRemoveShapeCommand(textShape, shape, parentCommand);
-        canvas()->shapeController()->addShape(shape, textShape->parent(), parentCommand);
     }
+    new KoKeepShapesSelectedCommand({}, {selectedShapes}, canvas()->selectedShapesProxy(), true, parentCommand);
+
     canvas()->addCommand(parentCommand);
 }
 

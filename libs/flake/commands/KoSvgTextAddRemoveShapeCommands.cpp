@@ -33,14 +33,6 @@ KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgText
     : KisCommandUtils::FlipFlopCommand(state, parent)
     , d(new Private(textShape, shape))
 {
-    /**
-     * 1) The shapes should belong to the same parent or have no parent at all.
-     * 2) The parent of the text shape is always preserved (null or non-null)
-     * 3) The parent of the contour shape is dropped, since it is put into
-     *    a virtual group created by the text shape
-     */
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!textShape->parent() || !shape->parent() || textShape->parent() == shape->parent());
-
     d->removeCommand = state == FINALIZING;
 
     if (!d->removeCommand) {
@@ -128,7 +120,13 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
 KoSvgTextAddShapeCommand::KoSvgTextAddShapeCommand(KoSvgTextShape *textShape, KoShape *shape, bool inside, KUndo2Command *parentCommand)
     : KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, (inside? Inside: Subtract), INITIALIZING, parentCommand)
 {
-
+    /**
+     * 1) The shapes should belong to the same parent or have no parent at all.
+     * 2) The parent of the text shape is always preserved (null or non-null)
+     * 3) The parent of the contour shape is dropped, since it is put into
+     *    a virtual group created by the text shape
+     */
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!textShape->parent() || !shape->parent() || textShape->parent() == shape->parent());
 }
 
 KoSvgTextAddShapeCommand::~KoSvgTextAddShapeCommand()
@@ -140,6 +138,7 @@ KoSvgTextRemoveShapeCommand::KoSvgTextRemoveShapeCommand(KoSvgTextShape *textSha
 : KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, Unknown, FINALIZING, parentCommand)
 {
     // the \p shape will be ungrouped into the parent of \p textShape
+    KIS_SAFE_ASSERT_RECOVER_NOOP(textShape->shapeInContours(shape));
 }
 
 KoSvgTextRemoveShapeCommand::~KoSvgTextRemoveShapeCommand()

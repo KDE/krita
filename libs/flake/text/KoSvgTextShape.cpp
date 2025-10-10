@@ -2127,6 +2127,7 @@ void KoSvgTextShape::addShapeContours(QList<KoShape *> shapes, const bool inside
             shape->addDependee(this);
         }
     }
+    notifyChanged(); // notify shape manager that our geometry has changed
     d->updateTextWrappingAreas();
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
@@ -2153,6 +2154,7 @@ void KoSvgTextShape::removeShapesFromContours(QList<KoShape *> shapes, bool call
         d->shapeGroup->removeShape(shape);
     }
     if (callUpdate) {
+        notifyChanged(); // notify shape manager that our geometry has changed
         d->updateTextWrappingAreas();
         d->updateInternalShapesList();
         shapeChangedPriv(ContentChanged);

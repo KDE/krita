@@ -31,20 +31,21 @@ class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
 {
     Q_OBJECT
 public:
-    KisSelectionActionsPanel(QObject *parent);
+    KisSelectionActionsPanel() = delete;
+    KisSelectionActionsPanel(KisViewManager *viewManager, QObject *parent);
     ~KisSelectionActionsPanel();
-    void drawDecoration(QPainter &gc,
-                        const KisCoordinatesConverter *converter,
-                        KisCanvas2 *canvas,
-                        bool selectionActionBarEnabled);
-    void setViewManager(KisViewManager *viewManager);
+
+    void draw(QPainter &painter);
+    void setVisible(bool visible);
     bool eventFilter(QObject *obj, QEvent *event) override;
-    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget);
-    QPushButton *createButton(const QString &iconName, const QString &tooltip);
-    void setupButtons();
-    void drawActionBarBackground(QPainter &gc);
 
 private:
+    void setupButtons();
+    QPushButton *createButton(const QString &iconName, const QString &tooltip);
+    QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
+    QPoint initialDragHandlePosition() const;
+    void drawActionBarBackground(QPainter &gc) const;
+
     struct Private;
     QScopedPointer<Private> d;
 

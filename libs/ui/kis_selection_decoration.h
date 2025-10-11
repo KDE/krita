@@ -70,7 +70,7 @@ private:
 
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
-    KisSelectionActionsPanel *m_selectionAssistantsDecoration;
+    KisSelectionActionsPanel *m_selectionActionsPanel;
     bool m_selectionActionBarEnabled;
 };
 

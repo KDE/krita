@@ -194,7 +194,7 @@ bool KisWaylandSurfaceColorManager::supportsSurfaceDescription(const KisSurfaceC
 
         /**
          * For some obscure reason Wayland compositors implemented transfer_function_srgb
-         * as gamma-2.2 transfer function, which caused a lot of confustion. Hence the enum
+         * as gamma-2.2 transfer function, which caused a lot of confusion. Hence the enum
          * is going to be deprecated in the upcoming version of the protocol.
          *
          * https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/442
@@ -267,7 +267,7 @@ QFuture<bool> KisWaylandSurfaceColorManager::setSurfaceDescription(const KisSurf
             if (!future.result()) return false;
 
             if (!m_surface) {
-                qWarning() << "WARNING: the surface has been desctroyed while its format was being set!";
+                qWarning() << "WARNING: the surface has been destroyed while its format was being set!";
                 return false;
             }
 

@@ -81,7 +81,7 @@ public:
 
     ~UiManagerTest() {
         /**
-         * Here is a weird way of precessing pending events.
+         * Here is a weird way of processing pending events.
          * This is needed for the dummies facade could process
          * all the queued events telling it some nodes were
          * added/deleted

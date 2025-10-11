@@ -116,7 +116,7 @@ void KisSelectionDecoration::selectionChanged()
 
     KisSelectionSP selection = view()->selection();
 
-    if (!mask && selection && selectionIsActive()) {
+    if (!mask && selectionIsActive()) {
         if ((m_mode == Ants && selection->outlineCacheValid()) ||
             (m_mode == Mask && selection->thumbnailImageValid())) {
 
@@ -130,6 +130,7 @@ void KisSelectionDecoration::selectionChanged()
                 m_thumbnailImageTransform = selection->thumbnailImageTransform();
                 m_antsTimer->stop();
             }
+
             if (view() && view()->canvasBase()) {
                 view()->canvasBase()->updateCanvas();
             }
@@ -145,7 +146,9 @@ void KisSelectionDecoration::selectionChanged()
         m_thumbnailImageTransform = QTransform();
         view()->canvasBase()->updateCanvas();
         m_antsTimer->stop();
+    }
 
+    if (!selection && !selectionIsActive()) {
         m_selectionActionsPanel->setVisible(false);
     }
 }

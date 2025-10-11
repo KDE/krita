@@ -133,8 +133,10 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
         canvasWidget->installEventFilter(this);
 
-        d->m_dragHandle.reset(new Private::DragHandle());
-        d->m_dragHandle->position = initialDragHandlePosition();
+        if (!d->m_dragHandle) {
+            d->m_dragHandle.reset(new Private::DragHandle());
+            d->m_dragHandle->position = initialDragHandlePosition();
+        }
 
         for (QPushButton *button : d->m_buttons) {
             button->setParent(canvasWidget);

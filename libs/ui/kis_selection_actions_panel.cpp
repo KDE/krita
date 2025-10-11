@@ -133,8 +133,6 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
     if (d->m_viewManager->selection() && p_visible) { // Now visible!
         canvasWidget->installEventFilter(this);
 
-        KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(canvasWidget);
-
         d->m_dragHandle.reset(new Private::DragHandle());
         d->m_dragHandle->position = initialDragHandlePosition();
 

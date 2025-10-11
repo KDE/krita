@@ -6,18 +6,14 @@
 
 #include "kis_selection_actions_panel.h"
 
-//#include <limits>
-
 #include "kis_canvas_widget_base.h"
 #include "KisDocument.h"
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_debug.h"
 #include "kis_icon_utils.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
-//include "kis_tool_proxy.h"
 #include <KoCompositeOpRegistry.h>
 #include <QList>
 #include <QPointF>

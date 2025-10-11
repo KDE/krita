@@ -138,7 +138,7 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
         KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(canvasWidget);
 
         d->m_dragHandle.reset(new Private::DragHandle());
-        d->m_dragHandle->position = initialDragHandlePosition(canvas->coordinatesConverter());
+        d->m_dragHandle->position = initialDragHandlePosition();
 
         for (QPushButton *button : d->m_buttons) {
             button->setParent(canvasWidget);
@@ -221,7 +221,7 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     return position;
 }
 
-QPoint KisSelectionActionsPanel::initialDragHandlePosition(const KisCoordinatesConverter *coordinatesConverter) const
+QPoint KisSelectionActionsPanel::initialDragHandlePosition() const
 {
     KisSelectionSP selection = d->m_viewManager->selection();
     KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(d->m_viewManager->canvas());

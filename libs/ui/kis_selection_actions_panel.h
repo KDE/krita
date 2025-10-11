@@ -43,7 +43,7 @@ private:
     void setupButtons();
     QPushButton *createButton(const QString &iconName, const QString &tooltip);
     QPoint updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const;
-    QPoint initialDragHandlePosition(const KisCoordinatesConverter *coordinatesConverter) const;
+    QPoint initialDragHandlePosition() const;
     void drawActionBarBackground(QPainter &gc) const;
 
     struct Private;

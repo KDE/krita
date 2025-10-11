@@ -35,8 +35,7 @@ public:
     KisSelectionActionsPanel(KisViewManager *viewManager, QObject *parent);
     ~KisSelectionActionsPanel();
 
-    void draw(QPainter &painter,
-            const KisCoordinatesConverter *coordinatesConverter);
+    void draw(QPainter &painter);
     void setVisible(bool visible);
     bool eventFilter(QObject *obj, QEvent *event) override;
 

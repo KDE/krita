@@ -100,10 +100,8 @@ KisSelectionActionsPanel::~KisSelectionActionsPanel()
     d->m_buttons.clear();
 }
 
-void KisSelectionActionsPanel::draw(QPainter &painter,
-                                    const KisCoordinatesConverter *coordinatesConverter)
+void KisSelectionActionsPanel::draw(QPainter &painter)
 {
-
     KisSelectionSP selection = d->m_viewManager->selection();
 
     if (!selection) {

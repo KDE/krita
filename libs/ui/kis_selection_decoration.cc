@@ -238,7 +238,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.restore();
 
     // render Selection Action Bar
-    m_selectionActionsPanel->draw(gc, converter);
+    m_selectionActionsPanel->draw(gc);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

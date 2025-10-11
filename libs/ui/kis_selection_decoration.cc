@@ -134,6 +134,7 @@ void KisSelectionDecoration::selectionChanged()
                 view()->canvasBase()->updateCanvas();
             }
 
+            m_selectionActionsPanel->setVisible(true);
         } else {
             m_signalCompressor.start();
         }
@@ -144,9 +145,9 @@ void KisSelectionDecoration::selectionChanged()
         m_thumbnailImageTransform = QTransform();
         view()->canvasBase()->updateCanvas();
         m_antsTimer->stop();
-    }
 
-    m_selectionActionsPanel->setVisible(selection != nullptr);
+        m_selectionActionsPanel->setVisible(false);
+    }
 }
 
 void KisSelectionDecoration::slotStartUpdateSelection()

@@ -116,8 +116,6 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
         button->move(d->m_dragHandle->position.x() + buttonPosition, d->m_dragHandle->position.y());
         button->show();
     }
-
-    KisCanvasWidgetBase *canvas = dynamic_cast<KisCanvasWidgetBase*>(d->m_viewManager->canvas());
 }
 
 void KisSelectionActionsPanel::setVisible(bool p_visible)

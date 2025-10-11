@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -16527,6 +16527,7 @@ msgstr "आंकड़ाकेँ आयात करू"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, fuzzy, kde-format
 #| msgid "Filter:"
 msgctxt "Resize interpolation method list label"
@@ -19736,7 +19737,7 @@ msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
@@ -27054,7 +27055,7 @@ msgstr "संरेखण"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 
@@ -28132,7 +28133,7 @@ msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
 
@@ -39708,13 +39709,6 @@ msgstr "मेटाबू"
 msgid "Scale"
 msgstr "मापक"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-#, fuzzy
-#| msgid "Filter:"
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "फिल्टर:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr ""
@@ -43951,6 +43945,12 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "फिल्टर:"
 
 #, fuzzy
 #~ msgid "Path options"

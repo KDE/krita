@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
-"PO-Revision-Date: 2025-10-10 02:33+0100\n"
-"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"PO-Revision-Date: 2025-10-11 01:56+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -16409,6 +16409,7 @@ msgstr "Importar escala del vídeo"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
@@ -19720,12 +19721,17 @@ msgstr "Preferencias de animación"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "When this option is checked newly created layers will be automatically "
+#| "pinned to the animation timeline. This is useful when animating with a "
+#| "small number of layers or when many elements on different animated layers "
+#| "are interacting with eachother."
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 "Cuando está marcada esta opción, las capas recién creadas se fijarán "
 "automáticamente en la línea de tiempo de la animación. Esto resulta útil al "
@@ -27392,7 +27398,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 
@@ -27433,12 +27439,10 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic Advance (ic)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic"
-msgstr "Avance ideográfico (ic)"
+msgstr "Ideográfica"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:87
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:85
@@ -27449,11 +27453,10 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Central"
-msgstr "Centro"
+msgstr "Central"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:89
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:87
@@ -27464,12 +27467,10 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Hangul"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Hangul"
+msgstr "Colgante"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -27477,16 +27478,15 @@ msgstr "Hangul"
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
 msgstr ""
+"Alinear al trazo de cabecera como hacen las escrituras bráhmicas del norte."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
 #: plugins/dockers/textproperties/qml/TextAlign.qml:368
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Middle"
-msgstr "Medio"
+msgstr "Media"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:93
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:91
@@ -27496,6 +27496,8 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
+"Alinear al centro entre la línea base alfabética y la altura de la x cuando "
+"se escribe horizontalmente; en vertical esta es la línea base central."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
@@ -27510,6 +27512,8 @@ msgstr "Matemática"
 msgctxt "@info:tooltip"
 msgid "Align to the mathematical baseline, so that operator symbols align."
 msgstr ""
+"Alinear a la línea base matemática, de modo que los símbolos de operadores "
+"se alineen."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
@@ -27569,35 +27573,30 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "None"
 msgstr "Ninguno"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:132
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Length"
-msgstr "Duración:"
+msgstr "Longitud"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:133
 #: plugins/dockers/textproperties/qml/OTPosition.qml:79
-#, fuzzy, kde-format
-#| msgid "Superhero"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Super"
-msgstr "Superhéroes"
+msgstr "Superíndice"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:134
 #: plugins/dockers/textproperties/qml/OTPosition.qml:80
-#, fuzzy, kde-format
-#| msgctxt "apng prediction option name"
-#| msgid "sub"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Sub"
-msgstr "sub"
+msgstr "Subíndice"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
 #, kde-format
@@ -27645,7 +27644,7 @@ msgstr "Párrafo"
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr ""
+msgstr "El estilo es relativo a píxeles"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
 #, kde-format
@@ -27656,6 +27655,10 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
+"De forma predeterminada, los estilos se guardan en puntos, lo que significa "
+"que los tamaños en píxeles dependerán de la resolución de la impresión. "
+"Cambie esto para asegurar que el estilo mantendrá el mismo tamaño en píxeles "
+"entre distintos documentos."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
 #, kde-format
@@ -27692,6 +27695,8 @@ msgstr "Dirección"
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
 msgstr ""
+"La dirección ajusta si el texto va de izquierda a derecha o de derecha a "
+"izquierda."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -27700,6 +27705,7 @@ msgctxt ""
 "insensitive"
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
+"derecha a izquierda, rtl, dirección, bidireccional, aislar, incrustar, anular"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:122
 #, kde-format
@@ -27717,7 +27723,7 @@ msgstr "De derecha a izquierda"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-Bidireccional"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:156
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
@@ -27737,32 +27743,28 @@ msgid "Normal"
 msgstr "Normal"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:157
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Camera Profile"
-#| msgid "Embedded"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Embed"
-msgstr "Incrustado"
+msgstr "Incrustar"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:158
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Override"
-msgstr "Sobrescribir"
+msgstr "Anular"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:159
-#, fuzzy, kde-format
-#| msgid "Translate"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate"
-msgstr "Trasladar"
+msgstr "Aislar"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:160
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "Aislar-Anular"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:161
 #, kde-format
@@ -27810,12 +27812,14 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"Alinear a la línea base alfabética cuando se escribe horizontalmente; "
+"alinear a la línea base central cuando se escribe verticalmente."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
 msgctxt "@label"
 msgid "Font Family"
-msgstr "Familia del tipo de letra"
+msgstr "Familia tipográfica"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:19
 #, kde-format
@@ -27825,6 +27829,10 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
+"La familia tipográfica permite seleccionar una lista de tipos de letra que "
+"se usarán para el texto actual. La primera familia tipográfica es el tipo de "
+"letra que se usará en primer lugar, mientras que el resto de familias se "
+"usarán si no está disponible la anterior."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -27885,6 +27893,7 @@ msgstr "Tamaño del tipo de letra"
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
 msgstr ""
+"El tamaño del tipo de letra permite ajustar el tamaño de los caracteres."
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -27892,14 +27901,13 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "tamaño, pequeño, pequeña, grande, medio, media, mediano, mediana"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
-#, fuzzy, kde-format
-#| msgid "Font Size:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size Adjust"
-msgstr "Tamaño del tipo de letra:"
+msgstr "Ajuste del tamaño del tipo de letra"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:17
 #, kde-format
@@ -27915,6 +27923,8 @@ msgctxt ""
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
+"tamaño, pequeño, pequeña, grande, medio, media, mediano, mediana, ajuste del "
+"tamaño del tipo de letra"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -27929,8 +27939,7 @@ msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgctxt "@label"
 msgid "Font Style"
 msgstr "Estilo del tipo de letra"
@@ -28505,7 +28514,7 @@ msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
 
@@ -40130,11 +40139,6 @@ msgstr "Grados:"
 msgid "Scale"
 msgstr "Escala"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "Filtro:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "Se han modificado los documentos seleccionados."
@@ -44295,3 +44299,7 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "Filtro:"

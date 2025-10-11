@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
-"PO-Revision-Date: 2025-10-08 10:52-0300\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"PO-Revision-Date: 2025-10-10 11:37-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -4413,7 +4413,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "l) Ajustar desvio"
+msgstr "l) Ajuste de subexposição"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -9090,7 +9090,7 @@ msgstr "Em relevo apenas na horizontal"
 #, kde-format
 msgctxt "action"
 msgid "D&odge"
-msgstr "Desvi&o"
+msgstr "Subexp&osição"
 
 #. i18n: context: toolTip @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
@@ -9098,7 +9098,7 @@ msgstr "Desvi&o"
 #, kde-format
 msgctxt "action"
 msgid "Dodge"
-msgstr "Desvio"
+msgstr "Subexposição"
 
 #. i18n: context: text @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1102
@@ -9811,7 +9811,7 @@ msgstr "Selecionar o modo de mesclagem de tela"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
-msgstr "Selecionar o modo de mesclagem por desvio de cores"
+msgstr "Selecionar o modo de mesclagem por subexposição de cor"
 
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -9820,7 +9820,7 @@ msgstr "Selecionar o modo de mesclagem por desvio de cores"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
-msgstr "Selecionar o modo de mesclagem por desvio linear"
+msgstr "Selecionar o modo de mesclagem por subexposição linear"
 
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10916,21 +10916,21 @@ msgstr "Máscara de sobreposição de cor rápida"
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
-msgstr "Adicionar máscara de &cor"
+msgstr "Adicionar máscara de &colorir"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2700
 #, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
-msgstr "Adiciona uma nova máscara de cor"
+msgstr "Adiciona uma nova máscara de colorir"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2701
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
-msgstr "Colorir Máscara"
+msgstr "Máscara de colorir"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2710
@@ -16405,6 +16405,7 @@ msgstr "Importar escala de vídeo"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
@@ -19698,12 +19699,17 @@ msgstr "Configurações de animação"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "When this option is checked newly created layers will be automatically "
+#| "pinned to the animation timeline. This is useful when animating with a "
+#| "small number of layers or when many elements on different animated layers "
+#| "are interacting with eachother."
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 "Quando esta opção estiver marcada, as camadas recém-criadas serão "
 "automaticamente fixadas à linha do tempo da animação. Isso é útil ao animar "
@@ -22570,12 +22576,12 @@ msgstr "Nova Máscara de Filtro"
 #: libs/ui/kis_mask_manager.cc:280
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
-msgstr "Adicionar Máscara de Pintura"
+msgstr "Adicionar máscara de colorir"
 
 #: libs/ui/kis_mask_manager.cc:280
 #, kde-format
 msgid "Colorize Mask"
-msgstr "Colorizar Máscara"
+msgstr "Máscara de colorir"
 
 #: libs/ui/kis_mask_manager.cc:292
 msgctxt "(qtundo-format)"
@@ -27341,10 +27347,14 @@ msgid "Alignment Baseline"
 msgstr "Linha base de alinhamento"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Alignment Baseline allows controling how this range of text is aligned to "
+#| "the parent text."
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 "A linha base de alinhamento permite controlar como esse intervalo de texto é "
@@ -28446,12 +28456,18 @@ msgid "Enable number-related glyph forms on the text."
 msgstr "Habilita formas de glifos relacionadas a números no texto."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "comma separated search terms for the font-variant-numeric property, "
+#| "matching is case-insensitive"
+#| msgid ""
+#| "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, "
+#| "slashed zero, fractions"
 msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
 "numérico-variante-fonte, numerais antigos, numerais alinhados, ordinais, "
@@ -40027,11 +40043,6 @@ msgstr "Graus:"
 msgid "Scale"
 msgstr "Escala"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "Filtro:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "Os documentos selecionados foram modificados."
@@ -43309,7 +43320,7 @@ msgstr "Ferramenta de preencher e delimitar"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
 #, kde-format
 msgid "Colorize Mask Editing Tool"
-msgstr "Ferramenta de Edição da Máscara de Cor"
+msgstr "Ferramenta de edição da máscara de colorir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
@@ -43977,7 +43988,7 @@ msgstr "Ferramenta multi-pincel"
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask Tool"
-msgstr "Ferramenta para colorir máscara"
+msgstr "Ferramenta de máscara de colorir"
 
 #. i18n: context: text @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -44167,6 +44178,10 @@ msgstr ""
 "Alternar entre o intervalo completo e o subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "Filtro:"
 
 #~ msgid "Path options"
 #~ msgstr "Opções de caminho"

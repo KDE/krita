@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
 "PO-Revision-Date: 2025-04-12 10:50+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16485,6 +16485,7 @@ msgstr "Zaimportuj skalę obrazu"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
@@ -19799,7 +19800,7 @@ msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
@@ -27426,7 +27427,7 @@ msgstr "Wyrównanie"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 
@@ -28595,7 +28596,7 @@ msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
 
@@ -40190,11 +40191,6 @@ msgstr "Stopnie:"
 msgid "Scale"
 msgstr "Skala"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "Filtr:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "Wybrane dokumenty uległy zmianie."
@@ -44347,6 +44343,10 @@ msgstr ""
 "Przełącz pomiędzy pełnym zakresem, a podzakresem.\n"
 "Pełny zakres: [%1, %2]\n"
 "Podzakres: [%3, %4]"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "Filtr:"
 
 #~ msgid "Path options"
 #~ msgstr "Ustawienia ścieżki"

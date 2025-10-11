@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
-"PO-Revision-Date: 2025-10-09 22:19+0300\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"PO-Revision-Date: 2025-10-10 23:17+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16469,6 +16469,7 @@ msgstr "Масштабування імпортованого відео"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
@@ -19774,12 +19775,17 @@ msgstr "Параметри анімації"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "When this option is checked newly created layers will be automatically "
+#| "pinned to the animation timeline. This is useful when animating with a "
+#| "small number of layers or when many elements on different animated layers "
+#| "are interacting with eachother."
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 "Якщо позначено, новостворені шари буде автоматично пришпилено до монтажного "
 "столу анімації. Корисно для анімування з невеликою кількістю шарів, або якщо "
@@ -27493,10 +27499,14 @@ msgid "Alignment Baseline"
 msgstr "Базова лінія вирівнювання"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Alignment Baseline allows controling how this range of text is aligned to "
+#| "the parent text."
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 "Базова лінія вирівнювання надає змогу керувати тим, як цей фрагмент тексту "
@@ -27883,6 +27893,8 @@ msgid ""
 "Dominant Baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
+"Основна базова лінія визначає, як вирівнюються фрагменти тексту для різних "
+"розмірів символів; це також типове значення для базової лінії вирівнювання."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -27909,6 +27921,8 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"Вирівнює до абеткової базової лінії при горизонтальному компонуванні; "
+"вирівнює до центральної базової лінії при вертикальному компонуванні."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
@@ -27924,6 +27938,10 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
+"Гарнітура шрифту надає змогу вибрати список шрифтів, які слід "
+"використовувати для поточного тексту. Перша гарнітура шрифту є основним "
+"шрифтом, який використовується, тоді як кожна наступна гарнітура шрифту "
+"використовується як резервна."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -27963,6 +27981,8 @@ msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments."
 msgstr ""
+"Вмикає або вимикає кернінґ шрифту. Кернінґ шрифту надає змогу коригувати "
+"інтервал між символами для кожної окремої пари гліфів."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -27970,7 +27990,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr ""
+msgstr "font-kerning, tracking, кернінґ шрифту, стеження"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -28004,6 +28024,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
+"За допомогою коригування розміру шрифту можна встановити коефіцієнт, на який "
+"має бути помножено висоту x."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -28012,6 +28034,8 @@ msgctxt ""
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
+"size, small, big, medium, font-size-adjust, розмір, малий, великий, "
+"середній, коригування"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -28024,6 +28048,8 @@ msgstr "Обчислити"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
+"Обчислити коефіцієнт відношення висоти x до розміру шрифту для першої "
+"гарнітури шрифту."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
@@ -28038,6 +28064,8 @@ msgid ""
 "Font style allows setting the sub style of the given font family, such as "
 "italics and bold"
 msgstr ""
+"За допомогою стилю шрифту можна встановити підстиль заданої гарнітури "
+"шрифту, зокрема курсив та напівжирний"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:20
 #, kde-format
@@ -28048,6 +28076,9 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"weight, width, style, italics, oblique, font-style, font-stretch, font-"
+"weight, bold, optical-size, variation, вага, ширина, стиль, курсив, "
+"нахилений, стиль, розтягування, напівжирний, оптичний, варіація"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
@@ -28122,6 +28153,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
+"Висяча пунктуація дозволяє використовувати висячі початкові та завершальні "
+"розділові знаки, а також коми. Ця реалізація використовує лише висячу "
+"пунктуацію у східноазійському стилі."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -28180,6 +28214,8 @@ msgid ""
 "The language of this text shape. Language affects a number of properties, "
 "like glyph shape, upper- and lowercase and line breaking"
 msgstr ""
+"Мова цієї текстової фігури. Мова впливає на низку властивостей, таких як "
+"форма гліфа, великі і малі літери та розрив рядка."
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
 #, kde-format
@@ -28212,7 +28248,7 @@ msgstr "Інтервал між літерами"
 msgctxt "@info:tooltip"
 msgid ""
 "Letter spacing controls the spacing between visible clusters of characters."
-msgstr ""
+msgstr "Інтервал між літерами керує інтервалом між видимими скупченнями літер."
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:20
 #, kde-format
@@ -28220,7 +28256,7 @@ msgctxt ""
 "comma separated search terms for the letter-spacing property, matching is "
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
-msgstr ""
+msgstr "letter-spacing, tracking, kerning, інтервал, стеження, кернінґ"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -28235,6 +28271,9 @@ msgid ""
 "Line Break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
+"За допомогою параметра розриву рядка можна вибрати строгість для алгоритму "
+"розриву рядків. Здебільшого використовують для східноазійських писемностей, "
+"потребує встановлення мови."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -28243,12 +28282,15 @@ msgctxt ""
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
 msgstr ""
+"line-break, line breaking, strictness, kinsoku, розрив, рядки, строгість, "
+"кінсоку"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
 msgstr ""
+"Не вносити особливих коригувань до алгоритму встановлення розривів рядків"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
@@ -28261,6 +28303,8 @@ msgstr "Вільно"
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
+"Хоча типово означає встановлення менш строгого алгоритму, у поточній "
+"реалізації це те саме, що «авто»."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -28269,6 +28313,8 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"Те саме, що «авто». Буде уможливлено м'які розриви перед малими кана, якщо "
+"мовою тексту є японська."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, kde-format
@@ -28280,7 +28326,7 @@ msgstr "Строго"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr ""
+msgstr "Буде уможливлено м'які розриви перед малими кана."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
@@ -28293,7 +28339,7 @@ msgstr "Будь-де"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr ""
+msgstr "Буде уможливлено м'які розриви між будь-якими графемами."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
@@ -28341,7 +28387,7 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "font-feature-settings, OpenType, можливості, параметри"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
@@ -28380,6 +28426,8 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals, "
+"прописні, капітель, заголовки, великі"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
@@ -28428,6 +28476,8 @@ msgstr "Гліфи: східноазійські"
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
 msgstr ""
+"Увімкнути форми гліфів, які пов'язано із компонуваннями текстів "
+"східноазійськими мовами."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -28438,6 +28488,8 @@ msgid ""
 "font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
 "full-width"
 msgstr ""
+"font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
+"full-width, повна, ширина, східноазійські"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
 #, kde-format
@@ -28528,6 +28580,8 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"font-variant-ligatures, common-ligatures, discretionary-ligatures, "
+"historical-ligatures, contextual-alts, лігатури, історичні"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -28566,14 +28620,22 @@ msgid "Enable number-related glyph forms on the text."
 msgstr "Увімкнути пов'язані з числами форми гліфів у тексті."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "comma separated search terms for the font-variant-numeric property, "
+#| "matching is case-insensitive"
+#| msgid ""
+#| "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, "
+#| "slashed zero, fractions"
 msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"zero, fractions, числа, порядкові, перекреслений нуль, дроби"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -28655,6 +28717,8 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
 msgstr ""
+"font-variant-position, superscript, subscript, варіанти, нижній, верхній, "
+"індекс"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
@@ -28855,6 +28919,8 @@ msgctxt ""
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
 msgstr ""
+"underline, overline, strikethrough, line-through, підкреслювання, "
+"надкреслювання, перекреслювання"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -28929,6 +28995,8 @@ msgid ""
 "Text Indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"Абзацний відступ надає змогу визначити відступ на початку абзацу. Працює, "
+"лише якщо увімкнено перенесення рядків."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -28975,6 +29043,8 @@ msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
 msgstr ""
+"У цій системі немає гарнітури шрифту «%1». Цей набір параметрів стилю може "
+"працювати некоректно."
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:216
 #, kde-format
@@ -29068,7 +29138,7 @@ msgstr "Обробка тексту"
 msgctxt "@info:tooltip"
 msgid ""
 "Text Rendering controls the hinting and rendering style for the property"
-msgstr ""
+msgstr "Обробка тексту керує гінтінґом та стилем обробки для властивості"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -29086,6 +29156,8 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
+"Те саме, що і геометрична точність, не використовує гінтінґу і завантаження "
+"внутрішніх растрових зображень."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
 #, kde-format
@@ -29103,7 +29175,7 @@ msgstr "Обробляє без згладжування."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Legibility"
-msgstr ""
+msgstr "Оптимізувати чіткість"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:86
 #, kde-format
@@ -29124,6 +29196,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
 msgstr ""
+"Без гінтінґу і без завантаження растрових штрихів, якщо у шрифту немає "
+"контурів."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, kde-format
@@ -29139,6 +29213,9 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"Перетворення тексту надає змогу перетворювати заданий діапазон символів, "
+"наприклад, встановлюючи для них верхній регістр або замінюючи форми "
+"половинної ширини на форми повної ширини."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -29149,6 +29226,8 @@ msgid ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana"
 msgstr ""
+"text-transform, uppercase, capitalization, lowercase, full-width, full-size "
+"kana, перетворення, верхній, нижній, регістр, повна, ширина, кана"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
@@ -29205,6 +29284,8 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
 msgstr ""
+"text-decoration-position, underline, left, right, under, декорація, "
+"оформлення, підкреслювання, ліворуч, праворуч, знизу"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
@@ -29237,6 +29318,8 @@ msgid ""
 "The CSS white space rule controls how multiples of spaces are handled, and "
 "whether the text can wrap."
 msgstr ""
+"Правило пробілів CSS керує тим, як буде оброблено кратні пробіли, і тим, чи "
+"можна переносити рядки тексту."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
 #, kde-format
@@ -29244,7 +29327,7 @@ msgctxt ""
 "comma separated search terms for the white-space property, matching is case-"
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
-msgstr ""
+msgstr "white-space, collapse, pre-formatted, пробіл, згортання, форматування"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -29290,6 +29373,9 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"Параметр розриву рядка надає змогу точно налаштувати розрив рядка, "
+"перемикаючи між режимами: розривати рядок лише на словах чи також на "
+"символах. Корисно для корейської та ефіопської мов."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -29297,7 +29383,7 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "word-break, line breaking, перенесення, слів, рядків"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
@@ -29318,6 +29404,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
 msgstr ""
+"М'яке перенесення буде дозволено лише у межах слів, типово, обмежених "
+"пробілами."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
 #, kde-format
@@ -29338,6 +29426,8 @@ msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
 msgstr ""
+"Інтервал між словами керує розміром символів, які відокремлюють слова, "
+"зокрема розміром пробілу."
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -29345,7 +29435,7 @@ msgctxt ""
 "comma separated search terms for the word-spacing property, matching is case-"
 "insensitive"
 msgid "word-spacing, tracking, white space,"
-msgstr ""
+msgstr "word-spacing, tracking, white space, інтервал, стеження, пробіл"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -29360,6 +29450,8 @@ msgid ""
 "Writing Mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"Режим письма визначає, записується текст горизонтально чи вертикально, а в "
+"останньому випадку – чи блок рухається справа наліво чи зліва направо."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -40155,11 +40247,6 @@ msgstr "Градуси:"
 msgid "Scale"
 msgstr "Масштабувати"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "Фільтр:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "Позначені документи було змінено."
@@ -42860,6 +42947,9 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+"Шукає символи, що відповідають першій літері рядка. Шістнадцятковий пошук "
+"можливий, якщо перед ним додати «U+» (наприклад, U+0045 призводитиме до "
+"пошуку «E»)"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -44337,6 +44427,10 @@ msgstr ""
 "Перемикання між повним діапазоном і піддіапазоном.\n"
 "Повний діапазон: [%1, %2]\n"
 "Піддіапазон: [%3, %4]"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "Фільтр:"
 
 #~ msgid "Path options"
 #~ msgstr "Параметри контурів"

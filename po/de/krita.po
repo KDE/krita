@@ -9,51 +9,51 @@
 # --- krita_shape_paths
 # --- krita_shape_vector
 # SPDX-FileCopyrightText: 2021, 2024, 2025 tobi <onewayme001@posteo.de>
-# Thomas Diehl <thd@kde.org>, 2002, 2003.
-# Stephan Johach <hunsum@gmx.de>, 2005.
-# Patrick Trettenbrein <patrick.trettenbrein@kdemail.net>, 2005.
-# Oliver Dörr <digikam-de@doerr-privat.de>, 2006.
-# Burkhard Lück <lueck@hube-lueck.de>, 2006, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2006, 2007.
-# Frederik Schwarzer <schwarzer@kde.org>, 2006, 2010, 2011, 2012, 2013, 2015, 2016.
-# Jannick Kuhr <opensource@kuhr.org>, 2005, 2006, 2007, 2008, 2009, 2010.
-# Markus Slopianka <markus.s@kdemail.net>, 2010.
-# Peter Rüthemann <peter.ruethemann@gmail.com>, 2011.
-# Eduard Gotwig <gotwig@ubuntu.com>, 2012.
-# Burkhard Lück <lueck@hube-lueck.de>, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011, 2012, 2013, 2016.
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2008, 2009, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2007.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2012.
-# Jannick Kuhr <opensource@kuhr.org>, 2008, 2010.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2015.
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2008, 2009.
-# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2009, 2013.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011.
-# Burkhard Lück <lueck@hube-lueck.de>, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2006.
-# Justus Seifert <justus.seifert@googlemail.com>, 2008.
-# Jannick Kuhr <opensource@kuhr.org>, 2008, 2009.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011, 2012, 2013, 2014, 2015.
-# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2016.
-# Burkhard Lück <lueck@hube-lueck.de>, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014.
-# Jannick Kuhr <opensource@kuhr.org>, 2005, 2006, 2007, 2008, 2009.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2016.
-# Jannick Kuhr <opensource@kuhr.org>, 2008, 2009, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011, 2012, 2013, 2014.
-# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2018, 2022.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011.
-# Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021.
-# Maik Wagner <linuxandlanguages@t-online.de>, 2016.
-# tobi <onewayme001@posteo.de>, 2021, 2024.
+# SPDX-FileCopyrightText: 2002, 2003 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2005 Stephan Johach <hunsum@gmx.de>
+# SPDX-FileCopyrightText: 2005 Patrick Trettenbrein <patrick.trettenbrein@kdemail.net>
+# SPDX-FileCopyrightText: 2006 Oliver Dörr <digikam-de@doerr-privat.de>
+# SPDX-FileCopyrightText: 2006, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2006, 2007 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2006, 2010, 2011, 2012, 2013, 2015, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
+# SPDX-FileCopyrightText: 2011 Peter Rüthemann <peter.ruethemann@gmail.com>
+# SPDX-FileCopyrightText: 2012 Eduard Gotwig <gotwig@ubuntu.com>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2010, 2012 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2008, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2012, 2013, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007, 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2008, 2009, 2013 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010, 2011 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2006 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2008 Justus Seifert <justus.seifert@googlemail.com>
+# SPDX-FileCopyrightText: 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2009, 2011, 2012, 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2011, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2009, 2011, 2012, 2013, 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2011, 2018, 2022 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2009, 2011 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010 Panagiotis Papadopoulos <pano_90@gmx.net>
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2016 Maik Wagner <linuxandlanguages@t-online.de>
+# SPDX-FileCopyrightText: 2021, 2024 tobi <onewayme001@posteo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
 "PO-Revision-Date: 2025-02-16 11:21+0100\n"
 "Last-Translator: oneway <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -17204,6 +17204,7 @@ msgstr "Bild importieren"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, fuzzy, kde-format
 #| msgid "Filter:"
 msgctxt "Resize interpolation method list label"
@@ -20578,7 +20579,7 @@ msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
@@ -28046,7 +28047,7 @@ msgstr "Ausrichtung"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 
@@ -29199,7 +29200,7 @@ msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
 
@@ -41052,13 +41053,6 @@ msgstr "Grad:"
 msgid "Scale"
 msgstr "Skalierung"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-#, fuzzy
-#| msgid "Filter:"
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "Filter:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "Das ausgewählte Dokument wurde geändert."
@@ -45373,6 +45367,12 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "Filter:"
 
 #, fuzzy
 #~| msgid "Patch Options"

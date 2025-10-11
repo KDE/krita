@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-09 02:06+0000\n"
+"POT-Creation-Date: 2025-10-11 10:56+0000\n"
 "PO-Revision-Date: 2025-10-08 21:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -16362,6 +16362,7 @@ msgstr "استيراد مقياس فيديو"
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
@@ -19627,12 +19628,17 @@ msgstr "إعدادات التحريك"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "When this option is checked newly created layers will be automatically "
+#| "pinned to the animation timeline. This is useful when animating with a "
+#| "small number of layers or when many elements on different animated layers "
+#| "are interacting with eachother."
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
 "number of layers or when many elements on different animated layers are "
-"interacting with eachother."
+"interacting with each other."
 msgstr ""
 "عندما تحدّد هذا الخيار، ألسنة الإطارات الجديدة تنشأ آلياً وتثبت على الخط "
 "الزمني للرسوم المتحركة. هذا مفيد عند التحريك بعدد صغير من الألسنة أو عند "
@@ -27174,10 +27180,14 @@ msgid "Alignment Baseline"
 msgstr "خط الأساس للمحاذاة"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Alignment Baseline allows controling how this range of text is aligned to "
+#| "the parent text."
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controling how this range of text is aligned to "
+"Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 "خط الأساس للمحاذاة يسمح بالتحكم في كيفية محاذاة هذا النطاق من النص بالنسبة "
@@ -28255,12 +28265,18 @@ msgid "Enable number-related glyph forms on the text."
 msgstr "فعّل أشكال المحارف المتعلقة بالأرقام على النص."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "comma separated search terms for the font-variant-numeric property, "
+#| "matching is case-insensitive"
+#| msgid ""
+#| "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, "
+#| "slashed zero, fractions"
 msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
 msgid ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
 "شكل-متغير-للخط-رقمي، أرقام بالنمط القديم، أرقام تراصفية، أرقام ترتيبية، صفر "
@@ -39713,11 +39729,6 @@ msgstr "الدرجات:"
 msgid "Scale"
 msgstr "المقاس"
 
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
-msgctxt "Resize intepolation method list label"
-msgid "Filter:"
-msgstr "المرشّح:"
-
 #: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "غير المستندات المحددة."
@@ -43796,6 +43807,10 @@ msgstr ""
 "بدّل بين النطاق الكامل والنطاق الفرعي.\n"
 "النطاق الكامل: [%1, %2]\n"
 "النطاق الفرعي: [%3, %4]"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "Filter:"
+#~ msgstr "المرشّح:"
 
 #~ msgid "Path options"
 #~ msgstr "خيارات المسار"

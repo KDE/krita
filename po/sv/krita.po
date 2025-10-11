@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 03:36+0000\n"
-"PO-Revision-Date: 2025-09-17 16:51+0200\n"
+"PO-Revision-Date: 2025-10-10 21:15+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -19602,7 +19602,7 @@ msgstr "Avancerat..."
 #: libs/ui/forms/wdggeneralsettings.ui:1533
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Långt tryck för att öppna sammanhangsberoende menyer"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)

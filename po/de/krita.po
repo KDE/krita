@@ -9,46 +9,46 @@
 # --- krita_shape_paths
 # --- krita_shape_vector
 # SPDX-FileCopyrightText: 2021, 2024, 2025 tobi <onewayme001@posteo.de>
-# Thomas Diehl <thd@kde.org>, 2002, 2003.
-# Stephan Johach <hunsum@gmx.de>, 2005.
-# Patrick Trettenbrein <patrick.trettenbrein@kdemail.net>, 2005.
-# Oliver Dörr <digikam-de@doerr-privat.de>, 2006.
-# Burkhard Lück <lueck@hube-lueck.de>, 2006, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2006, 2007.
-# Frederik Schwarzer <schwarzer@kde.org>, 2006, 2010, 2011, 2012, 2013, 2015, 2016.
-# Jannick Kuhr <opensource@kuhr.org>, 2005, 2006, 2007, 2008, 2009, 2010.
-# Markus Slopianka <markus.s@kdemail.net>, 2010.
-# Peter Rüthemann <peter.ruethemann@gmail.com>, 2011.
-# Eduard Gotwig <gotwig@ubuntu.com>, 2012.
-# Burkhard Lück <lueck@hube-lueck.de>, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011, 2012, 2013, 2016.
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2008, 2009, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2007.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2012.
-# Jannick Kuhr <opensource@kuhr.org>, 2008, 2010.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2015.
-# Jannick Kuhr <opensource@kuhr.org>, 2007, 2008, 2009.
-# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2009, 2013.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011.
-# Burkhard Lück <lueck@hube-lueck.de>, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2006.
-# Justus Seifert <justus.seifert@googlemail.com>, 2008.
-# Jannick Kuhr <opensource@kuhr.org>, 2008, 2009.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011, 2012, 2013, 2014, 2015.
-# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2016.
-# Burkhard Lück <lueck@hube-lueck.de>, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014.
-# Jannick Kuhr <opensource@kuhr.org>, 2005, 2006, 2007, 2008, 2009.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2016.
-# Jannick Kuhr <opensource@kuhr.org>, 2008, 2009, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011, 2012, 2013, 2014.
-# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2018, 2022.
-# Burkhard Lück <lueck@hube-lueck.de>, 2009, 2011.
-# Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
-# Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021.
-# Maik Wagner <linuxandlanguages@t-online.de>, 2016.
-# tobi <onewayme001@posteo.de>, 2021, 2024.
+# SPDX-FileCopyrightText: 2002, 2003 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2005 Stephan Johach <hunsum@gmx.de>
+# SPDX-FileCopyrightText: 2005 Patrick Trettenbrein <patrick.trettenbrein@kdemail.net>
+# SPDX-FileCopyrightText: 2006 Oliver Dörr <digikam-de@doerr-privat.de>
+# SPDX-FileCopyrightText: 2006, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2006, 2007 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2006, 2010, 2011, 2012, 2013, 2015, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
+# SPDX-FileCopyrightText: 2011 Peter Rüthemann <peter.ruethemann@gmail.com>
+# SPDX-FileCopyrightText: 2012 Eduard Gotwig <gotwig@ubuntu.com>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2010, 2012 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2008, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2012, 2013, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2007, 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2008, 2009, 2013 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010, 2011 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2006 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2008 Justus Seifert <justus.seifert@googlemail.com>
+# SPDX-FileCopyrightText: 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2009, 2011, 2012, 2013, 2014, 2015 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2011, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2010, 2016 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2008, 2009, 2010 Jannick Kuhr <opensource@kuhr.org>
+# SPDX-FileCopyrightText: 2009, 2011, 2012, 2013, 2014 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2011, 2018, 2022 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2009, 2011 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010 Panagiotis Papadopoulos <pano_90@gmx.net>
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2016 Maik Wagner <linuxandlanguages@t-online.de>
+# SPDX-FileCopyrightText: 2021, 2024 tobi <onewayme001@posteo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"

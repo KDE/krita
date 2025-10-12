@@ -11,6 +11,8 @@
 #include <kis_paint_device.h>
 #include "kistest.h"
 
+#include <QElapsedTimer>
+
 #include <KoColor.h>
 
 #include <kis_paint_device_debug_utils.h>

@@ -548,12 +548,33 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         REQUIRED COMPONENTS
         ColorScheme
     )
+
+    # Qt 6.10 has split this into it's own CMake module, it's no longer included with Gui
+    if (Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+        find_package(Qt6GuiPrivate ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+        get_target_property(Qt6Gui_PRIVATE_INCLUDE_DIRS Qt6::GuiPrivate INTERFACE_INCLUDE_DIRECTORIES)
+
+        # QtGui depends on private headers form QtCore as well
+        find_package(Qt6CorePrivate ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+        get_target_property(Qt6Core_PRIVATE_INCLUDE_DIRS Qt6::CorePrivate INTERFACE_INCLUDE_DIRECTORIES)
+
+        # Currently we depend on the Qt6Gui_PRIVATE_INCLUDE_DIRS variable to selectively include
+        # the needed headers, but it will fail to compile in 6.10 since the private headers exist
+        # in separate directories. So we'll just shove them into the variable we expect for now.
+        list(APPEND Qt6Gui_PRIVATE_INCLUDE_DIRS ${Qt6Core_PRIVATE_INCLUDE_DIRS})
+    endif()
 endif()
 
 set(HAVE_WAYLAND FALSE)
 if (TARGET Qt::WaylandClient)
     message(STATUS "Found Qt::WaylandClient, enabling kritawayland platform")
     set(HAVE_WAYLAND TRUE)
+
+    # Qt 6.10 has split the private module, see above for a better explanation
+    if (Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+        find_package(Qt6WaylandClientPrivate ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+        get_target_property(Qt6WaylandClient_PRIVATE_INCLUDE_DIRS Qt6::WaylandClientPrivate INTERFACE_INCLUDE_DIRECTORIES)
+    endif()
 endif()
 
 option(KRITA_USE_SURFACE_COLOR_MANAGEMENT_API "Use per-surface color management API (e.g. when using Wayland)" ${HAVE_WAYLAND})

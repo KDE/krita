@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-09-27 16:15+0200\n"
+"PO-Revision-Date: 2025-10-08 12:22+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20028,7 +20028,7 @@ msgstr "Anteponi «Copia di» ai livelli duplicati"
 #: libs/ui/forms/wdggeneralsettings.ui:1559
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Pressione prolungata per aprire i menu contestuali"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:1566
@@ -37667,8 +37667,7 @@ msgstr "Dettagli del pennello"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
-#, fuzzy, kde-format
-#| msgid "Preserve Brush Preset Settings"
+#, kde-format
 msgid "Preserve brush preset settings"
 msgstr "Preserva la configurazione delle preimpostazioni del pennello"
 
@@ -37723,34 +37722,25 @@ msgstr "Modalità a tubo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Contrast: "
+#, kde-format
 msgid "Contrast: "
 msgstr "Contrasto: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Neutral point: "
+#, kde-format
 msgid "Neutral point: "
 msgstr "Punto neutro: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Brightness: "
+#, kde-format
 msgid "Brightness: "
 msgstr "Luminosità: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgid "Scale: "
 msgstr "Scala: "
 

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-10 11:37-0300\n"
+"PO-Revision-Date: 2025-10-11 20:11-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -2804,7 +2804,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "ink_precision_03.kpp"
 msgid "ink precision 03"
-msgstr "precisão de tinta 03"
+msgstr "tinta precisa 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3999,7 +3999,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-1_Precision.kpp"
 msgid "d) Ink-1 Precision"
-msgstr "d) Precisão de tinta-1"
+msgstr "d) Tinta precisa-1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4008,7 +4008,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-2_Fineliner.kpp"
 msgid "d) Ink-2 Fineliner"
-msgstr "d) Tinta-2 linha fina"
+msgstr "d) Tinta-linha-fina-2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4809,7 +4809,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Grass_Patch.kpp"
 msgid "z) Stamp Grass Patch"
-msgstr "z) Patch de estampa de grama"
+msgstr "z) Patch de carimbo de grama"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -7953,7 +7953,7 @@ msgstr "Lado a lado"
 #, kde-format
 msgctxt "action"
 msgid "Create Resource Bundle..."
-msgstr "Criar um grupo de recursos..."
+msgstr "Criar um pacote de recursos..."
 
 #. i18n: context: toolTip @ Action (create_bundle), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_bundle), Actions (General), ActionCollection (Krita)
@@ -7961,7 +7961,7 @@ msgstr "Criar um grupo de recursos..."
 #, kde-format
 msgctxt "action"
 msgid "Create Resource Bundle"
-msgstr "Criar um grupo de recursos"
+msgstr "Criar um pacote de recursos"
 
 #. i18n: context: text @ Action (mainToolBar), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mainToolBar), Actions (General), ActionCollection (Krita)
@@ -8286,7 +8286,7 @@ msgstr "Amostra da cor da tela (amostra da tela de pintura real)"
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Mostrar áreas acopláveis"
+msgstr "Mostrar caixa de painéis"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:343
@@ -8989,8 +8989,8 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
-"Mostra a seleção global como uma máscara de seleção normal na área acoplável "
-"de <interface>Camadas</interface>"
+"Mostra a seleção global como uma máscara de seleção normal no painel de "
+"<interface>Camadas</interface>"
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:1030
@@ -11915,7 +11915,7 @@ msgstr "Deslocar camadas"
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
-msgstr "List&a de clones..."
+msgstr "M&atriz de clones..."
 
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -11923,7 +11923,7 @@ msgstr "List&a de clones..."
 #, kde-format
 msgctxt "action"
 msgid "Clones Array"
-msgstr "Lista de clones"
+msgstr "Matriz de clones"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3466
@@ -14567,7 +14567,7 @@ msgstr "Mudar o idioma do aplicativo"
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
-msgstr "Mo&strar áreas acopláveis"
+msgstr "Mo&strar painéis"
 
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
@@ -14575,14 +14575,14 @@ msgstr "Mo&strar áreas acopláveis"
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
-msgstr "Mostrar áreas acopláveis"
+msgstr "Mostrar painéis"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr "Most&rar barras de título das áreas acopláveis"
+msgstr "Most&rar barras de título dos painéis"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -14590,7 +14590,7 @@ msgstr "Most&rar barras de título das áreas acopláveis"
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr "Mostrar barras de título das áreas acopláveis"
+msgstr "Mostrar barras de título dos painéis"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1809
@@ -14615,7 +14615,7 @@ msgstr "Configurar barras de ferramentas"
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
-msgstr "Áreas acopláveis"
+msgstr "Painéis"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1831
@@ -15729,7 +15729,7 @@ msgstr "Alfa (16-bits/canal ponto flutuante)"
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:172
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr "Operação indefinida no espaço de cor 'alfa'"
+msgstr "Operação indefinida no espaço de cor alfa"
 
 #: libs/pigment/colorspaces/KoLabColorSpace.h:66
 #, kde-format
@@ -15792,7 +15792,7 @@ msgstr "Pasta"
 #: libs/resources/KisResourceStorage.h:121
 #, kde-format
 msgid "Bundle"
-msgstr "Grupo de recursos"
+msgstr "Pacote de recursos"
 
 #: libs/resources/KisResourceStorage.h:123
 #, kde-format
@@ -16397,7 +16397,7 @@ msgstr "Altura:"
 #: libs/ui/animation/VideoImportDialog.ui:553
 #, kde-format
 msgid "Import Video Scale"
-msgstr "Importar escala de vídeo"
+msgstr "Escala de importação do vídeo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
@@ -16479,7 +16479,7 @@ msgstr "Selecione as opções de exportação de quadro "
 #: libs/ui/animation/wdg_animationrenderer.ui:86
 #, kde-format
 msgid "Image location:"
-msgstr "Localização da Imagem:"
+msgstr "Localização da imagem:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/wdg_animationrenderer.ui:96
@@ -16605,7 +16605,7 @@ msgstr "Localização do vídeo:"
 #: libs/ui/animation/wdg_animationrenderer.ui:232
 #, kde-format
 msgid "Include Audio"
-msgstr "Incluir Áudio"
+msgstr "Incluir áudio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
@@ -18623,7 +18623,7 @@ msgstr "Filtragem de alta qualidade"
 #: libs/ui/forms/wdgdisplaysettings.ui:139
 #, kde-format
 msgid "Scaling Mode:"
-msgstr "Modo de escala:"
+msgstr "Modo de escalonamento:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
@@ -18969,7 +18969,7 @@ msgstr "Adaptar à resolução da imagem (PPI)"
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
 #, kde-format
 msgid "&Scaling Filter:"
-msgstr "&Filtro de escala:"
+msgstr "&Filtro de escalonamento:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -19139,7 +19139,7 @@ msgstr "Barras de ferramentas"
 #: libs/ui/forms/wdgfullscreensettings.ui:49
 #, kde-format
 msgid "Toolbox and dockers"
-msgstr "Caixa de ferramentas e áreas acopláveis"
+msgstr "Caixa de ferramentas e painéis"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScrollbars)
 #: libs/ui/forms/wdgfullscreensettings.ui:56
@@ -19170,7 +19170,7 @@ msgstr "Alternar máscara de gamute"
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "Selecione uma máscara na área acoplável de \"Máscaras de gamute\""
+msgstr "Selecione uma máscara no painel de \"Máscaras de gamute\""
 
 #. i18n: ectx: attribute (title), widget (QWidget, File)
 #: libs/ui/forms/wdggeneralsettings.ui:52
@@ -19570,7 +19570,7 @@ msgstr "Localização das opções da ferramenta (é necessário reiniciar)"
 #: libs/ui/forms/wdggeneralsettings.ui:906
 #, kde-format
 msgid "In Doc&ker"
-msgstr "Na área aco&plável"
+msgstr "No &painel"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
 #: libs/ui/forms/wdggeneralsettings.ui:913
@@ -19699,12 +19699,7 @@ msgstr "Configurações de animação"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, fuzzy, kde-format
-#| msgid ""
-#| "When this option is checked newly created layers will be automatically "
-#| "pinned to the animation timeline. This is useful when animating with a "
-#| "small number of layers or when many elements on different animated layers "
-#| "are interacting with eachother."
+#, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
@@ -19753,10 +19748,10 @@ msgid ""
 "range will cause the timeline to zoom out."
 msgstr ""
 "Quando marcada, esta opção dimensionará automaticamente a visualização de "
-"quadros da área acoplável da Linha do Tempo da Animação para melhor se "
-"ajustar ao intervalo de reprodução do documento. Um intervalo de reprodução "
-"menor fará com que a linha do tempo seja ampliada, enquanto um intervalo de "
-"reprodução maior fará com que a linha do tempo seja reduzida."
+"quadros do painel da linha do tempo da animação para melhor se ajustar ao "
+"intervalo de reprodução do documento. Um intervalo de reprodução menor fará "
+"com que a linha do tempo seja ampliada, enquanto um intervalo de reprodução "
+"maior fará com que a linha do tempo seja reduzida."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
 #: libs/ui/forms/wdggeneralsettings.ui:1095
@@ -19993,8 +19988,7 @@ msgstr "Sensibilidade:"
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
-"Ocultar barras de rolagem da área acoplável se a rolagem cinética estiver "
-"ativada"
+"Ocultar barras de rolagem do painel se a rolagem cinética estiver ativada"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1658
@@ -25686,7 +25680,7 @@ msgstr "Configurações do seletor de cor"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:42
 #, kde-format
 msgid "Docker:"
-msgstr "Área acoplável:"
+msgstr "Painel:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
@@ -25773,7 +25767,7 @@ msgstr "Comportamento"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:274
 #, kde-format
 msgid "When Docker Resizes: "
-msgstr "Quando a área acoplável é redimensionada: "
+msgstr "Quando o painel é redimensionado: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:294
@@ -26212,7 +26206,7 @@ msgstr "Preferências da roda de cores"
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
 #, kde-format
 msgid "Docker settings"
-msgstr "Configurações da área acoplável"
+msgstr "Configurações do painel"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -27347,11 +27341,7 @@ msgid "Alignment Baseline"
 msgstr "Linha base de alinhamento"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controling how this range of text is aligned to "
-#| "the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment Baseline allows controlling how this range of text is aligned to "
@@ -28456,13 +28446,7 @@ msgid "Enable number-related glyph forms on the text."
 msgstr "Habilita formas de glifos relacionadas a números no texto."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the font-variant-numeric property, "
-#| "matching is case-insensitive"
-#| msgid ""
-#| "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, "
-#| "slashed zero, fractions"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
@@ -31398,7 +31382,7 @@ msgstr "Resumo:"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:46
 #, kde-format
 msgid "Bundle Name:"
-msgstr "Nome do grupo de recursos:"
+msgstr "Nome do pacote de recursos:"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -31492,7 +31476,7 @@ msgstr "Atualizado:"
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
 #, kde-format
 msgid "New Bundle..."
-msgstr "Novo grupo de recursos..."
+msgstr "Novo pacote de recursos..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -31526,7 +31510,7 @@ msgstr "Abrir pasta de recursos"
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:106
 #, kde-format
 msgid "Create a Bundle"
-msgstr "Crie um pacote"
+msgstr "Criar um pacote"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:116
@@ -31596,7 +31580,7 @@ msgstr "Escolher etiquetas"
 #: plugins/extensions/resourcemanager/wdgside.ui:99
 #, kde-format
 msgid "Enter Bundle Details"
-msgstr "Digite os detalhes do grupo"
+msgstr "Digite os detalhes do pacote"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
@@ -31709,25 +31693,25 @@ msgstr "Aplainar todas as camadas antes da separação"
 #: plugins/extensions/separate_channels/wdg_separations.ui:90
 #, kde-format
 msgid "Alpha Options"
-msgstr "Opções do 'Alfa'"
+msgstr "Opções do alfa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCopyAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:96
 #, kde-format
 msgid "Copy alpha channel to each separated channel as an alpha channel"
-msgstr "Copiar o canal 'alfa' para cada canal separado como um canal 'alfa'"
+msgstr "Copiar o canal alfa para cada canal separado como um canal alfa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioDiscardAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:103
 #, kde-format
 msgid "Discard alpha channel"
-msgstr "Eliminar o canal 'alfa'"
+msgstr "Descartar canal alfa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSeparateAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:113
 #, kde-format
 msgid "Create separate separation from alpha channel"
-msgstr "Criar uma separação do canal de 'alfa'"
+msgstr "Criar uma separação do canal de alfa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownscale)
 #: plugins/extensions/separate_channels/wdg_separations.ui:123
@@ -35534,7 +35518,7 @@ msgid ""
 "recommended.</p>"
 msgstr ""
 "<p>O formato PNG (Portable Network Graphics) permite guardar a transparência "
-"da sua imagem, salvando um canal de 'alfa'.\n"
+"da sua imagem, salvando um canal alfa.\n"
 "Você poderá desativar a opção se não estiver usando transparências e quiser "
 "tornar o arquivo resultante menor.<br>Recomenda-se sempre salvar o canal "
 "'alfa'.</p>"
@@ -35543,7 +35527,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:184
 #, kde-format
 msgid "Store alpha channel (transparency)"
-msgstr "Armazenar o canal 'alfa' (transparência)"
+msgstr "Armazenar o canal alfa (transparência)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:194
@@ -35757,7 +35741,7 @@ msgstr "ZIP"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:134
 #, kde-format
 msgid "Store alpha &channel (transparency)"
-msgstr "Armazenar o &canal 'alfa' (transparência)"
+msgstr "Armazenar o &canal alfa (transparência)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxJPEG)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:230
@@ -37116,7 +37100,7 @@ msgstr "Taxa de proporção:"
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
 #, kde-format
 msgid "Preserve alpha"
-msgstr "Preservar o 'alfa'"
+msgstr "Preservar o alfa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
@@ -40249,7 +40233,7 @@ msgstr "E&xtensão"
 #: plugins/python/krita_script_starter/bbdkss.ui:129
 #, kde-format
 msgid "&Docker"
-msgstr "Área a&coplável"
+msgstr "&Painel"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:152
@@ -40262,8 +40246,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Se isto estiver marcado, seu script será "
 "automaticamente ativado no Krita. Ele será mostrado no menu Scripts ou na "
-"lista da área acoplável. Caso contrário, você precisará ativar o script "
-"manualmente usando o menu Configurações do Krita. </p></body></html>"
+"lista de painéis. Caso contrário, você precisará ativar o script manualmente "
+"usando o menu Configurações do Krita. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -40279,7 +40263,7 @@ msgstr "Criar Script"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
-msgstr "Área acoplável de Últimos documentos"
+msgstr "Painel de últimos documentos"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:46
 msgid "Change settings"
@@ -40287,7 +40271,7 @@ msgstr "Alterar configurações"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:63
 msgid "Mixer Slider Docker"
-msgstr "Área acoplável de Misturador de barras"
+msgstr "Painel do misturador de barras"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:39
 msgid "Number of slider lines: "
@@ -40407,7 +40391,7 @@ msgstr ""
 
 #: plugins/python/palette_docker/palette_docker.py:48
 msgid "Python Palette Docker"
-msgstr "Área acoplável de Paletas Python"
+msgstr "Painel de paletas Python"
 
 #: plugins/python/palette_docker/palette_docker.py:74
 msgid "Set"
@@ -40592,7 +40576,7 @@ msgstr "Arquivos Zip"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:36
 msgid "Quick Settings Docker"
-msgstr "Área acoplável de Configurações rápidas"
+msgstr "Painel de configurações rápidas"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -40600,7 +40584,7 @@ msgstr "Adicionar Script"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Área acoplável de Script"
+msgstr "Painel de scripts"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -40731,7 +40715,7 @@ msgstr "Erro ao rodar o Script"
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
 msgid "Selections Bag"
-msgstr "Maleta de Seleções"
+msgstr "Lista de seleções"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonSave)
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.ui:27
@@ -42463,13 +42447,13 @@ msgstr "Ferramenta de seleção retangular"
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
-msgstr "Seleção de cores semelhantes"
+msgstr "Seleção de cor semelhante"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
-msgstr "Seleção de cores semelhantes"
+msgstr "Seleção de cor semelhante"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, kde-format
@@ -42495,7 +42479,7 @@ msgstr "Extensão da seleção"
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
-msgstr "Ferramenta de seleção de cores semelhantes"
+msgstr "Ferramenta de seleção de cor semelhante"
 
 #. i18n: context: text @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectContiguous), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -42683,7 +42667,7 @@ msgstr "Ferramenta de seleção retangular"
 #, kde-format
 msgctxt "action"
 msgid "Similar Color Selection Tool"
-msgstr "Ferramenta de seleção de cores semelhantes"
+msgstr "Ferramenta de seleção de cor semelhante"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:44
 #, kde-format
@@ -43617,7 +43601,7 @@ msgstr "Livre"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:304
 #, kde-format
 msgid "Free Transform"
-msgstr "Transformação Livre"
+msgstr "Transformação livre"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, warpButton)
 #. i18n: ectx: property (text), widget (QToolButton, warpButton)

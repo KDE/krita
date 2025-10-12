@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-10 23:17+0300\n"
+"PO-Revision-Date: 2025-10-11 16:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19775,12 +19775,7 @@ msgstr "Параметри анімації"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, fuzzy, kde-format
-#| msgid ""
-#| "When this option is checked newly created layers will be automatically "
-#| "pinned to the animation timeline. This is useful when animating with a "
-#| "small number of layers or when many elements on different animated layers "
-#| "are interacting with eachother."
+#, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
@@ -27499,11 +27494,7 @@ msgid "Alignment Baseline"
 msgstr "Базова лінія вирівнювання"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controling how this range of text is aligned to "
-#| "the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment Baseline allows controlling how this range of text is aligned to "
@@ -28620,13 +28611,7 @@ msgid "Enable number-related glyph forms on the text."
 msgstr "Увімкнути пов'язані з числами форми гліфів у тексті."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the font-variant-numeric property, "
-#| "matching is case-insensitive"
-#| msgid ""
-#| "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, "
-#| "slashed zero, fractions"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"
@@ -28634,7 +28619,7 @@ msgid ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
-"font-variant-numeric, oldstyle numberals, lining numerals, ordinals, slashed "
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions, числа, порядкові, перекреслений нуль, дроби"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111

@@ -6,6 +6,7 @@
 
 #include "KisAnimationRenderingBenchmark.h"
 
+#include <QElapsedTimer>
 #include <QThread>
 #include <simpletest.h>
 

@@ -16,6 +16,7 @@ inline double drand48()
 #include <simpletest.h>
 
 #include <QtMath>
+#include <QElapsedTimer>
 #include <QImage>
 #include <kis_debug.h>
 

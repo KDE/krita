@@ -9,6 +9,7 @@
 #include <simpletest.h>
 
 #include <QDir>
+#include <QElapsedTimer>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

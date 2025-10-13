@@ -169,49 +169,46 @@ void KisSelectionActionsPanel::setEnabled(bool enabled)
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
+    bool eventHandled = false;
     // Clicks...
     bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress || event->type() == QEvent::TouchBegin;
-
-    if (clickEvent) {
+    if (clickEvent && !eventHandled ) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QRect dragHandleRect(d->m_dragHandle->position, QSize(25 * (d->m_buttonCount), 25));
         if (dragHandleRect.contains(mouseEvent->pos())) {
             d->m_dragging = true;
             d->m_dragHandle->dragOrigin = mouseEvent->pos() - d->m_dragHandle->position;
 
-            return true;
+            eventHandled = true;
         }
     }
 
     // Drags...
     bool dragEvent = d->m_dragging && (event->type() == QEvent::MouseMove || event->type() == QEvent::TouchUpdate);
 
-    if (dragEvent) {
+    if (dragEvent && !eventHandled) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QPoint newPos = mouseEvent->pos() - d->m_dragHandle->dragOrigin;
 
         // bound actionBar to stay within canvas space
         QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
 
-        if (obj != canvasWidget)
-            return false;
-
-        d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
-        canvasWidget->update();
-
-        return true;
+        if (obj == canvasWidget) {
+            d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
+            canvasWidget->update();
+            eventHandled = true;
+        }
     }
 
     // Releases...
     bool releaseEvent = d->m_dragging && (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease || event->type() == QEvent::TouchEnd);
 
-    if (releaseEvent) {
+    if (releaseEvent && d->m_dragging) {
         d->m_dragging = false;
-
-        return true;
+        eventHandled = true;
     }
 
-    return false;
+    return eventHandled;
 }
 
 QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const

@@ -54,7 +54,6 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    slotConfigChanged();
 
     m_antsTimer = new QTimer(this);
     m_antsTimer->setInterval(150);
@@ -67,6 +66,8 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     setPriority(100);
 
     m_selectionActionsPanel = new KisSelectionActionsPanel(this->view()->viewManager(), this);
+
+    slotConfigChanged();
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()
@@ -135,6 +136,7 @@ void KisSelectionDecoration::selectionChanged()
                 view()->canvasBase()->updateCanvas();
             }
 
+
             m_selectionActionsPanel->setVisible(true);
         } else {
             m_signalCompressor.start();
@@ -169,7 +171,7 @@ void KisSelectionDecoration::slotConfigChanged()
     m_opacity = imageConfig.selectionOutlineOpacity();
     m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
-    m_selectionActionBarEnabled = cfg.selectionActionBar();
+    m_selectionActionsPanel->setEnabled(cfg.selectionActionBar());
 }
 
 void KisSelectionDecoration::slotCanvasResourcesChanged(int key, const QVariant &v)
@@ -248,7 +250,6 @@ void KisSelectionDecoration::setVisible(bool v)
 {
     KisCanvasDecoration::setVisible(v);
     selectionChanged();
-
     m_selectionActionsPanel->setVisible(v);
 }
 

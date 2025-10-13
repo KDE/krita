@@ -51,6 +51,7 @@ struct KisSelectionActionsPanel::Private {
 
     bool m_dragging = false;
     bool m_visible = false;
+    bool m_enabled = true;
 
     struct DragHandle {
         QPoint position = QPoint(0, 0);
@@ -104,7 +105,7 @@ void KisSelectionActionsPanel::draw(QPainter &painter)
 {
     KisSelectionSP selection = d->m_viewManager->selection();
 
-    if (!selection) {
+    if (!selection || !d->m_enabled || !d->m_visible) {
         return;
     }
 
@@ -124,6 +125,8 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
     if (!canvasWidget) {
         return;
     }
+
+    p_visible &= d->m_enabled;
 
     const bool VISIBILITY_CHANGED = d->m_visible != p_visible;
     if (!VISIBILITY_CHANGED) {
@@ -152,6 +155,16 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
     }
 
     d->m_visible = p_visible;
+}
+
+void KisSelectionActionsPanel::setEnabled(bool enabled)
+{
+    bool configurationChanged = enabled != d->m_enabled;
+    d->m_enabled = enabled;
+    if (configurationChanged) {
+        // Reset visibility when configuration changes
+        setVisible(d->m_visible);
+    }
 }
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)

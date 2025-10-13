@@ -37,6 +37,7 @@ public:
 
     void draw(QPainter &painter);
     void setVisible(bool visible);
+    void setEnabled(bool enabled);
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:

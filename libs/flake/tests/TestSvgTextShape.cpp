@@ -151,11 +151,11 @@ void TestSvgTextShape::testSetTextOnShape_data()
         }
     }
 
-    // QTest::addRow("text and 2 contours") << QTransform() << false << 2 << QTransform() << false;
-    // QTest::addRow("text and 1 contour + local transform") << QTransform() << false << 1 << QTransform::fromTranslate(20, 20) << false;
-    // QTest::addRow("text + local transform and 1 contour") << QTransform::fromTranslate(20, 20) << false << 1 << QTransform() << false;
-    // QTest::addRow("text + absolute transform and 1 contour") << QTransform() << true << 1 << QTransform() << false;
-    // QTest::addRow("text and 1 contour + absolute transform") << QTransform() << false << 1 << QTransform() << true;
+    QTest::addRow("text and 2 contours") << QTransform() << 2 << QTransform() << false << false << TransformComponents(TransformComponent::None);
+    QTest::addRow("text and 1 contour + local transform") << QTransform() << 1 << QTransform::fromTranslate(20, 20) << false << false << TransformComponents(TransformComponent::None);
+    QTest::addRow("text + local transform and 1 contour") << QTransform::fromTranslate(20, 20) << 1 << QTransform() << false << false << TransformComponents(TransformComponent::Translate);
+    QTest::addRow("text + absolute transform and 1 contour") << QTransform() << 1 << QTransform() << true << false << TransformComponents(TransformComponent::Translate);
+    QTest::addRow("text and 1 contour + absolute transform") << QTransform() << 1 << QTransform() << false << true << TransformComponents(TransformComponent::None);
 }
 
 void TestSvgTextShape::testSetTextOnShape()

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-11 20:11-0300\n"
+"PO-Revision-Date: 2025-10-12 09:56-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -13063,7 +13063,7 @@ msgstr "Seleção de &Pinceladas..."
 #, kde-format
 msgctxt "action"
 msgid "Stroke selection"
-msgstr "Seleção de Pinceladas"
+msgstr "Traço na seleção"
 
 #. i18n: context: text @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
@@ -22893,7 +22893,7 @@ msgstr "Elevação suave"
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:70
 #, kde-format
 msgid "Stroke Emboss"
-msgstr "Elevação forte"
+msgstr "Elevação do traço"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:78

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-09 18:16+0200\n"
+"PO-Revision-Date: 2025-10-12 10:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -19727,12 +19727,7 @@ msgstr "Configuració d'animacions"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1072
-#, fuzzy, kde-format
-#| msgid ""
-#| "When this option is checked newly created layers will be automatically "
-#| "pinned to the animation timeline. This is useful when animating with a "
-#| "small number of layers or when many elements on different animated layers "
-#| "are interacting with eachother."
+#, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
 "pinned to the animation timeline. This is useful when animating with a small "
@@ -27391,11 +27386,7 @@ msgid "Alignment Baseline"
 msgstr "Línia base d'alineació"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controling how this range of text is aligned to "
-#| "the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment Baseline allows controlling how this range of text is aligned to "
@@ -28502,13 +28493,7 @@ msgid "Enable number-related glyph forms on the text."
 msgstr "Activa les formes de glif relacionades amb els nombres en el text."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the font-variant-numeric property, "
-#| "matching is case-insensitive"
-#| msgid ""
-#| "font-variant-numeric, oldstyle numberals, lining numerals, ordinals, "
-#| "slashed zero, fractions"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the font-variant-numeric property, matching "
 "is case-insensitive"

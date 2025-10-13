@@ -170,6 +170,12 @@ void KisSelectionActionsPanel::setEnabled(bool enabled)
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
     bool eventHandled = false;
+
+    bool focusInEvent = event->type() == QEvent::FocusIn;
+    if (focusInEvent && !eventHandled) {
+        eventHandled = true;
+    }
+
     // Clicks...
     bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress || event->type() == QEvent::TouchBegin;
     if (clickEvent && !eventHandled ) {

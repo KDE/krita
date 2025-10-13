@@ -47,7 +47,7 @@ ResourceDelegateBase {
                 palette: presetDelegate.palette;
                 text: presetDelegate.model.name;
                 elide: Text.ElideRight;
-                width: (iconRow.width - (missingFamily.implicitWidth+iconRow.spacing));
+                width: iconRow.width - (missingFamily.isVisible? (missingFamily.implicitWidth+iconRow.spacing) : 0);
                 color: presetDelegate.highlighted? palette.highlightedText: palette.text;
             }
         }

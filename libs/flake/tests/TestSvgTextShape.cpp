@@ -107,55 +107,51 @@ void TestSvgTextShape::testSetTextOnShape_data()
     QTest::addColumn<bool>("contourHasParent");
     QTest::addColumn<TransformComponents>("expectedTextTransformComponents");
 
-    for (bool textHasParent : {false, true}) {
-        for (bool contourHasParent : {false, true}) {
-            const char *textParentPrefix =
-                textHasParent ? "[text:parent]" : "[text:no-parent]";
-            const char *contourParentPrefix =
-                contourHasParent ? "[contour:parent]" : "[contour:no-parent]";
+    for (int contourCount : {1, 2}) {
+        for (bool textHasParent : {false, true}) {
+            for (bool contourHasParent : {false, true}) {
+                const char *textParentPrefix =
+                        textHasParent ? "[text:parent]" : "[text:no-parent]";
+                const char *contourParentPrefix =
+                        contourHasParent ? "[contour:parent]" : "[contour:no-parent]";
 
-            QTest::addRow("%s%s text and 1 contour", textParentPrefix, contourParentPrefix)
-                << QTransform::fromTranslate(10, 20) << 1
-                << QTransform::fromTranslate(5, 5)
-                << textHasParent
-                << contourHasParent
-                << TransformComponents(TransformComponent::Translate);
+                QTest::addRow("%s%s text and %d contour(s)", textParentPrefix, contourParentPrefix, contourCount)
+                        << QTransform::fromTranslate(10, 20) << contourCount
+                        << QTransform::fromTranslate(5, 5)
+                        << textHasParent
+                        << contourHasParent
+                        << TransformComponents(TransformComponent::Translate);
 
-            QTest::addRow("%s%s text and 1 contour (scaled)", textParentPrefix, contourParentPrefix)
-                << QTransform::fromTranslate(10, 20) << 1
-                << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(5, 5)
-                << textHasParent
-                << contourHasParent
-                << TransformComponents(TransformComponent::Translate);
+                QTest::addRow("%s%s text and %d contour(s) (scaled)", textParentPrefix, contourParentPrefix, contourCount)
+                        << QTransform::fromTranslate(10, 20) << contourCount
+                        << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(5, 5)
+                        << textHasParent
+                        << contourHasParent
+                        << TransformComponents(TransformComponent::Translate);
 
-            QTest::addRow("%s%s text and 1 contour (rotated)", textParentPrefix, contourParentPrefix)
-                << QTransform::fromTranslate(10, 20) << 1
-                << rotateAroundPoint(30, QPointF(50, 50)) * QTransform::fromTranslate(20, 25)
-                << textHasParent
-                << contourHasParent
-                << TransformComponents(TransformComponent::Translate);
+                QTest::addRow("%s%s text and %d contour(s) (rotated)", textParentPrefix, contourParentPrefix, contourCount)
+                        << QTransform::fromTranslate(10, 20) << contourCount
+                        << rotateAroundPoint(30, QPointF(50, 50)) * QTransform::fromTranslate(20, 25)
+                        << textHasParent
+                        << contourHasParent
+                        << TransformComponents(TransformComponent::Translate);
 
-            QTest::addRow("%s%s text (scaled) and 1 contour", textParentPrefix, contourParentPrefix)
-                << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(10, 20) << 1
-                << QTransform::fromTranslate(5, 5)
-                << textHasParent
-                << contourHasParent
-                << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+                QTest::addRow("%s%s text (scaled) and %d contour(s)", textParentPrefix, contourParentPrefix, contourCount)
+                        << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(10, 20) << contourCount
+                        << QTransform::fromTranslate(5, 5)
+                        << textHasParent
+                        << contourHasParent
+                        << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
 
-            QTest::addRow("%s%s text (rotated) and 1 contour", textParentPrefix, contourParentPrefix)
-                << rotateAroundPoint(30, QPointF(100, -10)) * QTransform::fromTranslate(10, 80) << 1
-                << QTransform::fromTranslate(5, 5)
-                << textHasParent
-                << contourHasParent
-                << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+                QTest::addRow("%s%s text (rotated) and %d contour(s)", textParentPrefix, contourParentPrefix, contourCount)
+                        << rotateAroundPoint(30, QPointF(100, -10)) * QTransform::fromTranslate(10, 80) << contourCount
+                        << QTransform::fromTranslate(5, 5)
+                        << textHasParent
+                        << contourHasParent
+                        << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+            }
         }
     }
-
-    QTest::addRow("text and 2 contours") << QTransform() << 2 << QTransform() << false << false << TransformComponents(TransformComponent::None);
-    QTest::addRow("text and 1 contour + local transform") << QTransform() << 1 << QTransform::fromTranslate(20, 20) << false << false << TransformComponents(TransformComponent::None);
-    QTest::addRow("text + local transform and 1 contour") << QTransform::fromTranslate(20, 20) << 1 << QTransform() << false << false << TransformComponents(TransformComponent::Translate);
-    QTest::addRow("text + absolute transform and 1 contour") << QTransform() << 1 << QTransform() << true << false << TransformComponents(TransformComponent::Translate);
-    QTest::addRow("text and 1 contour + absolute transform") << QTransform() << 1 << QTransform() << false << true << TransformComponents(TransformComponent::None);
 }
 
 void TestSvgTextShape::testSetTextOnShape()
@@ -170,6 +166,8 @@ void TestSvgTextShape::testSetTextOnShape()
         name.remove(')');
         return name;
     };
+
+    qDebug() << stripTestName;
 
     auto paintShapes = [stripTestName] (KoShape *textShape, QList<KoShape*> contourShapes, const QString &testName) {
         QImage image(QSize(300, 200), QImage::Format_ARGB32);

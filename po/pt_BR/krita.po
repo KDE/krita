@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-12 09:56-0300\n"
+"PO-Revision-Date: 2025-10-13 11:50-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -7867,7 +7867,7 @@ msgstr "Ponto de canto"
 #, kde-format
 msgctxt "action"
 msgid "Merge points"
-msgstr "Reunir pontos"
+msgstr "Mesclar pontos"
 
 #. i18n: context: iconText @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
@@ -25023,7 +25023,7 @@ msgstr "Sólida"
 #: libs/ui/widgets/KoFillConfigWidget.ui:85
 #, kde-format
 msgid "Gradient fill"
-msgstr "Ferramenta Degradê"
+msgstr "Preencher com gradiente"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, btnPatternFill)
 #: libs/ui/widgets/KoFillConfigWidget.ui:107
@@ -33379,13 +33379,13 @@ msgstr "Forma Retangular"
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:42
 #, kde-format
 msgid "Corner radius x:"
-msgstr "X do raio do canto:"
+msgstr "Raio x do canto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:52
 #, kde-format
 msgid "Corner radius y:"
-msgstr "Y do raio do canto:"
+msgstr "Raio y do canto:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:18
@@ -43128,7 +43128,7 @@ msgstr "Bloquear altura"
 #: plugins/tools/tool_crop/kis_tool_crop.cc:125
 #, kde-format
 msgid "Lock Ratio"
-msgstr "Taxa de bloqueio"
+msgstr "Bloquear proporção"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:250
 #, kde-format
@@ -43791,13 +43791,13 @@ msgstr "Inclinação vertical"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1279
 #, kde-format
 msgid "Flip selection horizontally"
-msgstr "Espelhar a seleção horizontalmente"
+msgstr "Inverter a seleção horizontalmente"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1304
 #, kde-format
 msgid "Flip selection vertically"
-msgstr "Espelhar a seleção verticalmente"
+msgstr "Inverter a seleção verticalmente"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1345

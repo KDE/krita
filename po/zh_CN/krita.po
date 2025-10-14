@@ -19545,6 +19545,8 @@ msgid ""
 "number of layers or when many elements on different animated layers are "
 "interacting with each other."
 msgstr ""
+"勾选此选项后，新建的图层将自动固定到动画时间轴上。这在使用少量图层进行动画制"
+"作，或在不同的动画图层中有大量相互作用的元素时能够提高效率。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
 #: libs/ui/forms/wdggeneralsettings.ui:1075
@@ -19788,7 +19790,7 @@ msgstr "复制为副本的图层：自动附加“副本”前缀"
 #: libs/ui/forms/wdggeneralsettings.ui:1559
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "长按打开右键菜单"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:1566
@@ -26987,7 +26989,7 @@ msgstr "删除操作流程"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Alignment Baseline"
-msgstr ""
+msgstr "对齐基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
 #, kde-format
@@ -26996,6 +26998,8 @@ msgid ""
 "Alignment Baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
+"对齐基线 (Alignment Baseline) 是控制某个范围内的文本如何与父级文本对齐的属"
+"性，用于调整字符间的垂直对齐关系。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:18
 #, kde-format
@@ -27004,39 +27008,43 @@ msgctxt ""
 "is case-insensitive"
 msgid "alignment-baseline, mojisoroe"
 msgstr ""
+"alignment-baseline, mojisoroe, duiqijixian, duiqi, zifuduiqi, 对齐基线, 字符"
+"对齐"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:82
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Baseline"
-msgstr ""
+msgstr "基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:83
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline defined by Dominant Baseline."
 msgstr ""
+"基线 (Baseline)：对齐到主导基线 (Dominant Baseline) 定义的基准线，即西文字母"
+"底部对齐的参考线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:84
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:82
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Alphabetic"
-msgstr ""
+msgstr "字母字符基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:85
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:83
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline for scripts that align at the bottom."
-msgstr ""
+msgstr "字母字符基线 (Alphabetic) 对齐到字母字符 (如拉丁文) 底部基线的水平线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic"
-msgstr ""
+msgstr "表意字符基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:87
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:85
@@ -27044,13 +27052,15 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box bottom."
 msgstr ""
+"表意字符基线 (Ideographic)：对齐到表意文字 (如中文) 的字面框 (em box) 底部的"
+"水平线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Central"
-msgstr ""
+msgstr "中央基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:89
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:87
@@ -27058,13 +27068,15 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box center."
 msgstr ""
+"中央基线 (Central)：对齐到表意文字 (如中文) 的字面框 (em box) 中心位置的水平"
+"线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr ""
+msgstr "悬挂基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -27072,6 +27084,8 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
 msgstr ""
+"悬挂基线 (Hanging)：对齐北布拉米克 (North-Brahmic) 文字 (如梵文) 头笔画的基"
+"线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -27079,7 +27093,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Middle"
-msgstr ""
+msgstr "中线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:93
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:91
@@ -27089,54 +27103,56 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
+"中线 (Middle)：水平排版时对齐到字母基线和 x 字高 (x-height) 的中心；垂直排版"
+"时相当于表意字符居中基线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Mathematical"
-msgstr ""
+msgstr "数学字符基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:95
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:93
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the mathematical baseline, so that operator symbols align."
-msgstr ""
+msgstr "数学字符基线 (Mathematical)：对齐数学符号 (如运算符) 的专用基线。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Text Top"
-msgstr ""
+msgstr "文本顶部"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:97
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:95
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
-msgstr ""
+msgstr "文本顶部 (Text Top)：对齐上行字母 (如“h”顶部) 的最高点。"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Text Bottom"
-msgstr ""
+msgstr "文本底部"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:99
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
-msgstr ""
+msgstr "文本底部 (Text Bottom)：对齐下行字母 (如“g”尾部) 的最低点。"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
 #, kde-format
 msgctxt "@label"
 msgid "Baseline-Shift"
-msgstr ""
+msgstr "基线偏移"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
 #, kde-format
@@ -27145,6 +27161,8 @@ msgid ""
 "Baseline shift allows moving the text away from the baseline, either by "
 "predefined super and subscript values, or by a fixed amount."
 msgstr ""
+"基线偏移 (Baseline shift) 允许将文本垂直移动使其偏离基线，可通过预定义的上标/"
+"下标值或固定数值实现。"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:20
 #, kde-format
@@ -27153,81 +27171,83 @@ msgctxt ""
 "case-insensitive"
 msgid "baseline-shift, superscript, subscript"
 msgstr ""
+"baseline-shift, superscript, subscript, jixianpianyi, shangbiao, xiabiao, 基"
+"线偏移, 上标, 下标"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "None"
-msgstr ""
+msgstr "无"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:132
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Length"
-msgstr ""
+msgstr "固定值"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:133
 #: plugins/dockers/textproperties/qml/OTPosition.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Super"
-msgstr ""
+msgstr "上标"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:134
 #: plugins/dockers/textproperties/qml/OTPosition.qml:80
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Sub"
-msgstr ""
+msgstr "下标"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
-msgstr ""
+msgstr "标题："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
-msgstr ""
+msgstr "样式名称："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
 #, kde-format
 msgctxt "@label:textarea"
 msgid "Description:"
-msgstr ""
+msgstr "描述："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
-msgstr ""
+msgstr "样式描述。"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
 #, kde-format
 msgctxt "label:listbox"
 msgid "Style Type:"
-msgstr ""
+msgstr "样式类型："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
-msgstr ""
+msgstr "字符"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
-msgstr ""
+msgstr "段落"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr ""
+msgstr "样式为像素相对值"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
 #, kde-format
@@ -27238,42 +27258,44 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
+"默认情况下，样式以点 (points) 为单位存储，这意味着不同图像的打印分辨率会导致"
+"像素大小不同。你可以切换此选项以确保样式在不同图像中保持相同的像素大小。"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Sample Text:"
-msgstr ""
+msgstr "示例文本："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
-msgstr ""
+msgstr "之前..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
-msgstr ""
+msgstr "示例..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
-msgstr ""
+msgstr "...之后"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Direction"
-msgstr ""
+msgstr "文本方向"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:17
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
-msgstr ""
+msgstr "文本方向 (Direction) 属性用于设置文本是从左到右还是从右到左。"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -27282,24 +27304,27 @@ msgctxt ""
 "insensitive"
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
+"right to left, rtl, direction, bidirectional, isolate, embed, override, "
+"congyoudaozuo, youdaozuo, wenbenfangxiang, fangxiang, shuangxiang, geli, "
+"qianru, fugai, 从右到左, 文本方向, 双向, 隔离, 嵌入, 覆盖"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:122
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left to Right"
-msgstr ""
+msgstr "从左到右"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:123
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right to Left"
-msgstr ""
+msgstr "从右到左"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:144
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-双向"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:156
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
@@ -27316,43 +27341,43 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:157
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Embed"
-msgstr ""
+msgstr "嵌入"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:158
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Override"
-msgstr ""
+msgstr "覆盖"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:159
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate"
-msgstr ""
+msgstr "隔离"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:160
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "隔离-覆盖"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:161
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Plain Text"
-msgstr ""
+msgstr "纯文本"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:12
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Dominant Baseline"
-msgstr ""
+msgstr "主导基线"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, kde-format
@@ -27361,6 +27386,8 @@ msgid ""
 "Dominant Baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
+"主导基线 (Dominant Baseline)：控制不同大小的文本段落如何对齐，同时作为对齐基"
+"线 (Alignment Baseline) 的默认基准。"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -27369,6 +27396,7 @@ msgctxt ""
 "case-insensitive"
 msgid "dominant-baseline, mojisoroe"
 msgstr ""
+"dominant-baseline, mojisoroe, zhudaojixian, zifuduiqi, 对齐基线, 字符对齐"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:80
 #: plugins/dockers/textproperties/qml/LineBreak.qml:77
@@ -27378,7 +27406,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Auto"
-msgstr ""
+msgstr "自动"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:81
 #, kde-format
@@ -27387,12 +27415,14 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"水平布局：自动对齐字母基线 (alphabetic baseline)；垂直布局：自动对齐中央基线 "
+"(central baseline)。"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
 msgctxt "@label"
 msgid "Font Family"
-msgstr ""
+msgstr "字体系列"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:19
 #, kde-format
@@ -27402,6 +27432,8 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
+"字体系列允许您管理应用于当前文本的字体列表。第一个字体是主要使用的字体，而其"
+"后的每个字体系列则作为备选字体。"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
 #, kde-format
@@ -27410,27 +27442,29 @@ msgctxt ""
 "insensitive"
 msgid "font-family, typeface, font, fallback"
 msgstr ""
+"font-family, typeface, font, fallback, ziti, zitijiazu, zitixilie, "
+"beiyongziti, 字体, 字体系列, 字体家族, 备用字体"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
 msgid "Remove family"
-msgstr ""
+msgstr "移除字体"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:155
 #, kde-format
 msgid "Family list is empty."
-msgstr ""
+msgstr "字体列表为空。"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:171
 #, kde-format
 msgid "Add Fallback Family"
-msgstr ""
+msgstr "添加备选字体"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:16
 #, kde-format
 msgctxt "@label"
 msgid "Font Kerning"
-msgstr ""
+msgstr "字距微调"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, kde-format
@@ -27438,7 +27472,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments."
-msgstr ""
+msgstr "开启/关闭字距微调。字距微调可针对特定字形组合进行间距调整。"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -27447,18 +27481,20 @@ msgctxt ""
 "insensitive"
 msgid "font-kerning, tracking"
 msgstr ""
+"font-kerning, tracking, zijuweitiao, aioujianjutiaozheng, 字距微调, 字偶间距"
+"调整"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size"
-msgstr ""
+msgstr "字体大小"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:19
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Font size allows setting the size of the characters."
-msgstr ""
+msgstr "字体大小用于设置字符的大小。"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:21
 #, kde-format
@@ -27467,12 +27503,14 @@ msgctxt ""
 "insensitive"
 msgid "size, small, big, medium"
 msgstr ""
+"size, small, big, medium, daxiao, zitidaxiao, xiao, zhong, da, 大小, 字体大"
+"小, 小, 中, 大"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Font Size Adjust"
-msgstr ""
+msgstr "字体大小调整系数"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:17
 #, kde-format
@@ -27480,6 +27518,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
+"字体大小调整系数 (Font Size Adjust) 通过设置一个比例值，强制要求当前字体的 x "
+"字高 (x-height) 必须匹配该比例，以保持不同字体的视觉大小一致性。"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -27488,24 +27528,26 @@ msgctxt ""
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
 msgstr ""
+"size, small, big, medium, font-size-adjust, daxiao, xiao, zhong, da, "
+"zitichicuntiaozhengxishu, 大小, 小, 中, 大, 字体大小调整系数"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
 msgctxt "@label:button"
 msgid "Calculate"
-msgstr ""
+msgstr "计算"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
-msgstr ""
+msgstr "计算首个字体的 x 字高 (x-height) 与设定字体大小的比例值。"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
 msgctxt "@label"
 msgid "Font Style"
-msgstr ""
+msgstr "字体样式"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:18
 #, kde-format
@@ -27513,7 +27555,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font style allows setting the sub style of the given font family, such as "
 "italics and bold"
-msgstr ""
+msgstr "字体样式用于设置字体的子样式，如斜体或粗体等。"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:20
 #, kde-format
@@ -27524,71 +27566,76 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"weight, width, style, italics, oblique, font-style, font-stretch, font-"
+"weight, bold, optical-size, variation, zizhong, kuandu, yangshi, xieti, "
+"weixieti, zitiyangshi, zitilashen, jiacu, cuti, guangxuedaxiao, bianzhong, "
+"bianliang, 字重, 宽度, 样式, 斜体, 伪斜体, 字体样式, 字体拉伸, 加粗, 粗体, 光"
+"学大小, 变种, 变量"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
 msgctxt "@label:slider"
 msgid "Weight: "
-msgstr ""
+msgstr "字重："
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:302
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr ""
+msgstr "合成粗体"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, kde-format
 msgctxt "@label:slider"
 msgid "Width: "
-msgstr ""
+msgstr "宽度："
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:328
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr ""
+msgstr "斜度："
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Italic"
-msgstr ""
+msgstr "斜体"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:341
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oblique"
-msgstr ""
+msgstr "伪斜体"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:362
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:393
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr ""
+msgstr "合成斜度"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
 #, kde-format
 msgctxt "@option:check"
 msgid "Optical Size"
-msgstr ""
+msgstr "光学大小"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
 msgid "No extra variable axes in this font"
-msgstr ""
+msgstr "此字体无额外可变轴"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr ""
+msgstr "悬挂标点"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
 #, kde-format
@@ -27598,6 +27645,7 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
+"悬挂标点允许悬挂开标点、闭标点以及逗号。此功能仅实现了东亚风格的悬挂标点。"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -27605,49 +27653,49 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "hanging-punctuation, burasagari, xuanguabiaoxian, 悬挂标点"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr ""
+msgstr "首字符悬挂"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Line End:"
-msgstr ""
+msgstr "行尾："
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:132
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr ""
+msgstr "不悬挂"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "允许悬挂逗号"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "强制悬挂逗号"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr ""
+msgstr "末字符悬挂"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
 msgctxt "@title:group"
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 #: plugins/dockers/textproperties/qml/Language.qml:18
 #, kde-format
@@ -27655,7 +27703,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The language of this text shape. Language affects a number of properties, "
 "like glyph shape, upper- and lowercase and line breaking"
-msgstr ""
+msgstr "此文本的语言类型。语言会影响许多属性，例如字形、大小写以及换行。"
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
 #, kde-format
@@ -27663,32 +27711,32 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "language, locale, bcp47, yuyan, quyushezhi, 语言, 区域设置"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Store this language between sessions."
-msgstr ""
+msgstr "跨会话保存此语言。"
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Script:"
-msgstr ""
+msgstr "书写系统："
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:14
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Letter Spacing"
-msgstr ""
+msgstr "字符间距"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Letter spacing controls the spacing between visible clusters of characters."
-msgstr ""
+msgstr "字距调整控制可见字符组之间的间距。"
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:20
 #, kde-format
@@ -27697,12 +27745,14 @@ msgctxt ""
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
 msgstr ""
+"letter-spacing, tracking, kerning, zifujianju, zijutiaozheng, zijuweitiao, 字"
+"符间距, 字距调整, 字距微调"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Line Break"
-msgstr ""
+msgstr "换行规则"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
 #, kde-format
@@ -27711,6 +27761,8 @@ msgid ""
 "Line Break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
+"换行规则属性用于选择换行算法的严格程度，主要应用于中日韩 (CJK) 文字排版，需预"
+"先设置语言属性。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -27719,24 +27771,26 @@ msgctxt ""
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
 msgstr ""
+"line-break, line breaking, strictness, kinsoku, huanhang, huanhangguize, "
+"yange, 换行, 换行规则, 严格"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
-msgstr ""
+msgstr "不对换行算法作任何特殊调整"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr ""
+msgstr "宽松"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
-msgstr ""
+msgstr "通常表示更宽松的算法，目前的实际行为与自动相同。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -27745,43 +27799,44 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"等同于自动。若文本语言设置为日语，允许在小假名 (如ゃ、ゅ、ょ) 前进行软换行。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Strict"
-msgstr ""
+msgstr "严格"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr ""
+msgstr "禁止在日语的小假名 (如ゃ、ゅ、ょ) 前进行软换行。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Anywhere"
-msgstr ""
+msgstr "任意位置"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:86
 #: plugins/dockers/textproperties/qml/WordBreak.qml:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr ""
+msgstr "软换行可在任意字素 (grapheme) 的边界发生。"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
 msgctxt "@label"
 msgid "Line Height"
-msgstr ""
+msgstr "行高"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line Height controls the line height used for the range of text."
-msgstr ""
+msgstr "行高用于控制所选范围内文本的行高。"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:20
 #, kde-format
@@ -27790,24 +27845,25 @@ msgctxt ""
 "insensitive"
 msgid "line-height, line-spacing"
 msgstr ""
+"line-height, line-spacing, hanggao, hangju, hangjianju, 行高,  行距, 行间距"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
 #, kde-format
 msgctxt "@option:check"
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:14
 #, kde-format
 msgctxt "@label"
 msgid "OpenType Features"
-msgstr ""
+msgstr "OpenType 特性"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure Open Type features."
-msgstr ""
+msgstr "配置 OpenType 特性。"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -27815,17 +27871,17 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "font-feature-settings, OpenType, zititexingshezhi, 字体特性设置"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "当前未设置任何 OpenType 特性。"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
 msgid "Remove feature."
-msgstr ""
+msgstr "移除特性。"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/dockers/textproperties/qml/ResourceView.qml:244
@@ -27833,19 +27889,19 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "搜索..."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr ""
+msgstr "字形：大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable opentype features related to capitals"
-msgstr ""
+msgstr "启用与大写字母相关的 OpenType 特性"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -27854,54 +27910,57 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals, "
+"xiaoxingdaxiezimu, xiaohaodaxiezimu, danxingzimu, biaotidaxiezimu, "
+"daxiezimu, 小型大写字母, 小号大写字母, 单形字母, 标题大写字母, 大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Small Caps"
-msgstr ""
+msgstr "小型大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Small Caps"
-msgstr ""
+msgstr "全部小型大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:80
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
-msgstr ""
+msgstr "小号大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Petite Caps"
-msgstr ""
+msgstr "全部小号大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:82
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Unicase"
-msgstr ""
+msgstr "单形字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
-msgstr ""
+msgstr "标题大写字母"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr ""
+msgstr "字形：东亚文字"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
-msgstr ""
+msgstr "启用与东亚文字布局相关的字形形式。"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -27912,85 +27971,87 @@ msgid ""
 "font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
 "full-width"
 msgstr ""
+"font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
+"full-width, dongya, zhuyin, bilikuandu, quanjiao, 东亚, 注音, 比例宽度, 全角"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Variant:"
-msgstr ""
+msgstr "变体："
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:101
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS78"
-msgstr ""
+msgstr "JIS78"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:102
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS83"
-msgstr ""
+msgstr "JIS83"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:103
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS90"
-msgstr ""
+msgstr "JIS90"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:104
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "JIS04"
-msgstr ""
+msgstr "JIS04"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:105
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Simplified"
-msgstr ""
+msgstr "简体"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:106
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Traditional"
-msgstr ""
+msgstr "繁体"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Width:"
-msgstr ""
+msgstr "宽度："
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:125
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Full width"
-msgstr ""
+msgstr "全角"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:126
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:136
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional"
-msgstr ""
+msgstr "比例宽度"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:141
 #, kde-format
 msgctxt "@option:check"
 msgid "Ruby"
-msgstr ""
+msgstr "注音"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Ligatures"
-msgstr ""
+msgstr "字形：连字"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
-msgstr ""
+msgstr "启用或禁用连字和上下文替代字形。"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -28001,42 +28062,45 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"font-variant-ligatures, common-ligatures, discretionary-ligatures, "
+"historical-ligatures, contextual-alts, lianzi, biaozhunlianzi, kexuanlianzi, "
+"lishilianzi, shangxiawentidai, 连字, 标准连字, 可选连字, 历史连字, 上下文替代"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
 msgctxt "@option:check"
 msgid "Common"
-msgstr ""
+msgstr "标准连字"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:109
 #, kde-format
 msgctxt "@option:check"
 msgid "Discretionary"
-msgstr ""
+msgstr "可选连字"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:117
 #, kde-format
 msgctxt "@option:check"
 msgid "Historical"
-msgstr ""
+msgstr "历史连字"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:125
 #, kde-format
 msgctxt "@option:check"
 msgid "Contextual"
-msgstr ""
+msgstr "上下文替代"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
-msgstr ""
+msgstr "字形：数字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "启用文本中的数字相关字形形式。"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -28047,79 +28111,82 @@ msgid ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
+"zero, fractions, shuzi, jiushishuzi, denggaoshuzi, xushubiaoji, xiexianling, "
+"fenshu, 数字, 旧式数字, 等高数字, 序数标记, 斜线零, 分数"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
-msgstr ""
+msgstr "样式："
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lining"
-msgstr ""
+msgstr "等高数字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr ""
+msgstr "旧式数字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Spacing:"
-msgstr ""
+msgstr "间距："
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:137
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Tabular"
-msgstr ""
+msgstr "表格数字"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Fractions:"
-msgstr ""
+msgstr "分数："
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:156
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Diagonal"
-msgstr ""
+msgstr "斜线分数"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:157
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Stacked"
-msgstr ""
+msgstr "堆叠分数"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:173
 #, kde-format
 msgctxt "@option:check"
 msgid "Ordinals"
-msgstr ""
+msgstr "序数标记"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:183
 #, kde-format
 msgctxt "@option:check"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "斜线零"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:12
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: Position"
-msgstr ""
+msgstr "字形：位置"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "启用文本的上标和下标。"
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -28128,60 +28195,62 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
 msgstr ""
+"font-variant-position, superscript, subscript, weizhi, shangbiao, xiabiao, 位"
+"置, 上标, 下标"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "溢出换行："
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:100
 #, kde-format
 msgctxt "@label:button"
 msgid "Tag"
-msgstr ""
+msgstr "标签"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:143
 #, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
-msgstr ""
+msgstr "分配到标签"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:168
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
-msgstr ""
+msgstr "新标签名称..."
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
-msgstr ""
+msgstr "移除出此标签"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:195
 #, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
-msgstr ""
+msgstr "移除出其他标签"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:252
 #, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
-msgstr ""
+msgstr "搜索标签"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:271
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
-msgstr ""
+msgstr "导入 %1"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:295
 #, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
-msgstr ""
+msgstr "移除 %1"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
 #, kde-format
@@ -28189,25 +28258,25 @@ msgctxt "@info:tooltip"
 msgid ""
 "Revert property. Within the current selection, this property has different "
 "values."
-msgstr ""
+msgstr "还原属性。在当前选择对象中，该属性存在不同值。"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:23
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert property."
-msgstr ""
+msgstr "还原属性。"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:14
 #, kde-format
 msgctxt "@title:group"
 msgid "Tab Size"
-msgstr ""
+msgstr "制表符宽度"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab Size allows defining the size of tabulation characters."
-msgstr ""
+msgstr "制表符宽度定义了按下 Tab 键所插入的制表符的视觉宽度。"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -28215,19 +28284,19 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr ""
+msgstr "tab-size, zhibiaofukuandu, 制表符宽度"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Align"
-msgstr ""
+msgstr "文本对齐方式"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Text Align sets the alignment for the given block of characters."
-msgstr ""
+msgstr "文本对齐方式用于设置字符块的水平对齐方式。"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -28236,19 +28305,21 @@ msgctxt ""
 "insensitive"
 msgid "text-align, justification, text-anchor"
 msgstr ""
+"text-align, justification, text-anchor, wenbenduiqifangshi, duiqi, "
+"wenbenmaodian, 文本对齐方式, 对齐, 文本锚点"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Text Align:"
-msgstr ""
+msgstr "文本对齐方式："
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:306
 #: plugins/dockers/textproperties/qml/TextAlign.qml:338
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left"
-msgstr ""
+msgstr "左对齐"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:307
 #: plugins/dockers/textproperties/qml/TextAlign.qml:339
@@ -28256,14 +28327,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Start"
-msgstr ""
+msgstr "前端对齐"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:308
 #: plugins/dockers/textproperties/qml/TextAlign.qml:340
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Center"
-msgstr ""
+msgstr "居中对齐"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:309
 #: plugins/dockers/textproperties/qml/TextAlign.qml:341
@@ -28271,38 +28342,38 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "End"
-msgstr ""
+msgstr "末端对齐"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:310
 #: plugins/dockers/textproperties/qml/TextAlign.qml:342
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right"
-msgstr ""
+msgstr "右对齐"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:311
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Justified"
-msgstr ""
+msgstr "两端对齐"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:327
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Align Last:"
-msgstr ""
+msgstr "最后一行对齐方式："
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:357
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Text Anchor:"
-msgstr ""
+msgstr "文本锚点："
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Decoration"
-msgstr ""
+msgstr "文本装饰"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
 #, kde-format
@@ -28310,7 +28381,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text Decoration allows drawing underlines, overlines and striking through "
 "text."
-msgstr ""
+msgstr "文本装饰属性允许绘制下划线、上划线和删除线。"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -28319,72 +28390,74 @@ msgctxt ""
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
 msgstr ""
+"underline, overline, strikethrough, line-through, xiahuaxian, shanghuaxian, "
+"shanchuxian, 下划线, 上划线, 删除线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
 msgctxt "@title:group"
 msgid "Line:"
-msgstr ""
+msgstr "线形："
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:177
 #, kde-format
 msgctxt "@option:check"
 msgid "Underline"
-msgstr ""
+msgstr "下划线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:191
 #, kde-format
 msgctxt "@option:check"
 msgid "Overline"
-msgstr ""
+msgstr "上划线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:205
 #, kde-format
 msgctxt "@option:check"
 msgid "Line-through"
-msgstr ""
+msgstr "删除线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:222
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Color:"
-msgstr ""
+msgstr "颜色："
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:255
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Solid"
-msgstr ""
+msgstr "实线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:256
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dotted"
-msgstr ""
+msgstr "点线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:257
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dashed"
-msgstr ""
+msgstr "虚线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:258
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Double"
-msgstr ""
+msgstr "双线"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:259
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Wavy"
-msgstr ""
+msgstr "波浪线"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:14
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Indent"
-msgstr ""
+msgstr "文本缩进"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
 #, kde-format
@@ -28392,7 +28465,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text Indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
-msgstr ""
+msgstr "文本缩进允许在行首设置缩进，且该缩进仅在文本自动换行时生效。"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -28400,37 +28473,37 @@ msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr ""
+msgstr "text-indent, wenbensuojin, 文本缩进"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr ""
+msgstr "悬挂缩进"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
 #, kde-format
 msgctxt "@option:check"
 msgid "Indent after hardbreaks"
-msgstr ""
+msgstr "硬回车后缩进"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
 #, kde-format
 msgctxt "@title:tab"
 msgid "Character"
-msgstr ""
+msgstr "字符"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
 #, kde-format
 msgctxt "@title:tab"
 msgid "Paragraph"
-msgstr ""
+msgstr "段落"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:73
 #, kde-format
 msgctxt "@title:tab"
 msgid "Preset"
-msgstr ""
+msgstr "预设"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:198
 #, kde-format
@@ -28438,101 +28511,101 @@ msgctxt "%1 is name of a font family"
 msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
-msgstr ""
+msgstr "字体系列“%1”在本机缺失。此样式预设可能无法正常工作。"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:216
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr ""
+msgstr "添加样式预设"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:229
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
-msgstr ""
+msgstr "编辑样式预设"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:248
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr ""
+msgstr "克隆样式预设"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr ""
+msgstr "过滤..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:325
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
-msgstr ""
+msgstr "添加属性"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:343
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Add Property..."
-msgstr ""
+msgstr "添加属性..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:424
 #, kde-format
 msgctxt "@label:button"
 msgid "Configure"
-msgstr ""
+msgstr "配置"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:39
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
-msgstr ""
+msgstr "默认可见性："
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Relevant"
-msgstr ""
+msgstr "相关时显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:47
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:108
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr ""
+msgstr "设置时显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Always Show"
-msgstr ""
+msgstr "总是显示"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:106
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr ""
+msgstr "遵循默认"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Never Show"
-msgstr ""
+msgstr "从不显示"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:12
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Rendering"
-msgstr ""
+msgstr "文本渲染方式"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text Rendering controls the hinting and rendering style for the property"
-msgstr ""
+msgstr "控制字体轮廓微调 (hinting) 和渲染样式的属性设置。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -28541,6 +28614,8 @@ msgctxt ""
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
 msgstr ""
+"text-rendering, hinting, anti-aliasing, wenbenxuanran, xuanran, "
+"zitilunkuoweitiao, kangjuchi, 文本渲染, 渲染, 字体轮廓微调, 抗锯齿"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -28549,49 +28624,53 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
+"等同于“几何精确性优先”渲染模式，无字体轮廓微调处理，避免加载字体内建位图字"
+"形。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Speed"
-msgstr ""
+msgstr "优化速度"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Renders without antialiasing."
-msgstr ""
+msgstr "关闭抗锯齿渲染，以提升渲染速度。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:85
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Legibility"
-msgstr ""
+msgstr "优化易读性"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
+"水平方向排版时使用轻度 (light) 字体轮廓微调；垂直方向排版时使用完整 (full) 字"
+"体轮廓微调，增强文字清晰度。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Geometric Precision"
-msgstr ""
+msgstr "几何精确性优先"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
-msgstr ""
+msgstr "完全禁用字体轮廓微调。除非字体缺失矢量路径，否则不加载位图字形。"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, kde-format
 msgctxt "@title:group"
 msgid "Text Transform"
-msgstr ""
+msgstr "文本变换"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
 #, kde-format
@@ -28601,6 +28680,7 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"文本变换用于描述字符的转换功能，例如将字母转为大写或切换半角/全角形式。"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -28611,54 +28691,57 @@ msgid ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana"
 msgstr ""
+"text-transform, uppercase, capitalization, lowercase, full-width, full-size "
+"kana, wenbenbianhuan, shouzimudaxie, quandaxie, quanxiaoxie, quanjiao, "
+"quanchicunjiaming, 文本变换, 首字母大写, 全大写, 全小写, 全角, 全尺寸假名"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
-msgstr ""
+msgstr "大小写："
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
-msgstr ""
+msgstr "首字母大写"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
-msgstr ""
+msgstr "全大写"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:107
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lower Case"
-msgstr ""
+msgstr "全小写"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:125
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-width"
-msgstr ""
+msgstr "全角"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:136
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "全尺寸假名"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Underline Position"
-msgstr ""
+msgstr "下划线位置"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:15
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "指定文本装饰中下划线的位置。"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -28667,30 +28750,32 @@ msgctxt ""
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
 msgstr ""
+"text-decoration-position, underline, left, right, under, xiahuaxian, "
+"zuohuaxian, youhuaxian, 下划线, 左划线, 右划线"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Bottom"
-msgstr ""
+msgstr "下划线"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:109
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Left"
-msgstr ""
+msgstr "垂直排版左划线"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:110
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Right"
-msgstr ""
+msgstr "垂直排版右划线"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "White Space"
-msgstr ""
+msgstr "空白"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:15
 #, kde-format
@@ -28699,6 +28784,8 @@ msgid ""
 "The CSS white space rule controls how multiples of spaces are handled, and "
 "whether the text can wrap."
 msgstr ""
+"CSS 的空白 (white-space) 属性用于控制多个空格的处理方式以及文本是否允许自动换"
+"行。"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
 #, kde-format
@@ -28707,42 +28794,44 @@ msgctxt ""
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
 msgstr ""
+"white-space, collapse, pre-formatted, kongbai, kongge, zhedie, "
+"geshihuanhang, 空白, 空格, 折叠, 格式换行"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre"
-msgstr ""
+msgstr "保留空白"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:124
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr ""
+msgstr "不换行"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
-msgstr ""
+msgstr "保留空白并换行"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
-msgstr ""
+msgstr "保留空格并允许断开空格"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
-msgstr ""
+msgstr "合并空白保留换行"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Word Break"
-msgstr ""
+msgstr "单词换行"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:16
 #, kde-format
@@ -28752,6 +28841,8 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"单词换行 (Word Break) 属性用于精细调整换行行为，通过切换是否仅允许在单词之间"
+"断行还是允许在字符之间断行来实现，适用于韩语或埃塞俄比亚语等非拉丁语言场景。"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -28759,38 +28850,38 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "word-break, line breaking, dancihuanhang, huanhang, 单词换行, 换行"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No additional adjustments are made to the regular line break algorithm."
-msgstr ""
+msgstr "不进行额外调整，使用默认的换行算法规则。"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "中断全部"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
-msgstr ""
+msgstr "软换行只允许在单词内部发生，通常由空格分隔。"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "保持全部"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
 msgctxt "@title:group"
 msgid "Word Spacing"
-msgstr ""
+msgstr "字间距"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:18
 #, kde-format
@@ -28798,7 +28889,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
-msgstr ""
+msgstr "字间距控制分词字符的大小，例如空格字符。"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -28807,12 +28898,14 @@ msgctxt ""
 "insensitive"
 msgid "word-spacing, tracking, white space,"
 msgstr ""
+"word-spacing, tracking, white space, zijianju, zifujianju, kongbai, 字间距, "
+"字符间距, 空白"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Writing Mode"
-msgstr ""
+msgstr "书写模式"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, kde-format
@@ -28821,6 +28914,8 @@ msgid ""
 "Writing Mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"书写模式决定文本是水平流动还是垂直流动；在垂直流动时，控制文本块是从右向左还"
+"是从左向右排列。"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -28829,24 +28924,26 @@ msgctxt ""
 "insensitive"
 msgid "writing-mode, horizontal, vertical, top-to-bottom"
 msgstr ""
+"writing-mode, horizontal, vertical, top-to-bottom, shuxiemoshi, shuiping, "
+"chuizhi, youshangzhixia"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Horizontal"
-msgstr ""
+msgstr "水平方向"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:78
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
-msgstr ""
+msgstr "垂直方向，从右向左"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
-msgstr ""
+msgstr "垂直方向，从左向右"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -36820,7 +36917,7 @@ msgstr "笔刷详情"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
 #, kde-format
 msgid "Preserve brush preset settings"
-msgstr ""
+msgstr "保留笔刷预设选项"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
@@ -36875,25 +36972,25 @@ msgstr "队列模式"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast: "
-msgstr ""
+msgstr "对比度："
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
 #, kde-format
 msgid "Neutral point: "
-msgstr ""
+msgstr "中性点："
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness: "
-msgstr ""
+msgstr "亮度："
 
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale: "
-msgstr ""
+msgstr "缩放："
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
@@ -41985,13 +42082,13 @@ msgstr "相似颜色选区工具"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
-msgstr ""
+msgstr "字形变体"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
 #, kde-format
 msgctxt "@title:tab"
 msgid "Character Map"
-msgstr ""
+msgstr "字符映射表"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:134
 #, kde-format
@@ -42001,6 +42098,8 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+"搜索与字符串首字母匹配的字符。若以“U+”开头，则可进行十六进制搜索 (例如，U"
+"+0045 将搜索“E”)"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -42027,7 +42126,7 @@ msgstr "文字工具"
 #, kde-format
 msgctxt "action"
 msgid "Glyph Palette..."
-msgstr "字符表..."
+msgstr "字形面板..."
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:18
@@ -42220,7 +42319,7 @@ msgstr "文字编辑器设置..."
 #, kde-format
 msgctxt "action"
 msgid "Kerning"
-msgstr "字偶间距调整"
+msgstr "字距微调"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -42294,7 +42393,7 @@ msgstr "定位换行"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
 #, kde-format
 msgid "Glyph Palette"
-msgstr "字符表"
+msgstr "字形面板"
 
 #. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
@@ -43449,3 +43548,6 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+"切换全范围/子范围模式。\n"
+"全范围：[%1, %2]\n"
+"子范围：[%3, %4]"

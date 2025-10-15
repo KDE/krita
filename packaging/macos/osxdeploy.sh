@@ -92,7 +92,7 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
 echo "Trying to guess Qt version..."
-if [[ -n "${KIS_INSTALL_DIR}/lib/QtCore.framework/Versions/A/QtCore" ]]; then
+if [[ -e "${KIS_INSTALL_DIR}/lib/QtCore.framework/Versions/A/QtCore" ]]; then
     echo " Found Qt6"
     # We only support from 12 up
     export MACOSX_DEPLOYMENT_TARGET=12

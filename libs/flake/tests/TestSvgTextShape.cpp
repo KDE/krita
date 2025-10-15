@@ -22,7 +22,6 @@
 #include "KoShapePainter.h"
 #include <KoShapeStroke.h>
 
-#include <commands/KoSvgChangeTextContoursCommand.h>
 #include <commands/KoSvgTextAddRemoveShapeCommands.h>
 #include <commands/KoSvgTextFlipShapeContourTypeCommand.h>
 #include <commands/KoSvgTextReorderShapeInsideCommand.h>

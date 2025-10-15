@@ -21,7 +21,7 @@
 #include "KoSnapGuide.h"
 #include "commands/KoKeepShapesSelectedCommand.h"
 #include "commands/KoShapeMoveCommand.h"
-#include "KoSvgChangeTextContoursCommand.h"
+#include "commands/KoSvgTextAddRemoveShapeCommands.h"
 #include "kis_global.h"
 #include "kundo2command.h"
 
@@ -145,15 +145,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     if (m_flowShape) {
         textShape->setPosition(m_flowShape->absolutePosition(KoFlake::TopLeft));
-        QList<QPointF> pos {m_flowShape->absolutePosition(KoFlake::TopLeft)};
-        QList<QPointF> newPos {QPointF()};
-        QList<KoShape*> shapes{m_flowShape};
-        new KoShapeMoveCommand(shapes, pos, newPos, KoFlake::TopLeft, parentCommand);
-        if (m_flowShape->parent()) {
-            // text is not a shape container, but we do need to remove the shape from the canvas properly.
-            tool->canvas()->shapeController()->removeShape(m_flowShape, parentCommand);
-        }
-        new KoSvgChangeTextContoursCommand(textShape, shapes, true, parentCommand);
+        new KoSvgTextAddShapeCommand(textShape, m_flowShape, true, parentCommand);
     }
 
     new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);

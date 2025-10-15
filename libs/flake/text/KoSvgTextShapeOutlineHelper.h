@@ -64,6 +64,14 @@ public:
 
     KoSvgTextShape *contourModeButtonHovered(const QPointF &point);
 
+    /**
+     * @brief updateTextContourMode
+     * This checks if the text contour mode still has shapes,
+     * and otherwise switches out of this mode.
+     * @return whether the mode was updated.
+     */
+    bool updateTextContourMode();
+
     void toggleTextContourMode(KoSvgTextShape *shape);
 private:
     void paintTextShape(QPainter *painter, const KoViewConverter &converter,

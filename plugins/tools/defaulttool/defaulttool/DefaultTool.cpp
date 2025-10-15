@@ -705,6 +705,11 @@ void DefaultTool::slotReorderFlowShapes(int type)
     }
 }
 
+bool DefaultTool::updateTextContourMode()
+{
+    return m_textOutlineHelper->updateTextContourMode();
+}
+
 bool DefaultTool::wantsAutoScroll() const
 {
     return true;
@@ -2319,6 +2324,7 @@ void DefaultToolTextPropertiesInterface::clearSelection()
 
 void DefaultToolTextPropertiesInterface::slotSelectionChanged()
 {
+    if (d->parent->updateTextContourMode()) return;
     Q_FOREACH(KoShape *shape, d->shapes) {
         if (!shape) continue;
         shape->removeShapeChangeListener(this);

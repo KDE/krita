@@ -91,6 +91,7 @@ public:
      */
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
+    bool updateTextContourMode();
 
 public Q_SLOTS:
     void activate(const QSet<KoShape *> &shapes) override;

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-13 11:50-0300\n"
+"PO-Revision-Date: 2025-10-14 19:30-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -20084,7 +20084,7 @@ msgstr "Pincel"
 #: libs/ui/forms/wdggeometryoptions.ui:106
 #, kde-format
 msgid "Brush (Background Color)"
-msgstr "Pincel (Cor de Fundo)"
+msgstr "Pincel (cor de fundo)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPatternTransform)
 #: libs/ui/forms/wdggeometryoptions.ui:114
@@ -41599,7 +41599,7 @@ msgstr "Cônico "
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
-msgstr "Cônico Simétrico"
+msgstr "Cônico simétrico"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:258
 #, kde-format
@@ -42415,7 +42415,7 @@ msgstr "Ferramenta de seleção por curva Bezier"
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
 msgid "Polygonal Selection"
-msgstr "Seleção Poligonal"
+msgstr "Seleção poligonal"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:54
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:70
@@ -42508,7 +42508,7 @@ msgstr "Ferramenta de seleção elíptica"
 #, kde-format
 msgctxt "action"
 msgid "Magnetic Selection Tool"
-msgstr "Ferramenta de Seleção Magnética"
+msgstr "Ferramenta de seleção magnética"
 
 #. i18n: context: toolTip @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -42522,7 +42522,7 @@ msgstr "Ferramenta de seleção de curva magnética"
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:51
 #, kde-format
 msgid "Magnetic Selection"
-msgstr "Seleção Magnética"
+msgstr "Seleção magnética"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:488
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:505
@@ -42552,7 +42552,7 @@ msgstr "Raio de pesquisa:"
 #, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr "Lacuna da âncora: "
+msgstr "Intervalo da âncora: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -43366,7 +43366,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Polygon Tool"
-msgstr "Ferramenta de Polígonos"
+msgstr "Ferramenta de polígonos"
 
 #. i18n: context: toolTip @ Action (KisToolPolygon), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolygon), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -43396,7 +43396,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool"
-msgstr "Ferramenta de Linhas Poligonais"
+msgstr "Ferramenta de linha poligonal"
 
 #. i18n: context: toolTip @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)

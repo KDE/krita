@@ -92,13 +92,13 @@ TransformComponents componentsForTransform(const QTransform &t) {
 
     return result;
 }
+auto rotateAroundPoint = [] (qreal deg, const QPointF center) {
+    return QTransform::fromTranslate(-center.x(), -center.y()) * QTransform().rotate(deg) * QTransform::fromTranslate(center.x(), center.y());
+};
 
 
 void TestSvgTextShape::testSetTextOnShape_data()
 {
-    auto rotateAroundPoint = [] (qreal deg, const QPointF center) {
-        return QTransform::fromTranslate(-center.x(), -center.y()) * QTransform().rotate(deg) * QTransform::fromTranslate(center.x(), center.y());
-    };
 
     QTest::addColumn<QTransform>("textTransform");
     QTest::addColumn<int>("contourCount");
@@ -299,17 +299,53 @@ void TestSvgTextShape::testSetTextOnShape()
     }
 }
 
+void TestSvgTextShape::testRemoveShapeFromText_data()
+{
+    QTest::addColumn<QTransform>("textTransform");
+    QTest::addColumn<QTransform>("contourTransform");
+    QTest::addColumn<TransformComponents>("expectedContourTransformComponents");
+
+    QTest::addRow("remove contour from text")
+            << QTransform::fromTranslate(10, 20)
+            << QTransform::fromTranslate(5, 5)
+            << TransformComponents(TransformComponent::Translate);
+
+    QTest::addRow("remove contour (scaled) from text")
+            << QTransform::fromTranslate(10, 20)
+            << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(5, 5)
+            << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+
+    QTest::addRow("remove contour (rotated) from text")
+            << QTransform::fromTranslate(10, 20)
+            << rotateAroundPoint(30, QPointF(50, 50)) * QTransform::fromTranslate(20, 25)
+            << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+
+    QTest::addRow("remove contour from text (scaled)")
+            << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(10, 20)
+            << QTransform::fromTranslate(5, 5)
+            << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+
+    QTest::addRow("remove contour from text (rotated)")
+            << rotateAroundPoint(30, QPointF(100, -10)) * QTransform::fromTranslate(10, 80)
+            << QTransform::fromTranslate(5, 5)
+            << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+}
+
 void TestSvgTextShape::testRemoveShapeFromText()
 {
     KoSvgTextShape *textShape = new KoSvgTextShape();
     textShape->insertText(0, "The quick brown fox jumps over the lazy dog.");
     QList<KoShape*> shapes;
 
-    QTransform rotate;
-    rotate.rotate(45);
+    QFETCH(QTransform, textTransform);
+    QFETCH(QTransform, contourTransform);
+    QFETCH(TransformComponents, expectedContourTransformComponents);
+
+    textShape->setTransformation(textTransform);
+
     for (int i = 0; i < 3; i++) {
         KoShape *p = createPolygon();
-        p->setTransformation(rotate*QTransform::fromTranslate(i*10, i*10));
+        p->setTransformation(QTransform::fromTranslate(i*10, i*10) * contourTransform);
         shapes.append(p);
     }
     textShape->setShapesInside(shapes);
@@ -320,9 +356,13 @@ void TestSvgTextShape::testRemoveShapeFromText()
 
     QVERIFY(!textShape->shapeInContours(shapes.last()));
 
+    QCOMPARE(componentsForTransform(shapes.last()->absoluteTransformation()), expectedContourTransformComponents);
+
     cmd->undo();
 
     QVERIFY(textShape->shapeInContours(shapes.last()));
+
+    delete textShape;
 }
 
 void TestSvgTextShape::testSetSize_data()

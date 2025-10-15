@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testSetTextOnShape_data();
     void testSetTextOnShape();
 
+    void testRemoveShapeFromText_data();
     void testRemoveShapeFromText();
 
     void testSetSize_data();

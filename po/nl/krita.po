@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-14 23:59+0200\n"
+"PO-Revision-Date: 2025-10-15 17:31+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -28899,6 +28899,8 @@ msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
 msgstr ""
+"Lettertypefamilie \"%1\" ontbreekt op deze machine. Deze voorinstelling van "
+"stijl kan niet juist werken."
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:216
 #, kde-format
@@ -28960,7 +28962,7 @@ msgstr "Wanneer relevant"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr ""
+msgstr "Indien gezet"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -28982,12 +28984,10 @@ msgid "Never Show"
 msgstr "Nooit weergeven"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:12
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text editing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Rendering"
-msgstr "Tekstbewerking"
+msgstr "Tekstweergave"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, kde-format
@@ -28995,15 +28995,16 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text Rendering controls the hinting and rendering style for the property"
 msgstr ""
+"Tekstweergave bestuurt de aanwijzing en stijl van weergeven voor de "
+"eigenschap"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
-#, fuzzy, kde-format
-#| msgid "Enable selection outline anti-aliasing"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr "Anti-aliasing van omtrek van selectie inschakelen"
+msgstr "tekst-weergave, aanwijzen, anti-aliasing"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -29012,26 +29013,26 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
+"Hetzelfde als geometrische precisie, gebruikt geen aanwijzing en vermijdt "
+"laden van interne bitmaps."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Speed"
-msgstr "Optimaliseren"
+msgstr "Geoptimaliseerde snelheid"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:84
-#, fuzzy, kde-format
-#| msgid "Enable curve anti-aliasing"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Renders without antialiasing."
-msgstr "Anti-aliasing van kromme inschakelen"
+msgstr "Weergeven zonder anti-aliasing."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:85
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Optimize Legibility"
-msgstr ""
+msgstr "Leesbaarheid optimaliseren"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:86
 #, kde-format
@@ -29040,11 +29041,10 @@ msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
-#, fuzzy, kde-format
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Geometric Precision"
-msgstr "Meetkundig gemiddelde"
+msgstr "Geometrische precisie"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:88
 #, kde-format
@@ -29054,11 +29054,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
-#, fuzzy, kde-format
-#| msgid "Free Transform"
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Transform"
-msgstr "Vrij transformeren"
+msgstr "Teksttransformatie"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
 #, kde-format
@@ -29068,6 +29067,9 @@ msgid ""
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"Teksttransformatie biedt het transformeren van de gegeven reeks tekens, "
+"bijvoorbeeld, door ze hoofdletters te maken of halve-breedteformulieren "
+"vervangen door volledige-breedteformulieren."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -29083,14 +29085,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
-msgstr ""
+msgstr "Geval:"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
-#, fuzzy, kde-format
-#| msgid "Capitalize"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
-msgstr "Kapitaliseren"
+msgstr "Hoofdletters maken"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
 #, kde-format
@@ -29105,9 +29106,7 @@ msgid "Lower Case"
 msgstr "Kleine letters"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:125
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Full Widths"
+#, kde-format
 msgctxt "@option:check"
 msgid "Full-width"
 msgstr "Volledige breedte"
@@ -29116,20 +29115,19 @@ msgstr "Volledige breedte"
 #, kde-format
 msgctxt "@option:check"
 msgid "Full-size Kana"
-msgstr ""
+msgstr "Volledige grootte van Kana"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
-#, fuzzy, kde-format
-#| msgid "Vertical Position"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Underline Position"
-msgstr "Verticale positie"
+msgstr "Positie onderstrepen"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:15
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Specify the position of the underline for text-decoration."
-msgstr ""
+msgstr "Specificeer de positie van de onderstreping voor tekstdecoratie."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
 #, kde-format
@@ -29140,34 +29138,28 @@ msgid "text-decoration-position, underline, left, right, under"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Bottom"
-msgstr "Onder"
+msgstr "Onderaan"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:109
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Left"
-msgstr "Verticale lijnen     "
+msgstr "Verticaal links"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:110
-#, fuzzy, kde-format
-#| msgid "Vertical Radius:"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical Right"
-msgstr "Verticale straal:"
+msgstr "Verticaal rechts"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "White Balance"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "White Space"
-msgstr "Witte ruimte"
+msgstr "Witruimte"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:15
 #, kde-format
@@ -29186,49 +29178,40 @@ msgid "white-space, collapse, pre-formatted"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
-#, fuzzy, kde-format
-#| msgid "Prev"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre"
-msgstr "Vorige"
+msgstr "Vooraan"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:124
-#, fuzzy, kde-format
-#| msgid "Wrap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
 msgstr "Niet van voren af verder gaan"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
-#, fuzzy, kde-format
-#| msgid "Wrap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Wrap"
-msgstr "Regelafbreking"
+msgstr "Voorafgaande regelafbreking"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
-msgstr "Subpad afbreken"
+msgstr "Afbreekspaties"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Draw Line"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
-msgstr "Lijn tekenen"
+msgstr "Voorafgaande lijn"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Break"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Word Break"
-msgstr "Regeleinde invoegen"
+msgstr "Woordafbreking"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:16
 #, kde-format
@@ -29273,11 +29256,10 @@ msgid "Break-all"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
-#, fuzzy, kde-format
-#| msgid "Auto Spacing"
+#, kde-format
 msgctxt "@title:group"
 msgid "Word Spacing"
-msgstr "Automatisch afstand houden"
+msgstr "Spatiëring tussen woorden"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:18
 #, kde-format
@@ -29293,7 +29275,7 @@ msgctxt ""
 "comma separated search terms for the word-spacing property, matching is case-"
 "insensitive"
 msgid "word-spacing, tracking, white space,"
-msgstr ""
+msgstr "Woordspatiëring, volgen, witruimte"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -29310,13 +29292,12 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
-#, fuzzy, kde-format
-#| msgid "Text flows horizontal, top to bottom."
+#, kde-format
 msgctxt ""
 "comma separated search terms for the writing-mode property, matching is case-"
 "insensitive"
 msgid "writing-mode, horizontal, vertical, top-to-bottom"
-msgstr "Tekst beweegt horizontaal, van boven naar beneden."
+msgstr "schrijfmodus, horizontaal, verticaal, boven-naar-onder"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:77
 #, kde-format
@@ -29325,18 +29306,16 @@ msgid "Horizontal"
 msgstr "Horizontaal"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:78
-#, fuzzy, kde-format
-#| msgid "Right to Left"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Right to Left"
-msgstr "Rechts naar links"
+msgstr "Verticaal, rechts naar links"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:79
-#, fuzzy, kde-format
-#| msgid "Left to Right"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
-msgstr "Links naar rechts"
+msgstr "Verticaal, links naar rechts"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -42756,18 +42735,16 @@ msgid "Similar Color Selection Tool"
 msgstr "Gereedschap voor selectie van gelijkwaardige kleur"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:44
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
-msgstr "Afwisselen"
+msgstr "Afwisselende glyphs"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Character Map"
-msgstr "Teken"
+msgstr "Kaart met tekens"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:134
 #, kde-format

@@ -27608,11 +27608,10 @@ msgstr "Odstranit šablonu"
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:237
 #: plugins/dockers/textproperties/qml/ResourceView.qml:244
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:127
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr "Hledat"
+msgstr "Hledat..."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:12
 #, kde-format
@@ -27739,8 +27738,7 @@ msgid "Traditional"
 msgstr "Racionální"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:120
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Width:"
 msgstr "Šířka:"
@@ -27841,8 +27839,7 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
-#, fuzzy, kde-format
-#| msgid "Style:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
 msgstr "Styl:"
@@ -28305,11 +28302,10 @@ msgid "Clone Style Preset"
 msgstr "Klonovat vrstvu"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
-#, fuzzy, kde-format
-#| msgid "Filter"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr "Filtr"
+msgstr "Filtr..."
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:325
 #, fuzzy, kde-format
@@ -36585,10 +36581,9 @@ msgstr "Jas: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgid "Scale: "
-msgstr "Měřítko:"
+msgstr "Měřítko: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141

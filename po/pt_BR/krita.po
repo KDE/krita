@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-14 19:30-0300\n"
+"PO-Revision-Date: 2025-10-15 10:00-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -8828,7 +8828,7 @@ msgstr "Suavização do pincel: Pixel"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "Suavização do pincel: Estabilizadora"
+msgstr "Suavização do pincel: Estabilizador"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -41190,12 +41190,12 @@ msgstr "Raio onde o pincel está bloqueado"
 #: plugins/tools/basictools/kis_tool_brush.cc:498
 #, kde-format
 msgid "Finish line:"
-msgstr "Linha final:"
+msgstr "Finalizar linha:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:510
 #, kde-format
 msgid "Stabilize Sensors:"
-msgstr "Sensores de estabilização:"
+msgstr "Estabilizar sensores:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:518
 #, kde-format
@@ -41205,7 +41205,7 @@ msgstr "Fim do traço:"
 #: plugins/tools/basictools/kis_tool_brush.cc:524
 #, kde-format
 msgid "Smooth Pressure"
-msgstr "Pressão suave"
+msgstr "Suavizar pressão"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:530
 #, kde-format
@@ -41418,7 +41418,7 @@ msgstr "Preencher todas as regiões até uma cor de borda específica"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Boundary color"
-msgstr "Cor de borda"
+msgstr "Cor da borda"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
 #, kde-format

@@ -144,6 +144,13 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
+    // When using touch drawing, we only ever receive move events after the
+    // finger has pressed down. We have to issue an artificial move here so that
+    // the tool's state is updated properly to handle the press.
+    if (event->isTouchEvent()) {
+        handleMouseMove(event, false);
+    }
+
     //Right click removes last point
     if (event->button() == Qt::RightButton) {
         removeLastPoint();
@@ -265,6 +272,11 @@ void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    handleMouseMove(event, true);
+}
+
+void KoCreatePathTool::handleMouseMove(const KoPointerEvent *event, bool considerDrag)
+{
     Q_D(KoCreatePathTool);
 
     d->hoveredPoint = d->endPointAtPosition(event->point);
@@ -281,7 +293,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 
     QPointF snappedPosition = canvas()->snapGuide()->snap(event->point, event->modifiers());
 
-    if (event->buttons() & Qt::LeftButton) {
+    if (considerDrag && (event->buttons() & Qt::LeftButton)) {
         if (d->pointIsDragged ||
             !handleGrabRect(d->dragStartPoint).contains(event->point)) {
 

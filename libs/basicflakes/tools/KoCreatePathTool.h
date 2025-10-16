@@ -91,6 +91,7 @@ protected:
       */
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
+    void handleMouseMove(const KoPointerEvent *event, bool considerDrag);
     void endPath();
     void endPathWithoutLastPoint();
     void cancelPath();

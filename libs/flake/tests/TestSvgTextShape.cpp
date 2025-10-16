@@ -13,6 +13,7 @@
 
 #include <kistest.h>
 #include <KoSvgTextShape.h>
+#include <KoSvgTextShapeMarkupConverter.h>
 #include <KoShape.h>
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
@@ -554,6 +555,52 @@ void TestSvgTextShape::testReorderShapesInside()
         QVERIFY2(final == startOld, QString("Expected: %1, got: %2").arg(startOld).arg(final).toLatin1());
         startOld+=1;
     }
+}
+
+void TestSvgTextShape::testTextPathOnRange_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<int>("startPos");
+    QTest::addColumn<int>("endPos");
+
+    QTest::addRow("Single node, full range") << "<text>Test</text>" << 0 << 4;
+    QTest::addRow("Single node, front") << "<text>Test test</text>" << 0 << 4;
+    QTest::addRow("Single node, back") << "<text>Test test</text>" << 4 << 10;
+    QTest::addRow("Complex text") << "<text>Text <tspan fill=\"#ff0000\">path</tspan> test</text>" << 6 << 12;
+
+    QTest::addRow("Complex with paths") << "<text>"
+                                           "<textPath path=\"M0 0L10 10\">Text </textPath>"
+                                           "<textPath path=\"M0 0L10 10\" fill=\"#ff0000\">path</textPath>"
+                                           "<textPath path=\"M0 0L10 10\"> test</textPath>"
+                                           "</text>" << 2 << 14;
+    QTest::addRow("Complex with paths and deep tree")
+            << "<text>"
+               "<textPath path=\"M0 0L10 10\">The quick <tspan fill=\"#aa8800\">brown </tspan></textPath>"
+               "<textPath path=\"M0 0L10 10\" fill=\"#ff0000\">fox</textPath>"
+               "<textPath path=\"M0 0L10 10\"> jumps <tspan fill=\"#00ff00\">over the lazy dog</tspan></textPath>"
+               "</text>" << 14 << 26;
+}
+
+void TestSvgTextShape::testTextPathOnRange()
+{
+    QFETCH(QString, svg);
+    QFETCH(int, startPos);
+    QFETCH(int, endPos);
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+    KoPathShape *path = createPolygon();
+    KoSvgTextSetTextPathOnRangeCommand *cmd = new KoSvgTextSetTextPathOnRangeCommand(textShape, path, startPos, endPos);
+
+    cmd->redo();
+
+    KoSvgTextNodeIndex idx = textShape->topLevelNodeForPos((startPos+endPos)/2);
+
+    KoPathShape *textPath = dynamic_cast<KoPathShape*>(idx.textPath());
+    QVERIFY(textPath);
+    QCOMPARE(textPath->toString(), path->toString());
+
+    //TODO test undo.
 }
 
 KISTEST_MAIN(TestSvgTextShape)

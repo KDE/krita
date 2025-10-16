@@ -12,10 +12,12 @@
 #include <KoShapeContainer.h>
 
 struct KoSvgTextAddRemoveShapeCommandImpl::Private {
-    Private(KoSvgTextShape *_text, KoShape *_shape)
+    Private(KoSvgTextShape *_text, KoShape *_shape, int _startPos, int _endPos)
         : textShape(_text)
         , shape(_shape)
         , memento(textShape->getMemento())
+        , startPos(_startPos)
+        , endPos(_endPos)
     {
 
     }
@@ -25,13 +27,15 @@ struct KoSvgTextAddRemoveShapeCommandImpl::Private {
     KoShape* shape = nullptr;
     std::optional<KoShapeContainer*> originalShapeParent;
     KoSvgTextShapeMementoSP memento;
+    int startPos = -1;
+    int endPos = -1;
     KoSvgTextAddRemoveShapeCommandImpl::ContourType type;
     bool removeCommand;
 };
 
-KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgTextShape *textShape, KoShape* shape, ContourType type, State state, KUndo2Command *parent)
+KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgTextShape *textShape, KoShape* shape, ContourType type, State state, int startPos, int endPos, KUndo2Command *parent)
     : KisCommandUtils::FlipFlopCommand(state, parent)
-    , d(new Private(textShape, shape))
+    , d(new Private(textShape, shape, startPos, endPos))
 {
     d->removeCommand = state == FINALIZING;
 
@@ -103,7 +107,9 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
         d->textShape->addShapeContours({d->shape}, true);
     } else if (d->type == Subtract) {
         d->textShape->addShapeContours({d->shape}, false);
-    } // TextPath is handled by setMemento.
+    } else if (!d->removeCommand && d->type == TextPath) {
+        d->textShape->setTextPathOnRange(d->shape, d->startPos, d->endPos);
+    }
 
     if (d->removeCommand) {
         d->textShape->setMemento(d->memento);
@@ -118,7 +124,7 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
 }
 
 KoSvgTextAddShapeCommand::KoSvgTextAddShapeCommand(KoSvgTextShape *textShape, KoShape *shape, bool inside, KUndo2Command *parentCommand)
-    : KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, (inside? Inside: Subtract), INITIALIZING, parentCommand)
+    : KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, (inside? Inside: Subtract), INITIALIZING, -1, -1, parentCommand)
 {
     /**
      * 1) The shapes should belong to the same parent or have no parent at all.
@@ -135,13 +141,24 @@ KoSvgTextAddShapeCommand::~KoSvgTextAddShapeCommand()
 }
 
 KoSvgTextRemoveShapeCommand::KoSvgTextRemoveShapeCommand(KoSvgTextShape *textShape, KoShape *shape, KUndo2Command *parentCommand)
-: KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, Unknown, FINALIZING, parentCommand)
+: KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, Unknown, FINALIZING, -1, -1, parentCommand)
 {
     // the \p shape will be ungrouped into the parent of \p textShape
     KIS_SAFE_ASSERT_RECOVER_NOOP(textShape->shapeInContours(shape));
 }
 
 KoSvgTextRemoveShapeCommand::~KoSvgTextRemoveShapeCommand()
+{
+
+}
+
+KoSvgTextSetTextPathOnRangeCommand::KoSvgTextSetTextPathOnRangeCommand(KoSvgTextShape *textShape, KoShape *shape, int startPos, int endPos, KUndo2Command *parentCommand)
+: KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, TextPath, INITIALIZING, startPos, endPos, parentCommand)
+{
+
+}
+
+KoSvgTextSetTextPathOnRangeCommand::~KoSvgTextSetTextPathOnRangeCommand()
 {
 
 }

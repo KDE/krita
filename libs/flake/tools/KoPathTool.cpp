@@ -835,8 +835,6 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
     // the max allowed distance from a segment
     const QRectF grabRoi = handleGrabRect(point);
-    const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);
-
     QScopedPointer<PathSegment> segment(new PathSegment);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
@@ -844,30 +842,11 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
         if (parameterShape && parameterShape->isParametricShape())
             continue;
 
-        // convert document point to shape coordinates
-        const QPointF p = shape->documentToShape(point);
-        // our region of interest, i.e. a region around our mouse position
-        const QRectF roi = shape->documentToShape(grabRoi);
-
-        qreal minDistance = std::numeric_limits<qreal>::max();
-
-        // check all segments of this shape which intersect the region of interest
-        const QList<KoPathSegment> segments = shape->segmentsAt(roi);
-
-        foreach (const KoPathSegment &s, segments) {
-            const qreal nearestPointParam = s.nearestPoint(p);
-            const QPointF nearestPoint = s.pointAt(nearestPointParam);
-            const qreal distance = kisDistance(p, nearestPoint);
-
-            // are we within the allowed distance ?
-            if (distance > distanceThreshold)
-                continue;
-            // are we closer to the last closest point ?
-            if (distance < minDistance) {
-                segment->path = shape;
-                segment->segmentStart = s.first();
-                segment->positionOnSegment = nearestPointParam;
-            }
+        const KoPathSegment s = shape->segmentAtPoint(point, grabRoi);
+        if (s.isValid()) {
+            segment->path = shape;
+            segment->segmentStart = s.first();
+            segment->positionOnSegment = s.nearestPoint(shape->documentToShape(point));
         }
     }
 

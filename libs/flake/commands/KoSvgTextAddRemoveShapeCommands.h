@@ -23,7 +23,7 @@ public:
         TextPath
     };
 
-    KoSvgTextAddRemoveShapeCommandImpl(KoSvgTextShape *textShape, KoShape *shape, ContourType type, State state, KUndo2Command *parent = nullptr);
+    KoSvgTextAddRemoveShapeCommandImpl(KoSvgTextShape *textShape, KoShape *shape, ContourType type, State state, int startPos, int endPos, KUndo2Command *parent = nullptr);
     ~KoSvgTextAddRemoveShapeCommandImpl();
     void partA() override;
     void partB() override;
@@ -42,6 +42,12 @@ class KRITAFLAKE_EXPORT KoSvgTextRemoveShapeCommand : public KoSvgTextAddRemoveS
 public:
     KoSvgTextRemoveShapeCommand(KoSvgTextShape *textShape, KoShape *shape, KUndo2Command *parentCommand = 0);
     ~KoSvgTextRemoveShapeCommand();
+};
+
+class KRITAFLAKE_EXPORT KoSvgTextSetTextPathOnRangeCommand : public KoSvgTextAddRemoveShapeCommandImpl {
+public:
+    KoSvgTextSetTextPathOnRangeCommand(KoSvgTextShape *textShape, KoShape *shape, int startPos, int endPos, KUndo2Command *parentCommand = 0);
+    ~KoSvgTextSetTextPathOnRangeCommand();
 };
 
 #endif // KOSVGTEXTADDREMOVESHAPECOMMANDS_H

@@ -462,6 +462,8 @@ public:
     bool autoFillMarkers() const;
     void setAutoFillMarkers(bool value);
 
+    KoPathSegment segmentAtPoint(const QPointF &point, const QRectF &grabRoi) const;
+
 public:
     struct KRITAFLAKE_EXPORT PointSelectionChangeListener : public ShapeChangeListener {
         void notifyShapeChanged(ChangeType type, KoShape *shape) override;

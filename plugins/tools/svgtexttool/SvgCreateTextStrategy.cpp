@@ -25,6 +25,9 @@
 #include "kis_global.h"
 #include "kundo2command.h"
 
+#include <KoPathShape.h>
+#include <KoPathSegment.h>
+
 SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked, KoShape *shape)
     : KoInteractionStrategy(tool)
     , m_dragStart(clicked)
@@ -145,7 +148,14 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     if (m_flowShape) {
         textShape->setPosition(m_flowShape->absolutePosition(KoFlake::TopLeft));
-        new KoSvgTextAddShapeCommand(textShape, m_flowShape, true, parentCommand);
+
+        KoPathShape *path = dynamic_cast<KoPathShape*>(m_flowShape);
+        if (path && path->segmentAtPoint(m_dragStart, tool->handleGrabRect(m_dragStart)).isValid()) {
+            int pos = textShape->posForIndex(textShape->plainText().size());
+            new KoSvgTextSetTextPathOnRangeCommand(textShape, m_flowShape, 0, pos, parentCommand);
+        } else {
+            new KoSvgTextAddShapeCommand(textShape, m_flowShape, true, parentCommand);
+        }
     }
 
     new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);

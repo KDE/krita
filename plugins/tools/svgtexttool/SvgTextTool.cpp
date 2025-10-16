@@ -944,7 +944,11 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             }
         } else if (hoveredFlowShape) {
             m_hoveredShapeHighlightRect.addPath(hoveredFlowShape->absoluteTransformation().map(hoveredFlowShape->outline()));
-            cursor = m_text_in_shape;
+            if (hoveredFlowShape->segmentAtPoint(event->point, handleGrabRect(event->point)).isValid()) {
+                cursor = m_text_on_path;
+            } else {
+                cursor = m_text_in_shape;
+            }
         } else if (!hoverPath.isEmpty() && shapeType == KoSvgTextShape_SHAPEID && m_highlightItem == HighlightItem::None) {
             m_hoveredShapeHighlightRect = hoverPath;
             if (isHorizontal) {

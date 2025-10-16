@@ -733,9 +733,11 @@ public:
      * split the contentElement in tree at index into two nodes.
      * @param tree -- tree to work on.
      * @param index -- index
+     * @param allowEmptyText -- when false, will return true without splitting
+     * the text content element, if the split text would be empty.
      * @return whether it was successful.
      */
-    static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index) {
+    static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index, bool allowEmptyText = true) {
         int currentIndex = 0;
 
         // If there's only a single root element, don't bother searching.
@@ -752,6 +754,10 @@ public:
             int length = contentElement->numChars(false) - start;
             int zero = 0;
             duplicate.removeText(start, length);
+
+            if (!allowEmptyText && (duplicate.text.isEmpty() || length == 0)) {
+                return true;
+            }
 
             // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
 
@@ -773,6 +779,83 @@ public:
             return true;
         }
         return false;
+    }
+
+    /**
+     * @brief splitTree
+     * Split the whole hierarchy of nodes at the given index.
+     * @param tree - tree to split.
+     * @param index - index to split at.
+     * @param textPathAfterSplit - whether to put any found textPaths before or after the split.
+     */
+    static void splitTree(KisForest<KoSvgTextContentElement> &tree, int index, bool textPathAfterSplit) {
+        splitContentElement(tree, index, false);
+        int currentIndex = 0;
+        auto contentElement = depth(tree) == 1? tree.depthFirstTailBegin(): findTextContentElementForIndex(tree, currentIndex, index, true);
+
+        // We're either at the start or end.
+        if (contentElement == tree.depthFirstTailEnd()) return;
+        if (siblingCurrent(contentElement) == tree.childBegin()) return;
+
+        auto lastNode = siblingCurrent(contentElement);
+        for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(contentElement));
+             parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(contentElement)); parentIt++) {
+            if (lastNode == siblingCurrent(parentIt)) continue;
+            if (siblingCurrent(parentIt) == tree.childBegin()) {
+                break;
+            }
+
+            if (lastNode != childBegin(siblingCurrent(parentIt))) {
+                KoSvgTextContentElement duplicate = KoSvgTextContentElement();
+                duplicate.properties = parentIt->properties;
+                if (textPathAfterSplit) {
+                    duplicate.textPathId = parentIt->textPathId;
+                    duplicate.textPathInfo = parentIt->textPathInfo;
+                    parentIt->textPathId = QString();
+                    parentIt->textPathInfo = KoSvgText::TextOnPathInfo();
+                }
+                auto insert = siblingCurrent(parentIt);
+                insert ++;
+                auto it = tree.insert(insert, duplicate);
+
+                QVector<KisForest<KoSvgTextContentElement>::child_iterator> movableChildren;
+                for (auto child = lastNode; child != childEnd(siblingCurrent(parentIt)); child++) {
+                    movableChildren.append(child);
+                }
+                while(!movableChildren.isEmpty()) {
+                    auto child = movableChildren.takeLast();
+                    tree.move(child, childBegin(it));
+                }
+                lastNode = it;
+            } else {
+                lastNode = siblingCurrent(parentIt);
+            }
+        }
+    }
+
+    /**
+     * @brief findTopLevelParent
+     * Returns the toplevel parent of child that is not root.
+     * @param root -- root under which the toplevel item is.
+     * @param child -- child for which to search the parent for.
+     * @return toplevel parent of child that is itself a child of root,
+     * will return childEnd(root) if the child isn't inside root.
+     */
+    static KisForest<KoSvgTextContentElement>::child_iterator findTopLevelParent(KisForest<KoSvgTextContentElement>::child_iterator root,
+                                                                                 KisForest<KoSvgTextContentElement>::child_iterator child) {
+        // An earlier version of the code used Hierarchy iterator,
+        // but that had too many exceptions when the child was not in the root.
+        if (!child.node()) return childEnd(root);
+        if (KisForestDetail::parent(child) == root) return child;
+        for (auto rootChild = childBegin(root); rootChild != childEnd(root); rootChild++) {
+            for (auto leaf = KisForestDetail::tailSubtreeBegin(rootChild);
+                 leaf != KisForestDetail::tailSubtreeEnd(rootChild); leaf++) {
+                if (siblingCurrent(leaf) == child) {
+                    return rootChild;
+                }
+            }
+        }
+        return childEnd(root);
     }
 
     /**
@@ -1244,7 +1327,7 @@ public:
         return false;
     }
 
-    static KoSvgTextNodeIndex createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement);
+    KoSvgTextNodeIndex createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement) const;
 
     /**
      * @brief removeTextPathId

@@ -118,6 +118,22 @@ void KoSvgTextLoader::setStyleInfo(KoShape *s)
 void KoSvgTextLoader::setTextPathOnCurrentNode(KoShape *s)
 {
     if (!KisForestDetail::isEnd(d->currentNode) && s) {
+        if (s->name().isEmpty()) {
+            int count = 0;
+            while(s->name().isEmpty()) {
+                QString newName("path"+QString::number(count));
+                bool nameIsUnique = true;
+                Q_FOREACH(KoShape *shape, d->shape->d->textPaths) {
+                    if (shape->name() == newName) {
+                        nameIsUnique = false;
+                    }
+                }
+                if(nameIsUnique) {
+                    s->setName(newName);
+                }
+                count+=1;
+            }
+        }
         d->currentNode->textPathId = s->name();
         s->addDependee(d->shape);
         d->shape->d->textPaths.append(s);

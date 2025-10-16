@@ -30,6 +30,9 @@ private Q_SLOTS:
     void testReorderShapesInside_data();
     void testReorderShapesInside();
 
+    void testTextPathOnRange_data();
+    void testTextPathOnRange();
+
 };
 
 #endif // TESTSVGTEXTSHAPE_H

@@ -20,6 +20,7 @@
 class KoSvgTextShapeMemento;
 class KoSvgTextNodeIndex;
 struct KoSvgTextCharacterInfo;
+class KoPathShape;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
@@ -118,8 +119,9 @@ public:
      * Remove list of shapes from any of the internal lists.
      * @param shapes -- shapes to remove.
      * @param update -- whether to call an update.
+     * @param cleanup -- whether to cleanup the textdata.
      */
-    void removeShapesFromContours(QList<KoShape*> shapes, bool callUpdate = true);
+    void removeShapesFromContours(QList<KoShape*> shapes, bool callUpdate = true, bool cleanup = true);
 
     /**
      * @brief moveShapeInsideToIndex
@@ -131,6 +133,17 @@ public:
      * @seealso shapesInside();
      */
     void moveShapeInsideToIndex(KoShape* shapeInside, const int index);
+
+    /**
+     * @brief setTextPathOnRange
+     * Set a text path on the specified range.
+     * In SVG text paths are always at the first child.
+     * @param textPath -- TextPath to set.
+     * @param posStart -- Start of the range, as cursor pos.
+     * @param posEnd --  End of the range, as cursor pos.
+     * @return whether successfull.
+     */
+    bool setTextPathOnRange(KoShape *textPath, const int startPos = -1, const int endPos = -1);
 
     /**
      * @brief shapesInside
@@ -484,6 +497,16 @@ public:
      * Will return {-1, -1} when the tree index is invalid.
      */
     QPair<int, int> findRangeForNodeIndex(const KoSvgTextNodeIndex &node) const;
+
+    /**
+     * @brief topLevelNodeForPos
+     * Get, if possible, an index for the child element of the root at pos.
+     * If not possible, returns an index for the root. This is used primarily for text-on-path.
+     * @param pos -- cursor position at which to find the index.
+     * @return if the text only has a root, it will still return the index for the root,
+     * but otherwise it will return a child element of root at pos.
+     */
+    KoSvgTextNodeIndex topLevelNodeForPos(int pos) const;
 
     /*--------------- Properties ---------------*/
 

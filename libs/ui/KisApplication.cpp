@@ -234,7 +234,9 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QString version = KritaVersionWrapper::versionString(true);
     setApplicationVersion(version);
+#ifndef Q_OS_MACOS
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
+#endif
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
 

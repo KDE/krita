@@ -1,20 +1,20 @@
 # Translation of krita.po to Catalan
 # Copyright (C) 2000-2025 This_file_is_part_of_KDE
 #
-# Sebastià Pla <sastia@retemail.es>, 2000.
-# Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
-# Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006, 2007.
-# Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
-# Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
-# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
+# SPDX-FileCopyrightText: 2000 Sebastià Pla <sastia@retemail.es>
+# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2006, 2007 Pau Tallada Crespí <pau_tallada@telefonica.net>
+# SPDX-FileCopyrightText: 2006 Xavier Batlle i Pèlach <tevibp@wanadoo.es>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011 Rafael Carreras <rcarreras@caliu.cat>
+# SPDX-FileCopyrightText: 2009 Manuel Tortosa Moreno <manutortosa@gmail.com>
 # SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 03:36+0000\n"
-"PO-Revision-Date: 2025-10-07 09:19+0200\n"
+"PO-Revision-Date: 2025-10-09 17:19+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -38380,7 +38380,7 @@ msgstr "Ajusta l'esborrador"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr "Habilita l'ajust quan s'usen esborradors"
+msgstr "Activa l'ajust quan s'usen esborradors"
 
 #: plugins/tools/basictools/kis_tool_brush.h:137
 #, kde-format

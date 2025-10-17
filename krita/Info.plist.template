@@ -9,7 +9,7 @@
     <key>NSHighResolutionMagnifyAllowed</key>
     <string>NO</string>
     <key>CFBundleDevelopmentRegion</key>
-    <string>English</string>
+    <string>en</string>
     <key>CFBundleExecutable</key>
     <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
     <key>CFBundleGetInfoString</key>

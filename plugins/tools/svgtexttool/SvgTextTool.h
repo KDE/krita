@@ -20,6 +20,7 @@
 
 #include "SvgTextCursor.h"
 #include "SvgTextToolOptionsManager.h"
+#include "SvgTextOnPathDecorationHelper.h"
 #include "glyphpalette/GlyphPaletteDialog.h"
 
 #include <memory>
@@ -27,7 +28,6 @@
 class KoSelection;
 class SvgTextEditor;
 class KoSvgTextShape;
-class SvgTextCursor;
 class KoInteractionStrategy;
 class KUndo2Command;
 
@@ -36,6 +36,7 @@ class SvgTextTool : public KoToolBase
     Q_OBJECT
 
     friend class SvgCreateTextStrategy;
+    friend class SvgChangeTextPathInfoStrategy;
 
 public:
     explicit SvgTextTool(KoCanvasBase *canvas);
@@ -119,6 +120,8 @@ private Q_SLOTS:
      * update the glyph palette dialog from the current selection.
      */
     void updateGlyphPalette();
+
+    void updateTextPathHelper();
     /**
      * @brief insertRichText
      * Insert a rich text shape, used by the glyph palette..
@@ -197,6 +200,7 @@ private:
         Select,
         InlineSizeHandle,
         Move,
+        TextPathHandle,
     };
     enum class HighlightItem {
         None = 0,
@@ -220,6 +224,7 @@ private:
 
 
     SvgTextCursor m_textCursor;
+    SvgTextOnPathDecorationHelper m_textOnPathHelper;
     QScopedPointer<KoSvgTextShapeOutlineHelper> m_textOutlineHelper;
     KisSignalAutoConnectionsStore m_canvasConnections;
 

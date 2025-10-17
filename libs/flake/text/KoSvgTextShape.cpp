@@ -114,7 +114,7 @@ KoSvgTextNodeIndex KoSvgTextShape::Private::createTextNodeIndex(KisForest<KoSvgT
 
 KoSvgTextNodeIndex::KoSvgTextNodeIndex(const KoSvgTextNodeIndex &rhs)
 {
-    d->textElement = rhs.d->textElement;
+    d.reset(new KoSvgTextNodeIndex::Private(rhs.d->textElement, rhs.d->textPath));
 }
 
 KoSvgTextNodeIndex::~KoSvgTextNodeIndex() {
@@ -122,17 +122,22 @@ KoSvgTextNodeIndex::~KoSvgTextNodeIndex() {
 }
 
 KoSvgTextProperties *KoSvgTextNodeIndex::properties(){
+    if (!d) { return nullptr;}
     return &d->textElement->properties;
 }
 
 KoSvgText::TextOnPathInfo *KoSvgTextNodeIndex::textPathInfo() {
+    if (!d) {
+        qDebug() << "d not initialized...";
+        return nullptr;
+    }
     return &d->textElement->textPathInfo;
 }
 
 KoShape *KoSvgTextNodeIndex::textPath() {
+    if (!d) { qDebug() << "d not initialized...";return nullptr;}
     return d->textPath;
 }
-
 
 KoSvgTextShape::KoSvgTextShape()
     : KoShape()
@@ -1458,12 +1463,25 @@ QPair<int, int> KoSvgTextShape::findRangeForNodeIndex(const KoSvgTextNodeIndex &
 
 KoSvgTextNodeIndex KoSvgTextShape::topLevelNodeForPos(int pos) const
 {
+    auto candidate = d->textData.childBegin();
+    if (d->isLoading || d->cursorPos.isEmpty()) return d->createTextNodeIndex(candidate);
+    if (childBegin(d->textData.childBegin()) != childEnd(d->textData.childBegin())) {
+        candidate = childBegin(d->textData.childBegin());
+    }
     const int finalPos = d->cursorPos.size() - 1;
     const int index = d->cursorPos.at(qBound(0, pos, finalPos)).index;
     int currentIndex = 0;
-    auto element = KisForestDetail::siblingCurrent(Private::findTextContentElementForIndex(d->textData, currentIndex, index, true));
-    if (element == d->textData.childBegin()) return d->createTextNodeIndex(d->textData.childBegin());
-    return d->createTextNodeIndex(Private::findTopLevelParent(d->textData.childBegin(), element));
+
+    auto e = Private::findTextContentElementForIndex(d->textData, currentIndex, index, true);
+    if (e == d->textData.depthFirstTailEnd()) {
+        return d->createTextNodeIndex(candidate);
+    }
+
+    auto element = KisForestDetail::siblingCurrent(e);
+    auto parent = Private::findTopLevelParent(d->textData.childBegin(), element);
+    if (parent == childEnd(d->textData.childBegin())) return d->createTextNodeIndex(candidate);
+
+    return d->createTextNodeIndex(parent);
 }
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const

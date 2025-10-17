@@ -24,6 +24,7 @@
 #include "SvgTextToolOptionsModel.h"
 #include "SvgTextTypeSettingStrategy.h"
 #include "SvgTextChangeTransformsOnRange.h"
+#include "SvgChangeTextPathInfoStrategy.h"
 
 #include <QPainterPath>
 #include <QDesktopServices>
@@ -145,6 +146,8 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
 
     m_textOutlineHelper->setDrawBoundingRect(false);
     m_textOutlineHelper->setDrawTextWrappingArea(true);
+
+    connect(&m_textCursor, SIGNAL(selectionChanged()), this, SLOT(updateTextPathHelper()));
 
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
@@ -359,6 +362,11 @@ void SvgTextTool::updateGlyphPalette()
     }
 }
 
+void SvgTextTool::updateTextPathHelper()
+{
+    m_textOnPathHelper.setPos(m_textCursor.getPos());
+}
+
 void SvgTextTool::insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph)
 {
     if (replaceLastGlyph) {
@@ -454,6 +462,7 @@ void SvgTextTool::slotShapeSelectionChanged()
     KoSvgTextShape *const shape = selectedShape();
     if (shape != m_textCursor.shape()) {
         m_textCursor.setShape(shape);
+        m_textOnPathHelper.setShape(shape);
         if (shape) {
             setTextMode(true);
         } else {
@@ -649,6 +658,7 @@ QRectF SvgTextTool::decorationsRect() const
     rect |= m_hoveredShapeHighlightRect.boundingRect();
 
     rect |= m_textOutlineHelper->decorationRect();
+    rect |= m_textOnPathHelper.decorationRect(canvas()->viewConverter()->documentToView());
 
     return rect;
 }
@@ -708,6 +718,9 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
     m_textOutlineHelper->setDecorationThickness(decorationThickness());
     m_textOutlineHelper->setHandleRadius(handleRadius());
     m_textOutlineHelper->paint(&gc, converter);
+    m_textOnPathHelper.setDecorationThickness(decorationThickness());
+    m_textOnPathHelper.setHandleRadius(handleRadius());
+    m_textOnPathHelper.paint(&gc, converter);
     gc.setTransform(converter.documentToView(), true);
     {
         KisHandlePainterHelper handlePainter(&gc, handleRadius(), decorationThickness());
@@ -766,6 +779,11 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
                 event->accept();
                 return;
             }
+        } else if (m_textOnPathHelper.hitTest(event->point)) {
+            m_interactionStrategy.reset(new SvgChangeTextPathInfoStrategy(this, selectedShape, event->point, m_textCursor.getPos()));
+            m_dragging = DragMode::TextPathHandle;
+            event->accept();
+            return;
         } else if (m_highlightItem == HighlightItem::MoveBorder) {
             m_interactionStrategy.reset(new SvgMoveTextStrategy(this, selectedShape, event->point));
             m_dragging = DragMode::Move;
@@ -876,6 +894,8 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 useCursor(m_ibeam_vertical);
             }
+        } else {
+            useCursor(Qt::ArrowCursor);
         }
         event->accept();
     } else {

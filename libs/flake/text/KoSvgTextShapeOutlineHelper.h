@@ -73,6 +73,7 @@ public:
     bool updateTextContourMode();
 
     void toggleTextContourMode(KoSvgTextShape *shape);
+
 private:
     void paintTextShape(QPainter *painter, const KoViewConverter &converter,
                         const QPalette &pal, KoSvgTextShape *text,

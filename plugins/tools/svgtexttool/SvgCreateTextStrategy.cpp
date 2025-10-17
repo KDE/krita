@@ -22,6 +22,7 @@
 #include "commands/KoKeepShapesSelectedCommand.h"
 #include "commands/KoShapeMoveCommand.h"
 #include "commands/KoSvgTextAddRemoveShapeCommands.h"
+#include "SvgTextPathInfoChangeCommand.h"
 #include "kis_global.h"
 #include "kundo2command.h"
 
@@ -150,9 +151,27 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
         textShape->setPosition(m_flowShape->absolutePosition(KoFlake::TopLeft));
 
         KoPathShape *path = dynamic_cast<KoPathShape*>(m_flowShape);
-        if (path && path->segmentAtPoint(m_dragStart, tool->handleGrabRect(m_dragStart)).isValid()) {
+        KoPathSegment segment;
+        if(path) {
+            segment = path->segmentAtPoint(m_dragStart, tool->handleGrabRect(m_dragStart));
+        }
+        if (segment.isValid()) {
             int pos = textShape->posForIndex(textShape->plainText().size());
             new KoSvgTextSetTextPathOnRangeCommand(textShape, m_flowShape, 0, pos, parentCommand);
+
+            KoSvgText::TextOnPathInfo info;
+            const qreal grab = tool->grabSensitivityInPt();
+            QList<KoPathSegment> segments = path->segmentsAt(path->outlineRect().adjusted(-grab, -grab, grab, grab));
+            Q_FOREACH(KoPathSegment s, segments) {
+                if (s == segment) {
+                    info.startOffset += (segment.nearestPoint(path->documentToShape(m_dragStart))*segment.length());
+                    break;
+                }
+                info.startOffset += s.length();
+                qDebug() << info.startOffset << s.length();
+            }
+            qDebug() << "setting path at..." << info.startOffset << segments.size();
+            new SvgTextPathInfoChangeCommand(textShape, 2, info, parentCommand);
         } else {
             new KoSvgTextAddShapeCommand(textShape, m_flowShape, true, parentCommand);
         }

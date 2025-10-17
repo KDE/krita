@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-15 17:31+0200\n"
+"PO-Revision-Date: 2025-10-16 15:12+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -27473,7 +27473,7 @@ msgstr "Basisregel"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline defined by Dominant Baseline."
-msgstr ""
+msgstr "Uitlijnen op de basislijn gedefinieerd door de dominante basislijn."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:84
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:82
@@ -27487,7 +27487,7 @@ msgstr "Alfabetisch"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline for scripts that align at the bottom."
-msgstr ""
+msgstr "De basislijn voor scripts uitlijnen die onderaan uitlijnen."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
@@ -27501,7 +27501,7 @@ msgstr "Ideografisch"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box bottom."
-msgstr ""
+msgstr "Uitlijnen op de ideografische onderkant van het em-vak."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
@@ -27530,6 +27530,8 @@ msgstr "Hangend"
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
 msgstr ""
+"De kopstreep uitlijnen zoals die in Noord-Brahmische schriften wordt "
+"gebruikt."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
@@ -27547,6 +27549,8 @@ msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
 "out horizontally, in vertical this is the central baseline."
 msgstr ""
+"Naar het centrum uitlijnen tussen de alfabetische basislijn en x-hoogte bij "
+"horizontaal indelen, in het verticale is dit de centrale basislijn."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:94
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:92
@@ -27561,6 +27565,7 @@ msgstr "Mathematisch"
 msgctxt "@info:tooltip"
 msgid "Align to the mathematical baseline, so that operator symbols align."
 msgstr ""
+"Uitlijnen naar de mathematische basislijn, zodat operatorsymbolen uitlijnen."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
@@ -27603,6 +27608,9 @@ msgid ""
 "Baseline shift allows moving the text away from the baseline, either by "
 "predefined super and subscript values, or by a fixed amount."
 msgstr ""
+"Basislijnverschuiving biedt het verplaatsen van de tekst weg van de "
+"basislijn, ofwel door voordefiniëren van waarden van super en subscript of "
+"door een vaste hoeveelheid."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:20
 #, kde-format
@@ -27610,7 +27618,7 @@ msgctxt ""
 "comma separated search terms for the baseline-shift property, matching is "
 "case-insensitive"
 msgid "baseline-shift, superscript, subscript"
-msgstr ""
+msgstr "basislijnverschuiving, superscript, subscript"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:131
 #: plugins/dockers/textproperties/qml/TextTransform.qml:104
@@ -27685,7 +27693,7 @@ msgstr "Paragraaf"
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr ""
+msgstr "Stijl is pixelrelatief"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
 #, kde-format
@@ -27696,6 +27704,10 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
+"Standaard worden stijlen opgeslagen in punten, wat betekent dat de groottes "
+"in pixels verschillende zullen zijn afhankelijk van de afdrukresolutie van "
+"het document. Dit omschakelen om te verzekeren dat de stijl dezelfde pixel "
+"grootte zal behouden over verschillende documenten."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
 #, kde-format
@@ -27731,7 +27743,7 @@ msgstr "Richting"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Direction sets whether the text is left-to-right or right-to-left."
-msgstr ""
+msgstr "Richting zet of de tekst linkst-naar-rechts of rechts-naar-links is."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
 #, kde-format
@@ -27740,6 +27752,8 @@ msgctxt ""
 "insensitive"
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
+"rechts naar links, rnl, richting, bi-directioneel, geïsoleerd, ingebed, "
+"overschreven"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:122
 #, kde-format
@@ -27757,7 +27771,7 @@ msgstr "Rechts naar links"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-Bidi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:156
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
@@ -27810,7 +27824,7 @@ msgstr "Platte tekst"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Dominant Baseline"
-msgstr ""
+msgstr "Dominante basislijn"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, kde-format
@@ -27819,6 +27833,8 @@ msgid ""
 "Dominant Baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
+"Dominante basislijn specificeer hoe stukken tekst met verschillende groottes "
+"uitgelijnd zijn, het is ook de standaard voor uitlijning van de basislijn."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format

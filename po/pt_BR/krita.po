@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-15 10:00-0300\n"
+"PO-Revision-Date: 2025-10-16 12:51-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16816,7 +16816,7 @@ msgstr "Selecione configurações personalizadas para a segunda transformação.
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
 #, kde-format
 msgid "Layer Properties"
-msgstr "Propriedades da Camada"
+msgstr "Propriedades da camada"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1631
@@ -20733,7 +20733,7 @@ msgstr "Nome:"
 #: libs/ui/forms/wdgnewwindowlayout.ui:40
 #, kde-format
 msgid "Primary workspace follows focus"
-msgstr "O espaço de trabalho principal segue o foco"
+msgstr "Espaço de trabalho primário segue o foco"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkActiveInAllWindows)
 #: libs/ui/forms/wdgnewwindowlayout.ui:47
@@ -20839,7 +20839,7 @@ msgstr "Salvar temporariamente ajustes nas predefinições"
 #: libs/ui/forms/wdgpaintopsettings.ui:808
 #, kde-format
 msgid "Scratchpad"
-msgstr "Caderno de Rabiscos"
+msgstr "Caderno de rabiscos"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
 #: libs/ui/forms/wdgpaintopsettings.ui:871
@@ -22395,12 +22395,12 @@ msgstr "A camada está vazia "
 #: libs/ui/kis_layer_manager.cc:256
 #, kde-format
 msgid "Filter Layer Properties"
-msgstr "Propriedades da Camada de Filtro"
+msgstr "Propriedades da camada de filtro"
 
 #: libs/ui/kis_layer_manager.cc:301
 #, kde-format
 msgid "File Layer Properties"
-msgstr "Propriedades da Camada de Arquivo"
+msgstr "Propriedades da camada de arquivo"
 
 #: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1018
 #, kde-format
@@ -25374,7 +25374,7 @@ msgstr "Comprimento fixo"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
 #, kde-format
 msgid "Global Color:"
-msgstr "Cor Global:"
+msgstr "Cor global:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -32175,7 +32175,7 @@ msgstr "Limiar:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Amostrador de cores:"
+msgstr "Amostragem de cor:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -32553,7 +32553,7 @@ msgstr "Em relevo diagonal"
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
 #, kde-format
 msgid "Edge Detection"
-msgstr "Detecção de Contorno"
+msgstr "Detecção de contorno"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbOutput)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:21
@@ -41278,7 +41278,7 @@ msgstr "Ferramenta de pincel à mão livre"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:121
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Ferramenta seletor de cor"
+msgstr "Ferramenta de amostragem de cor"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -41810,7 +41810,7 @@ msgstr "Ferramenta de caminho à mão livre"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Amostras de cores"
+msgstr "Amostragem de cor"
 
 #. i18n: ectx: property (text), widget (QLabel, blendLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:29
@@ -41838,7 +41838,7 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr> Determina se o selecionador de cor irá amostrar as cores </nobr> de "
+"<nobr> Determina se a amostragem de cor irá amostrar as cores </nobr> de "
 "todas as camadas visíveis ou apenas da camada atualmente selecionada."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
@@ -41893,8 +41893,8 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr> O Raio controla a área de amostragem do selecionador de cor. </"
-"nobr>As cores de pixel dentro deste raio são misturadas entre si."
+"<nobr> O raio controla a área de amostragem da amostragem de cor. </nobr>As "
+"cores de pixel dentro deste raio são misturadas entre si."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:218
@@ -41919,7 +41919,7 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr> Controla se o selecionador de cores atualiza a cor do primeiro plano</"
+"<nobr> Controla se a amostragem de cor atualiza a cor do primeiro plano</"
 "nobr> atual ou não."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
@@ -43322,7 +43322,7 @@ msgstr "Atualizar"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
 #, kde-format
 msgid "Edit key strokes"
-msgstr "Editar as chaves de traços"
+msgstr "Editar traços chaves"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowOutput)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:46
@@ -43340,7 +43340,7 @@ msgstr "Limitar aos limites da camada"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:119
 #, kde-format
 msgid "Key Strokes"
-msgstr "Traços de teclas"
+msgstr "Traços chave"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTransparent)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:149
@@ -44010,7 +44010,7 @@ msgstr "Ferramenta de seleção de formas"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Selecionar cor"
+msgstr "Amostragem de cor"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76

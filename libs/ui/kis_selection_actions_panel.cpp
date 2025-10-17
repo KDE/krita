@@ -78,8 +78,8 @@ struct KisSelectionActionsPanel::Private {
     int m_actionBarWidth = m_buttonCount * BUTTON_SIZE;
 };
 
-KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager, QObject *parent)
-    : QObject(parent)
+KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager, QWidget *parent)
+    : QWidget(parent)
     , d(new Private)
 {
     d->m_viewManager = viewManager;

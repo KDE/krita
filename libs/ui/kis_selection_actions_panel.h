@@ -27,12 +27,12 @@ class KisViewManager;
 class KisSelectionActionsPanel;
 typedef KisSharedPtr<KisSelectionActionsPanel> KisSelectionActionsPanelSP;
 
-class KRITAUI_EXPORT KisSelectionActionsPanel : public QObject
+class KRITAUI_EXPORT KisSelectionActionsPanel : public QWidget
 {
     Q_OBJECT
 public:
     KisSelectionActionsPanel() = delete;
-    KisSelectionActionsPanel(KisViewManager *viewManager, QObject *parent);
+    KisSelectionActionsPanel(KisViewManager *viewManager, QWidget *parent);
     ~KisSelectionActionsPanel();
 
     void draw(QPainter &painter);

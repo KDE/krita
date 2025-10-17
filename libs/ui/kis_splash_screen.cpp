@@ -49,7 +49,9 @@ KisSplashScreen::KisSplashScreen(bool themed, QWidget *parent, Qt::WindowFlags f
 {
 
     setupUi(this);
+#ifndef Q_OS_MACOS
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
+#endif
 
     m_loadingTextLabel = new QLabel(lblSplash);
     m_loadingTextLabel->setTextFormat(Qt::RichText);

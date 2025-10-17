@@ -619,7 +619,8 @@ krita_deploy () {
     # Deletes old copies of translation and qml to be recreated
     cd ${KIS_INSTALL_DIR}/share/
     rsync -prul --delete ./ \
-            --exclude krita_SRCS.icns \
+            --exclude krita.icns \
+            --exclude Assets.car \
             --exclude aclocal \
             --exclude doc \
             --exclude ECM \

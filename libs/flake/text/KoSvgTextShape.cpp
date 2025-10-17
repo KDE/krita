@@ -1935,7 +1935,6 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 QPainterPath KoSvgTextShape::outline() const {
     QPainterPath result;
     if (!d->internalShapes().isEmpty()) {
-        // TODO: Cache the computed wrapping shapes and draw their outlines instead.
         Q_FOREACH(KoShape *shape, d->internalShapes()) {
             result.addPath(shape->transformation().map(shape->outline()));
         }
@@ -1958,13 +1957,14 @@ QRectF KoSvgTextShape::outlineRect() const
 
 QRectF KoSvgTextShape::boundingRect() const
 {
-    QRectF result;
+    QRectF shapesRect;
     if (d->internalShapesPainter->contentRect().isValid()) {
-        result |= d->internalShapesPainter->contentRect();
+        shapesRect = d->internalShapesPainter->contentRect();
         if (!(d->shapesInside.isEmpty() && d->shapesSubtract.isEmpty())) {
-            return result;
+            return shapesRect;
         }
     }
+    QRectF result;
 
     QList<KoShapeStrokeModelSP> parentStrokes;
     for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
@@ -1995,7 +1995,7 @@ QRectF KoSvgTextShape::boundingRect() const
         }
     }
 
-    return this->absoluteTransformation().mapRect(result);
+    return (this->absoluteTransformation().mapRect(result) | shapesRect);
 }
 
 QSizeF KoSvgTextShape::size() const

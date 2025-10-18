@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-16 12:51-0300\n"
+"PO-Revision-Date: 2025-10-17 09:04-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -8072,7 +8072,7 @@ msgstr "Mostrar predefinições do pincel"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Tablet Debugger"
-msgstr "Alternar depurador da mesa digitalizadora"
+msgstr "Alternar depurador do tablet"
 
 #. i18n: context: text @ Action (buginfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (buginfo), Actions (General), ActionCollection (Krita)
@@ -12481,7 +12481,7 @@ msgstr "Sessões..."
 #, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr "Abrir o Gerenciador de Sessões"
+msgstr "Abrir o gerenciador de sessões"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
@@ -17172,8 +17172,8 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
-"Use carimbos de data/hora do driver do tablet (mesa digitalizadora) para a "
-"velocidade do pincel (pode causar artefatos graves ao usar a API do tablet "
+"Use carimbos de data/hora do driver do tablet (ou mesa digitalizadora) para "
+"a velocidade do pincel (pode causar artefatos graves ao usar a API do tablet "
 "WinTab)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1561
@@ -17367,12 +17367,12 @@ msgstr "Desempenho"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2414
 #, kde-format
 msgid "Tablet settings"
-msgstr "Configurações da mesa digitalizadora"
+msgstr "Configurações do tablet"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2416
 #, kde-format
 msgid "Tablet"
-msgstr "Mesa digitalizadora"
+msgstr "Tablet"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2424
 #, kde-format
@@ -17412,19 +17412,19 @@ msgstr "Restaurar Padrões"
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:18
 #, kde-format
 msgid "Advanced Tablet Setting"
-msgstr "Configuração avançada da mesa digitalizadora"
+msgstr "Configuração avançada do tablet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:24
 #, kde-format
 msgid "Select area your tablet is mapped to:"
-msgstr "Selecione a área para a qual sua mesa digitalizadora está mapeada:"
+msgstr "Selecione a área para a qual seu tablet está mapeado:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMapAsWintab)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:30
 #, kde-format
 msgid "Use information provided by tablet"
-msgstr "Use as informações fornecidas pela mesa digitalizadora"
+msgstr "Use as informações fornecidas pelo tablet"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCustomMapping)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:46
@@ -21447,7 +21447,7 @@ msgstr "Número máximo de predefinições de pincel:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:49
 #, kde-format
 msgid "Dynamically Adjust Slot Count"
-msgstr "Ajuste dinamicamente a contagem de slots"
+msgstr "Ajustar dinamicamente a contagem de slots"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:59
@@ -21465,7 +21465,7 @@ msgstr "Seletor de cor:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
 #, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "Triângulo seletor sRGB"
+msgstr "Seletor triangular sRGB"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
@@ -21933,8 +21933,7 @@ msgstr "0.0"
 #: libs/ui/forms/wdgtabletsettings.ui:130
 #, kde-format
 msgid "Tablet Input API (changing this requires restarting Krita)"
-msgstr ""
-"Entrada API da mesa digitalizadora (mudar isto requer reiniciar o Krita)"
+msgstr "Entrada API do tablet (mudar isto requer reiniciar o Krita)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWintab)
 #: libs/ui/forms/wdgtabletsettings.ui:138
@@ -21966,13 +21965,13 @@ msgid ""
 "tablet driver implementation).</p><p><br/></p><p>After changing this option "
 "Krita should be restarted.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Algumas mesas digitalizadoras não passam por cliques "
-"de botão de barril pela API da mesa digitalizadora. Se você tiver esse "
-"dispositivo, tente ativar esta solução alternativa. O Krita tentará ler os "
-"cliques do botão direito e do meio no fluxo de eventos do mouse. Pode ou não "
-"funcionar no seu dispositivo (depende da implementação do driver da mesa "
-"digitalizadora).</p><p><br/></p><p>Depois de mudar esta opção, o Krita "
-"precisa ser reiniciado.</p></body></html>"
+"<html><head/><body><p>Algumas tablets não passam por cliques de botão de "
+"barril pela API da mesa digitalizadora. Se você tiver esse dispositivo, "
+"tente ativar esta solução alternativa. O Krita tentará ler os cliques do "
+"botão direito e do meio no fluxo de eventos do mouse. Pode ou não funcionar "
+"no seu dispositivo (depende da implementação do driver da mesa "
+"digitalizadora ou tablet).</p><p><br/></p><p>Depois de mudar esta opção, o "
+"Krita precisa ser reiniciado.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:180
@@ -21993,7 +21992,7 @@ msgid ""
 msgstr ""
 "Velocidade máxima mapeada para 1.0 para a curva do sensor de velocidade. "
 "Deve ser definida para a velocidade máxima que você pode alcançar usando o "
-"Tablet Tester"
+"testador de tablet"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intBrushSpeedSmoothing)
 #: libs/ui/forms/wdgtabletsettings.ui:213
@@ -22016,7 +22015,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:233
 #, kde-format
 msgid "Open Tablet Tester..."
-msgstr "Abrir testador de mesa digitalizadora..."
+msgstr "Abrir testador de tablet..."
 
 #: libs/ui/imagesize/dlg_canvassize.cc:40
 #, kde-format
@@ -22299,7 +22298,7 @@ msgstr "Editar entrada da roda do mouse"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
 #, kde-format
 msgid "Tablet Tester"
-msgstr "Testador de mesa digitalizadora"
+msgstr "Testador de tablet"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -38333,8 +38332,8 @@ msgid ""
 "<html><head/><body><p>Use the tilt of the tablet to determine the normals.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Use a pressão na mesa digitalizadora para determinar "
-"as normais.</p></body></html>"
+"<html><head/><body><p>Use a pressão no tablet para determinar as normais.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:230

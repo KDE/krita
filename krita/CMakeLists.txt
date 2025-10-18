@@ -169,8 +169,17 @@ endif()
 
 
 if(APPLE)
+    set(KRITA_ASSET_KRZ_ICNS "krita-krz.icns")
+    add_custom_command(
+      OUTPUT ${KRITA_ASSET_KRZ_ICNS}
+      COMMAND ${CMAKE_COMMAND}
+      ARGS -E copy "./pics/mimetypes/krz/${KRITA_ASSET_KRZ_ICNS}" "${CMAKE_CURRENT_BINARY_DIR}/${KRITA_ASSET_KRZ_ICNS}"
+      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    set_source_files_properties(${KRITA_ASSET_KRZ_ICNS} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     # make krita depend on assets icons
-    target_sources(krita PRIVATE ${ASSETS_FILES})
+    target_sources(krita PRIVATE ${ASSETS_FILES} ${KRITA_ASSET_KRZ_ICNS})
+
     install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS} BUNDLE DESTINATION bin)
 else()
     install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})

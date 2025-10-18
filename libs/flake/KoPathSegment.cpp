@@ -1062,6 +1062,17 @@ KoPathSegment KoPathSegment::interpolate(const QPointF &p0, const QPointF &p1, c
     return KoPathSegment(p0, c1, p2);
 }
 
+QPointF KoPathSegment::angleVectorAtParam(qreal t)
+{
+    const QPointF dA1 = QLineF(d->first->point(), d->first->controlPoint2()).pointAt(t);
+    const QPointF dA2 = QLineF(d->first->controlPoint2(), d->second->controlPoint1()).pointAt(t);
+    const QPointF dA3 = QLineF(d->second->controlPoint1(), d->second->point()).pointAt(t);
+
+    QLineF finalDerivative = QLineF(QLineF(dA1, dA2).pointAt(t), QLineF(dA2, dA3).pointAt(t)).unitVector();
+
+    return finalDerivative.p2() - finalDerivative.p1();
+}
+
 #if 0
 void KoPathSegment::printDebug() const
 {

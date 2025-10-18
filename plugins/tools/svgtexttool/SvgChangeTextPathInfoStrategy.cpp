@@ -49,10 +49,10 @@ KUndo2Command *SvgChangeTextPathInfoStrategy::createCommand()
     KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
     KoSvgText::TextOnPathInfo info;
 
-    const qreal grab = tool->grabSensitivityInPt();
-    /*QRectF roi = path->boundingRect();
-    roi.adjust(-grab, -grab, grab, grab);*/
-    KoPathSegment segment = path->segmentAtPoint(m_currentMousePos, tool->handleGrabRect(m_currentMousePos));
+    const qreal grab = tool->grabSensitivityInPt()*4;
+    QRectF roi = QRect(0, 0, grab, grab);
+    roi.moveCenter(m_currentMousePos);
+    KoPathSegment segment = path->segmentAtPoint(m_currentMousePos, roi);
 
     if (!segment.isValid()) {
         return nullptr;
@@ -60,25 +60,28 @@ KUndo2Command *SvgChangeTextPathInfoStrategy::createCommand()
 
     QList<KoPathSegment> segments = path->segmentsAt(path->outlineRect().adjusted(-grab, -grab, grab, grab));
 
+    double length = 0;
     Q_FOREACH(KoPathSegment s, segments) {
         if (s == segment) {
-            const qreal t = segment.nearestPoint(path->documentToShape(m_currentMousePos));
-            info.startOffset += (t * segment.length());
+            const QPointF mouseInShape = path->documentToShape(m_currentMousePos);
+            const qreal t = segment.nearestPoint(mouseInShape);
+            info.startOffset = length + (t * segment.length());
 
-            QPainterPath p = path->transformation().map(path->outline());
-            qDebug() << info.startOffset/p.length();
-            const qreal angle = p.angleAtPercent(fmod(info.startOffset/p.length(), 1.0))+90;
-            if (fabs(QLineF(segment.pointAt(t), m_currentMousePos).angle() - angle) < 90) {
+            const QLineF l = QLineF(segment.pointAt(t), mouseInShape).unitVector();
+            const QVector2D p1(l.p2()-l.p1());
+            const QVector2D tangent = QVector2D(segment.angleVectorAtParam(t));
+            const QVector2D normal(-tangent.y(), tangent.x());
+            float dot = QVector2D::dotProduct(p1, normal);
+            if (dot <= 0) {
                 info.side = KoSvgText::TextPathSideRight;
             } else {
                 info.side = KoSvgText::TextPathSideLeft;
             }
-            if (info.side == KoSvgText::TextPathSideRight) {
-                info.startOffset = p.length() - info.startOffset;
-            }
-            break;
         }
-        info.startOffset += s.length();
+        length += s.length();
+    }
+    if (info.side == KoSvgText::TextPathSideRight) {
+        info.startOffset = length - info.startOffset;
     }
 
     KUndo2Command *cmd = new SvgTextPathInfoChangeCommand(m_shape, m_textCursorPos, info);

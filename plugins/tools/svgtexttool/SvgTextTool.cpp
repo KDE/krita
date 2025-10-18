@@ -518,6 +518,7 @@ void SvgTextTool::requestStrokeEnd()
             m_interactionStrategy->cancelInteraction();
             m_interactionStrategy = nullptr;
             useCursor(Qt::ArrowCursor);
+            m_textOnPathHelper.setStrategyActive(false);
         } else if (isInTextMode()) {
             canvas()->shapeManager()->selection()->deselectAll();
         }
@@ -769,6 +770,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             KoToolManager::instance()->switchToolRequested("InteractionTool");
             return;
         }
+
         if (m_highlightItem == HighlightItem::TypeSettingHandle) {
             SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
             if (handle != SvgTextCursor::NoHandle) {
@@ -779,9 +781,10 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
                 event->accept();
                 return;
             }
-        } else if (m_textOnPathHelper.hitTest(event->point)) {
+        } else if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument())) {
             m_interactionStrategy.reset(new SvgChangeTextPathInfoStrategy(this, selectedShape, event->point, m_textCursor.getPos()));
             m_dragging = DragMode::TextPathHandle;
+            m_textOnPathHelper.setStrategyActive(true);
             event->accept();
             return;
         } else if (m_highlightItem == HighlightItem::MoveBorder) {
@@ -900,6 +903,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         event->accept();
     } else {
         m_highlightItem = HighlightItem::None;
+
         KoSvgTextShape *const selectedShape = this->selectedShape();
         QCursor cursor = m_base_cursor;
         if (selectedShape) {
@@ -943,7 +947,9 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         const KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         const KoPathShape *hoveredFlowShape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
-        if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
+        if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument())) {
+            cursor = Qt::ArrowCursor;
+        } else if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
             if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
                 cursor = m_ibeam_horizontal;
             } else {
@@ -977,26 +983,6 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
                 cursor = m_ibeam_vertical;
             }
         }
-#if 0
-        /// Commenting this out until we have a good idea of how we want to tackle the text and shape to put them on.
-           else if(m_highlightItem == HighlightItem::None) {
-            KoPathShape *shape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
-            if (shape) {
-                if (shape->subpathCount() > 0) {
-                    if (shape->isClosedSubpath(0)) {
-                        cursor = m_text_in_shape;
-                    }
-                }
-                KoPathSegment segment = segmentAtPoint(event->point, shape, handleGrabRect(event->point));
-                if (segment.isValid()) {
-                    cursor = m_text_on_path;
-                }
-                m_hoveredShapeHighlightRect.addPath(shape->absoluteTransformation().map(shape->outline()));
-            } else {
-                m_hoveredShapeHighlightRect = QPainterPath();
-            }
-        }
-#endif
         useCursor(cursor);
         event->ignore();
     }
@@ -1018,6 +1004,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         if (m_dragging != DragMode::Select) {
             useCursor(m_base_cursor);
         }
+        m_textOnPathHelper.setStrategyActive(false);
         m_dragging = DragMode::None;
         m_textCursor.setDrawTypeSettingHandle(true);
         event->accept();

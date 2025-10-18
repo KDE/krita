@@ -45,7 +45,7 @@ public:
      * @brief hitTest
      * @return whether the current position is over a handle.
      */
-    bool hitTest(QPointF mouseInPts);
+    bool hitTest(QPointF mouseInPts, const QTransform viewToDocument);
 
     /**
      * @brief paint
@@ -59,6 +59,8 @@ public:
      * @return the decoration rect.
      */
     QRectF decorationRect(const QTransform documentToView) const;
+
+    void setStrategyActive(bool isActive);
 
 private:
     struct Private;

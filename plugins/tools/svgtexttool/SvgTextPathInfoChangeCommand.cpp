@@ -13,7 +13,6 @@ SvgTextPathInfoChangeCommand::SvgTextPathInfoChangeCommand(KoSvgTextShape *shape
     , m_pos(pos)
     , m_newInfo(textPathInfo)
 {
-    qWarning() << m_shape->topLevelNodeForPos(m_pos).textPath();
     setText(kundo2_i18n("Change Text On Path Properties"));
 }
 
@@ -35,7 +34,6 @@ void SvgTextPathInfoChangeCommand::redo()
     index.textPathInfo()->method = m_newInfo.method;
     index.textPathInfo()->startOffsetIsPercentage = m_newInfo.startOffsetIsPercentage;
     index.textPathInfo()->spacing = m_newInfo.spacing;
-    qDebug() << "old txtpath info" << index.textPathInfo()->side << index.textPathInfo()->startOffset;
 
     m_shape->relayout();
     m_shape->notifyChanged();

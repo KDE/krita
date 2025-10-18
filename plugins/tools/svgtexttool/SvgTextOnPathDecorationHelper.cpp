@@ -16,25 +16,27 @@ struct SvgTextOnPathDecorationHelper::Private {
 
     qreal handleRadius = 7;
     qreal decorationThickness = 1;
-    QPointF lastMousePos;
+
+    bool isHovered = false;
+    bool isActive = false;
 
     QLineF getLineAnchorTextNode(KoSvgTextNodeIndex &index, qreal lineLength) {
         KoPathShape *s = dynamic_cast<KoPathShape*>(index.textPath());
         QPainterPath outline = s->transformation().map(s->outline());
         QLineF line;
+        if (index.textPathInfo()->side == KoSvgText::TextPathSideRight) {
+            outline = outline.toReversed();
+        }
         qreal percent = index.textPathInfo()->startOffsetIsPercentage?
-                    index.textPathInfo()->startOffset * 0.01:
-                    index.textPathInfo()->startOffset / outline.length();
+                    outline.percentAtLength(index.textPathInfo()->startOffset * 0.01 * outline.length()):
+                    outline.percentAtLength(index.textPathInfo()->startOffset);
         if (s->isClosedSubpath(s->subpathCount()-1)) {
             percent = fmod(percent, 1.0);
         } else {
             percent = qBound(0.0, percent, 1.0);
         }
-        if (index.textPathInfo()->side == KoSvgText::TextPathSideRight) {
-            percent = 1.0 - percent;
-        }
         line.setP1(outline.pointAtPercent(percent));
-        line.setAngle(outline.angleAtPercent(percent)-90.0);
+        line.setAngle(outline.angleAtPercent(percent) - 90);
         line.setLength(lineLength);
         return line;
     }
@@ -70,18 +72,18 @@ void SvgTextOnPathDecorationHelper::setDecorationThickness(qreal thickness)
     d->decorationThickness = thickness;
 }
 
-bool SvgTextOnPathDecorationHelper::hitTest(QPointF mouseInPts)
+bool SvgTextOnPathDecorationHelper::hitTest(QPointF mouseInPts, const QTransform viewToDocument)
 {
-    if (d->lastMousePos != mouseInPts) {
-        d->lastMousePos = mouseInPts;
-    }
     if (!d->shape) return false;
     KoSvgTextNodeIndex index = d->shape->topLevelNodeForPos(d->pos);
     if (!(index.textPath() && index.textPathInfo())) return false;
+    QPointF handleInPts = viewToDocument.map(QPointF(d->handleRadius, d->handleRadius));
 
-    QLineF line = d->getLineAnchorTextNode(index, 0);
+    QLineF line = d->getLineAnchorTextNode(index, handleInPts.x()*2);
     line = d->shape->absoluteTransformation().map(line);
-    return (QLineF(line.p2(), mouseInPts).length() <= d->handleRadius);
+    bool hit = (QLineF(line.p2(), mouseInPts).length() <= handleInPts.x()*2);
+    d->isHovered = hit;
+    return hit;
 }
 
 void SvgTextOnPathDecorationHelper::paint(QPainter *p, const KoViewConverter &converter)
@@ -90,15 +92,18 @@ void SvgTextOnPathDecorationHelper::paint(QPainter *p, const KoViewConverter &co
     KoSvgTextNodeIndex index = d->shape->topLevelNodeForPos(d->pos);
     if (!(index.textPath() && index.textPathInfo())) return;
 
-    QLineF line = d->getLineAnchorTextNode(index, 0);
+    QPointF handleInPts = converter.viewToDocument().map(QPointF(d->handleRadius, d->handleRadius));
+    QLineF line = d->getLineAnchorTextNode(index, handleInPts.x()*3);
     p->save();
     KisHandlePainterHelper helper =
             KoShape::createHandlePainterHelperView(p, d->shape, converter, d->handleRadius, d->decorationThickness);
-    // TODO: fix handle.
-    if (QLineF(converter.documentToView().map(line.p2()), d->lastMousePos).length() <= converter.viewToDocumentX(d->handleRadius)) {
+
+    if (d->isActive) {
+        helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
+    } else if (d->isHovered) {
         helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
     } else {
-        helper.setHandleStyle(KisHandleStyle::secondarySelection());
+        helper.setHandleStyle(KisHandleStyle::primarySelection());
     }
 
     helper.drawConnectionLine(line);
@@ -113,14 +118,22 @@ QRectF SvgTextOnPathDecorationHelper::decorationRect(const QTransform documentTo
     if (!d->shape) return r;
     KoSvgTextNodeIndex index = d->shape->topLevelNodeForPos(d->pos);
     if (!(index.textPath() && index.textPathInfo())) return r;
+    QPointF handleInPts = documentToView.inverted().map(QPointF(d->handleRadius, d->handleRadius));
 
-    QLineF line = d->getLineAnchorTextNode(index, 0);
-    line = documentToView.map(line);
-    r |= QRectF(line.p1()-QPointF(d->decorationThickness, d->decorationThickness), line.p2()+QPointF(d->decorationThickness, d->decorationThickness));
+    QLineF line = d->getLineAnchorTextNode(index, handleInPts.x()*3);
+
+    line = QTransform(d->shape->absoluteTransformation()*documentToView).map(line);
+    r |= QRectF(line.p1()-QPointF(d->decorationThickness, d->decorationThickness)
+                , line.p2()+QPointF(d->decorationThickness, d->decorationThickness));
 
     QPointF handle(d->handleRadius, d->handleRadius);
     r |= QRectF(line.p2() - handle, line.p2() + handle);
 
     //qDebug() << "decor rect" << r << line.p2();
     return r;
+}
+
+void SvgTextOnPathDecorationHelper::setStrategyActive(bool isActive)
+{
+    d->isActive = isActive;
 }

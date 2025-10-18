@@ -139,6 +139,14 @@ public:
      */
     static KoPathSegment interpolate(const QPointF &p0, const QPointF &p1, const QPointF &p2, qreal t);
 
+    /**
+     * @brief angleVectorAtParam
+     * Calculates the angle vector at t.
+     * @param t -- param for this segment.
+     * @return normalized angle vector.
+     */
+    QPointF angleVectorAtParam(qreal t);
+
 private:
     class Private;
     Private * const d;

@@ -12,8 +12,6 @@
     <string>en</string>
     <key>CFBundleExecutable</key>
     <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
-    <key>CFBundleGetInfoString</key>
-    <string>${MACOSX_BUNDLE_INFO_STRING}</string>
     <key>CFBundleIconFile</key>
     <string>${MACOSX_BUNDLE_ICON_FILE}</string>
     <key>CFBundleIconName</key>
@@ -30,13 +28,15 @@
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
     <string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+    <key>CFBundleSupportedPlatforms</key>
+      <array>
+        <string>MacOSX</string>
+      </array>
     <key>CFBundleSignature</key>
     <string>KRTA</string>
     <key>CFBundleVersion</key>
     <string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
     <key>CSResourcesFileMapped</key>
-    <true/>
-    <key>LSRequiresCarbon</key>
     <true/>
     <key>LSMinimumSystemVersion</key>
     <string>${MACOS_MINIMUM_VERSION}</string>
@@ -47,248 +47,489 @@
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.graphics-design</string>
     <key>CFBundleDocumentTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleTypeIconFile</key>
-        <string>kra_SRCS</string>
-        <key>CFBundleTypeExtensions</key>
-        <array>
-          <string>kra</string>
-          <string>KRA</string>
-        </array>
-        <key>CFBundleTypeMIMETypes</key>
-        <array>
-          <string>application/x-krita</string>
-        </array>
-        <key>CFBundleTypeOSTypes</key>
-        <array>
-        </array>
-        <key>CFBundleTypeName</key>
-        <string>Krita File</string>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>LSHandlerRank</key>
-        <string>Owner</string>
-      </dict>
-      <dict>
-        <key>CFBundleTypeExtensions</key>
-        <array>
-          <string>ora</string>
-          <string>ORA</string>
-        </array>
-        <key>CFBundleTypeMIMETypes</key>
-        <array>
-          <string>image/openraster</string>
-        </array>
-        <key>CFBundleTypeName</key>
-        <string>OpenRaster File</string>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>LSHandlerRank</key>
-        <string>Alternate</string>
-      </dict>
-      <dict>
-        <key>LSItemContentTypes</key>
-        <array>
-          <string>com.compuserve.gif</string>
-          <string>public.png</string>
-          <string>public.jpeg</string>
-          <string>public.tiff</string>
-        </array>
-        <key>CFBundleTypeName</key>
-        <string>common/formats</string>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>LSHandlerRank</key>
-        <string>Alternate</string>
-    </dict>
-    <dict>
-          <key>CFBundleTypeExtensions</key>
-          <array>
-            <string>pgm</string>
-            <string>PGM</string>
-          </array>
-          <key>CFBundleTypeMIMETypes</key>
-          <array>
-              <string>image/x-portable-graymap</string>
-              <string>image/x-portable-greymap</string>
-              <string>image/x-portable-anymap</string>
-          </array>
+      <array>
+        <dict>
+          <key>CFBundleTypeIconFile</key>
+          <string>krita</string>
           <key>CFBundleTypeName</key>
-          <string>Netpbm grayscale image format </string>
+          <string>Krita File</string>
           <key>CFBundleTypeRole</key>
           <string>Editor</string>
-          <key>LSTypeIsPackage</key>
-          <integer>0</integer>
           <key>LSHandlerRank</key>
-        <string>Alternate</string>
-      </dict>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                  <string>psd</string>
-                  <string>PSD</string>
-            </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                  <string>image/vnd.adobe.photoshop</string>
-                  <string>application/x-photoshop</string>
-                  <string>application/photoshop</string>
-                  <string>application/psd</string>
-                  <string>image/psd</string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>Photoshop Document</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-        <string>Alternate</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                    <string>xcf</string>
-                    <string>XCF</string>
-            </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                    <string>image/x-xcf</string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>GIMP Image</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-        <dict>
-          <key>CFBundleTypeExtensions</key>
-          <array>
-                  <string>tga</string>
-                  <string>TGA</string>
-          </array>
+          <string>Owner</string>
           <key>LSItemContentTypes</key>
           <array>
-            <string>com.truevision.tga-image</string>
+            <string>org.krita.kra</string>
           </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeIconFile</key>
+          <string>krita-krz</string>
           <key>CFBundleTypeName</key>
-          <string>Targa Image</string>
+          <string>Krita Archival File</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Owner</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>org.krita.krz</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>Krita Presets File</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Owner</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>org.krita.kpp</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>JPEG image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.jpeg</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>PNG image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.png</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>TIF image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.tiff</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>GIF image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.compuserve.gif</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>Netpbm grayscale image format</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.pbm</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeIconFile</key>
+          <string>krita</string>
+          <key>CFBundleTypeName</key>
+          <string>OpenRaster File</string>
           <key>CFBundleTypeRole</key>
           <string>Editor</string>
           <key>LSHandlerRank</key>
           <string>Alternate</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>org.openraster.ora</string>
+          </array>
         </dict>
         <dict>
-            <key>CFBundleTypeExtensions</key>
+          <key>CFBundleTypeName</key>
+          <string>Photoshop Image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.adobe.photoshop-image</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>Gimp Image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>org.gimp.xcf</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>Targa image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.truevision.tga-image</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>JPEG-XL image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.jpeg-xl</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>BMP image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.microsoft.bmp</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>OpenEXR image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.ilm.openexr-image</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>WebP image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.google.webp</string>
+            <string>org.webmproject.webp</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>Adobe PDF</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.adobe.pdf</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>AVIF Image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.avif</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>JPEG-2000 image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.jpeg-2000</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>HDR image</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.radiance</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>Windows ICO</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>com.microsoft.ico</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>X Pixmap</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>public.xbitmap-image</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>GIMP BRush</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>org.gimp.gbr</string>
+          </array>
+        </dict>
+        <dict>
+          <key>CFBundleTypeName</key>
+          <string>GIMP Animated Brush</string>
+          <key>CFBundleTypeRole</key>
+          <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Default</string>
+          <key>LSItemContentTypes</key>
+          <array>
+            <string>org.gimp.gih</string>
+          </array>
+        </dict>
+      </array>
+      <key>UTExportedTypeDeclarations</key>
+      <array>
+        <dict>
+          <key>UTTypeConformsTo</key>
+          <array>
+            <string>public.zip-archive</string>
+            <string>public.image</string>
+          </array>
+          <key>UTTypeDescription</key>
+          <string>Krita Image File</string>
+          <key>UTTypeIdentifier</key>
+          <string>org.krita.kra</string>
+          <key>UTTypeTagSpecification</key>
+          <dict>
+            <key>public.filename-extension</key>
             <array>
-                    <string>gbr</string>
-                    <string>GBR</string>
+              <string>kra</string>
             </array>
-            <key>CFBundleTypeMIMETypes</key>
+            <key>public.mime-type</key>
             <array>
-                    <string>image/x-gimp-gbr</string>
+              <string>application/x-krita</string>
             </array>
-            <key>CFBundleTypeName</key>
+          </dict>
+        </dict>
+        <dict>
+          <key>UTTypeConformsTo</key>
+          <array>
+            <string>public.data</string>
+            <string>public.archive</string>
+          </array>
+          <key>UTTypeDescription</key>
+          <string>Krita Archival File</string>
+          <key>UTTypeIdentifier</key>
+          <string>org.krita.krz</string>
+          <key>UTTypeTagSpecification</key>
+          <dict>
+            <key>public.filename-extension</key>
+            <array>
+              <string>krz</string>
+            </array>
+            <key>public.mime-type</key>
+            <array>
+              <string>application/x-krita-krz</string>
+            </array>
+          </dict>
+        </dict>
+        <dict>
+          <key>UTTypeConformsTo</key>
+          <array>
+            <string>public.data</string>
+            <string>public.image</string>
+          </array>
+          <key>UTTypeDescription</key>
+          <string>Krita Presets File</string>
+          <key>UTTypeIdentifier</key>
+          <string>org.krita.kpp</string>
+          <key>UTTypeTagSpecification</key>
+          <dict>
+            <key>public.filename-extension</key>
+            <array>
+              <string>kpp</string>
+            </array>
+            <key>public.mime-type</key>
+            <array>
+              <string>application/x-krita-kpp</string>
+            </array>
+          </dict>
+        </dict>
+        <dict>
+          <key>UTTypeConformsTo</key>
+          <array>
+            <string>public.zip-archive</string>
+            <string>public.image</string>
+          </array>
+          <key>UTTypeDescription</key>
+          <string>Openraster Image</string>
+          <key>UTTypeIdentifier</key>
+          <string>org.openraster.ora</string>
+          <key>UTTypeReferenceURL</key>
+          <string>https://www.openraster.org/</string>
+          <key>UTTypeTagSpecification</key>
+          <dict>
+            <key>public.filename-extension</key>
+            <array>
+              <string>ora</string>
+            </array>
+            <key>public.mime-type</key>
+            <array>
+              <string>image/openraster</string>
+            </array>
+          </dict>
+        </dict>
+      </array>
+      <key>UTImportedTypeDeclarations</key>
+        <array>
+          <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+              <string>public.data</string>
+              <string>public.image</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>GIMP Image</string>
+            <key>UTTypeIdentifier</key>
+            <string>org.gimp.xcf</string>
+            <key>UTTypeReferenceURL</key>
+            <string>http://www.gimp.org/</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+              <key>public.filename-extension</key>
+              <array>
+                <string>xcf</string>
+              </array>
+              <key>public.mime-type</key>
+              <array>
+                <string>image/x-xcf</string>
+              </array>
+            </dict>
+          </dict>
+          <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+              <string>public.data</string>
+              <string>public.image</string>
+            </array>
+            <key>UTTypeDescription</key>
             <string>Gimp brush</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeMIMETypes</key>
+            <key>UTTypeIdentifier</key>
+            <string>org.gimp.gbr</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+              <key>public.filename-extension</key>
+              <array>
+                <string>gbr</string>
+                <string>gbp</string>
+              </array>
+              <key>public.mime-type</key>
+              <array>
+                <string>image/x-gimp-gbr</string>
+              </array>
+            </dict>
+          </dict>
+          <dict>
+            <key>UTTypeConformsTo</key>
             <array>
-                <string>image/x-nikon-nef</string>
-                <string>image/x-canon-cr2</string>
-                <string>image/x-sony-sr2</string>
-                <string>image/x-canon-crw</string>
-                <string>image/x-pentax-pef</string>
-                <string>image/x-sigma-x3f</string>
-                <string>image/x-kodak-kdc</string>
-                <string>image/x-minolta-mrw</string>
-                <string>image/x-sony-arw</string>
-                <string>image/x-kodak-k25</string>
-                <string>image/x-kodak-dcr</string>
-                <string>image/x-olympus-orf</string>
-                <string>image/x-panasonic-raw</string>
-                <string>image/x-panasonic-raw2</string>
-                <string>image/x-fuji-raf</string>
-                <string>image/x-sony-srf</string>
-                <string>image/x-adobe-dng</string>
-                <string>image/tiff</string>
+              <string>public.data</string>
+              <string>public.image</string>
             </array>
-            <key>CFBundleTypeName</key>
-            <string>Camera RAW</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                    <string>heif</string>
-                    <string>HEIF</string>
-                    <string>heic</string>
-                    <string>HEIC</string>
-            </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                    <string>image/heic</string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>High Efficiency Image File Format</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                    <string>webp</string>
-                    <string>WEBP</string>
-            </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                    <string>image/webp</string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>WebP Image</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                    <string>image/x-r16</string>
-            </array>
-            <key>CFBundleTypeName</key>
+            <key>UTTypeDescription</key>
             <string>Heightmap</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
+            <key>UTTypeIdentifier</key>
+            <string>org.krita.heightmap</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+              <key>public.filename-extension</key>
+              <array>
+                <string>r16</string>
+                <string>r8</string>
+                <string>r32</string>
+              </array>
+              <key>public.mime-type</key>
+              <array>
+                <string>image/x-r16</string>
+                <string>image/x-r8</string>
+                <string>image/x-r32</string>
+              </array>
+            </dict>
+          </dict>
+          <dict>
+            <key>UTTypeConformsTo</key>
             <array>
-                    <string>pdf</string>
-                    <string>PDF</string>
+              <string>public.data</string>
+              <string>public.image</string>
             </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                    <string>application/pdf</string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>Portable Document Format</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-        </dict>
-    </array>
+            <key>UTTypeDescription</key>
+            <string>GIMP animated brush</string>
+            <key>UTTypeIdentifier</key>
+            <string>org.gimp.gih</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+              <key>public.filename-extension</key>
+              <array>
+                <string>gih</string>
+              </array>
+            </dict>
+          </dict>
+        </array>
   </dict>
 </plist>

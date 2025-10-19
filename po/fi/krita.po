@@ -5,7 +5,7 @@
 # Mikko Ikola <ikola@iki.fi>, 2003.
 # Ilpo Kantonen <ilpo@iki.fi>, 2005.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
-# SPDX-FileCopyrightText: 2010, 2012, 2014, 2015, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2010, 2012, 2014, 2015, 2024, 2025 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015, 2016.
 # Tapio Kautto <eleknader@phnet.fi>, 2004.
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2006.
@@ -87,7 +87,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 03:36+0000\n"
-"PO-Revision-Date: 2025-04-07 22:41+0300\n"
+"PO-Revision-Date: 2025-10-17 17:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -95,7 +95,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -28405,13 +28405,12 @@ msgstr "Tilastot"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dyna"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr "Dyna"
+msgstr "Dynaaminen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -28422,10 +28421,9 @@ msgstr "Dynamiikan asetukset"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "Pika-asetustelakka"
+msgstr "Näytä &pika-asetusvalikko"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
@@ -28631,24 +28629,21 @@ msgstr "vasenta painiketta"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Värit kuvasta"
+msgstr "Värit &kuvasta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Automaattiset päivitykset"
+msgstr "Automaattinen päivitys"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "&Ala:"
+msgstr "Ala:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelValue)
@@ -28748,23 +28743,19 @@ msgstr "piilota sävyvalitsin"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Näytä MyPaint-sävyvalitsin"
+msgstr "Näytä MyPaint-valitsin"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Tee siveltimen väristä vaaleampi"
+msgstr "Vaalenna väriä"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -28779,12 +28770,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Te siveltimen väristä tummempi"
+msgstr "Tummenna väriä"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -28799,11 +28788,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Lisää kylläisyyttä"
+msgstr "Lisää värin kylläisyyttä"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
@@ -28816,11 +28804,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Vähennä kylläisyyttä"
+msgstr "Vähennä värin kylläisyyttä"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
@@ -28833,48 +28820,39 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color more yellow"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "Tee siveltimen väristä keltaisempi"
+msgstr "Kierrä sävyä myötäpäivään"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color more yellow"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr "Tee siveltimen väristä keltaisempi"
+msgstr "Kierrä valitun värin sävyä myötäpäivään"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color more yellow"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "Tee siveltimen väristä keltaisempi"
+msgstr "Kierrä sävyä vastapäivään"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color more yellow"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "Tee siveltimen väristä keltaisempi"
+msgstr "Kierrä valitun värin sävyä vastapäivään"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/buginfo/wdg_buginfo.ui:39
-#, fuzzy, kde-format
-#| msgid "Show some information about the hardware"
+#, kde-format
 msgid "Please add this information to a bug report:"
-msgstr "Näytä joitakin tietoja laitteistosta"
+msgstr "Lisää vikailmoitukseen seuraavat tiedot:"
 
 #: plugins/extensions/clonesarray/clonesarray.xmlgui:5
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:7
@@ -29026,10 +29004,9 @@ msgstr "&Käännä"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:82
-#, fuzzy, kde-format
-#| msgid "Fuzziness:"
+#, kde-format
 msgid "Fuzziness"
-msgstr "Epäterävyys:"
+msgstr "Sumeus"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAdd)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:98
@@ -29039,10 +29016,9 @@ msgstr "&Lisää nykyiseen valintaan"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSubtract)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:108
-#, fuzzy, kde-format
-#| msgid "&Subtract from current selection"
+#, kde-format
 msgid "Subtract fro&m current selection"
-msgstr "&Vähennä nykyisestä valinnasta"
+msgstr "Vähennä n&ykyisestä valinnasta"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeselect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:141
@@ -32102,10 +32078,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:95
-#, fuzzy, kde-format
-#| msgid "Named Colors"
+#, kde-format
 msgid "Nearest Colors"
-msgstr "Nimetyt värit"
+msgstr "Lähimmät värit"
 
 #. i18n: ectx: property (title), widget (QGroupBox, alphaGroupBox)
 #: plugins/filters/palettize/palettize.ui:155
@@ -41476,9 +41451,9 @@ msgstr "Passikuva"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:469
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decoration:"
-msgstr "Kylläisyys"
+msgstr "Koristelu:"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.h:139
 #, kde-format

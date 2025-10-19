@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-09 03:36+0000\n"
-"PO-Revision-Date: 2025-10-17 09:10-0300\n"
+"PO-Revision-Date: 2025-10-18 08:19-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -16708,7 +16708,7 @@ msgstr "Sem cursor"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #, kde-format
 msgid "Tool Icon"
-msgstr "Ícone de Ferramenta"
+msgstr "Ícone da ferramenta"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #, kde-format
@@ -16740,12 +16740,12 @@ msgstr "Triângulo para a esquerda"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "Black Pixel"
-msgstr "Ponto preto"
+msgstr "Pixel preto"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #, kde-format
 msgid "White Pixel"
-msgstr "Ponto branco"
+msgstr "Pixel branco"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
@@ -16766,7 +16766,7 @@ msgstr "Contorno da visualização"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "Tilt Outline"
-msgstr "Contorno da pressão"
+msgstr "Contorno de inclinação"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
@@ -16804,12 +16804,12 @@ msgstr "Desativado"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:333
 #, kde-format
 msgid "On Touch Drag"
-msgstr "Arrastar ao Tocar"
+msgstr "Arrastar ao tocar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:334
 #, kde-format
 msgid "On Click Drag"
-msgstr "Arrastar ao Clicar"
+msgstr "Arrastar ao clicar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:335
 #, kde-format
@@ -16824,7 +16824,7 @@ msgstr "Abrir janela padrão"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:373
 #, kde-format
 msgid "Load previous session"
-msgstr "Ler sessão anterior"
+msgstr "Carregar sessão anterior"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
 #, kde-format
@@ -17925,7 +17925,7 @@ msgstr "Use o modelo de cores padrão para novas imagens"
 #: libs/ui/forms/wdggeneralsettings.ui:1053
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
-msgstr "Quando Colar no Krita de Outros Aplicativos"
+msgstr "Quando colar no Krita de outros aplicativos"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteWeb)
 #: libs/ui/forms/wdgcolorsettings.ui:75
@@ -18474,7 +18474,7 @@ msgstr "Decorações da tela de pintura"
 #: libs/ui/forms/wdgdisplaysettings.ui:321
 #, kde-format
 msgid "Transparency Checkerboard:"
-msgstr "Padrão Quadriculado da Transparência:"
+msgstr "Padrão quadriculado da transparência:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:327
@@ -18588,7 +18588,7 @@ msgstr "Ativar a suavização de curvas"
 #: libs/ui/forms/wdgdisplaysettings.ui:549
 #, kde-format
 msgid "Hide layer thumbnail popup"
-msgstr "Ocultar a janela da miniatura da camada"
+msgstr "Ocultar exibição da miniatura da camada"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:556
@@ -18624,7 +18624,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:579
 #, kde-format
 msgid "&Move checkers when scrolling"
-msgstr "&Mover o quadriculado ao rolar a tela"
+msgstr "&Mover verificadores ao rolar a tela"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlgfilelayer.ui:35
@@ -19061,7 +19061,7 @@ msgstr "Ativar suporte a HiDPI"
 #: libs/ui/forms/wdggeneralsettings.ui:600
 #, kde-format
 msgid "Enable fractional scale factor"
-msgstr "Ativar fator de escala fracionária"
+msgstr "Ativar fator de escala fracionário"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
@@ -19141,7 +19141,7 @@ msgstr "Passos de zoom entre potências de 2"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
-msgstr "Rolagem Kinetic (necessário reiniciar)"
+msgstr "Rolagem cinética (necessário reiniciar)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:756
@@ -19351,8 +19351,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
-"Cole o bitmap sRGB anexado (sistema de arquivos ou acesso à Internet não são "
-"necessários, mas os metadados serão perdidos)."
+"Colar o bitmap sRGB anexado (sistema de arquivos ou acesso à Internet não "
+"são necessários, mas os metadados serão perdidos)."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
@@ -19391,7 +19391,7 @@ msgstr "Aplica-se apenas a imagens novas ou recém-abertas."
 #: libs/ui/forms/wdggeneralsettings.ui:1205
 #, kde-format
 msgid "Undo stack size:"
-msgstr "Tamanho da pilha de anulações:"
+msgstr "Tamanho da pilha de desfazer:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
 #: libs/ui/forms/wdggeneralsettings.ui:1234
@@ -19490,7 +19490,7 @@ msgstr "Fixar automaticamente novas camadas na linha do tempo"
 #: libs/ui/forms/wdggeneralsettings.ui:1416
 #, kde-format
 msgid "Adapt playback range to keyframes"
-msgstr "Adapte o intervalo de reprodução aos quadros-chave"
+msgstr "Adaptar o intervalo de reprodução aos quadros-chave"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:1426
@@ -20588,7 +20588,7 @@ msgstr " MiB"
 #: libs/ui/forms/wdgperformancesettings.ui:119
 #, kde-format
 msgid "Internal Pool:"
-msgstr "Recurso interno:"
+msgstr "Pool interno:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
@@ -20647,7 +20647,7 @@ msgstr "Multithreading"
 #: libs/ui/forms/wdgperformancesettings.ui:263
 #, kde-format
 msgid "CPU Limit:"
-msgstr "Limite de memória CPU:"
+msgstr "Limite de CPU:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderThreadsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:276
@@ -20663,7 +20663,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:283
 #, kde-format
 msgid "Frame Rendering Clones Limit"
-msgstr "Limite de Clones para a Renderização de Quadros"
+msgstr "Limite de clones para a renderização de quadros"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:296
@@ -20788,7 +20788,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:427
 #, kde-format
 msgid "Animation Cache"
-msgstr "Cache de Animação"
+msgstr "Cache de animação"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:433
@@ -34943,13 +34943,13 @@ msgstr "Inclinação em Y"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt direction"
-msgstr "Direção da pressão"
+msgstr "Direção da inclinação"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:31
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt elevation"
-msgstr "Elevação da pressão"
+msgstr "Elevação da inclinação"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:33
 #, kde-format
@@ -35658,7 +35658,7 @@ msgstr "- Z"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:219
 #, kde-format
 msgid "Tilt Options"
-msgstr "Opções de pressão"
+msgstr "Opções de inclinação"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:227
@@ -35667,15 +35667,15 @@ msgid ""
 "<html><head/><body><p>Use the tilt of the tablet to determine the normals.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Use a pressão no tablet para determinar as normais.</"
-"p></body></html>"
+"<html><head/><body><p>Use a inclinação do tablet para determinar as normais."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:230
 #, kde-format
 msgctxt "Tilt elevation"
 msgid "Tilt"
-msgstr "Pressão"
+msgstr "Inclinação"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionDirection)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:240
@@ -35713,15 +35713,15 @@ msgid ""
 "<html><head/><body><p>Mix Tilt and Drawing angle to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Mistura o ângulo de pressão e de desenho para "
-"determinar os eixos X e Y, enquanto a elevação de pressão é usada para o "
+"<html><head/><body><p>Mistura o ângulo de inclinação e de desenho para "
+"determinar os eixos X e Y, enquanto a elevação de inclinação é usada para o "
 "eixo Z.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
 #, kde-format
 msgid "Direction/Tilt Mix"
-msgstr "Mistura de direção/pressão"
+msgstr "Mistura de direção/inclinação"
 
 #. i18n: ectx: property (text), widget (QLabel, L_elevation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
@@ -35733,7 +35733,7 @@ msgstr "Sensibilidade da elevação"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:291
 #, kde-format
 msgid "Direction/Tilt Mix Value"
-msgstr "Valor da mistura de direção/pressão"
+msgstr "Valor da mistura de direção/inclinação"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:19
 msgid "Assign Profile"

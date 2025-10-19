@@ -349,7 +349,7 @@
         <dict>
           <key>UTTypeConformsTo</key>
           <array>
-            <string>public.zip-archive</string>
+            <string>public.data</string>
             <string>public.image</string>
           </array>
           <key>UTTypeDescription</key>
@@ -373,6 +373,7 @@
           <array>
             <string>public.data</string>
             <string>public.archive</string>
+            <string>public.image</string>
           </array>
           <key>UTTypeDescription</key>
           <string>Krita Archival File</string>
@@ -415,7 +416,7 @@
         <dict>
           <key>UTTypeConformsTo</key>
           <array>
-            <string>public.zip-archive</string>
+            <string>public.data</string>
             <string>public.image</string>
           </array>
           <key>UTTypeDescription</key>

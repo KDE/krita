@@ -634,6 +634,7 @@ krita_deploy () {
     cd ${KIS_INSTALL_DIR}/share/
     rsync -prul --delete ./ \
             --exclude krita.icns \
+            --exclude krita-krz.icns \
             --exclude Assets.car \
             --exclude aclocal \
             --exclude doc \
@@ -669,16 +670,6 @@ krita_deploy () {
     rsync -prul ${KIS_INSTALL_DIR}/translations/ \
             ${KRITA_DMG}/krita.app/Contents/Resources/translations
 
-    echo "Copying QuickLook plugin..."
-    mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
-    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklook.qlgenerator ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
-    echo "Copying Spotlight plugin..."
-    mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaspotlight.mdimporter ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
-    # echo "Copying QuickLook Thumbnailing extension..."
-    # rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
-
     cd ${KRITA_DMG}/krita.app/Contents
     ln -shF Resources share
     ln -shF Frameworks lib
@@ -688,12 +679,25 @@ krita_deploy () {
 
     echo "Copying plugins..."
     local KRITA_DMG_PLUGIN_DIR="${KRITA_DMG}/krita.app/Contents/PlugIns"
-    # exclude kritaquicklook.qlgenerator/
+    
+    # do not copy excluded files but delete if present in dst
     cd ${KIS_INSTALL_DIR}/plugins/
     rsync -prul --delete --delete-excluded ./ \
         --exclude kritaquicklook.qlgenerator \
         --exclude kritaspotlight.mdimporter \
         ${KRITA_DMG_PLUGIN_DIR}
+    
+    echo "Copying QuickLook plugin..."
+    mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
+    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklook.qlgenerator ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
+    echo "Copying Spotlight plugin..."
+    mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
+    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaspotlight.mdimporter ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
+
+    # thumbnails for macOS 11.0 and up
+    echo "Copying QuickLook Thumbnailing extension..."
+    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG_PLUGIN_DIR}
+
 
     cd ${BUILDROOT}
     rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/* ${KRITA_DMG_PLUGIN_DIR}
@@ -747,11 +751,11 @@ krita_deploy () {
 
     # Fix rpath for plugins
     # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
-    # printf "Repairing rpath for Finder plugins\n"
-    # find "${KRITA_DMG}/krita.app/Contents/Library" -type f -path "*/Contents/MacOS/*" -perm 755 | xargs -I FILE install_name_tool -add_rpath @loader_path/../../../../../Frameworks FILE
+    printf "Repairing rpath for Finder plugins\n"
+    find "${KRITA_DMG}/krita.app/Contents/Library" -type f -path "*/Contents/MacOS/*" -perm 755 | xargs -I FILE install_name_tool -add_rpath @loader_path/../../../../../Frameworks FILE
 
     printf "removing absolute or broken linksys, if any\n"
-    find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm
+    find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm -v
 
     printf "clean any left over rpath\n"
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
@@ -760,6 +764,7 @@ krita_deploy () {
     # remove debug version as both versions can't be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
     echo "## Finished preparing krita.app bundle!"
+
 }
 
 
@@ -796,6 +801,9 @@ signBundle() {
 
     cd ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     printf "kritaspotlight.mdimporter" | batch_codesign
+
+    cd ${KRITA_DMG}/krita.app/Contents/PlugIns
+    printf "kritaquicklookng.appex" | batch_codesign
 
     # It is necessary to sign every binary Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources

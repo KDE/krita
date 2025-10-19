@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>5.2.14</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSExtension</key>
@@ -28,53 +28,12 @@
 		<dict>
 			<key>QLSupportedContentTypes</key>
 			<array>
-				<dict>
-					<key>UTTypeConformsTo</key>
-					<array>
-						<string>public.image</string>
-					</array>
-					<key>UTTypeDescription</key>
-					<string>Open Raster Image</string>
-					<key>UTTypeIdentifier</key>
-					<string>org.krita.ora</string>
-					<key>UTTypeTagSpecification</key>
-					<dict>
-						<key>public.filename-extension</key>
-						<array>
-							<string>ora</string>
-							<string>ORA</string>
-						</array>
-						<key>public.mime-type</key>
-						<array>
-							<string>image/openraster</string>
-						</array>
-					</dict>
-				</dict>
-				<dict>
-					<key>UTTypeConformsTo</key>
-					<array>
-						<string>public.image</string>
-					</array>
-					<key>UTTypeDescription</key>
-					<string>Krita 3.0 Image</string>
-					<key>UTTypeIdentifier</key>
-					<string>org.krita.kra</string>
-					<key>UTTypeTagSpecification</key>
-					<dict>
-						<key>public.filename-extension</key>
-						<array>
-							<string>kra</string>
-							<string>KRA</string>
-						</array>
-						<key>public.mime-type</key>
-						<array>
-							<string>application/x-krita</string>
-						</array>
-					</dict>
-				</dict>
+				<string>org.krita.kra</string>
+				<string>org.openraster.ora</string>
+				<string>org.krita.krz</string>
 			</array>
 			<key>QLThumbnailMinimumDimension</key>
-			<integer>17</integer>
+			<integer>0</integer>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.quicklook.thumbnail</string>

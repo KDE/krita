@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-17 09:04-0300\n"
+"PO-Revision-Date: 2025-10-18 09:08-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -15497,7 +15497,7 @@ msgid ""
 "Your image contains layers with a color model that is different from the "
 "image. The layers will be converted."
 msgstr ""
-"Sua imagem contém camadas com um modelo de cores diferente da imagem. As "
+"Sua imagem contém camadas com um modelo de cor diferente da imagem. As "
 "camadas serão convertidas."
 
 #: libs/impex/ColorModelPerLayerCheck.h:116
@@ -18018,7 +18018,7 @@ msgstr "A intenção de renderização determina as escolhas na conversão da co
 #: libs/ui/forms/wdgapplyprofile.ui:91 libs/ui/forms/wdgimageproperties.ui:288
 #, kde-format
 msgid "Rendering Intent"
-msgstr "Tentativa de Desenho"
+msgstr "Intenção de renderização"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:97
@@ -18145,7 +18145,7 @@ msgstr "Configurações de Cor"
 #: libs/ui/forms/wdgcolorsettings.ui:46
 #, kde-format
 msgid "Use Default color model for new images"
-msgstr "Use o modelo de cores padrão para novas imagens"
+msgstr "Usar o modelo de cor padrão para novas imagens"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteFrom)
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteBehaviour)
@@ -18183,7 +18183,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:114
 #, kde-format
 msgid "Use Blackpoint Compensation"
-msgstr "Usar compensação do Pontos Pretos"
+msgstr "Usar compensação do pontos pretos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:124
@@ -18225,7 +18225,7 @@ msgstr "O perfil ICM do seu monitor calibrado"
 #: libs/ui/forms/wdgcolorsettings.ui:191
 #, kde-format
 msgid "&Rendering intent:"
-msgstr "&Tentativa de desenho:"
+msgstr "Intenção de &renderização:"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:213
@@ -18293,7 +18293,7 @@ msgstr "Intenção de renderização:"
 #: libs/ui/forms/wdgimageproperties.ui:347
 #, kde-format
 msgid "Black Point Compensation"
-msgstr "Compensação de Pontos Pretos"
+msgstr "Compensação de pontos pretos"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
 #: libs/ui/forms/wdgcolorsettings.ui:350
@@ -18407,7 +18407,7 @@ msgstr "Conversão do espaço de cor"
 #: libs/ui/forms/wdgconvertcolorspace.ui:40
 #, kde-format
 msgid "&Rendering Intent"
-msgstr "&Renderização Focada"
+msgstr "Intenção de &renderização"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgconvertcolorspace.ui:46
@@ -18505,7 +18505,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid "Use Blackpoint &Compensation"
-msgstr "Usar &compensação de Pontos Pretos"
+msgstr "Usar &compensação de pontos pretos"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgconvertcolorspace.ui:140
@@ -18915,7 +18915,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:579
 #, kde-format
 msgid "&Move checkers when scrolling"
-msgstr "&Mover o quadriculado ao rolar a tela"
+msgstr "&Mover verificadores ao rolar a tela"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlgfilelayer.ui:35
@@ -20169,13 +20169,13 @@ msgstr "Converter espaço de cor das camadas da imagem"
 #: libs/ui/forms/wdgimageproperties.ui:272
 #, kde-format
 msgid "Softproofing"
-msgstr "Pós-processamento "
+msgstr "Prova de tela"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProofing)
 #: libs/ui/forms/wdgimageproperties.ui:278
 #, kde-format
 msgid "Store Softproofing configuration in the image"
-msgstr "Salvar configuração de pós-processamento na imagem"
+msgstr "Salvar configuração de prova de tela na imagem"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, ckbBlackPointComp)
 #: libs/ui/forms/wdgimageproperties.ui:301
@@ -25699,7 +25699,7 @@ msgstr "Mostrar o seletor de cor"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
 #, kde-format
 msgid "Color Model Type"
-msgstr "Tipo do modelo de cores"
+msgstr "Tipo do modelo de cor"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientBox)
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientGroupbox)
@@ -25798,7 +25798,7 @@ msgstr "Seletor de Sombras"
 #: plugins/python/colorspace/uicolorspace.py:71
 #, kde-format
 msgid "Color model:"
-msgstr "Modelo de cores:"
+msgstr "Modelo de cor:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
@@ -35583,7 +35583,7 @@ msgid ""
 "Your image contains one or more layers with a color model that is different "
 "from the image."
 msgstr ""
-"Sua imagem contém uma ou mais camadas com um modelo de cores diferente da "
+"Sua imagem contém uma ou mais camadas com um modelo de cor diferente da "
 "imagem."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)

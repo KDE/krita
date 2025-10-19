@@ -28624,7 +28624,7 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
-"等同于“几何精确性优先”渲染模式，无字体轮廓微调处理，避免加载字体内建位图字"
+"等同于“几何精确性优先”渲染模式，不进行字体轮廓微调，避免加载字体内建的位图字"
 "形。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83

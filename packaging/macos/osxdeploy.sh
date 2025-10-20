@@ -686,7 +686,7 @@ krita_deploy () {
 
     # thumbnails for macOS 11.0 and up
     echo "Copying QuickLook Thumbnailing extension..."
-    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG_PLUGIN_DIR}
+    rsync -prul ${KIS_INSTALL_DIR}/plugins/krita-thumbnailer.appex ${KRITA_DMG_PLUGIN_DIR}
 
 
     cd ${BUILDROOT}
@@ -793,7 +793,7 @@ signBundle() {
     printf "kritaspotlight.mdimporter" | batch_codesign
 
     cd ${KRITA_DMG}/krita.app/Contents/PlugIns
-    printf "kritaquicklookng.appex" | batch_codesign
+    printf "krita-thumbnailer.appex" | batch_codesign
 
     # It is necessary to sign every binary Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources

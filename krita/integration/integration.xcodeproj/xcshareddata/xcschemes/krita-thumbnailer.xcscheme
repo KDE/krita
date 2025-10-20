@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "84B7B62625619404003662DB"
-               BuildableName = "kritaquicklookng.appex"
-               BlueprintName = "kritaquicklookng"
+               BuildableName = "krita-thumbnailer.appex"
+               BlueprintName = "krita-thumbnailer"
                ReferencedContainer = "container:integration.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,16 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "114946462EA5593D00515C4C"
-            BuildableName = "previewHelper.app"
-            BlueprintName = "previewHelper"
-            ReferencedContainer = "container:integration.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -63,8 +53,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "84B7B62625619404003662DB"
-            BuildableName = "kritaquicklookng.appex"
-            BlueprintName = "kritaquicklookng"
+            BuildableName = "krita-thumbnailer.appex"
+            BlueprintName = "krita-thumbnailer"
             ReferencedContainer = "container:integration.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

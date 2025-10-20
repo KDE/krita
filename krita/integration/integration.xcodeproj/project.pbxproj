@@ -8,7 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		114946422EA3FACB00515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
-		114946572EA5624C00515C4C /* kritaquicklookng.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 84B7B62725619404003662DB /* kritaquicklookng.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1149465C2EA6B34D00515C4C /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7B62D25619404003662DB /* ThumbnailProvider.swift */; };
+		1149465E2EA6B34D00515C4C /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62825619404003662DB /* QuickLookThumbnailing.framework */; };
+		1149465F2EA6B34D00515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
+		114946602EA6B34D00515C4C /* libunziptask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D505D725608693005AFC55 /* libunziptask.a */; };
+		114946612EA6B34D00515C4C /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
+		1149466C2EA6BA8900515C4C /* krita-thumbnailer_helper.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		84B7B62925619404003662DB /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62825619404003662DB /* QuickLookThumbnailing.framework */; };
 		84B7B62B25619404003662DB /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
 		84B7B62E25619404003662DB /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7B62D25619404003662DB /* ThumbnailProvider.swift */; };
@@ -35,6 +40,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 84B7B62625619404003662DB;
 			remoteInfo = kritaquicklookng;
+		};
+		1149465A2EA6B34D00515C4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84D505D625608693005AFC55;
+			remoteInfo = unziptask;
 		};
 		84B7B63525619534003662DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -66,7 +78,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				114946572EA5624C00515C4C /* kritaquicklookng.appex in Embed App Extensions */,
+				1149466C2EA6BA8900515C4C /* krita-thumbnailer_helper.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,15 +108,17 @@
 /* Begin PBXFileReference section */
 		114946412EA3FACB00515C4C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		114946472EA5593D00515C4C /* previewHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = previewHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114946672EA6B34E00515C4C /* krita_thumb_helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = krita_thumb_helper.plist; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-thumbnailer_helper/krita_thumb_helper.plist"; sourceTree = "<absolute>"; };
 		84A059912560A72500E4EAFD /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		84A059942560A75000E4EAFD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		84B7B62725619404003662DB /* kritaquicklookng.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = kritaquicklookng.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		84B7B62725619404003662DB /* krita-thumbnailer.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84B7B62825619404003662DB /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
 		84B7B62A25619404003662DB /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		84B7B62D25619404003662DB /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
 		84B7B62F25619404003662DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84B7B63025619404003662DB /* quicklookng.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = quicklookng.entitlements; sourceTree = "<group>"; };
-		84B7B63E256197D9003662DB /* quicklookng-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "quicklookng-Bridging-Header.h"; sourceTree = "<group>"; };
+		84B7B63025619404003662DB /* appex_sandbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = appex_sandbox.entitlements; sourceTree = "<group>"; };
+		84B7B63E256197D9003662DB /* unziptask-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "unziptask-Bridging-Header.h"; sourceTree = "<group>"; };
 		84D505962560520B005AFC55 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
 		84D505972560520B005AFC55 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
 		84D5059C256056BF005AFC55 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
@@ -145,6 +159,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1149465D2EA6B34D00515C4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1149465E2EA6B34D00515C4C /* QuickLookThumbnailing.framework in Frameworks */,
+				1149465F2EA6B34D00515C4C /* AppKit.framework in Frameworks */,
+				114946602EA6B34D00515C4C /* libunziptask.a in Frameworks */,
+				114946612EA6B34D00515C4C /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84B7B62425619404003662DB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -182,6 +207,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		114946682EA6B42B00515C4C /* krita-thumbnailer_helper */ = {
+			isa = PBXGroup;
+			children = (
+				114946672EA6B34E00515C4C /* krita_thumb_helper.plist */,
+			);
+			path = "krita-thumbnailer_helper";
+			sourceTree = "<group>";
+		};
+		114946692EA6B4D900515C4C /* common */ = {
+			isa = PBXGroup;
+			children = (
+				84B7B63025619404003662DB /* appex_sandbox.entitlements */,
+				84B7B63E256197D9003662DB /* unziptask-Bridging-Header.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
 		84A059902560A72500E4EAFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,15 +236,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		84B7B62C25619404003662DB /* quicklookng */ = {
+		84B7B62C25619404003662DB /* krita-thumbnailer */ = {
 			isa = PBXGroup;
 			children = (
 				84B7B62D25619404003662DB /* ThumbnailProvider.swift */,
 				84B7B62F25619404003662DB /* Info.plist */,
-				84B7B63025619404003662DB /* quicklookng.entitlements */,
-				84B7B63E256197D9003662DB /* quicklookng-Bridging-Header.h */,
 			);
-			path = quicklookng;
+			path = "krita-thumbnailer";
 			sourceTree = "<group>";
 		};
 		84D505AC2560726A005AFC55 /* unzipTask */ = {
@@ -217,11 +257,13 @@
 		84D650EF256036F000CC2E75 = {
 			isa = PBXGroup;
 			children = (
+				114946692EA6B4D900515C4C /* common */,
+				114946682EA6B42B00515C4C /* krita-thumbnailer_helper */,
 				84D505AC2560726A005AFC55 /* unzipTask */,
 				84D6512A2560379A00CC2E75 /* 3rdparty */,
 				84D651082560370B00CC2E75 /* quicklook */,
 				84D651182560371600CC2E75 /* spotlight */,
-				84B7B62C25619404003662DB /* quicklookng */,
+				84B7B62C25619404003662DB /* krita-thumbnailer */,
 				114946482EA5593D00515C4C /* previewHelper */,
 				84D650F9256036F000CC2E75 /* Products */,
 				84A059902560A72500E4EAFD /* Frameworks */,
@@ -234,8 +276,9 @@
 				84D651072560370B00CC2E75 /* kritaquicklook.qlgenerator */,
 				84D651172560371600CC2E75 /* kritaspotlight.mdimporter */,
 				84D505D725608693005AFC55 /* libunziptask.a */,
-				84B7B62725619404003662DB /* kritaquicklookng.appex */,
+				84B7B62725619404003662DB /* krita-thumbnailer.appex */,
 				114946472EA5593D00515C4C /* previewHelper.app */,
+				114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -342,9 +385,27 @@
 			productReference = 114946472EA5593D00515C4C /* previewHelper.app */;
 			productType = "com.apple.product-type.application";
 		};
-		84B7B62625619404003662DB /* kritaquicklookng */ = {
+		114946582EA6B34D00515C4C /* krita-thumbnailer_helper */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 84B7B63325619404003662DB /* Build configuration list for PBXNativeTarget "kritaquicklookng" */;
+			buildConfigurationList = 114946632EA6B34D00515C4C /* Build configuration list for PBXNativeTarget "krita-thumbnailer_helper" */;
+			buildPhases = (
+				1149465B2EA6B34D00515C4C /* Sources */,
+				1149465D2EA6B34D00515C4C /* Frameworks */,
+				114946622EA6B34D00515C4C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				114946592EA6B34D00515C4C /* PBXTargetDependency */,
+			);
+			name = "krita-thumbnailer_helper";
+			productName = quicklookng;
+			productReference = 114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		84B7B62625619404003662DB /* krita-thumbnailer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84B7B63325619404003662DB /* Build configuration list for PBXNativeTarget "krita-thumbnailer" */;
 			buildPhases = (
 				84B7B62325619404003662DB /* Sources */,
 				84B7B62425619404003662DB /* Frameworks */,
@@ -355,9 +416,9 @@
 			dependencies = (
 				84B7B63625619534003662DB /* PBXTargetDependency */,
 			);
-			name = kritaquicklookng;
+			name = "krita-thumbnailer";
 			productName = quicklookng;
-			productReference = 84B7B62725619404003662DB /* kritaquicklookng.appex */;
+			productReference = 84B7B62725619404003662DB /* krita-thumbnailer.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		84D505D625608693005AFC55 /* unziptask */ = {
@@ -462,14 +523,22 @@
 				84D651062560370B00CC2E75 /* kritaquicklook */,
 				84D651162560371600CC2E75 /* kritaspotlight */,
 				84D505D625608693005AFC55 /* unziptask */,
-				84B7B62625619404003662DB /* kritaquicklookng */,
+				84B7B62625619404003662DB /* krita-thumbnailer */,
 				114946462EA5593D00515C4C /* previewHelper */,
+				114946582EA6B34D00515C4C /* krita-thumbnailer_helper */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		114946452EA5593D00515C4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114946622EA6B34D00515C4C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -504,6 +573,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1149465B2EA6B34D00515C4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1149465C2EA6B34D00515C4C /* ThumbnailProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,8 +626,13 @@
 /* Begin PBXTargetDependency section */
 		114946552EA561DD00515C4C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 84B7B62625619404003662DB /* kritaquicklookng */;
+			target = 84B7B62625619404003662DB /* krita-thumbnailer */;
 			targetProxy = 114946542EA561DD00515C4C /* PBXContainerItemProxy */;
+		};
+		114946592EA6B34D00515C4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84D505D625608693005AFC55 /* unziptask */;
+			targetProxy = 1149465A2EA6B34D00515C4C /* PBXContainerItemProxy */;
 		};
 		84B7B63625619534003662DB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -644,11 +726,11 @@
 			};
 			name = Release;
 		};
-		84B7B63125619404003662DB /* Debug */ = {
+		114946642EA6B34D00515C4C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = quicklookng/quicklookng.entitlements;
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
@@ -658,17 +740,69 @@
 					NOUNCRYPT,
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = quicklookng/Info.plist;
+				INFOPLIST_FILE = "krita-thumbnailer_helper/krita_thumb_helper.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper.quicklookng;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-thumbnailer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "quicklookng/quicklookng-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		114946652EA6B34D00515C4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "krita-thumbnailer_helper/krita_thumb_helper.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-thumbnailer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		84B7B63125619404003662DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					NOUNCRYPT,
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "krita-thumbnailer/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.krita-thumbnailer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -677,21 +811,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = quicklookng/quicklookng.entitlements;
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = quicklookng/Info.plist;
+				INFOPLIST_FILE = "krita-thumbnailer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper.quicklookng;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.krita-thumbnailer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "quicklookng/quicklookng-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -917,7 +1051,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		84B7B63325619404003662DB /* Build configuration list for PBXNativeTarget "kritaquicklookng" */ = {
+		114946632EA6B34D00515C4C /* Build configuration list for PBXNativeTarget "krita-thumbnailer_helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114946642EA6B34D00515C4C /* Debug */,
+				114946652EA6B34D00515C4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84B7B63325619404003662DB /* Build configuration list for PBXNativeTarget "krita-thumbnailer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84B7B63125619404003662DB /* Debug */,

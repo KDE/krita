@@ -307,7 +307,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     groupLayer->setCollapsed(true);
                 }
 
-                QString compositeOp = psd_blendmode_to_composite_op(layerRecord->infoBlocks.sectionDividerBlendMode);
+                QString compositeOp = psd_blendmode_to_composite_op(layerRecord->infoBlocks.sectionDividerBlendMode, layerRecord->saiBlendMode);
 
                 // Krita doesn't support pass-through blend
                 // mode. Instead it is just a property of a group
@@ -550,7 +550,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     return ImportExportCodes::FileFormatIncorrect;
                 }
             }
-            layer->setCompositeOpId(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+            layer->setCompositeOpId(psd_blendmode_to_composite_op(layerRecord->blendModeKey, layerRecord->saiBlendMode));
 
             layer->setColorLabelIndex(layerRecord->labelColor);
 

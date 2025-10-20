@@ -319,6 +319,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "shmd") {
         } else if (key == "lyvr") {
         } else if (key == "tsly") {
+            // "Transparency shapes layer". Paint Tool SAI sets
+            // this to 0 when one of its blend modes is used.
+            psdread<byteOrder>(io, transparencyShapesLayer);
         } else if (key == "lmgm") {
         } else if (key == "vmgm") {
         } else if (key == "plLd") { // Replaced by SoLd in CS3
@@ -365,6 +368,12 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
             }
         } else if (key == "FXid") {
         } else if (key == "FEid") {
+        } else if (key == "iOpa") {
+            // Not from the PSD spec, the Python module psd_tools calls this
+            // "blend fill opacity". PaintTool SAI sets this value to the layer
+            // opacity when using one of its blend modes and leaves the regular
+            // layer opacity at 255.
+            psdread<byteOrder>(io, blendFillOpacity);
         }
     }
 }
@@ -494,6 +503,18 @@ void PsdAdditionalLayerInfoBlock::writeLclrBlockEx(QIODevice &io, const quint16 
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeSaiBlendBlockEx(QIODevice &io, quint8 opacity)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeSaiBlendBlockExImpl<psd_byte_order::psdLittleEndian>(io, opacity);
+        break;
+    default:
+        writeSaiBlendBlockExImpl(io, opacity);
+        break;
+    }
+}
+
 void PsdAdditionalLayerInfoBlock::writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type)
 {
     switch (m_header.byteOrder) {
@@ -604,6 +625,32 @@ void PsdAdditionalLayerInfoBlock::writeLclrBlockExImpl(QIODevice &io, const quin
     SAFE_WRITE_EX(byteOrder, io, zero);
 
 
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeSaiBlendBlockExImpl(QIODevice &io, quint8 opacity)
+{
+    // Paint Tool SAI blend mode marker. The regular layer opacity
+    // is set to 255, tsly to 0 and iOpa to the actual opacity.
+    // They're both 4 bytes long and have zeroes for padding.
+    const quint32 len = 4;
+    const quint8 zero = 0;
+    // Transparency shapes layer 0, three bytes of padding.
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("tsly", io);
+    SAFE_WRITE_EX(byteOrder, io, len);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    // Blend shape opacity, three bytes of padding.
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("iOpa", io);
+    SAFE_WRITE_EX(byteOrder, io, len);
+    SAFE_WRITE_EX(byteOrder, io, opacity);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
 }
 
 template<psd_byte_order byteOrder>

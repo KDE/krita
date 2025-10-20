@@ -131,6 +131,7 @@ public:
     bool visible {true};
     bool irrelevant {false};
     bool userLocked {false};
+    bool saiBlendMode {false};
 
     int labelColor {0};
 

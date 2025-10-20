@@ -514,6 +514,13 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
             userLocked = infoBlocks.userLock;
         }
         labelColor = kritaColorLabelIndex(infoBlocks.labelColor);
+
+        // Paint Tool SAI blend mode handling. It sets tsly to 0,
+        // the layer opacity to 255 and iOpa to the actual opacity.
+        if (infoBlocks.keys.contains("tsly") && infoBlocks.keys.contains("iOpa") && infoBlocks.transparencyShapesLayer == 0) {
+            opacity = infoBlocks.blendFillOpacity;
+            saiBlendMode = true;
+        }
     }
 
     return valid();
@@ -600,7 +607,10 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
         KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
         KisAslWriterUtils::writeFixedString<byteOrder>(blendModeKey, io);
 
-        SAFE_WRITE_EX(byteOrder, io, opacity);
+        // For Paint Tool SAI blend modes, the regular layer
+        // opacity is set to 255 and the real opacity is in the
+        // iOpa block instead.
+        SAFE_WRITE_EX(byteOrder, io, saiBlendMode ? quint8(255) : opacity);
         SAFE_WRITE_EX(byteOrder, io, clipping); // unused
 
         // visibility and protection
@@ -708,6 +718,10 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
                 additionalInfoBlock.writeVectorOriginationDataEx(io, vectorOriginationData);
             }
 
+            // write 'tsly' and 'iOpa' data blocks
+            if (saiBlendMode) {
+                additionalInfoBlock.writeSaiBlendBlockEx(io, opacity);
+            }
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));

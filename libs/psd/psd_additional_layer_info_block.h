@@ -1366,6 +1366,7 @@ public:
     void writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc);
     void writeLspfBlockEx(QIODevice &io, const bool lock);
     void writeLclrBlockEx(QIODevice &io, const quint16 &labelColor);
+    void writeSaiBlendBlockEx(QIODevice &io, quint8 opacity);
 
     void writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
     void writeVmskBlockEx(QIODevice &io, psd_vector_mask mask);
@@ -1401,6 +1402,8 @@ public:
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;
+    quint8 transparencyShapesLayer = 1;
+    quint8 blendFillOpacity = 0;
 
 private:
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
@@ -1423,6 +1426,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeLclrBlockExImpl(QIODevice &io, const quint16 &lclr);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeSaiBlendBlockExImpl(QIODevice &io, quint8 opacity);
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeFillLayerBlockExImpl(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);

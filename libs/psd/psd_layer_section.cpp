@@ -959,6 +959,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 }
 
                 layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
+                layerRecord->saiBlendMode = composite_op_is_sai(nodeCompositeOp);
                 layerRecord->isPassThrough = nodeIsPassThrough;
                 layerRecord->opacity = nodeOpacity;
                 layerRecord->clipping = nodeClipping;
@@ -1139,6 +1140,7 @@ void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer, psd_
                 }
 
                 layerRecord->blendModeKey = composite_op_to_psd_blendmode(nodeCompositeOp);
+                layerRecord->saiBlendMode = composite_op_is_sai(nodeCompositeOp);
                 layerRecord->isPassThrough = nodeIsPassThrough;
                 layerRecord->opacity = nodeOpacity;
                 layerRecord->clipping = nodeClipping;

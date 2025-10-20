@@ -56,7 +56,7 @@ QPair<QString, QString> psd_colormode_to_colormodelid(psd_color_mode colormode, 
     return colorSpaceId;
 }
 
-QString psd_blendmode_to_composite_op(const QString &blendmode)
+QString psd_blendmode_to_composite_op(const QString &blendmode, bool sai)
 {
     // 'pass' = pass through
     if (blendmode == "pass")
@@ -75,10 +75,10 @@ QString psd_blendmode_to_composite_op(const QString &blendmode)
         return COMPOSITE_MULT;
     // 'idiv' = color burn
     if (blendmode == "idiv")
-        return COMPOSITE_BURN;
+        return sai ? COMPOSITE_BURN_SAI : COMPOSITE_BURN;
     // 'lbrn' = linear burn
     if (blendmode == "lbrn")
-        return COMPOSITE_LINEAR_BURN;
+        return sai ? COMPOSITE_SHADE_SAI : COMPOSITE_LINEAR_BURN;
     // 'dkCl' = darker color
     if (blendmode == "dkCl")
         return COMPOSITE_DARKER_COLOR;
@@ -90,10 +90,10 @@ QString psd_blendmode_to_composite_op(const QString &blendmode)
         return COMPOSITE_SCREEN;
     // 'div ' = color dodge
     if (blendmode == "div ")
-        return COMPOSITE_DODGE;
+        return sai ? COMPOSITE_DODGE_SAI : COMPOSITE_DODGE;
     // 'lddg' = linear dodge
     if (blendmode == "lddg")
-        return COMPOSITE_LINEAR_DODGE;
+        return sai ? COMPOSITE_LUMINOSITY_SAI : COMPOSITE_LINEAR_DODGE;
     // 'lgCl' = lighter color
     if (blendmode == "lgCl")
         return COMPOSITE_LIGHTER_COLOR;
@@ -108,19 +108,19 @@ QString psd_blendmode_to_composite_op(const QString &blendmode)
         return COMPOSITE_HARD_LIGHT;
     // 'vLit' = vivid light
     if (blendmode == "vLit")
-        return COMPOSITE_VIVID_LIGHT;
+        return sai ? COMPOSITE_BURN_DODGE_SAI : COMPOSITE_VIVID_LIGHT;
     // 'lLit' = linear light
     if (blendmode == "lLit")
-        return COMPOSITE_LINEAR_LIGHT;
+        return sai ? COMPOSITE_SHADE_SHINE_SAI : COMPOSITE_LINEAR_LIGHT;
     // 'pLit' = pin light
     if (blendmode == "pLit")
         return COMPOSITE_PIN_LIGHT;
     // 'hMix' = hard mix
     if (blendmode == "hMix")
-        return COMPOSITE_HARD_MIX_PHOTOSHOP;
+        return sai ? COMPOSITE_HARD_MIX_SAI : COMPOSITE_HARD_MIX_PHOTOSHOP;
     // 'diff' = difference
     if (blendmode == "diff")
-        return COMPOSITE_DIFF;
+        return sai ? COMPOSITE_DIFFERENCE_SAI : COMPOSITE_DIFF;
     // 'smud' = exclusion
     if (blendmode == "smud")
         return COMPOSITE_EXCLUSION;
@@ -167,8 +167,12 @@ QString composite_op_to_psd_blendmode(const QString &compositeop)
     // 'idiv' = color burn
     if (compositeop == COMPOSITE_BURN)
         return "idiv";
+    if (compositeop == COMPOSITE_BURN_SAI)
+        return "idiv";
     // 'lbrn' = linear burn
     if (compositeop == COMPOSITE_LINEAR_BURN)
+        return "lbrn";
+    if (compositeop == COMPOSITE_SHADE_SAI)
         return "lbrn";
     // 'dkCl' = darker color
     if (compositeop == COMPOSITE_DARKER_COLOR)
@@ -182,8 +186,12 @@ QString composite_op_to_psd_blendmode(const QString &compositeop)
     // 'div ' = color dodge
     if (compositeop == COMPOSITE_DODGE)
         return "div ";
+    if (compositeop == COMPOSITE_DODGE_SAI)
+        return "div ";
     // 'lddg' = linear dodge
     if (compositeop == COMPOSITE_LINEAR_DODGE)
+        return "lddg";
+    if (compositeop == COMPOSITE_LUMINOSITY_SAI)
         return "lddg";
     // 'lgCl' = lighter color
     if (compositeop == COMPOSITE_LIGHTER_COLOR)
@@ -202,8 +210,12 @@ QString composite_op_to_psd_blendmode(const QString &compositeop)
     // 'vLit' = vivid light
     if (compositeop == COMPOSITE_VIVID_LIGHT)
         return "vLit";
+    if (compositeop == COMPOSITE_BURN_DODGE_SAI)
+        return "vLit";
     // 'lLit' = linear light
     if (compositeop == COMPOSITE_LINEAR_LIGHT)
+        return "lLit";
+    if (compositeop == COMPOSITE_SHADE_SHINE_SAI)
         return "lLit";
     // 'pLit' = pin light
     if (compositeop == COMPOSITE_PIN_LIGHT)
@@ -211,8 +223,12 @@ QString composite_op_to_psd_blendmode(const QString &compositeop)
     // 'hMix' = hard mix
     if (compositeop == COMPOSITE_HARD_MIX_PHOTOSHOP)
         return "hMix";
+    if (compositeop == COMPOSITE_HARD_MIX_SAI)
+        return "hMix";
     // 'diff' = difference
     if (compositeop == COMPOSITE_DIFF)
+        return "diff";
+    if (compositeop == COMPOSITE_DIFFERENCE_SAI)
         return "diff";
     // 'smud' = exclusion
     if (compositeop == COMPOSITE_EXCLUSION)
@@ -238,6 +254,18 @@ QString composite_op_to_psd_blendmode(const QString &compositeop)
 
     dbgKrita << "Krita blending mode" << compositeop << "does not exist in Photoshop, returning Normal";
     return "norm";
+}
+
+bool composite_op_is_sai(const QString &compositeop)
+{
+    return compositeop == COMPOSITE_BURN_DODGE_SAI
+        || compositeop == COMPOSITE_BURN_SAI
+        || compositeop == COMPOSITE_DIFFERENCE_SAI
+        || compositeop == COMPOSITE_DODGE_SAI
+        || compositeop == COMPOSITE_HARD_MIX_SAI
+        || compositeop == COMPOSITE_SHADE_SAI
+        || compositeop == COMPOSITE_SHADE_SHINE_SAI
+        || compositeop == COMPOSITE_LUMINOSITY_SAI;
 }
 
 QPoint psd_layer_effects_shadow_base::calculateOffset(const psd_layer_effects_context *context) const

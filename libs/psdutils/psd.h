@@ -1301,8 +1301,9 @@ QPair<QString, QString> KRITAPSDUTILS_EXPORT psd_colormode_to_colormodelid(psd_c
 /**
  * Convert the Photoshop blend mode strings to Pigment compositeop id's
  */
-QString KRITAPSDUTILS_EXPORT psd_blendmode_to_composite_op(const QString &blendmode);
+QString KRITAPSDUTILS_EXPORT psd_blendmode_to_composite_op(const QString &blendmode, bool sai = false);
 QString KRITAPSDUTILS_EXPORT composite_op_to_psd_blendmode(const QString &compositeOp);
+bool KRITAPSDUTILS_EXPORT composite_op_is_sai(const QString &compositeOp);
 
 
 #if defined(__clang__) && __clang_major__ < 10

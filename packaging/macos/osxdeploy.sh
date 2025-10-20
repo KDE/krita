@@ -621,6 +621,7 @@ krita_deploy () {
     rsync -prul --delete ./ \
             --exclude krita.icns \
             --exclude krita-krz.icns \
+            --exclude krita-kra.icns \
             --exclude Assets.car \
             --exclude aclocal \
             --exclude doc \

@@ -446,8 +446,6 @@ print("INFO: Copying all DLLs from lib/ (deps)")
 files = glob.glob(fr"{DEPS_INSTALL_DIR}\lib\*.dll")
 for f in files:
     shutil.copy(f, fr"{pkg_root}\bin")
-# Boost, there might be more than one leftover but we can't really do much
-files = glob.glob(fr"{DEPS_INSTALL_DIR}\bin\libboost_system-*.dll")
 for f in files:
     shutil.copy(f, fr"{pkg_root}\bin")
 # KF5/KF6 plugins may be placed at different locations depending on how Qt is built

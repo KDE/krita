@@ -10,6 +10,7 @@ add_custom_target( kritaintegration ALL xcodebuild
     -target kritaquicklook
     -target kritaspotlight
     -target krita-thumbnailer
+    -target krita-preview
     -configuration Release COMMENT build all macOS plugins
 )
 
@@ -19,4 +20,6 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/kritaspotlight.mdimp
 
 # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/krita-thumbnailer.appex DESTINATION ${KDE_INSTALL_PLUGINDIR})
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/krita-preview.appex DESTINATION ${KDE_INSTALL_PLUGINDIR})
 endif(APPLE)

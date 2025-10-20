@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 74;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,13 @@
 		114946602EA6B34D00515C4C /* libunziptask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D505D725608693005AFC55 /* libunziptask.a */; };
 		114946612EA6B34D00515C4C /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
 		1149466C2EA6BA8900515C4C /* krita-thumbnailer_helper.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		114946862EA6C47200515C4C /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
+		114946972EA6C49700515C4C /* libunziptask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D505D725608693005AFC55 /* libunziptask.a */; };
+		1149469A2EA6C49F00515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
+		114946A12EA7079600515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
+		114946A22EA7079600515C4C /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
+		114946A32EA7079600515C4C /* libunziptask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D505D725608693005AFC55 /* libunziptask.a */; };
+		114946AB2EA7080200515C4C /* krita-preview_helper.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 114946A82EA7079600515C4C /* krita-preview_helper.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		84B7B62925619404003662DB /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62825619404003662DB /* QuickLookThumbnailing.framework */; };
 		84B7B62B25619404003662DB /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
 		84B7B62E25619404003662DB /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7B62D25619404003662DB /* ThumbnailProvider.swift */; };
@@ -42,6 +49,27 @@
 			remoteInfo = kritaquicklookng;
 		};
 		1149465A2EA6B34D00515C4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84D505D625608693005AFC55;
+			remoteInfo = unziptask;
+		};
+		114946902EA6C47200515C4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 114946842EA6C47200515C4C;
+			remoteInfo = "krita-preview";
+		};
+		114946982EA6C49700515C4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84D505D625608693005AFC55;
+			remoteInfo = unziptask;
+		};
+		1149469E2EA7079600515C4C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
 			proxyType = 1;
@@ -78,6 +106,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				114946AB2EA7080200515C4C /* krita-preview_helper.appex in Embed App Extensions */,
 				1149466C2EA6BA8900515C4C /* krita-thumbnailer_helper.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -110,6 +139,9 @@
 		114946472EA5593D00515C4C /* previewHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = previewHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946672EA6B34E00515C4C /* krita_thumb_helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = krita_thumb_helper.plist; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-thumbnailer_helper/krita_thumb_helper.plist"; sourceTree = "<absolute>"; };
+		114946852EA6C47200515C4C /* krita-preview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-preview.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114946A82EA7079600515C4C /* krita-preview_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-preview_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		114946AA2EA7079600515C4C /* krita-preview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "krita-preview-Info.plist"; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-preview_helper/krita-preview-Info.plist"; sourceTree = "<absolute>"; };
 		84A059912560A72500E4EAFD /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		84A059942560A75000E4EAFD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		84B7B62725619404003662DB /* krita-thumbnailer.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,10 +177,29 @@
 			);
 			target = 114946462EA5593D00515C4C /* previewHelper */;
 		};
+		114946962EA6C47200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				/Localized/PreviewViewController.xib,
+				Info.plist,
+				PreviewViewController.swift,
+			);
+			target = 114946842EA6C47200515C4C /* krita-preview */;
+		};
+		114946A92EA7079600515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				/Localized/PreviewViewController.xib,
+				Info.plist,
+				PreviewViewController.swift,
+			);
+			target = 1149469C2EA7079600515C4C /* krita-preview_helper */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		114946482EA5593D00515C4C /* previewHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946532EA559CB00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = previewHelper; sourceTree = "<group>"; };
+		114946872EA6C47200515C4C /* krita-preview */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946962EA6C47200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 114946A92EA7079600515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "krita-preview"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +218,26 @@
 				1149465F2EA6B34D00515C4C /* AppKit.framework in Frameworks */,
 				114946602EA6B34D00515C4C /* libunziptask.a in Frameworks */,
 				114946612EA6B34D00515C4C /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114946822EA6C47200515C4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1149469A2EA6C49F00515C4C /* AppKit.framework in Frameworks */,
+				114946862EA6C47200515C4C /* Quartz.framework in Frameworks */,
+				114946972EA6C49700515C4C /* libunziptask.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114946A02EA7079600515C4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114946A12EA7079600515C4C /* AppKit.framework in Frameworks */,
+				114946A22EA7079600515C4C /* Quartz.framework in Frameworks */,
+				114946A32EA7079600515C4C /* libunziptask.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +295,14 @@
 			path = common;
 			sourceTree = "<group>";
 		};
+		114946AC2EA7086800515C4C /* krita-preview_helper */ = {
+			isa = PBXGroup;
+			children = (
+				114946AA2EA7079600515C4C /* krita-preview-Info.plist */,
+			);
+			path = "krita-preview_helper";
+			sourceTree = "<group>";
+		};
 		84A059902560A72500E4EAFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -257,6 +336,7 @@
 		84D650EF256036F000CC2E75 = {
 			isa = PBXGroup;
 			children = (
+				114946AC2EA7086800515C4C /* krita-preview_helper */,
 				114946692EA6B4D900515C4C /* common */,
 				114946682EA6B42B00515C4C /* krita-thumbnailer_helper */,
 				84D505AC2560726A005AFC55 /* unzipTask */,
@@ -265,6 +345,7 @@
 				84D651182560371600CC2E75 /* spotlight */,
 				84B7B62C25619404003662DB /* krita-thumbnailer */,
 				114946482EA5593D00515C4C /* previewHelper */,
+				114946872EA6C47200515C4C /* krita-preview */,
 				84D650F9256036F000CC2E75 /* Products */,
 				84A059902560A72500E4EAFD /* Frameworks */,
 			);
@@ -279,6 +360,8 @@
 				84B7B62725619404003662DB /* krita-thumbnailer.appex */,
 				114946472EA5593D00515C4C /* previewHelper.app */,
 				114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */,
+				114946852EA6C47200515C4C /* krita-preview.appex */,
+				114946A82EA7079600515C4C /* krita-preview_helper.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -374,6 +457,7 @@
 			);
 			dependencies = (
 				114946552EA561DD00515C4C /* PBXTargetDependency */,
+				114946912EA6C47200515C4C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				114946482EA5593D00515C4C /* previewHelper */,
@@ -401,6 +485,52 @@
 			name = "krita-thumbnailer_helper";
 			productName = quicklookng;
 			productReference = 114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		114946842EA6C47200515C4C /* krita-preview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 114946932EA6C47200515C4C /* Build configuration list for PBXNativeTarget "krita-preview" */;
+			buildPhases = (
+				114946812EA6C47200515C4C /* Sources */,
+				114946822EA6C47200515C4C /* Frameworks */,
+				114946832EA6C47200515C4C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				114946992EA6C49700515C4C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				114946872EA6C47200515C4C /* krita-preview */,
+			);
+			name = "krita-preview";
+			packageProductDependencies = (
+			);
+			productName = "krita-preview";
+			productReference = 114946852EA6C47200515C4C /* krita-preview.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		1149469C2EA7079600515C4C /* krita-preview_helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 114946A52EA7079600515C4C /* Build configuration list for PBXNativeTarget "krita-preview_helper" */;
+			buildPhases = (
+				1149469F2EA7079600515C4C /* Sources */,
+				114946A02EA7079600515C4C /* Frameworks */,
+				114946A42EA7079600515C4C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1149469D2EA7079600515C4C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				114946872EA6C47200515C4C /* krita-preview */,
+			);
+			name = "krita-preview_helper";
+			packageProductDependencies = (
+			);
+			productName = "krita-preview";
+			productReference = 114946A82EA7079600515C4C /* krita-preview_helper.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		84B7B62625619404003662DB /* krita-thumbnailer */ = {
@@ -492,6 +622,9 @@
 					114946462EA5593D00515C4C = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
+					114946842EA6C47200515C4C = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
 					84B7B62625619404003662DB = {
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1130;
@@ -508,7 +641,6 @@
 				};
 			};
 			buildConfigurationList = 84D650F3256036F000CC2E75 /* Build configuration list for PBXProject "integration" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -516,6 +648,7 @@
 				Base,
 			);
 			mainGroup = 84D650EF256036F000CC2E75;
+			preferredProjectObjectVersion = 50;
 			productRefGroup = 84D650F9256036F000CC2E75 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -526,6 +659,8 @@
 				84B7B62625619404003662DB /* krita-thumbnailer */,
 				114946462EA5593D00515C4C /* previewHelper */,
 				114946582EA6B34D00515C4C /* krita-thumbnailer_helper */,
+				114946842EA6C47200515C4C /* krita-preview */,
+				1149469C2EA7079600515C4C /* krita-preview_helper */,
 			);
 		};
 /* End PBXProject section */
@@ -539,6 +674,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		114946622EA6B34D00515C4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114946832EA6C47200515C4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114946A42EA7079600515C4C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -581,6 +730,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				1149465C2EA6B34D00515C4C /* ThumbnailProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		114946812EA6C47200515C4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1149469F2EA7079600515C4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -633,6 +796,21 @@
 			isa = PBXTargetDependency;
 			target = 84D505D625608693005AFC55 /* unziptask */;
 			targetProxy = 1149465A2EA6B34D00515C4C /* PBXContainerItemProxy */;
+		};
+		114946912EA6C47200515C4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 114946842EA6C47200515C4C /* krita-preview */;
+			targetProxy = 114946902EA6C47200515C4C /* PBXContainerItemProxy */;
+		};
+		114946992EA6C49700515C4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84D505D625608693005AFC55 /* unziptask */;
+			targetProxy = 114946982EA6C49700515C4C /* PBXContainerItemProxy */;
+		};
+		1149469D2EA7079600515C4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84D505D625608693005AFC55 /* unziptask */;
+			targetProxy = 1149469E2EA7079600515C4C /* PBXContainerItemProxy */;
 		};
 		84B7B63625619534003662DB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -774,6 +952,162 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		114946942EA6C47200515C4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "krita-preview/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.krita-preview";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		114946952EA6C47200515C4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "krita-preview/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.krita-preview";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		114946A62EA7079600515C4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "krita-preview_helper/krita-preview-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-preview";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		114946A72EA7079600515C4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "krita-preview_helper/krita-preview-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-preview";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -1056,6 +1390,24 @@
 			buildConfigurations = (
 				114946642EA6B34D00515C4C /* Debug */,
 				114946652EA6B34D00515C4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		114946932EA6C47200515C4C /* Build configuration list for PBXNativeTarget "krita-preview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114946942EA6C47200515C4C /* Debug */,
+				114946952EA6C47200515C4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		114946A52EA7079600515C4C /* Build configuration list for PBXNativeTarget "krita-preview_helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114946A62EA7079600515C4C /* Debug */,
+				114946A72EA7079600515C4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

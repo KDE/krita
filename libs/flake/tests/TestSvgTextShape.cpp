@@ -29,7 +29,7 @@
 #include <commands/KoShapeSizeCommand.h>
 
 #include <KoParameterShape.h>
-
+#include <KisTransformComponents.h>
 
 namespace {
 
@@ -237,88 +237,11 @@ const char* hasParentToString(bool hasParent) {
 
 }
 
-namespace detail {
-Q_NAMESPACE
-
-enum TransformComponent
-{
-    None = 0x0,
-    Translate = 0x1,
-    Scale = 0x2,
-    Rotate = 0x4,
-    Shear = 0x8,
-    Project = 0x10
-};
-Q_ENUM_NS(TransformComponent)
-
-}
-
-using detail::TransformComponent;
-
-Q_DECLARE_FLAGS(TransformComponents, TransformComponent)
-Q_DECLARE_OPERATORS_FOR_FLAGS(TransformComponents)
-Q_DECLARE_METATYPE(TransformComponents)
-
-TransformComponents makeFullTransformComponents()
-{
-    return TransformComponent::Translate | TransformComponent::Scale | TransformComponent::Rotate
-        | TransformComponent::Shear | TransformComponent::Project;
-}
-
-TransformComponents componentsForTransform(const QTransform &t) {
-    TransformComponents result = TransformComponent::None;
-
-    KisAlgebra2D::DecomposedMatrix m(t);
-
-    result.setFlag(TransformComponent::Translate,
-        !qFuzzyIsNull(m.dx) || !qFuzzyIsNull(m.dy));
-
-    result.setFlag(TransformComponent::Scale,
-        !qFuzzyCompare(m.scaleX, 1.0) || !qFuzzyCompare(m.scaleY, 1.0));
-
-    result.setFlag(TransformComponent::Shear,
-        !qFuzzyIsNull(m.shearXY));
-
-    result.setFlag(TransformComponent::Rotate,
-        !qFuzzyIsNull(m.angle));
-
-    result.setFlag(TransformComponent::Project,
-        !qFuzzyIsNull(m.proj[0]) || !qFuzzyIsNull(m.proj[1]) || !qFuzzyCompare(m.proj[2], 1.0));
-
-    return result;
-}
-
-TransformComponents compareTransformComponents(const QTransform &lhs, const QTransform &rhs) {
-    KisAlgebra2D::DecomposedMatrix m1(lhs);
-    KisAlgebra2D::DecomposedMatrix m2(rhs);
-
-    TransformComponents result = TransformComponent::None;
-
-    if (qFuzzyCompare(m1.dx, m2.dx) && qFuzzyCompare(m1.dy, m2.dy)) {
-        result.setFlag(TransformComponent::Translate);
-    }
-
-    if (qFuzzyCompare(m1.scaleX, m2.scaleX) && qFuzzyCompare(m1.scaleX, m2.scaleY)) {
-        result.setFlag(TransformComponent::Scale);
-    }
-
-    if (qFuzzyCompare(m1.shearXY, m2.shearXY)) {
-        result.setFlag(TransformComponent::Shear);
-    }
-
-    if (qFuzzyCompare(m1.angle, m2.angle)) {
-        result.setFlag(TransformComponent::Rotate);
-    }
-
-    if (qFuzzyCompare(m1.proj[0], m2.proj[0]) &&
-        qFuzzyCompare(m1.proj[1], m2.proj[1]) &&
-        qFuzzyCompare(m1.proj[2], m2.proj[2])) {
-
-        result.setFlag(TransformComponent::Project);
-    }
-
-    return result;
-}
+using KisAlgebra2D::KisTransformComponent;
+using KisAlgebra2D::KisTransformComponents;
+using KisAlgebra2D::componentsForTransform;
+using KisAlgebra2D::compareTransformComponents;
+using KisAlgebra2D::makeFullTransformComponents;
 
 auto rotateAroundPoint = [] (qreal deg, const QPointF center) {
     return QTransform::fromTranslate(-center.x(), -center.y()) * QTransform().rotate(deg) * QTransform::fromTranslate(center.x(), center.y());
@@ -333,7 +256,7 @@ void TestSvgTextShape::testSetTextOnShape_data()
     QTest::addColumn<int>("contourCount");
     QTest::addColumn<bool>("textHasParent");
     QTest::addColumn<bool>("contourHasParent");
-    QTest::addColumn<TransformComponents>("expectedTextTransformComponents");
+    QTest::addColumn<KisTransformComponents>("expectedTextTransformComponents");
 
     for (int contourCount : {1, 2}) {
         for (bool textHasParent : {false, true}) {
@@ -347,7 +270,7 @@ void TestSvgTextShape::testSetTextOnShape_data()
                         << contourCount
                         << textHasParent
                         << contourHasParent
-                        << TransformComponents(TransformComponent::Translate);
+                        << KisTransformComponents(KisTransformComponent::Translate);
 
                 QTest::addRow("[text:%s][contour:%s] text and %d contour(s) (scaled)",
                               hasParentToString(textHasParent),
@@ -358,7 +281,7 @@ void TestSvgTextShape::testSetTextOnShape_data()
                         << contourCount
                         << textHasParent
                         << contourHasParent
-                        << TransformComponents(TransformComponent::Translate);
+                        << KisTransformComponents(KisTransformComponent::Translate);
 
                 QTest::addRow("[text:%s][contour:%s] text and %d contour(s) (rotated)",
                               hasParentToString(textHasParent),
@@ -369,7 +292,7 @@ void TestSvgTextShape::testSetTextOnShape_data()
                         << contourCount
                         << textHasParent
                         << contourHasParent
-                        << TransformComponents(TransformComponent::Translate);
+                        << KisTransformComponents(KisTransformComponent::Translate);
 
                 QTest::addRow("[text:%s][contour:%s] text (scaled) and %d contour(s)",
                               hasParentToString(textHasParent),
@@ -380,7 +303,7 @@ void TestSvgTextShape::testSetTextOnShape_data()
                         << contourCount
                         << textHasParent
                         << contourHasParent
-                        << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+                        << KisTransformComponents(KisTransformComponent::Translate | KisTransformComponent::Scale);
 
                 QTest::addRow("[text:%s][contour:%s] text (rotated) and %d contour(s)",
                               hasParentToString(textHasParent),
@@ -391,7 +314,7 @@ void TestSvgTextShape::testSetTextOnShape_data()
                         << contourCount
                         << textHasParent
                         << contourHasParent
-                        << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+                        << KisTransformComponents(KisTransformComponent::Translate | KisTransformComponent::Rotate);
             }
         }
     }
@@ -404,7 +327,7 @@ void TestSvgTextShape::testSetTextOnShape()
     QFETCH(QTransform, contourTransform);
     QFETCH(bool, textHasParent);
     QFETCH(bool, contourHasParent);
-    QFETCH(TransformComponents, expectedTextTransformComponents);
+    QFETCH(KisTransformComponents, expectedTextTransformComponents);
 
     ComplexTextInContourBuilder b(textTransform,
                                   contourCount,
@@ -465,32 +388,32 @@ void TestSvgTextShape::testRemoveShapeFromText_data()
 {
     QTest::addColumn<QTransform>("textTransform");
     QTest::addColumn<QTransform>("contourTransform");
-    QTest::addColumn<TransformComponents>("expectedContourTransformComponents");
+    QTest::addColumn<KisTransformComponents>("expectedContourTransformComponents");
 
     QTest::addRow("remove contour from text")
             << QTransform::fromTranslate(10, 20)
             << QTransform::fromTranslate(5, 5)
-            << TransformComponents(TransformComponent::Translate);
+            << KisTransformComponents(KisTransformComponent::Translate);
 
     QTest::addRow("remove contour (scaled) from text")
             << QTransform::fromTranslate(10, 20)
             << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(5, 5)
-            << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+            << KisTransformComponents(KisTransformComponent::Translate | KisTransformComponent::Scale);
 
     QTest::addRow("remove contour (rotated) from text")
             << QTransform::fromTranslate(10, 20)
             << rotateAroundPoint(30, QPointF(50, 50)) * QTransform::fromTranslate(20, 25)
-            << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+            << KisTransformComponents(KisTransformComponent::Translate | KisTransformComponent::Rotate);
 
     QTest::addRow("remove contour from text (scaled)")
             << QTransform::fromScale(1.0, 1.5) * QTransform::fromTranslate(10, 20)
             << QTransform::fromTranslate(5, 5)
-            << TransformComponents(TransformComponent::Translate | TransformComponent::Scale);
+            << KisTransformComponents(KisTransformComponent::Translate | KisTransformComponent::Scale);
 
     QTest::addRow("remove contour from text (rotated)")
             << rotateAroundPoint(30, QPointF(100, -10)) * QTransform::fromTranslate(10, 80)
             << QTransform::fromTranslate(5, 5)
-            << TransformComponents(TransformComponent::Translate | TransformComponent::Rotate);
+            << KisTransformComponents(KisTransformComponent::Translate | KisTransformComponent::Rotate);
 }
 
 void TestSvgTextShape::testRemoveShapeFromText()
@@ -501,7 +424,7 @@ void TestSvgTextShape::testRemoveShapeFromText()
 
     QFETCH(QTransform, textTransform);
     QFETCH(QTransform, contourTransform);
-    QFETCH(TransformComponents, expectedContourTransformComponents);
+    QFETCH(KisTransformComponents, expectedContourTransformComponents);
 
     textShape->setTransformation(textTransform);
 
@@ -543,16 +466,16 @@ void TestSvgTextShape::testSetSize_data()
         QTest::addColumn<bool>("textHasParent");
     QTest::addColumn<bool>("contourHasParent");
 
-    QTest::addColumn<TransformComponents>("exprectedPreservedChildTransformComponents");
+    QTest::addColumn<KisTransformComponents>("exprectedPreservedChildTransformComponents");
 
-    const TransformComponents preserveEverythingButTranslation =
-        makeFullTransformComponents().setFlag(TransformComponent::Translate, false);
-    const TransformComponents preserveEverythingButTranslationAndScale =
+    const KisTransformComponents preserveEverythingButTranslation =
+        makeFullTransformComponents().setFlag(KisTransformComponent::Translate, false);
+    const KisTransformComponents preserveEverythingButTranslationAndScale =
         makeFullTransformComponents()
-            .setFlag(TransformComponent::Translate, false)
-            .setFlag(TransformComponent::Scale, false);
-    const TransformComponents preserveNothing =
-        TransformComponents(TransformComponent::Project);
+            .setFlag(KisTransformComponent::Translate, false)
+            .setFlag(KisTransformComponent::Scale, false);
+    const KisTransformComponents preserveNothing =
+        KisTransformComponents(KisTransformComponent::Project);
 
     const std::vector<KoFlake::AnchorPosition> anchors = {
         KoFlake::BottomRight, KoFlake::TopLeft, KoFlake::Top
@@ -681,7 +604,7 @@ void TestSvgTextShape::testSetSize()
     QFETCH(bool, textHasParent);
     QFETCH(bool, contourHasParent);
 
-    QFETCH(TransformComponents, exprectedPreservedChildTransformComponents);
+    QFETCH(KisTransformComponents, exprectedPreservedChildTransformComponents);
 
     ComplexTextInContourBuilder b(textTransform,
                                   contourCount,
@@ -710,7 +633,7 @@ void TestSvgTextShape::testSetSize()
     const QPointF absoluteStillPoint = b.textShape->absolutePosition(stillPointAnchor);
     const QPointF firstContourAnchorPoint = b.shapes[0]->absolutePosition(stillPointAnchor);
 
-    if (contourCount == 1 && componentsForTransform(b.shapes[0]->transformation()) == TransformComponent::Translate) {
+    if (contourCount == 1 && componentsForTransform(b.shapes[0]->transformation()) == KisTransformComponent::Translate) {
         QCOMPARE(absoluteStillPoint, firstContourAnchorPoint);
     }
 
@@ -746,7 +669,7 @@ void TestSvgTextShape::testSetSize()
     QCOMPARE(b.textShape->size(), newSize);
     QCOMPARE(b.textShape->absolutePosition(stillPointAnchor), absoluteStillPoint);
 
-    if (contourCount == 1 && componentsForTransform(b.shapes[0]->transformation()) == TransformComponent::Translate) {
+    if (contourCount == 1 && componentsForTransform(b.shapes[0]->transformation()) == KisTransformComponent::Translate) {
         // the still point of the only contour was unchanged (applies only in translation mode)
         QCOMPARE(b.shapes[0]->absolutePosition(stillPointAnchor), firstContourAnchorPoint);
     }

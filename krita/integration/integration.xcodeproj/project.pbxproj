@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		114946422EA3FACB00515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
+		114946572EA5624C00515C4C /* kritaquicklookng.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 84B7B62725619404003662DB /* kritaquicklookng.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		84B7B62925619404003662DB /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62825619404003662DB /* QuickLookThumbnailing.framework */; };
 		84B7B62B25619404003662DB /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62A25619404003662DB /* Quartz.framework */; };
 		84B7B62E25619404003662DB /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7B62D25619404003662DB /* ThumbnailProvider.swift */; };
@@ -28,6 +29,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		114946542EA561DD00515C4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84B7B62625619404003662DB;
+			remoteInfo = kritaquicklookng;
+		};
 		84B7B63525619534003662DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 84D650F0256036F000CC2E75 /* Project object */;
@@ -52,6 +60,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		114946562EA5622D00515C4C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				114946572EA5624C00515C4C /* kritaquicklookng.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84D505B4256072AD005AFC55 /* Embed Libraries */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -76,6 +95,7 @@
 
 /* Begin PBXFileReference section */
 		114946412EA3FACB00515C4C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		114946472EA5593D00515C4C /* previewHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = previewHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A059912560A72500E4EAFD /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		84A059942560A75000E4EAFD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		84B7B62725619404003662DB /* kritaquicklookng.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = kritaquicklookng.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,7 +123,28 @@
 		84D6513A256043A000CC2E75 /* UnzipTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnzipTask.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		114946532EA559CB00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 114946462EA5593D00515C4C /* previewHelper */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		114946482EA5593D00515C4C /* previewHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946532EA559CB00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = previewHelper; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		114946442EA5593D00515C4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84B7B62425619404003662DB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -181,6 +222,7 @@
 				84D651082560370B00CC2E75 /* quicklook */,
 				84D651182560371600CC2E75 /* spotlight */,
 				84B7B62C25619404003662DB /* quicklookng */,
+				114946482EA5593D00515C4C /* previewHelper */,
 				84D650F9256036F000CC2E75 /* Products */,
 				84A059902560A72500E4EAFD /* Frameworks */,
 			);
@@ -193,6 +235,7 @@
 				84D651172560371600CC2E75 /* kritaspotlight.mdimporter */,
 				84D505D725608693005AFC55 /* libunziptask.a */,
 				84B7B62725619404003662DB /* kritaquicklookng.appex */,
+				114946472EA5593D00515C4C /* previewHelper.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -275,6 +318,30 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		114946462EA5593D00515C4C /* previewHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1149464F2EA5594000515C4C /* Build configuration list for PBXNativeTarget "previewHelper" */;
+			buildPhases = (
+				114946432EA5593D00515C4C /* Sources */,
+				114946442EA5593D00515C4C /* Frameworks */,
+				114946452EA5593D00515C4C /* Resources */,
+				114946562EA5622D00515C4C /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				114946552EA561DD00515C4C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				114946482EA5593D00515C4C /* previewHelper */,
+			);
+			name = previewHelper;
+			packageProductDependencies = (
+			);
+			productName = previewHelper;
+			productReference = 114946472EA5593D00515C4C /* previewHelper.app */;
+			productType = "com.apple.product-type.application";
+		};
 		84B7B62625619404003662DB /* kritaquicklookng */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84B7B63325619404003662DB /* Build configuration list for PBXNativeTarget "kritaquicklookng" */;
@@ -357,10 +424,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				ORGANIZATIONNAME = "Stichting Krita Foundation";
 				TargetAttributes = {
+					114946462EA5593D00515C4C = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
 					84B7B62625619404003662DB = {
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1130;
@@ -393,11 +463,19 @@
 				84D651162560371600CC2E75 /* kritaspotlight */,
 				84D505D625608693005AFC55 /* unziptask */,
 				84B7B62625619404003662DB /* kritaquicklookng */,
+				114946462EA5593D00515C4C /* previewHelper */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		114946452EA5593D00515C4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84B7B62525619404003662DB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -422,6 +500,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		114946432EA5593D00515C4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84B7B62325619404003662DB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -462,6 +547,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		114946552EA561DD00515C4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84B7B62625619404003662DB /* kritaquicklookng */;
+			targetProxy = 114946542EA561DD00515C4C /* PBXContainerItemProxy */;
+		};
 		84B7B63625619534003662DB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 84D505D625608693005AFC55 /* unziptask */;
@@ -480,6 +570,80 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		114946502EA5594000515C4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = previewHelper/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		114946512EA5594000515C4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = previewHelper/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		84B7B63125619404003662DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -487,7 +651,7 @@
 				CODE_SIGN_ENTITLEMENTS = quicklookng/quicklookng.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -500,8 +664,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 5.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.krita.quicklookng;
+				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper.quicklookng;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -517,7 +680,7 @@
 				CODE_SIGN_ENTITLEMENTS = quicklookng/quicklookng.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = quicklookng/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -525,8 +688,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 5.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.krita.quicklookng;
+				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper.quicklookng;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "quicklookng/quicklookng-Bridging-Header.h";
@@ -592,11 +754,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5.2.13;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -614,11 +776,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 5.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -656,11 +820,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5.2.13;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = NOUNCRYPT;
@@ -672,6 +836,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 5.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -743,6 +908,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1149464F2EA5594000515C4C /* Build configuration list for PBXNativeTarget "previewHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				114946502EA5594000515C4C /* Debug */,
+				114946512EA5594000515C4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		84B7B63325619404003662DB /* Build configuration list for PBXNativeTarget "kritaquicklookng" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

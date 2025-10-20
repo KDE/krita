@@ -66,6 +66,8 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[2], KoID(COMPOSITE_SHADE_IFS_ILLUSIONS,  i18nc("Blending mode - Shade (IFS Illusions)", "Shade (IFS Illusions)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_FOG_DARKEN_IFS_ILLUSIONS,  i18nc("Blending mode - Fog Darken (IFS Illusions)", "Fog Darken (IFS Illusions)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_EASY_BURN       ,  i18nc("Blending mode - Easy Burn", "Easy Burn")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_BURN_SAI        ,  i18nc("Blending mode - Burn (SAI)", "Burn (SAI)")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_SHADE_SAI       ,  i18nc("Blending mode - Shade (SAI)", "Shade (SAI)")));
 
     m_map.insert(m_categories[3], KoID(COMPOSITE_DODGE       ,  i18nc("Blending mode - Color Dodge", "Color Dodge")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_DODGE_HDR   ,  i18nc("Blending mode - Color Dodge HDR", "Color Dodge HDR")));
@@ -92,6 +94,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[3], KoID(COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS,  i18nc("Blending mode - Fog Lighten (IFS Illusions)", "Fog Lighten (IFS Illusions)")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EASY_DODGE       ,  i18nc("Blending mode - Easy Dodge", "Easy Dodge")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_LUMINOSITY_SAI       ,  i18nc("Blending mode - Luminosity/Shine (SAI)", "Luminosity/Shine (SAI)")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_DODGE_SAI            ,  i18nc("Blending mode - Dodge (SAI)",            "Dodge (SAI)")));
 
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD              ,  i18nc("Blending mode - Modulo", "Modulo")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD_CON          ,  i18nc("Blending mode - Modulo - Continuous", "Modulo - Continuous")));
@@ -101,6 +104,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[4], KoID(COMPOSITE_MODULO_SHIFT_CON ,  i18nc("Blending mode - Modulo Shift - Continuous", "Modulo Shift - Continuous")));
 
     m_map.insert(m_categories[5], KoID(COMPOSITE_DIFF                 ,  i18nc("Blending mode - Difference", "Difference")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_DIFFERENCE_SAI       ,  i18nc("Blending mode - Difference (SAI)", "Difference (SAI)")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_EQUIVALENCE          ,  i18nc("Blending mode - Equivalence", "Equivalence")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_ADDITIVE_SUBTRACTIVE ,  i18nc("Blending mode - Additive Subtractive", "Additive Subtractive")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_EXCLUSION            ,  i18nc("Blending mode - Exclusion", "Exclusion")));
@@ -121,6 +125,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_HDR    ,  i18nc("Blending mode - Hard Mix HDR", "Hard Mix HDR")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_PHOTOSHOP,  i18nc("Blending mode - Hard Mix (Photoshop)", "Hard Mix (Photoshop)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP,  i18nc("Blending mode - Hard Mix Softer (Photoshop)", "Hard Mix Softer (Photoshop)")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_SAI    ,  i18nc("Blending mode - Hard Mix (SAI)", "Hard Mix (SAI)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GRAIN_MERGE     ,  i18nc("Blending mode - Grain Merge", "Grain Merge")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GRAIN_EXTRACT   ,  i18nc("Blending mode - Grain Extract", "Grain Extract")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_PARALLEL        ,  i18nc("Blending mode - Parallel", "Parallel")));
@@ -136,6 +141,8 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_PENUMBRAB       ,  i18nc("Blending mode - Penumbra B", "Penumbra B")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_PENUMBRAC       ,  i18nc("Blending mode - Penumbra C", "Penumbra C")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_PENUMBRAD       ,  i18nc("Blending mode - Penumbra D", "Penumbra D")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_BURN_DODGE_SAI  ,  i18nc("Blending mode - Burn/Dodge (SAI)", "Burn/Dodge (SAI)")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_SHADE_SHINE_SAI ,  i18nc("Blending mode - Shade/Shine (SAI)", "Shade/Shine (SAI)")));
 
     m_map.insert(m_categories[7], KoID(COMPOSITE_BUMPMAP   ,  i18nc("Blending mode - Bumpmap", "Bumpmap")));
     m_map.insert(m_categories[7], KoID(COMPOSITE_COMBINE_NORMAL,  i18nc("Blending mode - Combine Normal Map", "Combine Normal Map")));

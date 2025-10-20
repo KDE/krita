@@ -338,6 +338,11 @@ public:
                         // SPDX-License-Identifier: MIT
                         // SPDX-SnippetName: SAI blending logic based on psd-export by cromachina
                         channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
+                        if constexpr (!std::numeric_limits<channels_type>::is_integer) {
+                            if (srcInBlendSpace < zeroValue<channels_type>()) {
+                                srcInBlendSpace = zeroValue<channels_type>();
+                            }
+                        }
                         channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
                         channels_type srcPremultiplied = mul(srcInBlendSpace, srcAlpha);
                         channels_type resultInBlendSpace = compositeFunc(srcPremultiplied, dstInBlendSpace, srcAlpha);
@@ -358,6 +363,11 @@ public:
                         // SPDX-License-Identifier: MIT
                         // SPDX-SnippetName: SAI blending logic based on psd-export by cromachina
                         channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
+                        if constexpr (!std::numeric_limits<channels_type>::is_integer) {
+                            if (srcInBlendSpace < zeroValue<channels_type>()) {
+                                srcInBlendSpace = zeroValue<channels_type>();
+                            }
+                        }
                         channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
                         channels_type srcPremultiplied = mul(srcInBlendSpace, srcAlpha);
                         channels_type resultPremultiplied =

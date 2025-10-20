@@ -429,6 +429,13 @@ struct AddSAIOps<Traits, true>
     static void add(KoColorSpace* cs)
     {
         add<&cfAdditionSAI<Arg>>(cs, COMPOSITE_LUMINOSITY_SAI, KoCompositeOp::categoryLight());
+        add<&cfColorDodgeSAI<Arg>>(cs, COMPOSITE_DODGE_SAI, KoCompositeOp::categoryLight());
+        add<&cfColorBurnSAI<Arg>>(cs, COMPOSITE_BURN_SAI, KoCompositeOp::categoryDark());
+        add<&cfLinearBurnSAI<Arg>>(cs, COMPOSITE_SHADE_SAI, KoCompositeOp::categoryDark());
+        add<&cfVividLightSAI<Arg>>(cs, COMPOSITE_BURN_DODGE_SAI, KoCompositeOp::categoryMix());
+        add<&cfLinearLightSAI<Arg>>(cs, COMPOSITE_SHADE_SHINE_SAI, KoCompositeOp::categoryMix());
+        add<&cfHardMixSAI<Arg>>(cs, COMPOSITE_HARD_MIX_SAI, KoCompositeOp::categoryMix());
+        add<&cfDifferenceSAI<Arg>>(cs, COMPOSITE_DIFFERENCE_SAI, KoCompositeOp::categoryNegative());
     }
 
 

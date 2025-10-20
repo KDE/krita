@@ -127,6 +127,13 @@ QStringList subtractiveBlendingModesInCmyk()
     ids << COMPOSITE_FHYRD;
 
     ids << COMPOSITE_LUMINOSITY_SAI;
+    ids << COMPOSITE_DODGE_SAI;
+    ids << COMPOSITE_BURN_SAI;
+    ids << COMPOSITE_SHADE_SAI;
+    ids << COMPOSITE_BURN_DODGE_SAI;
+    ids << COMPOSITE_SHADE_SHINE_SAI;
+    ids << COMPOSITE_HARD_MIX_SAI;
+    ids << COMPOSITE_DIFFERENCE_SAI;
 
     return ids;
 }

@@ -219,6 +219,13 @@ void TestCompositeOpInversion::test_data()
     ids << COMPOSITE_DISSOLVE;
 
     ids << COMPOSITE_LUMINOSITY_SAI;
+    ids << COMPOSITE_DODGE_SAI;
+    ids << COMPOSITE_BURN_SAI;
+    ids << COMPOSITE_SHADE_SAI;
+    ids << COMPOSITE_BURN_DODGE_SAI;
+    ids << COMPOSITE_SHADE_SHINE_SAI;
+    ids << COMPOSITE_HARD_MIX_SAI;
+    ids << COMPOSITE_DIFFERENCE_SAI;
 
     QTest::addColumn<QString>("id");
 
@@ -524,6 +531,23 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
     addUnboundedRangeOp(COMPOSITE_ADD);
     addUnboundedRangeOp(COMPOSITE_LUMINOSITY_SAI);
 
+
+    result.emplace_back(COMPOSITE_DODGE_SAI, HDR | SrcCannotMakeNegative | PositivePreserveUnstable);
+    result.emplace_back(COMPOSITE_DODGE_SAI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+
+    addSdrPreservingOp(COMPOSITE_BURN_SAI);
+    addSdrPreservingHdrOp(COMPOSITE_SHADE_SAI);
+
+    result.emplace_back(COMPOSITE_BURN_DODGE_SAI, HDR | SrcCannotMakeNegative | PositivePreserveUnstable);
+    result.emplace_back(COMPOSITE_BURN_DODGE_SAI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+
+    addSdrPreservingOp(COMPOSITE_SHADE_SHINE_SAI);
+
+    // Hard-mix is the only stable positive-preserving mode
+    result.emplace_back(COMPOSITE_HARD_MIX_SAI, HDR | SrcCannotMakeNegative | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HARD_MIX_SAI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+
+    addSdrPreservingOp(COMPOSITE_DIFFERENCE_SAI);
 
 
 
@@ -879,10 +903,10 @@ void TestCompositeOpInversion::testF32vsU16ConsistencyInSDR()
                 qAbs(resultColorValueF - resultColorValueU) > tolerance) {
 
                 /**
-                 * HARD_MIX_PHOTOSHOP is not contiguous near the unit sum point,
-                 * so we should just skip this test case
+                 * HARD_MIX_PHOTOSHOP and _SAI are not contiguous near the
+                 * unit sum point, so we should just skip this test case
                  */
-                if (id == COMPOSITE_HARD_MIX_PHOTOSHOP &&
+                if ((id == COMPOSITE_HARD_MIX_PHOTOSHOP || id == COMPOSITE_HARD_MIX_SAI) &&
                     Arithmetic::isUnitValueFuzzy<float>(float(srcColorValueF) + float(dstColorValueF))) {
                     continue;
                 }
@@ -901,27 +925,27 @@ void TestCompositeOpInversion::testF32vsU16ConsistencyInSDR()
                     }
                 }
 
-                if (id == COMPOSITE_DODGE) {
+                if (id == COMPOSITE_DODGE || id == COMPOSITE_DODGE_SAI) {
                     if (Arithmetic::isUnitValueClampedFuzzy<float>(srcColorValueF) &&
                         Arithmetic::isZeroValueClampedFuzzy<float>(dstColorValueF)) {
                         continue;
                     }
                 }
 
-                if (id == COMPOSITE_DODGE && flags.testFlag(HDR)) {
+                if ((id == COMPOSITE_DODGE || id == COMPOSITE_DODGE_SAI) && flags.testFlag(HDR)) {
                     if (Arithmetic::isUnitValueClampedFuzzy<float>(srcColorValueF)) {
                         continue;
                     }
                 }
 
-                if (id == COMPOSITE_BURN) {
+                if (id == COMPOSITE_BURN || id == COMPOSITE_BURN_SAI) {
                     if (Arithmetic::isZeroValueClampedFuzzy<float>(srcColorValueF) &&
                         Arithmetic::isUnitValueClampedFuzzy<float>(dstColorValueF)) {
                         continue;
                     }
                 }
 
-                if (id == COMPOSITE_VIVID_LIGHT) {
+                if (id == COMPOSITE_VIVID_LIGHT || id == COMPOSITE_BURN_DODGE_SAI) {
                     if (Arithmetic::isUnitValueClampedFuzzy<float>(srcColorValueF) ||
                         Arithmetic::isZeroValueClampedFuzzy<float>(srcColorValueF)) {
                         continue;

@@ -1341,6 +1341,109 @@ inline T cfAdditionSAI(T src, T dst, T srcAlpha)
     Q_UNUSED(srcAlpha);
     return cfAddition(src, dst);
 }
+
+template<class T>
+inline T cfColorDodgeSAI(T src, T dst, T srcAlpha)
+{
+    using namespace Arithmetic;
+    Q_UNUSED(srcAlpha);
+
+    if (dst <= zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+
+    T denom = inv(src);
+    if (denom <= zeroValue<T>()) {
+        return unitValue<T>();
+    }
+
+    return clampToSDR<T>(div(dst, denom));
+}
+
+template<class T>
+inline T cfColorBurnSAI(T src, T dst, T srcAlpha)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    if (dst >= unitValue<T>()) {
+        return unitValue<T>();
+    }
+
+    if (dst <= zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+
+    composite_type denom = composite_type(unitValue<T>()) - srcAlpha + src;
+    if (denom <= composite_type(0)) {
+        return zeroValue<T>();
+    }
+
+    composite_type burned = div(inv(dst), T(denom));
+    return inv(clampToSDR<T>(burned));
+}
+
+template<class T>
+inline T cfLinearBurnSAI(T src, T dst, T srcAlpha)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    return clampToSDR<T>(composite_type(src) + dst - srcAlpha);
+}
+
+template<class T>
+inline T cfVividLightSAI(T src, T dst, T srcAlpha)
+{
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    composite_type src2 = composite_type(src) + src;
+
+    if (src2 <= composite_type(srcAlpha)) {
+        return cfColorBurnSAI<T>(T(src2), dst, srcAlpha);
+    } else {
+        return cfColorDodgeSAI<T>(T(src2 - srcAlpha), dst, srcAlpha);
+    }
+}
+
+template<class T>
+inline T cfLinearLightSAI(T src, T dst, T srcAlpha)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    return clampToSDR<T>(composite_type(src) + src + dst - srcAlpha);
+}
+
+template<class T>
+inline T cfHardMixSAI(T src, T dst, T srcAlpha)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+    composite_type c = composite_type(src) + dst - srcAlpha;
+    if (c < composite_type(0)) {
+        return zeroValue<T>();
+    }
+
+    composite_type denom = composite_type(unitValue<T>()) - srcAlpha;
+    if (denom <= composite_type(0)) {
+        return unitValue<T>();
+    }
+
+    return clampToSDR<T>(div(clampToSDR<T>(c), T(denom)));
+}
+
+template<class T>
+inline T cfDifferenceSAI(T src, T dst, T srcAlpha)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    Q_UNUSED(srcAlpha);
+
+    composite_type d = src > dst ? composite_type(src) - dst : composite_type(dst) - src;
+    return clampToSDR<T>(d);
+}
 // SPDX-SnippetEnd
 
 

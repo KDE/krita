@@ -2018,6 +2018,7 @@ QRectF KoSvgTextShape::boundingRect() const
 
 QSizeF KoSvgTextShape::size() const
 {
+    // TODO: check if KoShape::m_d->size is consistent, check cache in KoShapeGroup::size()
     return outlineRect().size();
 }
 
@@ -2028,20 +2029,114 @@ void KoSvgTextShape::setSize(const QSizeF &size)
 
     if (size == oldSize) return;
 
+    // don't try to divide by zero
+    if (oldSize.isEmpty()) return;
+
     const qreal scaleX = size.width() / oldSize.width();
     const qreal scaleY = size.height() / oldSize.height();
 
-    if (!d->internalShapes().isEmpty()) {
-        const bool usePostScaling = (d->internalShapes().size() > 1);
-        Q_FOREACH(KoShape *shape, d->internalShapes()) {
-            QPointF topLeft = shape->transformation().map(shape->outlineRect().topLeft());
-            KoFlake::resizeShapeCommon(shape, scaleX, scaleY, topLeft - oRect.topLeft(), false, usePostScaling, this->transformation());
-        }
-    } else {
+    if (d->internalShapes().isEmpty()) {
+        /**
+         * We don't have any contours, just scale (and distort) the text,
+         * as if "Scale Styles" were activated
+         */
+
+        const qreal scaleX = size.width() / oldSize.width();
+        const qreal scaleY = size.height() / oldSize.height();
+
         this->scale(scaleX, scaleY);
-        //TODO: use scaling function for kosvgtextproperties when styles presets are merged.
+        // TODO: use scaling function for kosvgtextproperties when styles presets are merged.
         notifyChanged();
         shapeChangedPriv(ScaleChanged);
+    } else {
+        const bool allInternalShapeAreTranslatedOnly = [this] () {
+            Q_FOREACH(KoShape *shape, d->internalShapes()) {
+                if (shape->transformation().type() > QTransform::TxTranslate) {
+                    return false;
+                }
+            }
+            return true;
+        }();
+
+        if (allInternalShapeAreTranslatedOnly) {
+            /**
+             * We have only one contour that has no transformations, so we can just pass
+             * the resize to it and preserve all the contours intact
+             */
+            Q_FOREACH (KoShape *internalShape, d->internalShapes()) {
+                /**
+                 * When resizing the shapes via setSize() we expect the method to
+                 * scale the shapes bluntly in the parent's coordinate system. So,
+                 * when resizing embedded shapes we should just anchor them to the
+                 * origin of the text-shape's coordinate system.
+                 */
+                const QPointF stillPoint = this->absoluteTransformation().map(QPointF());
+                const bool useGlobalMode = false;
+                const bool usePostScaling = false;
+                KoFlake::resizeShapeCommon(internalShape,
+                                           scaleX,
+                                           scaleY,
+                                           stillPoint,
+                                           useGlobalMode,
+                                           usePostScaling,
+                                           QTransform());
+            }
+
+            const QSizeF realNewSize = outlineRect().size();
+            KoShape::setSize(realNewSize);
+        } else {
+            /**
+             * When we have transformed (scaled, rotated and etc.) shapes
+             * internally, we cannot pass resize action to them, because
+             * it is impossible to mimic the parent resize by mere resizing
+             * the child shapes. We would have to add shear to them [1].
+             *
+             * That is why we just add a scaling transform to every contour
+             * shape while **keeping the text unscaled**. Keeping the text
+             * unscaled covers the case when the user want to simply
+             * transform a text balloon without contours.
+             *
+             * [1] Proof of the "impossible to pass the resize" claim
+             *
+             * That comes from the matrix equation to the child-parent
+             * transformation. Here is an example for a rotated child:
+             *
+             * Original transformation is:
+             *
+             * parentPoint = childPoint * ChildRotate,
+             *
+             * now apply Scale to both sides, to simulate scale in the parent's
+             * coordinate system:
+             *
+             * parentPoint * Scale = childPoint * ChildRotate * Scale,
+             *
+             * now we need to preserve the original child's transformation
+             * to be intact, which was `ChildRotate`. To achieve that,
+             * add (ChildRotate.inverted() * ChildRotate) at the end of the
+             * equation:
+             *
+             * parentPoint * Scale = childPoint * ChildRotate * Scale * (ChildRotate.inverted() * ChildRotate),
+             *
+             * now regroup the matrices:
+             *
+             * parentPoint * Scale = childPoint * (ChildRotate * Scale * ChildRotate.inverted()) * ChildRotate,
+             *
+             * notice matrix (ChildRotate * Scale * ChildRotate.inverted()) is the one
+             * that we should apply to the child shape in setSize() to preserve
+             * its transform. This matrix can not be a scale matrix, it will
+             * always recieve shear components for any non-trivial ChildRotate
+             * values.
+             */
+
+            const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+
+            Q_FOREACH (KoShape *shape, d->internalShapes()) {
+                shape->setTransformation(shape->transformation() * scale);
+            }
+
+            const QSizeF realNewSize = outlineRect().size();
+            KoShape::setSize(realNewSize);
+        }
     }
 }
 

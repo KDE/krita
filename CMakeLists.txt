@@ -67,6 +67,11 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
+# in CMake >=3.30; BoostConfig.cmake is shipped only by Boost >=1.82
+if (POLICY CMP0167)
+    cmake_policy(SET CMP0167 OLD)
+endif()
+
 if (APPLE)
     add_subdirectory(packaging/macos)
     set(MACOSX_RPATH TRUE)
@@ -820,7 +825,7 @@ if (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(Boost_COMPILER "mgw${KRITA_boost_COMPILER_VERSION}")
 endif()
 
-find_package(Boost 1.65 REQUIRED COMPONENTS system)
+find_package(Boost 1.69 REQUIRED)
 set_package_properties(Boost PROPERTIES
     DESCRIPTION "Boost provides free peer-reviewed portable C++ source libraries."
     URL "https://www.boost.org"

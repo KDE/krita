@@ -283,66 +283,90 @@ public:
     using base_class::base_class;
 };
 
-/**
- * Generic CompositeOp for separable channel + alpha compositing functions
- *
- * A template to generate a KoCompositeOp class by just specifying a
- * blending/compositing function. This template works with compositing functions
- * for separable channels (means each channel of a pixel can be processed separately)
- * with taking alpha into consideration.
- * Note that because of special treating of alpha, any composite op function
- * needs to make alpha blending itself - the value of color that is written onto the projection
- * is the same that the composite function gives (compare with KoCompositeOpGenericHSL and KoCompositeOpGenericSC).
- */
-template<class Traits, void compositeFunc(float, float, float&, float&), typename BlendingPolicy>
-class KoCompositeOpGenericSCAlpha: public KoCompositeOpBase< Traits, KoCompositeOpGenericSCAlpha<Traits,compositeFunc,BlendingPolicy> >
-{
-    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSCAlpha<Traits,compositeFunc,BlendingPolicy> > base_class;
-    typedef typename Traits::channels_type                                             channels_type;
 
-    static const qint32 channels_nb = Traits::channels_nb;
-    static const qint32 alpha_pos  = Traits::alpha_pos;
+/**
+ * Generic CompositeOp for Paint Tool SAI blend modes.
+ *
+ * This is similar to KoCompositeOpGenericSC, but hands the composite function the source color in a premultiplied state
+ * and also passes the source alpha along, which some of the composite functions make use of.
+ *
+ * The compositing logic comes from psd-export by cromachina, licensed under MIT:
+ * https://github.com/cromachina/psd-export
+ */
+template<class Traits,
+         typename Traits::channels_type compositeFunc(typename Traits::channels_type,
+                                                      typename Traits::channels_type,
+                                                      typename Traits::channels_type),
+         typename BlendingPolicy>
+class KoCompositeOpGenericSCSAI
+    : public KoCompositeOpBase<Traits, KoCompositeOpGenericSCSAI<Traits, compositeFunc, BlendingPolicy>>
+{
+    typedef KoCompositeOpBase<Traits, KoCompositeOpGenericSCSAI<Traits, compositeFunc, BlendingPolicy>> base_class;
+    typedef typename Traits::channels_type channels_type;
+
+    static constexpr qint32 channels_nb = Traits::channels_nb;
+    static constexpr qint32 alpha_pos = Traits::alpha_pos;
 
 public:
-    KoCompositeOpGenericSCAlpha(const KoColorSpace* cs, const QString& id, const QString& category)
-        : base_class(cs, id, category) { }
+    KoCompositeOpGenericSCSAI(const KoColorSpace *cs, const QString &id, const QString &category)
+        : base_class(cs, id, category)
+    {
+    }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>
-    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
-                                                     channels_type opacity, const QBitArray& channelFlags)
+    inline static channels_type composeColorChannels(const channels_type *src,
+                                                     channels_type srcAlpha,
+                                                     channels_type *dst,
+                                                     channels_type dstAlpha,
+                                                     channels_type maskAlpha,
+                                                     channels_type opacity,
+                                                     const QBitArray &channelFlags)
     {
         using namespace Arithmetic;
 
         srcAlpha = mul(srcAlpha, maskAlpha, opacity);
+        if (srcAlpha == zeroValue<channels_type>()) {
+            return dstAlpha;
+        }
 
-        if(alphaLocked) {
-            channels_type oldAlpha = dstAlpha;
-            if(dstAlpha != zeroValue<channels_type>()) {
-                for(qint32 i=0; i <channels_nb; i++) {
-                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        float dstValueFloat = scale<float>(BlendingPolicy::toAdditiveSpace(dst[i]));
-                        float dstAlphaFloat = scale<float>(oldAlpha);
-                        compositeFunc(scale<float>(BlendingPolicy::toAdditiveSpace(src[i])), scale<float>(srcAlpha), dstValueFloat, dstAlphaFloat);
-                        dst[i] = BlendingPolicy::fromAdditiveSpace(scale<channels_type>(dstValueFloat));
+        if constexpr (alphaLocked) {
+            if (dstAlpha != zeroValue<channels_type>()) {
+                for (qint32 i = 0; i < channels_nb; i++) {
+                    if (i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                        // SPDX-SnippetBegin
+                        // SPDX-License-Identifier: MIT
+                        // SPDX-SnippetName: SAI blending logic based on psd-export by cromachina
+                        channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
+                        channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
+                        channels_type srcPremultiplied = mul(srcInBlendSpace, srcAlpha);
+                        channels_type resultInBlendSpace = compositeFunc(srcPremultiplied, dstInBlendSpace, srcAlpha);
+                        dst[i] = BlendingPolicy::fromAdditiveSpace(resultInBlendSpace);
+                        // SPDX-SnippetEnd
                     }
                 }
             }
 
             return dstAlpha;
-        }
-        else {
-            channels_type oldAlpha = dstAlpha;
+        } else {
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
 
-            if(newDstAlpha != zeroValue<channels_type>()) {
-                for(qint32 i=0; i <channels_nb; i++) {
-                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        float dstFloat = scale<float>(BlendingPolicy::toAdditiveSpace(dst[i]));
-                        float dstAlphaFloat = scale<float>(oldAlpha);
-                        compositeFunc(scale<float>(BlendingPolicy::toAdditiveSpace(src[i])), scale<float>(srcAlpha), dstFloat, dstAlphaFloat);
-                        dst[i] = BlendingPolicy::fromAdditiveSpace(scale<channels_type>(dstFloat));
+            if (newDstAlpha != zeroValue<channels_type>()) {
+                for (qint32 i = 0; i < channels_nb; i++) {
+                    if (i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                        // SPDX-SnippetBegin
+                        // SPDX-License-Identifier: MIT
+                        // SPDX-SnippetName: SAI blending logic based on psd-export by cromachina
+                        channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
+                        channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
+                        channels_type srcPremultiplied = mul(srcInBlendSpace, srcAlpha);
+                        channels_type resultPremultiplied =
+                            lerp(srcPremultiplied,
+                                 compositeFunc(srcPremultiplied, dstInBlendSpace, srcAlpha),
+                                 dstAlpha);
+                        channels_type resultInBlendSpace = div(resultPremultiplied, newDstAlpha);
+                        dst[i] = BlendingPolicy::fromAdditiveSpace(resultInBlendSpace);
+                        // SPDX-SnippetEnd
                     }
                 }
             }

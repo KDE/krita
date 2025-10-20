@@ -400,35 +400,35 @@ struct AddRGBOps<Traits, true>
 
 
 template<class Traits, bool flag>
-struct AddGeneralAlphaOps
+struct AddSAIOps
 {
     static void add(KoColorSpace* cs) { Q_UNUSED(cs); }
 };
 
 template<class Traits>
-struct AddGeneralAlphaOps<Traits, true>
+struct AddSAIOps<Traits, true>
 {
-    typedef float Arg;
+    typedef typename Traits::channels_type Arg;
     static const qint32 alpha_pos  = Traits::alpha_pos;
-    template<void compositeFunc(Arg, Arg, Arg&, Arg&)>
+    template<Arg compositeFunc(Arg, Arg, Arg)>
 
 
     static void add(KoColorSpace* cs, const QString& id, const QString& category)
     {
         if constexpr (std::is_base_of_v<KoCmykTraits<typename Traits::channels_type>, Traits>) {
             if (useSubtractiveBlendingForCmykColorSpaces()) {
-                cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc, KoSubtractiveBlendingPolicy<Traits>>(cs, id, category));
+                cs->addCompositeOp(new KoCompositeOpGenericSCSAI<Traits, compositeFunc, KoSubtractiveBlendingPolicy<Traits>>(cs, id, category));
             } else {
-                cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+                cs->addCompositeOp(new KoCompositeOpGenericSCSAI<Traits, compositeFunc, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
             }
         } else {
-            cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+            cs->addCompositeOp(new KoCompositeOpGenericSCSAI<Traits, compositeFunc, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
         }
     }
 
     static void add(KoColorSpace* cs)
     {
-        add<&cfAdditionSAI<HSVType,Arg>>(cs, COMPOSITE_LUMINOSITY_SAI, KoCompositeOp::categoryHSV());
+        add<&cfAdditionSAI<Arg>>(cs, COMPOSITE_LUMINOSITY_SAI, KoCompositeOp::categoryLight());
     }
 
 
@@ -459,7 +459,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
 
     _Private::AddGeneralOps      <_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps          <_Traits_, useRGBOps    >::add(cs);
-    _Private::AddGeneralAlphaOps <_Traits_, useGeneralOps>::add(cs);
+    _Private::AddSAIOps          <_Traits_, useGeneralOps>::add(cs);
 
 }
 

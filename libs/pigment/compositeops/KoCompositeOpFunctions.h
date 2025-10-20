@@ -1332,17 +1332,16 @@ struct CFFlatLight : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<
 };
 
 
-template<class HSXType, class TReal>
-inline void cfAdditionSAI(TReal src, TReal sa, TReal& dst, TReal& da)
+// SPDX-SnippetBegin
+// SPDX-License-Identifier: MIT
+// SPDX-SnippetName: SAI blend functions based on psd-export by cromachina
+template<class T>
+inline T cfAdditionSAI(T src, T dst, T srcAlpha)
 {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<TReal>::compositetype composite_type;
-
-    Q_UNUSED(da);
-    composite_type newsrc;
-    newsrc = mul(src, sa);
-    dst = clamp<TReal>(newsrc + dst);
+    Q_UNUSED(srcAlpha);
+    return cfAddition(src, dst);
 }
+// SPDX-SnippetEnd
 
 
 

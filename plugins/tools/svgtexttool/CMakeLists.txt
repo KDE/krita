@@ -32,6 +32,7 @@ set (SvgTextTool_SRCS
     SvgTextPathInfoChangeCommand.cpp
     SvgChangeTextPathInfoStrategy.cpp
     SvgTextOnPathDecorationHelper.cpp
+    SvgChangeTextPaddingMarginStrategy.cpp
 
     glyphpalette/GlyphPaletteDialog.cpp
     glyphpalette/GlyphPaletteProxyModel.cpp

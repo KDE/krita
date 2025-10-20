@@ -25,6 +25,7 @@
 #include "SvgTextTypeSettingStrategy.h"
 #include "SvgTextChangeTransformsOnRange.h"
 #include "SvgChangeTextPathInfoStrategy.h"
+#include "SvgChangeTextPaddingMarginStrategy.h"
 
 #include <QPainterPath>
 #include <QDesktopServices>
@@ -668,7 +669,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if (!isActivated()) return;
 
-    if (m_interactionStrategy) {
+    if (m_dragging == DragMode::Create || m_dragging == DragMode::InShapeOffset) {
         m_interactionStrategy->paint(gc, converter);
     }
 
@@ -781,6 +782,11 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
                 event->accept();
                 return;
             }
+        } else if (SvgChangeTextPaddingMarginStrategy::hitTest(selectedShape, event->point, grabSensitivityInPt())) {
+            m_interactionStrategy.reset(new SvgChangeTextPaddingMarginStrategy(this, selectedShape, event->point));
+            m_dragging = DragMode::InShapeOffset;
+            event->accept();
+            return;
         } else if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument())) {
             m_interactionStrategy.reset(new SvgChangeTextPathInfoStrategy(this, selectedShape, event->point, m_textCursor.getPos()));
             m_dragging = DragMode::TextPathHandle;
@@ -897,7 +903,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 useCursor(m_ibeam_vertical);
             }
-        } else {
+        } else if (m_dragging != DragMode::InShapeOffset) {
             useCursor(Qt::ArrowCursor);
         }
         event->accept();
@@ -947,8 +953,10 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         const KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         const KoPathShape *hoveredFlowShape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
-        if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument())) {
+        if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument()) ) {
             cursor = Qt::ArrowCursor;
+        } else if(std::optional<QPointF> offsetVector = SvgChangeTextPaddingMarginStrategy::hitTest(selectedShape, event->point, grabSensitivityInPt())) {
+            cursor = lineToCursor(QLineF(QPointF(0, 0), offsetVector.value()).normalVector(), canvas());
         } else if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
             if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
                 cursor = m_ibeam_horizontal;
@@ -1017,8 +1025,8 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
 {
     if (m_interactionStrategy
-        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
-            || event->key() == Qt::Key_Meta)) {
+            && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
+                || event->key() == Qt::Key_Meta)) {
         m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
         event->accept();
         return;
@@ -1035,8 +1043,8 @@ void SvgTextTool::keyReleaseEvent(QKeyEvent *event)
 {
     m_textCursor.updateModifiers(event->modifiers());
     if (m_interactionStrategy
-        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
-            || event->key() == Qt::Key_Meta)) {
+            && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
+                || event->key() == Qt::Key_Meta)) {
         m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
         event->accept();
     } else {

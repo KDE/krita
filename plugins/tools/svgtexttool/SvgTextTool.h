@@ -201,6 +201,7 @@ private:
         InlineSizeHandle,
         Move,
         TextPathHandle,
+        InShapeOffset,
     };
     enum class HighlightItem {
         None = 0,

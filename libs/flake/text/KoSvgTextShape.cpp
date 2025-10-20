@@ -1860,7 +1860,14 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
 
 void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento, int pos, int anchor)
 {
+    const bool shapeOffsetBefore = (textProperties().hasProperty(KoSvgTextProperties::ShapeMarginId)
+                                    || textProperties().hasProperty(KoSvgTextProperties::ShapePaddingId));
     setMementoImpl(memento);
+    const bool shapeOffsetAfter = (textProperties().hasProperty(KoSvgTextProperties::ShapeMarginId)
+                                   || textProperties().hasProperty(KoSvgTextProperties::ShapePaddingId));
+    if (shapeOffsetBefore || shapeOffsetAfter) {
+        d->updateTextWrappingAreas();
+    }
     notifyCursorPosChanged(pos, anchor);
     notifyMarkupChanged();
 }

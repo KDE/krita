@@ -50,7 +50,7 @@
       <array>
         <dict>
           <key>CFBundleTypeIconFile</key>
-          <string>krita</string>
+          <string>krita-kra</string>
           <key>CFBundleTypeName</key>
           <string>Krita File</string>
           <key>CFBundleTypeRole</key>

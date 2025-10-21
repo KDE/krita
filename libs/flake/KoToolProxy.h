@@ -173,9 +173,12 @@ protected:
     virtual QPointF widgetToDocument(const QPointF &widgetPoint) const;
     KoCanvasBase* canvas() const;
 
+
 private:
     Q_PRIVATE_SLOT(d, void timeout())
     Q_PRIVATE_SLOT(d, void selectionChanged(bool))
+
+    void countMultiClick(KoPointerEvent *ev, int eventType);
 
     friend class KoToolProxyPrivate;
     KoToolProxyPrivate * const d;

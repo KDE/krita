@@ -146,6 +146,52 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
+void KoToolProxy::countMultiClick(KoPointerEvent *ev, int eventType)
+{
+    QPointF globalPoint = ev->globalPos();
+
+    if (d->multiClickSource != eventType) {
+        d->multiClickCount = 0;
+    }
+
+    if (d->multiClickGlobalPoint != globalPoint) {
+        if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
+                qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
+            d->multiClickCount = 0;
+        }
+        d->multiClickGlobalPoint = globalPoint;
+    }
+
+    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
+        // One more multiclick;
+        d->multiClickCount++;
+    } else {
+        d->multiClickTimeStamp.start();
+        d->multiClickCount = 1;
+        d->multiClickSource = QEvent::Type(eventType);
+    }
+
+    if (d->activeTool) {
+        switch (d->multiClickCount) {
+        case 0:
+        case 1:
+            d->activeTool->mousePressEvent(ev);
+            break;
+        case 2:
+            d->activeTool->mouseDoubleClickEvent(ev);
+            break;
+        case 3:
+        default:
+            d->activeTool->mouseTripleClickEvent(ev);
+            break;
+        }
+    } else {
+        d->multiClickCount = 0;
+        ev->ignore();
+    }
+
+}
+
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     // We get these events exclusively from KisToolProxy - accept them
@@ -155,10 +201,10 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
     KoPointerEvent ev(event, point);
+
     switch (event->type()) {
     case QEvent::TabletPress:
-        if (d->activeTool)
-            d->activeTool->mousePressEvent(&ev);
+        countMultiClick(&ev, event->type());
         break;
     case QEvent::TabletRelease:
         d->scrollTimer.stop();
@@ -200,41 +246,7 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
         return;
     }
 
-    QPointF globalPoint = ev->globalPos();
-    if (d->multiClickGlobalPoint != globalPoint) {
-        if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
-                qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
-            d->multiClickCount = 0;
-        }
-        d->multiClickGlobalPoint = globalPoint;
-    }
-
-    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
-        // One more multiclick;
-        d->multiClickCount++;
-    } else {
-        d->multiClickTimeStamp.start();
-        d->multiClickCount = 1;
-    }
-
-    if (d->activeTool) {
-        switch (d->multiClickCount) {
-        case 0:
-        case 1:
-            d->activeTool->mousePressEvent(ev);
-            break;
-        case 2:
-            d->activeTool->mouseDoubleClickEvent(ev);
-            break;
-        case 3:
-        default:
-            d->activeTool->mouseTripleClickEvent(ev);
-            break;
-        }
-    } else {
-        d->multiClickCount = 0;
-        ev->ignore();
-    }
+    countMultiClick(ev, QEvent::MouseButtonPress);
 
     d->isToolPressed = true;
 }

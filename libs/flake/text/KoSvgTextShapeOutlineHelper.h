@@ -74,6 +74,8 @@ public:
 
     void toggleTextContourMode(KoSvgTextShape *shape);
 
+    void setTextAreasHovered(bool enabled);
+
 private:
     void paintTextShape(QPainter *painter, const KoViewConverter &converter,
                         const QPalette &pal, KoSvgTextShape *text,

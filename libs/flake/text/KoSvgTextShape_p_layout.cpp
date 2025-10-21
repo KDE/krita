@@ -118,6 +118,11 @@ void KoSvgTextShape::Private::updateTextWrappingAreas()
         relayout();
     }
 }
+
+QList<QPainterPath> KoSvgTextShape::Private::generateShapes(const QList<KoShape *> shapesInside, const QList<KoShape *> shapesSubtract, const KoSvgTextProperties &properties)
+{
+    return getShapes(shapesInside, shapesSubtract, properties);
+}
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::relayout()
 {

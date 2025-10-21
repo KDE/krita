@@ -1923,6 +1923,11 @@ bool KoSvgTextShape::fontMatchingDisabled() const
     return d->disableFontMatching;
 }
 
+QList<QPainterPath> KoSvgTextShape::generateTextAreas(const QList<KoShape *> shapesInside, const QList<KoShape *> shapesSubtract, const KoSvgTextProperties &props)
+{
+    return Private::generateShapes(shapesInside, shapesSubtract, props);
+}
+
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();

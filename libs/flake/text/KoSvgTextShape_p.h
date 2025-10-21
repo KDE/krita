@@ -554,6 +554,7 @@ public:
      * calls computing them, and then calls relayout();
      */
     void updateTextWrappingAreas();
+    static QList<QPainterPath> generateShapes(const QList<KoShape*> shapesInside, const QList<KoShape*> shapesSubtract, const KoSvgTextProperties &properties);
 
     static KoShape *textPathByName(QString name, QList<KoShape*> textPaths) {
         auto it = std::find_if(textPaths.begin(), textPaths.end(), [&name](const KoShape *s) -> bool {return s->name() == name;});

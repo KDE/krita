@@ -32,6 +32,7 @@ struct KoSvgTextShapeOutlineHelper::Private {
     bool drawBoundingRect = true;
     bool drawTextWrappingArea = false;
     bool drawOutline = false;
+    bool textWrappingAreasHovered = false;
 
     KoSvgTextShape *getTextModeShape() {
         return canvas->textShapeManagerEnabled();
@@ -76,6 +77,45 @@ KoSvgTextShapeOutlineHelper::~KoSvgTextShapeOutlineHelper()
 
 }
 
+QList<QLineF> getTextAreaOrderArrows(QList<QPainterPath> areas) {
+    QList<QLineF> lines;
+    if (areas.size() <= 1) return lines;
+    for (int i = 1; i < areas.size(); i++) {
+        const QPainterPath previous = areas.at(i-1);
+        const QPainterPath next = areas.at(i);
+        const bool overlap = previous.intersects(next);
+        QLineF arrow(previous.boundingRect().center(), next.boundingRect().center());
+        if (!overlap) {
+
+            Q_FOREACH (QPolygonF p, previous.toSubpathPolygons()) {
+                if (p.size() == 1) continue;
+                for (int j = 1; j < p.size(); j++) {
+                    QLineF l2(p.at(j-1), p.at(j));
+                    QPointF intersect;
+                    if (l2.intersects(arrow, &intersect) == QLineF::BoundedIntersection) {
+                        arrow.setP1(intersect);
+                        break;
+                    }
+                }
+            }
+            Q_FOREACH (QPolygonF p, next.toSubpathPolygons()) {
+                if (p.size() == 1) continue;
+                for (int j = 1; j < p.size(); j++) {
+                    QLineF l2(p.at(j-1), p.at(j));
+                    QPointF intersect;
+                    if (l2.intersects(arrow, &intersect) == QLineF::BoundedIntersection) {
+                        arrow.setP2(intersect);
+                        break;
+                    }
+                }
+            }
+
+        }
+        lines.append(arrow);
+    }
+    return lines;
+}
+
 void KoSvgTextShapeOutlineHelper::paintTextShape(QPainter *painter, const KoViewConverter &converter,
                                                   const QPalette &pal, KoSvgTextShape *text,
                                                   bool contourModeActive) {
@@ -85,8 +125,16 @@ void KoSvgTextShapeOutlineHelper::paintTextShape(QPainter *painter, const KoView
     helper.setHandleStyle(KisHandleStyle::secondarySelection());
     if (contourModeActive) {
         if (d->drawOutline) {
+            QList<QPainterPath> areas;
             Q_FOREACH(KoShape *shape, text->internalShapeManager()->shapes()) {
-                helper.drawPath(shape->transformation().map(shape->outline()));
+                QPainterPath p = shape->transformation().map(shape->outline());
+                helper.drawPath(p);
+                if (!d->drawTextWrappingArea && text->shapesInside().contains(shape)) {
+                    areas.append(p);
+                }
+            }
+            Q_FOREACH(QLineF arrow, getTextAreaOrderArrows(areas)) {
+                helper.drawGradientArrow(arrow.p1(), arrow.p2(), 1.5 * d->handleRadius);
             }
         }
         if (d->drawBoundingRect) {
@@ -96,41 +144,12 @@ void KoSvgTextShapeOutlineHelper::paintTextShape(QPainter *painter, const KoView
         }
     }
     if (d->drawTextWrappingArea) {
+        if (d->textWrappingAreasHovered) {
+            helper.setHandleStyle(KisHandleStyle::partiallyHighlightedPrimaryHandles());
+        }
         QList<QPainterPath> areas = text->textWrappingAreas();
-        if (areas.size() > 1) {
-            for (int i = 1; i < areas.size(); i++) {
-                const QPainterPath previous = areas.at(i-1);
-                const QPainterPath next = areas.at(i);
-                const bool overlap = previous.intersects(next);
-                QLineF arrow(previous.boundingRect().center(), next.boundingRect().center());
-                if (!overlap) {
-
-                    Q_FOREACH (QPolygonF p, previous.toSubpathPolygons()) {
-                        if (p.size() == 1) continue;
-                        for (int j = 1; j < p.size(); j++) {
-                            QLineF l2(p.at(j-1), p.at(j));
-                            QPointF intersect;
-                            if (l2.intersects(arrow, &intersect) == QLineF::BoundedIntersection) {
-                                arrow.setP1(intersect);
-                                break;
-                            }
-                        }
-                    }
-                    Q_FOREACH (QPolygonF p, next.toSubpathPolygons()) {
-                        if (p.size() == 1) continue;
-                        for (int j = 1; j < p.size(); j++) {
-                            QLineF l2(p.at(j-1), p.at(j));
-                            QPointF intersect;
-                            if (l2.intersects(arrow, &intersect) == QLineF::BoundedIntersection) {
-                                arrow.setP2(intersect);
-                                break;
-                            }
-                        }
-                    }
-
-                }
-                helper.drawGradientArrow(arrow.p1(), arrow.p2(), 1.5 * d->handleRadius);
-            }
+        Q_FOREACH(QLineF arrow, getTextAreaOrderArrows(areas)) {
+            helper.drawGradientArrow(arrow.p1(), arrow.p2(), 1.5 * d->handleRadius);
         }
         Q_FOREACH(const QPainterPath path, areas) {
             helper.drawPath(path);
@@ -139,8 +158,6 @@ void KoSvgTextShapeOutlineHelper::paintTextShape(QPainter *painter, const KoView
     painter->restore();
 
     painter->save();
-    //painter->setTransform(converter.viewToDocument() *
-    //                      painter->transform());
     QIcon icon = contourModeActive? KisIconUtils::loadIcon(ICON_EXIT): KisIconUtils::loadIcon(ICON_ENTER);
     QPixmap pm = icon.pixmap(BUTTON_ICON_SIZE, BUTTON_ICON_SIZE);
     painter->setBrush(contourModeActive? pal.highlight(): pal.button());
@@ -257,4 +274,9 @@ void KoSvgTextShapeOutlineHelper::toggleTextContourMode(KoSvgTextShape *shape)
             d->canvas->setTextShapeManagerEnabled(shape);
         }
     }
+}
+
+void KoSvgTextShapeOutlineHelper::setTextAreasHovered(bool enabled)
+{
+    d->textWrappingAreasHovered = enabled;
 }

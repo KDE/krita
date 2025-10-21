@@ -126,17 +126,33 @@ QLineF getLine(QPointF mousePos, KoPathShape *referenceShape, bool isPadding) {
     return l;
 }
 
+KoSvgTextProperties getProperties(bool isPadding, QLineF line, KoSvgTextProperties previous = KoSvgTextProperties()) {
+    KoSvgTextProperties::PropertyId propId = isPadding? KoSvgTextProperties::ShapePaddingId: KoSvgTextProperties::ShapeMarginId;
+    KoSvgText::CssLengthPercentage length;
+    length.value = line.length();
+    previous.setProperty(propId, QVariant::fromValue(length));
+    return previous;
+}
+
 void SvgChangeTextPaddingMarginStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (!(m_referenceShape && m_shape)) return;
-    const QTransform originalPainterTransform = painter.transform();
-    painter.setTransform(converter.documentToView(), true);
-    KisHandlePainterHelper handlePainter(&painter, originalPainterTransform, handleRadius(), decorationThickness());
+    painter.save();
+    KisHandlePainterHelper handlePainter =
+            KoShape::createHandlePainterHelperView(&painter, m_shape, converter, handleRadius(), decorationThickness());
+    handlePainter.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
 
-    const QLineF l = m_referenceShape->absoluteTransformation().map(getLine(m_lastMousePos, m_referenceShape, m_isPadding));
-    QPolygonF poly;
-    poly << l.p1() << l.p2();
-    handlePainter.drawRubberLine(poly);
+    const QLineF line = getLine(m_lastMousePos, m_referenceShape, m_isPadding);
+    const QTransform lineTf = m_referenceShape->absoluteTransformation() * m_shape->absoluteTransformation().inverted();
+    handlePainter.drawConnectionLine(lineTf.map(line));
+
+    KoSvgTextProperties props = getProperties(m_isPadding, line, m_shape->textProperties());
+    QList<QPainterPath> areas = m_shape->generateTextAreas(m_shape->shapesInside(), m_shape->shapesSubtract(), props);
+    Q_FOREACH(QPainterPath area, areas) {
+        handlePainter.drawPath(area);
+    }
+
+    painter.restore();
 }
 
 void SvgChangeTextPaddingMarginStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
@@ -149,12 +165,7 @@ KUndo2Command *SvgChangeTextPaddingMarginStrategy::createCommand()
 {
     if (!(m_referenceShape && m_shape)) return nullptr;
     const QLineF l = getLine(m_lastMousePos, m_referenceShape, m_isPadding);
-
-    KoSvgTextProperties::PropertyId propId = m_isPadding? KoSvgTextProperties::ShapePaddingId: KoSvgTextProperties::ShapeMarginId;
-    KoSvgText::CssLengthPercentage length;
-    length.value = l.length();
-    KoSvgTextProperties props;
-    props.setProperty(propId, QVariant::fromValue(length));
+    KoSvgTextProperties props = getProperties(m_isPadding, l);
     return new SvgTextMergePropertiesRangeCommand(m_shape, props, -1, -1);
 }
 

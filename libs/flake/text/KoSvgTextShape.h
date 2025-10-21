@@ -508,6 +508,17 @@ public:
      */
     KoSvgTextNodeIndex topLevelNodeForPos(int pos) const;
 
+    /**
+     * @brief nodeForTextPath
+     * TextPaths are set on toplevel content elements. This function
+     * allows for searching which node has said textPath, which should be
+     * less clunky than running topLevelNodeForPos for every pos.
+     * @param textPath -- the text path to find the node for.
+     * @return toplevel node that has the given shape set at it's text path.
+     * Returns the root node when none is found.
+     */
+    KoSvgTextNodeIndex nodeForTextPath(KoShape *textPath) const;
+
     /*--------------- Properties ---------------*/
 
     KoSvgTextProperties textProperties() const;
@@ -616,6 +627,17 @@ public:
      * @return whether font matching is disabled for this shape.
      */
     bool fontMatchingDisabled() const;
+
+    /**
+     * @brief generateTextAreas
+     * Generates text areas with the given shapes and properties.
+     * This is used to paint previews in the PaddingMargin strategy.
+     * @param shapesInside -- the shapes inside to compute the text areas from.
+     * @param shapesSubtract -- the subtract shapes to remove from the text areas.
+     * @param props -- the properties to use. ShapePadding and ShapeMargin id will be taken from this.
+     * @return list of QPainterPaths.
+     */
+    static QList<QPainterPath> generateTextAreas(const QList<KoShape*> shapesInside, const QList<KoShape*> shapesSubtract, const KoSvgTextProperties &props);
 
 protected:
 

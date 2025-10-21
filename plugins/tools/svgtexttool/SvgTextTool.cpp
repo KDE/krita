@@ -785,6 +785,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         } else if (SvgChangeTextPaddingMarginStrategy::hitTest(selectedShape, event->point, grabSensitivityInPt())) {
             m_interactionStrategy.reset(new SvgChangeTextPaddingMarginStrategy(this, selectedShape, event->point));
             m_dragging = DragMode::InShapeOffset;
+            m_textOutlineHelper->setDrawTextWrappingArea(false);
             event->accept();
             return;
         } else if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument())) {
@@ -953,10 +954,13 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         const KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         const KoPathShape *hoveredFlowShape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
+
+        bool textAreasHovered = false;
         if (m_textOnPathHelper.hitTest(event->point, canvas()->viewConverter()->viewToDocument()) ) {
             cursor = Qt::ArrowCursor;
         } else if(std::optional<QPointF> offsetVector = SvgChangeTextPaddingMarginStrategy::hitTest(selectedShape, event->point, grabSensitivityInPt())) {
             cursor = lineToCursor(QLineF(QPointF(0, 0), offsetVector.value()).normalVector(), canvas());
+            textAreasHovered = true;
         } else if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
             if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
                 cursor = m_ibeam_horizontal;
@@ -991,6 +995,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
                 cursor = m_ibeam_vertical;
             }
         }
+        m_textOutlineHelper->setTextAreasHovered(textAreasHovered);
         useCursor(cursor);
         event->ignore();
     }
@@ -1013,6 +1018,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
             useCursor(m_base_cursor);
         }
         m_textOnPathHelper.setStrategyActive(false);
+        m_textOutlineHelper->setDrawTextWrappingArea(true);
         m_dragging = DragMode::None;
         m_textCursor.setDrawTypeSettingHandle(true);
         event->accept();

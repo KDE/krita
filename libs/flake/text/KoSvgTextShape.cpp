@@ -1828,6 +1828,10 @@ KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
 
 void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
 {
+    // TODO: add an assert that all linked shpaes in memento are present in
+    // the current state of d->textPaths. That is the responsibility of
+    // KoSvgTextAddRemoveShapeCommandImpl to prepare the shapes for us
+
     KoSvgTextShapeMementoImpl *impl = dynamic_cast<KoSvgTextShapeMementoImpl*>(memento.data());
     if (impl) {
         d->textData = impl->textData;

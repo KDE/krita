@@ -58,11 +58,21 @@ KoPathShape *createPolygon() {
     return p;
 }
 
+KoPathShape *createPath() {
+    KoPathShape *p = new KoPathShape;
+    p->moveTo(QPointF(20,50));
+    p->lineTo(QPointF(50,30));
+    p->lineTo(QPointF(100,50));
+    KoShapeStrokeModelSP blackStroke(new KoShapeStroke(1.0, QColor(Qt::black)));
+    p->setStroke(blackStroke);
+    return p;
+}
+
 ///
 /// Uncomment to get debugging output and vesual representation of the shapes
 /// as .png files
 ///
-// #define DEBUG_SHAPE_RENDERING
+#define DEBUG_SHAPE_RENDERING
 
 #ifdef DEBUG_SHAPE_RENDERING
 
@@ -800,7 +810,7 @@ void TestSvgTextShape::testTextPathOnRange_data()
     QTest::addColumn<int>("startPos");
     QTest::addColumn<int>("endPos");
 
-    QTest::addRow("Single node, full range") << "<text>Test</text>" << 0 << 4;
+    QTest::addRow("Single node, full range") << "<text>Test text on path</text>" << 0 << 17;
     QTest::addRow("Single node, front") << "<text>Test test</text>" << 0 << 4;
     QTest::addRow("Single node, back") << "<text>Test test</text>" << 4 << 10;
     QTest::addRow("Complex text") << "<text>Text <tspan fill=\"#ff0000\">path</tspan> test</text>" << 6 << 12;
@@ -820,24 +830,41 @@ void TestSvgTextShape::testTextPathOnRange_data()
 
 void TestSvgTextShape::testTextPathOnRange()
 {
+    // TODO: test a case when mulitple path shapes have the same original id
+    // TODO: assigned names should be removed/undone
+
     QFETCH(QString, svg);
     QFETCH(int, startPos);
     QFETCH(int, endPos);
     KoSvgTextShape *textShape = new KoSvgTextShape();
+    textShape->setPosition(QPointF(10,10));
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
-    KoPathShape *path = createPolygon();
+    KoPathShape *path = createPath();
     KoSvgTextSetTextPathOnRangeCommand *cmd = new KoSvgTextSetTextPathOnRangeCommand(textShape, path, startPos, endPos);
 
+    paintShapes(textShape, {path}, QString("ddd_%1_00_initial.png").arg(QTest::currentDataTag()));
+    qDebug() << ppVar(path->name());
+
     cmd->redo();
+    qDebug() << ppVar(path->name());
 
     KoSvgTextNodeIndex idx = textShape->topLevelNodeForPos((startPos+endPos)/2);
-
     KoPathShape *textPath = dynamic_cast<KoPathShape*>(idx.textPath());
-    QVERIFY(textPath);
-    QCOMPARE(textPath->toString(), path->toString());
+    qDebug() << ppVar(textPath->name());
+    QCOMPARE(textPath, path);
 
-    //TODO test undo.
+    paintShapes(textShape, {path}, QString("ddd_%1_10_redo.png").arg(QTest::currentDataTag()));
+
+    // KoPathShape *textPath = dynamic_cast<KoPathShape*>(idx.textPath());
+    // QVERIFY(textPath);
+    // QCOMPARE(textPath->toString(), path->toString());
+
+    cmd->undo();
+
+    paintShapes(textShape, {path}, QString("ddd_%1_20_undo.png").arg(QTest::currentDataTag()));
+    qDebug() << ppVar(path->name());
+    
 }
 
 KISTEST_MAIN(TestSvgTextShape)

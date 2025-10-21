@@ -275,7 +275,7 @@ bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
         if (textPath) {
             // we'll always save as an embedded shape as "path" is an svg 2.0
             // feature.
-            QString id = textPath->isVisible(false)? context.getID(textPath): SvgStyleWriter::embedShape(textPath, context);
+            QString id = textPath->isVisible(false) && !context.strippedTextMode()? context.getID(textPath): SvgStyleWriter::embedShape(textPath, context);
             // inkscape can only read 'xlink:href'
             if (!id.isEmpty()) {
                 context.shapeWriter().addAttribute("xlink:href", "#" + id);

@@ -1791,7 +1791,7 @@ QDomText SvgParser::getTheOnlyTextChild(const QDomElement &e)
                 firstChild.toText() : QDomText();
 }
 
-KoShape* SvgParser::getTextPath(const QDomElement &e) {
+KoShape* SvgParser::getTextPath(const QDomElement &e, bool hideShapesFromDefs) {
     if (e.hasAttribute("path")) {
         QDomElement p = e.ownerDocument().createElement("path");
         p.setAttribute("d", e.attribute("path"));
@@ -1810,7 +1810,7 @@ KoShape* SvgParser::getTextPath(const QDomElement &e) {
                 KoShape *cloned = s->cloneShape();
                 const QTransform absTf = s->absoluteTransformation();
                 cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
-                if(cloned && s->parent()) cloned->setVisible(false);
+                if(cloned && m_defsShapes.contains(s) && hideShapesFromDefs) cloned->setVisible(false);
                 return cloned;
             }
         }
@@ -1818,7 +1818,7 @@ KoShape* SvgParser::getTextPath(const QDomElement &e) {
     return nullptr;
 }
 
-void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader) {
+void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader, bool hideShapesFromDefs) {
     QDomText t = getTheOnlyTextChild(e);
     if (!t.isNull()) {
         textLoader.loadSvgText(t, m_context);
@@ -1838,9 +1838,9 @@ void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoa
                 uploadStyleToContext(b);
                 textLoader.loadSvg(b, m_context);
                 if (b.hasChildNodes()) {
-                    parseTextChildren(b, textLoader);
+                    parseTextChildren(b, textLoader, hideShapesFromDefs);
                 }
-                textLoader.setTextPathOnCurrentNode(getTextPath(b));
+                textLoader.setTextPathOnCurrentNode(getTextPath(b, hideShapesFromDefs));
                 m_context.popGraphicsContext();
             }
         }
@@ -1859,8 +1859,10 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     KoSvgTextShape *rootTextShape  = 0;
 
+    bool hideShapesFromDefs = false;
     if (mergeIntoShape) {
         rootTextShape = mergeIntoShape;
+        hideShapesFromDefs = true;
     } else {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
         rootTextShape = dynamic_cast<KoSvgTextShape*>(factory->createDefaultShape(m_documentResourceManager));
@@ -1876,12 +1878,12 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     if (rootTextShape) {
         if (!m_context.currentGC()->shapeInsideValue.isEmpty()) {
-            QList<KoShape*> shapesInside = createListOfShapesFromCSS(e, m_context.currentGC()->shapeInsideValue, m_context);
+            QList<KoShape*> shapesInside = createListOfShapesFromCSS(e, m_context.currentGC()->shapeInsideValue, m_context, hideShapesFromDefs);
             rootTextShape->setShapesInside(shapesInside);
         }
 
         if (!m_context.currentGC()->shapeSubtractValue.isEmpty()) {
-            QList<KoShape*> shapesSubtract = createListOfShapesFromCSS(e, m_context.currentGC()->shapeSubtractValue, m_context);
+            QList<KoShape*> shapesSubtract = createListOfShapesFromCSS(e, m_context.currentGC()->shapeSubtractValue, m_context, hideShapesFromDefs);
             rootTextShape->setShapesSubtract(shapesSubtract);
         }
     }
@@ -1939,7 +1941,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         textLoader.loadSvgText(onlyTextChild, m_context);
 
     } else {
-        parseTextChildren(e, textLoader);
+        parseTextChildren(e, textLoader, hideShapesFromDefs);
 
     }
 
@@ -2258,7 +2260,7 @@ KoShape * SvgParser::createShapeFromElement(const QDomElement &element, SvgLoadi
     return object;
 }
 
-KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)
+KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context, bool hideShapesFromDefs)
 {
     if (value.isEmpty()) {
         return 0;
@@ -2287,7 +2289,8 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
             cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
             // When we have a parent, the shape is inside the defs, but when not,
             // it's in the group we're in the currently parsing.
-            if (cloned && s->parent()) cloned->setVisible(false);
+
+            if (cloned && m_defsShapes.contains(s) && hideShapesFromDefs) cloned->setVisible(false);
             return cloned;
         }
     } else if (value.startsWith("circle(")) {
@@ -2335,7 +2338,7 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
     return shape;
 }
 
-QList<KoShape *> SvgParser::createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)
+QList<KoShape *> SvgParser::createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context, bool hideShapesFromDefs)
 {
     QList<KoShape*> shapeList;
     if (value == "auto" || value == "none") {
@@ -2343,7 +2346,7 @@ QList<KoShape *> SvgParser::createListOfShapesFromCSS(const QDomElement e, const
     }
     QStringList params = value.split(")");
     Q_FOREACH(const QString param, params) {
-        KoShape *s = createShapeFromCSS(e, param.trimmed()+")", context);
+        KoShape *s = createShapeFromCSS(e, param.trimmed()+")", context, hideShapesFromDefs);
         if (s) {
             shapeList.append(s);
         }

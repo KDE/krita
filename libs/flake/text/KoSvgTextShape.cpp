@@ -1650,7 +1650,8 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
             visibleShapes.append(shape);
         }
     }
-    if (!visibleShapes.isEmpty()) {
+    const bool writeGroup = !(visibleShapes.isEmpty() || context.strippedTextMode());
+    if (writeGroup) {
         context.shapeWriter().startElement("g", false);
         context.shapeWriter().addAttribute("id", context.createUID("group"));
         context.shapeWriter().addAttribute(KoSvgTextShape_TEXTCONTOURGROUP, "true");
@@ -1716,7 +1717,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
             context.shapeWriter().endElement();
         }
     }
-    if (!visibleShapes.isEmpty()) {
+    if (writeGroup) {
         context.shapeWriter().endElement();
     }
     return success;
@@ -2440,7 +2441,7 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
     if (!d->shapesInside.isEmpty()) {
         QStringList shapesInsideList;
         Q_FOREACH(KoShape* shape, d->shapesInside) {
-            QString id = shape->isVisible(false)? context.getID(shape): SvgStyleWriter::embedShape(shape, context);
+            QString id = (shape->isVisible(false) && !context.strippedTextMode())? context.getID(shape): SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-inside", shapesInsideList.join(" "));

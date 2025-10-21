@@ -251,7 +251,11 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
 
     /********** Kinetic Scrolling **************************************************************/
 
-    {
+    // Kinetic scrolling via left-click renders the timeline effectively
+    // unusable, you end up scrolling the timeline every time you try to move a
+    // key frame or attempt to use the zoom slider. So we don't enable kinetic
+    // scrolling in that case and require the use of the scrollbar instead.
+    if (KisKineticScroller::getConfiguredGestureType() != QScroller::LeftMouseButtonGesture) {
         QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
         if (scroller) {
             connect(scroller, SIGNAL(stateChanged(QScroller::State)),

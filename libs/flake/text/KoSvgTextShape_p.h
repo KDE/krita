@@ -1342,6 +1342,26 @@ public:
             }
         }
     }
+
+    static void makeTextPathNameUnique(QList<KoShape*> textPaths, KoShape *textPath) {
+        bool textPathNameUnique = false;
+        int textPathNumber = textPaths.size();
+        QString newTextPathName = textPath->name();
+        while(!textPathNameUnique) {
+            textPathNameUnique = true;
+            Q_FOREACH(KoShape *shape, textPaths) {
+                if (shape->name() == newTextPathName) {
+                    textPathNameUnique = false;
+                    textPathNumber += 1;
+                    break;
+                }
+            }
+            if (textPathNameUnique) {
+                textPath->setName(newTextPathName);
+            }
+            newTextPathName = QString("textPath"+QString::number(textPathNumber));
+        }
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

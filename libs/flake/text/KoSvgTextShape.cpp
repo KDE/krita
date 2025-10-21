@@ -56,8 +56,7 @@ public:
                               const QMap<int, int> &logicalToVisualCursorPos,
                               const QString &plainText,
                               const bool &isBidi,
-                              const QPointF &initialTextPosition,
-                              const QList<KoShape*> textPaths)
+                              const QPointF &initialTextPosition)
         : KoSvgTextShapeMemento()
         , textData(textData)
         , result(result)
@@ -67,7 +66,6 @@ public:
         , plainText(plainText)
         , isBidi(isBidi)
         , initialTextPosition(initialTextPosition)
-        , textPaths(textPaths)
     {
     }
 
@@ -86,8 +84,6 @@ private:
     QString plainText;
     bool isBidi = false;
     QPointF initialTextPosition = QPointF();
-
-    QList<KoShape *> textPaths;
 };
 
 struct KoSvgTextNodeIndex::Private {
@@ -1484,6 +1480,19 @@ KoSvgTextNodeIndex KoSvgTextShape::topLevelNodeForPos(int pos) const
     return d->createTextNodeIndex(parent);
 }
 
+KoSvgTextNodeIndex KoSvgTextShape::nodeForTextPath(KoShape *textPath) const
+{
+    auto root = d->textData.childBegin();
+    if (d->isLoading || d->cursorPos.isEmpty()) return d->createTextNodeIndex(root);
+
+    for (auto child = childBegin(root); child != childEnd(root); child++) {
+        if (child->textPathId == textPath->name()) {
+            return d->createTextNodeIndex(child);
+        }
+    }
+    return d->createTextNodeIndex(root);
+}
+
 KoSvgTextProperties KoSvgTextShape::textProperties() const
 {
     return KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties();
@@ -1822,8 +1831,7 @@ KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
                                                                  d->logicalToVisualCursorPos,
                                                                  d->plainText,
                                                                  d->isBidi,
-                                                                 d->initialTextPosition,
-                                                                 d->textPaths));
+                                                                 d->initialTextPosition));
 }
 
 void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
@@ -1843,14 +1851,14 @@ void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
         d->isBidi = impl->isBidi;
         d->initialTextPosition = impl->initialTextPosition;
 
-        // This is a problem :|
-        d->textPaths = impl->textPaths;
-        Q_FOREACH(KoShape * shape, d->textPaths) {
-            if (!shape->hasDependee(this)) {
-                shape->addDependee(this);
-            }
-            if (!d->shapeGroup->shapes().contains(shape)) {
-                d->shapeGroup->addShape(shape);
+        // Ensure that any text paths exist.
+        auto root = d->textData.childBegin();
+        for (auto child = childBegin(root); child != childEnd(root); child++) {
+            if (!child->textPathId.isEmpty()) {
+                KIS_SAFE_ASSERT_RECOVER(Private::textPathByName(child->textPathId, d->textPaths)) {
+                    qDebug() << "missing path is" << child->textPathId;
+                    child->textPathId = QString();
+                }
             }
         }
     }
@@ -2334,22 +2342,7 @@ bool KoSvgTextShape::setTextPathOnRange(KoShape *textPath, const int startPos, c
     Private::splitTree(d->textData, endIndex, true);
     int currentIndex = 0;
 
-    bool textPathNameUnique = false;
-    int textPathNumber = d->textPaths.size();
-    while(!textPathNameUnique) {
-        QString newTextPathName("textPath"+QString::number(textPathNumber));
-        textPathNameUnique = true;
-        Q_FOREACH(KoShape *shape, d->textPaths) {
-            if (shape->name() == newTextPathName) {
-                textPathNameUnique = false;
-                textPathNumber += 1;
-                break;
-            }
-        }
-        if (textPathNameUnique) {
-            textPath->setName(newTextPathName);
-        }
-    }
+    Private::makeTextPathNameUnique(d->textPaths, textPath);
     KoSvgTextContentElement textPathElement;
     textPathElement.textPathId = textPath->name();
     d->shapeGroup->addShape(textPath);
@@ -2416,6 +2409,48 @@ bool KoSvgTextShape::setTextPathOnRange(KoShape *textPath, const int startPos, c
     shapeChangedPriv(ContentChanged);
     update();
     return true;
+}
+
+QList<KoShape *> KoSvgTextShape::textPathsAtRange(const int startPos, const int endPos)
+{
+    const int finalPos = d->cursorPos.size() - 1;
+    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->cursorPos.at(qBound(0, startPos, finalPos)).index;
+    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->cursorPos.at(qBound(0, endPos, finalPos)).index;
+    QList<KoShape*> textPaths;
+    int currentIndex = 0;
+    auto startElement = Private::findTextContentElementForIndex(d->textData, currentIndex, startIndex, true);
+    currentIndex = 0;
+    auto endElement = Private::findTextContentElementForIndex(d->textData, currentIndex, endIndex, true);
+
+    auto first = startElement.node()? Private::findTopLevelParent(d->textData.childBegin(), KisForestDetail::siblingCurrent(startElement))
+                                     : childEnd(d->textData.childBegin());
+    auto last = endElement.node()? Private::findTopLevelParent(d->textData.childBegin(), KisForestDetail::siblingCurrent(endElement))
+                                 : childEnd(d->textData.childBegin());
+    if (last != childEnd(d->textData.childBegin())) {
+        last++;
+    }
+    for (auto child = first; (child != last && child != KisForestDetail::siblingEnd(first)); child++) {
+        if (KoShape *path = Private::textPathByName(child->textPathId, d->textPaths)) {
+            textPaths.append(path);
+        }
+    }
+    return textPaths;
+}
+
+void KoSvgTextShape::addTextPathAtEnd(KoShape *textPath)
+{
+    auto root = d->textData.childBegin();
+    if (root == d->textData.childEnd()) return;
+    if (d->textPaths.contains(textPath)) return;
+
+    Private::makeTextPathNameUnique(d->textPaths, textPath);
+    KoSvgTextContentElement textPathElement;
+    textPathElement.textPathId = textPath->name();
+    d->shapeGroup->addShape(textPath);
+    d->textPaths.append(textPath);
+    textPath->addDependee(this);
+
+    d->textData.insert(childEnd(root), textPathElement);
 }
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const

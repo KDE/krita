@@ -25,6 +25,7 @@ struct KoSvgTextAddRemoveShapeCommandImpl::Private {
     ~Private() {}
     KoSvgTextShape *textShape = nullptr;
     KoShape* shape = nullptr;
+    QList<KoShape*> oldTextPaths;
     std::optional<KoShapeContainer*> originalShapeParent;
     KoSvgTextShapeMementoSP memento;
     int startPos = -1;
@@ -50,12 +51,17 @@ KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgText
             d->type = Subtract;
         } else if (d->textShape->shapeInContours(shape)){
             d->type = TextPath;
+            KoSvgTextNodeIndex idx = textShape->nodeForTextPath(shape);
+            QPair<int, int> range = textShape->findRangeForNodeIndex(idx);
+            startPos = range.first;
+            endPos = range.second;
         } else {
             d->type = Unknown;
         }
     } else {
         d->type = type;
     }
+    d->oldTextPaths = d->textShape->textPathsAtRange(startPos, endPos);
 }
 
 KoSvgTextAddRemoveShapeCommandImpl::~KoSvgTextAddRemoveShapeCommandImpl()
@@ -82,6 +88,11 @@ void KoSvgTextAddRemoveShapeCommandImpl::partB()
     }
 
     if (!d->removeCommand) {
+        Q_FOREACH(KoShape *path, d->oldTextPaths) {
+            if (!d->textShape->shapeInContours(path)) {
+                d->textShape->addTextPathAtEnd(path);
+            }
+        }
         d->textShape->setMemento(d->memento);
     } else {
         d->textShape->relayout();
@@ -107,11 +118,16 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
         d->textShape->addShapeContours({d->shape}, true);
     } else if (d->type == Subtract) {
         d->textShape->addShapeContours({d->shape}, false);
-    } else if (!d->removeCommand && d->type == TextPath) {
+    } else if (d->type == TextPath) {
         d->textShape->setTextPathOnRange(d->shape, d->startPos, d->endPos);
     }
 
     if (d->removeCommand) {
+        Q_FOREACH(KoShape *path, d->oldTextPaths) {
+            if (!d->textShape->shapeInContours(path)) {
+                d->textShape->addTextPathAtEnd(path);
+            }
+        }
         d->textShape->setMemento(d->memento);
     } else {
         d->textShape->relayout();

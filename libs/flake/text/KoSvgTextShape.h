@@ -146,6 +146,23 @@ public:
     bool setTextPathOnRange(KoShape *textPath, const int startPos = -1, const int endPos = -1);
 
     /**
+     * @brief textPathsAtRange
+     * Get a list of textPaths at the given range. This includes textPaths whose
+     * node is only partially overlapped by the range.
+     * @param posStart -- Start of the range, as cursor pos.
+     * @param posEnd --  End of the range, as cursor pos.
+     * @return list of KoShapes that are text paths.
+     */
+    QList<KoShape*> textPathsAtRange(const int startPos = -1, const int endPos = -1);
+
+    /**
+     * @brief addTextPathAtEnd
+     * add a textpath node at the end of the text.
+     * @param textPath -- text path to add.
+     */
+    void addTextPathAtEnd(KoShape *textPath);
+
+    /**
      * @brief shapesInside
      * @return the list of shapes that make up the content area.
      */

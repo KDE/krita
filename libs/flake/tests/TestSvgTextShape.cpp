@@ -844,27 +844,32 @@ void TestSvgTextShape::testTextPathOnRange()
     KoSvgTextSetTextPathOnRangeCommand *cmd = new KoSvgTextSetTextPathOnRangeCommand(textShape, path, startPos, endPos);
 
     paintShapes(textShape, {path}, QString("ddd_%1_00_initial.png").arg(QTest::currentDataTag()));
-    qDebug() << ppVar(path->name());
+
+    KoSvgTextNodeIndex originalIndex = textShape->topLevelNodeForPos((startPos+endPos)/2);
+    KoPathShape *originalTextPath = dynamic_cast<KoPathShape*>(originalIndex.textPath());
+    const QString originalIndexTextPathString = originalTextPath? originalTextPath->toString(): QString();
 
     cmd->redo();
-    qDebug() << ppVar(path->name());
 
     KoSvgTextNodeIndex idx = textShape->topLevelNodeForPos((startPos+endPos)/2);
     KoPathShape *textPath = dynamic_cast<KoPathShape*>(idx.textPath());
-    qDebug() << ppVar(textPath->name());
-    QCOMPARE(textPath, path);
+    QVERIFY(textPath);
+    QCOMPARE(textPath->toString(), path->toString());
 
     paintShapes(textShape, {path}, QString("ddd_%1_10_redo.png").arg(QTest::currentDataTag()));
 
-    // KoPathShape *textPath = dynamic_cast<KoPathShape*>(idx.textPath());
-    // QVERIFY(textPath);
-    // QCOMPARE(textPath->toString(), path->toString());
-
     cmd->undo();
 
+    KoSvgTextNodeIndex idx2 = textShape->topLevelNodeForPos((startPos+endPos)/2);
+    if (!originalIndexTextPathString.isEmpty()) {
+        KoPathShape *currentTextPath = dynamic_cast<KoPathShape*>(idx2.textPath());
+        QVERIFY(currentTextPath);
+        QCOMPARE(originalIndexTextPathString, currentTextPath->toString());
+    } else {
+        QVERIFY(!idx2.textPath());
+    }
+
     paintShapes(textShape, {path}, QString("ddd_%1_20_undo.png").arg(QTest::currentDataTag()));
-    qDebug() << ppVar(path->name());
-    
 }
 
 KISTEST_MAIN(TestSvgTextShape)

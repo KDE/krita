@@ -31,9 +31,6 @@
 #include <QLineEdit>
 #include <QDebug>
 
-#ifdef HAVE_ICONTHEMES
-#include <kicondialog.h>
-#endif
 #include <klistwidgetsearchline.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -47,6 +44,7 @@
 #include <kis_icon_utils.h>
 #include "kis_action_registry.h"
 #include <KisKineticScroller.h>
+#include <kis_assert.h>
 
 static const char separatorstring[] = QT_TRANSLATE_NOOP("KEditToolBar", "--- separator ---");
 
@@ -456,6 +454,8 @@ public:
     void slotUpButton();
     void slotDownButton();
 
+    void slotChangeIconButton();
+
     void selectActiveItem(const QString &);
 
     void slotDropped(ToolBarListWidget *list, int index, ToolBarItem *item, bool sourceIsActiveList);
@@ -528,6 +528,8 @@ public:
     QToolButton *m_removeAction {nullptr};
     QToolButton *m_insertAction {nullptr};
     QToolButton *m_downAction {nullptr};
+
+    QToolButton *m_changeIconAction {nullptr};
 
     //QValueList<QAction*> m_actionList;
     KisKActionCollection *m_collection {nullptr};
@@ -1060,6 +1062,15 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
         }
     }
 
+    // Edit Icon Button under active actions
+    m_changeIconAction = new QToolButton(m_widget);
+    m_changeIconAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("preferences-desktop-icons")));
+    m_changeIconAction->setText(i18n("Change Icon..."));
+    m_changeIconAction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_changeIconAction->setEnabled(false);
+
+    QObject::connect(m_changeIconAction, SIGNAL(clicked()), m_widget, SLOT(slotChangeIconButton()));
+
     KListWidgetSearchLine *activeListSearchLine = new KListWidgetSearchLine(m_widget, m_activeList);
     activeListSearchLine->setPlaceholderText(i18n("Filter"));
 
@@ -1122,6 +1133,7 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
     active_layout->addWidget(active_label);
     active_layout->addWidget(activeListSearchLine);
     active_layout->addWidget(m_activeList, 1);
+    active_layout->addWidget(m_changeIconAction);
 
     list_layout->addLayout(inactive_layout);
     list_layout->addLayout(button_layout);
@@ -1347,6 +1359,7 @@ void KisKEditToolBarWidgetPrivate::slotActiveSelectionChanged()
     }
 
     m_removeAction->setEnabled(toolitem);
+    m_changeIconAction->setEnabled(toolitem && !toolitem->isSeparator());
 
     if (toolitem) {
         m_upAction->setEnabled(toolitem->index() != 0);
@@ -1459,18 +1472,11 @@ void KisKEditToolBarWidgetPrivate::removeActive(ToolBarItem *item)
 void KisKEditToolBarWidgetPrivate::slotUpButton()
 {
     ToolBarItem *item = m_activeList->currentItem();
-
-    if (!item) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(item);
 
     int row = item->listWidget()->row(item) - 1;
     // make sure we're not the top item already
-    if (row < 0) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(row >= 0);
 
     // we're modified, so let this change
     Q_EMIT m_widget->enableOk(true);
@@ -1512,23 +1518,132 @@ void KisKEditToolBarWidgetPrivate::moveActive(ToolBarItem *item, ToolBarItem *be
 void KisKEditToolBarWidgetPrivate::slotDownButton()
 {
     ToolBarItem *item = m_activeList->currentItem();
-
-    if (!item) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(item);
 
     // make sure we're not the bottom item already
     int newRow = item->listWidget()->row(item) + 1;
-    if (newRow >= item->listWidget()->count()) {
-        Q_ASSERT(false);
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(newRow < item->listWidget()->count());
 
     // we're modified, so let this change
     Q_EMIT m_widget->enableOk(true);
 
     moveActive(item, static_cast<ToolBarItem *>(item->listWidget()->item(newRow)));
+}
+
+void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
+{
+    ToolBarItem *toolitem = m_activeList->currentItem();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(toolitem && !toolitem->isSeparator());
+
+    QDomElement elem = findElementForToolBarItem(toolitem);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!elem.isNull());
+
+    QStringList loadedIcons = KisIconUtils::allUniqueLoadedIconNames();
+
+    // Dialog UI
+    QDialog dialog(m_widget);
+    dialog.setWindowTitle(i18n("Choose Icon"));
+    dialog.resize(480, 500);
+
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    // Filter input
+    QLineEdit *filterEdit = new QLineEdit(&dialog);
+    filterEdit->setPlaceholderText(i18n("Filter icons..."));
+    layout->addWidget(filterEdit);
+
+    // Icon list
+    QListWidget *list = new QListWidget(&dialog);
+    list->setViewMode(QListView::ListMode); // icon + text side by side
+    list->setIconSize(QSize(22, 22));
+    list->setResizeMode(QListWidget::Adjust);
+    list->setSelectionMode(QAbstractItemView::SingleSelection);
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(list);
+    if (scroller) {
+        QObject::connect(scroller, &QScroller::stateChanged, m_widget, [&](QScroller::State state) {
+            KisKineticScroller::updateCursor(m_widget, state);
+        });
+    }
+
+    // Fill the list
+    for (const QString &iconName : loadedIcons) {
+        QListWidgetItem *item = new QListWidgetItem(
+            KisIconUtils::loadIcon(iconName),
+            iconName,
+            list
+        );
+        item->setData(Qt::UserRole, iconName);
+    }
+    layout->addWidget(list);
+
+    // OK/Cancel buttons
+    QDialogButtonBox *backButton = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    layout->addWidget(backButton);
+
+    QObject::connect(backButton, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    QObject::connect(backButton, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+    // Filter logic
+    QObject::connect(filterEdit, &QLineEdit::textChanged, &dialog, [&list](const QString &text) {
+        for (int i = 0; i < list->count(); ++i) {
+            QListWidgetItem *item = list->item(i);
+            bool match = item->text().contains(text, Qt::CaseInsensitive);
+            item->setHidden(!match);
+        }
+    });
+
+    // Optional: pre-select current icon
+    QString currentIconName = elem.attribute(QStringLiteral("icon"));
+    for (int i = 0; i < list->count(); ++i) {
+        if (list->item(i)->data(Qt::UserRole).toString() == currentIconName) {
+            list->setCurrentItem(list->item(i));
+            break;
+        }
+    }
+
+    // Execute
+    if (dialog.exec() == QDialog::Accepted && list->currentItem()) {
+        QString chosenIconName = list->currentItem()->data(Qt::UserRole).toString();
+
+        toolitem->setIcon(KisIconUtils::loadIcon(chosenIconName));
+
+        // Update XML in the toolbar DOM
+        // Ensure (ActionIconOverrides) exist
+        QDomDocument doc = m_widget->domDocument();
+        QDomElement root = doc.documentElement();
+        QDomElement overridesElem = root.namedItem(QStringLiteral("ActionIconOverrides")).toElement();
+        if (overridesElem.isNull()) {
+            overridesElem = doc.createElement(QStringLiteral("ActionIconOverrides"));
+            root.appendChild(overridesElem);
+        }
+
+        // Find Action in overrides or create new
+        QString actionName = toolitem->internalName();
+        QDomElement overrideAction;
+        for (QDomNode child = overridesElem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+            QDomElement childElement = child.toElement();
+            if (childElement.attribute(QStringLiteral("name")) == actionName) {
+                overrideAction = childElement;
+                break;
+            }
+        }
+        if (overrideAction.isNull()) {
+            overrideAction = doc.createElement(QStringLiteral("Action"));
+            overrideAction.setAttribute(QStringLiteral("name"), actionName);
+            overridesElem.appendChild(overrideAction);
+        }
+
+        // Set icon override
+        overrideAction.setAttribute(QStringLiteral("icon"), chosenIconName);
+
+        // Mark document modified
+        m_currentToolBarElem.setAttribute(QStringLiteral("noMerge"), QLatin1String("1"));
+        updateLocal(m_currentToolBarElem);
+        m_currentXmlData->m_isModified = true;
+        m_activeList->update();
+
+        Q_EMIT m_widget->enableOk(true);
+    }
 }
 
 void KisKEditToolBarWidgetPrivate::updateLocal(QDomElement &elem)

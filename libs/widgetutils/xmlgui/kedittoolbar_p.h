@@ -234,6 +234,8 @@ private:
 
     Q_PRIVATE_SLOT(d, void slotDropped(ToolBarListWidget *, int, ToolBarItem *, bool))
 
+    Q_PRIVATE_SLOT(d, void slotChangeIconButton())
+
 private:
     friend class KisKEditToolBarWidgetPrivate;
     KisKEditToolBarWidgetPrivate *const d;

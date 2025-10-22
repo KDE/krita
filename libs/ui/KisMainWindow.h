@@ -502,6 +502,7 @@ private:
 
     void setMainWindowLayoutForCurrentMainWidget(int widgetIndex, bool widgetIndexChanged);
     void adjustLayoutForWelcomePage();
+    void applyActionIconOverridesFromLocalXML();
 
 private:
 

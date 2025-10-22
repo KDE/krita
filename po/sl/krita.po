@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-15 14:01+0200\n"
+"PO-Revision-Date: 2025-10-21 11:45+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -27312,12 +27312,13 @@ msgstr ""
 "poravnan z nadrejenim besedilom."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the alignment-baseline property, matching "
 "is case-insensitive"
 msgid "alignment-baseline, mojisoroe"
-msgstr "poravnava-osnovnica, mojisoroe"
+msgstr ""
+"poravnava-osnovnica, poravnava na osnovnico, alignment-baseline, mojisoroe"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:82
 #, kde-format
@@ -27326,10 +27327,10 @@ msgid "Baseline"
 msgstr "Osnovnica besedila"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline defined by Dominant Baseline."
-msgstr "Poravnavnajte z osnovnico, ki jo določa prevladujoča osnovnica."
+msgstr "Poravna z osnovnico, ki jo določa prevladujoča osnovnica."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:84
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:82
@@ -27340,10 +27341,10 @@ msgstr "Abecedna"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:85
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the baseline for scripts that align at the bottom."
-msgstr "Poravnajte z osnovnico za pisave, poravnane na dnu."
+msgstr "Poravnava na osnovnico - za pisave, poravnane na dnu."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:86
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:84
@@ -27354,10 +27355,10 @@ msgstr "Ideografska"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:87
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:85
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box bottom."
-msgstr ""
+msgstr "Poravnajte na dno ideografskega em polja."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:88
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:86
@@ -27368,10 +27369,10 @@ msgstr "Centralna"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:89
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:87
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ideographic em box center."
-msgstr ""
+msgstr "Poravnavnajte s središčem ideografskega em polja."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:90
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:88
@@ -27382,24 +27383,22 @@ msgstr "Hangulska"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the headstroke as used by North-Brahmic scripts."
-msgstr ""
+msgstr "Poravnajte s potezo glave, ki jo uporabljajo severnobramske pisave."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:92
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:90
 #: plugins/dockers/textproperties/qml/TextAlign.qml:368
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Middle"
-msgstr "Srednji"
+msgstr "Sredina"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:93
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Align to the center between the alphabetic baseline and x-height when laying "
@@ -27417,7 +27416,7 @@ msgstr "Matematična"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:95
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the mathematical baseline, so that operator symbols align."
 msgstr ""
@@ -27425,57 +27424,51 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:96
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:94
-#, fuzzy, kde-format
-#| msgid "Text Tool"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Text Top"
-msgstr "Orodje za besedilo"
+msgstr "Vrh besedila"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:97
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:95
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the ascender."
-msgstr ""
+msgstr "Poravnajte z vzponom."
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:98
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:96
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Text Bottom"
-msgstr "Na dno"
+msgstr "Dno besedila"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:99
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Align to the descender."
-msgstr ""
+msgstr "Poravnajte z repkom."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 profile name, check simplescreenrecorder for standard translations"
-#| msgid "baseline"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline-Shift"
-msgstr "osnovnica"
+msgstr "Zamik osnovnice"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Baseline shift allows moving the text away from the baseline, either by "
 "predefined super and subscript values, or by a fixed amount."
 msgstr ""
-"Premik osnovnice omogoča premikanje besedila stran od osnovnice, bodisi z "
-"vnaprej določenimi vrednostmi nadpisanega in podpisanega, bodisi s fiksno "
+"Premik osnovnice omogoča premikanje besedila stran od osnovnice, bodisi za "
+"vnaprej določenevrednosti nadpisanega in podpisanega, bodisi za fiksno "
 "količino."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the baseline-shift property, matching is "
 "case-insensitive"
@@ -27579,19 +27572,19 @@ msgid "Sample Text:"
 msgstr "Vzorčno besedilo:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "Pred ..."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "Vzorči …"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "… Po"
@@ -27610,7 +27603,7 @@ msgstr ""
 "Smer določa, ali poteka besedilo od leve proti desni ali od desne proti levi."
 
 #: plugins/dockers/textproperties/qml/Direction.qml:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the direction property, matching is case-"
 "insensitive"
@@ -27633,7 +27626,7 @@ msgstr "Z desne proti levi"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
-msgstr ""
+msgstr "Unicode-Bidi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:156
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
@@ -27674,7 +27667,7 @@ msgstr "Izoliraj"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
-msgstr ""
+msgstr "Izoliraj - Preglasi"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:161
 #, kde-format
@@ -27686,7 +27679,7 @@ msgstr "Navadno besedilo"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Dominant Baseline"
-msgstr ""
+msgstr "Prevladujoča osnovnica"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, kde-format
@@ -27695,6 +27688,8 @@ msgid ""
 "Dominant Baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
+"Prevladujoča osnovnica določa, kako so poravnani odseki besedila različnih "
+"velikosti, privzeta je tudi za osnovnico poravnave."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -27702,7 +27697,7 @@ msgctxt ""
 "comma separated search terms for the dominant-baseline property, matching is "
 "case-insensitive"
 msgid "dominant-baseline, mojisoroe"
-msgstr ""
+msgstr "dominantna-osnovnica, mojisoroe, dominantna osnovnica"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:80
 #: plugins/dockers/textproperties/qml/LineBreak.qml:77
@@ -27721,6 +27716,8 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"Poravna se z abecedno osnovnico pri vodoravni postavitvi, pri navpični "
+"postavitvi pa se poravna s središčno osnovnico."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
@@ -27729,7 +27726,7 @@ msgid "Font Family"
 msgstr "Družina pisav"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Font family allows selecting a list of fonts that should be used for the "
@@ -27747,6 +27744,8 @@ msgctxt ""
 "insensitive"
 msgid "font-family, typeface, font, fallback"
 msgstr ""
+"družina pisav, font-family, pisava, typeface, font, tipografija, nadomestna "
+"različica"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:149
 #, kde-format
@@ -27780,7 +27779,7 @@ msgstr ""
 "prilagajanje razmika med posameznimi glifi."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
@@ -27805,7 +27804,7 @@ msgctxt ""
 "comma separated search terms for the fontsize property, matching is case-"
 "insensitive"
 msgid "size, small, big, medium"
-msgstr ""
+msgstr "velikost, majhna, velika, srednja, majhno, veliko, srednje"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:13
 #, kde-format
@@ -27828,7 +27827,7 @@ msgctxt ""
 "comma separated search terms for the fontsize adjust property, matching is "
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
-msgstr ""
+msgstr "velikost, majhna, velika, srednja, prilagoditev velikosti pisave, size"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -27868,6 +27867,8 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"teža, debelina, širina, slog, ležeče, ležeča pisava, poševno, slog pisave, "
+"raztezanje pisave, debelost pisave, krepko, optična velikost, različica"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
@@ -27929,37 +27930,36 @@ msgid "No extra variable axes in this font"
 msgstr "V tej pisavi ni dodatnih spremenljivih osi"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "General Punctuation"
+#, kde-format
 msgctxt "@label"
 msgid "Hanging Punctuation"
-msgstr "Splošna ločila"
+msgstr "Viseče postavljanje ločil"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Hanging punctuation allows hanging opening and closing punctuation as well "
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
-"Viseča ločila omogočajo obešanje začetnih in končnih ločil ter vejic. Ta "
-"izvedba uveljavlja samo vzhodnoazijski slog visečih ločil."
+"Viseče postavljanje ločil omogoča viseče postavljanje začetnih in končnih "
+"ločil ter vejic. Ta izvedba uveljavlja samo vzhodnoazijski slog visečih "
+"ločil."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr "viseča-ločila, burasagari"
+msgstr "viseča-ločila, burasagari, viseča ločila"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr "Najprej obesi"
+msgstr "Najprej visenje"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -27968,29 +27968,28 @@ msgid "Line End:"
 msgstr "Konec črte:"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:132
-#, fuzzy, kde-format
-#| msgid "File Handling"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Ravnanje z datotekami"
+msgstr "Brez visenja"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr "Dovoli viseče postavljanje ločil"
+msgstr "Dovoli viseče postavljanje vejic"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr "Vsili viseče postavljanje ločil"
+msgstr "Vsili viseče postavljanje vejic"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr "Obesi na koncu"
+msgstr "Visenje na koncu"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -28009,12 +28008,12 @@ msgstr ""
 "oblika glifa, velike in/ali male črke ter prelom vrstic"
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr "jezik, področna-nastavitev, bcp47"
+msgstr "jezik, področna nastavitev, bcp47"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
@@ -28048,6 +28047,7 @@ msgctxt ""
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
 msgstr ""
+"razmik med črkami, sledenje, spodsekavanje, kerning, tracking, letter-spacing"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -28062,14 +28062,16 @@ msgid ""
 "Line Break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
+"Prelom vrstice omogoča izbor strogosti za algoritem preloma vrstice. "
+"Večinoma se uporablja za pisave CJK, zahteva pa nastavitev jezika."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the line-break property, matching is case-"
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
-msgstr "prelom vrstice, prelom vrstice, strogost, kinsoku"
+msgstr "prelom vrstice, prelamljanje vrstic, strogost, doslednost, kinsoku"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
@@ -28098,19 +28100,20 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"Enako kot samodejno. Mehki prelomi bodo dovoljeni pred majhno kano, če je "
+"jezik besedila japonski."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
-#, fuzzy, kde-format
-#| msgid "String"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Strict"
-msgstr "Niz"
+msgstr "Dosledno"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr ""
+msgstr "Mehki prelomi ne bodo dovoljeni pred majhno kano."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
@@ -28123,7 +28126,7 @@ msgstr "Kjerkoli"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr ""
+msgstr "Mehki prelomi se bodo pojavili vzdolž katerega koli grafema."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
@@ -28136,6 +28139,7 @@ msgstr "Višina vrstice"
 msgctxt "@info:tooltip"
 msgid "Line Height controls the line height used for the range of text."
 msgstr ""
+"Višina vrstice nadzoruje višino vrstice, ki se uporablja za obseg besedila."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:20
 #, kde-format
@@ -28143,7 +28147,7 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "višina vrstice, razmik med vrsticami"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
 #, kde-format
@@ -28169,7 +28173,7 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "nastavitve funkcij pisave, OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
@@ -28190,10 +28194,10 @@ msgid "Search..."
 msgstr "Poišči …"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Capitals"
-msgstr "Glifi: velike črke"
+msgstr "Glifi: velike začetnice"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, kde-format
@@ -28208,50 +28212,44 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"font-variant-caps, male velike črke, drobne velike črke, unicase, istovrstne "
+"črke, naslovi, velike črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Small Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Small Caps"
 msgstr "Male velike črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:79
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Small Caps"
 msgstr "Vse male velike črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:80
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Petite Capitals"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Petite Caps"
 msgstr "Drobne velike črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "All Petite Caps"
 msgstr "Vse drobne velike črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:82
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Unicase"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Unicase"
 msgstr "Istovrstne črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
 #, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Titling"
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
-msgstr "Naslavljanje"
+msgstr "Velike črke za naslove"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:12
 #, kde-format
@@ -28368,6 +28366,8 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"ligature različice pisave, navadne ligature, diskrecijske ligature, "
+"zgodovinske ligature, kontekstualne alts"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -28394,7 +28394,7 @@ msgid "Contextual"
 msgstr "Kontekstualno"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Glyphs: Numeric"
 msgstr "Glifi: številski"
@@ -28403,7 +28403,7 @@ msgstr "Glifi: številski"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "Omogočite oblike glifov, povezanih s števkami in števili, v besedilu."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -28414,6 +28414,9 @@ msgid ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"pisava-varianta-številčna, staroslogovne števke, črtne števke, števke, "
+"števci, števniki, številke, števila, prečrtana ničla, ulomki, font-variant-"
+"numeric, ordinals"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -28424,18 +28427,15 @@ msgstr "Slog:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
 #, fuzzy, kde-format
-#| msgid "Thinning:"
 msgctxt "@label:inlistbox"
 msgid "Lining"
-msgstr "Tanjšanje:"
+msgstr "Včrtavanje"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Oldstyle Figures"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Oldstyle"
-msgstr "Staroslogovni znaki"
+msgstr "Staroslogovno"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:131
 #, kde-format
@@ -28445,11 +28445,9 @@ msgstr "Razmik:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:137
 #, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Tabular Figures"
 msgctxt "@label:inlistbox"
 msgid "Tabular"
-msgstr "Tabelarne številke"
+msgstr "Tabelarne"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
 #, kde-format
@@ -28491,7 +28489,7 @@ msgstr "Glifi: položaj"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable super or subscripts on the text."
-msgstr ""
+msgstr "Omogočite nadpisano ali podpisano v besedilu."
 
 #: plugins/dockers/textproperties/qml/OTPosition.qml:18
 #, kde-format
@@ -28499,30 +28497,28 @@ msgctxt ""
 "comma separated search terms for the font-variant-position property, "
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
-msgstr ""
+msgstr "varianta položaja pisave, nadpisano, podpisano, superscript, subscript"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
 msgctxt "@title:group"
 msgid "Overflow Wrap:"
-msgstr ""
+msgstr "Prelom prekoračitve:"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:100
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "Značka"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:143
-#, fuzzy, kde-format
-#| msgid "Assign to tag"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "Dodeli znački"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:168
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
 msgstr "Ime nove značke ..."
@@ -28540,10 +28536,10 @@ msgid "Remove from other tag"
 msgstr "Odstrani iz druge značke"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:252
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
-msgstr "Najdi v značkah"
+msgstr "Išči po značkah"
 
 #: plugins/dockers/textproperties/qml/ResourceView.qml:271
 #, kde-format
@@ -28558,7 +28554,7 @@ msgid "Remove %1"
 msgstr "Odstrani %1"
 
 #: plugins/dockers/textproperties/qml/RevertPropertyButton.qml:22
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Revert property. Within the current selection, this property has different "
@@ -28573,16 +28569,16 @@ msgid "Revert property."
 msgstr "Povrni lastnost."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Tab Size"
-msgstr "Velikost zamika"
+msgstr "Velikost zamika tabulatorja"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab Size allows defining the size of tabulation characters."
-msgstr ""
+msgstr "Velikost tabulatorja omogoča določanje velikosti tabulatorskih znakov."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -28590,7 +28586,7 @@ msgctxt ""
 "comma separated search terms for the tab-size property, matching is case-"
 "insensitive"
 msgid "tab-size"
-msgstr ""
+msgstr "velikost tabulatorja, tab-size"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:13
 #, kde-format
@@ -28602,7 +28598,7 @@ msgstr "Poravnava besedila"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Text Align sets the alignment for the given block of characters."
-msgstr ""
+msgstr "Poravnava besedila nastavi poravnavo za dani blok znakov."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -28610,7 +28606,7 @@ msgctxt ""
 "comma separated search terms for the text-anchor property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
-msgstr ""
+msgstr "poravnava besedila, poravnava, obojestransko, sidro besedila"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:296
 #, kde-format
@@ -28662,7 +28658,7 @@ msgid "Justified"
 msgstr "Obojestransko poravnano"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:327
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Align Last:"
 msgstr "Poravnaj zadnje:"
@@ -28686,6 +28682,7 @@ msgid ""
 "Text Decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"Okrasitev besedila omogoča risanje podčrt, nadčrt in prečrtovanje besedila."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -28694,6 +28691,8 @@ msgctxt ""
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
 msgstr ""
+"podčrtano, prečrtano, prečrtano, črta prek, underline, overline, "
+"strikethrough, line-through"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -28726,14 +28725,13 @@ msgid "Color:"
 msgstr "Barva:"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:255
-#, fuzzy, kde-format
-#| msgid "Solid"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Solid"
-msgstr "Polno"
+msgstr "Zapolnjeno"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:256
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Dotted"
 msgstr "Pikčasto"
@@ -28757,7 +28755,7 @@ msgid "Wavy"
 msgstr "Valovito"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Text Indent"
 msgstr "Zamik besedila"
@@ -28769,25 +28767,25 @@ msgid ""
 "Text Indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"Zamik besedila omogoča nastavitev zamika na začetku vrstice. Deluje samo, ko "
+"je besedilo prelomljeno."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr "Levi zamik"
+msgstr "zamik besedila"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
-#, fuzzy, kde-format
-#| msgid "Page Orientation:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Hanging indentation"
-msgstr "Usmeritev strani:"
+msgstr "Viseči zamik"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:152
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Indent after hardbreaks"
 msgstr "Zamik po trdih prelomih"
@@ -28811,7 +28809,7 @@ msgid "Preset"
 msgstr "Prednastavitev"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:198
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "%1 is name of a font family"
 msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
@@ -28870,17 +28868,17 @@ msgstr "Privzeta vidnost:"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Relevant"
 msgstr "Kadar je to ustrezno"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:47
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:108
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "When Set"
-msgstr "Ko je nastavljena"
+msgstr "Kadar je nastavljena"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:48
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:109
@@ -28912,16 +28910,15 @@ msgstr "Izrisovanje besedila"
 msgctxt "@info:tooltip"
 msgid ""
 "Text Rendering controls the hinting and rendering style for the property"
-msgstr ""
+msgstr "Izrisovanje besedila nadzoruje slog namigov in izrisovanja za lastnost"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
-#, fuzzy, kde-format
-#| msgid "Enable selection outline anti-aliasing"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr "Omogoči glajenje robov orisa izbora"
+msgstr "izrisovanje besedila, namigi, glajenje robov"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -28930,6 +28927,8 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
+"Enako kot geometrična natančnost, ne uporablja namigov in se izogiba "
+"nalaganju notranjih bitnih slik."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
 #, kde-format
@@ -28953,7 +28952,7 @@ msgstr "Optimiziraj berljivost"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
-msgstr ""
+msgstr "Uporablja »rahle« namige v vodoravni in »polne« namige v navpični."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
@@ -28967,6 +28966,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
 msgstr ""
+"Brez namigov, izogne se nalaganju potez bitne slike, razen če pisava nima "
+"poti."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, kde-format
@@ -28975,16 +28976,19 @@ msgid "Text Transform"
 msgstr "Preoblikovanje besedila"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text Transform allows transforming the given range of characters, for "
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
+"Pretvorba besedila omogoča preoblikovanje danega obsega znakov, npr. tako, "
+"da jih nastavite z velikimi črkami ali zamenjate obrazce polovične širine za "
+"obrazce polne širine."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-transform property, matching is "
 "case-insensitive"
@@ -28996,32 +29000,28 @@ msgstr ""
 "kana polne-velikosti"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Case:"
 msgstr "Velikost črk:"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:105
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Capital Spacing"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Capitalize"
-msgstr "Razmik velikih črk"
+msgstr "Velika začetnica"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:106
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Upper Case"
-msgstr ""
+msgstr "Velike črke"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:107
-#, fuzzy, kde-format
-#| msgctxt "Lower HSV brightness"
-#| msgid "Lower value "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lower Case"
-msgstr "Nižja vrednost "
+msgstr "Male črke"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:125
 #, kde-format
@@ -29036,10 +29036,10 @@ msgid "Full-size Kana"
 msgstr "Kana polne velikosti"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Underline Position"
-msgstr "Položaj podčrtave"
+msgstr "Položaj podčrte"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:15
 #, kde-format
@@ -29048,7 +29048,7 @@ msgid "Specify the position of the underline for text-decoration."
 msgstr "Določite položaj podčrt za okrasitev besedila."
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:17
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-decoration-position property, "
 "matching is case-insensitive"
@@ -29077,11 +29077,9 @@ msgstr "Navpično desno"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
 #, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "White Balance"
 msgctxt "@label:spinbox"
 msgid "White Space"
-msgstr "Ravnovesje beline"
+msgstr "Presledek"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:15
 #, kde-format
@@ -29094,7 +29092,7 @@ msgstr ""
 "in ali se besedilo lahko prelomi."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the white-space property, matching is case-"
 "insensitive"
@@ -29102,7 +29100,7 @@ msgid "white-space, collapse, pre-formatted"
 msgstr "presledek, strni, vnaprej-oblikovano"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre"
 msgstr "Pred"
@@ -29120,16 +29118,16 @@ msgid "Pre Wrap"
 msgstr "Predhodni prelom"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:126
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break Spaces"
 msgstr "Prelomi presledke"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Pre Line"
-msgstr "Pred črta"
+msgstr "Pred črto"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:12
 #, kde-format
@@ -29145,14 +29143,17 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"Prelom besede omogoča natančno nastavitev preloma vrstice s preklapljanjem, "
+"ali naj se prelomi samo pri besedah ali pa se dovoli tudi prelom znakov. "
+"Uporabno za korejščino ali etiopščino."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr "prelom-besede, prelom-vrstice"
+msgstr "prelom besede, prelom vrstice"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
@@ -29172,9 +29173,11 @@ msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
 msgstr ""
+"Mehki prelomi bodo dovoljeni samo znotraj besed, običajno razmejenih s "
+"presledki."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
 msgstr "Prelomi-vse"

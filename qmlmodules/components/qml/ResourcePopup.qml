@@ -162,7 +162,7 @@ Button {
     }
 
     onClicked: {
-        if (resourceCmbPopup.visible) {
+        if (resourceCmbPopup.opened) {
             resourceCmbPopup.close();
         } else {
             resourceView.showTagging = true;
@@ -186,6 +186,8 @@ Button {
         padding: 2;
 
         palette: resourceCmb.palette;
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent;
 
         contentItem: Kis.ResourceView {
             id: resourceView;

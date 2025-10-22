@@ -805,6 +805,36 @@ bool fuzzyCompareRects(const Rect &r1, const Rect &r2, Difference tolerance) {
     return maxError < tolerance;
 }
 
+
+
+template<class Polygon, typename Difference = decltype(Polygon::first())>
+bool isPolygonRect(const Polygon &poly, Difference tolerance) {
+    typedef decltype(poly.first()) Point;
+
+    auto sameVert = [tolerance] (Point p1, Point p2) {
+        return std::abs(p2.x() - p1.x()) < tolerance;
+    };
+
+
+    auto sameHoriz = [tolerance] (Point p1, Point p2) {
+        return std::abs(p2.y() - p1.y()) < tolerance;
+    };
+
+    const int rectCorners = 4;
+    if (poly.length() != rectCorners) {
+        if (poly.length() != rectCorners + 1 || !fuzzyPointCompare(poly[0], poly[rectCorners], tolerance)) {
+            return false;
+        }
+    }
+
+    bool correctRect = sameVert(poly[0], poly[1]) && sameHoriz(poly[1], poly[2]) && sameVert(poly[2], poly[3]) && sameHoriz(poly[3], poly[0]);
+    if (correctRect) {
+        return true;
+    }
+    return sameHoriz(poly[0], poly[1]) && sameVert(poly[1], poly[2]) && sameHoriz(poly[2], poly[3]) && sameVert(poly[3], poly[0]);
+
+}
+
 struct KRITAGLOBAL_EXPORT DecomposedMatrix {
     DecomposedMatrix();
 

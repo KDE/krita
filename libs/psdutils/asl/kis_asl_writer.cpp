@@ -81,7 +81,9 @@ void parseElement(const QDomElement &el, QIODevice &device, bool forceTypeInfo =
         double v = KisDomUtils::toDouble(el.attribute("value", "0"));
         QString unit = el.attribute("unit", "#Pxl");
 
-        writeVarString<byteOrder>(key, device);
+        if (!key.isEmpty()) {
+            writeVarString<byteOrder>(key, device);
+        }
         writeFixedString<byteOrder>("UntF", device);
         writeFixedString<byteOrder>(unit, device);
         SAFE_WRITE_EX(byteOrder, device, v);
@@ -108,6 +110,27 @@ void parseElement(const QDomElement &el, QIODevice &device, bool forceTypeInfo =
         writeVarString<byteOrder>(key, device);
         writeFixedString<byteOrder>("bool", device);
         SAFE_WRITE_EX(byteOrder, device, v);
+    } else if (type == "RawData" && key == "EngineData") {
+        writeVarString<byteOrder>(key, device);
+        writeFixedString<byteOrder>("tdta", device);
+
+        QDomNode dataNode = el.firstChild();
+
+        if (!dataNode.isCDATASection()) {
+            warnKrita << "WARNING: failed to parse RawData XML section!";
+            return;
+        }
+
+        QDomCDATASection dataSection = dataNode.toCDATASection();
+        QByteArray data = dataSection.data().toLatin1();
+        data = QByteArray::fromBase64(data);
+
+        if (data.isEmpty()) {
+            warnKrita << "WARNING: failed to parse RawData XML section!";
+        }
+        quint32 length = data.size();
+        SAFE_WRITE_EX(byteOrder, device, length);
+        device.write(data);
     } else {
         warnKrita << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(key);
     }
@@ -288,6 +311,113 @@ void writeFillLayerSectionImpl(QIODevice &device, const QDomDocument &doc)
     }
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void writeTypeToolSectionImpl(QIODevice &device, const QDomDocument &doc, const QDomDocument &warpDoc, const QTransform tf, const QRectF bounds)
+{
+    QDomElement root = doc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
+
+    {
+        quint16 descriptorVersion = 1;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    {
+        SAFE_WRITE_EX(byteOrder, device, double(tf.m11()));
+        SAFE_WRITE_EX(byteOrder, device, double(tf.m12()));
+        SAFE_WRITE_EX(byteOrder, device, double(tf.m21()));
+        SAFE_WRITE_EX(byteOrder, device, double(tf.m22()));
+        SAFE_WRITE_EX(byteOrder, device, double(tf.dx()));
+        SAFE_WRITE_EX(byteOrder, device, double(tf.dy()));
+    }
+
+    {
+        quint16 textVersion = 50;
+        SAFE_WRITE_EX(byteOrder, device, textVersion);
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    QDomNode child = root.firstChild();
+    parseElement<byteOrder>(child.toElement(), device);
+
+    // warp data
+    {
+        quint16 textVersion = 1;
+        SAFE_WRITE_EX(byteOrder, device, textVersion);
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    QDomElement warpRoot = warpDoc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(warpRoot.tagName() == "asl");
+
+    QDomNode warpChild = warpRoot.firstChild();
+    parseElement<byteOrder>(warpChild.toElement(), device);
+
+    {
+        SAFE_WRITE_EX(byteOrder, device, double(bounds.left()));
+        SAFE_WRITE_EX(byteOrder, device, double(bounds.top()));
+        SAFE_WRITE_EX(byteOrder, device, double(bounds.right()));
+        SAFE_WRITE_EX(byteOrder, device, double(bounds.bottom()));
+    }
+
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device.pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(static_cast<int>(paddingSize), '\0');
+        device.write(padding);
+    }
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void writeVectorStrokeDataImpl(QIODevice &device, const QDomDocument &doc)
+{
+    QDomElement root = doc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
+
+    {
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    QDomNode child = root.firstChild();
+    parseElement<byteOrder>(child.toElement(), device);
+
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device.pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(static_cast<int>(paddingSize), '\0');
+        device.write(padding);
+    }
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void writeVectorOriginationDataImpl(QIODevice &device, const QDomDocument &doc)
+{
+    QDomElement root = doc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
+
+    {
+        quint32 version = 1;
+        SAFE_WRITE_EX(byteOrder, device, version);
+    }
+    {
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    QDomNode child = root.firstChild();
+    parseElement<byteOrder>(child.toElement(), device);
+
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device.pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(static_cast<int>(paddingSize), '\0');
+        device.write(padding);
+    }
+}
+
 } // namespace
 
 KisAslWriter::KisAslWriter(psd_byte_order byteOrder)
@@ -324,6 +454,42 @@ void KisAslWriter::writePsdLfx2SectionEx(QIODevice &device, const QDomDocument &
         break;
     default:
         Private::writePsdLfx2SectionImpl(device, doc);
+        break;
+    }
+}
+
+void KisAslWriter::writeTypeToolObjectSettings(QIODevice &device, const QDomDocument &doc, const QDomDocument &warpDoc, const QTransform tf, const QRectF bounds)
+{
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        Private::writeTypeToolSectionImpl<psd_byte_order::psdLittleEndian>(device, doc, warpDoc, tf, bounds);
+        break;
+    default:
+        Private::writeTypeToolSectionImpl(device, doc, warpDoc, tf, bounds);
+        break;
+    }
+}
+
+void KisAslWriter::writeVectorStrokeDataEx(QIODevice &device, const QDomDocument &doc)
+{
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        Private::writeVectorStrokeDataImpl<psd_byte_order::psdLittleEndian>(device, doc);
+        break;
+    default:
+        Private::writeVectorStrokeDataImpl(device, doc);
+        break;
+    }
+}
+
+void KisAslWriter::writeVectorOriginationDataEx(QIODevice &device, const QDomDocument &doc)
+{
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        Private::writeVectorOriginationDataImpl<psd_byte_order::psdLittleEndian>(device, doc);
+        break;
+    default:
+        Private::writeVectorOriginationDataImpl(device, doc);
         break;
     }
 }

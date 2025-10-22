@@ -20,6 +20,21 @@
 #include <kis_node.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
+#include <kis_selection.h>
+#include <kis_shape_selection.h>
+#include <kis_transparency_mask.h>
+#include <kis_shape_layer.h>
+#include <KoSvgTextShape.h>
+#include <KoShapeBackground.h>
+#include <KoColorBackground.h>
+#include <KoPatternBackground.h>
+#include <KoGradientBackground.h>
+#include <KoShapeStroke.h>
+
+#include <KoPathShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeManager.h>
+#include <KoSvgTextShapeMarkupConverter.h>
 
 #include "kis_dom_utils.h"
 
@@ -33,6 +48,8 @@
 #include <asl/kis_asl_writer_utils.h>
 #include <asl/kis_offset_on_exit_verifier.h>
 #include <kis_asl_layer_style_serializer.h>
+#include <cos/kis_txt2_utls.h>
+#include <cos/psd_text_data_converter.h>
 
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader &header)
     : globalInfoSection(header)
@@ -422,12 +439,60 @@ void addBackgroundIfNeeded(KisNodeSP root, QList<FlattenedNode> &nodes)
     }
 }
 
+void flattenShapes(const KisShapeLayer* parentShapeLayer, QList<KoShape*> shapes, QList<FlattenedNode> &nodes) {
+    Q_FOREACH (KoShape *shape, shapes) {
+        const QString name = shape->name().isEmpty()? "shape "+QString::number(nodes.size()): shape->name();
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+        if (group) {
+            KisGroupLayerSP newGroup(new KisGroupLayer(parentShapeLayer->image(),
+                                                       name,
+                                                       (1.0-shape->transparency(false))*255,
+                                                       parentShapeLayer->colorSpace()));
+            newGroup->setVisible(shape->isVisible(false));
+            newGroup->setOpacity(shape->transparency(false)*255);
+            {
+                FlattenedNode item;
+                item.node = newGroup;
+                item.type = FlattenedNode::SECTION_DIVIDER;
+                nodes << item;
+            }
+            flattenShapes(parentShapeLayer, group->shapes(), nodes);
+            {
+                FlattenedNode item;
+                item.node = newGroup;
+                item.type = FlattenedNode::FOLDER_CLOSED;
+                nodes << item;
+            }
+        } else {
+            KisShapeLayerSP newLayer(new KisShapeLayer(nullptr,
+                                                       parentShapeLayer->image(),
+                                                       name,
+                                                       (1.0-shape->transparency(false))*255));
+            KoShape *newShape = shape->cloneShape();
+            newShape->setTransparency(0.0);
+            newShape->setTransformation(shape->absoluteTransformation());
+            newLayer->setVisible(newShape->isVisible(false));
+            newShape->setVisible(true);
+            newLayer->shapeManager()->addShape(newShape, KoShapeManager::AddWithoutRepaint);
+            newLayer->addShape(newShape);
+
+            {
+                FlattenedNode item;
+                item.node = newLayer;
+                item.type = FlattenedNode::RASTER_LAYER;
+                nodes << item;
+            }
+        }
+    }
+}
+
 void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
 {
     KisNodeSP child = node->firstChild();
     while (child) {
         const bool isLayer = child->inherits("KisLayer");
         const bool isGroupLayer = child->inherits("KisGroupLayer");
+        const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(child.data());
 
         if (isGroupLayer) {
             {
@@ -443,6 +508,27 @@ void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
                 FlattenedNode item;
                 item.node = child;
                 item.type = FlattenedNode::FOLDER_OPEN;
+                nodes << item;
+            }
+        } else if (shapeLayer) {
+            if (shapeLayer->shapes().size() > 1) {
+                {
+                    FlattenedNode item;
+                    item.node = child;
+                    item.type = FlattenedNode::SECTION_DIVIDER;
+                    nodes << item;
+                }
+                flattenShapes(shapeLayer, shapeLayer->shapes(), nodes);
+                {
+                    FlattenedNode item;
+                    item.node = child;
+                    item.type = FlattenedNode::FOLDER_CLOSED;
+                    nodes << item;
+                }
+            } else {
+                FlattenedNode item;
+                item.node = child;
+                item.type = FlattenedNode::RASTER_LAYER;
                 nodes << item;
             }
         } else if (isLayer) {
@@ -544,6 +630,9 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 {
     dbgFile << "Writing layer section";
 
+    globalInfoSection.txt2Data = KisTxt2Utils::defaultTxt2();
+    int textCount = 0;
+
     // Build the whole layer structure
     QList<FlattenedNode> nodes;
     addBackgroundIfNeeded(rootLayer, nodes);
@@ -634,6 +723,126 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                     // And if anything else, it cannot be stored as a PSD fill layer.
                 }
 
+                double vectorWidth = rootLayer->image()? rootLayer->image()->width() / rootLayer->image()->xRes(): 1;
+                double vectorHeight = rootLayer->image()? rootLayer->image()->height() / rootLayer->image()->yRes(): 1;
+                QTransform FlaketoPixels = QTransform::fromScale(rootLayer->image()->xRes(), rootLayer->image()->yRes());
+
+                const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(node.data());
+                psd_layer_type_shape textData;
+                psd_vector_mask vectorMask;
+                QDomDocument strokeData;
+                QDomDocument vogkData;
+
+                if (shapeLayer && !shapeLayer->isFakeNode()) {
+                    // only store the first shape.
+                    if (shapeLayer->shapes().size() == 1) {
+                        KoSvgTextShape * text = dynamic_cast<KoSvgTextShape*>(shapeLayer->shapes().first());
+                        if (text) {
+                            PsdTextDataConverter convert;
+                            KoSvgTextShapeMarkupConverter svgConverter(text);
+                            QString svgtext;
+                            QString styles;
+                            svgConverter.convertToSvg(&svgtext, &styles);
+                            // unsure about the boundingBox, needs more research.
+                            textData.boundingBox = text->boundingRect().normalized();
+                            if (text->shapesInside().isEmpty()) {
+                                // Scale bbox to inline
+                                const KoSvgText::AutoValue inlineSizeProp =
+                                    text->textProperties().property(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+                                if (!inlineSizeProp.isAuto) {
+                                    if (text->writingMode() == KoSvgText::HorizontalTB) {
+                                        textData.boundingBox.setWidth(inlineSizeProp.customValue);
+                                    } else {
+                                        textData.boundingBox.setHeight(inlineSizeProp.customValue);
+                                    }
+                                }
+                            }
+                            textData.bounds = text->outlineRect().normalized();
+
+                            bool res = convert.convertToPSDTextEngineData(svgtext, textData.bounds, text->shapesInside(), globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);
+                            if (!res && !convert.errors().isEmpty()) {
+                                qWarning() << convert.errors();
+
+                            }
+                            dbgFile << convert.warnings();
+                            textData.engineData = KisTxt2Utils::tyShFromTxt2(globalInfoSection.txt2Data, FlaketoPixels.mapRect(textData.boundingBox), textData.textIndex);
+                            textCount += 1;
+                            if (!text->shapesInside().isEmpty()) {
+                                textData.bounds = text->outlineRect().normalized();
+                            }
+                            if (!textData.bounds.isEmpty()) {
+                                textData.boundingBox = FlaketoPixels.mapRect(textData.boundingBox);
+                                textData.bounds = FlaketoPixels.mapRect(textData.bounds);
+                            } else {
+                                textData.boundingBox = QRectF();
+                            }
+                            textData.transform = FlaketoPixels.inverted() * text->absoluteTransformation() * FlaketoPixels;
+                        } else {
+                            KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shapeLayer->shapes().first());
+                            if (pathShape){
+                                layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+
+                                // Right now only saving rect and ellipse when they are 'simple', as the actual parametric
+                                // shapes themselves are plugins, so we cannot include them and access the object data.
+                                if ((pathShape->pathShapeId() == "RectangleShape" || pathShape->pathShapeId() == "EllipseShape")
+                                        && pathShape->pointCount() == 4) {
+                                    psd_vector_origination_data data;
+                                    data.originType = data.typeToName.key(pathShape->pathShapeId(), 1);
+                                    QPolygonF poly = pathShape->absoluteTransformation().map(pathShape->outlineRect());
+                                    data.originShapeBBox = poly.boundingRect();
+                                    data.originBoxCorners = poly;
+                                    data.transform = pathShape->absoluteTransformation();
+                                    vogkData = data.getASL();
+                                }
+                                KoColorBackground *b = dynamic_cast<KoColorBackground *>(pathShape->background().data());
+                                KoGradientBackground *g = dynamic_cast<KoGradientBackground *>(pathShape->background().data());
+                                KoPatternBackground *p = dynamic_cast<KoPatternBackground *>(pathShape->background().data());
+                                if (b) {
+                                    psd_layer_solid_color fill;
+
+                                    if (node->image()) {
+                                        fill.cs = node->image()->colorSpace();
+                                    } else {
+                                        fill.cs = node->colorSpace();
+                                    }
+                                    fill.setColor(KoColor(b->color(), fill.cs));
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_solid_color;
+                                } else if (g) {
+                                    psd_layer_gradient_fill fill;
+                                    fill.setFromQGradient(g->gradient());
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_gradient;
+                                } else if (p) {
+                                    psd_layer_pattern_fill fill;
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_pattern;
+                                } else if (!pathShape->background()) {
+                                    psd_layer_solid_color fill;
+
+                                    if (node->image()) {
+                                        fill.cs = node->image()->colorSpace();
+                                    } else {
+                                        fill.cs = node->colorSpace();
+                                    }
+                                    fill.setColor(KoColor(Qt::transparent, fill.cs));
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_solid_color;
+                                }
+                                KoShapeStrokeSP shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(pathShape->stroke());
+                                if (shapeStroke) {
+                                    psd_vector_stroke_data strokeDataStruct;
+                                    strokeDataStruct.loadFromShapeStroke(shapeStroke);
+                                    strokeDataStruct.strokeEnabled = shapeStroke->isVisible();
+                                    strokeDataStruct.fillEnabled = pathShape->background()? true: false;
+                                    strokeDataStruct.resolution = node->image()->xRes()*72.0;
+                                    strokeData = strokeDataStruct.getASLXML();
+                                }
+                            }
+                        }
+                    }
+                }
+
                 QDomDocument stylesXmlDoc = fetchLayerStyleXmlData(node);
 
                 if (mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
@@ -659,9 +868,42 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                         bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
                         bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
                         if (transparency || semiOpacity) {
+                            KisSelectionSP selection = fillLayer->internalSelection();
+                            if(selection) {
+                                if(selection->hasNonEmptyShapeSelection()) {
+                                    KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                                    if (shapeSelection) {
+                                        Q_FOREACH(KoShape *shape, shapeSelection->shapes()) {
+                                            KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+                                            if (pathShape){
+                                                layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             layerContentDevice = node->original();
                             onlyTransparencyMask = node;
                             maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
+                        }
+                    } else {
+                        KisTransparencyMask *mask = qobject_cast<KisTransparencyMask*>(onlyTransparencyMask.data());
+                        if (mask) {
+                        KisSelectionSP selection = mask->selection();
+                        if(selection) {
+                            if(selection->hasNonEmptyShapeSelection()) {
+                                KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                                if (shapeSelection) {
+                                    Q_FOREACH(KoShape *shape, shapeSelection->shapes()) {
+                                        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+                                        if (pathShape){
+                                            layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         }
                     }
                     sectionType = psd_other;
@@ -727,6 +969,12 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layerRecord->fillType = fillType;
                 layerRecord->fillConfig = fillConfig;
 
+                layerRecord->vectorMask = vectorMask;
+                layerRecord->vectorStroke = strokeData;
+                layerRecord->vectorOriginationData = vogkData;
+
+                layerRecord->textShape = textData;
+
                 layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType, stylesXmlDoc, node->inherits("KisGroupLayer"));
             }
 
@@ -745,6 +993,30 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
         }
 
         globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
+
+#if 0
+        /**
+         * We're currently not writing the Txt2 data itself as it doesn't
+         * result in correct PSDs. There's three possible culprits for this:
+         *
+         * 1. PSD perhaps requires the data to be stored in a specific order.
+         *    The 'uncompressKeys' function in kis_txt2_utls gives an indication of this order.
+         * 2. PSD requires the Strikes for each text object to be written.
+         *    This is the most likely cause. The strikes object however consists of data for
+         *    every line, segment, and character, with positioning, bounding boxes and even
+         *    precise font glyph indices for each character. This is more or less a cached
+         *    version of the layout data of the text shape, and we don't have that kind of access
+         *    of the text shape data right now.
+         * 3. Something else. The Txt2 data is huge and therefore it is hard to figure out
+         *    where things might be going wrong.
+         *
+         * In practice, this means Krita won't be able to store OpenType feature data as well
+         * as path shapes for either text-in-shape or text-on-path.
+         */
+        if (textCount > 0) {
+            globalInfoSection.writeTxt2BlockEx(io, globalInfoSection.txt2Data);
+        }
+#endif
     }
 }
 

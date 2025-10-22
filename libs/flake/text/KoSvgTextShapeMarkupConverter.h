@@ -17,6 +17,8 @@
 
 class QRectF;
 class KoSvgTextShape;
+class KoShape;
+class KoColorSpace;
 
 /**
  * KoSvgTextShapeMarkupConverter is a utility class for converting a
@@ -89,7 +91,6 @@ public:
      * A list of errors happened during loading the user's text
      */
     QStringList errors() const;
-
     /**
      * A list of warnings produced during loading the user's text
      */

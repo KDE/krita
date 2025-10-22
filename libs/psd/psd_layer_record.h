@@ -22,6 +22,7 @@
 #include "psd_header.h"
 
 class QIODevice;
+class KoPathShape;
 
 enum psd_layer_type {
     psd_layer_type_normal,
@@ -80,6 +81,25 @@ public:
     bool readPixelData(QIODevice &io, KisPaintDeviceSP device);
     bool readMask(QIODevice &io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
+    /**
+     * @brief constructPathShape
+     * create a KoPathshape based on a psd_path struct, used in vector masks and path resources.
+     * @param path a psd path struct.
+     * @param shapeWidth the image width in points
+     * @param shapeHeight the image height in points
+     * @param vogk extra vector data from the vogk layer info block.
+     * @return a KoPathShape.
+     */
+    KoPathShape *constructPathShape(psd_path path, double shapeWidth, double shapeHeight);
+
+    /**
+     * @brief addPathShapeToPSDPath
+     * add all KoPathShape subpaths to the given psd_path struct.
+     * @param shapeWidth the image width in points
+     * @param shapeHeight the image height in points
+     */
+    void addPathShapeToPSDPath(psd_path &path, KoPathShape *shape, double shapeWidth, double shapeHeight);
+
     void write(QIODevice &io,
                KisPaintDeviceSP layerContentDevice,
                KisNodeSP onlyTransparencyMask,
@@ -115,6 +135,11 @@ public:
 
     psd_fill_type fillType {psd_fill_solid_color};
     QDomDocument fillConfig;
+
+    psd_vector_mask vectorMask;
+    psd_layer_type_shape textShape;
+    QDomDocument vectorStroke;
+    QDomDocument vectorOriginationData;
 
     struct LayerMaskData {
         qint32 top {0};

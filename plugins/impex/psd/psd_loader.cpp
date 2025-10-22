@@ -8,6 +8,7 @@
 #include <QApplication>
 
 #include <QStack>
+#include <QMessageBox>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -15,6 +16,17 @@
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
+#include <KoSvgTextShape.h>
+#include <KoSvgTextShapeMarkupConverter.h>
+#include <kis_shape_layer.h>
+#include <KoPathShape.h>
+#include <KoShapeStroke.h>
+#include <kis_shape_selection.h>
+#include <SvgShape.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeRegistry.h>
+#include <KoDocumentResourceManager.h>
+#include <KoProperties.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -27,9 +39,11 @@
 #include <kis_transparency_mask.h>
 #include <kis_generator_layer.h>
 #include <kis_generator_registry.h>
+#include <kis_guides_config.h>
 
 #include <kis_asl_layer_style_serializer.h>
 #include <asl/kis_asl_xml_parser.h>
+#include <cos/psd_text_data_converter.h>
 #include "KisResourceServerProvider.h"
 
 #include "psd.h"
@@ -144,6 +158,21 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         }
     }
 
+    if (resourceSection.resources.contains(PSDImageResourceSection::GRID_GUIDE)) {
+        GRID_GUIDE_1032 *gridGuidesInfo = dynamic_cast<GRID_GUIDE_1032*>(resourceSection.resources[PSDImageResourceSection::GRID_GUIDE]->resource);
+        if (gridGuidesInfo) {
+            KisGuidesConfig config = m_doc->guidesConfig();
+            Q_FOREACH(quint32 guide, gridGuidesInfo->verticalGuides) {
+                config.addGuideLine(Qt::Vertical, guide / m_image->xRes());
+            }
+            Q_FOREACH(quint32 guide, gridGuidesInfo->horizontalGuides) {
+                config.addGuideLine(Qt::Horizontal, guide / m_image->yRes());
+            }
+            config.setShowGuides(true);
+            m_doc->setGuidesConfig(config);
+        }
+    }
+
     // Preserve all the annotations
     Q_FOREACH (PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
         m_image->addAnnotation(resourceBlock);
@@ -216,6 +245,25 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
     typedef QPair<QDomDocument, KisLayerSP> LayerStyleMapping;
     QVector<LayerStyleMapping> allStylesXml;
     using namespace std::placeholders;
+
+    bool convertTextToShape = true;
+    for (int i = 0; i < layerSection.nLayers; i++) {
+        if (!layerSection.layers.at(i)->infoBlocks.textData.isNull()) {
+            KisImportUserFeedbackInterface::Result result =
+                    m_feedbackInterface->askUser([&] (QWidget *parent) {
+                    QMessageBox::StandardButton btn = QMessageBox::question(parent,
+                                                i18nc("@title:window PSD import question about text.", "Found Text Layers"),
+                                                i18nc("PSD import question about text",
+                                                      "Found text objects, do you wish to load them as editable text shapes? "
+                                                      "If not, they will be loaded as pixel data, which will be visually"
+                                                      " more accurate to the original file."));
+                    return (btn == QMessageBox::Yes);
+            });
+            convertTextToShape = (result == KisImportUserFeedbackInterface::Success
+                                  || result == KisImportUserFeedbackInterface::SuppressedByBatchMode);
+            break;
+        }
+    }
 
     // read the channels for the various layers
     for(int i = 0; i < layerSection.nLayers; ++i) {
@@ -294,55 +342,202 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisFilterConfigurationSP cfg;
                 QDomDocument fillConfig;
                 KisAslCallbackObjectCatcher catcher;
+
+                KoShape *vectorMask = nullptr;
+                if (layerRecord->infoBlocks.keys.contains("vmsk") || layerRecord->infoBlocks.keys.contains("vsms")) {
+                    psd_vector_origination_data data;
+                    if (!layerRecord->infoBlocks.vectorOriginationData.isNull()) {
+                        KisAslCallbackObjectCatcher catcher;
+                        psd_vector_origination_data::setupCatcher("/null", catcher, &data);
+                        KisAslXmlParser parser;
+                        parser.parseXML(layerRecord->infoBlocks.vectorOriginationData, catcher);
+                    }
+                    QString shapeName = data.shapeName();
+                    const KoShapeFactoryBase *f = KoShapeRegistry::instance()->value(shapeName);
+                    if (!(data.canMakeParametricShape() && f)) {
+                        double width = m_image->width() / m_image->xRes();
+                        double height = m_image->height() / m_image->yRes();
+                        vectorMask = layerRecord->constructPathShape(layerRecord->infoBlocks.vectorMask.path, width, height);
+                        vectorMask->setUserData(new KisShapeSelectionMarker);
+                    } else {
+                        QSizeF size;
+                        double angle;
+                        data.OriginalSizeAndAngle(size, angle);
+                        double resMultiplier = data.originResolution/72.0;
+                        QTransform scaleToPt = QTransform::fromScale(resMultiplier, resMultiplier).inverted();
+                        size = QSizeF(size.width()/resMultiplier, size.height()/resMultiplier);
+
+                        KoDocumentResourceManager manager;
+                        KoProperties props;
+                        if (shapeName == "RectangleShape") {
+                            props.setProperty("x", 0);
+                            props.setProperty("y", 0);
+                            props.setProperty("width", size.width());
+                            props.setProperty("height", size.height());
+                        } else if (shapeName == "StarShape") {
+                            props.setProperty("corners", data.originPolySides);
+                            props.setProperty("convex", !data.isStar);
+
+                            double angle = 360.0/(data.originPolySides*2);
+                            double a = cos(kisDegreesToRadians(angle)) * 100.0;
+                            double totalHeight = a + 100.0;
+                            double l = size.height() / totalHeight * 100.0;
+
+                            if (data.isStar) {
+                                // 100% is a normal polygon.
+                                a = cos(kisDegreesToRadians(angle)) * ((data.originPolyStarRatio*0.01) * l);
+                                props.setProperty("baseRadius", a);
+                            }
+                            props.setProperty("tipRadius", l);
+                            props.setProperty("baseRoundness", 0.0);
+                            props.setProperty("tipRoundness", 0.0);
+                        }
+                        KoShape *shape = f->createShape(&props, &manager);
+                        if (!shape)
+                            continue;
+                        shape->setSize(size);
+                        QTransform t;
+                        t.rotate(360.0-angle);
+
+                        shape->setTransformation(t * scaleToPt.inverted() * data.transform * scaleToPt);
+                        shape->setAbsolutePosition(scaleToPt.map(data.originShapeBBox.center()));
+
+                        vectorMask = shape;
+                    }
+                }
                 if (layerRecord->infoBlocks.fillType == psd_fill_gradient) {
                     cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(resourceProxy.resourcesInterface());
 
                     psd_layer_gradient_fill fill;
                     fill.imageWidth = m_image->width();
                     fill.imageHeight = m_image->height();
-                    catcher.subscribeGradient("/null/Grad", std::bind(&psd_layer_gradient_fill::setGradient, &fill, _1));
-                    catcher.subscribeBoolean("/null/Dthr", std::bind(&psd_layer_gradient_fill::setDither, &fill, _1));
-                    catcher.subscribeBoolean("/null/Rvrs", std::bind(&psd_layer_gradient_fill::setReverse, &fill, _1));
-                    catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_gradient_fill::setAngle, &fill, _1));
-                    catcher.subscribeEnum("/null/Type", "GrdT", std::bind(&psd_layer_gradient_fill::setType, &fill, _1));
-                    catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_gradient_fill::setAlignWithLayer, &fill, _1));
-                    catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_gradient_fill::setScale, &fill, _1));
-                    catcher.subscribePoint("/null/Ofst", std::bind(&psd_layer_gradient_fill::setOffset, &fill, _1));
+                    psd_layer_gradient_fill::setupCatcher("/null", catcher, &fill);
                     KisAslXmlParser parser;
                     parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
                     fillConfig = fill.getFillLayerConfig();
+                    if (vectorMask) {
+                        vectorMask->setBackground(fill.getBackground());
+                    }
 
                 } else if (layerRecord->infoBlocks.fillType == psd_fill_pattern) {
                     cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(resourceProxy.resourcesInterface());
 
                     psd_layer_pattern_fill fill;
-                    catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_pattern_fill::setAngle, &fill, _1));
-                    catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_pattern_fill::setScale, &fill, _1));
-                    catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_pattern_fill::setAlignWithLayer, &fill, _1));
-                    catcher.subscribePoint("/null/phase", std::bind(&psd_layer_pattern_fill::setOffset, &fill, _1));
-                    catcher.subscribePatternRef("/null/Ptrn", std::bind(&psd_layer_pattern_fill::setPatternRef, &fill, _1, _2));
+                    psd_layer_pattern_fill::setupCatcher("/null", catcher, &fill);
 
                     KisAslXmlParser parser;
                     parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
                     fillConfig = fill.getFillLayerConfig();
+                    if (vectorMask) {
+                        vectorMask->setBackground(fill.getBackground(resourceProxy));
+                    }
 
                 } else {
                     cfg = KisGeneratorRegistry::instance()->value("color")->defaultConfiguration(resourceProxy.resourcesInterface());
 
                     psd_layer_solid_color fill;
                     fill.cs = m_image->colorSpace();
-                    catcher.subscribeColor("/null/Clr ", std::bind(&psd_layer_solid_color::setColor, &fill, _1));
+                    psd_layer_solid_color::setupCatcher("/null", catcher, &fill);
                     KisAslXmlParser parser;
                     parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
 
                     fillConfig = fill.getFillLayerConfig();
+                    if (vectorMask) {
+                        vectorMask->setBackground(fill.getBackground());
+                    }
                 }
-                cfg->fromXML(fillConfig.firstChildElement());
-                cfg->createLocalResourcesSnapshot();
-                KisGeneratorLayerSP genlayer = new KisGeneratorLayer(m_image, layerRecord->layerName, cfg, m_image->globalSelection());
-                genlayer->setFilter(cfg);
-                layer = genlayer;
+                if (vectorMask) {
+                    KisShapeLayerSP shapeLayer = new KisShapeLayer(m_doc->shapeController(), m_image, layerRecord->layerName, layerRecord->opacity);
 
+
+                    if (!layerRecord->infoBlocks.vectorStroke.isNull()) {
+                        KoShapeStrokeSP stroke(new KoShapeStroke());
+                        psd_vector_stroke_data data;
+                        psd_layer_solid_color fill;
+                        psd_layer_gradient_fill grad;
+                        fill.cs = m_image->colorSpace();
+                        KisAslCallbackObjectCatcher strokeCatcher;
+                        psd_vector_stroke_data::setupCatcher("", strokeCatcher, &data);
+                        psd_layer_solid_color::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &fill);
+                        psd_layer_gradient_fill::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &grad);
+                        KisAslXmlParser parser;
+                        parser.parseXML(layerRecord->infoBlocks.vectorStroke, strokeCatcher);
+
+                        if (!data.fillEnabled) {
+                            vectorMask->setBackground(QSharedPointer<KoShapeBackground>(0));
+                        }
+                        if (data.strokeEnabled) {
+                            QColor c = fill.getBrush().color();
+                            c.setAlphaF(data.opacity);
+                            stroke->setColor(c);
+                            if (!grad.gradient.isNull()) {
+                                stroke->setLineBrush(grad.getBrush());
+                            }
+                        } else {
+                            stroke->setColor(Qt::transparent);
+                        }
+                        data.setupShapeStroke(stroke);
+
+                        vectorMask->setStroke(stroke);
+                    }
+
+                    shapeLayer->addShape(vectorMask);
+                    layer = shapeLayer;
+                } else {
+                    cfg->fromXML(fillConfig.firstChildElement());
+                    cfg->createLocalResourcesSnapshot();
+                    KisGeneratorLayerSP genlayer = new KisGeneratorLayer(m_image, layerRecord->layerName, cfg, m_image->globalSelection());
+                    genlayer->setFilter(cfg);
+                    layer = genlayer;
+                }
+
+
+            } else if (!layerRecord->infoBlocks.textData.isNull() && convertTextToShape) {
+                KisShapeLayerSP textLayer = new KisShapeLayer(m_doc->shapeController(), m_image, layerRecord->layerName, layerRecord->opacity);
+                KisAslCallbackObjectCatcher catcher;
+                psd_layer_type_shape text;
+                psd_layer_type_shape::setupCatcher(QString(), catcher, &text);
+                KisAslXmlParser parser;
+                parser.parseXML(layerRecord->infoBlocks.textData, catcher);
+                KoSvgTextShape *shape = new KoSvgTextShape();
+                PsdTextDataConverter converter;
+                KoSvgTextShapeMarkupConverter svgConverter(shape);
+
+                QString svg;
+                QString styles;
+                // This is to align inlinesize appropriately.
+                bool offsetByAscent = false;
+                QPointF offset1;
+                // PSD text layers have all their coordinates in pixels, and because fonts can be very precise-unit sensitive,
+                // we want to ensure all values are scaled appropriately.
+
+                QTransform scaleToPt = QTransform::fromScale(m_image->xRes(), m_image->yRes()).inverted();
+                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData,
+                                                                   layerSection.globalInfoSection.txt2Data,
+                                                                   m_image->colorSpace(),
+                                                                   text.textIndex,
+                                                                   &svg, &styles,
+                                                                   offset1, offsetByAscent,
+                                                                   text.isHorizontal, scaleToPt);
+                if (!res || !converter.errors().isEmpty()) {
+                    qWarning() << converter.errors();
+                }
+                dbgFile << converter.warnings();
+                svgConverter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
+                if (offsetByAscent) {
+                    QPointF offset2 = QPointF() - shape->outlineRect().topLeft();
+                    if (text.isHorizontal) {
+                        offset2.setX(offset1.x());
+                    } else {
+                        offset2.setY(offset1.y());
+                    }
+                    shape->setTransformation(QTransform::fromTranslate(offset2.x(), offset2.y()) * scaleToPt.inverted()
+                                             * layerRecord->infoBlocks.textTransform * scaleToPt);
+                } else {
+                    shape->setTransformation(scaleToPt.inverted() * layerRecord->infoBlocks.textTransform * scaleToPt);
+                }
+                textLayer->addShape(shape);
+                layer = textLayer;
             } else {
                 layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
                 if (!layerRecord->readPixelData(io, layer->paintDevice())) {
@@ -374,17 +569,40 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         Q_FOREACH (ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
             if (channelInfo->channelId < -1) {
                 const KisGeneratorLayer *fillLayer = qobject_cast<KisGeneratorLayer *>(newLayer.data());
+                const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer *>(newLayer.data());
+                KoPathShape *vectorMask = new KoPathShape();
+                if (layerRecord->infoBlocks.keys.contains("vmsk") || layerRecord->infoBlocks.keys.contains("vsms")) {
+                    double width = m_image->width() / m_image->xRes();
+                    double height = m_image->height() / m_image->yRes();
+                    vectorMask = layerRecord->constructPathShape(layerRecord->infoBlocks.vectorMask.path, width, height);
+                    vectorMask->setUserData(new KisShapeSelectionMarker);
+                }
+                bool hasVectorMask = vectorMask->pointCount() > 0 && layerRecord->infoBlocks.vectorMask.path.subPaths.size() > 0;
                 if (fillLayer) {
                     if (!layerRecord->readMask(io, fillLayer->paintDevice(), channelInfo)) {
                         dbgFile << "failed reading masks for generator layer: " << layerRecord->layerName << layerRecord->error;
                     }
-                } else {
-                    KisTransparencyMaskSP mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
-                    mask->initSelection(newLayer);
-                    if (!layerRecord->readMask(io, mask->paintDevice(), channelInfo)) {
-                        dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
+                    if (hasVectorMask) {
+                        KisShapeSelection* shapeSelection = new KisShapeSelection(m_doc->shapeController(), fillLayer->internalSelection());
+                        fillLayer->internalSelection()->convertToVectorSelectionNoUndo(shapeSelection);
+                        shapeSelection->addShape(vectorMask);
+                        fillLayer->internalSelection()->updateProjection();
                     }
-                    m_image->addNode(mask, newLayer);
+                } else {
+                    if (!(shapeLayer && hasVectorMask)) {
+                        KisTransparencyMaskSP mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
+                        mask->initSelection(newLayer);
+                        if (!layerRecord->readMask(io, mask->paintDevice(), channelInfo)) {
+                            dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
+                        }
+                        if (hasVectorMask) {
+                            KisShapeSelection* shapeSelection = new KisShapeSelection(m_doc->shapeController(), mask->selection());
+                            mask->selection()->convertToVectorSelectionNoUndo(shapeSelection);
+                            shapeSelection->addShape(vectorMask);
+                            mask->selection()->updateProjection();
+                        }
+                        m_image->addNode(mask, newLayer);
+                    }
                 }
             }
         }

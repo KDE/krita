@@ -495,4 +495,44 @@ inline bool psd_read_blendmode(QIODevice &io, QString &blendModeKey)
     return true;
 }
 
+// Copied from Scribus decodePSDfloat in scimgdataloader.cpp by Franz Schmid
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+inline double psdreadFixedPoint(QIODevice &io)
+{
+    quint32 data;
+    double ret = 0.0;
+
+    if (psdread<byteOrder>(io, data)) {
+        char man = (data & 0xFF000000) >> 24;
+        if (man >= 0)
+        {
+            ret = (data & 0x00FFFFFF) / 16777215.0;
+            ret = (ret + man);
+        }
+        else
+        {
+            ret = (~data & 0x00FFFFFF) / 16777215.0;
+            ret = (ret + ~man) * -1;
+        }
+    }
+    return ret;
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+inline void psdwriteFixedPoint(QIODevice &io, double val)
+{
+    qint32 data;
+    double max24 = 16777215.0;
+    // val is bound to -16 to +16
+
+    qint32 man = qint32(val);
+    quint32 frac= quint32(fabs(val - man) * max24);
+    data = (qAbs(man) << 24) | frac;
+    if (val < 0) {
+        data *= -1;
+    };
+
+    psdwrite<byteOrder>(io, data);
+}
+
 #endif // PSD_UTILS_H

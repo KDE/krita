@@ -148,9 +148,9 @@ bool PSDResourceBlock::read(QIODevice &io)
         //    case PSDImageResourceSection::JPEG_QUAL:
         //        resource = new JPEG_QUAL_1030;
         //        break;
-        //    case PSDImageResourceSection::GRID_GUIDE:
-        //        resource = new GRID_GUIDE_1032;
-        //        break;
+    case PSDImageResourceSection::GRID_GUIDE:
+        resource = new GRID_GUIDE_1032;
+        break;
         //    case PSDImageResourceSection::THUMB_RES:
         //        resource = new THUMB_RES_1033;
         //        break;

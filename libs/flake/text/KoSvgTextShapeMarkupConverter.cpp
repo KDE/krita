@@ -14,16 +14,16 @@
 #include FT_FREETYPE_H
 #include FT_TRUETYPE_TABLES_H
 
-#include <text/KoFontRegistry.h>
-
-#include <QBuffer>
-#include <QStringList>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QBuffer>
+#include <QTextCodec>
+#include <QtMath>
 
 #include <QTextBlock>
 #include <QTextLayout>
 #include <QTextLine>
+
 #include <QFont>
 
 #include <QStack>
@@ -37,7 +37,8 @@
 #include <KoSvgTextShape.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentResourceManager.h>
-#include <KoMarker.h>
+
+#include <KoColor.h>
 
 #include <SvgParser.h>
 #include <SvgWriter.h>
@@ -1114,6 +1115,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     doc->setModified(false);
     return true;
 }
+
+
 
 QStringList KoSvgTextShapeMarkupConverter::errors() const
 {

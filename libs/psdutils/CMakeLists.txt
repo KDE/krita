@@ -9,6 +9,11 @@ set(kritapsdutils_LIB_SRCS
     asl/kis_asl_xml_writer.cpp
     asl/kis_asl_patterns_writer.cpp
     asl/kis_asl_writer.cpp
+
+    cos/kis_cos_parser.cpp
+    cos/kis_cos_writer.cpp
+    cos/kis_txt2_utls.cpp
+    cos/psd_text_data_converter.cpp
 )
 
 kis_add_library(kritapsdutils SHARED ${kritapsdutils_LIB_SRCS})
@@ -18,6 +23,7 @@ target_link_libraries(kritapsdutils
     PUBLIC
         kritapigment
         kritaglobal
+        kritaflake
         Qt${QT_MAJOR_VERSION}::Core
         Qt${QT_MAJOR_VERSION}::Gui
     PRIVATE

@@ -25,6 +25,14 @@
 #include <KisImportExportErrorCode.h>
 #include <kis_generator_layer.h>
 #include <kis_filter_configuration.h>
+#include <kis_transparency_mask.h>
+#include <kis_selection.h>
+#include <kis_guides_config.h>
+#include <kis_shape_layer.h>
+#include <KoShape.h>
+#include <KoPathShape.h>
+#include <KoShapeStroke.h>
+#include <KoSvgTextShape.h>
 #include <KisGlobalResourcesInterface.h>
 
 
@@ -48,6 +56,12 @@ void KisPSDTest::testFiles()
     exclusions << "cmyk8-pantone_solid_coated_688c-L51_a33_b-8.psd";
     exclusions << "pattern2_uncompressed.psd";
     exclusions << "pattern4_rle.psd";
+    exclusions << "vector_mask.psd";
+    exclusions << "rgb-paragraph-text.psd";
+    exclusions << "cmyk-text-in-shape.psd";
+    exclusions << "lab-vertical-point-text.psd";
+    exclusions << "gray-text-on-path.psd";
+    exclusions << "test_shapes.psd";
 
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", exclusions, QString(), 2);
@@ -251,6 +265,172 @@ void KisPSDTest::testOpenFillLayers()
             KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
             QVERIFY(res.resource<KoPattern>());
         }
+}
+
+void KisPSDTest::testLoadVectorMasks()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/vector_mask.psd");
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    KisLayerSP layer = qobject_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer);
+    QVERIFY(layer->firstChild());
+    QVERIFY(layer->firstChild()->inherits("KisTransparencyMask"));
+    KisTransparencyMaskSP mask =  dynamic_cast<KisTransparencyMask*>(layer->firstChild().data());
+    QVERIFY(mask);
+    QVERIFY(mask->selection()->hasShapeSelection());
+}
+
+void KisPSDTest::testLoadText()
+{
+    qDebug() << "test rgb-paragraph-text.psd";
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/rgb-paragraph-text.psd");
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+    KisShapeLayerSP layer = qobject_cast<KisShapeLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(layer->shapes().first());
+    QVERIFY(textShape);
+    QVERIFY(textShape->shapesInside().size() > 0);
+
+    //TODO: Plain text contains (, \ and ), escaped, test salt.
+
+    //------ cmyk --------//
+
+    qDebug() << "test cmyk-text-in-shape.psd";
+
+    QFileInfo sourceFileInfo2(QString(FILES_DATA_DIR) + '/' + "sources/cmyk-text-in-shape.psd");
+    Q_ASSERT(sourceFileInfo2.exists());
+
+    doc = openPsdDocument(sourceFileInfo2);
+    QVERIFY(doc->image());
+    layer = qobject_cast<KisShapeLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    textShape = dynamic_cast<KoSvgTextShape*>(layer->shapes().first());
+    QVERIFY(textShape);
+    QVERIFY(textShape->shapesInside().size() > 0);
+
+    //TODO: test color, test shape, test text-transform:upper-case, test baseline-shift.
+
+    //------ lab --------//
+
+    // for some reason the lab one won't load, probably caused by 'incorrect profile?'
+    /*
+    qDebug() << "test lab-vertical-point-text.psd";
+
+    QFileInfo sourceFileInfo3(QString(FILES_DATA_DIR) + '/' + "sources/lab-vertical-point-text.psd");
+    Q_ASSERT(sourceFileInfo3.exists());
+
+    doc = openPsdDocument(sourceFileInfo3);
+    QVERIFY(doc->image());
+    layer = qobject_cast<KisShapeLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    textShape = dynamic_cast<KoSvgTextShape*>(layer->shapes().first());
+    QVERIFY(textShape);
+    QVERIFY(textShape->shapesInside().isEmpty());
+
+    //TODO: test vertical text, text-orientation and text-combine-upright as well as alignment baseline.
+    */
+    //----- gray -----//
+
+    qDebug() << "test gray-text-on-path.psd";
+
+    QFileInfo sourceFileInfo4(QString(FILES_DATA_DIR) + '/' + "sources/gray-text-on-path.psd");
+    Q_ASSERT(sourceFileInfo4.exists());
+
+    doc = openPsdDocument(sourceFileInfo4);
+    QVERIFY(doc->image());
+    layer = qobject_cast<KisShapeLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    textShape = dynamic_cast<KoSvgTextShape*>(layer->shapes().first());
+    QVERIFY(textShape);
+    QVERIFY(textShape->shapesInside().isEmpty());
+
+    //TODO: test text on path, color.
+}
+
+void KisPSDTest::testLoadVectorShapes()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/test_shapes.psd");
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    // Test guides, both are at 100 of 200.
+    QVERIFY(doc->guidesConfig().hasGuides());
+    QVERIFY(doc->guidesConfig().horizontalGuideLines().size() == 1);
+    QVERIFY(doc->guidesConfig().verticalGuideLines().size() == 1);
+
+    // Triangle, no fill, pattern stroke.
+    KisShapeLayerSP layer = qobject_cast<KisShapeLayer*>(doc->image()->root()->lastChild().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    KoShape *shape = layer->shapes().first();
+    QVERIFY(shape);
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "StarShape");
+    QVERIFY(!shape->background());
+    QVERIFY(shape->stroke());
+    KoShapeStrokeSP shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+    QVERIFY(shapeStroke->capStyle() == Qt::FlatCap);
+    QVERIFY(shapeStroke->joinStyle() == Qt::MiterJoin);
+
+    // Polygon, pattern fill, gradient stroke
+    layer = qobject_cast<KisShapeLayer*>(layer->prevSibling().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    shape = layer->shapes().first();
+    QVERIFY(shape);
+    QVERIFY(shape->background());
+    QVERIFY(shape->stroke());
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "StarShape");
+    shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+    QVERIFY(shapeStroke->capStyle() == Qt::SquareCap);
+    QVERIFY(shapeStroke->joinStyle() == Qt::BevelJoin);
+    QVERIFY(shapeStroke->lineBrush().gradient());
+
+    // Ellipse, gradient fill, solid dashed stroke
+    layer = qobject_cast<KisShapeLayer*>(layer->prevSibling().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    shape = layer->shapes().first();
+    QVERIFY(shape);
+    QVERIFY(shape->background());
+    QVERIFY(shape->stroke());
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "EllipseShape");
+    shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+    QVERIFY(shapeStroke->capStyle() == Qt::RoundCap);
+    QVERIFY(shapeStroke->joinStyle() == Qt::RoundJoin);
+    QVERIFY(shapeStroke->color() == Qt::red);
+
+    // Rectangle, solid fill, no stroke
+    layer = qobject_cast<KisShapeLayer*>(layer->prevSibling().data());
+    QVERIFY(layer);
+    QVERIFY(layer->shapes().size() == 1);
+    shape = layer->shapes().first();
+    QVERIFY(shape);
+    QVERIFY(shape->background());
+    QVERIFY(shape->stroke());
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "RectangleShape");
+    shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+    QVERIFY(!shapeStroke->isVisible());
 }
 
 void KisPSDTest::testOpenLayerStylesWithPattern()

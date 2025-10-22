@@ -29,6 +29,9 @@ using ASLCallbackPattern = std::function<void(const KoPatternSP, const QString &
 using ASLCallbackPatternRef = std::function<void(const QString &, const QString &)>;
 using ASLCallbackGradient = std::function<void(KoAbstractGradientSP)>;
 using ASLCallbackNewStyle = std::function<void()>;
+using ASLCallbackRawData = std::function<void(QByteArray)>;
+using ASLCallbackTransform = std::function<void(QTransform)>;
+using ASLCallbackRect = std::function<void(QRectF)>;
 
 class KRITAPSDUTILS_EXPORT KisAslCallbackObjectCatcher : public KisAslObjectCatcher
 {
@@ -49,6 +52,11 @@ public:
     void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName) override;
     void addGradient(const QString &path, KoAbstractGradientSP gradient) override;
     void newStyleStarted() override;
+    void addRawData(const QString &path, QByteArray ba) override;
+    void addTransform(const QString &path, const QTransform &transform) override;
+    void addRect(const QString &path, const QRectF &rect) override;
+    void addUnitRect(const QString &path, const QString &unit, const QRectF &rect) override;
+
 
     void subscribeDouble(const QString &path, ASLCallbackDouble callback);
     void subscribeInteger(const QString &path, ASLCallbackInteger callback);
@@ -63,6 +71,10 @@ public:
     void subscribePatternRef(const QString &path, ASLCallbackPatternRef callback);
     void subscribeGradient(const QString &path, ASLCallbackGradient callback);
     void subscribeNewStyleStarted(ASLCallbackNewStyle callback);
+    void subscribeRawData(const QString &path, ASLCallbackRawData callback);
+    void subscribeTransform(const QString &path, ASLCallbackTransform callback);
+    void subscribeRect(const QString &path, ASLCallbackRect callback);
+    void subscribeUnitRect(const QString &path, const QString &unit, ASLCallbackRect callback);
 
 private:
     struct Private;

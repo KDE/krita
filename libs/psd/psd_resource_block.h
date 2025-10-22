@@ -366,11 +366,92 @@ struct KRITAPSD_EXPORT JPEG_QUAL_1030 : public PSDInterpretedResource {
 
 /* 0x0408 - Grid & guide info */
 struct KRITAPSD_EXPORT GRID_GUIDE_1032 : public PSDInterpretedResource {
-    bool interpretBlock(QByteArray /*data*/) override
+    GRID_GUIDE_1032()
+        : version(1)
+        , gridHorizontal(0)
+        , gridVertical(0)
+    {
+    }
+
+    bool interpretBlock(QByteArray data) override
     {
         dbgFile << "Reading GRID_GUIDE_1032";
+        QDataStream ds(data);
+        ds.setByteOrder(QDataStream::BigEndian);
+        qint32 guidesLength;
+
+        // version == 1, adobe documentation says that grid values are for
+        //'future implementation document-specific grids', but this future
+        // does not seem to have come to pass as of yet.
+        ds >> version >> gridHorizontal >> gridVertical >> guidesLength;
+
+        for (qint32 i=0; i < guidesLength; i++) {
+            quint32 guide;
+            bool horizontal;
+            ds >> guide >> horizontal;
+            if (horizontal) {
+                horizontalGuides.append(guide / documentMultiplier);
+            } else {
+                verticalGuides.append(guide / documentMultiplier);
+            }
+        }
+
+        return ds.atEnd();
+    }
+
+    bool createBlock(QByteArray &data) override
+    {
+        QBuffer buf(&data);
+        quint32 size = 16;
+        size += (horizontalGuides.size() * 5);
+        size += (verticalGuides.size() * 5);
+        startBlock(buf, PSDImageResourceSection::GRID_GUIDE, size);
+        psdwrite(buf, version);
+        psdwrite(buf, (quint32)gridHorizontal);
+        psdwrite(buf, (quint32)gridVertical);
+        psdwrite(buf, quint32(horizontalGuides.size()+verticalGuides.size()));
+        Q_FOREACH(quint32 guide, verticalGuides) {
+            psdwrite(buf, quint32(guide * documentMultiplier));
+            psdwrite(buf, false);
+        }
+        Q_FOREACH(quint32 guide, horizontalGuides) {
+            psdwrite(buf, quint32(guide * documentMultiplier));
+            psdwrite(buf, true);
+        }
+        buf.close();
         return true;
     }
+
+    bool valid() override
+    {
+        return true;
+    }
+
+    QString displayText() override
+    {
+        QStringList guidesText;
+        guidesText.append(QString("Grids and Guides version: %1").arg(version));
+        guidesText.append(QString("Grids vertical: %1, horizontal: %2")
+                          .arg(gridVertical).arg(gridHorizontal));
+        QStringList vertical;
+        QStringList horizontal;
+        Q_FOREACH(quint32 guide, verticalGuides) {
+            vertical.append(QString::number(guide));
+        }
+        Q_FOREACH(quint32 guide, horizontalGuides) {
+            horizontal.append(QString::number(guide));
+        }
+        guidesText.append(QString("Vertical guides: %1").arg(vertical.join(", ")));
+        guidesText.append(QString("Horizontal guides: %1").arg(horizontal.join(", ")));
+        return guidesText.join("\n");
+    }
+
+    const int documentMultiplier{32};
+    quint32 version;
+    qint32 gridHorizontal;
+    qint32 gridVertical;
+    QList<quint32> horizontalGuides;
+    QList<quint32> verticalGuides;
 };
 
 /* 0x0409 - Thumbnail resource */

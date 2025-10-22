@@ -109,6 +109,11 @@ public:
     static KoSvgText::FontMetrics generateFontMetrics(FT_FaceSP face, bool isHorizontal = true, QString script = QString(), const KoSvgText::TextRendering rendering = KoSvgText::RenderingAuto);
 
     static int32_t loadFlagsForFace(FT_Face face, bool isHorizontal = true, int32_t loadFlags = 0, const KoSvgText::TextRendering rendering = KoSvgText::RenderingAuto);
+
+    // For PSD we only get the postscript name, and we'll need a bit
+    // more information to get a proper css representation.
+    KoCSSFontInfo getCssDataForPostScriptName (const QString postScriptName,
+                                      QString *foundPostScriptName);
 private Q_SLOTS:
     /**
      * Update the config and reset the FontChangeListener.

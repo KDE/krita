@@ -362,4 +362,29 @@ void PSDUtilsTest::test_psdread_pascalstring()
     }
 }
 
+void PSDUtilsTest::test_psdread_fixedpoint()
+{
+    {
+        QBuffer buf;
+        QVERIFY(buf.open(QBuffer::ReadWrite));
+        const double s = -2.7;
+        psdwriteFixedPoint<psd_byte_order::psdLittleEndian>(buf, s);
+        buf.close();
+        buf.open(QBuffer::ReadOnly);
+        double r = psdreadFixedPoint<psd_byte_order::psdLittleEndian>(buf);
+        QVERIFY(fabs(r-s) < 0.001);
+    }
+
+    {
+        QBuffer buf;
+        QVERIFY(buf.open(QBuffer::ReadWrite));
+        const double s = -2.7;
+        psdwriteFixedPoint(buf, s);
+        buf.close();
+        buf.open(QBuffer::ReadOnly);
+        double r = psdreadFixedPoint(buf);
+        QVERIFY(fabs(r-s) < 0.001);
+    }
+}
+
 SIMPLE_TEST_MAIN(PSDUtilsTest)

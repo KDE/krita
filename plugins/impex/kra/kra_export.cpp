@@ -74,6 +74,10 @@ QString KraExport::verify(const QString &fileName) const
     return error;
 }
 
+bool KraExport::exportSupportsGuides() const {
+    return true;
+}
+
 
 #include <kra_export.moc>
 

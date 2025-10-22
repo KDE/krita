@@ -18,6 +18,7 @@ class psdExport : public KisImportExportFilter {
     public:
         KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
         void initializeCapabilities() override;
+        bool exportSupportsGuides() const override;
 };
 
 #endif

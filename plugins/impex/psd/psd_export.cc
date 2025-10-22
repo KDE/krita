@@ -48,6 +48,7 @@ void psdExport::initializeCapabilities()
     addCapability(KisExportCheckRegistry::instance()->get("PSDLayerStyleCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGeneratorLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisShapeLayer")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
@@ -77,6 +78,20 @@ void psdExport::initializeCapabilities()
     addCapability(KisExportCheckRegistry::instance()->get("FillLayerTypeCheck/color")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("FillLayerTypeCheck/pattern")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("FillLayerTypeCheck/gradient")->create(KisExportCheckBase::SUPPORTED));
+
+    addCapability(KisExportCheckRegistry::instance()->get("ShapeLayerTypeCheck/KoPathShape")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ShapeLayerTypeCheck/KoPathShape/RectangleShape")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ShapeLayerTypeCheck/KoPathShape/EllipseShape")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ShapeLayerTypeCheck/KoPathShape/StarShape")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ShapeLayerTypeCheck/KoShapeGroup")->create(KisExportCheckBase::SUPPORTED));
+
+    const QString textShapeWarning = i18nc("image conversion warning", "While text shapes can be saved to psd, only basic features are supported. Advanced features, like text-on-path and opentype features will not be saved.");
+    addCapability(KisExportCheckRegistry::instance()->get("ShapeLayerTypeCheck/KoSvgTextShapeID")->create(KisExportCheckBase::PARTIALLY, textShapeWarning));
+}
+
+bool psdExport::exportSupportsGuides() const
+{
+    return true;
 }
 
 #include <psd_export.moc>

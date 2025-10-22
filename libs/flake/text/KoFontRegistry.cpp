@@ -1129,6 +1129,45 @@ int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_
     return faceLoadFlags;
 }
 
+KoCSSFontInfo KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, QString *foundPostScriptName)
+{
+    KoCSSFontInfo info;
+    FcPatternSP p(FcPatternCreate());
+    QByteArray utfData = postScriptName.toUtf8();
+    const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
+    FcPatternAddString(p.data(), FC_POSTSCRIPT_NAME, vals);
+    FcDefaultSubstitute(p.data());
+
+    FcResult result = FcResultNoMatch;
+    FcPatternSP match(FcFontMatch(FcConfigGetCurrent(), p.data(), &result));
+    if (result != FcResultNoMatch) {
+        FcChar8 *fileValue = nullptr;
+        if (FcPatternGetString(match.data(), FC_FAMILY, 0, &fileValue) == FcResultMatch) {
+            info.families << QString(reinterpret_cast<char *>(fileValue));
+        } else {
+            info.families << postScriptName;
+        }
+        if (FcPatternGetString(match.data(), FC_POSTSCRIPT_NAME, 0, &fileValue) == FcResultMatch) {
+            *foundPostScriptName = QString(reinterpret_cast<char *>(fileValue));
+        } else {
+            *foundPostScriptName = postScriptName;
+        }
+        int value;
+        if (FcPatternGetInteger(match.data(), FC_WEIGHT, 0, &value) == FcResultMatch) {
+            info.weight = FcWeightToOpenType(value);
+        }
+        if (FcPatternGetInteger(match.data(), FC_WIDTH, 0, &value) == FcResultMatch) {
+            info.width = value;
+        }
+        if (FcPatternGetInteger(match.data(), FC_SLANT, 0, &value) == FcResultMatch) {
+            info.slantMode = value != FC_SLANT_ROMAN? value != FC_SLANT_ITALIC? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
+        }
+    } else {
+        info.families << postScriptName;
+    }
+    return info;
+}
+
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)
 {
     const QByteArray utfData = path.toUtf8();

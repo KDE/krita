@@ -16,6 +16,7 @@
 #include <KoShapeStroke.h>
 
 #include <kis_global.h>
+#include <kis_algebra_2d.h>
 
 #include <QPainter>
 #include <QtMath>
@@ -56,6 +57,7 @@ getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const 
             } else {
                 p = precisionTF.map(p);
             }
+
             subtract.addPath(p);
         }
     }
@@ -84,10 +86,23 @@ getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const 
                 }
                 p2.addPolygon(subpathPoly);
             }
-            shapes.append(precisionTF.inverted().map(p2));
+            p2 = KisAlgebra2D::trySimplifyPath(precisionTF.inverted().map(p2), 1.0);
+            p2.closeSubpath();
+            shapes.append(p2);
         }
     }
     return shapes;
+}
+
+bool pastTerminator(const QPointF point, const QPointF terminator, const KoSvgText::WritingMode writingMode) {
+    if (writingMode == KoSvgText::HorizontalTB) {
+        return (terminator.y() - point.y() < SHAPE_PRECISION);
+    } else if (writingMode == KoSvgText::VerticalRL) {
+        return (point.x() - terminator.x() < SHAPE_PRECISION);
+    } else {
+        return (terminator.x() - point.x() < SHAPE_PRECISION);
+    }
+    return false;
 }
 
 static bool getFirstPosition(QPointF &firstPoint,
@@ -123,6 +138,8 @@ static bool getFirstPosition(QPointF &firstPoint,
             QLineF line;
             line.setP1(polygon.at(i));
             line.setP2(polygon.at(i+1));
+            if (!(pastTerminator(line.p1(), terminatorAdjusted, writingMode)
+                  || pastTerminator(line.p2(), terminatorAdjusted, writingMode))) continue;
 
             if (line.angle() == 0.0 || line.angle() == 180.0) {
                 qreal offset = word.center().y();
@@ -290,6 +307,8 @@ findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, const QRectF word
     QLineF bottomLine = baseLine.translated(lineBottom);
     for(int i = 0; i < polygon.size()-1; i++) {
         QLineF line(polygon.at(i), polygon.at(i+1));
+        if (!(pastTerminator(line.p1(), topLine.center(), writingMode)
+              || pastTerminator(line.p2(), topLine.center(), writingMode))) continue;
         bool addedA = false;
         QPointF intersectA;
         QPointF intersectB;
@@ -330,8 +349,6 @@ findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, const QRectF word
 
         QVector<QPointF> relevant;
         for(int i = 0; i < polygon.size()-1; i++) {
-
-            QLineF edgeLine(polygon.at(i), polygon.at(i+1));
 
             if (lineBox.contains(polygon.at(i))) {
                 relevant.append(polygon.at(i));

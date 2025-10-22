@@ -928,6 +928,14 @@ qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal x
 
 qreal KRITAGLOBAL_EXPORT pointToLineDistSquared(const QPointF& pt, const QLineF& line);
 
+/**
+ * @brief trySimplifyPath
+ * Tries to simplify a QPainterPath
+ * @param path -- path to simplify.
+ * @param lengthThreshold -- length at which points get merged.
+ * @return path with less nodes.
+ */
+QPainterPath KRITAGLOBAL_EXPORT trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
 
 }
 

@@ -20,6 +20,7 @@
 #include <resources/KoStopGradient.h>
 
 #include "krita_utils.h"
+#include <kis_algebra_2d.h>
 #include <testutil.h>
 
 
@@ -37,7 +38,7 @@ void KisGradientPainterTest::testSimplifyPath()
     path.addPolygon(selectionPolygon);
 
     QPainterPath simplifiedPath;
-    simplifiedPath = KritaUtils::trySimplifyPath(path, 10.0);
+    simplifiedPath = KisAlgebra2D::trySimplifyPath(path, 10.0);
 
     QPainterPath ref;
     ref.moveTo(100,100);

@@ -21,6 +21,7 @@
 #include <kis_image.h>
 #include <kis_spacing_information.h>
 #include <krita_utils.h>
+#include <kis_algebra_2d.h>
 
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
@@ -184,7 +185,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
                 bounds |= m_path.boundingRect();
 
                 qreal threshold = simplifyThreshold(bounds);
-                m_path = KritaUtils::trySimplifyPath(m_path, threshold);
+                m_path = KisAlgebra2D::trySimplifyPath(m_path, threshold);
             }
             else {
                 m_path = applyDisplace(m_path, m_displaceCoeff - length);

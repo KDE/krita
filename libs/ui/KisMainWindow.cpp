@@ -2319,8 +2319,14 @@ void KisMainWindow::slotNewToolbarConfig()
         return;
 
     plugActionList("toolbarlist", d->toolbarList);
-    applyToolBarLayout();
+
+    /**
+     * First we should apply icon overrides, and only after that we
+     * should update the layout, since the function checks for the
+     * presence of the icons in the action.
+     */
     applyActionIconOverridesFromLocalXML();
+    applyToolBarLayout();
 }
 
 void KisMainWindow::slotToolbarToggled(bool toggle)

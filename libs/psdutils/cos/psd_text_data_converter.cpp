@@ -1023,7 +1023,7 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
     } else {
         text = editor.value("/Text").toString();
         text.replace("\r", "\n"); // return, used for paragraph hard breaks.
-        text.replace(0x03, "\n"); // end of text character, used for non-paragraph hard breaks.
+        text.replace(QChar(0x03), "\n"); // end of text character, used for non-paragraph hard breaks.
     }
 
     int antiAliasing = 0;

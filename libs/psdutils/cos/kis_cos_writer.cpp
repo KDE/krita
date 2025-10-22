@@ -38,7 +38,7 @@ void writeString(QIODevice &dev, const QVariant val, const QString name) {
     if (nameKeys.contains(name)) {
         dev.write((name+" "+newString).toLatin1());
     } else {
-        newString.replace(0x0a, 0x0d);
+        newString.replace(QChar(0x0a), QChar(0x0d));
         QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
         dev.write((name+" (").toLatin1());
         QByteArray unicode = Utf16Codec->fromUnicode(newString);

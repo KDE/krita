@@ -54,8 +54,6 @@ void writeString(QIODevice &dev, const QVariant val, const QString name) {
             }
             c++;
         }
-        //qDebug() << name << newString;
-        //qDebug() << escaped;
         dev.write(escaped);
         dev.write(")");
     }
@@ -148,7 +146,7 @@ QByteArray KisCosWriter::writeCosFromVariantHash(const QVariantHash doc)
         writeVariant(dev, doc, indent, prettyPrint);
         dev.close();
     } else {
-        qDebug() << dev.errorString();
+        qWarning() << dev.errorString();
     }
     return ba;
 }
@@ -162,7 +160,7 @@ QByteArray KisCosWriter::writeTxt2FromVariantHash(const QVariantHash doc)
         writeVariant(dev, doc, 0, false, false);
         dev.close();
     } else {
-        qDebug() << dev.errorString();
+        qWarning() << dev.errorString();
     }
     if (ba.endsWith(' ')) {
         ba.chop(1);

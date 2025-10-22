@@ -353,7 +353,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                         parser.parseXML(layerRecord->infoBlocks.vectorOriginationData, catcher);
                     }
                     QString shapeName = data.shapeName();
-                    qDebug() << data.originType << shapeName;
                     const KoShapeFactoryBase *f = KoShapeRegistry::instance()->value(shapeName);
                     if (!(data.canMakeParametricShape() && f)) {
                         double width = m_image->width() / m_image->xRes();

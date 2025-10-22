@@ -44,7 +44,6 @@ bool isWhiteSpace(char c) {
 }
 
 void eatSpace(QIODevice &dev) {
-    //qDebug() << Q_FUNC_INFO;
     char c;
     dev.peek(&c, 1);
     while (isWhiteSpace(c) && !dev.atEnd()) {
@@ -54,7 +53,6 @@ void eatSpace(QIODevice &dev) {
 }
 
 bool parseName(QIODevice &dev, QVariant &val) {
-    //qDebug() << Q_FUNC_INFO;
     char c;
     dev.getChar(&c);
     QString name = "/"; // prepending with / so that we know this is a name.
@@ -83,7 +81,6 @@ const QMap<char, char> escaped = {
 };
 
 bool parseString(QIODevice &dev, QVariant &val) {
-    //qDebug() << Q_FUNC_INFO;
     char c;
     dev.getChar(&c);
     QByteArray text;
@@ -111,7 +108,7 @@ bool parseString(QIODevice &dev, QVariant &val) {
                 bool ok;
                 int val = octal.toInt(&ok, 8);
                 if (ok) {
-                    qDebug() << "escaped octal" << val;
+                    qWarning() << "escaped octal" << val;
                     // don't know how to actually interpret this as a char...
                 } else {
                     text.append(c);
@@ -125,7 +122,6 @@ bool parseString(QIODevice &dev, QVariant &val) {
         dev.getChar(&c);
     }
 
-    //qDebug() << text;
 
     if (text.startsWith(ByteOrderMark)) {
         QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
@@ -138,7 +134,6 @@ bool parseString(QIODevice &dev, QVariant &val) {
 }
 
 bool parseHexString(QIODevice &dev, QVariant &val) {
-    //qDebug() << Q_FUNC_INFO;
     char c;
     dev.getChar(&c);
     QByteArray hex;
@@ -153,7 +148,6 @@ bool parseHexString(QIODevice &dev, QVariant &val) {
 }
 
 bool parseNumber(QIODevice &dev, QVariant &val) {
-    //qDebug() << Q_FUNC_INFO;
     char c;
     bool isDouble = false;
     dev.getChar(&c);
@@ -175,7 +169,6 @@ bool parseNumber(QIODevice &dev, QVariant &val) {
             dev.getChar(&c);
         }
     }
-    //qDebug() << number << c;
 
     bool ok;
     if (isDouble) {
@@ -187,13 +180,11 @@ bool parseNumber(QIODevice &dev, QVariant &val) {
 }
 
 bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object, bool checkEnd) {
-    //qDebug() << Q_FUNC_INFO;
     eatSpace(dev);
 
     QVariant key;
     QVariant val;
     while (parseValue(dev, key)) {
-        //qDebug() << key;
         object.insert(key.toString(), QVariant());
         if (key.type() == QVariant::String && parseValue(dev, val)) {
             object.insert(key.toString(), val);
@@ -215,7 +206,6 @@ bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object, bool checkE
 
 bool KisCosParser::parseArray(QIODevice &dev, QVariantList &array)
 {
-    //qDebug() << Q_FUNC_INFO;
     eatSpace(dev);
 
     QVariant val;
@@ -234,7 +224,6 @@ bool KisCosParser::parseArray(QIODevice &dev, QVariantList &array)
 }
 
 bool KisCosParser::parseValue(QIODevice &dev, QVariant &val) {
-    //qDebug() << Q_FUNC_INFO;
 
     eatSpace(dev);
     char c;
@@ -317,14 +306,13 @@ QVariantHash KisCosParser::parseCosToJson(QByteArray *ba)
         char c;
         dev.peek(&c, 1);
         if (c == BeginObject) {
-            //qDebug() << "parsing as value";
             if (!parseValue(dev, root)) {
-                qDebug() << "dev not at end";
+                qWarning() << "dev not at end";
             }
         } else {
             QVariantHash b;
             if (!parseObject(dev, b, false)) {
-                qDebug() << "txt2 dev not at end";
+                qWarning() << "txt2 dev not at end";
             }
             root = b;
         }

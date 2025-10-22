@@ -825,11 +825,9 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
                                                                   bool &isHorizontal,
                                                                   QTransform scaleToPt)
 {
-    qDebug() << "Convert from psd engine data";
 
 
     QVariantHash root = tySh;
-    //qDebug() << textIndex << "Parsed JSON Object" << QJsonObject::fromVariantHash(txt2);
     bool loadFallback = txt2.isEmpty();
     const QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
 
@@ -837,7 +835,6 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
     if (textObject.isEmpty() || loadFallback) {
         textObject = root["/EngineDict"].toHash();
         loadFallback = true;
-        qDebug() << "loading from tySh data";
     }
     if (textObject.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
@@ -856,7 +853,6 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
         for (int i = 0; i < fonts.size(); i++) {
             QVariantHash font = loadFallback? fonts.value(i).toHash()
                                             : fonts.value(i).toHash().value("/Resource").toHash().value("/Identifier").toHash();
-            //qDebug() << font;
             QString postScriptName = font.value("/Name").toString();
             QString foundPostScriptName;
             KoCSSFontInfo fontInfo = KoFontRegistry::instance()->getCssDataForPostScriptName(postScriptName,
@@ -897,7 +893,6 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
                     }
                 }
             }
-            //qDebug() << bounds;
         }
     } else {
         QVariantHash view = textObject.value("/View").toHash();
@@ -911,7 +906,6 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
 
             if (!textFrame.isEmpty()) {
                 textType = textFrame["/Data"].toHash()["/Type"].toInt();
-                //qDebug() << QJsonObject::fromVariantHash(textFrame);
 
                 if (textType > 0) {
                     QScopedPointer<KoPathShape> textCurve(new KoPathShape());
@@ -1159,7 +1153,6 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
     }
     *svgText = QString::fromUtf8(svgBuffer.data()).trimmed();
     *svgStyles = QString::fromUtf8(styleBuffer.data()).trimmed();
-    //qDebug() << *svgText;
 
     return true;
 }

@@ -12,7 +12,6 @@
 #include <QRectF>
 
 QVariantHash uncompressColor(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
         QVariant val = object.value(key);
@@ -39,7 +38,6 @@ QVariantHash uncompressColor(const QVariantHash object) {
 }
 
 QVariantHash uncompressStyleSheetFeatures(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     const QMap<QString, QString> keyList{
@@ -174,7 +172,6 @@ QVariantHash uncompressStyleSheetFeatures(const QVariantHash object) {
 }
 
 QVariantHash uncompressParagraphSheetFeatures(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     const QMap<QString, QString> keyList{
@@ -243,7 +240,6 @@ QVariantHash uncompressParagraphSheetFeatures(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysStyleSheetSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     QVariantList resources = object.value("/0").toList();
@@ -271,7 +267,6 @@ QVariantHash uncompressKeysStyleSheetSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysParagraphSheetSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
     QVariantList resources = object.value("/0").toList();
     QVariantList newResources;
@@ -299,7 +294,6 @@ QVariantHash uncompressKeysParagraphSheetSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressTextFrameData(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
     const QMap<QString, QString> keyList {
         {"/0", "/Type"},
@@ -351,7 +345,6 @@ QVariantHash uncompressTextFrameData(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysTextFrameSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     QVariantList resources = object.value("/0").toList();
@@ -390,7 +383,6 @@ QVariantHash uncompressKeysTextFrameSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysKinsokuSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     QVariantList resources = object.value("/0").toList();
@@ -430,7 +422,6 @@ QVariantHash uncompressKeysKinsokuSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysMojiKumiTableSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
@@ -441,7 +432,6 @@ QVariantHash uncompressKeysMojiKumiTableSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysMojiKumiCodeToClassSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
@@ -452,7 +442,6 @@ QVariantHash uncompressKeysMojiKumiCodeToClassSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysFontSet(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     QVariantList resources = object.value("/0").toList();
@@ -492,7 +481,6 @@ QVariantHash uncompressKeysFontSet(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysDocumentResources(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
@@ -524,7 +512,6 @@ QVariantHash uncompressKeysDocumentResources(const QVariantHash object) {
 /*------- Document Objects ----------*/
 
 QVariantHash uncompressKeysTextModel(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     const QMap<QString, QString> runStyleKeyList {{"/0", "/Name"}, {"/5", "/Parent"}, {"/97", "/UUID"}};
@@ -697,7 +684,6 @@ QVariantHash uncompressLineDef(const QVariantHash object) {
 }
 
 QVariantHash uncompressStrikeDef(const QVariantHash object, bool flip = false) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
     QString tag = object.contains("/99")? object.value("/99").toString()
                                         : object.value("/StreamTag").toString();
@@ -737,7 +723,6 @@ QVariantHash uncompressStrikeDef(const QVariantHash object, bool flip = false) {
 }
 
 QVariantHash uncompressKeysTextView(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
         QVariant val = object.value(key);
@@ -767,7 +752,6 @@ QVariantHash uncompressKeysTextView(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysTextObject(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
@@ -875,7 +859,6 @@ QVariantHash uncompressKeysDocumentSettings(const QVariantHash object) {
 }
 
 QVariantHash uncompressKeysDocumentObjects(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
     QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
         QVariant val = object.value(key);

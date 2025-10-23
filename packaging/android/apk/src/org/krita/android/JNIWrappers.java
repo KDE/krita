@@ -9,15 +9,6 @@ package org.krita.android;
 
 class JNIWrappers {
     public static native void saveState();
-
-    /**
-     * Exit the app from full screen.
-     *
-     * @return true if the app was successfully exited from fullscreen, else
-     * false.
-     */
-    public static native boolean exitFullScreen();
-
     public static native boolean hasMainWindowLoaded();
     public static native void donationStateUpdated(int state);
     public static native void openFileFromIntent(String uri);

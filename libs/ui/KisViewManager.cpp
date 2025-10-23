@@ -1743,14 +1743,6 @@ void KisViewManager::slotResetDisplay()
     zoomManager()->slotZoomToFit();
 }
 
-void KisViewManager::slotToggleFullscreen()
-{
-    KisConfig cfg(false);
-    KisMainWindow *main = mainWindow();
-    main->viewFullscreen(!main->isFullScreen());
-    cfg.fullscreenMode(main->isFullScreen());
-}
-
 void KisViewManager::slotCreateOpacityResource(bool isOpacityPresetMode, KoToolBase *tool)
 {
     if (isOpacityPresetMode) {

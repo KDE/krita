@@ -255,7 +255,6 @@ private Q_SLOTS:
     void slotSaveRulersTrackMouseState(bool value);
     void slotResetRotation();
     void slotResetDisplay();
-    void slotToggleFullscreen();
     void slotCreateOpacityResource(bool isOpacityPresetMode, KoToolBase *tool);
 private:
     void createActions();

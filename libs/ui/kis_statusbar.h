@@ -114,7 +114,6 @@ private:
     QWidget *m_extraWidgetsParent {nullptr};
     QBoxLayout *m_extraWidgetsLayout {nullptr};
     KisAngleSelector *m_canvasAngleSelector {nullptr};
-    QToolButton *m_fullscreenToggle {nullptr};
 
     KSqueezedTextLabel *m_statusBarStatusLabel {nullptr};
     KSqueezedTextLabel *m_statusBarProfileLabel {nullptr};

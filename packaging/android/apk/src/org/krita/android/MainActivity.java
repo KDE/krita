@@ -157,8 +157,6 @@ public class MainActivity extends QtActivity {
                 // propagate leaves native side in an undefined state. So, it's
                 // best we finish the activity here.
                 finish();
-            } else if (JNIWrappers.exitFullScreen()) {
-                return true;
             }
         }
 

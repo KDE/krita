@@ -373,6 +373,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
+#ifdef Q_OS_ANDROID
+    connect(this, &KisMainWindow::sigFullscreenOnShow, this, &KisMainWindow::viewFullscreen, Qt::QueuedConnection);
+#endif
 
     actionCollection()->addAssociatedWidget(this);
     KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager, false);
@@ -1584,6 +1587,9 @@ void KisMainWindow::showEvent(QShowEvent *event)
     if (!event->spontaneous()) {
         setMainWindowLayoutForCurrentMainWidget(d->widgetStack->currentIndex(), false);
     }
+#ifdef Q_OS_ANDROID
+    Q_EMIT sigFullscreenOnShow(true); // Android defaults to fullscreen.
+#endif
     return KXmlGuiWindow::showEvent(event);
 }
 

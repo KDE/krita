@@ -235,6 +235,9 @@ Q_SIGNALS:
     /// emitted when the current view has changed
     void activeViewChanged();
 
+#ifdef Q_OS_ANDROID
+    void sigFullscreenOnShow(bool fullScreen);
+#endif
 
 public Q_SLOTS:
 

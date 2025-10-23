@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -15568,6 +15568,30 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr "此影像含有<b>圖層樣式</b>。圖層樣式在此格式中將不會被儲存。"
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr "此檔案包含有不支援的填充圖層類型「<b>%1</b>」。此圖層將轉成顏料圖層"
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr "此檔案包含有不支援的填充圖層類型「<b>%1</b>」。此圖層將轉成顏料圖層"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35314,13 +35338,21 @@ msgstr "使用作者檔案資料簽名"
 msgid "Force convert to 8 bits/channel"
 msgstr "強制轉成 8 位元/每通道"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains one or more layers with a color model that is different "
 "from the image."
 msgstr "此影像包含一個或多個與影像本身色彩模型不同的圖層。"
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2025-04-12 10:50+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -15686,6 +15686,34 @@ msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr ""
 "Obraz zawiera <b>wyglądy warstw</b>. Wyglądy warstw nie zostaną zapisane."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"Plik zawiera warstwę wypełnienia o rodzaju <b>%1</b>, która nie jest "
+"obsługiwana, więc warstwa ta zostanie przekształcona na warstwę malowania."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"Plik zawiera warstwę wypełnienia o rodzaju <b>%1</b>, która nie jest "
+"obsługiwana, więc warstwa ta zostanie przekształcona na warstwę malowania."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35727,7 +35755,7 @@ msgstr "Podpisz danymi autora"
 msgid "Force convert to 8 bits/channel"
 msgstr "Wymuś przekształcenie na 8 bitów/kanał"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35736,6 +35764,14 @@ msgid ""
 msgstr ""
 "Twój obraz zawiera jedną lub więcej warst o modelu barw innym od twojego "
 "obrazu."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

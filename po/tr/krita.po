@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2025-10-11 21:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -15587,6 +15587,34 @@ msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr ""
 "Görsel, <b>katman biçemleri</b> içeriyor. Katman biçemleri kaydedilmeyecek."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"Görselde <b>%1</b> türünden desteklenmeyen bir dolgu katman var; katman bir "
+"boya katmanına dönüştürülecek"
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"Görselde <b>%1</b> türünden desteklenmeyen bir dolgu katman var; katman bir "
+"boya katmanına dönüştürülecek"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35496,7 +35524,7 @@ msgstr "Çizer verisiyle imzala"
 msgid "Force convert to 8 bits/channel"
 msgstr "8 bit/kanala dönüşüme zorla"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35505,6 +35533,14 @@ msgid ""
 msgstr ""
 "Görseliniz, görselden farklı renk modeline sahip bir veya birden fazla "
 "katman içeriyor."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

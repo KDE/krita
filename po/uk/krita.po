@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2025-10-11 16:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -15668,6 +15668,34 @@ msgid ""
 msgstr ""
 "У цьому зображенні містяться <b>стилі шарів</b>. Стилі шарів не буде "
 "збережено."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"У файлі міститься шар заповнення типу <b>%1</b>, підтримку якого не "
+"передбачено. Шар буде перетворено на шар малювання."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"У файлі міститься шар заповнення типу <b>%1</b>, підтримку якого не "
+"передбачено. Шар буде перетворено на шар малювання."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35771,7 +35799,7 @@ msgstr "Підписати даними автора"
 msgid "Force convert to 8 bits/channel"
 msgstr "Примусово перетворити на 8 біт/канал"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35780,6 +35808,14 @@ msgid ""
 msgstr ""
 "У зображенні містяться шари із моделлю кольорів, яка відрізняється від "
 "моделі кольорів основного зображення."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

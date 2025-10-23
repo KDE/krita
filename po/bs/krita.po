@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -16099,6 +16099,32 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
+msgstr ""
+"Ova slika sadrži vektor, klon ili fill slojeve\n"
+"Ovi slojevi će biti spašeni kao raster slojevi."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgid ""
+#| "This image contains vector, clone or fill layers.\n"
+#| "These layers will be saved as raster layers."
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"Ova slika sadrži vektor, klon ili fill slojeve\n"
+"Ovi slojevi će biti spašeni kao raster slojevi."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgid ""
+#| "This image contains vector, clone or fill layers.\n"
+#| "These layers will be saved as raster layers."
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
 msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
@@ -36345,12 +36371,20 @@ msgstr "Otvor profil boje"
 msgid "Force convert to 8 bits/channel"
 msgstr "Pretvori u sRGb"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains one or more layers with a color model that is different "
 "from the image."
+msgstr ""
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)

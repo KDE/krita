@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16556,6 +16556,34 @@ msgid ""
 msgstr ""
 "이미지에 <b>레이어 스타일</b>이 들어 있습니다. 레이어 스타일은 저장되지 않습"
 "니다."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "Loading a .kra file"
+#| msgid ""
+#| "The file contains a clone layer that has an incorrect source node id. "
+#| "This layer will be converted into a paint layer."
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"파일에 잘못된 소스 노드 ID가 있는 복제 레이어가 있습니다. 이 레이어는 칠하기 "
+"레이어로 변환됩니다."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "Loading a .kra file"
+#| msgid ""
+#| "The file contains a clone layer that has an incorrect source node id. "
+#| "This layer will be converted into a paint layer."
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"파일에 잘못된 소스 노드 ID가 있는 복제 레이어가 있습니다. 이 레이어는 칠하기 "
+"레이어로 변환됩니다."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -36755,13 +36783,21 @@ msgstr "작성자 데이터로 서명"
 msgid "Force convert to 8 bits/channel"
 msgstr "강제로 sRGB로 변환"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains one or more layers with a color model that is different "
 "from the image."
 msgstr "색 모델이 이미지 설정과 다른 레이어가 하나 이상 포함되어 있습니다."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

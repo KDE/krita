@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2025-10-15 00:15+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -15647,6 +15647,34 @@ msgid ""
 msgstr ""
 "L'immagine contiene <b>stili di livello</b>. Gli stili di livello non "
 "saranno salvati."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"L'immagine contiene un livello Riempimento di tipo <b>%1</b>, non "
+"supportato. Il livello sarà convertito in un livello di disegno."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"L'immagine contiene un livello Riempimento di tipo <b>%1</b>, non "
+"supportato. Il livello sarà convertito in un livello di disegno."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35744,7 +35772,7 @@ msgstr "Firma con i dati dell'autore"
 msgid "Force convert to 8 bits/channel"
 msgstr "Forza conversione a 8 bit/canale"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35753,6 +35781,14 @@ msgid ""
 msgstr ""
 "L'immagine contiene uno o più livelli con un modello dei colori diverso "
 "dall'immagine."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-21 11:45+0200\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
+"PO-Revision-Date: 2025-10-22 17:59+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15594,6 +15594,34 @@ msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr "Slika vsebuje <b>sloge plasti</b>. Slogi plasti ne bodo shranjeni."
 
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"Datoteka vsebuje plast polnila zvrsti <b>%1</b>, ki ni podprt, ta plast bo "
+"pretvorjena v plast slikanja"
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"Datoteka vsebuje plast polnila zvrsti <b>%1</b>, ki ni podprt, ta plast bo "
+"pretvorjena v plast slikanja"
+
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
 msgctxt "image conversion warning"
@@ -28246,7 +28274,7 @@ msgid "Unicase"
 msgstr "Istovrstne črke"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Titling Caps"
 msgstr "Velike črke za naslove"
@@ -28426,10 +28454,10 @@ msgid "Style:"
 msgstr "Slog:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lining"
-msgstr "Včrtavanje"
+msgstr "Črtno"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:117
 #, kde-format
@@ -28444,10 +28472,10 @@ msgid "Spacing:"
 msgstr "Razmik:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Tabular"
-msgstr "Tabelarne"
+msgstr "Tabulatorski"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:151
 #, kde-format
@@ -28976,7 +29004,7 @@ msgid "Text Transform"
 msgstr "Preoblikovanje besedila"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text Transform allows transforming the given range of characters, for "
@@ -28984,8 +29012,8 @@ msgid ""
 "full-width forms."
 msgstr ""
 "Pretvorba besedila omogoča preoblikovanje danega obsega znakov, npr. tako, "
-"da jih nastavite z velikimi črkami ali zamenjate obrazce polovične širine za "
-"obrazce polne širine."
+"da jih nastavite z velikimi črkami ali zamenjate oblike polovične širine z "
+"oblikami polne širine."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -29056,9 +29084,7 @@ msgid "text-decoration-position, underline, left, right, under"
 msgstr "položaj-okrasitve-besedila, podčrtaj, levo, desno, pod"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Bottom"
 msgstr "Na dno"
@@ -29076,7 +29102,7 @@ msgid "Vertical Right"
 msgstr "Navpično desno"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:12
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "White Space"
 msgstr "Presledek"
@@ -35526,7 +35552,7 @@ msgstr "Podpiši s podatki o avtorju"
 msgid "Force convert to 8 bits/channel"
 msgstr "Vsili pretvorbo v 8 bitov/kanal"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35535,6 +35561,14 @@ msgid ""
 msgstr ""
 "Vaša slika vsebuje eno ali več plasti z barvnim modelom, ki se razlikuje od "
 "slike."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

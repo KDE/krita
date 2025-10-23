@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2025-10-17 17:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -16660,6 +16660,34 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr "Kuva sisältää <b>tasotyylejä</b>. Tasotyylejä ei tallenneta."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains layers of unsupported type <b>%1</b>. Only the "
+#| "rendered result will be saved."
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"Kuva sisätää ei-tuettuja tasotyyppejä <b>%1</b>. Vain renderöity tulos "
+"tallennetaan."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains layers of unsupported type <b>%1</b>. Only the "
+#| "rendered result will be saved."
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"Kuva sisätää ei-tuettuja tasotyyppejä <b>%1</b>. Vain renderöity tulos "
+"tallennetaan."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -36747,7 +36775,7 @@ msgstr "Allekirjoita tekijätiedoilla"
 msgid "Force convert to 8 bits/channel"
 msgstr "Pakota muunnos 8 bittiin/kanava"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -36755,6 +36783,14 @@ msgid ""
 "from the image."
 msgstr ""
 "Kuvasi sisältää yhden tai useamman tason, jonka väritila on eri kuin kuvan."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
 "PO-Revision-Date: 2025-10-16 15:12+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -15687,6 +15687,34 @@ msgid ""
 msgstr ""
 "Deze afbeelding bevat <b>lagenstijlen</b>. De lagenstijlen zullen niet "
 "worden opgeslagen."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"De afbeelding bevat een vullaag van het type <b>%1</b>, die niet wordt "
+"ondersteund, de laag zal geconverteerd worden in een tekenlaag."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"De afbeelding bevat een vullaag van het type <b>%1</b>, die niet wordt "
+"ondersteund, de laag zal geconverteerd worden in een tekenlaag."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35631,7 +35659,7 @@ msgstr "Met gegevens van auteur ondertekenen"
 msgid "Force convert to 8 bits/channel"
 msgstr "Conversie naar 8 bits/kanaal afdwingen"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35640,6 +35668,14 @@ msgid ""
 msgstr ""
 "Uw afbeelding bevat een of meer lagen met een kleurmodel dat anders is dan "
 "de afbeelding."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

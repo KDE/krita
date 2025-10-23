@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-11 10:56+0000\n"
-"PO-Revision-Date: 2025-10-18 09:08-0300\n"
+"POT-Creation-Date: 2025-10-23 01:56+0000\n"
+"PO-Revision-Date: 2025-10-22 12:31-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -9030,7 +9030,7 @@ msgstr "Filtros "
 #, kde-format
 msgctxt "action"
 msgid "&Color to Alpha..."
-msgstr "&Cor para Alfa..."
+msgstr "&Cor para alfa..."
 
 #. i18n: context: toolTip @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
@@ -9038,14 +9038,14 @@ msgstr "&Cor para Alfa..."
 #, kde-format
 msgctxt "action"
 msgid "Color to Alpha"
-msgstr "Cor para Alfa"
+msgstr "Cor para alfa"
 
 #. i18n: context: text @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1054
 #, kde-format
 msgctxt "action"
 msgid "&Top Edge Detection"
-msgstr "&Detecção de contorno superior"
+msgstr "&Detecção de borda superior"
 
 #. i18n: context: toolTip @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
@@ -9053,7 +9053,7 @@ msgstr "&Detecção de contorno superior"
 #, kde-format
 msgctxt "action"
 msgid "Top Edge Detection"
-msgstr "Detecção de contorno superior"
+msgstr "Detecção de borda superior"
 
 #. i18n: context: text @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1066
@@ -9075,7 +9075,7 @@ msgstr "Cores indexadas"
 #, kde-format
 msgctxt "action"
 msgid "Emboss Horizontal &Only"
-msgstr "Em relevo apenas na horizontal"
+msgstr "Em relev&o apenas na horizontal"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
@@ -9180,7 +9180,7 @@ msgstr "Em relevo em todas as direções"
 #, kde-format
 msgctxt "action"
 msgid "&Small Tiles..."
-msgstr "Pequeno&s padrões..."
+msgstr "Pequeno&s blocos..."
 
 #. i18n: context: toolTip @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
@@ -9188,7 +9188,7 @@ msgstr "Pequeno&s padrões..."
 #, kde-format
 msgctxt "action"
 msgid "Small Tiles"
-msgstr "Pequenos padrões"
+msgstr "Pequenos blocos"
 
 #. i18n: context: text @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1174
@@ -9300,7 +9300,7 @@ msgstr "Pixelizar"
 #, kde-format
 msgctxt "action"
 msgid "Emboss (&Laplacian)"
-msgstr "Elevar (&Laplaciano)"
+msgstr "Em relevo (&Laplaciano)"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
@@ -9308,14 +9308,14 @@ msgstr "Elevar (&Laplaciano)"
 #, kde-format
 msgctxt "action"
 msgid "Emboss (Laplacian)"
-msgstr "Elevar (Laplaciano)"
+msgstr "Em relevo (Laplaciano)"
 
 #. i18n: context: text @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1270
 #, kde-format
 msgctxt "action"
 msgid "&Left Edge Detection"
-msgstr "&Detecção de contorno esquerdo"
+msgstr "&Detecção de borda esquerda"
 
 #. i18n: context: toolTip @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
@@ -9323,7 +9323,7 @@ msgstr "&Detecção de contorno esquerdo"
 #, kde-format
 msgctxt "action"
 msgid "Left Edge Detection"
-msgstr "Detecção de contorno esquerdo"
+msgstr "Detecção de borda esquerda"
 
 #. i18n: context: text @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1282
@@ -9364,7 +9364,7 @@ msgstr "Pingos de chuva"
 #, kde-format
 msgctxt "action"
 msgid "&Bottom Edge Detection"
-msgstr "Dete&cção de contorno inferior"
+msgstr "Dete&cção de borda inferior"
 
 #. i18n: context: toolTip @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
@@ -9372,7 +9372,7 @@ msgstr "Dete&cção de contorno inferior"
 #, kde-format
 msgctxt "action"
 msgid "Bottom Edge Detection"
-msgstr "Detecção de contorno inferior"
+msgstr "Detecção de borda inferior"
 
 #. i18n: context: text @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1318
@@ -9439,7 +9439,7 @@ msgstr "Reduzir saturação"
 #, kde-format
 msgctxt "action"
 msgid "Color &Transfer..."
-msgstr "&Transferência de cores..."
+msgstr "&Transferência de cor..."
 
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
@@ -9447,7 +9447,7 @@ msgstr "&Transferência de cores..."
 #, kde-format
 msgctxt "action"
 msgid "Color Transfer"
-msgstr "Transferência de cores"
+msgstr "Transferência de cor"
 
 #. i18n: context: text @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1378
@@ -9529,7 +9529,7 @@ msgstr "Pintura à óleo"
 #, kde-format
 msgctxt "action"
 msgid "&Right Edge Detection"
-msgstr "Detecção de contorno di&reito"
+msgstr "Detecção de borda di&reita"
 
 #. i18n: context: toolTip @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
@@ -9537,7 +9537,7 @@ msgstr "Detecção de contorno di&reito"
 #, kde-format
 msgctxt "action"
 msgid "Right Edge Detection"
-msgstr "Detecção de contorno direito"
+msgstr "Detecção de borda direita"
 
 #. i18n: context: text @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1450
@@ -9619,7 +9619,7 @@ msgstr "Em relevo na horizontal e vertical"
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
-msgstr "Ext&ração aleatória..."
+msgstr "F&ranja aleatória..."
 
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
@@ -9627,7 +9627,7 @@ msgstr "Ext&ração aleatória..."
 #, kde-format
 msgctxt "action"
 msgid "Random Pick"
-msgstr "Extração aleatória"
+msgstr "Franja aleatória"
 
 #. i18n: context: text @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1522
@@ -9649,7 +9649,7 @@ msgstr "Redução de ruído gaussiano"
 #, kde-format
 msgctxt "action"
 msgid "&Posterize..."
-msgstr "&Poster..."
+msgstr "&Posterizar..."
 
 #. i18n: context: toolTip @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
@@ -9657,7 +9657,7 @@ msgstr "&Poster..."
 #, kde-format
 msgctxt "action"
 msgid "Posterize"
-msgstr "Poster"
+msgstr "Posterizar"
 
 #. i18n: context: text @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1546
@@ -10748,14 +10748,14 @@ msgstr "Agrupar camada"
 #, kde-format
 msgctxt "action"
 msgid "Add &Clone Layer"
-msgstr "Adicionar &camada clonada"
+msgstr "Adicionar &camada de clone"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2604
 #, kde-format
 msgctxt "action"
 msgid "Add a new Clone Layer"
-msgstr "Adiciona uma nova camada clonada"
+msgstr "Adiciona uma nova camada de clone"
 
 #. i18n: context: iconText @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2605
@@ -11976,7 +11976,7 @@ msgstr "Converter o espaço de cor da camada"
 #, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Unificar os espaços de cores das camadas"
+msgstr "Unificar os espaços de cor das camadas"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3504
@@ -12134,7 +12134,7 @@ msgstr "Configura C&ópia De..."
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
-msgstr "Configurar a origem para a(s) camada(s) clonada(s) selecionada(s)."
+msgstr "Configurar a origem para a(s) camada(s) de clone(s) selecionada(s)."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3645
@@ -14413,7 +14413,7 @@ msgstr "Cores"
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
-msgstr "Detecção de contorno"
+msgstr "Detecção de borda"
 
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
@@ -15421,7 +15421,7 @@ msgstr "Converter o espaço de cor da projeção"
 #: libs/image/kis_image.cc:1410
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Unificar os espaços de cores das camadas"
+msgstr "Unificar os espaços de cor das camadas"
 
 #: libs/image/kis_image.cc:1440
 msgctxt "(qtundo-format)"
@@ -15607,6 +15607,34 @@ msgid ""
 msgstr ""
 "A imagem contém <b>estilos de camadas</b>. Os estilos de camadas não serão "
 "salvos."
+
+#: libs/impex/ShapeLayerTypeCheck.h:118
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will not be saved."
+msgstr ""
+"A imagem contém uma Camada de Preenchimento do tipo <b>%1</b>, que não é "
+"suportada. A camada será convertida em uma camada de pintura."
+
+#: libs/impex/ShapeLayerTypeCheck.h:120
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
+#| "supported, the layer will be converted to a paintlayer"
+msgctxt "image conversion warning"
+msgid ""
+"The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
+"not supported, these will be saved as paths"
+msgstr ""
+"A imagem contém uma Camada de Preenchimento do tipo <b>%1</b>, que não é "
+"suportada. A camada será convertida em uma camada de pintura."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -18360,8 +18388,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Os <a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Espaços de cores</span></a> determinam como as cores são codificadas nos "
-"seus arquivos. Os espaços de cores têm propriedades diferentes e são usados "
+"\">Espaços de cor</span></a> determinam como as cores são codificadas nos "
+"seus arquivos. Os espaços de cor têm propriedades diferentes e são usados "
 "para finalidades distintas.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -22414,7 +22442,7 @@ msgstr "Propriedades da camada de preenchimento"
 #: libs/ui/kis_layer_manager.cc:396
 #, kde-format
 msgid "Change Clone Layer"
-msgstr "Alterar camada clonada"
+msgstr "Alterar camada de clone"
 
 #: libs/ui/kis_layer_manager.cc:511
 msgctxt "(qtundo-format)"
@@ -22449,7 +22477,7 @@ msgstr "Agrupar "
 #: libs/ui/kis_layer_manager.cc:690
 #, kde-format
 msgid "Clone Layer"
-msgstr "Clonar camada"
+msgstr "Camada de clone"
 
 #: libs/ui/kis_layer_manager.cc:703 plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
@@ -22880,7 +22908,7 @@ msgstr "Relevo interno"
 #, kde-format
 msgctxt "@item:inlistbox Bevel/emboss style"
 msgid "Emboss"
-msgstr "Relevo"
+msgstr "Em relevo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:65
@@ -24363,9 +24391,9 @@ msgid ""
 msgstr ""
 "<p>O espaço de trabalho IdentityRGB é incluído no pacote de perfis porque é "
 "matematicamente óbvio incluir todas as cores visíveis possíveis, ainda que "
-"tenha uma maior porcentagem de cores imaginárias que os espaços de cores "
-"ACES e AllColorsRGB. É pouco provável que você realmente queira editar "
-"imagens no espaço de trabalho IdentityRGB.</p>"
+"tenha uma maior porcentagem de cores imaginárias que os espaços de cor ACES "
+"e AllColorsRGB. É pouco provável que você realmente queira editar imagens no "
+"espaço de trabalho IdentityRGB.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
 #, kde-format
@@ -24516,7 +24544,7 @@ msgstr ""
 "'luz linear', etc) e só deverão ser usados quando estiver editando com "
 "profundidades de cor elevadas (16 bits em ponto flutuante, 16 bits inteiros, "
 "32 bits em ponto flutuante, 32 bits inteiros). Muitas operações de edição "
-"produzem melhores resultados nos espaços de cores de gama linear.</p>"
+"produzem melhores resultados nos espaços de cor de gama linear.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
@@ -24559,7 +24587,7 @@ msgstr ""
 "cores pequena e uma TRC uniforme de forma aproximada ou exata. Dos perfis "
 "fornecidos no meu pacote, só os espaços de cor sRGB e AdobeRGB1998 (ClayRGB) "
 "são pequenos o suficiente para edição em 8 bits. Mesmo com o espaço de cor "
-"AdobeRGB1998, é preciso ter cuidado para não criar um efeito de poster. "
+"AdobeRGB1998, é preciso ter cuidado para não criar um efeito de posterizar. "
 "Obviamente, você também não poderá usar as versões de gama linear destes "
 "perfis para edição em 8 bits.</p>"
 
@@ -24611,9 +24639,9 @@ msgid ""
 "Press \"Ok\" to create a 8-bit integer linear RGB color space or \"Cancel\" "
 "to return to the settings dialog."
 msgstr ""
-"O uso de espaços de cores RGB de gama linear não é suportado nos modos "
+"O uso de espaços de cor RGB de gama linear não é suportado nos modos "
 "inteiros de 8-bits. Sugerimos que use inteiros de 16-bits ou um espaço de "
-"cores de ponto flutuante qualquer para perfis lineares.\n"
+"cor de ponto flutuante qualquer para perfis lineares.\n"
 "\n"
 "Clique em \"Ok\" para criar um espaço de cor RGB linear de 8-bits inteiros "
 "ou em \"Cancelar\" para voltar à janela de configuração."
@@ -32141,7 +32169,7 @@ msgstr "Força:"
 #: plugins/filters/colors/kis_color_to_alpha.h:28
 #, kde-format
 msgid "Color to Alpha"
-msgstr "Cor para Alfa"
+msgstr "Cor para alfa"
 
 #: plugins/filters/colors/kis_minmax_filters.h:27
 #, kde-format
@@ -32496,12 +32524,12 @@ msgstr "Canal Guia"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "Filtro de altura para mapa normal"
+msgstr "Filtro de mapa de altura para normal"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
 msgid "Height to Normal Map"
-msgstr "Altura para o Mapa da Normal"
+msgstr "Mapa de altura para normal"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/convertheightnormalmap/wdg_convert_height_to_normal_map.ui:55
@@ -32517,12 +32545,12 @@ msgstr "Nitidez"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:33
 #, kde-format
 msgid "Mean Removal"
-msgstr "Remoção Mediana"
+msgstr "Remoção mediana"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:43
 #, kde-format
 msgid "Emboss (Laplacian)"
-msgstr "Elevar (Laplaciano)"
+msgstr "Em relevo (Laplaciano)"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:53
 #, kde-format
@@ -32532,17 +32560,17 @@ msgstr "Em relevo em todas direções"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:63
 #, kde-format
 msgid "Emboss Horizontal & Vertical"
-msgstr "Em relevo horizontal e vertical"
+msgstr "Em relevo na horizontal e vertical"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:73
 #, kde-format
 msgid "Emboss Vertical Only"
-msgstr "Em relevo somente vertical"
+msgstr "Em relevo apenas na vertical"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:83
 #, kde-format
 msgid "Emboss Horizontal Only"
-msgstr "Em relevo somente horizontal"
+msgstr "Em relevo apenas na horizontal"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:93
 #, kde-format
@@ -32552,7 +32580,7 @@ msgstr "Em relevo diagonal"
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
 #, kde-format
 msgid "Edge Detection"
-msgstr "Detecção de contorno"
+msgstr "Detecção de borda"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbOutput)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:21
@@ -32602,7 +32630,7 @@ msgstr "Saída:"
 #: plugins/filters/embossfilter/kis_emboss_filter.h:27
 #, kde-format
 msgid "Emboss with Variable Depth"
-msgstr "Gravar com Profundidade Variável"
+msgstr "Em relevo com profundidade variável"
 
 #: plugins/filters/example/example.h:33
 #, kde-format
@@ -32612,7 +32640,7 @@ msgstr "Inverter"
 #: plugins/filters/fastcolortransfer/fastcolortransfer.h:35
 #, kde-format
 msgid "Color Transfer"
-msgstr "Transferência de cores"
+msgstr "Transferência de cor"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/filters/fastcolortransfer/wdgfastcolortransfer.ui:36
@@ -32650,14 +32678,14 @@ msgstr "filtro de mapa de gradiente"
 #, kde-format
 msgctxt "action"
 msgid "Gradient Map Filter"
-msgstr "Filtro de mapa do gradiente"
+msgstr "Filtro de mapa de gradiente"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
 #, kde-format
 msgid "Gradient Map"
-msgstr "Mapa do gradiente"
+msgstr "Mapa de gradiente"
 
 #: plugins/filters/gradientmap/KisGradientMapFilterConfiguration.h:69
 #: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:173
@@ -32671,7 +32699,7 @@ msgstr "Sem nome"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
 #, kde-format
 msgid "Gradient Colors"
-msgstr "Cores de gradiente"
+msgstr "Cores do gradiente"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorMode)
 #. i18n: ectx: property (text), widget (QLabel, colorModeLabel)
@@ -32771,7 +32799,7 @@ msgstr "Redução de Ruído Gaussiana"
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.h:37
 #, kde-format
 msgid "Wavelet Noise Reducer"
-msgstr "Redução de Ruído Wavelet"
+msgstr "Redução de ruído por wavelets"
 
 #: plugins/filters/indexcolors/indexcolors.h:34
 #, kde-format
@@ -33201,7 +33229,7 @@ msgstr "Pixelizar"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:160
 #, kde-format
 msgid "Posterize"
-msgstr "Poster"
+msgstr "Posterizar"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
 #, kde-format
@@ -33232,7 +33260,7 @@ msgstr "Pingos de chuva"
 #: plugins/filters/randompickfilter/randompickfilter.h:37
 #, kde-format
 msgid "Random Pick"
-msgstr "Extração Aleatória"
+msgstr "Franja aleatória"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
@@ -33253,7 +33281,7 @@ msgstr "Arredondar cantos"
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.h:29
 #, kde-format
 msgid "Small Tiles"
-msgstr "Pequenos Padrões"
+msgstr "Pequenos blocos"
 
 #. i18n: context: text @ Action (krita_filter_threshold), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_threshold), Actions (Filters), ActionCollection (Krita)
@@ -33280,7 +33308,7 @@ msgstr "Nível de &Limiar:"
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
 #, kde-format
 msgid "Unsharp Mask"
-msgstr "Máscara Não-Nítida"
+msgstr "Máscara não-nítida"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/unsharp/wdgunsharp.ui:56
@@ -35576,7 +35604,7 @@ msgstr "Assinar com os dados do autor"
 msgid "Force convert to 8 bits/channel"
 msgstr "Forçar a conversão para 8 bits/canal"
 
-#: plugins/impex/psd/psd_export.cc:55
+#: plugins/impex/psd/psd_export.cc:56
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -35585,6 +35613,14 @@ msgid ""
 msgstr ""
 "Sua imagem contém uma ou mais camadas com um modelo de cor diferente da "
 "imagem."
+
+#: plugins/impex/psd/psd_export.cc:88
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"While text shapes can be saved to psd, only basic features are supported. "
+"Advanced features, like text-on-path and opentype features will not be saved."
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

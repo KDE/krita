@@ -134,9 +134,6 @@ public:
     OutlineStyle eraserOutlineStyle(bool defaultValue = false) const;
     void setEraserOutlineStyle(OutlineStyle style);
 
-    QRect colorPreviewRect() const;
-    void setColorPreviewRect(const QRect &rect);
-
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
     void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;

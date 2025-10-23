@@ -9,8 +9,10 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPalette>
 #include <QPixmap>
+#include <QTransform>
 
 #include "KoCanvasResourcesIds.h"
 #include "KoCanvasResourceProvider.h"
@@ -72,6 +74,7 @@ struct KisAsyncColorSamplerHelper::Private
     QColor baseColor;
 
     QPixmap cache;
+    qreal cacheRotation = 0.0;
 
     KisStrokesFacade *strokesFacade() const {
         return canvas->image().data();
@@ -249,9 +252,24 @@ void KisAsyncColorSamplerHelper::paint(QPainter &gc, const KoViewConverter &conv
     qreal dpr = gc.device()->devicePixelRatioF();
     QSizeF cacheSizeF = viewRectF.size() * dpr;
     QSize cacheSize(qCeil(cacheSizeF.width()), qCeil(cacheSizeF.height()));
-    if (m_d->cache.isNull() || m_d->cache.size() != cacheSize) {
+    bool needsNewCache = m_d->cache.isNull() || m_d->cache.size() != cacheSize;
+    if (needsNewCache) {
         m_d->cache = QPixmap(cacheSize);
         m_d->cache.fill(Qt::transparent);
+    }
+
+    QColor currentColor = colorWithAlpha(m_d->currentColor, OPACITY_OPAQUE_U8);
+    QColor baseColor = m_d->showComparison ? colorWithAlpha(m_d->baseColor, OPACITY_OPAQUE_U8) : currentColor;
+    bool needsDualColor = currentColor != baseColor;
+
+    qreal canvasRotationAngle = m_d->canvas->rotationAngle();
+    if (m_d->canvas->xAxisMirrored()) {
+        canvasRotationAngle = -canvasRotationAngle;
+    }
+
+    if (needsNewCache || (needsDualColor && !qFuzzyCompare(m_d->cacheRotation, canvasRotationAngle))) {
+        m_d->cacheRotation = canvasRotationAngle;
+
         QPainter cachePainter(&m_d->cache);
         cachePainter.setRenderHint(QPainter::Antialiasing);
 
@@ -262,20 +280,38 @@ void KisAsyncColorSamplerHelper::paint(QPainter &gc, const KoViewConverter &conv
 
         QRectF cacheRect = m_d->cache.rect();
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
-        QColor currentColor = colorWithAlpha(m_d->currentColor, OPACITY_OPAQUE_U8);
-        QColor baseColor = m_d->showComparison ? colorWithAlpha(m_d->baseColor, OPACITY_OPAQUE_U8) : currentColor;
 
-        cachePainter.setBrush(currentColor);
-        if (currentColor == baseColor) {
-            cachePainter.drawEllipse(outerRect);
-        } else {
-            cachePainter.setClipRect(QRectF(0, 0, cacheRect.width(), cacheRect.height() / 2.0));
+        if (needsDualColor) {
+            // The color sampler preview is an outline and those rotate along
+            // with the canvas. That's undesirable for the sampler preview
+            // though, so we un-rotate its contents here accordingly.
+            QTransform tf;
+            QPointF cacheCenter = cacheRect.center();
+            tf.translate(cacheCenter.x(), cacheCenter.y());
+            tf.rotate(-canvasRotationAngle);
+            tf.translate(-cacheCenter.x(), -cacheCenter.y());
+
+            QPainterPath clipPath;
+            clipPath.addPolygon(tf.map(QPolygonF(QRectF(0, 0, cacheRect.width(), cacheRect.height() / 2.0 + 1.0))));
+            cachePainter.setClipPath(clipPath);
+
+            bool flipped = m_d->canvas->yAxisMirrored();
+            cachePainter.setBrush(flipped ? baseColor : currentColor);
             cachePainter.drawEllipse(outerRect);
 
             cachePainter.setBrush(baseColor);
-            cachePainter.setClipRect(QRectF(0, cacheRect.height() / 2.0, cacheRect.width(), cacheRect.height() / 2.0));
+            clipPath.clear();
+            clipPath.addPolygon(
+                tf.map(QRectF(0, cacheRect.height() / 2.0, cacheRect.width(), cacheRect.height() / 2.0)));
+            cachePainter.setClipPath(clipPath);
+
+            cachePainter.setBrush(flipped ? currentColor : baseColor);
             cachePainter.drawEllipse(outerRect);
-            cachePainter.setClipRect(QRectF(), Qt::NoClip);
+
+            cachePainter.setClipPath(QPainterPath(), Qt::NoClip);
+        } else {
+            cachePainter.setBrush(currentColor);
+            cachePainter.drawEllipse(outerRect);
         }
 
         qreal innerX = cacheRect.width() / 8.0;

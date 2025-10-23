@@ -1,12 +1,16 @@
 /*
  *  SPDX-FileCopyrightText: 2022 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2025 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisAsyncColorSamplerHelper.h"
 
+#include <QApplication>
 #include <QPainter>
+#include <QPalette>
+#include <QPixmap>
 
 #include "KoCanvasResourcesIds.h"
 #include "KoCanvasResourceProvider.h"
@@ -15,7 +19,6 @@
 #include "kis_cursor.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image_interfaces.h"
-#include "kis_config.h"
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
@@ -26,22 +29,18 @@
 
 
 namespace {
-std::pair<QRectF,QRectF> colorPreviewDocRectImpl(const QPointF &outlineDocPoint, bool colorPreviewShowComparePlate, const KoViewConverter *converter)
+QRectF colorPreviewDocRectImpl(const QPointF &outlineDocPoint, const KoViewConverter *converter)
 {
-    KisConfig cfg(true);
-    const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
-
-    const QRectF colorPreviewBaseColorViewRect =
-        colorPreviewShowComparePlate ?
-            colorPreviewViewRect.translated(colorPreviewViewRect.width(), 0) :
-            QRectF();
-
+    constexpr qreal SIZE = 200.0;
+    const QRectF colorPreviewViewRect = QRectF(-SIZE / 2.0, -SIZE / 2.0, SIZE, SIZE);
     const QRectF colorPreviewDocumentRect = converter->viewToDocument(colorPreviewViewRect);
-    const QRectF colorPreviewBaseColorDocumentRect =
-        converter->viewToDocument(colorPreviewBaseColorViewRect);
+    return colorPreviewDocumentRect.translated(outlineDocPoint);
+}
 
-    return std::make_pair(colorPreviewDocumentRect.translated(outlineDocPoint),
-                          colorPreviewBaseColorDocumentRect.translated(outlineDocPoint));
+QColor colorWithAlpha(QColor color, int alpha)
+{
+    color.setAlpha(alpha);
+    return color;
 }
 }
 
@@ -59,7 +58,7 @@ struct KisAsyncColorSamplerHelper::Private
 
     bool isActive {false};
     bool showPreview {false};
-    bool showComparePlate {false};
+    bool showComparison {false};
 
     KisStrokeId strokeId;
     typedef KisSignalCompressorWithParam<QPointF> SamplingCompressor;
@@ -67,11 +66,12 @@ struct KisAsyncColorSamplerHelper::Private
 
     QTimer activationDelayTimer;
 
-    QRectF currentColorDocRect;
-    QRectF baseColorDocRect;
+    QRectF previewDocRect;
 
     QColor currentColor;
     QColor baseColor;
+
+    QPixmap cache;
 
     KisStrokesFacade *strokesFacade() const {
         return canvas->image().data();
@@ -118,7 +118,7 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
             KoCanvasResource::BackgroundColor;
 
     m_d->sampleCurrentLayer = sampleCurrentLayer;
-    m_d->showComparePlate = false;
+    m_d->showComparison = false;
 
     m_d->activationDelayTimer.start();
 }
@@ -137,6 +137,7 @@ void KisAsyncColorSamplerHelper::activateDelayedPreview()
 
     m_d->currentColor = previewColor;
     m_d->baseColor = previewColor;
+    m_d->cache = QPixmap();
 
     updateCursor(m_d->sampleCurrentLayer, m_d->sampleResourceId == KoCanvasResource::ForegroundColor);
 
@@ -188,12 +189,12 @@ void KisAsyncColorSamplerHelper::deactivate()
     m_d->activationDelayTimer.stop();
 
     m_d->showPreview = false;
-    m_d->showComparePlate = false;
+    m_d->showComparison = false;
 
-    m_d->currentColorDocRect = QRectF();
+    m_d->previewDocRect = QRectF();
     m_d->currentColor = QColor();
     m_d->baseColor = QColor();
-    m_d->baseColorDocRect = QRectF();
+    m_d->cache = QPixmap();
 
     m_d->isActive = false;
 
@@ -234,23 +235,63 @@ QRectF KisAsyncColorSamplerHelper::colorPreviewDocRect(const QPointF &docPoint)
 {
     if (!m_d->showPreview) return QRectF();
 
-    std::tie(m_d->currentColorDocRect, m_d->baseColorDocRect) =
-            colorPreviewDocRectImpl(docPoint, m_d->showComparePlate, &m_d->converter());
-
-    return m_d->currentColorDocRect | m_d->baseColorDocRect;
+    m_d->previewDocRect = colorPreviewDocRectImpl(docPoint, &m_d->converter());
+    return m_d->previewDocRect;
 }
 
 void KisAsyncColorSamplerHelper::paint(QPainter &gc, const KoViewConverter &converter)
 {
-    if (!m_d->showPreview) return;
-
-    const QRectF viewRect = converter.documentToView(m_d->currentColorDocRect);
-    gc.fillRect(viewRect, m_d->currentColor);
-
-    if (m_d->showComparePlate) {
-        const QRectF baseColorRect = converter.documentToView(m_d->baseColorDocRect);
-        gc.fillRect(baseColorRect, m_d->baseColor);
+    if (!m_d->showPreview) {
+        return;
     }
+
+    QRectF viewRectF = converter.documentToView(m_d->previewDocRect);
+    qreal dpr = gc.device()->devicePixelRatioF();
+    QSizeF cacheSizeF = viewRectF.size() * dpr;
+    QSize cacheSize(qCeil(cacheSizeF.width()), qCeil(cacheSizeF.height()));
+    if (m_d->cache.isNull() || m_d->cache.size() != cacheSize) {
+        m_d->cache = QPixmap(cacheSize);
+        m_d->cache.fill(Qt::transparent);
+        QPainter cachePainter(&m_d->cache);
+        cachePainter.setRenderHint(QPainter::Antialiasing);
+
+        QColor backgroundColor = colorWithAlpha(qApp->palette().color(QPalette::Base), OPACITY_OPAQUE_U8 / 2 + 1);
+        qreal penWidth = 2.0 * dpr;
+        QPen pen = QPen(backgroundColor, penWidth);
+        cachePainter.setPen(pen);
+
+        QRectF cacheRect = m_d->cache.rect();
+        QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
+        QColor currentColor = colorWithAlpha(m_d->currentColor, OPACITY_OPAQUE_U8);
+        QColor baseColor = m_d->showComparison ? colorWithAlpha(m_d->baseColor, OPACITY_OPAQUE_U8) : currentColor;
+
+        cachePainter.setBrush(currentColor);
+        if (currentColor == baseColor) {
+            cachePainter.drawEllipse(outerRect);
+        } else {
+            cachePainter.setClipRect(QRectF(0, 0, cacheRect.width(), cacheRect.height() / 2.0));
+            cachePainter.drawEllipse(outerRect);
+
+            cachePainter.setBrush(baseColor);
+            cachePainter.setClipRect(QRectF(0, cacheRect.height() / 2.0, cacheRect.width(), cacheRect.height() / 2.0));
+            cachePainter.drawEllipse(outerRect);
+            cachePainter.setClipRect(QRectF(), Qt::NoClip);
+        }
+
+        qreal innerX = cacheRect.width() / 8.0;
+        qreal innerY = cacheRect.height() / 8.0;
+        QRectF innerRect = cacheRect.marginsRemoved(QMarginsF(innerX, innerY, innerX, innerY));
+
+        cachePainter.setPen(Qt::NoPen);
+        cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
+        cachePainter.drawEllipse(innerRect);
+
+        cachePainter.setBrush(Qt::transparent);
+        cachePainter.setPen(pen);
+        cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        cachePainter.drawEllipse(innerRect);
+    }
+    gc.drawPixmap(viewRectF.toRect(), m_d->cache);
 }
 
 void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)
@@ -310,8 +351,11 @@ void KisAsyncColorSamplerHelper::slotColorSamplingFinished(const KoColor &rawCol
 
     const QColor previewColor = m_d->canvas->displayColorConverter()->toQColor(color);
 
-    m_d->showComparePlate = true;
-    m_d->currentColor = previewColor;
+    if (!m_d->showComparison || m_d->currentColor != previewColor) {
+        m_d->showComparison = true;
+        m_d->currentColor = previewColor;
+        m_d->cache = QPixmap();
+    }
 
     Q_EMIT sigRequestUpdateOutline();
 }

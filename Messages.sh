@@ -22,7 +22,7 @@ perl extracti18n.pl >> rc.cpp
 # Also ignore crashreporter, it has it's own catalog
 # None of the placeholder strings inside will be seen by users.
 kundo2_aware_xgettext krita.pot rc.cpp \
-                  `find . -name \*.cc -o -name \*.h  -o -name \*.cpp -o -name \*.h -o -name \*.qml | \
+                  `find . -name \*.cc -o -name \*.h  -o -name \*.cpp -o -name \*.qml | \
                   grep -v '/tests/' | grep -v './sdk/templates' | grep -v './krita/crashreporter/'`
 
 # Extract the messages in Python plugins.

@@ -141,8 +141,8 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
         do {
             FindAnother = false;
-            y = static_cast<int>(rng.bounded(static_cast<double>(Width - 1) / RAND_MAX));
-            x = static_cast<int>(rng.bounded(static_cast<double>(Height - 1) / RAND_MAX));
+            y = static_cast<int>(rng.bounded(static_cast<double>(Width - 1)));
+            x = static_cast<int>(rng.bounded(static_cast<double>(Height - 1)));
 
             if (BoolMatrix[y][x])
                 FindAnother = true;

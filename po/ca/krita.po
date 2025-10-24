@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-23 01:56+0000\n"
-"PO-Revision-Date: 2025-10-12 10:56+0200\n"
+"PO-Revision-Date: 2025-10-23 09:52+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15630,33 +15630,25 @@ msgstr ""
 
 # skip-rule: punctuation-period-no
 #: libs/impex/ShapeLayerTypeCheck.h:118
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"La imatge conté una capa d'emplenat de tipus <b>%1</b>, que no s'admet. La "
-"capa es convertirà en una capa de pintura."
+"La imatge conté una capa vectorial amb formes de tipus <b>%1</b>, que no "
+"s'admet. Aquestes no es desaran."
 
 # skip-rule: punctuation-period-no
 #: libs/impex/ShapeLayerTypeCheck.h:120
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"La imatge conté una capa d'emplenat de tipus <b>%1</b>, que no s'admet. La "
-"capa es convertirà en una capa de pintura."
+"La imatge conté una capa vectorial amb formes de tipus <b>%1</b>, que no "
+"s'admet. Aquestes es desaran com a camins"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35689,6 +35681,9 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"Mentre que les formes de text es poden desar a PSD, només s'admeten "
+"característiques bàsiques. No es desaran les característiques avançades, com "
+"les característiques de text en camí i opentype."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

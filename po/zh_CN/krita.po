@@ -15527,30 +15527,20 @@ msgid ""
 msgstr "此图像包含 <b>图层样式</b>。这些图层样式将不会被保存。"
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"图像包含 <b>%1</b> 类型的填充图层，Krita 不支持这种图层，它将被转换为颜料图层"
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"图像包含 <b>%1</b> 类型的填充图层，Krita 不支持这种图层，它将被转换为颜料图层"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format

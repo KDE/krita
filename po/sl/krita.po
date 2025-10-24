@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-23 01:56+0000\n"
-"PO-Revision-Date: 2025-10-22 17:59+0200\n"
+"PO-Revision-Date: 2025-10-23 15:13+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15595,32 +15595,24 @@ msgid ""
 msgstr "Slika vsebuje <b>sloge plasti</b>. Slogi plasti ne bodo shranjeni."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"Datoteka vsebuje plast polnila zvrsti <b>%1</b>, ki ni podprt, ta plast bo "
-"pretvorjena v plast slikanja"
+"Datoteka vsebuje vektorsko plast z liki vrste <b>%1</b>, kar ni podprto, ti "
+"ne bodo shranjeni."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"Datoteka vsebuje plast polnila zvrsti <b>%1</b>, ki ni podprt, ta plast bo "
-"pretvorjena v plast slikanja"
+"Datoteka vsebuje vektorsko plast z liki vrste <b>%1</b>, kar ni podprto, ti "
+"bodo shranjeni v poti."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -35569,6 +35561,9 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"Medtem ko je besedilne like možno shraniti v psd, so podprte le osnovne "
+"funkcije. Napredne funkcije, kot so funkcije besedila na poti in opentype, "
+"ne bodo shranjene."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

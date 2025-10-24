@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-23 01:56+0000\n"
-"PO-Revision-Date: 2025-10-15 20:55+0400\n"
+"PO-Revision-Date: 2025-10-23 13:17+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -20071,7 +20071,7 @@ msgstr "المقاسات"
 #: libs/ui/forms/wdgimageproperties.ui:119
 #, kde-format
 msgid "pixels-per-inch"
-msgstr "بكسل لكلّ بوصة<br><b>P</b>ixel <b>p</b>er <b>I</b>nch"
+msgstr "بكسل لكلّ بوصة"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgimageproperties.ui:122
@@ -20392,7 +20392,7 @@ msgstr "مصدر القناع"
 #: libs/ui/forms/wdgmasksource.ui:27
 #, kde-format
 msgid "&None"
-msgstr "&بلا"
+msgstr "&لا شيء"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMask)
 #: libs/ui/forms/wdgmasksource.ui:34
@@ -22663,7 +22663,7 @@ msgstr "بدّل ملء الشاشة"
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
-msgstr "‏%1 &× %2 (%3)"
+msgstr "‏%1 × %2 (%3)"
 
 #: libs/ui/kis_statusbar.cc:274
 #, kde-format

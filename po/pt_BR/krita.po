@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-23 01:56+0000\n"
-"PO-Revision-Date: 2025-10-22 12:31-0300\n"
+"PO-Revision-Date: 2025-10-23 10:44-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -8003,7 +8003,7 @@ msgstr "Mostrar o seletor de cor"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint shade selector"
-msgstr "Mostrar o seletor de formas do MyPaint"
+msgstr "Mostrar o seletor de tonalidade do MyPaint"
 
 #. i18n: context: text @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
@@ -8012,7 +8012,7 @@ msgstr "Mostrar o seletor de formas do MyPaint"
 #, kde-format
 msgctxt "action"
 msgid "Show minimal shade selector"
-msgstr "Mostrar o seletor de formas mínimo"
+msgstr "Mostrar o seletor de tonalidade mínimo"
 
 #. i18n: context: text @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_history), Actions (General), ActionCollection (Krita)
@@ -13449,7 +13449,7 @@ msgstr "Girar tela de pintura para a esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr "Reiniciar rotação da tela de pintura"
+msgstr "Redefinir rotação da tela de pintura"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
@@ -15609,32 +15609,24 @@ msgstr ""
 "salvos."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"A imagem contém uma Camada de Preenchimento do tipo <b>%1</b>, que não é "
-"suportada. A camada será convertida em uma camada de pintura."
+"A imagem contém uma camada vetorial com formas do tipo <b>%1</b>, que não é "
+"suportada. Essas formas não serão salvas."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"A imagem contém uma Camada de Preenchimento do tipo <b>%1</b>, que não é "
-"suportada. A camada será convertida em uma camada de pintura."
+"A imagem contém uma camada vetorial com formas do tipo <b>%1</b>, que não é "
+"suportada. Essas formas serão salvas como caminhos"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -25819,7 +25811,7 @@ msgstr "Ocultar a mensagem ao clicar."
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:406
 #, kde-format
 msgid "Shade Selector"
-msgstr "Seletor de Sombras"
+msgstr "Seletor de tonalidade"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
@@ -25840,7 +25832,7 @@ msgstr "Atualizar o seletor quando:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:402
 #, kde-format
 msgid "this doesn't include a color change by the shade selector"
-msgstr "isto não inclui uma mudança de cores do seletor de sombras"
+msgstr "isto não inclui uma mudança de cores do seletor de tonalidade"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
@@ -25858,19 +25850,19 @@ msgstr "Mudar a cor do primeiro plano"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:415
 #, kde-format
 msgid "Left clicking on shade selector"
-msgstr "Clicar com o botão esquerdo no seletor de sombras"
+msgstr "Clicar com o botão esquerdo no seletor de tonalidade"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnRightClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:422
 #, kde-format
 msgid "Right clicking on shade selector"
-msgstr "Clicar com o botão direito no seletor de sombras"
+msgstr "Clicar com o botão direito no seletor de tonalidade"
 
 #. i18n: ectx: property (title), widget (QGroupBox, minimalShadeSelectorGroup)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:438
 #, kde-format
 msgid "Minimal Shade Selector"
-msgstr "Seletor de Sombras Mínimo"
+msgstr "Seletor de tonalidade mínimo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsColorPatches)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
@@ -29520,7 +29512,7 @@ msgstr "Mudanças de cor externamente"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
 #, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "Clicar com o botão direito no seletor de sombras"
+msgstr "Clicar com o botão direito no seletor de tonalidade"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
@@ -29532,7 +29524,7 @@ msgstr "A interação termina"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
 #, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Mostrar seletor de sombras mínimas"
+msgstr "Mostrar seletor de tonalidade mínimo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -29560,7 +29552,7 @@ msgstr "Opções"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:734
 #, kde-format
 msgid "Clear Button"
-msgstr "Limpar botão"
+msgstr "Botão Limpar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:760
@@ -29642,7 +29634,7 @@ msgstr "Visualização:"
 #, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Ações do seletor de cor WG"
+msgstr "Ações do WG do seletor de cor"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
@@ -29656,7 +29648,7 @@ msgstr "Mostrar o seletor de cor de amplo gamute"
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Mostrar o seletor de sombras de amplo gamute"
+msgstr "Mostrar o seletor de tonalidade de amplo gamute"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -29665,7 +29657,7 @@ msgstr "Mostrar o seletor de sombras de amplo gamute"
 #, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "Mostrar o seletor de sombras"
+msgstr "Mostrar o seletor de tonalidade"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -31976,7 +31968,7 @@ msgstr "Wavelet escalas:"
 #, kde-format
 msgctxt "action"
 msgid "Slope, Offset, Power Filter"
-msgstr "Inclinação, deslocamento, filtro de força..."
+msgstr "Filtro de inclinação, deslocamento e força"
 
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
 #, kde-format
@@ -35621,6 +35613,9 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"Embora formas de texto possam ser salvas em psd, apenas recursos básicos são "
+"suportados. Recursos avançados, como texto sobre caminho e recursos "
+"OpenType, não serão salvos."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

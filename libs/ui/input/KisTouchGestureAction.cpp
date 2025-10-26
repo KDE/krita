@@ -22,6 +22,7 @@ KisTouchGestureAction::KisTouchGestureAction()
     shortcuts.insert(i18n("Redo"), RedoActionShortcut);
     shortcuts.insert(i18n("Toggle Canvas Only Mode"), ToggleCanvasOnlyShortcut);
     shortcuts.insert(i18n("Toggle Eraser"), ToggleEraserMode);
+    shortcuts.insert(i18n("Toggle Eraser Preset"), ToggleEraserPreset);
     shortcuts.insert(i18n("Reset Display"), ResetDisplay);
     shortcuts.insert(i18n("Toggle Previous Brush Preset"), PreviousPresetShortcut);
     shortcuts.insert(i18n("Color Sampler"), ColorSampler);
@@ -139,6 +140,13 @@ void KisTouchGestureAction::end(QEvent *event)
     }
     case KisToolTransform: {
         QAction *action = actionCollection->action("KisToolTransform");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case ToggleEraserPreset: {
+        QAction *action = actionCollection->action("eraser_preset_action");
         if (action) {
             action->trigger();
         }

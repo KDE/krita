@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 03:30+0000\n"
-"PO-Revision-Date: 2025-10-09 17:19+0200\n"
+"PO-Revision-Date: 2025-10-25 08:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.08.2\n"
 "X-Accelerator-Marker: &\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -31704,7 +31704,7 @@ msgstr "Les notícies en anglès sempre estan actualitzades."
 #: libs/ui/KisWelcomePageWidget.cpp:400
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
-msgstr ""
+msgstr "Obtingueu aquí la vostra insígnia de seguidor/a del Krita!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:634
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306

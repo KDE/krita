@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-07 03:33+0000\n"
+"POT-Creation-Date: 2025-10-25 03:30+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -15803,8 +15803,8 @@ msgid ""
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:694 libs/ui/KisApplication.cpp:415
-#: libs/ui/KisApplication.cpp:691
+#: krita/main.cc:694 libs/ui/KisApplication.cpp:422
+#: libs/ui/KisApplication.cpp:698
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -15838,17 +15838,17 @@ msgid ""
 "the tablet driver is properly installed."
 msgstr ""
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:547
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:559
 #, kde-format
 msgid "Path options"
 msgstr ""
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:549
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:561
 #, kde-format
 msgid "Autosmooth curve"
 msgstr ""
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:553
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:565
 #, kde-format
 msgid "Activate angle snap"
 msgstr ""
@@ -15869,7 +15869,8 @@ msgstr ""
 #: libs/basicflakes/tools/KoPencilTool.cpp:300
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Curve"
 msgid "Curve"
 msgstr "Mohkkálat"
 
@@ -15953,13 +15954,15 @@ msgstr ""
 
 #: libs/command/kundo2model.cpp:54
 #: plugins/dockers/historydocker/KisUndoModel.cpp:57
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<empty>"
 msgid "<empty>"
 msgstr "<guorus>"
 
 #: libs/command/kundo2stack.cpp:1397 libs/ui/input/KisTouchGestureAction.cpp:22
 #: libs/widgetutils/xmlgui/kundoactions.cpp:32
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Redo"
 msgid "Redo"
 msgstr "Daga ođđasit"
 
@@ -16253,7 +16256,8 @@ msgid "A simple path shape"
 msgstr ""
 
 #: libs/flake/KoShapeController.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 Options"
 msgid "%1 Options"
 msgstr "%1-molssaeavttut"
 
@@ -16572,32 +16576,38 @@ msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr ""
 
 #: libs/global/KoUnit.cpp:36
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Millimeters (mm)"
 msgid "Millimeters (mm)"
 msgstr "Millimehterat (mm)"
 
 #: libs/global/KoUnit.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Centimeters (cm)"
 msgid "Centimeters (cm)"
 msgstr "Centimehtarat (cm)"
 
 #: libs/global/KoUnit.cpp:40
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Decimeters (dm)"
 msgid "Decimeters (dm)"
 msgstr "Desimehterat (dm)"
 
 #: libs/global/KoUnit.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inches (in)"
 msgid "Inches (in)"
 msgstr "Dumat (in)"
 
 #: libs/global/KoUnit.cpp:44
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Pica (pi)"
 msgid "Pica (pi)"
 msgstr "Pica (pi)"
 
 #: libs/global/KoUnit.cpp:46
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cicero (cc)"
 msgid "Cicero (cc)"
 msgstr "Cicero (cc)"
 
@@ -17313,7 +17323,8 @@ msgid "Show Coloring"
 msgstr ""
 
 #: libs/image/kis_layer_properties_icons.cpp:32
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Open File"
 msgid "Open File"
 msgstr "Raba fiilla"
 
@@ -17324,7 +17335,8 @@ msgid "Error"
 msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:620
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Merged"
 msgid "Merged"
 msgstr "Bárgiduvvon"
 
@@ -17393,7 +17405,8 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1383
 #: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unnamed"
 msgid "Unnamed"
 msgstr "Namahis"
 
@@ -17651,13 +17664,15 @@ msgstr ""
 
 #: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "off"
 msgid "off"
 msgstr "eret"
 
 #: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "on"
 msgid "on"
 msgstr "alde"
 
@@ -18370,17 +18385,20 @@ msgid "Generic RGB Histogram"
 msgstr ""
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:364
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "R"
 msgid "R"
 msgstr "R"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:365
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "G"
 msgid "G"
 msgstr "G"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:366
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "B"
 msgid "B"
 msgstr "B"
 
@@ -19353,7 +19371,8 @@ msgstr ""
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Untitled"
 msgid "Untitled"
 msgstr "Namaheapmi"
 
@@ -19405,10 +19424,10 @@ msgstr ""
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
-#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1031
-#: libs/ui/KisApplication.cpp:1034 libs/ui/KisApplication.cpp:1050
-#: libs/ui/KisApplication.cpp:1082 libs/ui/KisApplication.cpp:1096
-#: libs/ui/KisApplication.cpp:1124 libs/ui/KisDocument.cpp:996
+#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
+#: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
+#: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
+#: libs/ui/KisApplication.cpp:1131 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
@@ -19422,7 +19441,7 @@ msgstr ""
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:741
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19864,7 +19883,8 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resource"
 msgid "Resource"
 msgstr "Resursa"
 
@@ -22299,17 +22319,20 @@ msgid "Set color used for warning"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:67
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Ascending"
 msgid "Ascending"
 msgstr "Lassáneaddji"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:68
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Descending"
 msgid "Descending"
 msgstr "Geahppáneaddji"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Alphabetical"
 msgid "Alphabetical"
 msgstr "Alfabehtalaš"
 
@@ -23323,7 +23346,8 @@ msgstr ""
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:79
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:75
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Copy"
 msgid "Copy"
 msgstr "Máŋge"
 
@@ -23439,7 +23463,7 @@ msgid "Start"
 msgstr "Álggat"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:646
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:611
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -23479,43 +23503,43 @@ msgid "Community"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:394
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:364
 #, kde-format
 msgid "User Manual"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:397
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:367
 #, kde-format
 msgid "Support Krita"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:406
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:376
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:403
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:373
 #, kde-format
 msgid "Source Code"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:391
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:361
 #, kde-format
 msgid "Getting Started"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:388
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:358
 #, kde-format
 msgid "User Community"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:400
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:370
 #, kde-format
 msgid "Krita Website"
 msgstr ""
@@ -23572,7 +23596,7 @@ msgid "Show details"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:408
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:378
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23581,7 +23605,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1559
+#: libs/ui/forms/KisWelcomePage.ui:1636
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -27145,7 +27169,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:357
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:364
 #, kde-format
 msgid "Sessions"
 msgstr "Bargovuorut"
@@ -27697,7 +27721,8 @@ msgid "Action Name"
 msgstr "Doaimma namma"
 
 #: libs/ui/input/config/kis_input_type_delegate.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Key Combination"
 msgid "Key Combination"
 msgstr "Boallokombinašuvdna"
 
@@ -27753,7 +27778,8 @@ msgstr ""
 
 #: libs/ui/input/kis_abstract_input_action.cpp:34
 #: libs/ui/input/kis_tool_invocation_action.cpp:41
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Activate"
 msgid "Activate"
 msgstr "Aktivere"
 
@@ -27839,7 +27865,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Normal"
 msgid "Normal"
 msgstr "Dábálaš"
 
@@ -28273,7 +28300,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Confirm"
 msgid "Confirm"
 msgstr "Nanne"
 
@@ -28363,17 +28391,20 @@ msgid "Relative Discrete Zoom Mode"
 msgstr ""
 
 #: libs/ui/input/kis_zoom_action.cpp:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zoom In"
 msgid "Zoom In"
 msgstr "Stuoridit"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zoom Out"
 msgid "Zoom Out"
 msgstr "Unnidit"
 
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zoom to 100%"
 msgid "Zoom to 100%"
 msgstr "Olles sturrodahkii"
 
@@ -28571,7 +28602,8 @@ msgid "Fill Gradients"
 msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:76
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Patterns"
 msgid "&Patterns"
 msgstr "&Minsttarat"
 
@@ -28600,11 +28632,12 @@ msgstr ""
 msgid "&Open Background color selector"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:353
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:360
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Patterns"
 msgid "Patterns"
 msgstr "Minsttarat"
 
@@ -28613,8 +28646,8 @@ msgstr "Minsttarat"
 msgid "Custom Pattern"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:338
-#: libs/ui/KisApplication.cpp:339
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:345
+#: libs/ui/KisApplication.cpp:346
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29228,39 +29261,39 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:155
+#: libs/ui/kis_splash_screen.cpp:157
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:179
+#: libs/ui/kis_splash_screen.cpp:181
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
 "p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:222
+#: libs/ui/kis_splash_screen.cpp:224
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:229
+#: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:230
+#: libs/ui/kis_splash_screen.cpp:232
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:234
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/"
@@ -29268,40 +29301,40 @@ msgid ""
 "%1;\">Getting Started</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:238
+#: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:240
+#: libs/ui/kis_splash_screen.cpp:242
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:241
+#: libs/ui/kis_splash_screen.cpp:243
 #, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -29398,61 +29431,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
-#: libs/ui/KisApplication.cpp:335 libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:340 libs/ui/KisApplication.cpp:341
+#: libs/ui/KisApplication.cpp:342 libs/ui/KisApplication.cpp:343
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:341
+#: libs/ui/KisApplication.cpp:348
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:361 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:362
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:356 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:363 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:358
+#: libs/ui/KisApplication.cpp:365
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:360
+#: libs/ui/KisApplication.cpp:367
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:365
+#: libs/ui/KisApplication.cpp:372
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:385
 #, kde-format
 msgid ""
 "%1\n"
@@ -29460,13 +29493,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:378 libs/ui/KisApplication.cpp:384
+#: libs/ui/KisApplication.cpp:385 libs/ui/KisApplication.cpp:391
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:384
+#: libs/ui/KisApplication.cpp:391
 #, kde-format
 msgid ""
 "\n"
@@ -29474,7 +29507,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:416
+#: libs/ui/KisApplication.cpp:423
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29482,65 +29515,66 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:433
+#: libs/ui/KisApplication.cpp:440
 #, kde-format
 msgid "Initializing Globals..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid "Adding resource types..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:476
 #, kde-format
 msgid "Loading plugins..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:475
+#: libs/ui/KisApplication.cpp:482
 #, kde-format
 msgid "Loading resources..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:484
+#: libs/ui/KisApplication.cpp:491
 #, kde-format
 msgid "Loading Main Window..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:516
+#: libs/ui/KisApplication.cpp:523
 #, kde-format
 msgid "Launching..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:589
-#, kde-format
+#: libs/ui/KisApplication.cpp:596
+#, fuzzy, kde-format
+#| msgid "Mimetype not found, try using the -mimetype option"
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Ii gávdnan mime-šlája, geahččal «-mimetype» molssaeavttuin"
 
-#: libs/ui/KisApplication.cpp:645
+#: libs/ui/KisApplication.cpp:652
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:891
+#: libs/ui/KisApplication.cpp:679 libs/ui/KisApplication.cpp:898
 #, kde-format
 msgid "File layer"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:680 libs/ui/KisApplication.cpp:685
-#: libs/ui/KisApplication.cpp:885 libs/ui/KisApplication.cpp:899
-#: libs/ui/KisApplication.cpp:904
+#: libs/ui/KisApplication.cpp:687 libs/ui/KisApplication.cpp:692
+#: libs/ui/KisApplication.cpp:892 libs/ui/KisApplication.cpp:906
+#: libs/ui/KisApplication.cpp:911
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681 libs/ui/KisApplication.cpp:900
+#: libs/ui/KisApplication.cpp:688 libs/ui/KisApplication.cpp:907
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:686
+#: libs/ui/KisApplication.cpp:693
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29553,7 +29587,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:692
+#: libs/ui/KisApplication.cpp:699
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29561,32 +29595,34 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:886
+#: libs/ui/KisApplication.cpp:893
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:905
+#: libs/ui/KisApplication.cpp:912
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1032
+#: libs/ui/KisApplication.cpp:1039
 #, kde-format
 msgid "No template found for: %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1035
-#, kde-format
+#: libs/ui/KisApplication.cpp:1042
+#, fuzzy, kde-format
+#| msgid "Too many templates found for: %1"
 msgid "Too many templates found for: %1"
 msgstr "Menddo máŋga málle gávdnon %1 várás"
 
-#: libs/ui/KisApplication.cpp:1051
-#, kde-format
+#: libs/ui/KisApplication.cpp:1058
+#, fuzzy, kde-format
+#| msgid "Template %1 failed to load."
 msgid "Template %1 failed to load."
 msgstr "Ii sáhttán viežžat málle %1."
 
-#: libs/ui/KisApplication.cpp:1083
+#: libs/ui/KisApplication.cpp:1090
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29596,7 +29632,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1097
+#: libs/ui/KisApplication.cpp:1104
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29604,13 +29640,14 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1125
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
 
 #: libs/ui/KisApplicationArguments.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Open a new document with a template"
 msgid "Open a new document with a template"
 msgstr "Raba ođđa dokumeantta málliin"
 
@@ -29812,7 +29849,8 @@ msgid "Autosaving... %1"
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:1482
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Autosaving..."
 msgid "Autosaving..."
 msgstr "Autovurkemin …"
 
@@ -30036,7 +30074,8 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:178
 #: plugins/impex/libkra/kra_converter.cpp:390
 #: plugins/impex/libkra/kra_converter.cpp:419
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unknown error."
 msgid "Unknown error."
 msgstr "Amas meattáhus."
 
@@ -30289,23 +30328,27 @@ msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show %1 Toolbar"
 msgid "Show %1 Toolbar"
 msgstr "Čájet %1-reaidoholgga"
 
 #: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hide %1 Toolbar"
 msgid "Hide %1 Toolbar"
 msgstr "Čiega %1-reaidoholgga"
 
 #: libs/ui/KisMainWindow.cpp:1013
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save as %1"
 msgid "Save as %1"
 msgstr "Vurke nugo %1"
 
 #: libs/ui/KisMainWindow.cpp:1041
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The file %1 does not exist."
 msgid "The file %1 does not exist."
 msgstr "%1-fiila ii gávdno."
 
@@ -30642,17 +30685,20 @@ msgid "&Add Group..."
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Remove"
 msgid "&Remove"
 msgstr "&Váldde eret"
 
 #: libs/ui/KisTemplateCreateDia.cpp:129
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Picture"
 msgid "Picture"
 msgstr "Govva"
 
 #: libs/ui/KisTemplateCreateDia.cpp:132
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Preview"
 msgid "&Preview"
 msgstr "&Ovdačájeheapmi"
 
@@ -30663,12 +30709,14 @@ msgid "Custom:"
 msgstr "Iešdefinerejuvvon:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:141
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Select..."
 msgid "&Select..."
 msgstr "&Vállje …"
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Use the new template as default"
 msgid "Use the new template as default"
 msgstr "Geavat ođđa málle standárdan"
 
@@ -30678,7 +30726,8 @@ msgid "Use the new template every time Krita starts"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:285
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "Hálidat go duođas buhtte «%1»-málle?"
 
@@ -30717,7 +30766,8 @@ msgid "Remove Group"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:437
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Do you really want to remove that template?"
 msgid "Do you really want to remove that template?"
 msgstr "Hálidat go duođas váldit dien málle eret?"
 
@@ -30728,12 +30778,14 @@ msgid "Remove Template"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:495
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Could not load picture."
 msgid "Could not load picture."
 msgstr "Ii sáhttán viežžat gova."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No picture available."
 msgid "No picture available."
 msgstr "Eai leat govat olamuttus."
 
@@ -30763,7 +30815,10 @@ msgid "Layer is invisible."
 msgstr ""
 
 #: libs/ui/KisView.cpp:1183
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#| "it?</p>"
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
@@ -30888,52 +30943,58 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:161
+#: libs/ui/KisWelcomePageWidget.cpp:158
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:163
+#: libs/ui/KisWelcomePageWidget.cpp:160
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:166
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Language"
 msgstr "Giella"
 
-#: libs/ui/KisWelcomePageWidget.cpp:167
+#: libs/ui/KisWelcomePageWidget.cpp:164
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:669
+#: libs/ui/KisWelcomePageWidget.cpp:400
+#, kde-format
+msgid "Get your Krita Supporter Badge here!"
+msgstr ""
+
+#: libs/ui/KisWelcomePageWidget.cpp:634
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:760
+#: libs/ui/KisWelcomePageWidget.cpp:725
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:789
+#: libs/ui/KisWelcomePageWidget.cpp:754
 #, kde-format
 msgid "An error occurred during the update"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:795
+#: libs/ui/KisWelcomePageWidget.cpp:760
 #, kde-format
 msgid "Restart is required."
 msgstr ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Document Information"
 msgid "Document Information"
 msgstr "Dokumeantadieđut"
 
@@ -32081,13 +32142,16 @@ msgid "Filter \"%1\""
 msgstr ""
 
 #: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:323
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Icon size"
+#| msgid "Default"
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Standárda"
 
 #: libs/ui/toolbox/KoToolBox.cpp:354
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1x%2"
 msgid "%1x%2"
 msgstr "%1x%2"
 
@@ -32290,7 +32354,8 @@ msgid "Segmented gradient"
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Edit..."
 msgid "Edit..."
 msgstr "Doaimmat …"
 
@@ -32320,7 +32385,8 @@ msgstr ""
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:82
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transparent"
 msgid "Transparent"
 msgstr "Čadačuovgi"
 
@@ -34338,7 +34404,8 @@ msgid "Email"
 msgstr "E-boasta"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fax"
 msgid "Fax"
 msgstr "Fáksa"
 
@@ -34355,7 +34422,8 @@ msgid "Post Address"
 msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Telephone"
 msgid "Telephone"
 msgstr "Telefuvdna"
 
@@ -34365,7 +34433,8 @@ msgid "Entry"
 msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:94
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Anonymous"
 msgid "Anonymous"
 msgstr "Anonyma"
 
@@ -34428,28 +34497,34 @@ msgid "Contact:"
 msgstr "Oktavuohta:"
 
 #: libs/widgets/KoDialog.cpp:250
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Try"
 msgid "&Try"
 msgstr "&Geahččal"
 
 #: libs/widgets/KoDialog.cpp:471
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "modified"
 msgid "modified"
 msgstr "rievdaduvvon"
 
 #: libs/widgets/KoDialog.cpp:482
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Document/application separator in titlebar"
+#| msgid " – "
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr " – "
 
 #: libs/widgets/KoDialog.cpp:764
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Details"
 msgid "&Details"
 msgstr "&Bienat"
 
 #: libs/widgets/KoDialog.cpp:922
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Get help..."
 msgid "Get help..."
 msgstr "Oažžut veahki …"
 
@@ -34505,17 +34580,20 @@ msgid "0. Foreground to Background"
 msgstr ""
 
 #: libs/widgets/KoRuler.cpp:1329
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "First line indent"
 msgid "First line indent"
 msgstr "Vuosttáš linnjá siskkildeapmi"
 
 #: libs/widgets/KoRuler.cpp:1330
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Left indent"
 msgid "Left indent"
 msgstr "Gurut siskkildeapmi"
 
 #: libs/widgets/KoRuler.cpp:1331
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Right indent"
 msgid "Right indent"
 msgstr "Olgeš siskkildeapmi"
 
@@ -34602,40 +34680,51 @@ msgid "Channels"
 msgstr ""
 
 #: libs/widgetutils/config/klanguagebutton.cpp:181
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "without name"
 msgid "without name"
 msgstr "namahis"
 
 #: libs/widgetutils/config/krecentfilesaction.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No Entries"
 msgid "No Entries"
 msgstr "Eai leat merkošat"
 
 #: libs/widgetutils/config/krecentfilesaction.cpp:96
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clear List"
 msgid "Clear List"
 msgstr "Sálke listtu"
 
 #: libs/widgetutils/config/kstandardaction.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "go back"
+#| msgid "&Back"
 msgctxt "go back"
 msgid "&Back"
 msgstr "&Maŋos"
 
 #: libs/widgetutils/config/kstandardaction.cpp:85
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "go forward"
+#| msgid "&Forward"
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "&Ovddos"
 
 #: libs/widgetutils/config/kstandardaction.cpp:92
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "home page"
+#| msgid "&Home"
 msgctxt "home page"
 msgid "&Home"
 msgstr "&Ruoktut"
 
 #: libs/widgetutils/config/kstandardaction.cpp:95
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "show help"
+#| msgid "&Help"
 msgctxt "show help"
 msgid "&Help"
 msgstr "&Veahkki"
@@ -34647,7 +34736,8 @@ msgid "Show &Menubar"
 msgstr "Čájet &fálloholgga"
 
 #: libs/widgetutils/config/kstandardaction.cpp:517
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 "Čájet fálloholgga <p>Čájeha fálloholgga fas maŋŋá go lea leamaš "
@@ -34660,7 +34750,10 @@ msgid "Show St&atusbar"
 msgstr "Čájet &stáhtusholgga"
 
 #: libs/widgetutils/config/kstandardaction.cpp:538
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of "
+#| "the window used for status information.</p>"
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
@@ -35185,7 +35278,8 @@ msgid "percent of animation (%)"
 msgstr ""
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Font Family"
 msgid "Font Family"
 msgstr "Fontabearaš"
 
@@ -35257,7 +35351,8 @@ msgid "%1"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "About KDE"
 msgid "About KDE"
 msgstr "KDE dieđut"
 
@@ -35281,7 +35376,16 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html>Software can always be improved, and the KDE team is ready to do "
+#| "so. However, you - the user - must tell us when something does not work "
+#| "as expected or could be done better.<br /><br />KDE has a bug tracking "
+#| "system. Visit <a href=\"%1\">%1</a> or use the \"Report Bug...\" dialog "
+#| "from the \"Help\" menu to report bugs.<br /><br />If you have a "
+#| "suggestion for improvement then you are welcome to use the bug tracking "
+#| "system to register your wish. Make sure you use the severity called "
+#| "\"Wishlist\".</html>"
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
 "However, you - the user - must tell us when something does not work as "
@@ -35302,7 +35406,15 @@ msgstr ""
 "(Wishlist)».</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html>You do not have to be a software developer to be a member of the "
+#| "KDE team. You can join the national teams that translate program "
+#| "interfaces. You can provide graphics, themes, sounds, and improved "
+#| "documentation. You decide!<br /><br />Visit <a href=\"%1\">%1</a> for "
+#| "information on some projects in which you can participate.<br /><br />If "
+#| "you need more information or documentation, then a visit to <a href=\""
+#| "%2\">%2</a> will provide you with what you need.</html>"
 msgid ""
 "<html>You do not have to be a software developer to be a member of the KDE "
 "team. You can join the national teams that translate program interfaces. You "
@@ -35347,34 +35459,43 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "About KDE"
+#| msgid "&About"
 msgctxt "About KDE"
 msgid "&About"
 msgstr "&KDE birra"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Report Bugs or Wishes"
 msgid "&Report Bugs or Wishes"
 msgstr "&Váidal dihkiid dahje sávaldagaid"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:137
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Join KDE"
 msgid "&Join KDE"
 msgstr "&Searvva KDE-jovkui"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Support KDE"
 msgid "&Support KDE"
 msgstr "&Doarjut KDE"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Submit Bug Report"
 msgid "Submit Bug Report"
 msgstr "Sádde dihkeváidalusa"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:117
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The application for which you wish to submit a bug report - if incorrect, "
+#| "please use the Report Bug menu item of the correct application"
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
 "please use the Report Bug menu item of the correct application"
@@ -35383,12 +35504,16 @@ msgstr ""
 "boastut, berret válljet «Álmmut dihki» fálus dan prográmmas."
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Application: "
 msgid "Application: "
 msgstr "Prográmma: "
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:132
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The version of this application - please make sure that no newer version "
+#| "is available before sending a bug report"
 msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
@@ -35403,12 +35528,14 @@ msgid "Version:"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:138
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "no version set (programmer error)"
 msgid "no version set (programmer error)"
 msgstr "Veršuvdna ii leat bidjon (programmerenmeattáhus!)"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:146
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "OS:"
 msgid "OS:"
 msgstr "Vuogádat:"
 
@@ -35429,19 +35556,24 @@ msgid "&Submit Bug Report"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Dr. Klash' Accelerator Diagnosis"
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "Dr. Klash:a jođánisboallodiagnosa"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Disable automatic checking"
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "Ale geavat automáhtalaš dárkkisteami"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<h2>Accelerators changed</h2>"
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>Jođánisboalut rievdaduvvon</h2>"
 
@@ -35458,42 +35590,52 @@ msgid "New Text"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<h2>Accelerators removed</h2>"
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>Jođánisboalut váldojuvvon eret</h2>"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<h2>Accelerators added (just for your info)</h2>"
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>Jođánisboalut lasihuvvon (vai dieđát)</h2>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "--- separator ---"
 msgid "--- separator ---"
 msgstr "— earrolinnjá —"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Change Text"
 msgid "Change Text"
 msgstr "Rievdat teavstta"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Icon te&xt:"
 msgid "Icon te&xt:"
 msgstr "Govaš&teaksta:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Hide text when toolbar shows text alongside icons"
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "Čiega &teavstta go reaidoholga čájeha teavstta govažiid bálddas"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Configure Toolbars"
 msgid "Configure Toolbars"
 msgstr "Heivet reaidoholggaid"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do you really want to reset all toolbars of this application to their "
+#| "default? The changes will be applied immediately."
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
@@ -35502,12 +35644,14 @@ msgstr ""
 "doaibmagohtet dakkaviđe."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Reset Toolbars"
 msgid "Reset Toolbars"
 msgstr "Máhcat reaidoholggaid"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Toolbar:"
 msgid "&Toolbar:"
 msgstr "&Reaidoholga:"
 
@@ -35519,7 +35663,8 @@ msgstr "&Reaidoholga:"
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "A&vailable actions:"
 msgid "A&vailable actions:"
 msgstr "O&lamuttus doaimmat:"
 
@@ -35530,40 +35675,52 @@ msgid "Filter"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Curr&ent actions:"
 msgid "Curr&ent actions:"
 msgstr "&Dálá doaimmat:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Filter"
 msgid "Filter"
 msgstr "Silli"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@item:intable Action name in toolbar editor"
+#| msgid "%1"
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "This element will be replaced with all the elements of an embedded "
+#| "component."
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "Dát mearkkuš buhttejuvvo vuojuhuvvon oasi merkošiin."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<Merge>"
 msgid "<Merge>"
 msgstr "<Bargit>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "<Merge %1>"
 msgid "<Merge %1>"
 msgstr "<Bargit %1>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is a dynamic list of actions. You can move it, but if you remove it "
+#| "you will not be able to re-add it."
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
@@ -35572,43 +35729,58 @@ msgstr ""
 "eret, de it sáhte bidjat dan sisa fas."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "ActionList: %1"
 msgid "ActionList: %1"
 msgstr "Doaibmalistu: %1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label Action tooltip in toolbar editor, below the action list"
+#| msgid "%1"
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:492
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "left mouse button"
+#| msgid "left button"
 msgctxt "left mouse button"
 msgid "left button"
 msgstr "gurut sáhpánboallu"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:495
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "middle mouse button"
+#| msgid "middle button"
 msgctxt "middle mouse button"
 msgid "middle button"
 msgstr "gaskasáhpánboallu"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:498
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "right mouse button"
+#| msgid "right button"
 msgctxt "right mouse button"
 msgid "right button"
 msgstr "olgešboallu"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:501
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "a nonexistent value of mouse button"
+#| msgid "invalid button"
 msgctxt "a nonexistent value of mouse button"
 msgid "invalid button"
 msgstr "gustohis boallu"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:515
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "a kind of mouse gesture: hold down one mouse button, then press another "
+#| "button"
+#| msgid "Hold %1, then push %2"
 msgctxt ""
 "a kind of mouse gesture: hold down one mouse button, then press another "
 "button"
@@ -35616,14 +35788,17 @@ msgid "Hold %1, then push %2"
 msgstr "Doala vuos %1, de coahkkal %2"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Default:"
 msgid "Default:"
 msgstr "Standárda:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "No shortcut defined"
+#| msgid "None"
 msgctxt "No shortcut defined"
 msgid "None"
 msgstr "Ii mihkkige"
@@ -35669,7 +35844,10 @@ msgid "Alternate"
 msgstr "Eavttolaš"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The current shortcut scheme is modified. Save before switching to the new "
+#| "one?"
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
 "one?"
@@ -35678,7 +35856,9 @@ msgstr ""
 "ovdalgo molsu eará čoahkkádussii?"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:244
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "header for an applications shortcut list"
+#| msgid "Shortcuts for %1"
 msgctxt "header for an applications shortcut list"
 msgid "Shortcuts for %1"
 msgstr "Njuolggobálgát %1 várás"
@@ -35705,13 +35885,18 @@ msgid "Description"
 msgstr "Válddahus"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditorItem.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@item:intable Action name in shortcuts configuration"
+#| msgid "%1"
 msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "%1 is the number of conflicts"
+#| msgid "Shortcut Conflict"
+#| msgid_plural "Shortcut Conflicts"
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
 msgid_plural "Shortcut Conflicts"
@@ -35719,7 +35904,8 @@ msgstr[0] "Njuolggobálggis konflikta"
 msgstr[1] "Njuolggobálggis konflivttat"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shortcut '%1' for action '%2'\n"
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Njuolggobálggis «%1» doaibma %2 várás\n"
 
@@ -35739,17 +35925,22 @@ msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Reassign"
 msgid "Reassign"
 msgstr "Bija ođđasit"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shortcut conflict"
 msgid "Shortcut conflict"
 msgstr "Njuolggobálggis konflikta"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<qt>The '%1' key combination is already used by the <b>%2</b> action."
+#| "<br>Please select a different one.</qt>"
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
@@ -35765,12 +35956,17 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Conflict with Standard Application Shortcut"
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikta standardprográmma njuolggobálgáin"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The '%1' key combination is also used for the standard action \"%2\" that "
+#| "some applications use.\n"
+#| "Do you really want to use it as a global shortcut as well?"
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
 "some applications use.\n"
@@ -35781,18 +35977,22 @@ msgstr ""
 "Háliidatgo duođas geavahit dán globála njuolggobálggisin?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "What the user inputs now will be taken as the new shortcut"
+#| msgid "Input"
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Mearrit njuolggobálgá"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The key you just pressed is not supported by Qt."
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Qt ii doarjjo boalu maid easka deaddilit."
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unsupported Key"
 msgid "Unsupported Key"
 msgstr "Doarjjokeahtes boallu"
 
@@ -35825,7 +36025,8 @@ msgid "Load Custom Shortcuts"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export Scheme..."
 msgid "Export Scheme..."
 msgstr "Olggosfievrrit čoahkkádusa …"
 
@@ -35835,27 +36036,34 @@ msgid "Import Scheme..."
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:96
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Name for New Scheme"
 msgid "Name for New Scheme"
 msgstr "Ođđa čoahkkádusa namma"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Name for new scheme:"
 msgid "Name for new scheme:"
 msgstr "Čoahkkádusa namma"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "New Scheme"
 msgid "New Scheme"
 msgstr "Ođđa čoahkkádus"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:103
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "A scheme with this name already exists."
 msgid "A scheme with this name already exists."
 msgstr "Čoahkkádus dán namas gávdno juo."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do you really want to delete the scheme %1?\n"
+#| "Note that this will not remove any system wide shortcut schemes."
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "Note that this will not remove any system wide shortcut schemes."
@@ -35881,22 +36089,29 @@ msgid "Import Shortcuts"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Switch Application Language"
 msgid "Switch Application Language"
 msgstr "Molsso prográmma giela"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Please choose the language which should be used for this application:"
 msgid "Please choose the language which should be used for this application:"
 msgstr "Vállje dán prográmma giela:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add Fallback Language"
 msgid "Add Fallback Language"
 msgstr "Lasit liigegiela"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Adds one more language which will be used if other translations do not "
+#| "contain a proper translation."
 msgid ""
 "Adds one more language which will be used if other translations do not "
 "contain a proper translation."
@@ -35911,7 +36126,10 @@ msgid "Application Language Changed"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The language for this application has been changed. The change will take "
+#| "effect the next time the application is started."
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
@@ -35920,17 +36138,22 @@ msgstr ""
 "prográmma álggahuvvo."
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fallback language:"
 msgid "Fallback language:"
 msgstr "Liigegiella:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Primary language:"
 msgid "Primary language:"
 msgstr "Váldogiella:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is the main application language which will be used first, before "
+#| "any other languages."
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
@@ -35938,20 +36161,27 @@ msgstr ""
 "Dát lea prográmma váldogiella, mii geavahuvvo ovdalgo eará gielat geavahuvvot"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is the language which will be used if any previous languages do not "
+#| "contain a proper translation."
 msgid ""
 "This is the language which will be used if any previous languages do not "
 "contain a proper translation."
 msgstr "Dát giella geavahuvvo jus eai leat jorgalusat eará gielain."
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:289
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Show Text"
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "Čájet teavstta"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:292
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Toolbar Settings"
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "Reaidoholgga heivehusat"
@@ -35963,46 +36193,58 @@ msgid "Orientation"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:296
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Top"
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "Badjin"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:298
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Left"
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "Gurutbealde"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:299
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Right"
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "Olgešbealde"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:300
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Vuollin"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:308
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Position"
 msgid "Text Position"
 msgstr "Teavstta sajádat"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:310
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Icons Only"
 msgid "Icons Only"
 msgstr "Dušše govažat"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:311
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Only"
 msgid "Text Only"
 msgstr "Dušše teaksta"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:312
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Alongside Icons"
 msgid "Text Alongside Icons"
 msgstr "Teaksta govažiid bálddas"
 
@@ -36013,53 +36255,64 @@ msgstr ""
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:357
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Small (%1x%2)"
 msgid "Small (%1x%2)"
 msgstr "Unni (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:338
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Medium (%1x%2)"
 msgid "Medium (%1x%2)"
 msgstr "Gaskaávnnas (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:340
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Large (%1x%2)"
 msgid "Large (%1x%2)"
 msgstr "Stuoris(%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:342
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Huge (%1x%2)"
 msgid "Huge (%1x%2)"
 msgstr "Stuoris (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:385
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Lock Toolbar Positions"
 msgid "Lock Toolbar Positions"
 msgstr "Lohkat reaidoholggaid"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1277
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@action:intoolbar Text label of toolbar button"
+#| msgid "%1"
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1278
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip Tooltip of toolbar button"
+#| msgid "%1"
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:92
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Toolbars Shown"
 msgid "Toolbars Shown"
 msgstr "Čájehuvvon reaidoholggat"
 
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:172
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:336
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No text"
 msgid "No text"
 msgstr "Ii leat teaksta"
 
@@ -36459,7 +36712,8 @@ msgstr "Čáhppat"
 #: plugins/color/lcms2engine/colorspaces/gray_f32/GrayF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/gray_u16/GrayU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/gray_u8/GrayU8ColorSpace.cpp:24
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Gray"
 msgid "Gray"
 msgstr "Ránes"
 
@@ -36470,7 +36724,8 @@ msgstr "Ránes"
 #: plugins/color/lcms2engine/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Y"
 msgid "Y"
 msgstr "Y"
 
@@ -36633,7 +36888,8 @@ msgid "Hide Shade Selector"
 msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Do Nothing"
 msgid "Do Nothing"
 msgstr "Ale daga maidege"
 
@@ -36648,7 +36904,8 @@ msgid "On Mouse Over"
 msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Never"
 msgid "Never"
 msgstr "Ii goassege"
 
@@ -37335,30 +37592,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1504
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1505
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1612
 #, kde-format
 msgid "Edit Frames:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1639
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1647
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -37402,7 +37659,8 @@ msgid "Pin Existing Layer"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove Layer"
 msgid "Remove Layer"
 msgstr "Váldde laiggahaga eret"
 
@@ -38042,7 +38300,8 @@ msgid "Update histogram"
 msgstr ""
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Histogram"
 msgid "Histogram"
 msgstr "Histográmma"
 
@@ -38169,17 +38428,20 @@ msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1245
 #: plugins/dockers/layerdocker/LayerBox.cpp:1266
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Add"
 msgid "&Add"
 msgstr "&Lasit"
 
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 %"
 msgid "%1 %"
 msgstr "%1 %"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:46
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No"
 msgid "No"
 msgstr "Ii"
 
@@ -38236,7 +38498,8 @@ msgid "Log Viewer"
 msgstr ""
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:117
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Log Settings"
 msgid "Log Settings"
 msgstr "Fáktenheivehusat"
 
@@ -39719,7 +39982,8 @@ msgid "Task sets"
 msgstr ""
 
 #: plugins/dockers/tasksetdocker/tasksetmodel.cpp:45
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Task"
 msgid "Task"
 msgstr "Bargu"
 
@@ -40575,7 +40839,10 @@ msgid "Image Split"
 msgstr ""
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save\n"
+#| "%1"
 msgid ""
 "Could not save\n"
 "%1"
@@ -40584,7 +40851,10 @@ msgstr ""
 "%1"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save %1\n"
+#| "Reason: %2"
 msgid ""
 "Could not save %1\n"
 "Reason: %2"
@@ -41604,17 +41874,20 @@ msgid "List"
 msgstr "Listu"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:53
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Date"
 msgid "Date"
 msgstr "Dáhton"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Number"
 msgid "Number"
 msgstr "Lohku"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "String"
 msgid "String"
 msgstr "Teaksta"
 
@@ -42096,7 +42369,9 @@ msgid "Module not loaded:<br/>%1"
 msgstr ""
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:51
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:column"
+#| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Namma"
@@ -44198,7 +44473,8 @@ msgid "Level:"
 msgstr "Dássi:"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Normalize"
 msgid "Normalize"
 msgstr "Normalisere"
 
@@ -44237,7 +44513,9 @@ msgstr ""
 
 # unreviewed-context
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:206
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "smooth out the painting strokes the filter creates"
+#| msgid "Smooth"
 msgctxt "smooth out the painting strokes the filter creates"
 msgid "Smooth"
 msgstr "Čábbát"
@@ -44557,12 +44835,14 @@ msgid "Reset Transparent"
 msgstr ""
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Round Corners..."
 msgid "&Round Corners..."
 msgstr "&Jorbaduvvon čiegat …"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Radius"
 msgid "Radius"
 msgstr "Radius"
 
@@ -44710,7 +44990,8 @@ msgid "Arc"
 msgstr ""
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Pie"
 msgid "Pie"
 msgstr "Beahci"
 
@@ -44848,7 +45129,8 @@ msgid "Change spiral"
 msgstr "Kanála"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:23
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clockwise"
 msgid "Clockwise"
 msgstr "Diimmu mielde"
 
@@ -44876,7 +45158,8 @@ msgid "Direction:"
 msgstr "Guđe guvllut"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeFactory.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Spiral"
 msgid "Spiral"
 msgstr "Spirála"
 
@@ -44932,7 +45215,8 @@ msgid "A star"
 msgstr ""
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Star"
 msgid "Star"
 msgstr "Násti"
 
@@ -46155,7 +46439,8 @@ msgid "Heightmap Import Options"
 msgstr ""
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Error: "
 msgid "Error: "
 msgstr "Meattáhus: "
 
@@ -47655,22 +47940,26 @@ msgid "Not a valid Krita file"
 msgstr ""
 
 #: plugins/impex/libkra/kra_converter.cpp:93
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid document: no file 'maindoc.xml'."
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Gustohis dokumeanta: Fiila «maindoc.xml» ii gávdno"
 
 #: plugins/impex/libkra/kra_converter.cpp:149
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Could not create the file for saving"
 msgid "Could not create the file for saving"
 msgstr "Ii sáhttán ráhkadit fiilla vurkendihte"
 
 #: plugins/impex/libkra/kra_converter.cpp:228
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Not able to write '%1'. Partition full?"
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Ii sáhte čállit «%1». Leago garraskearru dievvan?"
 
 #: plugins/impex/libkra/kra_converter.cpp:320
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
 msgid "Could not find %1"
 msgstr "Ii gávdnan %1"
 
@@ -51274,7 +51563,8 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "°"
 msgid "°"
 msgstr "°"
 
@@ -51576,7 +51866,8 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Opaque"
 msgid "Opaque"
 msgstr "Čađačuovgi"
 
@@ -56082,12 +56373,14 @@ msgid "Global Coordinates"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Geometry"
 msgid "Geometry"
 msgstr "Geometriija"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:41
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill"
 msgid "Fill"
 msgstr "Deavdin"
 
@@ -56294,7 +56587,8 @@ msgstr ""
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:190
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:197
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:217
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Current"
 msgid "Current"
 msgstr "Dálá"
 
@@ -56328,7 +56622,8 @@ msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:363
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:388
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Mouse"
 msgid "Mouse"
 msgstr "Sáhpán"
 
@@ -56817,7 +57112,8 @@ msgid "Change SvgTextTool"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Tool"
 msgid "Text Tool"
 msgstr "Teakstareaidu"
 
@@ -56827,13 +57123,15 @@ msgid "Conversion failed"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Find Text"
 msgid "Find Text"
 msgstr "Oza teavstta"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Find:"
 msgid "Find:"
 msgstr "Oza:"
 
@@ -56843,7 +57141,8 @@ msgid "Find and Replace all"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace:"
 msgid "Replace:"
 msgstr "Buhtte:"
 
@@ -56867,12 +57166,14 @@ msgid "SVG Source"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Font"
 msgid "Font"
 msgstr "Fonta"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Color"
 msgid "Text Color"
 msgstr "Teakstaivdni"
 

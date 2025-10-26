@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 03:30+0000\n"
-"PO-Revision-Date: 2025-10-23 13:17+0400\n"
+"PO-Revision-Date: 2025-10-25 16:49+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16073,7 +16073,7 @@ msgstr "عكس المسارات"
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr "كسر المسار الفرعيّ"
+msgstr "اكسر المسار الفرعي"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
@@ -17299,7 +17299,7 @@ msgstr "وضع المزج"
 #: libs/image/kis_layer_properties_icons.cpp:20
 #, kde-format
 msgid "Locked"
-msgstr "مقفلة"
+msgstr "مقفل"
 
 #: libs/image/kis_layer_properties_icons.cpp:21
 #: plugins/python/channels2layers/channels2layers.py:78
@@ -19059,7 +19059,7 @@ msgstr "ألانُون"
 #, kde-format
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
-msgstr "متوسط هندسي"
+msgstr "المتوسط الهندسي"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
@@ -21113,7 +21113,7 @@ msgstr "غفل"
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
-msgstr "خط القاعدة"
+msgstr "خطّ أساس"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:57
@@ -28292,7 +28292,7 @@ msgstr ""
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
 #, kde-format
 msgid "Normal"
-msgstr "عاديّ"
+msgstr "عادي"
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:26
 #, kde-format
@@ -28493,19 +28493,19 @@ msgstr " + "
 #, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
-msgstr "الأيسر"
+msgstr "اليسار"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
 #, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
-msgstr "الأيمن"
+msgstr "اليمين"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
 #, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
-msgstr "الأوسط"
+msgstr "المنتصف"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:323
 #, kde-format
@@ -31236,7 +31236,7 @@ msgstr "المجموعة:"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
-msgstr "أ&ضف مجموعة..."
+msgstr "أضف مجموعة..."
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
@@ -31288,7 +31288,7 @@ msgstr "اختر صورة"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "Add Group"
-msgstr "أضف المجموعة"
+msgstr "أضف مجموعة"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407
 #, kde-format
@@ -31322,7 +31322,7 @@ msgstr "أمتأكد من إزالة القالب؟"
 #, kde-format
 msgctxt "@title:window"
 msgid "Remove Template"
-msgstr "إزالة القالب"
+msgstr "أزل القالب"
 
 #: libs/ui/KisTemplateCreateDia.cpp:495
 #, kde-format
@@ -31521,7 +31521,7 @@ msgstr "الأخبار الإنجليزية دائما محدثة."
 #: libs/ui/KisWelcomePageWidget.cpp:400
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
-msgstr ""
+msgstr "احصل على شارة داعم كريتا هنا!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:634
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
@@ -36794,7 +36794,7 @@ msgstr "فضلًا اختر اللغة التي تودّ استخدام التّ
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, kde-format
 msgid "Add Fallback Language"
-msgstr "أضف لغة احتياطيّة"
+msgstr "أضف لغة احتياطية"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
 #, kde-format
@@ -36882,7 +36882,7 @@ msgstr "يمين"
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
-msgstr "أسفل"
+msgstr "الأسفل"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:308
 #, kde-format
@@ -36953,7 +36953,7 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:92
 #, kde-format
 msgid "Toolbars Shown"
-msgstr "أشرطة الأدوات الظّاهرة"
+msgstr "أشرطة الأدوات المعروضة"
 
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:172
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:336
@@ -37548,7 +37548,7 @@ msgstr "عند تمرير الفأرة"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
 #, kde-format
 msgid "Never"
-msgstr "أبدًا"
+msgstr "البتة"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:82
 #, kde-format
@@ -39229,7 +39229,7 @@ msgstr "الرياضيات والحسابات"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Image Rendering"
-msgstr "تصيير الصورة"
+msgstr "عرض الصورة"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
@@ -39459,7 +39459,7 @@ msgstr "اضبط النقاط البيضاء والسوداء للمنظر"
 #: plugins/dockers/overview/overviewdocker_dock.cpp:38
 #, kde-format
 msgid "Overview"
-msgstr "نظرة عامّة"
+msgstr "نظرة عامة"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:156
 #, kde-format
@@ -42598,7 +42598,7 @@ msgstr "العدد"
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
 #, kde-format
 msgid "String"
-msgstr "النصّ"
+msgstr "سلسلة"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:60
 #, kde-format
@@ -51115,7 +51115,7 @@ msgstr "فرشاة الاستنساخ (معطلة مؤقتًا)"
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
 #, kde-format
 msgid "Painting Mode"
-msgstr "وضع الطّلاء"
+msgstr "صيغ التلوين"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPerspective)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:32
@@ -52353,7 +52353,7 @@ msgstr "الإزاحة العمودية:"
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
 #, kde-format
 msgid "Auto Spacing"
-msgstr "ضبط آليّ للمسافات"
+msgstr "ضبط آلي للمسافات"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
@@ -53060,7 +53060,7 @@ msgstr "زيادة التشبّع"
 #, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
-msgstr "قيمة أدنى "
+msgstr "القيمة الدنيا "
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:144
 #, kde-format
@@ -57775,7 +57775,7 @@ msgstr "احفظ التشكيلة باسم..."
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
 #, kde-format
 msgid "Remove profile"
-msgstr "احذف منظومة"
+msgstr "أزِل التشكيلة"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:74
 #, kde-format
@@ -58364,7 +58364,7 @@ msgstr "فشل التّحويل"
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
-msgstr "العثور على نصّ"
+msgstr "اعثر على النص"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:648

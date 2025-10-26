@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 03:30+0000\n"
-"PO-Revision-Date: 2025-10-24 08:54-0300\n"
+"PO-Revision-Date: 2025-10-25 07:57-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -15941,9 +15941,7 @@ msgstr "Direito"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:310
 #: libs/basicflakes/tools/KoPencilTool.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "Label of Optimize in JPEG Exporting dialogue"
-#| msgid "Optimize"
+#, kde-format
 msgid "Optimize"
 msgstr "Otimizar"
 
@@ -16106,12 +16104,9 @@ msgid "Reverse paths"
 msgstr "Inverter os caminhos"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath at points"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr "Quebrar subcaminho nos pontos"
+msgstr "Quebrar subcaminho"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
@@ -17333,8 +17328,7 @@ msgid "Blending Mode"
 msgstr "Modo de mesclagem"
 
 #: libs/image/kis_layer_properties_icons.cpp:20
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Locked"
 msgstr "Bloqueado"
 
@@ -19637,10 +19631,9 @@ msgid "Installing the resources from bundle %1."
 msgstr "Instalando os recursos do grupo de recursos %1."
 
 #: libs/resources/KisResourceLocator.cpp:1032
-#, fuzzy, kde-format
-#| msgid "Synchronizing the resources."
+#, kde-format
 msgid "Initializing the resources."
-msgstr "Sincronizando os recursos."
+msgstr "Inicializando os recursos."
 
 #: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
@@ -19957,20 +19950,17 @@ msgid "All"
 msgstr "Tudo"
 
 #: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
-#, fuzzy, kde-format
-#| msgid "All untagged"
+#, kde-format
 msgid "All Untagged"
 msgstr "Todos não etiquetados"
 
 #: libs/resources/KisTagModel.cpp:305
-#, fuzzy, kde-format
-#| msgid "All resources"
+#, kde-format
 msgid "All Resources"
 msgstr "Todos os recursos"
 
 #: libs/resources/KisTagModel.cpp:315
-#, fuzzy, kde-format
-#| msgid "All untagged resources"
+#, kde-format
 msgid "All Untagged Resources"
 msgstr "Todos os recursos não etiquetados"
 
@@ -20053,22 +20043,17 @@ msgstr "Escolher o arquivo a adicionar"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:76
 #: libs/widgets/KisTagSelectionWidget.cpp:121
-#, fuzzy, kde-format
-#| msgid "Assign to tag"
+#, kde-format
 msgid "Assign to tag"
 msgstr "Atribuir à etiqueta"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Remove from this tag"
+#, kde-format
 msgid "Remove from this tag"
 msgstr "Remover desta etiqueta"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Remove from other tag"
+#, kde-format
 msgid "Remove from other tag"
 msgstr "Remover da outra etiqueta"
 
@@ -20223,9 +20208,7 @@ msgstr ""
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Tag"
+#, kde-format
 msgid "Tag"
 msgstr "Etiqueta"
 
@@ -21184,12 +21167,11 @@ msgid "placebo"
 msgstr "placebo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:50
-#, fuzzy, kde-format
-#| msgid "Use outline"
+#, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
-msgstr "Usar contorno"
+msgstr "linha de base"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:57
@@ -21316,12 +21298,10 @@ msgid "none"
 msgstr "nenhum"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Sub"
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr "Sub"
+msgstr "sub"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -22583,8 +22563,7 @@ msgid "Descending"
 msgstr "Decrescente"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
-#, fuzzy, kde-format
-#| msgid "Alphabetical"
+#, kde-format
 msgid "Alphabetical"
 msgstr "Alfabética"
 
@@ -28427,9 +28406,7 @@ msgstr ""
 "pincel para a ferramenta de pincel."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - sharpness"
-#| msgid "Normal"
+#, kde-format
 msgid "Normal"
 msgstr "Normal"
 
@@ -28632,9 +28609,7 @@ msgid " + "
 msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Left"
+#, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Esquerda"
@@ -28646,9 +28621,7 @@ msgid "Right"
 msgstr "Direito"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Meio"
@@ -30841,22 +30814,19 @@ msgstr ""
 "local diferente."
 
 #: libs/ui/KisImportExportFilter.cpp:286
-#, fuzzy, kde-format
-#| msgid ""
-#| "Component %1 is missing in %2. Please try to save again in a different "
-#| "location."
+#, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
 "different location."
 msgstr ""
-"O componente %1 está ausente em %2. Tente salvar novamente em um local "
-"diferente."
+"O arquivo %1 está ausente em %2 e está corrompido. Tente salvá-lo novamente "
+"em um local diferente."
 
 #: libs/ui/KisImportExportManager.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
-msgstr "Abrir Áudio"
+msgstr "Abrir áudio"
 
 #: libs/ui/KisImportExportManager.cpp:422
 #, kde-format
@@ -31408,8 +31378,7 @@ msgid "Group:"
 msgstr "Grupo:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
-#, fuzzy, kde-format
-#| msgid "&Add Group..."
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
 msgstr "&Adicionar grupo..."
@@ -31496,9 +31465,7 @@ msgid "Do you really want to remove that template?"
 msgstr "Deseja realmente remover aquele modelo?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Remove Template"
 msgstr "Remover modelo"
@@ -33179,10 +33146,9 @@ msgstr "Opacidade: "
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:99
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:161
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgid "Position: "
-msgstr "Posição:"
+msgstr "Posição: "
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
 #, kde-format
@@ -34646,9 +34612,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Override"
+#, kde-format
 msgid "Overwrite"
 msgstr "Substituir"
 
@@ -35615,8 +35579,7 @@ msgid "First line indent"
 msgstr "Recuo da primeira linha"
 
 #: libs/widgets/KoRuler.cpp:1330
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgid "Left indent"
 msgstr "Recuo esquerdo"
 
@@ -35671,8 +35634,7 @@ msgid "Fit Text Width"
 msgstr "Ajustar à largura do texto"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit to View Height"
+#, kde-format
 msgid "Fit View Height"
 msgstr "Ajustar à altura da visualização"
 
@@ -36295,16 +36257,12 @@ msgid "percent of animation (%)"
 msgstr "porcentagem da animação (%)"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Family"
 msgstr "Família da fonte"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:223
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Style"
 msgstr "Estilo da fonte"
 
@@ -36686,9 +36644,7 @@ msgstr "Açõ&es atuais:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Filter"
+#, kde-format
 msgid "Filter"
 msgstr "Filtro"
 
@@ -36738,9 +36694,7 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:492
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgctxt "left mouse button"
 msgid "left button"
 msgstr "botão esquerdo"
@@ -37020,10 +36974,7 @@ msgid "A scheme with this name already exists."
 msgstr "Já existe um esquema com este nome."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "Note that this will not remove any system wide shortcut schemes."
@@ -37058,8 +37009,7 @@ msgid "Please choose the language which should be used for this application:"
 msgstr "Escolha o idioma a ser usado por este aplicativo:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
-#, fuzzy, kde-format
-#| msgid "Add Fallback Language"
+#, kde-format
 msgid "Add Fallback Language"
 msgstr "Adicionar idioma secundário"
 
@@ -37152,9 +37102,7 @@ msgid "Right"
 msgstr "Direito"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Inferior"
@@ -37226,8 +37174,7 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:92
-#, fuzzy, kde-format
-#| msgid "Toolbars Shown"
+#, kde-format
 msgid "Toolbars Shown"
 msgstr "Barras de ferramentas visíveis"
 
@@ -37827,8 +37774,7 @@ msgid "On Mouse Over"
 msgstr "Ao passar o mouse"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgid "Never"
 msgstr "Nunca"
 
@@ -38452,9 +38398,7 @@ msgid "Mute"
 msgstr "Mudo"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Volume: "
@@ -38657,8 +38601,7 @@ msgid "Make clones Unique"
 msgstr "Tornar clones em únicos"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:46
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgid "Tint: "
 msgstr "Colorir: "
 
@@ -38969,8 +38912,7 @@ msgid "Rename Composition"
 msgstr "Renomear composição"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
-#, fuzzy, kde-format
-#| msgid "New Name:"
+#, kde-format
 msgid "New Name:"
 msgstr "Novo nome:"
 
@@ -39099,10 +39041,9 @@ msgid "Isometric"
 msgstr "Isométrico"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:348
-#, fuzzy, kde-format
-#| msgid "Isometric (Legacy - requires OpenGL)"
+#, kde-format
 msgid "Isometric (requires OpenGL)"
-msgstr "Isométrica (Legado - requer OpenGL)"
+msgstr "Isométrica (requer OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -39728,10 +39669,9 @@ msgid "Configure black and white points of the view"
 msgstr "Configura os pontos preto e branco da exibição"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:38
-#, fuzzy, kde-format
-#| msgid "Overview"
+#, kde-format
 msgid "Overview"
-msgstr "Introdução"
+msgstr "Visão geral"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:156
 #, kde-format
@@ -40549,20 +40489,13 @@ msgstr ""
 "Verifique o espaço livre em disco e reinicie o gravador."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:478
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time.\n"
-#| "Try to increase the capture interval or reduce the scaling filtering in "
-#| "the canvas acceleration settings."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
 "Aviso de baixo desempenho. O gravador não consegue gravar todos os quadros a "
-"tempo.\n"
-"Tente aumentar o intervalo de captura ou reduzir a filtragem de escala nas "
-"configurações de aceleração da tela de pintura."
+"tempo. Tente aumentar o intervalo de captura."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -42892,10 +42825,9 @@ msgid "Number"
 msgstr "Número"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, fuzzy, kde-format
-#| msgid "String"
+#, kde-format
 msgid "String"
-msgstr "Cadeia de Caracteres"
+msgstr "Cadeia de caracteres"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:60
 #, kde-format
@@ -43008,18 +42940,12 @@ msgid "Offset Image"
 msgstr "Deslocar imagem"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
-#| msgid_plural "Offset %1 Layers"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "Deslocar camada"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "Deslocar camada"
@@ -50144,12 +50070,10 @@ msgstr ""
 "específico para a imagem resultante.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "White Balance"
+#, kde-format
 msgctxt "@label"
 msgid "White Balance"
-msgstr "Balanceamento de branco"
+msgstr "Balanço de branco"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
 #, kde-format
@@ -50305,12 +50229,10 @@ msgid "None"
 msgstr "Nenhum"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Camera Profile"
-#| msgid "Embedded"
+#, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
-msgstr "Incorporado"
+msgstr "Embutido"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
 #, kde-format
@@ -51562,10 +51484,9 @@ msgstr "Clonar o pincel (temporariamente desativado)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Painting Mode"
+#, kde-format
 msgid "Painting Mode"
-msgstr "Modo de Pintura"
+msgstr "Modo de pintura"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPerspective)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:32
@@ -52808,11 +52729,9 @@ msgstr "Deslocamento vertical:"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Word Spacing"
+#, kde-format
 msgid "Auto Spacing"
-msgstr "Espaçamento de palavra"
+msgstr "Espaçamento automático"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
@@ -53123,9 +53042,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid "°"
+#, kde-format
 msgid "°"
 msgstr "°"
 
@@ -53335,8 +53252,7 @@ msgstr ""
 "traço"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
-#, fuzzy, kde-format
-#| msgid "Color image"
+#, kde-format
 msgid "Color Image"
 msgstr "Imagem colorida"
 
@@ -53347,9 +53263,7 @@ msgid "The brush tip image is painted as it is"
 msgstr "A imagem da ponta do pincel é pintada como ela é"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
+#, kde-format
 msgid "Lightness Map"
 msgstr "Mapa de luminosidade"
 
@@ -53377,8 +53291,7 @@ msgstr ""
 "final"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Animated mask"
+#, kde-format
 msgid "Animated Mask"
 msgstr "Máscara animada"
 
@@ -58097,11 +58010,9 @@ msgstr "Ferramenta de selecionar formas"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Opacity [*varies*]: {n}"
+#, kde-format
 msgid "Opacity [*varies*]: "
-msgstr "Opacidade [*varia*]: {n}"
+msgstr "Opacidade [*varia*]: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58246,18 +58157,14 @@ msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Saturation [*varies*]: {n}%"
+#, kde-format
 msgid "Saturation [*varies*]: "
-msgstr "Saturação [*varia*]: {n}%"
+msgstr "Saturação [*varia*]: "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
+#, kde-format
 msgid "Add Reference Image"
-msgstr "Adicionar Imagem de referência"
+msgstr "Adicionar imagem de referência"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:66
 #, kde-format
@@ -58323,8 +58230,7 @@ msgid "Save profile as..."
 msgstr "Salvar perfil como..."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
-#, fuzzy, kde-format
-#| msgid "Remove profile"
+#, kde-format
 msgid "Remove profile"
 msgstr "Remover perfil"
 
@@ -58339,8 +58245,7 @@ msgid "Use tablet &pressure"
 msgstr "Usar a &pressão da mesa digitalizadora"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thinning:"
 msgstr "Afinação:"
 
@@ -58390,8 +58295,7 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "Insira o nome com o qual deseja salvar este perfil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "Sorry, the name you entered is invalid."
 msgstr "Desculpe, mas o nome que você inseriu é inválido."
 
@@ -58908,9 +58812,7 @@ msgid "Change SvgTextTool"
 msgstr "Alterar ferramenta de texto SVG"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Tool"
 msgstr "Ferramenta de texto"
 
@@ -58920,10 +58822,9 @@ msgid "Conversion failed"
 msgstr "Conversão falhou"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
-#, fuzzy, kde-format
-#| msgid "Find &Next"
+#, kde-format
 msgid "Find Text"
-msgstr "Localizar p&róxima"
+msgstr "Localizar texto"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
@@ -59776,9 +59677,7 @@ msgid "Include contour regions"
 msgstr "Incluir regiões de contorno"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
 msgstr "Escala: "
@@ -59992,11 +59891,9 @@ msgstr ""
 "o valor \"Dica de fechamento de lacuna\""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Clean up: {n}%"
+#, kde-format
 msgid "Clean up: "
-msgstr "Limpar: {n}%"
+msgstr "Limpar: "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:127
 #, kde-format
@@ -60150,12 +60047,7 @@ msgid "Patch Radius:"
 msgstr "Raio do patch:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
-#, fuzzy, kde-format
-#| msgid ""
-#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
-#| "you cannot scale the selection with handles. Please compile Krita with "
-#| "GNU Scientific Library support, or use options widget for editing scale "
-#| "values manually."
+#, kde-format
 msgid ""
 "Sorry, Krita was built without the support of GNU Scientific Library, so you "
 "cannot scale the selection with handles. Please compile Krita with GNU "

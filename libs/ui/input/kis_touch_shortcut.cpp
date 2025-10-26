@@ -45,6 +45,15 @@ int KisTouchShortcut::priority() const
     return action()->priority();
 }
 
+bool KisTouchShortcut::isHoldType() const
+{
+#ifdef Q_OS_MACOS
+    return false; // No equivalent gestures on macOS.
+#else
+    return d->type == KisShortcutConfiguration::OneFingerHold;
+#endif
+}
+
 void KisTouchShortcut::setMinimumTouchPoints(int min)
 {
     d->minTouchPoints = min;
@@ -76,6 +85,11 @@ bool KisTouchShortcut::matchDragType(QTouchEvent *event)
         && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
 #endif
         ;
+}
+
+bool KisTouchShortcut::matchHoldType(QTouchEvent *event)
+{
+    return isHoldType() && matchTouchPoint(event);
 }
 
 bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)

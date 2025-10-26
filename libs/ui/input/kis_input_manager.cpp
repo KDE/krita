@@ -132,6 +132,16 @@ void KisInputManager::slotConfigChanged()
 #endif
 }
 
+void KisInputManager::slotTouchHoldTriggered()
+{
+    d->cancelTouchHoldTimer();
+    d->clearBufferedTouchEvents();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->originatingTouchBeginEvent);
+    if (d->matcher.touchHoldBeginEvent(static_cast<QTouchEvent *>(d->originatingTouchBeginEvent.data()))) {
+        d->touchHasBlockedPressEvents = true;
+    }
+}
+
 
 void KisInputManager::toggleTabletLogger()
 {
@@ -708,10 +718,25 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (startTouch(retval)) {
             QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
             KisAbstractInputAction::setInputManager(this);
-            d->previousPos = touchEvent->touchPoints().at(0).pos();
+            d->startingPos = touchEvent->touchPoints().at(0).pos();
+            d->previousPos = d->startingPos;
             // we don't want to lose this event
             KoPointerEvent::copyQtPointerEvent(touchEvent, d->originatingTouchBeginEvent);
-            retval = d->matcher.touchBeginEvent(touchEvent);
+
+            // In the face of a touch and hold shortcut being present, we need
+            // to disambiguate whether this is a touch being held or the user
+            // is doing something else. For that purpose, we start buffering
+            // received touch events until we can actually make a decision.
+            d->clearBufferedTouchEvents();
+            if (d->matcher.hasTouchHoldShortcut() && touchEvent->touchPoints().length() == 1) {
+                d->bufferTouchEvent(touchEvent);
+                d->restartTouchHoldTimer();
+                retval = true;
+            } else {
+                d->cancelTouchHoldTimer();
+                retval = handleTouchBegin(touchEvent);
+            }
+
             KIS_SAFE_ASSERT_RECOVER(!d->touchStrokeStarted) {
                 d->touchStrokeStarted = false;
             }
@@ -740,35 +765,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         if (count < 2 && touchEvent->touchPoints().length() > count) {
             d->touchHasBlockedPressEvents = false;
+            d->cancelTouchHoldTimer();
             retval = d->matcher.touchEndEvent(touchEvent);
         } else {
 #endif
-            QPointF currentPos = touchEvent->touchPoints().at(0).pos();
-            if (d->touchStrokeStarted || (!KisConfig(true).disableTouchOnCanvas()
-                && !d->touchHasBlockedPressEvents
-                && touchEvent->touchPoints().count() == 1
-                && touchEvent->touchPointStates() != Qt::TouchPointStationary
-                && (qAbs(currentPos.x() - d->previousPos.x()) > 1		// stop wobbliness which Qt sends us
-                ||  qAbs(currentPos.y() - d->previousPos.y()) > 1)))
-            {
-                d->previousPos = currentPos;
-                if (!d->touchStrokeStarted) {
-                    // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
-                    retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
-                    d->touchStrokeStarted = retval;
-                } else {
-                    // if it is a full-fledged stroke, then ignore (currentPos.x - previousPos.x)
-                    retval = compressMoveEventCommon(touchEvent);
-                    d->blockMouseEvents();
-                }
+            // Touch hold shortcuts need to buffer events, see TouchBegin.
+            if (touchHoldBufferUpdate(touchEvent)) {
+                retval = true; // Event was buffered.
             } else {
-                KisAbstractInputAction::setInputManager(this);
-                if (d->touchHasBlockedPressEvents) {
-                    retval = compressMoveEventCommon(touchEvent);
-                } else {
-                    retval = d->matcher.touchUpdateEvent(touchEvent);
-                    d->touchHasBlockedPressEvents = retval;
-                }
+                retval = handleTouchUpdate(touchEvent);
             }
 #ifdef Q_OS_MACOS
         }
@@ -783,15 +788,20 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchEnd:
     {
+        d->cancelTouchHoldTimer();
+        d->flushBufferedTouchEvents();
+
         if (d->popupWasActive) {
             event->setAccepted(true);
             return true;
         }
         d->debugEvent<QTouchEvent, false>(event);
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+
         retval = d->matcher.touchEndEvent(touchEvent);
         if (d->touchStrokeStarted) {
             retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
+            d->startingPos = {0, 0};
             d->previousPos = {0, 0};
             d->touchStrokeStarted = false; // stroke ended
         } else if (!KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
@@ -816,6 +826,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchCancel:
     {
+        d->cancelTouchHoldTimer();
+        d->clearBufferedTouchEvents();
+
         if (d->popupWasActive) {
             event->setAccepted(true);
             return true;
@@ -826,6 +839,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         d->matcher.touchCancelEvent(touchEvent, d->previousPos);
         // reset state
+        d->startingPos = {0, 0};
         d->previousPos = {0, 0};
         d->touchStrokeStarted = false;
         retval = true;
@@ -886,6 +900,57 @@ bool KisInputManager::startTouch(bool &retval)
 void KisInputManager::endTouch()
 {
     d->touchHasBlockedPressEvents = false;
+}
+
+bool KisInputManager::touchHoldBufferUpdate(QTouchEvent *touchEvent)
+{
+    if (d->isPendingTouchHold()) {
+        if (touchEvent->touchPoints().length() == 1 && d->isWithinTouchHoldSlopRange(touchEvent->touchPoints().at(0).pos())) {
+            d->bufferTouchEvent(touchEvent);
+            return true;
+        } else {
+            d->cancelTouchHoldTimer();
+            d->flushBufferedTouchEvents();
+        }
+    }
+    return false;
+}
+
+bool KisInputManager::handleTouchBegin(QTouchEvent *touchEvent)
+{
+    return d->matcher.touchBeginEvent(touchEvent);
+}
+
+bool KisInputManager::handleTouchUpdate(QTouchEvent *touchEvent)
+{
+    QPointF currentPos = touchEvent->touchPoints().at(0).pos();
+    if (d->touchStrokeStarted
+        || (!KisConfig(true).disableTouchOnCanvas() && !d->touchHasBlockedPressEvents
+            && touchEvent->touchPoints().count() == 1 && touchEvent->touchPointStates() != Qt::TouchPointStationary
+            && (qAbs(currentPos.x() - d->previousPos.x()) > 1 // stop wobbliness which Qt sends us
+                || qAbs(currentPos.y() - d->previousPos.y()) > 1))) {
+        d->previousPos = currentPos;
+        if (!d->touchStrokeStarted) {
+            // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
+            bool retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());
+            d->touchStrokeStarted = retval;
+            return retval;
+        } else {
+            // if it is a full-fledged stroke, then ignore (currentPos.x - previousPos.x)
+            bool retval = compressMoveEventCommon(touchEvent);
+            d->blockMouseEvents();
+            return retval;
+        }
+    } else {
+        KisAbstractInputAction::setInputManager(this);
+        if (d->touchHasBlockedPressEvents) {
+            return compressMoveEventCommon(touchEvent);
+        } else {
+            bool retval = d->matcher.touchUpdateEvent(touchEvent);
+            d->touchHasBlockedPressEvents = retval;
+            return retval;
+        }
+    }
 }
 
 void KisInputManager::slotCompressedMoveEvent()

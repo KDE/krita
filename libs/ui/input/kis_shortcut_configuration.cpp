@@ -496,6 +496,8 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
         return i18n("Four Finger Drag");
     case FiveFingerDrag:
         return i18n("Five Finger Drag");
+    case OneFingerHold:
+        return i18n("One Finger Hold");
 #endif
     default:
         return i18n("No Gesture");

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-23 13:17+0400\n"
+"PO-Revision-Date: 2025-10-25 16:49+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16057,9 +16057,7 @@ msgstr "مستقيم"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:307
 #: libs/basicflakes/tools/KoPencilTool.cpp:314
-#, fuzzy, kde-format
-#| msgctxt "Label of Optimize in JPEG Exporting dialogue"
-#| msgid "Optimize"
+#, kde-format
 msgid "Optimize"
 msgstr "حسِّن"
 
@@ -16222,12 +16220,9 @@ msgid "Reverse paths"
 msgstr "عكس المسارات"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath at points"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr "اكسِر المسار الفرعي عند النقاط"
+msgstr "اكسر المسار الفرعي"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
@@ -16478,12 +16473,10 @@ msgid "Fit Height"
 msgstr "لائم الارتفاع"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@info:placeholder"
-#| msgid "Style Name:"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "اسم الطراز:"
+msgstr "عينة الطراز"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -16929,12 +16922,10 @@ msgid "Greek Extended"
 msgstr "يوناني ممتدّ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Supplemental Punctuation"
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "ترقيم تكميلي"
+msgstr "ترقيم عام"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
@@ -17525,12 +17516,10 @@ msgid "Lycian"
 msgstr "ليشياني"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Variant:"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "التّنويعة:"
+msgstr "كاريان"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
@@ -18579,12 +18568,10 @@ msgid ""
 msgstr "استبدل تسلسلات الرسوميات بروابط اعتماداً على سياقها ضمن نص."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Contextual"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr "سياقي"
+msgstr "تزيين سياقي"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18620,12 +18607,10 @@ msgstr "استبدل الرسوميات بأشكال نهايات الأسطر �
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Historical"
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "تاريخية"
+msgstr "أشكال تأريخية"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18783,12 +18768,10 @@ msgstr ""
 "للتعامل مع التشكيلات."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
-msgstr "تجانب"
+msgstr "التجانب"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
 #, kde-format
@@ -18940,12 +18923,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr "استبدل التشكيلات على الأحرف الكبيرة بأشكال مسطحة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Fractions:"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "كسور:"
+msgstr "كسور"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -18977,12 +18958,10 @@ msgstr ""
 "الأحرف الكبيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr "رياضي"
+msgstr "رياضية يونانية"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -19018,12 +18997,10 @@ msgid ""
 msgstr "استبدل الأرقام بأشكال مناسبة لتمثيل البسط في كسر."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Oldstyle"
+#, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "النمط قديم"
+msgstr "أرقام قديمة الطراز"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19036,9 +19013,7 @@ msgstr ""
 "الصغيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Ordinals"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
 msgstr "ترتيبي"
@@ -19112,12 +19087,10 @@ msgid "Replaces glyphs with ones more suited for superscript."
 msgstr "استبدل الرسوميات بأخرى أكثر ملاءمة للأحرف المرتفعة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Tabular"
+#, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr "جدولي"
+msgstr "أرقام جدولية"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
@@ -19126,9 +19099,7 @@ msgid "Replaces proportional figures with tabular figures."
 msgstr "استبدل الأرقام المتناسبة بأرقام جدولية."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Slashed Zero"
+#, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
 msgstr "صفر بشرطة"
@@ -19200,9 +19171,7 @@ msgid "Replaces uppercase letters with small capital forms."
 msgstr "استبدل الأحرف الكبيرة بأشكال أحرف صغيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Petite Caps"
+#, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
 msgstr "حروف صغيرة دقيقة"
@@ -19218,12 +19187,10 @@ msgstr ""
 "للخط من أشكال الأحرف الصغيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Small Caps"
+#, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr "حروف كبيرة مصغرة"
+msgstr "حروف كبيرة مُصغّرة"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
@@ -19232,12 +19199,10 @@ msgid "Replaces lowercase letters with small capital forms."
 msgstr "استبدل الأحرف الصغيرة بأشكال أحرف صغيرة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Titling Caps"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "حروف كبيرة للعناوين"
+msgstr "العنونة"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -19246,9 +19211,7 @@ msgid "Replaces glyphs with alternate forms suited for header text."
 msgstr "استبدل الرسوميات بأشكال بديلة مناسبة لنص العنوان."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Unicase"
+#, kde-format
 msgctxt "@title"
 msgid "Unicase"
 msgstr "موحدة حالة الأحرف"
@@ -19556,12 +19519,10 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr "استبدل الأشكال القياسية في الخطوط اليابانية بأشكال الخبراء."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Full width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr "كامل العرض"
+msgstr "عُرض كامل"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
@@ -19594,12 +19555,10 @@ msgid ""
 msgstr "استبدل كانا القياسية في الخطوط اليابانية بأخرى مناسبة للتخطيط الأفقي."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Hangul Jamo"
+#, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr "هنگول جامو"
+msgstr "هانغول"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
@@ -19651,12 +19610,10 @@ msgid "Replaces Latin glyphs in a CJK font with their italic forms."
 msgstr "استبدل الرسوميات اللاتينية في خط CJK بأشكالها المائلة."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS2004 Forms"
+#, kde-format
 msgctxt "@title"
 msgid "JIS78 Forms"
-msgstr "أشكال JIS2004"
+msgstr "أشكال JIS78"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
 #, kde-format
@@ -19665,12 +19622,10 @@ msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
 msgstr "استبدل كانجي الشكل القياسي في الخطوط اليابانية بأشكال JIS78."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS2004 Forms"
+#, kde-format
 msgctxt "@title"
 msgid "JIS83 Forms"
-msgstr "أشكال JIS2004"
+msgstr "أشكال JIS83"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
 #, kde-format
@@ -19679,12 +19634,10 @@ msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
 msgstr "استبدل كانجي الشكل القياسي في الخطوط اليابانية بأشكال JIS83."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS2004 Forms"
+#, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr "أشكال JIS2004"
+msgstr "أشكال JIS90"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
@@ -19792,12 +19745,10 @@ msgid ""
 msgstr "استبدل الرسوميات في خطوط CJK بأخرى مناسبة للنص الصغير في تعليقات روبي."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Simplified"
+#, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr "مبسّط"
+msgstr "أشكال مبسطة"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -19836,12 +19787,10 @@ msgstr ""
 "الأسماء."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Traditional Name Forms"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "أشكال أسماء تقليدية"
+msgstr "أشكال تقليدية"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -21233,10 +21182,9 @@ msgid "Blending Mode"
 msgstr "وضع المزج"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
-#, fuzzy, kde-format
-#| msgid "Lock"
+#, kde-format
 msgid "Locked"
-msgstr "اقفل"
+msgstr "مقفل"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
 #: plugins/python/channels2layers/channels2layers.py:104
@@ -21924,32 +21872,24 @@ msgid ""
 msgstr "تحتوي الصّورة على <b>أنماط طبقات</b>. لن تُحفظ أنماط الطّبقات."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"تحتوي الصورة على طبقة ملء من النوع <b>%1</b>، والتي لا يدعمها، ستُحوَّل الطبقة "
-"إلى طبقة رسم"
+"تحتوي الصورة على طبقة متجهة بأشكال من النوع <b>%1</b>، وهي غير متاحة، ولن "
+"تُحفظ."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"تحتوي الصورة على طبقة ملء من النوع <b>%1</b>، والتي لا يدعمها، ستُحوَّل الطبقة "
-"إلى طبقة رسم"
+"تحتوي الصورة على طبقة متجهة بأشكال من النوع <b>%1</b>، وهي غير متاحة، ستحفظ "
+"على أنها مسارات"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -23039,13 +22979,10 @@ msgid "Alpha Darken"
 msgstr "تعتيم ألفا"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
-#| msgid "Markers"
+#, kde-format
 msgctxt "Blending mode - Marker"
 msgid "Marker"
-msgstr "المؤشرات"
+msgstr "مَعْلَم"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
@@ -23096,12 +23033,10 @@ msgid "Allanon"
 msgstr "ألانُون"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Geometric Shapes"
+#, kde-format
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
-msgstr "أشكال هندسية"
+msgstr "المتوسط الهندسي"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
 #, kde-format
@@ -23622,8 +23557,7 @@ msgid "Could not remove storage %1 from the database"
 msgstr "لم يستطع إزالة المخزن %1 من قاعدة البيانات"
 
 #: libs/resources/KisResourceLocator.cpp:973
-#, fuzzy, kde-format
-#| msgid "Could not synchronize updated font registery with the database"
+#, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr "لم يستطع مزامنة سجل الخطوط المُحدَّث مع قاعدة البيانات"
 
@@ -24103,23 +24037,17 @@ msgstr "اختر ملفًّا لإضافته"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
 #: libs/widgets/KisTagSelectionWidget.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Assign to Tag"
+#, kde-format
 msgid "Assign to tag"
 msgstr "عيّن إلى وسم"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Remove from this tag"
+#, kde-format
 msgid "Remove from this tag"
 msgstr "أزل من هذا الوسم"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Remove from other tag"
+#, kde-format
 msgid "Remove from other tag"
 msgstr "أزل من وسم آخر"
 
@@ -24272,9 +24200,7 @@ msgstr ""
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:51
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Tag"
+#, kde-format
 msgid "Tag"
 msgstr "الوسم"
 
@@ -25219,13 +25145,11 @@ msgid "placebo"
 msgstr "غفل"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Baseline"
+#, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
-msgstr "خط القاعدة"
+msgstr "خطّ أساس"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:57
@@ -25352,12 +25276,10 @@ msgid "none"
 msgstr "بلا"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Sub"
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr "منخفض"
+msgstr "استبدل"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -26636,9 +26558,7 @@ msgid "Descending"
 msgstr "تنازليّ"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Alphabetic"
+#, kde-format
 msgid "Alphabetical"
 msgstr "أبجديّ"
 
@@ -32673,9 +32593,7 @@ msgstr ""
 "”حجم الفرشاة“ لأداة الفرشاة."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Normal"
+#, kde-format
 msgid "Normal"
 msgstr "عادي"
 
@@ -32875,26 +32793,22 @@ msgid " + "
 msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Left"
+#, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
-msgstr "يسار"
+msgstr "اليسار"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
 #, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
-msgstr "الأيمن"
+msgstr "اليمين"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
-msgstr "منتصف"
+msgstr "المنتصف"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:323
 #, kde-format
@@ -35764,12 +35678,10 @@ msgid "Group:"
 msgstr "المجموعة:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "Group as in Template Group"
-#| msgid "Add Group"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
-msgstr "أضف المجموعة"
+msgstr "أضف مجموعة..."
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
@@ -35823,7 +35735,7 @@ msgstr "اختر صورة"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "Add Group"
-msgstr "أضف المجموعة"
+msgstr "أضف مجموعة"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407
 #, kde-format
@@ -35854,12 +35766,10 @@ msgid "Do you really want to remove that template?"
 msgstr "أمتأكد من إزالة القالب؟"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove Text"
+#, kde-format
 msgctxt "@title:window"
 msgid "Remove Template"
-msgstr "أزِل النّصّ"
+msgstr "أزل القالب"
 
 #: libs/ui/KisTemplateCreateDia.cpp:495
 #, kde-format
@@ -36058,7 +35968,7 @@ msgstr "الأخبار الإنجليزية دائما محدثة."
 #: libs/ui/KisWelcomePageWidget.cpp:397
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
-msgstr ""
+msgstr "احصل على شارة داعم كريتا هنا!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:632
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
@@ -38936,11 +38846,9 @@ msgstr ""
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Override"
+#, kde-format
 msgid "Overwrite"
-msgstr "تجاوز"
+msgstr "استبدل"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:208
 #, kde-format
@@ -39937,13 +39845,9 @@ msgid "First line indent"
 msgstr "المسافة البادئة للسطر الأول"
 
 #: libs/widgets/KoRuler.cpp:1302
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the text-indent property, matching is "
-#| "case-insensitive"
-#| msgid "text-indent"
+#, kde-format
 msgid "Left indent"
-msgstr "إزاحة النص"
+msgstr "المسافة البادئة اليسرى"
 
 #: libs/widgets/KoRuler.cpp:1303
 #, kde-format
@@ -40147,16 +40051,12 @@ msgid "percent of animation (%)"
 msgstr "نسبة مئوية من الحركة (٪)"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:216
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Family"
 msgstr "عائلة الخطّ"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:217
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Style"
 msgstr "نمط الخط"
 
@@ -40516,19 +40416,15 @@ msgid "Curr&ent actions:"
 msgstr "الإجراءات ال&حاليّة"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1068
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change font"
+#, kde-format
 msgid "Change Icon..."
-msgstr "تغيير الخطّ"
+msgstr "غيّر الأيقونة..."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1075
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Filter"
+#, kde-format
 msgid "Filter"
-msgstr "مرشّح"
+msgstr "المرشّح"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1217
 #, kde-format
@@ -40574,17 +40470,14 @@ msgid "%1"
 msgstr "‏%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1545
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Icon"
-msgstr "اختر لونًا"
+msgstr "اختر أيقونة"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1552
-#, fuzzy, kde-format
-#| msgctxt "@info:placeholder"
-#| msgid "Filter..."
+#, kde-format
 msgid "Filter icons..."
-msgstr "رشّح..."
+msgstr "رشّح الأيقونات…"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
@@ -40888,10 +40781,9 @@ msgid "Please choose the language which should be used for this application:"
 msgstr "فضلًا اختر اللغة التي تودّ استخدام التّطبيق بها:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
-#, fuzzy, kde-format
-#| msgid "Fallback language:"
+#, kde-format
 msgid "Add Fallback Language"
-msgstr "اللغة الاحتياطيّة:"
+msgstr "أضف لغة احتياطية"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
@@ -40976,12 +40868,10 @@ msgid "Right"
 msgstr "يمين"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:323
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
-msgstr "أسفل"
+msgstr "الأسفل"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:331
 #, kde-format
@@ -41050,10 +40940,9 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:93
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgid "Toolbars Shown"
-msgstr "أشرطة الأدوات"
+msgstr "أشرطة الأدوات المعروضة"
 
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:172
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:336
@@ -41698,11 +41587,9 @@ msgid "On Mouse Over"
 msgstr "عند تمرير الفأرة"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "Cancel any changes and restore initial value"
-#| msgid "Revert"
+#, kde-format
 msgid "Never"
-msgstr "اعكس"
+msgstr "البتة"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:82
 #, kde-format
@@ -42921,8 +42808,7 @@ msgid "Rename Composition"
 msgstr "غيّر اسم التّراكب"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
-#, fuzzy, kde-format
-#| msgid "New name:"
+#, kde-format
 msgid "New Name:"
 msgstr "الاسم الجديد:"
 
@@ -43470,7 +43356,7 @@ msgstr "الرياضيات والحسابات"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:167
 #, kde-format
 msgid "Image Rendering"
-msgstr "تصيير الصورة"
+msgstr "عرض الصورة"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:171
 #, kde-format
@@ -43698,11 +43584,9 @@ msgid "Configure black and white points of the view"
 msgstr "اضبط النقاط البيضاء والسوداء للمنظر"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Override"
+#, kde-format
 msgid "Overview"
-msgstr "تجاوز"
+msgstr "نظرة عامة"
 
 #: plugins/dockers/overview/overviewdocker_page.cpp:159
 #, kde-format
@@ -45095,12 +44979,10 @@ msgid "Proportional Advance (ch)"
 msgstr "تقدم تناسبي (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr "تصوري"
+msgstr "التقدم التصوري (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
@@ -45127,17 +45009,13 @@ msgid "Percentage (%)"
 msgstr "النسبة (٪)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Edit Style Preset"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
 msgstr "حرّر مسبقات الضّبط الطراز"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Optical Size"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "الحجم البصري"
@@ -45179,12 +45057,10 @@ msgid "Off"
 msgstr "معطل"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "OpenType Features"
+#, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr "ميزات OpenType"
+msgstr "وسم ميزة OpenType"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:12
 #, kde-format
@@ -47098,11 +46974,10 @@ msgid "Vertical, Left To Right"
 msgstr "عمودي من اليسار إلى اليمين"
 
 #: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
-#, fuzzy, kde-format
-#| msgid "Style Presets"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "الطُرُز المعرّفة مسبقًا"
+msgstr "طراز مسبق الضّبط جديد"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -49006,10 +48881,9 @@ msgid "Number"
 msgstr "العدد"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, fuzzy, kde-format
-#| msgid "Smearing"
+#, kde-format
 msgid "String"
-msgstr "التلطيخ"
+msgstr "سلسلة"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:60
 #, kde-format
@@ -56286,6 +56160,8 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"بينما يمكن حفظ أشكال النص في ملف psd، إلا أن الميزات الأساسية فقط هي التي "
+"تتوفر. لن تُحفظ الميزات المتقدمة، مثل ميزات النص على المسار وopentype."
 
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
@@ -56293,11 +56169,10 @@ msgid "Duotone Colormode Block"
 msgstr "كتلة نمط لون الثنائي اللون"
 
 #: plugins/impex/psd/psd_loader.cpp:255
-#, fuzzy, kde-format
-#| msgid "Clone Layer"
+#, kde-format
 msgctxt "@title:window PSD import question about text."
 msgid "Found Text Layers"
-msgstr "طبقة مستنسخة"
+msgstr "عثر على طبقات نص"
 
 #: plugins/impex/psd/psd_loader.cpp:257
 #, kde-format
@@ -56307,6 +56182,8 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
+"وجدنا كائنات نصية، هل ترغب في تحميلها كأشكال نصية قابلة للتحرير؟ إذا لم ترغب "
+"في ذلك، فستُحمل كبيانات بكسل، والتي ستكون أكثر دقة بصريًا من الملف الأصلي."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
@@ -56909,12 +56786,10 @@ msgstr ""
 "</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:623
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing"
-#| msgid "White &balance:"
+#, kde-format
 msgctxt "@label"
 msgid "White Balance"
-msgstr "&توازن الأبيض:"
+msgstr "توازن الأبيض"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:631
 #, kde-format
@@ -57065,12 +56940,10 @@ msgid "None"
 msgstr "بلا"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Embed"
+#, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
-msgstr "مضمّن"
+msgstr "مضمّنة"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
@@ -58281,10 +58154,9 @@ msgstr "فرشاة الاستنساخ (معطلة مؤقتًا)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Painting mode"
+#, kde-format
 msgid "Painting Mode"
-msgstr "وضع الرسم"
+msgstr "صيغ التلوين"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPerspective)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:32
@@ -59560,11 +59432,9 @@ msgstr "عكْس آلي للممحاة"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Word Spacing"
+#, kde-format
 msgid "Auto Spacing"
-msgstr "تباعد الكلمات"
+msgstr "ضبط آلي للمسافات"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
@@ -59869,9 +59739,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid "°"
+#, kde-format
 msgid "°"
 msgstr "°"
 
@@ -60267,7 +60135,7 @@ msgstr "زيادة التشبّع"
 #, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
-msgstr "قيمة أدنى "
+msgstr "القيمة الدنيا "
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:144
 #, kde-format
@@ -64557,10 +64425,9 @@ msgid "Mirror"
 msgstr "اعكس"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
-#, fuzzy, kde-format
-#| msgid "Translator"
+#, kde-format
 msgid "Translate"
-msgstr "مترجم"
+msgstr "ترجم"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
@@ -65376,11 +65243,9 @@ msgid "Save profile as..."
 msgstr "احفظ التشكيلة باسم..."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove point"
+#, kde-format
 msgid "Remove profile"
-msgstr "أزِل النّقطة"
+msgstr "أزِل التشكيلة"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:74
 #, kde-format
@@ -65393,10 +65258,9 @@ msgid "Use tablet &pressure"
 msgstr "استخدم &ضغط اللوح"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Touch Painting:"
+#, kde-format
 msgid "Thinning:"
-msgstr "الطّلاء باللمس:"
+msgstr "التنحيف:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
@@ -66013,9 +65877,7 @@ msgid "Change SvgTextTool"
 msgstr "غيّر أداة نصّ إس-في-جي"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Tool"
 msgstr "أداة النصوص"
 
@@ -66025,10 +65887,9 @@ msgid "Conversion failed"
 msgstr "فشل التّحويل"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
-#, fuzzy, kde-format
-#| msgid "Find &Next"
+#, kde-format
 msgid "Find Text"
-msgstr "ابحث عن ال&تّالي"
+msgstr "اعثر على النص"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:269

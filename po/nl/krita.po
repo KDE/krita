@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-23 12:29+0200\n"
+"PO-Revision-Date: 2025-10-25 15:03+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16172,9 +16172,7 @@ msgstr "Recht"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:307
 #: libs/basicflakes/tools/KoPencilTool.cpp:314
-#, fuzzy, kde-format
-#| msgctxt "Label of Optimize in JPEG Exporting dialogue"
-#| msgid "Optimize"
+#, kde-format
 msgid "Optimize"
 msgstr "Optimaliseren"
 
@@ -16337,12 +16335,9 @@ msgid "Reverse paths"
 msgstr "Paden ongedaan maken"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath at points"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
-msgstr "Subpad bij punten afbreken"
+msgstr "Subpad afbreken"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
 msgctxt "(qtundo-format)"
@@ -16585,12 +16580,10 @@ msgid "Fit Height"
 msgstr "Passend in de hoogte"
 
 #: libs/flake/resources/KoCssStylePreset.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@info:placeholder"
-#| msgid "Style Name:"
+#, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Naam van stijl:"
+msgstr "Stijlvoorbeeld"
 
 #: libs/flake/svg/SvgParser.cpp:1896
 #, kde-format
@@ -17037,12 +17030,10 @@ msgid "Greek Extended"
 msgstr "Grieks uitgebreid"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Supplemental Punctuation"
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "Supplementaire punctuatie"
+msgstr "Algemene punctuatie"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
@@ -18687,12 +18678,10 @@ msgstr ""
 "een tekst."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Contextual"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr "Contextueel"
+msgstr "Contextuele swash"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18730,12 +18719,10 @@ msgstr "Vervang glyphs door hun vormen bij regeleinde."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Historical"
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "Historisch"
+msgstr "Historische vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18898,9 +18885,7 @@ msgstr ""
 "tekens te behandelen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
 msgstr "Kerning"
@@ -19068,12 +19053,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr "Vervangt accenten op hoofdletters door afgeplatte vormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Fractions:"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "Fracties:"
+msgstr "Fracties"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -19107,12 +19090,10 @@ msgstr ""
 "hoofdletters."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr "Mathematisch"
+msgstr "Mathematisch Grieks"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -19151,12 +19132,10 @@ msgstr ""
 "representeren."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Oldstyle"
+#, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "Ouderwets"
+msgstr "Ouderwetse figuren"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19169,9 +19148,7 @@ msgstr ""
 "kleine letters."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Ordinals"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
 msgstr "Rangtelwoorden"
@@ -19247,12 +19224,10 @@ msgid "Replaces glyphs with ones more suited for superscript."
 msgstr "Vervangt glyphs door diegenen meer geschikt voor superscripts."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Tabular"
+#, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr "Tabel"
+msgstr "Tabulaire figuren"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
@@ -19261,9 +19236,7 @@ msgid "Replaces proportional figures with tabular figures."
 msgstr "Vervangt proportionele figuren door tabellarische figuren."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Slashed Zero"
+#, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
 msgstr "Nul met streep"
@@ -19336,9 +19309,7 @@ msgid "Replaces uppercase letters with small capital forms."
 msgstr "Vervangt hoofdletters door kleine hoofdlettervormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Petite Caps"
+#, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
 msgstr "Zeer kleine hoofdletters"
@@ -19354,9 +19325,7 @@ msgstr ""
 "de x-hoogte van een lettertype zijn dan kleine hoofdlettervormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Small Caps"
+#, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
 msgstr "Kleine hoofdletters"
@@ -19368,12 +19337,10 @@ msgid "Replaces lowercase letters with small capital forms."
 msgstr "Vervangt kleine letters door kleine hoofdlettervormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Titling Caps"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "Hoofdletter voor titels"
+msgstr "Titels toevoegen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -19382,9 +19349,7 @@ msgid "Replaces glyphs with alternate forms suited for header text."
 msgstr "Vervangt glyphs door alternatieve vormen geschikt voor koptekst."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Unicase"
+#, kde-format
 msgctxt "@title"
 msgid "Unicase"
 msgstr "Letters met gelijke hoogte"
@@ -19705,9 +19670,7 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr "Vervangt standaard vormen in Japanse lettertypen door expert-vormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Full width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
 msgstr "Volledige breedte"
@@ -19746,12 +19709,10 @@ msgstr ""
 "horizontale indeling."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Hangul Jamo"
+#, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr "Hangul Jamo"
+msgstr "Hangul"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
@@ -19804,12 +19765,10 @@ msgid "Replaces Latin glyphs in a CJK font with their italic forms."
 msgstr "Vervangt Latin glyphs in een CJK lettertype door hun cursieve vormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS2004 Forms"
+#, kde-format
 msgctxt "@title"
 msgid "JIS78 Forms"
-msgstr "JIS2004 vormen"
+msgstr "JIS78 vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
 #, kde-format
@@ -19819,12 +19778,10 @@ msgstr ""
 "Vervangt standaard vorm kanji in Japanse lettertypen door de JIS78 vormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS2004 Forms"
+#, kde-format
 msgctxt "@title"
 msgid "JIS83 Forms"
-msgstr "JIS2004 vormen"
+msgstr "JIS83 vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
 #, kde-format
@@ -19834,12 +19791,10 @@ msgstr ""
 "Vervangt standaard vorm kanji in Japanse lettertypen door de JIS83 vormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "JIS2004 Forms"
+#, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr "JIS2004 vormen"
+msgstr "JIS90 vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
@@ -19956,12 +19911,10 @@ msgstr ""
 "tekst in annotaties."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Simplified"
+#, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr "Vereenvoudigd"
+msgstr "Vereenvoudigde vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -20002,12 +19955,10 @@ msgstr ""
 "traditioneel gebruikt in namen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Traditional Name Forms"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "Traditionele naamvormen"
+msgstr "Traditionele vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -21420,9 +21371,7 @@ msgid "Blending Mode"
 msgstr "Mengmodus"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Locked"
+#, kde-format
 msgid "Locked"
 msgstr "Vergrendeld"
 
@@ -23235,13 +23184,10 @@ msgid "Alpha Darken"
 msgstr "Alfa Darken"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
-#| msgid "Markers"
+#, kde-format
 msgctxt "Blending mode - Marker"
 msgid "Marker"
-msgstr "Markeringen"
+msgstr "Markering"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
@@ -23816,8 +23762,7 @@ msgid "Could not remove storage %1 from the database"
 msgstr "Kon opslag %1 niet verwijderen uit de database"
 
 #: libs/resources/KisResourceLocator.cpp:973
-#, fuzzy, kde-format
-#| msgid "Could not synchronize updated font registery with the database"
+#, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 "Kon bijgewerkt register met lettertypen niet synchroniseren met de database"
@@ -24299,23 +24244,17 @@ msgstr "Toe te voegen bestand kiezen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:75
 #: libs/widgets/KisTagSelectionWidget.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Assign to tag"
+#, kde-format
 msgid "Assign to tag"
 msgstr "Aan tag toewijzen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Remove from this tag"
+#, kde-format
 msgid "Remove from this tag"
 msgstr "Uit deze tag verwijderen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Remove from other tag"
+#, kde-format
 msgid "Remove from other tag"
 msgstr "Van andere tag verwijderen"
 
@@ -24473,9 +24412,7 @@ msgstr ""
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:51
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Tag"
+#, kde-format
 msgid "Tag"
 msgstr "Tag"
 
@@ -25435,11 +25372,7 @@ msgid "placebo"
 msgstr "placebo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:50
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "(qtundo-format) h264 profile name, check simplescreenrecorder for "
-#| "standard translations"
-#| msgid "baseline"
+#, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
@@ -25570,12 +25503,10 @@ msgid "none"
 msgstr "geen"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Sub"
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr "Ondert"
+msgstr "sub"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -26859,9 +26790,7 @@ msgid "Descending"
 msgstr "Aflopend"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Alphabetical"
+#, kde-format
 msgid "Alphabetical"
 msgstr "Alfabetisch"
 
@@ -32980,9 +32909,7 @@ msgstr ""
 "penseel."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Normal"
+#, kde-format
 msgid "Normal"
 msgstr "Normaal"
 
@@ -33187,9 +33114,7 @@ msgid " + "
 msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Left"
+#, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Links"
@@ -33201,9 +33126,7 @@ msgid "Right"
 msgstr "Rechts"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Midden"
@@ -36192,9 +36115,7 @@ msgid "Do you really want to remove that template?"
 msgstr "Wilt u werkelijk dit sjabloon verwijderen?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) @title:window"
-#| msgid "Remove Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Remove Template"
 msgstr "Sjabloon verwijderen"
@@ -39340,9 +39261,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Override"
+#, kde-format
 msgid "Overwrite"
 msgstr "Overschrijven"
 
@@ -40349,9 +40268,7 @@ msgid "First line indent"
 msgstr "Eerste-regel-insprong"
 
 #: libs/widgets/KoRuler.cpp:1302
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Left indent"
+#, kde-format
 msgid "Left indent"
 msgstr "Linker insprong"
 
@@ -40558,16 +40475,12 @@ msgid "percent of animation (%)"
 msgstr "percentage animatie (%)"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:216
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Family"
 msgstr "Lettertypefamilie"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:217
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Style"
 msgstr "Lettertypestijl"
 
@@ -40943,17 +40856,13 @@ msgid "Curr&ent actions:"
 msgstr "Huidig&e acties:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1068
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change font"
+#, kde-format
 msgid "Change Icon..."
-msgstr "Lettertype wijzigen"
+msgstr "Pictogram wijzigen..."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1075
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Filter"
+#, kde-format
 msgid "Filter"
 msgstr "Filter"
 
@@ -41003,17 +40912,14 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1545
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Icon"
-msgstr "Kies een kleur"
+msgstr "Pictogram kiezen"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1552
-#, fuzzy, kde-format
-#| msgctxt "@info:placeholder"
-#| msgid "Filter..."
+#, kde-format
 msgid "Filter icons..."
-msgstr "Filteren..."
+msgstr "Pictogrammen filteren..."
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
@@ -41303,9 +41209,7 @@ msgid "Please choose the language which should be used for this application:"
 msgstr "Kies de taal die u voor dit programma wilt gebruiken:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Fallback Language"
+#, kde-format
 msgid "Add Fallback Language"
 msgstr "Terugvaltaal toevoegen"
 
@@ -41397,9 +41301,7 @@ msgid "Right"
 msgstr "Rechts"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:323
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Onderaan"
@@ -41471,9 +41373,7 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Toolbars Shown"
+#, kde-format
 msgid "Toolbars Shown"
 msgstr "Getoonde werkbalken"
 
@@ -42125,8 +42025,7 @@ msgid "On Mouse Over"
 msgstr "Bij muis erboven"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgid "Never"
 msgstr "Nooit"
 
@@ -43319,9 +43218,7 @@ msgid "Rename Composition"
 msgstr "Compositie hernoemen"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "New Name:"
+#, kde-format
 msgid "New Name:"
 msgstr "Nieuwe naam:"
 
@@ -44106,9 +44003,7 @@ msgid "Configure black and white points of the view"
 msgstr "Zwarte en witte punten in het beeld instellen"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Overview"
+#, kde-format
 msgid "Overview"
 msgstr "Overzicht"
 
@@ -45528,12 +45423,10 @@ msgid "Proportional Advance (ch)"
 msgstr "Proportionele voortgang (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr "Ideografisch"
+msgstr "Ideografisch voortgang (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
@@ -45560,17 +45453,13 @@ msgid "Percentage (%)"
 msgstr "Percentage (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Edit Style Preset"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
 msgstr "Voorinstellingen van stijl bewerken"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Optical Size"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Optische grootte"
@@ -45612,12 +45501,10 @@ msgid "Off"
 msgstr "Uit"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "OpenType Features"
+#, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr "Mogelijkheden van Opentype"
+msgstr "Mogelijkheidstag van Opentype"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:12
 #, kde-format
@@ -46041,6 +45928,8 @@ msgid ""
 "Aligns to alphabetic baseline when laying out horizontally, aligns to "
 "central baseline when laying out vertically."
 msgstr ""
+"Lijnt uit op alfabetische basislijn bij horizontale indeling, lijnt uit op "
+"centrale basislijn bij verticale indeling."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:14
 #, kde-format
@@ -46137,6 +46026,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Font size adjust allows setting a ratio that the x-height must be matched by."
 msgstr ""
+"Tekengrootte aanpassen biedt het instellen van een verhouding waarmee de x-"
+"hoogte moet overeenkomen."
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:19
 #, kde-format
@@ -46144,7 +46035,7 @@ msgctxt ""
 "comma separated search terms for the fontsize adjust property, matching is "
 "case-insensitive"
 msgid "size, small, big, medium, font-size-adjust"
-msgstr ""
+msgstr "grootte, klein, groot, middel, aanpassen tekengrootte"
 
 #: plugins/dockers/textproperties/qml/FontSizeAdjust.qml:84
 #, kde-format
@@ -46157,6 +46048,8 @@ msgstr "Berekenen"
 msgctxt "@info:tooltip"
 msgid "Calculate the x-height to font size ratio for the first font family."
 msgstr ""
+"Berekent de x-hoogte naar verhouding met lettertypegrootte voor de eerste "
+"lettertypefamilie."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:13
 #, kde-format
@@ -46171,6 +46064,8 @@ msgid ""
 "Font style allows setting the sub style of the given font family, such as "
 "italics and bold"
 msgstr ""
+"Lettertypestijl biedt het instellen van de substijl van de gegeven "
+"lettertypefamilie, zoals cursief en vet"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:20
 #, kde-format
@@ -47517,11 +47412,10 @@ msgid "Vertical, Left To Right"
 msgstr "Verticaal, links naar rechts"
 
 #: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
-#, fuzzy, kde-format
-#| msgid "Style Presets"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Voorinstellingen van stijl."
+msgstr "Nieuwe voorinstelling van stijl"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -49427,8 +49321,7 @@ msgid "Number"
 msgstr "Aantal"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, fuzzy, kde-format
-#| msgid "String"
+#, kde-format
 msgid "String"
 msgstr "Tekenreeks"
 
@@ -56796,11 +56689,10 @@ msgid "Duotone Colormode Block"
 msgstr "Duotone kleurmodus blok"
 
 #: plugins/impex/psd/psd_loader.cpp:255
-#, fuzzy, kde-format
-#| msgid "Clone Layer"
+#, kde-format
 msgctxt "@title:window PSD import question about text."
 msgid "Found Text Layers"
-msgstr "Laag klonen"
+msgstr "Tekstlagen gevonden"
 
 #: plugins/impex/psd/psd_loader.cpp:257
 #, kde-format
@@ -57445,9 +57337,7 @@ msgstr ""
 "de uitvoerafbeelding.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:623
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "White Balance"
+#, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Witbalans"
@@ -57606,9 +57496,7 @@ msgid "None"
 msgstr "Geen"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) @item:inlistbox Camera Profile"
-#| msgid "Embedded"
+#, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Ingebed"
@@ -58861,9 +58749,7 @@ msgstr "Penseel klonen (tijdelijk uitgeschakeld)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Painting Mode"
+#, kde-format
 msgid "Painting Mode"
 msgstr "Tekenmodus"
 
@@ -60148,11 +60034,9 @@ msgstr "Automatisch inverteren voor wisser"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Word Spacing"
+#, kde-format
 msgid "Auto Spacing"
-msgstr "Spatiëring tussen woorden"
+msgstr "Automatisch afstand houden"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
@@ -60461,9 +60345,7 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "@item:valuesuffix"
-#| msgid "°"
+#, kde-format
 msgid "°"
 msgstr "°"
 
@@ -66069,8 +65951,7 @@ msgid "Save profile as..."
 msgstr "Sla profiel op als..."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
-#, fuzzy, kde-format
-#| msgid "Remove profile"
+#, kde-format
 msgid "Remove profile"
 msgstr "Profiel verwijderen"
 
@@ -66709,11 +66590,9 @@ msgid "Change SvgTextTool"
 msgstr "SvgTextTool wijzigen"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Text Tool"
+#, kde-format
 msgid "Text Tool"
-msgstr "Tekstgereedschap"
+msgstr "Hulpmiddel voor tekst"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:170
 #, kde-format
@@ -66721,10 +66600,9 @@ msgid "Conversion failed"
 msgstr "Conversie is mislukt"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
-#, fuzzy, kde-format
-#| msgid "Find &Next"
+#, kde-format
 msgid "Find Text"
-msgstr "Vol&gende zoeken"
+msgstr "Tekst zoeken"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:269

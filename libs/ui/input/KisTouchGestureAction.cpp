@@ -45,115 +45,68 @@ void KisTouchGestureAction::begin(int shortcut, QEvent *event)
 void KisTouchGestureAction::end(QEvent *event)
 {
     Q_UNUSED(event)
-    KisKActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
+
+    QString actionName;
     switch (m_shortcut) {
-    case UndoActionShortcut: {
-        QAction *action = actionCollection->action("edit_undo");
-        if (action) {
-            action->trigger();
-        }
+    case UndoActionShortcut:
+        actionName = QStringLiteral("edit_undo");
+        break;
+    case RedoActionShortcut:
+        actionName = QStringLiteral("edit_redo");
+        break;
+    case ToggleCanvasOnlyShortcut:
+        actionName = QStringLiteral("view_show_canvas_only");
+        break;
+    case ToggleEraserMode:
+        actionName = QStringLiteral("erase_action");
+        break;
+    case ResetDisplay:
+        actionName = QStringLiteral("reset_display");
+        break;
+    case PreviousPresetShortcut:
+        actionName = QStringLiteral("previous_preset");
+        break;
+    case ColorSampler:
+        actionName = QStringLiteral("KritaSelected/KisToolColorSampler");
+        break;
+    case Deselect:
+        actionName = QStringLiteral("deselect");
+        break;
+    case NextLayer:
+        actionName = QStringLiteral("activateNextLayer");
+        break;
+    case PreviousLayer:
+        actionName = QStringLiteral("activatePreviousLayer");
+        break;
+    case FreehandBrush:
+        actionName = QStringLiteral("KritaShape/KisToolBrush");
+        break;
+    case KisToolSelectContiguous:
+        actionName = QStringLiteral("KisToolSelectOutline");
+        break;
+    case KisToolMove:
+        actionName = QStringLiteral("KritaTransform/KisToolMove");
+        break;
+    case KisToolTransform:
+        actionName = QStringLiteral("KisToolTransform");
+        break;
+    case ToggleEraserPreset:
+        actionName = QStringLiteral("eraser_preset_action");
         break;
     }
-    case RedoActionShortcut: {
-        QAction *action = actionCollection->action("edit_redo");
+
+    if (actionName.isEmpty()) {
+        qWarning("KisTouchGestureAction: Unhandled shortcut %d", m_shortcut);
+    } else {
+        KisKActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
+        QAction *action = actionCollection->action(actionName);
         if (action) {
             action->trigger();
+        } else {
+            qWarning("KisTouchGestureAction: unable to find action '%s' for shortcut %d",
+                     qUtf8Printable(actionName),
+                     m_shortcut);
         }
-        break;
-    }
-    case ToggleCanvasOnlyShortcut: {
-        QAction *action = actionCollection->action("view_show_canvas_only");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case ToggleEraserMode: {
-        QAction *action = actionCollection->action("erase_action");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-     case ResetDisplay: {
-        QAction *action = actionCollection->action("reset_display");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case PreviousPresetShortcut: {
-        QAction *action = actionCollection->action("previous_preset");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case ColorSampler: {
-        QAction *action = actionCollection->action("KisToolColorSampler");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case Deselect: {
-        QAction *action = actionCollection->action("deselect");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case NextLayer: {
-        QAction *action = actionCollection->action("activateNextLayer");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case PreviousLayer: {
-        QAction *action = actionCollection->action("activatePreviousLayer");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case FreehandBrush: {
-        QAction *action = actionCollection->action("FreehandBrush");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case KisToolSelectContiguous: {
-        QAction *action = actionCollection->action("KisToolSelectContiguous");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case KisToolMove: {
-        QAction *action = actionCollection->action("KisToolMove");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case KisToolTransform: {
-        QAction *action = actionCollection->action("KisToolTransform");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    case ToggleEraserPreset: {
-        QAction *action = actionCollection->action("eraser_preset_action");
-        if (action) {
-            action->trigger();
-        }
-        break;
-    }
-    default:
-        break;
     }
 }
 

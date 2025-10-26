@@ -18,6 +18,7 @@ public:
         ToggleCanvasOnlyShortcut,
         ToggleEraserMode,
         ResetDisplay,
+        ToggleEraserPreset,
     };
 
     KisTouchGestureAction();

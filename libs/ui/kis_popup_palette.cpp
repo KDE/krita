@@ -1138,7 +1138,13 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     /**
      * We are in native and modal mode, so handle our closure ourselves
      */
-    if (this->windowHandle() && !QRectF(rect()).contains(event->position())) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    const QPointF localPos = event->localPos();
+#else
+    const QPointF localPos = event->position();
+#endif
+
+     if (this->windowHandle() && !QRectF(rect()).contains(localPos)) {
         Q_EMIT finished();
         return;
     }

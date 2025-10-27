@@ -31,6 +31,14 @@
  */
 #define SANITY_CHECK_PROPERTY_EXISTS(prop) Q_ASSERT(prop.isValid())
 #define SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(prop) do { Q_ASSERT(prop.isValid()); Q_ASSERT(prop.isWritable()); } while (0)
+#define SANITY_CHECK_PROPERTY_METATYPE_REGISTERED(prop) do { \
+    const int metaTypeId = QMetaType::type(prop.typeName()); \
+    if (metaTypeId <= 0) { \
+        qWarning().nospace() << "WARNING: metatype for property \"" << prop.name() << "\" is not register. Please register type \"" << prop.typeName() << "\""; \
+    } \
+    Q_ASSERT(metaTypeId > 0); \
+    Q_ASSERT(QMetaType::isRegistered(metaTypeId)); \
+} while (0)
 
 class ConnectButtonStateHelper : public QObject
 {
@@ -512,6 +520,14 @@ void connectControlState(QComboBox *button, QObject *source, const char *readSta
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
     SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
+
+    /**
+     * On Qt5 to perform conversion from int to enum, the enum should be registered as
+     * a metatype, so we should manually verify that. For some reason, on Qt6 it is not
+     * necessary.
+     */
+    SANITY_CHECK_PROPERTY_METATYPE_REGISTERED(writeProp);
+
     if (writeProp.isWritable()) {
         QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged),
                          source, [writeProp, source] (int value) { writeProp.write(source, value); });
@@ -540,6 +556,8 @@ void connectControl(QComboBox *button, QObject *source, const char *property)
     button->setCurrentIndex(stateProp.read(source).value<int>());
 
     if (stateProp.isWritable()) {
+        // see a comment in connectControlState(QComboBox *button, ...)
+        SANITY_CHECK_PROPERTY_METATYPE_REGISTERED(stateProp);
         QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged),
                          source, [stateProp, source] (int value) { stateProp.write(source, value); });
     }

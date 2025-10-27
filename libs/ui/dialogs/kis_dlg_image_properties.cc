@@ -27,13 +27,11 @@
 
 struct KisDlgImageProperties::Private {
     Private(KisDisplayColorConverter *colorConverter)
-        : proofingModel(KisProofingConfigModel())
-        , compressor(KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
+        : compressor(KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
         , colorConverter(colorConverter)
     {
     }
     KisImageWSP image;
-    KisProofingConfigModel proofingModel;
     KisProofingConfigurationSP originalProofingConfig;
     bool firstProofingConfigChange {true};
     QLabel *colorWarningLabel {0};

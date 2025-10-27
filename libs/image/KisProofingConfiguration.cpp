@@ -6,6 +6,11 @@
 
 #include "KisProofingConfiguration.h"
 
+#include <KisStaticInitializer.h>
+
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisProofingConfiguration::DisplayTransformState>();
+}
 
 KisProofingConfiguration::KisProofingConfiguration()
     : conversionIntent(KoColorConversionTransformation::IntentRelativeColorimetric),

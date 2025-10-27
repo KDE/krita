@@ -7,9 +7,9 @@
 #ifndef _KO_COLOR_CONVERSION_TRANSFORMATION_H_
 #define _KO_COLOR_CONVERSION_TRANSFORMATION_H_
 
-#include "KoColorTransformation.h"
-
 #include "kritapigment_export.h"
+#include "KoColorTransformation.h"
+#include <QMetaType>
 
 class KoColorSpace;
 class KoColorConversionCache;
@@ -132,6 +132,7 @@ private:
     Private * const d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoColorConversionTransformation::ConversionFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoColorConversionTransformation::ConversionFlags);
+Q_DECLARE_METATYPE(KoColorConversionTransformation::Intent);
 
 #endif

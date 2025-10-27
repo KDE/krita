@@ -242,11 +242,10 @@ bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpaceWrap
 void KisOpenGLModeProber::initSurfaceFormatFromConfig(std::pair<KisSurfaceColorSpaceWrapper, int> rootSurfaceFormat,
                                                       QSurfaceFormat *format)
 {
-if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
-    KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 10);
-}
-
 #ifdef HAVE_HDR
+    /**
+     * In Windows' HDR we have three fixed modes only.
+     */
     if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::bt2020PQColorSpace) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 10);
         format->setRedBufferSize(10);
@@ -261,28 +260,8 @@ if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
         format->setBlueBufferSize(16);
         format->setAlphaBufferSize(16);
         format->setColorSpace(KisSurfaceColorSpaceWrapper(KisSurfaceColorSpaceWrapper::scRGBColorSpace));
-    } else
-#else
-    if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::bt2020PQColorSpace) {
-        qWarning() << "WARNING: Bt.2020 PQ surface type is not supported by this build of Krita";
-        rootSurfaceFormat.first = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
-    } else if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
-        qWarning() << "WARNING: scRGB surface type is not supported by this build of Krita";
-        rootSurfaceFormat.first = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
-    }
-#endif
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::DefaultColorSpace);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 8 || rootSurfaceFormat.second == 10);
-
-    if (rootSurfaceFormat.second == 10) {
-        format->setRedBufferSize(10);
-        format->setGreenBufferSize(10);
-        format->setBlueBufferSize(10);
-        format->setAlphaBufferSize(2);
-        // TODO: check if we can use real sRGB space here
-        format->setColorSpace(KisSurfaceColorSpaceWrapper());
     } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 8);
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
@@ -290,6 +269,38 @@ if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
         // TODO: check if we can use real sRGB space here
         format->setColorSpace(KisSurfaceColorSpaceWrapper());
     }
+#else
+    /**
+     * In Wayland's HDR we don't set the mode on the root surface, we should only select
+     * bit-width.
+     */
+    if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::bt2020PQColorSpace) {
+        qWarning() << "WARNING: Bt.2020 PQ surface type is not supported by this build of Krita";
+        rootSurfaceFormat.first = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
+    } else if (rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::scRGBColorSpace) {
+        qWarning() << "WARNING: scRGB surface type is not supported by this build of Krita";
+        rootSurfaceFormat.first = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.first == KisSurfaceColorSpaceWrapper::DefaultColorSpace);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootSurfaceFormat.second == 8 || rootSurfaceFormat.second == 10);
+
+        if (rootSurfaceFormat.second == 10) {
+            format->setRedBufferSize(10);
+            format->setGreenBufferSize(10);
+            format->setBlueBufferSize(10);
+            format->setAlphaBufferSize(2);
+            // TODO: check if we can use real sRGB space here
+            format->setColorSpace(KisSurfaceColorSpaceWrapper());
+        } else {
+            format->setRedBufferSize(8);
+            format->setGreenBufferSize(8);
+            format->setBlueBufferSize(8);
+            format->setAlphaBufferSize(8);
+            // TODO: check if we can use real sRGB space here
+            format->setColorSpace(KisSurfaceColorSpaceWrapper());
+        }
+    }
+#endif
 }
 
 bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)

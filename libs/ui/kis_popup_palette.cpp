@@ -107,6 +107,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_acyclicConnector(new KisAcyclicSignalConnector(this))
     , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))
 {
+    setAttribute(Qt::WA_TranslucentBackground);
+
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 

@@ -31,6 +31,7 @@
 #include "kis_acyclic_signal_connector.h"
 #include <kis_paintop_preset.h>
 #include "KisMouseClickEater.h"
+#include <KisPlatformPluginInterfaceFactory.h>
 
 static const int WIDGET_MARGIN = 16;
 static const qreal BORDER_WIDTH = 3.0;
@@ -90,7 +91,12 @@ private:
 
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
-    : QWidget(parent, Qt::FramelessWindowHint)
+    : QWidget(parent,
+        KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS() ?
+            // when using Wayland, the popup should have a native window
+            // to avoid wrong color space to be used
+            Qt::Popup :
+            Qt::FramelessWindowHint)
     , m_coordinatesConverter(coordinatesConverter)
     , m_viewManager(viewManager)
     , m_actionManager(viewManager->actionManager())
@@ -253,6 +259,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     KisConfig cfg(true);
     m_dockerHudButton->setChecked(cfg.showBrushHud());
     m_bottomBarButton->setChecked(cfg.showPaletteBottomBar());
+
+    m_dockerHud->setVisible(m_dockerHudButton->isChecked());
+    m_bottomBarWidget->setVisible(m_bottomBarButton->isChecked());
 }
 
 KisPopupPalette::~KisPopupPalette()
@@ -736,9 +745,16 @@ void KisPopupPalette::resizeEvent(QResizeEvent* resizeEvent) {
     m_resetCanvasRotationIndicatorRect = rotationIndicatorRect(0);
     m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle());
     // Ensure that the resized geometry fits within the desired rect...
-    QRect tempGeo = rect(); 
-    tempGeo.translate(pos());
-    ensureWithinParent(tempGeo.topLeft(), true);
+
+    /**
+     * When popup is native, its geometry report the global position; then
+     * the popup is non-native, its geometry is in its parent's coordinate
+     * system.
+     */
+    const QPoint globalTopLeft = windowHandle() ?
+        geometry().topLeft() :
+        parentWidget()->mapToGlobal(geometry().topLeft());
+    ensureWithinParent(globalTopLeft, true);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -1044,7 +1060,9 @@ void KisPopupPalette::slotRemoveMirrorPos() {
 
 void KisPopupPalette::popup(const QPoint &position) {
     setVisible(true);
-    ensureWithinParent(position, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentWidget());
+    const QPoint globalPos = parentWidget()->mapToGlobal(position);
+    ensureWithinParent(globalPos, false);
     m_mirrorPos = QCursor::pos();
 }
 
@@ -1058,22 +1076,31 @@ bool KisPopupPalette::onScreen()
     return isVisible();
 }
 
-void KisPopupPalette::ensureWithinParent(const QPoint& position, bool useUpperLeft) {
-    if (isVisible() && parentWidget())  {
-        const qreal widgetMargin = -20.0;
-        const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
-        const QPoint paletteCenterOffset(sizeHint().width() / 2, sizeHint().height() / 2);
+void KisPopupPalette::ensureWithinParent(const QPoint& globalPos, bool useUpperLeft) {
+    if (isVisible())  {
+        const QSize paletteSize = geometry().size();
+        const QPoint paletteCenterOffset(paletteSize.width() / 2, paletteSize.height() / 2);
 
-        QRect paletteRect = rect();
-
+        QPoint paletteGlobalPos = globalPos;
         if (!useUpperLeft) {
-            paletteRect.moveTo(position - paletteCenterOffset);
-        } else {
-            paletteRect.moveTopLeft(position);
+            paletteGlobalPos -= paletteCenterOffset;
         }
 
-        paletteRect = kisEnsureInRect(paletteRect, fitRect);
-        move(paletteRect.topLeft());
+        if (parentWidget()) {
+            const qreal widgetMargin = -20.0;
+
+            const QPoint paletteParentPos = parentWidget()->mapFromGlobal(paletteGlobalPos);
+            QRect paletteParentRect(paletteParentPos, paletteSize);
+
+            const QRect fitRect = kisGrowRect(parentWidget()->rect(), widgetMargin);
+            paletteParentRect = kisEnsureInRect(paletteParentRect, fitRect);
+            paletteGlobalPos = parentWidget()->mapToGlobal(paletteParentRect.topLeft());
+        }
+
+
+        const QPoint moveToPoint = this->windowHandle() ? paletteGlobalPos : parentWidget()->mapFromGlobal(paletteGlobalPos);
+
+        move(moveToPoint);
     }
 }
 
@@ -1088,9 +1115,6 @@ void KisPopupPalette::showEvent(QShowEvent *event)
         KisSignalsBlocker b(zoomCanvasSlider);
         zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
     }
-
-    m_dockerHud->setVisible(m_dockerHudButton->isChecked());
-    m_bottomBarWidget->setVisible(m_bottomBarButton->isChecked());
 
     QWidget::showEvent(event);
 }
@@ -1108,6 +1132,14 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
 {
     QPointF point = event->localPos();
     event->accept();
+
+    /**
+     * We are in native and modal mode, so handle our closure ourselves
+     */
+    if (this->windowHandle() && !QRectF(rect()).contains(event->position())) {
+        Q_EMIT finished();
+        return;
+    }
 
     if (m_isRotatingCanvasIndicator) {
         update();

@@ -16023,9 +16023,7 @@ msgid "Precision:"
 msgstr "Presisjon:"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:296
-#, fuzzy, kde-format
-#| msgctxt "The raw line data"
-#| msgid "Raw"
+#, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "Rå"
@@ -16039,8 +16037,7 @@ msgid "Curve"
 msgstr "Kurve"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:298
-#, fuzzy, kde-format
-#| msgid "Straight"
+#, kde-format
 msgid "Straight"
 msgstr "Rett"
 
@@ -16052,8 +16049,7 @@ msgid "Optimize"
 msgstr "Optimaliser"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:321
-#, fuzzy, kde-format
-#| msgid "Exactness:"
+#, kde-format
 msgid "Exactness:"
 msgstr "Nøyaktighet:"
 
@@ -16097,39 +16093,32 @@ msgid "Could not access brush tip metadata"
 msgstr ""
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
-#, fuzzy, kde-format
-#| msgctxt "Default text for undo action"
-#| msgid "Undo"
+#, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Angre"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #: libs/ui/KisUndoActionsUpdateManager.cpp:44
-#, fuzzy, kde-format
-#| msgid "Undo %1"
+#, kde-format
 msgid "Undo %1"
 msgstr "Angre %1"
 
 #: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
-#, fuzzy, kde-format
-#| msgctxt "Default text for redo action"
-#| msgid "Redo"
+#, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Gjør om"
 
 #: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #: libs/ui/KisUndoActionsUpdateManager.cpp:49
-#, fuzzy, kde-format
-#| msgid "Redo %1"
+#, kde-format
 msgid "Redo %1"
 msgstr "Gjør om %1"
 
 #: libs/command/kundo2model.cpp:54
 #: plugins/dockers/historydocker/KisUndoModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "<empty>"
+#, kde-format
 msgid "<empty>"
 msgstr "<tom>"
 
@@ -16150,26 +16139,17 @@ msgstr "Angre"
 
 #: libs/flake/commands/KoMultiPathPointJoinCommand.cpp:18
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:43
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Join subpaths"
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
 msgstr "Slå sammen delbaner"
 
 #: libs/flake/commands/KoMultiPathPointMergeCommand.cpp:38
 #: libs/flake/commands/KoPathPointMergeCommand.cpp:135
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Merge points"
 msgctxt "(qtundo-format)"
 msgid "Merge points"
 msgstr "Flett sammen punkter"
 
 #: libs/flake/commands/KoParameterHandleMoveCommand.cpp:22
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
 msgctxt "(qtundo-format)"
 msgid "Change parameter"
 msgstr "Endre parameter"
@@ -16183,67 +16163,43 @@ msgid "Convert to Path"
 msgstr "Konverter til bane"
 
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath at points"
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
 msgstr "Bryt delbane ved punkter"
 
 #: libs/flake/commands/KoPathCombineCommand.cpp:54
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
 msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "Kombiner baner"
 
 #: libs/flake/commands/KoPathControlPointMoveCommand.cpp:29
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Move control point"
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr "Flytt styringspunkt"
 
 #: libs/flake/commands/KoPathFillRuleCommand.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set fill rule"
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
 msgstr "Angi fyllingsregel"
 
 #: libs/flake/commands/KoPathPointInsertCommand.cpp:67
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert points"
 msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "Sett inn punkter"
 
 #: libs/flake/commands/KoPathPointMoveCommand.cpp:30
 #: libs/flake/commands/KoPathPointMoveCommand.cpp:46
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Move points"
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr "Flytt punkter"
 
 #: libs/flake/commands/KoPathPointRemoveCommand.cpp:91
 #: libs/flake/commands/KoPathPointRemoveCommand.cpp:120
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove points"
 msgctxt "(qtundo-format)"
 msgid "Remove points"
 msgstr "Fjern punkter"
 
 #: libs/flake/commands/KoPathPointTypeCommand.cpp:36
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set point type"
 msgstr "Angi punkttype"
@@ -16257,41 +16213,26 @@ msgid "Reverse paths"
 msgstr "Snu baner"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Break subpath"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Bryt delbane"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change segments to curves"
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
 msgstr "Endre segmenter til kurver"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:123
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change segments to lines"
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Endre segmenter til linjer"
 
 #: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set marker"
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "Oppgi markør"
 
 #: libs/flake/commands/KoShapeAlignCommand.cpp:71
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Align shapes"
 msgctxt "(qtundo-format)"
 msgid "Align shapes"
 msgstr "Innrett former"
@@ -16299,18 +16240,12 @@ msgstr "Innrett former"
 #: libs/flake/commands/KoShapeBackgroundCommand.cpp:53
 #: libs/flake/commands/KoShapeBackgroundCommand.cpp:64
 #: libs/flake/commands/KoShapeBackgroundCommand.cpp:79
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set background"
 msgctxt "(qtundo-format)"
 msgid "Set background"
 msgstr "Angi bakgrunn"
 
 #: libs/flake/commands/KoShapeClipCommand.cpp:57
 #: libs/flake/commands/KoShapeClipCommand.cpp:72
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Clip Shape"
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
 msgstr "Klipp form"
@@ -16329,10 +16264,6 @@ msgid "Delete shape"
 msgstr ""
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:56
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete shape"
-#| msgid_plural "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
@@ -16340,9 +16271,6 @@ msgstr[0] "Slett form"
 msgstr[1] "Slett former"
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Distribute shapes"
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
 msgstr "Fordel former"
@@ -16350,17 +16278,11 @@ msgstr "Fordel former"
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Grupper former"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:69
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
 msgstr "Legg til former til en gruppe"
@@ -16374,9 +16296,6 @@ msgid "Keep Aspect Ratio"
 msgstr "Behold høyde/bredde-forhold"
 
 #: libs/flake/commands/KoShapeLockCommand.cpp:22
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Lock shapes"
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Lås former"
@@ -16388,9 +16307,6 @@ msgstr ""
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Move shapes"
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr "Flytt former"
@@ -16401,26 +16317,17 @@ msgid "Set paint order"
 msgstr ""
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rename Shape"
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
 msgstr "Endre navn på form"
 
 #: libs/flake/commands/KoShapeReorderCommand.cpp:53
 #: libs/flake/commands/KoShapeReorderCommand.cpp:66
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
 msgctxt "(qtundo-format)"
 msgid "Reorder shapes"
 msgstr "Omordne former"
 
 #: libs/flake/commands/KoShapeResizeCommand.cpp:36
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Resize"
 msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr "Endre størrelse"
@@ -16436,25 +16343,16 @@ msgstr "Endre omgåing av form"
 #: libs/flake/commands/KoShapeShadowCommand.cpp:54
 #: libs/flake/commands/KoShapeShadowCommand.cpp:71
 #: libs/flake/commands/KoShapeShadowCommand.cpp:82
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Shadow"
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
 msgstr "Oppgi skygge"
 
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear shapes"
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
 msgstr "Skjær former"
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Resize shapes"
 msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Endre størrelse på former"
@@ -16462,9 +16360,6 @@ msgstr "Endre størrelse på former"
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:54
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:73
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:84
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set stroke"
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Oppgi strøk"
@@ -16472,50 +16367,32 @@ msgstr "Oppgi strøk"
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:36
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:47
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:60
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set opacity"
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
 msgstr "Oppgi ugjennomsiktighet"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Unclip Shape"
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
 msgstr "U-klipp form"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:92
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Unclip Shapes"
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
 msgstr "U-klipp former"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Løs opp formgruppe"
 
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:45
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Close subpath"
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
 msgstr "Lukk delbane"
 
 #: libs/flake/commands/KoSubpathRemoveCommand.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove subpath"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Fjern delbane"
@@ -16552,26 +16429,22 @@ msgstr ""
 "Feilmelding: %3"
 
 #: libs/flake/KoPathShapeFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "Simple path shape"
+#, kde-format
 msgid "Simple path shape"
 msgstr "En enkel baneform"
 
 #: libs/flake/KoPathShapeFactory.cpp:25
-#, fuzzy, kde-format
-#| msgid "A simple path shape"
+#, kde-format
 msgid "A simple path shape"
 msgstr "En enkel baneform"
 
 #: libs/flake/KoShapeController.cpp:56
-#, fuzzy, kde-format
-#| msgid "%1 Options"
+#, kde-format
 msgid "%1 Options"
 msgstr "%1-valg"
 
 #: libs/flake/KoToolManager.cpp:605
-#, fuzzy, kde-format
-#| msgid "Active tool: %1"
+#, kde-format
 msgid "Active tool: %1"
 msgstr "Aktivt verktøy: %1"
 
@@ -20264,9 +20137,6 @@ msgid "Unknown error writing SVG text element"
 msgstr ""
 
 #: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Endre segment"
@@ -20277,27 +20147,22 @@ msgid "Edit Shape"
 msgstr ""
 
 #: libs/flake/tools/KoPathTool.cpp:613
-#, fuzzy, kde-format
-#| msgid "Drag to move handle."
+#, kde-format
 msgid "Drag to move handle."
 msgstr "Dra for å flytte håndtaket."
 
 #: libs/flake/tools/KoPathTool.cpp:667
-#, fuzzy, kde-format
-#| msgid "Drag to move point. Shift click to change point type."
+#, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Dra for å flytte punktet. Shift-trykk for å endre punkttype."
 
 #: libs/flake/tools/KoPathTool.cpp:669
-#, fuzzy, kde-format
-#| msgid "Drag to move control point."
+#, kde-format
 msgid "Drag to move control point."
 msgstr "Dra for å flytte styringspunkt."
 
 #: libs/flake/tools/KoPathTool.cpp:692
-#, fuzzy, kde-format
-#| msgid ""
-#| "Drag to change curve directly. Double click to insert new path point."
+#, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Dra for å endre kurve direkte. Dobbeltklikk for å sette inn nytt punkt på "
@@ -20515,22 +20380,18 @@ msgid "Convert to Path"
 msgstr "Gjør om til bane"
 
 #: libs/global/kis_assert.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Krita: Internal Error"
+#, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
 msgstr "Krita: intern feil"
 
 #: libs/global/kis_dom_utils.cpp:128
-#, fuzzy, kde-format
-#| msgid "Could not find \"%1\" XML tag in \"%2\""
+#, kde-format
 msgid "Could not find \"%1\" XML tag in \"%2\""
 msgstr "Fant ikke XML-taggen «%1» i «%2»"
 
 #: libs/global/kis_dom_utils.cpp:158
-#, fuzzy, kde-format
-#| msgid "Error: incorrect type (%2) for value %1. Expected %3"
+#, kde-format
 msgid "Error: incorrect type (%2) for value %1. Expected %3"
 msgstr "Feil: feil type (%2) for verdi %1. Forventet: %3"
 
@@ -20540,63 +20401,52 @@ msgid "Don't ask this again"
 msgstr ""
 
 #: libs/global/KoUnit.cpp:36
-#, fuzzy, kde-format
-#| msgid "Millimeters (mm)"
+#, kde-format
 msgid "Millimeters (mm)"
 msgstr "Millimeter (mm)"
 
 #: libs/global/KoUnit.cpp:38
-#, fuzzy, kde-format
-#| msgid "Centimeters (cm)"
+#, kde-format
 msgid "Centimeters (cm)"
 msgstr "Centimeter (cm)"
 
 #: libs/global/KoUnit.cpp:40
-#, fuzzy, kde-format
-#| msgid "Decimeters (dm)"
+#, kde-format
 msgid "Decimeters (dm)"
 msgstr "Decimeter (dm)"
 
 #: libs/global/KoUnit.cpp:42
-#, fuzzy, kde-format
-#| msgid "Inches (in)"
+#, kde-format
 msgid "Inches (in)"
 msgstr "Tommer (in)"
 
 #: libs/global/KoUnit.cpp:44
-#, fuzzy, kde-format
-#| msgid "Pica (pi)"
+#, kde-format
 msgid "Pica (pi)"
 msgstr "Pica (pi)"
 
 #: libs/global/KoUnit.cpp:46
-#, fuzzy, kde-format
-#| msgid "Cicero (cc)"
+#, kde-format
 msgid "Cicero (cc)"
 msgstr "Cicero (cc)"
 
 #: libs/global/KoUnit.cpp:48
-#, fuzzy, kde-format
-#| msgid "Points (pt)"
+#, kde-format
 msgid "Points (pt)"
 msgstr "Punkter (pt.)"
 
 #: libs/global/KoUnit.cpp:50
-#, fuzzy, kde-format
-#| msgid "Pixels (px)"
+#, kde-format
 msgid "Pixels (px)"
 msgstr "Piksler (px.)"
 
 #: libs/global/KoUnit.cpp:52
-#, fuzzy, kde-format
-#| msgid "Unsupported unit"
+#, kde-format
 msgid "Unsupported unit"
 msgstr "Ikke støttet enhet"
 
 #: libs/image/brushengine/kis_paintop_factory.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Category of brush engines"
-#| msgid "Brush engines"
+#, kde-format
 msgctxt "Category of brush engines"
 msgid "Brush engines"
 msgstr "Penselmotorer"
@@ -20784,9 +20634,6 @@ msgid "Change Filter"
 msgstr "Endre filter"
 
 #: libs/image/commands/kis_deselect_global_selection_command.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Deselect"
 msgctxt "(qtundo-format)"
 msgid "Deselect"
 msgstr "Velg bort"
@@ -20801,9 +20648,6 @@ msgstr "Legg til lag"
 
 #: libs/image/commands/kis_image_layer_move_command.cpp:23
 #: libs/image/commands/kis_image_layer_move_command.cpp:36
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Layer"
 msgctxt "(qtundo-format)"
 msgid "Move Layer"
 msgstr "Flytt lag"
@@ -20818,33 +20662,21 @@ msgid "Remove Layer"
 msgstr "Fjern lag"
 
 #: libs/image/commands/kis_node_compositeop_command.cpp:15
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Composition Mode Change"
 msgctxt "(qtundo-format)"
 msgid "Composition Mode Change"
 msgstr "Endre sammensettingsmodus"
 
 #: libs/image/commands/kis_node_opacity_command.cpp:22
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Opacity Change"
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
 msgstr "Tetthetsendring"
 
 #: libs/image/commands/kis_node_property_list_command.cpp:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Property Changes"
 msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "Egenskapsendringer"
 
 #: libs/image/commands/kis_reselect_global_selection_command.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Reselect"
 msgctxt "(qtundo-format)"
 msgid "Reselect"
 msgstr "Velg på nytt"
@@ -20978,8 +20810,7 @@ msgid "Other"
 msgstr ""
 
 #: libs/image/generator/kis_generator_layer.cpp:202
-#, fuzzy, kde-format
-#| msgid "Generator"
+#, kde-format
 msgid "Generator"
 msgstr "Generator"
 
@@ -21304,8 +21135,7 @@ msgid "Blending Mode"
 msgstr "Blandingsmodus"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Locked"
 msgstr "Låst"
 
@@ -21345,8 +21175,7 @@ msgstr ""
 #: libs/resources/KisStorageModel.cpp:473
 #: libs/resources/KisTagResourceModel.cpp:647
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
-#, fuzzy, kde-format
-#| msgid "Active"
+#, kde-format
 msgid "Active"
 msgstr "Aktiv"
 
@@ -21415,8 +21244,7 @@ msgid ""
 msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:626
-#, fuzzy, kde-format
-#| msgid "Merged"
+#, kde-format
 msgid "Merged"
 msgstr "Flettet"
 
@@ -21426,8 +21254,7 @@ msgid "Merge Down"
 msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:1713
-#, fuzzy, kde-format
-#| msgid "Copy of"
+#, kde-format
 msgid "Copy of"
 msgstr "Kopi av"
 
@@ -21457,25 +21284,16 @@ msgid "Visible"
 msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:2115
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Merge Selection Masks"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Flett sammen utvalgsmasker"
 
 #: libs/image/kis_layer_utils.cpp:2139
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Flatten Layer"
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Flat ut lag"
 
 #: libs/image/kis_layer_utils.cpp:2155
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Flatten Image"
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Flat ut bilde"
@@ -21491,8 +21309,7 @@ msgid "Convert to a Paint Layer"
 msgstr ""
 
 #: libs/image/kis_processing_visitor.cpp:24
-#, fuzzy, kde-format
-#| msgid "Processing"
+#, kde-format
 msgid "Processing"
 msgstr "Behandler"
 
@@ -21511,57 +21328,36 @@ msgid "Render Animation"
 msgstr ""
 
 #: libs/image/kis_selection_filters.cpp:116
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Erode Selection"
 msgctxt "(qtundo-format)"
 msgid "Erode Selection"
 msgstr "Eroder utvalget"
 
 #: libs/image/kis_selection_filters.cpp:182
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Dilate Selection"
 msgctxt "(qtundo-format)"
 msgid "Dilate Selection"
 msgstr "Fortynn utvalget"
 
 #: libs/image/kis_selection_filters.cpp:255
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Border Selection"
 msgctxt "(qtundo-format)"
 msgid "Border Selection"
 msgstr "Omrissvalg"
 
 #: libs/image/kis_selection_filters.cpp:499
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Feather Selection"
 msgctxt "(qtundo-format)"
 msgid "Feather Selection"
 msgstr "Fjær-utvalg"
 
 #: libs/image/kis_selection_filters.cpp:550
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Grow Selection"
 msgctxt "(qtundo-format)"
 msgid "Grow Selection"
 msgstr "Øk utvalg"
 
 #: libs/image/kis_selection_filters.cpp:679
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shrink Selection"
 msgctxt "(qtundo-format)"
 msgid "Shrink Selection"
 msgstr "Krymp utvalg"
 
 #: libs/image/kis_selection_filters.cpp:822
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Smooth Selection"
 msgctxt "(qtundo-format)"
 msgid "Smooth Selection"
 msgstr "Jevnt utvalg"
@@ -21595,8 +21391,7 @@ msgid "Instant Preview"
 msgstr ""
 
 #: libs/image/kis_update_scheduler.cpp:126
-#, fuzzy, kde-format
-#| msgid "Updating..."
+#, kde-format
 msgid "Updating..."
 msgstr "Oppdaterer …"
 
@@ -21784,8 +21579,7 @@ msgstr ""
 
 #: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgid "off"
 msgstr "av"
 
@@ -21797,26 +21591,22 @@ msgstr ""
 
 #: libs/image/layerstyles/kis_ls_bevel_emboss_filter.cpp:45
 #: libs/image/layerstyles/kis_ls_stroke_filter.cpp:67
-#, fuzzy, kde-format
-#| msgid "Stroke (style)"
+#, kde-format
 msgid "Stroke (style)"
 msgstr "Strek (stil)"
 
 #: libs/image/layerstyles/kis_ls_drop_shadow_filter.cpp:36
-#, fuzzy, kde-format
-#| msgid "Drop Shadow (style)"
+#, kde-format
 msgid "Drop Shadow (style)"
 msgstr "Bakgrunnsskygge (stil)"
 
 #: libs/image/layerstyles/kis_ls_overlay_filter.cpp:38
-#, fuzzy, kde-format
-#| msgid "Overlay (style)"
+#, kde-format
 msgid "Overlay (style)"
 msgstr "Overlagre (stil)"
 
 #: libs/image/layerstyles/kis_ls_satin_filter.cpp:34
-#, fuzzy, kde-format
-#| msgid "Satin (style)"
+#, kde-format
 msgid "Satin (style)"
 msgstr "Sateng (stil)"
 
@@ -22528,15 +22318,13 @@ msgid "Undefined operation in the %1 color space"
 msgstr "Udefinert handling i %1-fargerommet"
 
 #: libs/pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
-#, fuzzy, kde-format
-#| msgid "Simple Color Conversion Engine"
+#, kde-format
 msgid "Simple Color Conversion Engine"
 msgstr "Enkel fargeomdanningsmotor"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:360
 #: libs/pigment/KoBasicHistogramProducers.cpp:427
-#, fuzzy, kde-format
-#| msgid "Generic RGB Histogram"
+#, kde-format
 msgid "Generic RGB Histogram"
 msgstr "Generisk RGB-histogram"
 
@@ -22546,20 +22334,17 @@ msgid "R"
 msgstr "R"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:365
-#, fuzzy, kde-format
-#| msgid "G"
+#, kde-format
 msgid "G"
 msgstr "G"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:366
-#, fuzzy, kde-format
-#| msgid "B"
+#, kde-format
 msgid "B"
 msgstr "B"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:433
-#, fuzzy, kde-format
-#| msgid "L*a*b* Histogram"
+#, kde-format
 msgid "L*a*b* Histogram"
 msgstr "L*a*b* histogram"
 
@@ -22571,8 +22356,7 @@ msgid "L*"
 msgstr "L*"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:511
-#, fuzzy, kde-format
-#| msgid "Generic L*a*b* Histogram"
+#, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr "Generisk L*a*b*-histogram"
 
@@ -23556,8 +23340,7 @@ msgid "In"
 msgstr "Inn"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:219
-#, fuzzy, kde-format
-#| msgid "Out"
+#, kde-format
 msgid "Out"
 msgstr "Ut"
 
@@ -23568,14 +23351,12 @@ msgstr "Ut"
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
-#, fuzzy, kde-format
-#| msgid "Untitled"
+#, kde-format
 msgid "Untitled"
 msgstr "Uten tittel"
 
 #: libs/pigment/resources/KoStopGradient.cpp:373
-#, fuzzy, kde-format
-#| msgid "SVG Gradient"
+#, kde-format
 msgid "SVG Gradient"
 msgstr "SVG-gradient"
 
@@ -24121,8 +23902,7 @@ msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:673
 #: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:99
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Ressurs"
 
@@ -24188,9 +23968,7 @@ msgstr "Slett ressurs"
 #: libs/ui/KisMainWindow.cpp:2674
 #: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose File to Add"
+#, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
 msgstr "Velg fil som skal legges til"
@@ -24483,9 +24261,7 @@ msgid "Filter in Tag"
 msgstr ""
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "<qt>Show the tag box options.</qt>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
 msgstr "<qt>Vis valg  for etikett-boksen.</qt>"
@@ -24493,42 +24269,32 @@ msgstr "<qt>Vis valg  for etikett-boksen.</qt>"
 #: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
 #: libs/resourcewidgets/TagActions.cpp:158
-#, fuzzy, kde-format
-#| msgid "New tag"
+#, kde-format
 msgid "New tag"
 msgstr "Ny etikett"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:75
-#, fuzzy, kde-format
-#| msgid "Rename tag"
+#, kde-format
 msgid "Rename tag"
 msgstr "Endre navn på etikett"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:85
-#, fuzzy, kde-format
-#| msgid "Delete this tag"
+#, kde-format
 msgid "Delete this tag"
 msgstr "Slett denne etiketten"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:125
-#, fuzzy, kde-format
-#| msgid "Undelete"
+#, kde-format
 msgid "Undelete"
 msgstr "Gjenopprett"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:156
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Select All"
 msgctxt "(qtundo-format)"
 msgid "Select All"
 msgstr "Velg alt"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
 #: libs/ui/KisView.cpp:779
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Flood Fill Layer"
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Flom-fyll laget"
@@ -24550,9 +24316,6 @@ msgid "Copy"
 msgstr "Kopier"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:472
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Copy Merged"
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Kopier flettet"
@@ -24565,9 +24328,6 @@ msgstr ""
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:514
 #: libs/ui/actions/kis_selection_action_factories.cpp:534
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to Vector Selection"
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Gjør om til vektorutvalg"
@@ -24606,14 +24366,12 @@ msgstr ""
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
 #: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
-#, fuzzy, kde-format
-#| msgid "(pasted)"
+#, kde-format
 msgid "(pasted)"
 msgstr "(limt inn)"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:397
-#, fuzzy, kde-format
-#| msgid "Pasted"
+#, kde-format
 msgid "Pasted"
 msgstr "Limt inn"
 
@@ -26171,31 +25929,24 @@ msgstr "Vannrett speiling: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #: libs/ui/canvas/kis_canvas_controller.cpp:405
-#, fuzzy, kde-format
-#| msgid "OFF"
+#, kde-format
 msgid "OFF"
 msgstr "Av"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #: libs/ui/canvas/kis_canvas_controller.cpp:405
-#, fuzzy, kde-format
-#| msgid "ON"
+#, kde-format
 msgid "ON"
 msgstr "På"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "floating message about rotation"
-#| msgid "Rotation: %1° "
+#, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Rotasjon: %1° "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:338
-#, fuzzy, kde-format
-#| msgid ""
-#| "You are activating wrap-around mode, but have not enabled OpenGL.\n"
-#| "To visualize wrap-around mode, enable OpenGL."
+#, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
@@ -26339,8 +26090,7 @@ msgid "About Krita"
 msgstr "Om Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:46
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
+#, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Laget av</h1></p><p>"
 
@@ -26386,16 +26136,12 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_about_application.cpp:104
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
+#, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Takk til</h1><p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| ".</p><p><i>For supporting Krita development with advice, icons, brush "
-#| "sets and more.</i></p></body></html>"
+#, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
@@ -26481,17 +26227,13 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:139
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Filter"
 msgstr "Filter"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:139
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Filter: %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Filter: %1"
 msgstr "Filter: %1"
@@ -26646,8 +26388,7 @@ msgid "Ascending"
 msgstr "Stigende"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:67
-#, fuzzy, kde-format
-#| msgid "Descending"
+#, kde-format
 msgid "Descending"
 msgstr "Synkende"
 
@@ -26769,39 +26510,31 @@ msgid "Change Layer Properties"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
-#, fuzzy, kde-format
-#| msgid "Layer Styles"
+#, kde-format
 msgid "Layer Styles"
 msgstr "Lagstiler"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Enter new style name"
+#, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skriv inn navn på ny stil:"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2685
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Navn:"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:279
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "Ny stil"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:333
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:397
-#, fuzzy, kde-format
-#| msgid "Select ASL file"
+#, kde-format
 msgid "Select ASL file"
 msgstr "Velg ASL-fil"
 
@@ -26826,8 +26559,7 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:908
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
-#, fuzzy, kde-format
-#| msgid "Not Implemented Yet"
+#, kde-format
 msgid "Not Implemented Yet"
 msgstr "Ikke implementert ennå"
 
@@ -27737,8 +27469,7 @@ msgid "Create session"
 msgstr ""
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
-#, fuzzy, kde-format
-#| msgid "Session name:"
+#, kde-format
 msgid "Session name:"
 msgstr "Øktnavn:"
 
@@ -27748,8 +27479,7 @@ msgid "Rename session"
 msgstr ""
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
-#, fuzzy, kde-format
-#| msgid "New name:"
+#, kde-format
 msgid "New name:"
 msgstr "Nytt navn:"
 
@@ -27760,9 +27490,6 @@ msgid "Vector Layer %1"
 msgstr "Vektorlag %1"
 
 #: libs/ui/flake/kis_take_all_shapes_command.cpp:15
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Clear Vector Selection"
 msgctxt "(qtundo-format)"
 msgid "Clear Vector Selection"
 msgstr "Tøm vektorutvalg"
@@ -32370,8 +32097,7 @@ msgstr ""
 
 #: libs/ui/input/kis_abstract_input_action.cpp:38
 #: libs/ui/input/kis_tool_invocation_action.cpp:42
-#, fuzzy, kde-format
-#| msgid "Activate"
+#, kde-format
 msgid "Activate"
 msgstr "Aktiver"
 
@@ -32894,8 +32620,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
-#, fuzzy, kde-format
-#| msgid "Confirm"
+#, kde-format
 msgid "Confirm"
 msgstr "Bekreft"
 
@@ -32971,8 +32696,7 @@ msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
 
 #: libs/ui/input/kis_zoom_action.cpp:72
-#, fuzzy, kde-format
-#| msgid "Zoom Mode"
+#, kde-format
 msgid "Zoom Mode"
 msgstr "Zoom modus"
 
@@ -33225,8 +32949,7 @@ msgid "&Choose foreground and background colors"
 msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:112
-#, fuzzy, kde-format
-#| msgid "&Painter's Tools"
+#, kde-format
 msgid "&Painter's Tools"
 msgstr "&Malerverktøy"
 
@@ -33256,8 +32979,7 @@ msgid "Patterns"
 msgstr "Mønstre"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
-#, fuzzy, kde-format
-#| msgid "Custom Pattern"
+#, kde-format
 msgid "Custom Pattern"
 msgstr "Egendefinert sti"
 
@@ -33865,9 +33587,7 @@ msgid "Texture"
 msgstr ""
 
 #: libs/ui/kis_paintop_options_model.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "option category"
-#| msgid "Filter"
+#, kde-format
 msgctxt "option category"
 msgid "Filter"
 msgstr "Filter"
@@ -33905,8 +33625,7 @@ msgstr ""
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:32
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgid "100%"
 msgstr "100%"
 
@@ -34184,8 +33903,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
-#, fuzzy, kde-format
-#| msgid "Palettes"
+#, kde-format
 msgid "Palettes"
 msgstr "Paletter"
 
@@ -34253,11 +33971,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:507
-#, fuzzy, kde-format
-#| msgid ""
-#| "You are running a 32 bits build on a 64 bits Windows.\n"
-#| "This is not recommended.\n"
-#| "Please download and install the x64 build instead."
+#, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
 "This is not recommended.\n"
@@ -34298,8 +34012,7 @@ msgid "Launching..."
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:680
-#, fuzzy, kde-format
-#| msgid "Mimetype not found, try using the -mimetype option"
+#, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Fant ikke mimetypen, prøv å bruke alternativet «-mimetype»"
 
@@ -34358,20 +34071,17 @@ msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:1184
-#, fuzzy, kde-format
-#| msgid "No template found for: %1"
+#, kde-format
 msgid "No template found for: %1"
 msgstr "Fant ingen mal for: %1 "
 
 #: libs/ui/KisApplication.cpp:1187
-#, fuzzy, kde-format
-#| msgid "Too many templates found for: %1"
+#, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Fant for mange maler for %1"
 
 #: libs/ui/KisApplication.cpp:1203
-#, fuzzy, kde-format
-#| msgid "Template %1 failed to load."
+#, kde-format
 msgid "Template %1 failed to load."
 msgstr "Klarte ikke laste malen %1."
 
@@ -34399,8 +34109,7 @@ msgid "Do you want to clear the settings file?"
 msgstr ""
 
 #: libs/ui/KisApplicationArguments.cpp:69
-#, fuzzy, kde-format
-#| msgid "Open a new document with a template"
+#, kde-format
 msgid "Open a new document with a template"
 msgstr "Opprett nytt dokument fra mal"
 
@@ -34453,14 +34162,12 @@ msgid "Start Krita in full-screen mode"
 msgstr ""
 
 #: libs/ui/KisApplicationArguments.cpp:91
-#, fuzzy, kde-format
-#| msgid "Override display DPI"
+#, kde-format
 msgid "Override display DPI"
 msgstr "Overstyr skjermens PPT"
 
 #: libs/ui/KisApplicationArguments.cpp:95
-#, fuzzy, kde-format
-#| msgid "Export to the given filename and exit"
+#, kde-format
 msgid "Export to the given filename and exit"
 msgstr "Eksporter til oppgitt filnavn og avslutt"
 
@@ -34485,15 +34192,12 @@ msgid "A location that overrides the configured location for Krita's resources"
 msgstr ""
 
 #: libs/ui/KisApplicationArguments.cpp:100
-#, fuzzy, kde-format
-#| msgid "File(s) or URL(s) to open"
+#, kde-format
 msgid "File(s) or URL(s) to open"
 msgstr "Fil(er) eller URL(er) å åpne"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:177
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Recover Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "Gjenopprett filer"
@@ -34504,14 +34208,12 @@ msgid "Discard All"
 msgstr ""
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:184
-#, fuzzy, kde-format
-#| msgid "The following autosave file can be recovered:"
+#, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "Følgende autolagrede fil kan gjenopprettes:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "The following autosave files can be recovered:"
+#, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "Følgende autolagrede filer kan gjenopprettes:"
 
@@ -34609,8 +34311,7 @@ msgid "Autosaving... %1"
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:1478
-#, fuzzy, kde-format
-#| msgid "Autosaving..."
+#, kde-format
 msgid "Autosaving..."
 msgstr "Autolagrer …"
 
@@ -34638,8 +34339,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:1964
-#, fuzzy, kde-format
-#| msgid "File %1 does not exist."
+#, kde-format
 msgid "File %1 does not exist."
 msgstr "Feil «%1» finnes ikke."
 
@@ -34835,8 +34535,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:178
 #: plugins/impex/libkra/kra_converter.cpp:388
 #: plugins/impex/libkra/kra_converter.cpp:417
-#, fuzzy, kde-format
-#| msgid "Unknown error."
+#, kde-format
 msgid "Unknown error."
 msgstr "Ukjent feil."
 
@@ -35088,26 +34787,22 @@ msgid "Wor&kspace"
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:604
-#, fuzzy, kde-format
-#| msgid "Show %1 Toolbar"
+#, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis verktøylinje for %1"
 
 #: libs/ui/KisMainWindow.cpp:606
-#, fuzzy, kde-format
-#| msgid "Hide %1 Toolbar"
+#, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skjul verktøylinje for %1"
 
 #: libs/ui/KisMainWindow.cpp:1042
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgid "Save as %1"
 msgstr "Lagre som %1"
 
 #: libs/ui/KisMainWindow.cpp:1070
-#, fuzzy, kde-format
-#| msgid "The file %1 does not exist."
+#, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fila %1 finnes ikke."
 
@@ -35126,8 +34821,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:1353
-#, fuzzy, kde-format
-#| msgid "Exporting"
+#, kde-format
 msgid "Exporting"
 msgstr "Eksporterer"
 
@@ -35142,8 +34836,7 @@ msgid "Create new document"
 msgstr "Lag et nytt dokument"
 
 #: libs/ui/KisMainWindow.cpp:1791
-#, fuzzy, kde-format
-#| msgid "Custom Document"
+#, kde-format
 msgid "Custom Document"
 msgstr "Tilpasset dokument"
 
@@ -35252,8 +34945,7 @@ msgid "Activate %1"
 msgstr ""
 
 #: libs/ui/KisOpenPane.cpp:176
-#, fuzzy, kde-format
-#| msgid "Open Existing Document"
+#, kde-format
 msgid "Open Existing Document"
 msgstr "Åpne eksisterende dokument"
 
@@ -35428,9 +35120,7 @@ msgid "Create Template"
 msgstr "Lag en mal"
 
 #: libs/ui/KisTemplateCreateDia.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "Template name"
-#| msgid "Name:"
+#, kde-format
 msgctxt "Template name"
 msgid "Name:"
 msgstr "Navn:"
@@ -35453,14 +35143,12 @@ msgid "&Remove"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:129
-#, fuzzy, kde-format
-#| msgid "Picture"
+#, kde-format
 msgid "Picture"
 msgstr "Bilde"
 
 #: libs/ui/KisTemplateCreateDia.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Preview"
+#, kde-format
 msgid "&Preview"
 msgstr "&Forhåndsvisning"
 
@@ -35473,14 +35161,12 @@ msgid "Custom:"
 msgstr "Tilpasset:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:141
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "&Select..."
 msgstr "Vel&g …"
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
-#, fuzzy, kde-format
-#| msgid "Use the new template as default"
+#, kde-format
 msgid "Use the new template as default"
 msgstr "Bruk den nye malen som standardmal"
 
@@ -35490,14 +35176,12 @@ msgid "Use the new template every time Krita starts"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:285
-#, fuzzy, kde-format
-#| msgid "Do you really want to overwrite the existing '%1' template?"
+#, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "Er du sikker på at du vil overskrive den eksisterende malen «%1»?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
-#, fuzzy, kde-format
-#| msgid "Select an image"
+#, kde-format
 msgid "Select an image"
 msgstr "Velg et bilde"
 
@@ -35531,8 +35215,7 @@ msgid "Remove Group"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:437
-#, fuzzy, kde-format
-#| msgid "Do you really want to remove that template?"
+#, kde-format
 msgid "Do you really want to remove that template?"
 msgstr "Er du sikker på at du vil fjerne den malen?"
 
@@ -35543,20 +35226,17 @@ msgid "Remove Template"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:495
-#, fuzzy, kde-format
-#| msgid "Could not load picture."
+#, kde-format
 msgid "Could not load picture."
 msgstr "Klarte ikke laste bilde."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgid "No picture available."
 msgstr "Ingen bilder tilgjengelig."
 
 #: libs/ui/KisTemplatesPane.cpp:39
-#, fuzzy, kde-format
-#| msgid "Use This Template"
+#, kde-format
 msgid "Use This Template"
 msgstr "Bruk denne malen"
 
@@ -35581,10 +35261,7 @@ msgid "Layer is invisible."
 msgstr "Laget er usynlig."
 
 #: libs/ui/KisView.cpp:1175
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
-#| "it?</p>"
+#, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
@@ -35704,9 +35381,7 @@ msgid "Open in &private app location"
 msgstr ""
 
 #: libs/ui/KisViewManager.cpp:1620 libs/ui/KisViewManager.cpp:1638
-#, fuzzy, kde-format
-#| msgctxt "choice for author profile"
-#| msgid "Anonymous"
+#, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonym"
@@ -35767,57 +35442,45 @@ msgid "Document Information"
 msgstr "Dokumentinformasjon"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:115
-#, fuzzy, kde-format
-#| msgid "Last saved by"
+#, kde-format
 msgid "Last saved by"
 msgstr "Sist lagret av"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:170
-#, fuzzy, kde-format
-#| msgid "Use ';' (Example: Office;KDE;Calligra)"
+#, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
 msgstr "Bruk «;» (Eksempel: Office;KDE;Calligra)"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:296
-#, fuzzy, kde-format
-#| msgid "%1 week"
-#| msgid_plural "%1 weeks"
+#, kde-format
 msgid "%1 week"
 msgid_plural "%1 weeks"
 msgstr[0] "%1 uke"
 msgstr[1] "%1 uker"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:297 libs/ui/KoDocumentInfoDlg.cpp:299
-#, fuzzy, kde-format
-#| msgid "%1 day"
-#| msgid_plural "%1 days"
+#, kde-format
 msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] "%1 dag"
 msgstr[1] "%1 dager"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:300 libs/ui/KoDocumentInfoDlg.cpp:302
-#, fuzzy, kde-format
-#| msgid "%1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgid "%1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 time"
 msgstr[1] "%1 timer"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:303 libs/ui/KoDocumentInfoDlg.cpp:305
-#, fuzzy, kde-format
-#| msgid "%1 minute"
-#| msgid_plural "%1 minutes"
+#, kde-format
 msgid "%1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "%1 minutt"
 msgstr[1] "%1 minutter"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:306 libs/ui/KoDocumentInfoDlg.cpp:308
-#, fuzzy, kde-format
-#| msgid "%1 second"
-#| msgid_plural "%1 seconds"
+#, kde-format
 msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] "%1 sekund"
@@ -36869,9 +36532,6 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_utils.cpp:212 libs/ui/tool/kis_tool_utils.cpp:224
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Clear"
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Tøm"
@@ -36920,22 +36580,18 @@ msgid "Filter \"%1\""
 msgstr ""
 
 #: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Icon size"
-#| msgid "Default"
+#, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Standard"
 
 #: libs/ui/toolbox/KoToolBox.cpp:356
-#, fuzzy, kde-format
-#| msgid "%1x%2"
+#, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:26
-#, fuzzy, kde-format
-#| msgid "Toolbox"
+#, kde-format
 msgid "Toolbox"
 msgstr "Verktøykasse"
 
@@ -36944,8 +36600,7 @@ msgstr "Verktøykasse"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
-#, fuzzy, kde-format
-#| msgid "Icon Size"
+#, kde-format
 msgid "Icon Size"
 msgstr "Ikonstørrelse"
 
@@ -37123,8 +36778,7 @@ msgid "Custom size items"
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:238
-#, fuzzy, kde-format
-#| msgid "Add..."
+#, kde-format
 msgid "Add..."
 msgstr "Legg til …"
 
@@ -37139,15 +36793,13 @@ msgid "Segmented gradient"
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:252
-#, fuzzy, kde-format
-#| msgid "Edit..."
+#, kde-format
 msgid "Edit..."
 msgstr "Rediger …"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:490
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
-#, fuzzy, kde-format
-#| msgid "unnamed"
+#, kde-format
 msgid "unnamed"
 msgstr "uten navn"
 
@@ -37302,8 +36954,7 @@ msgstr ""
 #: libs/ui/widgets/gradient/KisSegmentGradientSlider.cpp:1064
 #: libs/ui/widgets/gradient/KisStopGradientSlider.cpp:507
 #: libs/widgets/kis_color_button.cpp:317
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose a color"
 msgstr "Velg en farge"
 
@@ -37885,8 +37536,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:33
-#, fuzzy, kde-format
-#| msgid "Insert as New Layer"
+#, kde-format
 msgid "Insert as New Layer"
 msgstr "Sett inn som nytt lag"
 
@@ -37896,8 +37546,7 @@ msgid "Insert as New File Layer"
 msgstr ""
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:35
-#, fuzzy, kde-format
-#| msgid "Open in New Document"
+#, kde-format
 msgid "Open in New Document"
 msgstr "Åpne i nytt dokument"
 
@@ -38127,8 +37776,7 @@ msgstr ""
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:185
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
-#, fuzzy, kde-format
-#| msgid "Thumbnails"
+#, kde-format
 msgid "Thumbnails"
 msgstr "Småbilder"
 
@@ -38396,14 +38044,12 @@ msgstr ""
 
 #: libs/ui/widgets/kis_wdg_generator.cpp:148
 #: libs/ui/widgets/kis_wdg_generator.cpp:160
-#, fuzzy, kde-format
-#| msgid "No configuration options."
+#, kde-format
 msgid "No configuration options."
 msgstr "Ingen innstillingsvalg."
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:131
-#, fuzzy, kde-format
-#| msgid "Insert name"
+#, kde-format
 msgid "Insert name"
 msgstr "Tilføy navn"
 
@@ -38708,8 +38354,7 @@ msgid "Background color selector"
 msgstr ""
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:261
-#, fuzzy, kde-format
-#| msgid "Change the filling color"
+#, kde-format
 msgid "Change the filling color"
 msgstr "Endre fyllfargen"
 
@@ -38869,50 +38514,42 @@ msgid "Smoothing:"
 msgstr ""
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
-#, fuzzy, kde-format
-#| msgid "Butt cap"
+#, kde-format
 msgid "Butt cap"
 msgstr "Tvers av"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:97
-#, fuzzy, kde-format
-#| msgid "Round cap"
+#, kde-format
 msgid "Round cap"
 msgstr "Rund ende"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:104
-#, fuzzy, kde-format
-#| msgid "Square cap"
+#, kde-format
 msgid "Square cap"
 msgstr "Firkantet ende"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Miter join"
+#, kde-format
 msgid "Miter join"
 msgstr "Gjæret sammenføying"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Round join"
+#, kde-format
 msgid "Round join"
 msgstr "Rund sammenføying"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:129
-#, fuzzy, kde-format
-#| msgid "Bevel join"
+#, kde-format
 msgid "Bevel join"
 msgstr "Faset sammenføying"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Miter limit"
+#, kde-format
 msgid "Miter limit"
 msgstr "Gjæringsgrense"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
-#, fuzzy, kde-format
-#| msgid "Set line width of actual selection"
+#, kde-format
 msgid "Set line width of actual selection"
 msgstr "Oppgi linjebredden for faktisk utvalg"
 
@@ -38956,8 +38593,7 @@ msgid "Thickness:"
 msgstr "Tykkelse:"
 
 #: libs/widgets/kis_color_input.cpp:54
-#, fuzzy, kde-format
-#| msgid "%1:"
+#, kde-format
 msgid "%1:"
 msgstr "%1:"
 
@@ -39051,19 +38687,13 @@ msgid "Removing Group"
 msgstr ""
 
 #: libs/widgets/kis_spacing_selection_widget.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Auto"
+#, kde-format
 msgctxt "@action:button"
 msgid "Auto"
 msgstr "Auto"
 
 #: libs/widgets/kis_spacing_selection_widget.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "In auto mode the spacing of the brush will be calculated automatically "
-#| "depending on its size"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "In auto mode the spacing of the brush will be calculated automatically "
@@ -39205,8 +38835,7 @@ msgid "Lightness:"
 msgstr "Lyshet:"
 
 #: libs/widgets/KisSpinboxHSXSelector.cpp:80
-#, fuzzy, kde-format
-#| msgid "Intensity:"
+#, kde-format
 msgid "Intensity:"
 msgstr "Intensitet:"
 
@@ -39221,8 +38850,7 @@ msgid "Remove from tag"
 msgstr ""
 
 #: libs/widgets/KoColorSetWidget.cpp:76
-#, fuzzy, kde-format
-#| msgid "Recent:"
+#, kde-format
 msgid "Recent:"
 msgstr "Nylig brukt:"
 
@@ -39233,14 +38861,12 @@ msgid "Choose palette"
 msgstr "Velg palett"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:65
-#, fuzzy, kde-format
-#| msgid "Add new author profile (starts out as a copy of current)"
+#, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
 msgstr "Legg til ny forfatterprofil (begynner som en kopi av den gjeldende)"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:69
-#, fuzzy, kde-format
-#| msgid "Delete the author profile"
+#, kde-format
 msgid "Delete the author profile"
 msgstr "Slett forfatterprofilen"
 
@@ -39265,8 +38891,7 @@ msgid "Email"
 msgstr "E-post"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
-#, fuzzy, kde-format
-#| msgid "Fax"
+#, kde-format
 msgid "Fax"
 msgstr "Faks"
 
@@ -39283,14 +38908,12 @@ msgid "Post Address"
 msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:86
-#, fuzzy, kde-format
-#| msgid "Telephone"
+#, kde-format
 msgid "Telephone"
 msgstr "Telefon"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:89
-#, fuzzy, kde-format
-#| msgid "Entry"
+#, kde-format
 msgid "Entry"
 msgstr "Oppføring"
 
@@ -39301,14 +38924,12 @@ msgid "Anonymous"
 msgstr "Anonym"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:280
-#, fuzzy, kde-format
-#| msgid "Name (not duplicate or blank name):"
+#, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Navn (ikke duplikat eller tomt navn):"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:280
-#, fuzzy, kde-format
-#| msgid "Name of Profile"
+#, kde-format
 msgid "Name of Profile"
 msgstr "Navn på profilen"
 
@@ -39361,34 +38982,28 @@ msgid "Contact:"
 msgstr "Kontakt:"
 
 #: libs/widgets/KoDialog.cpp:250
-#, fuzzy, kde-format
-#| msgid "&Try"
+#, kde-format
 msgid "&Try"
 msgstr "&Prøv"
 
 #: libs/widgets/KoDialog.cpp:480
-#, fuzzy, kde-format
-#| msgid "modified"
+#, kde-format
 msgid "modified"
 msgstr "endret"
 
 #: libs/widgets/KoDialog.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "Document/application separator in titlebar"
-#| msgid " – "
+#, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr " – "
 
 #: libs/widgets/KoDialog.cpp:773
-#, fuzzy, kde-format
-#| msgid "&Details"
+#, kde-format
 msgid "&Details"
 msgstr "&Detaljer"
 
 #: libs/widgets/KoDialog.cpp:931
-#, fuzzy, kde-format
-#| msgid "Get help..."
+#, kde-format
 msgid "Get help..."
 msgstr "Få hjelp …"
 
@@ -39405,14 +39020,12 @@ msgid "Close Docker"
 msgstr ""
 
 #: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Add Color To Palette"
+#, kde-format
 msgid "Add Color To Palette"
 msgstr "Legg til farge til palett"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:201
-#, fuzzy, kde-format
-#| msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
 msgstr "Kan ikke skrive til palettfila %1. Kanskje den er skrivebeskyttet."
 
@@ -39425,8 +39038,7 @@ msgid "Palette"
 msgstr "Palett"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:215
-#, fuzzy, kde-format
-#| msgid "Add/Remove Colors"
+#, kde-format
 msgid "Add/Remove Colors"
 msgstr "Legg til /Fjern farger"
 
@@ -39441,8 +39053,7 @@ msgid "0. Foreground to Background"
 msgstr ""
 
 #: libs/widgets/KoRuler.cpp:1301
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgid "First line indent"
 msgstr "Innrykk for første linje"
 
@@ -39453,8 +39064,7 @@ msgid "Left indent"
 msgstr "Venstre innrykk"
 
 #: libs/widgets/KoRuler.cpp:1303
-#, fuzzy, kde-format
-#| msgid "Right indent"
+#, kde-format
 msgid "Right indent"
 msgstr "Høyre innrykk"
 
@@ -39525,14 +39135,12 @@ msgid "Channels"
 msgstr ""
 
 #: libs/widgetutils/config/klanguagebutton.cpp:181
-#, fuzzy, kde-format
-#| msgid "without name"
+#, kde-format
 msgid "without name"
 msgstr "uten navn"
 
 #: libs/widgetutils/config/krecentfilesaction.cpp:90
-#, fuzzy, kde-format
-#| msgid "No Entries"
+#, kde-format
 msgid "No Entries"
 msgstr "Ingen oppføringer"
 
@@ -39558,17 +39166,13 @@ msgid "&Forward"
 msgstr "&Fram"
 
 #: libs/widgetutils/config/kstandardaction.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "home page"
-#| msgid "&Home"
+#, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "&Hjem"
 
 #: libs/widgetutils/config/kstandardaction.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "show help"
-#| msgid "&Help"
+#, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "&Hjelp"
@@ -39579,8 +39183,7 @@ msgid "Show &Menubar"
 msgstr "Vis &menylinje"
 
 #: libs/widgetutils/config/kstandardaction.cpp:517
-#, fuzzy, kde-format
-#| msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
+#, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 "Vis menylinja <p>Viser menylinja igjen etter at den har vært skjult</p>"
@@ -39591,10 +39194,7 @@ msgid "Show St&atusbar"
 msgstr "Vis &statuslinja"
 
 #: libs/widgetutils/config/kstandardaction.cpp:538
-#, fuzzy, kde-format
-#| msgid ""
-#| "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of "
-#| "the window used for status information.</p>"
+#, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
@@ -39609,8 +39209,7 @@ msgstr ""
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgid "Percent (%)"
 msgstr "Prosent (%)"
 
@@ -39682,8 +39281,7 @@ msgid "Font Style"
 msgstr ""
 
 #: libs/widgetutils/kis_multipliers_double_slider_spinbox.cpp:51
-#, fuzzy, kde-format
-#| msgid "x%1"
+#, kde-format
 msgid "x%1"
 msgstr "x%1"
 
@@ -39734,15 +39332,12 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/KoFileDialog.cpp:539
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All supported formats"
 msgstr "Alle støttede formater"
 
 #: libs/widgetutils/KoGroupButton.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom triple button"
-#| msgid "%1"
+#, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
@@ -39759,17 +39354,7 @@ msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:53
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
-#| "writers, translators and facilitators who are committed to <a href=\""
-#| "%1\">Free Software</a> development. This community has created hundreds "
-#| "of Free Software applications as part of the KDE frameworks, workspaces "
-#| "and applications.<br /><br />KDE is a cooperative enterprise in which no "
-#| "single entity controls the efforts or products of KDE to the exclusion of "
-#| "others. Everyone is welcome to join and contribute to KDE, including you."
-#| "<br /><br />Visit <a href=\"%2\">%2</a> for more information about the "
-#| "KDE community and the software we produce.</html>"
+#, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
 "writers, translators and facilitators who are committed to <a "
@@ -39792,16 +39377,7 @@ msgstr ""
 "programvaren vi lager.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html>Software can always be improved, and the KDE team is ready to do "
-#| "so. However, you - the user - must tell us when something does not work "
-#| "as expected or could be done better.<br /><br />KDE has a bug tracking "
-#| "system. Visit <a href=\"%1\">%1</a> or use the \"Report Bug...\" dialog "
-#| "from the \"Help\" menu to report bugs.<br /><br />If you have a "
-#| "suggestion for improvement then you are welcome to use the bug tracking "
-#| "system to register your wish. Make sure you use the severity called "
-#| "\"Wishlist\".</html>"
+#, kde-format
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
 "However, you - the user - must tell us when something does not work as "
@@ -39859,43 +39435,34 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "About KDE"
-#| msgid "&About"
+#, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "&Om"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
-#, fuzzy, kde-format
-#| msgid "&Report Bugs or Wishes"
+#, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "&Rapporter feil eller ønsker"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
-#, fuzzy, kde-format
-#| msgid "&Join KDE"
+#, kde-format
 msgid "&Join KDE"
 msgstr "&Bli med i KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
-#, fuzzy, kde-format
-#| msgid "&Support KDE"
+#, kde-format
 msgid "&Support KDE"
 msgstr "&Støtt KDE"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
-#, fuzzy, kde-format
-#| msgid "Submit Bug Report"
+#, kde-format
 msgid "Submit Bug Report"
 msgstr "Send inn en feilrapport"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:117
-#, fuzzy, kde-format
-#| msgid ""
-#| "The application for which you wish to submit a bug report - if incorrect, "
-#| "please use the Report Bug menu item of the correct application"
+#, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
 "please use the Report Bug menu item of the correct application"
@@ -39904,16 +39471,12 @@ msgstr ""
 "«Rapporter feil» fra det programmet feilen gjelder"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
-#, fuzzy, kde-format
-#| msgid "Application: "
+#, kde-format
 msgid "Application: "
 msgstr "Program: "
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:132
-#, fuzzy, kde-format
-#| msgid ""
-#| "The version of this application - please make sure that no newer version "
-#| "is available before sending a bug report"
+#, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
@@ -39928,14 +39491,12 @@ msgid "Version:"
 msgstr "Versjon:"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:138
-#, fuzzy, kde-format
-#| msgid "no version set (programmer error)"
+#, kde-format
 msgid "no version set (programmer error)"
 msgstr "ingen versjon angitt (programmeringsfeil)"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:146
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgid "OS:"
 msgstr "OS:"
 
@@ -39956,68 +39517,56 @@ msgid "&Submit Bug Report"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Dr. Klash' Accelerator Diagnosis"
+#, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "Dr. Klashs sjekk av snarveistastene"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Disable automatic checking"
+#, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "Skru av automatisk sjekking"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
-#, fuzzy, kde-format
-#| msgid "<h2>Accelerators changed</h2>"
+#, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>Hurtigtastene ble endret</h2>"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
-#, fuzzy, kde-format
-#| msgid "Old Text"
+#, kde-format
 msgid "Old Text"
 msgstr "Gammel tekst"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
-#, fuzzy, kde-format
-#| msgid "New Text"
+#, kde-format
 msgid "New Text"
 msgstr "Ny tekst"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
-#, fuzzy, kde-format
-#| msgid "<h2>Accelerators removed</h2>"
+#, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>Hurtigtastene ble fjernet</h2>"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
-#, fuzzy, kde-format
-#| msgid "<h2>Accelerators added (just for your info)</h2>"
+#, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>Hurtigtastene ble lagt til (bare til informasjon) </h2>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:359
-#, fuzzy, kde-format
-#| msgid "Change Text"
+#, kde-format
 msgid "Change Text"
 msgstr "Endre tekst"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:369
-#, fuzzy, kde-format
-#| msgid "Icon te&xt:"
+#, kde-format
 msgid "Icon te&xt:"
 msgstr "Ikonte&kst:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:374
-#, fuzzy, kde-format
-#| msgid "&Hide text when toolbar shows text alongside icons"
+#, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "S&kjul tekst når verkøylinja viser tekst ved siden av ikoner"
 
@@ -40028,10 +39577,7 @@ msgid "Configure Toolbars"
 msgstr "Oppsett av verktøylinjer"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to reset all toolbars of this application to their "
-#| "default? The changes will be applied immediately."
+#, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
@@ -40040,14 +39586,12 @@ msgstr ""
 "programmet til standardverdiene? Endringene får effekt med en gang."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:675
-#, fuzzy, kde-format
-#| msgid "Reset Toolbars"
+#, kde-format
 msgid "Reset Toolbars"
 msgstr "Tilbakestill verktøylinjer"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1000
-#, fuzzy, kde-format
-#| msgid "&Toolbar:"
+#, kde-format
 msgid "&Toolbar:"
 msgstr "&Verktøylinje:"
 
@@ -40070,8 +39614,7 @@ msgid "Filter"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
-#, fuzzy, kde-format
-#| msgid "Curr&ent actions:"
+#, kde-format
 msgid "Curr&ent actions:"
 msgstr "Gjeld&ende handlinger:"
 
@@ -40088,18 +39631,13 @@ msgid "Filter"
 msgstr "Filter"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1217
-#, fuzzy, kde-format
-#| msgctxt "@item:intable Action name in toolbar editor"
-#| msgid "%1"
+#, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1237
-#, fuzzy, kde-format
-#| msgid ""
-#| "This element will be replaced with all the elements of an embedded "
-#| "component."
+#, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr ""
@@ -40107,22 +39645,17 @@ msgstr ""
 "komponent."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1239
-#, fuzzy, kde-format
-#| msgid "<Merge>"
+#, kde-format
 msgid "<Merge>"
 msgstr "<Slå sammen>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1241
-#, fuzzy, kde-format
-#| msgid "<Merge %1>"
+#, kde-format
 msgid "<Merge %1>"
 msgstr "<Slå sammen %1>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1247
-#, fuzzy, kde-format
-#| msgid ""
-#| "This is a dynamic list of actions. You can move it, but if you remove it "
-#| "you will not be able to re-add it."
+#, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
@@ -40131,16 +39664,13 @@ msgstr ""
 "den kan du ikke legge den inn igjen senere."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1248
-#, fuzzy, kde-format
-#| msgid "ActionList: %1"
+#, kde-format
 msgid "ActionList: %1"
 msgstr "Handlingsliste: %1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1347
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1369
-#, fuzzy, kde-format
-#| msgctxt "@label Action tooltip in toolbar editor, below the action list"
-#| msgid "%1"
+#, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
@@ -40156,17 +39686,14 @@ msgid "Filter icons..."
 msgstr ""
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
-#, fuzzy, kde-format
-#| msgid "Default:"
+#, kde-format
 msgid "Default:"
 msgstr "Standard:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
-#, fuzzy, kde-format
-#| msgctxt "No shortcut defined"
-#| msgid "None"
+#, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
 msgstr "Ingen"
@@ -40213,10 +39740,7 @@ msgstr "Alternativ"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
-#, fuzzy, kde-format
-#| msgid ""
-#| "The current shortcut scheme is modified. Save before switching to the new "
-#| "one?"
+#, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
 "one?"
@@ -40225,9 +39749,7 @@ msgstr ""
 "til det nye oppsettet?"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:244
-#, fuzzy, kde-format
-#| msgctxt "header for an applications shortcut list"
-#| msgid "Shortcuts for %1"
+#, kde-format
 msgctxt "header for an applications shortcut list"
 msgid "Shortcuts for %1"
 msgstr "Hurtigtaster for %1"
@@ -40254,18 +39776,13 @@ msgid "Description"
 msgstr "Beskrivelse"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditorItem.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "@item:intable Action name in shortcuts configuration"
-#| msgid "%1"
+#, kde-format
 msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:168
-#, fuzzy, kde-format
-#| msgctxt "%1 is the number of conflicts"
-#| msgid "Shortcut Conflict"
-#| msgid_plural "Shortcut Conflicts"
+#, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
 msgid_plural "Shortcut Conflicts"
@@ -40273,8 +39790,7 @@ msgstr[0] "Snarveiskonflikt"
 msgstr[1] "Snarveiskonflikter"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:172
-#, fuzzy, kde-format
-#| msgid "Shortcut '%1' for action '%2'\n"
+#, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Snarvei «%1» for handling «%2»\n"
 
@@ -40294,22 +39810,17 @@ msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
-#, fuzzy, kde-format
-#| msgid "Reassign"
+#, kde-format
 msgid "Reassign"
 msgstr "Tilordne på nytt"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
-#, fuzzy, kde-format
-#| msgid "Shortcut conflict"
+#, kde-format
 msgid "Shortcut conflict"
 msgstr "Snarveiskonflikt"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:197
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The '%1' key combination is already used by the <b>%2</b> action."
-#| "<br>Please select a different one.</qt>"
+#, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
@@ -40325,17 +39836,12 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
-#, fuzzy, kde-format
-#| msgid "Conflict with Standard Application Shortcut"
+#, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikt med en standard programsnarvei"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
-#, fuzzy, kde-format
-#| msgid ""
-#| "The '%1' key combination is also used for the standard action \"%2\" that "
-#| "some applications use.\n"
-#| "Do you really want to use it as a global shortcut as well?"
+#, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
 "some applications use.\n"
@@ -40346,22 +39852,18 @@ msgstr ""
 "Er du sikker på at du vil bruke den som en  global snarvei også?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
-#, fuzzy, kde-format
-#| msgctxt "What the user inputs now will be taken as the new shortcut"
-#| msgid "Input"
+#, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Inndata"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
-#, fuzzy, kde-format
-#| msgid "The key you just pressed is not supported by Qt."
+#, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Qt støtter ikke den tasten du nettopp trykket."
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
-#, fuzzy, kde-format
-#| msgid "Unsupported Key"
+#, kde-format
 msgid "Unsupported Key"
 msgstr "Ustøttet tast"
 
@@ -40394,8 +39896,7 @@ msgid "Load Custom Shortcuts"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:78
-#, fuzzy, kde-format
-#| msgid "Export Scheme..."
+#, kde-format
 msgid "Export Scheme..."
 msgstr "Eksporter oppsett …"
 
@@ -40405,26 +39906,22 @@ msgid "Import Scheme..."
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:96
-#, fuzzy, kde-format
-#| msgid "Name for New Scheme"
+#, kde-format
 msgid "Name for New Scheme"
 msgstr "Navn på det nye oppsettet"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:97
-#, fuzzy, kde-format
-#| msgid "Name for new scheme:"
+#, kde-format
 msgid "Name for new scheme:"
 msgstr "Navn på det nye oppsettet:"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:97
-#, fuzzy, kde-format
-#| msgid "New Scheme"
+#, kde-format
 msgid "New Scheme"
 msgstr "Nytt oppsett"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:103
-#, fuzzy, kde-format
-#| msgid "A scheme with this name already exists."
+#, kde-format
 msgid "A scheme with this name already exists."
 msgstr "Oppsett med dette navnet finnes fra før."
 
@@ -40472,10 +39969,7 @@ msgid "Add Fallback Language"
 msgstr "Legg til reservespråk"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
-#, fuzzy, kde-format
-#| msgid ""
-#| "Adds one more language which will be used if other translations do not "
-#| "contain a proper translation."
+#, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
 "contain a proper translation."
@@ -40490,10 +39984,7 @@ msgid "Application Language Changed"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
-#, fuzzy, kde-format
-#| msgid ""
-#| "The language for this application has been changed. The change will take "
-#| "effect the next time the application is started."
+#, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
@@ -40502,183 +39993,145 @@ msgstr ""
 "omstart av programmet."
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
-#, fuzzy, kde-format
-#| msgid "Fallback language:"
+#, kde-format
 msgid "Fallback language:"
 msgstr "Reservespråk:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
-#, fuzzy, kde-format
-#| msgid "Primary language:"
+#, kde-format
 msgid "Primary language:"
 msgstr "Standardspråk:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
-#, fuzzy, kde-format
-#| msgid ""
-#| "This is the main application language which will be used first, before "
-#| "any other languages."
+#, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "Dette er hovedspråket som brukes før andre språk."
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
-#, fuzzy, kde-format
-#| msgid ""
-#| "This is the language which will be used if any previous languages do not "
-#| "contain a proper translation."
+#, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
 "contain a proper translation."
 msgstr "Dette språket brukes om forrige språk ikke er skikkelig oversatt."
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:312
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Show Text"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "Vis tekst"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:315
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Toolbar Settings"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "Verktøylinjeinnstillinger"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:317
-#, fuzzy, kde-format
-#| msgctxt "Toolbar orientation"
-#| msgid "Orientation"
+#, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "Retning"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "Øverst"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Left"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "Venstre"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:322
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Right"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "Høyre"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:323
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Nederst"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:331
-#, fuzzy, kde-format
-#| msgid "Text Position"
+#, kde-format
 msgid "Text Position"
 msgstr "Tekstposisjon"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:333
-#, fuzzy, kde-format
-#| msgid "Icons Only"
+#, kde-format
 msgid "Icons Only"
 msgstr "Bare ikoner"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:334
-#, fuzzy, kde-format
-#| msgid "Text Only"
+#, kde-format
 msgid "Text Only"
 msgstr "Bare tekst"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:335
-#, fuzzy, kde-format
-#| msgid "Text Alongside Icons"
+#, kde-format
 msgid "Text Alongside Icons"
 msgstr "Tekst ved siden av ikoner"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:336
-#, fuzzy, kde-format
-#| msgid "Text Under Icons"
+#, kde-format
 msgid "Text Under Icons"
 msgstr "Tekst under ikoner"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:359
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:380
-#, fuzzy, kde-format
-#| msgid "Small (%1x%2)"
+#, kde-format
 msgid "Small (%1x%2)"
 msgstr "Liten (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:361
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:382
-#, fuzzy, kde-format
-#| msgid "Medium (%1x%2)"
+#, kde-format
 msgid "Medium (%1x%2)"
 msgstr "Medium (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:363
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:384
-#, fuzzy, kde-format
-#| msgid "Large (%1x%2)"
+#, kde-format
 msgid "Large (%1x%2)"
 msgstr "Stor (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:365
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:386
-#, fuzzy, kde-format
-#| msgid "Huge (%1x%2)"
+#, kde-format
 msgid "Huge (%1x%2)"
 msgstr "Enorm (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:408
-#, fuzzy, kde-format
-#| msgid "Lock Toolbar Positions"
+#, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "Lås verktøylinjeplasseringer"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
-#, fuzzy, kde-format
-#| msgctxt "@action:intoolbar Text label of toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip Tooltip of toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:93
-#, fuzzy, kde-format
-#| msgid "Toolbars Shown"
+#, kde-format
 msgid "Toolbars Shown"
 msgstr "Viste verktøylinjer"
 
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:172
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:336
-#, fuzzy, kde-format
-#| msgid "No text"
+#, kde-format
 msgid "No text"
 msgstr "Ingen tekst"
 
@@ -41130,8 +40583,7 @@ msgstr "Svart"
 #: plugins/color/lcms2engine/colorspaces/gray_f32/GrayF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/gray_u16/GrayU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/gray_u8/GrayU8ColorSpace.cpp:24
-#, fuzzy, kde-format
-#| msgid "Gray"
+#, kde-format
 msgid "Gray"
 msgstr "Grå"
 
@@ -41142,8 +40594,7 @@ msgstr "Grå"
 #: plugins/color/lcms2engine/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:23
-#, fuzzy, kde-format
-#| msgid "Y"
+#, kde-format
 msgid "Y"
 msgstr "Y"
 
@@ -41151,30 +40602,26 @@ msgstr "Y"
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:29
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:24
-#, fuzzy, kde-format
-#| msgid "Z"
+#, kde-format
 msgid "Z"
 msgstr "Z"
 
 #: plugins/color/lcms2engine/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:28
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:23
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:24
-#, fuzzy, kde-format
-#| msgid "Cb"
+#, kde-format
 msgid "Cb"
 msgstr "Cb"
 
 #: plugins/color/lcms2engine/colorspaces/ycbcr_f32/YCbCrF32ColorSpace.cpp:29
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u16/YCbCrU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/ycbcr_u8/YCbCrU8ColorSpace.cpp:25
-#, fuzzy, kde-format
-#| msgid "Cr"
+#, kde-format
 msgid "Cr"
 msgstr "Cr"
 
 #: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:142
-#, fuzzy, kde-format
-#| msgid "ICC Engine"
+#, kde-format
 msgid "ICC Engine"
 msgstr "ICC-motor"
 
@@ -41264,8 +40711,7 @@ msgid "XYZ/F16 Histogram"
 msgstr ""
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:285
-#, fuzzy, kde-format
-#| msgid "XYZF32 Histogram"
+#, kde-format
 msgid "XYZF32 Histogram"
 msgstr "XYZF32-histogram"
 
@@ -41291,8 +40737,7 @@ msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_ng_dock.cpp:24
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:43
-#, fuzzy, kde-format
-#| msgid "Advanced Color Selector"
+#, kde-format
 msgid "Advanced Color Selector"
 msgstr "Avansert fargevelger"
 
@@ -41302,8 +40747,7 @@ msgid "Color Hotkeys"
 msgstr "Fargefart"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
-#, fuzzy, kde-format
-#| msgid "Change to a Horizontal Layout"
+#, kde-format
 msgid "Change to a Horizontal Layout"
 msgstr "Endre til vannrett utforming"
 
@@ -41314,32 +40758,27 @@ msgid "Hide Shade Selector"
 msgstr "Skjul tonevelger"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgid "Do Nothing"
 msgstr "Ikke gjør noe"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:60
-#, fuzzy, kde-format
-#| msgid "When Pressing Middle Mouse Button"
+#, kde-format
 msgid "When Pressing Middle Mouse Button"
 msgstr "når midtre museknapp trykkes"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
-#, fuzzy, kde-format
-#| msgid "On Mouse Over"
+#, kde-format
 msgid "On Mouse Over"
 msgstr "når musepeker er over"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, fuzzy, kde-format
-#| msgid "Never"
+#, kde-format
 msgid "Never"
 msgstr "Aldri"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:82
-#, fuzzy, kde-format
-#| msgid "MyPaint"
+#, kde-format
 msgid "MyPaint"
 msgstr "MyPaint"
 
@@ -41350,8 +40789,7 @@ msgid "Minimal"
 msgstr "Minimal"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:84
-#, fuzzy, kde-format
-#| msgid "Do Not Show"
+#, kde-format
 msgid "Do Not Show"
 msgstr "ikke vis"
 
@@ -41378,16 +40816,12 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:276
-#, fuzzy, kde-format
-#| msgid "Intensity maps to the sum of rgb components"
+#, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intensitet avbildes til summen av rgb-komponenter"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:279
-#, fuzzy, kde-format
-#| msgid ""
-#| "Luma(Y') is weighted by its coefficients which are configurable. Default "
-#| "values are set to 'rec 709'."
+#, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
 "values are set to 'rec 709'."
@@ -41396,20 +40830,17 @@ msgstr ""
 "verdier er satt til «rec 709»."
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:36
-#, fuzzy, kde-format
-#| msgid "Create a list of colors from the image"
+#, kde-format
 msgid "Create a list of colors from the image"
 msgstr "Opprett en liste over farger fra bildet"
 
 #: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:199
-#, fuzzy, kde-format
-#| msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
+#, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 
 #: plugins/dockers/advancedcolorselector/kis_shade_selector_line_editor.cpp:23
-#, fuzzy, kde-format
-#| msgid "Delta: "
+#, kde-format
 msgid "Delta: "
 msgstr "Delta: "
 
@@ -42111,8 +41542,7 @@ msgid "Drop Frames"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:29
-#, fuzzy, kde-format
-#| msgid "New Layer"
+#, kde-format
 msgid "New Layer"
 msgstr "Nytt lag"
 
@@ -42299,14 +41729,12 @@ msgid "Distribute"
 msgstr ""
 
 #: plugins/dockers/arrangedocker/arrangedocker_dock.cpp:19
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Arrange"
 msgstr "Ordne"
 
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:66
-#, fuzzy, kde-format
-#| msgid "Artistic Color Selector"
+#, kde-format
 msgid "Artistic Color Selector"
 msgstr "Artistisk Fargevelger"
 
@@ -42465,20 +41893,17 @@ msgid "Current properties:"
 msgstr ""
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Compositions"
+#, kde-format
 msgid "Compositions"
 msgstr "Sammensettinger"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:66
-#, fuzzy, kde-format
-#| msgid "Delete Composition"
+#, kde-format
 msgid "Delete Composition"
 msgstr "Slett sammensetting"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:67
-#, fuzzy, kde-format
-#| msgid "New Composition"
+#, kde-format
 msgid "New Composition"
 msgstr "Ny sammensetting"
 
@@ -42509,15 +41934,13 @@ msgid "Export Animations"
 msgstr ""
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:104
-#, fuzzy, kde-format
-#| msgid "Insert Name"
+#, kde-format
 msgid "Insert Name"
 msgstr "Sett inn navn"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:247
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:350
-#, fuzzy, kde-format
-#| msgid "Select a Directory"
+#, kde-format
 msgid "Select a Directory"
 msgstr "Velg en mappe"
 
@@ -42538,14 +41961,12 @@ msgid "Rename Composition"
 msgstr "Gi sammensetting nytt navn"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
-#, fuzzy, kde-format
-#| msgid "New Name:"
+#, kde-format
 msgid "New Name:"
 msgstr "Nytt navn:"
 
 #: plugins/dockers/compositiondocker/compositionmodel.cpp:65
-#, fuzzy, kde-format
-#| msgid "Composition"
+#, kde-format
 msgid "Composition"
 msgstr "Sammensetting"
 
@@ -42838,8 +42259,7 @@ msgid "Histogram"
 msgstr "Histogram"
 
 #: plugins/dockers/historydocker/HistoryDock.cpp:22
-#, fuzzy, kde-format
-#| msgid "Undo History"
+#, kde-format
 msgid "Undo History"
 msgstr "Angre historie"
 
@@ -42962,8 +42382,7 @@ msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1247
 #: plugins/dockers/layerdocker/LayerBox.cpp:1271
-#, fuzzy, kde-format
-#| msgid "&Add"
+#, kde-format
 msgid "&Add"
 msgstr "&Legg til"
 
@@ -42973,14 +42392,12 @@ msgid "%1 %"
 msgstr ""
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:47
-#, fuzzy, kde-format
-#| msgid "No"
+#, kde-format
 msgid "No"
 msgstr "Nei"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:47
-#, fuzzy, kde-format
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "Ja"
 
@@ -43033,14 +42450,12 @@ msgid "Delete the layer or mask"
 msgstr "Slett laget eller masken"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:41
-#, fuzzy, kde-format
-#| msgid "Log Viewer"
+#, kde-format
 msgid "Log Viewer"
 msgstr "Loggviser"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:116
-#, fuzzy, kde-format
-#| msgid "Log Settings"
+#, kde-format
 msgid "Log Settings"
 msgstr "Logg-innstillinger"
 
@@ -43090,8 +42505,7 @@ msgid "Image Rendering"
 msgstr ""
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:171
-#, fuzzy, kde-format
-#| msgid "Scripting"
+#, kde-format
 msgid "Scripting"
 msgstr "Skripting"
 
@@ -43142,47 +42556,38 @@ msgid "Configure Logging"
 msgstr ""
 
 #: plugins/dockers/lut/black_white_point_chooser.cpp:43
-#, fuzzy, kde-format
-#| msgid "Black:"
+#, kde-format
 msgid "Black:"
 msgstr "Svart:"
 
 #: plugins/dockers/lut/black_white_point_chooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "White:"
+#, kde-format
 msgid "White:"
 msgstr "Hvit:"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:82
-#, fuzzy, kde-format
-#| msgid "LUT Management"
+#, kde-format
 msgid "LUT Management"
 msgstr "LUT-administrering"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:100
-#, fuzzy, kde-format
-#| msgid "Select custom configuration file."
+#, kde-format
 msgid "Select custom configuration file."
 msgstr "Velg egendefinert oppsettsfil."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:107
 #: plugins/dockers/lut/lutdocker_dock.cpp:611
-#, fuzzy, kde-format
-#| msgid "Select LUT file"
+#, kde-format
 msgid "Select LUT file"
 msgstr "Velg LUT-fil"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:120
-#, fuzzy, kde-format
-#| msgid "Select the exposure (stops) for HDR images."
+#, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Velg eksponering (blenderI for HDR-bilder."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the amount of gamma modification for display. This does not affect "
-#| "the pixels of your image."
+#, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
@@ -43190,17 +42595,13 @@ msgstr ""
 "Bestem gamma-justering for visning. Dette påvirke ikke piksene i bildet ditt."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:258
-#, fuzzy, kde-format
-#| msgctxt "floating message about exposure"
-#| msgid "Exposure: %1"
+#, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Eksponering: %1"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:277
-#, fuzzy, kde-format
-#| msgctxt "floating message about gamma"
-#| msgid "Gamma: %1"
+#, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
@@ -43214,14 +42615,12 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:437
-#, fuzzy, kde-format
-#| msgid "Select OpenColorIO Configuration"
+#, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Velg OpenColorIO-oppsett"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:514
-#, fuzzy, kde-format
-#| msgid "Luminance"
+#, kde-format
 msgid "Luminance"
 msgstr "Luminans"
 
@@ -43334,8 +42733,7 @@ msgid "Configure black and white points of the view"
 msgstr "Sett opp svarte og hvite punkter i visningen"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
-#, fuzzy, kde-format
-#| msgid "Overview"
+#, kde-format
 msgid "Overview"
 msgstr "Oversikt"
 
@@ -44621,20 +44019,17 @@ msgid "Symbol Libraries"
 msgstr ""
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:77
-#, fuzzy, kde-format
-#| msgid "Task Sets"
+#, kde-format
 msgid "Task Sets"
 msgstr "Oppgavesett"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:190
-#, fuzzy, kde-format
-#| msgid "Taskset"
+#, kde-format
 msgid "Taskset"
 msgstr "Oppgavesett"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:198
-#, fuzzy, kde-format
-#| msgid "Taskset Name"
+#, kde-format
 msgid "Taskset Name"
 msgstr "Navn på oppgavesett"
 
@@ -44644,8 +44039,7 @@ msgid "Task sets"
 msgstr ""
 
 #: plugins/dockers/tasksetdocker/tasksetmodel.cpp:45
-#, fuzzy, kde-format
-#| msgid "Task"
+#, kde-format
 msgid "Task"
 msgstr "Oppgave"
 
@@ -46647,8 +46041,7 @@ msgid "New Style Preset"
 msgstr ""
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgid "Text Properties"
 msgstr "Tekstegenskaper"
 
@@ -47183,20 +46576,17 @@ msgid "La&yer"
 msgstr "&Lag"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:31
-#, fuzzy, kde-format
-#| msgid "Create Clones Array"
+#, kde-format
 msgid "Create Clones Array"
 msgstr "Oppretter klone-array"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:219
-#, fuzzy, kde-format
-#| msgid "+ Array of %1"
+#, kde-format
 msgid "+ Array of %1"
 msgstr "+ Array av %1"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:226
-#, fuzzy, kde-format
-#| msgid "- Array of %1"
+#, kde-format
 msgid "- Array of %1"
 msgstr "- Array av %1"
 
@@ -47509,10 +46899,7 @@ msgid "Image Split"
 msgstr "Bildedeling"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid ""
 "Could not save\n"
 "%1"
@@ -47521,10 +46908,7 @@ msgstr ""
 "%1"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
+#, kde-format
 msgid ""
 "Could not save %1\n"
 "Reason: %2"
@@ -47534,8 +46918,7 @@ msgstr ""
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:170
 #: plugins/extensions/imagesplit/imagesplit.cpp:245
-#, fuzzy, kde-format
-#| msgid "Save Image on Split"
+#, kde-format
 msgid "Save Image on Split"
 msgstr "Lagre bilde ved deling"
 
@@ -47614,9 +46997,6 @@ msgid "Split into Masks"
 msgstr ""
 
 #: plugins/extensions/layersplit/layersplit.cpp:193
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Split Layer"
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
 msgstr "Splitt lag"
@@ -48555,62 +47935,52 @@ msgid "List"
 msgstr "Liste"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:53
-#, fuzzy, kde-format
-#| msgid "Date"
+#, kde-format
 msgid "Date"
 msgstr "Dato"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:56
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Number"
 msgstr "Antall"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, fuzzy, kde-format
-#| msgid "String"
+#, kde-format
 msgid "String"
 msgstr "Streng"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:60
-#, fuzzy, kde-format
-#| msgid "Variant (%1)"
+#, kde-format
 msgid "Variant (%1)"
 msgstr "Variant (%1)"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:64
-#, fuzzy, kde-format
-#| msgid "Ordered array"
+#, kde-format
 msgid "Ordered array"
 msgstr "Ordnet tabell"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:66
-#, fuzzy, kde-format
-#| msgid "Unordered array"
+#, kde-format
 msgid "Unordered array"
 msgstr "Uordnet tabell"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:68
-#, fuzzy, kde-format
-#| msgid "Alternative array"
+#, kde-format
 msgid "Alternative array"
 msgstr "Alternativ tabell"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:70
-#, fuzzy, kde-format
-#| msgid "Language array"
+#, kde-format
 msgid "Language array"
 msgstr "Språktabell"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:74
-#, fuzzy, kde-format
-#| msgid "Rational"
+#, kde-format
 msgid "Rational"
 msgstr "Rasjonal"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:95
-#, fuzzy, kde-format
-#| msgid "Key"
+#, kde-format
 msgid "Key"
 msgstr "Nøkkel"
 
@@ -48671,17 +48041,12 @@ msgid "Shrink from image border"
 msgstr "Krymp fra bildekant"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:56
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Image"
 msgctxt "(qtundo-format)"
 msgid "Offset Image"
 msgstr "Forskyv bildet"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Image"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Forskyv bildet"
@@ -49065,9 +48430,7 @@ msgid "Module not loaded:<br/>%1"
 msgstr ""
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Navn"
@@ -49147,8 +48510,7 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:229
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:295
-#, fuzzy, kde-format
-#| msgid "Could not load bundle %1."
+#, kde-format
 msgid "Could not load bundle %1."
 msgstr "Klarte ikke laste inn bunten %1."
 
@@ -49247,8 +48609,7 @@ msgid ""
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
-#, fuzzy, kde-format
-#| msgid "The resource bundle name cannot be empty."
+#, kde-format
 msgid "The resource bundle name cannot be empty."
 msgstr "Buntnavnet kan ikke være tomt."
 
@@ -49360,8 +48721,7 @@ msgid "What resource do you want to import these %1 files as?"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
-#, fuzzy, kde-format
-#| msgid "Select a directory to save the bundle"
+#, kde-format
 msgid "Select a directory to save the bundle"
 msgstr "Velg en mappe som bunten lagres til"
 
@@ -50398,8 +49758,7 @@ msgstr ""
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:230
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:234
-#, fuzzy, kde-format
-#| msgid "Luma"
+#, kde-format
 msgid "Luma"
 msgstr "Luma"
 
@@ -50786,26 +50145,22 @@ msgid "All sides"
 msgstr ""
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:22
-#, fuzzy, kde-format
-#| msgid "Top Edge"
+#, kde-format
 msgid "Top Edge"
 msgstr "Øvre kant"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:23
-#, fuzzy, kde-format
-#| msgid "Bottom Edge"
+#, kde-format
 msgid "Bottom Edge"
 msgstr "Nedre kant"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:24
-#, fuzzy, kde-format
-#| msgid "Right Edge"
+#, kde-format
 msgid "Right Edge"
 msgstr "Høyre kant"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:25
-#, fuzzy, kde-format
-#| msgid "Left Edge"
+#, kde-format
 msgid "Left Edge"
 msgstr "Venstre kant"
 
@@ -51078,8 +50433,7 @@ msgid "Threshold"
 msgstr "Terskel"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:45
-#, fuzzy, kde-format
-#| msgid "Window size"
+#, kde-format
 msgid "Window size"
 msgstr "Vindusstørrelse"
 
@@ -51106,17 +50460,13 @@ msgid "&Index Colors..."
 msgstr "&Indekser farger …"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "Color palette shade"
-#| msgid "Base"
+#, kde-format
 msgctxt "Color palette shade"
 msgid "Base"
 msgstr "Base"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "Color palette shade"
-#| msgid "Bright"
+#, kde-format
 msgctxt "Color palette shade"
 msgid "Bright"
 msgstr "Lyssterk"
@@ -51130,9 +50480,7 @@ msgid "Light"
 msgstr "Lys"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "Color palette shade"
-#| msgid "Shadow"
+#, kde-format
 msgctxt "Color palette shade"
 msgid "Shadow"
 msgstr "Skygge"
@@ -51143,10 +50491,7 @@ msgid "Index Colors"
 msgstr "Indeksfarger"
 
 #: plugins/filters/indexcolors/kiswdgindexcolors.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "suffix for a spinbox"
-#| msgid " color"
-#| msgid_plural " colors"
+#, kde-format
 msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
@@ -51396,9 +50741,7 @@ msgid "Brush size"
 msgstr "Penselstørrelse"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:206
-#, fuzzy, kde-format
-#| msgctxt "smooth out the painting strokes the filter creates"
-#| msgid "Smooth"
+#, kde-format
 msgctxt "smooth out the painting strokes the filter creates"
 msgid "Smooth"
 msgstr "Jevn ut"
@@ -51648,8 +50991,7 @@ msgid "Pixel width"
 msgstr "Pikselbredde"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:139
-#, fuzzy, kde-format
-#| msgid "Pixel height"
+#, kde-format
 msgid "Pixel height"
 msgstr "Pikselhøyde"
 
@@ -51665,8 +51007,7 @@ msgid "&Posterize..."
 msgstr "&Posteriser …"
 
 #: plugins/filters/posterize/posterize.cpp:81
-#, fuzzy, kde-format
-#| msgid "Steps"
+#, kde-format
 msgid "Steps"
 msgstr "Steg"
 
@@ -51828,8 +51169,7 @@ msgid "Number of drops"
 msgstr ""
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:384
-#, fuzzy, kde-format
-#| msgid "Fish eyes"
+#, kde-format
 msgid "Fish eyes"
 msgstr "Fiskeøyne"
 
@@ -51868,8 +51208,7 @@ msgid "&Round Corners..."
 msgstr "Av&rund hjørner …"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
-#, fuzzy, kde-format
-#| msgid "Radius"
+#, kde-format
 msgid "Radius"
 msgstr "Radius"
 
@@ -51885,8 +51224,7 @@ msgid "&Small Tiles..."
 msgstr "&Små fliser …"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:90
-#, fuzzy, kde-format
-#| msgid "Number of tiles"
+#, kde-format
 msgid "Number of tiles"
 msgstr "Antall fliser"
 
@@ -52011,16 +51349,12 @@ msgid "A shape that shows an image (PNG/JPG/TIFF)"
 msgstr ""
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigCommand.cpp:20
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change ellipse"
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
 msgstr "Endre ellipse"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Arc"
+#, kde-format
 msgid "Arc"
 msgstr "Bue"
 
@@ -52030,8 +51364,7 @@ msgid "Pie"
 msgstr "Sektor"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:21
-#, fuzzy, kde-format
-#| msgid "Chord"
+#, kde-format
 msgid "Chord"
 msgstr "Korde"
 
@@ -52060,20 +51393,17 @@ msgid "Close ellipse"
 msgstr "Lukk ellipse"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "An ellipse"
+#, kde-format
 msgid "An ellipse"
 msgstr "En ellipse"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:26
-#, fuzzy, kde-format
-#| msgid "An enhanced path shape"
+#, kde-format
 msgid "An enhanced path shape"
 msgstr "En forsterket baneform"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:28
-#, fuzzy, kde-format
-#| msgid "An enhanced path"
+#, kde-format
 msgid "An enhanced path"
 msgstr "En forsterket bane"
 
@@ -52083,8 +51413,7 @@ msgid "Cross"
 msgstr "Kors"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:153
-#, fuzzy, kde-format
-#| msgid "A cross"
+#, kde-format
 msgid "A cross"
 msgstr "Et kors"
 
@@ -52092,20 +51421,17 @@ msgstr "Et kors"
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:223
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:257
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:291
-#, fuzzy, kde-format
-#| msgid "An arrow"
+#, kde-format
 msgid "An arrow"
 msgstr "En pil"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:368
-#, fuzzy, kde-format
-#| msgid "Callout"
+#, kde-format
 msgid "Callout"
 msgstr "Utkall"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:370
-#, fuzzy, kde-format
-#| msgid "A callout"
+#, kde-format
 msgid "A callout"
 msgstr "Et utkall"
 
@@ -52122,27 +51448,21 @@ msgid "Circular Arrow"
 msgstr "Sirkulær pil"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:496
-#, fuzzy, kde-format
-#| msgid "A circular-arrow"
+#, kde-format
 msgid "A circular-arrow"
 msgstr "En sirkulær pil"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:539
-#, fuzzy, kde-format
-#| msgid "Gearhead"
+#, kde-format
 msgid "Gearhead"
 msgstr "Tannhjulhode"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:541
-#, fuzzy, kde-format
-#| msgid "A gearhead"
+#, kde-format
 msgid "A gearhead"
 msgstr "En figur med tannhjulhode"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
 msgstr "Endre rektangel"
@@ -52166,15 +51486,11 @@ msgid "Corner radius y:"
 msgstr "Hjørneradius y:"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:25
-#, fuzzy, kde-format
-#| msgid "A rectangle"
+#, kde-format
 msgid "A rectangle"
 msgstr "Et rektangel"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change spiral"
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
 msgstr "Endre spiral"
@@ -52221,9 +51537,6 @@ msgid "A spiral shape"
 msgstr "En spiralform"
 
 #: plugins/flake/pathshapes/star/StarShapeConfigCommand.cpp:21
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change star"
 msgctxt "(qtundo-format)"
 msgid "Change star"
 msgstr "Endre stjerne"
@@ -52259,8 +51572,7 @@ msgid "Outer radius:"
 msgstr "Ytre radius:"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:25
-#, fuzzy, kde-format
-#| msgid "A star shape"
+#, kde-format
 msgid "A star shape"
 msgstr "En stjerneform"
 
@@ -52272,14 +51584,12 @@ msgid "A star"
 msgstr "En stjerne"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:37
-#, fuzzy, kde-format
-#| msgid "Star"
+#, kde-format
 msgid "Star"
 msgstr "Stjerne"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:51
-#, fuzzy, kde-format
-#| msgid "Flower"
+#, kde-format
 msgid "Flower"
 msgstr "Blomst"
 
@@ -52296,8 +51606,7 @@ msgid "Pentagon"
 msgstr "Femkant"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:70
-#, fuzzy, kde-format
-#| msgid "A pentagon"
+#, kde-format
 msgid "A pentagon"
 msgstr "En femkant"
 
@@ -52308,8 +51617,7 @@ msgid "Hexagon"
 msgstr "Sekskant"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:86
-#, fuzzy, kde-format
-#| msgid "A hexagon"
+#, kde-format
 msgid "A hexagon"
 msgstr "En sekskant"
 
@@ -52674,8 +51982,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
-#, fuzzy, kde-format
-#| msgid "&Pattern..."
+#, kde-format
 msgid "&Pattern..."
 msgstr "&Mønster …"
 
@@ -53091,8 +52398,7 @@ msgid "Use Custom Seed"
 msgstr ""
 
 #: plugins/generators/solid/colorgenerator.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Solid Color..."
+#, kde-format
 msgid "&Solid Color..."
 msgstr "En&sfarget …"
 
@@ -53527,8 +52833,7 @@ msgid "Convert to sRGB for extra compatibility"
 msgstr ""
 
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:70
-#, fuzzy, kde-format
-#| msgid "Unknown file type"
+#, kde-format
 msgid "Unknown file type"
 msgstr "Ukjent filtype"
 
@@ -55366,8 +54671,7 @@ msgid "Not a valid Krita file"
 msgstr ""
 
 #: plugins/impex/libkra/kra_converter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Invalid document: no file 'maindoc.xml'."
+#, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Ugyldig dokument: Fila «maindoc.xml» finnes ikke."
 
@@ -55382,8 +54686,7 @@ msgid "Not able to write '%1'. Partition full?"
 msgstr ""
 
 #: plugins/impex/libkra/kra_converter.cpp:318
-#, fuzzy, kde-format
-#| msgid "Could not find %1"
+#, kde-format
 msgid "Could not find %1"
 msgstr "Fant ikke %1"
 
@@ -55416,14 +54719,12 @@ msgstr ""
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:77
 #: plugins/impex/pdf/kis_pdf_import.cpp:78
-#, fuzzy, kde-format
-#| msgid "A password is required to read that pdf"
+#, kde-format
 msgid "A password is required to read that pdf"
 msgstr "Det kreves et passord for å lese den pdf-en"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:87
-#, fuzzy, kde-format
-#| msgid "PDF Import Options"
+#, kde-format
 msgid "PDF Import Options"
 msgstr "PDF importvalg"
 
@@ -55714,8 +55015,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/psd/psd_loader.cpp:184
-#, fuzzy, kde-format
-#| msgid "Duotone Colormode Block"
+#, kde-format
 msgid "Duotone Colormode Block"
 msgstr "Blokk med Duotone Colormode"
 
@@ -55774,9 +55074,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "16 bits color depth"
+#, kde-format
 msgctxt "@option:check"
 msgid "16 bits color depth"
 msgstr "16 bit fargedybde"
@@ -55793,9 +55091,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Interpolate RGB as four colors"
+#, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
 msgstr "Interpoler RGB som fire farger"
@@ -55814,17 +55110,13 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Visit LibRaw project website"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
 msgstr "Besøk nettstedet til LibRaw-prosjektet"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:308
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Do not stretch or rotate pixels"
+#, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
 msgstr "Ikke strekk eller roter piksler"
@@ -55840,97 +55132,73 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Quality:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Quality:"
 msgstr "Kvalitet:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:322
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "Bilinear"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
 msgstr "Bilineær"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:323
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "VNG"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VNG"
 msgstr "VNG"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "PPG"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "PPG"
 msgstr "PPG"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:325
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "AHD"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD"
 msgstr "AHD"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:328
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "DCB"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "DCB"
 msgstr "DCB"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:329
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "AHD v2"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD v2"
 msgstr "AHD v2"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "AFD"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AFD"
 msgstr "AFD"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:331
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "VCD"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD"
 msgstr "VCD"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:332
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "VCD & AHD"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD & AHD"
 msgstr "VCD & AHD"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:333
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "LMMSE"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "LMMSE"
 msgstr "LMMSE"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:335
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Quality"
-#| msgid "AMaZE"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AMaZE"
 msgstr "AMaZE"
@@ -55977,9 +55245,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:421
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Pass:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
 msgstr "Pass:"
@@ -55998,9 +55264,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Refine interpolation"
+#, kde-format
 msgctxt "@option:check"
 msgid "Refine interpolation"
 msgstr "Forbedre interpolasjon"
@@ -56017,49 +55281,37 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:452
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Demosaicing"
+#, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
 msgstr "Mosaikkfjerning"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:460
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Method:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Method:"
 msgstr "Metode:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Default D65"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Default D65"
 msgstr "Standard D65"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:463
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Camera"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Camera"
 msgstr "Kamera"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:464
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set while balance automatically"
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inlistbox set while balance automatically"
 msgid "Automatic"
 msgstr "Automatisk"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:465
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set white balance manually"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@item:inlistbox set white balance manually"
 msgid "Manual"
 msgstr "Manuelt"
@@ -56079,9 +55331,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:482
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "T(K):"
+#, kde-format
 msgctxt "@label:slider"
 msgid "T(K):"
 msgstr "T(K):"
@@ -56094,9 +55344,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
-#, fuzzy, kde-format
-#| msgctxt "@label:slider Green component"
-#| msgid "Green:"
+#, kde-format
 msgctxt "@label:slider Green component"
 msgid "Green:"
 msgstr "Grønn:"
@@ -56109,9 +55357,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:494
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Highlights:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
 msgstr "Høylys:"
@@ -56125,25 +55371,19 @@ msgid "Solid white"
 msgstr "Ensfarget hvitt"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:497
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Unclip"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Unclip"
 msgstr "Uklippet"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Blend"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blend"
 msgstr "Flett"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:499
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Rebuild"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
 msgstr "Gjenoppbygg"
@@ -56162,9 +55402,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:512
-#, fuzzy, kde-format
-#| msgctxt "@label:slider Highlight reconstruct level"
-#| msgid "Level:"
+#, kde-format
 msgctxt "@label:slider Highlight reconstruct level"
 msgid "Level:"
 msgstr "Nivå:"
@@ -56178,9 +55416,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:520
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Exposure Correction (E.V)"
+#, kde-format
 msgctxt "@option:check"
 msgid "Exposure Correction (E.V)"
 msgstr "Eksponeringskorreksjon (E.V)"
@@ -56192,9 +55428,7 @@ msgid "<p>Turn on the exposure correction before interpolation.</p>"
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:524
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Linear Shift:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Linear Shift:"
 msgstr "Lineær shift:"
@@ -56208,9 +55442,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:532
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Highlight:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Highlight:"
 msgstr "Høylys:"
@@ -56225,9 +55457,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:541
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Correct false colors in highlights"
+#, kde-format
 msgctxt "@option:check"
 msgid "Correct false colors in highlights"
 msgstr "Korriger fargefeil i høylys"
@@ -56242,9 +55472,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:546
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Auto Brightness"
+#, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
 msgstr "Autolysstyrke"
@@ -56258,9 +55486,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:550
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Brightness:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Brightness:"
 msgstr "Lysstyrke:"
@@ -56274,9 +55500,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:565
-#, fuzzy, kde-format
-#| msgctxt "@option:check Black point"
-#| msgid "Black:"
+#, kde-format
 msgctxt "@option:check Black point"
 msgid "Black:"
 msgstr "Svart:"
@@ -56299,9 +55523,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:576
-#, fuzzy, kde-format
-#| msgctxt "@option:check White point"
-#| msgid "White:"
+#, kde-format
 msgctxt "@option:check White point"
 msgid "White:"
 msgstr "Hvit:"
@@ -56324,25 +55546,19 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:623
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "White Balance"
+#, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Hvitbalanse"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:631
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Noise reduction:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "Støyreduksjon:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Noise Reduction"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "Ingen"
@@ -56356,25 +55572,19 @@ msgid "Wavelets"
 msgstr "Wavelets"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Noise Reduction"
-#| msgid "FBDD"
+#, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Noise Reduction"
-#| msgid "CFA Line Denoise"
+#, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "CFA linjestøyfjerning"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Noise Reduction"
-#| msgid "Impulse Denoise"
+#, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "Impuls-støyfjerning"
@@ -56396,9 +55606,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Enable Chromatic Aberration correction"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "Slå på rettelse for kromatisk avvik"
@@ -56412,9 +55620,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Automatic color axis adjustments"
+#, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "Automatisk justering av fargeakser"
@@ -56463,25 +55669,19 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:712
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Corrections"
+#, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "Korreksjoner"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Camera Profile:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "Kameraprofil:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Camera Profile"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "Ingen"
@@ -56495,9 +55695,7 @@ msgid "Embedded"
 msgstr "Innebygd"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Camera Profile"
-#| msgid "Custom"
+#, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "Selvvalgt"
@@ -56515,63 +55713,48 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
-#, fuzzy, kde-format
-#| msgid "ICC Files (*.icc; *.icm)"
+#, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "ICC-filer (*.icc;*.icm)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Workspace:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "Arbeidsrom:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Raw (no profile)"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "Raw (ingen profil)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "sRGB"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Adobe RGB"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Wide Gamut"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "Bredt område"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Pro-Photo"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Custom"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "Selvvalgt"
@@ -56603,17 +55786,13 @@ msgid "ICC Files (*.icc *.icm)"
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:783
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Color Management"
+#, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "Fargestyring"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:989
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Threshold:"
+#, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "Terskel:"
@@ -56660,9 +55839,7 @@ msgstr ""
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rcombobox.cpp:73
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rnuminput.cpp:83
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rnuminput.cpp:182
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset to default value"
 msgstr "Tilbakestill til standardverdi"
@@ -57420,8 +56597,7 @@ msgid "Iptc"
 msgstr "Iptc"
 
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
-#, fuzzy, kde-format
-#| msgid "Color Smudge"
+#, kde-format
 msgid "Color Smudge"
 msgstr "Fargekladd"
 
@@ -57434,15 +56610,13 @@ msgstr "Kladdemodus"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
-#, fuzzy, kde-format
-#| msgid "Smearing"
+#, kde-format
 msgid "Smearing"
 msgstr "Utsmøring"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:45
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:107
-#, fuzzy, kde-format
-#| msgid "Dulling"
+#, kde-format
 msgid "Dulling"
 msgstr "Matting"
 
@@ -57463,8 +56637,7 @@ msgstr ""
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:45
-#, fuzzy, kde-format
-#| msgid "Weak"
+#, kde-format
 msgid "Weak"
 msgstr "Svak"
 
@@ -57514,8 +56687,7 @@ msgid "Smudge Length"
 msgstr "Kladdelengde"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:59
-#, fuzzy, kde-format
-#| msgid "Smudge mode:"
+#, kde-format
 msgid "Smudge mode:"
 msgstr "Kladdemodus:"
 
@@ -57535,17 +56707,12 @@ msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
 msgstr ""
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid " (caution, pierced brush!)"
+#, kde-format
 msgid " (caution, pierced brush!)"
 msgstr " (forsiktig, hull i penselen)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:112
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "This brush has transparent pixels in its center. \"Dulling\" mode may "
-#| "give unstable results. Consider using \"Smearing\" mode instead."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "This brush has transparent pixels in its center. \"Dulling\" mode may give "
@@ -57586,8 +56753,7 @@ msgid "Smudge Radius"
 msgstr "Kladderadius"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:72
-#, fuzzy, kde-format
-#| msgid "Line Width"
+#, kde-format
 msgid "Line Width"
 msgstr "Linjebredde"
 
@@ -57612,8 +56778,7 @@ msgstr ""
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:32
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
-#, fuzzy, kde-format
-#| msgid "0%"
+#, kde-format
 msgid "0%"
 msgstr "0%"
 
@@ -57699,8 +56864,7 @@ msgstr ""
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Painting Mode"
+#, kde-format
 msgid "Painting Mode"
 msgstr "Malemodus"
 
@@ -57771,8 +56935,7 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
-#, fuzzy, kde-format
-#| msgid "Deform"
+#, kde-format
 msgid "Deform"
 msgstr "Deformer"
 
@@ -57852,8 +57015,7 @@ msgid "Deform Brush (unsupported)"
 msgstr ""
 
 #: plugins/paintops/deform/KisDeformOptionWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Deform Options"
+#, kde-format
 msgid "Deform Options"
 msgstr "Deformeringvalg"
 
@@ -57981,17 +57143,13 @@ msgid "Global Pattern"
 msgstr ""
 
 #: plugins/paintops/filterop/filterop.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "type of a brush engine, shown in the list of brush engines"
-#| msgid "Filter"
+#, kde-format
 msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Filter"
 msgstr "Filter"
 
 #: plugins/paintops/gridbrush/grid_paintop_plugin.cpp:27
-#, fuzzy, kde-format
-#| msgctxt "type of a brush engine, shown in the list of brush engines"
-#| msgid "Grid"
+#, kde-format
 msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Grid"
 msgstr "Rutenett"
@@ -58002,8 +57160,7 @@ msgid "Division Level"
 msgstr ""
 
 #: plugins/paintops/gridbrush/KisGridShapeOptionWidget.cpp:44
-#, fuzzy, kde-format
-#| msgid "Particle type"
+#, kde-format
 msgid "Particle type"
 msgstr "Partikkeltype"
 
@@ -58353,14 +57510,12 @@ msgid "Hatching Brush (heavy aliasing in preview mode)"
 msgstr ""
 
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
-#, fuzzy, kde-format
-#| msgid "Hatching options"
+#, kde-format
 msgid "Hatching options"
 msgstr "Skraveringsvalg"
 
 #: plugins/paintops/hatching/KisHatchingPreferencesWidget.cpp:43
-#, fuzzy, kde-format
-#| msgid "Hatching preferences"
+#, kde-format
 msgid "Hatching preferences"
 msgstr "Innstillinger for skravering"
 
@@ -58989,13 +58144,7 @@ msgid "Brush Tip"
 msgstr "Penselspiss"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "Precision Level 1 (fastest)\n"
-#| "Subpixel precision: disabled\n"
-#| "Brush size precision: 5%\n"
-#| "\n"
-#| "Optimal for very big brushes"
+#, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
 "Subpixel precision: disabled\n"
@@ -59010,13 +58159,7 @@ msgstr ""
 "Optimal for svært store pensler"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "Precision Level 2\n"
-#| "Subpixel precision: disabled\n"
-#| "Brush size precision: 1%\n"
-#| "\n"
-#| "Optimal for big brushes"
+#, kde-format
 msgid ""
 "Precision Level 2\n"
 "Subpixel precision: disabled\n"
@@ -59031,11 +58174,7 @@ msgstr ""
 "Optimal for store pensler"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "Precision Level 3\n"
-#| "Subpixel precision: disabled\n"
-#| "Brush size precision: exact"
+#, kde-format
 msgid ""
 "Precision Level 3\n"
 "Subpixel precision: disabled\n"
@@ -59046,13 +58185,7 @@ msgstr ""
 "Presisjon for penselstørrelse: nøyaktig"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "Precision Level 4 (optimal)\n"
-#| "Subpixel precision: 50%\n"
-#| "Brush size precision: exact\n"
-#| "\n"
-#| "Gives up to 50% better performance in comparison to Level 5"
+#, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
 "Subpixel precision: 50%\n"
@@ -59067,13 +58200,7 @@ msgstr ""
 "Gir opptil 50% bedre ytelse enn nivå 5"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
-#, fuzzy, kde-format
-#| msgid ""
-#| "Precision Level 5 (best quality)\n"
-#| "Subpixel precision: exact\n"
-#| "Brush size precision: exact\n"
-#| "\n"
-#| "The slowest performance. Best quality."
+#, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
 "Subpixel precision: exact\n"
@@ -59107,10 +58234,7 @@ msgid "Text"
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
-#, fuzzy, kde-format
-#| msgid ""
-#| "Nothing copied\n"
-#| " to Clipboard"
+#, kde-format
 msgid ""
 "Nothing copied\n"
 " to Clipboard"
@@ -59119,10 +58243,7 @@ msgstr ""
 " til utklippstavla"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "Creates a brush tip from the current image selection.\n"
-#| " If no selection is present the whole image will be used."
+#, kde-format
 msgid ""
 "Creates a brush tip from the current image selection.\n"
 " If no selection is present the whole image will be used."
@@ -59131,17 +58252,12 @@ msgstr ""
 " Hvis det ikke er noe utvalg blir hele bildet brukt."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the image in the clipboard."
 msgstr "Lager en penselspiss av bildet i utklippstavla."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
-#, fuzzy, kde-format
-#| msgid ""
-#| "Reloads Spacing from file\n"
-#| "Sets Scale to 1.0\n"
-#| "Sets Rotation to 0.0"
+#, kde-format
 msgid ""
 "Reloads Spacing from file\n"
 "Sets Scale to 1.0\n"
@@ -59226,8 +58342,7 @@ msgid "Linear Height (Photoshop)"
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
-#| msgid "Cut Off Brush"
+#, kde-format
 msgid "Cut Off Brush"
 msgstr "Skjær av pensel"
 
@@ -59238,16 +58353,12 @@ msgid "Cut Off Disabled"
 msgstr "Avskjæring slått av"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
-#| msgid "Cut Off Pattern"
+#, kde-format
 msgid "Cut Off Pattern"
 msgstr "Avskjæringsmønster"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:86
-#, fuzzy, kde-format
-#| msgid ""
-#| "When pattern texture values are outside the range specified by the "
-#| "slider, the cut-off policy will be applied."
+#, kde-format
 msgid ""
 "When pattern texture values are outside the range specified by the slider, "
 "the cut-off policy will be applied."
@@ -59263,32 +58374,27 @@ msgid "Airbrush"
 msgstr "Luftpensel"
 
 #: plugins/paintops/libpaintop/KisColorOptionWidget.cpp:52
-#, fuzzy, kde-format
-#| msgid "Color options"
+#, kde-format
 msgid "Color options"
 msgstr "Fargevalg"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:16
-#, fuzzy, kde-format
-#| msgid "Plain color"
+#, kde-format
 msgid "Plain color"
 msgstr "Enkel farge"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:18
-#, fuzzy, kde-format
-#| msgid "Uniform random"
+#, kde-format
 msgid "Uniform random"
 msgstr "Regelmessig tilfeldig"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:19
-#, fuzzy, kde-format
-#| msgid "Total random"
+#, kde-format
 msgid "Total random"
 msgstr "Helt tilfeldig"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:21
-#, fuzzy, kde-format
-#| msgid "Locked pattern"
+#, kde-format
 msgid "Locked pattern"
 msgstr "Låst mønster"
 
@@ -59304,8 +58410,7 @@ msgid "Strength: "
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:69
-#, fuzzy, kde-format
-#| msgid "%1 px"
+#, kde-format
 msgid "%1 px"
 msgstr "%1 px"
 
@@ -59315,16 +58420,14 @@ msgstr "%1 px"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#, fuzzy, kde-format
-#| msgid "0°"
+#, kde-format
 msgid "0°"
 msgstr "0°"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
-#, fuzzy, kde-format
-#| msgid "360°"
+#, kde-format
 msgid "360°"
 msgstr "360°"
 
@@ -59354,26 +58457,22 @@ msgid "Fan Corners"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:77
-#, fuzzy, kde-format
-#| msgid "Angle Offset"
+#, kde-format
 msgid "Angle Offset"
 msgstr "Vinkelforskyving"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
-#, fuzzy, kde-format
-#| msgid "%1"
+#, kde-format
 msgid "%1"
 msgstr "%1"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
-#, fuzzy, kde-format
-#| msgid "Slow"
+#, kde-format
 msgid "Slow"
 msgstr "Langsom"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
-#, fuzzy, kde-format
-#| msgid "Far"
+#, kde-format
 msgid "Far"
 msgstr "Fjern"
 
@@ -59390,8 +58489,7 @@ msgid "-60°"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
-#, fuzzy, kde-format
-#| msgid "90°"
+#, kde-format
 msgid "90°"
 msgstr "90°"
 
@@ -59521,14 +58619,12 @@ msgid "Mirror"
 msgstr "Speilvend"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:44
-#, fuzzy, kde-format
-#| msgid "Horizontally"
+#, kde-format
 msgid "Horizontally"
 msgstr "Vannrett"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:45
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Vertically"
 msgstr "Loddrett"
 
@@ -59589,32 +58685,27 @@ msgid "Animated mask"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
-#, fuzzy, kde-format
-#| msgid "Scatter"
+#, kde-format
 msgid "Scatter"
 msgstr "Spre"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:45
-#, fuzzy, kde-format
-#| msgid "Axis X"
+#, kde-format
 msgid "Axis X"
 msgstr "Akse X"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Axis Y"
+#, kde-format
 msgid "Axis Y"
 msgstr "Akse Y"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Scatter amount"
+#, kde-format
 msgid "Scatter amount"
 msgstr "Spredningsmengde"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionData.cpp:32
-#, fuzzy, kde-format
-#| msgid "Sharpness"
+#, kde-format
 msgid "Sharpness"
 msgstr "Skarphet"
 
@@ -59636,8 +58727,7 @@ msgid "Size -> Fade (sensor)"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Isotropic Spacing"
+#, kde-format
 msgid "Isotropic Spacing"
 msgstr "Isotropisk avstand"
 
@@ -59648,8 +58738,7 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
-#, fuzzy, kde-format
-#| msgid "Opaque"
+#, kde-format
 msgid "Opaque"
 msgstr "Ugjennomsiktig"
 
@@ -59696,14 +58785,12 @@ msgid "+180°"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:87
-#, fuzzy, kde-format
-#| msgid "CCW hue"
+#, kde-format
 msgid "CCW hue"
 msgstr "Moturs fargetone"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:98
-#, fuzzy, kde-format
-#| msgid "CW hue"
+#, kde-format
 msgid "CW hue"
 msgstr "Medurs fargetone"
 
@@ -59732,14 +58819,12 @@ msgid "-100%"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
-#, fuzzy, kde-format
-#| msgid "Less saturation "
+#, kde-format
 msgid "Less saturation "
 msgstr "Mindre metning"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:121
-#, fuzzy, kde-format
-#| msgid "More saturation"
+#, kde-format
 msgid "More saturation"
 msgstr "Mer metning"
 
@@ -60183,8 +59268,7 @@ msgid "dy scale"
 msgstr ""
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:166
-#, fuzzy, kde-format
-#| msgid "Gravity"
+#, kde-format
 msgid "Gravity"
 msgstr "Gravitasjon"
 
@@ -60200,8 +59284,7 @@ msgid "Particle Brush (not supported)"
 msgstr ""
 
 #: plugins/paintops/particle/particle_paintop_plugin.cpp:30
-#, fuzzy, kde-format
-#| msgid "Particle"
+#, kde-format
 msgid "Particle"
 msgstr "Partikkel"
 
@@ -60415,8 +59498,7 @@ msgid "Spray Area"
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayShapeDynamicsOptionWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Shape dynamics"
+#, kde-format
 msgid "Shape dynamics"
 msgstr "Form-dynamikk"
 
@@ -60426,8 +59508,7 @@ msgid "Spray Shape"
 msgstr ""
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
-#, fuzzy, kde-format
-#| msgid "Spray"
+#, kde-format
 msgid "Spray"
 msgstr "Dusj"
 
@@ -60639,8 +59720,7 @@ msgid "Tangent Normal"
 msgstr "Tangent normal"
 
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Tangent Tilt"
+#, kde-format
 msgid "Tangent Tilt"
 msgstr "Tangentvipp"
 
@@ -63917,16 +62997,12 @@ msgid "Move Tool"
 msgstr "Flytt verktøy"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:49
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Multibrush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Flerpensel-strøk"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:449
-#, fuzzy, kde-format
-#| msgid "Symmetry"
+#, kde-format
 msgid "Symmetry"
 msgstr "Symmetri"
 
@@ -63937,14 +63013,12 @@ msgid "Mirror"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
-#, fuzzy, kde-format
-#| msgid "Translate"
+#, kde-format
 msgid "Translate"
 msgstr "Forskyv"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:452
-#, fuzzy, kde-format
-#| msgid "Snowflake"
+#, kde-format
 msgid "Snowflake"
 msgstr "Snøfnugg"
 
@@ -64037,9 +63111,6 @@ msgid "Freehand Path Tool"
 msgstr ""
 
 #: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "(qtundo-format)"
 msgid "Move Selection"
 msgstr "Flytt utvalget"
@@ -64346,36 +63417,28 @@ msgid "Interval Y:"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
-#, fuzzy, kde-format
-#| msgid ""
-#| "Left click rotates around center, right click around highlighted position."
+#, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "Venstreklikk roterer om sentrum, høyreklikk om fremhevet posisjon."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
-#, fuzzy, kde-format
-#| msgid "Click and drag to shear selection."
+#, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Trykk og dra for å skjære utvalget."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
-#, fuzzy, kde-format
-#| msgid "Click and drag to resize selection."
+#, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Trykk og dra for å endre størrrelse på utvalget"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
-#, fuzzy, kde-format
-#| msgid "Click and drag to move selection."
+#, kde-format
 msgid "Click and drag to move selection."
 msgstr "Trykk og dra for å flytte utvalget."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
-#, fuzzy, kde-format
-#| msgid ""
-#| "Click and drag to resize selection. Middle click to set highlighted "
-#| "position."
+#, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
@@ -64536,8 +63599,7 @@ msgid "Global Coordinates"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:24
-#, fuzzy, kde-format
-#| msgid "Geometry"
+#, kde-format
 msgid "Geometry"
 msgstr "Geometri"
 
@@ -64553,29 +63615,21 @@ msgid "Press Shift to hold x- or y-position."
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
-#, fuzzy, kde-format
-#| msgid "Press CTRL to resize from center."
+#, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Trykk CTRL for å endre størrelse fra sentrum."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:44
-#, fuzzy, kde-format
-#| msgid "Press ALT to rotate in 45 degree steps."
+#, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Trykk ALT for å rotere i steg på 45°."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate"
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "Roter"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear"
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Skjær"
@@ -64743,76 +63797,64 @@ msgid "Delete All"
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
-#, fuzzy, kde-format
-#| msgid "A calligraphic shape"
+#, kde-format
 msgid "A calligraphic shape"
 msgstr "En kalligrafisk form"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Calligraphic Shape"
+#, kde-format
 msgid "Calligraphic Shape"
 msgstr "Kalligrafisk form"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:59
-#, fuzzy, kde-format
-#| msgid "Save profile as..."
+#, kde-format
 msgid "Save profile as..."
 msgstr "Lagre profil som …"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
-#, fuzzy, kde-format
-#| msgid "Remove profile"
+#, kde-format
 msgid "Remove profile"
 msgstr "Fjern profil"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:74
-#, fuzzy, kde-format
-#| msgid "&Follow selected path"
+#, kde-format
 msgid "&Follow selected path"
 msgstr "&Følg valgt kontur"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:77
-#, fuzzy, kde-format
-#| msgid "Use tablet &pressure"
+#, kde-format
 msgid "Use tablet &pressure"
 msgstr "Bruk &skriveplatetrykk"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thinning:"
 msgstr "Tynning:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
-#, fuzzy, kde-format
-#| msgid "Use tablet &angle"
+#, kde-format
 msgid "Use tablet &angle"
 msgstr "Bruk skriveplate&vinkel"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid "Fixation:"
+#, kde-format
 msgid "Fixation:"
 msgstr "Fiksering:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:120
-#, fuzzy, kde-format
-#| msgid "Caps:"
+#, kde-format
 msgid "Caps:"
 msgstr "Ender:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:129
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:278
-#, fuzzy, kde-format
-#| msgid "Mass:"
+#, kde-format
 msgid "Mass:"
 msgstr "Masse:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:138
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
-#, fuzzy, kde-format
-#| msgid "Drag:"
+#, kde-format
 msgid "Drag:"
 msgstr "Dra:"
 
@@ -64825,14 +63867,12 @@ msgid "Current"
 msgstr "Gjeldende"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:209
-#, fuzzy, kde-format
-#| msgid "Profile name"
+#, kde-format
 msgid "Profile name"
 msgstr "Profilnavn"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:210
-#, fuzzy, kde-format
-#| msgid "Please insert the name by which you want to save this profile:"
+#, kde-format
 msgid "Please insert the name by which you want to save this profile:"
 msgstr "Oppgi navnet du vil ha på profilen du vil lagre:"
 
@@ -64842,18 +63882,13 @@ msgid "The name you entered is invalid."
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
-#, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
+#, kde-format
 msgctxt "invalid profile name"
 msgid "Invalid name."
 msgstr "Ugyldig navn."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:228
-#, fuzzy, kde-format
-#| msgid ""
-#| "A profile with that name already exists.\n"
-#| "Do you want to overwrite it?"
+#, kde-format
 msgid ""
 "A profile with that name already exists.\n"
 "Do you want to overwrite it?"
@@ -64863,8 +63898,7 @@ msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:364
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:389
-#, fuzzy, kde-format
-#| msgid "Mouse"
+#, kde-format
 msgid "Mouse"
 msgstr "Mus"
 
@@ -65419,15 +64453,13 @@ msgid "Conversion failed"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:223
-#, fuzzy, kde-format
-#| msgid "Find Text"
+#, kde-format
 msgid "Find Text"
 msgstr "Finn tekst"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:226
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Find:"
+#, kde-format
 msgid "Find:"
 msgstr "Finn:"
 
@@ -65437,8 +64469,7 @@ msgid "Find and Replace all"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:271
-#, fuzzy, kde-format
-#| msgid "Replace:"
+#, kde-format
 msgid "Replace:"
 msgstr "Erstatt:"
 
@@ -66099,28 +65130,22 @@ msgid "Decoration:"
 msgstr "Dekorasjon:"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:38
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Dynamic Brush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Dynamic Brush Stroke"
 msgstr "Dynamisk penselstrøk"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
-#, fuzzy, kde-format
-#| msgid "Fixed angle:"
+#, kde-format
 msgid "Fixed angle:"
 msgstr "Fast vinkel:"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:315
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Initial width:"
 msgstr "Startbredde:"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
-#, fuzzy, kde-format
-#| msgid "Width range:"
+#, kde-format
 msgid "Width range:"
 msgstr "Breddeområde:"
 
@@ -66653,56 +65678,41 @@ msgid "Transform a layer or a selection"
 msgstr "Omform et lag eller et utvalg"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Default (Affine)"
+#, kde-format
 msgid "Default (Affine)"
 msgstr "Standard (Affin)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:89
-#, fuzzy, kde-format
-#| msgid "Strong (Rigid)"
+#, kde-format
 msgid "Strong (Rigid)"
 msgstr "Sterk (Stiv)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:90
-#, fuzzy, kde-format
-#| msgid "Strongest (Similitude)"
+#, kde-format
 msgid "Strongest (Similitude)"
 msgstr "Sterkest (Formlikhet)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:218
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Size of the deformation brush"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Size of the deformation brush"
 msgstr "Størrelsen på deformeringspenselen"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:225
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Amount of the deformation you get"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Amount of the deformation you get"
 msgstr "Hvor mye deformering du får"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:232
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "When in non-buildup mode, shows how fast the deformation limit is reached."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "When in non-buildup mode, shows how fast the deformation limit is reached."
 msgstr "Viser hvor fort deformeringsgrensen når, uten oppbyggingsmodus."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:237
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Switch between Build Up and Wash mode of painting. Build Up mode adds "
-#| "deformations one on top of the other without any limits. Wash mode "
-#| "gradually deforms the piece to the selected deformation level."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Switch between Build Up and Wash mode of painting. Build Up mode adds "
@@ -66714,9 +65724,7 @@ msgstr ""
 "deformeringsnivået."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:245
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Space between two sequential applications of the deformation"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Space between two sequential applications of the deformation"
 msgstr "Avstand mellom to etterfølgende deformeringsstrøk"
@@ -66734,56 +65742,43 @@ msgid "Scale <b>Amount</b> value according to current stylus pressure"
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:260
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reverse direction of the current deformation tool"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reverse direction of the current deformation tool"
 msgstr "Snu retning for gjeldende deformeringsverktøy"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Move: drag the image along the brush stroke"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move: drag the image along the brush stroke"
 msgstr "Flytt: Dra bildet langs penselstrøket"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:277
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Scale: grow/shrink image under cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
 msgstr "Skaler: Øk/krymp bildet under markøren"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Rotate: twirl image under cursor"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate: twirl image under cursor"
 msgstr "Roter: snurr bildet under markøren"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Offset: shift the image to the right of the stroke direction"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
 msgstr "Forskyv: skyv bildet til høyre for strøkretningen"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:280
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Undo: erase actions of other tools"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Undo: erase actions of other tools"
 msgstr "Angre: visk ut handling fra andre verktøy"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:621
-#, fuzzy, kde-format
-#| msgid "Switch between editing and deforming cage"
+#, kde-format
 msgid "Switch between editing and deforming cage"
 msgstr "Bytt mellom å redigere og deformere buret"
 
@@ -66795,8 +65790,7 @@ msgid "Lock Points"
 msgstr "Lås punkter"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:684
-#, fuzzy, kde-format
-#| msgid "Unlock Points"
+#, kde-format
 msgid "Unlock Points"
 msgstr "Lås opp punkter"
 
@@ -66827,9 +65821,6 @@ msgstr ""
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Transform"
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Omform"

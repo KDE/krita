@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-25 13:47+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"PO-Revision-Date: 2025-10-26 23:34+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.11.70\n"
+"X-Generator: Poedit 3.8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -26113,7 +26113,7 @@ msgstr "Video konumu:"
 #: libs/ui/animation/wdg_animationrenderer.ui:232
 #, kde-format
 msgid "Include Audio"
-msgstr "Sesi İçer"
+msgstr "Sesi içer"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
@@ -59082,7 +59082,7 @@ msgstr "Vuruşun ilk konumundan mürekkebi em"
 #: plugins/paintops/hairy/wdgInkOptions.ui:91
 #, kde-format
 msgid "Soak ink"
-msgstr "Islak mürekkep"
+msgstr "Mürekkebi emdir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/hairy/wdgInkOptions.ui:171
@@ -59106,7 +59106,7 @@ msgstr "Kıl uzunluğu ağırlığı:"
 #: plugins/paintops/hairy/wdgInkOptions.ui:222
 #, kde-format
 msgid "Ink Depletion Curve Weight:"
-msgstr "Mürekkep Boşaltma Eğri Ağırlığı:"
+msgstr "Mürekkep tükenme eğrisi ağırlığı:"
 
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
 #, kde-format

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-25 17:17-0300\n"
+"PO-Revision-Date: 2025-10-26 07:41-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -58905,12 +58905,12 @@ msgstr "Deslocar"
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:177
 #, kde-format
 msgid "Winding Fill"
-msgstr "Preenchimento em Espiral"
+msgstr "Preenchimento em espiral"
 
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:201
 #, kde-format
 msgid "Hard Edge"
-msgstr "Borda Sólida"
+msgstr "Borda dura"
 
 #: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:60
 #, kde-format
@@ -58946,7 +58946,7 @@ msgstr "Preenchimento em espiral"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:123
 #, kde-format
 msgid "Hard edge"
-msgstr "Borda sólida"
+msgstr "Borda dura"
 
 #. i18n: ectx: property (title), widget (QGroupBox, fillStylGroupBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:138
@@ -61101,7 +61101,7 @@ msgstr "Partículas"
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:79
 #, kde-format
 msgid "Opacity Weight"
-msgstr "Peso da Opacidade"
+msgstr "Peso da opacidade"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:108
 #, kde-format
@@ -61226,7 +61226,7 @@ msgstr "Magneticidade"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
 #, kde-format
 msgid "Random RGB"
-msgstr "RGB Aleatório"
+msgstr "RGB aleatório"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceOpacityCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:169

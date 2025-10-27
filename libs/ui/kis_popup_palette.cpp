@@ -92,9 +92,23 @@ private:
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
     : QWidget(parent,
+
+        /**
+         * Note on the flags used:
+         * We use Qt::Popup on Wayland because it makes the popup receive a native
+         * surface and render separately from the main HDR-canvas surface. We cannot
+         * use this mode on all platforms, because:
+         *
+         * 1) On X11 the Qt::Popup flag works fine, but it make the popup use the
+         *    global system show-up animation, which might be disruptive for the
+         *    painter.
+         *
+         * 2) On Windows Qt::Popup + Qt::FramelessWindowHint + Qt::WA_TranslucentBackground
+         *    just don't work. It shows black background instead. It also has some weird
+         *    jumping when opened, because we call to move() **after** the popup becomes
+         *    visible.
+         */
         KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS() ?
-            // when using Wayland, the popup should have a native window
-            // to avoid wrong color space to be used
             Qt::Popup :
             Qt::FramelessWindowHint)
     , m_coordinatesConverter(coordinatesConverter)

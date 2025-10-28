@@ -21,6 +21,7 @@ class KoColorProfile;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
 class KisDisplayConfig;
+class KisCanvasState;
 
 #include <kis_types.h>
 #include "kis_ui_types.h"
@@ -73,11 +74,7 @@ public Q_SLOTS:
      */
     void updateSettings();
 
-    /**
-     * Called whenever the view widget needs to show a different part of
-     * the document
-     */
-    void viewportMoved(const QPointF &offset);
+    void notifyCanvasStateChanged(const KisCanvasState &state);
 
     /**
      * Called whenever the size of the KisImage changes.
@@ -92,8 +89,6 @@ public Q_SLOTS:
      * updates it. The size is given in canvas widget pixels.
      */
     void notifyCanvasSizeChanged(const QSize &widgetSize);
-
-    void notifyZoomChanged();
 
     /**
      * Set the current monitor profile
@@ -119,6 +114,12 @@ private:
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
 
     void updateViewportSize();
+
+    /**
+     * Called whenever the view widget needs to show a different part of
+     * the document
+     */
+    void viewportMoved(const QPointF &offset);
 
     /**
      * This creates an empty update information and fills it with the only

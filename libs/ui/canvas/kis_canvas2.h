@@ -289,8 +289,6 @@ private Q_SLOTS:
     void slotEffectiveZoomChanged(qreal newZoom);
     void slotCanvasStateChanged();
 
-    void viewportOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset);
-
     void slotSelectionChanged();
 
     void slotDoCanvasUpdate();

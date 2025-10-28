@@ -24,6 +24,7 @@
 #include <kis_group_layer.h>
 #include <kis_update_info.h>
 #include <KisDisplayConfig.h>
+#include <KisCanvasState.h>
 
 #include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_prescaled_projection.h"
@@ -287,7 +288,6 @@ public:
         projection.setDisplayConfig(KisDisplayConfig());
         projection.setImage(image);
         projection.notifyCanvasSizeChanged(QSize(100,100));
-        projection.notifyZoomChanged();
     }
 
     QImage sourceImage;
@@ -334,7 +334,7 @@ void KisPrescaledProjectionTest::testScrollingZoom50()
                                   "initial"));
 
     t.converter.setZoom(0.5);
-    t.projection.notifyZoomChanged();
+    t.projection.notifyCanvasStateChanged(KisCanvasState::fromConverter(t.converter));
 
     QEXPECT_FAIL("", "Images should be the same, but aren't", Continue);
     QVERIFY(TestUtil::checkQImage(t.projection.prescaledQImage(),
@@ -363,7 +363,7 @@ void KisPrescaledProjectionTest::testUpdates()
 
 
     t.converter.setZoom(0.50);
-    t.projection.notifyZoomChanged();
+    t.projection.notifyCanvasStateChanged(KisCanvasState::fromConverter(t.converter));
 
     QEXPECT_FAIL("", "Images should be the same, but aren't", Continue);
     QVERIFY(TestUtil::checkQImage(t.projection.prescaledQImage(),

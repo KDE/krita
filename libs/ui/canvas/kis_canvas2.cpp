@@ -107,6 +107,7 @@
 
 #include <KisPlatformPluginInterfaceFactory.h>
 #include <KisMultiSurfaceStateManager.h>
+#include <KisCanvasState.h>
 
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
@@ -325,7 +326,6 @@ void KisCanvas2::setup()
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
 
-    connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveViewportOffset(QPointF, QPointF)), SLOT(viewportOffsetMoved(QPointF, QPointF)));
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(effectiveZoomChanged(qreal)), SLOT(slotEffectiveZoomChanged(qreal)));
     connect(m_d->view->canvasController()->proxyObject, &KoCanvasControllerProxyObject::canvasStateChanged, this, &KisCanvas2::slotCanvasStateChanged);
 
@@ -1238,15 +1238,9 @@ void KisCanvas2::slotEffectiveZoomChanged(qreal newZoom)
 {
     Q_UNUSED(newZoom)
 
-    if (!m_d->currentCanvasIsOpenGL) {
-        Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->notifyZoomChanged();
-    }
+
 
     notifyLevelOfDetailChange();
-    updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
-
-    m_d->regionOfInterestUpdateCompressor.start();
 }
 
 QRect KisCanvas2::regionOfInterest() const
@@ -1351,18 +1345,14 @@ KisImageWSP KisCanvas2::currentImage() const
     return m_d->view->image();
 }
 
-void KisCanvas2::viewportOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset)
-{
-    if (!m_d->currentCanvasIsOpenGL) {
-        const QPointF moveOffset = oldOffset - newOffset;
-        m_d->prescaledProjection->viewportMoved(-moveOffset);
-        // we don't emit updateCanvas() here, because it will be emitted later
-        // in documentOffsetMoved()
-    }
-}
-
 void KisCanvas2::slotCanvasStateChanged()
 {
+    if (!m_d->currentCanvasIsOpenGL) {
+        Q_ASSERT(m_d->prescaledProjection);
+        auto state = KisCanvasState::fromConverter(*m_d->coordinatesConverter);
+        m_d->prescaledProjection->notifyCanvasStateChanged(state);
+    }
+
     updateCanvas();
     m_d->regionOfInterestUpdateCompressor.start();
 

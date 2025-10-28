@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "KisLongPressEventFilter.h"
+#include <KisKineticScroller.h>
 #include <QAbstractButton>
 #include <QAbstractScrollArea>
 #include <QAbstractSlider>
@@ -7,11 +8,13 @@
 #include <QApplication>
 #include <QComboBox>
 #include <QContextMenuEvent>
+#include <QCursor>
 #include <QLineEdit>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMouseEvent>
 #include <QScopedValueRollback>
+#include <QScroller>
 #include <QStyleHints>
 #include <QTimer>
 #ifdef Q_OS_ANDROID
@@ -71,18 +74,32 @@ bool KisLongPressEventFilter::handleMousePress(QWidget *target, const QMouseEven
         m_pressLocalPos = me->position().toPoint();
         m_pressGlobalPos = me->globalPosition().toPoint();
 #endif
-        m_target = target;
+        // Kinetic scrolling may have already delayed the input, so subtract
+        // that from the intended delay to avoid waiting for it twice. This may
+        // end up with a delay of zero, but that's okay. Also, the user may have
+        // already dragged far enough for the cursor to be outside of the
+        // long-press distance (it only checks the axes that are scrollable), in
+        // which case we bail out here.
+        int kineticScrollDelay = getKineticScrollDelay(target);
+        if (kineticScrollDelay == 0 || isWithinDistance(QCursor::pos())) {
+            m_target = target;
 #ifdef Q_OS_ANDROID
-        int longPressInterval = m_longPressTimeout;
+            int longPressInterval = m_longPressTimeout;
 #else
-        int longPressInterval = sh->mousePressAndHoldInterval();
+            int longPressInterval = sh->mousePressAndHoldInterval();
 #endif
-        m_timer->start(qMax(MINIMUM_DELAY, longPressInterval));
-        return true;
-    } else {
-        cancel();
-        return false;
+            if (longPressInterval < MINIMUM_DELAY) {
+                longPressInterval = MINIMUM_DELAY;
+            }
+            // Kinetic scrolling may have already delayed the input, so subtract
+            // that from the intended delay to avoid waiting for it twice. This
+            // may end up with a delay of zero, but that's okay.
+            m_timer->start(qMax(0, longPressInterval - kineticScrollDelay));
+            return true;
+        }
     }
+    cancel();
+    return false;
 }
 
 bool KisLongPressEventFilter::handleMouseMove(const QMouseEvent *me)
@@ -160,6 +177,41 @@ void KisLongPressEventFilter::triggerLongPress()
         }
         qApp->postEvent(target, new QContextMenuEvent(QContextMenuEvent::Mouse, m_pressLocalPos, m_pressGlobalPos));
     }
+}
+
+int KisLongPressEventFilter::getKineticScrollDelay(QWidget *target) const
+{
+    switch (KisKineticScroller::getConfiguredGestureType()) {
+    case QScroller::TouchGesture:
+    case QScroller::LeftMouseButtonGesture:
+        break;
+    default:
+        return 0;
+    }
+
+    const QScroller *scroller = searchScroller(target);
+    if (!scroller) {
+        return 0;
+    }
+
+    qreal pressDelay = scroller->scrollerProperties().scrollMetric(QScrollerProperties::MousePressEventDelay).toReal();
+    if (pressDelay < 0.0) {
+        return 0;
+    }
+
+    return int(pressDelay * 1000.0);
+}
+
+const QScroller *KisLongPressEventFilter::searchScroller(QWidget *target)
+{
+    while (target) {
+        if (QScroller::hasScroller(target)) {
+            return QScroller::scroller(target);
+        } else {
+            target = target->parentWidget();
+        }
+    }
+    return nullptr;
 }
 
 bool KisLongPressEventFilter::isContextMenuTarget(QWidget *target)

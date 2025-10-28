@@ -7,6 +7,7 @@
 #include <QWidget>
 
 class QMouseEvent;
+class QScroller;
 class QTimer;
 
 class KisLongPressEventFilter : public QObject
@@ -29,6 +30,9 @@ private:
     void cancel();
 
     bool isWithinDistance(const QPoint &globalPos) const;
+
+    int getKineticScrollDelay(QWidget *target) const;
+    static const QScroller *searchScroller(QWidget *target);
 
     void triggerLongPress();
 

@@ -57,4 +57,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KritaPlatformPluginWaylandFactory, "kritaplatformwayl
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
     );)
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+// for detail::KisWaylandSurfaceColorManagerWrapper
 #include <KritaPlatformPluginWayland.moc>
+#endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */

@@ -116,10 +116,9 @@ class TenBrushesExtension(Extension):
                 self.oldPreset = window.views()[0].currentBrushPreset()
                 window.views()[0].activateResource(allPresets[preset])
 
-        preset = window.views()[0].currentBrushPreset()
-
-        if self.showMessage:
-            window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
-                                                QIcon(QPixmap.fromImage(preset.image())),
-                                                1000, 1)
+            if self.showMessage:
+                preset = window.views()[0].currentBrushPreset()
+                window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
+                                                    QIcon(QPixmap.fromImage(preset.image())),
+                                                    1000, 1)
 

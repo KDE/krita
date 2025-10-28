@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-26 07:41-0300\n"
+"PO-Revision-Date: 2025-10-27 10:55-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -5679,7 +5679,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Moiré_Pattern.kse"
 msgid "Wolthera's Moiré Pattern"
-msgstr "Padrão Moiré de Wolthera"
+msgstr "Padrão moiré de Wolthera"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -45883,7 +45883,7 @@ msgctxt ""
 "comma separated search terms for the font-kerning property, matching is case-"
 "insensitive"
 msgid "font-kerning, tracking"
-msgstr "fonte-kerning, rastreamento"
+msgstr "fonte-kerning, rastro"
 
 #: plugins/dockers/textproperties/qml/FontSize.qml:14
 #, kde-format
@@ -46148,7 +46148,7 @@ msgctxt ""
 "comma separated search terms for the letter-spacing property, matching is "
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
-msgstr "espaçamento-letra, rastreamento, kerning"
+msgstr "espaçamento-letra, rastro, kerning"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -47304,7 +47304,7 @@ msgctxt ""
 "comma separated search terms for the word-spacing property, matching is case-"
 "insensitive"
 msgid "word-spacing, tracking, white space,"
-msgstr "espaçamento-palavra, rastreamento, espaço em branco,"
+msgstr "espaçamento-palavra, rastro, espaço em branco,"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:12
 #, kde-format
@@ -58824,7 +58824,7 @@ msgstr "Redução da lente"
 #, kde-format
 msgctxt "Rearrange the positions of the pixels under the cursor"
 msgid "Color Deformation"
-msgstr "Deformação de Cor"
+msgstr "Deformação de cor"
 
 #: plugins/paintops/deform/KisDeformOptionData.cpp:43
 #, kde-format
@@ -58842,7 +58842,7 @@ msgstr "Opções de deformação"
 #, kde-format
 msgctxt "Rearrange the pixels positions under the cursor"
 msgid "Color deformation"
-msgstr "Deformação das cores"
+msgstr "Deformação de cor"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lensOutBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:93
@@ -59000,7 +59000,7 @@ msgstr "Altura da grade:"
 #: plugins/paintops/gridbrush/wdggridoptions.ui:52
 #, kde-format
 msgid "Vertical border:"
-msgstr "Contorno vertical:"
+msgstr "Borda vertical:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, divisionPressureCHBox)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:68
@@ -59024,7 +59024,7 @@ msgstr "Diâmetro:"
 #: plugins/paintops/gridbrush/wdggridoptions.ui:98
 #, kde-format
 msgid "Horizontal border:"
-msgstr "Contorno horizontal:"
+msgstr "Borda horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:108
@@ -59042,7 +59042,7 @@ msgstr "Nível de divisão:"
 #: plugins/paintops/gridbrush/wdggridoptions.ui:131
 #, kde-format
 msgid "Jitter borders"
-msgstr "Bordas da agitação"
+msgstr "Bordas agitadas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
@@ -59299,12 +59299,12 @@ msgstr "Peso da curva de deplexão da tinta:"
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
 #, kde-format
 msgid "Hatching"
-msgstr "Sombreamento"
+msgstr "Tracejamento"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:97
 #, kde-format
 msgid "Hatching Angle"
-msgstr "Ângulo da origem"
+msgstr "Ângulo de tracejamento"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:127
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
@@ -59322,22 +59322,22 @@ msgstr "Espessura"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Hatching Brush (heavy aliasing in preview mode)"
-msgstr "Pincel intercruzado (efeitos notórios no modo de visualização)"
+msgstr "Pincel tracejado (efeitos notórios no modo de visualização)"
 
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
 #, kde-format
 msgid "Hatching options"
-msgstr "Opções de sombreamento"
+msgstr "Opções de tracejado"
 
 #: plugins/paintops/hatching/KisHatchingPreferencesWidget.cpp:43
 #, kde-format
 msgid "Hatching preferences"
-msgstr "Preferências do sombreamento"
+msgstr "Preferências do tracejado"
 
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
 msgid "Crosshatching"
-msgstr "Sombreamento cruzado"
+msgstr "Tracejamento cruzado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
@@ -59361,13 +59361,13 @@ msgstr "Origem Y:"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
 #, kde-format
 msgid "Crosshatching style"
-msgstr "Estilo de sombreamento"
+msgstr "Estilo de tracejamento cruzado"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noCrosshatchingRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:286
 #, kde-format
 msgid "No crosshatch&ing"
-msgstr "Sem &hachura cruzada"
+msgstr "Sem tracejame&nto cruzado"
 
 #. i18n: ectx: property (text), widget (QRadioButton, perpendicularRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:308
@@ -59391,7 +59391,7 @@ msgstr "Plano +45° &seguido de plano -45°"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:368
 #, kde-format
 msgid "&Moiré pattern"
-msgstr "Padrão &Moiré"
+msgstr "Padrão &moiré"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384
@@ -60343,7 +60343,7 @@ msgstr "%1 ms"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fuzzy Dab"
-msgstr "Toque difuso"
+msgstr "Pincelada difusa"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:12
 #, kde-format
@@ -60579,7 +60579,7 @@ msgstr "Espaçamento isotrópico"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
 msgid "Update Between Dabs"
-msgstr "Atualizar entre os toques"
+msgstr "Atualizar entre as pinceladas"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
@@ -60801,7 +60801,7 @@ msgstr "Velocidade"
 #, kde-format
 msgctxt "Option Category"
 msgid "Dabs"
-msgstr "Salpicos"
+msgstr "Pinceladas"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
 #, kde-format
@@ -60813,7 +60813,7 @@ msgstr "Opacidade"
 #, kde-format
 msgctxt "Option Category"
 msgid "Tracking"
-msgstr "Rastreamento"
+msgstr "Rastro"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:207
 #, kde-format
@@ -60898,12 +60898,12 @@ msgstr "Suavização de curvas"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, kde-format
 msgid "Elliptical Dab Angle"
-msgstr "Ângulo elíptico do toque"
+msgstr "Ângulo da pincelada elíptica"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:67
 #, kde-format
 msgid "Elliptical Dab Ratio"
-msgstr "Relação do toque elíptico"
+msgstr "Proporção da pincelada elíptica"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:77
 #, kde-format
@@ -60988,7 +60988,7 @@ msgstr "Compensado pelo filtro de velocidade"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
 msgid "Offset By Random"
-msgstr "Compensado por Aleatório"
+msgstr "Compensado por aleatório"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
 #, kde-format
@@ -61000,17 +61000,17 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, kde-format
 msgid "Dabs Per Basic Radius"
-msgstr "Toque por raio básico"
+msgstr "Pinceladas por raio básico"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:259
 #, kde-format
 msgid "Dabs Per Actual Radius"
-msgstr "Toque por raio real"
+msgstr "Pinceladas por raio real"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:268
 #, kde-format
 msgid "Dabs per Second"
-msgstr "Toques por segundo"
+msgstr "Pinceladas por segundo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:278
 #, kde-format
@@ -61025,17 +61025,17 @@ msgstr "Multiplicar opaco"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
-msgstr "Rastreamento lento por toque"
+msgstr "Rastro lento por pincelada"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
 msgid "Slow Tracking"
-msgstr "Rastreamento lento"
+msgstr "Rastro lento"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:314
 #, kde-format
 msgid "Tracking Noise"
-msgstr "Rastreamento do ruído"
+msgstr "Ruído do rastro"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
 #, kde-format

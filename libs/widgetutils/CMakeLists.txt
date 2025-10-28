@@ -136,6 +136,10 @@ if (APPLE)
     target_link_libraries(kritawidgetutils PRIVATE kritamacosutils)
 endif ()
 
+if (ANDROID)
+    target_link_libraries(kritawidgetutils PRIVATE Qt${QT_MAJOR_VERSION}::AndroidExtras)
+endif()
+
 target_link_libraries(kritawidgetutils
     PUBLIC
         Qt5::Widgets

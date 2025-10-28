@@ -11,6 +11,12 @@
 #include <QAbstractItemView>
 #include <QEvent>
 #include <QScrollBar>
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#else
+#include <QApplication>
+#include <QStyleHints>
+#endif
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -97,7 +103,20 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
         // of 10 mm, with minimum sensitivity any > 0 mm.
         const float mm = 0.001f;
         const float resistance = 1.0f - (sensitivity / 100.0f);
-        const float mousePressEventDelay = config.readEntry("KineticScrollingMousePressDelay", 1.0f - 0.75f * resistance);
+        float mousePressEventDelay = config.readEntry("KineticScrollingMousePressDelay", 1.0f - 0.75f * resistance);
+
+        // If the mouse press event delay is too large, it also ends up delaying
+        // long-presses. Cap the value there for consistency.
+#ifdef Q_OS_ANDROID
+        int maxDelayMs =
+            QAndroidJniObject::callStaticMethod<jint>("org/krita/android/MainActivity", "getLongPressTimeout", "()I");
+#else
+        int maxDelayMs = qApp->styleHints()->mousePressAndHoldInterval();
+#endif
+        float maxDelay = float(maxDelayMs) / 1000.0f;
+        if (mousePressEventDelay > maxDelay) {
+            mousePressEventDelay = maxDelay;
+        }
 
         properties.setScrollMetric(QScrollerProperties::DragStartDistance, resistance * resistanceCoefficient * mm);
         properties.setScrollMetric(QScrollerProperties::DragVelocitySmoothingFactor, dragVelocitySmoothFactor);

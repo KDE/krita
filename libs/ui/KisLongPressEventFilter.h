@@ -23,8 +23,9 @@ private:
     static constexpr int MINIMUM_DELAY = 100;
     static constexpr int MINIMUM_DISTANCE = 0;
 
-    void handleMousePress(QWidget *target, const QMouseEvent *me);
-    void handleMouseMove(const QMouseEvent *me);
+    bool handleMousePress(QWidget *target, const QMouseEvent *me);
+    bool handleMouseMove(const QMouseEvent *me);
+    void flush();
     void cancel();
 
     bool isWithinDistance(const QPoint &globalPos) const;
@@ -39,6 +40,10 @@ private:
     QPoint m_pressLocalPos;
     QPoint m_pressGlobalPos;
     QPointer<QWidget> m_target;
+#ifdef Q_OS_ANDROID
+    int m_longPressTimeout;
+#endif
+    bool m_handlingEvent = false;
 };
 
 #endif

@@ -144,7 +144,7 @@
     </Action>
     <Action name="svg_weight_normal">
       <iconText>Normal</iconText>
-      <shortcut>Ctrl+N</shortcut>
+      <shortcut></shortcut>
       <toolTip>Normal</toolTip>
       <icon>format-text-normal</icon>
       <whatsThis/>

@@ -150,10 +150,10 @@ KisOpenGLCanvasRenderer::KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge,
     const KisDisplayConfig &config = displayConfig;
 
     d->openGLImageTextures =
-            KisOpenGLImageTextures::getImageTextures(image,
-                                                     config.profile,
-                                                     config.intent,
-                                                     config.conversionFlags);
+            KisOpenGLImageTextures::createImageTextures(image,
+                                                        config.profile,
+                                                        config.intent,
+                                                        config.conversionFlags);
 
 
     setDisplayFilterImpl(displayFilter, true);

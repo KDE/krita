@@ -68,8 +68,6 @@
 //#define DEBUG_BUFFER_REALLOCATION
 
 
-KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
-
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
@@ -130,15 +128,6 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
 
 KisOpenGLImageTextures::~KisOpenGLImageTextures()
 {
-    ImageTexturesMap::iterator it = imageTexturesMap.find(m_image);
-    if (it != imageTexturesMap.end()) {
-        KisOpenGLImageTextures *textures = it.value();
-        if (textures == this) {
-            dbgUI << "Removing shared image context from map";
-            imageTexturesMap.erase(it);
-        }
-    }
-
     destroyImageTextureTiles();
     if (m_checkerTexture) {
         m_glFuncs->glDeleteTextures(1, &(*m_checkerTexture));
@@ -148,23 +137,6 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
 KisImageSP KisOpenGLImageTextures::image() const
 {
     return m_image;
-}
-
-bool KisOpenGLImageTextures::imageCanShareTextures()
-{
-    KisConfig cfg(true);
-    if (cfg.useOcio()) return false;
-    if (KisPart::instance()->mainwindowCount() == 1) return true;
-    if (QGuiApplication::screens().count() == 1) return true;
-    // Disable sharing in managed mode, since we need to handle the transitions in some
-    // clever way when the window is moved to a different screen
-    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) return false;
-    for (int i = 1; i < QGuiApplication::screens().count(); i++) {
-        if (cfg.displayProfile(i) != cfg.displayProfile(i - 1)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 void KisOpenGLImageTextures::initBufferStorage(bool useBuffer)
@@ -183,30 +155,12 @@ void KisOpenGLImageTextures::initBufferStorage(bool useBuffer)
     }
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::createImageTextures(KisImageWSP image,
                                                                   const KoColorProfile *monitorProfile,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    // Disabled until we figure out why we're deleting the shared textures on closing the second view on a single image
-    if (false && imageCanShareTextures()) {
-        ImageTexturesMap::iterator it = imageTexturesMap.find(image);
-
-        if (it != imageTexturesMap.end()) {
-            KisOpenGLImageTexturesSP textures = it.value();
-            textures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
-
-            return textures;
-        } else {
-            KisOpenGLImageTextures *imageTextures = new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
-            imageTexturesMap[image] = imageTextures;
-            dbgUI << "Added shareable textures to map";
-
-            return imageTextures;
-        }
-    } else {
-        return new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
-    }
+    return new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
 }
 
 void KisOpenGLImageTextures::recreateImageTextureTiles()

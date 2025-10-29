@@ -44,7 +44,7 @@ public:
      * @param renderingIntent The rendering intent
      * @param conversionFlags The color conversion flags
      */
-    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
+    static KisOpenGLImageTexturesSP createImageTextures(KisImageWSP image,
                                                      const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
                                                      KoColorConversionTransformation::ConversionFlags conversionFlags);
 
@@ -175,8 +175,6 @@ protected:
 
     void destroyImageTextureTiles();
 
-    static bool imageCanShareTextures();
-
     void initBufferStorage(bool useBuffer);
 
 private:
@@ -218,10 +216,6 @@ private:
     bool m_initialized {false};
 
     KisOpenGLUpdateInfoBuilder m_updateInfoBuilder;
-
-private:
-    typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;
-    static ImageTexturesMap imageTexturesMap;
 };
 
 #endif // KIS_OPENGL_IMAGE_TEXTURES_H_

@@ -254,7 +254,6 @@ private Q_SLOTS:
     void slotSaveRulersTrackMouseState(bool value);
     void slotResetRotation();
     void slotResetDisplay();
-    void slotToggleFullscreen();
 private:
     void createActions();
     void setupManagers();

@@ -271,6 +271,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
         child->installEventFilter(this);
     }
 
+    // No context menu here. Setting this avoids long-presses from delaying
+    // inputs or dismissing the palette, see KisLongPressEventFilter.cpp.
+    setContextMenuPolicy(Qt::PreventContextMenu);
+
     // Load configuration..
     KisConfig cfg(true);
     m_dockerHudButton->setChecked(cfg.showBrushHud());

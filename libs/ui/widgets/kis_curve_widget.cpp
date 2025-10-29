@@ -64,6 +64,9 @@ KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WindowFlags f)
     setMinimumSize(150, 50);
     setMaximumSize(250, 250);
 
+    // Curves widgets don't have context menus. Setting this prevents any
+    // long-presses from delaying inputs, see KisLongPressEventFilter.cpp.
+    setContextMenuPolicy(Qt::PreventContextMenu);
 
     setFocusPolicy(Qt::StrongFocus);
 }

@@ -215,11 +215,13 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         return boost::none;
     }
 
-    if (context.format().redBufferSize() != format.redBufferSize() ||
-        context.format().greenBufferSize() != format.greenBufferSize() ||
-        context.format().blueBufferSize() != format.blueBufferSize()) {
+    if (format.redBufferSize() > 0 && format.greenBufferSize() > 0 && format.blueBufferSize() > 0
+        && (context.format().redBufferSize() != format.redBufferSize()
+            || context.format().greenBufferSize() != format.greenBufferSize()
+            || context.format().blueBufferSize() != format.blueBufferSize())) {
 
-        dbgOpenGL << "Failed to create an OpenGL context with requested bit depth. Requested:" << format.redBufferSize() << "Actual:" << context.format().redBufferSize();
+        dbgOpenGL << "Failed to create an OpenGL context with requested bit depth. Requested:" << format.redBufferSize()
+                  << "Actual:" << context.format().redBufferSize();
         return boost::none;
     }
 

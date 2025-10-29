@@ -156,7 +156,6 @@ void KisPopupButton::showPopupWidget()
 {
     if (m_d->popupWidget && !m_d->frame->isVisible()) {
         setPopupWidgetVisible(true);
-        adjustPosition();
     } else {
         hidePopupWidget();
     }
@@ -171,6 +170,10 @@ void KisPopupButton::setPopupWidgetVisible(bool visible)
 {
     if (m_d->popupWidget) {
         if (visible) {
+            // Force layout sizing before positioning
+            m_d->popupWidget->adjustSize();
+            m_d->frame->adjustSize();
+            adjustPosition();
             m_d->frame->raise();
             m_d->frame->show();
             m_d->frame->activateWindow();

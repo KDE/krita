@@ -94,7 +94,7 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {
         QAction *a = action(name);
         if(m_textCursor.registerPropertyAction(a, name)) {
-            dbgTools() << "registered" << name << a->shortcut();
+            dbgTools << "registered" << name << a->shortcut();
         }
     }
 

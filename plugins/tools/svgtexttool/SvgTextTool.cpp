@@ -62,6 +62,7 @@
 
 #include "KisHandlePainterHelper.h"
 #include "kis_tool_utils.h"
+#include "kis_debug.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
 
 
@@ -93,7 +94,7 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {
         QAction *a = action(name);
         if(m_textCursor.registerPropertyAction(a, name)) {
-            qDebug() << "registered" << name << a->shortcut();
+            dbgTools() << "registered" << name << a->shortcut();
         }
     }
 

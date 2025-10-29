@@ -23,13 +23,13 @@ const QString localeName (const KoWritingSystemUtils::Bcp47Locale &locale) {
     if (!lang.isEmpty() && lang != "C") {
         if (!locale.regionTag.isEmpty()) {
             if (!locale.variantTags.isEmpty()) {
-                name = i18nc("language, region, variant", "%1, %2, variant: %3").arg(lang).arg(region).arg(locale.variantTags.join("-"));
+                name = i18nc("language, region, variant", "%1, %2, variant: %3", lang, region, locale.variantTags.join("-"));
             } else {
-                name = i18nc("language, region", "%1, %2").arg(lang).arg(region);
+                name = i18nc("language, variant", "%1, variant: %2", lang, region);
             }
         } else {
             if (!locale.variantTags.isEmpty()) {
-                name = i18nc("language, variant", "%1, variant: %3").arg(lang).arg(locale.variantTags.join("-"));
+                name = i18nc("language, variant", "%1, variant: %2", lang, locale.variantTags.join("-"));
             } else {
                 name = lang;
             }

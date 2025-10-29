@@ -44,7 +44,6 @@ QList<QAction *> KoPathToolFactory::createActionsImpl()
     actions << actionRegistry->makeQAction("pathsegment-curve", this);
     actions << actionRegistry->makeQAction("pathpoint-insert", this);
     actions << actionRegistry->makeQAction("pathpoint-remove", this);
-    actions << actionRegistry->makeQAction("path-break-at-selection", this);
     actions << actionRegistry->makeQAction("path-break-point", this);
     actions << actionRegistry->makeQAction("path-break-segment", this);
     actions << actionRegistry->makeQAction("path-break-selection", this);

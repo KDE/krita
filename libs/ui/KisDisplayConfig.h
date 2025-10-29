@@ -44,6 +44,13 @@ public:
     const KoColorProfile *profile;
     KoColorConversionTransformation::Intent intent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
+
+    // TODO (DK):
+    // 1) remove isHDR from KisDisplayConfig and keep it only in
+    //    KisMultiSurfaceDisplayConfig
+    // 2) move KisDisplayConfig into pigment and use it as a structure
+    //    for transformation options, e.g. rename into
+    //    KoColorTransformationOptions
     bool isHDR { false };
 };
 

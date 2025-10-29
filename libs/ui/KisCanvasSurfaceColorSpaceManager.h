@@ -10,8 +10,6 @@
 
 #include <KisDisplayConfig.h>
 #include <kis_types.h>
-
-// TODO: remove
 #include <kis_config.h>
 
 class KoColorProfile;

@@ -7,7 +7,7 @@
 
 #include <KoColorProfile.h>
 #include <kis_config.h>
-#include <opengl/KisOpenGLModeProber.h>
+//#include <opengl/KisOpenGLModeProber.h>
 
 namespace {
 KoColorConversionTransformation::Intent

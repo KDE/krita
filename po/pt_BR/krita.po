@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-27 10:55-0300\n"
+"POT-Creation-Date: 2025-10-29 02:01+0000\n"
+"PO-Revision-Date: 2025-10-28 18:47-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -742,14 +742,14 @@ msgstr "Tamanho de Estrelas"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr "a) Círculo de borracha"
+msgstr "a) Borracha circular"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr "b) Padrão de tamanho básico-5"
+msgstr "b) Básico-5 tamanho padrão"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -1695,7 +1695,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel_4x4_rounded.gbr"
 msgid "Z_Pixel 4x4 rounded"
-msgstr "Z_Pixel 4x4 arrendondado"
+msgstr "Z_Pixel 4x4 arredondado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1868,7 +1868,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Blender_Blur.kpp"
 msgid "Blender Blur"
-msgstr "Borrão misturado"
+msgstr "Mistura de desfoque"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2084,7 +2084,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_circle.kpp"
 msgid "Eraser circle"
-msgstr "Círculo de borracha"
+msgstr "Borracha circular"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3582,7 +3582,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chisel_dense_smear.png"
 msgid "chisel dense smear"
-msgstr "cinzel borrado denso"
+msgstr "cinzel manchado denso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3846,7 +3846,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr "a) Borracha redonda"
+msgstr "a) Borracha circular"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3891,7 +3891,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-2_Opacity.kpp"
 msgid "b) Basic-2 Opacity"
-msgstr "b) Opacidade Básica-2"
+msgstr "b) Básico-2 opacidade"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3900,7 +3900,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-3_Flow.kpp"
 msgid "b) Basic-3 Flow"
-msgstr "b) Fluxo básico-3"
+msgstr "b) Básico-3 fluxo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3909,7 +3909,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-4_Flow_Opacity.kpp"
 msgid "b) Basic-4 Flow Opacity"
-msgstr "b) Opacidade de fluxo básico-4"
+msgstr "b) Básico-4 opacidade de fluxo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3918,7 +3918,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr "b) Padrão de tamanho básico-5"
+msgstr "b) Básico-5 tamanho padrão"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3927,7 +3927,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_Opacity.kpp"
 msgid "b) Basic-5 Size Opacity"
-msgstr "b) Opacidade de tamanho básico-5"
+msgstr "b) Básico-5 tamanho de opacidade"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3936,7 +3936,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-6_Details.kpp"
 msgid "b) Basic-6 Details"
-msgstr "b) Detalhes do básico-6"
+msgstr "b) Básico-6 detalhes"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3999,7 +3999,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-1_Precision.kpp"
 msgid "d) Ink-1 Precision"
-msgstr "d) Tinta precisa-1"
+msgstr "d) Tinta-1 precisão"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4008,7 +4008,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-2_Fineliner.kpp"
 msgid "d) Ink-2 Fineliner"
-msgstr "d) Tinta-linha-fina-2"
+msgstr "d) Tinta-2 linha fina"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4062,7 +4062,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "e)_Marker_Details.kpp"
 msgid "e) Marker Details"
-msgstr "e) Detalhes do marcador"
+msgstr "e) Marcador detalhes"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4287,7 +4287,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Smear.kpp"
 msgid "i) Wet Smear"
-msgstr "i) Esfregaço úmido"
+msgstr "i) Mancha úmida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4341,7 +4341,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Basic.kpp"
 msgid "k) Blender Basic"
-msgstr "k) Mistura básica"
+msgstr "k) Mistura básico"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4350,7 +4350,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Blur.kpp"
 msgid "k) Blender Blur"
-msgstr "k) Desfoque misturado"
+msgstr "k) Mistura desfoque"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4359,7 +4359,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Knife_Edge.kpp"
 msgid "k) Blender Knife Edge"
-msgstr "k) Ponta de faca misturada"
+msgstr "k) Mistura ponta de faca"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4377,7 +4377,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Rake.kpp"
 msgid "k) Blender Rake"
-msgstr "k) rake misturado"
+msgstr "k) Mistura rake"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4386,7 +4386,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Smear.kpp"
 msgid "k) Blender Smear"
-msgstr "k) Mistura borrada"
+msgstr "k) Mistura mancha"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4404,7 +4404,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Color.kpp"
 msgid "l) Adjust Color"
-msgstr "l) Ajustar cor"
+msgstr "l) Ajuste cor"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4413,7 +4413,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "l) Ajuste de subexposição"
+msgstr "l) Ajuste subexposição"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4422,7 +4422,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Lighten.kpp"
 msgid "l) Adjust Lighten"
-msgstr "l) Ajustar clarear"
+msgstr "l) Ajuste clarear"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4440,7 +4440,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Overlay_Burn.kpp"
 msgid "l) Adjust Overlay Burn"
-msgstr "l) Ajuste de sobreposição queimada"
+msgstr "l) Ajuste sobreposição queimada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4449,7 +4449,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "t)_Shapes_Fill.kpp"
 msgid "t) Shapes Fill"
-msgstr "t) Preenchimento de formas"
+msgstr "t) Formas preenchimento"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4476,7 +4476,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "t)_Shapes_Spikes.kpp"
 msgid "t) Shapes Spikes"
-msgstr "t) Picos das formas"
+msgstr "t) Formas picos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4485,7 +4485,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "t)_Shapes_Square.kpp"
 msgid "t) Shapes Square"
-msgstr "t) Formas quadradas"
+msgstr "t) Formas quadrado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4494,7 +4494,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art.kpp"
 msgid "u) Pixel Art"
-msgstr "u) Pixel Art"
+msgstr "u) Arte de pixel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4503,7 +4503,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art_Dithering.kpp"
 msgid "u) Pixel Art Dithering"
-msgstr "u) Pontilhamento de Pixel Art"
+msgstr "u) Pontilhamento de arte de pixel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4512,7 +4512,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art_Fill.kpp"
 msgid "u) Pixel Art Fill"
-msgstr "u) Preenchimento de Pixel Art"
+msgstr "u) Preenchimento de arte de pixel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -10356,7 +10356,7 @@ msgstr "Selecionar o modo de mesclagem por camada"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Overlay Blending Mode"
-msgstr "Selecionar o modo de mesclagem de mistura forte"
+msgstr "Selecionar o modo de mesclagem de sobreposição dura"
 
 #. i18n: context: text @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -13967,7 +13967,7 @@ msgstr "Exibir"
 #, kde-format
 msgctxt "action"
 msgid "&Show Canvas Only"
-msgstr "Mo&strar somente a tela de pintura"
+msgstr "Mo&strar somente tela de pintura"
 
 #. i18n: context: toolTip @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:618
@@ -13981,7 +13981,7 @@ msgstr "Mostra apenas a tela de pintura ou toda a janela"
 #, kde-format
 msgctxt "action"
 msgid "Show Canvas Only"
-msgstr "Mostrar somente a tela de pintura"
+msgstr "Mostrar somente tela de pintura"
 
 #. i18n: context: text @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:628
@@ -14099,7 +14099,7 @@ msgstr "Modo de Visualização Instantânea"
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr "Simulação de tela"
+msgstr "Prova de tela"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -14109,7 +14109,7 @@ msgstr "Simulação de tela"
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr "Ligar simulação de tela"
+msgstr "Ligar prova de tela"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:722
@@ -14530,7 +14530,7 @@ msgstr "Mostrar grade"
 #, kde-format
 msgctxt "action"
 msgid "Snap To Grid"
-msgstr "Ajustar à Grade"
+msgstr "Ajustar à grade"
 
 #. i18n: context: text @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
@@ -14582,7 +14582,7 @@ msgstr "Nó de ajuste"
 #, kde-format
 msgctxt "action"
 msgid "Snap Extension"
-msgstr "Extensão do ajuste"
+msgstr "Ajustar à extensão"
 
 #. i18n: context: text @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
@@ -14595,7 +14595,7 @@ msgstr "Extensão do ajuste"
 #, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr "Pixel de Ajuste"
+msgstr "Ajustar ao pixel"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -14608,7 +14608,7 @@ msgstr "Pixel de Ajuste"
 #, kde-format
 msgctxt "action"
 msgid "Snap Intersection"
-msgstr "Interseção do ajuste"
+msgstr "Ajustar à interseção"
 
 #. i18n: context: text @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
@@ -20951,7 +20951,7 @@ msgstr "Cores"
 #, kde-format
 msgctxt "The category of edge detection filters. Noun."
 msgid "Edge Detection"
-msgstr "Detecção de contorno"
+msgstr "Detecção de borda"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:16
 #, kde-format
@@ -21102,7 +21102,7 @@ msgid ""
 "Offers similar results than Bicubic, but maybe a little bit sharper. Can "
 "produce light and dark halos along strong edges."
 msgstr ""
-"Oferece resultados semelhantes ao Bicúbico, mas talvez um pouco mais "
+"Oferece resultados semelhantes ao bicúbico, mas talvez um pouco mais "
 "nítidas. Pode provocar halos claros e escuros em torno das bordas demarcadas."
 
 #: libs/image/kis_filter_strategy.h:163
@@ -21321,13 +21321,13 @@ msgstr "Estilo da camada"
 #: libs/image/kis_layer_properties_icons.cpp:26
 #, kde-format
 msgid "Inherit Alpha"
-msgstr "Herdar o Alfa"
+msgstr "Herdar alfa"
 
 #: libs/image/kis_layer_properties_icons.cpp:27
 #: libs/image/kis_paint_layer.cc:215
 #, kde-format
 msgid "Alpha Locked"
-msgstr "Bloqueado no Alfa"
+msgstr "Alfa bloqueado"
 
 #: libs/image/kis_layer_properties_icons.cpp:28
 #: libs/image/kis_paint_layer.cc:218
@@ -21466,7 +21466,7 @@ msgstr "Achatar imagem"
 #: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
-msgstr "Dividir o Alfa para uma Máscara"
+msgstr "Dividir alfa para uma máscara"
 
 #: libs/image/kis_layer_utils.cpp:2407
 msgctxt "(qtundo-format)"
@@ -23106,7 +23106,7 @@ msgstr "Apagar"
 #, kde-format
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
-msgstr "Escurecer o alfa"
+msgstr "Escurecer alfa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format
@@ -23142,13 +23142,13 @@ msgstr "Mistura dura suavizada (Photoshop)"
 #, kde-format
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
-msgstr "Mesclagem da granulação"
+msgstr "Mesclar grão"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:124
 #, kde-format
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
-msgstr "Extração da granulação"
+msgstr "Extrair grão"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
@@ -23184,13 +23184,13 @@ msgstr "Destino em"
 #, kde-format
 msgctxt "Blending mode - Hard Overlay"
 msgid "Hard Overlay"
-msgstr "Camada dura"
+msgstr "Sobreposição dura"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
 #, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Camada dura HDR"
+msgstr "Sobreposição dura HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -23496,7 +23496,7 @@ msgstr "Congelar"
 #, kde-format
 msgctxt "Blending mode - Heat"
 msgid "Heat"
-msgstr "Esquentar"
+msgstr "Calor"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:189
 #, kde-format
@@ -27396,12 +27396,12 @@ msgstr "Atalhos"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2376
 #, kde-format
 msgid "Canvas Input Settings"
-msgstr "Configurações da interação da tela de pintura"
+msgstr "Entrada da tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2377
 #, kde-format
 msgid "Canvas Input"
-msgstr "Interação da tela de pintura"
+msgstr "Entrada da tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2394
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
@@ -27439,7 +27439,7 @@ msgstr "Configurações do modo somente tela de pintura"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2426
 #, kde-format
 msgid "Canvas-only"
-msgstr "Somente a tela de pintura"
+msgstr "Somente tela de pintura"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2434
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2436
@@ -28500,7 +28500,7 @@ msgstr "Usar o modelo de cor padrão para novas imagens"
 #: libs/ui/forms/wdgcolorsettings.ui:77 libs/ui/forms/wdggeneralsettings.ui:250
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
-msgstr "Quando Colar no Krita de Outros Aplicativos"
+msgstr "Quando colar no Krita de outros aplicativos"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteWeb)
 #: libs/ui/forms/wdgcolorsettings.ui:83
@@ -28531,7 +28531,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:114
 #, kde-format
 msgid "Use Blackpoint Compensation"
-msgstr "Usar compensação do pontos pretos"
+msgstr "Usar compensação de pontos pretos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:124
@@ -28549,7 +28549,7 @@ msgid ""
 "Enforce palette colors: always select the nearest color from the active "
 "palette."
 msgstr ""
-"Aplicar cores da paleta: sempre selecione a cor mais próxima da paleta."
+"Aplicar cores da paleta: sempre selecionar a cor mais próxima da paleta."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEXRImportColorSpace)
 #: libs/ui/forms/wdgcolorsettings.ui:159
@@ -28561,7 +28561,7 @@ msgstr "Perfil de cor para arquivos EXR importados:"
 #: libs/ui/forms/wdgcolorsettings.ui:178
 #, kde-format
 msgid "Use system monitor profile"
-msgstr "Usar o perfil de sistema do monitor"
+msgstr "Usar o perfil de monitor do sistema"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblRenderingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:188
@@ -28601,7 +28601,7 @@ msgstr "Importar perfil"
 #: libs/ui/forms/wdgcolorsettings.ui:268
 #, kde-format
 msgid "Soft Proofing"
-msgstr "Simulação de tela"
+msgstr "Prova de tela"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorsettings.ui:274
@@ -29063,7 +29063,7 @@ msgstr "Decorações da tela de pintura"
 #: libs/ui/forms/wdgdisplaysettings.ui:321
 #, kde-format
 msgid "Transparency Checkerboard:"
-msgstr "Padrão Quadriculado da Transparência:"
+msgstr "Padrão quadriculado da transparência:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:327
@@ -29102,7 +29102,7 @@ msgstr "Cor do contorno da tela de pintura:"
 #: libs/ui/forms/wdgdisplaysettings.ui:404
 #, kde-format
 msgid "Pixel Grid:"
-msgstr "Grade do Pixel:"
+msgstr "Grade de pixel:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -29195,7 +29195,7 @@ msgstr "%"
 #: libs/ui/forms/wdgdisplaysettings.ui:447
 #, kde-format
 msgid "Selection Overlay:"
-msgstr "Sobreposição da Seleção:"
+msgstr "Sobreposição da seleção:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:459
@@ -29376,7 +29376,7 @@ msgstr "Visualização"
 #: libs/ui/forms/wdgfilterdialog.ui:74
 #, kde-format
 msgid "Multiframe"
-msgstr "quadros múltiplos"
+msgstr "Quadros múltiplos"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonCreateMaskEffect)
 #: libs/ui/forms/wdgfilterdialog.ui:97
@@ -29488,7 +29488,7 @@ msgstr "Manipulação de arquivos"
 #: libs/ui/forms/wdggeneralsettings.ui:58
 #, kde-format
 msgid "Enable Autosaving"
-msgstr "Ativar o salvamento automático"
+msgstr "Ativar salvamento automático"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:67
@@ -29508,13 +29508,13 @@ msgstr " min"
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
-msgstr "Cada"
+msgstr "a cada "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
 #: libs/ui/forms/wdggeneralsettings.ui:96
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
-msgstr "Arquivos de salvamento automático sem nome estão ocultos por padrão"
+msgstr "Arquivos de salvamento automático sem nome são ocultos por padrão"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:109
@@ -29589,7 +29589,7 @@ msgid ""
 "Use Zip64 (for very large files: cannot be opened in versions of Krita older "
 "than 4.2.0)"
 msgstr ""
-"Use Zip64 (para arquivos muito grandes: não pode ser aberto em versões do "
+"Usar Zip64 (para arquivos muito grandes: não pode ser aberto em versões do "
 "Krita anteriores à 4.2.0)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkCompressKra)
@@ -29661,8 +29661,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
-"Cole o bitmap sRGB anexado (sistema de arquivos ou acesso à Internet não são "
-"necessários, mas os metadados serão perdidos)."
+"Colar o bitmap sRGB anexado (sistema de arquivos ou acesso à Internet não "
+"são necessários, mas os metadados serão perdidos)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:291
@@ -29852,13 +29852,13 @@ msgstr "Enquanto pintava com uma borracha..."
 #: libs/ui/forms/wdggeneralsettings.ui:837
 #, kde-format
 msgid "Eraser Outline Color:"
-msgstr "Cor do Contorno da Borracha:"
+msgstr "Cor do contorno da borracha:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdggeneralsettings.ui:873
 #, kde-format
 msgid "Brush Outline Color:"
-msgstr "Cor do Contorno do Pincél:"
+msgstr "Cor do contorno do pincel:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:894
@@ -30113,7 +30113,7 @@ msgstr "Aplica-se apenas a imagens novas ou recém-abertas."
 #: libs/ui/forms/wdggeneralsettings.ui:1282
 #, kde-format
 msgid "Undo stack size:"
-msgstr "Tamanho da pilha de anulações:"
+msgstr "Tamanho da pilha de desfazer:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1310
@@ -30153,7 +30153,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1380
 #, kde-format
 msgid "Enable native file dialogs"
-msgstr "Ativar diálogos de arquivos nativos"
+msgstr "Ativar janelas de arquivos nativas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: libs/ui/forms/wdggeneralsettings.ui:1403
@@ -30252,7 +30252,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1529
 #, kde-format
 msgid "Automatic layer naming"
-msgstr "Nomeação de camada automática"
+msgstr "Nomeação automática de camadas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1535
@@ -30679,7 +30679,7 @@ msgstr "Perfil:"
 #: libs/ui/forms/wdglayerproperties.ui:167
 #, kde-format
 msgid "Color label:"
-msgstr "Legenda de cores:"
+msgstr "Legenda de cor:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDimensionsTitle)
 #: libs/ui/forms/wdglayerproperties.ui:196
@@ -30714,7 +30714,7 @@ msgstr ""
 #: libs/ui/forms/wdglayerproperties.ui:264
 #, kde-format
 msgid "&Active Channels"
-msgstr "Canais &Ativos"
+msgstr "Canais &ativos"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionSource)
 #: libs/ui/forms/wdgmaskfromselection.ui:21
@@ -31233,7 +31233,7 @@ msgstr ""
 #: libs/ui/forms/wdgPasteFormat.ui:118
 #, kde-format
 msgid "Paste the attached &bitmap"
-msgstr "Cole o &bitmap anexado"
+msgstr "Colar o &bitmap anexado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgPasteFormat.ui:131
@@ -31515,7 +31515,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:442
 #, kde-format
 msgid "Animation Cache"
-msgstr "Cache de Animação"
+msgstr "Cache de animação"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:448
@@ -33626,12 +33626,12 @@ msgstr "Gradientes"
 #: libs/ui/kis_control_frame.cpp:278
 #, kde-format
 msgid "Docker box"
-msgstr "Área acoplável:"
+msgstr "Caixa de painéis"
 
 #: libs/ui/kis_control_frame.cpp:284
 #, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Barra de ferramentas da área acoplável"
+msgstr "Barra de ferramentas de caixa de painéis"
 
 #: libs/ui/kis_custom_pattern.cc:103
 #, kde-format
@@ -34043,7 +34043,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1434
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
-msgstr "Gravar o Alfa para uma Camada"
+msgstr "Gravar alfa para uma camada"
 
 #: libs/ui/kis_node_manager.cpp:1574
 msgctxt "(qtundo-format)"
@@ -34260,7 +34260,7 @@ msgstr "Espelhar tela de pintura"
 #: libs/ui/kis_popup_palette.cpp:185
 #, kde-format
 msgid "Canvas Only"
-msgstr "Somente a tela de pintura"
+msgstr "Somente tela de pintura"
 
 #: libs/ui/kis_popup_palette.cpp:189
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
@@ -36069,17 +36069,17 @@ msgstr "Recuperado"
 #: libs/ui/KisView.cpp:1355
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
-msgstr "A simulação de tela (Soft Proofing) não funciona em ponto flutuante."
+msgstr "A prova de tela (Soft Proofing) não funciona em ponto flutuante."
 
 #: libs/ui/KisView.cpp:1360
 #, kde-format
 msgid "Soft Proofing turned on."
-msgstr "Simulação de tela (Soft Proofing) ligada."
+msgstr "Prova de tela (Soft Proofing) ligada."
 
 #: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned off."
-msgstr "Simulação de tela (Soft Proofing) desligada."
+msgstr "Prova de tela (Soft Proofing) desligada."
 
 #: libs/ui/KisView.cpp:1374
 #, kde-format
@@ -36094,7 +36094,7 @@ msgstr "Avisos de cores fora do gamute ligados."
 #: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "But Soft Proofing is still off."
-msgstr "Mas a simulação de tela continua desligada."
+msgstr "Mas a prova de tela continua desligada."
 
 #: libs/ui/KisView.cpp:1385
 #, kde-format
@@ -39121,7 +39121,7 @@ msgstr "Título"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Bloquear a área acoplável"
+msgstr "Bloquear painel"
 
 #: libs/ui/widgets/kis_wdg_generator.cpp:148
 #: libs/ui/widgets/kis_wdg_generator.cpp:160
@@ -39376,14 +39376,14 @@ msgstr "Para Baixo"
 #: libs/ui/widgets/KisDockerHud.cpp:60
 #, kde-format
 msgid "Configure docker panel"
-msgstr "Configurar o painel da área acoplável"
+msgstr "Configurar o painel acoplável"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr "A área acoplável está aberta em %1. Feche %1 para mostrar aqui."
+msgstr "O painel está aberto em %1. Feche %1 para mostrar aqui."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
 #, kde-format
@@ -40055,7 +40055,7 @@ msgstr "E&mpresa:"
 #: libs/widgets/KoConfigAuthorPage.ui:140
 #, kde-format
 msgid "Family Name:"
-msgstr "Nome de família:"
+msgstr "Sobrenome:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdd)
 #: libs/widgets/KoConfigAuthorPage.ui:150
@@ -40105,13 +40105,13 @@ msgstr "Obter ajuda..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Área acoplável flutuante"
+msgstr "Painel flutuante"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Fechar área acoplável"
+msgstr "Fechar painel"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
@@ -42066,7 +42066,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
 #, kde-format
 msgid "Use custom color for selector background."
-msgstr "Use uma cor personalizada para o seletor da cor de fundo."
+msgstr "Usar cor personalizada para o seletor da cor de fundo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
@@ -42212,7 +42212,7 @@ msgstr "Exibir o histór&ico de cores"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:862
 #, kde-format
 msgid "Patch Options"
-msgstr "Opções da patch"
+msgstr "Opções de patch"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -43428,8 +43428,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"Mostra a seleção global como uma máscara de seleção usual na área acoplável "
-"de <b>Camadas</b>"
+"Mostra a seleção global como uma máscara de seleção usual no painel de "
+"<b>Camadas</b>"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:323
 #, kde-format
@@ -44865,7 +44865,7 @@ msgstr "Remover instantâneo selecionado"
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:81
 #, kde-format
 msgid "Snapshot Docker"
-msgstr "Área acoplável de Instantâneos"
+msgstr "Painel de instantâneos"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
 #, kde-format
@@ -47369,7 +47369,7 @@ msgstr "Configuração da propriedade do texto"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Área acoplável de Toque"
+msgstr "Painel de toque"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -48334,7 +48334,7 @@ msgstr "Colocar todas as camadas na sua própria e separada da camada de grupo"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:46
 #, kde-format
 msgid "Alpha-lock every new layer"
-msgstr "Bloquear o alfa de todas as camadas novas"
+msgstr "Bloquear alfa de todas as camadas novas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideOriginal)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:56
@@ -50448,7 +50448,7 @@ msgstr "Opções do alfa"
 #: plugins/extensions/separate_channels/wdg_separations.ui:96
 #, kde-format
 msgid "Copy alpha channel to each separated channel as an alpha channel"
-msgstr "Copiar o canal alfa para cada canal separado como um canal alfa"
+msgstr "Copiar canal alfa para cada canal separado como um canal alfa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioDiscardAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:103
@@ -50460,7 +50460,7 @@ msgstr "Descartar canal alfa"
 #: plugins/extensions/separate_channels/wdg_separations.ui:113
 #, kde-format
 msgid "Create separate separation from alpha channel"
-msgstr "Criar uma separação do canal de alfa"
+msgstr "Criar uma separação do canal alfa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownscale)
 #: plugins/extensions/separate_channels/wdg_separations.ui:123
@@ -50945,7 +50945,7 @@ msgstr "Força:"
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
 msgid "&Color to Alpha..."
-msgstr "&Cor para 'Alfa'..."
+msgstr "&Cor para alfa..."
 
 #: plugins/filters/colors/kis_color_to_alpha.h:28
 #, kde-format
@@ -51370,7 +51370,7 @@ msgstr "Filtro de mapa de altura para normal"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "&Altura para o Mapa da Normal..."
+msgstr "&Altura para mapa normal..."
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
@@ -51380,7 +51380,7 @@ msgstr "Mapa de altura para normal"
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:20
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "O Mapa de Altura para Normal não funciona neste espaço de cor."
+msgstr "O mapa de altura para normal não funciona neste espaço de cor."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:27
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:19
@@ -51414,7 +51414,7 @@ msgstr "&Nitidez"
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:62
 #, kde-format
 msgid "&Mean Removal"
-msgstr "Remoção &Mediana"
+msgstr "Remoção &mediana"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:76
 #: plugins/filters/convolutionfilters/convolutionfilters.h:43
@@ -51448,7 +51448,7 @@ msgstr "Em relevo apenas na horizontal"
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:151
 #, kde-format
 msgid "Top Edge Detection"
-msgstr "Detecção de Contorno Superior"
+msgstr "Detecção de borda superior"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:22
 #, kde-format
@@ -51483,7 +51483,7 @@ msgstr "Gravar..."
 #: plugins/filters/edgedetection/kis_edge_detection_filter.cpp:39
 #, kde-format
 msgid "&Edge Detection..."
-msgstr "&Detecção de Contorno..."
+msgstr "&Detecção de borda..."
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
 #, kde-format
@@ -51498,22 +51498,22 @@ msgstr "Todos os lados"
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:22
 #, kde-format
 msgid "Top Edge"
-msgstr "Borda Superior"
+msgstr "Borda superior"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:23
 #, kde-format
 msgid "Bottom Edge"
-msgstr "Borda Inferior"
+msgstr "Borda inferior"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:24
 #, kde-format
 msgid "Right Edge"
-msgstr "Margem direita: "
+msgstr "Borda direita"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:25
 #, kde-format
 msgid "Left Edge"
-msgstr "Margem esquerda: "
+msgstr "Borda esquerda"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:26
 #, kde-format
@@ -51647,7 +51647,7 @@ msgstr "Filtro de mapa de gradiente"
 #: plugins/filters/gradientmap/KisGradientMapFilter.cpp:32
 #, kde-format
 msgid "&Gradient Map..."
-msgstr "Mapa do &Gradiente..."
+msgstr "Mapa do &gradiente..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
@@ -52029,7 +52029,7 @@ msgstr "&Níveis..."
 #: plugins/filters/noisefilter/noisefilter.cpp:42
 #, kde-format
 msgid "&Random Noise..."
-msgstr "&Ruído Aleatório..."
+msgstr "&Ruído aleatório..."
 
 #: plugins/filters/noisefilter/noisefilter.h:38
 #, kde-format
@@ -52241,7 +52241,7 @@ msgstr "Canal do mapa de altura:"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:386
 #, kde-format
 msgid "Use Normal map"
-msgstr "Usar o Mapa da Normal "
+msgstr "Usar mapa normal"
 
 #. i18n: ectx: attribute (title), widget (QWidget, lightSources)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:397
@@ -52527,7 +52527,7 @@ msgstr "Pingos de chuva"
 #: plugins/filters/randompickfilter/randompickfilter.cpp:54
 #, kde-format
 msgid "&Random Pick..."
-msgstr "Ext&ração Aleatória..."
+msgstr "F&ranja aleatória..."
 
 #: plugins/filters/randompickfilter/randompickfilter.h:37
 #, kde-format
@@ -52549,7 +52549,7 @@ msgstr "Redefinir transparência"
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
-msgstr "A&rredondar Cantos..."
+msgstr "A&rredondar cantos..."
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
 #, kde-format
@@ -52564,12 +52564,12 @@ msgstr "Arredondar cantos"
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:43
 #, kde-format
 msgid "&Small Tiles..."
-msgstr "Pequenos Padrõe&s..."
+msgstr "Pequenos bloco&s..."
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:90
 #, kde-format
 msgid "Number of tiles"
-msgstr "Número de padrões"
+msgstr "Número de blocos"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.h:29
 #, kde-format
@@ -52604,7 +52604,7 @@ msgstr "Nível de &Limiar:"
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
 msgid "&Unsharp Mask..."
-msgstr "&Máscara Não-Nítida..."
+msgstr "&Máscara não-nítida..."
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:76
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
@@ -56548,7 +56548,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:184
 #, kde-format
 msgid "Store alpha channel (transparency)"
-msgstr "Armazenar o canal alfa (transparência)"
+msgstr "Armazenar canal alfa (transparência)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:194
@@ -57768,7 +57768,7 @@ msgstr "ZIP"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:134
 #, kde-format
 msgid "Store alpha &channel (transparency)"
-msgstr "Armazenar o &canal alfa (transparência)"
+msgstr "Armazenar &canal alfa (transparência)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxJPEG)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:230
@@ -58126,7 +58126,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:422
 #, kde-format
 msgid "Alpha Plane Compression"
-msgstr "Compressão de plano alfa"
+msgstr "Compressão do plano alfa"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:432
@@ -58412,18 +58412,18 @@ msgstr "Modo Borrão"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
 #, kde-format
 msgid "Smearing"
-msgstr "Fluído"
+msgstr "Mancha"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:45
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:107
 #, kde-format
 msgid "Dulling"
-msgstr "Seco"
+msgstr "Embotamento"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:105
 #, kde-format
 msgid "Smear Alpha"
-msgstr "Manchar alfa:"
+msgstr "Alfa da mancha"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:141
 #, kde-format
@@ -58469,7 +58469,7 @@ msgstr "Substituir (suavizar quando baixo) a espessura da tinta existente"
 #, kde-format
 msgid "Paint over existing paint thickness (controlled by Smudge Length)"
 msgstr ""
-"Pinte sobre a espessura da tinta existente (controlado pelo comprimento do "
+"Pintar sobre a espessura da tinta existente (controlado pelo comprimento do "
 "borrão)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:47
@@ -58500,12 +58500,12 @@ msgstr "Modo borrão:"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
 #, kde-format
 msgid "Smear alpha:"
-msgstr "Manchar alfa:"
+msgstr "Alfa da mancha:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr "Use o novo algoritmo de borrar:"
+msgstr "Usar o novo algoritmo de borrar:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
 #, kde-format
@@ -58526,8 +58526,8 @@ msgid ""
 "This brush has transparent pixels in its center. \"Dulling\" mode may give "
 "unstable results. Consider using \"Smearing\" mode instead."
 msgstr ""
-"Este pincel tem pixels transparentes no seu centro. O modo \"Seco\" poderá "
-"gerar resultados instáveis. Considere usar o modo \"Fluído\"."
+"Este pincel tem pixels transparentes no seu centro. O modo \"Embotamento\" "
+"poderá gerar resultados instáveis. Considere usar o modo \"Mancha\"."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
 #, kde-format
@@ -58663,7 +58663,7 @@ msgstr "Clonar"
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:25
 #, kde-format
 msgid "Healing"
-msgstr "Reconciliação"
+msgstr "Cura"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:219
 #, kde-format
@@ -58674,7 +58674,7 @@ msgstr "Mover fonte"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Clone Brush (temporarily disabled)"
-msgstr "Clonar o pincel (temporariamente desativado)"
+msgstr "Pincel de clonagem (temporariamente desativado)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
@@ -58720,7 +58720,7 @@ msgstr "Reseta a origem toda vez que você der um novo valor."
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:61
 #, kde-format
 msgid "Source point reset before a new stroke"
-msgstr "Redefinição do ponto de origem antes de um novo curso"
+msgstr "Redefinição do ponto de origem antes de um novo traço"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCloneProjection)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:71
@@ -59070,14 +59070,14 @@ msgstr "Elevação do pincel (as linhas serão mais finas que na visualização)
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format
 msgid "Bristle options"
-msgstr "Opções da elevação"
+msgstr "Opções da cerdas"
 
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
 #: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:55
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
-msgstr "Deplexão da tinta"
+msgstr "Depleção da tinta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:66
@@ -59207,7 +59207,7 @@ msgstr "Quantidade de Tinta"
 #: plugins/paintops/hairy/wdgInkOptions.ui:135
 #, kde-format
 msgid "Ink Depletion Curve"
-msgstr "Curva de Deplexão da Tinta"
+msgstr "Curva de depleção da tinta"
 
 #. i18n: ectx: property (title), widget (QGroupBox, weightGroup)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:347
@@ -59226,19 +59226,19 @@ msgstr "peso da pressão"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:387
 #, kde-format
 msgid "Ink depletion curve weight"
-msgstr "Peso da curva de deplexão da tinta"
+msgstr "Peso da curva de depleção da tinta"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, bristleLengthSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:415
 #, kde-format
 msgid "bristle length weight"
-msgstr "peso do comprimento do espinho"
+msgstr "peso do comprimento da cerda"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, bristleInkAmountSlider)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:443
 #, kde-format
 msgid "Bristle ink amount weight"
-msgstr "Peso da quantidade de tinta do espinho"
+msgstr "Peso da quantidade de tinta da cerda"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useWeightCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, weightSaturationCBox)
@@ -59276,7 +59276,7 @@ msgstr "Pingar tinta"
 #: plugins/paintops/hairy/wdgInkOptions.ui:171
 #, kde-format
 msgid "Bristle Ink Weight:"
-msgstr "Peso da tinta do espinho:"
+msgstr "Peso da tinta da cerda:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hairy/wdgInkOptions.ui:178
@@ -59288,13 +59288,13 @@ msgstr "Peso da pressão:"
 #: plugins/paintops/hairy/wdgInkOptions.ui:195
 #, kde-format
 msgid "Bristle Length Weight:"
-msgstr "Peso do comprimento do espinho:"
+msgstr "Peso do comprimento da cerda:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/hairy/wdgInkOptions.ui:222
 #, kde-format
 msgid "Ink Depletion Curve Weight:"
-msgstr "Peso da curva de deplexão da tinta:"
+msgstr "Peso da curva de depleção da tinta:"
 
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
 #, kde-format
@@ -59527,7 +59527,7 @@ msgstr "Proporção:"
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
 #, kde-format
 msgid "Preserve alpha"
-msgstr "Preservar o alfa"
+msgstr "Preservar alfa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
@@ -59731,7 +59731,7 @@ msgstr "Intervalo X:"
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
 #, kde-format
 msgid "Preserve alpha channel"
-msgstr "Preservar o canal alfa"
+msgstr "Preservar canal alfa"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
@@ -61604,7 +61604,7 @@ msgstr "Inclinação da tangente"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:33
 #, kde-format
 msgid "A Brush Engine for Drawing 3d Tangent Normal Maps"
-msgstr "Um motor de pincéis para desenhar mapas de normal tangente em 3D"
+msgstr "Um motor de pincéis para desenhar mapas normais de tangente em 3D"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TangentEncoding)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:43
@@ -62110,7 +62110,7 @@ msgstr "Nome do Meio"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Family Name"
-msgstr "Nome de Família"
+msgstr "Sobrenome"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:371
@@ -64145,7 +64145,7 @@ msgstr "Associar dez predefinições de pincel a dez atalhos."
 msgid "Activate Brush Preset {num}"
 msgstr "Ativar Predefinição de Pincel {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:122
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"
@@ -67455,7 +67455,7 @@ msgstr "Ferramenta de edição da máscara de colorir"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:107
 #, kde-format
 msgid "Edge detection: "
-msgstr "Detecção de Contorno:"
+msgstr "Detecção da borda: "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:110
 #, kde-format
@@ -67772,7 +67772,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
-msgstr "Transforma uma camada ou uma seleção"
+msgstr "Transformar uma camada ou seleção"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
 #, kde-format
@@ -67919,7 +67919,7 @@ msgstr "Ferramenta de transformação"
 #, kde-format
 msgctxt "action"
 msgid "Transform a layer or a selection"
-msgstr "Transforma uma camada ou uma seleção"
+msgstr "Transformar uma camada ou seleção"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63

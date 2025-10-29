@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-25 02:01+0000\n"
-"PO-Revision-Date: 2025-10-26 23:34+0300\n"
+"POT-Creation-Date: 2025-10-29 02:01+0000\n"
+"PO-Revision-Date: 2025-10-29 01:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -58342,8 +58342,8 @@ msgid ""
 "This brush has transparent pixels in its center. \"Dulling\" mode may give "
 "unstable results. Consider using \"Smearing\" mode instead."
 msgstr ""
-"Bu fırçanın merkezinde saydam pikseller var. ‘Matlaşma’ kipi kararsız "
-"sonuçlar verebilir. ‘Bulaşma’ kipini kullanmayı deneyin."
+"Bu fırçanın merkezinde saydam pikseller var. “Matlaşma” kipi kararsız "
+"sonuçlar verebilir. “Bulaşma” kipini kullanmayı deneyin."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
 #, kde-format
@@ -63942,7 +63942,7 @@ msgstr "On fırça önayarını on adet kısayola ata."
 msgid "Activate Brush Preset {num}"
 msgstr "{num}. Fırça Önayarını Etkinleştir"
 
-#: plugins/python/tenbrushes/tenbrushes.py:122
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"

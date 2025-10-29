@@ -20,7 +20,11 @@ class KRITAWIDGETS_EXPORT KisColorSelectorInterface : public QWidget {
 public:
     KisColorSelectorInterface(QWidget *parent = 0)
         : QWidget(parent)
-    {}
+    {
+        // Color selectors don't have context menus. Setting this prevents any
+        // long-presses from delaying inputs, see KisLongPressEventFilter.cpp.
+        setContextMenuPolicy(Qt::PreventContextMenu);
+    }
     ~KisColorSelectorInterface() override {}
     virtual void setConfig(bool forceCircular, bool forceSelfUpdate)
     {

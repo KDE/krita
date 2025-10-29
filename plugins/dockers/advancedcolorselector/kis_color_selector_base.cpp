@@ -141,6 +141,10 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     using namespace std::placeholders; // For _1 placeholder
     auto function = std::bind(&KisColorSelectorBase::slotUpdateColorAndPreview, this, _1);
     m_updateColorCompressor.reset(new ColorCompressorType(20 /* ms */, function));
+
+    // Color selectors don't have context menus. Setting this prevents any
+    // long-presses from delaying inputs, see KisLongPressEventFilter.cpp.
+    setContextMenuPolicy(Qt::PreventContextMenu);
 }
 
 KisColorSelectorBase::~KisColorSelectorBase()

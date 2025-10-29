@@ -35,7 +35,7 @@ KisPlatformPluginInterfaceFactory::KisPlatformPluginInterfaceFactory()
             "Krita/PlatformPlugin");
 
         if (factory) {
-            auto interface = factory->create<KisSurfaceColorManagementInfo>();
+            QScopedPointer<KisSurfaceColorManagementInfo> interface(factory->create<KisSurfaceColorManagementInfo>());
             return interface && interface->surfaceColorManagedByOS();
         }
 

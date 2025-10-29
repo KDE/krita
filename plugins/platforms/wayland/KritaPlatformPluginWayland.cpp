@@ -39,6 +39,7 @@ public:
 
 class KisWaylandSurfaceColorManagementInfo : public KisSurfaceColorManagementInfo
 {
+    Q_OBJECT
 public:
     using KisSurfaceColorManagementInfo::KisSurfaceColorManagementInfo;
     bool surfaceColorManagedByOS() override {

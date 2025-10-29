@@ -12,6 +12,7 @@
 
 class KisExtendedModifiersMapperWayland : public KisExtendedModifiersMapperPluginInterface
 {
+    Q_OBJECT
 public:
     KisExtendedModifiersMapperWayland(QObject *parent, const QVariantList &);
     ExtendedModifiers queryExtendedModifiers() override;

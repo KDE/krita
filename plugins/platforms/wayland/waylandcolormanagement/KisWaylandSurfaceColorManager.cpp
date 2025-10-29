@@ -218,7 +218,6 @@ bool KisWaylandSurfaceColorManager::supportsRenderIntent(const KisSurfaceColorim
     return m_waylandManager->isIntentSupported(waylandIntent);
 }
 
-#warning USE_KWIN_BUG_WORKAROUND should become optional switch depending on the version of KWin used
 #define USE_KWIN_BUG_WORKAROUND
 
 #ifdef USE_KWIN_BUG_WORKAROUND
@@ -272,13 +271,15 @@ QFuture<bool> KisWaylandSurfaceColorManager::setSurfaceDescription(const KisSurf
             }
 
 #ifdef USE_KWIN_BUG_WORKAROUND
-            // WARNING: KWin <= 6.4.4 doesn't handle intent changes properly
-            if (m_currentDescription && m_currentDescription == desc &&
-                m_renderingIntent && m_renderingIntent != intent) {
+            if (qEnvironmentVariableIsSet("KRITA_ENABLE_KWIN_INTENT_WORKAROUND")) {
+                // WARNING: KWin <= 6.4.4 doesn't handle intent changes properly
+                if (m_currentDescription && m_currentDescription == desc &&
+                    m_renderingIntent && m_renderingIntent != intent) {
 
-                m_surface->unset_image_description();
-                auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
-                ::wl_surface_commit(waylandWindow->surface());
+                    m_surface->unset_image_description();
+                    auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
+                    ::wl_surface_commit(waylandWindow->surface());
+                }
             }
 #endif
 

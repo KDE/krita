@@ -9,6 +9,7 @@
 #include <kritasurfacecolormanagementapi_export.h>
 
 #include <QObject>
+#include <QFuture>
 
 class KRITASURFACECOLORMANAGEMENTAPI_EXPORT KisSurfaceColorManagementInfo : public QObject
 {
@@ -23,6 +24,8 @@ public:
      * space should be managed by OS.
      */
     virtual bool surfaceColorManagedByOS() = 0;
+
+    virtual QFuture<QString> debugReport() = 0;
 };
 
 #endif /* KISSURFACECOLORMANAGEMENTINFO_H */

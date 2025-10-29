@@ -12,6 +12,7 @@
 #include <KoPluginLoader.h>
 #include <kpluginfactory.h>
 #include <surfacecolormanagement/KisOutputColorInfoInterface.h>
+#include <surfacecolormanagement/KisSurfaceColorManagementInfo.h>
 
 
 DlgColorManagementInfo::DlgColorManagementInfo(QWidget *parent)
@@ -37,6 +38,17 @@ DlgColorManagementInfo::DlgColorManagementInfo(QWidget *parent)
                             initializeText();
                         }
                     });
+        }
+
+        m_surfaceColorManagementInfo.reset(
+            factory->create<KisSurfaceColorManagementInfo>(nullptr));
+
+        if (m_surfaceColorManagementInfo) {
+            auto future = m_surfaceColorManagementInfo->debugReport();
+            future.then([this] (const QString &report) {
+                m_surfaceManagementReport = report;
+                initializeText();
+            });
         }
     }
 }
@@ -135,6 +147,14 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
             s << Qt::endl;
         }
     }
+
+    s << "Color management plugin report" << Qt::endl;
+    s << "===" << Qt::endl;
+    s << Qt::endl;
+
+    s.noquote().nospace() << (m_surfaceManagementReport.isEmpty() ? "<no information available>" : m_surfaceManagementReport);
+    s.space().quote();
+    s << Qt::endl;
 
     return report;
 }

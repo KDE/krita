@@ -17,6 +17,7 @@
 #include <waylandcolormanagement/KisWaylandSurfaceColorManager.h>
 #include <waylandcolormanagement/KisWaylandOutputColorInfo.h>
 #include <surfacecolormanagement/KisSurfaceColorManagementInfo.h>
+#include <waylandcolormanagement/KisWaylandDebugInfoFetcher.h>
 
 #include <QWindow>
 
@@ -42,6 +43,37 @@ public:
     using KisSurfaceColorManagementInfo::KisSurfaceColorManagementInfo;
     bool surfaceColorManagedByOS() override {
         return true;
+    }
+
+    QFuture<QString> debugReport() override {
+        QPromise<QString> promise;
+        promise.start();
+
+        std::shared_ptr<KisWaylandDebugInfoFetcher> infoFetcher(new KisWaylandDebugInfoFetcher());
+
+        if (infoFetcher->isReady()) {
+            promise.addResult(infoFetcher->report());
+            promise.finish();
+
+            return promise.future();
+        } else {
+            // wrap the info fetcher into the resulting lambda
+            QFuture<QString> result = promise.future().then(
+                [infoFetcher] (const QString &report) {
+                    // a simple wrapping class that holds the fetcher until the
+                    // result is reported or the future is destroyed
+                    return report;
+            });
+
+            // move the promise into the handler of its completion signal
+            connect(infoFetcher.get(), &KisWaylandDebugInfoFetcher::sigDebugInfoReady,
+                    infoFetcher.get(), [promise = std::move(promise)] (const QString &report) mutable {
+                        promise.addResult(report);
+                        promise.finish();
+                    });
+
+            return result;
+        }
     }
 };
 

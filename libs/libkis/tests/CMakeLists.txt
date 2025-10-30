@@ -1,6 +1,8 @@
 
 include(KritaAddBrokenUnitTest)
 
+set(KIS_TEST_NAME_PREFIX "libs-libkis-")
+
 kis_add_tests(
     #TestKrita.cpp
     TestChannel.cpp
@@ -11,7 +13,6 @@ kis_add_tests(
     TestFilter.cpp
     TestManagedColor.cpp
     TestNotifier.cpp
-    NAME_PREFIX "libs-libkis-"
     LINK_LIBRARIES kritalibkis kritatestsdk
     )
 

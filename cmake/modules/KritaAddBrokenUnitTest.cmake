@@ -27,6 +27,9 @@ function(KRITA_ADD_UNIT_TEST)
     #more than one source file passed, but no test name given -> error
     message(FATAL_ERROR "kis_add_test() called with multiple source files but without setting \"TEST_NAME\"")
   endif()
+  if (NOT ARG_NAME_PREFIX)
+      set(ARG_NAME_PREFIX ${KIS_TEST_NAME_PREFIX})
+  endif()
 
   set(_testname ${ARG_NAME_PREFIX}${_targetname})
 
@@ -82,6 +85,10 @@ function(KRITA_ADD_UNIT_TESTS)
   set(BROKEN_TOKEN)
   if (ARG_BROKEN)
       set(BROKEN_TOKEN BROKEN)
+  endif()
+
+  if (NOT ARG_NAME_PREFIX)
+      set(ARG_NAME_PREFIX ${KIS_TEST_NAME_PREFIX})
   endif()
 
   set(test_names)

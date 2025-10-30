@@ -1,5 +1,7 @@
 include(KritaAddBrokenUnitTest)
 
+set(KIS_TEST_NAME_PREFIX "plugins-dockers-lut-")
+
 ########### next target ###############
 
 if (HAVE_OCIO_V2)
@@ -19,6 +21,5 @@ kis_add_test(
      $<TARGET_PROPERTY:kritatestsdk,SOURCE_DIR>/stroke_testing_utils.cpp
     TEST_NAME KisOcioDisplayFilterTest
     LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF${KF_MAJOR}::I18n kritatestsdk kritalutdocker_static
-    NAME_PREFIX "plugins-dockers-lut-"
     )
 

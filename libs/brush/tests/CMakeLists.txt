@@ -2,6 +2,8 @@
 
 include(KritaAddBrokenUnitTest)
 
+set(KIS_TEST_NAME_PREFIX "libs-brush-")
+
 kis_add_tests(
     kis_auto_brush_test.cpp
     kis_auto_brush_factory_test.cpp
@@ -11,6 +13,5 @@ kis_add_tests(
     kis_imagepipe_brush_test.cpp
     TestAbrStorage.cpp
     KisBrushModelTest.cpp
-    NAME_PREFIX "libs-brush-"
     LINK_LIBRARIES kritaimage kritalibbrush kritatestsdk
     )

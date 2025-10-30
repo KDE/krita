@@ -1,5 +1,7 @@
 include(KritaAddBrokenUnitTest)
 
+set(KIS_TEST_NAME_PREFIX "libs-koplugin-")
+
 kis_add_library(dummytrivialinterface SHARED DummyTrivialInterface.cpp)
 target_link_libraries(dummytrivialinterface PRIVATE Qt::Core)
 generate_export_header(dummytrivialinterface BASE_NAME dummytrivialinterface)
@@ -41,7 +43,6 @@ kis_add_test(
     KoPluginLoaderTest.cpp
     TEST_NAME KoPluginLoaderTest
     LINK_LIBRARIES kritaplugin kritaglobal kritatestsdk KF${KF_MAJOR}::CoreAddons KF${KF_MAJOR}::ConfigCore dummytrivialinterface
-    NAME_PREFIX "libs-koplugin-"
 )
 
 target_compile_definitions(KoPluginLoaderTest

@@ -1,11 +1,12 @@
 include(KritaAddBrokenUnitTest)
 
+set(KIS_TEST_NAME_PREFIX "plugins-impex-")
+
 if(APPLE)
     krita_add_broken_unit_test(
         KisHeifTest.cpp
         TEST_NAME KisHeifTest
         LINK_LIBRARIES kritaui kritatestsdk
-        NAME_PREFIX "plugins-impex-"
     )
 
 else(APPLE)
@@ -14,7 +15,6 @@ else(APPLE)
         KisHeifTest.cpp
         TEST_NAME KisHeifTest
         LINK_LIBRARIES kritaui kritatestsdk
-        NAME_PREFIX "plugins-impex-"
     )
 
 

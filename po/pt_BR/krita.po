@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-29 02:01+0000\n"
-"PO-Revision-Date: 2025-10-28 18:47-0300\n"
+"POT-Creation-Date: 2025-10-30 02:03+0000\n"
+"PO-Revision-Date: 2025-10-29 11:18-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -10392,7 +10392,7 @@ msgstr "Selecionar o modo de mesclagem por luz forte"
 #, kde-format
 msgctxt "action"
 msgid "Select Vivid Light Blending Mode"
-msgstr "Selecionar o modo de mesclagem por luz viva"
+msgstr "Selecionar o modo de mesclagem por luz vívida"
 
 #. i18n: context: text @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -16036,14 +16036,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espaços de trabalho"
 
-#: krita/main.cc:747 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:726 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:788
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Aviso"
 
-#: krita/main.cc:748
+#: krita/main.cc:727
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -21479,8 +21479,8 @@ msgid "Processing"
 msgstr "Processando"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1418
-#: libs/ui/KisMainWindow.cpp:1788 libs/ui/KisMainWindow.cpp:1801
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1421
+#: libs/ui/KisMainWindow.cpp:1794 libs/ui/KisMainWindow.cpp:1807
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -21640,7 +21640,7 @@ msgstr "Rascunho"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Shade"
-msgstr "Sombra"
+msgstr "Tom"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:64
 #, kde-format
@@ -22250,8 +22250,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Imagem RGBE Radiance"
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2159
-#: libs/ui/KisMainWindow.cpp:2238
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2165
+#: libs/ui/KisMainWindow.cpp:2244
 #, kde-format
 msgid "Import frames"
 msgstr "Importar quadros"
@@ -22716,25 +22716,25 @@ msgstr "Adição"
 #, kde-format
 msgctxt "Blending mode - Subtract"
 msgid "Subtract"
-msgstr "Subtrair"
+msgstr "Subtração"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:46
 #, kde-format
 msgctxt "Blending mode - Multiply"
 msgid "Multiply"
-msgstr "Multiplicar"
+msgstr "Multiplicação"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
 msgctxt "Blending mode - Divide"
 msgid "Divide"
-msgstr "Dividir"
+msgstr "Divisão"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:48
 #, kde-format
 msgctxt "Blending mode - Inverse Subtract"
 msgid "Inverse Subtract"
-msgstr "Subtrair inverso"
+msgstr "Subtração inversa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:50
 #, kde-format
@@ -22830,13 +22830,13 @@ msgstr "Cor mais escura"
 #, kde-format
 msgctxt "Blending mode - Shade (IFS Illusions)"
 msgid "Shade (IFS Illusions)"
-msgstr "Sombra (ilusões IFS)"
+msgstr "Tom (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
 msgctxt "Blending mode - Fog Darken (IFS Illusions)"
 msgid "Fog Darken (IFS Illusions)"
-msgstr "Névoa escurecida (ilusões IFS)"
+msgstr "Névoa escurecida (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:68
 #, kde-format
@@ -22848,13 +22848,13 @@ msgstr "Queima suave"
 #, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
-msgstr "Subexposição de cores"
+msgstr "Subexposição de cor"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:71
 #, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Subexposição de cores HDR"
+msgstr "Subexposição de cor HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -22890,13 +22890,13 @@ msgstr "Luz pontual"
 #, kde-format
 msgctxt "Blending mode - Vivid Light"
 msgid "Vivid Light"
-msgstr "Luz viva"
+msgstr "Luz vívida"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:78
 #, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Luz viva HDR"
+msgstr "Luz vívida HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
@@ -22914,7 +22914,7 @@ msgstr "Luz forte"
 #, kde-format
 msgctxt "Blending mode - Soft Light (IFS Illusions)"
 msgid "Soft Light (IFS Illusions)"
-msgstr "Luz suave (ilusões IFS)"
+msgstr "Luz suave (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
@@ -22944,7 +22944,7 @@ msgstr "Clarear gama"
 #, kde-format
 msgctxt "Blending mode - Gamma Illumination"
 msgid "Gamma Illumination"
-msgstr "Iluminação gama"
+msgstr "Iluminação de gama"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:87
 #, kde-format
@@ -22956,13 +22956,13 @@ msgstr "Cor mais clara"
 #, kde-format
 msgctxt "Blending mode - P-Norm A"
 msgid "P-Norm A"
-msgstr "P-Norm A"
+msgstr "Norma-P A"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:89
 #, kde-format
 msgctxt "Blending mode - P-Norm B"
 msgid "P-Norm B"
-msgstr "P-Norm B"
+msgstr "Norma-P B"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:90
 #, kde-format
@@ -22974,25 +22974,25 @@ msgstr "Super luz"
 #, kde-format
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
-msgstr "Colorir (ilusões de IFS)"
+msgstr "Colorir (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:92
 #, kde-format
 msgctxt "Blending mode - Fog Lighten (IFS Illusions)"
 msgid "Fog Lighten (IFS Illusions)"
-msgstr "Névoa clara (Ilusões IFS)"
+msgstr "Névoa clara (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
-msgstr "Desvio fácil"
+msgstr "Subexposição fácil"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:94
 #, kde-format
 msgctxt "Blending mode - Luminosity/Shine (SAI)"
 msgid "Luminosity/Shine (SAI)"
-msgstr "Luminosidade/especular (SAI)"
+msgstr "Luminosidade/Brilho (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:96
 #, kde-format
@@ -23603,11 +23603,11 @@ msgstr "Recursos locais"
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
-#: libs/ui/KisMainWindow.cpp:1000 libs/ui/KisMainWindow.cpp:1070
-#: libs/ui/KisMainWindow.cpp:1199 libs/ui/KisMainWindow.cpp:1296
-#: libs/ui/KisMainWindow.cpp:2019 libs/ui/KisMainWindow.cpp:2028
-#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2226
-#: libs/ui/KisMainWindow.cpp:2245 libs/ui/KisMainWindow.cpp:2877
+#: libs/ui/KisMainWindow.cpp:1003 libs/ui/KisMainWindow.cpp:1073
+#: libs/ui/KisMainWindow.cpp:1202 libs/ui/KisMainWindow.cpp:1299
+#: libs/ui/KisMainWindow.cpp:2025 libs/ui/KisMainWindow.cpp:2034
+#: libs/ui/KisMainWindow.cpp:2173 libs/ui/KisMainWindow.cpp:2232
+#: libs/ui/KisMainWindow.cpp:2251 libs/ui/KisMainWindow.cpp:2883
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24161,7 +24161,7 @@ msgid "Delete resource"
 msgstr "Excluir recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2674
+#: libs/ui/KisMainWindow.cpp:2680
 #: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
@@ -24640,7 +24640,7 @@ msgstr ""
 "incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2267
+#: libs/ui/KisMainWindow.cpp:2273
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderizar Animação"
@@ -26718,7 +26718,7 @@ msgid "Numerical"
 msgstr "Numérica"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1164
+#: libs/ui/KisMainWindow.cpp:1167
 #, kde-format
 msgid "Import Images"
 msgstr "Importar imagens"
@@ -26834,7 +26834,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Indique o nome do novo estilo"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2691
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31076,7 +31076,7 @@ msgstr "Predefinição de pincel atual"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1045
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1048
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -34464,18 +34464,13 @@ msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Escola de Scripting</span></a></p>"
 
-#: libs/ui/kis_statusbar.cc:85
-#, kde-format
-msgid "Toggle Fullscreen"
-msgstr "Alterna o modo de tela cheia"
-
-#: libs/ui/kis_statusbar.cc:242
+#: libs/ui/kis_statusbar.cc:230
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:274
+#: libs/ui/kis_statusbar.cc:262
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -34489,7 +34484,7 @@ msgstr ""
 "  - projeções:\t %3\n"
 "  - visualizações instantâneas:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:285
+#: libs/ui/kis_statusbar.cc:273
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -34507,7 +34502,7 @@ msgstr ""
 "\n"
 "Memória de Troca (Swap) usada:\t %8"
 
-#: libs/ui/kis_statusbar.cc:320
+#: libs/ui/kis_statusbar.cc:308
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -34521,24 +34516,24 @@ msgstr ""
 "ATENÇÃO:\tMemória insuficiente! Foi ativada a paginação da memória virtual.\n"
 "\t\tConfigure mais memória RAM para o Krita na janela de Configurações"
 
-#: libs/ui/kis_statusbar.cc:379
+#: libs/ui/kis_statusbar.cc:367
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "Oculto"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:369
 #, kde-format
 msgid "Ants"
 msgstr "Formigas"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:369
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Máscara"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -34547,17 +34542,17 @@ msgstr ""
 "Seleção: x = %1 y = %2 largura = %3 altura = %4\n"
 "Modo de apresentação: %5"
 
-#: libs/ui/kis_statusbar.cc:389
+#: libs/ui/kis_statusbar.cc:377
 #, kde-format
 msgid "No Selection"
 msgstr "Nenhuma seleção"
 
-#: libs/ui/kis_statusbar.cc:407
+#: libs/ui/kis_statusbar.cc:395
 #, kde-format
 msgid "No profile"
 msgstr "Sem perfil"
 
-#: libs/ui/kis_statusbar.cc:409
+#: libs/ui/kis_statusbar.cc:397
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -35551,32 +35546,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Espaço de &trabalho"
 
-#: libs/ui/KisMainWindow.cpp:604
+#: libs/ui/KisMainWindow.cpp:607
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostrar barra de ferramentas %1"
 
-#: libs/ui/KisMainWindow.cpp:606
+#: libs/ui/KisMainWindow.cpp:609
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Ocultar barra de ferramentas %1"
 
-#: libs/ui/KisMainWindow.cpp:1042
+#: libs/ui/KisMainWindow.cpp:1045
 #, kde-format
 msgid "Save as %1"
 msgstr "Salvar como %1"
 
-#: libs/ui/KisMainWindow.cpp:1070
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "O arquivo %1 não existe."
 
-#: libs/ui/KisMainWindow.cpp:1164
+#: libs/ui/KisMainWindow.cpp:1167
 #, kde-format
 msgid "Open Images"
 msgstr "Abrir imagens"
 
-#: libs/ui/KisMainWindow.cpp:1297
+#: libs/ui/KisMainWindow.cpp:1300
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35589,44 +35584,44 @@ msgstr ""
 "\n"
 "Selecione um local onde o arquivo original não será sobrescrito!"
 
-#: libs/ui/KisMainWindow.cpp:1353
+#: libs/ui/KisMainWindow.cpp:1356
 #, kde-format
 msgid "Exporting"
 msgstr "Exportando"
 
-#: libs/ui/KisMainWindow.cpp:1353
+#: libs/ui/KisMainWindow.cpp:1356
 #, kde-format
 msgid "Saving As"
 msgstr "Salvando como"
 
-#: libs/ui/KisMainWindow.cpp:1767
+#: libs/ui/KisMainWindow.cpp:1773
 #, kde-format
 msgid "Create new document"
 msgstr "Cria um novo documento"
 
-#: libs/ui/KisMainWindow.cpp:1791
+#: libs/ui/KisMainWindow.cpp:1797
 #, kde-format
 msgid "Custom Document"
 msgstr "Documento personalizado"
 
-#: libs/ui/KisMainWindow.cpp:1803
+#: libs/ui/KisMainWindow.cpp:1809
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Criar da área de transferência"
 
-#: libs/ui/KisMainWindow.cpp:1988
+#: libs/ui/KisMainWindow.cpp:1994
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Camadas/Máscaras"
 
-#: libs/ui/KisMainWindow.cpp:2014
+#: libs/ui/KisMainWindow.cpp:2020
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Você não tem nenhum pacote de recursos habilitado."
 
-#: libs/ui/KisMainWindow.cpp:2018
+#: libs/ui/KisMainWindow.cpp:2024
 #, kde-format
 msgid ""
 "\n"
@@ -35637,7 +35632,7 @@ msgstr ""
 "Não há predefinições de pincel disponíveis. Ative um pacote com "
 "predefinições antes de continuar.\n"
 
-#: libs/ui/KisMainWindow.cpp:2028
+#: libs/ui/KisMainWindow.cpp:2034
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -35648,7 +35643,7 @@ msgstr ""
 "\n"
 "Apenas seus recursos locais estão disponíveis."
 
-#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2173 libs/ui/KisMainWindow.cpp:2251
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35657,40 +35652,40 @@ msgstr ""
 "Não foi possível concluir a importação da animação:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2226
+#: libs/ui/KisMainWindow.cpp:2232
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Falha ao criar novo documento. A importação da animação foi abortada."
 
-#: libs/ui/KisMainWindow.cpp:2665
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importar espaços de trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2680
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Novo espaço de trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2684
+#: libs/ui/KisMainWindow.cpp:2690
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Novo espaço de trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2728
+#: libs/ui/KisMainWindow.cpp:2734
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2731
+#: libs/ui/KisMainWindow.cpp:2737
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2900
+#: libs/ui/KisMainWindow.cpp:2906
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35699,19 +35694,19 @@ msgstr ""
 "O plugin de gerenciamento de cor LittleCMS do Krita não está instalado. O "
 "Krita será fechado agora."
 
-#: libs/ui/KisMainWindow.cpp:2916
+#: libs/ui/KisMainWindow.cpp:2922
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Erro de instalação"
 
-#: libs/ui/KisMainWindow.cpp:3026
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temas"
 
-#: libs/ui/KisMainWindow.cpp:3085
+#: libs/ui/KisMainWindow.cpp:3091
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expansão do espaçador"
@@ -45364,15 +45359,12 @@ msgid "%1, %2, variant: %3"
 msgstr "%1, %2, variante: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, kde-format
-msgctxt "language, region"
-msgid "%1, %2"
-msgstr "%1, %2"
-
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "language, variant"
+#| msgid "%1, variant: %3"
 msgctxt "language, variant"
-msgid "%1, variant: %3"
+msgid "%1, variant: %2"
 msgstr "%1, variante: %3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
@@ -66828,7 +66820,7 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Kerning"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:329
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:330
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -68546,6 +68538,13 @@ msgstr ""
 "Alternar entre o intervalo completo e o subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Alterna o modo de tela cheia"
+
+#~ msgctxt "language, region"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
 
 #~ msgctxt "Resize intepolation method list label"
 #~ msgid "Filter:"

@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-29 02:01+0000\n"
+"POT-Creation-Date: 2025-10-30 02:03+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -16017,14 +16017,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Pracovní plochy"
 
-#: krita/main.cc:747 libs/ui/KisApplication.cpp:506
+#: krita/main.cc:726 libs/ui/KisApplication.cpp:506
 #: libs/ui/KisApplication.cpp:788
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varování"
 
-#: krita/main.cc:748
+#: krita/main.cc:727
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -21310,8 +21310,8 @@ msgid "Processing"
 msgstr "Zpracování"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1418
-#: libs/ui/KisMainWindow.cpp:1788 libs/ui/KisMainWindow.cpp:1801
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1421
+#: libs/ui/KisMainWindow.cpp:1794 libs/ui/KisMainWindow.cpp:1807
 #: plugins/impex/libkra/kis_kra_saver.cpp:89
 #, kde-format
 msgid "Unnamed"
@@ -22046,8 +22046,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr ""
 
-#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2159
-#: libs/ui/KisMainWindow.cpp:2238
+#: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2165
+#: libs/ui/KisMainWindow.cpp:2244
 #, kde-format
 msgid "Import frames"
 msgstr "Importovat rámce"
@@ -23395,11 +23395,11 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:1276 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
-#: libs/ui/KisMainWindow.cpp:1000 libs/ui/KisMainWindow.cpp:1070
-#: libs/ui/KisMainWindow.cpp:1199 libs/ui/KisMainWindow.cpp:1296
-#: libs/ui/KisMainWindow.cpp:2019 libs/ui/KisMainWindow.cpp:2028
-#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2226
-#: libs/ui/KisMainWindow.cpp:2245 libs/ui/KisMainWindow.cpp:2877
+#: libs/ui/KisMainWindow.cpp:1003 libs/ui/KisMainWindow.cpp:1073
+#: libs/ui/KisMainWindow.cpp:1202 libs/ui/KisMainWindow.cpp:1299
+#: libs/ui/KisMainWindow.cpp:2025 libs/ui/KisMainWindow.cpp:2034
+#: libs/ui/KisMainWindow.cpp:2173 libs/ui/KisMainWindow.cpp:2232
+#: libs/ui/KisMainWindow.cpp:2251 libs/ui/KisMainWindow.cpp:2883
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -23948,7 +23948,7 @@ msgid "Delete resource"
 msgstr "Smazat zdroj"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:339
-#: libs/ui/KisMainWindow.cpp:2674
+#: libs/ui/KisMainWindow.cpp:2680
 #: plugins/dockers/textproperties/TagFilterProxyModelQmlWrapper.cpp:296
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #, kde-format
@@ -24400,7 +24400,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2267
+#: libs/ui/KisMainWindow.cpp:2273
 #, kde-format
 msgid "Render Animation"
 msgstr "Vykreslit animaci"
@@ -26385,7 +26385,7 @@ msgid "Numerical"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1164
+#: libs/ui/KisMainWindow.cpp:1167
 #, kde-format
 msgid "Import Images"
 msgstr "Importovat obrázky"
@@ -26501,7 +26501,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2691
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30530,7 +30530,7 @@ msgstr "Současné přednastavení štětce"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1045
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1048
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -33812,18 +33812,13 @@ msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Škola skriptování</span></a></p>"
 
-#: libs/ui/kis_statusbar.cc:85
-#, kde-format
-msgid "Toggle Fullscreen"
-msgstr "Přepnout do celoobrazovkového režimu"
-
-#: libs/ui/kis_statusbar.cc:242
+#: libs/ui/kis_statusbar.cc:230
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:274
+#: libs/ui/kis_statusbar.cc:262
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -33833,7 +33828,7 @@ msgid ""
 "  - instant preview:\t %4\n"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:285
+#: libs/ui/kis_statusbar.cc:273
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -33845,7 +33840,7 @@ msgid ""
 "Swap used:\t %8"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:320
+#: libs/ui/kis_statusbar.cc:308
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -33855,24 +33850,24 @@ msgid ""
 "\t\tPlease configure more RAM for Krita in Settings dialog"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:379
+#: libs/ui/kis_statusbar.cc:367
 #: plugins/python/channels2layers/channels2layers.py:105
 #, kde-format
 msgid "Hidden"
 msgstr "Skryté"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:369
 #, kde-format
 msgid "Ants"
 msgstr "Mravenci"
 
-#: libs/ui/kis_statusbar.cc:381
+#: libs/ui/kis_statusbar.cc:369
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -33881,17 +33876,17 @@ msgstr ""
 "Výběr: x = %1 y = %2 šířka = %3 výška = %4\n"
 "Režim zobrazení: %5"
 
-#: libs/ui/kis_statusbar.cc:389
+#: libs/ui/kis_statusbar.cc:377
 #, kde-format
 msgid "No Selection"
 msgstr "Žádný výběr"
 
-#: libs/ui/kis_statusbar.cc:407
+#: libs/ui/kis_statusbar.cc:395
 #, kde-format
 msgid "No profile"
 msgstr "Žádný profil"
 
-#: libs/ui/kis_statusbar.cc:409
+#: libs/ui/kis_statusbar.cc:397
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -34799,32 +34794,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Pracovní ploc&ha"
 
-#: libs/ui/KisMainWindow.cpp:604
+#: libs/ui/KisMainWindow.cpp:607
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Zobrazit panel nástrojů %1"
 
-#: libs/ui/KisMainWindow.cpp:606
+#: libs/ui/KisMainWindow.cpp:609
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skrýt panel nástrojů %1"
 
-#: libs/ui/KisMainWindow.cpp:1042
+#: libs/ui/KisMainWindow.cpp:1045
 #, kde-format
 msgid "Save as %1"
 msgstr "Uložit jako %1"
 
-#: libs/ui/KisMainWindow.cpp:1070
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Soubor %1 neexistuje."
 
-#: libs/ui/KisMainWindow.cpp:1164
+#: libs/ui/KisMainWindow.cpp:1167
 #, kde-format
 msgid "Open Images"
 msgstr "Otevřít obrázky"
 
-#: libs/ui/KisMainWindow.cpp:1297
+#: libs/ui/KisMainWindow.cpp:1300
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -34833,44 +34828,44 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1353
+#: libs/ui/KisMainWindow.cpp:1356
 #, kde-format
 msgid "Exporting"
 msgstr "Probíhá export"
 
-#: libs/ui/KisMainWindow.cpp:1353
+#: libs/ui/KisMainWindow.cpp:1356
 #, kde-format
 msgid "Saving As"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1767
+#: libs/ui/KisMainWindow.cpp:1773
 #, kde-format
 msgid "Create new document"
 msgstr "Vytvořit nový dokument"
 
-#: libs/ui/KisMainWindow.cpp:1791
+#: libs/ui/KisMainWindow.cpp:1797
 #, kde-format
 msgid "Custom Document"
 msgstr "Vlastní dokument"
 
-#: libs/ui/KisMainWindow.cpp:1803
+#: libs/ui/KisMainWindow.cpp:1809
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Vytvořit ze schránky"
 
-#: libs/ui/KisMainWindow.cpp:1988
+#: libs/ui/KisMainWindow.cpp:1994
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Vrstvy/masky"
 
-#: libs/ui/KisMainWindow.cpp:2014
+#: libs/ui/KisMainWindow.cpp:2020
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2018
+#: libs/ui/KisMainWindow.cpp:2024
 #, kde-format
 msgid ""
 "\n"
@@ -34878,7 +34873,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2028
+#: libs/ui/KisMainWindow.cpp:2034
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:359
 #, kde-format
@@ -34887,66 +34882,66 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2173 libs/ui/KisMainWindow.cpp:2251
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2226
+#: libs/ui/KisMainWindow.cpp:2232
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2665
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importovat pracovní plochu..."
 
-#: libs/ui/KisMainWindow.cpp:2680
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nová pracovní plocha..."
 
-#: libs/ui/KisMainWindow.cpp:2684
+#: libs/ui/KisMainWindow.cpp:2690
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nová pracovní plocha..."
 
-#: libs/ui/KisMainWindow.cpp:2728
+#: libs/ui/KisMainWindow.cpp:2734
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2731
+#: libs/ui/KisMainWindow.cpp:2737
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2900
+#: libs/ui/KisMainWindow.cpp:2906
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2916
+#: libs/ui/KisMainWindow.cpp:2922
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Chyba instalace"
 
-#: libs/ui/KisMainWindow.cpp:3026
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "Mo&tivy vzhledu"
 
-#: libs/ui/KisMainWindow.cpp:3085
+#: libs/ui/KisMainWindow.cpp:3091
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -44149,15 +44144,10 @@ msgid "%1, %2, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, kde-format
-msgctxt "language, region"
-msgid "%1, %2"
-msgstr ""
-
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #, kde-format
 msgctxt "language, variant"
-msgid "%1, variant: %3"
+msgid "%1, variant: %2"
 msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
@@ -64654,7 +64644,7 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Kerning"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:329
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:330
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66324,3 +66314,6 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Přepnout do celoobrazovkového režimu"

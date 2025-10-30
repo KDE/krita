@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-25 03:30+0000\n"
+"POT-Creation-Date: 2025-10-30 03:33+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -15941,13 +15941,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्र"
 
-#: krita/main.cc:572
+#: krita/main.cc:551
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "गंभीर त्रुटि"
 
-#: krita/main.cc:573
+#: krita/main.cc:552
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15956,14 +15956,14 @@ msgstr ""
 "क्रिता को वैलैंड प्लेटफॉर्म समर्थन नहीं है। वैलैंड पर क्रिता को चलाने के लिए XWayland का "
 "उपयोग करें। क्रिता अब बंद होगा।"
 
-#: krita/main.cc:694 libs/ui/KisApplication.cpp:422
+#: krita/main.cc:673 libs/ui/KisApplication.cpp:422
 #: libs/ui/KisApplication.cpp:698
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "क्रिता : चेतावनी"
 
-#: krita/main.cc:695
+#: krita/main.cc:674
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15974,12 +15974,12 @@ msgstr ""
 "यह अनुशंसित नहीं है। किसी भी त्रुटी की सूचना न दें।\n"
 "कृपया विंडोज़ के समर्थित संस्करण में अद्यतन करें : विंडोज़ ७, ८, ८.१ या १०।"
 
-#: krita/main.cc:717 krita/main.cc:722
+#: krita/main.cc:696 krita/main.cc:701
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "क्रिता टॅबलेट समर्थन"
 
-#: krita/main.cc:718
+#: krita/main.cc:697
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15990,7 +15990,7 @@ msgstr ""
 "हैं। यदि आपके पास एक चित्रकारी का टैबलेट है, तो कृपया सुनिश्चित करें कि टैबलेट के ड्राइवर "
 "ठीक से स्थापित हुएं हैं।"
 
-#: krita/main.cc:723
+#: krita/main.cc:702
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17567,8 +17567,8 @@ msgid "Processing"
 msgstr "प्रसंस्करण"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1383
-#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1386
+#: libs/ui/KisMainWindow.cpp:1765 libs/ui/KisMainWindow.cpp:1778
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18307,8 +18307,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "दस्तावेज़"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2128
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid "Import frames"
 msgstr "फ़्रेमों को आयात करें"
@@ -19617,12 +19617,12 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
-#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1184
-#: libs/ui/KisMainWindow.cpp:1281 libs/ui/KisMainWindow.cpp:1990
-#: libs/ui/KisMainWindow.cpp:1999 libs/ui/KisMainWindow.cpp:2136
-#: libs/ui/KisMainWindow.cpp:2197 libs/ui/KisMainWindow.cpp:2218
-#: libs/ui/KisMainWindow.cpp:2831 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:974
+#: libs/ui/KisMainWindow.cpp:1044 libs/ui/KisMainWindow.cpp:1187
+#: libs/ui/KisMainWindow.cpp:1284 libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2005 libs/ui/KisMainWindow.cpp:2142
+#: libs/ui/KisMainWindow.cpp:2203 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2837 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20128,7 +20128,7 @@ msgid "Delete resource"
 msgstr "संसाधन मिटाएँ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2628
+#: libs/ui/KisMainWindow.cpp:2634
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20617,7 +20617,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "ऐनिमेशन फ़्रेम रेंडर करने में विफल! आउटपुट फ़ाइलें अपूर्ण हैं।"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2246
 #, kde-format
 msgid "Render Animation"
 msgstr "एनिमेशन रेंडर करें"
@@ -22650,7 +22650,7 @@ msgid "Numerical"
 msgstr "संख्यात्मक"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, kde-format
 msgid "Import Images"
 msgstr "चित्रों का आयात"
@@ -22799,7 +22799,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "शैली के लिए नया नाम दर्ज करें"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2645
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26697,7 +26697,7 @@ msgstr "वर्तमान ब्रश प्रीसेट"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1019
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -29851,18 +29851,13 @@ msgid ""
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:88
-#, kde-format
-msgid "Toggle Fullscreen"
-msgstr "पूर्ण स्क्रीन टॉगल करें"
-
-#: libs/ui/kis_statusbar.cc:245
+#: libs/ui/kis_statusbar.cc:233
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:277
+#: libs/ui/kis_statusbar.cc:265
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -29876,7 +29871,7 @@ msgstr ""
 "   - चित्र प्रदर्शन :\t %3\n"
 "   - त्वरित पूर्वावलोकन :\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:288
+#: libs/ui/kis_statusbar.cc:276
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -29894,7 +29889,7 @@ msgstr ""
 "\n"
 "स्वैप उपयोग :\t %8"
 
-#: libs/ui/kis_statusbar.cc:323
+#: libs/ui/kis_statusbar.cc:311
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -29908,24 +29903,24 @@ msgstr ""
 "चेतावनी :\tमेमोरी समाप्त हुई हैं! स्वैपिंग शुरू कर दी गई है।\n"
 "\t\tसेटिंग्स डायलॉग में क्रिता के लिए कृपया अधिक रेम निर्धारित करें"
 
-#: libs/ui/kis_statusbar.cc:382
+#: libs/ui/kis_statusbar.cc:370
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "छिपा हुआ"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #, kde-format
 msgid "Ants"
 msgstr "चींटियाँ"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "मास्क"
 
-#: libs/ui/kis_statusbar.cc:387
+#: libs/ui/kis_statusbar.cc:375
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -29934,17 +29929,17 @@ msgstr ""
 "चयन : x = %1 y = %2 चौड़ाई = %3 ऊंचाई = %4\n"
 "प्रदर्शन मोड : %5"
 
-#: libs/ui/kis_statusbar.cc:392
+#: libs/ui/kis_statusbar.cc:380
 #, kde-format
 msgid "No Selection"
 msgstr "कोई चयन नहीं"
 
-#: libs/ui/kis_statusbar.cc:410
+#: libs/ui/kis_statusbar.cc:398
 #, kde-format
 msgid "No profile"
 msgstr "कोई रंग रेखा नहीं"
 
-#: libs/ui/kis_statusbar.cc:412
+#: libs/ui/kis_statusbar.cc:400
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -30920,34 +30915,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "कार्यक्षेत्र (&k)"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "औज़ार पट्टी %1 दिखाएँ"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:592
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "औज़ार-पट्टी %1 छुपाएँ"
 
-#: libs/ui/KisMainWindow.cpp:1013
+#: libs/ui/KisMainWindow.cpp:1016
 #, kde-format
 msgid "Save as %1"
 msgstr "ऐसे सहेजें %1"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1044
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "फ़ाइल %1 अस्तित्व में नहीं है."
 
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, kde-format
 msgid "Open Images"
 msgstr "छवियाँ खोलें"
 
-#: libs/ui/KisMainWindow.cpp:1282
+#: libs/ui/KisMainWindow.cpp:1285
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30956,45 +30951,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Exporting"
 msgstr "११निर्यात किया जा रहा है"
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Saving As"
 msgstr "सहेजा जा रहा है"
 
-#: libs/ui/KisMainWindow.cpp:1738
+#: libs/ui/KisMainWindow.cpp:1744
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "नया दस्तावेज़ बनाएँ"
 
-#: libs/ui/KisMainWindow.cpp:1762
+#: libs/ui/KisMainWindow.cpp:1768
 #, kde-format
 msgid "Custom Document"
 msgstr "तदनुकूल दस्तावेज़"
 
-#: libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1780
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "क्लिपबोर्ड से बनाएँ"
 
-#: libs/ui/KisMainWindow.cpp:1959
+#: libs/ui/KisMainWindow.cpp:1965
 #, kde-format
 msgid "Layers/Masks"
 msgstr "परतें/मास्क"
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1991
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "आपके पास कोई संसाधन बंडल सक्षम नहीं है।"
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1995
 #, fuzzy, kde-format
 #| msgid ""
 #| "\n"
@@ -31008,7 +31003,7 @@ msgstr ""
 "\n"
 "%1 प्रकार का कोई संसाधन उपलब्ध नहीं है। कृपया कम से कम एक बंडल सक्षम करें ।"
 
-#: libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:2005
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31017,7 +31012,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2136 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2142 libs/ui/KisMainWindow.cpp:2224
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31026,61 +31021,61 @@ msgstr ""
 "एनिमेशन आयात समाप्त नहीं कर सका :\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2203
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "नया दस्तावेज़ बनाने में विफल. एनिमेशन आयात रद्द किया गया।"
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "कार्यक्षेत्र आयात करें... (&I)"
 
-#: libs/ui/KisMainWindow.cpp:2634
+#: libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "नया कार्यक्षेत्र... (&N)"
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2644
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "नया कार्यक्षेत्र..."
 
-#: libs/ui/KisMainWindow.cpp:2682
+#: libs/ui/KisMainWindow.cpp:2688
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2691
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2860
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2870
+#: libs/ui/KisMainWindow.cpp:2876
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "संस्थापन त्रुटि"
 
-#: libs/ui/KisMainWindow.cpp:2980
+#: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "थीम (&T)"
 
-#: libs/ui/KisMainWindow.cpp:3039
+#: libs/ui/KisMainWindow.cpp:3045
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "विस्तार होने वाला स्पेसर "
@@ -60536,6 +60531,9 @@ msgstr "ज़ूम औज़ार"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "पूर्ण स्क्रीन टॉगल करें"
 
 #~ msgid ""
 #~ "<html>KDE software is and will always be available free of charge, "

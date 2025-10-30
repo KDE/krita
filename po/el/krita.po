@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-25 03:30+0000\n"
+"POT-Creation-Date: 2025-10-30 03:33+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -16309,27 +16309,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Χώροι εργασίας"
 
-#: krita/main.cc:572
+#: krita/main.cc:551
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Κατακόρυφο περίγραμμα"
 
-#: krita/main.cc:573
+#: krita/main.cc:552
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:694 libs/ui/KisApplication.cpp:422
+#: krita/main.cc:673 libs/ui/KisApplication.cpp:422
 #: libs/ui/KisApplication.cpp:698
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Προειδοποίηση"
 
-#: krita/main.cc:695
+#: krita/main.cc:674
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16337,12 +16337,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:717 krita/main.cc:722
+#: krita/main.cc:696 krita/main.cc:701
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "A_Nice Sketch"
 
-#: krita/main.cc:718
+#: krita/main.cc:697
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16350,7 +16350,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:723
+#: krita/main.cc:702
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17999,8 +17999,8 @@ msgid "Processing"
 msgstr "Μεταεπεξεργασία"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1383
-#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1386
+#: libs/ui/KisMainWindow.cpp:1765 libs/ui/KisMainWindow.cpp:1778
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18764,8 +18764,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Άνοιγμα σε νέα έγγραφα"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2128
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2217
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Εισαγωγή εικόνας"
@@ -20193,12 +20193,12 @@ msgstr "Αρχεία πηγής:"
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
-#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1184
-#: libs/ui/KisMainWindow.cpp:1281 libs/ui/KisMainWindow.cpp:1990
-#: libs/ui/KisMainWindow.cpp:1999 libs/ui/KisMainWindow.cpp:2136
-#: libs/ui/KisMainWindow.cpp:2197 libs/ui/KisMainWindow.cpp:2218
-#: libs/ui/KisMainWindow.cpp:2831 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:974
+#: libs/ui/KisMainWindow.cpp:1044 libs/ui/KisMainWindow.cpp:1187
+#: libs/ui/KisMainWindow.cpp:1284 libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2005 libs/ui/KisMainWindow.cpp:2142
+#: libs/ui/KisMainWindow.cpp:2203 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2837 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20729,7 +20729,7 @@ msgid "Delete resource"
 msgstr "Διαγραφή πόρου"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2628
+#: libs/ui/KisMainWindow.cpp:2634
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -21228,7 +21228,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2246
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Προσανατολισμός"
@@ -23292,7 +23292,7 @@ msgid "Numerical"
 msgstr "Κατακόρυφα:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Εισαγωγή εικόνας"
@@ -23443,7 +23443,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Εισάγετε το όνομα ομάδας:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2645
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27472,7 +27472,7 @@ msgstr "τρέχουσα προεπιλογή"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1019
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30690,18 +30690,13 @@ msgid ""
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:88
-#, kde-format
-msgid "Toggle Fullscreen"
-msgstr ""
-
-#: libs/ui/kis_statusbar.cc:245
+#: libs/ui/kis_statusbar.cc:233
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:277
+#: libs/ui/kis_statusbar.cc:265
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -30711,7 +30706,7 @@ msgid ""
 "  - instant preview:\t %4\n"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:288
+#: libs/ui/kis_statusbar.cc:276
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -30723,7 +30718,7 @@ msgid ""
 "Swap used:\t %8"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:323
+#: libs/ui/kis_statusbar.cc:311
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -30733,41 +30728,41 @@ msgid ""
 "\t\tPlease configure more RAM for Krita in Settings dialog"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:382
+#: libs/ui/kis_statusbar.cc:370
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #, kde-format
 msgid "Ants"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, fuzzy, kde-format
 msgid "Mask"
 msgstr "&Μάσκα"
 
-#: libs/ui/kis_statusbar.cc:387
+#: libs/ui/kis_statusbar.cc:375
 #, fuzzy, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
 "Display Mode: %5"
 msgstr "Ενεργή επιλογή: x = %1 y = %2 πλάτος = %3 ύψος = %4"
 
-#: libs/ui/kis_statusbar.cc:392
+#: libs/ui/kis_statusbar.cc:380
 #, kde-format
 msgid "No Selection"
 msgstr "Καμία επιλογή"
 
-#: libs/ui/kis_statusbar.cc:410
+#: libs/ui/kis_statusbar.cc:398
 #, kde-format
 msgid "No profile"
 msgstr "Χωρίς προφίλ"
 
-#: libs/ui/kis_statusbar.cc:412
+#: libs/ui/kis_statusbar.cc:400
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -31737,34 +31732,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Χώρος εργασίας"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Εμφάνιση ριζικού στρώματος"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:592
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Γραμμές κύλισης"
 
-#: libs/ui/KisMainWindow.cpp:1013
+#: libs/ui/KisMainWindow.cpp:1016
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Σχήματα flake %1"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1044
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Το αρχείο %1 δεν υπάρχει."
 
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Εικόνες"
 
-#: libs/ui/KisMainWindow.cpp:1282
+#: libs/ui/KisMainWindow.cpp:1285
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31773,39 +31768,39 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Εξαγωγή"
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Τύπος αποθήκευσης"
 
-#: libs/ui/KisMainWindow.cpp:1738
+#: libs/ui/KisMainWindow.cpp:1744
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Πρόσφατα έγγραφα"
 
-#: libs/ui/KisMainWindow.cpp:1762
+#: libs/ui/KisMainWindow.cpp:1768
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Προσαρμοσμένη διαβάθμιση"
 
-#: libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1780
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Πρώτο στρώμα από το πρόχειρο"
 
-#: libs/ui/KisMainWindow.cpp:1959
+#: libs/ui/KisMainWindow.cpp:1965
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Αποθήκευση στρώματος ως εικόνα..."
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1991
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
@@ -31813,7 +31808,7 @@ msgstr "Αποθήκευση στρώματος ως εικόνα..."
 msgid "You don't have any resource bundles enabled."
 msgstr "Αδυναμία δημιουργίας του αρχείου εξόδου"
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1995
 #, kde-format
 msgid ""
 "\n"
@@ -31821,7 +31816,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:2005
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31830,7 +31825,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2136 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2142 libs/ui/KisMainWindow.cpp:2224
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31839,43 +31834,43 @@ msgstr ""
 "Αδυναμία εισαγωγής\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2203
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2625
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Εισαγωγή γραφικού..."
 
-#: libs/ui/KisMainWindow.cpp:2634
+#: libs/ui/KisMainWindow.cpp:2640
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Εισαγωγή γραφικού..."
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2644
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&Εισαγωγή γραφικού..."
 
-#: libs/ui/KisMainWindow.cpp:2682
+#: libs/ui/KisMainWindow.cpp:2688
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2691
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2860
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -31887,19 +31882,19 @@ msgstr ""
 "Το πρόσθετο διαχείρισης χρώματος Calligra LittleCMS δεν έχει εγκατασταθεί. "
 "Το Krita θα εγκαταλείψει τώρα."
 
-#: libs/ui/KisMainWindow.cpp:2870
+#: libs/ui/KisMainWindow.cpp:2876
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Σφάλμα εγκατάστασης"
 
-#: libs/ui/KisMainWindow.cpp:2980
+#: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3039
+#: libs/ui/KisMainWindow.cpp:3045
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

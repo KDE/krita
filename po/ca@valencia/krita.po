@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-25 03:30+0000\n"
+"POT-Creation-Date: 2025-10-30 03:33+0000\n"
 "PO-Revision-Date: 2025-10-25 08:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -15847,13 +15847,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espais de treball"
 
-#: krita/main.cc:572
+#: krita/main.cc:551
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Error fatal"
 
-#: krita/main.cc:573
+#: krita/main.cc:552
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15862,14 +15862,14 @@ msgstr ""
 "Krita no admet la plataforma Wayland. Utilitzeu XWayland per a executar "
 "Krita a Wayland. Krita tancarà ara."
 
-#: krita/main.cc:694 libs/ui/KisApplication.cpp:422
+#: krita/main.cc:673 libs/ui/KisApplication.cpp:422
 #: libs/ui/KisApplication.cpp:698
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Avís"
 
-#: krita/main.cc:695
+#: krita/main.cc:674
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15880,12 +15880,12 @@ msgstr ""
 "Açò no es recomana. No informeu de cap error.\n"
 "Actualitzeu a una versió admesa de Windows: Windows 7, 8, 8.1 o 10."
 
-#: krita/main.cc:717 krita/main.cc:722
+#: krita/main.cc:696 krita/main.cc:701
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Suport de tauleta de Krita"
 
-#: krita/main.cc:718
+#: krita/main.cc:697
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15896,7 +15896,7 @@ msgstr ""
 "de llapis de Windows Ink. Si teniu una tauleta de dibuix, assegureu-vos que "
 "el controlador de la tauleta estiga instal·lat correctament."
 
-#: krita/main.cc:723
+#: krita/main.cc:702
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17475,8 +17475,8 @@ msgid "Processing"
 msgstr "En procés"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1383
-#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1386
+#: libs/ui/KisMainWindow.cpp:1765 libs/ui/KisMainWindow.cpp:1778
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18219,8 +18219,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Document CSV"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2128
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid "Import frames"
 msgstr "Importa fotogrames"
@@ -19534,12 +19534,12 @@ msgstr "Recursos locals"
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
-#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1184
-#: libs/ui/KisMainWindow.cpp:1281 libs/ui/KisMainWindow.cpp:1990
-#: libs/ui/KisMainWindow.cpp:1999 libs/ui/KisMainWindow.cpp:2136
-#: libs/ui/KisMainWindow.cpp:2197 libs/ui/KisMainWindow.cpp:2218
-#: libs/ui/KisMainWindow.cpp:2831 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:974
+#: libs/ui/KisMainWindow.cpp:1044 libs/ui/KisMainWindow.cpp:1187
+#: libs/ui/KisMainWindow.cpp:1284 libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2005 libs/ui/KisMainWindow.cpp:2142
+#: libs/ui/KisMainWindow.cpp:2203 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2837 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20043,7 +20043,7 @@ msgid "Delete resource"
 msgstr "Suprimix el recurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2628
+#: libs/ui/KisMainWindow.cpp:2634
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20524,7 +20524,7 @@ msgstr ""
 "d'eixida estan incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2246
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderització de l'animació"
@@ -22592,7 +22592,7 @@ msgid "Numerical"
 msgstr "Numèric"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, kde-format
 msgid "Import Images"
 msgstr "Importa imatges"
@@ -22741,7 +22741,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduïu el nom de l'estil nou"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2645
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26759,7 +26759,7 @@ msgstr "Pinzell predefinit actual"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1019
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -29956,18 +29956,13 @@ msgstr ""
 "\" text-decoration: underline; color:%1;\">Escola de creació de scripts</"
 "span></a></p>"
 
-#: libs/ui/kis_statusbar.cc:88
-#, kde-format
-msgid "Toggle Fullscreen"
-msgstr "Canvia a pantalla completa"
-
-#: libs/ui/kis_statusbar.cc:245
+#: libs/ui/kis_statusbar.cc:233
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 &x %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:277
+#: libs/ui/kis_statusbar.cc:265
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -29981,7 +29976,7 @@ msgstr ""
 "  - Projeccions:\t %3\n"
 "  - Vista prèvia instantània:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:288
+#: libs/ui/kis_statusbar.cc:276
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -29999,7 +29994,7 @@ msgstr ""
 "\n"
 "Ús de la memòria d'intercanvi:\t %8"
 
-#: libs/ui/kis_statusbar.cc:323
+#: libs/ui/kis_statusbar.cc:311
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -30014,24 +30009,24 @@ msgstr ""
 "d'intercanvi.\n"
 "\t\tConfigureu més RAM per a Krita en el diàleg de configuració"
 
-#: libs/ui/kis_statusbar.cc:382
+#: libs/ui/kis_statusbar.cc:370
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Ocult"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #, kde-format
 msgid "Ants"
 msgstr "Formigues"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Màscara"
 
-#: libs/ui/kis_statusbar.cc:387
+#: libs/ui/kis_statusbar.cc:375
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -30040,17 +30035,17 @@ msgstr ""
 "Selecció: x = %1 y = %2 amplària = %3 alçària = %4\n"
 "Mode de visualització: %5"
 
-#: libs/ui/kis_statusbar.cc:392
+#: libs/ui/kis_statusbar.cc:380
 #, kde-format
 msgid "No Selection"
 msgstr "Cap selecció"
 
-#: libs/ui/kis_statusbar.cc:410
+#: libs/ui/kis_statusbar.cc:398
 #, kde-format
 msgid "No profile"
 msgstr "Cap perfil"
 
-#: libs/ui/kis_statusbar.cc:412
+#: libs/ui/kis_statusbar.cc:400
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -31039,34 +31034,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&Espai de treball"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostra la barra d'eines %1"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:592
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Oculta la barra d'eines %1"
 
-#: libs/ui/KisMainWindow.cpp:1013
+#: libs/ui/KisMainWindow.cpp:1016
 #, kde-format
 msgid "Save as %1"
 msgstr "Anomena i guarda %1"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1044
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "El fitxer %1 no existix."
 
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, kde-format
 msgid "Open Images"
 msgstr "Obri imatges"
 
-#: libs/ui/KisMainWindow.cpp:1282
+#: libs/ui/KisMainWindow.cpp:1285
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31079,45 +31074,45 @@ msgstr ""
 "\n"
 "Trieu una ubicació a on se sobreescriga el fitxer original!"
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Exporting"
 msgstr "Exportant"
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Saving As"
 msgstr "Guardant com"
 
-#: libs/ui/KisMainWindow.cpp:1738
+#: libs/ui/KisMainWindow.cpp:1744
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Crea un document nou"
 
-#: libs/ui/KisMainWindow.cpp:1762
+#: libs/ui/KisMainWindow.cpp:1768
 #, kde-format
 msgid "Custom Document"
 msgstr "Document personalitzat"
 
-#: libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1780
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Crea des del porta-retalls"
 
-#: libs/ui/KisMainWindow.cpp:1959
+#: libs/ui/KisMainWindow.cpp:1965
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Capes i màscares"
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1991
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "No teniu cap paquet de recursos habilitat."
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1995
 #, kde-format
 msgid ""
 "\n"
@@ -31128,7 +31123,7 @@ msgstr ""
 "No hi ha disponible cap pinzell predefinit. Abans de continuar, habiliteu un "
 "paquet que proporcione pinzells predefinits.\n"
 
-#: libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:2005
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31139,7 +31134,7 @@ msgstr ""
 "\n"
 "Només hi ha disponibles els vostres recursos locals."
 
-#: libs/ui/KisMainWindow.cpp:2136 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2142 libs/ui/KisMainWindow.cpp:2224
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31148,42 +31143,42 @@ msgstr ""
 "No s'ha pogut finalitzar la importació de l'animació:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2203
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "No s'ha pogut crear un document nou. S'ha interromput la importació de "
 "l'animació."
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importa espais de treball…"
 
-#: libs/ui/KisMainWindow.cpp:2634
+#: libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Espai de treball &nou…"
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2644
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Espai de treball nou…"
 
-#: libs/ui/KisMainWindow.cpp:2682
+#: libs/ui/KisMainWindow.cpp:2688
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2691
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2860
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31192,19 +31187,19 @@ msgstr ""
 "El connector de gestió del color LittleCMS de Krita no està instal·lat. "
 "Krita es tancarà ara."
 
-#: libs/ui/KisMainWindow.cpp:2870
+#: libs/ui/KisMainWindow.cpp:2876
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "S'ha produït un error en la instal·lació"
 
-#: libs/ui/KisMainWindow.cpp:2980
+#: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temes"
 
-#: libs/ui/KisMainWindow.cpp:3039
+#: libs/ui/KisMainWindow.cpp:3045
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Espaiador expansible"
@@ -61010,3 +61005,6 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Canvia a pantalla completa"

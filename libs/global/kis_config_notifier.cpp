@@ -60,6 +60,11 @@ void KisConfigNotifier::notifyTouchPaintingChanged()
     Q_EMIT touchPaintingChanged();
 }
 
+void KisConfigNotifier::notifyColorSamplerPreviewStyleChanged()
+{
+    Q_EMIT sigColorSamplerPreviewStyleChanged();
+}
+
 void KisConfigNotifier::notifyColorThemeChanged(const QString &filename)
 {
     Q_EMIT signalColorThemeChanged(filename);

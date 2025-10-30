@@ -37,6 +37,7 @@ public:
     void notifyPixelGridModeChanged();
     void notifyColorHistoryModeChanged();
     void notifyTouchPaintingChanged();
+    void notifyColorSamplerPreviewStyleChanged();
 
     void notifyColorThemeChanged(const QString &filename);
     void notifyLongPressChanged(bool enabled);
@@ -50,6 +51,7 @@ Q_SIGNALS:
     void pixelGridModeChanged();
     void colorHistoryModeChanged();
     void touchPaintingChanged();
+    void sigColorSamplerPreviewStyleChanged();
     void signalColorThemeChanged(const QString &filename);
     void sigLongPressChanged(bool enabled);
 private:

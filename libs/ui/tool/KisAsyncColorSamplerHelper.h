@@ -75,6 +75,10 @@ private Q_SLOTS:
     void slotColorSamplingFinished(const KoColor &rawColor);
 
 private:
+    void activatePreview();
+    void paintRectangle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
+    void paintCircle(QPainter &gc, const QRectF &viewRectF, const QColor &currentColor, const QColor &baseColor);
+
     struct Private;
     QScopedPointer<Private> m_d;
 };

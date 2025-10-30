@@ -135,6 +135,17 @@ public:
     OutlineStyle eraserOutlineStyle(bool defaultValue = false) const;
     void setEraserOutlineStyle(OutlineStyle style);
 
+    enum class ColorSamplerPreviewStyle {
+        None,
+        Circle,
+        RectangleLeft,
+        RectangleRight,
+        Count,
+    };
+
+    ColorSamplerPreviewStyle colorSamplerPreviewStyle(bool defaultValue = false) const;
+    void setColorSamplerPreviewStyle(ColorSamplerPreviewStyle style);
+
     /**
      * Controls if the canvas should have a separate color managed surface.
      * Even though the surface can be created on any platform the proper

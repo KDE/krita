@@ -860,7 +860,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="6" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -892,6 +892,16 @@
           <string/>
          </property>
         </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="m_lblColorSamplerPreviewStyle">
+         <property name="text">
+          <string>Color Sampler Preview:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="m_cmbColorSamplerPreviewStyle"/>
        </item>
       </layout>
      </widget>

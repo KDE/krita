@@ -433,7 +433,7 @@ public:
     virtual void setBackground(QSharedPointer<KoShapeBackground> background);
 
     /**
-     * return the brush used to paint te background of this shape with.
+     * Return the brush used to paint the background of this shape with.
      * A QBrush can have a plain color, be fully transparent or have a complex fill.
      * setting such a brush will allow the shape to fill itself using that brush and
      * will be able to tell if its transparent or not.

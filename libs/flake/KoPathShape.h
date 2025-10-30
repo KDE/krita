@@ -197,7 +197,7 @@ public:
     /**
      * @brief Returns the path points within the given rectangle.
      * @param rect the rectangle the requested points are in
-     * @param useControlPoints wether to add control points to result or not
+     * @param useControlPoints whether to add control points to result or not
      * @return list of points within the rectangle
      */
     QList<KoPathPoint*> pointsAt(const QRectF &rect, const bool useControlPoints = false) const;

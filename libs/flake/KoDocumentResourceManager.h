@@ -59,7 +59,7 @@ enum DocumentResource {
     OdfDocument,            ///< OBSOLETE The document this canvas shows
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
     MarkerCollection,       ///< The collection holding all markers
-    DocumentResolution,     ///< Pixels-per-inch resoluton of the document
+    DocumentResolution,     ///< Pixels-per-inch resolution of the document
     DocumentRectInPixels,   ///< Bounds of the document in pixels
 
     KarbonStart = 1000,      ///< Base number for Karbon specific values.

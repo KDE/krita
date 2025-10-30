@@ -79,8 +79,8 @@ public:
      */
     KoShape* generateSampleShape() const;
 
-    /// Determines the prefered sample alignment based on the text properties. It's set up so that
-    /// the alignment anchor of the text is shown.
+    /// Determines the preferred sample alignment based on the text properties.
+    /// It's set up so that the alignment anchor of the text is shown.
     Qt::Alignment alignSample() const;
 
     /**

@@ -364,7 +364,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
         p = [&]() {
             const FcChar32 hash = FcPatternHash(p.data());
             QString patternHash = info.families.join("+")+QString::number(hash);
-            // FCPatternHash breaks down when there's mutliple family names that start
+            // FCPatternHash breaks down when there's multiple family names that start
             // with the same letter and are the same length (Butcherman and Babylonica, Eater and Elsie, all 4 on google fonts).
             const auto oldPattern = d->patterns().find(patternHash);
             if (oldPattern != d->patterns().end()) {
@@ -410,7 +410,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
 
             // First, we're going to split up the text into graphemes. This is both
             // because the css spec requires it, but also because of why the css
-            // spec requires it: graphemes' parts should not end up in seperate
+            // spec requires it: graphemes' parts should not end up in separate
             // runs, which they will if they get assigned different fonts,
             // potentially breaking ligatures and emoji sequences.
             QStringList graphemes = KoCssTextUtils::textToUnicodeGraphemeClusters(text, language);
@@ -1055,7 +1055,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     }
 
     if (!isHorizontal) {
-        // SVG 2.0 explicitely requires vertical ascent/descent to be tied to the ideographic em box.
+        // SVG 2.0 explicitly requires vertical ascent/descent to be tied to the ideographic em box.
         ascender = metrics.ideographicOverBaseline;
         descender = metrics.ideographicUnderBaseline;
 

@@ -6,7 +6,7 @@ https://github.com/web-platform-tests/wpt
 Some fonts have an explicit license file, but not all. This should list the files without such file and which license they have.
 
 - variabletest_matching.ttf -- has the "SIL Open Font License, Version 1.1" embedded into the TTF, copyright chromium authors 2016
-- DejaVuSans.ttf -- embeded license is http://dejavu.sourceforge.net/wiki/index.php/License, Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved, Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved, DejaVu changes are in public domain.
+- DejaVuSans.ttf -- embedded license is http://dejavu.sourceforge.net/wiki/index.php/License, Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved, Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved, DejaVu changes are in public domain.
 - Krita_Test_Unicode_Variation_A.ttf and Krita_Test_Unicode_Variation_B.ttf -- These fonts were made specifically for these unittests. Has the "SIL Open Font License, Version 1.1" embedded into the TTF,  Copyright 2022 Wolthera van Hövell tot Westerflier.
 - FreeSans.ttf -- Embedded http://www.gnu.org/copyleft/gpl.html "GNU General Public License as published by the Free Software Foundation, either version 3 of the License", Copyright 2002, 2003, 2005, 2008, 2009, 2010, 2012 GNU Freefont contributors.
 - krita-pixel-test.otb -- This fonts was made specifically for these unittests. Released under "SIL Open Font License, Version 1.1" embedded into the TTF,  Copyright 2022 Wolthera van Hövell tot Westerflier.

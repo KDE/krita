@@ -459,7 +459,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
 
     QVector<int> wordIndices; ///< 'word' in this case meaning characters
                               ///< inbetween softbreaks.
-    QRectF wordBox; ///< Approximated box of the currrent word;
+    QRectF wordBox; ///< Approximated box of the current word;
     QPointF wordAdvance;
 
     LineBox currentLine;
@@ -552,8 +552,8 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 indentLine = false;
             }
             // Not adding indent to the (first) word box means it'll overflow if there's no room,
-            // but being too strict might end with the whole text dissapearing. Given Krita's text layout is
-            // in an interactive context, ugly result might be more communicative than all text dissapearing.
+            // but being too strict might end with the whole text disappearing. Given Krita's text layout is
+            // in an interactive context, ugly result might be more communicative than all text disappearing.
             bool ind = textIndentInfo.hanging? !indentLine: indentLine;
             QPointF indent = ind? textIndent: QPointF();
             bool foundFirst = false;
@@ -579,7 +579,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             /*
              * In theory we could have overflow wrap for shapes, but it'd require either generalizing
              * the line-filling portion above and this new line seeking portion, or somehow reverting
-             * the itterator over the results to be on the last fitted glyph (which'd still require
+             * the iterator over the results to be on the last fitted glyph (which'd still require
              * generalizing the line-filling portion about), and I am unsure how to do that.
              * Either way, this place here is where you'd check for overflow wrap.
              */

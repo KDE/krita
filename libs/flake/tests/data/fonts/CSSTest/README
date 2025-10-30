@@ -9,8 +9,8 @@ The original fonts were used to create the family 'CSSTest Basic'. This
 family has four faces and can be used for testing bold / italics.
 A subsetted version of this font with only glyphs for basic ASCII
 characters is 'CSSTest ASCII'.  This was used to make the other
-variations.  Most of the modications are to the name table and character
-maps, for the most part glyphs were not modified.
+variations.  Most of the modifications are to the name table and
+character maps, for the most part glyphs were not modified.
 
 The fonts are available for download both individually and as a
 ZIP package below.

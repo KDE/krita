@@ -1379,7 +1379,7 @@ void TestSvgText::testTextFontSize()
 /**
  * @brief TestSvgText::testAddingTestFont
  *
- * This test tests whether we can add a font to the font registery
+ * This test tests whether we can add a font to the font registry
  * and retrieve it afterwards. Without this, we won't be able to
  * write reliable machine tests given how much of text rendering is
  * font specific.
@@ -2100,7 +2100,7 @@ void TestSvgText::testFontSizeRender()
 /**
  * @brief TestSvgText::testFontOpenTypeVariationsConfiguration
  *
- * test whether we can succefully confgiure the axes for an opentype
+ * test whether we can successfully configure the axes for an opentype
  * variation font. This test is an adaptation of web-platform-test
  * style-ranges-over-weight-direction.html
  */
@@ -2124,7 +2124,7 @@ void TestSvgText::testFontOpenTypeVariationsConfiguration()
 /**
  * Testing color font rendering.
  *
- * This right now only tests COLRv0 fonts, beecause we don't support COLRv1 and SVG-in-opentype yet,
+ * This right now only tests COLRv0 fonts, because we don't support COLRv1 and SVG-in-opentype yet,
  * and I have no idea what to expect from SBX.
  *
  * TODO: Still searching for a CBDT font.
@@ -2159,7 +2159,7 @@ void TestSvgText::testFontColorRender()
 /**
  * @brief TestSvgText::testCssFontVariants
  *
- * This tests css 3 font-variants, which are equivelant to opentype features,
+ * This tests css 3 font-variants, which are equivalent to opentype features,
  * and should not be confused with opentype variations
  * (or with unicode variation selectors for that matter).
  */
@@ -2381,7 +2381,7 @@ void TestSvgText::testCssTextTransform()
              QString("Greek tonos tailor test number 3 is failing.").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-004.html
-    // "[Exploratory] the brower tailors text-transform: capitalize such that a stressed vowel that is the first syllable of a Greek sentence keeps its tonos
+    // "[Exploratory] the browser tailors text-transform: capitalize such that a stressed vowel that is the first syllable of a Greek sentence keeps its tonos
     // diacritic."
 
     /* This needs someone who can actually read greek, because I am unsure what 'tonos' means, like, is it all diacritics or just a few unicode values?
@@ -2412,7 +2412,7 @@ void TestSvgText::testCssTextTransform()
 /*
  * This is a basic test of inline-size with different teext-anchors,
  * directions and writing modes. These interact in very fundamental
- * ways, so it doesn't make sense to test them seperately.
+ * ways, so it doesn't make sense to test them separately.
  */
 void TestSvgText::testTextInlineSize()
 {
@@ -2458,7 +2458,7 @@ void TestSvgText::testTextInlineSize()
 void TestSvgText::testTextWrap()
 {
     QMap<QString, QRect> testFiles;
-    // Tests differrent line-height configurations.
+    // Tests different line-height configurations.
     testFiles.insert("textWrap-test-css-line-height", QRect(0, 0, 120, 180));
     // Tests overflow wrap behaviour options.
     testFiles.insert("textWrap-test-css-overflow-wrap", QRect(0, 0, 120, 220));

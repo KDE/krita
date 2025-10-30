@@ -377,7 +377,7 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
 
             if (charResult.visualIndex > -1) {
                 // this is for glyph clusters, unicode combining marks are always
-                // added. we could have these as seperate paths, but there's no real
+                // added. we could have these as separate paths, but there's no real
                 // purpose, and the svg standard prefers 'ligatures' to be treated
                 // as a single glyph. It simplifies things for us in any case.
                 outlineGlyph->path.addPath(glyph.translated(charResult.advance));

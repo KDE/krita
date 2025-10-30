@@ -210,8 +210,8 @@ void KoSvgTextShape::Private::relayout()
     int globalIndex = 0;
     QVector<CharacterResult> result(text.size());
     // HACK ALERT!
-    // Apparantly feeding a bidi algorithm a hardbreak makes it go 'ok, not doing any
-    // bidi', which makes sense, Bidi is supossed to be done 'after' line breaking.
+    // Apparently feeding a bidi algorithm a hardbreak makes it go 'ok, not doing any
+    // bidi', which makes sense, Bidi is supposed to be done 'after' line breaking.
     // Without replacing hardbreaks with spaces, hardbreaks in rtl will break the bidi.
     for (int i = 0; i < text.size(); i++) {
         if (lineBreaks[i] == LINEBREAK_MUSTBREAK) {
@@ -248,7 +248,7 @@ void KoSvgTextShape::Private::relayout()
     }
     this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars, KoSvgTextProperties::defaultProperties(), true);
 
-    // pass everything to a css-compatible text-layout algortihm.
+    // pass everything to a css-compatible text-layout algorithm.
     raqm_t_sp layout(raqm_create());
 
     if (raqm_set_text_utf16(layout.data(), text.utf16(), static_cast<size_t>(text.size()))) {
@@ -508,7 +508,7 @@ void KoSvgTextShape::Private::relayout()
     }
 
     // 2. Set flags and assign initial positions
-    // We also retreive a glyph path here.
+    // We also retrieve a glyph path here.
     size_t count = 0;
     const raqm_glyph_t *glyphs = raqm_get_glyphs(layout.data(), &count);
     if (!glyphs) {
@@ -878,7 +878,7 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
             bool bidi = bidiControls.contains(text.at(k));
             bool softHyphen = text.at(k) == QChar::SoftHyphen;
 
-            // Apparantly when there's bidi controls in the text, they participate in line-wrapping,
+            // Apparently when there's bidi controls in the text, they participate in line-wrapping,
             // so we don't check for it when wrapping.
             if (collapsedChars[k] || (bidi && !wrapped) || softHyphen) {
                 result[k].addressable = false;
@@ -1025,7 +1025,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
         }
         resolvedDescendentNodes += 1;
 
-        // apply the shift to all consequetive chars as long as they don't start
+        // apply the shift to all consecutive chars as long as they don't start
         // a new chunk.
         int lastVisualValue = visualToLogical.keys().last();
         visualToLogical.clear();
@@ -1819,7 +1819,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
                                             QPointF &startPos,
                                             const KoSvgTextProperties resolvedProps)
 {
-    // Unlike all the other applying functions, this one only iterrates over the
+    // Unlike all the other applying functions, this one only iterates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
     // https://github.com/w3c/svgwg/issues/580
     bool inPath = false;

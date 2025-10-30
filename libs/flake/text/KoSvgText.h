@@ -58,7 +58,7 @@ enum UnicodeBidi {
     BidiEmbed, ///< Opens an additional Bidi-reordering level.
     BidiOverride, ///< Opens an additional Bidi-reordering level, implicit part
                   ///< of the algorithm is ignored.
-    BidiIsolate, ///< Content is ordered as if in a seperate paragraph.
+    BidiIsolate, ///< Content is ordered as if in a separate paragraph.
     BidiIsolateOverride, ///< Ordered like a directional override inside an
                          ///< isolated paragraph.
     BidiPlainText ///< Behaves like isolate, except using heuristics defined in
@@ -205,7 +205,7 @@ enum HangingPunctuation {
     HangNone = 0x0, ///< Hang nothing.
     HangFirst = 0x1, ///< Hang opening brackets and quotes.
     HangLast = 0x2, ///< Hang closing brackets and quotes.
-    HangEnd = 0x4, ///< Hang stops and commas. Force/Allow is a seperate boolean.
+    HangEnd = 0x4, ///< Hang stops and commas. Force/Allow is a separate boolean.
     HangForce = 0x8 ///< Whether to force hanging stops or commas.
 };
 
@@ -338,7 +338,7 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
 
     qint32 ascender; ///< distance from origin to top.
     qint32 descender; ///< distance for origin to bottom.
-    qint32 lineGap; ///< additional linegap between consequetive lines.
+    qint32 lineGap; ///< additional linegap between consecutive lines.
 
     qint32 alphabeticBaseline; ///< location of alphabetic baseline from origin.
     qint32 mathematicalBaseline; ///< location of mathematical baseline from origin.
@@ -410,8 +410,8 @@ struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercenta
         Em, /// multiply by Font-size
         Ex, /// multiply by font-x-height.
         Cap,/// multiply by font cap height
-        Ch, /// multiply by width of "0", represents avarage proportional script advance.
-        Ic, /// multiply by width of "U+6C34", represents avarage full width script advance.
+        Ch, /// multiply by width of "0", represents average proportional script advance.
+        Ic, /// multiply by width of "U+6C34", represents average full width script advance.
         Lh, /// multiply by lineheight.
     };
 
@@ -638,7 +638,7 @@ struct TextTransformInfo : public boost::equality_comparable<TextTransformInfo> 
     bool fullWidth = false; ///< Convert proportional or half-width text to
                             ///< full-width text. 'at-risk'
     bool fullSizeKana = false; ///< Convert Japanese Katakana and Hiragana to
-                               ///< their 'fullsize' equivelants. 'at-risk'
+                               ///< their 'fullsize' equivalents. 'at-risk'
     bool operator==(const TextTransformInfo &rhs) const
     {
         return (capitals == rhs.capitals) && (fullWidth == rhs.fullWidth) && (fullSizeKana == rhs.fullSizeKana);
@@ -780,7 +780,7 @@ struct FontFamilyAxis : public boost::equality_comparable<FontFamilyAxis> {
     qreal value = 0;
     qreal defaultValue = 0;
     bool variableAxis = false;
-    bool axisHidden = false; /// Some variable fonts have axes that are not really supossed to be shown to the user.
+    bool axisHidden = false; /// Some variable fonts have axes that are not really supposed to be shown to the user.
 
     QString debugInfo() const {
         QString label;

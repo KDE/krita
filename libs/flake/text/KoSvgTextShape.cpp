@@ -92,7 +92,7 @@ struct KoSvgTextNodeIndex::Private {
 
 // for the use in KoSvgTextShape::Private::createTextNodeIndex() only
 KoSvgTextNodeIndex::KoSvgTextNodeIndex()
-    : d() // Private is **not** initialized, to be intialized by the factory method
+    : d() // Private is **not** initialized, to be initialized by the factory method
 {
 }
 
@@ -933,7 +933,7 @@ QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos
             auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought);
             if (KisForestDetail::siblingCurrent(it) == d->textData.childBegin()) {
                 // If there's a selection and the search algorithm only returns the root, return empty.
-                // The root text properties should be retrieved explicitely (either by using -1 as pos, or by calling textProperties()).
+                // The root text properties should be retrieved explicitly (either by using -1 as pos, or by calling textProperties()).
                 props = {KoSvgTextProperties()};
                 return props;
             } else if (it != d->textData.depthFirstTailEnd()) {

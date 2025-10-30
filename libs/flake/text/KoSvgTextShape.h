@@ -246,7 +246,7 @@ public:
 
     /**
      * @brief posForPointLineSensitive
-     * When clicking on an empty space in a wrapped text, it is preferrable to have the
+     * When clicking on an empty space in a wrapped text, it is preferable to have the
      * caret be at the end of the line visually associated with that empty space than
      * the positions above or below that might be closer.
      *
@@ -290,13 +290,13 @@ public:
      * Insert a text somewhere in the KoTextShape.
      * @param pos the cursor position.
      * @param text the text to insert.
-     * @return whether it was succesful in inserting text.
+     * @return whether it was successful in inserting text.
      */
     bool insertText(int pos, QString text);
 
     /**
      * @brief removeText
-     * Where insert text explicitely uses a cursorposition,
+     * Where insert text explicitly uses a cursorposition,
      * remove text uses a string index. It will modify these values
      * so that...
      * - Whole code points are deleted at any time, avoiding
@@ -366,7 +366,7 @@ public:
      * Insert rich text at the given cursor pos. This will first split contents at the given pos before inserting the new rich text.
      * @param pos -- cursor pos to insert at.
      * @param richText -- KoSvgTextShape with rich text data. TODO: make this const once KisForest constness issues have been fixed.
-     * @return whether insertion happened succesfully.
+     * @return whether insertion happened successfully.
      */
     bool insertRichText(int pos, const KoSvgTextShape *richText);
 

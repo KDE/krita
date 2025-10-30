@@ -32,7 +32,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-constexpr qreal SHAPE_PRECISION = 1e-6; ///< Value that indcates the precision for testing coordinates for text-in-shape layout.
+constexpr qreal SHAPE_PRECISION = 1e-6; ///< Value that indicates the precision for testing coordinates for text-in-shape layout.
 
 class KoPathShape;
 struct raqm_glyph_t;
@@ -46,7 +46,7 @@ enum class BreakType {
 enum class LineEdgeBehaviour {
     NoChange, ///< Do nothing special.
     Collapse, ///< Collapse if first or last in line.
-    ForceHang, ///< Force hanging at the start or end of a line, never measured for justfication.
+    ForceHang, ///< Force hanging at the start or end of a line, never measured for justification.
     ConditionallyHang ///< Only hang if no space otherwise, only measured for justification if not hanging.
 };
 
@@ -619,7 +619,7 @@ public:
      * @param tree -- tree to search in.
      * @param currentIndex -- currentIndex, will always be set to the start index of the found element.
      * @param sought -- index sought.
-     * @param skipZeroWidth -- whether to explicitely skip zero-width chunks. Remove text may set this to true, while inserting text into empty chunks requires this to be false.
+     * @param skipZeroWidth -- whether to explicitly skip zero-width chunks. Remove text may set this to true, while inserting text into empty chunks requires this to be false.
      * @return iterator -- found iterator. Will default to tree end if nothing is found.
      */
     static KisForest<KoSvgTextContentElement>::depth_first_tail_iterator findTextContentElementForIndex(KisForest<KoSvgTextContentElement> &tree,
@@ -855,7 +855,7 @@ public:
     /**
      * @brief applyWhiteSpace
      * CSS Whitespace processes whitespaces so that duplicate white spaces and
-     * unecessary hard breaks get removed from the text. Within the text layout
+     * unnecessary hard breaks get removed from the text. Within the text layout
      * we avoid removing the white spaces. However, when converting between text
      * types it can be useful to remove these spaces.
      * This function actually applies the white space rule to the active text.

@@ -120,7 +120,7 @@ struct FontFamilyNode {
     /**
      * @brief sizeInfo
      * This is only really used to ensure that sizes get sorted into different WWS families, as otherwise they're unselectable.
-     * We could take them into account when searching, but the CSS-WG hasn't explicitely requested or provided any guidance therein.
+     * We could take them into account when searching, but the CSS-WG hasn't explicitly requested or provided any guidance therein.
      */
     FontFamilySizeInfo sizeInfo;
 
@@ -742,7 +742,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     if (font->type != KoSvgText::OpenTypeFontType && font->type != KoSvgText::Type1FontType) {
                         // Hack for really old fonts.
                         // It's questionable whether this is wise, given that it is not the family name,
-                        // but it seems CSS is explicitely vague about what the family name is, because
+                        // but it seems CSS is explicitly vague about what the family name is, because
                         // of the varying ways a font can be assigned a family name.
                         // Like, it is technically correct, because it allows us to select fonts with CSS
                         // that would otherwise be unselectable, but this does mean that other applications

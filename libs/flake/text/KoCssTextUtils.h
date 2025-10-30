@@ -75,7 +75,7 @@ public:
     /**
      * @brief transformTextFullSizeKana
      * This function will take 'small' Kana (Japanese phonetic script) and
-     * transform it to their 'full-size' equivelants, following the list in the
+     * transform it to their 'full-size' equivalents, following the list in the
      * CSS-Text-3 spec.
      *
      * @param text the text to transform.
@@ -160,7 +160,7 @@ public:
      *
      * @param text the text to break.
      * @param langCode the language code of the text, BCP style.
-     * @return a QStringList of the graphemes as seperate strings.
+     * @return a QStringList of the graphemes as separate strings.
      */
     static QStringList textToUnicodeGraphemeClusters(const QString &text, const QString &langCode);
 

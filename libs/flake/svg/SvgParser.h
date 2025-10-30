@@ -58,7 +58,7 @@ public:
     void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
     void setDefaultKraTextVersion(int version);
 
-    // Set whether to always consider shapes without fill or stroke explicitely set as inherited.
+    // Set whether to always consider shapes without fill or stroke explicitly set as inherited.
     // By default, this is off, and the parser retrieves the fill from the graphicsContext.
     void setFillStrokeInheritByDefault(const bool enable);
 

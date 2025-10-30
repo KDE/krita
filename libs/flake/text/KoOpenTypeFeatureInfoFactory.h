@@ -60,7 +60,7 @@ struct KoOpenTypeFeatureInfo
 
     QStringList namedParameters;/// Named parameters. Only used by CVXX features and retrieved from the font.
     
-    QVector<OpenTypeTable> tables; ///< Which table type(s) are recommended for this feature in the official registery.
+    QVector<OpenTypeTable> tables; ///< Which table type(s) are recommended for this feature in the official registry.
 
     bool glyphPalette{false}; ///< Whether the feature should be visible in the glyph palette.
 

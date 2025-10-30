@@ -43,7 +43,7 @@ public:
      * it will try to select fallback fonts as well.
      *
      * @returns a vector of loaded FT_Faces, the "lengths" vector
-     * will be filled with the lengths of consequetive characters
+     * will be filled with the lengths of consecutive characters
      * a face can be set on.
      */
     std::vector<FT_FaceSP> facesForCSSValues(QVector<int> &lengths,
@@ -127,18 +127,18 @@ private:
 
     /**
      * @brief addFontFilePathToRegistery
-     * This adds a font file to the registery. Right now only used by unittests.
+     * This adds a font file to the registry. Right now only used by unittests.
      *
      * @param path the path of the font file.
-     * @return Whether adding the font file was succesful.
+     * @return Whether adding the font file was successful.
      */
     bool addFontFilePathToRegistery(const QString &path);
 
     /**
      * @brief addFontFileDirectoryToRegistery
-     * This adds a directory of font files to the registery. Right now only used by unittests.
+     * This adds a directory of font files to the registry. Right now only used by unittests.
      * @param path the path of the directory.
-     * @return whether it was succesful.
+     * @return whether it was successful.
      */
     bool addFontFileDirectoryToRegistery(const QString &path);
 

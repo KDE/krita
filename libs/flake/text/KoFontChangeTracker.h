@@ -11,7 +11,7 @@
 /**
  * @brief The KoFontChangeTracker class
  * This class keeps track of the paths FontConfig is looking at,
- * and resets the font registery if they change.
+ * and resets the font registry if they change.
  */
 class KoFontChangeTracker : public QObject
 {

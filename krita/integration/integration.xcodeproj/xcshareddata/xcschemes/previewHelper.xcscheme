@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "2600"
+   wasCreatedForAppExtension = "YES"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -18,6 +19,34 @@
                BlueprintIdentifier = "114946462EA5593D00515C4C"
                BuildableName = "previewHelper.app"
                BlueprintName = "previewHelper"
+               ReferencedContainer = "container:integration.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1149469C2EA7079600515C4C"
+               BuildableName = "krita-preview_helper.appex"
+               BlueprintName = "krita-preview_helper"
+               ReferencedContainer = "container:integration.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "114946582EA6B34D00515C4C"
+               BuildableName = "krita-thumbnailer_helper.appex"
+               BlueprintName = "krita-thumbnailer_helper"
                ReferencedContainer = "container:integration.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

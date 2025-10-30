@@ -5,6 +5,8 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>krita-kra</string>
 			<key>CFBundleTypeName</key>
 			<string>Krita File</string>
 			<key>CFBundleTypeRole</key>
@@ -19,8 +21,10 @@
 			<string></string>
 		</dict>
 		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>krita-krz</string>
 			<key>CFBundleTypeName</key>
-			<string>Krita File</string>
+			<string>Krita Archival File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -33,6 +37,8 @@
 			<string></string>
 		</dict>
 		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>krita-kra</string>
 			<key>CFBundleTypeName</key>
 			<string>Openraster File</string>
 			<key>CFBundleTypeRole</key>
@@ -45,7 +51,7 @@
 			</array>
 		</dict>
 	</array>
-	<key>UTImportedTypeDeclarations</key>
+	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
@@ -54,7 +60,7 @@
 				<string>public.image</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Krita File</string>
+			<string>Krita Image File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -67,7 +73,7 @@
 				</array>
 				<key>public.mime-type</key>
 				<array>
-					<string>application/x-krita-kra</string>
+					<string>application/x-krita</string>
 				</array>
 			</dict>
 		</dict>
@@ -75,11 +81,9 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
-				<string>public.archive</string>
-				<string>public.image</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Krita File</string>
+			<string>Krita Archival File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -99,7 +103,7 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.data</string>
+				<string>public.zip-archive</string>
 				<string>public.image</string>
 			</array>
 			<key>UTTypeDescription</key>
@@ -108,6 +112,8 @@
 			<dict/>
 			<key>UTTypeIdentifier</key>
 			<string>org.openraster.ora</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.openraster.org/</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

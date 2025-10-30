@@ -1009,6 +1009,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
             CharacterResult cr = result[visualToLogical.value(k)];
             if (cr.addressable) {
                 cr.finalPosition += shift;
+                cr.textLengthOffset += shift;
                 if (spacingAndGlyphs) {
                     QPointF scale(d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0, d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
                     cr.scaleCharacterResult(scale.x(), scale.y());
@@ -1690,6 +1691,7 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
 
         for (int j = start; j < end; j++) {
             result[j].finalPosition += shiftP;
+            result[j].textPathAndAnchoringOffset += shiftP;
         }
         start = end;
     }
@@ -1877,6 +1879,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
                             tAngle = 0 - (360 - tAngle);
                         }
                         const QPointF vectorT(qCos(qDegreesToRadians(tAngle)), -qSin(qDegreesToRadians(tAngle)));
+                        const QPointF originalPos = cr.finalPosition;
                         if (isHorizontal) {
                             cr.rotate -= qDegreesToRadians(tAngle);
                             QPointF vectorN(-vectorT.y(), vectorT.x());
@@ -1888,6 +1891,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
                             const qreal o = (cr.advance.y() * 0.5);
                             cr.finalPosition = pos - (o * vectorT) + (cr.finalPosition.x() * vectorN);
                         }
+                        cr.textPathAndAnchoringOffset += (cr.finalPosition - originalPos);
                         // FIXME: What about other glyph formats?
                         if (stretch && outlineGlyph) {
                             const QTransform tf = cr.finalTransform();
@@ -1911,6 +1915,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
                         afterPath = false;
                     } else {
                         cr.finalPosition += pathEnd;
+                        cr.textPathAndAnchoringOffset += pathEnd;
                         result[i] = cr;
                     }
                 }

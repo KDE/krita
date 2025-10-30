@@ -25,6 +25,7 @@
 #include "KoCanvasController.h"
 #include "KoCanvasResourceProvider.h"
 #include <kis_signal_compressor.h>
+#include <KisHandlePainterHelper.h>
 
 #include "kundo2command.h"
 #include <QTimer>
@@ -103,6 +104,26 @@ struct IMEDecorationInfo {
     }
 };
 
+struct TypeSettingDecorInfo {
+    QPair<QPointF, QPointF> handles;
+    bool handlesEnabled;
+
+    QMap<SvgTextCursor::TypeSettingModeHandle, QPainterPath> paths;
+
+    QRectF boundingRect(qreal handleRadius) {
+        QRectF total;
+        for (int i = 0; i< paths.values().size(); i++) {
+            total |= paths.values().at(i).boundingRect();
+        }
+        QRectF rect(0, 0, handleRadius, handleRadius);
+        rect.moveCenter(handles.first);
+        total |= rect;
+        rect.moveCenter(handles.second);
+        total |= rect;
+        return total;
+    }
+};
+
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
     KoCanvasBase *canvas;
     bool isAddingCommand = false;
@@ -130,6 +151,13 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
 
     bool visualNavigation = true;
     bool pasteRichText = true;
+
+    bool typeSettingMode = false;
+    SvgTextCursor::TypeSettingModeHandle hoveredTypeSettingHandle = SvgTextCursor::NoHandle;
+    bool drawTypeSettingHandle = true;
+    qreal handleRadius = 7;
+    QRectF oldTypeSettingRect;
+    TypeSettingDecorInfo typeSettingDecor;
 
     SvgTextInsertCommand *preEditCommand {nullptr}; ///< PreEdit string as an command provided by the input method.
     int preEditStart = -1; ///< Start of the preEdit string as a cursor pos.
@@ -181,6 +209,8 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
         d->shape->addShapeChangeListener(this);
         updateInputMethodItemTransform();
         d->pos = d->shape->posForIndex(d->shape->plainText().size());
+        d->typeSettingDecor.handlesEnabled = (d->shape->textType() == KoSvgTextShape::PreformattedText
+                                              || d->shape->textType() == KoSvgTextShape::PrePositionedText);
     } else {
         d->pos = 0;
     }
@@ -206,6 +236,12 @@ void SvgTextCursor::setVisualMode(bool visualMode)
 void SvgTextCursor::setPasteRichTextByDefault(const bool pasteRichText)
 {
     d->pasteRichText = pasteRichText;
+}
+
+void SvgTextCursor::setTypeSettingModeActive(bool activate)
+{
+    d->typeSettingMode = activate;
+    updateTypeSettingDecoration();
 }
 
 int SvgTextCursor::getPos()
@@ -250,6 +286,35 @@ void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
         updateCursor();
         updateSelection();
     }
+}
+
+SvgTextCursor::TypeSettingModeHandle SvgTextCursor::typeSettingHandleAtPos(const QRectF regionOfInterest)
+{
+    SvgTextCursor::TypeSettingModeHandle handle = SvgTextCursor::NoHandle;
+
+    if (!(d->typeSettingMode && d->shape && d->canvas && d->shape->boundingRect().contains(regionOfInterest))) return handle;
+
+    const QRectF roiInShape = d->shape->absoluteTransformation().inverted().mapRect(regionOfInterest);
+
+    if (d->typeSettingDecor.handlesEnabled) {
+        if (roiInShape.contains(d->typeSettingDecor.handles.first)) {
+            handle = SvgTextCursor::StartPos;
+        } else if (roiInShape.contains(d->typeSettingDecor.handles.second)) {
+            handle = SvgTextCursor::EndPos;
+        }
+    }
+
+    return handle;
+}
+
+void SvgTextCursor::setTypeSettingHandleHovered(TypeSettingModeHandle hovered)
+{
+    d->hoveredTypeSettingHandle = hovered;
+}
+
+void SvgTextCursor::setDrawTypeSettingHandle(bool draw)
+{
+    d->drawTypeSettingHandle = draw;
 }
 
 void SvgTextCursor::moveCursor(MoveMode mode, bool moveAnchor)
@@ -482,12 +547,13 @@ static QColor bgColorForCaret(QColor c) {
     return KisPaintingTweaks::luminosityCoarse(c) > 0.8? QColor(0, 0, 0, 64) : QColor(255, 255, 255, 64);
 }
 
-void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness)
+void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness, qreal handleRadius)
 {
     if (d->shape) {
         gc.save();
         gc.setTransform(d->shape->absoluteTransformation(), true);
-        if (d->pos != d->anchor) {
+
+        if (d->pos != d->anchor && !d->typeSettingMode) {
             gc.save();
             gc.setOpacity(0.5);
             QBrush brush(selectionColor);
@@ -509,12 +575,42 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int de
 
             }
         }
+
         if (d->preEditCommand) {
             gc.save();
             QBrush brush(selectionColor);
             gc.setOpacity(0.5);
             gc.fillPath(d->IMEDecoration, brush);
             gc.restore();
+        }
+        if (d->typeSettingMode && d->drawTypeSettingHandle) {
+            d->handleRadius = handleRadius;
+            QTransform painterTf = gc.transform();
+            KisHandlePainterHelper helper(&gc, handleRadius, decorationThickness);
+            const KisHandleStyle highlight = KisHandleStyle::partiallyHighlightedPrimaryHandles();
+            const KisHandleStyle regular = KisHandleStyle::secondarySelection();
+
+            Q_FOREACH(SvgTextCursor::TypeSettingModeHandle handle, d->typeSettingDecor.paths.keys()) {
+                const QPainterPath p = d->typeSettingDecor.paths.value(handle);
+                if (d->hoveredTypeSettingHandle == handle) {
+                    helper.setHandleStyle(highlight);
+                    helper.drawPath(p);
+                } else {
+                    gc.save();
+                    gc.setPen(selectionColor);
+                    gc.setOpacity(0.5);
+                    gc.drawPath(painterTf.map(p));
+                    gc.restore();
+                }
+            }
+
+            if (d->typeSettingDecor.handlesEnabled) {
+                helper.setHandleStyle(d->hoveredTypeSettingHandle == EndPos? highlight: regular);
+                helper.drawHandleCircle(d->typeSettingDecor.handles.second);
+                helper.setHandleStyle(d->hoveredTypeSettingHandle == StartPos? highlight: regular);
+                helper.drawHandleRect(d->typeSettingDecor.handles.first);
+            }
+
         }
         gc.restore();
     }
@@ -1280,6 +1376,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
         d->posIndex = d->shape->indexForPos(d->pos);
         d->anchorIndex = d->shape->indexForPos(d->anchor);
         emit selectionChanged();
+        updateTypeSettingDecoration();
     }
     d->cursorColor = QColor();
     d->cursorShape = d->shape? d->shape->cursorForPos(d->pos, d->cursorCaret, d->cursorColor): QPainterPath();
@@ -1340,6 +1437,83 @@ void SvgTextCursor::updateIMEDecoration()
 
         Q_EMIT updateCursorDecoration(d->shape->shapeToDocument(d->IMEDecoration.boundingRect()) | d->oldIMEDecorationRect);
     }
+}
+
+void SvgTextCursor::updateTypeSettingDecoration()
+{
+    QRectF updateRect;
+    if (d->shape && d->typeSettingMode) {
+
+        QList<KoSvgTextCharacterInfo> infos =
+                d->shape->getPositionsAndRotationsForRange(d->pos, d->anchor);
+        if (infos.size() < 1) return;
+
+        const bool rtl = infos.first().rtl;
+
+        KoSvgTextCharacterInfo first = infos.first();
+        KoSvgTextCharacterInfo last = infos.last();
+        if (infos.size() > 1) {
+            std::sort(infos.begin(), infos.end(), KoSvgTextCharacterInfo::visualLessThan);
+            for (auto it = infos.begin(); it != infos.end(); it++) {
+                if (it->visualIndex >= 0) {
+                    first = *it;
+                    break;
+                }
+            }
+            for (auto it = infos.rbegin(); it != infos.rend(); it++) {
+                if (it->visualIndex >= 0) {
+                    last = *it;
+                    break;
+                }
+            }
+        }
+
+        QTransform t = QTransform::fromTranslate(last.finalPos.x(), last.finalPos.y());
+        t.rotate(last.rotateDeg);
+        last.finalPos = t.map(last.advance);
+
+        //
+        d->typeSettingDecor.handles.first = rtl? last.finalPos: first.finalPos;
+        d->typeSettingDecor.handles.second = rtl? first.finalPos: last.finalPos;
+
+        // Slightly cursed...
+        // It'd be better if we could get KoSvgTextNodeIndex for a pos, but that one is only implemented in shape branch...
+        d->typeSettingDecor.paths = QMap<SvgTextCursor::TypeSettingModeHandle, QPainterPath>();
+        for (auto it = infos.begin(); it != infos.end(); it++) {
+            const KoSvgTextProperties props = d->shape->propertiesForPos(d->shape->posForIndex(it->logicalIndex), true);
+            KoSvgText::FontMetrics metrics = it->metrics;
+            const bool isHorizontal = d->shape->writingMode() == KoSvgText::HorizontalTB;
+
+            const qreal scaleMetrics = props.fontSize().value/qreal(metrics.fontSize);
+
+            QTransform t = QTransform::fromTranslate(it->finalPos.x(), it->finalPos.y());
+            t.rotate(it->rotateDeg);
+
+            const QMap<SvgTextCursor::TypeSettingModeHandle, int> types {
+                {BaselineShift, 0},
+                {Ascender, metrics.ascender},
+                {Descender, metrics.descender},
+                {BaselineAlphabetic, metrics.alphabeticBaseline},
+                {BaselineIdeographic, metrics.ideographicUnderBaseline},
+                {BaselineHanging, metrics.hangingBaseline},
+                {BaselineMathematic, metrics.mathematicalBaseline},
+                {BaselineMiddle, metrics.xHeight/2}
+            };
+
+            Q_FOREACH(SvgTextCursor::TypeSettingModeHandle handle, types.keys()) {
+                const int metric = types.value(handle);
+                QPointF offset = isHorizontal? QPointF(0, -(metric*scaleMetrics)): QPointF(metric*scaleMetrics, 0);
+                QPainterPath p = d->typeSettingDecor.paths.value(handle);
+                p.moveTo(t.map(offset));
+                p.lineTo(t.map(offset+it->advance));
+                d->typeSettingDecor.paths.insert(handle, p);
+            }
+        }
+
+        updateRect = d->shape->shapeToDocument(d->typeSettingDecor.boundingRect(d->handleRadius));
+    }
+    Q_EMIT updateCursorDecoration(updateRect | d->oldTypeSettingRect);
+    d->oldTypeSettingRect = updateRect;
 }
 
 void SvgTextCursor::addCommandToUndoAdapter(KUndo2Command *cmd)

@@ -22,6 +22,7 @@ class SvgTextToolOptionsManager : public QObject
     Q_PROPERTY(int textType READ textType WRITE convertToTextType NOTIFY convertTextType)
     Q_PROPERTY(bool textPropertiesOpen READ textPropertiesOpen WRITE setTextPropertiesOpen NOTIFY openTextPropertiesDocker)
     Q_PROPERTY(bool showTextPropertyButton READ showTextPropertyButton WRITE setShowTextPropertyButton NOTIFY showTextPropertyButtonChanged)
+    Q_PROPERTY(bool typeSettingMode READ typeSettingMode WRITE setTypeSettingMode NOTIFY typeSettingModeChanged)
 
     /* Debug options */
     Q_PROPERTY(bool showDebug READ showDebug WRITE setShowDebug NOTIFY showDebugChanged)
@@ -77,6 +78,9 @@ public:
     bool showTextPropertyButton() const;
     void setShowTextPropertyButton(const bool show);
 
+    bool typeSettingMode() const;
+    void setTypeSettingMode(const bool activate);
+
 public Q_SLOTS:
     /**
      * @brief emitOpenTextEditor
@@ -102,6 +106,8 @@ Q_SIGNALS:
     void showDebugChanged();
     void showDebugCharacterChanged();
     void showLineDebugChanged();
+
+    void typeSettingModeChanged();
 
 private:
     struct Private;

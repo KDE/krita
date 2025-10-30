@@ -66,6 +66,21 @@ public:
         ParagraphEnd,
     };
 
+    enum TypeSettingModeHandle {
+        NoHandle,
+        StartPos,
+        EndPos,
+        Ascender,
+        BaselineShift,
+        Descender,
+
+        BaselineAlphabetic,
+        BaselineIdeographic,
+        BaselineMiddle,
+        BaselineHanging,
+        BaselineMathematic
+    };
+
     ~SvgTextCursor();
 
     /**
@@ -103,6 +118,8 @@ public:
      */
     void setPasteRichTextByDefault(const bool pasteRichText = true);
 
+    void setTypeSettingModeActive(bool activate);
+
     /// Get the current position.
     int getPos();
 
@@ -114,6 +131,11 @@ public:
 
     /// Set the pos from a point. This currently does a search inside the text shape.
     void setPosToPoint(QPointF point, bool moveAnchor = true);
+
+    /// Get typeSettingMode handle for text;
+    TypeSettingModeHandle typeSettingHandleAtPos(const QRectF regionOfInterest);
+    void setTypeSettingHandleHovered(TypeSettingModeHandle hovered = TypeSettingModeHandle::NoHandle);
+    void setDrawTypeSettingHandle(bool draw);
 
     /// Move the cursor, and, if you don't want a selection, move the anchor.
     void moveCursor(MoveMode mode, bool moveAnchor = true);
@@ -171,7 +193,7 @@ public:
 
     void deselectText();
 
-    void paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness = 1);
+    void paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness = 1, qreal handleRadius = 5.0);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     void inputMethodEvent(QInputMethodEvent *event);
@@ -249,6 +271,7 @@ private:
     void updateCursor(bool firstUpdate = false);
     void updateSelection();
     void updateIMEDecoration();
+    void updateTypeSettingDecoration();
     void addCommandToUndoAdapter(KUndo2Command *cmd);
 
     int moveModeResult(MoveMode &mode, int &pos, bool visual = false) const;

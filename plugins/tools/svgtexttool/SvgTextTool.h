@@ -173,6 +173,15 @@ private Q_SLOTS:
      */
     void slotTextTypeUpdated();
 
+    /**
+     * @brief slotMoveTextSelection
+     * Move the start of the selection in typesetting mode by image 1 pix.
+     * @param index -- Qt key for a direction.
+     */
+    void slotMoveTextSelection(int index);
+
+    void slotUpdateTypeSettingMode();
+
 private:
     enum class DragMode {
         None = 0,
@@ -198,6 +207,7 @@ private:
     bool m_strategyAddingCommand {false};
 
     QScopedPointer<KisSignalMapper> m_textTypeSignalsMapper;
+    QScopedPointer<KisSignalMapper> m_typeSettingMovementMapper;
 
 
     SvgTextCursor m_textCursor;

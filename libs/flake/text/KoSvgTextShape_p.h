@@ -108,6 +108,8 @@ struct CharacterResult {
     int visualIndex = -1;
     int plaintTextIndex = -1;
     QPointF cssPosition = QPointF(); ///< the position in accordance with the CSS specs, as opossed to the SVG spec.
+    QPointF textLengthOffset = QPointF(); ///< offset caused by textLength
+    QPointF textPathAndAnchoringOffset = QPointF(); ///< Offset caused by textPath and anchoring.
     QPointF dominantBaselineOffset = QPointF(); // Shift caused by aligning glyphs to dominant baseline.
     QPointF baselineOffset = QPointF(); ///< The computed baseline offset, will be applied
                                         ///< when calculating the line-offset during line breaking.
@@ -700,7 +702,7 @@ public:
      * @param alsoCollapseLowSurrogate -- whether to mark utf16 surrogates as collapsed too.
      * @return list of collapsed characters
      */
-    static QVector<bool> collapsedWhiteSpacesForText(KisForest<KoSvgTextContentElement> &tree, QString &allText, const bool alsoCollapseLowSurrogate = false) {
+    static QVector<bool> collapsedWhiteSpacesForText(KisForest<KoSvgTextContentElement> &tree, QString &allText, const bool alsoCollapseLowSurrogate = false, bool includeBidiControls = false) {
         QMap<int, KoSvgText::TextSpaceCollapse> collapseModes;
 
         QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
@@ -713,6 +715,14 @@ public:
                 const int children = childCount(siblingCurrent(it));
                 if (children == 0) {
                     QString text = it->text;
+                    if (includeBidiControls) {
+                        KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(parentProps.last().propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
+                        KoSvgText::Direction direction = KoSvgText::Direction(parentProps.last().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+                        QVector<QPair<int, int>> positions;
+                        QString text = KoCssTextUtils::getBidiOpening(direction, bidi);
+                        text += it->getTransformedString(positions, parentProps.last());
+                        text += KoCssTextUtils::getBidiClosing(bidi);
+                    }
                     KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(parentProps.last().propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
                     collapseModes.insert(allText.size(), collapse);
                     allText += text;
@@ -773,6 +783,7 @@ public:
             int transformOffsetEnd = 0;
 
             for (int i = globalIndex; i < globalIndex + currentLength; i++) {
+                if (i >= collapsedCharacters.size()) break;
                 if (i < start) {
                     transformOffset += collapsedCharacters.at(i)? 0: 1;
                 }
@@ -783,7 +794,8 @@ public:
                 }
             }
             if (transformOffset < currentTextElement->localTransformations.size()) {
-                currentTextElement->localTransformations.remove(transformOffset, transformOffsetEnd-transformOffset);
+                currentTextElement->localTransformations.remove(transformOffset,
+                                                                qBound(0, transformOffsetEnd-transformOffset, currentTextElement->localTransformations.size()));
             }
 
         }
@@ -913,16 +925,9 @@ public:
         }
     }
 
-    /**
-     * @brief insertNewLinesAtAnchors
-     * Resolves character transforms and then inserts new lines at each
-     * transform that creates a new chunk.
-     * @param tree -- tree to apply to.
-     * @param shapesInside -- whether we're wrapping in shape.
-     */
-    static void insertNewLinesAtAnchors(KisForest<KoSvgTextContentElement> &tree, bool shapesInside = false) {
+    static QVector<KoSvgText::CharTransformation> resolvedTransformsForTree(KisForest<KoSvgTextContentElement> &tree, bool shapesInside = false, bool includeBidiControls = false) {
         QString all;
-        QVector<bool> collapsed = collapsedWhiteSpacesForText(tree, all, false);
+        QVector<bool> collapsed = collapsedWhiteSpacesForText(tree, all, false, includeBidiControls);
         QVector<CharacterResult> result(all.size());
         int globalIndex = 0;
         KoSvgTextProperties props = tree.childBegin()->properties;
@@ -937,6 +942,18 @@ public:
                           isHorizontal, isWrapped, false, resolvedTransforms,
                           collapsed, KoSvgTextProperties::defaultProperties(),
                           false);
+        return resolvedTransforms;
+    }
+
+    /**
+     * @brief insertNewLinesAtAnchors
+     * Resolves character transforms and then inserts new lines at each
+     * transform that creates a new chunk.
+     * @param tree -- tree to apply to.
+     * @param shapesInside -- whether we're wrapping in shape.
+     */
+    static void insertNewLinesAtAnchors(KisForest<KoSvgTextContentElement> &tree, bool shapesInside = false) {
+        QVector<KoSvgText::CharTransformation> resolvedTransforms = resolvedTransformsForTree(tree, shapesInside);
 
         auto end = std::make_reverse_iterator(tree.childBegin());
         auto begin = std::make_reverse_iterator(tree.childEnd());

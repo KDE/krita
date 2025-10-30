@@ -19,6 +19,7 @@
 
 class KoSvgTextShapeMemento;
 class KoSvgTextNodeIndex;
+struct KoSvgTextCharacterInfo;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
@@ -373,6 +374,28 @@ public:
     /// Cleans up the internal text data. Used by undo commands.
     void cleanUp();
 
+    /**
+     * @brief setCharacterTransformsOnRange
+     * Set SVG 1.1 style character transforms on the given range. Will not work
+     * when the shape is auto wrapping.
+     * @param startPos -- start of range
+     * @param endPos -- end of range
+     * @param positions -- positions, in shape coordinates.
+     * @param rotations -- rotations, in degrees.
+     * @param deltaPosition -- whether to calculate and set the delta positions.
+     * @return whether successful.
+     */
+    bool setCharacterTransformsOnRange(const int startPos, const int endPos, const QVector<QPointF> positions, const QVector<qreal> rotateDegrees, const bool deltaPosition = true);
+
+    /**
+     * @brief getPositionsAndRotationsForRange
+     * @param startPos -- start of range.
+     * @param endPos -- end of range, not inclusive.
+     * @param includeLastAdvance -- include a transform at the end that represents the last transform+advance.
+     * @return list of qpairs, with the first value being the final position, and the second the final rotation.
+     */
+    QList<KoSvgTextCharacterInfo> getPositionsAndRotationsForRange(const int startPos, const int endPos) const;
+
 /*****************************************************************************
  * KoSvgTextNodeIndex functions.
  *
@@ -598,6 +621,41 @@ private:
     struct Private;
     QScopedPointer<Private> d;
 
+};
+
+/**
+ * @brief The KoSvgTextCharacterInfo class
+ * This is a small struct to convey information about
+ * character positioning inside a textShape.
+ * It's functionally a simplified readonly version
+ * of CharacterResult inside the TextShape.
+ *
+ * Currently used for character transform adjustments.
+ */
+struct KoSvgTextCharacterInfo {
+    QPointF finalPos;
+    QPointF advance;
+    qreal rotateDeg; // Rotation in radians.
+    int visualIndex = -1;
+    int logicalIndex = -1;
+    bool rtl = false;
+    bool middle = false; /// <Whether the character is in the middle of a cluster.
+    KoSvgText::FontMetrics metrics;
+
+    // For use with std::sort
+    static bool visualLessThan(const KoSvgTextCharacterInfo &a, const KoSvgTextCharacterInfo &b) {
+        bool compare = false;
+        if (a.visualIndex >= 0
+                && b.visualIndex >= 0) {
+            compare = a.visualIndex < b.visualIndex;
+        } else {
+            compare = a.logicalIndex < b.logicalIndex;
+        }
+        return compare;
+    }
+    static bool logicalLessThan(const KoSvgTextCharacterInfo &a, const KoSvgTextCharacterInfo &b) {
+        return a.logicalIndex < b.logicalIndex;
+    }
 };
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase

@@ -26,6 +26,8 @@ set (SvgTextTool_SRCS
     SvgTextToolOptionsData.cpp
     SvgTextToolOptionsModel.cpp
     SvgTextToolOptionsManager.cpp
+    SvgTextChangeTransformsOnRange.cpp
+    SvgTextTypeSettingStrategy.cpp
 
     glyphpalette/GlyphPaletteDialog.cpp
     glyphpalette/GlyphPaletteProxyModel.cpp

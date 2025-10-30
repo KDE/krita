@@ -17,6 +17,8 @@ struct SvgTextToolOptionsManager::Private
 
     bool textPropertiesDockerOpen = false;
     bool showTextPropertyButton = false;
+
+    bool typeSettingMode = false;
 };
 
 SvgTextToolOptionsManager::SvgTextToolOptionsManager(QObject *parent)
@@ -112,6 +114,18 @@ void SvgTextToolOptionsManager::setShowTextPropertyButton(const bool show)
     if (d->showTextPropertyButton == show) return;
     d->showTextPropertyButton = show;
     Q_EMIT showTextPropertyButtonChanged();
+}
+
+bool SvgTextToolOptionsManager::typeSettingMode() const
+{
+    return d->typeSettingMode;
+}
+
+void SvgTextToolOptionsManager::setTypeSettingMode(const bool activate)
+{
+    if (d->typeSettingMode == activate) return;
+    d->typeSettingMode = activate;
+    Q_EMIT typeSettingModeChanged();
 }
 
 void SvgTextToolOptionsManager::emitOpenTextEditor()

@@ -882,12 +882,17 @@ KoSvgTextProperties KoSvgTextShape::propertiesForPos(const int pos, bool inherit
 }
 
 KoSvgTextProperties inheritProperties(KisForest<KoSvgTextContentElement>::depth_first_tail_iterator it)  {
-    KoSvgTextProperties props = it->properties;
+    QList<KisForest<KoSvgTextContentElement>::hierarchy_iterator> hierarchy;
     for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it));
          parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
-         KoSvgTextProperties parentProps = parentIt->properties;
-         parentProps.setAllButNonInheritableProperties(props);
-         props = parentProps;
+        hierarchy.append(parentIt);
+    }
+    KoSvgTextProperties props = KoSvgTextProperties::defaultProperties();
+    while (!hierarchy.isEmpty()) {
+        auto it = hierarchy.takeLast();
+        KoSvgTextProperties p = it->properties;
+        p.inheritFrom(props, true);
+        props = p;
     }
     return props;
 }
@@ -1097,6 +1102,192 @@ void KoSvgTextShape::cleanUp()
     KoSvgTextShape::Private::cleanUp(d->textData);
     notifyChanged();
     shapeChangedPriv(ContentChanged);
+}
+
+bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int endPos, const QVector<QPointF> positions, const QVector<qreal> rotateDegrees, const bool deltaPosition)
+{
+    if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
+        return false;
+    }
+    const int finalPos = d->cursorPos.size()-1;
+    const int startIndex = d->cursorPos.at(qBound(0, qMin(startPos, endPos), finalPos)).index;
+    int endIndex = d->cursorPos.at(qBound(0, qMax(startPos, endPos), finalPos)).index;
+    if (startIndex == endIndex) {
+        endIndex += 1;
+        while(d->result.at(endIndex).middle) {
+            endIndex += 1;
+            if (endIndex > d->result.size()) break;
+        }
+    }
+
+    bool changed = false;
+
+    QVector<KoSvgText::CharTransformation> resolvedTransforms = Private::resolvedTransformsForTree(d->textData, !shapesInside().isEmpty(), true);
+    Private::removeTransforms(d->textData, startIndex, endIndex-startIndex);
+    QPointF totalStartDelta;
+    QPointF anchorAbsolute;
+    QPointF anchorCssPos;
+
+    if (deltaPosition) {
+        for (int i = 0; i< startIndex; i++) {
+            KoSvgText::CharTransformation tf = resolvedTransforms.value(i);
+            if (tf.xPos) {
+                totalStartDelta.setX(0);
+                anchorAbsolute.setX(*tf.xPos);
+            }
+            if (tf.yPos) {
+                totalStartDelta.setY(0);
+                anchorAbsolute.setY(*tf.yPos);
+            }
+            if (tf.startsNewChunk()) {
+                anchorCssPos = d->result.value(i).cssPosition;
+            }
+            totalStartDelta += tf.relativeOffset();
+        }
+    }
+
+    int currentIndex = 0;
+    QPointF accumulatedOffset;
+    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+        if (KoSvgTextShape::Private::childCount(siblingCurrent(it)) > 0) {
+            continue;
+            // TODO: also skip textpaths, their transforms aren't read.
+        }
+
+        int endContentElement = it->finalResultIndex;
+
+        if (endContentElement >= startIndex && currentIndex <= endIndex) {
+
+            QVector<KoSvgText::CharTransformation> transforms;
+            int addressableOffset = 0;
+            for (int i = currentIndex; (i < endContentElement); i++) {
+                const CharacterResult res = d->result.value(i);
+                if (!res.addressable) {
+                    addressableOffset += 1;
+                    continue;
+                }
+
+                int transformIndex = (i - startIndex) - addressableOffset;
+                KoSvgText::CharTransformation tf = resolvedTransforms.value(i, KoSvgText::CharTransformation());
+                if (i < startIndex) {
+                    if (!deltaPosition) {
+                        const QPointF p = res.finalPosition - res.textPathAndAnchoringOffset;
+                        if (!tf.xPos) {
+                            tf.xPos = p.x();
+                        }
+                        if (!tf.yPos) {
+                            tf.yPos = p.y();
+                        }
+                    }
+                    transforms << tf;
+                    continue;
+                }
+                if (i >= endIndex) {
+                    if (i == endIndex) {
+                        // Counter transform to keep unselected characters at the same pos.
+                        if (deltaPosition && !tf.startsNewChunk()) {
+                            QPointF delta = res.finalPosition - (res.textPathAndAnchoringOffset + anchorAbsolute + res.textLengthOffset);
+                            delta -= (totalStartDelta + accumulatedOffset + (res.cssPosition-anchorCssPos));
+                            tf.dxPos = delta.x();
+                            tf.dyPos = delta.y();
+                        } else {
+                            const QPointF p = res.finalPosition - res.textPathAndAnchoringOffset;
+                            tf.xPos = p.x();
+                            tf.yPos = p.y();
+                        }
+                    }
+                    transforms << tf;
+                    continue;
+                }
+
+                if (rotateDegrees.size()+startIndex > i) {
+                    tf.rotate = kisDegreesToRadians(rotateDegrees.value(transformIndex, tf.rotate? *tf.rotate: rotateDegrees.last()));
+                }
+                if (positions.size()+startIndex > i) {
+                    const QPointF pos = positions.value(transformIndex, QPointF());
+
+
+                    if (deltaPosition) {
+                        if (tf.startsNewChunk()) {
+                            anchorAbsolute = tf.absolutePos();
+                            totalStartDelta = tf.relativeOffset();
+                            anchorCssPos = res.cssPosition;
+                        }
+
+                        QPointF delta = pos - (res.textPathAndAnchoringOffset + anchorAbsolute + res.textLengthOffset);
+                        delta -= (totalStartDelta + accumulatedOffset + (res.cssPosition-anchorCssPos));
+                        tf.dxPos = delta.x();
+                        tf.dyPos = delta.y();
+                        if (tf.startsNewChunk()) {
+                            accumulatedOffset = QPointF();
+                            totalStartDelta = tf.relativeOffset();
+                        } else {
+                            accumulatedOffset += tf.relativeOffset();
+                        }
+                    } else {
+                        const QPointF delta = pos - res.textPathAndAnchoringOffset;
+                        tf.xPos = delta.x();
+                        tf.yPos = delta.y();
+                    }
+                }
+
+                transforms << tf;
+            }
+            it->localTransformations = transforms;
+            changed = true;
+        }
+        currentIndex = it->finalResultIndex;
+        if (currentIndex > endIndex) {
+            break;
+        }
+    }
+
+    if (changed) {
+        KoSvgTextShape::Private::cleanUp(d->textData);
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+    }
+
+    return changed;
+}
+
+KoSvgTextCharacterInfo infoFromCharacterResult(const CharacterResult &res, const int index) {
+    KoSvgTextCharacterInfo info;
+    info.finalPos = res.finalPosition;
+    info.rotateDeg = kisRadiansToDegrees(res.rotate);
+    info.visualIndex = res.visualIndex;
+    info.middle = res.middle;
+    info.advance = res.advance;
+    info.logicalIndex = index;
+    info.rtl = res.cursorInfo.rtl;
+    info.metrics = res.metrics;
+    return info;
+}
+
+QList<KoSvgTextCharacterInfo> KoSvgTextShape::getPositionsAndRotationsForRange(const int startPos, const int endPos) const
+{
+    QList<KoSvgTextCharacterInfo> infos;
+    if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
+        return infos;
+    }
+    const int finalPos = d->cursorPos.size()-1;
+    const int startIndex = d->cursorPos.at(qBound(0, qMin(startPos, endPos), finalPos)).index;
+    const int endIndex = d->cursorPos.at(qBound(0, qMax(startPos, endPos), finalPos)).index;
+
+    for (int i = startIndex; i < endIndex; i++) {
+        CharacterResult res = d->result.value(i);
+        if (!res.addressable) continue;
+        infos << infoFromCharacterResult(res, i);
+    }
+
+    if (endIndex == startIndex) {
+        CharacterResult resFinal = d->result.value(startIndex);
+        if (resFinal.addressable) {
+            infos << infoFromCharacterResult(resFinal, startIndex);
+        }
+    }
+
+    return infos;
 }
 
 KisForest<KoSvgTextContentElement>::child_iterator findNodeIndexForPropertyIdImpl(KisForest<KoSvgTextContentElement>::child_iterator parent, KoSvgTextProperties::PropertyId propertyId) {
@@ -1709,9 +1900,14 @@ KoSvgTextShape::TextType KoSvgTextShape::textType() const
                 textSpaceCollapse = true;
                 break;
             }
+            if (!it->localTransformations.isEmpty()) {
+                textSpaceCollapse = true;
+                break;
+            }
         }
         return textSpaceCollapse? TextType::PrePositionedText: TextType::PreformattedText;
     }
+    return TextType::PrePositionedText;
 }
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)

@@ -222,5 +222,50 @@
       <isCheckable>false</isCheckable>
       <text>Paste Plain Text</text>
       </Action>
+
+      <Action name="svg_type_setting_move_selection_start_down_1_px">
+      <iconText>Move Text Selection Down</iconText>
+      <text>Move Text Selection Down By 1 Pixel</text>
+      <shortcut></shortcut>
+      <toolTip>When type setting mode is active, move the start of the selection down by one pixel.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      </Action>
+
+      <Action name="svg_type_setting_move_selection_start_up_1_px">
+      <iconText>Move Text Selection Up</iconText>
+      <text>Move Text Selection Up By 1 Pixel</text>
+      <shortcut></shortcut>
+      <toolTip>When type setting mode is active, move the start of the selection up by one pixel.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      </Action>
+
+      <Action name="svg_type_setting_move_selection_start_left_1_px">
+      <iconText>Move Text Selection Left</iconText>
+      <text>Move Text Selection Left By 1 Pixel</text>
+      <shortcut></shortcut>
+      <toolTip>When type setting mode is active, move the start of the selection left by one pixel.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      </Action>
+
+      <Action name="svg_type_setting_move_selection_start_right_1_px">
+      <iconText>Move Text Selection Right</iconText>
+      <text>Move Text Selection Right By 1 Pixel</text>
+      <shortcut></shortcut>
+      <toolTip>When type setting mode is active, move the start of the selection reft by one pixel.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      </Action>
+
     </Actions>
 </ActionCollection>

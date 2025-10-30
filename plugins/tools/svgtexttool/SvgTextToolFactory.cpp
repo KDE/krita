@@ -46,6 +46,11 @@ QList<QAction *> SvgTextToolFactory::createActionsImpl()
     actions << KisActionRegistry::instance()->makeQAction("text_type_preformatted", this);
     actions << KisActionRegistry::instance()->makeQAction("text_type_pre_positioned", this);
     actions << KisActionRegistry::instance()->makeQAction("text_type_inline_wrap", this);
+
+    actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_down_1_px", this);
+    actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_up_1_px", this);
+    actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_left_1_px", this);
+    actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_right_1_px", this);
     return actions;
 }
 

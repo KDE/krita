@@ -16,9 +16,14 @@ Control {
     property SvgTextToolOptionsManager manager: SvgTextToolOptionsManager{};
 
     onManagerChanged: {
+        if (typeof manager == "undefined") return;
         updateTextProperties()
         textType.updateTextTypes();
-        updatePresetName()
+        updatePresetName();
+
+        btnTypeSettingMode.checked = manager.typeSettingMode;
+        chkVisualBidiCursor.checked = manager.optionsModel.useVisualBidiCursor;
+        chkPasteRichTextByDefault.checked = manager.optionsModel.pasteRichtTextByDefault;
     }
 
     Connections {
@@ -28,6 +33,9 @@ Control {
         }
         function onTextTypeChanged() {
             textType.updateTextTypes();
+        }
+        function onTypeSettingModeChanged() {
+            btnTypeSettingMode.checked = manager.typeSettingMode;
         }
     }
 
@@ -164,6 +172,27 @@ Control {
             }
             hoverEnabled: true;
             Layout.fillWidth: true;
+        }
+
+        Kis.ToolSeparatorBase {
+            orientation: Qt.Horizontal;
+            Layout.fillWidth: true;
+        }
+        Button {
+            id: btnTypeSettingMode;
+            text: i18nc("@label:button", "Type Setting Mode");
+            checkable: true;
+            hoverEnabled: true;
+            onCheckedChanged: {
+                manager.typeSettingMode = checked;
+            }
+            Layout.fillWidth: true;
+
+            Kis.ToolTipBase {
+                parent: btnTypeSettingMode;
+                text: i18nc("@info:tooltip", "Enable type setting mode.");
+                visible: parent.hovered;
+            }
         }
 
         Kis.ToolSeparatorBase {

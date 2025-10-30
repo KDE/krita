@@ -22,6 +22,8 @@
 #include "KoSvgConvertTextTypeCommand.h"
 #include "SvgTextShortCuts.h"
 #include "SvgTextToolOptionsModel.h"
+#include "SvgTextTypeSettingStrategy.h"
+#include "SvgTextChangeTransformsOnRange.h"
 
 #include <QPainterPath>
 #include <QDesktopServices>
@@ -137,6 +139,19 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
         m_textTypeSignalsMapper->setMapping(a, convertActions.value(name));
     }
 
+    m_typeSettingMovementMapper.reset(new KisSignalMapper(this));
+    const QMap<QString, int> typeSetActions {
+        {"svg_type_setting_move_selection_start_down_1_px", Qt::Key_Down},
+        {"svg_type_setting_move_selection_start_up_1_px", Qt::Key_Up},
+        {"svg_type_setting_move_selection_start_left_1_px", Qt::Key_Left},
+        {"svg_type_setting_move_selection_start_right_1_px", Qt::Key_Right}
+    };
+    Q_FOREACH(const QString name, typeSetActions.keys()) {
+        QAction *a = action(name);
+        connect(a, SIGNAL(triggered()), m_typeSettingMovementMapper.data(), SLOT(map()));
+        m_typeSettingMovementMapper->setMapping(a, typeSetActions.value(name));
+    }
+
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
     m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);
@@ -172,6 +187,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
     }
 
     connect(m_textTypeSignalsMapper.data(), SIGNAL(mapped(int)), this, SLOT(slotConvertType(int)));
+    connect(m_typeSettingMovementMapper.data(), SIGNAL(mapped(int)), this, SLOT(slotMoveTextSelection(int)));
 
     useCursor(m_base_cursor);
     slotShapeSelectionChanged();
@@ -190,6 +206,7 @@ void SvgTextTool::deactivate()
     }
     // Exiting text editing mode is handled by requestStrokeEnd
     disconnect(m_textTypeSignalsMapper.data(), 0, this, 0);
+    disconnect(m_typeSettingMovementMapper.data(), 0, this, 0);
 
     m_hoveredShapeHighlightRect = QPainterPath();
 
@@ -237,6 +254,7 @@ QWidget *SvgTextTool::createOptionWidget()
     connect(m_optionManager.data(), SIGNAL(openGlyphPalette()), SLOT(showGlyphPalette()));
 
     connect(m_optionManager.data(), SIGNAL(convertTextType(int)), SLOT(slotConvertType(int)));
+    connect(m_optionManager.data(), SIGNAL(typeSettingModeChanged()), SLOT(slotUpdateTypeSettingMode()));
     connect(m_optionManager->optionsModel(), SIGNAL(useVisualBidiCursorChanged(bool)), this, SLOT(slotUpdateVisualCursor()));
     connect(m_optionManager->optionsModel(), SIGNAL(pasteRichtTextByDefaultChanged(bool)), this, SLOT(slotUpdateTextPasteBehaviour()));
     const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
@@ -554,11 +572,59 @@ void SvgTextTool::slotTextTypeUpdated()
             action("text_type_preformatted")->setChecked(shape->textType() == KoSvgTextShape::PreformattedText);
             action("text_type_pre_positioned")->setChecked(shape->textType() == KoSvgTextShape::PrePositionedText);
             action("text_type_inline_wrap")->setChecked(shape->textType() == KoSvgTextShape::InlineWrap);
+
         } else {
             m_optionManager->convertToTextType(-1);
             action("text_type_preformatted")->setEnabled(false);
             action("text_type_pre_positioned")->setEnabled(false);
             action("text_type_inline_wrap")->setEnabled(false);
+        }
+        Q_FOREACH(QObject *obj, m_typeSettingMovementMapper->children()) {
+            QAction *a = qobject_cast<QAction*>(obj);
+            if (a && shape) {
+                a->setEnabled(m_optionManager->typeSettingMode());
+            }
+        }
+    }
+}
+
+void SvgTextTool::slotMoveTextSelection(int index)
+{
+    KoSvgTextShape *shape = selectedShape();
+    if (!shape) return;
+    QPointF offset;
+    // test type setting mode.
+    if (index == Qt::Key_Down) {
+        offset = QPointF(0, 1);
+    } else if (index == Qt::Key_Up) {
+        offset = QPointF(0, -1);
+    } else if (index == Qt::Key_Right) {
+        offset = QPointF(-1, 0);
+    } else if (index == Qt::Key_Left) {
+        offset = QPointF(1, 0);
+    } else {
+        return;
+    }
+    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    if (canvas2) {
+        offset = canvas2->coordinatesConverter()->imageToDocumentTransform().map(offset);
+    }
+    KUndo2Command *parentCommand = new KUndo2Command();
+    new KoKeepShapesSelectedCommand({selectedShape()}, {}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
+    KUndo2Command *cmd = new SvgTextChangeTransformsOnRange(shape, m_textCursor.getPos(), m_textCursor.getAnchor(), offset, SvgTextChangeTransformsOnRange::OffsetAll, true, parentCommand);
+    new KoKeepShapesSelectedCommand({}, {selectedShape()}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
+    parentCommand->setText(cmd->text());
+    canvas()->addCommand(parentCommand);
+}
+
+void SvgTextTool::slotUpdateTypeSettingMode()
+{
+    m_textCursor.setTypeSettingModeActive(m_optionManager->typeSettingMode());
+    KoSvgTextShape *shape = selectedShape();
+    Q_FOREACH(QObject *obj, m_typeSettingMovementMapper->children()) {
+        QAction *a = qobject_cast<QAction*>(obj);
+        if (a && shape) {
+            a->setEnabled(m_optionManager->typeSettingMode());
         }
     }
 }
@@ -594,7 +660,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if (!isActivated()) return;
 
-    if (m_dragging == DragMode::Create) {
+    if (m_interactionStrategy) {
         m_interactionStrategy->paint(gc, converter);
     }
 
@@ -653,7 +719,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         }
     }
     if (shape) {
-            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight), decorationThickness());
+            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight), decorationThickness(), handleRadius());
     }
     if (m_interactionStrategy) {
         gc.save();
@@ -718,7 +784,12 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             canvas()->shapeManager()->selection()->select(hoveredShape);
             m_hoveredShapeHighlightRect = QPainterPath();
         }
-        m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
+        if (m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point)) != SvgTextCursor::NoHandle && hoveredShape == selectedShape) {
+            m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point)));
+            m_textCursor.setDrawTypeSettingHandle(false);
+        } else {
+            m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
+        }
         m_dragging = DragMode::Select;
         event->accept();
     } else if (crossLayerPossible) {
@@ -826,10 +897,12 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         const KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
         if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
-            if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
-                cursor = m_ibeam_horizontal;
+            SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
+            m_textCursor.setTypeSettingHandleHovered(handle);
+            if (handle != SvgTextCursor::NoHandle) {
+                cursor = Qt::ArrowCursor;
             } else {
-                cursor = m_ibeam_vertical;
+                cursor = selectedShape->writingMode() == KoSvgText::HorizontalTB? m_ibeam_horizontal: m_ibeam_vertical;
             }
         } else if (hoveredShape) {
             if (!hoveredShape->shapesInside().isEmpty()) {
@@ -901,6 +974,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
             useCursor(m_base_cursor);
         }
         m_dragging = DragMode::None;
+        m_textCursor.setDrawTypeSettingHandle(true);
         event->accept();
     } else {
         useCursor(m_base_cursor);

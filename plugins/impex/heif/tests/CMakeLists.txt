@@ -3,7 +3,6 @@ if(APPLE)
         KisHeifTest.cpp
         TEST_NAME KisHeifTest
         LINK_LIBRARIES kritaui kritatestsdk
-        NAME_PREFIX "plugins-impex-"
     )
 
 else(APPLE)
@@ -12,7 +11,6 @@ else(APPLE)
         KisHeifTest.cpp
         TEST_NAME KisHeifTest
         LINK_LIBRARIES kritaui kritatestsdk
-        NAME_PREFIX "plugins-impex-"
     )
 
 

@@ -4,5 +4,4 @@
 krita_add_broken_unit_test( kis_exif_test.cpp
     TEST_NAME KisExifTest
     LINK_LIBRARIES kritametadata kritaui kritatestsdk
-    NAME_PREFIX "plugins-metadata-"
     )

@@ -7,6 +7,23 @@ include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(KritaTestSuite)
 
+# set variable on the include scope, as consumers are supposed to have access to it
+if(NOT DEFINED KIS_TEST_NAME_PREFIX_IGNORE_DIRS)
+    set(KIS_TEST_NAME_PREFIX_IGNORE_DIRS "src" "test" "tests" "autotest" "autotests")
+endif()
+
+# private helper method
+function(_krita_test_name_prefix_from_project_path _name_prefix_varname)
+    file(RELATIVE_PATH _project_path ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+    file(TO_CMAKE_PATH ${_project_path} _project_path)
+    string(REPLACE "/" ";" _dirs ${_project_path})
+    list(REMOVE_ITEM _dirs ${KIS_TEST_NAME_PREFIX_IGNORE_DIRS})
+    string(JOIN "-" _name_prefix ${_dirs})
+    if (_name_prefix)
+        string(APPEND _name_prefix "-")
+    endif()
+    set(${_name_prefix_varname} ${_name_prefix} PARENT_SCOPE)
+endfunction()
 
 # modified version of ECMAddTests.cmake in cmake-extra-modules
 function(KRITA_ADD_UNIT_TEST)
@@ -26,6 +43,9 @@ function(KRITA_ADD_UNIT_TEST)
   else()
     #more than one source file passed, but no test name given -> error
     message(FATAL_ERROR "kis_add_test() called with multiple source files but without setting \"TEST_NAME\"")
+  endif()
+  if (NOT ARG_NAME_PREFIX)
+      _krita_test_name_prefix_from_project_path(ARG_NAME_PREFIX)
   endif()
 
   set(_testname ${ARG_NAME_PREFIX}${_targetname})

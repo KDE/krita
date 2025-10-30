@@ -16,7 +16,6 @@ kis_add_tests(
     TestFallBackColorTransformation.cpp
     TestKoChannelInfo.cpp
 
-    NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment KF${KF_MAJOR}::I18n kritatestsdk
     )
 
@@ -24,7 +23,7 @@ kis_add_test(
     TestCompositeOpInversion.cpp TestCompositeOpInversion_p.cpp
     TEST_NAME TestCompositeOpInversion
     LINK_LIBRARIES kritapigment KF${KF_MAJOR}::I18n kritatestsdk
-    NAME_PREFIX "libs-pigment-")
+    )
 
 kis_add_tests(
     TestColorConversion.cpp
@@ -32,7 +31,6 @@ kis_add_tests(
     TestKisSwatchGroup.cpp
     TestKoStopGradient.cpp
 
-    NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment kritatestsdk
     )
 

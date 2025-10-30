@@ -131,32 +131,27 @@ kis_add_tests(
     KisSpatialContainerTest.cpp
     KisGridInterpolationToolsTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
-    NAME_PREFIX "libs-image-"
     )
 
 kis_add_test(
     KisMplTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk kritaglobal
-    NAME_PREFIX "libs-image-"
     )
 
 kis_add_test(
     kis_clone_layer_test.cpp
     LINK_LIBRARIES kritaimage kritatestsdk kritaglobal kritatransformmaskstubs
-    NAME_PREFIX "libs-image-"
     )
 
 kis_add_test(
     kis_transform_mask_test.cpp
     LINK_LIBRARIES kritaimage kritatestsdk kritaglobal kritatransformmaskstubs
-    NAME_PREFIX "libs-image-"
     )
 
 
 krita_add_broken_unit_tests(
     kis_perspective_transform_worker_test.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
-    NAME_PREFIX "libs-image-"
     )
 
 if(APPLE)

@@ -46,21 +46,27 @@ public:
     bool m_isReady {false};
 };
 
-class KisWaylandAPIImageDescription : public QObject, public QtWayland::wp_image_description_v1
+/**
+ * A wrapper for image description object, which doesn't support
+ * fetching the info object, i.e. the one returned by creators
+ */
+class KisWaylandAPIImageDescriptionNoInfo : public QObject, public QtWayland::wp_image_description_v1
 {
     Q_OBJECT
 public:
-    explicit KisWaylandAPIImageDescription(::wp_image_description_v1 *descr);
+    explicit KisWaylandAPIImageDescriptionNoInfo(::wp_image_description_v1 *descr);
 
-    ~KisWaylandAPIImageDescription();
+    ~KisWaylandAPIImageDescriptionNoInfo();
 
-    Q_SIGNAL void done();
     Q_SIGNAL void sigDescriptionConstructed(bool success);
-
-    KisWaylandAPIImageDescriptionInfo info;
 
     uint32_t identity() const {
         return m_identity;
+    }
+
+    using cause = QtWayland::wp_image_description_v1::cause;
+    std::optional<cause> error() const {
+        return m_error;
     }
 
 protected:
@@ -69,6 +75,23 @@ protected:
 
 private:
     uint32_t m_identity {0};
+    std::optional<QtWayland::wp_image_description_v1::cause> m_error;
+};
+
+/**
+ * A wrapper for image description object, which supports fetching
+ * the info object, i.e. the one returned by "preferred" space or
+ * the description of the output.
+ */
+class KisWaylandAPIImageDescription : public KisWaylandAPIImageDescriptionNoInfo
+{
+    Q_OBJECT
+public:
+    explicit KisWaylandAPIImageDescription(::wp_image_description_v1 *descr);
+
+    Q_SIGNAL void done();
+
+    KisWaylandAPIImageDescriptionInfo info;
 };
 
 

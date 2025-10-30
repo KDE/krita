@@ -23,6 +23,9 @@ public:
     void wp_color_management_surface_feedback_v1_preferred_changed(uint32_t identity) override;
 
     std::unique_ptr<KisWaylandAPIImageDescription> m_preferred;
+
+private:
+    void requestPreferredDescriptionInfo();
 };
 
 class KisWaylandAPISurface : public QObject, public QtWayland::wp_color_management_surface_v1

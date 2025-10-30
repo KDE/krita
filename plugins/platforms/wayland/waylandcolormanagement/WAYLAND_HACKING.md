@@ -87,3 +87,11 @@ Your app should not die :)
 
 **WARNING:** it will kill all your XWayland apps (and wayland-native apps
 that handle this case incorrectly).
+
+## How to debug Wayland protocol interactions
+
+You can set `WAYLAND_DEBUG` environment variable:
+
+```bash
+WAYLAND_DEBUG=1 krita | grep -E 'image|color'
+```

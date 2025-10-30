@@ -16,7 +16,6 @@
 #include "kis_ui_types.h"
 
 class KisCanvas2;
-class KisDisplayColorConverter;
 class QOpenGLShaderProgram;
 class QPainterPath;
 class KisOptimizedBrushOutline;
@@ -36,7 +35,12 @@ class KRITAUI_EXPORT KisOpenGLCanvas2
 
 public:
 
-    KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter);
+    KisOpenGLCanvas2(KisCanvas2 *canvas,
+        KisCoordinatesConverter *coordinatesConverter,
+        QWidget *parent, KisImageWSP image,
+        const KisDisplayConfig &displayConfig,
+        QSharedPointer<KisDisplayFilter> displayFilter,
+        BitDepthMode bitDepthRequest);
 
     ~KisOpenGLCanvas2() override;
 
@@ -70,7 +74,7 @@ public: // Implement kis_abstract_canvas_widget interface
     WrapAroundAxis wrapAroundViewingModeAxis() const override;
 
     void channelSelectionChanged(const QBitArray &channelFlags) override;
-    void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
+    void setDisplayConfig(const KisDisplayConfig &config) override;
     void finishResizingImage(qint32 w, qint32 h) override;
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;
@@ -87,6 +91,9 @@ public: // Implement kis_abstract_canvas_widget interface
     void setLodResetInProgress(bool value) override;
 
     KisOpenGLImageTexturesSP openGLImageTextures() const;
+
+    BitDepthMode currentBitDepthMode() const override;
+    QString currentBitDepthUserReport() const override;
 
 public Q_SLOTS:
     void slotConfigChanged();

@@ -50,3 +50,8 @@ void KisImageConfigNotifier::notifyAutoKeyFrameConfigurationChanged()
 {
     m_d->autoKeyframeUpdateCompressor.start();
 }
+
+void KisImageConfigNotifier::notifyGlobalProofingConfigChanged()
+{
+    Q_EMIT globalProofingConfigChanged();
+}

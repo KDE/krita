@@ -159,8 +159,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft, const Ki
 
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
-    KisConfig cfg(true);
-    const KisDisplayConfig displayConfig(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()), cfg);
+    const KisDisplayConfig displayConfig = KisMimeData::displayConfigForMimePastes();
 
     qimage = dev->convertToQImage(displayConfig.profile,
                                   displayConfig.intent,
@@ -504,7 +503,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
         const KoColorSpace *cs = nullptr;
         const KoColorProfile *profile = nullptr;
         if (!profile && behaviour == PASTE_ASSUME_MONITOR)
-            profile = cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()));
+            profile = KisMimeData::displayConfigForMimePastes().profile;
 
         cs = KoColorSpaceRegistry::instance()->rgb8(profile);
         if (!cs) {

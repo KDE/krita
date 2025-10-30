@@ -138,6 +138,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
+    KisMultiSurfaceStateManager.cpp
     KisLayerThumbnailCache.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
@@ -308,6 +309,7 @@ set(kritaui_LIB_SRCS
     widgets/KisDlgListPicker.cpp
     widgets/kis_round_hud_button.cpp
     widgets/KisDockerHud.cpp
+    widgets/KisProofingOptionsWidget.cpp
 
     widgets/KisGrabKeyboardFocusRecoveryWorkaround.cpp
 
@@ -572,6 +574,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgcolorspaceselector.ui
     forms/wdgcolorspaceselectoradvanced.ui
     forms/wdgdisplaysettings.ui
+    forms/wdgproofingoptions.ui
     forms/kis_matrix_widget.ui
     forms/wdggeometryoptions.ui
     forms/wdgnewimage.ui
@@ -662,6 +665,7 @@ if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
 
         KisSRGBSurfaceColorSpaceManager.cpp
         KisCanvasSurfaceColorSpaceManager.cpp
+        KisRootSurfaceInfoProxy.cpp
     )
 endif()
 

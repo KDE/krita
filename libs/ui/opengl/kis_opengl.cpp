@@ -42,6 +42,7 @@
 #include "opengl/kis_opengl.h"
 
 #include <config-hdr.h>
+#include <config-use-surface-color-management-api.h>
 
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
@@ -405,7 +406,7 @@ bool KisOpenGL::needsFenceWorkaround()
 
 void KisOpenGL::testingInitializeDefaultSurfaceFormat()
 {
-    setDefaultSurfaceConfig(selectSurfaceConfig(KisOpenGL::RendererAuto, KisConfig::BT709_G22, false));
+    setDefaultSurfaceConfig(selectSurfaceConfig(KisOpenGL::RendererAuto, KisConfig::BT709_G22, KisConfig::CanvasSurfaceBitDepthMode::DepthAuto, false));
 }
 
 void KisOpenGL::setDebugSynchronous(bool value)
@@ -576,7 +577,7 @@ QOpenGLContext::OpenGLModuleType determineOpenGLImplementation(const RendererInf
 }
 
 KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer renderer,
-                                                KisConfig::RootSurfaceFormat rootSurfaceFormat,
+                                                std::pair<KisSurfaceColorSpaceWrapper, int> rootSurfaceFormat,
                                                 bool debugContext)
 {
     RendererInfo info = getRendererInfo(renderer);
@@ -753,6 +754,9 @@ public:
         ORDER_BY(lhs.rendererId() == m_preferredRendererByQt,
                  rhs.rendererId() == m_preferredRendererByQt);
 
+        ORDER_BY(lhs.format.redBufferSize() == m_userPreferredBitDepth,
+                 rhs.format.redBufferSize() == m_userPreferredBitDepth);
+
         return false;
     }
 
@@ -782,6 +786,10 @@ public:
         m_openGLESBlacklisted = openGLESBlacklisted;
     }
 
+    void setUserPreferredBitDepth(int value) {
+        m_userPreferredBitDepth = value;
+    }
+
     bool isOpenGLBlacklisted() const {
         return m_openGLBlacklisted;
     }
@@ -796,6 +804,10 @@ public:
 
     KisOpenGL::OpenGLRenderer preferredRendererByUser() const {
         return m_preferredRendererByUser;
+    }
+
+    int userPreferredBitDepth() const {
+        return m_userPreferredBitDepth;
     }
 
 private:
@@ -847,6 +859,7 @@ private:
     KisOpenGL::OpenGLRenderer m_preferredRendererByHDR = KisOpenGL::RendererAuto;
     bool m_openGLBlacklisted = false;
     bool m_openGLESBlacklisted = false;
+    int m_userPreferredBitDepth = 8;
 };
 
 struct DetectionDebug : public QDebug
@@ -867,6 +880,7 @@ struct DetectionDebug : public QDebug
 
 KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRenderer preferredRenderer,
                                                          KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
+                                                         KisConfig::CanvasSurfaceBitDepthMode preferredCanvasSurfaceBitMode,
                                                          bool enableDebug)
 {
     QVector<KLocalizedString> warningMessages;
@@ -883,22 +897,40 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     renderersToTest.insert(RendererSoftware, Info());
 #endif
 
+    auto makeDefaultSurfaceFormatPair = [] () -> std::pair<KisSurfaceColorSpaceWrapper, int> {
+        return {KisSurfaceColorSpaceWrapper::DefaultColorSpace, 8};
+    };
 
-#ifdef HAVE_HDR
-    QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22, KisConfig::BT709_G10, KisConfig::BT2020_PQ});
+#if defined HAVE_HDR
+    std::vector<std::pair<KisSurfaceColorSpaceWrapper, int>> formatSymbolPairs(
+        {
+            // TODO: check if we can use real sRGB space here
+            {KisSurfaceColorSpaceWrapper::DefaultColorSpace, 8},
+            {KisSurfaceColorSpaceWrapper::scRGBColorSpace, 16},
+            {KisSurfaceColorSpaceWrapper::bt2020PQColorSpace, 10}
+        });
+#elif KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    std::vector<std::pair<KisSurfaceColorSpaceWrapper, int>> formatSymbolPairs(
+        {
+            {KisSurfaceColorSpaceWrapper::DefaultColorSpace, 8},
+            {KisSurfaceColorSpaceWrapper::DefaultColorSpace, 10},
+        });
 #else
-    QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22});
+    std::vector<std::pair<KisSurfaceColorSpaceWrapper, int>> formatSymbolPairs(
+        {
+            {KisSurfaceColorSpaceWrapper::DefaultColorSpace, 8},
+        });
 #endif
 
     KisOpenGL::RendererConfig defaultConfig = generateSurfaceConfig(KisOpenGL::RendererAuto,
-                                                                    KisConfig::BT709_G22, false);
+                                                                    makeDefaultSurfaceFormatPair(), false);
     Info info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
 
 #ifdef Q_OS_WIN
     if (!info) {
         // try software rasterizer (WARP)
         defaultConfig = generateSurfaceConfig(KisOpenGL::RendererSoftware,
-                                              KisConfig::BT709_G22, false);
+                                              makeDefaultSurfaceFormatPair(), false);
         info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
 
         if (!info) {
@@ -941,6 +973,12 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     compareOp.setPreferredRendererByUser(preferredRenderer);
     compareOp.setOpenGLESBlacklisted(false); // We cannot blacklist ES drivers atm
 
+#if KRITA_USE_SURFACE_COLOR_MANAGEMENT_API
+    // 10-bit is the default, 8-bit is set explicitly by the user
+    compareOp.setUserPreferredBitDepth(preferredCanvasSurfaceBitMode == KisConfig::CanvasSurfaceBitDepthMode::Depth8Bit ? 8 : 10);
+#else
+    Q_UNUSED(preferredCanvasSurfaceBitMode)
+#endif
 
     renderersToTest[defaultRenderer] = info;
 
@@ -948,7 +986,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         Info info = it.value();
 
         if (!info) {
-            const RendererConfig config = generateSurfaceConfig(it.key(), KisConfig::BT709_G22, false);
+            const RendererConfig config = generateSurfaceConfig(it.key(), makeDefaultSurfaceFormatPair(), false);
             dbgOpenGL << "Probing" << it.key() << "from default:" << config.format << config.angleRenderer
                       << config.rendererId();
             info = KisOpenGLModeProber::instance()->probeFormat(config);
@@ -999,8 +1037,8 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         // if default mode of the renderer doesn't work, then custom won't either
         if (!it.value()) continue;
 
-        Q_FOREACH (const KisConfig::RootSurfaceFormat formatSymbol, formatSymbols) {
-            preferredConfigs << generateSurfaceConfig(it.key(), formatSymbol, enableDebug);
+        Q_FOREACH (const auto &formatPair, formatSymbolPairs) {
+            preferredConfigs << generateSurfaceConfig(it.key(), formatPair, enableDebug);
         }
     }
 

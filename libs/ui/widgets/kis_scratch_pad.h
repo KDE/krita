@@ -19,6 +19,7 @@
 #include <kis_gradient_painter.h>
 #include <kritaui_export.h>
 #include <KisDisplayConfig.h>
+#include <KisMultiSurfaceStateManager.h>
 
 class QColor;
 
@@ -233,6 +234,8 @@ private:
     void updateViewport();
     bool updateViewportImpl();
 
+    void assignNewSurfaceState(const KisMultiSurfaceStateManager::State &newState);
+
     QTransform documentToWidget() const;
     QTransform widgetToDocument() const;
 
@@ -301,6 +304,8 @@ private:
 
     QImage m_presetImage;
     QScopedPointer<KisScreenMigrationTracker> m_screenMigrationTracker;
+    KisMultiSurfaceStateManager m_multiSurfaceStateManager;
+    KisMultiSurfaceStateManager::State m_multiSurfaceState;
 };
 
 #endif // KIS_SCRATCH_PAD_H

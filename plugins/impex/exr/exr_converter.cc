@@ -203,7 +203,16 @@ const KoColorSpace *kisTypeToColorSpace(QString colorModelID, ImageType imageTyp
     };
 
     const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModelID, colorDepthID);
-    const QString profileName = KisConfig(false).readEntry("ExrDefaultColorProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
+    const QString defaultProfileForColorSpace = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
+
+    /**
+     * Our user settings are only for the RGB color model, for other models just use
+     * the default one provided by the color space.
+     */
+    const QString profileName =
+        colorModelID == RGBAColorModelID.id() ?
+        KisConfig(false).readEntry("ExrDefaultColorProfile", defaultProfileForColorSpace) :
+        defaultProfileForColorSpace;
 
     return KoColorSpaceRegistry::instance()->colorSpace(colorModelID, colorDepthID, profileName);
 

@@ -2583,8 +2583,16 @@ KisImageAnimationInterface* KisImage::animationInterface() const
 
 void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfig)
 {
+    const bool changed = bool(m_d->proofingConfig) != bool(proofingConfig) ||
+        (m_d->proofingConfig && proofingConfig && *m_d->proofingConfig != *proofingConfig);
+
+    // we still assign even when unchanged since they can be different
+    // shared pointer objects
     m_d->proofingConfig = proofingConfig;
-    Q_EMIT sigProofingConfigChanged();
+
+    if (changed) {
+        Q_EMIT sigProofingConfigChanged();
+    }
 }
 
 KisProofingConfigurationSP KisImage::proofingConfiguration() const

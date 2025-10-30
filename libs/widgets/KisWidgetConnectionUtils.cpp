@@ -24,6 +24,22 @@
 #include "kis_color_button.h"
 #include "kis_file_name_requester.h"
 
+/**
+ * Sanity check asserts that check the validity of the passed
+ * properties (as c-strings). Sanity check intentionally use
+ * Q_ASSERT to strip this code completely from the release builds.
+ */
+#define SANITY_CHECK_PROPERTY_EXISTS(prop) Q_ASSERT(prop.isValid())
+#define SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(prop) do { Q_ASSERT(prop.isValid()); Q_ASSERT(prop.isWritable()); } while (0)
+#define SANITY_CHECK_PROPERTY_METATYPE_REGISTERED(prop) do { \
+    const int metaTypeId = QMetaType::type(prop.typeName()); \
+    if (metaTypeId <= 0) { \
+        qWarning().nospace() << "WARNING: metatype for property \"" << prop.name() << "\" is not register. Please register type \"" << prop.typeName() << "\""; \
+    } \
+    Q_ASSERT(metaTypeId > 0); \
+    Q_ASSERT(QMetaType::isRegistered(metaTypeId)); \
+} while (0)
+
 class ConnectButtonStateHelper : public QObject
 {
     Q_OBJECT
@@ -84,6 +100,7 @@ void connectButtonLikeControl(Button *button, QObject *source, const char *prope
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -125,6 +142,7 @@ void connectControl(QSpinBox *spinBox, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -151,6 +169,7 @@ void connectControl(QSlider *slider, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -177,6 +196,7 @@ void connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *proper
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -227,6 +247,7 @@ void connectControlState(QSpinBox *spinBox, QObject *source, const char *readSta
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStateProperty));
+    SANITY_CHECK_PROPERTY_EXISTS(readStateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
 
@@ -246,6 +267,7 @@ void connectControlState(QSpinBox *spinBox, QObject *source, const char *readSta
     helper->setState(readStateProp.read(source).value<IntSpinBoxState>());
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
+    SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
     if (writeProp.isWritable()) {
         QObject::connect(spinBox, qOverload<int>(&QSpinBox::valueChanged),
                          source, [writeProp, source] (int value) { writeProp.write(source, value); });
@@ -280,6 +302,7 @@ void connectControlState(QDoubleSpinBox *spinBox, QObject *source, const char *r
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStateProperty));
+    SANITY_CHECK_PROPERTY_EXISTS(readStateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
 
@@ -299,6 +322,7 @@ void connectControlState(QDoubleSpinBox *spinBox, QObject *source, const char *r
     helper->setState(readStateProp.read(source).value<DoubleSpinBoxState>());
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
+    SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
     if (writeProp.isWritable()) {
         QObject::connect(spinBox, qOverload<qreal>(&QDoubleSpinBox::valueChanged),
                          source, [writeProp, source] (qreal value) { writeProp.write(source, value); });
@@ -310,6 +334,7 @@ void connectControl(KisMultipliersDoubleSliderSpinBox *spinBox, QObject *source,
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -380,6 +405,7 @@ void connectControl(QButtonGroup *group, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -409,6 +435,7 @@ void connectControlState(QButtonGroup *group, QObject *source, const char *readS
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStateProperty));
+    SANITY_CHECK_PROPERTY_EXISTS(readStateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
 
@@ -428,6 +455,8 @@ void connectControlState(QButtonGroup *group, QObject *source, const char *readS
     helper->updateState(readStateProp.read(source).value<ButtonGroupState>());
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
+    SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
+
     if (writeProp.isWritable()) {
         QObject::connect(helper, &ConnectButtonGroupHelper::idClicked,
                          source, [writeProp, source] (int value) { writeProp.write(source, value); });
@@ -438,6 +467,7 @@ void connectControlState(QAbstractButton *button, QObject *source, const char *r
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStatePropertyName));
+    SANITY_CHECK_PROPERTY_EXISTS(readStateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
 
@@ -457,6 +487,7 @@ void connectControlState(QAbstractButton *button, QObject *source, const char *r
     helper->updateState(readStateProp.read(source).value<CheckBoxState>());
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
+    SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
     if (writeProp.isWritable()) {
         button->connect(button, &QAbstractButton::toggled,
                         source, [writeProp, source] (bool value) { writeProp.write(source, value); });
@@ -468,6 +499,7 @@ void connectControlState(QComboBox *button, QObject *source, const char *readSta
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStatePropertyName));
+    SANITY_CHECK_PROPERTY_EXISTS(readStateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
 
@@ -487,6 +519,15 @@ void connectControlState(QComboBox *button, QObject *source, const char *readSta
     helper->updateState(readStateProp.read(source).value<ComboBoxState>());
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
+    SANITY_CHECK_PROPERTY_EXISTS_AND_WRITABLE(writeProp);
+
+    /**
+     * On Qt5 to perform conversion from int to enum, the enum should be registered as
+     * a metatype, so we should manually verify that. For some reason, on Qt6 it is not
+     * necessary.
+     */
+    SANITY_CHECK_PROPERTY_METATYPE_REGISTERED(writeProp);
+
     if (writeProp.isWritable()) {
         QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged),
                          source, [writeProp, source] (int value) { writeProp.write(source, value); });
@@ -497,6 +538,7 @@ void connectControl(QComboBox *button, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty stateProp = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(stateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(stateProp.hasNotifySignal());
 
@@ -514,6 +556,8 @@ void connectControl(QComboBox *button, QObject *source, const char *property)
     button->setCurrentIndex(stateProp.read(source).value<int>());
 
     if (stateProp.isWritable()) {
+        // see a comment in connectControlState(QComboBox *button, ...)
+        SANITY_CHECK_PROPERTY_METATYPE_REGISTERED(stateProp);
         QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged),
                          source, [stateProp, source] (int value) { stateProp.write(source, value); });
     }
@@ -552,6 +596,7 @@ void connectControl(KisSpacingSelectionWidget *widget, QObject *source, const ch
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty stateProp = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(stateProp);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(stateProp.hasNotifySignal());
 
@@ -580,6 +625,7 @@ void connectControl(KisAngleSelector *widget, QObject *source, const char *prope
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -606,6 +652,7 @@ void connectControl(QLineEdit *widget, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -632,6 +679,7 @@ void connectControl(KisFileNameRequester *widget, QObject *source, const char *p
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -659,6 +707,7 @@ void connectControl(KisColorButton *widget, QObject *source, const char *propert
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
 
@@ -686,6 +735,10 @@ void connectWidgetVisibleToProperty(QWidget* widget, QObject* source, const char
 {
 	const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
 	QMetaMethod signal = prop.notifySignal();
 	
     const QMetaObject* dstMeta = widget->metaObject();
@@ -701,6 +754,10 @@ void connectWidgetEnabledToProperty(QWidget* widget, QObject* source, const char
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    SANITY_CHECK_PROPERTY_EXISTS(prop);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
     QMetaMethod signal = prop.notifySignal();
 
     const QMetaObject* dstMeta = widget->metaObject();

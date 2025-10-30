@@ -187,10 +187,6 @@ private Q_SLOTS:
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
     void toggleUseDefaultColorSpace(bool useDefColorSpace);
 
-    void updateProofingWidgets();
-    void proofingDisplayModeUpdated();
-    void proofingConversionIntentUpdated();
-    void proofingDisplayIntentUpdated();
     void updateProofingDisplayInfo();
 
 public:
@@ -202,10 +198,12 @@ public:
     QScopedPointer<KisProofingConfigModel> m_proofModel;
 
     using CanvasSurfaceMode = KisConfig::CanvasSurfaceMode;
+    using CanvasSurfaceBitDepthMode = KisConfig::CanvasSurfaceBitDepthMode;
 
     bool m_colorManagedByOS {false};
     QPointer<QCheckBox> m_chkEnableCanvasColorSpaceManagement;
     QPointer<KisSqueezedComboBox> m_canvasSurfaceColorSpace;
+    QPointer<KisSqueezedComboBox> m_canvasSurfaceBitDepth;
 };
 
 //=======================

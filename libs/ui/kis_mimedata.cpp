@@ -38,6 +38,8 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KisDisplayConfig.h>
+#include <KisPlatformPluginInterfaceFactory.h>
+#include <opengl/KisOpenGLModeProber.h>
 
 #include <QApplication>
 #include <QImage>
@@ -70,6 +72,32 @@ KisMimeData::KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCop
     Q_FOREACH (KisNodeSP node, nodes) {
         m_copiedBounds |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
     }
+}
+
+KisDisplayConfig KisMimeData::displayConfigForMimePastes()
+{
+    KisDisplayConfig result;
+
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS() ||
+        KisOpenGLModeProber::instance()->useHDRMode()) {
+        /**
+         * When the surface is managed, we just put the data in sRGB mode, because
+         * the compositor expects untagged data to be sRGB.
+         */
+        result.profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    } else {
+        KisConfig cfg(true);
+        const KoColorProfile *profile = cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()));
+        KIS_SAFE_ASSERT_RECOVER(profile) {
+            result.profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+        }
+    }
+
+    result.intent = KoColorConversionTransformation::internalRenderingIntent();
+    result.conversionFlags = KoColorConversionTransformation::internalConversionFlags();
+    result.isHDR = false;
+
+    return result;
 }
 
 void KisMimeData::deepCopyNodes()
@@ -187,8 +215,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QMetaType preferredT
 
         QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image, m_copiedBounds));
 
-        const KisDisplayConfig displayConfig(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()), cfg);
-
+        const KisDisplayConfig displayConfig = this->displayConfigForMimePastes();
         return doc->image()->projection()->convertToQImage(displayConfig.profile,
                                                            displayConfig.intent,
                                                            displayConfig.conversionFlags);

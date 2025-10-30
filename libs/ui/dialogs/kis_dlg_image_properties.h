@@ -37,19 +37,13 @@ public:
     bool convertLayerPixels() const;
     const KoColorSpace * colorSpace() const;
 
-private Q_SLOTS:
+    virtual int exec() override;
 
+private Q_SLOTS:
     void setAnnotation(const QString& type);
     void setCurrentColor();
-    void setProofingConfig();
-    void updateProofingWidgets();
+    void setProofingConfigToImage();
     void updateDisplayConfigInfo();
-
-    void proofingDisplayModeUpdated();
-    void proofingConversionIntentUpdated();
-    void proofingDisplayIntentUpdated();
-
-    void slotSaveDialogState();
 
     void slotColorSpaceChanged(const KoColorSpace*);
 private:

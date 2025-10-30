@@ -25,6 +25,7 @@ class KisSnapConfig;
 class QSettings;
 class KisOcioConfiguration;
 struct KisCumulativeUndoData;
+class QSurfaceFormat;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -162,6 +163,20 @@ public:
      */
     CanvasSurfaceMode canvasSurfaceColorSpaceManagementMode(bool defaultValue = false) const;
     void setCanvasSurfaceColorSpaceManagementMode(CanvasSurfaceMode value);
+
+    enum class CanvasSurfaceBitDepthMode {
+        DepthAuto = 0,
+        Depth8Bit,
+        Depth10Bit
+    };
+
+    static CanvasSurfaceBitDepthMode canvasSurfaceBitDepthMode(QSettings *settings, bool defaultValue = false);
+    static void setCanvasSurfaceBitDepthMode(QSettings *settings, CanvasSurfaceBitDepthMode value);
+
+    CanvasSurfaceBitDepthMode canvasSurfaceBitDepthMode(bool defaultValue = false) const;
+    void setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value);
+
+    CanvasSurfaceBitDepthMode effectiveCanvasSurfaceBitDepthMode(const QSurfaceFormat &format) const;
 
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
@@ -794,5 +809,12 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceMode)
+Q_DECLARE_METATYPE(KisConfig::CanvasSurfaceBitDepthMode)
 
 #endif // KIS_CONFIG_H_
+
+KRITAUI_EXPORT
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceMode &mode);
+
+KRITAUI_EXPORT
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceBitDepthMode &mode);

@@ -12,6 +12,7 @@
 #include <KoPluginLoader.h>
 #include <kpluginfactory.h>
 #include <surfacecolormanagement/KisOutputColorInfoInterface.h>
+#include <surfacecolormanagement/KisSurfaceColorManagementInfo.h>
 
 
 DlgColorManagementInfo::DlgColorManagementInfo(QWidget *parent)
@@ -37,6 +38,17 @@ DlgColorManagementInfo::DlgColorManagementInfo(QWidget *parent)
                             initializeText();
                         }
                     });
+        }
+
+        m_surfaceColorManagementInfo.reset(
+            factory->create<KisSurfaceColorManagementInfo>(nullptr));
+
+        if (m_surfaceColorManagementInfo) {
+            auto future = m_surfaceColorManagementInfo->debugReport();
+            future.then([this] (const QString &report) {
+                m_surfaceManagementReport = report;
+                initializeText();
+            });
         }
     }
 }
@@ -67,6 +79,7 @@ QString DlgColorManagementInfo::replacementWarningText()
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <kis_canvas2.h>
+#include <KisPlatformPluginInterfaceFactory.h>
 
 QString DlgColorManagementInfo::infoText(QSettings& kritarc)
 {
@@ -84,7 +97,7 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
     s << "Native window handle:" << mainWindow->windowHandle() << Qt::endl;
     s << Qt::endl;
 
-    s.noquote().nospace() << mainWindow->colorManagementReport();
+    s.noquote().nospace() << KisPlatformPluginInterfaceFactory::instance()->colorManagementReport(mainWindow);
     s.space().quote();
     s << Qt::endl;
 
@@ -99,7 +112,7 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
         s << "Native window handle:" << canvas->canvasWidget()->windowHandle() << Qt::endl;
 
 
-        if (mainWindow->managedSurfaceProfile() &&
+        if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS() &&
             canvas->canvasWidget()->windowHandle() == mainWindow->windowHandle()) {
 
                 s << "WARNING: the canvas shares the surface with the main window on a platform with managed surface color space!";
@@ -134,6 +147,14 @@ QString DlgColorManagementInfo::infoText(QSettings& kritarc)
             s << Qt::endl;
         }
     }
+
+    s << "Color management plugin report" << Qt::endl;
+    s << "===" << Qt::endl;
+    s << Qt::endl;
+
+    s.noquote().nospace() << (m_surfaceManagementReport.isEmpty() ? "<no information available>" : m_surfaceManagementReport);
+    s.space().quote();
+    s << Qt::endl;
 
     return report;
 }

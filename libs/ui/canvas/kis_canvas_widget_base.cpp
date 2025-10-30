@@ -247,3 +247,13 @@ void KisCanvasWidgetBase::processFocusOutEvent(QFocusEvent *event)
 {
     m_d->toolProxy->focusOutEvent(event);
 }
+
+KisAbstractCanvasWidget::BitDepthMode KisCanvasWidgetBase::currentBitDepthMode() const
+{
+    return BitDepthMode::Depth8Bit;
+}
+
+QString KisCanvasWidgetBase::currentBitDepthUserReport() const
+{
+    return QString("Canvas bit depth management is not supported\n");
+}

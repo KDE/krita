@@ -31,6 +31,41 @@
 #include "kis_display_filter.h"
 #include <KisDisplayConfig.h>
 
+#include <KisCanvasState.h>
+
+namespace {
+/**
+ * RelevantCanvasState represents a part of the canvas state
+ * which is relevant for the prescaled projection. Basically,
+ * if this structure changes, then the prescaled projection
+ * needs an update.
+ */
+struct RelevantCanvasState
+{
+    qreal zoom = 1.0;
+    qreal rotation = 0.0;
+    QPointF viewportOffsetF;
+
+    std::tuple<qreal,qreal> transformations() const {
+        return {zoom, rotation};
+    }
+
+    bool operator==(const RelevantCanvasState& other) const {
+        return qFuzzyCompare(zoom, other.zoom) &&
+               qFuzzyCompare(rotation, other.rotation) &&
+               viewportOffsetF == other.viewportOffsetF;
+    }
+
+    bool operator!=(const RelevantCanvasState& other) const {
+        return !(*this == other);
+    }
+
+    static RelevantCanvasState fromCanvasState(const KisCanvasState &state) {
+        return {state.effectiveZoom, state.rotation, state.viewportOffsetF};
+    }
+};
+}
+
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 
 inline void copyQImageBuffer(uchar* dst, const uchar* src , qint32 deltaX, qint32 width)
@@ -70,6 +105,7 @@ struct KisPrescaledProjection::Private {
 
     QImage prescaledQImage;
 
+    std::optional<RelevantCanvasState> currentRelevantCanvasState;
     QSize updatePatchSize;
     QSize canvasSize;
     QSize viewportSize;
@@ -113,6 +149,7 @@ QImage KisPrescaledProjection::prescaledQImage() const
 void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter)
 {
     m_d->coordinatesConverter = coordinatesConverter;
+    m_d->currentRelevantCanvasState = RelevantCanvasState::fromCanvasState(KisCanvasState::fromConverter(*coordinatesConverter));
 }
 
 void KisPrescaledProjection::updateSettings()
@@ -120,6 +157,25 @@ void KisPrescaledProjection::updateSettings()
     KisImageConfig imageConfig(false);
     m_d->updatePatchSize.setWidth(imageConfig.updatePatchWidth());
     m_d->updatePatchSize.setHeight(imageConfig.updatePatchHeight());
+}
+
+void KisPrescaledProjection::notifyCanvasStateChanged(const KisCanvasState &state)
+{
+    auto relevantState = RelevantCanvasState::fromCanvasState(state);
+
+    if (m_d->currentRelevantCanvasState == relevantState) return;
+
+    if (!m_d->currentRelevantCanvasState ||
+        m_d->currentRelevantCanvasState->transformations() != relevantState.transformations()) {
+
+        updateViewportSize();
+        preScale();
+    } else {
+        const QPointF moveOffset = m_d->currentRelevantCanvasState->viewportOffsetF - relevantState.viewportOffsetF;
+        viewportMoved(-moveOffset);
+    }
+
+    m_d->currentRelevantCanvasState = relevantState;
 }
 
 void KisPrescaledProjection::viewportMoved(const QPointF &offset)
@@ -269,9 +325,9 @@ void KisPrescaledProjection::setDisplayFilter(QSharedPointer<KisDisplayFilter> d
 
 void KisPrescaledProjection::updateViewportSize()
 {
-    QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
-    QSizeF minimalSize(qMin(imageRect.width(), (qreal)m_d->canvasSize.width()),
-                       qMin(imageRect.height(), (qreal)m_d->canvasSize.height()));
+    QRect imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect();
+    QSizeF minimalSize(qMin(imageRect.width(), m_d->canvasSize.width()),
+                       qMin(imageRect.height(), m_d->canvasSize.height()));
     QRectF minimalRect(QPointF(0,0), minimalSize);
 
     m_d->viewportSize = m_d->coordinatesConverter->widgetToViewport(minimalRect).toAlignedRect().size();
@@ -282,12 +338,6 @@ void KisPrescaledProjection::updateViewportSize()
         m_d->prescaledQImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
         m_d->prescaledQImage.fill(0);
     }
-}
-
-void KisPrescaledProjection::notifyZoomChanged()
-{
-    updateViewportSize();
-    preScale();
 }
 
 void KisPrescaledProjection::notifyCanvasSizeChanged(const QSize &widgetSize)

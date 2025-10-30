@@ -7,6 +7,8 @@
 
 #define GL_GLEXT_PROTOTYPES
 
+#include <QWindow>
+
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/KisOpenGLCanvasRenderer.h"
 #include "opengl/KisOpenGLSync.h"
@@ -18,11 +20,11 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include <KisViewManager.h>
-#include <KisMainWindow.h>
 #include "KisRepaintDebugger.h"
 
 #include "KisOpenGLModeProber.h"
 #include "KisOpenGLContextSwitchLock.h"
+#include <KisPlatformPluginInterfaceFactory.h>
 
 #include "config-qt-patches-present.h"
 
@@ -54,6 +56,9 @@ protected:
     QColor borderColor() const override {
         return m_canvas->borderColor();
     }
+    GLenum internalTextureFormat() const override {
+        return m_canvas->textureFormat();
+    }
 };
 
 struct KisOpenGLCanvas2::Private
@@ -77,7 +82,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                    KisCoordinatesConverter *coordinatesConverter,
                                    QWidget *parent,
                                    KisImageWSP image,
-                                   KisDisplayColorConverter *colorConverter)
+                                   const KisDisplayConfig &displayConfig,
+                                   QSharedPointer<KisDisplayFilter> displayFilter,
+                                   BitDepthMode bitDepthRequest)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
@@ -87,7 +94,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
-    d->renderer = new KisOpenGLCanvasRenderer(new CanvasBridge(this), image, colorConverter);
+    d->renderer = new KisOpenGLCanvasRenderer(new CanvasBridge(this), image, displayConfig, displayFilter);
 
     connect(d->renderer->openGLImageTextures().data(),
             SIGNAL(sigShowFloatingMessage(QString, int, bool)),
@@ -106,7 +113,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
-    const bool osManagedSurfacePresent = canvas->viewManager()->mainWindow()->managedSurfaceProfile();
+    const bool osManagedSurfacePresent = KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS();
     bool useNativeSurfaceForCanvas = osManagedSurfacePresent && cfg.enableCanvasSurfaceColorSpaceManagement();
     if (qEnvironmentVariableIsSet("KRITA_USE_NATIVE_CANVAS_SURFACE")) {
         useNativeSurfaceForCanvas = qEnvironmentVariableIntValue("KRITA_USE_NATIVE_CANVAS_SURFACE");
@@ -124,17 +131,27 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     if (KisOpenGLModeProber::instance()->useHDRMode()) {
         setTextureFormat(GL_RGBA16F);
     } else {
-        /**
-         * When in pure OpenGL mode, the canvas surface will have alpha
-         * channel. Therefore, if our canvas blending algorithm produces
-         * semi-transparent pixels (and it does), then Krita window itself
-         * will become transparent. Which is not good.
-         *
-         * In Angle mode, GL_RGB8 is not available (and the transparence effect
-         * doesn't exist at all).
-         */
-        if (!KisOpenGL::hasOpenGLES()) {
-            setTextureFormat(GL_RGB8);
+        if (bitDepthRequest == BitDepthMode::Depth10Bit) {
+            if (QSurfaceFormat::defaultFormat().redBufferSize() < 10) {
+                warnOpenGL <<
+                    "WARNING: KisOpenGLCanvas2 was created with a 10-bit surface, "
+                    "while the global surface format is still set to 8-bit. Expect "
+                    "color banding to appear";
+            }
+            setTextureFormat(GL_RGB10_A2);
+        } else {
+            /**
+             * When in pure OpenGL mode, the canvas surface will have alpha
+             * channel. Therefore, if our canvas blending algorithm produces
+             * semi-transparent pixels (and it does), then Krita window itself
+             * will become transparent. Which is not good.
+             *
+             * In Angle mode, GL_RGB8 is not available (and the transparence effect
+             * doesn't exist at all).
+             */
+            if (!KisOpenGL::hasOpenGLES()) {
+                setTextureFormat(GL_RGB8);
+            }
         }
     }
 
@@ -393,10 +410,10 @@ void KisOpenGLCanvas2::showEvent(QShowEvent *e)
     notifyDecorationsWindowMinimized(false);
 }
 
-void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
+void KisOpenGLCanvas2::setDisplayConfig(const KisDisplayConfig &config)
 {
     KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
-    d->renderer->setDisplayColorConverter(colorConverter);
+    d->renderer->setDisplayConfig(config);
 }
 
 void KisOpenGLCanvas2::channelSelectionChanged(const QBitArray &channelFlags)
@@ -446,4 +463,78 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const
 {
     return d->renderer->openGLImageTextures();
+}
+
+KisOpenGLCanvas2::BitDepthMode KisOpenGLCanvas2::currentBitDepthMode() const 
+{
+    return
+        textureFormat() == GL_RGB10_A2 &&
+        format().redBufferSize() == 10 &&
+        format().greenBufferSize() == 10 &&
+        format().blueBufferSize() == 10 ?
+            BitDepthMode::Depth10Bit :
+            BitDepthMode::Depth8Bit;
+}
+
+QString KisOpenGLCanvas2::currentBitDepthUserReport() const {
+    QString report;
+    QDebug str(&report);
+
+    str << "Texture Format: " << Qt::hex << Qt::showbase << textureFormat() << Qt::reset;
+
+    switch (textureFormat()) {
+        case GL_RGB10_A2:
+            str << " (" << "GL_RGB10_A2" << ")";
+            break;
+        case GL_RGB10:
+            str << " (" << "GL_RGB10" << ")";
+            break;
+        case GL_RGB12:
+            str << " (" << "GL_RGB12" << ")";
+            break;
+        case GL_RGBA16:
+            str << " (" << "GL_RGBA16" << ")";
+            break;
+        case GL_RGB16:
+            str << " (" << "GL_RGB16" << ")";
+            break;
+        case GL_RGBA16F:
+            str << " (" << "GL_RGBA16F" << ")";
+            break;
+        case GL_RGB8:
+            str << " (" << "GL_RGB8" << ")";
+            break;
+        case GL_RGBA8:
+            str << " (" << "GL_RGBA8" << ")";
+            break;
+        default:
+            str << " (" << "<unknown>" << ")";
+            break;
+    }
+    str << Qt::endl;
+
+    str << "FBO Buffer Size: "
+        << "R: " << format().redBufferSize() << " "
+        << "G: " << format().greenBufferSize() << " "
+        << "B: " << format().blueBufferSize() << " "
+        << "A: " << format().alphaBufferSize() << Qt::endl;
+
+    QWindow *win = windowHandle();
+    if (win) {
+        str << "Window Buffer Size: "
+        << "R: " << win->format().redBufferSize() << " "
+        << "G: " << win->format().greenBufferSize() << " "
+        << "B: " << win->format().blueBufferSize() << " "
+        << "A: " << win->format().alphaBufferSize() << Qt::endl;
+    }
+
+    if (win) {
+        str << "Global Buffer Size: "
+        << "R: " << QSurfaceFormat::defaultFormat().redBufferSize() << " "
+        << "G: " << QSurfaceFormat::defaultFormat().greenBufferSize() << " "
+        << "B: " << QSurfaceFormat::defaultFormat().blueBufferSize() << " "
+        << "A: " << QSurfaceFormat::defaultFormat().alphaBufferSize() << Qt::endl;
+    }
+
+    return report;
 }

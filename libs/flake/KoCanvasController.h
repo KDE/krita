@@ -222,7 +222,6 @@ public:
     void emitDocumentMousePositionChanged(const QPointF &position) { Q_EMIT documentMousePositionChanged(position); }
     void emitSizeChanged(const QSize &size) { Q_EMIT sizeChanged(size); }
     void emitMoveDocumentOffset(const QPointF &oldOffset, const QPointF &newOffset) { Q_EMIT moveDocumentOffset(oldOffset, newOffset); }
-    void emitMoveViewportOffset(const QPointF &oldOffset, const QPointF &newOffset) { Q_EMIT moveViewportOffset(oldOffset, newOffset); }
     void emitEffectiveZoomChanged(qreal zoom) { Q_EMIT effectiveZoomChanged(zoom); }
     void emitZoomStateChanged(const KoZoomState &zoomState) { Q_EMIT zoomStateChanged(zoomState); }
     void emitDocumentRectInWidgetPixelsChanged(const QRectF &documentRectInWidgetPixels) { Q_EMIT documentRectInWidgetPixelsChanged(documentRectInWidgetPixels); }
@@ -279,14 +278,6 @@ Q_SIGNALS:
      * be drawn.
      */
     void moveDocumentOffset(const QPointF &oldOffset, const QPointF &newOffset);
-
-    /**
-     * Emitted whenever the document is scrolled and the viewport offset is changed.
-     *
-     * @param point the new top-left point from which the document should
-     * be drawn.
-     */
-     void moveViewportOffset(const QPointF &oldOffset, const QPointF &newOffset);
 
     void effectiveZoomChanged(qreal zoom);
 

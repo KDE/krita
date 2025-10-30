@@ -39,7 +39,6 @@ public:
                                                                        KoColorProofingConversionTransformation::Intent proofingIntent,
                                                                        bool bpcFirstTransform,
                                                                        quint8 *gamutWarning,
-                                                                       double adaptationState,
                                                                        KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
     {
         Q_UNUSED(srcColorSpace);
@@ -49,7 +48,6 @@ public:
         Q_UNUSED(proofingIntent);
         Q_UNUSED(bpcFirstTransform);
         Q_UNUSED(gamutWarning);
-        Q_UNUSED(adaptationState);
         Q_UNUSED(displayConversionFlags);
         qFatal("createColorProofingTransform undefined.");
         return 0;

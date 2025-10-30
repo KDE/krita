@@ -178,10 +178,6 @@ void KoCanvasControllerWidget::emitSignals(const KisCanvasState &oldState, const
         proxyObject->emitCanvasOffsetChanged();
     }
 
-    if (oldState.viewportOffsetF != newState.viewportOffsetF) {
-        proxyObject->emitMoveViewportOffset(oldState.viewportOffsetF, newState.viewportOffsetF);
-    }
-
     if (oldState.documentOffsetF != newState.documentOffsetF) {
         proxyObject->emitMoveDocumentOffset(oldState.documentOffsetF, newState.documentOffsetF);
     }

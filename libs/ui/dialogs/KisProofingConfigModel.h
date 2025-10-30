@@ -11,7 +11,6 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 #include <lager/state.hpp>
-#include <lager/sensor.hpp>
 
 #include <KisProofingConfiguration.h>
 #include <KisDisplayConfig.h>
@@ -37,42 +36,43 @@ public:
     KisProofingConfigModel(lager::cursor<KisProofingConfiguration> _data = lager::make_state(KisProofingConfiguration(), lager::automatic_tag{}));
     ~KisProofingConfigModel();
     lager::cursor<KisProofingConfiguration> data;
-    lager::sensor<KisDisplayConfig> displayConfigCursor;
+    lager::state<KisDisplayConfig::Options, lager::automatic_tag> displayConfigOptions;
+
+    using ColorSpaceId = std::tuple<QString,QString,QString>;
 
     LAGER_QT_CURSOR(KoColor, warningColor); ///< Warning color for out-of-gamut checks.
-    LAGER_QT_CURSOR(QString, proofingProfile);
-    LAGER_QT_CURSOR(QString, proofingModel);
-    LAGER_QT_CURSOR(QString, proofingDepth);
 
-    LAGER_QT_CURSOR(bool, storeSoftproofingInsideImage);
+    // should be set atomically, hence "reader"; for writing use setProofingColorSpaceId
+    LAGER_QT_READER(ColorSpaceId, proofingSpaceTuple);
 
     LAGER_QT_CURSOR(KoColorConversionTransformation::Intent, conversionIntent);
+    LAGER_QT_READER(ComboBoxState, conversionIntentState);
+
     LAGER_QT_CURSOR(bool, convBlackPointCompensation);
 
-    LAGER_QT_CURSOR(KisProofingConfiguration::DisplayTransformState, displayTransformState);
+    LAGER_QT_CURSOR(KisProofingConfiguration::DisplayTransformState, displayTransformMode);
+    LAGER_QT_READER(ComboBoxState, displayTransformModeState);
 
     // Following are all part of the second transform if it is custom.
+    LAGER_QT_READER(bool, enableCustomDisplayConfig);
     LAGER_QT_CURSOR(KoColorConversionTransformation::Intent, displayIntent);
-    LAGER_QT_CURSOR(bool, dispBlackPointCompensation);
-
     LAGER_QT_READER(KoColorConversionTransformation::Intent, effectiveDisplayIntent);
-    LAGER_QT_READER(bool, effectiveDispBlackPointCompensation);
+    LAGER_QT_READER(ComboBoxState, effectiveDisplayIntentState);
 
-    LAGER_QT_CURSOR(int, adaptationState);
-    /// this just returns the constant for the maximum adaptation range. Minimum is 0.
-    LAGER_QT_CONST(int, adaptationRangeMax)
-    LAGER_QT_READER(int, effectiveAdaptationState);
+    LAGER_QT_CURSOR(bool, dispBlackPointCompensation);
+    LAGER_QT_READER(CheckBoxState, effectiveDispBlackPointCompensationState);
 
-    void updateDisplayConfig(KisDisplayConfig config);
+    LAGER_QT_CURSOR(bool, adaptationSwitch);
+    LAGER_QT_READER(CheckBoxState, adaptationSwitchState);
 
-    LAGER_QT_READER(bool, enableDisplayToggles);
-    LAGER_QT_READER(bool, enableAdaptationSlider);
-    LAGER_QT_READER(bool, enableDisplayBlackPointCompensation);
+    void updateDisplayConfigOptions(KisDisplayConfig::Options options);
+    void setProofingColorSpaceIdAtomic(const QString &model, const QString &depth, const QString &profile);
+
 Q_SIGNALS:
     void modelChanged();
 
 private:
-    KisDisplayConfig m_displayConfig;
+    KisDisplayConfig::Options m_displayConfigOptions;
 };
 
 #endif // KISPROOFINGCONFIGMODEL_H

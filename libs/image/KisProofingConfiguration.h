@@ -6,7 +6,6 @@
 #define KISPROOFINGCONFIGURATION_H
 
 #include "KoColor.h"
-#include "KoColorSpace.h"
 #include "KoColorConversionTransformation.h"
 #include "kritaimage_export.h"
 
@@ -29,11 +28,17 @@ public:
     QString proofingProfile;
     QString proofingModel;
     QString proofingDepth;
-    double adaptationState;
-    bool storeSoftproofingInsideImage;
+
+    qreal legacyAdaptationState() const {
+        return displayFlags.testFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent) ? 0.0 : 1.0;
+    }
+
+    void setLegacyAdaptationState(qreal value) {
+        displayFlags.setFlag(KoColorConversionTransformation::NoAdaptationAbsoluteIntent, value < 0.5);
+    }
 
     enum DisplayTransformState {
-        Monitor, ///< Whether to use monitor rendering intent and flags for the second transform.
+        Monitor = 0, ///< Whether to use monitor rendering intent and flags for the second transform.
         Paper,   ///< Whether to use Paper settings (absolute colorimetric, 0% adaptation.)
         Custom   ///< Let artists configure their own.
     };
@@ -41,7 +46,11 @@ public:
 
     KoColorConversionTransformation::Intent determineDisplayIntent(KoColorConversionTransformation::Intent monitorDisplayIntent);
     KoColorConversionTransformation::ConversionFlags determineDisplayFlags(KoColorConversionTransformation::ConversionFlags monitorDisplayFlags);
-    double determineAdaptationState();
+
+    bool operator==(const KisProofingConfiguration &other) const;
+    bool operator!=(const KisProofingConfiguration &other) const;
 };
+
+Q_DECLARE_METATYPE(KisProofingConfiguration::DisplayTransformState);
 
 #endif // KISPROOFINGCONFIGURATION_H

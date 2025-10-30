@@ -257,6 +257,7 @@ public Q_SLOTS:
     bool yAxisMirrored() const;
     void slotSoftProofing();
     void slotGamutCheck();
+    void slotChangeGlobalProofingConfig();
     void slotChangeProofingConfig();
     void slotPopupPaletteRequestedZoomChange(int zoom);
 
@@ -287,8 +288,6 @@ private Q_SLOTS:
 
     void slotEffectiveZoomChanged(qreal newZoom);
     void slotCanvasStateChanged();
-
-    void viewportOffsetMoved(const QPointF &oldOffset, const QPointF &newOffset);
 
     void slotSelectionChanged();
 
@@ -328,9 +327,7 @@ private:
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
     void setCanvasWidget(KisAbstractCanvasWidget *widget);
     void resetCanvas(bool useOpenGL);
-    void setDisplayConfig(const KisDisplayConfig &config);
-
-    const KoColorProfile* effectiveDisplayProfile(int screenNumber, const KisConfig &config) const;
+    void slotSurfaceFormatChanged(const KisDisplayConfig &config);
 
     void notifyLevelOfDetailChange();
 

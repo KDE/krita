@@ -18,6 +18,7 @@ class KisNodeDummy;
 class KisNodeInsertionAdapter;
 class KisNodeGraphListener;
 class KisProcessingApplicator;
+class KisDisplayConfig;
 
 /**
  * KisMimeData implements delayed retrieval of nodes for d&d and copy/paste.
@@ -67,6 +68,17 @@ public:
             KisImageSP image,
             KisShapeController *shapeController,
             bool &copyNode);
+
+    /**
+     * Conversion options for mime clips when they are pasted into
+     * clipboard or fetched from clipboard (with user selecting
+     * "display" space)
+     *
+     * On unmanaged compositors they should coinside with the
+     * space of the display. On managed ones they should be set
+     * to the default color space, e.g. sRGB.
+     */
+    static KisDisplayConfig displayConfigForMimePastes();
 
 private:
     /**

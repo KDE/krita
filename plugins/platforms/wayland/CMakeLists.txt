@@ -51,7 +51,8 @@ if (KRITA_USE_SURFACE_COLOR_MANAGEMENT_API)
          waylandcolormanagement/KisWaylandAPISurface.cpp
          waylandcolormanagement/KisWaylandOutputColorInfo.cpp
          waylandcolormanagement/KisWaylandSurfaceColorimetry.cpp
-         waylandcolormanagement/KisWaylandSurfaceColorManager.cpp)
+         waylandcolormanagement/KisWaylandSurfaceColorManager.cpp
+         waylandcolormanagement/KisWaylandDebugInfoFetcher.cpp)
 endif()
 
 kis_add_library(kritaplatformpluginwayland MODULE ${kritaplatformpluginwayland_LIB_SRCS})

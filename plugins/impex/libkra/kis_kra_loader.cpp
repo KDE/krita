@@ -272,24 +272,25 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                 return KisImageSP(0);
             }
         }
-        KisProofingConfigurationSP proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig;
         if (!(attr = imageElement.attribute(PROOFINGPROFILENAME)).isNull()) {
+            // initialize config only if ptofile name is present
+            proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
             proofingConfig->proofingProfile = attr;
-            proofingConfig->storeSoftproofingInsideImage = true;
         }
-        if (!(attr = imageElement.attribute(PROOFINGMODEL)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGMODEL)).isNull()) {
             proofingConfig->proofingModel = attr;
         }
-        if (!(attr = imageElement.attribute(PROOFINGDEPTH)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGDEPTH)).isNull()) {
             proofingConfig->proofingDepth = attr;
         }
-        if (!(attr = imageElement.attribute(PROOFINGINTENT)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGINTENT)).isNull()) {
             proofingConfig->conversionIntent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
         }
-        if (!(attr = imageElement.attribute(PROOFINGDISPLAYINTENT)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGDISPLAYINTENT)).isNull()) {
             proofingConfig->displayIntent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
         }
-        if (!(attr = imageElement.attribute(PROOFINGDISPLAYMODE)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGDISPLAYMODE)).isNull()) {
             if (attr == "monitor") {
                 proofingConfig->displayMode = KisProofingConfiguration::Monitor;
             } else if (attr == "paper") {
@@ -298,16 +299,17 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                 proofingConfig->displayMode = KisProofingConfiguration::Custom;
             }
         }
-        if (!(attr = imageElement.attribute(PROOFINGBLACKPOINTCOMPENSATION)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGBLACKPOINTCOMPENSATION)).isNull()) {
             proofingConfig->useBlackPointCompensationFirstTransform = (attr == "true");
         }
 
-        if (!(attr = imageElement.attribute(PROOFINGDISPLAYBLACKPOINTCOMPENSATION)).isNull()) {
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGDISPLAYBLACKPOINTCOMPENSATION)).isNull()) {
             proofingConfig->displayFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, attr == "true");
         }
 
-        if (!(attr = imageElement.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {
-            proofingConfig->adaptationState = KisDomUtils::toDouble(attr);
+        if (proofingConfig && !(attr = imageElement.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {
+            const qreal legacyAdaptationState = KisDomUtils::toDouble(attr);
+            proofingConfig->setLegacyAdaptationState(legacyAdaptationState);
         }
 
         if (m_d->document) {
@@ -344,7 +346,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                 }
             }
 
-            if(e.tagName()== PROOFINGWARNINGCOLOR) {
+            if (proofingConfig && e.tagName()== PROOFINGWARNINGCOLOR) {
                 QDomDocument dom;
                 QDomNode node = e;
                 dom.appendChild(dom.importNode(node, true));
@@ -358,7 +360,9 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             }
         }
 
-        image->setProofingConfiguration(proofingConfig);
+        if (proofingConfig) {
+            image->setProofingConfiguration(proofingConfig);
+        }
 
         for (child = imageElement.lastChild(); !child.isNull(); child = child.previousSibling()) {
             QDomElement e = child.toElement();

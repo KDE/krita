@@ -42,6 +42,7 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 #include <KisCumulativeUndoData.h>
+#include <QSurfaceFormat>
 
 #if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #  include <QtGui/private/qguiapplication_p.h>
@@ -640,6 +641,73 @@ void KisConfig::setCanvasSurfaceColorSpaceManagementMode(KisConfig::CanvasSurfac
     }
 
     m_cfg.writeEntry("canvasSurfaceColorSpaceManagementMode", modeStr);
+}
+
+
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(QSettings *settings, bool defaultValue)
+{
+    QString modeStr = defaultValue ? "auto" : settings->value("canvasSurfaceBitDepthMode", "auto").toString();
+
+    if (modeStr == "auto") {
+        return CanvasSurfaceBitDepthMode::DepthAuto;
+    } else if (modeStr == "8bit") {
+        return CanvasSurfaceBitDepthMode::Depth8Bit;
+    } else if (modeStr == "10bit") {
+        return CanvasSurfaceBitDepthMode::Depth10Bit;
+    }
+
+    return CanvasSurfaceBitDepthMode::DepthAuto;
+}
+
+void KisConfig::setCanvasSurfaceBitDepthMode(QSettings *settings, CanvasSurfaceBitDepthMode value)
+{
+    QString modeStr;
+
+    switch (value) {
+        case CanvasSurfaceBitDepthMode::DepthAuto:
+            modeStr = "auto";
+            break;
+        case CanvasSurfaceBitDepthMode::Depth8Bit:
+            modeStr = "8bit";
+            break;
+        case CanvasSurfaceBitDepthMode::Depth10Bit:
+            modeStr = "10bit";
+            break;
+    }
+
+    settings->setValue("canvasSurfaceBitDepthMode", modeStr);
+}
+
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::canvasSurfaceBitDepthMode(bool defaultValue) const
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    return canvasSurfaceBitDepthMode(&kritarc, defaultValue);
+}
+
+void KisConfig::setCanvasSurfaceBitDepthMode(CanvasSurfaceBitDepthMode value)
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    setCanvasSurfaceBitDepthMode(&kritarc, value);
+}
+
+KisConfig::CanvasSurfaceBitDepthMode KisConfig::effectiveCanvasSurfaceBitDepthMode(const QSurfaceFormat &format) const
+{
+    auto mode = canvasSurfaceBitDepthMode();
+
+    if (mode == CanvasSurfaceBitDepthMode::DepthAuto) {
+        if (format.redBufferSize() == 10 &&
+            format.greenBufferSize() == 10 &&
+            format.blueBufferSize() == 10) {
+
+            mode = CanvasSurfaceBitDepthMode::Depth10Bit;
+        } else {
+            mode = CanvasSurfaceBitDepthMode::Depth8Bit;
+        }
+    }
+
+    return mode;
 }
 
 
@@ -2793,3 +2861,58 @@ QList<KoColor> KisConfig::readKoColors(const QString& name) const
 
     return colors;
 }
+
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceMode &mode)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "CanvasSurfaceMode(";
+
+    switch (mode) {
+        case KisConfig::CanvasSurfaceMode::Preferred:
+            debug.nospace() << "Preferred";
+            break;
+        case KisConfig::CanvasSurfaceMode::Rec709g22:
+            debug.nospace() << "Rec709g22";
+            break;
+        case KisConfig::CanvasSurfaceMode::Rec709g10:
+            debug.nospace() << "Rec709g10";
+            break;
+        case KisConfig::CanvasSurfaceMode::Unmanaged:
+            debug.nospace() << "Unmanaged";
+            break;
+        default:
+            debug.nospace() << "unknown(" << static_cast<int>(mode) << ")";
+            break;
+    }
+
+    debug.nospace() << ")";
+
+    return debug.space();
+}
+
+QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceBitDepthMode &mode)
+{
+
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "CanvasSurfaceBitDepthMode(";
+
+    switch (mode) {
+        case KisConfig::CanvasSurfaceBitDepthMode::DepthAuto:
+            debug.nospace() << "DepthAuto";
+            break;
+        case KisConfig::CanvasSurfaceBitDepthMode::Depth8Bit:
+            debug.nospace() << "Depth8Bit";
+            break;
+        case KisConfig::CanvasSurfaceBitDepthMode::Depth10Bit:
+            debug.nospace() << "Depth10Bit";
+            break;
+        default:
+            debug.nospace() << "unknown(" << static_cast<int>(mode) << ")";
+            break;
+    }
+
+    debug.nospace() << ")";
+
+    return debug.space();
+}
+

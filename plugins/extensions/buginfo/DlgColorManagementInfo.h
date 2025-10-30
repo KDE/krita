@@ -13,6 +13,7 @@
 
 class QSettings;
 class KisOutputColorInfoInterface;
+class KisSurfaceColorManagementInfo;
 
 class DlgColorManagementInfo: public DlgBugInfo
 {
@@ -31,6 +32,8 @@ public:
 
 private:
     QScopedPointer<KisOutputColorInfoInterface> m_outputColorInfoInterface;
+    QScopedPointer<KisSurfaceColorManagementInfo> m_surfaceColorManagementInfo;
+    QString m_surfaceManagementReport;
 };
 
 #endif // DLG_COLORMANAGEMENTINFO_H

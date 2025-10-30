@@ -29,7 +29,7 @@ KisWaylandAPIImageDescriptionCreatorParams::~KisWaylandAPIImageDescriptionCreato
     }
 }
 
-std::unique_ptr<KisWaylandAPIImageDescription> KisWaylandAPIImageDescriptionCreatorParams::createImageDescription(const KisSurfaceColorimetry::WaylandSurfaceDescription &data)
+std::unique_ptr<KisWaylandAPIImageDescriptionNoInfo> KisWaylandAPIImageDescriptionCreatorParams::createImageDescription(const KisSurfaceColorimetry::WaylandSurfaceDescription &data)
 {
     if (data.tfNamed) {
         set_tf_named(static_cast<uint32_t>(*data.tfNamed));
@@ -89,7 +89,7 @@ std::unique_ptr<KisWaylandAPIImageDescription> KisWaylandAPIImageDescriptionCrea
         qWarning() << "ICC file is not supported yet.";
     }
 
-    auto result = std::make_unique<KisWaylandAPIImageDescription>(create());
+    auto result = std::make_unique<KisWaylandAPIImageDescriptionNoInfo>(create());
 
     init(nullptr);
 

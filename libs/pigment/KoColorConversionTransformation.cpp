@@ -8,6 +8,12 @@
 
 #include "KoColorSpace.h"
 
+#include <KisStaticInitializer.h>
+
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KoColorConversionTransformation::Intent>();
+}
+
 struct Q_DECL_HIDDEN KoColorConversionTransformation::Private {
     const KoColorSpace* srcColorSpace;
     const KoColorSpace* dstColorSpace;

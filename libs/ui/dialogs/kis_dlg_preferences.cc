@@ -86,6 +86,7 @@
 #include "kis_file_name_requester.h"
 #include <KisWidgetConnectionUtils.h>
 #include <dialogs/KisFrameRateLimitModel.h>
+#include <KisPlatformPluginInterfaceFactory.h>
 
 #include "slider_and_spin_box_sync.h"
 
@@ -1108,8 +1109,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisConfig cfg(true);
 
-    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    m_colorManagedByOS = mainWindow->managedSurfaceProfile();
+    m_colorManagedByOS = KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS();
 
     if (!m_colorManagedByOS) {
         m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
@@ -1217,6 +1217,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
         monitorProfileGrid->addRow(m_chkEnableCanvasColorSpaceManagement);
 
+        // surface color space
         m_canvasSurfaceColorSpace = new KisSqueezedComboBox();
             m_canvasSurfaceColorSpace->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         QLabel *canvasSurfaceColorSpaceLbl = new QLabel(i18n("Canvas surface color space:"), this);
@@ -1232,71 +1233,83 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
                  "window compositor. Use \"preferred\" space unless you know "
                  "what you are doing</p>"));
 
+        // surface bit depth
+        m_canvasSurfaceBitDepth = new KisSqueezedComboBox();
+            m_canvasSurfaceBitDepth->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        QLabel *canvasSurfaceBitDepthLbl = new QLabel(i18n("Canvas surface bit depth (needs restart):"), this);
+        monitorProfileGrid->addRow(canvasSurfaceBitDepthLbl, m_canvasSurfaceBitDepth);
+
+        m_canvasSurfaceBitDepth->addSqueezedItem(i18n("Auto"), QVariant::fromValue(CanvasSurfaceBitDepthMode::DepthAuto));
+        m_canvasSurfaceBitDepth->addSqueezedItem(i18n("8-bit"), QVariant::fromValue(CanvasSurfaceBitDepthMode::Depth8Bit));
+        m_canvasSurfaceBitDepth->addSqueezedItem(i18n("10-bit"), QVariant::fromValue(CanvasSurfaceBitDepthMode::Depth10Bit));
+
+        m_canvasSurfaceBitDepth->setToolTip(
+            i18n("<p>The bit depth of the color that is passed to the window "
+                 "compositor. You should switch into 10-bit mode if you want to use "
+                 "HDR capabilities of your display</p>"));
+
+        const QString currentBitBepthString = QSurfaceFormat::defaultFormat().redBufferSize() == 10 ? i18n("10-bit") : i18n("8-bit");
+        QLabel *currentCanvasSurfaceBitDepthLbl = new QLabel(i18n("Current canvas surface bit depth:"), this);
+        QLabel *currentCanvasSurfaceBitDepth = new QLabel(currentBitBepthString, this);
+        monitorProfileGrid->addRow(currentCanvasSurfaceBitDepthLbl, currentCanvasSurfaceBitDepth);
+
         vboxLayout->addItem(new QSpacerItem(20,20));
 
-        QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", mainWindow->osPreferredColorSpaceReport()), this);
+        KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+        QLabel *preferredLbl = new QLabel(i18n("Color space preferred by the operating system:\n%1", KisPlatformPluginInterfaceFactory::instance()->osPreferredColorSpaceReport(mainWindow)), this);
         vboxLayout->addWidget(preferredLbl);
 
         m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement());
-        auto mode = cfg.canvasSurfaceColorSpaceManagementMode();
-        int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
-        KIS_SAFE_ASSERT_RECOVER(index >= 0) {
-            index = 0;
+
+        {
+            auto mode = cfg.canvasSurfaceColorSpaceManagementMode();
+            int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceColorSpace->setCurrentIndex(index);
         }
-        m_canvasSurfaceColorSpace->setCurrentIndex(index);
+
+        {
+            auto mode = cfg.canvasSurfaceBitDepthMode();
+            int index = m_canvasSurfaceBitDepth->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceBitDepth->setCurrentIndex(index);
+        }
 
         connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, m_canvasSurfaceColorSpace, &QWidget::setEnabled);
         m_canvasSurfaceColorSpace->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
 
         connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, canvasSurfaceColorSpaceLbl, &QWidget::setEnabled);
         canvasSurfaceColorSpaceLbl->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
+
+        connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, m_canvasSurfaceBitDepth, &QWidget::setEnabled);
+        m_canvasSurfaceBitDepth->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
+
+        connect(m_chkEnableCanvasColorSpaceManagement, &QCheckBox::toggled, canvasSurfaceBitDepthLbl, &QWidget::setEnabled);
+        canvasSurfaceBitDepthLbl->setEnabled(m_chkEnableCanvasColorSpaceManagement->isChecked());
     }
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
     m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors());
+    m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent());
     KisImageConfig cfgImage(true);
 
+    /**
+     * Default proofing config
+     */
     KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
+
+    m_page->wdgProofingOptions->setProofingConfig(proofingConfig);
+
     m_proofModel->data.set(*proofingConfig.data());
 
     connect(m_page->chkBlackpoint, SIGNAL(toggled(bool)), this, SLOT(updateProofingDisplayInfo()));
     connect(m_page->cmbMonitorIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(updateProofingDisplayInfo()));
-    m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent());
     updateProofingDisplayInfo();
-
-    m_page->sldAdaptationState->setMaximum(m_proofModel->adaptationRangeMax());
-    m_page->sldAdaptationState->setMinimum(0);
-
-    m_page->proofingSpaceSelector->showDepth(false);
-
-    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Perceptual"), INTENT_PERCEPTUAL);
-    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Relative Colorimetric"), INTENT_RELATIVE_COLORIMETRIC);
-    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Saturation"), INTENT_SATURATION);
-    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Absolute Colorimetric"), INTENT_ABSOLUTE_COLORIMETRIC);
-    m_page->cmbProofingIntent->setModel(m_page->cmbDisplayIntent->model());
-
-    m_page->cmbDisplayMode->addItem(i18nc("Display Mode", "Use global display settings"), int(KisProofingConfiguration::Monitor));
-    m_page->cmbDisplayMode->addItem(i18nc("Display Mode", "Simulate paper white and black"), int(KisProofingConfiguration::Paper));
-    m_page->cmbDisplayMode->addItem(i18nc("Display Mode", "Custom"), int(KisProofingConfiguration::Custom));
-
-    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(m_proofModel->proofingModel(),
-                                                                                      m_proofModel->proofingDepth(),
-                                                                                      m_proofModel->proofingProfile());
-    if (proofingSpace) {
-        m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
-    }
-    updateProofingWidgets();
-    connect(m_page->cmbDisplayMode, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingDisplayModeUpdated()));
-    connect(m_page->cmbDisplayIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingDisplayIntentUpdated()));
-    connect(m_page->cmbProofingIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingConversionIntentUpdated()));
-    connect(m_page->chkDispBlackPoint, &QCheckBox::toggled, m_proofModel.data(), &KisProofingConfigModel::dispBlackPointCompensation);
-    connect(m_page->sldAdaptationState, &QSlider::valueChanged, m_proofModel.data(), &KisProofingConfigModel::setadaptationState);
-    KisWidgetConnectionUtils::connectControl(m_page->ckbProofBlackPoint, m_proofModel.data(), "convBlackPointCompensation");
-    KisWidgetConnectionUtils::connectControl(m_page->gamutAlarm, m_proofModel.data(), "warningColor");
-    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->gbxDisplayTransform, m_proofModel.data(), "enableDisplayToggles");
-    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->sldAdaptationState, m_proofModel.data(), "enableAdaptationSlider");
-    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->chkDispBlackPoint, m_proofModel.data(), "enableDisplayBlackPointCompensation");
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
@@ -1400,24 +1413,29 @@ void ColorSettingsTab::setDefault()
         refillMonitorProfiles(KoID("RGBA"));
     } else {
         m_chkEnableCanvasColorSpaceManagement->setChecked(cfg.enableCanvasSurfaceColorSpaceManagement(true));
-        auto mode = cfg.canvasSurfaceColorSpaceManagementMode(true);
-        int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
-        KIS_SAFE_ASSERT_RECOVER(index >= 0) {
-            index = 0;
+
+        {
+            auto mode = cfg.canvasSurfaceColorSpaceManagementMode(true);
+            int index = m_canvasSurfaceColorSpace->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceColorSpace->setCurrentIndex(index);
         }
-        m_canvasSurfaceColorSpace->setCurrentIndex(index);
+
+        {
+            auto mode = cfg.canvasSurfaceBitDepthMode(true);
+            int index = m_canvasSurfaceBitDepth->findData(QVariant::fromValue(mode));
+            KIS_SAFE_ASSERT_RECOVER(index >= 0) {
+                index = 0;
+            }
+            m_canvasSurfaceBitDepth->setCurrentIndex(index);
+        }
     }
 
     KisImageConfig cfgImage(true);
     KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration(true);
-    m_proofModel->data.set(*proofingConfig.data());
-    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(m_proofModel->proofingModel(),
-                                                                                      m_proofModel->proofingDepth(),
-                                                                                      m_proofModel->proofingProfile());
-    if (proofingSpace) {
-        m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
-    }
-    updateProofingWidgets();
+    m_page->wdgProofingOptions->setProofingConfig(proofingConfig);
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
@@ -1462,36 +1480,12 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
     }
 }
 
-void ColorSettingsTab::updateProofingWidgets() {
-    m_page->cmbDisplayIntent->setCurrentIndex(m_page->cmbDisplayIntent->findData((int)m_proofModel->effectiveDisplayIntent(), Qt::UserRole));
-    m_page->cmbProofingIntent->setCurrentIndex(m_page->cmbProofingIntent->findData((int)m_proofModel->conversionIntent(), Qt::UserRole));
-
-    m_page->cmbDisplayMode->setCurrentIndex(m_page->cmbDisplayMode->findData(int(m_proofModel->displayTransformState()), Qt::UserRole));
-    m_page->chkDispBlackPoint->setChecked(m_proofModel->effectiveDispBlackPointCompensation());
-    m_page->sldAdaptationState->setValue(m_proofModel->effectiveAdaptationState());
-}
-
-void ColorSettingsTab::proofingDisplayModeUpdated() {
-    m_proofModel->setdisplayTransformState(KisProofingConfiguration::DisplayTransformState(m_page->cmbDisplayMode->currentData(Qt::UserRole).toInt()));
-    updateProofingWidgets();
-}
-
-void ColorSettingsTab::proofingConversionIntentUpdated() {
-    m_proofModel->setconversionIntent(KoColorConversionTransformation::Intent(m_page->cmbProofingIntent->currentData(Qt::UserRole).toInt()));
-    updateProofingWidgets();
-}
-void ColorSettingsTab::proofingDisplayIntentUpdated() {
-    if (m_proofModel->displayTransformState() == KisProofingConfiguration::Custom) {
-        m_proofModel->setdisplayIntent(KoColorConversionTransformation::Intent(m_page->cmbDisplayIntent->currentData(Qt::UserRole).toInt()));
-        updateProofingWidgets();
-    }
-}
-
 void ColorSettingsTab::updateProofingDisplayInfo() {
-    KisDisplayConfig displayInfo;
-    displayInfo.intent = KoColorConversionTransformation::Intent(m_page->cmbMonitorIntent->currentIndex());
-    displayInfo.conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->chkBlackpoint->isChecked());
-    m_proofModel->updateDisplayConfig(displayInfo);
+    KisDisplayConfig::Options options;
+    options.first = KoColorConversionTransformation::Intent(m_page->cmbMonitorIntent->currentIndex());
+    options.second = KoColorConversionTransformation::internalConversionFlags();
+    options.second.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->chkBlackpoint->isChecked());
+    m_page->wdgProofingOptions->setDisplayConfigOptions(options);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -2684,6 +2678,7 @@ bool KisDlgPreferences::editPreferences()
         } else {
             cfg.setEnableCanvasSurfaceColorSpaceManagement(m_colorSettings->m_chkEnableCanvasColorSpaceManagement->isChecked());
             cfg.setCanvasSurfaceColorSpaceManagementMode(m_colorSettings->m_canvasSurfaceColorSpace->currentData().value<ColorSettingsTab::CanvasSurfaceMode>());
+            cfg.setCanvasSurfaceBitDepthMode(m_colorSettings->m_canvasSurfaceBitDepth->currentData().value<ColorSettingsTab::CanvasSurfaceBitDepthMode>());
         }
         cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
         if (cfg.useDefaultColorSpace())
@@ -2696,14 +2691,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.writeEntry("ExrDefaultColorProfile", m_colorSettings->m_page->cmbColorProfileForEXR->currentText());
 
-        cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
-                                          int(m_colorSettings->m_proofModel->conversionIntent()),
-                                          m_colorSettings->m_proofModel->convBlackPointCompensation(),
-                                          m_colorSettings->m_proofModel->warningColor(),
-                                          m_colorSettings->m_proofModel->adaptationState()*0.05,
-                                          m_colorSettings->m_proofModel->dispBlackPointCompensation(),
-                                          int(m_colorSettings->m_proofModel->displayIntent()),
-                                          m_colorSettings->m_proofModel->displayTransformState());
+        cfgImage.setDefaultProofingConfig(*m_colorSettings->m_page->wdgProofingOptions->currentProofingConfig());
         cfg.setUseBlackPointCompensation(m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setForcePaletteColors(m_colorSettings->m_page->chkForcePaletteColor->isChecked());

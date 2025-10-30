@@ -67,7 +67,7 @@ public:
     void dismiss() override;
     bool onScreen() override;
     
-    void ensureWithinParent(const QPoint& position, bool useUpperLeft);
+    void ensureWithinParent(const QPoint& globalPos, bool useUpperLeft);
 
 protected:
     void showEvent(QShowEvent *event) override;

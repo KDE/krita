@@ -280,7 +280,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
      * Load platform plugin for modifiers fetching
      */
     {
-        d->extendedModifiersPluginInterface.reset(KisPlatformPluginInterfaceFactory::createExtendedModifiersMapper());
+        d->extendedModifiersPluginInterface.reset(KisPlatformPluginInterfaceFactory::instance()->createExtendedModifiersMapper());
     }
 
     // store the style name

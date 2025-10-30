@@ -223,11 +223,10 @@ public:
                                                                       KoColorConversionTransformation::Intent proofingIntent,
                                                                       bool bpcFirstTransform,
                                                                       KoColor gamutWarning,
-                                                                      double adaptationState,
                                                                       KoColorConversionTransformation::ConversionFlags displayConversionFlags)
     {
         KoColor properGamutWarning = gamutWarning.convertedTo(dstCS);
-        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, bpcFirstTransform, properGamutWarning.data(), adaptationState, displayConversionFlags);
+        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, bpcFirstTransform, properGamutWarning.data(), displayConversionFlags);
     }
 
     inline quint8* data() const {

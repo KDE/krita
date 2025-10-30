@@ -6,35 +6,20 @@
 #ifndef KISSRGBSURFACECOLORSPACEMANAGER_H
 #define KISSRGBSURFACECOLORSPACEMANAGER_H
 
-#include <QObject>
-#include <QScopedPointer>
-
-#include <surfacecolormanagement/KisSurfaceColorimetry.h>
-
-class KisSurfaceColorManagerInterface;
+#include <KisCanvasSurfaceColorSpaceManager.h>
 
 
-class KisSRGBSurfaceColorSpaceManager : public QObject
+class KRITAUI_EXPORT KisSRGBSurfaceColorSpaceManager : public KisCanvasSurfaceColorSpaceManager
 {
     Q_OBJECT
 public:
     KisSRGBSurfaceColorSpaceManager(KisSurfaceColorManagerInterface *interface, QObject *parent = nullptr);
     ~KisSRGBSurfaceColorSpaceManager();
 
-    QString colorManagementReport() const;
-    QString osPreferredColorSpaceReport() const;
-
-    static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);   
+    static KisSRGBSurfaceColorSpaceManager* tryCreateForCurrentPlatform(QWidget *widget);
 
 protected:
-    static KisSurfaceColorimetry::RenderIntent calculateConfigIntent();
-
     void slotConfigChanged();
-    void slotInterfaceReadyChanged(bool isReady);
-    void reinitializeSurfaceDescription();
-
-protected:
-    QScopedPointer<KisSurfaceColorManagerInterface> m_interface;
 };
 
 #endif /* KISSRGBSURFACECOLORSPACEMANAGER_H */

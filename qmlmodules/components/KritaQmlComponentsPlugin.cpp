@@ -45,5 +45,4 @@ void KritaQmlComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<KisFontFunctions>(uri, 1, 0, "FontFunctions");
 }
 
-#include "KritaQmlComponentsPlugin.moc"
 #include "moc_KritaQmlComponentsPlugin.cpp"

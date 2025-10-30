@@ -49,7 +49,7 @@ void KisAnimationFrameCacheTest::testCache()
     KisKeyframeChannel *rasterChannel3 = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
     rasterChannel3->addKeyframe(17, &parentCommand);
 
-    KisOpenGLImageTexturesSP glTex = KisOpenGLImageTextures::getImageTextures(image, 0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+    KisOpenGLImageTexturesSP glTex = KisOpenGLImageTextures::createImageTextures(image, 0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
     KisAnimationFrameCacheSP cache = new KisAnimationFrameCache(glTex);
     glTex->testingForceInitialized();
 

@@ -111,6 +111,15 @@ auto variant_to = lager::lenses::getset(
     }
 );
 
+constexpr auto logical_not = [] {
+    return lager::lenses::getset(
+        [](bool value) -> bool {
+            return !value;
+        },
+        [](bool, bool value) -> bool {
+            return !value;
+        });
+};
 
 } // namespace lenses
 

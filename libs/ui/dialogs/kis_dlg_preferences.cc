@@ -260,6 +260,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     eraserCursorColor.fromQColor(cfg.getEraserCursorMainColor());
     eraserCursorColorButton->setColor(eraserCursorColor);
 
+    // Color sampler
+
+    setColorSamplerPreviewStyleItems(m_cmbColorSamplerPreviewStyle);
+    setColorSamplerPreviewStyleIndexByValue(m_cmbColorSamplerPreviewStyle, cfg.colorSamplerPreviewStyle());
+
     //
     // Window Tab
     //
@@ -650,6 +655,7 @@ void GeneralTab::setDefault()
     m_chkSeparateEraserCursor->setChecked(cfg.readEntry<bool>("separateEraserCursor", false));
     m_cmbEraserCursorShape->setCurrentIndex(cfg.eraserCursorStyle(true));
     m_cmbEraserOutlineShape->setCurrentIndex(cfg.eraserOutlineStyle(true));
+    setColorSamplerPreviewStyleIndexByValue(m_cmbColorSamplerPreviewStyle, cfg.colorSamplerPreviewStyle(true));
 
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
     m_autosaveCheckBox->setChecked(cfg.autoSaveInterval(true) > 0);
@@ -772,6 +778,11 @@ CursorStyle GeneralTab::eraserCursorStyle()
 OutlineStyle GeneralTab::eraserOutlineStyle()
 {
     return (OutlineStyle)m_cmbEraserOutlineShape->currentIndex();
+}
+
+KisConfig::ColorSamplerPreviewStyle GeneralTab::colorSamplerPreviewStyle() const
+{
+    return getColorSamplerPreviewStyleValue(m_cmbColorSamplerPreviewStyle);
 }
 
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
@@ -903,6 +914,27 @@ bool GeneralTab::adaptivePlaybackRange()
 int GeneralTab::forcedFontDpi()
 {
     return chkForcedFontDPI->isChecked() ? intForcedFontDPI->value() : -1;
+}
+
+void GeneralTab::setColorSamplerPreviewStyleItems(QComboBox *cmb)
+{
+    // Order is synchronized with KisConfig::ColorSamplerPreviewStyle.
+    cmb->addItems({
+        i18nc("Preview option for no color sampler", "None"),
+        i18nc("Preview option for a circular/ring-shaped color sampler", "Circle"),
+        i18nc("Preview option for a rectangular color sampler left of the cursor", "Rectangle Left"),
+        i18nc("Preview option for a rectangular color sampler right of the cursor", "Rectangle Right"),
+    });
+}
+
+void GeneralTab::setColorSamplerPreviewStyleIndexByValue(QComboBox *cmb, KisConfig::ColorSamplerPreviewStyle style)
+{
+    cmb->setCurrentIndex(int(style));
+}
+
+KisConfig::ColorSamplerPreviewStyle GeneralTab::getColorSamplerPreviewStyleValue(const QComboBox *cmb)
+{
+    return KisConfig::ColorSamplerPreviewStyle(cmb->currentIndex());
 }
 
 bool GeneralTab::renameMergedLayers()
@@ -2305,6 +2337,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setSeparateEraserCursor(m_general->m_chkSeparateEraserCursor->isChecked());
         cfg.setEraserCursorStyle(m_general->eraserCursorStyle());
         cfg.setEraserOutlineStyle(m_general->eraserOutlineStyle());
+        cfg.setColorSamplerPreviewStyle(m_general->colorSamplerPreviewStyle());
         cfg.setShowRootLayer(m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());
         cfg.setForceAlwaysFullSizedOutline(!m_general->m_changeBrushOutline->isChecked());

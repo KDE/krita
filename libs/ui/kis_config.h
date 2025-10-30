@@ -134,6 +134,17 @@ public:
     OutlineStyle eraserOutlineStyle(bool defaultValue = false) const;
     void setEraserOutlineStyle(OutlineStyle style);
 
+    enum class ColorSamplerPreviewStyle {
+        None,
+        Circle,
+        RectangleLeft,
+        RectangleRight,
+        Count,
+    };
+
+    ColorSamplerPreviewStyle colorSamplerPreviewStyle(bool defaultValue = false) const;
+    void setColorSamplerPreviewStyle(ColorSamplerPreviewStyle style);
+
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
     void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;

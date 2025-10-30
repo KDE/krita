@@ -36,6 +36,7 @@ public:
     void notifyDropFramesModeChanged();
     void notifyPixelGridModeChanged();
     void notifyTouchPaintingChanged();
+    void notifyColorSamplerPreviewStyleChanged();
 
     void notifyLongPressChanged(bool enabled);
 
@@ -47,6 +48,7 @@ Q_SIGNALS:
     void dropFramesModeChanged();
     void pixelGridModeChanged();
     void touchPaintingChanged();
+    void sigColorSamplerPreviewStyleChanged();
     void sigLongPressChanged(bool enabled);
 private:
     KisConfigNotifier(const KisConfigNotifier&);

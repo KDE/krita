@@ -94,6 +94,9 @@ private Q_SLOTS:
     void slotColorPickerSelectedColor(const KoColor &color);
     void slotColorPickerSelectionFinished(const KoColor &color);
 
+    void slotSetPreviewStyleComboBoxFromConfig();
+    void slotSetPreviewStyleConfigFromComboBox();
+
 private:
     void displaySampledColor(const KoColor &color);
     void updateOptionWidget();

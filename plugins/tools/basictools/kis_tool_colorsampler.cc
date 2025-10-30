@@ -20,6 +20,10 @@
 #include "kis_display_color_converter.h"
 #include "kis_tool_utils.h"
 
+#include <kis_config.h>
+#include <kis_config_notifier.h>
+#include <dialogs/kis_dlg_preferences.h>
+#include <QSignalBlocker>
 
 namespace
 {
@@ -98,6 +102,24 @@ void KisToolColorSampler::slotColorPickerSelectionFinished(const KoColor &color)
                 }
             }
         }
+    }
+}
+
+void KisToolColorSampler::slotSetPreviewStyleComboBoxFromConfig()
+{
+    if (m_optionsWidget) {
+        QSignalBlocker blocker(m_optionsWidget->cmbPreviewStyle);
+        GeneralTab::setColorSamplerPreviewStyleIndexByValue(m_optionsWidget->cmbPreviewStyle,
+                                                            KisConfig(true).colorSamplerPreviewStyle());
+    }
+}
+
+void KisToolColorSampler::slotSetPreviewStyleConfigFromComboBox()
+{
+    if (m_optionsWidget) {
+        KisConfig::ColorSamplerPreviewStyle style =
+            GeneralTab::getColorSamplerPreviewStyleValue(m_optionsWidget->cmbPreviewStyle);
+        KisConfig(false).setColorSamplerPreviewStyle(style);
     }
 }
 
@@ -276,6 +298,16 @@ QWidget* KisToolColorSampler::createOptionWidget()
     specialSpacer->setFixedSize(0, 0);
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
+    GeneralTab::setColorSamplerPreviewStyleItems(m_optionsWidget->cmbPreviewStyle);
+    connect(KisConfigNotifier::instance(),
+            &KisConfigNotifier::sigColorSamplerPreviewStyleChanged,
+            this,
+            &KisToolColorSampler::slotSetPreviewStyleComboBoxFromConfig);
+    connect(m_optionsWidget->cmbPreviewStyle,
+            QOverload<int>::of(&QComboBox::activated),
+            this,
+            &KisToolColorSampler::slotSetPreviewStyleConfigFromComboBox);
+
     // Initialize blend KisSliderSpinBox
     m_optionsWidget->blend->setRange(0,100);
     m_optionsWidget->blend->setSuffix(i18n("%"));
@@ -327,6 +359,8 @@ void KisToolColorSampler::updateOptionWidget()
     m_optionsWidget->cbPalette->setChecked(m_config->addColorToCurrentPalette);
     m_optionsWidget->radius->setValue(m_config->radius);
     m_optionsWidget->blend->setValue(m_config->blend);
+
+    slotSetPreviewStyleComboBoxFromConfig();
 }
 
 void KisToolColorSampler::slotSetUpdateColor(bool state)

@@ -52,7 +52,7 @@ public:
     }
 };
 
-class GeneralTab : public WdgGeneralSettings
+class KRITAUI_EXPORT GeneralTab : public WdgGeneralSettings
 {
     Q_OBJECT
 
@@ -64,6 +64,7 @@ public:
     OutlineStyle outlineStyle();
     CursorStyle eraserCursorStyle();
     OutlineStyle eraserOutlineStyle();
+    KisConfig::ColorSamplerPreviewStyle colorSamplerPreviewStyle() const;
 
     KisConfig::SessionOnStartup sessionOnStartup() const;
     bool saveSessionOnQuit() const;
@@ -97,6 +98,10 @@ public:
     bool renamePastedLayers();
 
     int forcedFontDpi();
+
+    static void setColorSamplerPreviewStyleItems(QComboBox *cmb);
+    static void setColorSamplerPreviewStyleIndexByValue(QComboBox *cmb, KisConfig::ColorSamplerPreviewStyle style);
+    static KisConfig::ColorSamplerPreviewStyle getColorSamplerPreviewStyleValue(const QComboBox *cmb);
 
 private Q_SLOTS:
     void getBackgroundImage();

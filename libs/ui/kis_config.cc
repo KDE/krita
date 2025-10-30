@@ -496,6 +496,23 @@ void KisConfig::setEraserOutlineStyle(OutlineStyle style)
     m_cfg.writeEntry("eraserOutlineStyle", (int)style);
 }
 
+KisConfig::ColorSamplerPreviewStyle KisConfig::colorSamplerPreviewStyle(bool defaultValue) const
+{
+    if (!defaultValue) {
+        int style = m_cfg.readEntry("colorSamplerPreviewStyle", int(ColorSamplerPreviewStyle::Circle));
+        if (style >= 0 && style < int(ColorSamplerPreviewStyle::Count)) {
+            return ColorSamplerPreviewStyle(style);
+        }
+    }
+    return ColorSamplerPreviewStyle::Circle;
+}
+
+void KisConfig::setColorSamplerPreviewStyle(ColorSamplerPreviewStyle style)
+{
+    m_cfg.writeEntry("colorSamplerPreviewStyle", int(style));
+    KisConfigNotifier::instance()->notifyColorSamplerPreviewStyleChanged();
+}
+
 bool KisConfig::useDirtyPresets(bool defaultValue) const
 {
    return (defaultValue ? false : m_cfg.readEntry("useDirtyPresets", true));

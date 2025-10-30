@@ -33,7 +33,7 @@
 				<string>org.krita.krz</string>
 			</array>
 			<key>QLThumbnailMinimumDimension</key>
-			<integer>0</integer>
+			<integer>5</integer>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.quicklook.thumbnail</string>

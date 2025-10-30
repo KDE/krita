@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 74;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -138,10 +138,11 @@
 		114946412EA3FACB00515C4C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		114946472EA5593D00515C4C /* previewHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = previewHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		114946672EA6B34E00515C4C /* krita_thumb_helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = krita_thumb_helper.plist; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-thumbnailer_helper/krita_thumb_helper.plist"; sourceTree = "<absolute>"; };
+		114946672EA6B34E00515C4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-thumbnailer_helper/Info.plist"; sourceTree = "<absolute>"; };
 		114946852EA6C47200515C4C /* krita-preview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-preview.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946A82EA7079600515C4C /* krita-preview_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-preview_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946AA2EA7079600515C4C /* krita-preview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "krita-preview-Info.plist"; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-preview_helper/krita-preview-Info.plist"; sourceTree = "<absolute>"; };
+		114946C42EA85C7800515C4C /* base.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = base.entitlements; sourceTree = "<group>"; };
 		84A059912560A72500E4EAFD /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		84A059942560A75000E4EAFD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		84B7B62725619404003662DB /* krita-thumbnailer.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,36 +171,25 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		114946532EA559CB00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		114946C72EA873D200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 114946462EA5593D00515C4C /* previewHelper */;
 		};
-		114946962EA6C47200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		114946C82EA873DE00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				/Localized/PreviewViewController.xib,
 				Info.plist,
-				PreviewViewController.swift,
 			);
 			target = 114946842EA6C47200515C4C /* krita-preview */;
-		};
-		114946A92EA7079600515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				/Localized/PreviewViewController.xib,
-				Info.plist,
-				PreviewViewController.swift,
-			);
-			target = 1149469C2EA7079600515C4C /* krita-preview_helper */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		114946482EA5593D00515C4C /* previewHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946532EA559CB00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = previewHelper; sourceTree = "<group>"; };
-		114946872EA6C47200515C4C /* krita-preview */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946962EA6C47200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 114946A92EA7079600515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "krita-preview"; sourceTree = "<group>"; };
+		114946482EA5593D00515C4C /* previewHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946C72EA873D200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = previewHelper; sourceTree = "<group>"; };
+		114946872EA6C47200515C4C /* krita-preview */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946C82EA873DE00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "krita-preview"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,7 +271,7 @@
 		114946682EA6B42B00515C4C /* krita-thumbnailer_helper */ = {
 			isa = PBXGroup;
 			children = (
-				114946672EA6B34E00515C4C /* krita_thumb_helper.plist */,
+				114946672EA6B34E00515C4C /* Info.plist */,
 			);
 			path = "krita-thumbnailer_helper";
 			sourceTree = "<group>";
@@ -291,6 +281,7 @@
 			children = (
 				84B7B63025619404003662DB /* appex_sandbox.entitlements */,
 				84B7B63E256197D9003662DB /* unziptask-Bridging-Header.h */,
+				114946C42EA85C7800515C4C /* base.entitlements */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -641,6 +632,7 @@
 				};
 			};
 			buildConfigurationList = 84D650F3256036F000CC2E75 /* Build configuration list for PBXProject "integration" */;
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -648,7 +640,6 @@
 				Base,
 			);
 			mainGroup = 84D650EF256036F000CC2E75;
-			preferredProjectObjectVersion = 50;
 			productRefGroup = 84D650F9256036F000CC2E75 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -656,8 +647,8 @@
 				84D651062560370B00CC2E75 /* kritaquicklook */,
 				84D651162560371600CC2E75 /* kritaspotlight */,
 				84D505D625608693005AFC55 /* unziptask */,
-				84B7B62625619404003662DB /* krita-thumbnailer */,
 				114946462EA5593D00515C4C /* previewHelper */,
+				84B7B62625619404003662DB /* krita-thumbnailer */,
 				114946582EA6B34D00515C4C /* krita-thumbnailer_helper */,
 				114946842EA6C47200515C4C /* krita-preview */,
 				1149469C2EA7079600515C4C /* krita-preview_helper */,
@@ -836,13 +827,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = common/base.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -850,6 +846,8 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = previewHelper/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "kra preview Helper";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -858,7 +856,14 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -876,16 +881,23 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = common/base.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = previewHelper/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "kra preview Helper";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -894,7 +906,14 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.krita.previewHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -909,16 +928,31 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					NOUNCRYPT,
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "krita-thumbnailer_helper/krita_thumb_helper.plist";
+				INFOPLIST_FILE = "krita-thumbnailer_helper/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita thumnailer helper";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -926,6 +960,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-thumbnailer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
@@ -938,11 +973,26 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = "krita-thumbnailer_helper/krita_thumb_helper.plist";
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				INFOPLIST_FILE = "krita-thumbnailer_helper/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita thumnailer helper";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -950,6 +1000,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-thumbnailer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "common/unziptask-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -966,7 +1017,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -984,7 +1034,6 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.krita-preview";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1008,7 +1057,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1022,7 +1070,6 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.krita-preview";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1041,11 +1088,11 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1054,7 +1101,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "krita-preview_helper/krita-preview-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview-helper";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1065,6 +1112,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-preview";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1082,16 +1130,16 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = common/appex_sandbox.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "krita-preview_helper/krita-preview-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-preview-helper";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Stichting Krita Foundation. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1102,6 +1150,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.krita.previewHelper.krita-preview";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -1127,6 +1176,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "krita-thumbnailer/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-thumbnailer";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1151,6 +1201,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "krita-thumbnailer/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "krita-thumbnailer";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1244,7 +1295,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 5.0;
+				MARKETING_VERSION = 5.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1304,7 +1355,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 5.0;
+				MARKETING_VERSION = 5.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;

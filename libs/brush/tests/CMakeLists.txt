@@ -9,6 +9,5 @@ kis_add_tests(
     kis_imagepipe_brush_test.cpp
     TestAbrStorage.cpp
     KisBrushModelTest.cpp
-    NAME_PREFIX "libs-brush-"
     LINK_LIBRARIES kritaimage kritalibbrush kritatestsdk
     )

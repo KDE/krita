@@ -5,7 +5,6 @@ kis_add_tests(
     TestKoProgressUpdater.cpp
     TestSqueezedComboBox.cpp
     kis_parse_spin_boxes_test.cpp
-    NAME_PREFIX "libs-widgetutils-"
     LINK_LIBRARIES kritawidgetutils kritaimage kritatestsdk
 )
 
@@ -18,6 +17,5 @@ kis_add_test(
     ${DialogStateSaver_SRCS}
     TEST_NAME KisDialogStateSaverTest
     LINK_LIBRARIES kritawidgetutils kritatestsdk KF${KF_MAJOR}::ConfigCore
-    NAME_PREFIX "libs-widgetutils-"
     )
 

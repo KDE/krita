@@ -8,7 +8,6 @@ kis_add_tests(
     TestFilter.cpp
     TestManagedColor.cpp
     TestNotifier.cpp
-    NAME_PREFIX "libs-libkis-"
     LINK_LIBRARIES kritalibkis kritatestsdk
     )
 

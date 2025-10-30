@@ -9,7 +9,6 @@ kis_add_tests(
     kis_tile_data_store_test.cpp
     kis_tile_data_pooler_test.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
-    NAME_PREFIX "libs-image-tiles3-"
     )
 
 set_tests_properties(libs-image-tiles3-kis_low_memory_tests PROPERTIES TIMEOUT 180)

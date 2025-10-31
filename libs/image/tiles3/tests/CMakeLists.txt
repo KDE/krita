@@ -15,4 +15,4 @@ kis_add_tests(
     NAME_PREFIX "libs-image-tiles3-"
     )
 
-set_tests_properties(libs-image-tiles3-kis_low_memory_tests PROPERTIES TIMEOUT 180)
+set_tests_properties(libs-image-tiles3-KisLowMemoryTests PROPERTIES TIMEOUT 180)

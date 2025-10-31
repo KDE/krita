@@ -7,6 +7,17 @@ include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(KritaTestSuite)
 
+function(_snake_to_camel _camel_term_varname _snake_string)
+    string(REPLACE "_" ";" _terms ${_snake_string})
+    set(_camel_term)
+    foreach(_term ${_terms})
+        string(SUBSTRING ${_term} 0 1 _firstletter)
+        string(SUBSTRING ${_term} 1 -1 _otherletters)
+        string(TOUPPER ${_firstletter} _firstletter)
+        string(APPEND _camel_term ${_firstletter} ${_otherletters})
+    endforeach()
+    set(${_camel_term_varname} ${_camel_term} PARENT_SCOPE)
+endfunction()
 
 # modified version of ECMAddTests.cmake in cmake-extra-modules
 function(KRITA_ADD_UNIT_TEST)
@@ -26,6 +37,21 @@ function(KRITA_ADD_UNIT_TEST)
   else()
     #more than one source file passed, but no test name given -> error
     message(FATAL_ERROR "kis_add_test() called with multiple source files but without setting \"TEST_NAME\"")
+  endif()
+
+  # adjust target/executable name from old-style kis_some_test to KisSomeTest, where needed
+  # TODO: rename actual test sources/names instead, one by the time, then remove this
+  _snake_to_camel(_CamelCaseName ${_targetname})
+  if (NOT "${_CamelCaseName}" STREQUAL "${_targetname}")
+      # Disable to get warnings about old test name style
+      # message(DEPRECATION "${_targetname} uses old snake_case name, change to CamelCase.")
+
+      # handle duplicated name
+      if ("KisMaskGeneratorTest" STREQUAL "${_CamelCaseName}")
+          message(WARNING "${_targetname} has duplicated name with KisMaskGeneratorTest, renaming with suffix 2")
+          set(_CamelCaseName "KisMaskGenerator2Test")
+      endif()
+      set(_targetname ${_CamelCaseName})
   endif()
 
   set(_testname ${ARG_NAME_PREFIX}${_targetname})

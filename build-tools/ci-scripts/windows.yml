@@ -1,6 +1,6 @@
 windows-build:
   stage: build
-  image: storage.kde.org/vm-images/krita-windows-clang18
+  image: $VM_IMAGE_NAME_WINDOWS
   tags:
     - VM
     - amd64

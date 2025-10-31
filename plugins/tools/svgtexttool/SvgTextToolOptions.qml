@@ -269,7 +269,7 @@ Control {
         }
         Button {
             id: btnPrepositioned;
-            text: i18nc("@label:button", "Prepositioned");
+            text: i18nc("@label:button", "Pre-positioned");
             property int type: SvgTextToolOptionsManager.PrePositionedText;
             Layout.fillWidth: true;
             ButtonGroup.group: textType;

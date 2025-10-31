@@ -14,6 +14,7 @@
 #include <QPointer>
 
 #include <kis_signal_auto_connection.h>
+#include <KisSignalMapper.h>
 
 #include "SvgTextCursor.h"
 #include "SvgTextToolOptionsManager.h"
@@ -195,6 +196,8 @@ private:
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
     HighlightItem m_highlightItem {HighlightItem::None};
     bool m_strategyAddingCommand {false};
+
+    QScopedPointer<KisSignalMapper> m_textTypeSignalsMapper;
 
 
     SvgTextCursor m_textCursor;

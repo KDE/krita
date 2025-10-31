@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-#include "SvgConvertTextTypeCommand.h"
+#include "KoSvgConvertTextTypeCommand.h"
 
-SvgConvertTextTypeCommand::SvgConvertTextTypeCommand(KoSvgTextShape *shape, ConversionType type, int pos, KUndo2Command *parent)
+KoSvgConvertTextTypeCommand::KoSvgConvertTextTypeCommand(KoSvgTextShape *shape, KoSvgTextShape::TextType type, int pos, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_conversionType(type)
@@ -14,17 +14,17 @@ SvgConvertTextTypeCommand::SvgConvertTextTypeCommand(KoSvgTextShape *shape, Conv
     setText(kundo2_i18n("Convert Text Type"));
 }
 
-void SvgConvertTextTypeCommand::redo()
+void KoSvgConvertTextTypeCommand::redo()
 {
     QRectF updateRect = m_shape->boundingRect();
     m_textData = m_shape->getMemento();
     const int oldIndex = qMax(0, m_shape->indexForPos(m_pos));
 
-    if (m_conversionType == ToPreFormatted) {
+    if (m_conversionType == KoSvgTextShape::PreformattedText) {
         m_shape->convertCharTransformsToPreformatted(false);
-    } else if (m_conversionType == ToInlineSize) {
+    } else if (m_conversionType == KoSvgTextShape::InlineWrap) {
         m_shape->convertCharTransformsToPreformatted(true);
-    } else if (m_conversionType == ToCharTransforms) {
+    } else if (m_conversionType == KoSvgTextShape::PrePositionedText) {
         m_shape->setCharacterTransformsFromLayout();
     }
 
@@ -33,7 +33,7 @@ void SvgConvertTextTypeCommand::redo()
     m_shape->notifyCursorPosChanged(pos, pos);
 }
 
-void SvgConvertTextTypeCommand::undo()
+void KoSvgConvertTextTypeCommand::undo()
 {
     QRectF updateRect = m_shape->boundingRect();
     m_shape->setMemento(m_textData, m_pos, m_pos);

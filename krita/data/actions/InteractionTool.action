@@ -297,6 +297,35 @@
       <isCheckable>false</isCheckable>
     </Action>
 
-
+<Action name="text_type_preformatted">
+  <text>Convert Text To Preformatted</text>
+  <iconText>Preformatted</iconText>
+  <toolTip>The text will not wrap and preserves spaces and new lines. A line break is inserted so the lines from wrapping or positioning remain separated.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>true</isCheckable>
+</Action>
+<Action name="text_type_inline_wrap">
+  <text>Convert Text To Inline Wrapped</text>
+  <iconText>Inline Wrapped</iconText>
+  <toolTip>Text wraps inside a fixed length, spaces and new lines are preserved. New lines are not removed.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>true</isCheckable>
+</Action>
+<Action name="text_type_pre_positioned">
+  <text>Convert Text To Pre-positioned</text>
+  <iconText>Pre-positioned</iconText>
+  <toolTip>Text uses SVG 1.1 character transforms to position each line. Spaces and new lines are collapsed. This is for backward compatibility with SVG 1.1.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>true</isCheckable>
+</Action>
   </Actions>
 </ActionCollection>

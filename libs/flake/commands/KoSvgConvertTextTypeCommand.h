@@ -7,7 +7,7 @@
 #define SVGCONVERTTEXTTYPECOMMAND_H
 
 #include <kundo2command.h>
-#include "kritatoolsvgtext_export.h"
+#include "kritaflake_export.h"
 #include <KoSvgTextShape.h>
 
 /**
@@ -19,17 +19,12 @@
  * for each new text chunk, and finally, assigns an inline-size if
  * necessary.
  */
-class KRITATOOLSVGTEXT_EXPORT SvgConvertTextTypeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoSvgConvertTextTypeCommand : public KUndo2Command
 {
 public:
-    enum ConversionType {
-        ToPreFormatted, ///< Apply whitespace, convert whitespace rule to pre-wrapped, insert newlines at chunk starts and remove character transforms. Removes InlineSize.
-        ToInlineSize, ///< Same as ToPreFormatted, except adds an inline-size.
-        ToCharTransforms ///< This applies SVG 1.1 char transforms and sets whitespace to normal.
-    };
 
-    SvgConvertTextTypeCommand(KoSvgTextShape *shape, ConversionType type, int pos, KUndo2Command *parent = 0);
-    ~SvgConvertTextTypeCommand() override = default;
+    KoSvgConvertTextTypeCommand(KoSvgTextShape *shape, KoSvgTextShape::TextType type, int pos, KUndo2Command *parent = 0);
+    ~KoSvgConvertTextTypeCommand() override = default;
 
     void redo() override;
 
@@ -42,7 +37,7 @@ private:
     KoSvgTextShape *m_shape;
     KoSvgTextShapeMementoSP m_textData;
 
-    ConversionType m_conversionType;
+    KoSvgTextShape::TextType m_conversionType;
     int m_pos;
 };
 

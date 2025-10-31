@@ -73,6 +73,10 @@ QList<QAction *> DefaultToolFactory::createActionsImpl()
     actions << actionRegistry->makeQAction("object_subtract", this);
     actions << actionRegistry->makeQAction("object_split", this);
 
+    actions << actionRegistry->makeQAction("text_type_preformatted", this);
+    actions << actionRegistry->makeQAction("text_type_pre_positioned", this);
+    actions << actionRegistry->makeQAction("text_type_inline_wrap", this);
+
     return actions;
 
 }

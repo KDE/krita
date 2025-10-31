@@ -19,7 +19,7 @@
 #include "SvgTextChangeCommand.h"
 #include "SvgTextEditor.h"
 #include "SvgTextRemoveCommand.h"
-#include "SvgConvertTextTypeCommand.h"
+#include "KoSvgConvertTextTypeCommand.h"
 #include "SvgTextShortCuts.h"
 #include "SvgTextToolOptionsModel.h"
 
@@ -121,6 +121,18 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
         }
     }
 
+    m_textTypeSignalsMapper.reset(new KisSignalMapper(this));
+    const QMap<QString, int> convertActions {
+        {"text_type_preformatted", KoSvgTextShape::PreformattedText},
+        {"text_type_inline_wrap", KoSvgTextShape::InlineWrap},
+        {"text_type_pre_positioned", KoSvgTextShape::PrePositionedText}
+    };
+    Q_FOREACH(const QString name, convertActions.keys()) {
+        QAction *a = action(name);
+        connect(a, SIGNAL(triggered()), m_textTypeSignalsMapper.data(), SLOT(map()));
+        m_textTypeSignalsMapper->setMapping(a, convertActions.value(name));
+    }
+
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
     m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);
@@ -155,6 +167,8 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
         }
     }
 
+    connect(m_textTypeSignalsMapper.data(), SIGNAL(mapped(int)), this, SLOT(slotConvertType(int)));
+
     useCursor(m_base_cursor);
     slotShapeSelectionChanged();
 
@@ -171,6 +185,7 @@ void SvgTextTool::deactivate()
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(nullptr);
     }
     // Exiting text editing mode is handled by requestStrokeEnd
+    disconnect(m_textTypeSignalsMapper.data(), 0, this, 0);
 
     m_hoveredShapeHighlightRect = QPainterPath();
 
@@ -502,15 +517,10 @@ void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
 void SvgTextTool::slotConvertType(int index) {
     if (selectedShape()) {
         if (index == selectedShape()->textType()) return;
-        SvgConvertTextTypeCommand::ConversionType type = SvgConvertTextTypeCommand::ToPreFormatted;
-        if (index == KoSvgTextShape::InlineWrap) {
-            type = SvgConvertTextTypeCommand::ToInlineSize;
-        } else if (index == KoSvgTextShape::PrePositionedText) {
-            type = SvgConvertTextTypeCommand::ToCharTransforms;
-        }
+        KoSvgTextShape::TextType type = KoSvgTextShape::TextType(index);
         KUndo2Command *parentCommand = new KUndo2Command();
         new KoKeepShapesSelectedCommand({selectedShape()}, {}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
-        SvgConvertTextTypeCommand *cmd = new SvgConvertTextTypeCommand(selectedShape(), type, m_textCursor.getPos(), parentCommand);
+        KoSvgConvertTextTypeCommand *cmd = new KoSvgConvertTextTypeCommand(selectedShape(), type, m_textCursor.getPos(), parentCommand);
         parentCommand->setText(cmd->text());
         new KoKeepShapesSelectedCommand({}, {selectedShape()}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
         canvas()->addCommand(parentCommand);
@@ -531,10 +541,21 @@ void SvgTextTool::slotUpdateTextPasteBehaviour()
 void SvgTextTool::slotTextTypeUpdated()
 {
     KoSvgTextShape *shape = selectedShape();
-    if (shape && m_optionManager) {
-        m_optionManager->convertToTextType(int(shape->textType()));
-    } else {
-        m_optionManager->convertToTextType(-1);
+    if (m_optionManager) {
+        if (shape) {
+            m_optionManager->convertToTextType(int(shape->textType()));
+            action("text_type_preformatted")->setEnabled(true);
+            action("text_type_pre_positioned")->setEnabled(true);
+            action("text_type_inline_wrap")->setEnabled(true);
+            action("text_type_preformatted")->setChecked(shape->textType() == KoSvgTextShape::PreformattedText);
+            action("text_type_pre_positioned")->setChecked(shape->textType() == KoSvgTextShape::PrePositionedText);
+            action("text_type_inline_wrap")->setChecked(shape->textType() == KoSvgTextShape::InlineWrap);
+        } else {
+            m_optionManager->convertToTextType(-1);
+            action("text_type_preformatted")->setEnabled(false);
+            action("text_type_pre_positioned")->setEnabled(false);
+            action("text_type_inline_wrap")->setEnabled(false);
+        }
     }
 }
 

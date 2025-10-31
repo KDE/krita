@@ -41,6 +41,7 @@
 #include <commands/KoShapeDistributeCommand.h>
 #include <commands/KoKeepShapesSelectedCommand.h>
 #include <commands/KoShapeMergeTextPropertiesCommand.h>
+#include <commands/KoSvgConvertTextTypeCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
@@ -520,6 +521,33 @@ void DefaultTool::slotResetMeshGradientState()
     m_selectedMeshHandle = KoShapeMeshGradientHandles::Handle();
 }
 
+void DefaultTool::slotChangeTextType(int index)
+{
+    QList<KoShape *> shapes = koSelection()->selectedShapes();
+
+    if (shapes.isEmpty()) return;
+
+    const KoSvgTextShape::TextType type = KoSvgTextShape::TextType(index);
+    KUndo2Command *parentCommand = new KUndo2Command();
+    bool convertableShape = false;
+    new KoKeepShapesSelectedCommand({shapes}, {}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
+    Q_FOREACH(KoShape *shape, shapes) {
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+        if (textShape && textShape->textType() != type) {
+            KoSvgConvertTextTypeCommand *cmd = new KoSvgConvertTextTypeCommand(textShape, type, 0, parentCommand);
+            if (!convertableShape) {
+                convertableShape = true;
+                parentCommand->setText(cmd->text());
+            }
+        }
+    }
+
+    new KoKeepShapesSelectedCommand({}, {shapes}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
+    if (convertableShape) {
+        canvas()->addCommand(parentCommand);
+    }
+}
+
 bool DefaultTool::wantsAutoScroll() const
 {
     return true;
@@ -569,6 +597,11 @@ void DefaultTool::setupActions()
     addMappedAction(m_booleanSignalsMapper, "object_unite", BooleanUnion);
     addMappedAction(m_booleanSignalsMapper, "object_intersect", BooleanIntersection);
     addMappedAction(m_booleanSignalsMapper, "object_subtract", BooleanSubtraction);
+
+    m_textTypeSignalsMapper = new KisSignalMapper(this);
+    addMappedAction(m_textTypeSignalsMapper, "text_type_preformatted", KoSvgTextShape::PreformattedText);
+    addMappedAction(m_textTypeSignalsMapper, "text_type_inline_wrap", KoSvgTextShape::InlineWrap);
+    addMappedAction(m_textTypeSignalsMapper, "text_type_pre_positioned", KoSvgTextShape::PrePositionedText);
 
     m_contextMenu.reset(new QMenu());
 }
@@ -1194,6 +1227,7 @@ void DefaultTool::activate(const QSet<KoShape *> &shapes)
     connect(m_distributeSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionDistribute(int)));
     connect(m_transformSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionTransform(int)));
     connect(m_booleanSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionBooleanOp(int)));
+    connect(m_textTypeSignalsMapper, SIGNAL(mapped(int)), SLOT(slotChangeTextType(int)));
 
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
@@ -1241,6 +1275,7 @@ void DefaultTool::deactivate()
     disconnect(m_distributeSignalsMapper, 0, this, 0);
     disconnect(m_transformSignalsMapper, 0, this, 0);
     disconnect(m_booleanSignalsMapper, 0, this, 0);
+    disconnect(m_textTypeSignalsMapper, 0, this, 0);
 
     const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
     if (canvas2) {
@@ -1847,6 +1882,27 @@ void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes
             }
         }
     action("object_ungroup")->setEnabled(hasGroupShape);
+
+    bool enablePreformatted = false;
+    bool enablePrePositioned = false;
+    bool enableInlineWrapped = false;
+    Q_FOREACH (KoShape *shape, editableShapes) {
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape *>(shape);
+        if (textShape) {
+            if (textShape->textType() != KoSvgTextShape::PreformattedText && !enablePreformatted) {
+                enablePreformatted = true;
+            }
+            if (textShape && textShape->textType() != KoSvgTextShape::PrePositionedText && !enablePrePositioned) {
+                enablePrePositioned = true;
+            }
+            if (textShape && textShape->textType() != KoSvgTextShape::PrePositionedText && !enableInlineWrapped) {
+                enableInlineWrapped = true;
+            }
+        }
+    }
+    action("text_type_preformatted")->setEnabled(enablePreformatted);
+    action("text_type_pre_positioned")->setEnabled(enablePrePositioned);
+    action("text_type_inline_wrap")->setEnabled(enableInlineWrapped);
 }
 
 

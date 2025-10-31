@@ -120,6 +120,8 @@ private Q_SLOTS:
     void slotActivateEditFillMeshGradient(bool value);
     void slotResetMeshGradientState();
 
+    void slotChangeTextType(int index);
+
 protected Q_SLOTS:
     /// Update actions on selection change
     void updateActions();
@@ -201,6 +203,7 @@ private:
     KisSignalMapper *m_distributeSignalsMapper {0};
     KisSignalMapper *m_transformSignalsMapper {0};
     KisSignalMapper *m_booleanSignalsMapper {0};
+    KisSignalMapper *m_textTypeSignalsMapper {0};
 
     DefaultToolTextPropertiesInterface *m_textPropertyInterface{0};
 };

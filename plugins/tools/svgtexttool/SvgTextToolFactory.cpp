@@ -43,6 +43,9 @@ QList<QAction *> SvgTextToolFactory::createActionsImpl()
     actions << KisActionRegistry::instance()->makeQAction("svg_insert_special_character", this);
     actions << KisActionRegistry::instance()->makeQAction("svg_paste_rich_text", this);
     actions << KisActionRegistry::instance()->makeQAction("svg_paste_plain_text", this);
+    actions << KisActionRegistry::instance()->makeQAction("text_type_preformatted", this);
+    actions << KisActionRegistry::instance()->makeQAction("text_type_pre_positioned", this);
+    actions << KisActionRegistry::instance()->makeQAction("text_type_inline_wrap", this);
     return actions;
 }
 

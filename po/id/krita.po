@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -7658,6 +7658,83 @@ msgstr "Belah"
 #, kde-format
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert &to Shape"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "Konversikan &ke Bentuk"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, kde-format
+msgctxt "action"
+msgid "Preformatted"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, kde-format
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert &to Shape"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "Konversikan &ke Bentuk"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Sine"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "Sinus"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert &to Shape"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "Konversikan &ke Bentuk"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "Posisi"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16309,7 +16386,7 @@ msgstr "Distribusikan bentuk-bentuk"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Kelompokkan bentuk-bentuk"
@@ -16415,7 +16492,7 @@ msgid "Unclip Shapes"
 msgstr "Lepas-klip Bentuk-bentuk"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Lepas-kelompok bentuk-bentuk"
@@ -16429,6 +16506,14 @@ msgstr "Tutup sub-alur"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Hapus sub-alur"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Convert &to Shape"
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "Konversikan &ke Bentuk"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26487,7 +26572,7 @@ msgstr "Tidak ada"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -37445,7 +37530,7 @@ msgstr "Pilih Area Bidang Berdekatan"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65297,7 +65382,7 @@ msgstr ""
 msgid "Interval Y:"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -65305,22 +65390,22 @@ msgstr ""
 "Klik kiri merotasikan di sekitar tengah, klik kanan di sekitar posisi yang "
 "disorot."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klik dan seret untuk menggunting pemilihan."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Klik dan seret untuk mengubah ukuran pemilihan."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Klik dan seret untuk memindah pemilihan."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65328,14 +65413,14 @@ msgstr ""
 "Klik dan seret untuk mengubah ukuran pemilihan. Klik tengah untuk mengatur "
 "posisi yang disorot."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Alat ini hanya bekerja pada saat lapisan vektor. Barangkali Anda ingin "
 "pindah alat."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Rotate 90° CW"
@@ -65343,7 +65428,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Rotasikan 90° SJJ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Rotate 90° CCW"
@@ -65351,7 +65436,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Rotasikan 90° LAJJ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Rotate 180°"
@@ -65359,17 +65444,17 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Rotasikan 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Cerminkan Obyek Secara Horizontal"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Cerminkan Obyek Secara Vertikal"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Reset Transformations"
@@ -65377,7 +65462,7 @@ msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Set ulang Transformasi"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -65385,7 +65470,7 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Lepas-klip Bentuk-bentuk"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Subtract Shapes"
@@ -65393,24 +65478,24 @@ msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Bentuk Subtract"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Bentuk Subtract"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 #, fuzzy
 #| msgid "Spiral Shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Bentuk Spiral"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Logical Operations"
@@ -66367,14 +66452,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert &to Shape"
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "Konversikan &ke Bentuk"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -66774,7 +66851,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66939,7 +67016,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "Posisi"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

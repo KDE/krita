@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2025-10-25 16:49+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -7666,6 +7666,102 @@ msgstr "افصل"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "اقسم الكائنات ذات المسارات الفرعية المتعددة إلى كائنات متعددة"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "حوّل نوع النص"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Preformatted"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "مُنسق مسبقًا"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#| "lines. A line break is inserted so the lines from wrapping or positioning "
+#| "remain separated.</p></body></html>"
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+"<html><head/><body><p>النّصّ لن يلتفّ، وسيحافظ على المسافات والأسطر الجديدة. "
+"أدرِج فاصل سطر لتبقى الأسطر من الالتفاف أو التّحديد مفصولة.</p></body></html>"
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "حوّل نوع النص"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Inline Wrapped"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "ملفوف داخليًّا"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#| "lines are preserved. New lines are not removed.</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+"<html><head/><body><p>النّصّ يلتفّ ضمن طول ثابت، وحافظ على المسافات والأسطر "
+"الجديدة. أسطر جديدة لا أُزيلت.</p></body></html>"
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "حوّل نوع النص"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Prepositioned"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "موضّع مبدئيًّا"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#| "each line. Spaces and new lines are collapsed. This is for backward "
+#| "compatibility with SVG 1.1.</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+"<html><head/><body><p>النّصّ استخدم تحويلات حروف إس-في-جي 1.1 لوضع كلّ سطر. "
+"أدمجت المسافات والأسطر الجديدة. هذا للتّوافق الرّجعيّ مع إس-في-جي 1.1.</p></"
+"body></html>"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16292,7 +16388,7 @@ msgstr "توزيع الأشكال"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "تجميع الأشكال"
@@ -16391,7 +16487,7 @@ msgid "Unclip Shapes"
 msgstr "فك مقطع الأشكال"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "فك تجميع الأشكال"
@@ -16405,6 +16501,11 @@ msgstr "إغلاق المسار الفرعيّ"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "إزالة المسار الفرعيّ"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "حوّل نوع النص"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26038,7 +26139,7 @@ msgstr "بلا"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -37057,7 +37158,7 @@ msgstr "إجراءات التحديد"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -64787,94 +64888,94 @@ msgstr "فاصل س:"
 msgid "Interval Y:"
 msgstr "فاصل ص:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "نقرة باليسار تدور حول المركز، نقرة باليمين تدور حول الموضع المظلل."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "انقر واسحب لتجريف التحديد."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "انقر واسحب لتغيير حجم التحديد."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "انقر واسحب لتحريك التحديد."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "انقر واسحب لتغيير حجم التحديد. نقرة وسطى لتعيين الموضع المظلل."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "تعمل هذه الأداة فقط على الطبقات الاتجاهية. ربما رغبت بأداة التحريك."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "تدوير الكائن 90° مع عقارب السّاعة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "تدوير الكائن 90° عكس عقارب السّاعة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "تدوير الكائن 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "عكس الكائن أفقيًّا"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "عكس الكائن رأسيًّا"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "تصفير تحويلات الكائن"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "توحيد الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "تقاطع الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "طرح الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "تقسيم الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "إجراءات الأشكال الاتجاهية"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "العمليات المنطقية"
@@ -65804,11 +65905,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "كلّ الرموز"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "حوّل نوع النص"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -66194,7 +66290,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "نسيج باستيل نحيف"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66373,7 +66469,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Prepositioned"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "موضّع مبدئيًّا"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

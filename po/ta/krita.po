@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -7724,6 +7724,76 @@ msgstr "நிறம் எடுக்கும் கருவி"
 #, kde-format
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "உருவத்தை அடுக்காக நுழை..."
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Preformatted"
+msgstr "செயல்திறன் சோதனை"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, kde-format
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "உருவத்தை அடுக்காக நுழை..."
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Sine"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "சைன்"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "உருவத்தை அடுக்காக நுழை..."
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "நிலை இல்லை"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16362,7 +16432,7 @@ msgstr "உரையை அழி"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
@@ -16480,7 +16550,7 @@ msgid "Unclip Shapes"
 msgstr "இடது பக்கம் சீரமை"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
@@ -16497,6 +16567,12 @@ msgstr "குழுவை நீக்கு"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "குழுவை நீக்கு"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "உருவத்தை அடுக்காக நுழை..."
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26138,7 +26214,7 @@ msgstr "எதுவுமில்லை"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -36742,7 +36818,7 @@ msgstr "நிகழ்வுள்ள நிறத்தை மேல்லு�
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 msgid "Transform"
@@ -63967,104 +64043,104 @@ msgstr "வேறுபாடு:"
 msgid "Interval Y:"
 msgstr "வேறுபாடு:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, fuzzy, kde-format
 msgid "Click and drag to shear selection."
 msgstr "உருவத்திற்கு அடுக்கை சேர்க்க முடியவில்லை."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, fuzzy, kde-format
 msgid "Click and drag to resize selection."
 msgstr "நிகழ்விலுள்ள அடுக்கிற்கு உருவத்தின் அளவை மாற்று"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, fuzzy, kde-format
 msgid "Click and drag to move selection."
 msgstr "உருவத்திற்கு அடுக்கை சேர்க்க முடியவில்லை."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, fuzzy, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "நிகழ்விலுள்ள அடுக்கிற்கு உருவத்தின் அளவை மாற்று"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "பிம்பத்தை சுற்று"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "பிம்பத்தை சுற்று"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "&அடுக்கை சுழற்று"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "இடவலதை மட்டும் புடைத்துநிற்கும்படி செய்"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "அழிக்கும் கருவி"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "இடது பக்கம் சீரமை"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "&புரட்டு"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "உரை தூரிகை"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "உரை தூரிகை"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, fuzzy, kde-format
 msgid "Vector Shape Actions"
 msgstr "தேர்வு இல்லை"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "பூலியன் செயல்"
@@ -64991,12 +65067,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "உருவம்"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "உருவத்தை அடுக்காக நுழை..."
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -65384,7 +65454,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "எதிரான சரிவு..."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -65534,7 +65604,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
 #, fuzzy, kde-format
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "நிலை இல்லை"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

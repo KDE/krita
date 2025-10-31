@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -8381,6 +8381,90 @@ msgstr "분할"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "하위 경로 여러 개가 있는 객체를 여러 객체로 분할"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Image Type"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "이미지 형식 변환"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Performance"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "성능"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, kde-format
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Image Type"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "이미지 형식 변환"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Sine Wave Lines"
+#| msgid "Sine Wave"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "사인파"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
+#| "</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+"<html><head/><body><p>평균을 결정할 때 태블릿의 기울기를 사용합니다.</p></"
+"body></html>"
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Image Type"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "이미지 형식 변환"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "위치"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -17266,7 +17350,7 @@ msgstr "모양 분배"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "모양 그룹"
@@ -17371,7 +17455,7 @@ msgid "Unclip Shapes"
 msgstr "모양 클립 해제"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "모양 그룹 해제"
@@ -17385,6 +17469,14 @@ msgstr "하위 경로 닫기"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "하위 경로 삭제"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Image Type"
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "이미지 형식 변환"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -27498,7 +27590,7 @@ msgstr "없음"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -38776,7 +38868,7 @@ msgstr "선택 작업"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -67232,7 +67324,7 @@ msgstr "내부"
 msgid "Interval Y:"
 msgstr "내부"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -67240,22 +67332,22 @@ msgstr ""
 "마우스 왼쪽 단추 클릭은 중앙을 중심으로 회전하고, 오른쪽 단추 클릭은 강조 표"
 "시된 위치를 중심으로 회전합니다."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "선택 영역을 기울이려면 클릭한 후 드래그하십시오."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "선택 영역의 크기를 변경하려면 클릭한 후 드래그하십시오."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "선택 영역을 이동하려면 클릭한 후 드래그하십시오."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -67263,44 +67355,44 @@ msgstr ""
 "선택 영역의 크기를 조절하려면 클릭하고 드래그하십시오. 가운데 단추로 클릭하"
 "면 위치를 강조 표시할 수 있습니다."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "이 도구는 벡터 레이어에서만 작동합니다. 이동 도구를 사용해야 할 수도 있습니"
 "다."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "객체 90° 시계 방향 회전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "객체 90° 반시계 방향 회전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "객체 180° 회전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "객체 좌우 반전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "객체 상하 반전"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "객체 변형 초기화"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -67308,27 +67400,27 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "모양 클립 해제"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "모양 교차하기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "모양 빼기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "모양 분할하기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "벡터 모양 작업"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "논리 연산"
@@ -68293,14 +68385,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "모든 쪽(&G)"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Image Type"
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "이미지 형식 변환"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -68703,7 +68787,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "대기 시간 없이 저장"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -68874,7 +68958,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "위치"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

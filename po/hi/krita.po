@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -7685,6 +7685,79 @@ msgstr "विभाजन"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "कई उप पथों वाले वस्तुएं अनेक वस्तुओं में विभाजित करें"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "छवि क़िस्म परिवर्तित करें"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Performance"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "निष्पादन"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, kde-format
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "छवि क़िस्म परिवर्तित करें"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Sine Wave Lines"
+#| msgid "Sine Wave"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "ज्या तरंग"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "छवि क़िस्म परिवर्तित करें"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "स्थिति"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16439,7 +16512,7 @@ msgstr "आकृतियाँ वितरित करें"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "आकृतियाँ समूहबद्ध करें"
@@ -16544,7 +16617,7 @@ msgid "Unclip Shapes"
 msgstr "आकृतियाँ अन-क्लिप करें"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "आकृतियाँ असमूहीकृत करें"
@@ -16558,6 +16631,12 @@ msgstr "उपपथ बंद करें"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "उपपथ हटाएँ"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "छवि क़िस्म परिवर्तित करें"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26539,7 +26618,7 @@ msgstr "कोई नहीं"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -37391,7 +37470,7 @@ msgstr "चयन क्रियाएँ"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65309,28 +65388,28 @@ msgstr "आंतरिक"
 msgid "Interval Y:"
 msgstr "आंतरिक"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "चयन को अपप्रपण के लिए क्लिक करें और खींचें"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "चयन का आकार बदलने के लिए क्लिक करें और खींचें।"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "चयन को स्थानांतरित करने के लिए क्लिक करें और खींचें।"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65338,42 +65417,42 @@ msgstr ""
 "चयन का आकार बदलने के लिए क्लिक करें और खींचें। चिन्हांकित स्थिति सेट करने के लिए मध्य क्लिक "
 "करें।"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "वस्तु को ९०° दक्षिणावर्त घुमाएँ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "वस्तु को ९०° वामावर्त घुमाएँ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "वस्तु को १८० ° घुमाएँ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "वस्तु को क्षैतिज रूप से पलटें"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "वस्तु को लंबवत रूप से पलटें"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "वस्तुओं के रूपांतरण रीसेट करें"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -65381,27 +65460,27 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "आकृतियाँ अन-क्लिप करें"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "आकृति प्रतिच्छेदन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "आकारों का व्यवकलन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "आकृतियाँ अलग करें"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "वेक्टर आकृति क्रियाएँ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "तार्किक संचालन"
@@ -66355,12 +66434,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "सभी पृष्ठ (&g)"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "छवि क़िस्म परिवर्तित करें"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -66757,7 +66830,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "प्रतीक्षा किए बिना सहेजें"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66923,7 +66996,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "स्थिति"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

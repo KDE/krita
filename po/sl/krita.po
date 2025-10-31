@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2025-10-25 22:13+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -7676,6 +7676,103 @@ msgstr "Razdeli"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "Razdeli predmete z več podpotmi na več predmetov"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "Pretvori vrsto besedila"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Preformatted"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "Predoblikovano"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#| "lines. A line break is inserted so the lines from wrapping or positioning "
+#| "remain separated.</p></body></html>"
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+"<html><head/><body><p>Besedilo se ne prelomi in ohrani presledke in nove "
+"vrstice. Prelom vrstice je vstavljen tako, da vrstice z ovijanjem ali "
+"umeščanjem ostanejo ločene.</p></body></html>"
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "Pretvori vrsto besedila"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Inline Wrapped"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "Znotrajvrstično prelomljeno"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#| "lines are preserved. New lines are not removed.</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+"<html><head/><body><p>Besedilo se prelomi znotraj fiksne dolžine, presledki "
+"in nove vrstice se ohranijo. Nove vrstice niso odstranjene.</p></body></html>"
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "Pretvori vrsto besedila"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Prepositioned"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "Vnaprej umeščeno"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#| "each line. Spaces and new lines are collapsed. This is for backward "
+#| "compatibility with SVG 1.1.</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+"<html><head/><body><p>Besedilo uporablja pretvorbe znakov SVG 1.1 za "
+"postavitev vsake vrstice. Presledki in nove vrstice so strnjene. To je za "
+"povratno združljivost z SVG 1.1.</p></body></html>"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16311,7 +16408,7 @@ msgstr "Razporedi like"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Združi like"
@@ -16410,7 +16507,7 @@ msgid "Unclip Shapes"
 msgstr "Odpni lik"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Razdruži like"
@@ -16424,6 +16521,11 @@ msgstr "Zapri podpot"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Odstrani podpot"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "Pretvori vrsto besedila"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26135,7 +26237,7 @@ msgstr "Brez"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -37222,7 +37324,7 @@ msgstr "Dejanja izbora"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65256,29 +65358,29 @@ msgstr "Interval X:"
 msgid "Interval Y:"
 msgstr "Interval Y:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 "Levi klik se vrti okoli središča, desni klik okoli označenega položaja."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Kliknite in povlecite za striženje oz. nagib."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Kliknite in povlecite da spremenite velikost izbire."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Kliknite in povlecite da premaknete izbiro."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65286,69 +65388,69 @@ msgstr ""
 "Kliknite in povlecite da spremenite velikost izbire. Kliknite s srednjo "
 "tipko da nastavite položaj poudarka."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "To orodje deluje samo na vektorskih plasteh. Verjetno želite orodje za "
 "premikanje."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Zavrti predmet za 90° v SUK"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Zasukaj predmet za 90° nasprotno SUK"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Zavrti predmet za 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Zrcali predmet vodoravno"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Zrcali predmet navpično"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Ponastavi preoblikovanja predmetov"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Združi like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Presekaj like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Odštej like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Razdeli like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Dejanja vektorskega lika"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logične operacije"
@@ -66282,11 +66384,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Vsi glifi"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "Pretvori vrsto besedila"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -66675,7 +66772,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "Pasteli, tekstura, tanko"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66855,7 +66952,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Prepositioned"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "Vnaprej umeščeno"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

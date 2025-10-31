@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -7704,6 +7704,103 @@ msgstr "Dela"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "Dela objekt med flera delkonturer i flera objekt"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "Konvertera texttyp"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Preformatted"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "Förformaterad"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#| "lines. A line break is inserted so the lines from wrapping or positioning "
+#| "remain separated.</p></body></html>"
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+"<html><head/><body><p>Texten radbryts inte och behåller mellanslag och "
+"nyrader. En radbrytning infogas så att raderna förblir separerade efter "
+"radbrytning eller positionering.</p></body></html>"
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "Konvertera texttyp"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Inline Wrapped"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "Radbruten på plats"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#| "lines are preserved. New lines are not removed.</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+"<html><head/><body><p>Text radbryts inom en fast längd, mellanslag och "
+"nyrader bevaras. Nyrader tas inte bort.</p></body></html>"
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "Konvertera texttyp"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Prepositioned"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "Förplacerad"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#| "each line. Spaces and new lines are collapsed. This is for backward "
+#| "compatibility with SVG 1.1.</p></body></html>"
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+"<html><head/><body><p>Text använder teckentransformeringar i SVG 1.1 för att "
+"placera varje rad. Mellanslag och nyrader är dras ihop. Det är till för "
+"bakåtkompatibilitet med SVG 1.1.</p></body></html>"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16343,7 +16440,7 @@ msgstr "Fördela former"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Gruppera former"
@@ -16442,7 +16539,7 @@ msgid "Unclip Shapes"
 msgstr "Lossa former"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Dela upp former"
@@ -16456,6 +16553,11 @@ msgstr "Slut delkontur"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Ta bort delkontur"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "Konvertera texttyp"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26172,7 +26274,7 @@ msgstr "Ingen"
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -37233,7 +37335,7 @@ msgstr "Markeringsåtgärder"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65128,29 +65230,29 @@ msgstr "Intervall X:"
 msgid "Interval Y:"
 msgstr "Intervall Y:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 "Vänsterklick roterar omkring centrum, högerklick omkring markerad position."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klicka och dra för att skjuva markeringen."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Klicka och dra för att ändra markeringens storlek."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Klicka och dra för att flytta markeringen."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65158,69 +65260,69 @@ msgstr ""
 "Klicka och dra för att ändra markeringens storlek. Mittenklick för att ange "
 "markerad position."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Verktyget fungerar bara med vektorlager. Du behöver troligtvis "
 "förflyttningsverktyget."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Rotera objekt 90° medurs"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Rotera objekt 90° moturs"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Rotera objekt 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Spegla objekt horisontellt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Spegla objekt vertikalt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Återställ objekttransformeringar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Förena former"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Snitt av former"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Subtrahera former"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Dela former"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektorformåtgärder"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logiska operationer"
@@ -66151,11 +66253,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Alla glyfer"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "Konvertera texttyp"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -66543,7 +66640,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "Pastell struktur tunn"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66723,7 +66820,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Prepositioned"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "Förplacerad"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

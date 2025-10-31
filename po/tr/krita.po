@@ -13,16 +13,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
-"PO-Revision-Date: 2025-10-30 06:16+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
-"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
+"PO-Revision-Date: 2025-10-31 17:51+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7665,6 +7665,102 @@ msgstr "Böl"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "Nesneleri birden çok alt yolu olan birden çok nesneye böl"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "Metin Türünü Dönüştür"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Preformatted"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "Önceden Biçimlendirilmiş"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "The text will not wrap and preserves spaces and new lines. A line break "
+#| "is inserted so the lines from wrapping or positioning remain separated."
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+"Metin kaydırılmaz ve boşlukları ve yeni satırları korur. Bir satır sonu "
+"girilir; böylece satırlar, kaydırmadan veya konumlandırmadan eksik kalırlar."
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "Metin Türünü Dönüştür"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Inline Wrapped"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "Satır İçi Kaydırılmış"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text wraps inside a fixed length, spaces and new lines are preserved. New "
+#| "lines are not removed."
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+"Metin sabit bir uzunluğun içinde kaydırılır; boşluklar ve yeni satırlar "
+"korunur. Yeni satırlar kaldırılmaz."
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "Metin Türünü Dönüştür"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Prepositioned"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "Önceden Konumlandırılmış"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text uses SVG 1.1 character transforms to position each line. Spaces and "
+#| "new lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+"Metin, her bir satırı konumlandırmak için SVG 1.1 karakter dönüşümlerini "
+"kullanır. Bu, SVG 1.1 ile geriye dönük uyumluluğu korumak içindir."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16304,7 +16400,7 @@ msgstr "Şekilleri Dağıt"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Şekilleri Grupla"
@@ -16403,7 +16499,7 @@ msgid "Unclip Shapes"
 msgstr "Şekilleri Kırpmayı Geri Al"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Şekillerin Gruplamasını Kaldır"
@@ -16417,6 +16513,11 @@ msgstr "Alt Yolu Kapat"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Alt Yolu Kaldır"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "Metin Türünü Dönüştür"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26153,12 +26254,19 @@ msgid "None"
 msgstr "Yok"
 
 #: libs/ui/canvas/kis_canvas2.cpp:1457
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
+#| "Please activate 10-bit mode in Krita's Preferences dialog and "
+#| "restartKrita to avoid color banding!"
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"UYARI: 8 bit kipinde çalışan yüzeyde HDR kipi etkinleştirildi!\n"
+"Renk bantlanmasını önlemek için lütfen Krita’nın Tercihler/Ayarlar iletişim "
+"kutusundan 10 bit kipini etkinleştirin ve Krita’yı yeniden başlatın!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27094,10 +27202,9 @@ msgstr ""
 "yaptığınızı bilmiyorsanız “yeğlenen” seçeneğini kullanın.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1239
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "CMYK harmanlama kipi (yeniden başlatma gerektirir):"
+msgstr "Tuval yüzeyi bit derinliği (yeniden başlatma gerektirir):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27114,13 +27221,13 @@ msgstr "Kendiliğinden"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8 bit"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10 bit"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1247
 #, kde-format
@@ -27129,12 +27236,13 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>Pencere bileşikleştiricisine iletilen rengin bit derinliği. Ekranınızın "
+"HDR özelliklerini kullanmak istiyorsanız 10 bit kipine geçmelisiniz.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Tuval yüzeyi renk uzayı:"
+msgstr "Geçerli tuval yüzeyi bit derinliği:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1259
 #, kde-format
@@ -31837,12 +31945,17 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Mutlak sunum amacı için renk uyarlamasını "
+"etkinleştirir. Bu, görsel bir kâğıda basıldığında ve tek ışık kaynağı olarak "
+"monitör kullanıldığında renklerin nasıl görüneceğini etkili bir şekilde "
+"gösterir. Bu, bir ICC v4 iş akışı için standart bir davranıştır.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Mutlak niyet kromatik uyarlaması"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -37217,7 +37330,7 @@ msgstr "Seçim Eylemleri"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -65187,7 +65300,7 @@ msgstr "X aralığı:"
 msgid "Interval Y:"
 msgstr "Y aralığı:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -65195,22 +65308,22 @@ msgstr ""
 "Sol tıklamak merkez çevresinde döndürürken, sağ tıklamak vurgulanan konumda "
 "döndürür."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Seçimi kaydırmak için tıklayın ve sürükleyin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Seçimi taşımak için tıklayın ve sürükleyin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65218,69 +65331,69 @@ msgstr ""
 "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin. Vurgulanmış konum "
 "için farenin orta düğmesi ile tıklayın."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Bu araç yalnızca vektör katmanlarında çalışır. Büyük olasılıkla taşıma "
 "aracını istiyorsunuz."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Nesneyi 90° Saat Yönünde Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Nesneyi 90° Saat Yönünün Tersine Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Nesneyi 180° Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Nesneyi Yatay Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Nesneyi Dikey Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Nesne Dönüşümlerini Sıfırla"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Şekilleri Birleştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Şekilleri Kesiştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Şekilleri Çıkar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Şekilleri Böl"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektör Şekli Eylemleri"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "Mantıksal İşlemler"
@@ -66217,11 +66330,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Tüm Glifler"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "Metin Türünü Dönüştür"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -66569,19 +66677,17 @@ msgstr "Harf Aralıklandırma"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Rich Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "Zengin Metin Ekle"
+msgstr "Zengin Metin Yapıştır"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Olanaklıysa biçimlendirilmiş metin yapıştırmayı deneyin."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66589,25 +66695,19 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Düz metin"
+msgstr "Düz Metin Yapıştır"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Pastel doku ince"
+msgstr "Metni biçimlendirme olmadan yapıştırın."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66619,18 +66719,16 @@ msgid "SVG Text Tool"
 msgstr "SVG Metin Aracı"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr "Yeni metin oluştur…"
+msgstr "Şununla yeni metinler oluştur…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Geçerli özellikler:"
+msgstr "Geçerli metin özellikleri"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
 #, kde-format
@@ -66638,21 +66736,20 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Yeni metinler oluşturmak için Metin Özellikleri panelindeki geçerli "
+"özellikleri kullanın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Biçem Önayarını Klonla"
+msgstr "Biçem önayarı seç"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Metin Özellikleri"
+msgstr "Metin Özelliklerini Aç"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
 #, kde-format
@@ -66660,54 +66757,48 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Yazıtipi puntosu ve biçemi gibi özellikleri düzenlemek için Metin "
+"Özellikleri panelini açın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Seçenekler"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "İmleç Konumunda Yapıştır"
+msgstr "Görsel imleç kullan"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Çift yönlü metin için görsel sırayı kullanın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Temel uç öntanımlı"
+msgstr "Öntanımlı olarak zengin metin yapıştır"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
+"Yapıştırma eylemini kullanırken her zaman zengin metin olarak yapıştırın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "İletişim Kutusu"
+msgstr "İletişim Kutuları"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "SVG Kaynağını Düzenle"
@@ -66716,11 +66807,10 @@ msgstr "SVG Kaynağını Düzenle"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr ""
+msgstr "Şu anda seçili metni SVG XML olarak düzenleyin."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Glif Paleti"
@@ -66732,101 +66822,82 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Gliflerin alternatif OpenType veya Unicode varyasyonlarına ve karakter "
+"eşlemesine erişim sağlayan glif paletini açın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "Metin Türünü Dönüştür"
+msgstr "Türü Dönüştür…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Önceden Biçimlendirilmiş"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Metin kaydırılmaz ve boşlukları ve yeni satırları "
-"korur. Bir satır sonu girilir; böylece satırlar, kaydırmadan veya "
-"konumlandırmadan eksik kalırlar.</p></body></html>"
+"Metin kaydırılmaz ve boşlukları ve yeni satırları korur. Bir satır sonu "
+"girilir; böylece satırlar, kaydırmadan veya konumlandırmadan eksik kalırlar."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Satır İçi Kaydırılmış"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Metin sabit bir uzunluğun içinde kaydırılır; boşluklar "
-"ve yeni satırlar korunur. Yeni satırlar kaldırılmaz.</p></body></html>"
+"Metin sabit bir uzunluğun içinde kaydırılır; boşluklar ve yeni satırlar "
+"korunur. Yeni satırlar kaldırılmaz."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
 #, fuzzy, kde-format
+#| msgctxt "@label:button"
 #| msgid "Prepositioned"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "Önceden Konumlandırılmış"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Metin, her bir satırı konumlandırmak için SVG 1.1 "
-"karakter dönüşümlerini kullanır. Bu, SVG 1.1 ile geriye dönük uyumluluğu "
-"korumak içindir.</p></body></html>"
+"Metin, her bir satırı konumlandırmak için SVG 1.1 karakter dönüşümlerini "
+"kullanır. Bu, SVG 1.1 ile geriye dönük uyumluluğu korumak içindir."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Hata Ayıkla"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Çevreleyen Kutuyu Tuttur"
+msgstr "Karakter kenar kutularını göster"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Klasörde göster"
+msgstr "Çizgi kutularını göster"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25

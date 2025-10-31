@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -8053,6 +8053,80 @@ msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 #, kde-format
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, kde-format
+msgctxt "action"
+msgid "Preformatted"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, kde-format
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "ਤਬਦੀਲ"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "ਸਥਿਤੀ"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, kde-format
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -17551,7 +17625,7 @@ msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
@@ -17686,7 +17760,7 @@ msgid "Unclip Shapes"
 msgstr "ਸ਼ਕਲ"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 #, fuzzy
 #| msgid "Shape"
 msgctxt "(qtundo-format)"
@@ -17706,6 +17780,13 @@ msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#, fuzzy
+#| msgid "Create Layer"
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -28126,7 +28207,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
 
@@ -39872,7 +39953,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 #| msgid "Line Color"
@@ -69882,119 +69963,119 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 msgid "Interval Y:"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Click and drag to shear selection."
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Click and drag to resize selection."
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Click and drag to move selection."
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 #, fuzzy
 #| msgid "Position"
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "ਸਥਿਤੀ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 #, fuzzy
 #| msgid "Set border"
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 #, fuzzy
 #| msgid "Shape"
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "ਸ਼ਕਲ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 #, fuzzy
 #| msgid "Create shape"
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 #, fuzzy
 #| msgid "Shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "ਸ਼ਕਲ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Vector Shape Actions"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, fuzzy, kde-format
 #| msgid "%1 Options"
 msgid "Logical Operations"
@@ -71046,13 +71127,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-#, fuzzy
-#| msgid "Create Layer"
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr "ਲੇਅਰ ਬਣਾਓ"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -71465,7 +71539,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "@title:window"
@@ -71627,7 +71701,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "ਸਥਿਤੀ"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280

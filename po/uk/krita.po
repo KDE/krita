@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 01:59+0000\n"
-"PO-Revision-Date: 2025-10-30 14:57+0200\n"
+"POT-Creation-Date: 2025-10-31 15:52+0000\n"
+"PO-Revision-Date: 2025-10-31 11:59+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7663,6 +7663,110 @@ msgstr "Розділити"
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
 msgstr "Розділити об'єкти із декількох підконтурів на декілька об'єктів"
+
+#. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:301
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Preformatted"
+msgstr ""
+"Перетворити тип тексту\n"
+"перетворення типу тексту"
+
+#. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:302
+#, fuzzy, kde-format
+#| msgid "Preformatted"
+msgctxt "action"
+msgid "Preformatted"
+msgstr "Попереднє форматування"
+
+#. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:303
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "The text will not wrap and preserves spaces and new lines. A line break "
+#| "is inserted so the lines from wrapping or positioning remain separated."
+msgctxt "action"
+msgid ""
+"The text will not wrap and preserves spaces and new lines. A line break is "
+"inserted so the lines from wrapping or positioning remain separated."
+msgstr ""
+"Текст не переноситиметься за рядками, а пробіли і розриви рядків буде "
+"збережено. Розрив рядка буде вставлено так, щоб відокремити ці рядки від "
+"блоків з перенесенням та позиціюванням."
+
+#. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:311
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Inline Wrapped"
+msgstr ""
+"Перетворити тип тексту\n"
+"перетворення типу тексту"
+
+#. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:312
+#, fuzzy, kde-format
+#| msgid "Inline Wrapped"
+msgctxt "action"
+msgid "Inline Wrapped"
+msgstr "Вбудоване перенесення"
+
+#. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:313
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text wraps inside a fixed length, spaces and new lines are preserved. New "
+#| "lines are not removed."
+msgctxt "action"
+msgid ""
+"Text wraps inside a fixed length, spaces and new lines are preserved. New "
+"lines are not removed."
+msgstr ""
+"Текст переноситиметься з фіксованою шириною, пробіли і розриви рядків буде "
+"збережено. Розриви рядків не вилучатимуться."
+
+#. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:321
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Text Type"
+msgctxt "action"
+msgid "Convert Text To Pre-positioned"
+msgstr ""
+"Перетворити тип тексту\n"
+"перетворення типу тексту"
+
+#. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:322
+#, fuzzy, kde-format
+#| msgid "Prepositioned"
+msgctxt "action"
+msgid "Pre-positioned"
+msgstr "Попереднє позиціювання"
+
+#. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:323
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text uses SVG 1.1 character transforms to position each line. Spaces and "
+#| "new lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgctxt "action"
+msgid ""
+"Text uses SVG 1.1 character transforms to position each line. Spaces and new "
+"lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+"Текст використовує перетворення символів SVG 1.1 для розташовування окремих "
+"рядків. Пробіли і розриви рядків буде згорнуто. Це для зворотної сумісності "
+"з SVG 1.1."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16375,7 +16479,7 @@ msgstr ""
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr ""
@@ -16510,7 +16614,7 @@ msgstr ""
 "зняти фіксацію форм"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr ""
@@ -16530,6 +16634,13 @@ msgid "Remove subpath"
 msgstr ""
 "Вилучити підконтур\n"
 "вилучення підконтуру"
+
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Convert Text Type"
+msgstr ""
+"Перетворити тип тексту\n"
+"перетворення типу тексту"
 
 #: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
@@ -26451,12 +26562,20 @@ msgid "None"
 msgstr "Жодного"
 
 #: libs/ui/canvas/kis_canvas2.cpp:1457
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
+#| "Please activate 10-bit mode in Krita's Preferences dialog and "
+#| "restartKrita to avoid color banding!"
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-"Please activate 10-bit mode in Krita's Preferences dialog and restartKrita "
+"Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"ПОПЕРЕДЖЕННЯ: Режим HDR було активовано на поверхні, яка працювала в 8-"
+"бітовому режимі!\n"
+"Будь ласка, активуйте 10-бітовий режим у діалоговому вікні налаштувань Krita "
+"та перезапустіть Krita, щоб уникнути кольорових смуг!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27414,10 +27533,9 @@ msgstr ""
 "ваших дій.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1239
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Режим злиття CMYK (потребує перезапуску):"
+msgstr "Бітова глибина поверхні поточного полотна (потребує перезапуску):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27434,13 +27552,13 @@ msgstr "Авто"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8-бітова"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10-бітова"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1247
 #, kde-format
@@ -27449,12 +27567,14 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>Бітова глибина кольору, що передається до засобу композиції вікон. Вам "
+"слід перемкнутися на 10-бітовий режим, якщо ви хочете використовувати "
+"можливості високого динамічного діапазону вашого дисплея.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Простір кольорів поверхні полотна:"
+msgstr "Бітова глибина поверхні поточного полотна:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1259
 #, kde-format
@@ -32200,12 +32320,17 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Вмикає хроматичну адаптацію для абсолютного "
+"відтворення кольорів. Фактично, це покаже, як виглядатимуть кольори, якщо "
+"зображення буде надруковано на папері та переглянуто з монітором як єдиним "
+"джерелом світла. Це стандартна поведінка для робочого процесу ICC v4.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Абсолютна хроматична адаптація"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -37722,7 +37847,7 @@ msgstr "Дії з позначеним"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -66097,7 +66222,7 @@ msgstr "Інтервал за X:"
 msgid "Interval Y:"
 msgstr "Інтервал за Y:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -66105,22 +66230,22 @@ msgstr ""
 "Клацання лівою обертатиме навколо центра, клацання правою — навколо "
 "підсвіченої позиції."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Клацніть і перетягніть, щоб зсунути вибране."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Клацніть і перетягніть, щоб змінити розмір вибраного."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Клацніть і перетягніть, щоб пересунути вибране."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -66128,83 +66253,83 @@ msgstr ""
 "Клацніть і перетягніть, щоб змінити розмір вибраного. Клацання середньою "
 "встановлює підсвічену позицію."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Цей інструмент працює лише для векторних шарів. Ймовірно, вам потрібен "
 "інструмент пересування."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Обернути об'єкт на 90° за год. стрілкою"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Обернути об'єкт на 90° проти год. стрілки"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Обернути об'єкт на 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr ""
 "Віддзеркалити об'єкт горизонтально\n"
 "віддзеркалення об'єкта горизонтально"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr ""
 "Віддзеркалити об'єкт вертикально\n"
 "віддзеркалення об'єкта вертикально"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr ""
 "Скинути перетворення об'єктів\n"
 "скидання перетворення об'єктів"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr ""
 "Об'єднати форми\n"
 "об'єднання форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr ""
 "Перетнути форми\n"
 "перетин форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr ""
 "Відняти форми\n"
 "віднімання форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr ""
 "Розділити форми\n"
 "поділ форм"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Дії з векторними формами"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
 #, kde-format
 msgid "Logical Operations"
 msgstr "Логічні операції"
@@ -67160,13 +67285,6 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Усі гліфи"
 
-#: plugins/tools/svgtexttool/SvgConvertTextTypeCommand.cpp:14
-msgctxt "(qtundo-format)"
-msgid "Convert Text Type"
-msgstr ""
-"Перетворити тип тексту\n"
-"перетворення типу тексту"
-
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -67528,21 +67646,17 @@ msgstr "Кернінґ"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Rich Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr ""
-"Вставити форматований текст\n"
-"вставлення форматованого тексту"
+msgstr "Вставити форматований текст"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Намагатися вставляти форматований текст, якщо це можливе."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67550,25 +67664,19 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Звичайний текст"
+msgstr "Вставити як звичайний текст"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Пастельний текстурований тонкий"
+msgstr "Вставити текст без стилізації."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:272
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -67580,18 +67688,16 @@ msgid "SVG Text Tool"
 msgstr "Інструмент «Текст SVG»"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr "Створити текст з такими параметрами…"
+msgstr "Створювати тексти за допомогою…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Поточні властивості:"
+msgstr "Поточні властивості тексту"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
 #, kde-format
@@ -67599,21 +67705,20 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Використовувати для створення фрагментів тексту поточні властивості на "
+"бічній панелі властивостей тексту."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Клонувати набір стилів"
+msgstr "Виберіть набір стилів"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Властивості тексту"
+msgstr "Відкрити властивості тексту"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
 #, kde-format
@@ -67621,54 +67726,48 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Відкрити бічну панель властивостей тексту для редагування властивостей, "
+"зокрема розміру і стилю тексту."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
-msgstr "Налаштування"
+msgstr "Параметри"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Вставити під вказівником"
+msgstr "Використовувати візуальний курсор"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Використовувати візуальний порядок для двоспрямованого тексту."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Базовий кінчик, типовий"
+msgstr "Типово вставляти форматований текст"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
+"Завжди вставляти форматований текст при використанні дії зі вставлення."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Діалогове вікно"
+msgstr "Діалогові вікна"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Редагувати код SVG"
@@ -67677,11 +67776,10 @@ msgstr "Редагувати код SVG"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr ""
+msgstr "Редагувати поточний позначений текст як XML SVG."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Палітра гліфів"
@@ -67693,104 +67791,84 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Відкрити палітру гліфів, яка надає доступ до альтернативних варіантів гліфів "
+"OpenType або Unicode, а також таблиці символів."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr ""
-"Перетворити тип тексту\n"
-"перетворення типу тексту"
+msgstr "Тип перетворення…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Попереднє форматування"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Текст не переноситиметься за рядками, а пробіли і "
-"розриви рядків буде збережено. Розрив рядка буде вставлено так, щоб "
-"відокремити ці рядки від блоків з перенесенням та позиціюванням.</p></body></"
-"html>"
+"Текст не переноситиметься за рядками, а пробіли і розриви рядків буде "
+"збережено. Розрив рядка буде вставлено так, щоб відокремити ці рядки від "
+"блоків з перенесенням та позиціюванням."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Вбудоване перенесення"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Текст переноситиметься з фіксованою шириною, пробіли і "
-"розриви рядків буде збережено. Розриви рядків не вилучатимуться.</p></body></"
-"html>"
+"Текст переноситиметься з фіксованою шириною, пробіли і розриви рядків буде "
+"збережено. Розриви рядків не вилучатимуться."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
 #, fuzzy, kde-format
+#| msgctxt "@label:button"
 #| msgid "Prepositioned"
 msgctxt "@label:button"
-msgid "Prepositioned"
+msgid "Pre-positioned"
 msgstr "Попереднє позиціювання"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Текст використовує перетворення символів SVG 1.1 для "
-"розташовування окремих рядків. Пробіли і розриви рядків буде згорнуто. Це "
-"для зворотної сумісності з SVG 1.1.</p></body></html>"
+"Текст використовує перетворення символів SVG 1.1 для розташовування окремих "
+"рядків. Пробіли і розриви рядків буде згорнуто. Це для зворотної сумісності "
+"з SVG 1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Діагностика"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Прилипання до рамок-обгорток"
+msgstr "Показувати обмежувальні рамки символів"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
-#, fuzzy, kde-format
-#| msgid "Show line boxes"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Показати рамки рядків"
+msgstr "Показувати рамки рядків"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25

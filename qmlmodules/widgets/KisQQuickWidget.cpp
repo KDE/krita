@@ -71,6 +71,12 @@ KisQQuickWidget::KisQQuickWidget(QWidget *parent): QQuickWidget(parent)
 #elif QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     extraSelectors << "qt5";
 #endif
+    /**
+     * WARNING: The following selector is *only* for KisQQuickWidget. Do not
+     * copy it to other engines.
+     */
+    extraSelectors << "qquickwidget";
+
     selector->setExtraSelectors(extraSelectors);
 
 

@@ -16,6 +16,7 @@
 #include <KisFontFunctions.h>
 #include <KoShapeQtQuickLabel.h>
 #include <TagFilterProxyModelQmlWrapper.h>
+#include <KisQmlPopupWidgetManager.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #error "This plugin implementation is to be used with Qt5 only!\n"
@@ -47,6 +48,7 @@ void KritaQmlComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<KisFontFunctions>(uri, 1, 0, "FontFunctions");
     qmlRegisterType<KoShapeQtQuickLabel>(uri, 1, 0, "KoShapeQtQuickLabel");
     qmlRegisterType<TagFilterProxyModelQmlWrapper>(uri, 1, 0, "TagFilterProxyModelQmlWrapper");
+    qmlRegisterType<KisQmlPopupWidgetManager>(uri, 1, 0, "PopupWidget");
 
 }
 

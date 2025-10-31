@@ -25,6 +25,9 @@ if (QT_MAJOR_VERSION STREQUAL "6")
             KoShapeQtQuickLabel.h
             TagFilterProxyModelQmlWrapper.cpp
             TagFilterProxyModelQmlWrapper.h
+            KisQmlPopupWidgetManager.cpp
+            KisQmlPopupWidgetManager.h
+
     )
 
 else ()
@@ -52,6 +55,8 @@ else ()
             KoShapeQtQuickLabel.h
             TagFilterProxyModelQmlWrapper.cpp
             TagFilterProxyModelQmlWrapper.h
+            KisQmlPopupWidgetManager.cpp
+            KisQmlPopupWidgetManager.h
     )
 
 endif ()
@@ -90,6 +95,10 @@ ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH +qt5 SOURCES
     qml/+qt5/WindowFocusChecker.qml
 )
 
+ecm_target_qml_sources(kritaqmlcomponents PRIVATE PATH +qquickwidget SOURCES
+    qml/+qquickwidget/PopupBase.qml
+)
+
 ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/button/GroupButton.qml
     qml/button/OptionButtonStrip.qml
@@ -117,6 +126,7 @@ ecm_target_qml_sources(kritaqmlcomponents SOURCES
     qml/ResourcePopup.qml
     qml/resourceDelegates/ResourceDelegateBase.qml
     qml/resourceDelegates/FontFamilyDelegate.qml
+    qml/PopupBase.qml
     qml/resourceDelegates/CssStylePresetDelegate.qml
 
 )
@@ -124,6 +134,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kritaqmlcomponents
         PRIVATE
         kritaui
+        kritaqmlwidgets
         Qt::Qml
         Qt::Quick
         Qt::QuickControls2
@@ -133,6 +144,7 @@ else ()
     target_link_libraries(kritaqmlcomponents
         PRIVATE
         kritaui
+        kritaqmlwidgets
         Qt::Qml
         Qt::Quick
         Qt::QuickControls2

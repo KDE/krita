@@ -1,5 +1,8 @@
 set(kritaqmlwidgets_SRCS
     KisQQuickWidget.cpp
+    KisQQuickPopupWidget.cpp
+    kisquickwidgets.qrc
+
 )
 
 kis_add_library(kritaqmlwidgets SHARED ${kritaqmlwidgets_SRCS})

@@ -74,6 +74,9 @@ ResourceDelegateBase {
     }
 
     width: ListView.view.width;
+    // We need to set the implicit width, because otherwise the label's implicit width will decide,
+    // and the label can be a little too big.
+    implicitWidth: 250;
 
     contentItem: Control {
         id: delegateControl;

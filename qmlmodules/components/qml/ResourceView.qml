@@ -17,6 +17,7 @@ Control {
     id: control;
     property Kis.TagFilterProxyModelQmlWrapper modelWrapper: Kis.TagFilterProxyModelQmlWrapper {
         resourceType: control.resourceType;
+
     };
 
     Connections {
@@ -79,6 +80,12 @@ Control {
         Show the search bar, bool.
      */
     property alias showSearch: searchBar.visible;
+
+    /*
+      \qmlProperty resourceCount
+      amount of items in the listview.
+     */
+    property alias resourceCount: view.count;
 
     /*
       \qmlProperty viewPreferredHeight

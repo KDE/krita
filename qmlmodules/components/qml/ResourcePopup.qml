@@ -88,7 +88,7 @@ Button {
     /// Ideally we'd have the max popup height be Window-height - y-pos-of-item-to-window.
     /// But that's pretty hard to calculate (map to global is screen relative, but there's
     /// no way to get window.y relative to screen), so we'll just use 300 as the maximum.
-    property int maxPopupHeight: Math.min(Window.height, 500) - height*3;
+    property int maxPopupHeight: 500;
 
     contentItem: Kis.InformingTextInput {
         id: textInput;
@@ -98,8 +98,8 @@ Button {
         readOnly: !resourceCmb.enabled;
 
         onEditingFinished: {
-            if (resourceCmbPopup.visible) {
-                resourceView.applyHighlightedIndex();
+            if (completerPopup.visible) {
+                completerView.applyHighlightedIndex();
             }
 
             testInput();
@@ -112,10 +112,8 @@ Button {
         onTextEdited: {
             stopWarning();
             modelWrapper.searchText = text;
-            resourceView.showTagging = false;
-            resourceView.showSearch = false;
-            resourceView.highlightedIndex = 0;
-            resourceCmbPopup.open();
+            completerView.highlightedIndex = 0;
+            completerPopup.open();
         }
 
         onActiveFocusChanged: {
@@ -145,10 +143,18 @@ Button {
         }
 
         Keys.onDownPressed: {
-            resourceView.downPress();
+            if (completerPopup.opened) {
+                completerView.downPress();
+            } else {
+                resourceView.downPress();
+            }
         }
         Keys.onUpPressed: {
-            resourceView.upPress();
+            if (completerPopup.opened) {
+                completerView.upPress();
+            } else {
+                resourceView.upPress();
+            }
         }
     }
 
@@ -170,33 +176,57 @@ Button {
         if (resourceCmbPopup.opened) {
             resourceCmbPopup.close();
         } else {
-            resourceView.showTagging = true;
-            resourceView.showSearch = true;
             resourceCmbPopup.open();
         }
     }
     signal activated();
     onActivated: {
         resourceCmbPopup.close();
+        completerPopup.close();
         modelWrapper.searchText = "";
     }
 
     //--- Pop up setup ---//
-    Popup {
+    Kis.PopupBase {
         id: resourceCmbPopup;
         y: resourceCmb.height - 1;
         x: resourceCmb.width - width;
-        width: Math.max(contentWidth, Math.max(resourceCmb.width, 200));
-        height: Math.min(contentItem.implicitHeight, resourceCmb.maxPopupHeight - topMargin - bottomMargin)
+        width: Math.max(implicitWidth, Math.max(resourceCmb.width, 200));
+        height: (resourceCmb.maxPopupHeight - topMargin - bottomMargin);
         padding: 2;
 
         palette: resourceCmb.palette;
+        parent: resourceCmb;
 
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent;
 
         contentItem: Kis.ResourceView {
             id: resourceView;
             palette: resourceCmbPopup.palette;
+        }
+    }
+
+    Popup {
+        id: completerPopup;
+        y: resourceCmb.height - 1;
+        x: resourceCmb.width - width;
+        width: Math.max(implicitWidth, Math.max(resourceCmb.width, 200));
+        property int windowMaximum: Window.height > 0? Math.min(Window.height, resourceCmb.maxPopupHeight) - resourceCmb.height*3: resourceCmb.maxPopupHeight;
+        height: Math.min(contentItem.implicitHeight, windowMaximum - (topMargin + bottomMargin));
+        padding: 2;
+
+        palette: resourceCmb.palette;
+        parent: resourceCmb;
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent;
+        contentItem: Kis.ResourceView {
+            id: completerView;
+            palette: resourceCmbPopup.palette;
+            modelWrapper: resourceCmb.modelWrapper;
+            resourceDelegate: resourceCmb.resourceDelegate;
+            showTagging: false;
+            showSearch: false;
+            addResourceRowVisible: resourceCmb.addResourceRowVisible;
         }
     }
 }

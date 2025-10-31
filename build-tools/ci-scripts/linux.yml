@@ -1,6 +1,6 @@
 linux-build:
   stage: build
-  image: storage.kde.org/vm-images/krita-appimage-2204
+  image: $VM_IMAGE_NAME_LINUX
   tags:
     - VM
     - amd64

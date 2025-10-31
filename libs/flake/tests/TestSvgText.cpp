@@ -112,7 +112,7 @@ void TestSvgText::initTestCase()
              "fonts/testFontsCozens/BaselineTest-Regular-with-BASE.otf",
          }) {
         QString fileName = TestUtil::fetchDataFileLazy(fontFile);
-        bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
+        bool res = KoFontRegistry::instance()->addFontFilePathToRegistry(fileName);
 
         QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontFile).toLatin1());
     }
@@ -123,7 +123,7 @@ void TestSvgText::initTestCase()
              "fonts/testFontNames",
          }) {
         QString fileName = TestUtil::fetchDataFileLazy(fontDir);
-        bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistery(fileName);
+        bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistry(fileName);
         QVERIFY2(res, QString("KoFontRegistry could not add the directory of test fonts %1").arg(fontDir).toLatin1());
     }
 }

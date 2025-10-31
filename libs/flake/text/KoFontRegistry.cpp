@@ -1168,7 +1168,7 @@ KoCSSFontInfo KoFontRegistry::getCssDataForPostScriptName(const QString postScri
     return info;
 }
 
-bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)
+bool KoFontRegistry::addFontFilePathToRegistry(const QString &path)
 {
     const QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(utfData.data());
@@ -1179,7 +1179,7 @@ bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)
     return success;
 }
 
-bool KoFontRegistry::addFontFileDirectoryToRegistery(const QString &path)
+bool KoFontRegistry::addFontFileDirectoryToRegistry(const QString &path)
 {
     const QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(utfData.data());

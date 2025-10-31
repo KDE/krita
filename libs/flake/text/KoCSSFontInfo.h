@@ -13,7 +13,7 @@
 
 /**
  * @brief The KoCSSFontInfo class
- * Convenience struct to make it easier to use KoFontRegistery.
+ * Convenience struct to make it easier to use KoFontRegistry.
  * This struct contains default css values and can generate the axisvalues
  * for the given values.
  */

@@ -19,7 +19,7 @@
 void SvgTextCursorTest::initTestCase()
 {
     QString fileName = QString(FILES_DATA_DIR) + '/' + "DejaVuSans.ttf";
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
+    bool res = KoFontRegistry::instance()->addFontFilePathToRegistry(fileName);
 
     QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fileName).toLatin1());
 }

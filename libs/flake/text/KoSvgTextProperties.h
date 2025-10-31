@@ -282,7 +282,7 @@ public:
     /**
      * @brief cssFontInfo
      * @return this collects all the CSS Font properties into
-     * a KoCSSFontInfo struct for usage with the KoFontRegistery.
+     * a KoCSSFontInfo struct for usage with the KoFontRegistry.
      */
     KoCSSFontInfo cssFontInfo() const;
 

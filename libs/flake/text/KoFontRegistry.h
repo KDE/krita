@@ -126,21 +126,21 @@ private:
     friend class SvgTextCursorTest;
 
     /**
-     * @brief addFontFilePathToRegistery
+     * @brief addFontFilePathToRegistry
      * This adds a font file to the registry. Right now only used by unittests.
      *
      * @param path the path of the font file.
      * @return Whether adding the font file was successful.
      */
-    bool addFontFilePathToRegistery(const QString &path);
+    bool addFontFilePathToRegistry(const QString &path);
 
     /**
-     * @brief addFontFileDirectoryToRegistery
+     * @brief addFontFileDirectoryToRegistry
      * This adds a directory of font files to the registry. Right now only used by unittests.
      * @param path the path of the directory.
      * @return whether it was successful.
      */
-    bool addFontFileDirectoryToRegistery(const QString &path);
+    bool addFontFileDirectoryToRegistry(const QString &path);
 
     QScopedPointer<Private> d;
 

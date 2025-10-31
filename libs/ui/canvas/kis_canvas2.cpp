@@ -1455,7 +1455,7 @@ void KisCanvas2::slotSurfaceFormatChanged(const KisDisplayConfig &config)
 
             const QString warningMessage = i18n(
                 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-                "Please activate 10-bit mode in Krita's Preferences dialog and restart"
+                "Please activate 10-bit mode in Krita's Preferences dialog and restart "
                 "Krita to avoid color banding!");
 
             m_d->view->showFloatingMessage(warningMessage, koIcon("warning"), 7000, KisFloatingMessage::High);

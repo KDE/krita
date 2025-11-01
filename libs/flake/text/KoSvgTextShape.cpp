@@ -1569,7 +1569,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                 } else {
                     context.shapeWriter().startElement("tspan", false);
                 }
-                SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity, true).toBool(),
+                SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visibility, true).toBool(),
                                                   it->properties.property(KoSvgTextProperties::Opacity, 0).toReal(),
                                                   it->properties.property(KoSvgTextProperties::PaintOrder,
                                                                           QVariant::fromValue(paintOrder())
@@ -1737,7 +1737,7 @@ void KoSvgTextShape::debugParsing()
             qDebug() << QString(spaces + "| Stroke set: ") << it->properties.hasProperty(KoSvgTextProperties::StrokeId);
             qDebug() << QString(spaces + "| Opacity: ") << it->properties.property(KoSvgTextProperties::Opacity);
             qDebug() << QString(spaces + "| PaintOrder: ") << it->properties.hasProperty(KoSvgTextProperties::PaintOrder);
-            qDebug() << QString(spaces + "| Visibility set: ") << it->properties.hasProperty(KoSvgTextProperties::Visiblity);
+            qDebug() << QString(spaces + "| Visibility set: ") << it->properties.hasProperty(KoSvgTextProperties::Visibility);
             qDebug() << QString(spaces + "| TextPath set: ") << (!it->textPath.isNull());
             qDebug() << QString(spaces + "| Transforms set: ") << it->localTransformations;
             spaces.append(" ");

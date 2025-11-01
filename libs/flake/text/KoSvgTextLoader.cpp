@@ -104,7 +104,7 @@ void KoSvgTextLoader::setStyleInfo(KoShape *s)
         }
         d->currentNode->properties.setProperty(KoSvgTextProperties::Opacity,
                                                s->transparency());
-        d->currentNode->properties.setProperty(KoSvgTextProperties::Visiblity,
+        d->currentNode->properties.setProperty(KoSvgTextProperties::Visibility,
                                                s->isVisible());
         if (!s->inheritPaintOrder()) {
             d->currentNode->properties.setProperty(KoSvgTextProperties::PaintOrder,

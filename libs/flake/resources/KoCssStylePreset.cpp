@@ -93,7 +93,7 @@ KoSvgTextProperties KoCssStylePreset::properties(int ppi, bool removeKraProps) c
     props.removeProperty(KoSvgTextProperties::FillId);
     props.removeProperty(KoSvgTextProperties::StrokeId);
     props.removeProperty(KoSvgTextProperties::Opacity);
-    props.removeProperty(KoSvgTextProperties::Visiblity);
+    props.removeProperty(KoSvgTextProperties::Visibility);
     props.removeProperty(KoSvgTextProperties::TextOrientationId);
     props.removeProperty(KoSvgTextProperties::PaintOrder);
     return props;
@@ -191,7 +191,7 @@ KoShape* KoCssStylePreset::generateSampleShape() const
     modifiedProps.removeProperty(KoSvgTextProperties::StrokeId);
     modifiedProps.removeProperty(KoSvgTextProperties::PaintOrder);
     modifiedProps.removeProperty(KoSvgTextProperties::Opacity);
-    modifiedProps.removeProperty(KoSvgTextProperties::Visiblity);
+    modifiedProps.removeProperty(KoSvgTextProperties::Visibility);
     modifiedProps.removeProperty(KoSvgTextProperties::TextOrientationId);
 
     sampleText->setPropertiesAtPos(-1, modifiedProps);

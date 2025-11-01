@@ -172,7 +172,7 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
                                                         KoSvgTextProperties::StrokeId,
                                                         KoSvgTextProperties::PaintOrder,
                                                         KoSvgTextProperties::Opacity,
-                                                        KoSvgTextProperties::Visiblity};
+                                                        KoSvgTextProperties::Visibility};
     for (int i = 0; i < generic.size(); i++) {
         auto id = generic[i];
         if (properties.hasProperty(id)) {

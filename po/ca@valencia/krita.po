@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-10-30 10:29+0100\n"
+"PO-Revision-Date: 2025-10-31 10:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -7693,18 +7693,18 @@ msgstr "Amb format previ"
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
 #, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
 #| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#| "The text will not wrap and preserves spaces and new lines. A line break "
+#| "is inserted so the lines from wrapping or positioning remain separated."
 msgctxt "action"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>El text no ajustarà i conservarà espais i línies "
-"noves. S'inserix un salt de línia de manera que les línies ajustades o "
-"posicionades es mantenen separades.</p></body></html>"
+"El text no ajustarà i conservarà espais i línies noves. S'inserix un salt de "
+"línia de manera que les línies ajustades o posicionades es mantenen "
+"separades."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
@@ -7726,17 +7726,17 @@ msgstr "Ajustat en línia"
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
 #, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
 #| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#| "Text wraps inside a fixed length, spaces and new lines are preserved. New "
+#| "lines are not removed."
 msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Es conserven els ajustos de text dins d'una llargària "
-"fixa, espais i línies noves. No s'han eliminat les línies noves.</p></body></"
-"html>"
+"Es conserven els ajustos de text dins d'una llargària fixa, espais i línies "
+"noves. No s'han eliminat les línies noves."
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
@@ -7758,18 +7758,18 @@ msgstr "Amb preposició"
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
 #, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
 #| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#| "Text uses SVG 1.1 character transforms to position each line. Spaces and "
+#| "new lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>El text utilitza transformacions de caràcters SVG 1.1 "
-"per a posicionar cada línia. Els espais i les línies noves estan reduïts. "
-"Açò és per a la compatibilitat amb SVG 1.1.</p></body></html>"
+"El text utilitza transformacions de caràcters SVG 1.1 per a posicionar cada "
+"línia. Els espais i les línies noves estan reduïts. Açò és per a la "
+"compatibilitat amb SVG 1.1."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -26373,12 +26373,20 @@ msgid "None"
 msgstr "Cap"
 
 #: libs/ui/canvas/kis_canvas2.cpp:1457
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
+#| "Please activate 10-bit mode in Krita's Preferences dialog and "
+#| "restartKrita to avoid color banding!"
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"AVÍS: el mode HDR s'ha activat a la superfície funcionant en mode de 8 "
+"bits!\n"
+"Activeu el mode de 10 bits en el diàleg de preferències de Krita i reinicieu "
+"Krita per a evitar bandes de color!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27323,10 +27331,9 @@ msgstr ""
 "finestres. Utilitzeu l'espai «preferit» tret que sapieu el que esteu fent</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1239
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Mode de barreja CMYK (cal reiniciar):"
+msgstr "Profunditat de bits de la superfície del llenç (cal reiniciar):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27343,13 +27350,13 @@ msgstr "Automàtic"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8 bits"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10 bits"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1247
 #, kde-format
@@ -27358,12 +27365,14 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>La profunditat de bits de color que es passa al compositor de finestres. "
+"Hauríeu de canviar al mode de 10 bits si voleu utilitzar les capacitats HDR "
+"de la pantalla</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Espai de color de la superfície del llenç:"
+msgstr "Profunditat de bits de la superfície del llenç:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1259
 #, kde-format
@@ -32097,12 +32106,17 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Habilita l'adaptació cromàtica per al propòsit de "
+"renderització absoluta. Efectivament, açò mostrarà com es veurien els colors "
+"si la imatge s'imprimira en un paper i es veiés amb el monitor com l'única "
+"font de llum. Este és el comportament estàndard per a un flux de treball ICC "
+"v4.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Adaptació cromàtica de propòsit absolut"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -67055,19 +67069,17 @@ msgstr "Interlletratge"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Rich Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "Inserció de text enriquit"
+msgstr "Apegades de text enriquit"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Intenta apegar text amb estil si és possible."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67075,23 +67087,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Text net"
+msgstr "Apegades de text net"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Textura pastel fina"
+msgstr "Apega text sense estil."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
@@ -67105,18 +67111,16 @@ msgid "SVG Text Tool"
 msgstr "Eina de text SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Crea textos nous amb…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Propietats actuals:"
+msgstr "Propietats actuals del text"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
 #, kde-format
@@ -67124,21 +67128,20 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Utilitza les propietats actuals a l'acoblador de propietats del text per a "
+"crear textos nous."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Clona el predefinit d'estil"
+msgstr "Tria el predefinit d'estil"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Propietats del text"
+msgstr "Obri les propietats del text"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
 #, kde-format
@@ -67146,54 +67149,47 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Obri l'acoblador de propietats del text per a editar propietats com la mida "
+"i l'estil de la lletra."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Opcions"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Apega en el cursor"
+msgstr "Utilitza un cursor visual"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Utilitza l'ordre visual per al text bidireccional."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Punta bàsica predeterminada"
+msgstr "Apegades de text enriquit de manera predeterminada"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
-msgstr ""
+msgstr "Apega sempre text enriquit en utilitzar l'acció d'apegades."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Diàleg"
+msgstr "Diàlegs"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Edita el codi font de SVG"
@@ -67202,11 +67198,10 @@ msgstr "Edita el codi font de SVG"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr ""
+msgstr "Edita el text actualment seleccionat coma a XML de SVG."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Paleta de glifs"
@@ -67218,102 +67213,84 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Obri la paleta de glifs, que proporciona accés a alternatives d'OpenType o "
+"variants Unicode dels glifs, així com un mapa de caràcters."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "Convertix el tipus de text"
+msgstr "Convertix el tipus…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Amb format previ"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>El text no ajustarà i conservarà espais i línies "
-"noves. S'inserix un salt de línia de manera que les línies ajustades o "
-"posicionades es mantenen separades.</p></body></html>"
+"El text no ajustarà i conservarà espais i línies noves. S'inserix un salt de "
+"línia de manera que les línies ajustades o posicionades es mantenen "
+"separades."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Ajustat en línia"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Es conserven els ajustos de text dins d'una llargària "
-"fixa, espais i línies noves. No s'han eliminat les línies noves.</p></body></"
-"html>"
+"Es conserven els ajustos de text dins d'una llargària fixa, espais i línies "
+"noves. No s'han eliminat les línies noves."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
 #, fuzzy, kde-format
+#| msgctxt "@label:button"
 #| msgid "Prepositioned"
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Amb preposició"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>El text utilitza transformacions de caràcters SVG 1.1 "
-"per a posicionar cada línia. Els espais i les línies noves estan reduïts. "
-"Açò és per a la compatibilitat amb SVG 1.1.</p></body></html>"
+"El text utilitza transformacions de caràcters SVG 1.1 per a posicionar cada "
+"línia. Els espais i les línies noves estan reduïts. Açò és per a la "
+"compatibilitat amb SVG 1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Depuració"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Ajusta el quadro contenidor"
+msgstr "Mostra els quadros contenidors de caràcters"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Mostra en la carpeta"
+msgstr "Mostra els quadros de línies"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -69073,24 +69050,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid "Proofing transform"
-#~ msgstr "Transformació de provatura"
-
-#~ msgid "Adaptation State:"
-#~ msgstr "Estat de l'adaptació:"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Set how much you wish to correct the adaptation "
-#~ "state. This will affect how <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span> changes the whites of your image. In Layman's terms: "
-#~ "how much do you wish to have the color management correct the paper-color "
-#~ "to screen white while using <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span>?</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Establix quan es vol corregir l'estat d'adaptació. "
-#~ "Açò afectarà la manera com la <span style=\" font-style:italic;"
-#~ "\">Colorimetria absoluta</span> canvia els blancs de la imatge. En "
-#~ "paraules de Layman: quant voleu corregir la gestió del color del paper al "
-#~ "blanc de la pantalla en utilitzar la <span style=\" font-style:italic;"
-#~ "\">Colorimetria absoluta</span>?</p></body></html>"

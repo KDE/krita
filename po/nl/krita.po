@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-10-30 12:29+0100\n"
+"PO-Revision-Date: 2025-10-31 11:23+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -27316,10 +27316,9 @@ msgstr ""
 "p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1239
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Mengmodus CMYK (heeft opnieuw starten nodig):"
+msgstr "Bitdiepte van werkveldoppervlakte (heeft opnieuw starten nodig):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27336,13 +27335,13 @@ msgstr "Auto"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8-bit"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10-bits"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1247
 #, kde-format
@@ -27353,10 +27352,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Kleurruimte van oppervlak van werkveld:"
+msgstr "Huidige bitdiepte van werkveldoppervlakte:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1259
 #, kde-format
@@ -32094,7 +32092,7 @@ msgstr ""
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Absolute intentie van chromatische aanpassing"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -46187,6 +46185,8 @@ msgid ""
 "weight, width, style, italics, oblique, font-style, font-stretch, font-"
 "weight, bold, optical-size, variation"
 msgstr ""
+"gewicht, breedte, stijl, cursief, schuin, lettertypestijl, uitrekking van "
+"lettertype, gewicht van lettertype, vet, optische grootte, variatie"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:284
 #, kde-format
@@ -46198,7 +46198,7 @@ msgstr "Gewicht: "
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Bold"
-msgstr ""
+msgstr "Vet synthetiseren"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:315
 #, kde-format
@@ -46210,7 +46210,7 @@ msgstr "Breedte: "
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Slant:"
-msgstr ""
+msgstr "Hellend:"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:340
 #, kde-format
@@ -46234,7 +46234,7 @@ msgstr "°"
 #, kde-format
 msgctxt "@option:check"
 msgid "Synthesize Slant"
-msgstr ""
+msgstr "Hellend synthetiseren"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:408
 #, kde-format
@@ -46245,7 +46245,7 @@ msgstr "Optische grootte"
 #: plugins/dockers/textproperties/qml/FontStyle.qml:432
 #, kde-format
 msgid "No extra variable axes in this font"
-msgstr ""
+msgstr "Geen extra variabele assen in dit lettertype"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:12
 #, kde-format
@@ -46268,7 +46268,7 @@ msgctxt ""
 "comma separated search terms for the hanging-punctuation property, matching "
 "is case-insensitive"
 msgid "hanging-punctuation, burasagari"
-msgstr ""
+msgstr "hangende punctuatie, burasagari"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:115
 #, kde-format
@@ -46292,19 +46292,19 @@ msgstr "Niets hangt"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Allow hanging commas"
-msgstr ""
+msgstr "Hangende komma's toestaan"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:134
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Force hanging commas"
-msgstr ""
+msgstr "Hangende komma's afdwingen"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr ""
+msgstr "Laatste hangend"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -46326,13 +46326,13 @@ msgctxt ""
 "comma separated search terms for the language property, matching is case-"
 "insensitive"
 msgid "language, locale, bcp47"
-msgstr ""
+msgstr "taal, taalcode, bcp47"
 
 #: plugins/dockers/textproperties/qml/Language.qml:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Store this language between sessions."
-msgstr ""
+msgstr "Deze taal tussen sessies opslaan."
 
 #: plugins/dockers/textproperties/qml/Language.qml:247
 #, kde-format
@@ -46359,7 +46359,7 @@ msgctxt ""
 "comma separated search terms for the letter-spacing property, matching is "
 "case-insensitive"
 msgid "letter-spacing, tracking, kerning"
-msgstr ""
+msgstr "letter-spatiëring, volgen, kerning"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
 #, kde-format
@@ -46381,13 +46381,14 @@ msgctxt ""
 "comma separated search terms for the line-break property, matching is case-"
 "insensitive"
 msgid "line-break, line breaking, strictness, kinsoku"
-msgstr ""
+msgstr "regelafbreking, striktheid,,kinsoku"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No particular adjustments are made to the line break algorithm"
 msgstr ""
+"Geen speciale aanpassing is gedaan aan het algoritme voor regelafbreking"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:79
 #, kde-format
@@ -66973,12 +66974,10 @@ msgstr "Kerning"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste As Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "Als tekst plakken"
+msgstr "Opgemaakte tekst plakken"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
@@ -66993,23 +66992,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Platte tekst"
+msgstr "Platte tekst plakken"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Pastel textuur smal"
+msgstr "Tekst zonder stilering plakken"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
@@ -67023,18 +67016,16 @@ msgid "SVG Text Tool"
 msgstr "SVG-teksthulpmiddel"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Nieuwe teksten aanmaken met..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Huidige eigenschappen:"
+msgstr "Huidige teksteigenschappen"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
 #, kde-format
@@ -67044,19 +67035,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Voorinstelling van stijl klonen"
+msgstr "Voorinstelling van stijl selecteren"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Teksteigenschappen"
+msgstr "Teksteigenschappen openen"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
 #, kde-format
@@ -67066,19 +67054,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Opties"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Bij cursor plakken"
+msgstr "Huidige visuele cursor"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
@@ -67087,14 +67072,10 @@ msgid "Use the visual order for bidirectional text."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Basis tip standaard"
+msgstr "Opgemaakte tekst plakken is standaard"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
@@ -67103,29 +67084,25 @@ msgid "Always paste rich text when using paste action."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Dialoog"
+msgstr "Dialogen"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "SVG-bron bewerken"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:188
-#, fuzzy, kde-format
-#| msgid "Duplicate the currently selected layer or mask"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr "De huidige geselecteerde laag of masker dupliceren"
+msgstr "De huidige geselecteerde tekst als SVG-XML bewerken."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Glyph-palet"
@@ -67139,96 +67116,75 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
-#, fuzzy, kde-format
-#| msgid "&Convert Image Type..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "Afbeeldingstype &converteren..."
+msgstr "Type converteren..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Vooraf ingedeeld"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>De tekst zal niet doorlopen naar de volgende regel en "
-"behoudt spaties en nieuwe regels. Een regelafbreking wordt ingevoegd zodat "
-"de regels uit doorlopen naar de volgende regel of positionering gescheiden "
-"blijven.</p></body></html>"
+"De tekst zal niet doorlopen naar de volgende regel en behoudt spaties en "
+"nieuwe regels. Een regelafbreking wordt ingevoegd zodat de regels uit "
+"doorlopen naar de volgende regel of positionering gescheiden blijven."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Inline doorlopen naar volgende regel"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Tekst loopt door naar de volgende regel binnen een "
-"vaste lengte, spaties en nieuwe regels blijven behouden. Nieuw regels worden "
-"niet verwijderd.</p></body></html>"
+"Tekst loopt door naar de volgende regel binnen een vaste lengte, spaties en "
+"nieuwe regels blijven behouden. Nieuw regels worden niet verwijderd."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Vooraf gepositioneerd"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Tekst gebruikt SVG 1.1 tekentransformatie om elke "
-"regel te positioneren. Spaties en nieuwe regels worden ingevouwen. Dit is "
-"voor achterwaartse compatibiliteit met SVG 1.1.</p></body></html>"
+"Tekst gebruikt SVG 1.1 tekentransformatie om elke regel te positioneren. "
+"Spaties en nieuwe regels worden ingevouwen. Dit is voor achterwaartse "
+"compatibiliteit met SVG 1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Debuggen"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Begrenzingsvak vastklikken"
+msgstr "Begrenzingsvakken van tekens tonen"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
-#, fuzzy, kde-format
-#| msgid "Show line boxes"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
 msgstr "Regelvakken tonen"

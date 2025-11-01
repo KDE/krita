@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-10-25 22:13+0200\n"
+"PO-Revision-Date: 2025-10-31 10:40+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -26240,6 +26240,10 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"OPOZORILO: Način HDR je bil aktiviran na površini, ki deluje v 8-bitnem "
+"načinu!\n"
+"Aktivirajte 10-bitni način v pogovornem oknu Nastavitve Krite in znova "
+"zaženite Krito, da se izognete barvnim pasovom!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27178,10 +27182,9 @@ msgstr ""
 "Uporabite »prednostni« prostor, razen če veste, kaj počnete</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1239
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Način mešanja CMYK (potreben je ponoven zagon):"
+msgstr "Bitna globina površine platna (zahteva ponoven zagon):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27198,13 +27201,13 @@ msgstr "Samodejno"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8-bitna"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10-bitna"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1247
 #, kde-format
@@ -27213,12 +27216,13 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>Bitna globina barve, ki se posreduje sestavljalniku oken. Če želite "
+"uporabljati zmogljivosti zaslona HDR, preklopite v 10-bitni način</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Barvni prostor površine platna:"
+msgstr "Trenutna bitna globina površine platna:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1259
 #, kde-format
@@ -31925,12 +31929,16 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Omogoča kromatično prilagoditev za absolutni namen "
+"izrisovanja. To bo pokazalo, kako bodo videti barve, če bo slika natisnjena "
+"na papir in ogledana na zaslonu kot edinim virom svetlobe. To je standardno "
+"vedenje za potek dela ICC v4.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Kromatična prilagoditev z absolutnim namenom"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -39227,7 +39235,7 @@ msgstr "Metoda:"
 #, kde-format
 msgctxt "Use same black and white points for all the channels in auto levels"
 msgid "Adjust monochromatic contrast"
-msgstr "Prilagodi monokromatski kontrast"
+msgstr "Prilagodi monokromatični kontrast"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShadowsAndLightsMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:75
@@ -45395,12 +45403,10 @@ msgstr "%1, %2, različica: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "language, variant"
-#| msgid "%1, variant: %3"
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %2"
-msgstr "%1, različica: %3"
+msgstr "%1, različica: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -57293,7 +57299,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
-msgstr "Omogoči popravek kromatske aberacije"
+msgstr "Omogoči popravek kromatične aberacije"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
@@ -57302,7 +57308,7 @@ msgid ""
 "<title>Enable Chromatic Aberration correction</title><p>Enlarge the raw red-"
 "green and blue-yellow axis by the given factors (automatic by default).</p>"
 msgstr ""
-"<title>Omogoči popravek kromatske aberacije</title><p>Surovi osi rdeče-"
+"<title>Omogoči popravek kromatične aberacije</title><p>Surovi osi rdeče-"
 "zelene in modro-rumene povečajte za dane dejavnike (samodejno privzeto).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
@@ -57321,9 +57327,9 @@ msgid ""
 "method may fail. In this case, disable this option and tune manually color "
 "factors.</p>"
 msgstr ""
-"<title>Samodejni popravek kromaske aberacije</title><p>Če je ta možnost "
+"<title>Samodejni popravek kromatične aberacije</title><p>Če je ta možnost "
 "vklopljena, poskuša nekoliko preusmeriti slikovne kanale in oceniti "
-"spremembo kromatske aberacije. Upoštevajte, da če ste posneli modro-rdeči "
+"spremembo kromatične aberacije. Upoštevajte, da če ste posneli modro-rdeči "
 "vzorec, metoda morda ne uspe. V tem primeru onemogočite to možnost in ročno "
 "nastavite barvne dejavnike.</p>"
 
@@ -66734,19 +66740,17 @@ msgstr "Spodsekavanje"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Rich Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "Vstavi obogateno besedilo"
+msgstr "Prilepi obogateno besedilo"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Če je možno, poskusi prilepiti stilizirano besedilo."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66754,23 +66758,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Navadno besedilo"
+msgstr "Prilepi navadno besedilo"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Pasteli, tekstura, tanko"
+msgstr "Prilepite besedilo brez sloga."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
@@ -66784,18 +66782,16 @@ msgid "SVG Text Tool"
 msgstr "Orodje za besedilo SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr "Ustvarite nova besedila z ..."
+msgstr "Ustvari nova besedila z ..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Trenutne lastnosti:"
+msgstr "Trenutne lastnosti besedila"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
 #, kde-format
@@ -66803,21 +66799,20 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Uporabite trenutne lastnosti v zloženem oknu lastnosti besedila, da "
+"ustvarite nova besedila."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Kloniraj prednastavitev sloga"
+msgstr "Izberite prednastavitev sloga"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Lastnosti besedila"
+msgstr "Odpri lastnosti besedila"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
 #, kde-format
@@ -66825,54 +66820,47 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Odprite zloženo okno Lastnosti besedila, da uredite lastnosti, kot sta "
+"velikost in slog pisave."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Možnosti"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Prilepi na mesto kazalca"
+msgstr "Uporabi vizualni kazalec"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Uporabite vizualno zaporedje za dvosmerno besedilo."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Osnovno, konica, privzeto"
+msgstr "Privzeto prilepi obogateno besedilo"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
-msgstr ""
+msgstr "Ko uporabite dejanje lepljenja, vedno prilepi obogateno besedilo."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Pogovorno okno"
+msgstr "Pogovorna okna"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Uredi vir SVG"
@@ -66881,11 +66869,10 @@ msgstr "Uredi vir SVG"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr ""
+msgstr "Uredi trenutno izbrano besedilo kot SVG XML."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Paleta glifov"
@@ -66897,101 +66884,81 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Odprite Paleto glifov, ki omogoča dostop do alternativnih različic glifov "
+"OpenType ali Unicode ter rezpredelnice znakov."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "Pretvori vrsto besedila"
+msgstr "Pretvori vrsto ..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Predoblikovano"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Besedilo se ne prelomi in ohrani presledke in nove "
-"vrstice. Prelom vrstice je vstavljen tako, da vrstice z ovijanjem ali "
-"umeščanjem ostanejo ločene.</p></body></html>"
+"Besedilo se ne prelomi in ohrani presledke in nove vrstice. Prelom vrstice "
+"je vstavljen tako, da vrstice z ovijanjem ali umeščanjem ostanejo ločene."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Znotrajvrstično prelomljeno"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Besedilo se prelomi znotraj fiksne dolžine, presledki "
-"in nove vrstice se ohranijo. Nove vrstice niso odstranjene.</p></body></html>"
+"Besedilo se prelomi znotraj fiksne dolžine, presledki in nove vrstice se "
+"ohranijo. Nove vrstice niso odstranjene."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Vnaprej umeščeno"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Besedilo uporablja pretvorbe znakov SVG 1.1 za "
-"postavitev vsake vrstice. Presledki in nove vrstice so strnjene. To je za "
-"povratno združljivost z SVG 1.1.</p></body></html>"
+"Besedilo uporablja pretvorbe znakov SVG 1.1 za postavitev vsake vrstice. "
+"Presledki in nove vrstice so strnjene. To je za povratno združljivost z SVG "
+"1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Razhrošči"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Pripni na okvir"
+msgstr "Pokaži mejne okvire znakov"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Pokaži v mapi"
+msgstr "Pokaži okvire vrstic"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -68744,31 +68711,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Proofing transform"
-#~ msgstr "Preoblikovanje preverjanja videza"
-
-#~ msgid "Adaptation State:"
-#~ msgstr "Stanje prilagajanja:"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Set how much you wish to correct the adaptation "
-#~ "state. This will affect how <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span> changes the whites of your image. In Layman's terms: "
-#~ "how much do you wish to have the color management correct the paper-color "
-#~ "to screen white while using <span style=\" font-style:italic;\">Absolute "
-#~ "Colorimetric</span>?</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Nastavite, koliko želite popraviti stanje "
-#~ "prilagajanja. To bo vplivalo na to, kako <span style=\" font-style:italic;"
-#~ "\">absolutno kolorimetrično</span> spremeni bele barve slike. "
-#~ "Poenostavljeno zapisano: koliko naj upravljanje barv popravi barvo "
-#~ "papirja na zaslonsko belo, ko uporabljate <span style=\" font-style:"
-#~ "italic;\">absolutno kolorimetrično</span>?</p></body></html>"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Vključi/izključi celozaslonski pogled"
-
-#~ msgctxt "language, region"
-#~ msgid "%1, %2"
-#~ msgstr "%1, %2"

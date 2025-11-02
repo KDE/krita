@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-10-31 10:56+0100\n"
+"PO-Revision-Date: 2025-11-01 09:22+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7675,28 +7675,21 @@ msgstr "Divideix objectes amb múltiples subcamins en múltiples objectes"
 
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "Converteix el tipus de text"
+msgstr "Converteix el text a amb format previ"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
 msgstr "Amb format previ"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "The text will not wrap and preserves spaces and new lines. A line break "
-#| "is inserted so the lines from wrapping or positioning remain separated."
+#, kde-format
 msgctxt "action"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
@@ -7708,28 +7701,21 @@ msgstr ""
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "Converteix el tipus de text"
+msgstr "Converteix el text a ajustat en línia"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
 msgstr "Ajustat en línia"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text wraps inside a fixed length, spaces and new lines are preserved. New "
-#| "lines are not removed."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
@@ -7740,28 +7726,21 @@ msgstr ""
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "Converteix el tipus de text"
+msgstr "Converteix el text a preposicionat"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr "Amb preposició"
+msgstr "Preposicionat"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text uses SVG 1.1 character transforms to position each line. Spaces and "
-#| "new lines are collapsed. This is for backward compatibility with SVG 1.1."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
@@ -26376,11 +26355,7 @@ msgid "None"
 msgstr "Cap"
 
 #: libs/ui/canvas/kis_canvas2.cpp:1457
-#, fuzzy, kde-format
-#| msgid ""
-#| "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
-#| "Please activate 10-bit mode in Krita's Preferences dialog and "
-#| "restartKrita to avoid color banding!"
+#, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
@@ -67258,12 +67233,10 @@ msgstr ""
 "noves. No s'han eliminat les línies noves."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr "Amb preposició"
+msgstr "Preposicionat"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
 #, kde-format

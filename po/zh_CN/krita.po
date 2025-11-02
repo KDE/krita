@@ -7664,14 +7664,14 @@ msgstr "将包含多个子路径的对象拆分为多个对象"
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr ""
+msgstr "转换文本为格式换行"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
 #, kde-format
 msgctxt "action"
 msgid "Preformatted"
-msgstr ""
+msgstr "格式换行"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
@@ -7681,20 +7681,22 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
+"文本不会自动换行，保留空格和新行。通过插入换行符来实现自动换行或人工换行的行"
+"的换行。"
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr ""
+msgstr "转换文本为行内自动换行"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
 #, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
-msgstr ""
+msgstr "行内自动换行"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
@@ -7703,21 +7705,21 @@ msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
-msgstr ""
+msgstr "文本按照固定行宽自动换行，保留空格和新行。新行不会被移除。"
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
 #, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr ""
+msgstr "转换文本为定位换行"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
 #, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr ""
+msgstr "定位换行"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
@@ -7727,6 +7729,8 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
+"使用 SVG 1.1 规范的字符变换功能来对每一行文本进行定位。空格和换行符会被折叠。"
+"此类型专门用于向后兼容 SVG 1.1 规范。"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -26017,6 +26021,9 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"警告：在 8 位模式下工作的表面启用了 HDR 模式！\n"
+"请在 Krita 的“首选项”对话框中激活 10 位模式，然后重新启动 Krita 以避免出现颜"
+"色条带现象！"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -26946,7 +26953,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1239
 #, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr ""
+msgstr "画布表面位深度 (需要重启)："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -26963,13 +26970,13 @@ msgstr "自动"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8 位"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1251
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10 位"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1247
 #, kde-format
@@ -26978,11 +26985,13 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>传递给窗口合成器的颜色位深度。如果您想使用显示器的 HDR 功能，请切换到 10 "
+"位模式</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr ""
+msgstr "当前画布表面位深度："
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1259
 #, kde-format
@@ -27585,13 +27594,13 @@ msgstr "预设图标库"
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
-msgstr "可感知"
+msgstr "感知"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:73
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
-msgstr "相对比色"
+msgstr "相对色度"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:74
 #, kde-format
@@ -27603,7 +27612,7 @@ msgstr "饱和度"
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
-msgstr "绝对比色"
+msgstr "绝对色度"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:92
 #, kde-format
@@ -27629,7 +27638,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
-msgstr "使用在色彩管理配置中的再现意图、黑点补偿和屏幕白点顺应程度设置。"
+msgstr "使用在色彩管理配置中的渲染意图、黑点补偿和屏幕白点适应程度设置。"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:97
 #, kde-format
@@ -27637,7 +27646,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
-msgstr "模拟纸张显示效果，使用绝对比色并禁用屏幕白点顺应和黑点补偿。"
+msgstr "模拟纸张显示效果，使用绝对色度并禁用屏幕白点适应和黑点补偿。"
 
 #: libs/ui/dialogs/KisProofingConfigModel.cpp:98
 #, kde-format
@@ -28187,14 +28196,14 @@ msgstr "配置文件(&P)："
 #: libs/ui/forms/wdgapplyprofile.ui:88
 #, kde-format
 msgid "Rendering intent determines the bias in the color conversion."
-msgstr "再现意图用于指定转换颜色时如何处理色彩偏差。"
+msgstr "渲染意图用于指定转换颜色时如何处理色彩偏差。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, grpRenderIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:91 libs/ui/forms/wdgproofingoptions.ui:23
 #, kde-format
 msgid "Rendering Intent"
-msgstr "再现意图"
+msgstr "渲染意图"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:97
@@ -28204,8 +28213,8 @@ msgid ""
 "sacrificed to maintain the perceived color. White point changed to result in "
 "neutral grays. Intended for images."
 msgstr ""
-"尽可能维持色相，为维持感知色彩而牺牲亮度和饱和度。白点将会匹配图像的中性灰"
-"色。适用于图像。"
+"尽可能维持色相，为维持感知色彩而牺牲亮度和饱和度。白点改变以产生中性灰。适用"
+"于图像。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -28214,7 +28223,7 @@ msgstr ""
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #, kde-format
 msgid "Perceptual"
-msgstr "可感知"
+msgstr "感知"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:107
@@ -28222,14 +28231,14 @@ msgstr "可感知"
 msgid ""
 "Within and outside gamut; same as Absolute Colorimetric. White point changed "
 "to result in neutral grays."
-msgstr "无论色域内外都与绝对比色模式一致。白点将会匹配图像的中性灰色。"
+msgstr "无论色域内外都与绝对色度模式一致。白点改变以产生中性灰。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
 #: libs/ui/forms/wdgconvertcolorspace.ui:76
 #, kde-format
 msgid "Relative colorimetric"
-msgstr "相对比色"
+msgstr "相对色度"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:117
@@ -28239,8 +28248,8 @@ msgid ""
 "saturation. White point changed to result in neutral grays. Intended for "
 "business graphics (make it colorful charts, graphs, overheads, ...)"
 msgstr ""
-"维持色相及饱和度，为维持饱和度而牺牲亮度。白点将会匹配图像的中性灰色。用于彩"
-"色表格、柱状图、报表等商业图形。"
+"维持色相及饱和度，为维持饱和度而牺牲亮度。白点改变以产生中性灰。用于彩色表"
+"格、柱状图、报表等商业图形。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -28269,7 +28278,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:120
 #, kde-format
 msgid "Absolute colorimetric"
-msgstr "绝对比色"
+msgstr "绝对色度"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgBookmarkedConfigurationsEditor)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:24
@@ -28393,21 +28402,21 @@ msgstr "已校色的显示器 ICM 特性文件"
 #: libs/ui/forms/wdgcolorsettings.ui:191
 #, kde-format
 msgid "&Rendering intent:"
-msgstr "再现意图(&R)："
+msgstr "渲染意图(&R)："
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:213
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
 msgid "Relative Colorimetric"
-msgstr "相对比色"
+msgstr "相对色度"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:223
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
-msgstr "绝对比色"
+msgstr "绝对色度"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAddColorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:247
@@ -28526,7 +28535,7 @@ msgstr "色彩空间转换"
 #: libs/ui/forms/wdgconvertcolorspace.ui:40
 #, kde-format
 msgid "&Rendering Intent"
-msgstr "再现意图(&R)"
+msgstr "渲染意图(&R)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgconvertcolorspace.ui:46
@@ -28544,7 +28553,7 @@ msgid ""
 "result in neutral grays. Intended for images."
 msgstr ""
 "尽可能维持色相，为维持感知色彩而牺牲亮度\n"
-"和饱和度。白点将会匹配图像的中性灰色。\n"
+"和饱和度。白点改变以产生中性灰。\n"
 "适用于图像。"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
@@ -28558,10 +28567,10 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"无论在色域内外的处理方式都与绝对比色模式\n"
-"保持一致。白点将为输出中性灰色进行转换。\n"
+"无论在色域内外的处理方式都与绝对色度模式\n"
+"保持一致。白点改变以产生中性灰。\n"
 "如果特性文件包含适合的查找表则使用此模式。\n"
-"否则将用回可感知模式。"
+"否则将用回感知模式。"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:86
@@ -28582,11 +28591,11 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"维持色相及饱和度，为维持饱和度而牺牲亮度。\n"
-"白点将为输出中性灰色进行转换。适合办公用途，\n"
+"维持色相和饱和度，为维持饱和度而牺牲亮度。\n"
+"白点改变以产生中性灰。适合办公用途，\n"
 "如彩色表格、柱状图、报表等图形。\n"
 "如果特性文件包含适合的查找表则使用此模式。\n"
-"否则将用回可感知模式。"
+"否则将用回感知模式。"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgconvertcolorspace.ui:109
@@ -31544,8 +31553,8 @@ msgid ""
 "p></body></html>"
 msgstr ""
 "<html><head/><body><p>黑点补偿功能将源设备的最暗颜色匹配到目标设备可以显示的"
-"最暗颜色。在使用相对比色模式时如果未启用黑点补偿，图像与设备的最暗颜色之间的"
-"差异会被保留; 如果启用了黑点补偿，则图像中最黑的黑色就会被当作显示设备能够显"
+"最暗颜色。在使用相对色度模式时如果未启用黑点补偿，图像与设备的最暗颜色之间的"
+"差异会被保留；如果启用了黑点补偿，则图像中最黑的黑色就会被当作显示设备能够显"
 "示的最黑的黑色来进行显示。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
@@ -31566,7 +31575,7 @@ msgstr "显示模式："
 #: libs/ui/forms/wdgproofingoptions.ui:79
 #, kde-format
 msgid "Rendering Intent:"
-msgstr "再现意图："
+msgstr "渲染意图："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:96
@@ -31577,12 +31586,15 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>启用绝对模式再现意图下的色彩适应功能。这将把图像的颜色"
+"呈现为图像被打印在纸上，并且仅以显示器的白光作为光源来观看时的效果。这是 ICC "
+"v4 工作流程的标准行为。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "绝对模式渲染意图色彩适应"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -37999,10 +38011,10 @@ msgstr ""
 "色和品红色。而好消息则是随着技术的进步，更宽的色域开始在消费级 LCD 产品线上普"
 "及。</p><p>相较之下，彩色打印机的色域一般可在青色、绿色和黄绿色上超出 sRGB 色"
 "域的范围。数码相机的已插值 RAW 文件也常常超出 sRGB 色域。</p><p>注意：在使用"
-"可感知模式转换图像色彩空间至 sRGB 时，如果原始图像的色域超出了 sRGB 色域的范"
+"感知模式转换图像色彩空间至 sRGB 时，如果原始图像的色域超出了 sRGB 色域的范"
 "围，那些超出的部分不会被自动转换至 sRGB 色域范围内。这是因为标准的 sRGB 色彩"
 "空间 (包括在此色彩特性文件库中提供的所有 RGB 特性文件) 都是阶调矩阵特性文件，"
-"而阶调矩阵配置文件不含可感知模式所用的查找表。</p>"
+"而阶调矩阵配置文件不包含感知模式所用的查找表。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
@@ -53272,7 +53284,7 @@ msgid ""
 "a perceptual quantizer curve (also known as SMPTE 2048 curve). Recommended "
 "for HDR images where the absolute brightness is important."
 msgstr ""
-"图像将首先被转换为 Rec 2020 线性，然后通过可感知量化曲线 (也称 SMPTE 2048 曲"
+"图像将首先被转换为 Rec 2020 线性，然后通过感知量化曲线 (也称 SMPTE 2048 曲"
 "线) 进行编码。推荐用于绝对亮度信息较为重要的 HDR 图像。"
 
 #: plugins/impex/heif/HeifExport.cpp:558
@@ -53303,8 +53315,8 @@ msgid ""
 "quantizer curve (also known as the SMPTE 2048 curve). Recommended for images "
 "where the absolute brightness is important."
 msgstr ""
-"图像将首先被线性化，然后通过可感知量化曲线 (也称 SMPTE 2048 曲线) 进行编码。"
-"推荐用于绝对亮度信息较为重要的 HDR 图像。"
+"图像将首先被线性化，然后通过感知量化曲线 (也称 SMPTE 2048 曲线) 进行编码。推"
+"荐用于绝对亮度信息较为重要的 HDR 图像。"
 
 #: plugins/impex/heif/HeifExport.cpp:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
@@ -65447,7 +65459,7 @@ msgstr "插入文本"
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "插入增强文本"
+msgstr "插入富文本"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
 msgctxt "(qtundo-format)"
@@ -65738,14 +65750,14 @@ msgstr "字距微调"
 #, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr ""
+msgstr "粘贴富文本"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "尽可能尝试粘贴带样式的文本。"
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -65756,14 +65768,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr ""
+msgstr "粘贴纯文本"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
 #, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr ""
+msgstr "不带样式粘贴文本。"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
@@ -65780,93 +65792,93 @@ msgstr "SVG 文字工具"
 #, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr ""
+msgstr "新建文本的属性："
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr ""
+msgstr "当前文本属性"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
-msgstr ""
+msgstr "使用文本属性面板中的当前属性来创建新文本。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr ""
+msgstr "选择样式预设"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr ""
+msgstr "打开文本属性"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
-msgstr ""
+msgstr "打开文本属性面板来编辑字体大小和样式等属性。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
-msgstr ""
+msgstr "选项"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr ""
+msgstr "使用视觉光标"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "对双向文本使用视觉顺序。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr ""
+msgstr "默认粘贴富文本"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
-msgstr ""
+msgstr "粘贴时总是粘贴富文本。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr ""
+msgstr "对话框"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
-msgstr ""
+msgstr "编辑 SVG 源代码"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:188
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr ""
+msgstr "将当前选中的文本作为 SVG XML 进行编辑。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
-msgstr ""
+msgstr "字形面板"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
 #, kde-format
@@ -65875,18 +65887,20 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"打开字形面板，您可以在其中访问字形的 OpenType 或 Unicode 替代变体以及字符映射"
+"表。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr ""
+msgstr "转换类型..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
-msgstr ""
+msgstr "格式换行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
 #, kde-format
@@ -65895,12 +65909,14 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
+"文本不会自动换行，保留空格和新行。通过插入换行符来实现自动换行或人工换行的行"
+"的换行。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
-msgstr ""
+msgstr "行内自动换行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
 #, kde-format
@@ -65908,13 +65924,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
-msgstr ""
+msgstr "文本按照固定行宽自动换行，保留空格和新行。新行不会被移除。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr ""
+msgstr "定位换行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
 #, kde-format
@@ -65923,24 +65939,26 @@ msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
+"使用 SVG 1.1 规范的字符变换功能来对每一行文本进行定位。空格和换行符会被折叠。"
+"此类型专门用于向后兼容 SVG 1.1 规范。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
-msgstr ""
+msgstr "调试"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr ""
+msgstr "显示字符边界框"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr ""
+msgstr "显示行框"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25

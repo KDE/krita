@@ -22187,7 +22187,8 @@ msgid "Drop Shadow (style)"
 msgstr "Rzuć cień (styl)"
 
 #: libs/image/layerstyles/kis_ls_overlay_filter.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Overlay (style)"
 msgid "Overlay (style)"
 msgstr "Nałóż (styl)"
 
@@ -23234,7 +23235,9 @@ msgid "Burn"
 msgstr "Wypalanie"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:62
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Linear Burn"
+#| msgid "Linear Burn"
 msgctxt "Blending mode - Linear Burn"
 msgid "Linear Burn"
 msgstr "Liniowe wypalanie"
@@ -23597,7 +23600,9 @@ msgid "Allanon"
 msgstr "Allanon"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Geometric Mean"
+#| msgid "Geometric Mean"
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
 msgstr "Średnia geometryczna"
@@ -33499,7 +33504,9 @@ msgid "Left"
 msgstr "Lewy"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Right Mouse Button"
+#| msgid "Right"
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "Prawy"
@@ -36406,7 +36413,9 @@ msgid "Group:"
 msgstr "Grupa:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Group as in Template Group"
+#| msgid "&Add Group..."
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
 msgstr "Dod&aj grupę..."
@@ -36460,7 +36469,9 @@ msgid "Select an image"
 msgstr "Wybierz obraz"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407 libs/ui/KisTemplateCreateDia.cpp:410
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Group as in Template Group"
+#| msgid "Add Group"
 msgctxt "Group as in Template Group"
 msgid "Add Group"
 msgstr "Dodaj grupę"
@@ -36699,7 +36710,8 @@ msgid "English news is always up to date."
 msgstr "Wieści po angielsku są zawsze na czasie."
 
 #: libs/ui/KisWelcomePageWidget.cpp:397
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Get your Krita Supporter Badge here!"
 msgid "Get your Krita Supporter Badge here!"
 msgstr "Zdobądź tutaj swoją odznakę wsparcia Krity!"
 
@@ -44161,7 +44173,8 @@ msgid "Mathematics and calculations"
 msgstr "Matematyka i obliczenia"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:167
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Image Rendering"
 msgid "Image Rendering"
 msgstr "Wyświetlanie obrazów"
 
@@ -44935,7 +44948,9 @@ msgid "Size"
 msgstr "Rozmiar"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Header title for last modified date/time column"
+#| msgid "Last Modified"
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Ostatnio zmieniony"
@@ -48391,7 +48406,9 @@ msgid "Wide Gamut Color Selector"
 msgstr "Wybierak barwy o szerokim gamutcie"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Wide Gamut Color Selector"
+#| msgid "Configure..."
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Ustawienia..."
@@ -58130,7 +58147,8 @@ msgid "Reset to default value"
 msgstr "Wyzeruj do domyślnej wartości"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:362
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Browse..."
 msgid "Browse..."
 msgstr "Przeglądaj..."
 
@@ -60626,19 +60644,25 @@ msgstr ""
 "Ustawia obrót na 0.0"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Punkt neutralny: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Jasność względna: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Kontrast: "
@@ -61201,7 +61225,9 @@ msgid "More saturation"
 msgstr "Więcej nasycenia"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:132
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Lower HSV brightness"
+#| msgid "Lower value "
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
 msgstr "Niższa wartość "
@@ -65566,7 +65592,8 @@ msgid "Mirror"
 msgstr "Lustro"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Translate"
 msgid "Translate"
 msgstr "Przemieść"
 
@@ -66424,7 +66451,8 @@ msgid "Use tablet &pressure"
 msgstr "Użyj &nacisku na tablecie"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Thinning:"
 msgid "Thinning:"
 msgstr "Przycinanie:"
 
@@ -66573,7 +66601,8 @@ msgid "Calligraphy"
 msgstr "Kaligrafia"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Calligraphy"
 msgid "Calligraphy"
 msgstr "Kaligrafia"
 

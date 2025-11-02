@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-10-31 15:22-0300\n"
+"PO-Revision-Date: 2025-11-01 19:44-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -8331,7 +8331,7 @@ msgstr "Mostrar log do Krita para reportar bugs."
 #, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports."
-msgstr "Mostrar informação do sistema para reportar bugs."
+msgstr "Mostrar informações do sistema para reportar bugs."
 
 #. i18n: context: text @ Action (color_management_report), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187
@@ -8924,7 +8924,7 @@ msgstr "Usar Pressão de Caneta"
 #, kde-format
 msgctxt "action"
 msgid "Horizontal Mirror Tool"
-msgstr "Ferramenta de Espelhamento Horizontal"
+msgstr "Ferramenta de espelhamento horizontal"
 
 #. i18n: context: text @ Action (vmirror_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (vmirror_action), Actions (Painting), ActionCollection (Krita)
@@ -8936,7 +8936,7 @@ msgstr "Ferramenta de Espelhamento Horizontal"
 #, kde-format
 msgctxt "action"
 msgid "Vertical Mirror Tool"
-msgstr "Ferramenta de Espelhamento Vertical"
+msgstr "Ferramenta de espelhamento vertical"
 
 #. i18n: context: text @ Action (mirrorX-hideDecorations), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-hideDecorations), Actions (Painting), ActionCollection (Krita)
@@ -8948,7 +8948,7 @@ msgstr "Ferramenta de Espelhamento Vertical"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror X Line"
-msgstr "Ocultar Linha de Espelhamento X"
+msgstr "Ocultar linha de espelhamento X"
 
 #. i18n: context: text @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
@@ -8960,7 +8960,7 @@ msgstr "Ocultar Linha de Espelhamento X"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror Y Line"
-msgstr "Ocultar Linha de Espelhamento Y"
+msgstr "Ocultar linha de espelhamento Y"
 
 #. i18n: context: text @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
@@ -9758,7 +9758,7 @@ msgstr "Inverter"
 #, kde-format
 msgctxt "action"
 msgid "&Color Adjustment curves..."
-msgstr "&Curvas de ajuste de cores..."
+msgstr "&Curvas de ajuste de cor..."
 
 #. i18n: context: toolTip @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
@@ -9768,7 +9768,7 @@ msgstr "&Curvas de ajuste de cores..."
 #, kde-format
 msgctxt "action"
 msgid "Color Adjustment curves"
-msgstr "Curvas de ajuste de cores"
+msgstr "Curvas de ajuste de cor"
 
 #. i18n: context: text @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1246
@@ -11800,7 +11800,7 @@ msgstr "Camada de pintura"
 #, kde-format
 msgctxt "action"
 msgid "&New Layer From Visible"
-msgstr "&Nova Camada a partir da Visível"
+msgstr "&Nova camada a partir da visível"
 
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
@@ -11861,7 +11861,7 @@ msgstr "Copiar &seleção para nova camada"
 #, kde-format
 msgctxt "action"
 msgid "Copy Selection to New Layer"
-msgstr "Copiar Seleção para Nova Camada"
+msgstr "Copiar seleção para nova camada"
 
 #. i18n: context: text @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2878
@@ -13411,7 +13411,7 @@ msgstr "Importar animação de vídeo"
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr "&Renderizar Animação..."
+msgstr "&Renderizar animação..."
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
@@ -13428,7 +13428,7 @@ msgstr "Renderiza a Animação para GIF, Sequência de Imagem ou Vídeo"
 #, kde-format
 msgctxt "action"
 msgid "Render Animation"
-msgstr "Renderizar Animação"
+msgstr "Renderizar animação"
 
 #. i18n: context: text @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:153
@@ -13947,7 +13947,7 @@ msgstr "Traçar as formas selecionadas"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "Seleção de &Pinceladas..."
+msgstr "Seleção de &pincelada..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -14159,7 +14159,7 @@ msgstr "Em ciclo verticalmente"
 #, kde-format
 msgctxt "action"
 msgid "&Instant Preview Mode"
-msgstr "Modo de Visualização &Instantânea"
+msgstr "Modo de visualização &instantânea"
 
 #. i18n: context: toolTip @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
@@ -14169,7 +14169,7 @@ msgstr "Modo de Visualização &Instantânea"
 #, kde-format
 msgctxt "action"
 msgid "Instant Preview Mode"
-msgstr "Modo de Visualização Instantânea"
+msgstr "Modo de visualização instantânea"
 
 #. i18n: context: text @ Action (softProof), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:712
@@ -14577,7 +14577,7 @@ msgstr "Mostrar barra de status"
 #, kde-format
 msgctxt "action"
 msgid "Show Pixel Grid"
-msgstr "Mostrar Grade de Pixel"
+msgstr "Mostrar grade de pixel"
 
 #. i18n: context: text @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:978
@@ -14765,7 +14765,7 @@ msgstr "Mostrar visualizações do assistente"
 #, kde-format
 msgctxt "action"
 msgid "S&how Reference Images"
-msgstr "M&ostrar Imagens de Referência"
+msgstr "M&ostrar imagens de referência"
 
 #. i18n: context: toolTip @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
@@ -14775,7 +14775,7 @@ msgstr "M&ostrar Imagens de Referência"
 #, kde-format
 msgctxt "action"
 msgid "Show Reference Images"
-msgstr "Mostrar Imagens de Referência"
+msgstr "Mostrar imagens de referência"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
@@ -15157,7 +15157,7 @@ msgstr "Selecionar novamente"
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
-msgstr "&Converter para seleção do vetor"
+msgstr "&Converter para seleção vetorial"
 
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -15174,7 +15174,7 @@ msgstr "Converter para vetor da seleção"
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
-msgstr "&Converter para Seleção do Raster"
+msgstr "&Converter para seleção raster"
 
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
@@ -15184,7 +15184,7 @@ msgstr "&Converter para Seleção do Raster"
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
-msgstr "Converter para Seleção do Raster"
+msgstr "Converter para seleção raster"
 
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
@@ -15204,7 +15204,7 @@ msgstr "Editar seleção"
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
-msgstr "Converter as formas para &vetor da seleção"
+msgstr "Converter formas para seleção &vetorial"
 
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -15214,14 +15214,14 @@ msgstr "Converter as formas para &vetor da seleção"
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
-msgstr "Converter as formas para vetor da seleção"
+msgstr "Converter formas para seleção vetorial"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1453
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
-msgstr "&Seleção da suavização..."
+msgstr "&Suavizar seleção..."
 
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
@@ -15231,7 +15231,7 @@ msgstr "&Seleção da suavização..."
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
-msgstr "Seleção da suavização"
+msgstr "Suavizar seleção"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1465
@@ -15357,7 +15357,7 @@ msgstr "Seleção opaca (interseção)"
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
-msgstr "Au&mentar a seleção..."
+msgstr "A&mpliar seleção..."
 
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
@@ -15367,14 +15367,14 @@ msgstr "Au&mentar a seleção..."
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
-msgstr "Aumentar seleção"
+msgstr "Ampliar seleção"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
-msgstr "Encol&her a seleção..."
+msgstr "Encol&her seleção..."
 
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
@@ -21591,17 +21591,17 @@ msgstr "Seleção do contorno"
 #: libs/image/kis_selection_filters.cpp:499
 msgctxt "(qtundo-format)"
 msgid "Feather Selection"
-msgstr "Seleção da suavização"
+msgstr "Suavizar seleção"
 
 #: libs/image/kis_selection_filters.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Grow Selection"
-msgstr "Aumentar seleção"
+msgstr "Ampliar seleção"
 
 #: libs/image/kis_selection_filters.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Shrink Selection"
-msgstr "Encolher a seleção"
+msgstr "Encolher seleção"
 
 #: libs/image/kis_selection_filters.cpp:822
 msgctxt "(qtundo-format)"
@@ -21621,7 +21621,7 @@ msgstr "Seleção com suavização de curvas"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr "Aumentar a seleção até o pixel mais escuro"
+msgstr "Ampliar seleção até o pixel mais escuro"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:33
 msgctxt "(qtundo-format)"
@@ -24635,7 +24635,7 @@ msgstr "A forma já pertence a uma seleção"
 #: libs/ui/actions/kis_selection_action_factories.cpp:582
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
-msgstr "Converter as formas para vetor da seleção"
+msgstr "Converter formas para seleção vetorial"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:635
 #: libs/ui/actions/kis_selection_action_factories.cpp:694
@@ -24725,7 +24725,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:2245
 #, kde-format
 msgid "Render Animation"
-msgstr "Renderizar Animação"
+msgstr "Renderizar animação"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:95
 #, kde-format
@@ -32734,7 +32734,7 @@ msgstr "Entrada..."
 #: libs/ui/input/config/kis_input_configuration_page.ui:48
 #, kde-format
 msgid "Input Profile"
-msgstr "Perfil de Entrada"
+msgstr "Perfil de entrada"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
@@ -33672,7 +33672,7 @@ msgstr "Favoritos"
 #: libs/ui/kis_control_frame.cpp:61
 #, kde-format
 msgid "Fill Patterns"
-msgstr "Padrões de Preenchimento"
+msgstr "Padrões de preenchimento"
 
 #: libs/ui/kis_control_frame.cpp:65
 #, kde-format
@@ -33884,7 +33884,7 @@ msgstr "Converter para um arquivo de camadas"
 #: libs/ui/kis_layer_manager.cc:725
 #, kde-format
 msgid "New Filter Layer"
-msgstr "Nova Camada de Filtro"
+msgstr "Nova camada de filtro"
 
 #: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:357
 #, kde-format
@@ -41984,7 +41984,7 @@ msgstr "Seletor de cor avançado"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
 #, kde-format
 msgid "Color Hotkeys"
-msgstr "Atalhos de teclado de cores"
+msgstr "Atalhos de teclado de cor"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
 #, kde-format
@@ -49352,7 +49352,7 @@ msgstr "Seleção do Contorno"
 #: plugins/extensions/modify_selection/dlg_feather_selection.cc:20
 #, kde-format
 msgid "Feather Selection"
-msgstr "Seleção da suavização"
+msgstr "Suavizar seleção"
 
 #: plugins/extensions/modify_selection/dlg_grow_selection.cc:20
 #, kde-format
@@ -49362,7 +49362,7 @@ msgstr "Ampliar Seleção"
 #: plugins/extensions/modify_selection/dlg_shrink_selection.cc:19
 #, kde-format
 msgid "Shrink Selection"
-msgstr "Encolher Seleção"
+msgstr "Encolher seleção"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:53
@@ -51194,7 +51194,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
-msgstr "Curvas de ajuste de &cores..."
+msgstr "Curvas de ajuste de &cor..."
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.h:52
 #, kde-format
@@ -51406,7 +51406,7 @@ msgstr "Filtro de mapa de altura para normal"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "&Altura para mapa normal..."
+msgstr "Mapa de &altura para normal..."
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
@@ -52385,7 +52385,7 @@ msgstr "Pixelizar"
 #: plugins/filters/posterize/posterize.cpp:43
 #, kde-format
 msgid "&Posterize..."
-msgstr "&Poster..."
+msgstr "&Posterizar..."
 
 #: plugins/filters/posterize/posterize.cpp:81
 #, kde-format

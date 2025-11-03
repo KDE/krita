@@ -486,18 +486,30 @@ QString KisOpenGLCanvas2::currentBitDepthUserReport() const {
         case GL_RGB10_A2:
             str << " (" << "GL_RGB10_A2" << ")";
             break;
-        case GL_RGB10:
+// not available in openGLES
+#ifdef GL_RGB10
+            case GL_RGB10:
             str << " (" << "GL_RGB10" << ")";
             break;
+#endif /* GL_RGB10 */
+// not available in openGLES
+#ifdef GL_RGB12
         case GL_RGB12:
             str << " (" << "GL_RGB12" << ")";
             break;
+#endif /* GL_RGB12 */
+// not available in openGLES
+#ifdef GL_RGBA16
         case GL_RGBA16:
             str << " (" << "GL_RGBA16" << ")";
             break;
+#endif /* GL_RGBA16 */
+// not available in openGLES
+#ifdef GL_RGB16
         case GL_RGB16:
             str << " (" << "GL_RGB16" << ")";
             break;
+#endif /* GL_RGB16 */
         case GL_RGBA16F:
             str << " (" << "GL_RGBA16F" << ")";
             break;

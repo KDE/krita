@@ -73,12 +73,15 @@ public:
         Ascender,
         BaselineShift,
         Descender,
+        LineHeightTop,
+        LineHeightBottom,
 
         BaselineAlphabetic,
         BaselineIdeographic,
         BaselineMiddle,
         BaselineHanging,
-        BaselineMathematic
+        BaselineMathematical,
+        BaselineCentral
     };
 
     ~SvgTextCursor();
@@ -136,6 +139,10 @@ public:
     TypeSettingModeHandle typeSettingHandleAtPos(const QRectF regionOfInterest);
     void setTypeSettingHandleHovered(TypeSettingModeHandle hovered = TypeSettingModeHandle::NoHandle);
     void setDrawTypeSettingHandle(bool draw);
+
+    QString handleName(TypeSettingModeHandle handle) const;
+
+    bool setDominantBaselineFromHandle(const TypeSettingModeHandle handle);
 
     /// Move the cursor, and, if you don't want a selection, move the anchor.
     void moveCursor(MoveMode mode, bool moveAnchor = true);
@@ -213,6 +220,8 @@ public:
 
     /// Handle the cursor-related key events.
     void keyPressEvent(QKeyEvent *event);
+
+    void updateModifiers(const Qt::KeyboardModifiers modifiers);
 
     /// the cursor is currently adding a command
     bool isAddingCommand() const;

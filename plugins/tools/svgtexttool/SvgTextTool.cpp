@@ -784,9 +784,12 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             canvas()->shapeManager()->selection()->select(hoveredShape);
             m_hoveredShapeHighlightRect = QPainterPath();
         }
-        if (m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point)) != SvgTextCursor::NoHandle && hoveredShape == selectedShape) {
-            m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point)));
-            m_textCursor.setDrawTypeSettingHandle(false);
+        SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
+        if (handle != SvgTextCursor::NoHandle && hoveredShape == selectedShape) {
+            if (!m_textCursor.setDominantBaselineFromHandle(handle)) {
+                m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point)));
+                m_textCursor.setDrawTypeSettingHandle(false);
+            }
         } else {
             m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
         }
@@ -836,7 +839,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_lastMousePos = event->point;
     m_hoveredShapeHighlightRect = QPainterPath();
-
+    m_textCursor.updateModifiers(event->modifiers());
 
     if (m_interactionStrategy) {
         m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
@@ -1001,6 +1004,7 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
 
 void SvgTextTool::keyReleaseEvent(QKeyEvent *event)
 {
+    m_textCursor.updateModifiers(event->modifiers());
     if (m_interactionStrategy
         && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
             || event->key() == Qt::Key_Meta)) {

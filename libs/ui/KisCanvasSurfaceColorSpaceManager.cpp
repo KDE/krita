@@ -275,7 +275,18 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription(const Kis
             requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_srgb;
             requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_ext_linear;
             if (compositorPreferred->colorSpace.luminance) {
-                // rec709-g22 is considered as SDR in lcms, so we should our space to SDR range
+                /**
+                 * Our definition of rec709-g10 is different from the one used in Wayland.
+                 * Krita defines it as "value 1.0 is reference white" and everything above is
+                 * HDR values. But Wayland declares it as "0.0...1.0 is the full HDR range" and
+                 * reference white value being put somewhere inbetween. It technically allows
+                 * Wayland to use 10-bit integer surfaces for rec709-g10 space, which is a bad
+                 * idea in general (due to potential resolution limit). But given that Wayland/Mesa
+                 * doesn't seem to support 16-bit float surfaces, that is the only option they have.
+                 *
+                 * Anyway, due to limitations of 10-bit integer surfaces in rec709-g10 mode,
+                 * we just refuse to support that.
+                 */
                 requestedDescription->colorSpace.luminance = 
                     compositorPreferred->colorSpace.luminance->clipToSdr();
             }

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-25 03:30+0000\n"
+"POT-Creation-Date: 2025-10-30 03:33+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15859,13 +15859,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbeidsflate"
 
-#: krita/main.cc:572
+#: krita/main.cc:551
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kritisk feil"
 
-#: krita/main.cc:573
+#: krita/main.cc:552
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15874,14 +15874,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:694 libs/ui/KisApplication.cpp:422
+#: krita/main.cc:673 libs/ui/KisApplication.cpp:422
 #: libs/ui/KisApplication.cpp:698
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:695
+#: krita/main.cc:674
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15892,12 +15892,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:717 krita/main.cc:722
+#: krita/main.cc:696 krita/main.cc:701
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:718
+#: krita/main.cc:697
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15908,7 +15908,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:723
+#: krita/main.cc:702
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16199,8 +16199,6 @@ msgstr "Legg figurar til i gruppe"
 
 #: libs/flake/commands/KoShapeKeepAspectRatioCommand.cpp:14
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Keep Aspect Ratio"
 msgctxt "(qtundo-format)"
 msgid "Keep Aspect Ratio"
 msgstr "Hald fast på høgd/breidd-forhold"
@@ -17453,8 +17451,6 @@ msgstr "Byt projeksjonsfarge"
 
 #: libs/image/kis_layer_utils.cpp:2015
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Merge Selected Nodes"
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Slå saman merkte nodar"
@@ -17501,8 +17497,8 @@ msgid "Processing"
 msgstr "Handsamar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1383
-#: libs/ui/KisMainWindow.cpp:1759 libs/ui/KisMainWindow.cpp:1772
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1386
+#: libs/ui/KisMainWindow.cpp:1765 libs/ui/KisMainWindow.cpp:1778
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18107,8 +18103,6 @@ msgstr "Photoshop lagstils-bibliotek"
 
 #: libs/koplugin/KisMimeDatabase.cpp:234
 #, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
 msgctxt "description of a file type"
 msgid "Color Palette"
 msgstr "Fargepalett"
@@ -18245,8 +18239,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr ""
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2128
-#: libs/ui/KisMainWindow.cpp:2211
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid "Import frames"
 msgstr "Importer bilete"
@@ -19270,16 +19264,12 @@ msgstr "Lysenergi"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:148
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
 msgctxt "Blending mode - Decrease Saturation HSY"
 msgid "Decrease Saturation"
 msgstr "Mindre metting"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:149
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
 msgctxt "Blending mode - Increase Saturation HSY"
 msgid "Increase Saturation"
 msgstr "Meir metting"
@@ -19570,12 +19560,12 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
-#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1184
-#: libs/ui/KisMainWindow.cpp:1281 libs/ui/KisMainWindow.cpp:1990
-#: libs/ui/KisMainWindow.cpp:1999 libs/ui/KisMainWindow.cpp:2136
-#: libs/ui/KisMainWindow.cpp:2197 libs/ui/KisMainWindow.cpp:2218
-#: libs/ui/KisMainWindow.cpp:2831 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:974
+#: libs/ui/KisMainWindow.cpp:1044 libs/ui/KisMainWindow.cpp:1187
+#: libs/ui/KisMainWindow.cpp:1284 libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2005 libs/ui/KisMainWindow.cpp:2142
+#: libs/ui/KisMainWindow.cpp:2203 libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2837 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20001,7 +19991,6 @@ msgstr "Alle utan merkelappar"
 
 #: libs/resources/KisTagModel.cpp:305
 #, fuzzy, kde-format
-#| msgid "All Resources"
 msgid "All Resources"
 msgstr "Alle ressursar"
 
@@ -20080,7 +20069,7 @@ msgid "Delete resource"
 msgstr "Slett ressurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2628
+#: libs/ui/KisMainWindow.cpp:2634
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20090,19 +20079,16 @@ msgstr "Vel fila du vil leggja til"
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:76
 #: libs/widgets/KisTagSelectionWidget.cpp:121
 #, fuzzy, kde-format
-#| msgid "Assign to tag"
 msgid "Assign to tag"
 msgstr "Bruk merkelappen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
 #, fuzzy, kde-format
-#| msgid "Remove from this tag"
 msgid "Remove from this tag"
 msgstr "Fjern frå merkelappen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
 #, fuzzy, kde-format
-#| msgid "Remove from other tag"
 msgid "Remove from other tag"
 msgstr "Fjern frå annan merkelapp"
 
@@ -20259,7 +20245,6 @@ msgstr ""
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, fuzzy, kde-format
-#| msgid "Tag"
 msgid "Tag"
 msgstr "Merkelapp"
 
@@ -20560,7 +20545,7 @@ msgstr ""
 "Klarte ikkje teikna opp animasjonsbilete. Utdatafilene er ufullstendige."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2246
 #, kde-format
 msgid "Render Animation"
 msgstr "Teikn opp animasjon"
@@ -22601,7 +22586,6 @@ msgstr "Synkande"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
 #, fuzzy, kde-format
-#| msgid "Alphabetical"
 msgid "Alphabetical"
 msgstr "Alfabetisk"
 
@@ -22611,7 +22595,7 @@ msgid "Numerical"
 msgstr "Numerisk"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, kde-format
 msgid "Import Images"
 msgstr "Importer bilete"
@@ -22760,7 +22744,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skriv inn nytt namn på stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2645
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23738,8 +23722,6 @@ msgstr "Fjern vektorutval"
 
 #: libs/ui/flake/KisReferenceImagesLayer.cpp:24
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
 msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Legg til referansebilete"
@@ -26750,7 +26732,7 @@ msgstr "Gjeldande ferdigpensel"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1019
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28424,7 +28406,6 @@ msgstr ""
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
 #, fuzzy, kde-format
-#| msgid "Normal"
 msgid "Normal"
 msgstr "Normal"
 
@@ -28627,8 +28608,6 @@ msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
 #, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Venstre"
@@ -28641,8 +28620,6 @@ msgstr "Høgre"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
 #, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Midt"
@@ -28971,7 +28948,6 @@ msgstr "Forminsk"
 
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, fuzzy, kde-format
-#| msgid "Zoom to 100%"
 msgid "Zoom to 100%"
 msgstr "Forstørr til 100 %"
 
@@ -29037,7 +29013,6 @@ msgstr "Vis berre lerretet / alt"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:24
 #, fuzzy, kde-format
-#| msgid "Toggle Eraser"
 msgid "Toggle Eraser"
 msgstr "Byt til/frå viskelêr"
 
@@ -29131,8 +29106,6 @@ msgstr "Penseltettleik: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:319
 #, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
 msgstr "Flyt: %1 %"
@@ -29937,19 +29910,14 @@ msgid ""
 "a></p>"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:88
-#, kde-format
-msgid "Toggle Fullscreen"
-msgstr "Slå på/av fullskjerm"
-
 # Fjerna &-teiknet, sidan «posieve check_tp_kde» protesterer uansett kor eg set han. :(
-#: libs/ui/kis_statusbar.cc:245
+#: libs/ui/kis_statusbar.cc:233
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
 msgstr "%1 × %2 (%3)"
 
-#: libs/ui/kis_statusbar.cc:277
+#: libs/ui/kis_statusbar.cc:265
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (image stats)"
 msgid ""
@@ -29963,7 +29931,7 @@ msgstr ""
 "  – Projeksjonar:\t %3\n"
 "  – Kjapp førehandsvising:\t %4\n"
 
-#: libs/ui/kis_statusbar.cc:288
+#: libs/ui/kis_statusbar.cc:276
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button (total stats)"
 msgid ""
@@ -29981,7 +29949,7 @@ msgstr ""
 "\n"
 "Veksleminne bruk:\t %8"
 
-#: libs/ui/kis_statusbar.cc:323
+#: libs/ui/kis_statusbar.cc:311
 #, kde-format
 msgctxt "tooltip on statusbar memory reporting button"
 msgid ""
@@ -29995,24 +29963,24 @@ msgstr ""
 "ÅTVARING:\tIkkje nok minne. Brukar no veksleminne.\n"
 "\t\tDu bør reservera meir minne for Krita i innstillingane."
 
-#: libs/ui/kis_statusbar.cc:382
+#: libs/ui/kis_statusbar.cc:370
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Gøymd"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #, kde-format
 msgid "Ants"
 msgstr "Maur"
 
-#: libs/ui/kis_statusbar.cc:384
+#: libs/ui/kis_statusbar.cc:372
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maske"
 
-#: libs/ui/kis_statusbar.cc:387
+#: libs/ui/kis_statusbar.cc:375
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -30021,18 +29989,18 @@ msgstr ""
 "Utval: x = %1, y = %2, breidd = %3, høgd = %4\n"
 "Visingsmodus: %5"
 
-#: libs/ui/kis_statusbar.cc:392
+#: libs/ui/kis_statusbar.cc:380
 #, kde-format
 msgid "No Selection"
 msgstr "Inkje utval"
 
-#: libs/ui/kis_statusbar.cc:410
+#: libs/ui/kis_statusbar.cc:398
 #, kde-format
 msgid "No profile"
 msgstr "Ingen profil"
 
 # Ser mykje betre ut med eit skiljemerke (tankestrek) her.
-#: libs/ui/kis_statusbar.cc:412
+#: libs/ui/kis_statusbar.cc:400
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -30047,7 +30015,6 @@ msgstr "Forstørring: %1 %"
 #: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
-#| msgid "Brush presets"
 msgid "Brush presets"
 msgstr "Ferdigpenslar"
 
@@ -31002,35 +30969,35 @@ msgid "Wor&kspace"
 msgstr "&Arbeidsflate"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis «%1»-verktøylinje"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:592
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gøym «%1»-verktøylinje"
 
-#: libs/ui/KisMainWindow.cpp:1013
+#: libs/ui/KisMainWindow.cpp:1016
 #, kde-format
 msgid "Save as %1"
 msgstr "Lagra som %1"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1044
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fila %1 finst ikkje."
 
-#: libs/ui/KisMainWindow.cpp:1149
+#: libs/ui/KisMainWindow.cpp:1152
 #, kde-format
 msgid "Open Images"
 msgstr "Opna bilete"
 
-#: libs/ui/KisMainWindow.cpp:1282
+#: libs/ui/KisMainWindow.cpp:1285
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31044,47 +31011,46 @@ msgstr ""
 "Du bør lagra til ein annan stad, slik at originalbiletet ikkje vert "
 "overskrive."
 
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Exporting"
 msgstr "Eksporterer"
 
 # Namna på dialogvindauget når ein vel «Lagra som». Bør ha same form som sjølve kommandoen, derfor ikkje «Lagrar som».
-#: libs/ui/KisMainWindow.cpp:1338
+#: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Saving As"
 msgstr "Lagra som"
 
-#: libs/ui/KisMainWindow.cpp:1738
+#: libs/ui/KisMainWindow.cpp:1744
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Lag nytt dokument"
 
-#: libs/ui/KisMainWindow.cpp:1762
+#: libs/ui/KisMainWindow.cpp:1768
 #, kde-format
 msgid "Custom Document"
 msgstr "Tilpassa dokument"
 
-#: libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1780
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Basert på utklippstavla"
 
-#: libs/ui/KisMainWindow.cpp:1959
+#: libs/ui/KisMainWindow.cpp:1965
 #, fuzzy, kde-format
-#| msgid "Layers/Masks"
 msgid "Layers/Masks"
 msgstr "Lag/masker"
 
-#: libs/ui/KisMainWindow.cpp:1985
+#: libs/ui/KisMainWindow.cpp:1991
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har ikkje teke i bruk nokon ressurs­samlingar."
 
-#: libs/ui/KisMainWindow.cpp:1989
+#: libs/ui/KisMainWindow.cpp:1995
 #, kde-format
 msgid ""
 "\n"
@@ -31095,7 +31061,7 @@ msgstr ""
 "Det finst ingen tilgjengelege ferdigpenslar. Ta i bruk ei ressurssamling som "
 "inneheld ferdigpenslar før du held fram.\n"
 
-#: libs/ui/KisMainWindow.cpp:1999
+#: libs/ui/KisMainWindow.cpp:2005
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31106,7 +31072,7 @@ msgstr ""
 "\n"
 "Berre dei lokale ressursane er tilgjengelege."
 
-#: libs/ui/KisMainWindow.cpp:2136 libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2142 libs/ui/KisMainWindow.cpp:2224
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31115,41 +31081,41 @@ msgstr ""
 "Klarte ikkje fullføra import av animasjon:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2197
+#: libs/ui/KisMainWindow.cpp:2203
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Klarte ikkje oppretta nytt dokument. Animasjonsimporteringa vart avbroten."
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importer arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2634
+#: libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2644
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2682
+#: libs/ui/KisMainWindow.cpp:2688
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2691
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2860
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31158,19 +31124,19 @@ msgstr ""
 "LittleCMS-programtillegget for fargestyring i Krita er ikkje installert. "
 "Programmet vert derfor avslutta."
 
-#: libs/ui/KisMainWindow.cpp:2870
+#: libs/ui/KisMainWindow.cpp:2876
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installasjonsfeil"
 
-#: libs/ui/KisMainWindow.cpp:2980
+#: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Tema"
 
-#: libs/ui/KisMainWindow.cpp:3039
+#: libs/ui/KisMainWindow.cpp:3045
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Utvidande mellomrom"
@@ -31463,8 +31429,6 @@ msgstr "Er du sikker på at du vil fjerna malen?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "@title:window"
 msgid "Remove Template"
 msgstr "Fjern mal"
@@ -32737,7 +32701,6 @@ msgstr ""
 
 #: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, fuzzy, kde-format
-#| msgid "Selection Actions"
 msgid "Selection Actions"
 msgstr "Utvalshandlingar"
 
@@ -34125,7 +34088,6 @@ msgstr "Lås opp (behald gjeldande innstillingar)"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:658
 #, fuzzy, kde-format
-#| msgid "Uncalibrated color space"
 msgid "Uncalibrated color space"
 msgstr "Ukalibrert fargerom"
 
@@ -34352,7 +34314,6 @@ msgstr "Vis/gøym kladdeblokk"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:121
 #, fuzzy, kde-format
-#| msgid "Reload the brush preset"
 msgid "Reload the brush preset"
 msgstr "Last inn ferdigpensel på nytt"
 
@@ -35303,7 +35264,6 @@ msgstr "Legg til ny palett"
 
 #: libs/widgets/KisPaletteChooser.cpp:36
 #, fuzzy, kde-format
-#| msgid "Remove current palette"
 msgid "Remove current palette"
 msgstr "Fjern gjeldande palett"
 
@@ -35571,7 +35531,6 @@ msgstr "Innrykk av første linje"
 
 #: libs/widgets/KoRuler.cpp:1330
 #, fuzzy, kde-format
-#| msgid "Left indent"
 msgid "Left indent"
 msgstr "Venstreinnrykk"
 
@@ -36248,13 +36207,11 @@ msgstr "prosent av animasjon (%)"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, fuzzy, kde-format
-#| msgid "Font Family"
 msgid "Font Family"
 msgstr "Skriftfamilie"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, fuzzy, kde-format
-#| msgid "Font Style"
 msgid "Font Style"
 msgstr "Skriftstil"
 
@@ -36668,8 +36625,6 @@ msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:492
 #, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
 msgctxt "left mouse button"
 msgid "left button"
 msgstr "venstreknapp"
@@ -36985,7 +36940,6 @@ msgstr "Vel språket du vil køyra dette programmet i:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, fuzzy, kde-format
-#| msgid "Add Fallback Language"
 msgid "Add Fallback Language"
 msgstr "Legg til reservespråk"
 
@@ -47901,8 +47855,6 @@ msgstr "Standard (kodaren vel)"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:95
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
 #, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Disabled"
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
 msgstr "Slått av"
@@ -52802,24 +52754,18 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:241
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Neutral point: "
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Nøytralverdi: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:249
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Brightness: "
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Lysstyrke: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:256
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Contrast: "
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Kontrast: "
@@ -52982,7 +52928,6 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
 #, fuzzy, kde-format
-#| msgid "°"
 msgid "°"
 msgstr "°"
 
@@ -53236,7 +53181,6 @@ msgstr "Animert maske"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
 #, fuzzy, kde-format
-#| msgid "Animated Image"
 msgid "Animated Image"
 msgstr "Animerte bilete"
 
@@ -58743,7 +58687,6 @@ msgstr "Endra SVG-tekst"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
 #, fuzzy, kde-format
-#| msgid "Text Tool"
 msgid "Text Tool"
 msgstr "Tekstverktøy"
 
@@ -58804,7 +58747,6 @@ msgstr "Tekstfarge"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
 #, fuzzy, kde-format
-#| msgid "Sample a Color"
 msgid "Sample a Color"
 msgstr "Plukk opp ein farge"
 

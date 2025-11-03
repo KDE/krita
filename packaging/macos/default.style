@@ -4,15 +4,20 @@ tell application "Finder"
         set current view of container window to icon view
         set toolbar visible of container window to false
         set statusbar visible of container window to false
-        set the bounds of container window to {539, 238, 1331, 652}
+        set pathbar visible of container window to false
+        set the bounds of container window to {329, 220, 1142, 689}
         set theViewOptions to the icon view options of container window
         set arrangement of theViewOptions to not arranged
-        set icon size of theViewOptions to 72
+        set shows item info of theViewOptions to false
+        set icon size of theViewOptions to 96
         set background picture of theViewOptions to file ".background:%s"
-        set position of item "krita.app" of container window to {606, 85}
-        set position of item "Applications" of container window to {606, 241}
-        set position of item "Terms of Use" of container window to {718, 85}
-        update without registering applications
+        set position of item "krita.app" of container window to {344, 216}
+        set position of item "Applications" of container window to {590, 216}
+        set position of item "Terms of Use" of container window to {163, 216}
+        set position of item ".background" of container window to {1300, 64}
+        set position of item ".fseventsd" of container window to {1300, 150}
+        set position of item ".VolumeIcon.icns" of container window to {1300, 230}
+        -- update without registering applications
         delay 1
         close
     end tell

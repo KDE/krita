@@ -518,7 +518,7 @@ public:
     void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal,
                          const KoSvgTextProperties resolvedProps, const KoSvgText::ResolutionHandler &resHandler);
     static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal, const KoSvgText::ResolutionHandler resHandler);
-    static qreal anchoredChunkShift(const QVector<CharacterResult> &result, const bool isHorizontal, const int start, int &i);
+    static qreal anchoredChunkShift(const QVector<CharacterResult> &result, const bool isHorizontal, const int start, int &end);
     static qreal
     characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
     static QPainterPath stretchGlyphOnPath(const QPainterPath &glyph,

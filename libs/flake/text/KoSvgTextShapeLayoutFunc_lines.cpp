@@ -425,8 +425,13 @@ void finalizeLine(QVector<CharacterResult> &result,
             }
             applyInlineSizeAnchoring(result, *currentChunk, anchor, anchorPoint, ltr, isHorizontal, currentLine.textIndent, resHandler);
         } else {
-            // this adds a length for preformated text, only useful for debug.
-            currentChunk->length.setLength(isHorizontal? currentChunk->boundingBox.width(): currentChunk->boundingBox.height());
+            if (!ltr) {
+                // RTL relies on the start being 0.0, so we need to align it to the startAnchor.
+                applyInlineSizeAnchoring(result, *currentChunk, KoSvgText::AnchorStart, currentChunk->length.p1(), ltr, isHorizontal, currentLine.textIndent, resHandler);
+            } else {
+                // this adds a length for preformated text, only useful for debug.
+                currentChunk->length.setLength(isHorizontal? currentChunk->boundingBox.width(): currentChunk->boundingBox.height());
+            }
         }
     }
     lineOffset += lineHeightOffset(writingMode, result, currentLine, firstLine, resHandler);

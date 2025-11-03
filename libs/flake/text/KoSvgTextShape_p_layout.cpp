@@ -1679,27 +1679,28 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal, const KoSvgText::ResolutionHandler resHandler)
 {
-    int i = 0;
+    int end = 0;
     int start = 0;
 
     while (start < result.size()) {
 
-        qreal shift = anchoredChunkShift(result, isHorizontal, start, i);
+        qreal shift = anchoredChunkShift(result, isHorizontal, start, end);
 
         const QPointF shiftP = resHandler.adjust(isHorizontal ? QPointF(shift, 0) : QPointF(0, shift));
 
-        for (int j = start; j < i; j++) {
+        for (int j = start; j < end; j++) {
             result[j].finalPosition += shiftP;
         }
-        start = i;
+        start = end;
     }
 }
 
-qreal KoSvgTextShape::Private::anchoredChunkShift(const QVector<CharacterResult> &result, const bool isHorizontal, const int start, int &i)
+qreal KoSvgTextShape::Private::anchoredChunkShift(const QVector<CharacterResult> &result, const bool isHorizontal, const int start, int &end)
 {
     qreal a = 0;
     qreal b = 0;
-    for (i = start; i < result.size(); i++) {
+    int i = start;
+    for (; i < result.size(); i++) {
         if (!result.at(i).addressable) {
             continue;
         }
@@ -1718,18 +1719,22 @@ qreal KoSvgTextShape::Private::anchoredChunkShift(const QVector<CharacterResult>
         }
     }
 
-    const bool rtl = result.at(start).direction == KoSvgText::DirectionRightToLeft;
-    qreal shift = isHorizontal ? result.at(start).finalPosition.x() : result.at(start).finalPosition.y();
+    const CharacterResult startRes = result.at(start);
 
-    if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl) || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
+    const bool rtl = startRes.direction == KoSvgText::DirectionRightToLeft;
+    qreal shift = isHorizontal ? startRes.finalPosition.x() : startRes.finalPosition.y();
+
+    if ((startRes.anchor == KoSvgText::AnchorStart && !rtl)
+            || (startRes.anchor == KoSvgText::AnchorEnd && rtl)) {
         shift = shift - a;
 
-    } else if ((result.at(start).anchor == KoSvgText::AnchorEnd && !rtl) || (result.at(start).anchor == KoSvgText::AnchorStart && rtl)) {
+    } else if ((startRes.anchor == KoSvgText::AnchorEnd && !rtl)
+               || (startRes.anchor == KoSvgText::AnchorStart && rtl)) {
         shift = shift - b;
-
     } else {
         shift = shift - (a + b) * 0.5;
     }
+    end = i;
     return shift;
 }
 

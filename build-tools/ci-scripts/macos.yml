@@ -61,16 +61,14 @@ macos-build:
     # firstly, build .app bundle and sign it
     - env BUILDROOT=$CI_PROJECT_DIR ONLY_APP=1 $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-app.log
     # TODO: add a note about absolute paths if they were actually the problem
-    # TODO: temporarily disable macos signing and notarization since it doesn't work
-    #- python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-sign.log
-    #- python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-notarize.log
+    - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-sign.log
+    - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-notarize.log
     
     # secondly, build .dmg image and sign it as well
     - env BUILDROOT=$CI_PROJECT_DIR ONLY_DMG=1 $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-dmg.log
     # TODO: add a note about absolute paths if they were actually the problem
-    # TODO: temporarily disable macos signing and notarization since it doesn't work
-    #- python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-sign.log
-    #- python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-notarize.log
+    - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-sign.log
+    - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-notarize.log
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos-universal --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee dmg-publish.log
   after_script:
     # try to fetch signing errors from the task log

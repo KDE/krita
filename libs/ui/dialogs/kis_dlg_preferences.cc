@@ -2083,6 +2083,19 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
 #ifndef HAVE_HDR
     tabHDR->setEnabled(false);
+
+    /**
+     * We hide the HDR page in Wayland mode, because the mode is managed
+     * by a different page. We still keep the disabled tab visible on other
+     * systems just to promote the existence of this feature.
+     */
+    if (KisPlatformPluginInterfaceFactory::instance()->surfaceColorManagedByOS()) {
+        const int hdrTabIndex = tabWidget->indexOf(tabHDR);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(hdrTabIndex >= 0);
+        if (hdrTabIndex >= 0) {
+            tabWidget->setTabVisible(hdrTabIndex, false);
+        }
+    }
 #endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();

@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-11-01 17:11+0100\n"
+"PO-Revision-Date: 2025-11-02 14:46+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -26349,6 +26349,10 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"WAARSCHUWING: modus HDR was geactiveerd op het oppervlak werkend in modus 8-"
+"bits!\n"
+"Activeer modus 10-bits in de voorkeurendialoog van Krita en start Krita "
+"opnieuw om kleurbanden te voorkomen!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27328,6 +27332,9 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>De bitdiepte van de kleur gaat door de vensteropsteller. U zou om moeten "
+"schakelen naar modus 10-bits als u de HDR mogelijkheden van uw scherm wilt "
+"gebruiken</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
@@ -32065,6 +32072,11 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Schakelt chromatische adaptatie in voor absolute "
+"weergave-intentie. Effectief zal dit de kleuren tonen zoals ze er uit zouden "
+"zien als de afbeelding op een papier was gedrukt en bekeken met de monitor "
+"als de enige lichtbron. Dit is het standaard gedrag voor een ICC v4 "
+"werkmethode.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
@@ -46239,6 +46251,9 @@ msgid ""
 "as commas. This implementation only implements East-Asian style hanging "
 "punctuation."
 msgstr ""
+"Hangende punctuatie biedt het hangen van opening en sluitende punctuatie "
+"evenals komma's. Deze implementatie implementeert alleen de Oost-Aziatische "
+"stijl van hangende punctuatie."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -46297,6 +46312,8 @@ msgid ""
 "The language of this text shape. Language affects a number of properties, "
 "like glyph shape, upper- and lowercase and line breaking"
 msgstr ""
+"De taal van deze tekstvorm. Taal heeft affect op een aantal eigenschappen, "
+"zoals glyphvorm, hoofd- en kleine letters en regelafbreking"
 
 #: plugins/dockers/textproperties/qml/Language.qml:20
 #, kde-format

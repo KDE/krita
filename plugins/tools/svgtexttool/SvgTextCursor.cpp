@@ -315,6 +315,7 @@ SvgTextCursor::TypeSettingModeHandle SvgTextCursor::typeSettingHandleAtPos(const
             handle = SvgTextCursor::EndPos;
         }
     }
+    if (handle != NoHandle) return handle;
     if (!d->typeSettingDecor.boundingRect(d->handleRadius).intersects(roiInShape)) return handle;
 
     qreal closest = std::numeric_limits<qreal>::max();
@@ -1612,10 +1613,13 @@ void SvgTextCursor::updateTypeSettingDecoration()
         d->typeSettingDecor.baselines = QMap<SvgTextCursor::TypeSettingModeHandle, QPainterPath>();
         for (auto it = infos.begin(); it != infos.end(); it++) {
             const KoSvgTextProperties props = d->shape->propertiesForPos(d->shape->posForIndex(it->logicalIndex), true);
+            KoSvgText::LineHeightInfo lineHeight = props.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
+
             KoSvgText::FontMetrics metrics = it->metrics;
             const bool isHorizontal = d->shape->writingMode() == KoSvgText::HorizontalTB;
 
             const qreal scaleMetrics = props.fontSize().value/qreal(metrics.fontSize);
+            const int lineGap = lineHeight.isNormal? metrics.lineGap: (lineHeight.length.value/scaleMetrics)-(metrics.ascender-metrics.descender);
 
             QTransform t = QTransform::fromTranslate(it->finalPos.x(), it->finalPos.y());
             t.rotate(it->rotateDeg);
@@ -1629,8 +1633,8 @@ void SvgTextCursor::updateTypeSettingDecoration()
                 {BaselineCentral, metrics.ideographicCenterBaseline},
                 {BaselineMathematical, metrics.mathematicalBaseline},
                 {BaselineMiddle, isHorizontal? metrics.xHeight/2: metrics.ideographicCenterBaseline},
-                {LineHeightTop, metrics.ascender+(metrics.lineGap/2)},
-                {LineHeightBottom, metrics.descender-(metrics.lineGap/2)},
+                {LineHeightTop, metrics.ascender+(lineGap/2)},
+                {LineHeightBottom, metrics.descender-(lineGap/2)},
                 {BaselineShift, 0}
             };
 

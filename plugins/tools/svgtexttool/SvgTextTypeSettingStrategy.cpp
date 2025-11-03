@@ -7,11 +7,13 @@
 #include "SvgTextTypeSettingStrategy.h"
 #include "SvgTextCursor.h"
 #include "SvgTextChangeTransformsOnRange.h"
+#include "SvgTextMergePropertiesRangeCommand.h"
 #include "SvgTextShapeManagerBlocker.h"
 
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include "KoSnapGuide.h"
+#include <QVector2D>
 #include <kis_algebra_2d.h>
 #include <QDebug>
 #include <KoViewConverter.h>
@@ -24,7 +26,6 @@ SvgTextTypeSettingStrategy::SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTe
 
     m_cursorPos = textCursor->getPos();
     m_cursorAnchor = textCursor->getAnchor();
-    qDebug() << Q_FUNC_INFO << regionOfInterest << m_cursorPos << m_cursorAnchor;
     m_editingType = textCursor->typeSettingHandleAtPos(regionOfInterest);
 }
 
@@ -97,6 +98,52 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
         SvgTextChangeTransformsOnRange::OffsetType type = m_editingType == int(SvgTextCursor::StartPos)? SvgTextChangeTransformsOnRange::OffsetAll: SvgTextChangeTransformsOnRange::ScaleAndRotate;
 
         cmd = new SvgTextChangeTransformsOnRange(m_shape, m_cursorPos, m_cursorAnchor, delta, type, true, nullptr);
+    } else {
+        const QPointF dragStart = m_shape->documentToShape(m_dragStart);
+        const QPointF dragCurrent = m_shape->documentToShape(m_dragCurrent);
+        const int closestPos = m_shape->posForPointLineSensitive(dragStart);
+        const QList<KoSvgTextCharacterInfo> infos = m_shape->getPositionsAndRotationsForRange(closestPos, closestPos);
+
+        if (infos.empty()) return cmd;
+
+        const KoSvgTextCharacterInfo info = infos.first();
+        const QTransform tf = QTransform::fromTranslate(info.finalPos.x(), info.finalPos.y()) * QTransform().rotate(info.rotateDeg);
+        const QLineF line = tf.map(QLineF(QPointF(), info.advance));
+        const qreal distOld = kisDistanceToLine(dragStart, line);
+        const qreal distNew = kisDistanceToLine(dragCurrent, line);
+        const qreal scale = distNew/distOld;
+
+        KoSvgTextProperties props;
+        KoSvgTextProperties oldProps = m_shape->propertiesForPos(closestPos, true);
+
+        if (m_editingType == int(SvgTextCursor::Ascender) || m_editingType == int(SvgTextCursor::Descender)) {
+            KoSvgText::CssLengthPercentage length = oldProps.fontSize();
+            length.value *= scale;
+            props.setFontSize(length);
+        } else if (m_editingType == int(SvgTextCursor::BaselineShift)) {
+            KoSvgText::CssLengthPercentage length;
+
+            QLineF normal = line.normalVector();
+            qreal dot = QVector2D::dotProduct(QVector2D(normal.p2() - normal.p1()), QVector2D(dragCurrent));
+            length.value = dot > 0? distNew: -distNew;
+            props.setProperty(KoSvgTextProperties::BaselineShiftValueId, QVariant::fromValue(length));
+            props.setProperty(KoSvgTextProperties::BaselineShiftModeId, QVariant::fromValue(KoSvgText::ShiftLengthPercentage));
+        } else if (m_editingType == int(SvgTextCursor::LineHeightTop) || m_editingType == int(SvgTextCursor::LineHeightBottom)) {
+            KoSvgText::LineHeightInfo lineHeight = oldProps.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
+            const qreal metricsMultiplier = oldProps.fontSize().value/qreal(info.metrics.fontSize);
+
+            const qreal ascender = metricsMultiplier*info.metrics.ascender;
+            const qreal descender = metricsMultiplier*info.metrics.descender;
+            qreal lineGap = distNew - fabs(m_editingType == int(SvgTextCursor::LineHeightTop)? ascender: descender);
+            lineHeight.length.value = (ascender-descender)+lineGap+lineGap;
+            lineHeight.isNormal = false;
+            lineHeight.isNumber = false;
+
+            props.setProperty(KoSvgTextProperties::LineHeightId, QVariant::fromValue(lineHeight));
+        }
+        if (!props.isEmpty()) {
+            cmd = new SvgTextMergePropertiesRangeCommand(m_shape, props, m_cursorPos, m_cursorAnchor);
+        }
     }
     return cmd;
 }

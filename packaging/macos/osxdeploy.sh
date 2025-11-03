@@ -285,7 +285,7 @@ print_msg "Using style from: %s" "${DMG_STYLE}"
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
     echo "Using default style"
-    DMG_background="${KIS_SRC_DIR}/packaging/macos/krita_dmgBG.jpg"
+    DMG_background="${KIS_SRC_DIR}/packaging/macos/krita_dmgBG.png"
 fi
 
 
@@ -942,16 +942,15 @@ createDMG () {
     cp -v "${KIS_SRC_DIR}/packaging/macos/Terms_of_use.rtf" "/Volumes/${DMG_title}/Terms of Use/"
     ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
 
-    ## Apple script to set style
-    style="$(<"${DMG_STYLE}")"
-    printf "${style}" "${DMG_title}" "${DMG_background##*/}" | osascript
-
     #Set Icon for DMG
     cp -v "${KIS_SRC_DIR}/packaging/macos/KritaIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
     SetFile -a C "/Volumes/${DMG_title}"
 
-    chmod -Rf go-w "/Volumes/${DMG_title}"
+    ## Apple script to set style
+    style="$(<"${DMG_STYLE}")"
+    printf "${style}" "${DMG_title}" "${DMG_background##*/}" | osascript
 
+    chmod -Rf go-w "/Volumes/${DMG_title}"
     # ensure all writing operations to dmg are over
     sync
 
@@ -967,7 +966,7 @@ createDMG () {
         printf "${DMG_NAME}" | batch_codesign
     fi
 
-    notarize_build "${BUILDROOT}" "${DMG_NAME}"
+    # notarize_build "${BUILDROOT}" "${DMG_NAME}"
 
     if [[ ! -d "${BUILDROOT}/_packaging" ]]; then
         mkdir "${BUILDROOT}/_packaging"

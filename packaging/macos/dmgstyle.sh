@@ -8,8 +8,7 @@
 # the dmg image file.
 
 set_dmgfolder_props() {
-    cp ${DMG_background} "${DMG_STYLE_DIR}/.background"
-    BG_FILENAME=${DMG_background##*/}
+    cp ${DMG_background} "${DMG_STYLE_DIR}/.background/${BG_FILENAME}"
     printf '
     tell application "Finder"
         tell folder "%s" of %s
@@ -17,14 +16,19 @@ set_dmgfolder_props() {
             set current view of container window to icon view
             set toolbar visible of container window to false
             set statusbar visible of container window to false
-            set the bounds of container window to {186, 156, 956, 592}
+            set pathbar visible of container window to false
+            set the bounds of container window to {329, 220, 1142, 689}
             set theViewOptions to the icon view options of container window
             set arrangement of theViewOptions to not arranged
-            set icon size of theViewOptions to 80
+            set shows item info of theViewOptions to false
+            set icon size of theViewOptions to 96
             set background picture of theViewOptions to file ".background:%s"
-            set position of item "krita.app" of container window to {279, 272}
-            set position of item "Applications" of container window to {597, 272}
-            set position of item "Terms of Use" of container window to {597, 110}
+            set position of item "krita.app" of container window to {344, 216}
+            set position of item "Applications" of container window to {590, 216}
+            set position of item "Terms of Use" of container window to {163, 216}
+            set position of item ".background" of container window to {1300,64}
+            set position of item ".fseventsd" of container window to {1300, 150}
+            set position of item ".VolumeIcon.icns" of container window to {1300, 230}
             update without registering applications
             close
         end tell
@@ -45,6 +49,8 @@ get_dmgfolder_props() {
                 log v_tb
                 set v_stat to statusbar visible of container window
                 log v_stat
+                set v_path to pathbar visible of container window
+                log v_path
                 set v_bounds to the bounds of container window
                 log v_bounds
                 set theViewOptions to the icon view options of container window
@@ -58,6 +64,8 @@ get_dmgfolder_props() {
                 log v_pos_ap
                 set v_pos_term to position of item "Terms of Use" of container window
                 log v_pos_term
+                set v_pos_bg to position of item ".background" of container window
+                log v_pos_bg
                 update without registering applications
             end tell
         end tell
@@ -75,15 +83,20 @@ print_osascript_cmd() {
         set current view of container window to %s
         set toolbar visible of container window to %s
         set statusbar visible of container window to %s
+        set pathbar visible of container window to %s
         set the bounds of container window to {%s}
         set theViewOptions to the icon view options of container window
         set arrangement of theViewOptions to %s
+        set shows item info of theViewOptions to false
         set icon size of theViewOptions to %s
         set background picture of theViewOptions to file ".background:%%s"
         set position of item "krita.app" of container window to {%s}
         set position of item "Applications" of container window to {%s}
         set position of item "Terms of Use" of container window to {%s}
-        update without registering applications
+        set position of item ".background" of container window to {%s}
+        set position of item ".fseventsd" of container window to {1300, 150}
+        set position of item ".VolumeIcon.icns" of container window to {1300, 200}
+        -- update without registering applications
         delay 1
         close
     end tell
@@ -135,7 +148,8 @@ DMG_DUMMY_NAME="dmg_style_dummy"
 DMG_STYLE_DIR="${BUILDROOT}/${DMG_DUMMY_NAME}"
 DMG_STYLE_DIR_OSA=$(printf "%s/%s" ${build_folder} ${DMG_DUMMY_NAME} | tr / :)
 DMG_STYLE_LOCATION=${dmg_vol_name}
-KIS_INSTALL_DIR="${BUILDROOT}/i"
+KIS_INSTALL_DIR="${BUILDROOT}/install"
+BG_FILENAME=".background@2x.png"
 
 
 if [[ ${1} = "-h" || ${1} = "--help" ]]; then
@@ -149,6 +163,8 @@ if [[ ${1} = "set" ]]; then
         mkdir "${DMG_STYLE_DIR}"
         mkdir "${DMG_STYLE_DIR}/Terms of Use"
         mkdir "${DMG_STYLE_DIR}/.background"
+        mkdir "${DMG_STYLE_DIR}/.fseventsd"
+        ln -s "${BUILDROOT}/krita/packaging/macos/KritaIcon.icns" "${DMG_STYLE_DIR}/.VolumeIcon.icns"
         ln -s "/Applications" "${DMG_STYLE_DIR}/Applications"
         ln -s "${KIS_INSTALL_DIR}/bin/krita.app" "${DMG_STYLE_DIR}/krita.app"
     fi

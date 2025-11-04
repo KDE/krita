@@ -350,8 +350,9 @@ void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
         int viewportWidth = static_cast<int>(width * devicePixelRatioF());
         int viewportHeight = static_cast<int>(height * devicePixelRatioF());
 
-        // we expect the size to be adjusted in the converter at the higher
-        // level of hierarchy
+        // We expect the size to be adjusted in the converter at the higher
+        // level of hierarchy. It happens in KisCanvasControllerWidget, which
+        // then explicitly resizes the canvas widget.
         KIS_SAFE_ASSERT_RECOVER_NOOP(QSize(viewportWidth, viewportHeight) == coordinatesConverter()->viewportDevicePixelSize());
     }
 

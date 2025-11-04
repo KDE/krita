@@ -129,7 +129,7 @@ protected:
     bool viewportEvent(QEvent *event) override;
 
     virtual void updateCanvasOffsetInternal(const QPointF &newOffset) = 0;
-    virtual void updateCanvasWidgetSizeInternal(const QSize &newSize) = 0;
+    virtual void updateCanvasWidgetSizeInternal(const QSize &newSize, qreal devicePixelRatio) = 0;
     virtual void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint) = 0;
     virtual void zoomToInternal(const QRect &viewRect) = 0;
 

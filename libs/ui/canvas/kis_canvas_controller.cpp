@@ -513,8 +513,9 @@ void KisCanvasController::updateCanvasOffsetInternal(const QPointF &newOffset)
     m_d->coordinatesConverter->setDocumentOffset(newOffset);
 }
 
-void KisCanvasController::updateCanvasWidgetSizeInternal(const QSize &newSize)
+void KisCanvasController::updateCanvasWidgetSizeInternal(const QSize &newSize, qreal devicePixelRatio)
 {
+    m_d->coordinatesConverter->setDevicePixelRatio(devicePixelRatio);
     m_d->coordinatesConverter->setCanvasWidgetSizeKeepZoom(newSize);
 }
 

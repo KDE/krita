@@ -95,7 +95,7 @@ public Q_SLOTS:
 
 protected:
     void updateCanvasOffsetInternal(const QPointF &newOffset) override;
-    void updateCanvasWidgetSizeInternal(const QSize &newSize) override;
+    void updateCanvasWidgetSizeInternal(const QSize &newSize, qreal devicePixelRatio) override;
     void updateCanvasZoomInternal(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const std::optional<KoViewTransformStillPoint> &docStillPoint) override;
     void zoomToInternal(const QRect &viewRect) override;
 

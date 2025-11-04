@@ -7,9 +7,11 @@
 #ifndef KISSCREENMIGRATIONTRACKER_H
 #define KISSCREENMIGRATIONTRACKER_H
 
-#include <QObject>
-#include <QPointer>
-#include <kritawidgetutils_export.h>
+#include <KisRootSurfaceTrackerBase.h>
+
+//#include <QObject>
+//#include <QPointer>
+//#include <kritawidgetutils_export.h>
 #include <kis_signal_auto_connection.h>
 
 
@@ -26,7 +28,7 @@ class KisSignalCompressor;
  * the widget is created, then it subscribes to widget's QEvent::Show event
  * and waits until the widget is displayed.
  */
-class KRITAWIDGETUTILS_EXPORT KisScreenMigrationTracker : public QObject
+class KRITAWIDGETUTILS_EXPORT KisScreenMigrationTracker : public KisRootSurfaceTrackerBase
 {
     Q_OBJECT
 public:
@@ -65,16 +67,17 @@ Q_SIGNALS:
 
 private:
     void connectScreenSignals(QScreen *screen);
-    void connectTopLevelWindow(QWindow *window);
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
+    void connectToNativeWindow(QWindow *window) override;
+    void disconnectFromNativeWindow() override;
 
 private:
     Q_DISABLE_COPY_MOVE(KisScreenMigrationTracker)
 
-    QWidget *m_trackedWidget {nullptr};
-    QPointer<QWindow> m_trackedTopLevelWindow;
+    QPointer<QWindow> m_connectedTopLevelWindow;
+    QMetaObject::Connection m_topLevelWindowConnection;
+
     KisSignalAutoConnectionsStore m_screenConnections;
     KisSignalCompressor *m_resolutionChangeCompressor;
 };

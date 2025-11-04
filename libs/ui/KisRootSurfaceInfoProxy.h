@@ -7,14 +7,9 @@
 #define KISROOTSURFACEINFOPROXY_H
 
 #include <kritaui_export.h>
-
-#include <QObject>
-#include <QPointer>
+#include <KisRootSurfaceTrackerBase.h>
 
 class KisSRGBSurfaceColorSpaceManager;
-class QWidget;
-class QWindow;
-class QEvent;
 class KoColorProfile;
 
 /**
@@ -42,7 +37,7 @@ class KoColorProfile;
  * 4) Finally, connects to the manager and forwards its
  *    sigDisplayConfigChanged() to local sigRootSurfaceProfileChanged()
  */
-class KRITAUI_EXPORT KisRootSurfaceInfoProxy : public QObject
+class KRITAUI_EXPORT KisRootSurfaceInfoProxy : public KisRootSurfaceTrackerBase
 {
     Q_OBJECT
 public:
@@ -59,30 +54,15 @@ Q_SIGNALS:
 
 private:
 
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
-    void tryUpdateHierarchy();
-    void tryReconnectSurfaceManager();
+    void connectToNativeWindow(QWindow *nativeWindow) override;
+    void disconnectFromNativeWindow() override;
     void tryUpdateRootSurfaceProfile();
 
-    QVector<QPointer<QObject>> getCurrentHierarchy(QWidget *wdg);
-
-    void reconnectToHierarchy(const QVector<QPointer<QObject>> newHierarchy);
-
 private:
-    QWidget *m_watched {nullptr};
-    QVector<QPointer<QObject>> m_watchedHierarchy;
-
-    QPointer<QWidget> m_topLevelWidgetWithSurface;
-
-    QPointer<QWindow> m_topLevelNativeWindow;
-    QPointer<QObject> m_childChangedFilter;
-
     QPointer<KisSRGBSurfaceColorSpaceManager> m_topLevelSurfaceManager;
     QMetaObject::Connection m_surfaceManagerConnection;
 
     const KoColorProfile* m_rootSurfaceProfile {nullptr};
-
 };
 
 #endif /* KISROOTSURFACEINFOPROXY_H */

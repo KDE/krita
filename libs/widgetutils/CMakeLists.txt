@@ -49,6 +49,7 @@ set(kritawidgetutils_LIB_SRCS
     KisMenuStyleDontCloseOnAlt.cpp
     KisSpinBoxI18nHelper.cpp
     KisScreenMigrationTracker.cpp
+    KisRootSurfaceTrackerBase.cpp
 
     config/khelpclient.cpp
     config/klanguagebutton.cpp

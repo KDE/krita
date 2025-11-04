@@ -13,40 +13,16 @@
 #include <kis_assert.h>
 #include <kis_signal_compressor.h>
 
-namespace {
-QWindow *findNearestParentWithNativeWindow(QWidget *widget)
-{
-    do {
-        QWindow *nativeWindow = widget->windowHandle();
+#include <kis_debug.h>
 
-        if (nativeWindow) {
-            return nativeWindow;
-        }
-
-    } while ((widget = widget->parentWidget()));
-
-    return nullptr;
-}
-}
 
 KisScreenMigrationTracker::KisScreenMigrationTracker(QWidget *trackedWidget, QObject *parent)
-    : QObject(parent)
-    , m_trackedWidget(trackedWidget)
+    : KisRootSurfaceTrackerBase(trackedWidget, parent)
     , m_resolutionChangeCompressor(new KisSignalCompressor(100, KisSignalCompressor::POSTPONE, this))
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(trackedWidget);
-
-    /**
-     * The window of the tracked widget may be not initialized at the construction
-     * of the widget. Hence we should postpone initialization of the window handle
-     * till the widget gets shown on screen.
-     */
-    m_trackedTopLevelWindow = findNearestParentWithNativeWindow(trackedWidget);
-    if (m_trackedTopLevelWindow) {
-        connectTopLevelWindow(m_trackedTopLevelWindow);
-    } else {
-        trackedWidget->installEventFilter(this);
-    }
+    // WARNING: we potentially call virtual functions here!
+    initialize();
 
     connect(m_resolutionChangeCompressor, &KisSignalCompressor::timeout,
             this, &KisScreenMigrationTracker::slotResolutionCompressorTriggered);
@@ -54,13 +30,13 @@ KisScreenMigrationTracker::KisScreenMigrationTracker(QWidget *trackedWidget, QOb
 
 QScreen* KisScreenMigrationTracker::currentScreen() const
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_trackedTopLevelWindow, qApp->screens().first());
-    return m_trackedTopLevelWindow->screen();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_connectedTopLevelWindow, qApp->screens().first());
+    return m_connectedTopLevelWindow->screen();
 }
 
 QScreen *KisScreenMigrationTracker::currentScreenSafe() const
 {
-    return m_trackedTopLevelWindow ? m_trackedTopLevelWindow->screen() : qApp->screens().first();
+    return m_connectedTopLevelWindow ? m_connectedTopLevelWindow->screen() : qApp->screens().first();
 }
 
 void KisScreenMigrationTracker::connectScreenSignals(QScreen *screen)
@@ -72,27 +48,25 @@ void KisScreenMigrationTracker::connectScreenSignals(QScreen *screen)
                                       this, &KisScreenMigrationTracker::slotScreenLogicalResolutionChanged);
 }
 
-void KisScreenMigrationTracker::connectTopLevelWindow(QWindow *window)
+void KisScreenMigrationTracker::connectToNativeWindow(QWindow *window)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(window);
-    connect(window, &QWindow::screenChanged, this, &KisScreenMigrationTracker::slotScreenChanged);
-    connectScreenSignals(window->screen());
 
-    Q_EMIT sigScreenChanged(window->screen());
-    Q_EMIT sigScreenOrResolutionChanged(window->screen());
-}
+    if (window != m_connectedTopLevelWindow) {
+        m_topLevelWindowConnection =
+            connect(window, &QWindow::screenChanged, this, &KisScreenMigrationTracker::slotScreenChanged);
+        connectScreenSignals(window->screen());
+        m_connectedTopLevelWindow = window;
 
-bool KisScreenMigrationTracker::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == m_trackedWidget && event->type() == QEvent::Show) {
-        m_trackedTopLevelWindow = findNearestParentWithNativeWindow(m_trackedWidget);
-        if (m_trackedTopLevelWindow) {
-            connectTopLevelWindow(m_trackedTopLevelWindow);
-            m_trackedWidget->removeEventFilter(this);
-        }
+        Q_EMIT sigScreenChanged(window->screen());
+        Q_EMIT sigScreenOrResolutionChanged(window->screen());
     }
-
-    return QObject::eventFilter(watched, event);
+}
+void KisScreenMigrationTracker::disconnectFromNativeWindow()
+{
+    disconnect(m_topLevelWindowConnection);
+    m_connectedTopLevelWindow.clear();
+    m_screenConnections.clear();
 }
 
 void KisScreenMigrationTracker::slotScreenChanged(QScreen *screen)
@@ -117,6 +91,11 @@ void KisScreenMigrationTracker::slotScreenLogicalResolutionChanged(qreal value)
 
 void KisScreenMigrationTracker::slotResolutionCompressorTriggered()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_trackedTopLevelWindow);
-    Q_EMIT sigScreenOrResolutionChanged(m_trackedTopLevelWindow->screen());
+    if (!m_connectedTopLevelWindow) {
+        // the tracker is not yet initialized, it should happen only
+        // when the widget have not yet been shown at least once
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!trackedWidget()->isVisible());
+        return;
+    }
+    Q_EMIT sigScreenOrResolutionChanged(m_connectedTopLevelWindow->screen());
 }

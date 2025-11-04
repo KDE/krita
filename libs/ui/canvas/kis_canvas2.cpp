@@ -651,7 +651,7 @@ void KisCanvas2::createQPainterCanvas()
     KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->coordinatesConverter, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
-    m_d->prescaledProjection->setDisplayConfig(m_d->displayColorConverter.displayConfig());
+    m_d->prescaledProjection->setDisplayConfig(m_d->multiSurfaceState->multiConfig.canvasDisplayConfig());
     m_d->prescaledProjection->setDisplayFilter(m_d->displayColorConverter.displayFilter());
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
     setCanvasWidget(canvasWidget);

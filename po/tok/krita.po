@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 15:52+0000\n"
+"POT-Creation-Date: 2025-11-04 02:14+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -24627,7 +24627,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
 #, kde-format
 msgid "Warning(s):"
 msgstr ""
@@ -25564,8 +25564,8 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2380
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2391
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2393
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25666,8 +25666,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2348
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2350
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2361
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2363
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26521,8 +26521,8 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1629
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1633
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1718
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2214 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27147,95 +27147,95 @@ msgstr ""
 msgid "White Point: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2341
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2354
 #, kde-format
 msgid "Configure Krita"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2358
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2360
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2383
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
 #, kde-format
 msgid "Canvas Input"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2401
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2390
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2403
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2398
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2400
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2411
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2413
 #, kde-format
 msgid "Performance"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
 #, kde-format
 msgid "Tablet settings"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2410
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2423
 #, kde-format
 msgid "Tablet"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2418
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2431
 #, kde-format
 msgid "Canvas-only settings"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2433
 #, kde-format
 msgid "Canvas-only"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2428
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2443
 #, kde-format
 msgid "Pop-up Palette"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2438
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2451
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2440
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2453
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2447
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2460
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -32796,7 +32796,7 @@ msgid "Activate Rectangle Tool"
 msgstr ""
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:48
-#: libs/ui/input/KisTouchGestureAction.cpp:33
+#: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
 msgid "Activate Move Tool"
 msgstr ""
@@ -32970,52 +32970,57 @@ msgid "Toggle Eraser"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
+#, kde-format
+msgid "Toggle Eraser Preset"
+msgstr ""
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Transformations"
 msgid "Reset Display"
 msgstr "o weka e ante sijelo"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:26
+#: libs/ui/input/KisTouchGestureAction.cpp:27
 #, kde-format
 msgid "Toggle Previous Brush Preset"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
-#: libs/ui/input/KisTouchGestureAction.cpp:27
+#: libs/ui/input/KisTouchGestureAction.cpp:28
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
 msgstr ""
 
-#: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:69
 #, kde-format
 msgid "Deselect"
 msgstr ""
 
-#: libs/ui/input/KisTouchGestureAction.cpp:29
+#: libs/ui/input/KisTouchGestureAction.cpp:30
 #, kde-format
 msgid "Activate Next Layer"
 msgstr ""
 
-#: libs/ui/input/KisTouchGestureAction.cpp:30
+#: libs/ui/input/KisTouchGestureAction.cpp:31
 #, kde-format
 msgid "Activate Previous Layer"
 msgstr ""
 
-#: libs/ui/input/KisTouchGestureAction.cpp:31
+#: libs/ui/input/KisTouchGestureAction.cpp:32
 #, kde-format
 msgid "Activate Freehand Brush Tool"
 msgstr ""
 
-#: libs/ui/input/KisTouchGestureAction.cpp:32
+#: libs/ui/input/KisTouchGestureAction.cpp:33
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
 msgstr ""
 
-#: libs/ui/input/KisTouchGestureAction.cpp:34
+#: libs/ui/input/KisTouchGestureAction.cpp:35
 #, kde-format
 msgid "Activate Transform Tool"
 msgstr ""

@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 15:52+0000\n"
-"PO-Revision-Date: 2025-11-02 14:46+0100\n"
+"POT-Creation-Date: 2025-11-04 02:14+0000\n"
+"PO-Revision-Date: 2025-11-03 10:53+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -24862,7 +24862,7 @@ msgstr ""
 "De framesnelheid zal gereduceerd worden tot 50 frames per seconde"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
 #, kde-format
 msgid "Warning(s):"
 msgstr "Waarschuwing(en):"
@@ -25832,8 +25832,8 @@ msgstr "Hoofdscherm:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2380
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2391
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2393
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25934,8 +25934,8 @@ msgstr "Video-animatie importeren"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2348
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2350
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2361
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2363
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26857,8 +26857,8 @@ msgstr "Laageigenschappen"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1629
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1633
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1718
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2214 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27509,95 +27509,95 @@ msgstr "Blauw primair: %1, %2"
 msgid "White Point: %1, %2"
 msgstr "Witpunt: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Waarschuwing:</b> huidige scherm ondersteunt geen HDR-rendering"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2341
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2354
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita configureren"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2358
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2360
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Sneltoetsen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2383
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Invoerinstellingen voor werkblad"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
 #, kde-format
 msgid "Canvas Input"
 msgstr "Invoer voor werkblad"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2401
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "Kleurbeheer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2390
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2403
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Kleur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2398
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2400
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2411
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2413
 #, kde-format
 msgid "Performance"
 msgstr "Prestatie"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
 #, kde-format
 msgid "Tablet settings"
 msgstr "Tabletinstellingen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2410
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2423
 #, kde-format
 msgid "Tablet"
 msgstr "Tablet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2418
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2431
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Instellingen voor alleen-werkblad"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2433
 #, kde-format
 msgid "Canvas-only"
 msgstr "Alleen-werkblad"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2428
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2443
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Palet tonen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2438
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2451
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Auteur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2440
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2453
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "Auteur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2447
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2460
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -33485,7 +33485,7 @@ msgid "Activate Rectangle Tool"
 msgstr "Hulpmiddel voor rechthoek activeren"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:48
-#: libs/ui/input/KisTouchGestureAction.cpp:33
+#: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
 msgid "Activate Move Tool"
 msgstr "Verplaatsingshulpmiddel activeren"
@@ -33653,50 +33653,57 @@ msgid "Toggle Eraser"
 msgstr "Wisser omschakelen"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Toggle eraser preset"
+msgid "Toggle Eraser Preset"
+msgstr "Voorinstelling van wisser omschakelen"
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
 #, kde-format
 msgid "Reset Display"
 msgstr "Display resetten"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:26
+#: libs/ui/input/KisTouchGestureAction.cpp:27
 #, kde-format
 msgid "Toggle Previous Brush Preset"
 msgstr "Vorige voorinstelling van penseel omschakelen"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
-#: libs/ui/input/KisTouchGestureAction.cpp:27
+#: libs/ui/input/KisTouchGestureAction.cpp:28
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
 msgstr "Kleuren-sampler"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:28
+#: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:69
 #, kde-format
 msgid "Deselect"
 msgstr "Selectie opheffen"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:29
+#: libs/ui/input/KisTouchGestureAction.cpp:30
 #, kde-format
 msgid "Activate Next Layer"
 msgstr "Volgende laag activeren"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:30
+#: libs/ui/input/KisTouchGestureAction.cpp:31
 #, kde-format
 msgid "Activate Previous Layer"
 msgstr "Vorige laag activeren"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:31
+#: libs/ui/input/KisTouchGestureAction.cpp:32
 #, kde-format
 msgid "Activate Freehand Brush Tool"
 msgstr "Gereedschap voor penseel uit de vrije hand activeren"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:32
+#: libs/ui/input/KisTouchGestureAction.cpp:33
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
 msgid "Freehand Selection Tool"
 msgstr "Hulpmiddel voor selectie uit de vrije hand"
 
-#: libs/ui/input/KisTouchGestureAction.cpp:34
+#: libs/ui/input/KisTouchGestureAction.cpp:35
 #, kde-format
 msgid "Activate Transform Tool"
 msgstr "Transformatiehulpmiddel activeren"
@@ -46346,7 +46353,7 @@ msgstr "Afstand tussen letters"
 msgctxt "@info:tooltip"
 msgid ""
 "Letter spacing controls the spacing between visible clusters of characters."
-msgstr ""
+msgstr "Letterspatiëring bestuurt de ruimte tussen zichtbaren clusters tekens."
 
 #: plugins/dockers/textproperties/qml/LetterSpacing.qml:20
 #, kde-format
@@ -46369,6 +46376,9 @@ msgid ""
 "Line Break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
+"Regelafbreking biedt het kiezen van een strict toepassen van het algoritme "
+"voor regelafbreking. Meest gebruikt voor CJK scripts, vereist dat de taal is "
+"gezet."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -46389,13 +46399,15 @@ msgstr ""
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr ""
+msgstr "Los"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
+"Terwijl het typisch een losser algoritme definieert, is het nu hetzelfde als "
+"automatisch."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
 #, kde-format
@@ -46404,6 +46416,8 @@ msgid ""
 "Same as auto. Soft breaks will be allowed before small kana if text language "
 "is Japanese."
 msgstr ""
+"Hetzelfde als automatisch. Zachte afbrekingen zullen toegestaan worden voor "
+"kleine kana als de taal van de tekst Japans is."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:83
 #, kde-format
@@ -46415,7 +46429,7 @@ msgstr "Strict"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will not be allowed before small kana."
-msgstr ""
+msgstr "Zachte afbrekingen zullen niet toegestaan worden voor kleine kana."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:85
 #, kde-format
@@ -46428,7 +46442,7 @@ msgstr "Overal"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Soft breaks will occur along any grapheme."
-msgstr ""
+msgstr "Zachte afbrekingen zullen gebeuren langs elke grafeem."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:14
 #, kde-format
@@ -46440,7 +46454,7 @@ msgstr "Lijnhoogte"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line Height controls the line height used for the range of text."
-msgstr ""
+msgstr "Regelhoogte bestuurt de regelhoogte gebruikt voor de reeks tekst."
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:20
 #, kde-format
@@ -46448,7 +46462,7 @@ msgctxt ""
 "comma separated search terms for the line-height property, matching is case-"
 "insensitive"
 msgid "line-height, line-spacing"
-msgstr ""
+msgstr "regelhoogte, regelafstand"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:133
 #, kde-format
@@ -46474,7 +46488,7 @@ msgctxt ""
 "comma separated search terms for the font-feature-settings property, "
 "matching is case-insensitive"
 msgid "font-feature-settings, OpenType"
-msgstr ""
+msgstr "lettertype-instellingen, OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format

@@ -137,12 +137,35 @@ public:
 
     /// Get typeSettingMode handle for text;
     TypeSettingModeHandle typeSettingHandleAtPos(const QRectF regionOfInterest);
+
+    /// Set a given typesetting handle as hovered, so it will be drawn as such.
     void setTypeSettingHandleHovered(TypeSettingModeHandle hovered = TypeSettingModeHandle::NoHandle);
+
+    /// Whether to draw the type setting handles.
+    /// Turned off when the typesetting strategy is active to give artists more control.
     void setDrawTypeSettingHandle(bool draw);
 
+    /**
+     * @brief handleName
+     * @return translated name of a given handle.
+     */
     QString handleName(TypeSettingModeHandle handle) const;
 
+    /**
+     * @brief setDominantBaselineFromHandle
+     * Set the dominant baseline from a given handle.
+     * @return true if dominant baseline was set, false if the handle doesn't
+     * correspond to a baseline.
+     */
     bool setDominantBaselineFromHandle(const TypeSettingModeHandle handle);
+
+    /**
+     * @brief posForHandleAndRect
+     * Returns the closest cursor position for a given region and typesetting handle.
+     * Used by the type setting mode to find the relevant metrics to scale.
+     * @return cursor pos closest.
+     */
+    int posForTypeSettingHandleAndRect(const TypeSettingModeHandle handle, const QRectF regionOfInterest);
 
     /// Move the cursor, and, if you don't want a selection, move the anchor.
     void moveCursor(MoveMode mode, bool moveAnchor = true);

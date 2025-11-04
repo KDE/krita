@@ -195,6 +195,7 @@ private:
         InlineSizeStartHandle,
         InlineSizeEndHandle,
         MoveBorder,
+        TypeSettingHandle,
     };
 
     QScopedPointer<SvgTextToolOptionsManager>m_optionManager;

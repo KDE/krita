@@ -22,36 +22,13 @@ SvgTextTypeSettingStrategy::SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTe
     : KoInteractionStrategy(tool)
     , m_shape(textShape)
     , m_dragStart(regionOfInterest.center())
+    , m_textData(textShape->getMemento())
 {
 
     m_cursorPos = textCursor->getPos();
     m_cursorAnchor = textCursor->getAnchor();
     m_editingType = textCursor->typeSettingHandleAtPos(regionOfInterest);
-}
-
-void SvgTextTypeSettingStrategy::paint(QPainter &painter, const KoViewConverter &converter)
-{
-    /*
-    if (!m_shape) return;
-    const int lineStart = qMax(m_shape->lineStart(m_cursorAnchor), qMin(m_cursorPos, m_cursorAnchor));
-    QList<QPair<QPointF, qreal>> firstTf = m_shape->getPositionsAndRotationsForRange(lineStart, qMax(m_cursorPos, m_cursorAnchor), false);
-    if (firstTf.size() < 2) return;
-    QLineF originalLine(firstTf.first().first, firstTf.last().first);
-    QPointF delta = m_dragCurrent - m_dragStart;
-    QLineF newLine(originalLine.p1(), originalLine.p2() + delta);
-    painter.save();
-    painter.setPen(Qt::blue);
-    painter.setTransform(converter.documentToView(), true);
-    painter.drawPoint(m_dragStart);
-    painter.drawPoint(m_dragCurrent);
-    painter.setTransform(m_shape->absoluteTransformation(), true);
-    painter.setPen(Qt::red);
-    painter.setOpacity(0.3);
-    painter.drawPoint(originalLine.p1());
-    painter.drawLine(originalLine);
-    painter.drawLine(newLine);
-    painter.restore();
-    */
+    m_referenceCursorPos = textCursor->posForTypeSettingHandleAndRect(SvgTextCursor::TypeSettingModeHandle(m_editingType), regionOfInterest);
 }
 
 void SvgTextTypeSettingStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
@@ -101,7 +78,7 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
     } else {
         const QPointF dragStart = m_shape->documentToShape(m_dragStart);
         const QPointF dragCurrent = m_shape->documentToShape(m_dragCurrent);
-        const int closestPos = m_shape->posForPointLineSensitive(dragStart);
+        const int closestPos = m_referenceCursorPos;
         const QList<KoSvgTextCharacterInfo> infos = m_shape->getPositionsAndRotationsForRange(closestPos, closestPos);
 
         if (infos.empty()) return cmd;
@@ -109,23 +86,23 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
         const KoSvgTextCharacterInfo info = infos.first();
         const QTransform tf = QTransform::fromTranslate(info.finalPos.x(), info.finalPos.y()) * QTransform().rotate(info.rotateDeg);
         const QLineF line = tf.map(QLineF(QPointF(), info.advance));
-        const qreal distOld = kisDistanceToLine(dragStart, line);
         const qreal distNew = kisDistanceToLine(dragCurrent, line);
-        const qreal scale = distNew/distOld;
 
         KoSvgTextProperties props;
         KoSvgTextProperties oldProps = m_shape->propertiesForPos(closestPos, true);
 
         if (m_editingType == int(SvgTextCursor::Ascender) || m_editingType == int(SvgTextCursor::Descender)) {
+            const qreal distOld = kisDistanceToLine(dragStart, line);
+            const qreal scale = distNew/distOld;
             KoSvgText::CssLengthPercentage length = oldProps.fontSize();
             length.value *= scale;
             props.setFontSize(length);
         } else if (m_editingType == int(SvgTextCursor::BaselineShift)) {
             KoSvgText::CssLengthPercentage length;
 
-            QLineF normal = line.normalVector();
-            qreal dot = QVector2D::dotProduct(QVector2D(normal.p2() - normal.p1()), QVector2D(dragCurrent));
-            length.value = dot > 0? distNew: -distNew;
+            const QLineF normal = line.normalVector();
+            qreal dot = QVector2D::dotProduct(QVector2D(normal.p2() - normal.p1()), QVector2D(dragCurrent-line.p1()));
+            length.value = dot < 0? -distNew: distNew;
             props.setProperty(KoSvgTextProperties::BaselineShiftValueId, QVariant::fromValue(length));
             props.setProperty(KoSvgTextProperties::BaselineShiftModeId, QVariant::fromValue(KoSvgText::ShiftLengthPercentage));
         } else if (m_editingType == int(SvgTextCursor::LineHeightTop) || m_editingType == int(SvgTextCursor::LineHeightBottom)) {
@@ -153,13 +130,20 @@ void SvgTextTypeSettingStrategy::cancelInteraction()
     if (m_previousCmd) {
         m_previousCmd->undo();
     }
+    QRectF updateRect = m_shape->boundingRect();
+    m_shape->setMemento(m_textData, m_cursorPos, m_cursorAnchor);
+    m_shape->updateAbsolute(updateRect| m_shape->boundingRect());
     tool()->repaintDecorations();
 }
 
 void SvgTextTypeSettingStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
+    Q_UNUSED(modifiers)
     if (m_previousCmd) {
         m_previousCmd->undo();
     }
+    QRectF updateRect = m_shape->boundingRect();
+    m_shape->setMemento(m_textData, m_cursorPos, m_cursorAnchor);
+    m_shape->updateAbsolute(updateRect| m_shape->boundingRect());
     tool()->repaintDecorations();
 }

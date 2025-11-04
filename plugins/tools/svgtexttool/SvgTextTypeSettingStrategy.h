@@ -27,7 +27,7 @@ public:
 
     // KoInteractionStrategy interface
 public:
-    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    // void paint(QPainter &painter, const KoViewConverter &converter) override;
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;
     void cancelInteraction() override;
@@ -42,8 +42,10 @@ private:
     int m_cursorPos;
     int m_cursorAnchor;
     int m_editingType;
+    int m_referenceCursorPos;
 
     QScopedPointer<KUndo2Command> m_previousCmd;
+    KoSvgTextShapeMementoSP m_textData;
 };
 
 #endif // SVGTEXTTYPESETTINGSTRATEGY_H

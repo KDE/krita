@@ -750,7 +750,17 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
     KoSvgTextShape *selectedShape = this->selectedShape();
 
     if (selectedShape) {
-        if (m_highlightItem == HighlightItem::MoveBorder) {
+        if (m_highlightItem == HighlightItem::TypeSettingHandle) {
+            SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
+            if (handle != SvgTextCursor::NoHandle) {
+                if (!m_textCursor.setDominantBaselineFromHandle(handle)) {
+                    m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point)));
+                    m_textCursor.setDrawTypeSettingHandle(false);
+                }
+                event->accept();
+                return;
+            }
+        } else if (m_highlightItem == HighlightItem::MoveBorder) {
             m_interactionStrategy.reset(new SvgMoveTextStrategy(this, selectedShape, event->point));
             m_dragging = DragMode::Move;
             event->accept();
@@ -784,15 +794,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             canvas()->shapeManager()->selection()->select(hoveredShape);
             m_hoveredShapeHighlightRect = QPainterPath();
         }
-        SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
-        if (handle != SvgTextCursor::NoHandle && hoveredShape == selectedShape) {
-            if (!m_textCursor.setDominantBaselineFromHandle(handle)) {
-                m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point)));
-                m_textCursor.setDrawTypeSettingHandle(false);
-            }
-        } else {
-            m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
-        }
+        m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
         m_dragging = DragMode::Select;
         event->accept();
     } else if (crossLayerPossible) {
@@ -872,15 +874,24 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             cursor = m_ibeam_horizontal_done;
             const qreal sensitivity = grabSensitivityInPt();
 
-            if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
-                const QPolygonF zone = info->endLineGrabRect(sensitivity);
-                const QPolygonF startZone = info->startLineGrabRect(sensitivity);
-                if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
-                    m_highlightItem = HighlightItem::InlineSizeEndHandle;
-                    cursor = lineToCursor(info->baselineLine(), canvas());
-                } else if (startZone.containsPoint(event->point, Qt::OddEvenFill)){
-                    m_highlightItem = HighlightItem::InlineSizeStartHandle;
-                    cursor = lineToCursor(info->baselineLine(), canvas());
+            SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
+            m_textCursor.setTypeSettingHandleHovered(handle);
+            if (handle != SvgTextCursor::NoHandle) {
+                cursor = Qt::ArrowCursor;
+                m_highlightItem = HighlightItem::TypeSettingHandle;
+            }
+
+            if (m_highlightItem == HighlightItem::None) {
+                if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
+                    const QPolygonF zone = info->endLineGrabRect(sensitivity);
+                    const QPolygonF startZone = info->startLineGrabRect(sensitivity);
+                    if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
+                        m_highlightItem = HighlightItem::InlineSizeEndHandle;
+                        cursor = lineToCursor(info->baselineLine(), canvas());
+                    } else if (startZone.containsPoint(event->point, Qt::OddEvenFill)){
+                        m_highlightItem = HighlightItem::InlineSizeStartHandle;
+                        cursor = lineToCursor(info->baselineLine(), canvas());
+                    }
                 }
             }
 
@@ -900,13 +911,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         const KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
         if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
-            SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
-            m_textCursor.setTypeSettingHandleHovered(handle);
-            if (handle != SvgTextCursor::NoHandle) {
-                cursor = Qt::ArrowCursor;
-            } else {
-                cursor = selectedShape->writingMode() == KoSvgText::HorizontalTB? m_ibeam_horizontal: m_ibeam_vertical;
-            }
+            cursor = selectedShape->writingMode() == KoSvgText::HorizontalTB? m_ibeam_horizontal: m_ibeam_vertical;
         } else if (hoveredShape) {
             if (!hoveredShape->shapesInside().isEmpty()) {
                 QPainterPath paths;

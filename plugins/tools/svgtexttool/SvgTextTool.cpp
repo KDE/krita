@@ -72,6 +72,10 @@
 #include "kis_debug.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
 
+#ifdef Q_OS_ANDROID
+#include <QMenuBar>
+#endif
+
 
 using SvgInlineSizeHelper::InlineSizeInfo;
 

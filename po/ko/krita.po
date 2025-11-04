@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 03:33+0000\n"
+"POT-Creation-Date: 2025-11-04 03:57+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -30059,6 +30059,12 @@ msgstr "미리 보기 전환"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, fuzzy, kde-format
+#| msgid "Toggle Preview"
+msgid "Toggle Eraser Preset"
+msgstr "미리 보기 전환"
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
+#, fuzzy, kde-format
 #| msgid "Master Display:"
 msgid "Reset Display"
 msgstr "마스터 디스플레이:"
@@ -30825,7 +30831,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "캔버스 크기"
 
-#: libs/ui/kis_popup_palette.cpp:877
+#: libs/ui/kis_popup_palette.cpp:881
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -30834,7 +30840,7 @@ msgstr ""
 "전경색과 배경색을 전환하려면 클릭하십시오.\n"
 "검은색과 흰색으로 설정하려면 오른쪽 단추로 클릭하십시오."
 
-#: libs/ui/kis_popup_palette.cpp:1015
+#: libs/ui/kis_popup_palette.cpp:1019
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -37394,7 +37400,7 @@ msgstr "글꼴 스타일"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -37404,19 +37410,19 @@ msgid ""
 "Subrange: [%3, %4]"
 msgstr ""
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "모두 선택(&S)"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "한 단계 위(&S)"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"

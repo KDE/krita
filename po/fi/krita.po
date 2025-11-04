@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 03:33+0000\n"
+"POT-Creation-Date: 2025-11-04 03:57+0000\n"
 "PO-Revision-Date: 2025-10-17 17:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -30624,6 +30624,11 @@ msgstr "Esikatsele"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, fuzzy, kde-format
+msgid "Toggle Eraser Preset"
+msgstr "Esikatsele"
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
+#, fuzzy, kde-format
 #| msgid "Display:"
 msgid "Reset Display"
 msgstr "Näkymä:"
@@ -31452,7 +31457,7 @@ msgstr "100 %"
 msgid "Fit Canvas to View"
 msgstr "Kankaan koko"
 
-#: libs/ui/kis_popup_palette.cpp:877
+#: libs/ui/kis_popup_palette.cpp:881
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Foreground and Background Color"
@@ -31461,7 +31466,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "Alusta piirto- ja taustavärit"
 
-#: libs/ui/kis_popup_palette.cpp:1015
+#: libs/ui/kis_popup_palette.cpp:1019
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -38073,7 +38078,7 @@ msgstr "Fonttikoko"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -38083,7 +38088,7 @@ msgid ""
 "Subrange: [%3, %4]"
 msgstr ""
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Select All"
@@ -38091,14 +38096,14 @@ msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "Valitse kaikki"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, fuzzy, kde-format
 #| msgid "Step"
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "Askel"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Move down"

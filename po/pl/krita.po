@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 03:33+0000\n"
+"POT-Creation-Date: 2025-11-04 03:57+0000\n"
 "PO-Revision-Date: 2025-04-12 10:50+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -29116,6 +29116,13 @@ msgid "Toggle Eraser"
 msgstr "Przełącz gumkę"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Toggle eraser preset"
+msgid "Toggle Eraser Preset"
+msgstr "Przełącz nastawę gumki"
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
 #, kde-format
 msgid "Reset Display"
 msgstr "Wyzeruj wyświetlacz"
@@ -29872,7 +29879,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "Zmieść płótno w widoku"
 
-#: libs/ui/kis_popup_palette.cpp:877
+#: libs/ui/kis_popup_palette.cpp:881
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29881,7 +29888,7 @@ msgstr ""
 "Naciśnij, aby zamienić ze sobą barwę pierwszo- i drugoplanową.\n"
 "Naciśnij prawym, aby ustawić na czarną i białą."
 
-#: libs/ui/kis_popup_palette.cpp:1015
+#: libs/ui/kis_popup_palette.cpp:1019
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -36369,7 +36376,7 @@ msgstr "Krój czcionki"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -36382,19 +36389,19 @@ msgstr ""
 "Pełny zakres: [%1, %2]\n"
 "Podzakres: [%3, %4]"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "Zaznacz wszy&stko"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "&Wejdź wyżej"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"

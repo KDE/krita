@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 03:33+0000\n"
-"PO-Revision-Date: 2025-09-17 08:47+0200\n"
+"POT-Creation-Date: 2025-11-04 03:57+0000\n"
+"PO-Revision-Date: 2025-11-03 09:55+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.2\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -5785,7 +5785,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Petri_Dish.kse"
 msgid "Wolthera's Petri Dish"
-msgstr "La boîte de Pétri de Wolthera"
+msgstr "La boite de Pétri de Wolthera"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20165,12 +20165,12 @@ msgstr "Affecter à l'étiquette"
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
 #, kde-format
 msgid "Remove from this tag"
-msgstr "Enlever de cette étiquette"
+msgstr "Supprimer de cette étiquette"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
 #, kde-format
 msgid "Remove from other tag"
-msgstr "Enlever d'une autre étiquette"
+msgstr "Supprimer à partir d'une autre étiquette"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:25
 #, kde-format
@@ -20470,7 +20470,7 @@ msgstr "Filtrer par étiquette"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr "<qt>Affiche la boîte des options d'étiquette.</qt>"
+msgstr "<qt>Affiche la boite des options d'étiquette.</qt>"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
@@ -21430,7 +21430,7 @@ msgstr "aucun"
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr "sous"
+msgstr "Sous"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -24339,7 +24339,7 @@ msgid ""
 msgstr ""
 "La donnée de l'image que vous voulez coller n'a pas de profil ICM associé. "
 "Si vous ne sélectionnez pas un profil, Krita considérera que la donnée de "
-"l'image est encodée dans un profil d'import défini dans la boîte de dialogue "
+"l'image est encodée dans un profil d'import défini dans la boite de dialogue "
 "Configuration."
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfile)
@@ -25958,7 +25958,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1275
 #, kde-format
 msgid "Enable native file dialogs"
-msgstr "Activer les boîtes de dialogue natives de fichiers"
+msgstr "Activer les boites de dialogue natives de fichiers"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: libs/ui/forms/wdggeneralsettings.ui:1298
@@ -26129,7 +26129,7 @@ msgstr "Avancé..."
 #: libs/ui/forms/wdggeneralsettings.ui:1533
 #, kde-format
 msgid "Long-press to open context menus"
-msgstr ""
+msgstr "Appuyez longuement pour ouvrir les menus contextuels"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -27515,7 +27515,7 @@ msgid ""
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>La boîte de dialogue de filtrage utilisera toujours "
+"<html><head/><body><p>La boite de dialogue de filtrage utilisera toujours "
 "l'aperçu instantané, même si ce dernier est désactivé dans le menu &quot;"
 "Affichage&quot;.</p> </body></html>"
 
@@ -27573,7 +27573,7 @@ msgstr "dans l'outil « Déplacement »"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
 #, kde-format
 msgid "Form"
-msgstr "Formulaire"
+msgstr "Forme"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:32
@@ -29218,6 +29218,13 @@ msgid "Toggle Eraser"
 msgstr "Afficher / Masquer la gomme"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Toggle eraser preset"
+msgid "Toggle Eraser Preset"
+msgstr "Afficher / Masquer les préréglages de gomme"
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
 #, kde-format
 msgid "Reset Display"
 msgstr "Ré-initialiser l'affichage"
@@ -29978,7 +29985,7 @@ msgstr "100 %"
 msgid "Fit Canvas to View"
 msgstr "Ajuster le tableau à la vue"
 
-#: libs/ui/kis_popup_palette.cpp:877
+#: libs/ui/kis_popup_palette.cpp:881
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29987,7 +29994,7 @@ msgstr ""
 "Cliquer pour inverser les couleurs de premier plan et d'arrière-plan.\n"
 "Faites un clic droit pour définir une version en noir et blanc."
 
-#: libs/ui/kis_popup_palette.cpp:1015
+#: libs/ui/kis_popup_palette.cpp:1019
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -36543,7 +36550,7 @@ msgstr "Pourcentage d'animation ( %)"
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
-msgstr "Famille de la police"
+msgstr "Famille de polices"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
@@ -36555,7 +36562,7 @@ msgstr "Style de police"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -36568,19 +36575,19 @@ msgstr ""
 "Gamme complète : [%1, %2]\n"
 "Sous-gamme : [%3, %4]"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "Tout &sélectionner"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "&Renforcer"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
@@ -36667,7 +36674,7 @@ msgstr ""
 "prête à le faire. Cependant, vous - utilisateur - devez nous alerter lorsque "
 "quelque chose ne fonctionne pas comme prévu ou pourrait être perfectionné."
 "<br /><br />KDE offre un système de suivi de bogues. Allez sur <a href="
-"\"%1\">%1</a> ou utilisez la boîte de dialogue « Rapport de bogue... » dans "
+"\"%1\">%1</a> ou utilisez la boite de dialogue « Rapport de bogue... » dans "
 "le menu « Aide » pour signaler des bogues.<br /><br />Si vous avez une "
 "suggestion d'amélioration, vous êtes invité à utiliser le système de suivi "
 "de bogues pour enregistrer votre souhait. Veillez à employer le niveau de "
@@ -36937,7 +36944,7 @@ msgstr "Actions courantes :"
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
-msgstr "Filtrer"
+msgstr "Filtre"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
 #, kde-format
@@ -37305,7 +37312,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, kde-format
 msgid "Add Fallback Language"
-msgstr "Ajouter une langue secondaire"
+msgstr "Ajouter une langue de secours"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
 #, kde-format
@@ -39610,7 +39617,7 @@ msgstr "Boîte à cocher pour la sélection de calques"
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
-"Afficher la boîte à cocher pour sélectionner / dé-sélectionner des calques."
+"Afficher la boite à cocher pour sélectionner / dé-sélectionner des calques."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1006
 msgctxt "(qtundo-format)"
@@ -56766,8 +56773,8 @@ msgid ""
 "the dialog where a user can enable or disable Krita scripts. </p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>Ceci apparaîtra comme une entrée &quot;"
-"Commentaires&quot; dans la boîte de dialogue dans laquelle l'utilisateur "
+"<html><head/><body><p>Ceci apparaitra comme une entrée &quot;"
+"Commentaires&quot; dans la boite de dialogue dans laquelle l'utilisateur "
 "peut activer ou désactiver les scripts de Krita. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
@@ -56798,7 +56805,7 @@ msgid ""
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
 "<html><head/><body><p>Si cette option est sélectionnée, votre script sera "
-"automatiquement activé dans Krita. Autrement dit, il apparaîtra dans un menu "
+"automatiquement activé dans Krita. Autrement dit, il apparaitra dans un menu "
 "« Scripts » ou dans une liste dans un panneau. Dans le cas contraire, vous "
 "devrez activer manuellement le script grâce à l'entrée de menu de Krita / "
 "Configuration. </p></body></html>"
@@ -58174,7 +58181,7 @@ msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
 "masks. Shortcut: ctrl-click."
 msgstr ""
-"Déplacer le calque actuellement sélectionné dans la boîte des calques avec "
+"Déplacer le calque actuellement sélectionné dans la boite des calques avec "
 "ses masques. Raccourci : « Ctrl » + clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
@@ -58503,7 +58510,7 @@ msgid ""
 "transformations.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>En mode &quot;Coordonnées globales&quot;, les champs "
-"« Largeur » et « Hauteur » affichent la taille de la boîte de délimitation "
+"« Largeur » et « Hauteur » affichent la taille de la boite de délimitation "
 "de la forme en coordonnées alignées sur l'image, même lorsque la forme est "
 "tournée ou subit toute autre transformation. </p><p>Si le mode &quot;"
 "Coordonnées globales&quot; est désactivé, les champs « Largeur » et "
@@ -59271,7 +59278,7 @@ msgstr "Saisie de texte"
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
 #, kde-format
 msgid "Text Tool"
-msgstr "Texte"
+msgstr "Outil de texte"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-30 03:33+0000\n"
+"POT-Creation-Date: 2025-11-04 03:57+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -29272,6 +29272,11 @@ msgstr "Foarbyld"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, fuzzy, kde-format
+msgid "Toggle Eraser Preset"
+msgstr "Foarbyld"
+
+#: libs/ui/input/KisTouchGestureAction.cpp:26
+#, fuzzy, kde-format
 msgid "Reset Display"
 msgstr "Werjefte"
 
@@ -30051,14 +30056,14 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "&Kanvas"
 
-#: libs/ui/kis_popup_palette.cpp:877
+#: libs/ui/kis_popup_palette.cpp:881
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "Kleur fan foargrûn"
 
-#: libs/ui/kis_popup_palette.cpp:1015
+#: libs/ui/kis_popup_palette.cpp:1019
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -36250,7 +36255,7 @@ msgstr "Lettertype grutte"
 msgid "x%1"
 msgstr "%1%"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -36260,20 +36265,20 @@ msgid ""
 "Subrange: [%3, %4]"
 msgstr ""
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, fuzzy, kde-format
 #| msgid "&Select All"
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "Alle&s selektearje"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, fuzzy, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "Tiidstap:"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, fuzzy, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"

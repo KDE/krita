@@ -56,6 +56,7 @@
 #include <KisOptimizedBrushOutline.h>
 
 #include <KoShapeTransformCommand.h>
+#include <KoCanvasController.h>
 
 #include "kis_action_registry.h"
 
@@ -540,6 +541,11 @@ void KisToolTransform::applyTransform()
     slotApplyTransform();
 }
 
+void KisToolTransform::setNextActivationTransformMode(KisToolTransform::TransformToolMode mode)
+{
+    nextActivationTransformMode = mode;
+}
+
 KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
 {
     TransformToolMode mode = FreeTransformMode;
@@ -640,11 +646,11 @@ int KisToolTransform::warpPointDensity() const
     return m_currentArgs.numPoints();
 }
 
-void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newMode)
+ToolTransformArgs::TransformMode KisToolTransform::toArgsMode(KisToolTransform::TransformToolMode toolMode)
 {
     ToolTransformArgs::TransformMode mode = ToolTransformArgs::FREE_TRANSFORM;
 
-    switch (newMode) {
+    switch (toolMode) {
     case FreeTransformMode:
         mode = ToolTransformArgs::FREE_TRANSFORM;
         break;
@@ -666,6 +672,13 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
     default:
         KIS_ASSERT_RECOVER_NOOP(0 && "unexpected transform mode");
     }
+
+    return mode;
+}
+
+void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newMode)
+{
+    ToolTransformArgs::TransformMode mode = toArgsMode(newMode);
 
     if( mode != m_currentArgs.mode() ) {
         if( newMode == FreeTransformMode ) {
@@ -830,7 +843,8 @@ void KisToolTransform::activate(const QSet<KoShape*> &shapes)
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeList(), {});
     }
 
-    startStroke(ToolTransformArgs::FREE_TRANSFORM, false);
+    startStroke(toArgsMode(nextActivationTransformMode), false);
+    nextActivationTransformMode = KisToolTransform::FreeTransformMode;
 }
 
 void KisToolTransform::deactivate()
@@ -1451,5 +1465,66 @@ QList<QAction *> KisToolTransformFactory::createActionsImpl()
     actions << actionRegistry->makeQAction("movetool-move-left-more", this);
     actions << actionRegistry->makeQAction("movetool-move-right-more", this);
 
+    auto makeSubtoolAction = [&actionRegistry, &actions, this](QString actionName, const char *slot) {
+        QAction *action = actionRegistry->makeQAction(actionName, this);
+        action->setProperty("always_enabled", true); // To allow this action to be triggered when the transform tool isn't already active
+        connect(action, SIGNAL(triggered()), slot);
+        actions << action;
+    };
+    makeSubtoolAction("KisToolTransformFree", SLOT(activateSubtoolFree()));
+    makeSubtoolAction("KisToolTransformPerspective", SLOT(activateSubtoolPerspective()));
+    makeSubtoolAction("KisToolTransformWarp", SLOT(activateSubtoolWarp()));
+    makeSubtoolAction("KisToolTransformCage", SLOT(activateSubtoolCage()));
+    makeSubtoolAction("KisToolTransformLiquify", SLOT(activateSubtoolLiquify()));
+    makeSubtoolAction("KisToolTransformMesh", SLOT(activateSubtoolMesh()));
+
     return actions;
+}
+
+void KisToolTransformFactory::activateSubtool(KisToolTransform::TransformToolMode mode)
+{
+    KoToolManager *toolManager = KoToolManager::instance();
+
+    KoCanvasController *canvasController = toolManager->activeCanvasController();
+    if (!canvasController) return;
+    KoCanvasBase *canvas = canvasController->canvas();
+    if (!canvas) return;
+
+    KoToolBase *tool = toolManager->toolById(canvas, id());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(tool);
+    KisToolTransform *transformTool = dynamic_cast<KisToolTransform*>(tool);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(transformTool);
+
+    if (toolManager->activeToolId() == id()) {
+        // Transform tool is already active, switch the current mode
+        transformTool->setTransformMode(mode);
+    } else {
+        // Works like KoToolFactoryBase::activateTool, but tells the tool beforehand which initial transform mode to use
+        transformTool->setNextActivationTransformMode(mode);
+        toolManager->switchToolRequested(id());
+    }
+}
+void KisToolTransformFactory::activateSubtoolFree()
+{
+    activateSubtool(KisToolTransform::FreeTransformMode);
+}
+void KisToolTransformFactory::activateSubtoolPerspective()
+{
+    activateSubtool(KisToolTransform::PerspectiveTransformMode);
+}
+void KisToolTransformFactory::activateSubtoolWarp()
+{
+    activateSubtool(KisToolTransform::WarpTransformMode);
+}
+void KisToolTransformFactory::activateSubtoolCage()
+{
+    activateSubtool(KisToolTransform::CageTransformMode);
+}
+void KisToolTransformFactory::activateSubtoolLiquify()
+{
+    activateSubtool(KisToolTransform::LiquifyTransformMode);
+}
+void KisToolTransformFactory::activateSubtoolMesh()
+{
+    activateSubtool(KisToolTransform::MeshTransformMode);
 }

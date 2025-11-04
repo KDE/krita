@@ -160,6 +160,7 @@ public:
 
     void newActivationWithExternalSource(KisPaintDeviceSP externalSource) override;
 
+    void setNextActivationTransformMode(TransformToolMode mode);
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -178,6 +179,8 @@ public:
     WarpType warpType() const;
     double warpFlexibility() const;
     int warpPointDensity() const;
+
+    static ToolTransformArgs::TransformMode toArgsMode(KisToolTransform::TransformToolMode toolMode);
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
@@ -279,6 +282,7 @@ private:
     KisToolChangesTracker m_changesTracker;
     KisSignalAutoConnectionsStore m_actionConnections;
 
+    TransformToolMode nextActivationTransformMode {FreeTransformMode};
 
     /// actions for the context click menu
     KisAction* warpAction {0};
@@ -353,6 +357,9 @@ private Q_SLOTS:
 
 class KisToolTransformFactory : public KisToolPaintFactoryBase
 {
+
+    Q_OBJECT
+
 public:
 
     KisToolTransformFactory()
@@ -372,6 +379,17 @@ public:
     }
 
     QList<QAction *> createActionsImpl() override;
+
+private:
+    void activateSubtool(KisToolTransform::TransformToolMode mode);
+
+private Q_SLOTS:
+    void activateSubtoolFree();
+    void activateSubtoolPerspective();
+    void activateSubtoolWarp();
+    void activateSubtoolCage();
+    void activateSubtoolLiquify();
+    void activateSubtoolMesh();
 };
 
 

@@ -544,6 +544,13 @@ void KoPathTool::repaintDecorations()
 
 void KoPathTool::mousePressEvent(KoPointerEvent *event)
 {
+    // When using touch drawing, we only ever receive move events after the
+    // finger has pressed down. We have to issue an artificial move here so that
+    // the tool's state is updated properly to handle the press.
+    if (event->isTouchEvent()) {
+        mouseMoveEvent(event);
+    }
+
     // we are moving if we hit a point and use the left mouse button
     if (m_activeHandle) {
         m_currentStrategy.reset(m_activeHandle->handleMousePress(event));

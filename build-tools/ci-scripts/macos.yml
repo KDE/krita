@@ -62,9 +62,9 @@ macos-build:
     - env BUILDROOT=$CI_PROJECT_DIR ONLY_APP=1 packaging/macos/osxdeploy.sh | tee build-app.log
 
     - python3 -u ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini _dmg/*.app 2>&1 | tee app-sign.log
-    - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix app-sign_ --directory _dmp
+    - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix app-sign_ --directory _dmg
     - python3 -u ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini _dmg/*.app 2>&1 | tee app-notarize.log
-    - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix app-notarize_ --directory _dmp
+    - python3 -u build-tools/ci-scripts/move-signing-logs.py --prefix app-notarize_ --directory _dmg
 
     # secondly, build .dmg image and sign it as well
     - env BUILDROOT=$CI_PROJECT_DIR ONLY_DMG=1 packaging/macos/osxdeploy.sh | tee build-dmg.log

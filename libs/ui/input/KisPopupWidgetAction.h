@@ -35,9 +35,6 @@ public:
     int priority() const override {return 1;}
 
     void end(QEvent *) override;
-
-private:
-    bool m_requestedWithStylus;
 };
 
 #endif // KIS_POPUP_WIDGET_ACTION_H

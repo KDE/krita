@@ -354,6 +354,18 @@ void SvgTextCursor::setDrawTypeSettingHandle(bool draw)
     d->drawTypeSettingHandle = draw;
 }
 
+QCursor SvgTextCursor::cursorTypeForTypeSetting() const
+{
+    if (d->hoveredTypeSettingHandle == StartPos ||
+            d->hoveredTypeSettingHandle == StartPos ||
+            d->typeSettingDecor.testBaselines(d->lastKnownModifiers)) {
+        return Qt::ArrowCursor;
+    } else if (d->shape) {
+        return (d->shape->writingMode() == KoSvgText::HorizontalTB)? Qt::SizeVerCursor: Qt::SizeHorCursor;
+    }
+    return Qt::ArrowCursor;
+}
+
 QString SvgTextCursor::handleName(TypeSettingModeHandle handle) const
 {
     bool baseline = d->typeSettingDecor.testBaselines(d->lastKnownModifiers);
@@ -432,9 +444,9 @@ QMap<SvgTextCursor::TypeSettingModeHandle, int> typeSettingBaselinesFromMetrics(
         {SvgTextCursor::BaselineAlphabetic, metrics.alphabeticBaseline},
         {SvgTextCursor::BaselineIdeographic, metrics.ideographicUnderBaseline},
         {SvgTextCursor::BaselineHanging, metrics.hangingBaseline},
+        {SvgTextCursor::BaselineCentral, metrics.ideographicCenterBaseline},
         {SvgTextCursor::BaselineMathematical, metrics.mathematicalBaseline},
         {SvgTextCursor::BaselineMiddle, isHorizontal? metrics.xHeight/2: metrics.ideographicCenterBaseline},
-        {SvgTextCursor::BaselineCentral, metrics.ideographicCenterBaseline},
         {SvgTextCursor::LineHeightTop, metrics.ascender+(lineGap/2)},
         {SvgTextCursor::LineHeightBottom, metrics.descender-(lineGap/2)},
         {SvgTextCursor::BaselineShift, 0}
@@ -452,10 +464,11 @@ int SvgTextCursor::posForTypeSettingHandleAndRect(const TypeSettingModeHandle ha
     const QRectF roi = d->shape->documentToShape(regionOfInterest);
 
     for (auto it = infos.begin(); it != infos.end(); it++) {
-        const KoSvgTextProperties props = d->shape->propertiesForPos(d->shape->posForIndex(it->logicalIndex), true);
+        const int currentPos = (d->pos == d->anchor)? -1 :d->shape->posForIndex(it->logicalIndex);
+        const KoSvgTextProperties props = d->shape->propertiesForPos(currentPos, true);
         KoSvgText::LineHeightInfo lineHeight = props.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
 
-        KoSvgText::FontMetrics metrics = it->metrics;
+        KoSvgText::FontMetrics metrics = (d->pos == d->anchor)? props.metrics(true, true): it->metrics;
         const bool isHorizontal = d->shape->writingMode() == KoSvgText::HorizontalTB;
 
         const qreal scaleMetrics = props.fontSize().value/qreal(metrics.fontSize);
@@ -1255,6 +1268,7 @@ void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
     updateCursor(true);
     updateSelection();
     updateInputMethodItemTransform();
+    updateTypeSettingDecoration();
 }
 
 void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
@@ -1263,6 +1277,7 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
     d->anchor = anchor;
     updateCursor();
     updateSelection();
+    updateTypeSettingDecoration();
 }
 
 void SvgTextCursor::notifyMarkupChanged()
@@ -1549,6 +1564,9 @@ bool SvgTextCursor::registerPropertyAction(QAction *action, const QString &name)
         d->actions.append(action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(pastePlainText()));
         return true;
+    } else if (action) {
+        d->actions.append(action);
+        return true;
     }
     return false;
 }
@@ -1665,15 +1683,20 @@ void SvgTextCursor::updateTypeSettingDecoration()
         d->typeSettingDecor.handles.first = rtl? last.finalPos: first.finalPos;
         d->typeSettingDecor.handles.second = rtl? first.finalPos: last.finalPos;
 
-        // Slightly cursed...
+        // This could be better, it's quite clunky right now.
         // It'd be better if we could get KoSvgTextNodeIndex for a pos, but that one is only implemented in shape branch...
         d->typeSettingDecor.paths = QMap<SvgTextCursor::TypeSettingModeHandle, QPainterPath>();
         d->typeSettingDecor.baselines = QMap<SvgTextCursor::TypeSettingModeHandle, QPainterPath>();
-        for (auto it = infos.begin(); it != infos.end(); it++) {
-            const KoSvgTextProperties props = d->shape->propertiesForPos(d->shape->posForIndex(it->logicalIndex), true);
+        QList<KoSvgTextCharacterInfo> metricInfos = infos;
+        if (d->pos == d->anchor) {
+            metricInfos = d->shape->getPositionsAndRotationsForRange(0, d->shape->posForIndex(d->shape->plainText().size()));
+        }
+        for (auto it = metricInfos.begin(); it != metricInfos.end(); it++) {
+            const int currentPos = (d->pos == d->anchor)? -1 :d->shape->posForIndex(it->logicalIndex);
+            const KoSvgTextProperties props = d->shape->propertiesForPos(currentPos, true);
             KoSvgText::LineHeightInfo lineHeight = props.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
 
-            KoSvgText::FontMetrics metrics = it->metrics;
+            KoSvgText::FontMetrics metrics = (d->pos == d->anchor)? props.metrics(true, true) :it->metrics;
             const bool isHorizontal = d->shape->writingMode() == KoSvgText::HorizontalTB;
 
             const qreal scaleMetrics = props.fontSize().value/qreal(metrics.fontSize);
@@ -1702,6 +1725,7 @@ void SvgTextCursor::updateTypeSettingDecoration()
         }
         d->typeSettingDecor.baselines.remove(LineHeightTop);
         d->typeSettingDecor.baselines.remove(LineHeightBottom);
+
 
         updateRect = d->shape->shapeToDocument(d->typeSettingDecor.boundingRect(d->handleRadius));
     }

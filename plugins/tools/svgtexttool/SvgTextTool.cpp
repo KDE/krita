@@ -128,29 +128,16 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     }
 
     m_textTypeSignalsMapper.reset(new KisSignalMapper(this));
-    const QMap<QString, int> convertActions {
-        {"text_type_preformatted", KoSvgTextShape::PreformattedText},
-        {"text_type_inline_wrap", KoSvgTextShape::InlineWrap},
-        {"text_type_pre_positioned", KoSvgTextShape::PrePositionedText}
-    };
-    Q_FOREACH(const QString name, convertActions.keys()) {
-        QAction *a = action(name);
-        connect(a, SIGNAL(triggered()), m_textTypeSignalsMapper.data(), SLOT(map()));
-        m_textTypeSignalsMapper->setMapping(a, convertActions.value(name));
-    }
+    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_preformatted", KoSvgTextShape::PreformattedText);
+    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_inline_wrap", KoSvgTextShape::InlineWrap);
+    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_pre_positioned", KoSvgTextShape::PrePositionedText);
 
     m_typeSettingMovementMapper.reset(new KisSignalMapper(this));
-    const QMap<QString, int> typeSetActions {
-        {"svg_type_setting_move_selection_start_down_1_px", Qt::Key_Down},
-        {"svg_type_setting_move_selection_start_up_1_px", Qt::Key_Up},
-        {"svg_type_setting_move_selection_start_left_1_px", Qt::Key_Left},
-        {"svg_type_setting_move_selection_start_right_1_px", Qt::Key_Right}
-    };
-    Q_FOREACH(const QString name, typeSetActions.keys()) {
-        QAction *a = action(name);
-        connect(a, SIGNAL(triggered()), m_typeSettingMovementMapper.data(), SLOT(map()));
-        m_typeSettingMovementMapper->setMapping(a, typeSetActions.value(name));
-    }
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_down_1_px", Qt::Key_Down);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_up_1_px", Qt::Key_Up);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_left_1_px", Qt::Key_Left);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_right_1_px", Qt::Key_Right);
+
 
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
@@ -877,7 +864,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
             m_textCursor.setTypeSettingHandleHovered(handle);
             if (handle != SvgTextCursor::NoHandle) {
-                cursor = Qt::ArrowCursor;
+                cursor = m_textCursor.cursorTypeForTypeSetting();
                 m_highlightItem = HighlightItem::TypeSettingHandle;
             }
 
@@ -912,7 +899,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
         if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
             cursor = selectedShape->writingMode() == KoSvgText::HorizontalTB? m_ibeam_horizontal: m_ibeam_vertical;
-        } else if (hoveredShape) {
+        } else if (hoveredShape && selectedShape != hoveredShape) {
             if (!hoveredShape->shapesInside().isEmpty()) {
                 QPainterPath paths;
                 Q_FOREACH(KoShape *s, hoveredShape->shapesInside()) {
@@ -1068,5 +1055,15 @@ KoSvgText::WritingMode SvgTextTool::writingMode() const
 {
     KoSvgTextProperties props = propertiesForNewText();
     return KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+}
+
+void SvgTextTool::addMappedAction(KisSignalMapper *mapper, const QString &actionName, const int value)
+{
+    QAction *a = action(actionName);
+    if (a) {
+        connect(a, SIGNAL(triggered()), mapper, SLOT(map()));
+        mapper->setMapping(a, value);
+        m_textCursor.registerPropertyAction(a, actionName);
+    }
 }
 

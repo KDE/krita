@@ -1088,13 +1088,21 @@ qreal KoSvgTextProperties::xHeight() const
     return fontSizeVal * 0.5;
 }
 
-KoSvgText::FontMetrics KoSvgTextProperties::metrics(const bool withResolvedLineHeight) const
+KoSvgText::FontMetrics KoSvgTextProperties::metrics(const bool withResolvedLineHeight, const bool offsetByBaseline) const
 {
     const KoCSSFontInfo info = cssFontInfo();
 
     const bool isHorizontal = propertyOrDefault(WritingModeId).toInt() == KoSvgText::HorizontalTB;
     const KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
     KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal, textRendering);
+
+    if (offsetByBaseline) {
+        KoSvgText::Baseline baseline = KoSvgText::Baseline(propertyOrDefault(DominantBaselineId).toInt());
+        if (baseline == KoSvgText::BaselineAuto || baseline == KoSvgText::BaselineNoChange ||  baseline == KoSvgText::BaselineResetSize || baseline == KoSvgText::BaselineUseScript) {
+            baseline = isHorizontal? KoSvgText::BaselineAlphabetic: KoSvgText::BaselineCentral;
+        }
+        metrics.offsetMetricsToNewOrigin(baseline);
+    }
 
     return withResolvedLineHeight? applyLineHeight(metrics): metrics;
 }

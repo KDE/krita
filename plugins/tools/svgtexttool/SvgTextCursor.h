@@ -145,6 +145,9 @@ public:
     /// Turned off when the typesetting strategy is active to give artists more control.
     void setDrawTypeSettingHandle(bool draw);
 
+    /// Return appropriate typeSetting cursor;
+    QCursor cursorTypeForTypeSetting() const;
+
     /**
      * @brief handleName
      * @return translated name of a given handle.

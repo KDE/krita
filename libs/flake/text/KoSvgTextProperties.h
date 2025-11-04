@@ -256,9 +256,10 @@ public:
      * @brief metrics
      * Return the metrics of the first available font.
      * @param withResolvedLineHeight -- apply the lineheight into the linegap property.
+     * @param offsetByBaseline -- ensure the metrics are offset by the dominant baseline.
      * @return metrics for the current font.
      */
-    KoSvgText::FontMetrics metrics(const bool withResolvedLineHeight = true) const;
+    KoSvgText::FontMetrics metrics(const bool withResolvedLineHeight = true, const bool offsetByBaseline = false) const;
 
     /**
      * @brief applyLineHeight

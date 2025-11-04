@@ -24,7 +24,6 @@ SvgTextTypeSettingStrategy::SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTe
     , m_dragStart(regionOfInterest.center())
     , m_textData(textShape->getMemento())
 {
-
     m_cursorPos = textCursor->getPos();
     m_cursorAnchor = textCursor->getAnchor();
     m_editingType = textCursor->typeSettingHandleAtPos(regionOfInterest);
@@ -119,7 +118,9 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
             props.setProperty(KoSvgTextProperties::LineHeightId, QVariant::fromValue(lineHeight));
         }
         if (!props.isEmpty()) {
-            cmd = new SvgTextMergePropertiesRangeCommand(m_shape, props, m_cursorPos, m_cursorAnchor);
+            int pos = m_cursorPos == m_cursorAnchor? -1: m_cursorPos;
+            int anchor = m_cursorPos == m_cursorAnchor? -1: m_cursorAnchor;
+            cmd = new SvgTextMergePropertiesRangeCommand(m_shape, props, pos, anchor);
         }
     }
     return cmd;
@@ -127,10 +128,12 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
 
 void SvgTextTypeSettingStrategy::cancelInteraction()
 {
+    tool()->canvas()->snapGuide()->reset();
+    QRectF updateRect = m_shape->boundingRect();
     if (m_previousCmd) {
         m_previousCmd->undo();
     }
-    QRectF updateRect = m_shape->boundingRect();
+    updateRect |= m_shape->boundingRect();
     m_shape->setMemento(m_textData, m_cursorPos, m_cursorAnchor);
     m_shape->updateAbsolute(updateRect| m_shape->boundingRect());
     tool()->repaintDecorations();
@@ -139,11 +142,5 @@ void SvgTextTypeSettingStrategy::cancelInteraction()
 void SvgTextTypeSettingStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers)
-    if (m_previousCmd) {
-        m_previousCmd->undo();
-    }
-    QRectF updateRect = m_shape->boundingRect();
-    m_shape->setMemento(m_textData, m_cursorPos, m_cursorAnchor);
-    m_shape->updateAbsolute(updateRect| m_shape->boundingRect());
-    tool()->repaintDecorations();
+    cancelInteraction();
 }

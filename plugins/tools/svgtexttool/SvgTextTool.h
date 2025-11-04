@@ -99,6 +99,8 @@ private:
 
     KoSvgText::WritingMode writingMode() const;
 
+    void addMappedAction(KisSignalMapper* mapper, const QString &actionName, const int value);
+
 private Q_SLOTS:
 
     void showEditor();
@@ -180,6 +182,10 @@ private Q_SLOTS:
      */
     void slotMoveTextSelection(int index);
 
+    /**
+     * @brief slotUpdateTypeSettingMode
+     * Enable typesetting mode from the tool options.
+     */
     void slotUpdateTypeSettingMode();
 
 private:

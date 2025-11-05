@@ -248,9 +248,18 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription(const Kis
         KIS_SAFE_ASSERT_RECOVER_RETURN(compositorPreferred);
 
         if (m_d->surfaceMode == KisConfig::CanvasSurfaceMode::Preferred) {
-            // we don't copy mastering properties, since they mean a different thing
-            // for the preferred space and outputs
-            requestedDescription->colorSpace = compositorPreferred->colorSpace;
+
+            if (compositorPreferred->colorSpace.isHDR()) {
+                // we support HDR only via Rec2020PQ, so reset the color space to that
+                // (KWin 6.5+ reports gamma-2.2 as preferred color space for whatever
+                //  reason)
+                requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_bt2020;
+                requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_st2084_pq;
+            } else {
+                // we don't copy mastering properties, since they mean a different thing
+                // for the preferred space and outputs
+                requestedDescription->colorSpace = compositorPreferred->colorSpace;
+            }
 
             if (std::holds_alternative<NamedTransferFunction>(requestedDescription->colorSpace.transferFunction) &&
                 std::get<NamedTransferFunction>(requestedDescription->colorSpace.transferFunction) == NamedTransferFunction::transfer_function_st2084_pq) {

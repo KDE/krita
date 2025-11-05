@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 02:10+0000\n"
-"PO-Revision-Date: 2025-11-04 09:10+0200\n"
+"PO-Revision-Date: 2025-11-05 08:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -68935,51 +68935,45 @@ msgstr "Перетворити шар або вибране"
 
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Дії з інструментом перетворення"
+msgstr "Інструменти перетворення (довільне перетворення)"
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Дії з інструментом перетворення"
+msgstr "Інструменти перетворення (перетворення перспективи)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Дії з інструментом перетворення"
+msgstr "Інструменти перетворення (перетворення викривлення)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Дії з інструментом перетворення"
+msgstr "Інструменти перетворення (перетворення клітки)"
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Дії з інструментом перетворення"
+msgstr "Інструменти перетворення (перетворення розплавлення)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr "Дії з інструментом перетворення"
+msgstr "Інструменти перетворення (перетворення сітки)"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63

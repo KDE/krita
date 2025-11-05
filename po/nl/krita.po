@@ -63,9 +63,9 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 02:10+0000\n"
-"PO-Revision-Date: 2025-11-04 13:53+0100\n"
+"PO-Revision-Date: 2025-11-05 11:03+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46491,7 +46491,7 @@ msgstr "lettertype-instellingen, OpenType"
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:99
 #, kde-format
 msgid "No OpenType features are currently set."
-msgstr ""
+msgstr "Geen mogelijkheden van Opentype zijn nu ingesteld."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:183
 #, kde-format
@@ -46516,7 +46516,7 @@ msgstr "Glyphs: hoofdletters"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable opentype features related to capitals"
-msgstr ""
+msgstr "Mogelijkheden van Opentype inschakelen gerelateerd aan hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -46525,6 +46525,8 @@ msgctxt ""
 "case-insensitive"
 msgid "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals"
 msgstr ""
+"lettertype-variant-hoofdletters, Kleine hoofdletters, Mini-hoofdletters, "
+"Uniforme hoofd- of kleine letters, Titels geven, Hoofdletters"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:78
 #, kde-format
@@ -46566,13 +46568,13 @@ msgstr "Hoofdletter voor titels"
 #, kde-format
 msgctxt "@label"
 msgid "Glyphs: East-Asian"
-msgstr ""
+msgstr "Glyphs: Oost-Aziatisch"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:16
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable glyph forms related to East Asian text layout."
-msgstr ""
+msgstr "Glyphvormen inschakelen gerelateerd aan Oost-Aziatische tekstindeling."
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:18
 #, kde-format
@@ -46583,6 +46585,8 @@ msgid ""
 "font-variant-east-asian, jis78, jis83, jis90, jis04, ruby, proportional, "
 "full-width"
 msgstr ""
+"lettertype-variant-oost-aziatisch, jis78, jis83, jis90, jis04, ruby, "
+"proportioneel, volledige-breedte"
 
 #: plugins/dockers/textproperties/qml/OTEastAsian.qml:96
 #, kde-format
@@ -46661,7 +46665,7 @@ msgstr "Glyphs: ligaturen"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
-msgstr ""
+msgstr "Ligaturen in of uitschakelen en contextuele alternatieven op de tekst."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -46672,6 +46676,8 @@ msgid ""
 "font-variant-ligatures, common-ligatures, discretionary-ligatures, "
 "historical-ligatures, contextual-alts"
 msgstr ""
+"font-variant-ligaturen, gemeenschappelijk-ligaturen, discretionaire-"
+"ligaturen, historische-ligaturen, contextuele-alternatieven"
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:101
 #, kde-format
@@ -46707,7 +46713,7 @@ msgstr "Glyphs: numeriek"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable number-related glyph forms on the text."
-msgstr ""
+msgstr "Getal-ferelateerde glyphvormen op de tekst inschakelen."
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:18
 #, kde-format
@@ -46718,6 +46724,8 @@ msgid ""
 "font-variant-numeric, oldstyle numerals, lining numerals, ordinals, slashed "
 "zero, fractions"
 msgstr ""
+"lettertype-variant-numeriek, ouderwetse getallen, getallen uitlijnen, "
+"rangtelwoorden, nul-met-schuine-streep, breuken"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:111
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:245
@@ -68277,51 +68285,45 @@ msgstr "Transformeer een laag of selectie"
 
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Acties voor transformatiehulpmiddel"
+msgstr "Transformatiehulpmiddel (vrije transformatie)"
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
-#, fuzzy, kde-format
-#| msgid "Perspective Transform"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Perspectieftransformatie"
+msgstr "Transformatiehulpmiddel (perspectief transformatie)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Acties voor transformatiehulpmiddel"
+msgstr "Transformatiehulpmiddel (warp-transformatie)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Acties voor transformatiehulpmiddel"
+msgstr "Transformatiehulpmiddel (kooi-transformatie)"
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
-#, fuzzy, kde-format
-#| msgid "Liquify Transform"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Transformeren met Liquify"
+msgstr "Transformatiehulpmiddel (vloeiende transformatie)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr "Acties voor transformatiehulpmiddel"
+msgstr "Transformatiehulpmiddel (maas-transformatie)"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 02:10+0000\n"
-"PO-Revision-Date: 2025-11-04 05:44+0300\n"
+"PO-Revision-Date: 2025-11-05 05:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -67951,43 +67951,38 @@ msgstr "Bir katmanı veya seçimi dönüştür"
 
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Dönüşüm Aracı Eylemleri"
+msgstr "Dönüşüm Aracı (Serbest Dönüşüm)"
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Dönüşüm Aracı Eylemleri"
+msgstr "Dönüşüm Aracı (Perspektif Dönüşümü)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Dönüşüm Aracı Eylemleri"
+msgstr "Dönüşüm Aracı (Çarpıtma Dönüşümü)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Dönüşüm Aracı Eylemleri"
+msgstr "Dönüşüm Aracı (Kafes Dönüşümü)"
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Dönüşüm Aracı Eylemleri"
+msgstr "Dönüşüm Aracı (Sıvılaştırma Dönüşümü)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67

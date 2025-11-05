@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 02:10+0000\n"
-"PO-Revision-Date: 2025-11-03 09:55+0100\n"
+"PO-Revision-Date: 2025-11-04 13:27+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -33818,9 +33818,7 @@ msgid "Toggle Eraser"
 msgstr "Afficher / Masquer la gomme"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Afficher / Masquer les préréglages de gomme"
 

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 02:10+0000\n"
-"PO-Revision-Date: 2025-11-04 11:53+0100\n"
+"PO-Revision-Date: 2025-11-05 10:21+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -68351,51 +68351,45 @@ msgstr "Transforma una capa o una selecció"
 
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Accions de l'eina de transformació"
+msgstr "Eina de transformació (Transformació lliure)"
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Accions de l'eina de transformació"
+msgstr "Eina de transformació (Transformació de perspectiva)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Accions de l'eina de transformació"
+msgstr "Eina de transformació (Transformació de deformació)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Accions de l'eina de transformació"
+msgstr "Eina de transformació (Transformació de gàbia)"
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Accions de l'eina de transformació"
+msgstr "Eina de transformació (Transformació liqüescent)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr "Accions de l'eina de transformació"
+msgstr "Eina de transformació (Transformació lliure)"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63

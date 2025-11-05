@@ -396,6 +396,11 @@ public:
      */
     QList<KoSvgTextCharacterInfo> getPositionsAndRotationsForRange(const int startPos, const int endPos) const;
 
+    /**
+     * Remove local transforms from the given range.
+     */
+    void removeTransformsFromRange(const int startPos, const int endPos);
+
 /*****************************************************************************
  * KoSvgTextNodeIndex functions.
  *

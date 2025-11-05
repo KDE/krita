@@ -267,5 +267,15 @@
       <isCheckable>false</isCheckable>
       </Action>
 
+      <Action name="svg_remove_transforms_from_range">
+        <iconText>Remove Character Transforms</iconText>
+        <text>Remove Character Transforms</text>
+        <shortcut></shortcut>
+        <toolTip>Remove Character Transforms from the selection.</toolTip>
+        <icon></icon>
+        <whatsThis/>
+        <statusTip/>
+        <isCheckable>false</isCheckable>
+      </Action>
     </Actions>
 </ActionCollection>

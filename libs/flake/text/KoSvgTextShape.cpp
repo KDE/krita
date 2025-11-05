@@ -1321,6 +1321,22 @@ QList<KoSvgTextCharacterInfo> KoSvgTextShape::getPositionsAndRotationsForRange(c
     return infos;
 }
 
+void KoSvgTextShape::removeTransformsFromRange(const int startPos, const int endPos)
+{
+    if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
+        return;
+    }
+    const int finalPos = d->cursorPos.size()-1;
+    const int startIndex = d->cursorPos.at(qBound(0, qMin(startPos, endPos), finalPos)).index;
+    const int endIndex = d->cursorPos.at(qBound(0, qMax(startPos, endPos), finalPos)).index;
+
+    d->removeTransforms(d->textData, startIndex, endIndex-startIndex);
+
+    KoSvgTextShape::Private::cleanUp(d->textData);
+    notifyChanged();
+    shapeChangedPriv(ContentChanged);
+}
+
 KisForest<KoSvgTextContentElement>::child_iterator findNodeIndexForPropertyIdImpl(KisForest<KoSvgTextContentElement>::child_iterator parent, KoSvgTextProperties::PropertyId propertyId) {
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
         if (child->properties.hasProperty(propertyId)) {

@@ -51,6 +51,7 @@ QList<QAction *> SvgTextToolFactory::createActionsImpl()
     actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_up_1_px", this);
     actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_left_1_px", this);
     actions << KisActionRegistry::instance()->makeQAction("svg_type_setting_move_selection_start_right_1_px", this);
+    actions << KisActionRegistry::instance()->makeQAction("svg_remove_transforms_from_range", this);
     return actions;
 }
 

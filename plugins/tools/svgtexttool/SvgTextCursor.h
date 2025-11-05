@@ -291,6 +291,8 @@ private Q_SLOTS:
      */
     bool pastePlainText();
 
+    void removeTransformsFromRange();
+
 private:
 
     /**

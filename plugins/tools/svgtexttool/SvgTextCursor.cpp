@@ -10,6 +10,7 @@
 #include "SvgTextInsertRichCommand.h"
 #include "SvgTextMergePropertiesRangeCommand.h"
 #include "SvgTextRemoveCommand.h"
+#include "SvgTextRemoveTransformsFromRange.h"
 #include "SvgTextShapeManagerBlocker.h"
 #include "SvgTextShortCuts.h"
 
@@ -711,6 +712,14 @@ bool SvgTextCursor::pastePlainText()
     return success;
 }
 
+void SvgTextCursor::removeTransformsFromRange()
+{
+    if (d->shape) {
+        KUndo2Command *cmd = new SvgTextRemoveTransformsFromRange(d->shape, d->pos, d->anchor);
+        addCommandToUndoAdapter(cmd);
+    }
+}
+
 void SvgTextCursor::deselectText()
 {
     setPos(d->pos, d->pos);
@@ -1283,6 +1292,7 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
 void SvgTextCursor::notifyMarkupChanged()
 {
     d->interface->emitSelectionChange();
+    updateTypeSettingDecoration();
 }
 
 void SvgTextCursor::keyPressEvent(QKeyEvent *event)
@@ -1563,6 +1573,10 @@ bool SvgTextCursor::registerPropertyAction(QAction *action, const QString &name)
     } else if (name == "svg_paste_plain_text") {
         d->actions.append(action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(pastePlainText()));
+        return true;
+    } else if (name == "svg_remove_transforms_from_range") {
+        d->actions.append(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(removeTransformsFromRange()));
         return true;
     } else if (action) {
         d->actions.append(action);

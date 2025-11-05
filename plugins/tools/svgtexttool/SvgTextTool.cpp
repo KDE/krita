@@ -115,7 +115,8 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     const QStringList extraActions = {
         "svg_insert_special_character",
         "svg_paste_rich_text",
-        "svg_paste_plain_text"
+        "svg_paste_plain_text",
+        "svg_remove_transforms_from_range"
     };
     connect(&m_textCursor, SIGNAL(sigOpenGlyphPalette()), this, SLOT(showGlyphPalette()));
     Q_FOREACH (const QString name, extraActions) {

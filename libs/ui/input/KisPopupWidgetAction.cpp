@@ -59,7 +59,7 @@ void KisPopupWidgetAction::end(QEvent *event)
         if (requestingEventType == QEvent::TouchBegin) {
             const QTouchEvent *touchEvent = static_cast<const QTouchEvent *>(event);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-            const QList<QEventPoint> &touchPoints = event->points();
+            const QList<QEventPoint> &touchPoints = touchEvent->points();
 #else
             const QList<QTouchEvent::TouchPoint> &touchPoints = touchEvent->touchPoints();
 #endif

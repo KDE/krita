@@ -8,6 +8,7 @@
 #include <SvgTextCursor.h>
 #include <SvgTextInsertCommand.h>
 #include <SvgTextRemoveCommand.h>
+#include <SvgTextChangeTransformsOnRange.h>
 
 #include <KoSvgTextShape.h>
 #include <KoSvgTextShapeMarkupConverter.h>
@@ -311,6 +312,135 @@ void SvgTextCursorTest::test_text_remove_dedicated()
 
     QCOMPARE(posEnd - posStart, length);
 
+}
+
+void SvgTextCursorTest::test_set_transforms_on_text_command_data()
+{
+    QTest::addColumn<QString>("svg");
+    QTest::addColumn<int>("pos");
+    QTest::addColumn<int>("length");
+    QTest::addColumn<int>("type");
+    QTest::addColumn<bool>("delta");
+
+    QMap<int, QString> mapType = {
+        {int(SvgTextChangeTransformsOnRange::OffsetAll), "-offset-all"},
+        {int(SvgTextChangeTransformsOnRange::ScaleAndRotate), "-scale-and-rotate"},
+        {int(SvgTextChangeTransformsOnRange::ScaleOnly), "-scale-only"},
+        {int(SvgTextChangeTransformsOnRange::RotateOnly), "-rotate-only"}
+    };
+    QMap<int, QString> mapDelta = {
+        {true, "-delta-pos"},
+        {false, "-absolute-pos"},
+    };
+
+    Q_FOREACH(int type, mapType.keys()) {
+        Q_FOREACH(int delta, mapDelta.keys()) {
+            QTest::addRow("ltr%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data()) << "<text style=\"font-size:10.0;font-family:Deja Vu Sans\">Digital Painting, Creative Freedom</text>" << 3 << 3 << type << bool(delta);
+            QTest::addRow("ttb%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data())  << "<text style=\"font-size:10.0;writing-mode: vertical-rl;font-family:Deja Vu Sans\">KRITA</text>" << 1 << 3 << type << bool(delta);
+            QTest::addRow("ltr-absolute-pos%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data()) << "<text style=\"font-size:10.0;font-family:Deja Vu Sans\">Digital Painting, <tspan x=\"0\" y=\"0\">Creative</tspan> Freedom</text>" << 15 << 4 << type << bool(delta);
+            QTest::addRow("ltr-mixed-pos%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data()) << "<text style=\"font-size:10.0;font-family:Deja Vu Sans\">Digital Painting, <tspan x=\"0\" dy=\"10\">Creative</tspan> Freedom</text>" << 15 << 4 << type << bool(delta);
+
+            // These tests are very sensitive to the location of the anchor, so the following tests have been massaged a little so the text isn't moved in such a manner that the anchor location changes.
+
+            QTest::addRow("ltr-relative-pos%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data()) << "<text style=\"font-size:10.0;text-anchor:start;font-family:Deja Vu Sans\">Digital Painting, <tspan dx=\"-50\" dy=\"10\">Creative</tspan> Freedom</text>" << 15 << 4 << type << bool(delta);
+            QTest::addRow("rtl%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data())  << "<text style=\"font-size:10.0;direction: rtl;text-anchor:end;font-family:Deja Vu Sans\">رسم رقميّ، حريّة إبداعيّة</text>" << 2 << 5 << type << bool(delta);
+            QTest::addRow("rtl-unicode-bidi%s%s",
+                          mapType.value(type).toLatin1().data(),
+                          mapDelta.value(delta).toLatin1().data())  << "<text style=\"font-size:10.0;direction: rtl;text-anchor:end;font-family:Deja Vu Sans\"><tspan>رسم رقميّ،</tspan><tspan direction=\"ltr\" unicode-bidi=\"isolate\">- Krita - </tspan><tspan> حريّة إبداعيّة</tspan></text></text>" << 14 << 7 << type << bool(delta);
+        }
+    }
+}
+
+void SvgTextCursorTest::test_set_transforms_on_text_command()
+{
+    QFETCH(QString, svg);
+    QFETCH(int, pos);
+    QFETCH(int, length);
+    QFETCH(int, type);
+    QFETCH(bool, delta);
+    const QPointF offset(50, 20);
+    const SvgTextChangeTransformsOnRange::OffsetType offsetType = SvgTextChangeTransformsOnRange::OffsetType(type);
+
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(svg, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    // Normalize the pos and anchor, so we're sure the index corresponds to the given pos.
+    const int indexPos = textShape->indexForPos(pos);
+    const int indexAnchor = textShape->indexForPos(pos+length);
+    const int posNormalized = textShape->posForIndex(indexPos);
+    const int anchor = textShape->posForIndex(indexAnchor);
+
+    QString currentString = textShape->plainText().mid(indexPos, indexAnchor - indexPos);
+
+    QList<KoSvgTextCharacterInfo> infos = textShape->getPositionsAndRotationsForRange(posNormalized, anchor);
+    QTransform deltaTf = SvgTextChangeTransformsOnRange::getTransformForOffset(textShape, posNormalized, anchor, offset, offsetType);
+
+    QVector<QPointF> positions;
+    QVector<qreal> rotations;
+    if (offsetType == SvgTextChangeTransformsOnRange::OffsetAll) {
+        while (!infos.isEmpty()) {
+            KoSvgTextCharacterInfo tf = infos.takeFirst();
+            positions.append(deltaTf.map(tf.finalPos));
+            rotations.append(tf.rotateDeg);
+        }
+    } else {
+        QLineF l(0, 0, 10, 0);
+        l.setAngle(0);
+        l = deltaTf.map(l);
+        while (!infos.isEmpty()) {
+            KoSvgTextCharacterInfo tf = infos.takeFirst();
+            if (offsetType != SvgTextChangeTransformsOnRange::RotateOnly) {
+                positions.append(deltaTf.map(tf.finalPos));
+            } else {
+                positions.append(tf.finalPos);
+            }
+            if (offsetType != SvgTextChangeTransformsOnRange::ScaleOnly) {
+                rotations.append(tf.rotateDeg - (l.angle()));
+            } else {
+                rotations.append(tf.rotateDeg);
+            }
+        }
+    }
+
+    KUndo2Command *cmd = new SvgTextChangeTransformsOnRange(textShape, posNormalized, anchor, offset, offsetType, delta);
+
+    cmd->redo();
+
+    int newPos = textShape->posForIndex(indexPos);
+    int newAnchor = textShape->posForIndex(indexAnchor);
+    QList<KoSvgTextCharacterInfo> newInfos = textShape->getPositionsAndRotationsForRange(newPos, newAnchor);
+
+    for (int i = 0; i < positions.size(); i++) {
+        KoSvgTextCharacterInfo info = newInfos.value(i);
+        if (i > 0 && !delta && info.rtl) {
+            /// Absolute positioning is supossed to affect the shaping, which in turn affects advance and positioning
+            /// This means we cannot be expected to test rtl beyond the first offset.
+            break;
+        }
+        const QPointF position = positions.value(i);
+        const qreal rotate = rotations.value(i);
+
+        if (offsetType != SvgTextChangeTransformsOnRange::RotateOnly) {
+            QCOMPARE(position, info.finalPos);
+        }
+        if (offsetType != SvgTextChangeTransformsOnRange::ScaleOnly) {
+            QCOMPARE(rotate, info.rotateDeg);
+        }
+    }
 }
 
 SIMPLE_TEST_MAIN(SvgTextCursorTest)

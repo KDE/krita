@@ -31,6 +31,9 @@ private Q_SLOTS:
 
     void test_text_remove_dedicated_data();
     void test_text_remove_dedicated();
+
+    void test_set_transforms_on_text_command_data();
+    void test_set_transforms_on_text_command();
 };
 
 #endif // SVGTEXTCURSORTEST_H

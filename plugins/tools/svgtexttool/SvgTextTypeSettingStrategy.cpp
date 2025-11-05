@@ -18,10 +18,12 @@
 #include <QDebug>
 #include <KoViewConverter.h>
 
-SvgTextTypeSettingStrategy::SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTextShape *textShape, SvgTextCursor *textCursor, const QRectF &regionOfInterest)
+SvgTextTypeSettingStrategy::SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTextShape *textShape, SvgTextCursor *textCursor, const QRectF &regionOfInterest, Qt::KeyboardModifiers modifiers)
     : KoInteractionStrategy(tool)
     , m_shape(textShape)
     , m_dragStart(regionOfInterest.center())
+    , m_deltaCalc(true)
+    , m_modifiers(modifiers)
     , m_textData(textShape->getMemento())
 {
     m_cursorPos = textCursor->getPos();
@@ -33,8 +35,9 @@ SvgTextTypeSettingStrategy::SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTe
 void SvgTextTypeSettingStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
     QPointF delta = mouseLocation - m_dragStart;
+    m_modifiers = modifiers;
 
-    if (modifiers & Qt::ShiftModifier) {
+    if (m_modifiers & Qt::ShiftModifier) {
         delta = snapToClosestAxis(delta);
         m_dragCurrent = m_dragStart + delta;
         m_currentDelta = delta;
@@ -43,6 +46,7 @@ void SvgTextTypeSettingStrategy::handleMouseMove(const QPointF &mouseLocation, Q
             tool()->canvas()->snapGuide()->snap(mouseLocation, modifiers);
         m_currentDelta = m_dragCurrent - m_dragStart;
     }
+
 
     if (m_editingType != int(SvgTextCursor::NoHandle)) {
         SvgTextShapeManagerBlocker blocker(tool()->canvas()->shapeManager());
@@ -73,7 +77,7 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
         if (m_shape->textType() != KoSvgTextShape::PreformattedText && m_shape->textType() != KoSvgTextShape::PrePositionedText) return nullptr;
         SvgTextChangeTransformsOnRange::OffsetType type = m_editingType == int(SvgTextCursor::StartPos)? SvgTextChangeTransformsOnRange::OffsetAll: SvgTextChangeTransformsOnRange::ScaleAndRotate;
 
-        cmd = new SvgTextChangeTransformsOnRange(m_shape, m_cursorPos, m_cursorAnchor, delta, type, true, nullptr);
+        cmd = new SvgTextChangeTransformsOnRange(m_shape, m_cursorPos, m_cursorAnchor, delta, type, m_deltaCalc, nullptr);
     } else {
         const QPointF dragStart = m_shape->documentToShape(m_dragStart);
         const QPointF dragCurrent = m_shape->documentToShape(m_dragCurrent);
@@ -141,6 +145,6 @@ void SvgTextTypeSettingStrategy::cancelInteraction()
 
 void SvgTextTypeSettingStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
-    Q_UNUSED(modifiers)
+    m_modifiers = modifiers;
     cancelInteraction();
 }

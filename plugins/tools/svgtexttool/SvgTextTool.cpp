@@ -741,7 +741,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             SvgTextCursor::TypeSettingModeHandle handle = m_textCursor.typeSettingHandleAtPos(handleGrabRect(event->point));
             if (handle != SvgTextCursor::NoHandle) {
                 if (!m_textCursor.setDominantBaselineFromHandle(handle)) {
-                    m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point)));
+                    m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point), event->modifiers()));
                     m_textCursor.setDrawTypeSettingHandle(false);
                 }
                 event->accept();

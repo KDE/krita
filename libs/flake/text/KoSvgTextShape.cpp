@@ -1128,6 +1128,12 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
     QPointF anchorAbsolute;
     QPointF anchorCssPos;
 
+    const KoSvgText::Direction dir = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    const KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(this->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+
+    const CharacterResult startRes = d->result.value(startIndex);
+    const QPointF startAdvance = startRes.cursorInfo.rtl? startRes.advance: QPointF();
+
     if (deltaPosition) {
         for (int i = 0; i< startIndex; i++) {
             KoSvgText::CharTransformation tf = resolvedTransforms.value(i);
@@ -1140,9 +1146,18 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                 anchorAbsolute.setY(*tf.yPos);
             }
             if (tf.startsNewChunk()) {
-                anchorCssPos = d->result.value(i).cssPosition;
+                const CharacterResult res = d->result.value(i);
+                anchorCssPos = res.cssPosition;
             }
             totalStartDelta += tf.relativeOffset();
+        }
+    } else {
+        bool rtl = (dir == KoSvgText::DirectionRightToLeft);
+        QPointF positionAtVisualEnd = (rtl? d->result.first(): d->result.last()).finalPosition;
+        if (anchor == KoSvgText::AnchorEnd) {
+            anchorAbsolute = positionAtVisualEnd;
+        } else if (anchor == KoSvgText::AnchorMiddle) {
+            anchorAbsolute = positionAtVisualEnd/2;
         }
     }
 
@@ -1167,11 +1182,25 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                     continue;
                 }
 
-                int transformIndex = (i - startIndex) - addressableOffset;
+                const int transformIndex = (i - startIndex) - addressableOffset;
                 KoSvgText::CharTransformation tf = resolvedTransforms.value(i, KoSvgText::CharTransformation());
+
+                // Function to get the delta position.
+                auto getDelta = [res, totalStartDelta, accumulatedOffset, anchorAbsolute, anchorCssPos, startAdvance] (QPointF pos) -> QPointF {
+                    QPointF delta = pos - (res.textPathAndAnchoringOffset + anchorAbsolute + res.textLengthOffset);
+                    delta -= (totalStartDelta + accumulatedOffset + (res.cssPosition-anchorCssPos) + startAdvance);
+                    return delta;
+                };
+                // Function to get absolute position.
+                auto getAbsolute = [res, tf, anchorAbsolute] (QPointF pos) -> QPointF {
+                    QPointF p = pos - (res.textPathAndAnchoringOffset - anchorAbsolute) - tf.relativeOffset();
+                    return p;
+                };
+
                 if (i < startIndex) {
                     if (!deltaPosition) {
-                        const QPointF p = res.finalPosition - res.textPathAndAnchoringOffset;
+                        // Because we don't split the text content element, we need to set the absolute pos for every preceding transform.
+                        const QPointF p = getAbsolute(res.finalPosition);
                         if (!tf.xPos) {
                             tf.xPos = p.x();
                         }
@@ -1182,16 +1211,16 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                     transforms << tf;
                     continue;
                 }
+
                 if (i >= endIndex) {
                     if (i == endIndex) {
                         // Counter transform to keep unselected characters at the same pos.
                         if (deltaPosition && !tf.startsNewChunk()) {
-                            QPointF delta = res.finalPosition - (res.textPathAndAnchoringOffset + anchorAbsolute + res.textLengthOffset);
-                            delta -= (totalStartDelta + accumulatedOffset + (res.cssPosition-anchorCssPos));
+                            QPointF delta = getDelta(res.finalPosition);
                             tf.dxPos = delta.x();
                             tf.dyPos = delta.y();
                         } else {
-                            const QPointF p = res.finalPosition - res.textPathAndAnchoringOffset;
+                            const QPointF p = getAbsolute(res.finalPosition) - anchorAbsolute;
                             tf.xPos = p.x();
                             tf.yPos = p.y();
                         }
@@ -1206,7 +1235,6 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                 if (positions.size()+startIndex > i) {
                     const QPointF pos = positions.value(transformIndex, QPointF());
 
-
                     if (deltaPosition) {
                         if (tf.startsNewChunk()) {
                             anchorAbsolute = tf.absolutePos();
@@ -1214,10 +1242,10 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                             anchorCssPos = res.cssPosition;
                         }
 
-                        QPointF delta = pos - (res.textPathAndAnchoringOffset + anchorAbsolute + res.textLengthOffset);
-                        delta -= (totalStartDelta + accumulatedOffset + (res.cssPosition-anchorCssPos));
+                        QPointF delta = getDelta(pos);
                         tf.dxPos = delta.x();
                         tf.dyPos = delta.y();
+
                         if (tf.startsNewChunk()) {
                             accumulatedOffset = QPointF();
                             totalStartDelta = tf.relativeOffset();
@@ -1225,10 +1253,12 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                             accumulatedOffset += tf.relativeOffset();
                         }
                     } else {
-                        const QPointF delta = pos - res.textPathAndAnchoringOffset;
+                        const QPointF delta = getAbsolute(pos);
                         tf.xPos = delta.x();
                         tf.yPos = delta.y();
+                        accumulatedOffset = pos - res.finalPosition;
                     }
+
                 }
 
                 transforms << tf;
@@ -1241,6 +1271,7 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
             break;
         }
     }
+    const CharacterResult res = d->result.last();
 
     if (changed) {
         KoSvgTextShape::Private::cleanUp(d->textData);

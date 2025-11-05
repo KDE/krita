@@ -23,7 +23,7 @@ class QPointF;
 class SvgTextTypeSettingStrategy: public KoInteractionStrategy
 {
 public:
-    SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTextShape *textShape, SvgTextCursor *textCursor, const QRectF &regionOfInterest);
+    SvgTextTypeSettingStrategy(KoToolBase *tool, KoSvgTextShape *textShape, SvgTextCursor *textCursor, const QRectF &regionOfInterest, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     // KoInteractionStrategy interface
 public:
@@ -43,6 +43,9 @@ private:
     int m_cursorAnchor;
     int m_editingType;
     int m_referenceCursorPos;
+
+    bool m_deltaCalc;
+    Qt::KeyboardModifiers m_modifiers;
 
     QScopedPointer<KUndo2Command> m_previousCmd;
     KoSvgTextShapeMementoSP m_textData;

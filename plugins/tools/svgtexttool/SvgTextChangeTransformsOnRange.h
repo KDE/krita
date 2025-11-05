@@ -8,9 +8,10 @@
 
 #include <kundo2command.h>
 #include <KoSvgTextShape.h>
+#include "kritatoolsvgtext_export.h"
 
 
-class SvgTextChangeTransformsOnRange : public KUndo2Command
+class KRITATOOLSVGTEXT_EXPORT SvgTextChangeTransformsOnRange : public KUndo2Command
 {
 public:
     SvgTextChangeTransformsOnRange(KoSvgTextShape *shape, int startPos, int endPos, QVector<QPointF> positions, QVector<qreal> rotations, bool calculateDeltaPositions, KUndo2Command *parentCommand = nullptr);
@@ -28,6 +29,12 @@ public:
     void redo() override;
     int id() const override;
     bool mergeWith(const KUndo2Command *other) override;
+
+    /**
+     * @brief getTransformForOffset
+     * Function to get the expected transform, so we can test this command better.
+     */
+    static QTransform getTransformForOffset(KoSvgTextShape *shape, int startPos, int endPos, QPointF delta, OffsetType type);
 private:
     KoSvgTextShape *m_textShape = nullptr;
     int m_startPos = -1;

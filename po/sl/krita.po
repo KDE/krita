@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita stable\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 03:57+0000\n"
-"PO-Revision-Date: 2025-10-25 22:27+0200\n"
+"POT-Creation-Date: 2025-11-05 03:45+0000\n"
+"PO-Revision-Date: 2025-11-04 11:11+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16384,36 +16384,36 @@ msgstr "Spremeni odsek"
 msgid "Edit Shape"
 msgstr "Uredi lik"
 
-#: libs/flake/tools/KoPathTool.cpp:619
+#: libs/flake/tools/KoPathTool.cpp:626
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Potegnite, da premaknete ročico."
 
-#: libs/flake/tools/KoPathTool.cpp:673
+#: libs/flake/tools/KoPathTool.cpp:680
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Potegnite, da premaknete točko. Dvigalka+klik, da spremenite vrsto točke."
 
-#: libs/flake/tools/KoPathTool.cpp:675
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Povlecite, da premaknete nadzorno točko."
 
-#: libs/flake/tools/KoPathTool.cpp:698
+#: libs/flake/tools/KoPathTool.cpp:705
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Povlecite, da neposredno spremenite krivuljo. Dvokliknite, da vstavite novo "
 "točko poti."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:715
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Pritisnite %1, da prelomite pot v izbrani točki."
 
-#: libs/flake/tools/KoPathTool.cpp:710
+#: libs/flake/tools/KoPathTool.cpp:717
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -28982,9 +28982,7 @@ msgid "Toggle Eraser"
 msgstr "Preklopi radirko"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Preklopi prednastavitev radirke"
 
@@ -60811,6 +60809,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Vključi/izključi celozaslonski pogled"

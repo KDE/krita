@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 03:57+0000\n"
+"POT-Creation-Date: 2025-11-05 03:45+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -16880,37 +16880,37 @@ msgstr "Кесіндіні өзгерту"
 msgid "Edit Shape"
 msgstr "Қалыпты қосу"
 
-#: libs/flake/tools/KoPathTool.cpp:619
+#: libs/flake/tools/KoPathTool.cpp:626
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Сүйреп жылжыту тұтқасы."
 
-#: libs/flake/tools/KoPathTool.cpp:673
+#: libs/flake/tools/KoPathTool.cpp:680
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Сүйреп жылжыту нүктесі. Нүктенің түрін өзгерту үшін Shift-пен түртіңіз."
 
-#: libs/flake/tools/KoPathTool.cpp:675
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Басқару нүктені жылжыту үшін сүйреңіз."
 
-#: libs/flake/tools/KoPathTool.cpp:698
+#: libs/flake/tools/KoPathTool.cpp:705
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Кисықты өзгерту үшін оны сүйреңіз. Сүрлеудің жаңа нүктесін қою үшін қос "
 "түртім жасаңыз."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:715
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Сүрлеуді таңдаған нүктеде үзу үшін B-ні басыңыз."
 
-#: libs/flake/tools/KoPathTool.cpp:710
+#: libs/flake/tools/KoPathTool.cpp:717
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"

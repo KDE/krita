@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 03:57+0000\n"
-"PO-Revision-Date: 2025-11-02 10:14-0300\n"
+"POT-Creation-Date: 2025-11-05 03:45+0000\n"
+"PO-Revision-Date: 2025-11-04 08:29-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -16390,36 +16390,36 @@ msgstr "Alterar segmento"
 msgid "Edit Shape"
 msgstr "Editar Forma"
 
-#: libs/flake/tools/KoPathTool.cpp:619
+#: libs/flake/tools/KoPathTool.cpp:626
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Arrastar para mover a pega."
 
-#: libs/flake/tools/KoPathTool.cpp:673
+#: libs/flake/tools/KoPathTool.cpp:680
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Arrastar para mover o ponto. Clique com o Shift para mudar o tipo de ponto."
 
-#: libs/flake/tools/KoPathTool.cpp:675
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Arrastar para mover o ponto de controle."
 
-#: libs/flake/tools/KoPathTool.cpp:698
+#: libs/flake/tools/KoPathTool.cpp:705
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Arraste para mudar diretamente a curva. Clique-duplo para inserir um novo "
 "ponto no caminho."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:715
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Pressione %1 para quebrar o caminho no ponto selecionado."
 
-#: libs/flake/tools/KoPathTool.cpp:710
+#: libs/flake/tools/KoPathTool.cpp:717
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -29019,9 +29019,7 @@ msgid "Toggle Eraser"
 msgstr "Alternar borracha"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Alternar predefinição de borracha"
 

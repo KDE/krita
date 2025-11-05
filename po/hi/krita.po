@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 03:57+0000\n"
+"POT-Creation-Date: 2025-11-05 03:45+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16489,34 +16489,34 @@ msgstr "खण्ड बदलें"
 msgid "Edit Shape"
 msgstr "आकार संपादित करें"
 
-#: libs/flake/tools/KoPathTool.cpp:619
+#: libs/flake/tools/KoPathTool.cpp:626
 #, kde-format
 msgid "Drag to move handle."
 msgstr "हैंडल को स्थानांतरित करने के लिए खींचें"
 
-#: libs/flake/tools/KoPathTool.cpp:673
+#: libs/flake/tools/KoPathTool.cpp:680
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "बिंदु को स्थानांतरित करने के लिए खींचें। बिंदु के प्रकार बदलने के लिए Shift क्लिक करें।"
 
-#: libs/flake/tools/KoPathTool.cpp:675
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to move control point."
 msgstr "नियंत्रण बिंदु को स्थानांतरित करने के लिए खींचें"
 
-#: libs/flake/tools/KoPathTool.cpp:698
+#: libs/flake/tools/KoPathTool.cpp:705
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr "वक्र को सीधे बदलने के लिए खींचें। नया पथ बिंदु सम्मिलित करने के लिए डबल क्लिक करें।"
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:715
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "चयनित बिंदु पर पथ तोड़ने के लिए B दबाएँ।"
 
-#: libs/flake/tools/KoPathTool.cpp:710
+#: libs/flake/tools/KoPathTool.cpp:717
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"

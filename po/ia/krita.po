@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 03:57+0000\n"
+"POT-Creation-Date: 2025-11-05 03:45+0000\n"
 "PO-Revision-Date: 2023-11-23 10:49+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -16749,36 +16749,36 @@ msgstr "Cambia segmento"
 msgid "Edit Shape"
 msgstr "Modifica Forma"
 
-#: libs/flake/tools/KoPathTool.cpp:619
+#: libs/flake/tools/KoPathTool.cpp:626
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trahe pro mover manico."
 
-#: libs/flake/tools/KoPathTool.cpp:673
+#: libs/flake/tools/KoPathTool.cpp:680
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Trahe pro mover puncto. Pulsa Shift pro modificar typo de puncto."
 
-#: libs/flake/tools/KoPathTool.cpp:675
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trahe pro mover puncto de controlo."
 
-#: libs/flake/tools/KoPathTool.cpp:698
+#: libs/flake/tools/KoPathTool.cpp:705
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Trahe pro modificar directemente le curva. Duple pulsa pro insertar un nove "
 "ouncto de percurso."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:715
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Pressa B pro interrumper le percurso al puncto seligite."
 
-#: libs/flake/tools/KoPathTool.cpp:710
+#: libs/flake/tools/KoPathTool.cpp:717
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"

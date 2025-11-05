@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 02:14+0000\n"
+"POT-Creation-Date: 2025-11-05 02:10+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20857,37 +20857,37 @@ msgstr "प्रतिशत"
 msgid "Edit Shape"
 msgstr "आकार जोडा"
 
-#: libs/flake/tools/KoPathTool.cpp:613
+#: libs/flake/tools/KoPathTool.cpp:620
 #, fuzzy, kde-format
 #| msgid "Drag to move color stop."
 msgid "Drag to move handle."
 msgstr "रंग थांबणे हलविण्यासाठी ओढा."
 
-#: libs/flake/tools/KoPathTool.cpp:667
+#: libs/flake/tools/KoPathTool.cpp:674
 #, fuzzy, kde-format
 #| msgid "Drag to move gradient position. Double click to insert color stop."
 msgid "Drag to move point. Shift click to change point type."
 msgstr "उररणीचे स्थान हलविण्यासाठी ओढा. रंग थांबणे समाविष्ट करण्यासाठी दोनदा क्लिक करा."
 
-#: libs/flake/tools/KoPathTool.cpp:669
+#: libs/flake/tools/KoPathTool.cpp:676
 #, fuzzy, kde-format
 #| msgid "Drag to move color stop."
 msgid "Drag to move control point."
 msgstr "रंग थांबणे हलविण्यासाठी ओढा."
 
-#: libs/flake/tools/KoPathTool.cpp:692
+#: libs/flake/tools/KoPathTool.cpp:699
 #, fuzzy, kde-format
 #| msgid "Drag to move gradient position. Double click to insert color stop."
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr "उररणीचे स्थान हलविण्यासाठी ओढा. रंग थांबणे समाविष्ट करण्यासाठी दोनदा क्लिक करा."
 
-#: libs/flake/tools/KoPathTool.cpp:702
+#: libs/flake/tools/KoPathTool.cpp:709
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:704
+#: libs/flake/tools/KoPathTool.cpp:711
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -25962,7 +25962,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
 #, kde-format
 msgid "Reset"
 msgstr "पुन्हस्थापित करा"
@@ -35045,14 +35045,14 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "कॅनव्हासचा आकार"
 
-#: libs/ui/kis_popup_palette.cpp:905
+#: libs/ui/kis_popup_palette.cpp:909
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "पृष्ठभूमीचे व पार्श्वभूमीचे रंग पुन्हस्थापित करा"
 
-#: libs/ui/kis_popup_palette.cpp:1043
+#: libs/ui/kis_popup_palette.cpp:1047
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -40897,7 +40897,7 @@ msgstr "फॉन्ट आकार"
 msgid "x%1"
 msgstr "x%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -40907,19 +40907,19 @@ msgid ""
 "Subrange: [%3, %4]"
 msgstr ""
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, fuzzy, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "सर्व निवडा"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, fuzzy, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "अल्फा पर्याय"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, fuzzy, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
@@ -67904,7 +67904,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "वळण एंटिएलायसिंग कार्यान्वित करा"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:291
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -68919,99 +68919,99 @@ msgid ""
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:121
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
 #, fuzzy, kde-format
 #| msgid "Warp"
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr "वार्प"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
 msgstr "कुंचल्याचा आकार"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, fuzzy, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr "M_पिंजरा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, fuzzy, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "निवडा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr "आकलन"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:129
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
 #, fuzzy, kde-format
 msgid "Mirror Horizontal"
 msgstr "स्तर आडवेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
 #, fuzzy, kde-format
 msgid "Mirror Vertical"
 msgstr "स्तर उभेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, fuzzy, kde-format
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
 msgid "Rotate 90 degrees Clockwise"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, fuzzy, kde-format
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
 msgid "Rotate 90 degrees CounterClockwise"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Keep Aspect Ratio"
 msgid "Keep Aspect Ratio"
 msgstr "स्वरूपाचे गुणोत्तर ठेवा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Apply"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:425
 #, fuzzy, kde-format
 msgid "Transform Tool Actions"
 msgstr "रूपांतरित करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:936
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "पुढचा स्तर सक्रिय करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:943
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "पुढचा स्तर सक्रिय करा"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -69019,20 +69019,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:977
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1062
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1101
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "नोड बदला"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -69040,7 +69040,7 @@ msgid ""
 "them to be transformed "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:367
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "स्तर किंवा निवड रूपांतरित करा"
@@ -69183,6 +69183,51 @@ msgstr "रूपांतरित करा"
 msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "स्तर किंवा निवड रूपांतरित करा"
+
+#. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:17
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Free Transform)"
+msgstr "रूपांतरित करा"
+
+#. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:27
+#, fuzzy, kde-format
+#| msgid "Free Transform"
+msgctxt "action"
+msgid "Transform Tool (Perspective Transform)"
+msgstr "खुले रूपांतर"
+
+#. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:37
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Warp Transform)"
+msgstr "रूपांतरित करा"
+
+#. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:47
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Cage Transform)"
+msgstr "रूपांतरित करा"
+
+#. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:57
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Transform"
+msgctxt "action"
+msgid "Transform Tool (Liquify Transform)"
+msgstr "रूपांतरित करा"
+
+#. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:67
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Mesh Transform)"
+msgstr "रूपांतरित करा"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -99024,19 +99069,8 @@ msgstr ""
 
 #, fuzzy
 #~| msgid "Free Transform"
-#~ msgid "Perspective Transform"
-#~ msgstr "खुले रूपांतर"
-
-#, fuzzy
-#~| msgid "Free Transform"
 #~ msgid "Cage Transform"
 #~ msgstr "खुले रूपांतर"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Transform"
-#~ msgid "Liquify Transform"
-#~ msgstr "रूपांतरित करा"
 
 #~ msgid ""
 #~ "Image\n"

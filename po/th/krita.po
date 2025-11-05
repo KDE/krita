@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 02:14+0000\n"
+"POT-Creation-Date: 2025-11-05 02:10+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -20336,33 +20336,33 @@ msgstr "เปลี่ยนทิศทางจัดวาง"
 msgid "Edit Shape"
 msgstr "เพิ่มช่องว่าง"
 
-#: libs/flake/tools/KoPathTool.cpp:613
+#: libs/flake/tools/KoPathTool.cpp:620
 #, fuzzy, kde-format
 msgid "Drag to move handle."
 msgstr "การเลือก"
 
-#: libs/flake/tools/KoPathTool.cpp:667
+#: libs/flake/tools/KoPathTool.cpp:674
 #, fuzzy, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "การเลือก"
 
-#: libs/flake/tools/KoPathTool.cpp:669
+#: libs/flake/tools/KoPathTool.cpp:676
 #, fuzzy, kde-format
 msgid "Drag to move control point."
 msgstr "การเลือก"
 
-#: libs/flake/tools/KoPathTool.cpp:692
+#: libs/flake/tools/KoPathTool.cpp:699
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:702
+#: libs/flake/tools/KoPathTool.cpp:709
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:704
+#: libs/flake/tools/KoPathTool.cpp:711
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -25242,7 +25242,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
 #, fuzzy, kde-format
 msgid "Reset"
 msgstr "เลือกใหม่"
@@ -33982,14 +33982,14 @@ msgstr "  100%"
 msgid "Fit Canvas to View"
 msgstr "พื้นที่วาดภาพ"
 
-#: libs/ui/kis_popup_palette.cpp:905
+#: libs/ui/kis_popup_palette.cpp:909
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "ตั้งสีพื้นหน้าและสีพื้นหลังใหม่"
 
-#: libs/ui/kis_popup_palette.cpp:1043
+#: libs/ui/kis_popup_palette.cpp:1047
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -39691,7 +39691,7 @@ msgstr "เครื่องมือทาสี"
 msgid "x%1"
 msgstr "%1%"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -39701,19 +39701,19 @@ msgid ""
 "Subrange: [%3, %4]"
 msgstr ""
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, fuzzy, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "การเลือก"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, fuzzy, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "ตัวเลือกการไล่ระดับสี"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, fuzzy, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
@@ -65480,7 +65480,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "เครื่องมือทาสี"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:291
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66451,91 +66451,91 @@ msgid ""
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:121
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
 #, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, fuzzy, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
 msgstr "แปรงทาสี"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, fuzzy, kde-format
 #| msgid "Edit Palette"
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr "แก้ไขจานสี"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, fuzzy, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "การเลือก"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
 #, fuzzy, kde-format
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr "เครื่องมือ&ย้ายภาพ"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:129
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
 #, fuzzy, kde-format
 msgid "Mirror Horizontal"
 msgstr "สะท้อนแนวนอน"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
 #, fuzzy, kde-format
 msgid "Mirror Vertical"
 msgstr "สะท้อนแนวตั้ง"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, fuzzy, kde-format
 msgid "Rotate 90 degrees Clockwise"
 msgstr "&ลบเลเยอร์"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, fuzzy, kde-format
 msgid "Rotate 90 degrees CounterClockwise"
 msgstr "&ลบเลเยอร์"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, fuzzy, kde-format
 msgid "Keep Aspect Ratio"
 msgstr "รักษาสัดส่วนพ"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, fuzzy, kde-format
 msgid "Apply"
 msgstr "เพิ่มมาสก์"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:425
 #, fuzzy, kde-format
 msgid "Transform Tool Actions"
 msgstr "เครื่องมือ&ย้ายภาพ"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:936
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "ลบเลเยอร์แล้ว"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:943
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "ลบเลเยอร์แล้ว"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -66543,20 +66543,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:977
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1062
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1101
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "เครื่องมือ&ยางลบ"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -66564,7 +66564,7 @@ msgid ""
 "them to be transformed "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:367
 #, fuzzy, kde-format
 msgid "Transform a layer or a selection"
 msgstr "เปลี่ยนชื่อรูปภาพ..."
@@ -66707,6 +66707,48 @@ msgstr "เครื่องมือ&ย้ายภาพ"
 msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "เปลี่ยนชื่อรูปภาพ..."
+
+#. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:17
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Free Transform)"
+msgstr "เครื่องมือ&ย้ายภาพ"
+
+#. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:27
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Perspective Transform)"
+msgstr "เครื่องมือ&ย้ายภาพ"
+
+#. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:37
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Warp Transform)"
+msgstr "เครื่องมือ&ย้ายภาพ"
+
+#. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:47
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Cage Transform)"
+msgstr "เครื่องมือ&ย้ายภาพ"
+
+#. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:57
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Liquify Transform)"
+msgstr "เครื่องมือ&ย้ายภาพ"
+
+#. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:67
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Transform Tool (Mesh Transform)"
+msgstr "เครื่องมือ&ย้ายภาพ"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -92270,15 +92312,7 @@ msgstr ""
 #~ msgstr "&สูง:"
 
 #, fuzzy
-#~ msgid "Perspective Transform"
-#~ msgstr "เครื่องมือ&ย้ายภาพ"
-
-#, fuzzy
 #~ msgid "Cage Transform"
-#~ msgstr "เครื่องมือ&ย้ายภาพ"
-
-#, fuzzy
-#~ msgid "Liquify Transform"
 #~ msgstr "เครื่องมือ&ย้ายภาพ"
 
 #, fuzzy

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-04 02:14+0000\n"
+"POT-Creation-Date: 2025-11-05 02:10+0000\n"
 "PO-Revision-Date: 2025-10-25 20:31+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -20490,37 +20490,37 @@ msgstr "Cambia segmento"
 msgid "Edit Shape"
 msgstr "Modifica la forma"
 
-#: libs/flake/tools/KoPathTool.cpp:613
+#: libs/flake/tools/KoPathTool.cpp:620
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trascina per spostare la maniglia."
 
-#: libs/flake/tools/KoPathTool.cpp:667
+#: libs/flake/tools/KoPathTool.cpp:674
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Trascina per spostare il punto. Fai clic con il tasto sinistro, tenendo "
 "premuto MAIUSC, per cambiare il tipo di punto."
 
-#: libs/flake/tools/KoPathTool.cpp:669
+#: libs/flake/tools/KoPathTool.cpp:676
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trascina per spostare il punto di controllo."
 
-#: libs/flake/tools/KoPathTool.cpp:692
+#: libs/flake/tools/KoPathTool.cpp:699
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Trascina per modificare direttamente la curva. Doppio clic per inserire un "
 "nuovo punto del tracciato."
 
-#: libs/flake/tools/KoPathTool.cpp:702
+#: libs/flake/tools/KoPathTool.cpp:709
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Premi %1 per spezzare il tracciato nel punto selezionato."
 
-#: libs/flake/tools/KoPathTool.cpp:704
+#: libs/flake/tools/KoPathTool.cpp:711
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -25393,7 +25393,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:346
 #: plugins/tools/basictools/wdgmultihandtool.ui:192
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:140
 #, kde-format
 msgid "Reset"
 msgstr "Azzera"
@@ -34511,7 +34511,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "Adatta tela alla vista"
 
-#: libs/ui/kis_popup_palette.cpp:905
+#: libs/ui/kis_popup_palette.cpp:909
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -34520,7 +34520,7 @@ msgstr ""
 "Fai clic per alternare i colori di primo piano e di sfondo.\n"
 "Fai clic col destro per impostare il bianco e nero."
 
-#: libs/ui/kis_popup_palette.cpp:1043
+#: libs/ui/kis_popup_palette.cpp:1047
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -40616,7 +40616,7 @@ msgstr "Stile del carattere"
 msgid "x%1"
 msgstr "×%1"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:372
+#: libs/widgetutils/kis_slider_spin_box_p.h:373
 #, kde-format
 msgctxt ""
 "@info:tooltip toggle between soft and hard range in the slider spin box"
@@ -40629,19 +40629,19 @@ msgstr ""
 "Intervallo intero: [%1, %2]\n"
 "Subintervallo: [%3, %4]"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:542
+#: libs/widgetutils/kis_slider_spin_box_p.h:543
 #, kde-format
 msgctxt "Menu action to select all text in the slider spin box"
 msgid "&Select All"
 msgstr "&Seleziona tutto"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:552
+#: libs/widgetutils/kis_slider_spin_box_p.h:553
 #, kde-format
 msgctxt "Menu action to step up in the slider spin box"
 msgid "&Step up"
 msgstr "&Sali"
 
-#: libs/widgetutils/kis_slider_spin_box_p.h:554
+#: libs/widgetutils/kis_slider_spin_box_p.h:555
 #, kde-format
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
@@ -67154,7 +67154,7 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "Pastello trama fine"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:291
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -68180,84 +68180,84 @@ msgstr ""
 "col supporto della GNU Scientific Library, o usa l'oggetto delle opzioni per "
 "modificare manualmente i valori di scala."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:121
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
 #, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr "Piega"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:122
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr "Liquefà"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:123
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
 msgstr "Reticolo"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:124
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr "Gabbia"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:125
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "Libera"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:126
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:127
 #, kde-format
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr "Prospettiva"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:129
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
 #, kde-format
 msgid "Mirror Horizontal"
 msgstr "Rispecchia orizzontalmente"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:130
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
 #, kde-format
 msgid "Mirror Vertical"
 msgstr "Rispecchia verticalmente"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:131
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, kde-format
 msgid "Rotate 90 degrees Clockwise"
 msgstr "Ruota di 90° in senso orario"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:132
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, kde-format
 msgid "Rotate 90 degrees CounterClockwise"
 msgstr "Ruota di 90° in senso antiorario"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:134
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, kde-format
 msgid "Keep Aspect Ratio"
 msgstr "Mantieni le proporzioni"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:138
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:139
 #, kde-format
 msgid "Apply"
 msgstr "Applica"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:424
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:425
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Azioni strumento Trasforma"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:922
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:936
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Il tipo di livello non può utilizzare lo strumento Trasforma"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:929
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:943
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -68265,7 +68265,7 @@ msgstr ""
 "Il tipo di livello non può utilizzare lo strumento Trasforma. Usa invece la "
 "maschera di trasformazione."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -68275,7 +68275,7 @@ msgstr ""
 "Il livello ha figli con maschere di trasformazione. Disabilitali prima di "
 "eseguire la trasformazione."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:963
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:977
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -68283,14 +68283,14 @@ msgstr ""
 "Le selezioni non vengono utilizzate durante la modifica delle maschere di "
 "trasformazione "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1048
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1087
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1062
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1101
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossibile trasformare un livello vuoto "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1074
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1088
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -68300,7 +68300,7 @@ msgstr ""
 "Saranno trasformati anche i sottolivelli invisibili. Blocca i livelli se non "
 "vuoi che vengano trasformati"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:367
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Trasforma un livello o una selezione"
@@ -68450,6 +68450,55 @@ msgstr "Strumento Trasforma"
 msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Trasforma un livello o una selezione"
+
+#. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:17
+#, fuzzy, kde-format
+#| msgid "Transform Tool Actions"
+msgctxt "action"
+msgid "Transform Tool (Free Transform)"
+msgstr "Azioni strumento Trasforma"
+
+#. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:27
+#, fuzzy, kde-format
+#| msgid "Perspective Transform"
+msgctxt "action"
+msgid "Transform Tool (Perspective Transform)"
+msgstr "Trasforma la prospettiva"
+
+#. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:37
+#, fuzzy, kde-format
+#| msgid "Transform Tool Actions"
+msgctxt "action"
+msgid "Transform Tool (Warp Transform)"
+msgstr "Azioni strumento Trasforma"
+
+#. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:47
+#, fuzzy, kde-format
+#| msgid "Transform Tool Actions"
+msgctxt "action"
+msgid "Transform Tool (Cage Transform)"
+msgstr "Azioni strumento Trasforma"
+
+#. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:57
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Transform"
+msgctxt "action"
+msgid "Transform Tool (Liquify Transform)"
+msgstr "Trasforma"
+
+#. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tool_transform2/KisToolTransform.action:67
+#, fuzzy, kde-format
+#| msgid "Transform Tool Actions"
+msgctxt "action"
+msgid "Transform Tool (Mesh Transform)"
+msgstr "Azioni strumento Trasforma"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -114956,19 +115005,10 @@ msgstr ""
 #~ msgid "Rigid"
 #~ msgstr "Rigida"
 
-#~ msgid "Perspective Transform"
-#~ msgstr "Trasforma la prospettiva"
-
 #, fuzzy
 #~| msgid "Free Transform"
 #~ msgid "Cage Transform"
 #~ msgstr "Trasformazione libera"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Transform"
-#~ msgid "Liquify Transform"
-#~ msgstr "Trasforma"
 
 #~ msgid ""
 #~ "Image\n"

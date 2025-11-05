@@ -615,6 +615,8 @@ KisConfig::CanvasSurfaceMode KisConfig::canvasSurfaceColorSpaceManagementMode(bo
         return CanvasSurfaceMode::Rec709g22;
     } else if (modeStr == "rec709g10") {
         return CanvasSurfaceMode::Rec709g10;
+    } else if (modeStr == "rec2020pq") {
+        return CanvasSurfaceMode::Rec2020pq;
     } else if (modeStr == "unmanaged") {
         return CanvasSurfaceMode::Unmanaged;
     } else {
@@ -634,6 +636,9 @@ void KisConfig::setCanvasSurfaceColorSpaceManagementMode(KisConfig::CanvasSurfac
             break;
         case CanvasSurfaceMode::Rec709g10:
             modeStr = "rec709g10";
+            break;
+        case CanvasSurfaceMode::Rec2020pq:
+            modeStr = "rec2020pq";
             break;
         case CanvasSurfaceMode::Unmanaged:
             modeStr = "unmanaged";
@@ -2876,6 +2881,9 @@ QDebug operator<<(QDebug debug, const KisConfig::CanvasSurfaceMode &mode)
             break;
         case KisConfig::CanvasSurfaceMode::Rec709g10:
             debug.nospace() << "Rec709g10";
+            break;
+        case KisConfig::CanvasSurfaceMode::Rec2020pq:
+            debug.nospace() << "Rec2020pq";
             break;
         case KisConfig::CanvasSurfaceMode::Unmanaged:
             debug.nospace() << "Unmanaged";

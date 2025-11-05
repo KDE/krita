@@ -1226,6 +1226,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Preferred by operating system"), QVariant::fromValue(CanvasSurfaceMode::Preferred));
         m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Rec 709 Gamma 2.2"), QVariant::fromValue(CanvasSurfaceMode::Rec709g22));
         m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Rec 709 Linear"), QVariant::fromValue(CanvasSurfaceMode::Rec709g10));
+        m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Rec 2020 PQ"), QVariant::fromValue(CanvasSurfaceMode::Rec2020pq));
         m_canvasSurfaceColorSpace->addSqueezedItem(i18n("Unmanaged (testing only)"), QVariant::fromValue(CanvasSurfaceMode::Unmanaged));
 
         m_canvasSurfaceColorSpace->setToolTip(

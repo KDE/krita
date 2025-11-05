@@ -153,6 +153,7 @@ public:
         Preferred = 0,
         Rec709g22,
         Rec709g10,
+        Rec2020pq,
         Unmanaged
     };
 

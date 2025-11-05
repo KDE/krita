@@ -247,6 +247,16 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription(const Kis
         const auto compositorPreferred = m_d->interface->preferredSurfaceDescription();
         KIS_SAFE_ASSERT_RECOVER_RETURN(compositorPreferred);
 
+        // we have our own definition of the Rec2020PQ space with
+        // the reference point fixed to 80 cd/m2
+        auto makeKritaRec2020PQLuminance = [] () {
+            Luminance luminance;
+            luminance.minLuminance = 0;
+            luminance.referenceLuminance = 80;
+            luminance.maxLuminance = 10000;
+            return luminance;
+        };
+
         if (m_d->surfaceMode == KisConfig::CanvasSurfaceMode::Preferred) {
 
             if (compositorPreferred->colorSpace.isHDR()) {
@@ -264,14 +274,12 @@ void KisCanvasSurfaceColorSpaceManager::reinitializeSurfaceDescription(const Kis
             if (std::holds_alternative<NamedTransferFunction>(requestedDescription->colorSpace.transferFunction) &&
                 std::get<NamedTransferFunction>(requestedDescription->colorSpace.transferFunction) == NamedTransferFunction::transfer_function_st2084_pq) {
 
-                // we have our own definition of the Rec2020PQ space with
-                // the reference point fixed to 80 cd/m2
-                requestedDescription->colorSpace.luminance = Luminance();
-                requestedDescription->colorSpace.luminance->minLuminance = 0;
-                requestedDescription->colorSpace.luminance->referenceLuminance = 80;
-                requestedDescription->colorSpace.luminance->maxLuminance = 10000;
+                requestedDescription->colorSpace.luminance = makeKritaRec2020PQLuminance();
             }
-
+        } else if (m_d->surfaceMode == KisConfig::CanvasSurfaceMode::Rec2020pq) {
+            requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_bt2020;
+            requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_st2084_pq;
+            requestedDescription->colorSpace.luminance = makeKritaRec2020PQLuminance();
         } else if (m_d->surfaceMode == KisConfig::CanvasSurfaceMode::Rec709g22) {
             requestedDescription->colorSpace.primaries = NamedPrimaries::primaries_srgb;
             requestedDescription->colorSpace.transferFunction = NamedTransferFunction::transfer_function_gamma22;

@@ -85,20 +85,19 @@ KisSelectionActionsPanel::KisSelectionActionsPanel(KisViewManager *viewManager, 
     d->m_viewManager = viewManager;
     d->m_selectionManager = viewManager->selectionManager();
 
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(viewManager->canvas());
+
     // Setup buttons...
     for (const ActionButtonData &buttonData : Private::buttonData()) {
         QPushButton *button = createButton(buttonData.iconName, buttonData.tooltip);
         connect(button, &QPushButton::clicked, d->m_selectionManager, buttonData.slot);
+        button->setParent(canvasWidget);
         d->m_buttons.append(button);
     }
 }
 
 KisSelectionActionsPanel::~KisSelectionActionsPanel()
 {
-    // buttons are children of the canvas, but we should still delete
-    // them to make sure they are not accessed after the decoration dies
-    qDeleteAll(d->m_buttons);
-    d->m_buttons.clear();
 }
 
 void KisSelectionActionsPanel::draw(QPainter &painter)
@@ -139,10 +138,6 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
         if (!d->m_dragHandle) {
             d->m_dragHandle.reset(new Private::DragHandle());
             d->m_dragHandle->position = initialDragHandlePosition();
-        }
-
-        for (QPushButton *button : d->m_buttons) {
-            button->setParent(canvasWidget);
         }
     } else { // Now hidden!
         canvasWidget->removeEventFilter(this);

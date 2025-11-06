@@ -376,6 +376,12 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 
 void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)
 {
+    // just reuse the content of notifyDevicePixelRationChanged()
+    notifyDevicePixelRationChanged();
+}
+
+void KisVisualColorSelectorShape::notifyDevicePixelRationChanged()
+{
     forceImageUpdate();
     updateGamutMask();
     setMask(getMaskMap());

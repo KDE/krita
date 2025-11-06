@@ -137,12 +137,6 @@ public:
 
     void setAcceptTabletEvents(bool on);
 
-    /**
-     * This signal is delivered in a centralized way by
-     * KisVisualColorSelector
-     */
-    void notifyDevicePixelRationChanged();
-
 Q_SIGNALS:
     void sigCursorMoved(QPointF pos);
 

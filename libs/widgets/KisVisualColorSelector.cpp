@@ -19,8 +19,6 @@
 #include "kis_signal_compressor.h"
 #include "kis_debug.h"
 
-#include <KisScreenMigrationTracker.h>
-
 #include "KisVisualColorSelectorShape.h"
 #include "KisVisualDiamondSelectorShape.h"
 #include "KisVisualRectangleSelectorShape.h"
@@ -47,7 +45,6 @@ struct KisVisualColorSelector::Private
     KisVisualColorModelSP selectorModel;
     QPointer<const KoColorDisplayRendererInterface> displayRenderer;
     KoGamutMaskSP gamutMask;
-    QPointer<KisScreenMigrationTracker> screenMigrationTracker;
 };
 
 KisVisualColorSelector::KisVisualColorSelector(QWidget *parent, KisVisualColorModelSP model)
@@ -67,15 +64,6 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent, KisVisualColorMo
 
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE);
     connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotReloadConfiguration()), Qt::UniqueConnection);
-
-    m_d->screenMigrationTracker = new KisScreenMigrationTracker(this, this);
-    connect(m_d->screenMigrationTracker, &KisScreenMigrationTracker::sigScreenOrResolutionChanged,
-            this, [this] (QScreen *screen) {
-                Q_UNUSED(screen);
-                Q_FOREACH(KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-                    shape->notifyDevicePixelRationChanged();
-                }
-            });
 }
 
 KisVisualColorSelector::~KisVisualColorSelector()

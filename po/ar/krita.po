@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 03:45+0000\n"
-"PO-Revision-Date: 2025-10-25 16:49+0400\n"
+"PO-Revision-Date: 2025-11-05 18:56+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -28899,9 +28899,7 @@ msgid "Toggle Eraser"
 msgstr "بدّل الممحاة"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "بدّل إعداد الممحاة المسبق"
 

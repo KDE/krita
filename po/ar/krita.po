@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-05 02:10+0000\n"
-"PO-Revision-Date: 2025-10-25 16:49+0400\n"
+"POT-Creation-Date: 2025-11-06 01:59+0000\n"
+"PO-Revision-Date: 2025-11-05 18:56+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7669,99 +7669,78 @@ msgstr "اقسم الكائنات ذات المسارات الفرعية الم�
 
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "حوّل نوع النص"
+msgstr "حوِّل النص إلى تنسيق مسبق"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
 msgstr "مُنسق مسبقًا"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>النّصّ لن يلتفّ، وسيحافظ على المسافات والأسطر الجديدة. "
-"أدرِج فاصل سطر لتبقى الأسطر من الالتفاف أو التّحديد مفصولة.</p></body></html>"
+"النّصّ لن يلتفّ، وسيحافظ على المسافات والأسطر الجديدة. أدرِج فاصل سطر لتبقى "
+"الأسطر من الالتفاف أو التّحديد مفصولة."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "حوّل نوع النص"
+msgstr "حوّل النص إلى نص ملفوف"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
 msgstr "ملفوف داخليًّا"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>النّصّ يلتفّ ضمن طول ثابت، وحافظ على المسافات والأسطر "
-"الجديدة. أسطر جديدة لا أُزيلت.</p></body></html>"
+"النّصّ يلتفّ ضمن طول ثابت، وحافظ على المسافات والأسطر الجديدة. أسطر جديدة لا "
+"أُزيلت."
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "حوّل نوع النص"
+msgstr "حوِّل النص إلى موضع مسبق"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr "موضّع مبدئيًّا"
+msgstr "مسبق التموضع"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>النّصّ استخدم تحويلات حروف إس-في-جي 1.1 لوضع كلّ سطر. "
-"أدمجت المسافات والأسطر الجديدة. هذا للتّوافق الرّجعيّ مع إس-في-جي 1.1.</p></"
-"body></html>"
+"النّصّ استخدم تحويلات حروف إس-في-جي 1.1 لوضع كلّ سطر. أدمجت المسافات والأسطر "
+"الجديدة. هذا للتّوافق الرّجعيّ مع إس-في-جي 1.1."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -20233,30 +20212,30 @@ msgid "Character Variant %1"
 msgstr "تنويعة المحرف %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:150
-#: libs/flake/text/KoSvgTextShape.cpp:1787
+#: libs/flake/text/KoSvgTextShape.cpp:2030
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "نص مبدئي"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1766
+#: libs/flake/text/KoSvgTextShape.cpp:2009
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "نص"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1768
-#: libs/flake/text/KoSvgTextShape.cpp:1776
+#: libs/flake/text/KoSvgTextShape.cpp:2011
+#: libs/flake/text/KoSvgTextShape.cpp:2019
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "شكل SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1774
+#: libs/flake/text/KoSvgTextShape.cpp:2017
 #, kde-format
 msgid "SVG Text"
 msgstr "‏SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1797
+#: libs/flake/text/KoSvgTextShape.cpp:2040
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20650,7 +20629,7 @@ msgstr "المقاس"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1712
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1713
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -23850,8 +23829,8 @@ msgstr "بعض الموارد مفقودة:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2069
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2073
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24665,7 +24644,7 @@ msgstr ""
 "الإطارات إلى 50 إطارًا في الثانية"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2106
 #, kde-format
 msgid "Warning(s):"
 msgstr "تحذير (تحذيرات):"
@@ -25625,8 +25604,8 @@ msgstr "الشاشة الرئيسية:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2391
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2393
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2392
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2394
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25727,8 +25706,8 @@ msgstr "استيراد حركة الفيديو"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2361
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2363
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2362
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2364
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26142,6 +26121,9 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"تحذير: نُشّط وضع HDR على سطح يعمل في وضع 8 بت!\n"
+"يرجى تنشيط وضع 10 بت في مربع حوار تفضيلات كريتا وإعادة تشغيل كريتا لتجنب "
+"ظهور خطوط الألوان!"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -26637,12 +26619,12 @@ msgstr "خصائص الطّبقة"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1625
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1629
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1718
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2156
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2214 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1626
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1630
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1719
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2215 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27002,8 +26984,8 @@ msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>تحذير:</b> لا يمكن الكتابة في هذا الموقع."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1165
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1377
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1478
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1479
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27060,11 +27042,18 @@ msgid "Rec 709 Linear"
 msgstr "Rec 709 خطي"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
+#, fuzzy, kde-format
+#| msgctxt "Color space name"
+#| msgid "Rec 2100 PQ"
+msgid "Rec 2020 PQ"
+msgstr "Rec 2100 PQ"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr "غير مُدار (للاختبار فقط)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1233
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
@@ -27073,16 +27062,15 @@ msgstr ""
 "<p>مساحة لون البكسلات التي تنقَل إلى مؤلّف النافذة. استخدم المساحة \"المفضلة\" "
 "ما لم تعرف ما تفعل</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1239
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1240
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "وضع مزج CMYK (يحتاج إعادة تشغيل):"
+msgstr "عمق بت سطح اللوحة القماشية (يحتاج إلى إعادة التشغيل):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1242
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1243
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
@@ -27090,33 +27078,34 @@ msgstr "وضع مزج CMYK (يحتاج إعادة تشغيل):"
 msgid "Auto"
 msgstr "آليّ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1243
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8-بت"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1245
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10-بت"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1248
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>عمق بت اللون المُمرر إلى مُركب النافذة. يجب عليك التبديل إلى الوضع 10 بت "
+"إذا كنت ترغب في استخدام إمكانات HDR لشاشتك.</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1252
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1253
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "فضاء ألون سطح اللوحة:"
+msgstr "عمق بت سطح اللوحة الحالي:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1259
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1260
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
@@ -27125,19 +27114,19 @@ msgstr ""
 "مساحة اللون المفضلة من نظام التشغيل:\n"
 "%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1336
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "ثبّت تشكيلات الألوان"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1539
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1540
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr "واجهة برمجة تطبيق إدخال اللوحة (الواجهة البرمجية النشطة حاليًا: \"%1\")"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1553
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1554
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27146,7 +27135,7 @@ msgstr ""
 "استخدم أختام وقت مشغل اللوحة لسرعة الفرشاة (قد تسبب عيوبًا شديدة عند استخدام "
 "واجهة برمجة تطبيقات WinTab اللوحية)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1555
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1556
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "استخدم أختام وقت مشغل اللوحة لسرعة الفرشاة"
@@ -27154,7 +27143,7 @@ msgstr "استخدم أختام وقت مشغل اللوحة لسرعة الفر
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1565
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1566
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27168,7 +27157,7 @@ msgstr[5] "الحد الأقصى لسرعة الفرشاة: {n} بكسل/ملل�
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1574
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1575
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -27179,19 +27168,19 @@ msgstr[3] "سلاسة سرعة الفرشاة: {n} عينات"
 msgstr[4] "سلاسة سرعة الفرشاة: {n} عينة"
 msgstr[5] "سلاسة سرعة الفرشاة: {n} عينة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1582
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "إزاحة اتجاه ميل القلم: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1679
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " غ.بايت"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1700
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1701
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27200,187 +27189,187 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " ثانية"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1703
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1704
 #, kde-format
 msgid " fps"
 msgstr "  إطار/ثا"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "أوبن‌جي‌إل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1944
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "مُقدِّم برمجي (بطيء جدًا)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1947
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 عبر ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL عبر ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1950
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1957
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1977
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "آليّ (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2054
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, kde-format
 msgid "Display Id: %1"
 msgstr "معرّف العرض: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "اسم العرض: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "الحد الأدنى للسطوع: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2058
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "الحد الأقصى للسطوع: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2058
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "الحد الأقصى للسطوع بالإطار الكامل: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "الأحمر الأساسي: %1، %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2061
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "الأخضر الأساسي: %1، %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2061
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "الأزرق الأساسي: %1، %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "النّقطة البيضاء: %1، %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2244
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>تحذير:</b> لا يدعم العرض الحالي تقديم HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2354
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2355
 #, kde-format
 msgid "Configure Krita"
 msgstr "اضبط كريتا"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "اختصارات لوحة المفاتيح"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "الاختصارات"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2383
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "إعدادات دخل اللوحة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
 #, kde-format
 msgid "Canvas Input"
 msgstr "دخل اللوحة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2401
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2402
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "إدارة الألوان"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2403
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2404
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "اللون"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2411
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2414
 #, kde-format
 msgid "Performance"
 msgstr "الأداء"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2422
 #, kde-format
 msgid "Tablet settings"
 msgstr "إعدادات اللوحي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2423
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2424
 #, kde-format
 msgid "Tablet"
 msgstr "اللوحي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2432
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "إعدادات ”اللوحة فقط“"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2434
 #, kde-format
 msgid "Canvas-only"
 msgstr "اللوحة فقط"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2441
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2442
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2444
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "لوحة منبثقة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2451
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2452
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "المؤلف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2453
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2454
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "المؤلف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2460
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2461
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -31777,12 +31766,15 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>يتيح التكيف اللوني لغرض العرض المطلق. سيُظهر هذا بشكل "
+"فعال كيف ستبدو الألوان إذا تمت طباعة الصورة على ورق وعرضها على الشاشة كمصدر "
+"إضاءة وحيد. هذا هو السلوك القياسي لسير عمل ICC v4.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "التكيف اللوني المطلق"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -33343,9 +33335,7 @@ msgid "Toggle Eraser"
 msgstr "بدّل الممحاة"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "بدّل إعداد الممحاة المسبق"
 
@@ -45151,12 +45141,10 @@ msgstr "%1، %2، متغير: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "language, variant"
-#| msgid "%1, variant: %3"
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %2"
-msgstr "%1، متغير: %3"
+msgstr "%1، متغير: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -65927,6 +65915,108 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "غيّر أداة نصّ إس-في-جي"
 
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:19
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Adjust character transforms on text."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Text Top"
+msgctxt "Type setting mode line name"
+msgid "Text Top"
+msgstr "أعلى النص"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#, fuzzy, kde-format
+#| msgctxt "@label:spinbox"
+#| msgid "Font Size"
+msgctxt "Type setting mode line name"
+msgid "Font Size"
+msgstr "حجم الخطّ"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Text Bottom"
+msgctxt "Type setting mode line name"
+msgid "Text Bottom"
+msgstr "أسفل النص"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Alphabetic"
+msgctxt "Type setting mode line name"
+msgid "Alphabetic"
+msgstr "أبجديّ"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Ideographic"
+msgctxt "Type setting mode line name"
+msgid "Ideographic"
+msgstr "تصوري"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Hanging"
+msgctxt "Type setting mode line name"
+msgid "Hanging"
+msgstr "مُعلَّق"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#, fuzzy, kde-format
+#| msgctxt "Middle Mouse Button"
+#| msgid "Middle"
+msgctxt "Type setting mode line name"
+msgid "Middle"
+msgstr "المنتصف"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Mathematical"
+msgctxt "Type setting mode line name"
+msgid "Mathematical"
+msgstr "رياضي"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#, fuzzy, kde-format
+#| msgctxt "@label:inlistbox"
+#| msgid "Central"
+msgctxt "Type setting mode line name"
+msgid "Central"
+msgstr "وسط"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Line Height"
+msgctxt "Type setting mode line name"
+msgid "Line Height"
+msgstr "ارتفاع السّطر"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#, fuzzy, kde-format
+#| msgid "Current selection"
+msgctxt "Type setting mode line name"
+msgid "Current Baseline"
+msgstr "التحديد الحالي"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Baseline-Shift"
+msgctxt "Type setting mode line name"
+msgid "Baseline Shift"
+msgstr "إزاحة-خط-الأساس"
+
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
 msgid "Text Tool"
@@ -65982,6 +66072,13 @@ msgstr "غيّر خصائص النّصّ"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "أزِل النّصّ"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
+#, fuzzy
+#| msgid "Pattern Transform"
+msgctxt "(qtundo-format)"
+msgid "Remove Character Transforms"
+msgstr "تحويل النمط"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -66259,19 +66356,17 @@ msgstr "تجانب"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste As Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "اللصق كنصّ"
+msgstr "ألصق نصًّا منسّقًا"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "حاول لصق النص المنسق إن أمكن."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66279,25 +66374,138 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "نصّ صِرف"
+msgstr "ألصق نصّ صِرف"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "نسيج باستيل نحيف"
+msgstr "ألصق النص دون تنسيق"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:291
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:227
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Down"
+msgstr "نقل التّحديد"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:228
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Down By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:230
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection down by "
+"one pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:238
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Up"
+msgstr "نقل التّحديد"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:239
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Up By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:241
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection up by one "
+"pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:249
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Left"
+msgstr "نقل التّحديد"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:250
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Left By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:252
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection left by "
+"one pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:260
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Right"
+msgstr "نقل التّحديد"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:261
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Right By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:263
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection reft by "
+"one pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:271
+#: plugins/tools/svgtexttool/SvgTextTool.action:272
+#, fuzzy, kde-format
+#| msgid "Pattern Transform"
+msgctxt "action"
+msgid "Remove Character Transforms"
+msgstr "تحويل النمط"
+
+#. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:274
+#, kde-format
+msgctxt "action"
+msgid "Remove Character Transforms from the selection."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:297
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -66308,214 +66516,193 @@ msgstr "كريتا - حرّر النّصّ"
 msgid "SVG Text Tool"
 msgstr "أداة نصوص SVG"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "أنشئ نصوصًا جديدة بـ..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "الخصائص الحاليّة:"
+msgstr "خصائص النص الحاليّة"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
-msgstr ""
+msgstr "استخدم الخصائص الحالية في نافذة خصائص النص لإنشاء نصوص جديدة."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "انسخ النمط المبدئي"
+msgstr "انسخ النمط محدد مسبقًا"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "خصائص النص"
+msgstr "افتح خصائص النص"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
-msgstr ""
+msgstr "افتح نافذة خصائص النص لتحرير خصائص مثل حجم الخط ونوعه."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
-#, fuzzy, kde-format
-#| msgid "Options"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "خيارات"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "ألصِق عند المؤشر"
+msgstr "استخدم مؤشر مرئي"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "استخدم الترتيب المرئي للنص ثنائي الاتجاه."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "رأس أساسي مبدئي"
+msgstr "ألصق نصًّا منسّقًا مبدئيًا"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
-msgstr ""
+msgstr "ألصق دائمًا نصًا منسقًا عند استخدام إجراء اللصق."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
 #, fuzzy, kde-format
-#| msgid "Dialog"
+#| msgid "Texturing Mode:"
+msgctxt "@label:button"
+msgid "Type Setting Mode"
+msgstr "نمط النقش:"
+
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
+#, fuzzy, kde-format
+#| msgid "Enable Pen Settings"
+msgctxt "@info:tooltip"
+msgid "Enable type setting mode."
+msgstr "فعّل إعدادات القلم"
+
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "حواريّ"
+msgstr "الحوارات"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "حرّر مصدر إس-في-جي"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:188
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr ""
+msgstr "حرّر النص المحدد حاليًا بتنسيق SVG XML."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "لوحة الرموز"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"افتح لوحة الحروف، التي توفر الوصول إلى أشكال بديلة من الحروف OpenType أو "
+"Unicode، بالإضافة إلى خريطة الأحرف."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "حوّل نوع النص"
+msgstr "حوّل النوع…"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "مُنسق مسبقًا"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>النّصّ لن يلتفّ، وسيحافظ على المسافات والأسطر الجديدة. "
-"أدرِج فاصل سطر لتبقى الأسطر من الالتفاف أو التّحديد مفصولة.</p></body></html>"
+"النّصّ لن يلتفّ، وسيحافظ على المسافات والأسطر الجديدة. أدرِج فاصل سطر لتبقى "
+"الأسطر من الالتفاف أو التّحديد مفصولة."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "ملفوف داخليًّا"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>النّصّ يلتفّ ضمن طول ثابت، وحافظ على المسافات والأسطر "
-"الجديدة. أسطر جديدة لا أُزيلت.</p></body></html>"
+"النّصّ يلتفّ ضمن طول ثابت، وحافظ على المسافات والأسطر الجديدة. أسطر جديدة لا "
+"أُزيلت."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr "موضّع مبدئيًّا"
+msgstr "مسبق التموضع"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>النّصّ استخدم تحويلات حروف إس-في-جي 1.1 لوضع كلّ سطر. "
-"أدمجت المسافات والأسطر الجديدة. هذا للتّوافق الرّجعيّ مع إس-في-جي 1.1.</p></"
-"body></html>"
+"النّصّ استخدم تحويلات حروف إس-في-جي 1.1 لوضع كلّ سطر. أدمجت المسافات والأسطر "
+"الجديدة. هذا للتّوافق الرّجعيّ مع إس-في-جي 1.1."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
-#, fuzzy, kde-format
-#| msgid "Debug"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "التنقيح"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "اجذب صندوق الإحاطة"
+msgstr "أظهر حدود صندوق المحرف"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "أعرض في مجلد"
+msgstr "أظهر صناديق السطر"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -69551,9 +69738,6 @@ msgstr ""
 #~ "Make the selection using a merged copy of the selected color-labeled "
 #~ "layers"
 #~ msgstr "اضبط وضع المزج للطّبقة"
-
-#~ msgid "Current selection"
-#~ msgstr "التحديد الحالي"
 
 #, fuzzy
 #~| msgid "Set the blend mode for the layer"

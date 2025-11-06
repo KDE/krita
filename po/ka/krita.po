@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-05 02:10+0000\n"
+"POT-Creation-Date: 2025-11-06 01:59+0000\n"
 "PO-Revision-Date: 2025-04-26 07:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -20232,31 +20232,31 @@ msgid "Character Variant %1"
 msgstr "სიმბოლოს ვარიანტი %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:150
-#: libs/flake/text/KoSvgTextShape.cpp:1787
+#: libs/flake/text/KoSvgTextShape.cpp:2030
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "ადგილმჭერი ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1766
+#: libs/flake/text/KoSvgTextShape.cpp:2009
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1768
-#: libs/flake/text/KoSvgTextShape.cpp:1776
+#: libs/flake/text/KoSvgTextShape.cpp:2011
+#: libs/flake/text/KoSvgTextShape.cpp:2019
 #, fuzzy, kde-format
 #| msgid "SVG Text"
 msgid "SVG Text Shape"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1774
+#: libs/flake/text/KoSvgTextShape.cpp:2017
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1797
+#: libs/flake/text/KoSvgTextShape.cpp:2040
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20656,7 +20656,7 @@ msgstr "ზომა"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1352
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1355
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1712
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1713
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -23935,8 +23935,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2069
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2073
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:325
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24766,7 +24766,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2106
 #, kde-format
 msgid "Warning(s):"
 msgstr "გაფრთხილებები:"
@@ -25708,8 +25708,8 @@ msgstr "მთავარი ეკრანი:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2391
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2393
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2392
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2394
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -25810,8 +25810,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2361
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2363
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2362
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2364
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26662,12 +26662,12 @@ msgstr "ფენის თვისებები"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1423
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1426
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1429
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1625
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1629
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1718
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2156
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2214 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1626
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1630
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1719
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2215 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27036,8 +27036,8 @@ msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1165
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1377
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1478
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1479
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27090,18 +27090,24 @@ msgid "Rec 709 Linear"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
+#, fuzzy, kde-format
+#| msgid "Rec. 2100 PQ"
+msgid "Rec 2020 PQ"
+msgstr "Rec. 2100 PQ"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1233
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1240
 #, fuzzy, kde-format
 #| msgid "CMYK blending mode (needs restart):"
 msgid "Canvas surface bit depth (needs restart):"
@@ -27110,7 +27116,7 @@ msgstr "CMYK არევის რეჟიმი (საჭიროებს 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1242
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1243
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
@@ -27118,19 +27124,19 @@ msgstr "CMYK არევის რეჟიმი (საჭიროებს 
 msgid "Auto"
 msgstr "ავტომატური"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1243
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "8-bit"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1245
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "10-bit"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1248
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
@@ -27138,39 +27144,39 @@ msgid ""
 "display</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1253
 #, fuzzy, kde-format
 #| msgid "Color space:"
 msgid "Current canvas surface bit depth:"
 msgstr "ფერების სივრცე:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1259
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1260
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1336
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "ფერის პროფილების დაყენება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1539
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1540
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1553
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1554
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1555
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1556
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -27178,7 +27184,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1565
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1566
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27188,26 +27194,26 @@ msgstr[1] "ფუნჯის მაქსიმალური სიჩქა�
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1574
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1575
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1582
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1679
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " გიბ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1700
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1701
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27216,187 +27222,187 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " წმ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1703
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1704
 #, kde-format
 msgid " fps"
 msgstr " კადრი/წმ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1944
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "პროგრამული რენდერერი (ძალიან ნელი)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1947
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11-ი ANGLE-ის საშუალებით"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL ANGLE-ით"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1950
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1957
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1977
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "ავტომატური (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2054
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ეკრანის Id: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "საჩვენებელი სახელი: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2058
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2058
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2059
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "წითელი ძირითადი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2060
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2061
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "მწვანე ძირითადი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2061
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "ლურჯი ძირითადი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "თეთრი წერტილი: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2244
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2354
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2355
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita-ის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "კლავიატურის მალსახმობები"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "მალსახმობები"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2383
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "ტილოს შეყვანის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
 #, kde-format
 msgid "Canvas Input"
 msgstr "ტილოს შეყვანა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2401
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2402
 #: plugins/dockers/logdocker/LogDockerDock.cpp:195
 #, kde-format
 msgid "Color Management"
 msgstr "ფერების მართვა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2403
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2404
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "ფერი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2411
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2414
 #, kde-format
 msgid "Performance"
 msgstr "წარმადობა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2422
 #, kde-format
 msgid "Tablet settings"
 msgstr "ტაბლეტის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2423
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2424
 #, kde-format
 msgid "Tablet"
 msgstr "ტაბლეტი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2432
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "მხოლოდ-ტილოს მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2434
 #, kde-format
 msgid "Canvas-only"
 msgstr "მხოლოდ-ტილო"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2441
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2442
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2444
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "მხტუნარა პალიტრა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2451
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2452
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ავტორი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2453
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2454
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:233
 #, kde-format
 msgid "Author"
 msgstr "ავტორი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2460
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2461
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -65466,6 +65472,105 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "სეგმენტის შეცვლა"
 
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:19
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Adjust character transforms on text."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
+#, fuzzy, kde-format
+#| msgid "Text Tool"
+msgctxt "Type setting mode line name"
+msgid "Text Top"
+msgstr "ტექსტის ხელსაწყო"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Font Size"
+msgctxt "Type setting mode line name"
+msgid "Font Size"
+msgstr "ფონტის ზომა"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
+msgctxt "Type setting mode line name"
+msgid "Text Bottom"
+msgstr "ბოლოში"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#, fuzzy, kde-format
+#| msgid "Alphabetical"
+msgctxt "Type setting mode line name"
+msgid "Alphabetic"
+msgstr "ანბანით დალაგებული"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#, fuzzy, kde-format
+#| msgid "Biography"
+msgctxt "Type setting mode line name"
+msgid "Ideographic"
+msgstr "ბიოგრაფია"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#, fuzzy, kde-format
+#| msgctxt "@title"
+#| msgid "Hangul"
+msgctxt "Type setting mode line name"
+msgid "Hanging"
+msgstr "ჰანგული"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#, fuzzy, kde-format
+#| msgctxt "Middle Mouse Button"
+#| msgid "Middle"
+msgctxt "Type setting mode line name"
+msgid "Middle"
+msgstr "შუა"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#, fuzzy, kde-format
+#| msgctxt "@title"
+#| msgid "Mathematical Greek"
+msgctxt "Type setting mode line name"
+msgid "Mathematical"
+msgstr "მათემატიკური ბერძნული ენა"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#, fuzzy, kde-format
+#| msgid "Center"
+msgctxt "Type setting mode line name"
+msgid "Central"
+msgstr "ცენტრში"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Line Height"
+msgctxt "Type setting mode line name"
+msgid "Line Height"
+msgstr "ხაზის სიმაღლე"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#, fuzzy, kde-format
+#| msgid "Current selection"
+msgctxt "Type setting mode line name"
+msgid "Current Baseline"
+msgstr "მიმდინარე მონიშნული"
+
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 profile name, check simplescreenrecorder for standard translations"
+#| msgid "baseline"
+msgctxt "Type setting mode line name"
+msgid "Baseline Shift"
+msgstr "baseline"
+
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -65525,6 +65630,14 @@ msgstr "ტექსტის თვისებების შეცვლა"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "ტექსტის წაშლა"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Reset Transformations"
+msgctxt "(qtundo-format)"
+msgid "Remove Character Transforms"
+msgstr "გარდაქმნების ჩამოყრა"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -65837,7 +65950,127 @@ msgctxt "action"
 msgid "Paste text without styling."
 msgstr "მოცდის გარეშე შენახვა"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:291
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:227
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Down"
+msgstr "მონიშნულის წაღება"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:228
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Down By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:230
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection down by "
+"one pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:238
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Up"
+msgstr "მონიშნულის წაღება"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:239
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Up By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:241
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection up by one "
+"pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:249
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Left"
+msgstr "მონიშნულის წაღება"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:250
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Left By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:252
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection left by "
+"one pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:260
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "action"
+msgid "Move Text Selection Right"
+msgstr "მონიშნულის წაღება"
+
+#. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:261
+#, kde-format
+msgctxt "action"
+msgid "Move Text Selection Right By 1 Pixel"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:263
+#, kde-format
+msgctxt "action"
+msgid ""
+"When type setting mode is active, move the start of the selection reft by "
+"one pixel."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:271
+#: plugins/tools/svgtexttool/SvgTextTool.action:272
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Reset Transformations"
+msgctxt "action"
+msgid "Remove Character Transforms"
+msgstr "გარდაქმნების ჩამოყრა"
+
+#. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:274
+#, kde-format
+msgctxt "action"
+msgid "Remove Character Transforms from the selection."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:297
 #, fuzzy, kde-format
 #| msgid "Edit Text"
 msgctxt "@title:window"
@@ -65851,27 +66084,27 @@ msgstr "ტექსტის ჩასწორება"
 msgid "SVG Text Tool"
 msgstr "ტექსტის ხელსაწყო"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:60
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
 #, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:66
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
 #, fuzzy, kde-format
 #| msgid "Current properties:"
 msgctxt "@option:check"
 msgid "Current Text Properties"
 msgstr "მიმდინარე თვისებები:"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:75
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:85
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
 #, fuzzy, kde-format
 #| msgctxt "Default name for a new style"
 #| msgid "New Style"
@@ -65879,40 +66112,40 @@ msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "ახალი სტილი"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:111
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
 #, fuzzy, kde-format
 #| msgid "Text Properties"
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "ტექსტის თვისებები"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:123
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:133
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "@label:group"
 msgid "Options"
 msgstr "გამართვა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:155
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
@@ -65922,40 +66155,54 @@ msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "სტანდარტული ბუნიკი ნაგულისხმები"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:175
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
+#, fuzzy, kde-format
+#| msgid "Selection Mode"
+msgctxt "@label:button"
+msgid "Type Setting Mode"
+msgstr "არჩევის რეჟიმი"
+
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
+#, fuzzy, kde-format
+#| msgid "Tablet settings"
+msgctxt "@info:tooltip"
+msgid "Enable type setting mode."
+msgstr "ტაბლეტის მორგება"
+
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
 #, fuzzy, kde-format
 #| msgid "Dialog"
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "ფანჯარა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:180
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
 #, fuzzy, kde-format
 #| msgid "Edit SVG Source"
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "SVG წყაროს ჩასწორება"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:188
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:194
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
 #, fuzzy, kde-format
 #| msgid "Glyph Palette"
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "გლიფის პალიტრა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:202
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65963,7 +66210,7 @@ msgid ""
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:213
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Text"
@@ -65971,14 +66218,14 @@ msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "ტექსტის ჩასმა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:240
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
 #, fuzzy, kde-format
 #| msgid "Performance"
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "წარმადობა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:247
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65986,14 +66233,14 @@ msgid ""
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:257
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
 #, fuzzy, kde-format
 #| msgid "Inline"
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "ხაზში"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:265
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -66001,14 +66248,14 @@ msgid ""
 "lines are not removed."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:272
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "მდებარეობა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:280
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -66016,14 +66263,14 @@ msgid ""
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:292
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "პროგრამის შეცდომის პოვნა"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:298
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Snap Bounding Box"
@@ -66031,7 +66278,7 @@ msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "შემომსაზღვრელი ჩარჩოს მიმაგრება"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
 #, fuzzy, kde-format
 #| msgid "Show line boxes"
 msgctxt "@option:check"
@@ -68480,9 +68727,6 @@ msgstr ""
 
 #~ msgid "Fit Page"
 #~ msgstr "გვერდის ჩატევა"
-
-#~ msgid "Current selection"
-#~ msgstr "მიმდინარე მონიშნული"
 
 #~ msgctxt "The 'fill with' section label in fill tool options"
 #~ msgid "Fill with"

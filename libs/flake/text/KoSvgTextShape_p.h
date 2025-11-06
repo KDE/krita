@@ -1356,8 +1356,10 @@ public:
                     break;
                 }
             }
-            if (textPathNameUnique) {
+            if (textPathNameUnique && !newTextPathName.isEmpty()) {
                 textPath->setName(newTextPathName);
+            } else {
+                textPathNameUnique = false;
             }
             newTextPathName = QString("textPath"+QString::number(textPathNumber));
         }

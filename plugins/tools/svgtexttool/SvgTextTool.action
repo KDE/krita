@@ -260,7 +260,7 @@
       <iconText>Move Text Selection Right</iconText>
       <text>Move Text Selection Right By 1 Pixel</text>
       <shortcut></shortcut>
-      <toolTip>When type setting mode is active, move the start of the selection reft by one pixel.</toolTip>
+      <toolTip>When type setting mode is active, move the start of the selection right by one pixel.</toolTip>
       <icon></icon>
       <whatsThis/>
       <statusTip/>

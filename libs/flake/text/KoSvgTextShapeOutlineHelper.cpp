@@ -125,13 +125,14 @@ void KoSvgTextShapeOutlineHelper::paintTextShape(QPainter *painter, const KoView
     helper.setHandleStyle(KisHandleStyle::secondarySelection());
     if (contourModeActive) {
         if (d->drawOutline) {
-            QList<QPainterPath> areas;
+
             Q_FOREACH(KoShape *shape, text->internalShapeManager()->shapes()) {
                 QPainterPath p = shape->transformation().map(shape->outline());
                 helper.drawPath(p);
-                if (!d->drawTextWrappingArea && text->shapesInside().contains(shape)) {
-                    areas.append(p);
-                }
+            }
+            QList<QPainterPath> areas;
+            Q_FOREACH(const KoShape *shape, text->shapesInside()) {
+                areas.append(shape->transformation().map(shape->outline()));
             }
             Q_FOREACH(QLineF arrow, getTextAreaOrderArrows(areas)) {
                 helper.drawGradientArrow(arrow.p1(), arrow.p2(), 1.5 * d->handleRadius);

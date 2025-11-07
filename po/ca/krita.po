@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-06 16:32+0000\n"
-"PO-Revision-Date: 2025-11-06 09:44+0100\n"
+"PO-Revision-Date: 2025-11-06 18:16+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -67261,11 +67261,7 @@ msgstr "Mou 1 píxel a la dreta la selecció de text"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "When type setting mode is active, move the start of the selection reft by "
-#| "one pixel."
+#, kde-format
 msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "

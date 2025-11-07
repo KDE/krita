@@ -908,7 +908,7 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
                 textType = textFrame["/Data"].toHash()["/Type"].toInt();
 
                 if (textType > 0) {
-                    QScopedPointer<KoPathShape> textCurve(new KoPathShape());
+                    KoPathShape *textCurve = new KoPathShape();
                     QVariantHash data = textFrame.value("/Data").toHash();
                     QVariantList points = textFrame.value("/Bezier").toHash().value("/Points").toList();
                     QVariantList range = data.value("/TextOnPathTRange").toList();
@@ -958,7 +958,9 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
                         if (endPoint == startPoint) {
                             textCurve->closeMerge();
                         }
-                        textShape.reset(textCurve.data());
+                        textShape.reset(textCurve);
+                    } else {
+                        delete textCurve;
                     }
                     if (!range.isEmpty()) {
                         textPathStartOffset = range[0].toDouble();
@@ -1005,6 +1007,7 @@ bool PsdTextDataConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh
         stylesWriter.writeStartElement("path");
         stylesWriter.writeAttribute("id", "textShape");
         stylesWriter.writeAttribute("d", textShape->toString());
+        stylesWriter.writeAttribute("opacity", "0");
         stylesWriter.writeAttribute("sodipodi:nodetypes", textShape->nodeTypes());
         stylesWriter.writeEndElement();
     }

@@ -82,6 +82,7 @@ struct KisAsyncColorSamplerHelper::Private
     int circlePreviewDiameter {180};
     qreal circlePreviewThickness {0.12};
     bool circlePreviewOutlineEnabled {true};
+    bool circlePreviewExtraCircles {true};
     QRectF previewDocRect;
 
     QColor currentColor;
@@ -198,6 +199,7 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
     m_d->circlePreviewDiameter = cfg.colorSamplerPreviewCircleDiameter();
     m_d->circlePreviewThickness = cfg.colorSamplerPreviewCircleThickness()/100.0; // saved in percentages
     m_d->circlePreviewOutlineEnabled = cfg.colorSamplerPreviewCircleOutlineEnabled();
+    m_d->circlePreviewExtraCircles = cfg.colorSamplerPreviewCircleExtraCirclesEnabled();
 
 
     if (colorPreviewHasForegroundComparison(m_d->style)) {
@@ -410,7 +412,10 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         return;
     }
 
+
+
     gc.save();
+
     qreal dpr = gc.device()->devicePixelRatioF();
     QSizeF cacheSizeF = viewRectF.size() * dpr;
     QSize cacheSize(qCeil(cacheSizeF.width()), qCeil(cacheSizeF.height()));
@@ -444,15 +449,19 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         QRectF cacheRect = m_d->cache.rect();
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
 
+        QTransform tf;
+
+        QPointF cacheCenter = cacheRect.center();
+        tf.translate(cacheCenter.x(), cacheCenter.y());
+        tf.rotate(-canvasRotationAngle);
+        tf.translate(-cacheCenter.x(), -cacheCenter.y());
+
+
         if (needsDualColor) {
             // The color sampler preview is an outline and those rotate along
             // with the canvas. That's undesirable for the sampler preview
             // though, so we un-rotate its contents here accordingly.
-            QTransform tf;
-            QPointF cacheCenter = cacheRect.center();
-            tf.translate(cacheCenter.x(), cacheCenter.y());
-            tf.rotate(-canvasRotationAngle);
-            tf.translate(-cacheCenter.x(), -cacheCenter.y());
+
 
             QPainterPath clipPath;
             clipPath.addPolygon(tf.map(QPolygonF(QRectF(0, 0, cacheRect.width(), cacheRect.height() / 2.0 + 1.0))));
@@ -480,19 +489,38 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         qreal innerX = cacheRect.width() * (1.0 - m_d->circlePreviewThickness);
         qreal innerY = cacheRect.height() * (1.0 - m_d->circlePreviewThickness);
         QRectF innerRect = cacheRect.marginsRemoved(QMarginsF(innerX, innerY, innerX, innerY));
+        QPainterPath innerEllipse;
+        innerEllipse.addEllipse(innerRect);
+
+        QPainterPath innerPath;
+        innerPath.addPath(innerEllipse);
+
+
+        if (m_d->circlePreviewThickness < 0.5 && m_d->circlePreviewExtraCircles) {
+            qreal extraMargin = 0.1*m_d->circlePreviewThickness*innerRect.width(); // looks better
+            QPointF leftCenter = QPointF(innerRect.left() - extraMargin, innerRect.top() + innerRect.height()/2.0);
+            QPointF rightCenter = QPointF(innerRect.right() + extraMargin, innerRect.top() + innerRect.height()/2.0);
+
+            innerPath.setFillRule(Qt::OddEvenFill);
+            innerPath.addEllipse(leftCenter, m_d->circlePreviewThickness*cacheRect.width(), m_d->circlePreviewThickness*cacheRect.width());
+            innerPath.addEllipse(rightCenter, m_d->circlePreviewThickness*cacheRect.width(), m_d->circlePreviewThickness*cacheRect.width());
+
+            innerPath = innerPath.intersected(innerEllipse);
+        }
 
         cachePainter.setPen(Qt::NoPen);
         cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
-        cachePainter.drawEllipse(innerRect);
+        cachePainter.drawPath(tf.map(innerPath));
 
         if (m_d->circlePreviewOutlineEnabled) {
             cachePainter.setBrush(Qt::transparent);
             cachePainter.setPen(pen);
             cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-            cachePainter.drawEllipse(innerRect);
+            cachePainter.drawPath(tf.map(innerPath));
         }
     }
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);
+
     gc.restore();
 }
 

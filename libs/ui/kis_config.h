@@ -155,6 +155,9 @@ public:
     bool colorSamplerPreviewCircleOutlineEnabled(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleOutlineEnabled(bool enabled);
 
+    bool colorSamplerPreviewCircleExtraCirclesEnabled(bool defaultValue = false) const;
+    void setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled);
+
     /**
      * Controls if the canvas should have a separate color managed surface.
      * Even though the surface can be created on any platform the proper

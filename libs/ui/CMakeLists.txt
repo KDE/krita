@@ -319,6 +319,7 @@ set(kritaui_LIB_SRCS
 
     widgets/KisNewsWidget.cpp
     widgets/KisGamutMaskToolbar.cpp
+	widgets/KisColorSamplerPreviewPreview.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
     utils/KisSpinBoxSplineUnitConverter.cpp

@@ -65,6 +65,9 @@ public:
     CursorStyle eraserCursorStyle();
     OutlineStyle eraserOutlineStyle();
     KisConfig::ColorSamplerPreviewStyle colorSamplerPreviewStyle() const;
+    int colorSamplerPreviewCircleDiameter() const;
+    qreal colorSamplerPreviewCircleThickness() const;
+    bool colorSamplerPreviewCircleOutlineEnabled() const;
 
     KisConfig::SessionOnStartup sessionOnStartup() const;
     bool saveSessionOnQuit() const;
@@ -110,6 +113,9 @@ private Q_SLOTS:
     void enableSubWindowOptions(int);
     void showAdvancedCumulativeUndoSettings();
 
+    void colorSamplePreviewSizeChanged(int value);
+    void colorSamplePreviewThicknessChanged(qreal value);
+    void colorSamplePreviewOutlineEnabledChanged(int value);
 public:
     QButtonGroup m_pasteFormatGroup;
     KisCumulativeUndoData m_cumulativeUndoData;

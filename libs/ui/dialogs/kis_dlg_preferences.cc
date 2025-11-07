@@ -265,6 +265,31 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     setColorSamplerPreviewStyleItems(m_cmbColorSamplerPreviewStyle);
     setColorSamplerPreviewStyleIndexByValue(m_cmbColorSamplerPreviewStyle, cfg.colorSamplerPreviewStyle());
 
+    m_nmbColorSamplerPreviewSize->setRange(1, 400);
+    m_nmbColorSamplerPreviewSize->setValue(cfg.colorSamplerPreviewCircleDiameter());
+    m_lblColorSamplerPreviewSizePreview->setDiameter(cfg.colorSamplerPreviewCircleDiameter());
+    connect(m_nmbColorSamplerPreviewSize,SIGNAL(valueChanged(int)), SLOT(colorSamplePreviewSizeChanged(int)));
+
+    m_ssbColorSamplerPreviewThickness->setRange(1, 50);
+    m_ssbColorSamplerPreviewThickness->setValue(cfg.colorSamplerPreviewCircleThickness());
+    m_lblColorSamplerPreviewSizePreview->setThickness(cfg.colorSamplerPreviewCircleThickness()/100.0);
+    connect(m_ssbColorSamplerPreviewThickness,SIGNAL(valueChanged(qreal)), SLOT(colorSamplePreviewThicknessChanged(qreal)));
+
+    m_chkColorSamplerPreviewOutlineEnabled->setChecked(cfg.colorSamplerPreviewCircleOutlineEnabled());
+    m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(cfg.colorSamplerPreviewCircleOutlineEnabled());
+    connect(m_chkColorSamplerPreviewOutlineEnabled,SIGNAL(stateChanged(int)), SLOT(colorSamplePreviewOutlineEnabledChanged(int)));
+
+
+
+    m_ssbColorSamplerPreviewThickness->setSuffix(i18n(" %"));
+
+
+
+
+
+
+
+
     //
     // Window Tab
     //
@@ -656,6 +681,10 @@ void GeneralTab::setDefault()
     m_cmbEraserCursorShape->setCurrentIndex(cfg.eraserCursorStyle(true));
     m_cmbEraserOutlineShape->setCurrentIndex(cfg.eraserOutlineStyle(true));
     setColorSamplerPreviewStyleIndexByValue(m_cmbColorSamplerPreviewStyle, cfg.colorSamplerPreviewStyle(true));
+    m_ssbColorSamplerPreviewThickness->setValue(cfg.colorSamplerPreviewCircleThickness(true));
+    m_nmbColorSamplerPreviewSize->setValue(cfg.colorSamplerPreviewCircleDiameter(true));
+    m_chkColorSamplerPreviewOutlineEnabled->setChecked(cfg.colorSamplerPreviewCircleOutlineEnabled(true));
+
 
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
     m_autosaveCheckBox->setChecked(cfg.autoSaveInterval(true) > 0);
@@ -760,6 +789,21 @@ void GeneralTab::showAdvancedCumulativeUndoSettings()
     }
 }
 
+void GeneralTab::colorSamplePreviewSizeChanged(int value)
+{
+    m_lblColorSamplerPreviewSizePreview->setDiameter(value);
+}
+
+void GeneralTab::colorSamplePreviewThicknessChanged(qreal value)
+{
+    m_lblColorSamplerPreviewSizePreview->setThickness(value/100.0);
+}
+
+void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
+{
+    m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
+}
+
 CursorStyle GeneralTab::cursorStyle()
 {
     return (CursorStyle)m_cmbCursorShape->currentIndex();
@@ -784,6 +828,22 @@ KisConfig::ColorSamplerPreviewStyle GeneralTab::colorSamplerPreviewStyle() const
 {
     return getColorSamplerPreviewStyleValue(m_cmbColorSamplerPreviewStyle);
 }
+
+int GeneralTab::colorSamplerPreviewCircleDiameter() const
+{
+    return m_nmbColorSamplerPreviewSize->value();
+}
+
+qreal GeneralTab::colorSamplerPreviewCircleThickness() const
+{
+    return m_ssbColorSamplerPreviewThickness->value();
+}
+
+bool GeneralTab::colorSamplerPreviewCircleOutlineEnabled() const
+{
+    return m_chkColorSamplerPreviewOutlineEnabled->isChecked();
+}
+
 
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
 {
@@ -2338,6 +2398,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setEraserCursorStyle(m_general->eraserCursorStyle());
         cfg.setEraserOutlineStyle(m_general->eraserOutlineStyle());
         cfg.setColorSamplerPreviewStyle(m_general->colorSamplerPreviewStyle());
+        cfg.setColorSamplerPreviewCircleDiameter(m_general->colorSamplerPreviewCircleDiameter());
+        cfg.setColorSamplerPreviewCircleThickness(m_general->colorSamplerPreviewCircleThickness());
+        cfg.setColorSamplerPreviewCircleOutlineEnabled(m_general->colorSamplerPreviewCircleOutlineEnabled());
+
         cfg.setShowRootLayer(m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());
         cfg.setForceAlwaysFullSizedOutline(!m_general->m_changeBrushOutline->isChecked());

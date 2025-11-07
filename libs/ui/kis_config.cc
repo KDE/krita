@@ -513,6 +513,48 @@ void KisConfig::setColorSamplerPreviewStyle(ColorSamplerPreviewStyle style)
     KisConfigNotifier::instance()->notifyColorSamplerPreviewStyleChanged();
 }
 
+int KisConfig::colorSamplerPreviewCircleDiameter(bool defaultValue) const
+{
+    int def = 180;
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerPreviewCircleDiameter", def);
+    }
+    return def;
+}
+
+void KisConfig::setColorSamplerPreviewCircleDiameter(int diameter)
+{
+    m_cfg.writeEntry("colorSamplerPreviewCircleDiameter", diameter);
+}
+
+qreal KisConfig::colorSamplerPreviewCircleThickness(bool defaultValue) const
+{
+    qreal def = 12; // percentage
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerPreviewCircleThickness", def);
+    }
+    return def;
+}
+
+void KisConfig::setColorSamplerPreviewCircleThickness(qreal thickness)
+{
+    m_cfg.writeEntry("colorSamplerPreviewCircleThickness", thickness);
+}
+
+bool KisConfig::colorSamplerPreviewCircleOutlineEnabled(bool defaultValue) const
+{
+    bool def = true;
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerPreviewCircleOutlineEnabled", def);
+    }
+    return def;
+}
+
+void KisConfig::setColorSamplerPreviewCircleOutlineEnabled(bool enabled)
+{
+    m_cfg.writeEntry("colorSamplerPreviewCircleOutlineEnabled", enabled);
+}
+
 bool KisConfig::useDirtyPresets(bool defaultValue) const
 {
    return (defaultValue ? false : m_cfg.readEntry("useDirtyPresets", true));

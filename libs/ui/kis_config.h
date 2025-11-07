@@ -154,6 +154,9 @@ public:
     bool colorSamplerPreviewCircleOutlineEnabled(bool defaultValue = false) const;
     void setColorSamplerPreviewCircleOutlineEnabled(bool enabled);
 
+    bool colorSamplerPreviewCircleExtraCirclesEnabled(bool defaultValue = false) const;
+    void setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled);
+
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
     void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;

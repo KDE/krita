@@ -555,6 +555,20 @@ void KisConfig::setColorSamplerPreviewCircleOutlineEnabled(bool enabled)
     m_cfg.writeEntry("colorSamplerPreviewCircleOutlineEnabled", enabled);
 }
 
+bool KisConfig::colorSamplerPreviewCircleExtraCirclesEnabled(bool defaultValue) const
+{
+    bool def = true;
+    if (!defaultValue) {
+        return m_cfg.readEntry("colorSamplerPreviewCircleExtraCirclesEnabled", def);
+    }
+    return def;
+}
+
+void KisConfig::setColorSamplerPreviewCircleExtraCirclesEnabled(bool enabled)
+{
+    m_cfg.writeEntry("colorSamplerPreviewCircleExtraCirclesEnabled", enabled);
+}
+
 bool KisConfig::useDirtyPresets(bool defaultValue) const
 {
    return (defaultValue ? false : m_cfg.readEntry("useDirtyPresets", true));

@@ -279,6 +279,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(cfg.colorSamplerPreviewCircleOutlineEnabled());
     connect(m_chkColorSamplerPreviewOutlineEnabled,SIGNAL(stateChanged(int)), SLOT(colorSamplePreviewOutlineEnabledChanged(int)));
 
+    m_chkColorSamplerPreviewExtraCircles->setChecked(cfg.colorSamplerPreviewCircleExtraCirclesEnabled());
 
 
     m_ssbColorSamplerPreviewThickness->setSuffix(i18n(" %"));
@@ -842,6 +843,11 @@ qreal GeneralTab::colorSamplerPreviewCircleThickness() const
 bool GeneralTab::colorSamplerPreviewCircleOutlineEnabled() const
 {
     return m_chkColorSamplerPreviewOutlineEnabled->isChecked();
+}
+
+bool GeneralTab::colorSamplerPreviewCircleExtraCirclesEnabled() const
+{
+    return m_chkColorSamplerPreviewExtraCircles->isChecked();
 }
 
 
@@ -2401,6 +2407,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setColorSamplerPreviewCircleDiameter(m_general->colorSamplerPreviewCircleDiameter());
         cfg.setColorSamplerPreviewCircleThickness(m_general->colorSamplerPreviewCircleThickness());
         cfg.setColorSamplerPreviewCircleOutlineEnabled(m_general->colorSamplerPreviewCircleOutlineEnabled());
+        cfg.setColorSamplerPreviewCircleExtraCirclesEnabled(m_general->colorSamplerPreviewCircleExtraCirclesEnabled());
 
         cfg.setShowRootLayer(m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());

@@ -284,7 +284,7 @@
          </layout>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
+       <item row="10" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -369,6 +369,16 @@
        </item>
        <item row="8" column="1">
         <widget class="QCheckBox" name="m_chkColorSamplerPreviewOutlineEnabled"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="m_lblColorSamplerPreviewExtraCircles">
+         <property name="text">
+          <string>Extra comparison space:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QCheckBox" name="m_chkColorSamplerPreviewExtraCircles"/>
        </item>
       </layout>
      </widget>

@@ -79,6 +79,9 @@ struct KisAsyncColorSamplerHelper::Private
     QTimer activationDelayTimer;
 
     KisConfig::ColorSamplerPreviewStyle style = KisConfig::ColorSamplerPreviewStyle::Circle;
+    int circlePreviewDiameter {180};
+    qreal circlePreviewThickness {0.12};
+    bool circlePreviewOutlineEnabled {true};
     QRectF previewDocRect;
 
     QColor currentColor;
@@ -123,8 +126,7 @@ struct KisAsyncColorSamplerHelper::Private
 
     QRectF colorPreviewRectForCircle()
     {
-        constexpr qreal SIZE = 200.0;
-        return QRectF(-SIZE / 2.0, -SIZE / 2.0, SIZE, SIZE);
+        return QRectF(-circlePreviewDiameter / 2.0, -circlePreviewDiameter / 2.0, circlePreviewDiameter, circlePreviewDiameter);
     }
 
     QRectF colorPreviewDocRect(const QPointF &outlineDocPoint)
@@ -188,6 +190,15 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
 
     m_d->sampleCurrentLayer = sampleCurrentLayer;
     m_d->haveSample = false;
+
+
+    KisConfig cfg(true);
+    m_d->style = cfg.colorSamplerPreviewStyle();
+
+    m_d->circlePreviewDiameter = cfg.colorSamplerPreviewCircleDiameter();
+    m_d->circlePreviewThickness = cfg.colorSamplerPreviewCircleThickness()/100.0; // saved in percentages
+    m_d->circlePreviewOutlineEnabled = cfg.colorSamplerPreviewCircleOutlineEnabled();
+
 
     if (colorPreviewHasForegroundComparison(m_d->style)) {
         m_d->activationDelayTimer.start();
@@ -399,6 +410,7 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         return;
     }
 
+    gc.save();
     qreal dpr = gc.device()->devicePixelRatioF();
     QSizeF cacheSizeF = viewRectF.size() * dpr;
     QSize cacheSize(qCeil(cacheSizeF.width()), qCeil(cacheSizeF.height()));
@@ -421,9 +433,13 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
         cachePainter.setRenderHint(QPainter::Antialiasing);
 
         QColor backgroundColor = colorWithAlpha(qApp->palette().color(QPalette::Base), OPACITY_OPAQUE_U8 / 2 + 1);
-        qreal penWidth = 2.0 * dpr;
+        qreal penWidth = m_d->circlePreviewDiameter > 100 ? (2.0 * dpr) : (1.0 * dpr);
         QPen pen = QPen(backgroundColor, penWidth);
-        cachePainter.setPen(pen);
+        if (m_d->circlePreviewOutlineEnabled) {
+            cachePainter.setPen(pen);
+        } else {
+            cachePainter.setPen(Qt::NoPen);
+        }
 
         QRectF cacheRect = m_d->cache.rect();
         QRectF outerRect = cacheRect.marginsRemoved(QMarginsF(penWidth, penWidth, penWidth, penWidth));
@@ -461,20 +477,23 @@ void KisAsyncColorSamplerHelper::paintCircle(QPainter &gc,
             cachePainter.drawEllipse(outerRect);
         }
 
-        qreal innerX = cacheRect.width() / 8.0;
-        qreal innerY = cacheRect.height() / 8.0;
+        qreal innerX = cacheRect.width() * (1.0 - m_d->circlePreviewThickness);
+        qreal innerY = cacheRect.height() * (1.0 - m_d->circlePreviewThickness);
         QRectF innerRect = cacheRect.marginsRemoved(QMarginsF(innerX, innerY, innerX, innerY));
 
         cachePainter.setPen(Qt::NoPen);
         cachePainter.setCompositionMode(QPainter::CompositionMode_Clear);
         cachePainter.drawEllipse(innerRect);
 
-        cachePainter.setBrush(Qt::transparent);
-        cachePainter.setPen(pen);
-        cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        cachePainter.drawEllipse(innerRect);
+        if (m_d->circlePreviewOutlineEnabled) {
+            cachePainter.setBrush(Qt::transparent);
+            cachePainter.setPen(pen);
+            cachePainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            cachePainter.drawEllipse(innerRect);
+        }
     }
     gc.drawPixmap(viewRectF.toRect(), m_d->cache);
+    gc.restore();
 }
 
 void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)

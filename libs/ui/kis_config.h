@@ -146,6 +146,15 @@ public:
     ColorSamplerPreviewStyle colorSamplerPreviewStyle(bool defaultValue = false) const;
     void setColorSamplerPreviewStyle(ColorSamplerPreviewStyle style);
 
+    int colorSamplerPreviewCircleDiameter(bool defaultValue = false) const;
+    void setColorSamplerPreviewCircleDiameter(int style);
+
+    qreal colorSamplerPreviewCircleThickness(bool defaultValue = false) const;
+    void setColorSamplerPreviewCircleThickness(qreal thickness);
+
+    bool colorSamplerPreviewCircleOutlineEnabled(bool defaultValue = false) const;
+    void setColorSamplerPreviewCircleOutlineEnabled(bool enabled);
+
     /**
      * Controls if the canvas should have a separate color managed surface.
      * Even though the surface can be created on any platform the proper

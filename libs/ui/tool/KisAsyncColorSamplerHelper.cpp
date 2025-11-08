@@ -31,23 +31,6 @@
 
 
 namespace {
-bool colorPreviewHasForegroundComparison(KisConfig::ColorSamplerPreviewStyle style)
-{
-    // Not all styles show the foreground color when sampling is pending. It
-    // would probably be cleaner if that were its own action instead of being
-    // tied to the color sampler activation and show the comparison *on* the
-    // cursor instead of it being off to the side, but it'd take some effort
-    // to implement the separation of that.
-    switch (style) {
-    case KisConfig::ColorSamplerPreviewStyle::RectangleLeft:
-    case KisConfig::ColorSamplerPreviewStyle::RectangleRight:
-    case KisConfig::ColorSamplerPreviewStyle::RectangleAbove:
-        return true;
-    default:
-        return false;
-    }
-}
-
 QColor colorWithAlpha(QColor color, int alpha)
 {
     color.setAlpha(alpha);
@@ -168,10 +151,15 @@ struct KisAsyncColorSamplerHelper::Private
             colorPreviewViewRect = colorPreviewRectForRectangle();
             break;
         default:
-            if (!haveSample) {
-                return QRectF();
+            // Showing a preview without sampling a color (by just holding a
+            // modifier) is used to compare the foreground color with the
+            // canvas. The circle doesn't work well for that purpose, so we
+            // use the handedness-independent rectangle above instead.
+            if (haveSample) {
+                colorPreviewViewRect = colorPreviewRectForCircle();
+            } else {
+                colorPreviewViewRect = colorPreviewRectForRectangle();
             }
-            colorPreviewViewRect = colorPreviewRectForCircle();
             break;
         }
 
@@ -226,12 +214,7 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
     m_d->circlePreviewOutlineEnabled = cfg.colorSamplerPreviewCircleOutlineEnabled();
     m_d->circlePreviewExtraCircles = cfg.colorSamplerPreviewCircleExtraCirclesEnabled();
 
-
-    if (colorPreviewHasForegroundComparison(m_d->style)) {
-        m_d->activationDelayTimer.start();
-    } else {
-        activatePreview();
-    }
+    m_d->activationDelayTimer.start();
 }
 
 void KisAsyncColorSamplerHelper::activateDelayedPreview()
@@ -374,7 +357,12 @@ void KisAsyncColorSamplerHelper::paint(QPainter &gc, const KoViewConverter &conv
         paintRectangle(gc, viewRectF, currentColor, baseColor);
         break;
     default:
-        paintCircle(gc, viewRectF, currentColor, baseColor);
+        // See comment in colorPreviewDocRect.
+        if (m_d->haveSample) {
+            paintCircle(gc, viewRectF, currentColor, baseColor);
+        } else {
+            paintRectangle(gc, viewRectF, currentColor, baseColor);
+        }
         break;
     }
 }

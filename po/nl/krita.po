@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-06 16:32+0000\n"
+"POT-Creation-Date: 2025-11-08 02:00+0000\n"
 "PO-Revision-Date: 2025-11-05 11:03+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -20458,7 +20458,7 @@ msgstr "Geen 'tekst'-node gevonden!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
-#: libs/psdutils/cos/psd_text_data_converter.cpp:1151
+#: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Onbekende fout bij schrijven van SVG-tekstelement"

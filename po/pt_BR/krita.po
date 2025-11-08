@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-06 16:32+0000\n"
-"PO-Revision-Date: 2025-11-06 07:15-0300\n"
+"POT-Creation-Date: 2025-11-08 02:00+0000\n"
+"PO-Revision-Date: 2025-11-07 08:34-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -20388,7 +20388,7 @@ msgstr "Nenhum nó 'texto' encontrado!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
-#: libs/psdutils/cos/psd_text_data_converter.cpp:1151
+#: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Erro desconhecido ao escrever o elemento texto SVG"
@@ -67080,11 +67080,7 @@ msgstr "Mover seleção de texto para direita em 1 pixel"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "When type setting mode is active, move the start of the selection reft by "
-#| "one pixel."
+#, kde-format
 msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "

@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-06 16:32+0000\n"
+"POT-Creation-Date: 2025-11-08 02:00+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -20433,7 +20433,7 @@ msgstr ""
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
-#: libs/psdutils/cos/psd_text_data_converter.cpp:1151
+#: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr ""

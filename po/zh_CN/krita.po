@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-06 16:32+0000\n"
+"POT-Creation-Date: 2025-11-08 02:00+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -20205,7 +20205,7 @@ msgstr "找不到“文本”节点！"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
-#: libs/psdutils/cos/psd_text_data_converter.cpp:1151
+#: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "写入 SVG 文本元素时发生未知错误"
@@ -26939,7 +26939,7 @@ msgstr "Rec 709 Linear"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
 #, kde-format
 msgid "Rec 2020 PQ"
-msgstr ""
+msgstr "Rec 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #, kde-format
@@ -65429,80 +65429,80 @@ msgstr "SVG 文字工具更改"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "调整文本的字符转换。"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
-msgstr ""
+msgstr "文本顶部"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
-msgstr ""
+msgstr "字体大小"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
-msgstr ""
+msgstr "文本底部"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
-msgstr ""
+msgstr "字母字符基线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
-msgstr ""
+msgstr "表意字符基线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr ""
+msgstr "悬挂基线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
-msgstr ""
+msgstr "中线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
-msgstr ""
+msgstr "数学字符基线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
-msgstr ""
+msgstr "中央基线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
-msgstr ""
+msgstr "行高"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr ""
+msgstr "当前基线"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr ""
+msgstr "基线偏移"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
@@ -65563,7 +65563,7 @@ msgstr "移除文本"
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr ""
+msgstr "移除字符变换"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -65876,14 +65876,14 @@ msgstr "不带样式粘贴文本。"
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr ""
+msgstr "下移所选文本"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
-msgstr ""
+msgstr "下移所选文本 1 像素"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:230
@@ -65892,21 +65892,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
-msgstr ""
+msgstr "当文本排版模式处于活动状态时，将所选文本开头下移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr ""
+msgstr "上移所选文本"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up By 1 Pixel"
-msgstr ""
+msgstr "上移所选文本 1 像素"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:241
@@ -65915,21 +65915,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
-msgstr ""
+msgstr "当文本排版模式处于活动状态时，将所选文本开头上移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr ""
+msgstr "左移所选文本"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr ""
+msgstr "左移所选文本 1 像素"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -65938,21 +65938,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
-msgstr ""
+msgstr "当文本排版模式处于活动状态时，将所选文本开头左移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr ""
+msgstr "右移所选文本"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right By 1 Pixel"
-msgstr ""
+msgstr "右移所选文本 1 像素"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
@@ -65961,7 +65961,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
-msgstr ""
+msgstr "当文本排版模式处于活动状态时，将所选文本开头右移 1 像素"
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -65972,14 +65972,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr ""
+msgstr "移除字符变换"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "移除选中文本的字符变换。"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:297
 #, kde-format
@@ -66064,13 +66064,13 @@ msgstr "粘贴时总是粘贴富文本。"
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr ""
+msgstr "文本排版模式"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr ""
+msgstr "启用文本排版模式。"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
 #, kde-format
@@ -66192,7 +66192,7 @@ msgstr "编辑 SVG 源代码"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
 #, kde-format
 msgid "Text Type"
-msgstr "文字类型"
+msgstr "文本排版模式"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47

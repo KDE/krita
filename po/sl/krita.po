@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-06 16:32+0000\n"
-"PO-Revision-Date: 2025-11-06 08:29+0100\n"
+"POT-Creation-Date: 2025-11-08 02:00+0000\n"
+"PO-Revision-Date: 2025-11-07 19:48+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -20345,7 +20345,7 @@ msgstr "Nobenega »besedilnega« vozlišča ni mogoče najti!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
-#: libs/psdutils/cos/psd_text_data_converter.cpp:1151
+#: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Neznana napaka pri pisanju besedilnega elementa SVG"
@@ -66934,11 +66934,7 @@ msgstr "Premakni izbor besedila desno za 1 sl. točko"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "When type setting mode is active, move the start of the selection reft by "
-#| "one pixel."
+#, kde-format
 msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "

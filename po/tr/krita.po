@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-06 16:32+0000\n"
-"PO-Revision-Date: 2025-11-05 19:17+0300\n"
+"POT-Creation-Date: 2025-11-08 02:00+0000\n"
+"PO-Revision-Date: 2025-11-07 05:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20362,7 +20362,7 @@ msgstr "Bulunan “metin” düğümü yok!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
-#: libs/psdutils/cos/psd_text_data_converter.cpp:1151
+#: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "SVG metin ögesi yazılırken bilinmeyen hata"
@@ -27163,11 +27163,9 @@ msgid "Rec 709 Linear"
 msgstr "Rec 709 Doğrusal"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
-#, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rec 2100 PQ"
+msgstr "Rec 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #, kde-format
@@ -66336,103 +66334,80 @@ msgstr "SVG Metni Değiştir Aracı"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "Metinde Karakter Dönüşümlerini Ayarla"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Top"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
-msgstr "Metin üstü"
+msgstr "Metin Üstü"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
-msgstr "Yazıtipi puntosu"
+msgstr "Yazıtipi Puntosu"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Bottom"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
-msgstr "Metin altı"
+msgstr "Metin Altı"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Alphabetic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Abecesel"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "İdeografik"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Hanging"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Asılı"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Orta"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematiksel"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Central"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Merkezî"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
-msgstr "Satır yüksekliği"
+msgstr "Satır Yüksekliği"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
-#, fuzzy, kde-format
-#| msgid "Current Brush Engine"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "Geçerli Fırça İşletkesi"
+msgstr "Geçerli Taban Çizgisi"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Baseline-Shift"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "Taban çizgisi kaydırma"
+msgstr "Taban Çizgisi Kaydırma"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
@@ -66491,11 +66466,9 @@ msgid "Remove Text"
 msgstr "Metni Kaldır"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
-#, fuzzy
-#| msgid "Pattern Transform"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "Desen Dönüşümü"
+msgstr "Karakter Dönüşümlerini Kaldır"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -66805,19 +66778,17 @@ msgstr "Metni biçimlendirme olmadan yapıştırın."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "Seçimi Taşı"
+msgstr "Metin Seçimini Aşağı Taşı"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
-msgstr ""
+msgstr "Metin Seçimini 1 Piksel Aşağı Taşı"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:230
@@ -66826,23 +66797,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
-msgstr ""
+msgstr "Dizgi kipi etkinken, seçimin başlangıcını bir piksel aşağı taşıyın."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "Seçimi Taşı"
+msgstr "Metin Seçimini Yukarı Taşı"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up By 1 Pixel"
-msgstr ""
+msgstr "Metin Seçimini 1 Piksel Yukarı Taşı"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:241
@@ -66851,23 +66820,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
-msgstr ""
+msgstr "Dizgi kipi etkinken, seçimin başlangıcını bir piksel yukarı taşıyın."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "Seçimi Taşı"
+msgstr "Metin Seçimini Sola Taşı"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr ""
+msgstr "Metin Seçimini 1 Piksel Sola Taşı"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -66876,23 +66843,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
-msgstr ""
+msgstr "Dizgi kipi etkinken, seçimin başlangıcını bir piksel sola taşıyın."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "Seçimi Taşı"
+msgstr "Metin Seçimini Sağa Taşı"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right By 1 Pixel"
-msgstr ""
+msgstr "Metin Seçimini 1 Piksel Sağa Taşı"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
@@ -66901,7 +66866,7 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
-msgstr ""
+msgstr "Dizgi kipi etkinken, seçimin başlangıcını bir piksel sağa taşıyın."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66909,18 +66874,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "Desen Dönüşümü"
+msgstr "Karakter Dönüşümlerini Kaldır"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "Seçimden karakter dönüşümlerini kaldırın."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:297
 #, kde-format
@@ -67007,18 +66971,16 @@ msgstr ""
 "Yapıştırma eylemini kullanırken her zaman zengin metin olarak yapıştırın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
-#, fuzzy, kde-format
-#| msgid "Texturing Mode:"
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Dokulandırma kipi:"
+msgstr "Dizgi Kipi"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Kalem Ayarlarını Etkinleştir"
+msgstr "Dizgi kipini etkinleştirin."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
 #, kde-format

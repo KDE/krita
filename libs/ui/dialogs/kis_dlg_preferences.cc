@@ -272,6 +272,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     setColorSamplerPreviewStyleItems(m_cmbColorSamplerPreviewStyle);
     setColorSamplerPreviewStyleIndexByValue(m_cmbColorSamplerPreviewStyle, cfg.colorSamplerPreviewStyle());
+    connect(m_cmbColorSamplerPreviewStyle,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this,
+            &GeneralTab::colorSamplePreviewStyleChanged);
+    colorSamplePreviewStyleChanged(m_cmbColorSamplerPreviewStyle->currentIndex());
 
     m_nmbColorSamplerPreviewSize->setRange(1, 400);
     m_nmbColorSamplerPreviewSize->setValue(cfg.colorSamplerPreviewCircleDiameter());
@@ -847,6 +852,12 @@ void GeneralTab::showAdvancedCumulativeUndoSettings()
     if (dlg.exec() == KoDialog::Accepted) {
         m_cumulativeUndoData = dlg.cumulativeUndoData();
     }
+}
+
+void GeneralTab::colorSamplePreviewStyleChanged(int index)
+{
+    bool circleSettingsVisible = index == int(KisConfig::ColorSamplerPreviewStyle::Circle);
+    m_frmColorSamplerCircleSettings->setVisible(circleSettingsVisible);
 }
 
 void GeneralTab::colorSamplePreviewSizeChanged(int value)

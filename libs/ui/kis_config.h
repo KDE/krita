@@ -139,6 +139,7 @@ public:
         Circle,
         RectangleLeft,
         RectangleRight,
+        RectangleAbove,
         Count,
     };
 

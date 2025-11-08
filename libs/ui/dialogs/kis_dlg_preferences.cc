@@ -990,6 +990,7 @@ void GeneralTab::setColorSamplerPreviewStyleItems(QComboBox *cmb)
         i18nc("Preview option for a circular/ring-shaped color sampler", "Circle"),
         i18nc("Preview option for a rectangular color sampler left of the cursor", "Rectangle Left"),
         i18nc("Preview option for a rectangular color sampler right of the cursor", "Rectangle Right"),
+        i18nc("Preview option for a rectangular color sampler above the cursor", "Rectangle Above"),
     });
 }
 

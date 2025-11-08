@@ -155,6 +155,26 @@
          </layout>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Brush Outline Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="KisColorButton" name="cursorColorButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="0" colspan="2">
         <widget class="QGroupBox" name="m_chkSeparateEraserCursor">
          <property name="title">
@@ -284,7 +304,17 @@
          </layout>
         </widget>
        </item>
-       <item row="10" column="0" colspan="2">
+       <item row="4" column="0">
+        <widget class="QLabel" name="m_lblColorSamplerPreviewStyle">
+         <property name="text">
+          <string>Color Sampler Shape:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="m_cmbColorSamplerPreviewStyle"/>
+       </item>
+       <item row="6" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -297,88 +327,67 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Brush Outline Color:</string>
+       <item row="5" column="0" colspan="2">
+        <widget class="QFrame" name="m_frmColorSamplerCircleSettings">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
          </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QFormLayout" name="m_frmColorSamplerCircleSettingsLayout">
+          <item row="1" column="0">
+           <widget class="QLabel" name="m_lblColorSamplerPreviewSize">
+            <property name="text">
+             <string>Diameter:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="KisSliderSpinBox" name="m_nmbColorSamplerPreviewSize"/>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="KisColorSamplerPreviewPreview" name="m_lblColorSamplerPreviewSizePreview">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="m_lblColorSamplerPreviewThickness">
+            <property name="text">
+             <string>Thickness:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="KisDoubleSliderSpinBox" name="m_ssbColorSamplerPreviewThickness"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="m_chkColorSamplerPreviewOutlineEnabled">
+            <property name="text">
+             <string>Enable Outline</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="m_chkColorSamplerPreviewExtraCircles">
+            <property name="text">
+             <string>Extra Comparison Space</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="KisColorButton" name="cursorColorButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="m_lblColorSamplerPreviewStyle">
-         <property name="text">
-          <string>Color Sampler Preview:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QComboBox" name="m_cmbColorSamplerPreviewStyle"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="KisColorSamplerPreviewPreview" name="m_lblColorSamplerPreviewSizePreview">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>20</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="m_lblColorSamplerPreviewSizePreviewEmpty"/>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="m_lblColorSamplerPreviewSize">
-         <property name="text">
-          <string>Diameter:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="KisSliderSpinBox" name="m_nmbColorSamplerPreviewSize"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="m_lblColorSamplerPreviewThickness">
-         <property name="text">
-          <string>Thickness:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_24">
-         <property name="text">
-          <string>Enable Outline:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="m_ssbColorSamplerPreviewThickness"/>
-       </item>
-       <item row="8" column="1">
-        <widget class="QCheckBox" name="m_chkColorSamplerPreviewOutlineEnabled"/>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="m_lblColorSamplerPreviewExtraCircles">
-         <property name="text">
-          <string>Extra comparison space:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QCheckBox" name="m_chkColorSamplerPreviewExtraCircles"/>
        </item>
       </layout>
      </widget>
@@ -1684,6 +1693,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
    <class>KisSliderSpinBox</class>
    <extends>QSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisFontComboBoxes</class>
@@ -1701,6 +1711,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
    <class>KisDoubleSliderSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisColorSamplerPreviewPreview</class>

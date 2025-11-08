@@ -114,6 +114,7 @@ private Q_SLOTS:
     void enableSubWindowOptions(int);
     void showAdvancedCumulativeUndoSettings();
 
+    void colorSamplePreviewStyleChanged(int index);
     void colorSamplePreviewSizeChanged(int value);
     void colorSamplePreviewThicknessChanged(qreal value);
     void colorSamplePreviewOutlineEnabledChanged(int value);

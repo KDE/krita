@@ -41,6 +41,7 @@ bool colorPreviewHasForegroundComparison(KisConfig::ColorSamplerPreviewStyle sty
     switch (style) {
     case KisConfig::ColorSamplerPreviewStyle::RectangleLeft:
     case KisConfig::ColorSamplerPreviewStyle::RectangleRight:
+    case KisConfig::ColorSamplerPreviewStyle::RectangleAbove:
         return true;
     default:
         return false;
@@ -100,19 +101,44 @@ struct KisAsyncColorSamplerHelper::Private
         return *canvas->imageView()->viewConverter();
     }
 
-    QRectF colorPreviewRectForRectangle(bool left)
+    QRectF colorPreviewRectForRectangle() const
     {
+        // Offsetting to the sides is both vertical and horizontal, when
+        // offsetting above it's only vertical, so it needs a bit more space.
         constexpr qreal OFFSET = 32.0;
+        constexpr qreal OFFSET_ABOVE = OFFSET * 1.5;
         constexpr qreal SIZE = PREVIEW_RECT_SIZE;
 
         bool mirrored = canvas->xAxisMirrored();
-        if (mirrored) {
-            left = !left;
+        bool flipped = canvas->yAxisMirrored();
+
+        KisConfig::ColorSamplerPreviewStyle effectiveStyle;
+        if (mirrored && style == KisConfig::ColorSamplerPreviewStyle::RectangleLeft) {
+            effectiveStyle = KisConfig::ColorSamplerPreviewStyle::RectangleRight;
+        } else if (mirrored && style == KisConfig::ColorSamplerPreviewStyle::RectangleRight) {
+            effectiveStyle = KisConfig::ColorSamplerPreviewStyle::RectangleLeft;
+        } else {
+            effectiveStyle = style;
         }
 
         qreal width = haveSample ? SIZE * 2.0 : SIZE;
-        qreal x = left ? -(OFFSET + width) : OFFSET;
-        qreal y = canvas->yAxisMirrored() ? -(OFFSET + SIZE) : OFFSET;
+
+        qreal x, y;
+        switch (effectiveStyle) {
+        case KisConfig::ColorSamplerPreviewStyle::RectangleLeft:
+            x = -(OFFSET + width);
+            y = flipped ? -(OFFSET + SIZE) : OFFSET;
+            break;
+        case KisConfig::ColorSamplerPreviewStyle::RectangleRight:
+            x = OFFSET;
+            y = flipped ? -(OFFSET + SIZE) : OFFSET;
+            break;
+        default:
+            x = width / -2.0;
+            y = flipped ? OFFSET_ABOVE : -(OFFSET_ABOVE + SIZE);
+            break;
+        }
+
         QRectF rect(x, y, width, SIZE);
 
         qreal canvasRotationAngle = canvas->rotationAngle();
@@ -137,10 +163,9 @@ struct KisAsyncColorSamplerHelper::Private
         case KisConfig::ColorSamplerPreviewStyle::None:
             return QRectF();
         case KisConfig::ColorSamplerPreviewStyle::RectangleLeft:
-            colorPreviewViewRect = colorPreviewRectForRectangle(true);
-            break;
         case KisConfig::ColorSamplerPreviewStyle::RectangleRight:
-            colorPreviewViewRect = colorPreviewRectForRectangle(false);
+        case KisConfig::ColorSamplerPreviewStyle::RectangleAbove:
+            colorPreviewViewRect = colorPreviewRectForRectangle();
             break;
         default:
             if (!haveSample) {
@@ -345,6 +370,7 @@ void KisAsyncColorSamplerHelper::paint(QPainter &gc, const KoViewConverter &conv
     switch (m_d->style) {
     case KisConfig::ColorSamplerPreviewStyle::RectangleLeft:
     case KisConfig::ColorSamplerPreviewStyle::RectangleRight:
+    case KisConfig::ColorSamplerPreviewStyle::RectangleAbove:
         paintRectangle(gc, viewRectF, currentColor, baseColor);
         break;
     default:

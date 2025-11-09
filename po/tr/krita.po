@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-08 02:00+0000\n"
-"PO-Revision-Date: 2025-11-07 05:02+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"PO-Revision-Date: 2025-11-08 14:48+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -47810,7 +47810,7 @@ msgstr "+ %1 dizilişi"
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:226
 #, kde-format
 msgid "- Array of %1"
-msgstr "- %1 dizilişi"
+msgstr "− %1 dizilişi"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:239
 #, kde-format
@@ -47833,7 +47833,7 @@ msgstr "Görseli Döndür"
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:32
 #, kde-format
 msgid "- Elements"
-msgstr "- Ögeler"
+msgstr "− Ögeler"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:48
@@ -50834,7 +50834,7 @@ msgstr "Çember"
 #: plugins/filters/blur/wdgblur.ui:108
 #, kde-format
 msgid "Strength:"
-msgstr "Sertlik:"
+msgstr "Güç:"
 
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
@@ -57952,7 +57952,7 @@ msgstr "Süzgeç Türü"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr "Süzgeç Gücünü Kendiliğinden Ayarla"
+msgstr "Süzgeç gücünü kendiliğinden ayarla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -60565,7 +60565,7 @@ msgstr "Oran"
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, kde-format
 msgid "Strength"
-msgstr "Uzunluk"
+msgstr "Güç"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, kde-format

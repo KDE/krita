@@ -719,6 +719,8 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
 
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(activeNode, QString(), 0, selection, &applicator);
+    applicator.end();
+    image->waitForDone(); // So that previewDevice doesn't end up empty and result in empty histograms
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 
@@ -731,10 +733,9 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     if (dlg.exec() != QDialog::Accepted || adjl->filter().isNull()) {
         // XXX: add messagebox warning if there's no filter set!
-        applicator.cancel();
+        m_commandsAdapter->undoLastCommand();
     } else {
-        applicator.applyCommand(new KisNodeRenameCommand(adjl, adjl->name(), dlg.layerName()));
-        applicator.end();
+        adjl->setName(dlg.layerName());
     }
 
     return adjl;

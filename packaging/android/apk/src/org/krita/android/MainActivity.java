@@ -66,11 +66,18 @@ public class MainActivity extends QtActivity {
         // unlike onCreate where we did this before, this method is called several times throughout the
         // lifecycle of our app, but we intend to run this method only once (and in "Foreground").
         if (!serviceStarted) {
+            serviceStarted  = true;
+            // Full-screening the application here instead of after the main window is shown avoids
+            // some ugly flicker as the Qt UI resizes itself.
+            try {
+                setFullScreen(true);
+            } catch (Exception | UnsatisfiedLinkError e) {
+                Log.e(TAG, "Failed to enter fullscreen", e);
+            }
             // Keep the service started so in an unfortunate case where we're not allowed to start a
             // foreground service, we can try to continue without it.
             Intent docSaverServiceIntent = new Intent(this, DocumentSaverService.class);
             startService(docSaverServiceIntent);
-            serviceStarted = true;
         }
     }
 

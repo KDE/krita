@@ -531,16 +531,28 @@ public:
         Q_FOREACH(KoShape *shape, textPaths) {
             shapeGroup->addShape(shape);
         }
-        qDebug() << "updateing contours";
         updateTextWrappingAreas();
         updateInternalShapesList();
     }
     void updateInternalShapesList() {
         if (shapeGroup) {
-            qDebug() << Q_FUNC_INFO << shapesInside.size() << shapeGroup->shapes().size();
             internalShapesPainter->setShapes(shapeGroup->shapes());
         }
     }
+
+    struct BulkActionState {
+        BulkActionState(QRectF originalBoundingRectArg) : originalBoundingRect(originalBoundingRectArg) {}
+
+        QRectF originalBoundingRect;
+        bool contourHasChanged = false;
+        bool layoutHasChanged = false;
+
+        bool changed() const {
+            return contourHasChanged || layoutHasChanged;
+        }
+    };
+
+    std::optional<BulkActionState> bulkActionState;
 
     QList<KoShape*> shapesInside;
     QList<KoShape*> shapesSubtract;

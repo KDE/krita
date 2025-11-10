@@ -14,14 +14,15 @@
 KoShapeBulkActionLockAdapter::KoShapeBulkActionLockAdapter(const QList<KoShape*> &shapes)
 {
     Q_FOREACH(KoShape *shape, shapes) {
-        if (!tryAddBulkInterfaceShape(shape)) {
-            m_normalUpdateShapes.append(shape);
-        }
+        // explicitly called shaped will be "updated" in both
+        // ways, using normal updates and dependent bulk updates
+        m_normalUpdateShapes.append(shape);
+        tryAddBulkInterfaceShape(shape);
         addBulkInterfaceDependees(shape->dependees());
     }
 }
 
-bool KoShapeBulkActionLockAdapter::tryAddBulkInterfaceShape(KoShape *shape)
+void KoShapeBulkActionLockAdapter::tryAddBulkInterfaceShape(KoShape *shape)
 {
     KoShapeBulkActionInterface *iface = dynamic_cast<KoShapeBulkActionInterface *>(shape);
     if (iface) {
@@ -31,9 +32,7 @@ bool KoShapeBulkActionLockAdapter::tryAddBulkInterfaceShape(KoShape *shape)
             m_bulkInterfaceShapes.removeOne(iface);
         }
         m_bulkInterfaceShapes.append(iface);
-        return true;
     }
-    return false;
 };
 
 void KoShapeBulkActionLockAdapter::addBulkInterfaceDependees(const QList<KoShape*> dependees)
@@ -90,5 +89,13 @@ KoShapeBulkActionLock::~KoShapeBulkActionLock()
 {
     if (owns_lock()) {
         qWarning() << "WARNING: KoShapeBulkActionLock is destroyed while being locked. Update rect will be lost!";
+    }
+}
+
+void KoShapeBulkActionLock::bulkShapesUpdate(const UpdatesList &updates)
+{
+    // TODO: implement optimization for shape managers merging
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
+        it->first->updateAbsolute(it->second);
     }
 }

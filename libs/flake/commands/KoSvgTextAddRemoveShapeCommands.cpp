@@ -8,6 +8,7 @@
 #include <optional>
 #include "kis_debug.h"
 
+#include <KoShapeBulkActionLock.h>
 #include <KoSvgTextShape.h>
 #include <KoShapeContainer.h>
 
@@ -70,8 +71,8 @@ void KoSvgTextAddRemoveShapeCommandImpl::partB()
         d->memento = d->textShape->getMemento();
         d->oldTextPaths = d->textShape->textPathsAtRange(d->startPos, d->endPos);
     }
-    QRectF updateRectText = d->textShape->boundingRect();
-    QRectF updateRectShape = d->shape->boundingRect();
+
+    KoShapeBulkActionLock lock(QList<KoShape*>({d->textShape, d->shape}));
 
     KoShapeContainer *newParent = d->originalShapeParent.has_value() ? d->originalShapeParent.value() : d->textShape->parent();
     const QTransform newParentTransform = newParent ? newParent->absoluteTransformation() : QTransform();
@@ -96,10 +97,8 @@ void KoSvgTextAddRemoveShapeCommandImpl::partB()
         d->textShape->relayout();
     }
     d->shape->applyAbsoluteTransformation(absoluteTf);
-    updateRectText |= d->textShape->boundingRect();
-    updateRectShape |= d->shape->boundingRect();
-    d->textShape->updateAbsolute(updateRectText);
-    d->shape->updateAbsolute(updateRectShape);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 // Add shape to text.
@@ -110,8 +109,8 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
         d->oldTextPaths = d->textShape->textPathsAtRange(d->startPos, d->endPos);
         d->originalShapeParent = d->shape->parent();
     }
-    QRectF updateRect = d->textShape->boundingRect();
-    updateRect |= d->shape->boundingRect();
+
+    KoShapeBulkActionLock lock(QList<KoShape*>({d->textShape, d->shape}));
 
     KoShapeContainer *oldParent = d->shape->parent();
     const QTransform oldParentTransform = oldParent ? oldParent->absoluteTransformation() : QTransform();
@@ -136,10 +135,8 @@ void KoSvgTextAddRemoveShapeCommandImpl::partA()
         d->textShape->relayout();
     }
     d->shape->applyAbsoluteTransformation(absoluteTf);
-    updateRect |= d->textShape->boundingRect();
-    updateRect |= d->shape->boundingRect();
-    d->shape->updateAbsolute(updateRect);
-    d->textShape->updateAbsolute(updateRect);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 KoSvgTextAddShapeCommand::KoSvgTextAddShapeCommand(KoSvgTextShape *textShape, KoShape *shape, bool inside, KUndo2Command *parentCommand)

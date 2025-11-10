@@ -5,6 +5,7 @@
  */
 #include "SvgTextPathInfoChangeCommand.h"
 #include "kis_command_ids.h"
+#include <KoShapeBulkActionLock.h>
 
 SvgTextPathInfoChangeCommand::SvgTextPathInfoChangeCommand(KoSvgTextShape *shape, int pos, KoSvgText::TextOnPathInfo textPathInfo, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -18,7 +19,7 @@ SvgTextPathInfoChangeCommand::SvgTextPathInfoChangeCommand(KoSvgTextShape *shape
 
 void SvgTextPathInfoChangeCommand::redo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     KoSvgTextNodeIndex index = m_shape->topLevelNodeForPos(m_pos);
 
 
@@ -37,17 +38,15 @@ void SvgTextPathInfoChangeCommand::redo()
 
     m_shape->relayout();
     m_shape->notifyChanged();
-    updateRect |= m_shape->boundingRect();
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
     m_shape->notifyCursorPosChanged(m_pos, m_pos);
-    m_shape->updateAbsolute(updateRect);
 }
 
 void SvgTextPathInfoChangeCommand::undo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     m_shape->setMemento(m_textData, m_pos, m_pos);
-    updateRect |= m_shape->boundingRect();
-    m_shape->updateAbsolute(updateRect);
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int SvgTextPathInfoChangeCommand::id() const

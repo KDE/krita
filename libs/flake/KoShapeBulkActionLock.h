@@ -28,7 +28,7 @@ public:
     UpdatesList takeFinalUpdatesList();
 
 private:
-    bool tryAddBulkInterfaceShape(KoShape *shape);
+    void tryAddBulkInterfaceShape(KoShape *shape);
     void addBulkInterfaceDependees(const QList<KoShape*> dependees);
 
 private:
@@ -42,6 +42,11 @@ class KRITAFLAKE_EXPORT KoShapeBulkActionLock : protected KisAdaptedLock<KoShape
 public:
     using BaseClass = KisAdaptedLock<KoShapeBulkActionLockAdapter>;
     using BaseClass::BaseClass;
+
+    template <typename T, typename = std::enable_if_t<std::is_base_of_v<KoShape, T>>>
+    KoShapeBulkActionLock(T *shape)
+        : BaseClass(QList<KoShape*>{shape})
+    {}
 
     ~KoShapeBulkActionLock();
 
@@ -59,6 +64,8 @@ public:
     using BaseClass::swap;
     using BaseClass::release;
     using BaseClass::operator bool;
+
+    static void bulkShapesUpdate(const UpdatesList &updates);
 };
 
 #endif /* KOSHAPEBULKACTIONLOCK_H */

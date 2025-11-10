@@ -177,18 +177,19 @@ KoShape *KoSvgTextShape::cloneShape() const
 
 void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
+    KoShape::shapeChanged(type, shape);
+
     if (d->isLoading) {
         return;
     }
-    KoShape::shapeChanged(type, shape);
 
     const QVector<ChangeType> transformationTypes = {PositionChanged, RotationChanged, ScaleChanged, ShearChanged, SizeChanged, GenericMatrixChange};
 
-    qDebug() << shape << type;
     if ((d->shapesInside.contains(shape) || d->shapesSubtract.contains(shape) || d->textPaths.contains(shape))
             && (transformationTypes.contains(type)
                 || type == ParameterChanged
                 || type == ParentChanged
+                || type == ContentChanged // for KoPathShape modifications
                 || type == Deleted)) {
         if (type == Deleted) {
             if (d->shapesInside.contains(shape)) {
@@ -209,28 +210,38 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 
         // Updates the contours and calls relayout.
         // Would be great if we could compress the updates here somehow...
-        d->updateTextWrappingAreas();
-        // NotifyChanged ensures that boundingRect() is called on this shape.
-        this->notifyChanged();
-        if (d->shapesSubtract.contains(shape)) {
-            // Shape subtract will otherwise only
-            // update it's own bounding rect.
-            this->update();
+        if (d->bulkActionState) {
+            d->bulkActionState->contourHasChanged = true;
+        } else {
+            d->updateTextWrappingAreas();
         }
-        qDebug() << "child updated";
+
+        // NotifyChanged ensures that boundingRect() is called on this shape;
+        // it is NOT compressed by the bulk action, since boundingRect() is
+        // guaranteed to be valid during the whole bulk action
+        this->notifyChanged();
     }
     if ((!shape || shape == this)) {
-        qDebug() << "text updated";
-        if ((type == ContentChanged)) {
-            relayout();
+        if (type == ContentChanged) {
+            if (d->bulkActionState) {
+                d->bulkActionState->layoutHasChanged = true;
+            } else {
+                relayout();
+            }
         } else if (transformationTypes.contains(type) || type == ParentChanged) {
-            qDebug() << "update transform" << this->absoluteTransformation();
             d->shapeGroup->setTransformation(this->absoluteTransformation());
         } else if (type == TextRunAroundChanged) {
             // Hack: we don't use runaround else where, so we're using it for padding and margin.
-            qDebug() << "update wrapping areas";
-            d->updateTextWrappingAreas();
+            if (d->bulkActionState) {
+                d->bulkActionState->contourHasChanged = true;
+            } else {
+                d->updateTextWrappingAreas();
+            }
         }
+
+        // when calling shapeChangedImpl() on `this` shape, we call
+        // notifyChanged() manually at the calling site, so we shouldn't
+        // do that again here
     }
 }
 
@@ -1936,6 +1947,33 @@ QList<QPainterPath> KoSvgTextShape::generateTextAreas(const QList<KoShape *> sha
     return Private::generateShapes(shapesInside, shapesSubtract, props);
 }
 
+void KoSvgTextShape::startBulkAction()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->bulkActionState);
+    d->bulkActionState.emplace(boundingRect());
+}
+
+QRectF KoSvgTextShape::endBulkAction()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->bulkActionState, boundingRect());
+
+    QRectF updateRect;
+
+    if (d->bulkActionState->changed()) {
+        if (d->bulkActionState->contourHasChanged) {
+            d->updateTextWrappingAreas();
+        } else if (d->bulkActionState->layoutHasChanged) {
+            // updateTextWrappingAreas() already includes a call to relayout()
+            relayout();
+        }
+
+        updateRect = d->bulkActionState->originalBoundingRect | boundingRect();
+    }
+
+    d->bulkActionState = std::nullopt;
+    return updateRect;
+}
+
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
@@ -1982,6 +2020,7 @@ QPainterPath KoSvgTextShape::outline() const {
             result.addPath(shape->transformation().map(shape->outline()));
         }
     }
+
     if ((d->shapesInside.isEmpty() && d->shapesSubtract.isEmpty())) {
         for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
             result.addPath(it->associatedOutline);
@@ -2074,6 +2113,8 @@ void KoSvgTextShape::setSize(const QSizeF &size)
         notifyChanged();
         shapeChangedPriv(ScaleChanged);
     } else {
+        if (!d->textPaths.isEmpty()) return;
+
         const bool allInternalShapeAreTranslatedOnly = [this] () {
             Q_FOREACH(KoShape *shape, d->internalShapes()) {
                 if (shape->transformation().type() > QTransform::TxTranslate) {
@@ -2282,8 +2323,13 @@ void KoSvgTextShape::addShapeContours(QList<KoShape *> shapes, const bool inside
             shape->addDependee(this);
         }
     }
+
     notifyChanged(); // notify shape manager that our geometry has changed
-    d->updateTextWrappingAreas();
+
+    if (!d->isLoading) {
+        d->updateTextWrappingAreas();
+    }
+
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();
@@ -2312,7 +2358,9 @@ void KoSvgTextShape::removeShapesFromContours(QList<KoShape *> shapes, bool call
     }
     if (callUpdate) {
         notifyChanged(); // notify shape manager that our geometry has changed
-        d->updateTextWrappingAreas();
+        if (!d->isLoading) {
+            d->updateTextWrappingAreas();
+        }
         d->updateInternalShapesList();
         shapeChangedPriv(ContentChanged);
         update();
@@ -2326,7 +2374,9 @@ void KoSvgTextShape::moveShapeInsideToIndex(KoShape *shapeInside, const int inde
 
     // Update.
     d->shapesInside.move(oldIndex, index);
-    d->updateTextWrappingAreas();
+    if (!d->isLoading) {
+        d->updateTextWrappingAreas();
+    }
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();

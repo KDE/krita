@@ -6,6 +6,8 @@
 #include "KoSvgTextFlipShapeContourTypeCommand.h"
 
 #include <KoSvgTextShape.h>
+#include <KoShapeBulkActionLock.h>
+
 
 struct KoSvgTextFlipShapeContourTypeCommand::Private {
     Private(KoSvgTextShape *_text, KoShape *_shape)
@@ -34,16 +36,18 @@ KoSvgTextFlipShapeContourTypeCommand::~KoSvgTextFlipShapeContourTypeCommand()
 
 void KoSvgTextFlipShapeContourTypeCommand::redo()
 {
-    QRectF updateRect = d->textShape->boundingRect();
+    KoShapeBulkActionLock lock(d->textShape);
+
     d->textShape->addShapeContours({d->shape}, !(d->isInside));
-    updateRect |= d->textShape->boundingRect();
-    d->textShape->updateAbsolute(updateRect);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoSvgTextFlipShapeContourTypeCommand::undo()
 {
-    QRectF updateRect = d->textShape->boundingRect();
+    KoShapeBulkActionLock lock(d->textShape);
+
     d->textShape->addShapeContours({d->shape}, d->isInside);
-    updateRect |= d->textShape->boundingRect();
-    d->textShape->updateAbsolute(updateRect);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }

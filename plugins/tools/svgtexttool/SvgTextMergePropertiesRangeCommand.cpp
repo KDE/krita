@@ -7,6 +7,7 @@
 
 #include "KoSvgTextShape.h"
 #include "kis_command_ids.h"
+#include <KoShapeBulkActionLock.h>
 
 SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgTextShape *shape,
                                                                        const KoSvgTextProperties props,
@@ -31,18 +32,18 @@ SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgText
 
 void SvgTextMergePropertiesRangeCommand::redo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     m_shape->mergePropertiesIntoRange(qMin(m_pos, m_anchor), qMax(m_pos, m_anchor), m_props, m_removeProperties);
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 
     m_shape->notifyMarkupChanged();
 }
 
 void SvgTextMergePropertiesRangeCommand::undo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     m_shape->setMemento(m_textData, m_pos, m_anchor);
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int SvgTextMergePropertiesRangeCommand::id() const

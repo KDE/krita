@@ -11,6 +11,8 @@
 #include <klocalizedstring.h>
 #include "kis_command_ids.h"
 #include <kis_assert.h>
+#include <KoShapeBulkActionLock.h>
+
 
 class Q_DECL_HIDDEN KoShapeMoveCommand::Private
 {
@@ -56,25 +58,28 @@ void KoShapeMoveCommand::redo()
 {
     KUndo2Command::redo();
 
+    KoShapeBulkActionLock lock(d->shapes);
+
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape *shape = d->shapes.at(i);
-
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setAbsolutePosition(d->newPositions.at(i), d->anchor);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoShapeMoveCommand::undo()
 {
     KUndo2Command::undo();
+
+    KoShapeBulkActionLock lock(d->shapes);
+
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape *shape = d->shapes.at(i);
-
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setAbsolutePosition(d->previousPositions.at(i), d->anchor);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int KoShapeMoveCommand::id() const

@@ -34,7 +34,11 @@ KoSvgTextLoader::~KoSvgTextLoader()
     d->shape->d->updateShapeGroup();
     d->shape->cleanUp();
     d->shape->d->isLoading = false;
-    d->shape->relayout();
+
+    // finish loading by synchronizing the internal group
+    d->shape->d->shapeGroup->setTransformation(d->shape->absoluteTransformation());
+    d->shape->d->updateTextWrappingAreas();
+    d->shape->notifyChanged();
 }
 
 void KoSvgTextLoader::enterNodeSubtree()

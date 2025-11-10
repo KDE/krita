@@ -15,6 +15,7 @@
 #include <KoShapeContainerModel.h>
 #include <KoCanvasResourceProvider.h>
 #include <commands/KoShapeMoveCommand.h>
+#include <KoShapeBulkActionLock.h>
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
 #include <KoToolBase.h>
@@ -71,6 +72,8 @@ void ShapeMoveStrategy::moveSelection(const QPointF &diff)
 {
     Q_ASSERT(m_newPositions.count());
 
+    KoShapeBulkActionLock lock(m_selectedShapes);
+
     int i = 0;
     Q_FOREACH (KoShape *shape, m_selectedShapes) {
         QPointF delta = m_previousPositions.at(i) + diff - shape->absolutePosition(KoFlake::Center);
@@ -81,11 +84,11 @@ void ShapeMoveStrategy::moveSelection(const QPointF &diff)
         QPointF newPos(shape->absolutePosition(KoFlake::Center) + delta);
         m_newPositions[i] = newPos;
 
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setAbsolutePosition(newPos, KoFlake::Center);
-        shape->updateAbsolute(oldDirtyRect | oldDirtyRect.translated(delta));
         i++;
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 KUndo2Command *ShapeMoveStrategy::createCommand()

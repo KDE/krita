@@ -1142,6 +1142,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     d->blockQueryUpdates = false;
     qApp->inputMethod()->update(Qt::ImQueryInput);
     updateRect |= d->shape->boundingRect();
+    // TODO: replace with KoShapeBulkActionLock
     d->shape->updateAbsolute(updateRect);
     d->styleMap = styleMap;
     updateIMEDecoration();

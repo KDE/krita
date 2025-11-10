@@ -8,7 +8,7 @@
 
 #include <KoShape.h>
 #include "kis_command_ids.h"
-#include "kis_assert.h"
+#include <KoShapeBulkActionLock.h>
 
 
 struct Q_DECL_HIDDEN KoShapeResizeCommand::Private
@@ -56,57 +56,42 @@ KoShapeResizeCommand::~KoShapeResizeCommand()
 
 void KoShapeResizeCommand::redoImpl()
 {
-    QMap<KoShape*, QRectF> updates = redoNoUpdate();
+    KoShapeBulkActionLock lock(m_d->shapes);
 
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
-        it.key()->updateAbsolute(it.value());
-    }
+    redoNoUpdate();
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoShapeResizeCommand::undoImpl()
 {
-    QMap<KoShape*, QRectF> updates = undoNoUpdate();
+    KoShapeBulkActionLock lock(m_d->shapes);
 
-    for (auto it = updates.begin(); it != updates.end(); ++it) {
-        it.key()->updateAbsolute(it.value());
-    }
+    undoNoUpdate();
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
-QMap<KoShape*, QRectF> KoShapeResizeCommand::redoNoUpdate()
+void KoShapeResizeCommand::redoNoUpdate()
 {
-    QMap<KoShape*,QRectF> updates;
-
     Q_FOREACH (KoShape *shape, m_d->shapes) {
-        const QRectF oldDirtyRect = shape->boundingRect();
-
         KoFlake::resizeShapeCommon(shape,
                              m_d->scaleX, m_d->scaleY,
                              m_d->absoluteStillPoint,
                              m_d->useGlobalMode,
                              m_d->usePostScaling,
                              m_d->postScalingCoveringTransform);
-
-        updates[shape] = oldDirtyRect | shape->boundingRect();
     }
-
-    return updates;
 }
 
-QMap<KoShape*, QRectF> KoShapeResizeCommand::undoNoUpdate()
+void KoShapeResizeCommand::undoNoUpdate()
 {
-    QMap<KoShape*,QRectF> updates;
-
     for (int i = 0; i < m_d->shapes.size(); i++) {
         KoShape *shape = m_d->shapes[i];
 
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setSize(m_d->oldSizes[i]);
         shape->setTransformation(m_d->oldTransforms[i]);
-
-        updates[shape] = oldDirtyRect | shape->boundingRect();
     }
-
-    return updates;
 }
 
 int KoShapeResizeCommand::id() const
@@ -144,18 +129,15 @@ bool KoShapeResizeCommand::mergeWith(const KUndo2Command *command)
 
 void KoShapeResizeCommand::replaceResizeAction(qreal scaleX, qreal scaleY, const QPointF &absoluteStillPoint)
 {
-    const QMap<KoShape*, QRectF> undoUpdates = undoNoUpdate();
+    KoShapeBulkActionLock lock(m_d->shapes);
+
+    undoNoUpdate();
 
     m_d->scaleX = scaleX;
     m_d->scaleY = scaleY;
     m_d->absoluteStillPoint = absoluteStillPoint;
 
-    const QMap<KoShape*, QRectF> redoUpdates = redoNoUpdate();
+    redoNoUpdate();
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(undoUpdates.size() == redoUpdates.size());
-
-    for (auto it = undoUpdates.begin(); it != undoUpdates.end(); ++it) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(redoUpdates.contains(it.key()));
-        it.key()->updateAbsolute(it.value() | redoUpdates[it.key()]);
-    }
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }

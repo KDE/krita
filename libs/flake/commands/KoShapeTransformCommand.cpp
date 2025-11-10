@@ -7,6 +7,7 @@
 
 #include "kis_command_ids.h"
 
+#include <KoShapeBulkActionLock.h>
 #include "KoShapeTransformCommand.h"
 #include "KoShape.h"
 
@@ -43,26 +44,30 @@ void KoShapeTransformCommand::redo()
 {
     KUndo2Command::redo();
 
+    KoShapeBulkActionLock lock(d->shapes);
+
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setTransformation(d->newState[i]);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoShapeTransformCommand::undo()
 {
     KUndo2Command::undo();
 
+    KoShapeBulkActionLock lock(d->shapes);
+
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setTransformation(d->oldState[i]);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int KoShapeTransformCommand::id() const

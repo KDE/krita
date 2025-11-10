@@ -5,6 +5,7 @@
  */
 
 #include "SvgTextRemoveTransformsFromRange.h"
+#include <KoShapeBulkActionLock.h>
 
 SvgTextRemoveTransformsFromRange::SvgTextRemoveTransformsFromRange(KoSvgTextShape *shape, int pos, int anchor, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -18,25 +19,23 @@ SvgTextRemoveTransformsFromRange::SvgTextRemoveTransformsFromRange(KoSvgTextShap
 
 void SvgTextRemoveTransformsFromRange::undo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
 
     m_shape->setMemento(m_textData);
 
-    updateRect |= m_shape->boundingRect();
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
     m_shape->notifyCursorPosChanged(m_pos, m_anchor);
-    m_shape->updateAbsolute(updateRect);
 }
 
 void SvgTextRemoveTransformsFromRange::redo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
 
     const int indexPos = m_shape->indexForPos(m_pos);
     const int indexAnchor = m_shape->indexForPos(m_anchor);
 
     m_shape->removeTransformsFromRange(m_pos, m_anchor);
 
-    updateRect |= m_shape->boundingRect();
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
     m_shape->notifyCursorPosChanged(m_shape->posForIndex(indexPos), m_shape->posForIndex(indexAnchor));
-    m_shape->updateAbsolute(updateRect);
 }

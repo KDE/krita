@@ -13,6 +13,7 @@
 #include <KoShapeFactoryBase.h>
 #include <SvgShape.h>
 #include <KoShape.h>
+#include <KoShapeBulkActionInterface.h>
 #include <KoSvgText.h>
 #include "html/HtmlSavingContext.h"
 #include <QFlags>
@@ -28,7 +29,7 @@ typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 /**
  * KoSvgTextShape is a root chunk of the \<text\> element subtree.
  */
-class KRITAFLAKE_EXPORT KoSvgTextShape : public KoShape, public SvgShape
+class KRITAFLAKE_EXPORT KoSvgTextShape : public KoShape, public SvgShape, public KoShapeBulkActionInterface
 {
 public:
     KoSvgTextShape();
@@ -655,6 +656,9 @@ public:
      * @return list of QPainterPaths.
      */
     static QList<QPainterPath> generateTextAreas(const QList<KoShape*> shapesInside, const QList<KoShape*> shapesSubtract, const KoSvgTextProperties &props);
+
+    void startBulkAction() override;
+    QRectF endBulkAction() override;
 
 protected:
 

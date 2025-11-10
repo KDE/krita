@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 #include "KoSvgConvertTextTypeCommand.h"
+#include <KoShapeBulkActionLock.h>
 
 KoSvgConvertTextTypeCommand::KoSvgConvertTextTypeCommand(KoSvgTextShape *shape, KoSvgTextShape::TextType type, int pos, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -16,7 +17,8 @@ KoSvgConvertTextTypeCommand::KoSvgConvertTextTypeCommand(KoSvgTextShape *shape, 
 
 void KoSvgConvertTextTypeCommand::redo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
+
     m_textData = m_shape->getMemento();
     const int oldIndex = qMax(0, m_shape->indexForPos(m_pos));
 
@@ -28,14 +30,14 @@ void KoSvgConvertTextTypeCommand::redo()
         m_shape->setCharacterTransformsFromLayout();
     }
 
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
     const int pos = m_shape->posForIndex(oldIndex, false, false);
     m_shape->notifyCursorPosChanged(pos, pos);
 }
 
 void KoSvgConvertTextTypeCommand::undo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     m_shape->setMemento(m_textData, m_pos, m_pos);
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }

@@ -114,9 +114,7 @@ void KoSvgTextShape::Private::updateTextWrappingAreas()
 {
     KoSvgTextProperties rootProperties = textData.empty()? KoSvgTextProperties::defaultProperties(): textData.childBegin()->properties;
     currentTextWrappingAreas = getShapes(shapesInside, shapesSubtract, rootProperties);
-    if (!isLoading) {
-        relayout();
-    }
+    relayout();
 }
 
 QList<QPainterPath> KoSvgTextShape::Private::generateShapes(const QList<KoShape *> shapesInside, const QList<KoShape *> shapesSubtract, const KoSvgTextProperties &properties)

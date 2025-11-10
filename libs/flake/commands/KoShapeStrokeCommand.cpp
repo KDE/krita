@@ -10,6 +10,7 @@
 #include "KoShapeStrokeCommand.h"
 #include "KoShape.h"
 #include "KoShapeStrokeModel.h"
+#include <KoShapeBulkActionLock.h>
 
 #include <klocalizedstring.h>
 
@@ -92,25 +93,31 @@ KoShapeStrokeCommand::~KoShapeStrokeCommand()
 void KoShapeStrokeCommand::redo()
 {
     KUndo2Command::redo();
+
+    KoShapeBulkActionLock lock(d->shapes);
+
     QList<KoShapeStrokeModelSP>::iterator strokeIt = d->newStrokes.begin();
     Q_FOREACH (KoShape *shape, d->shapes) {
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setStroke(*strokeIt);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         ++strokeIt;
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoShapeStrokeCommand::undo()
 {
     KUndo2Command::undo();
+
+    KoShapeBulkActionLock lock(d->shapes);
+
     QList<KoShapeStrokeModelSP>::iterator strokeIt = d->oldStrokes.begin();
     Q_FOREACH (KoShape *shape, d->shapes) {
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setStroke(*strokeIt);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         ++strokeIt;
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int KoShapeStrokeCommand::id() const

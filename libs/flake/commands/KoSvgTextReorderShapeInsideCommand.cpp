@@ -5,6 +5,7 @@
  */
 #include "KoSvgTextReorderShapeInsideCommand.h"
 #include <KoSvgTextShape.h>
+#include <KoShapeBulkActionLock.h>
 
 
 struct KoSvgTextReorderShapeInsideCommand::Private {
@@ -44,7 +45,7 @@ KoSvgTextReorderShapeInsideCommand::~KoSvgTextReorderShapeInsideCommand()
 
 void KoSvgTextReorderShapeInsideCommand::redo()
 {
-    QRectF updateRect = d->textShape->boundingRect();
+    KoShapeBulkActionLock lock(d->textShape);
 
     int newIndex = d->textShape->shapesInside().indexOf(d->shapes.first());
     const int max = (d->textShape->shapesInside().size() -1);
@@ -81,13 +82,13 @@ void KoSvgTextReorderShapeInsideCommand::redo()
         }
     }
 
-    updateRect |= d->textShape->boundingRect();
-    d->textShape->updateAbsolute(updateRect);
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoSvgTextReorderShapeInsideCommand::undo()
 {
-    QRectF updateRect = d->textShape->boundingRect();
+    KoShapeBulkActionLock lock(d->textShape);
+
     if (d->type == MoveEarlier || d->type == BringToFront) {
         for (int i = d->oldIndices.size() -1 ; i>= 0; i--) {
             d->textShape->moveShapeInsideToIndex(d->shapes.at(i), d->oldIndices.at(i));
@@ -98,6 +99,6 @@ void KoSvgTextReorderShapeInsideCommand::undo()
         }
     }
     d->textShape->setMemento(d->memento);
-    updateRect |= d->textShape->boundingRect();
-    d->textShape->updateAbsolute(updateRect);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }

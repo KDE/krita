@@ -16,6 +16,7 @@
 #include <commands/KoShapeShearCommand.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeTransformCommand.h>
+#include <KoShapeBulkActionLock.h>
 
 #include <KoSelection.h>
 #include <QPointF>
@@ -147,11 +148,14 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
 
     QTransform applyMatrix = matrix * m_shearMatrix.inverted();
 
+    KoShapeBulkActionLock lock(m_transformedShapesAndSelection);
+
     Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
+
     m_shearMatrix = matrix;
 }
 

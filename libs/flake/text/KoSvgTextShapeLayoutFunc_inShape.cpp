@@ -197,9 +197,9 @@ static bool getFirstPosition(QPointF &firstPoint,
         }
     }
     if (candidatePositions.isEmpty()) {
+
         return false;
     }
-
     QPointF firstPointC = writingMode == KoSvgText::VerticalRL? p.boundingRect().bottomLeft(): p.boundingRect().bottomRight();
     Q_FOREACH(const QPointF candidate, candidatePositions) {
         if (writingMode == KoSvgText::HorizontalTB) {
@@ -307,8 +307,6 @@ findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, const QRectF word
     QLineF bottomLine = baseLine.translated(lineBottom);
     for(int i = 0; i < polygon.size()-1; i++) {
         QLineF line(polygon.at(i), polygon.at(i+1));
-        if (!(pastTerminator(line.p1(), topLine.center(), writingMode)
-              || pastTerminator(line.p2(), topLine.center(), writingMode))) continue;
         bool addedA = false;
         QPointF intersectA;
         QPointF intersectB;
@@ -483,11 +481,10 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
     QPointF wordAdvance;
 
     LineBox currentLine;
-    bool firstLine = true; ///< First line will be created proper after we get our first wordbox, this tracks if it's the first.
     bool indentLine = true;
 
-    QPointF currentPos = writingMode == KoSvgText::VerticalRL? shapes.at(0).boundingRect().topRight()
-                                                             :shapes.at(0).boundingRect().topLeft(); ///< Current position with advances of each character.
+    QPointF currentPos = writingMode == KoSvgText::VerticalRL? shapes.first().boundingRect().topRight()
+                                                             : shapes.first().boundingRect().topLeft(); ///< Current position with advances of each character.
     QPointF lineOffset = currentPos; ///< Current line offset.
 
     QListIterator<int> it(logicalToVisual.keys());
@@ -568,7 +565,6 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             if (!currentLine.isEmpty()) {
                 finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true, resHandler);
                 lineBoxes.append(currentLine);
-                firstLine = false;
                 indentLine = false;
             }
             // Not adding indent to the (first) word box means it'll overflow if there's no room,
@@ -588,7 +584,11 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent, resHandler);
                 qreal length = isHorizontal? wordBox.width(): wordBox.height();
                 for (int i = 0; i < currentLine.chunks.size(); i++) {
-                    if (currentLine.chunks.at(i).length.length() > length) {
+                    const LineChunk chunk = currentLine.chunks.at(i);
+                    // We have a new line, so we find the first chunk that fits the word.
+                    if ( chunk.length.length() > length
+                            && currentShape.contains(chunk.length.p1())
+                            && currentShape.contains(chunk.length.p2()) ) {
                         currentLine.currentChunk = i;
                         foundFirst = true;
                         needNewLine = false;
@@ -610,6 +610,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 }
                 currentShape = shapesIt.next();
                 getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
+
                 bool indentPercent = textIndentInfo.length.unit == KoSvgText::CssLengthPercentage::Percentage;
                 qreal textIdentValue = textIndentInfo.length.value;
                 if (isHorizontal) {
@@ -630,7 +631,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             }
 
             bool lastDitch = false;
-            if (!foundFirst && firstLine && !wordIndices.isEmpty() && !currentShape.isEmpty()) {
+            if (!foundFirst && lineBoxes.isEmpty() && !wordIndices.isEmpty() && !currentShape.isEmpty()) {
                 // Last-ditch attempt to get any kind of positioning to happen.
                 // This typically happens when wrapping has been disabled.
                 wordBox = result[wordIndices.first()].lineHeightBox().translated(result[wordIndices.first()].totalBaselineOffset());
@@ -649,11 +650,12 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 const qreal expectedLineT = isHorizontal? wordBox.top():
                                                           writingMode == KoSvgText::VerticalRL? wordBox.right(): wordBox.left();
 
-                currentLine.firstLine = firstLine;
+                currentLine.firstLine = lineBoxes.isEmpty();
                 currentLine.expectedLineTop = expectedLineT;
                 currentLine.justifyLine = align == KoSvgText::AlignJustify;
-                currentPos = currentLine.chunk().length.p1() + indent;
+                currentPos = currentLine.chunk().length.p1();
                 lineOffset = currentPos;
+                currentPos += needNewLine? currentLine.textIndent: QPointF();
 
                 if (lastDitch) {
                     QVector<int> wordNew;

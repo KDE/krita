@@ -563,6 +563,7 @@ public:
 
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.
+    bool dirty = false; ///< Enabled when updates come in while isLoading is enabled.
 
     bool disableFontMatching = false; ///< Turn off font matching, which should speed up relayout slightly.
 

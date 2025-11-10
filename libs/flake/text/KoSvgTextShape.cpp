@@ -178,6 +178,8 @@ KoShape *KoSvgTextShape::cloneShape() const
 void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     if (d->isLoading) {
+        this->notifyChanged();
+        d->dirty = true;
         return;
     }
     KoShape::shapeChanged(type, shape);
@@ -212,7 +214,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
         d->updateTextWrappingAreas();
         // NotifyChanged ensures that boundingRect() is called on this shape.
         this->notifyChanged();
-        if (d->shapesSubtract.contains(shape)) {
+        if (d->shapesSubtract.contains(shape) || d->textPaths.contains(shape)) {
             // Shape subtract will otherwise only
             // update it's own bounding rect.
             this->update();
@@ -1936,6 +1938,17 @@ QList<QPainterPath> KoSvgTextShape::generateTextAreas(const QList<KoShape *> sha
     return Private::generateShapes(shapesInside, shapesSubtract, props);
 }
 
+bool KoSvgTextShape::processComplexOperationsIfNecessary()
+{
+    if (d->dirty) {
+        d->shapeGroup->setTransformation(this->absoluteTransformation());
+        d->updateTextWrappingAreas();
+        notifyChanged();
+        return true;
+    }
+    return false;
+}
+
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
@@ -2283,7 +2296,11 @@ void KoSvgTextShape::addShapeContours(QList<KoShape *> shapes, const bool inside
         }
     }
     notifyChanged(); // notify shape manager that our geometry has changed
-    d->updateTextWrappingAreas();
+    if (!d->isLoading) {
+        d->updateTextWrappingAreas();
+    } else {
+        d->dirty = true;
+    }
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();
@@ -2312,7 +2329,11 @@ void KoSvgTextShape::removeShapesFromContours(QList<KoShape *> shapes, bool call
     }
     if (callUpdate) {
         notifyChanged(); // notify shape manager that our geometry has changed
-        d->updateTextWrappingAreas();
+        if (!d->isLoading) {
+            d->updateTextWrappingAreas();
+        } else {
+            d->dirty = true;
+        }
         d->updateInternalShapesList();
         shapeChangedPriv(ContentChanged);
         update();
@@ -2326,7 +2347,11 @@ void KoSvgTextShape::moveShapeInsideToIndex(KoShape *shapeInside, const int inde
 
     // Update.
     d->shapesInside.move(oldIndex, index);
-    d->updateTextWrappingAreas();
+    if (!d->isLoading) {
+        d->updateTextWrappingAreas();
+    } else {
+        d->dirty = true;
+    }
     d->updateInternalShapesList();
     shapeChangedPriv(ContentChanged);
     update();
@@ -2505,6 +2530,7 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
 void KoSvgTextShape::relayout() const
 {
     d->relayout();
+    d->dirty = false;
 }
 
 KoSvgTextShapeFactory::KoSvgTextShapeFactory()

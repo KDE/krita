@@ -10,6 +10,8 @@
 #include "kis_command_ids.h"
 #include "kis_assert.h"
 
+#include <KoSvgTextShape.h>
+
 
 struct Q_DECL_HIDDEN KoShapeResizeCommand::Private
 {
@@ -47,6 +49,13 @@ KoShapeResizeCommand::KoShapeResizeCommand(const QList<KoShape*> &shapes,
     Q_FOREACH (KoShape *shape, m_d->shapes) {
         m_d->oldSizes << shape->size();
         m_d->oldTransforms << shape->transformation();
+
+        Q_FOREACH(KoShape *dependee, shape->dependees()) {
+            KoSvgTextShape* text = dynamic_cast<KoSvgTextShape*>(dependee);
+            if (text) {
+                text->setRelayoutBlocked(true);
+            }
+        }
     }
 }
 
@@ -144,6 +153,20 @@ bool KoShapeResizeCommand::mergeWith(const KUndo2Command *command)
 
 void KoShapeResizeCommand::replaceResizeAction(qreal scaleX, qreal scaleY, const QPointF &absoluteStillPoint)
 {
+    QMap<KoSvgTextShape *, QRectF> textUpdates;
+    Q_FOREACH(KoShape *shape, m_d->shapes) {
+        KoSvgTextShape* text = dynamic_cast<KoSvgTextShape*>(shape);
+        if (!text) {
+            Q_FOREACH(KoShape *dependee, shape->dependees()) {
+                text = dynamic_cast<KoSvgTextShape*>(dependee);
+
+            }
+        }
+        if (text) {
+            text->setRelayoutBlocked(true);
+            textUpdates.insert(text, text->boundingRect());
+        }
+    }
     const QMap<KoShape*, QRectF> undoUpdates = undoNoUpdate();
 
     m_d->scaleX = scaleX;
@@ -156,6 +179,14 @@ void KoShapeResizeCommand::replaceResizeAction(qreal scaleX, qreal scaleY, const
 
     for (auto it = undoUpdates.begin(); it != undoUpdates.end(); ++it) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(redoUpdates.contains(it.key()));
+        if (textUpdates.keys().contains(dynamic_cast<KoSvgTextShape*>(it.key()))) continue;
         it.key()->updateAbsolute(it.value() | redoUpdates[it.key()]);
     }
+
+    for (auto it = textUpdates.begin(); it != textUpdates.end(); ++it) {
+        it.key()->setRelayoutBlocked(false);
+        it.key()->processComplexOperationsIfNecessary();
+        it.key()->updateAbsolute( it.value()| it.key()->boundingRect());
+    }
+
 }

@@ -656,6 +656,8 @@ public:
      */
     static QList<QPainterPath> generateTextAreas(const QList<KoShape*> shapesInside, const QList<KoShape*> shapesSubtract, const KoSvgTextProperties &props);
 
+
+    bool processComplexOperationsIfNecessary();
 protected:
 
     void shapeChanged(ChangeType type, KoShape *shape) override;

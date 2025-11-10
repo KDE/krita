@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 03:45+0000\n"
-"PO-Revision-Date: 2025-10-25 20:31+0200\n"
+"PO-Revision-Date: 2025-11-09 10:30+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -24801,7 +24801,7 @@ msgstr "Accelerazione della tela"
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Accelerazione &grafica delle tele"
+msgstr "Accelerazione &grafica della tela"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -24812,8 +24812,8 @@ msgid ""
 "</p></body></html>"
 msgstr ""
 "<html><body><p>Usa buffer della trama. Questo può essere più veloce su "
-"alcune combinazioni di GPU/driver (come Intel) o malfunzionante su altre "
-"(AMD/Radeon).</p></body></html>"
+"alcune combinazioni di GPU/driver (come Intel) o non funzionare bene su "
+"altre (AMD/Radeon).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:76
@@ -29088,9 +29088,7 @@ msgid "Toggle Eraser"
 msgstr "Attiva/disattiva gomma"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Attiva/disattiva preimpostazione gomma"
 

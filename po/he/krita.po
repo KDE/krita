@@ -42,14 +42,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 03:45+0000\n"
-"PO-Revision-Date: 2025-08-12 14:37+0300\n"
+"PO-Revision-Date: 2025-11-09 11:14+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16325,7 +16325,7 @@ msgid ""
 "Parsing error in the main document at line %1, column %2\n"
 "Error message: %3"
 msgstr ""
-"שגיאת פירוק במסמך הראשי בשורה %1, טור %2\n"
+"שגיאת פענוח במסמך הראשי בשורה %1, עמודה %2\n"
 "הודעת שגיאה: %3"
 
 #: libs/flake/KoPathShapeFactory.cpp:23
@@ -16661,22 +16661,22 @@ msgstr ""
 #: libs/global/KoUnit.cpp:36
 #, kde-format
 msgid "Millimeters (mm)"
-msgstr "מילימטרים (מ\"מ)"
+msgstr "מילימטרים (מ״מ)"
 
 #: libs/global/KoUnit.cpp:38
 #, kde-format
 msgid "Centimeters (cm)"
-msgstr "סנטימטרים (ס\"מ)"
+msgstr "סנטימטרים (ס״מ)"
 
 #: libs/global/KoUnit.cpp:40
 #, kde-format
 msgid "Decimeters (dm)"
-msgstr "דצימטרים (ד\"מ)"
+msgstr "דצימטרים (ד״מ)"
 
 #: libs/global/KoUnit.cpp:42
 #, kde-format
 msgid "Inches (in)"
-msgstr "אינצ'ים (in)"
+msgstr "אינטשים (in)"
 
 #: libs/global/KoUnit.cpp:44
 #, kde-format
@@ -16691,7 +16691,7 @@ msgstr "קיקרו (cc)"
 #: libs/global/KoUnit.cpp:48
 #, kde-format
 msgid "Points (pt)"
-msgstr "נקודות (נק')"
+msgstr "נקודות (נק׳)"
 
 #: libs/global/KoUnit.cpp:50
 #, fuzzy, kde-format
@@ -59530,10 +59530,10 @@ msgstr "הסר שכבה"
 #. i18n: context: iconText @ Action (KarbonCalligraphyTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:154 plugins/tools/tools.action:156
 #: plugins/tools/tools.action:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Calligraphy"
-msgstr "הוסף מעבר שורה"
+msgstr "קליגרפיה"
 
 #. i18n: context: text @ Action (PathTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (PathTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59543,10 +59543,10 @@ msgstr "הוסף מעבר שורה"
 #. i18n: context: iconText @ Action (PathTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:164 plugins/tools/tools.action:166
 #: plugins/tools/tools.action:167
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Edit Shapes Tool"
-msgstr "כלי מי&לוי"
+msgstr "כלי עריכת צורות"
 
 #. i18n: context: text @ Action (ZoomTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (ZoomTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59556,10 +59556,10 @@ msgstr "כלי מי&לוי"
 #. i18n: context: iconText @ Action (ZoomTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:174 plugins/tools/tools.action:176
 #: plugins/tools/tools.action:177
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom Tool"
-msgstr "כל&י התקרבות"
+msgstr "כלי תקריב"
 
 #. i18n: context: text @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)

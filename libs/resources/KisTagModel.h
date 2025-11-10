@@ -90,7 +90,7 @@ public:
 
     // TODO: they can be static const variables, too, if it's better than functions
     static QString urlAll() { return "All"; }
-    static QString urlAllUntagged() { return "All Untagged"; }
+    static QString urlAllUntagged() { return "All untagged"; }
 
 private Q_SLOTS:
 

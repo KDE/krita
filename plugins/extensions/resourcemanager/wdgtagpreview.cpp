@@ -46,7 +46,7 @@ WdgTagPreview::WdgTagPreview(QString resourceType, KoResourceBundleSP bundle, QW
     for (int i = 0; i < model->rowCount(); ++i) {
         QModelIndex idx = model->index(i, 0);
         QString name  = model->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-        if (name == "All" || name == "All Untagged") continue;
+        if (name == "All" || name == "All untagged") continue;
         KisTagLabel *label = new KisTagLabel(name);
         m_layout->addWidget(label);
     }

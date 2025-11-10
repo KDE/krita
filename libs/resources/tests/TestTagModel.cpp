@@ -109,10 +109,10 @@ void TestTagModel::testData()
     QCOMPARE(v.toString(), "All");
 
     v = tagModel.data(tagModel.index(1, 0), Qt::DisplayRole);
-    QCOMPARE(v.toString(), "All Untagged");
+    QCOMPARE(v.toString(), "All untagged");
 
     v = tagModel.data(tagModel.index(1, 0), Qt::UserRole + KisAllTagsModel::Url);
-    QCOMPARE(v.toString(), "All Untagged");
+    QCOMPARE(v.toString(), "All untagged");
 
     v = tagModel.data(tagModel.index(2, 0), Qt::DisplayRole);
     QCOMPARE(v.toString(), "* Favorites");
@@ -141,7 +141,7 @@ void TestTagModel::testTagForIndex()
 
     idx = tagModel.index(1, 0);
     tag = tagModel.tagForIndex(idx);
-    QCOMPARE(tag->url(), "All Untagged");
+    QCOMPARE(tag->url(), "All untagged");
 
     idx = tagModel.index(2, 0);
     tag = tagModel.tagForIndex(idx);
@@ -156,9 +156,9 @@ void TestTagModel::testTagForUrl()
     QVERIFY(tag);
     QCOMPARE(tag->url(), "All");
 
-    tag = tagModel.tagForUrl("All Untagged");
+    tag = tagModel.tagForUrl("All untagged");
     QVERIFY(tag);
-    QCOMPARE(tag->url(), "All Untagged");
+    QCOMPARE(tag->url(), "All untagged");
 
     tag = tagModel.tagForUrl(m_tag->url());
     QVERIFY(tag);

@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-08 02:00+0000\n"
-"PO-Revision-Date: 2025-10-25 20:31+0200\n"
+"PO-Revision-Date: 2025-11-09 10:30+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -7698,101 +7698,80 @@ msgstr "Dividi oggetti con più sotto-tracciati in più oggetti"
 
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "Converti il tipo di testo"
+msgstr "Converti testo in preformattato"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
 msgstr "Preformattato"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Il testo non va a capo, sono mantenuti gli spazi e le "
-"nuove righe. Viene inserita un'interruzione di riga in modo che le righe in "
-"precedenza mandate a capo o posizionate restino separate.</p></body></html>"
+"Il testo non va a capo, sono mantenuti gli spazi e le nuove righe. Viene "
+"inserita un'interruzione di riga in modo che le righe in precedenza mandate "
+"a capo o posizionate restino separate."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "Converti il tipo di testo"
+msgstr "Converti testo in a capo in linea"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
 msgstr "A capo in linea"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Il testo va a capo all'interno di una lunghezza "
-"predefinita, sono mantenuti gli spazi e le nuove righe. Le nuove righe non "
-"vengono rimosse.</p></body></html>"
+"Il testo va a capo all'interno di una lunghezza predefinita, sono mantenuti "
+"gli spazi e le nuove righe. Le nuove righe non vengono rimosse."
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "Converti il tipo di testo"
+msgstr "Converti testo in preposizionato"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
 msgstr "Preposizionato"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Il testo utilizza le trasformazioni di carattere SVG "
-"1.1 per posizionare ciascuna riga. Gli spazi e le nuove righe vengono "
-"ridotti. Utilizzato per retrocompatibilità con SVG 1.1.</p></body></html>"
+"Il testo utilizza le trasformazioni di carattere SVG 1.1 per posizionare "
+"ciascuna riga. Gli spazi e le nuove righe vengono ridotti. Utilizzato per "
+"retrocompatibilità con SVG 1.1."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -26364,6 +26343,10 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"ATTENZIONE: è stata attivata la modalità HDR su una superficie che funziona "
+"a in 8 bit.\n"
+"Attiva la modalità a 10 bit nella finestra di dialogo delle Preferenze di "
+"Krita e riavvia il programma per evitare il banding dei colori."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -27293,11 +27276,9 @@ msgid "Rec 709 Linear"
 msgstr "Rec 709 Linear"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
-#, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rec 2100 PQ"
+msgstr "Rec 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #, kde-format
@@ -27315,10 +27296,9 @@ msgstr ""
 "facendo</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1240
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Metodo di fusione CMYK (richiede il riavvio):"
+msgstr "Profondità in bit della superficie della tela (richiede il riavvio):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27335,13 +27315,13 @@ msgstr "Automatica"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "8-bit"
-msgstr ""
+msgstr "8 bit"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1245
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1252
 #, kde-format
 msgid "10-bit"
-msgstr ""
+msgstr "10 bit"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1248
 #, kde-format
@@ -27350,12 +27330,14 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>La profondità in bit del colore che viene passato al compositore delle "
+"finestre. Se vuoi utilizzare le capacità HDR del tuo schermo devi passare "
+"alla modalità a 10 bit.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1253
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Spazio dei colori superficie della tela:"
+msgstr "Profondità in bit attuale della superficie della tela:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1260
 #, kde-format
@@ -29105,7 +29087,7 @@ msgstr "Accelerazione della tela"
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Accelerazione &grafica delle tele"
+msgstr "Accelerazione &grafica della tela"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -29116,8 +29098,8 @@ msgid ""
 "</p></body></html>"
 msgstr ""
 "<html><body><p>Usa buffer della trama. Questo può essere più veloce su "
-"alcune combinazioni di GPU/driver (come Intel) o malfunzionante su altre "
-"(AMD/Radeon).</p></body></html>"
+"alcune combinazioni di GPU/driver (come Intel) o non funzionare bene su "
+"altre (AMD/Radeon).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:76
@@ -32100,12 +32082,17 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Abilita l'adattamento cromatico per l'obbiettivo di "
+"resa assoluto. Di fatto, mostrerà come i colori apparirebbero se l'immagine "
+"fosse stampata su carta e visualizzate con il monitor come sola fonte "
+"luminosa. Questo è il comportamento standard per un flusso di lavoro ICC v4."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Adattamento cromatico per l'obbiettivo assoluto"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -33675,9 +33662,7 @@ msgid "Toggle Eraser"
 msgstr "Attiva/disattiva gomma"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Attiva/disattiva preimpostazione gomma"
 
@@ -45624,12 +45609,10 @@ msgstr "%1, %2, variante: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "language, variant"
-#| msgid "%1, variant: %3"
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %2"
-msgstr "%1, variante: %3"
+msgstr "%1, variante: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -66795,100 +66778,77 @@ msgstr "Cambia SvgTextTool"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "Regola le trasformazioni del carattere nel testo."
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Top"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Cima del testo"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Dimensione caratteri"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Bottom"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Fondo del testo"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Alphabetic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabetica"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografica"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Hanging"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Sporgente"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
-msgstr "Centrale"
+msgstr "In mezzo"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematica"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Central"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Centrale"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Altezza riga"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
-#, fuzzy, kde-format
-#| msgid "Current selection"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "Selezione attuale"
+msgstr "Linea di base attuale"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Baseline-Shift"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
 msgstr "Scostamento linea di base"
@@ -66950,11 +66910,9 @@ msgid "Remove Text"
 msgstr "Rimuovi testo"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
-#, fuzzy
-#| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "Azzera le trasformazioni della tela"
+msgstr "Rimuovi trasformazioni del carattere"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -67232,19 +67190,17 @@ msgstr "Crenatura"
 #. i18n: context: text @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste As Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Rich Text"
-msgstr "Incolla come testo"
+msgstr "Incolla testo formattato"
 
 #. i18n: context: toolTip @ Action (svg_paste_rich_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Prova a incollare il testo formattato, se possibile."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67252,40 +67208,31 @@ msgstr ""
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "action"
 msgid "Paste Plain Text"
-msgstr "Testo semplice"
+msgstr "Incolla testo semplice"
 
 #. i18n: context: toolTip @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_thin.kpp"
-#| msgid "Pastel texture thin"
+#, kde-format
 msgctxt "action"
 msgid "Paste text without styling."
-msgstr "Pastello trama fine"
+msgstr "Incolla il testo senza formattazione."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "Sposta selezione"
+msgstr "Sposta la selezione del testo giù"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
-#, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
-msgstr "Sposta tratto di selezione"
+msgstr "Sposta la selezione del testo giù di un pixel"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:230
@@ -67295,22 +67242,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
 msgstr ""
+"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
+"selezione giù di un pixel."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "Sposta selezione"
+msgstr "Sposta la selezione del testo su"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up By 1 Pixel"
-msgstr ""
+msgstr "Sposta la selezione del testo su di un pixel"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:241
@@ -67320,23 +67267,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
+"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
+"selezione su di un pixel."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "Sposta selezione"
+msgstr "Sposta la selezione del testo a sinistra"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
-#, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr "Sposta tratto di selezione"
+msgstr "Sposta la selezione del testo a sinistra di un pixel"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -67346,22 +67292,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
+"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
+"selezione a sinistra di un pixel."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "Sposta selezione"
+msgstr "Sposta la selezione del testo a destra"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right By 1 Pixel"
-msgstr ""
+msgstr "Sposta la selezione del testo a destra di un pixel"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
@@ -67371,6 +67317,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
+"Quando la modalità di impostazione del testo è attiva, sposta l'inizio della "
+"selezione a destra di un pixel."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67378,18 +67326,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
-#| msgid "Reset Canvas Transformations"
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "Azzera le trasformazioni della tela"
+msgstr "Rimuovi trasformazioni del carattere"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "Rimuove le trasformazioni del carattere dalla selezione."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:297
 #, kde-format
@@ -67403,18 +67350,16 @@ msgid "SVG Text Tool"
 msgstr "Strumento Testo SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
-#, fuzzy, kde-format
-#| msgid "Create new texts with..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Crea nuovi testi con..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Proprietà attuali:"
+msgstr "Proprietà attuali del testo"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
 #, kde-format
@@ -67422,21 +67367,20 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Usa le proprietà attuali nell'area di aggancio Proprietà del testo per "
+"creare nuovi testi."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
-#, fuzzy, kde-format
-#| msgctxt "@label:button"
-#| msgid "Clone Style Preset"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Clona preimpostazione stile"
+msgstr "Seleziona preimpostazione stile"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Proprietà del testo"
+msgstr "Apri proprietà del testo"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
 #, kde-format
@@ -67444,82 +67388,72 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Apri l'area di aggancio Proprietà del testo per modificare le proprietà "
+"quali la dimensione e lo stile."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Opzioni"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Incolla al cursore"
+msgstr "Usa cursore visivo"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Usa l'ordine visivo per il testo bidirezionale."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_tip_default.kpp"
-#| msgid "Basic tip default"
+#, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Punta di base predefinita"
+msgstr "Incolla testo formattato in modo predefinito"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
+"Incolla sempre il testo formattato quando utilizzi l'azione di incollaggio."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
-#, fuzzy, kde-format
-#| msgid "Texturing Mode:"
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Modalità di trama:"
+msgstr "Modalità impostazioni tipo"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Abilita le impostazioni della penna"
+msgstr "Abilita la modalità di impostazione del tipo."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Finestra di dialogo"
+msgstr "Finestre di dialogo"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Modifica sorgente SVG"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
-#, fuzzy, kde-format
-#| msgid "Duplicate the currently selected layer or mask"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr "Duplica il livello o la maschera attualmente selezionato"
+msgstr "Modifica il testo correntemente selezionato come XML SVG."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
-#, fuzzy, kde-format
-#| msgid "Glyph Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Tavolozza dei glifi"
@@ -67531,100 +67465,82 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Apri la tavolozza dei glifi che fornisce accesso a variazioni OpenType o "
+"Unicode di glifi e a una mappa caratteri."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
-#, fuzzy, kde-format
-#| msgid "&Convert Image Type..."
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "&Converti il tipo di immagine..."
+msgstr "Converti tipo..."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
-#, fuzzy, kde-format
-#| msgid "Preformatted"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Preformattato"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#| "lines. A line break is inserted so the lines from wrapping or positioning "
-#| "remain separated.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"<html><head/><body><p>Il testo non va a capo, sono mantenuti gli spazi e le "
-"nuove righe. Viene inserita un'interruzione di riga in modo che le righe in "
-"precedenza mandate a capo o posizionate restino separate.</p></body></html>"
+"Il testo non va a capo, sono mantenuti gli spazi e le nuove righe. Viene "
+"inserita un'interruzione di riga in modo che le righe in precedenza mandate "
+"a capo o posizionate restino separate."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "A capo in linea"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#| "lines are preserved. New lines are not removed.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
 msgstr ""
-"<html><head/><body><p>Il testo va a capo all'interno di una lunghezza "
-"predefinita, sono mantenuti gli spazi e le nuove righe. Le nuove righe non "
-"vengono rimosse.</p></body></html>"
+"Il testo va a capo all'interno di una lunghezza predefinita, sono mantenuti "
+"gli spazi e le nuove righe. Le nuove righe non vengono rimosse."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
-#, fuzzy, kde-format
-#| msgid "Prepositioned"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Preposizionato"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#| "each line. Spaces and new lines are collapsed. This is for backward "
-#| "compatibility with SVG 1.1.</p></body></html>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
-"<html><head/><body><p>Il testo utilizza le trasformazioni di carattere SVG "
-"1.1 per posizionare ciascuna riga. Gli spazi e le nuove righe vengono "
-"ridotti. Utilizzato per retrocompatibilità con SVG 1.1.</p></body></html>"
+"Il testo utilizza le trasformazioni di carattere SVG 1.1 per posizionare "
+"ciascuna riga. Gli spazi e le nuove righe vengono ridotti. Utilizzato per "
+"retrocompatibilità con SVG 1.1."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Debug"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Aggancia riquadro esterno"
+msgstr "Mostra rettangoli circoscritti dei caratteri"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
-#, fuzzy, kde-format
-#| msgid "Show line boxes"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Mostra riquadri linee"
+msgstr "Mostra riquadri delle linee"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -68704,52 +68620,45 @@ msgstr "Trasforma un livello o una selezione"
 
 #. i18n: context: text @ Action (KisToolTransformFree), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:17
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Free Transform)"
-msgstr "Azioni strumento Trasforma"
+msgstr "Strumento Trasforma (trasformazione libera)"
 
 #. i18n: context: text @ Action (KisToolTransformPerspective), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:27
-#, fuzzy, kde-format
-#| msgid "Perspective Transform"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Perspective Transform)"
-msgstr "Trasforma la prospettiva"
+msgstr "Strumento Trasforma (trasformazione in prospettiva)"
 
 #. i18n: context: text @ Action (KisToolTransformWarp), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:37
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Warp Transform)"
-msgstr "Azioni strumento Trasforma"
+msgstr "Strumento Trasforma (trasformazione piega)"
 
 #. i18n: context: text @ Action (KisToolTransformCage), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:47
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Cage Transform)"
-msgstr "Azioni strumento Trasforma"
+msgstr "Strumento Trasforma (trasformazione gabbia)"
 
 #. i18n: context: text @ Action (KisToolTransformLiquify), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:57
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Transform"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Liquify Transform)"
-msgstr "Trasforma"
+msgstr "Strumento Trasforma (trasformazione liquefà)"
 
 #. i18n: context: text @ Action (KisToolTransformMesh), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:67
-#, fuzzy, kde-format
-#| msgid "Transform Tool Actions"
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool (Mesh Transform)"
-msgstr "Azioni strumento Trasforma"
+msgstr "Strumento Trasforma (trasformazione reticolo)"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:153
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63

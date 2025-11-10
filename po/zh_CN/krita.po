@@ -66110,7 +66110,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "转换类型..."
+msgstr "排版模式"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
 #, kde-format

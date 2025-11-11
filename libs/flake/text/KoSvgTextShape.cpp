@@ -2514,6 +2514,9 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-inside", shapesInsideList.join(" "));
+        /// Right now we don't support showing glyphs outside the shape. Nor does Inkscape.
+        /// Therefore being excplit about clipping these glyphs is preferable.
+        map.insert("overflow", "clip");
     }
     if (!d->shapesSubtract.isEmpty()) {
         QStringList shapesInsideList;

@@ -277,6 +277,7 @@ private Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant &value);
     void toggleProperty(KoSvgTextProperties::PropertyId property);
     void propertyAction();
+    void clearFormattingAction();
 
     /**
      * @brief pasteRichText

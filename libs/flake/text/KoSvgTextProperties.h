@@ -119,6 +119,8 @@ public:
         KraTextVersionId, ///< Int, used for handling incorrectly saved files.
         KraTextStyleType, ///< string, used to identify the style preset type (character or paragraph).
         KraTextStyleResolution, ///< Int, used to scale style presets to be pixel-relative.
+
+        LastPropertyId ///< Last Property ID, used for iteration.
     };
 
     KoSvgTextProperties();

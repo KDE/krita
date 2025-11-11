@@ -1263,6 +1263,19 @@ void SvgTextCursor::propertyAction()
     mergePropertiesIntoSelection(properties);
 }
 
+void SvgTextCursor::clearFormattingAction()
+{
+    KoSvgTextProperties props;
+
+    QSet<KoSvgTextProperties::PropertyId> ids;
+
+    for (int i = 0; i < int(KoSvgTextProperties::LastPropertyId); i++) {
+        ids.insert(KoSvgTextProperties::PropertyId(i));
+    }
+
+    mergePropertiesIntoSelection(props, ids);
+}
+
 bool SvgTextCursor::hasSelection()
 {
     return d->pos != d->anchor;
@@ -1577,6 +1590,10 @@ bool SvgTextCursor::registerPropertyAction(QAction *action, const QString &name)
     } else if (name == "svg_remove_transforms_from_range") {
         d->actions.append(action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(removeTransformsFromRange()));
+        return true;
+    } else if (name == "svg_clear_formatting") {
+        d->actions.append(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(clearFormattingAction()));
         return true;
     } else if (action) {
         d->actions.append(action);

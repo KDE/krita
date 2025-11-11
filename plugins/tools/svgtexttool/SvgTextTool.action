@@ -277,5 +277,16 @@
         <statusTip/>
         <isCheckable>false</isCheckable>
       </Action>
+
+<Action name="svg_clear_formatting">
+  <iconText>Clear Formatting</iconText>
+  <text>Clear Formatting</text>
+  <shortcut>edit-clear</shortcut>
+  <toolTip>Remove all set text properties from the selection.</toolTip>
+  <icon></icon>
+  <whatsThis/>
+  <statusTip/>
+  <isCheckable>false</isCheckable>
+</Action>
     </Actions>
 </ActionCollection>

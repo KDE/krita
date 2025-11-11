@@ -59129,6 +59129,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Přepnout do celoobrazovkového režimu"

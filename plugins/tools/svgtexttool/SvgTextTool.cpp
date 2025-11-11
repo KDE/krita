@@ -26,6 +26,7 @@
 #include "SvgTextChangeTransformsOnRange.h"
 #include "SvgChangeTextPathInfoStrategy.h"
 #include "SvgChangeTextPaddingMarginStrategy.h"
+#include <commands/KoSvgTextAddRemoveShapeCommands.h>
 
 #include <QPainterPath>
 #include <QDesktopServices>
@@ -545,14 +546,18 @@ void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
 }
 
 void SvgTextTool::slotConvertType(int index) {
-    if (selectedShape()) {
-        if (index == selectedShape()->textType()) return;
+    KoSvgTextShape *shape = selectedShape();
+    if (shape) {
+        if (index == shape->textType()) return;
         KoSvgTextShape::TextType type = KoSvgTextShape::TextType(index);
         KUndo2Command *parentCommand = new KUndo2Command();
-        new KoKeepShapesSelectedCommand({selectedShape()}, {}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
-        KoSvgConvertTextTypeCommand *cmd = new KoSvgConvertTextTypeCommand(selectedShape(), type, m_textCursor.getPos(), parentCommand);
+        new KoKeepShapesSelectedCommand({shape}, {}, canvas()->selectedShapesProxy(),
+                                        KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
+        KoSvgConvertTextTypeCommand *cmd = new KoSvgConvertTextTypeCommand(shape, type, m_textCursor.getPos(), parentCommand);
         parentCommand->setText(cmd->text());
-        new KoKeepShapesSelectedCommand({}, {selectedShape()}, canvas()->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
+        KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(shape, parentCommand, shape->textType() == KoSvgTextShape::TextInShape, type == KoSvgTextShape::InlineWrap);
+        new KoKeepShapesSelectedCommand({}, {shape}, canvas()->selectedShapesProxy(),
+                                        KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
         canvas()->addCommand(parentCommand);
         slotTextTypeUpdated();
     }

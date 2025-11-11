@@ -15,7 +15,6 @@ struct KoSvgTextAddRemoveShapeCommandImpl::Private {
     Private(KoSvgTextShape *_text, KoShape *_shape, int _startPos, int _endPos)
         : textShape(_text)
         , shape(_shape)
-        , memento(textShape->getMemento())
         , startPos(_startPos)
         , endPos(_endPos)
     {
@@ -40,10 +39,6 @@ KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgText
 {
     d->removeCommand = state == FINALIZING;
 
-    if (!d->removeCommand) {
-        d->originalShapeParent = shape->parent();
-    }
-
     if (type == Unknown) {
         if (d->textShape->shapesInside().contains(shape)) {
             d->type = Inside;
@@ -53,15 +48,14 @@ KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgText
             d->type = TextPath;
             KoSvgTextNodeIndex idx = textShape->nodeForTextPath(shape);
             QPair<int, int> range = textShape->findRangeForNodeIndex(idx);
-            startPos = range.first;
-            endPos = range.second;
+            d->startPos = range.first;
+            d->endPos = range.second;
         } else {
             d->type = Unknown;
         }
     } else {
         d->type = type;
     }
-    d->oldTextPaths = d->textShape->textPathsAtRange(startPos, endPos);
 }
 
 KoSvgTextAddRemoveShapeCommandImpl::~KoSvgTextAddRemoveShapeCommandImpl()
@@ -72,6 +66,10 @@ KoSvgTextAddRemoveShapeCommandImpl::~KoSvgTextAddRemoveShapeCommandImpl()
 // Remove shape from text.
 void KoSvgTextAddRemoveShapeCommandImpl::partB()
 {
+    if (d->removeCommand) {
+        d->memento = d->textShape->getMemento();
+        d->oldTextPaths = d->textShape->textPathsAtRange(d->startPos, d->endPos);
+    }
     QRectF updateRectText = d->textShape->boundingRect();
     QRectF updateRectShape = d->shape->boundingRect();
 
@@ -107,6 +105,11 @@ void KoSvgTextAddRemoveShapeCommandImpl::partB()
 // Add shape to text.
 void KoSvgTextAddRemoveShapeCommandImpl::partA()
 {
+    if (!d->removeCommand) {
+        d->memento = d->textShape->getMemento();
+        d->oldTextPaths = d->textShape->textPathsAtRange(d->startPos, d->endPos);
+        d->originalShapeParent = d->shape->parent();
+    }
     QRectF updateRect = d->textShape->boundingRect();
     updateRect |= d->shape->boundingRect();
 
@@ -166,6 +169,21 @@ KoSvgTextRemoveShapeCommand::KoSvgTextRemoveShapeCommand(KoSvgTextShape *textSha
 KoSvgTextRemoveShapeCommand::~KoSvgTextRemoveShapeCommand()
 {
 
+}
+
+void KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(KoSvgTextShape *textShape, KUndo2Command *parent, bool textInShape, bool textPaths)
+{
+   QList<KoShape*> shapes;
+   if (textInShape) {
+       shapes.append(textShape->shapesInside());
+       shapes.append(textShape->shapesSubtract());
+   }
+   if (textPaths) {
+       shapes.append(textShape->textPathsAtRange(0, textShape->posForIndex(textShape->plainText().size())));
+   }
+   Q_FOREACH(KoShape *shape, shapes) {
+       new KoSvgTextRemoveShapeCommand(textShape, shape, parent);
+   }
 }
 
 KoSvgTextSetTextPathOnRangeCommand::KoSvgTextSetTextPathOnRangeCommand(KoSvgTextShape *textShape, KoShape *shape, int startPos, int endPos, KUndo2Command *parentCommand)

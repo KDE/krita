@@ -548,6 +548,7 @@ void DefaultTool::slotChangeTextType(int index)
                 convertableShape = true;
                 parentCommand->setText(cmd->text());
             }
+            KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, textShape->textType() == KoSvgTextShape::TextInShape, type == KoSvgTextShape::InlineWrap);
         }
     }
 
@@ -580,6 +581,11 @@ void DefaultTool::slotAddShapesToFlow()
     if (shapes.isEmpty()) return;
 
    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Add shapes to text flow."));
+
+   if (textShape->textType() != KoSvgTextShape::InlineWrap) {
+       new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
+   }
+   KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, false, true);
 
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, shapes) {
@@ -615,6 +621,11 @@ void DefaultTool::slotSubtractShapesFromFlow()
     if (shapes.isEmpty()) return;
 
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Subtract shapes from text flow."));
+
+    if (textShape->textType() == KoSvgTextShape::InlineWrap) {
+        new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
+    }
+    KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, false, true);
 
     new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
     Q_FOREACH(KoShape *shape, shapes) {

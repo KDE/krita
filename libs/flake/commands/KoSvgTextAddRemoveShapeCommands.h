@@ -42,6 +42,17 @@ class KRITAFLAKE_EXPORT KoSvgTextRemoveShapeCommand : public KoSvgTextAddRemoveS
 public:
     KoSvgTextRemoveShapeCommand(KoSvgTextShape *textShape, KoShape *shape, KUndo2Command *parentCommand = 0);
     ~KoSvgTextRemoveShapeCommand();
+
+    /**
+     * @brief removeContourShapesFromFlow
+     * Create a command to remove all contour shapes of a certain type from the flow
+     * and add the command to the parent.
+     * @param textShape -- textShape to work on.
+     * @param parent -- parentCommand to add remove commands to.
+     * @param textInShape -- remove all text-in-shape shapeInside and ShapeSubtract shapes.
+     * @param textPaths -- remove all text paths.
+     */
+    static void removeContourShapesFromFlow(KoSvgTextShape *textShape, KUndo2Command *parent, bool textInShape, bool textPaths);
 };
 
 class KRITAFLAKE_EXPORT KoSvgTextSetTextPathOnRangeCommand : public KoSvgTextAddRemoveShapeCommandImpl {

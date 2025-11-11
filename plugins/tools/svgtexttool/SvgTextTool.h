@@ -30,6 +30,7 @@ class SvgTextEditor;
 class KoSvgTextShape;
 class KoInteractionStrategy;
 class KUndo2Command;
+class QActionGroup;
 
 class SvgTextTool : public KoToolBase
 {
@@ -102,7 +103,7 @@ private:
 
     KoSvgText::WritingMode writingMode() const;
 
-    void addMappedAction(KisSignalMapper* mapper, const QString &actionName, const int value);
+    void addMappedAction(KisSignalMapper* mapper, const QString &actionName, const int value, QActionGroup *group = nullptr);
 
 private Q_SLOTS:
 

@@ -145,6 +145,8 @@ public:
     /// Turned off when the typesetting strategy is active to give artists more control.
     void setDrawTypeSettingHandle(bool draw);
 
+    void updateTypeSettingDecorFromShape();
+
     /// Return appropriate typeSetting cursor;
     QCursor cursorTypeForTypeSetting() const;
 

@@ -135,15 +135,17 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     }
 
     m_textTypeSignalsMapper.reset(new KisSignalMapper(this));
-    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_preformatted", KoSvgTextShape::PreformattedText);
-    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_inline_wrap", KoSvgTextShape::InlineWrap);
-    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_pre_positioned", KoSvgTextShape::PrePositionedText);
+    QActionGroup *textTypeActions = new QActionGroup(this);
+    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_preformatted", KoSvgTextShape::PreformattedText, textTypeActions);
+    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_inline_wrap", KoSvgTextShape::InlineWrap, textTypeActions);
+    addMappedAction(m_textTypeSignalsMapper.data(), "text_type_pre_positioned", KoSvgTextShape::PrePositionedText, textTypeActions);
 
     m_typeSettingMovementMapper.reset(new KisSignalMapper(this));
-    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_down_1_px", Qt::Key_Down);
-    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_up_1_px", Qt::Key_Up);
-    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_left_1_px", Qt::Key_Left);
-    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_right_1_px", Qt::Key_Right);
+    QActionGroup *typeSettingActions = new QActionGroup(this);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_down_1_px", Qt::Key_Down, typeSettingActions);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_up_1_px", Qt::Key_Up, typeSettingActions);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_left_1_px", Qt::Key_Left, typeSettingActions);
+    addMappedAction(m_typeSettingMovementMapper.data(), "svg_type_setting_move_selection_start_right_1_px", Qt::Key_Right, typeSettingActions);
 
     m_textOutlineHelper->setDrawBoundingRect(false);
     m_textOutlineHelper->setDrawTextWrappingArea(true);
@@ -569,28 +571,26 @@ void SvgTextTool::slotUpdateTextPasteBehaviour()
 void SvgTextTool::slotTextTypeUpdated()
 {
     KoSvgTextShape *shape = selectedShape();
+    QActionGroup *typeConvertGroup = action("text_type_preformatted")->actionGroup();
+    typeConvertGroup->setExclusive(true);
+    Q_FOREACH (QAction *a, typeConvertGroup->actions()) {
+        a->setCheckable(true);
+    }
     if (m_optionManager) {
         if (shape) {
             m_optionManager->convertToTextType(int(shape->textType()));
-            action("text_type_preformatted")->setEnabled(true);
-            action("text_type_pre_positioned")->setEnabled(true);
-            action("text_type_inline_wrap")->setEnabled(true);
+            typeConvertGroup->setEnabled(true);
             action("text_type_preformatted")->setChecked(shape->textType() == KoSvgTextShape::PreformattedText);
             action("text_type_pre_positioned")->setChecked(shape->textType() == KoSvgTextShape::PrePositionedText);
             action("text_type_inline_wrap")->setChecked(shape->textType() == KoSvgTextShape::InlineWrap);
 
         } else {
             m_optionManager->convertToTextType(-1);
-            action("text_type_preformatted")->setEnabled(false);
-            action("text_type_pre_positioned")->setEnabled(false);
-            action("text_type_inline_wrap")->setEnabled(false);
+            typeConvertGroup->setEnabled(false);
         }
-        Q_FOREACH(QObject *obj, m_typeSettingMovementMapper->children()) {
-            QAction *a = qobject_cast<QAction*>(obj);
-            if (a && shape) {
-                a->setEnabled(m_optionManager->typeSettingMode());
-            }
-        }
+        const bool enableTypeSetting = (m_optionManager->typeSettingMode() && shape && (shape->textType() == KoSvgTextShape::PreformattedText ||shape->textType() == KoSvgTextShape::PrePositionedText));
+        action("svg_type_setting_move_selection_start_down_1_px")->actionGroup()->setEnabled(enableTypeSetting);
+        m_textCursor.updateTypeSettingDecorFromShape();
     }
 }
 
@@ -626,13 +626,7 @@ void SvgTextTool::slotMoveTextSelection(int index)
 void SvgTextTool::slotUpdateTypeSettingMode()
 {
     m_textCursor.setTypeSettingModeActive(m_optionManager->typeSettingMode());
-    KoSvgTextShape *shape = selectedShape();
-    Q_FOREACH(QObject *obj, m_typeSettingMovementMapper->children()) {
-        QAction *a = qobject_cast<QAction*>(obj);
-        if (a && shape) {
-            a->setEnabled(m_optionManager->typeSettingMode());
-        }
-    }
+    slotTextTypeUpdated();
 }
 
 QRectF SvgTextTool::decorationsRect() const
@@ -1108,13 +1102,16 @@ KoSvgText::WritingMode SvgTextTool::writingMode() const
     return KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 }
 
-void SvgTextTool::addMappedAction(KisSignalMapper *mapper, const QString &actionName, const int value)
+void SvgTextTool::addMappedAction(KisSignalMapper *mapper, const QString &actionName, const int value, QActionGroup *group)
 {
     QAction *a = action(actionName);
     if (a) {
         connect(a, SIGNAL(triggered()), mapper, SLOT(map()));
         mapper->setMapping(a, value);
         m_textCursor.registerPropertyAction(a, actionName);
+        if (group && !a->actionGroup()) {
+            group->addAction(a);
+        }
     }
 }
 

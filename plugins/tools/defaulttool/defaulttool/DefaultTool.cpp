@@ -765,6 +765,14 @@ void DefaultTool::setupActions()
     addMappedAction(m_textTypeSignalsMapper, "text_type_inline_wrap", KoSvgTextShape::InlineWrap);
     addMappedAction(m_textTypeSignalsMapper, "text_type_pre_positioned", KoSvgTextShape::PrePositionedText);
 
+    if (!action("text_type_preformatted")->actionGroup()) {
+        QActionGroup *textTypeActions = new QActionGroup(this);
+        textTypeActions->addAction(action("text_type_preformatted"));
+        textTypeActions->addAction(action("text_type_inline_wrap"));
+        textTypeActions->addAction(action("text_type_pre_positioned"));
+        textTypeActions->setExclusive(true);
+    }
+
     m_textFlowSignalsMapper  = new KisSignalMapper(this);
 
     addMappedAction(m_textFlowSignalsMapper, "flow_shape_order_back", KoSvgTextReorderShapeInsideCommand::SendToBack);
@@ -2122,20 +2130,29 @@ void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes
     bool enablePreformatted = false;
     bool enablePrePositioned = false;
     bool enableInlineWrapped = false;
+    bool text = false;
     Q_FOREACH (KoShape *shape, editableShapes) {
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape *>(shape);
         if (textShape) {
+            text = true;
             if (textShape->textType() != KoSvgTextShape::PreformattedText && !enablePreformatted) {
                 enablePreformatted = true;
             }
             if (textShape && textShape->textType() != KoSvgTextShape::PrePositionedText && !enablePrePositioned) {
                 enablePrePositioned = true;
             }
-            if (textShape && textShape->textType() != KoSvgTextShape::PrePositionedText && !enableInlineWrapped) {
+            if (textShape && textShape->textType() != KoSvgTextShape::InlineWrap && !enableInlineWrapped) {
                 enableInlineWrapped = true;
             }
         }
     }
+    QActionGroup *group = action("text_type_preformatted")->actionGroup();
+    group->setEnabled(true);
+    group->setExclusive(false);
+    Q_FOREACH (QAction *a, group->actions()) {
+        a->setCheckable(false);
+    }
+
     action("text_type_preformatted")->setEnabled(enablePreformatted);
     action("text_type_pre_positioned")->setEnabled(enablePrePositioned);
     action("text_type_inline_wrap")->setEnabled(enableInlineWrapped);
@@ -2204,6 +2221,10 @@ QMenu* DefaultTool::popupActionsMenu()
         QMenu *text = m_contextMenu->addMenu(i18n("Text"));
         text->addAction(action("add_shape_to_flow_area"));
         text->addAction(action("subtract_shape_from_flow_area"));
+        text->addSeparator();
+        text->addAction(action("text_type_preformatted"));
+        text->addAction(action("text_type_inline_wrap"));
+        text->addAction(action("text_type_pre_positioned"));
         text->addSeparator();
         text->addAction(action("remove_shapes_from_text_flow"));
         text->addAction(action("flow_shape_type_toggle"));

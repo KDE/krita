@@ -588,6 +588,10 @@ public:
                    CharacterResult &charResult,
                    QPointF &totalAdvanceFTFontCoordinates);
 
+    static QVector<QPointF> getLigatureCarets(const KoSvgText::ResolutionHandler &resHandler,
+                                  const bool isHorizontal,
+                                  raqm_glyph_t &currentGlyph);
+
     static std::pair<QTransform, qreal> loadGlyphOnly(const QTransform &ftTF,
                                                FT_Int32 faceLoadFlags,
                                                bool isHorizontal,

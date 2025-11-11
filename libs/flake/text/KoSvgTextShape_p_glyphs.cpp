@@ -513,20 +513,6 @@ bool KoSvgTextShape::Private::loadGlyph(const KoSvgText::ResolutionHandler &resH
             caret.translate(-QPointF(-offset, -descender));
             cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
 
-            QVector<QPointF> positions;
-            // Ligature caret list only uses direction to determine whether horizontal or vertical.
-            hb_direction_t dir = HB_DIRECTION_LTR;
-
-            uint numCarets = hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, nullptr, nullptr);
-            for (uint i=0; i<numCarets; i++) {
-                hb_position_t caretPos = 0;
-                uint caretCount = 1;
-                hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, &caretCount, &caretPos);
-                QPointF pos(caretPos, 0);
-                positions.append(ftTF.map(pos));
-            }
-
-            cursorInfo.offsets = positions;
         } else {
             qreal slope = 0;
             if (charResult.metrics.caretRun != 0 && charResult.metrics.caretRise !=0) {
@@ -632,6 +618,25 @@ bool KoSvgTextShape::Private::loadGlyph(const KoSvgText::ResolutionHandler &resH
         charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
     }
     return true;
+}
+
+QVector<QPointF> KoSvgTextShape::Private::getLigatureCarets(const KoSvgText::ResolutionHandler &resHandler, const bool isHorizontal, raqm_glyph_t &currentGlyph)
+{
+    QVector<QPointF> positions;
+    const QTransform ftTF = resHandler.freeTypeToPointTransform();
+    // Ligature caret list only uses direction to determine whether horizontal or vertical.
+    hb_direction_t dir = isHorizontal? HB_DIRECTION_LTR: HB_DIRECTION_TTB;
+    hb_font_t_sp font(hb_ft_font_create_referenced(currentGlyph.ftface));
+
+    uint numCarets = hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, nullptr, nullptr);
+    for (uint i=0; i<numCarets; i++) {
+        hb_position_t caretPos = 0;
+        uint caretCount = 1;
+        hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, &caretCount, &caretPos);
+        QPointF pos = isHorizontal? QPointF(caretPos, 0): QPointF(0, caretPos);
+        positions.append(ftTF.map(pos));
+    }
+    return positions;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

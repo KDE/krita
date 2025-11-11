@@ -535,6 +535,10 @@ void KoSvgTextShape::Private::relayout()
 
     KIS_ASSERT(count <= INT32_MAX);
 
+    // For detecting ligatures.
+    int previousGlyph = -1;
+    int previousCluster = -1;
+
     for (int i = 0; i < static_cast<int>(count); i++) {
         raqm_glyph_t currentGlyph = glyphs[i];
         KIS_ASSERT(currentGlyph.cluster <= INT32_MAX);
@@ -566,12 +570,28 @@ void KoSvgTextShape::Private::relayout()
             continue;
         }
 
+        /// Ligature caret testing. We try to test when there's a gap between clusters and glyphs.
+        /// This gap happens because a single glyph covers multiple clusters.
+        /// We do this because testing for caret positions is surprisingly heavy.
+        if (((cluster - previousCluster) > (i-previousGlyph)) && previousCluster >= 0) {
+            raqm_glyph_t previousGlyph = glyphs[i];
+            result[previousCluster].cursorInfo.offsets = getLigatureCarets(resHandler, isHorizontal, previousGlyph);
+        }
+        // Always test last one.
+        if (i+1 == count) {
+            charResult.cursorInfo.offsets = getLigatureCarets(resHandler, isHorizontal, currentGlyph);
+        }
+
         charResult.visualIndex = i;
         logicalToVisual.insert(cluster, i);
 
         charResult.middle = false;
 
         result[cluster] = charResult;
+        if (previousCluster != cluster) {
+            previousGlyph = i;
+            previousCluster = cluster;
+        }
     }
 
     // fix it so that characters that are in the 'middle' due to either being

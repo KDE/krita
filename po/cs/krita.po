@@ -7703,19 +7703,17 @@ msgstr ""
 
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
-#, fuzzy, kde-format
-#| msgid "Convert to Path"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "Převést na cestu"
+msgstr ""
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
-msgstr "Výkon"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
@@ -7728,19 +7726,17 @@ msgstr ""
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgid "Inline"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "Vložené"
+msgstr ""
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgid "Inline"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
-msgstr "Vložené"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
@@ -7753,19 +7749,17 @@ msgstr ""
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
-#, fuzzy, kde-format
-#| msgid "Text Position"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "Pozice textu"
+msgstr ""
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr "Pozice"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
@@ -64371,41 +64365,35 @@ msgid "Adjust character transforms on text."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
-#, fuzzy, kde-format
-#| msgid "Text Tool"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
-msgstr "Nástroj na text"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
-#, fuzzy, kde-format
-#| msgid "Font Size:"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
-msgstr "Velikost písma:"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
-msgstr "Dole"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
-#, fuzzy, kde-format
-#| msgid "Alphabetical"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
-msgstr "Podle abecedy"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
-#, fuzzy, kde-format
-#| msgid "Biography"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
-msgstr "Životopis"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, kde-format
@@ -64414,48 +64402,40 @@ msgid "Hanging"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
-msgstr "Uprostřed"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
-#, fuzzy, kde-format
-#| msgid "Mathematics and calculations"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
-msgstr "Matematika a výpočty"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
-msgstr "Střed"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
-#, fuzzy, kde-format
-#| msgid "Line Height:"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
-msgstr "Tloušťka čáry:"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "Aktuální vrstva"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Linear Shift:"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "Lineární posun:"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
@@ -64514,12 +64494,9 @@ msgid "Remove Text"
 msgstr "Odstranit text"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Reset Transformations"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "Resetovat transformace"
+msgstr ""
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -64829,12 +64806,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "Obrátit výběr"
+msgstr ""
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
@@ -64854,12 +64829,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "Obrátit výběr"
+msgstr ""
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
@@ -64879,12 +64852,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "Obrátit výběr"
+msgstr ""
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
@@ -64904,12 +64875,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "Obrátit výběr"
+msgstr ""
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
@@ -64933,12 +64902,10 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Reset Transformations"
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "Resetovat transformace"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
@@ -64959,18 +64926,16 @@ msgid "SVG Text Tool"
 msgstr "Nástroj pro SVG text"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
-#, fuzzy, kde-format
-#| msgid "Create new Template"
+#, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
-msgstr "Vytvořit novou šablonu"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
-msgstr "Vlastnosti textu"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
 #, kde-format
@@ -64980,18 +64945,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
-#, fuzzy, kde-format
-#| msgid "Select Layer"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Vybrat vrstvu"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
-msgstr "Vlastnosti textu"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
 #, kde-format
@@ -65001,19 +64964,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Možnosti"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste at Cursor"
+#, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
-msgstr "Vložit na kurzoru"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
 #, kde-format
@@ -65034,32 +64994,28 @@ msgid "Always paste rich text when using paste action."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Režim označování"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
-#, fuzzy, kde-format
-#| msgid "Tablet settings"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Nastavení tabletu"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
-msgstr "Dialog"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
-#, fuzzy, kde-format
-#| msgid "Edit Resources"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
-msgstr "Upravit zdroje"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
 #, kde-format
@@ -65068,11 +65024,10 @@ msgid "Edit the currently selected text as SVG XML."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
-msgstr "Paleta"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
 #, kde-format
@@ -65083,19 +65038,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "Převést na tvar"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
-msgstr "Výkon"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
 #, kde-format
@@ -65106,11 +65058,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
-#, fuzzy, kde-format
-#| msgid "Inline"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
-msgstr "Vložené"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
 #, kde-format
@@ -65121,11 +65072,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr "Pozice"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
 #, kde-format
@@ -65136,26 +65086,22 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
-msgstr "Ladění"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Ohraničení"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Zobrazit ve složce"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -66914,6 +66860,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Přepnout do celoobrazovkového režimu"

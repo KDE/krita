@@ -79,6 +79,7 @@ QList<QAction *> DefaultToolFactory::createActionsImpl()
 
     actions << actionRegistry->makeQAction("add_shape_to_flow_area", this);
     actions << actionRegistry->makeQAction("subtract_shape_from_flow_area", this);
+    actions << actionRegistry->makeQAction("put_text_on_path", this);
     actions << actionRegistry->makeQAction("remove_shapes_from_text_flow", this);
 
     actions << actionRegistry->makeQAction("flow_shape_type_toggle", this);

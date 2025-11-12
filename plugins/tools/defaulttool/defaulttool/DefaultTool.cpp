@@ -598,6 +598,51 @@ void DefaultTool::slotAddShapesToFlow()
     selection->select(textShape);
 }
 
+void DefaultTool::slotPutTextOnPath()
+{
+    KoSvgTextShape *textShape = nullptr;
+    KoPathShape *textPath = nullptr;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    if (selectedShapes.isEmpty()) return;
+
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+        if (text && !textShape) {
+            textShape = text;
+        } else if (KoPathShape *path = dynamic_cast<KoPathShape*>(shape)){
+            textPath = path;
+        }
+        if (textShape && textPath) {
+            break;
+        }
+    }
+    if (!(textShape && textPath)) return;
+
+   KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Put Text On Path"));
+
+   new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
+   if (textShape->textType() != KoSvgTextShape::InlineWrap) {
+       new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
+   }
+
+   /// This will always remove all previous text paths.
+   /// While Krita's layout engine can handle multiple of them, the interaction
+   /// hasn't been fully verified yet. So if someone implements multiple textpaths,
+   /// they will also need to check if the cursor interaction makes sense.
+   KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, true, true);
+   new KoSvgTextSetTextPathOnRangeCommand(textShape, textPath, 0, textShape->posForIndex(textShape->plainText().size()), parentCommand);
+
+   new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
+
+   canvas()->addCommand(parentCommand);
+   selection->deselectAll();
+   selection->select(textShape);
+}
+
 void DefaultTool::slotSubtractShapesFromFlow()
 {
     KoSvgTextShape *textShape = nullptr;
@@ -1438,6 +1483,9 @@ void DefaultTool::activate(const QSet<KoShape *> &shapes)
     QAction *actionTextSubtract = action("subtract_shape_from_flow_area");
     connect(actionTextSubtract, SIGNAL(triggered()), this, SLOT(slotSubtractShapesFromFlow()), Qt::UniqueConnection);
 
+    QAction *actionTextOnPath = action("put_text_on_path");
+    connect(actionTextOnPath, SIGNAL(triggered()), this, SLOT(slotPutTextOnPath()), Qt::UniqueConnection);
+
     QAction *actionTextRemoveFlow = action("remove_shapes_from_text_flow");
     connect(actionTextRemoveFlow, SIGNAL(triggered()), this, SLOT(slotRemoveShapesFromFlow()), Qt::UniqueConnection);
 
@@ -1497,6 +1545,8 @@ void DefaultTool::deactivate()
     disconnect(actionTextInside, 0, this, 0);
     QAction *actionTextSubtract = action("subtract_shape_from_flow_area");
     disconnect(actionTextSubtract, 0, this, 0);
+    QAction *actionTextOnPath = action("put_text_on_path");
+    disconnect(actionTextOnPath, 0, this, 0);
     QAction *actionTextRemoveFlow = action("remove_shapes_from_text_flow");
     disconnect(actionTextRemoveFlow, 0, this, 0);
     QAction *actionTextFlowToggle = action("flow_shape_type_toggle");
@@ -2097,6 +2147,7 @@ void DefaultTool::updateActions()
 
     action("add_shape_to_flow_area")->setEnabled(editContours);
     action("subtract_shape_from_flow_area")->setEnabled(editContours);
+    action("put_text_on_path")->setEnabled(editContours);
     action("remove_shapes_from_text_flow")->setEnabled(editFlowShapes);
     action("flow_shape_type_toggle")->setEnabled(editFlowShapes);
     action("flow_shape_order_back")->setEnabled(shapesInside);
@@ -2232,6 +2283,7 @@ QMenu* DefaultTool::popupActionsMenu()
         QMenu *text = m_contextMenu->addMenu(i18n("Text"));
         text->addAction(action("add_shape_to_flow_area"));
         text->addAction(action("subtract_shape_from_flow_area"));
+        text->addAction(action("put_text_on_path"));
         text->addSeparator();
         text->addAction(action("text_type_preformatted"));
         text->addAction(action("text_type_inline_wrap"));

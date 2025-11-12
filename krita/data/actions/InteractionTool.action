@@ -348,6 +348,16 @@
   <isCheckable>false</isCheckable>
 </Action>
 
+<Action name="put_text_on_path">
+  <text>Put Text On Path</text>
+  <toolTip>Make the first selected text flow onto the first selected path.</toolTip>
+  <shortcut></shortcut>
+  <icon></icon>
+  <whatsThis></whatsThis>
+  <statusTip></statusTip>
+  <isCheckable>false</isCheckable>
+</Action>
+
 <Action name="remove_shapes_from_text_flow">
   <text>Remove Shapes from Text Flow</text>
   <toolTip>Remove shapes from text flow and add them to the layer.</toolTip>

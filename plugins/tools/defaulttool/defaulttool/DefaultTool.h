@@ -124,6 +124,7 @@ private Q_SLOTS:
 
     void slotChangeTextType(int index);
     void slotAddShapesToFlow();
+    void slotPutTextOnPath();
     void slotSubtractShapesFromFlow();
     void slotRemoveShapesFromFlow();
     void slotToggleFlowShapeType();

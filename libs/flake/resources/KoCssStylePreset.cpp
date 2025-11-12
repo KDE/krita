@@ -43,6 +43,8 @@ struct KoCssStylePreset::Private {
     QString beforeText;
     QString sample = SAMPLE_PLACEHOLDER.toString();
     QString afterText;
+
+    QSizeF paragraphSampleSize = QSizeF(120, 120);
 };
 
 KoCssStylePreset::KoCssStylePreset(const QString &filename)
@@ -194,14 +196,16 @@ KoShape* KoCssStylePreset::generateSampleShape() const
 
     sampleText->setPropertiesAtPos(-1, modifiedProps);
 
+
     if (type == STYLE_TYPE_PARAGRAPH) {
+        const QSizeF sampleSize = d->paragraphSampleSize;
         // For paragraph we'll add a shape, as those will allow wrapping,
         // without being part of the properties like inline-size is.
         KoPathShape *inlineShape = new KoPathShape();
         inlineShape->moveTo(QPointF(0, 0));
-        inlineShape->lineTo(QPointF(120, 0));
-        inlineShape->lineTo(QPointF(120, 120));
-        inlineShape->lineTo(QPointF(0, 120));
+        inlineShape->lineTo(QPointF(sampleSize.width(), 0));
+        inlineShape->lineTo(QPointF(sampleSize.width(), sampleSize.height()));
+        inlineShape->lineTo(QPointF(0, sampleSize.height()));
         inlineShape->lineTo(QPointF(0, 0));
         inlineShape->close();
         sampleText->setShapesInside({inlineShape});
@@ -372,6 +376,17 @@ QString KoCssStylePreset::sampleSvg() const
     return m[SAMPLE_SVG].toString();
 }
 
+QSizeF KoCssStylePreset::paragraphSampleSize() const
+{
+    return d->paragraphSampleSize;
+}
+
+void KoCssStylePreset::setParagraphSampleSize(const QSizeF size)
+{
+    d->paragraphSampleSize = size;
+    setDirty(true);
+}
+
 int KoCssStylePreset::storedPPIResolution() const
 {
     QMap<QString, QVariant> m = metadata();
@@ -443,6 +458,11 @@ bool KoCssStylePreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
                 d->sample = textShape->plainText().mid(pos.first, pos.second-pos.first);
                 d->beforeText = textShape->plainText().mid(0, pos.first);
                 d->afterText = textShape->plainText().mid(pos.second);
+
+                if (!textShape->shapesInside().isEmpty() && styleType == STYLE_TYPE_PARAGRAPH) {
+                    d->paragraphSampleSize = textShape->shapesInside().first()->size();
+                }
+
             }
 
             addMetaData(STYLE_TYPE, styleType);

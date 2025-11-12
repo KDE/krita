@@ -21,6 +21,8 @@ Control {
     property double canvasDPI: 72.0;
     property double pixelRelativeDPI: 72.0;
     property alias makePixelRelative: pixelRelativeCheck.checked;
+    property alias sampleWidth: sampleWidthSpn.value;
+    property alias sampleHeight: sampleHeightSpn.value;
 
     property var locales: [];
     property KoSvgTextPropertiesModel textProperties: KoSvgTextPropertiesModel{};
@@ -164,6 +166,37 @@ Control {
                     placeholderText: i18nc("@info:placeholder", "... After");
                     onTextChanged: mainWindow.slotUpdateTextProperties();
                     visible: styleType !== "paragraph";
+                }
+            }
+            RowLayout {
+                Layout.columnSpan: 2;
+                Layout.fillWidth: true;
+                visible: styleType === "paragraph";
+                Label {
+                    Layout.preferredWidth: implicitWidth;
+                     text: i18nc("@label:spinbox", "Width:");
+                }
+                Kis.IntParseSpinBox {
+                    id: sampleWidthSpn;
+                    Layout.fillWidth: true;
+                    from: 0;
+                    to: 999;
+                    value: 100;
+                    onValueChanged: mainWindow.slotUpdateTextProperties();
+                }
+
+                Label {
+                    Layout.preferredWidth: implicitWidth;
+                     text: i18nc("@label:spinbox", "Height:");
+                }
+
+                Kis.IntParseSpinBox {
+                    id: sampleHeightSpn;
+                    Layout.fillWidth: true;
+                    from: 0;
+                    to: 999;
+                    value: 100;
+                    onValueChanged: mainWindow.slotUpdateTextProperties();
                 }
             }
             Item {

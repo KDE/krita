@@ -81,7 +81,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 02:00+0000\n"
+"POT-Creation-Date: 2025-11-12 02:02+0000\n"
 "PO-Revision-Date: 2025-09-17 12:11+0300\n"
 "Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -67847,7 +67847,27 @@ msgctxt "action"
 msgid "Remove Character Transforms from the selection."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:297
+#. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:282
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, fuzzy, kde-format
+#| msgid "Formatting"
+msgctxt "action"
+msgid "Clear Formatting"
+msgstr "Форматирование"
+
+#. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:285
+#, fuzzy, kde-format
+#| msgid "Smooths the edges of the selection"
+msgctxt "action"
+msgid "Remove all set text properties from the selection."
+msgstr "Сглаживает края выделения"
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -70018,9 +70038,6 @@ msgstr ""
 
 #~ msgid "Font Settings"
 #~ msgstr "Настройка шрифтов"
-
-#~ msgid "Formatting"
-#~ msgstr "Форматирование"
 
 #~ msgid "SVG source"
 #~ msgstr "Источник SVG"

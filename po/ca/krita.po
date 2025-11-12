@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 02:00+0000\n"
+"POT-Creation-Date: 2025-11-12 02:02+0000\n"
 "PO-Revision-Date: 2025-11-06 18:16+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -67288,7 +67288,28 @@ msgctxt "action"
 msgid "Remove Character Transforms from the selection."
 msgstr "Elimina la transformació de caràcters de la selecció."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:297
+#. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:282
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, fuzzy, kde-format
+#| msgid "Formatting"
+msgctxt "action"
+msgid "Clear Formatting"
+msgstr "S'està donant format"
+
+#. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:285
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Remove Character Transforms from the selection."
+msgctxt "action"
+msgid "Remove all set text properties from the selection."
+msgstr "Elimina la transformació de caràcters de la selecció."
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -69446,9 +69467,6 @@ msgstr ""
 
 #~ msgid "Font Settings"
 #~ msgstr "Configuració del tipus de lletra"
-
-#~ msgid "Formatting"
-#~ msgstr "S'està donant format"
 
 #~ msgid "SVG source"
 #~ msgstr "Codi font de SVG"

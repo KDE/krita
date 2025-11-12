@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 02:00+0000\n"
+"POT-Creation-Date: 2025-11-12 02:02+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -65485,7 +65485,25 @@ msgctxt "action"
 msgid "Remove Character Transforms from the selection."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:297
+#. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:282
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Clear Formatting"
+msgstr "Ngopja"
+
+#. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:285
+#, kde-format
+msgctxt "action"
+msgid "Remove all set text properties from the selection."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -67564,10 +67582,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Font Settings"
 #~ msgstr "Parametrat e Ngjyrave"
-
-#, fuzzy
-#~ msgid "Formatting"
-#~ msgstr "Ngopja"
 
 #, fuzzy
 #~| msgid "Source"

@@ -586,9 +586,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 for (int i = 0; i < currentLine.chunks.size(); i++) {
                     const LineChunk chunk = currentLine.chunks.at(i);
                     // We have a new line, so we find the first chunk that fits the word.
-                    if ( chunk.length.length() > length
-                            && currentShape.contains(chunk.length.p1())
-                            && currentShape.contains(chunk.length.p2()) ) {
+                    if ( chunk.length.length() > length ) {
                         currentLine.currentChunk = i;
                         foundFirst = true;
                         needNewLine = false;

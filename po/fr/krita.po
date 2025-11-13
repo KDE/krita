@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-12 02:02+0000\n"
+"POT-Creation-Date: 2025-11-13 02:02+0000\n"
 "PO-Revision-Date: 2025-11-07 10:22+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -18751,7 +18751,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Aucun bloc"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:371
+#: libs/flake/text/KoFontGlyphModel.cpp:418
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -46096,55 +46096,55 @@ msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr "Sous"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "Titre :"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
 msgstr "Nom de style :"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, kde-format
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "Description :"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "Description de style."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, kde-format
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "Type de style :"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "Caractère"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "Paragraphe"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
 msgstr "Le style est relatif aux pixels."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
 msgctxt "info:tooltip"
 msgid ""
@@ -46158,29 +46158,43 @@ msgstr ""
 "d'impression du document. Veuillez activer cette option pour vous assurer "
 "que le style conservera la même taille de pixels sur différents documents."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "Exemple de texte :"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "Avant..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "Échantillonner..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "... Après"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgctxt "@label:spinbox"
+msgid "Width:"
+msgstr "Largeur :"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:spinbox"
+msgid "Height:"
+msgstr "Hauteur :"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, kde-format

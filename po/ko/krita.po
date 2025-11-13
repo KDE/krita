@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-12 02:02+0000\n"
+"POT-Creation-Date: 2025-11-13 02:02+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -19820,7 +19820,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "블록 정렬"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:371
+#: libs/flake/text/KoFontGlyphModel.cpp:418
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -47296,62 +47296,62 @@ msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr "sub"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, fuzzy, kde-format
 #| msgid "Title:"
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "직함:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, fuzzy, kde-format
 #| msgid "Style Sheet"
 msgctxt "@info:placeholder"
 msgid "Style Name:"
 msgstr "스타일시트"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, fuzzy, kde-format
 #| msgid "Description:"
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "설명:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, fuzzy, kde-format
 #| msgid "Short Description"
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "짧은 설명"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, fuzzy, kde-format
 #| msgid "Style:"
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "스타일:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, fuzzy, kde-format
 #| msgid "Character"
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "문자"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, fuzzy, kde-format
 #| msgid "Paragraph"
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "문단"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
 msgctxt "info:tooltip"
 msgid ""
@@ -47361,7 +47361,7 @@ msgid ""
 "documents."
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "This is a label before a combobox with different choices regarding which "
@@ -47374,14 +47374,14 @@ msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "샘플:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, fuzzy, kde-format
 #| msgid "Before:"
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "이전:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Sca&le..."
@@ -47389,12 +47389,26 @@ msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "스케일(&L)..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, fuzzy, kde-format
 #| msgid "After:"
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "이후:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgctxt "@label:spinbox"
+msgid "Width:"
+msgstr "너비:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:spinbox"
+msgid "Height:"
+msgstr "높이:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, fuzzy, kde-format

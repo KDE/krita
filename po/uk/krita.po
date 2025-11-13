@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-12 02:02+0000\n"
-"PO-Revision-Date: 2025-11-06 19:37+0200\n"
+"POT-Creation-Date: 2025-11-13 02:02+0000\n"
+"PO-Revision-Date: 2025-11-12 14:56+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -18733,7 +18733,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Немає блоку"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:371
+#: libs/flake/text/KoFontGlyphModel.cpp:418
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -46279,55 +46279,55 @@ msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr "Нижній"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "Назва:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
 msgstr "Назва стилю:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, kde-format
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "Опис:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "Опис стилю"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, kde-format
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "Тип стилю:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "Символ"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "Абзац"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
 msgstr "Стиль відносно пікселя"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
 msgctxt "info:tooltip"
 msgid ""
@@ -46341,29 +46341,43 @@ msgstr ""
 "Позначте цей пункт, щоб стиль зберігав однаковий розмір у пікселях у різних "
 "документах."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "Текст зразка:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "До..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "Зразок…"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "... після"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgctxt "@label:spinbox"
+msgid "Width:"
+msgstr "Ширина:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:spinbox"
+msgid "Height:"
+msgstr "Висота:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, kde-format
@@ -67863,20 +67877,17 @@ msgstr "Вилучити перетворення символів з позна
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Форматування"
+msgstr "Вилучити форматування"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Вилучити перетворення символів з позначеного фрагмента."
+msgstr "Вилучити усі встановлені для позначеного фрагмента властивості тексту."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:298
 #, kde-format

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-12 02:02+0000\n"
+"POT-Creation-Date: 2025-11-13 02:02+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -18764,7 +18764,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Haen i'r Gwaelod"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:371
+#: libs/flake/text/KoFontGlyphModel.cpp:418
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -44872,57 +44872,57 @@ msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, fuzzy, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "Arddull:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
 msgstr "Arddulliau"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, fuzzy, kde-format
 #| msgid "Description:"
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "Disgrifiad:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "Disgrifiad:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, fuzzy, kde-format
 #| msgid "Style:"
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "Arddull:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "Chartreuse"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, fuzzy, kde-format
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "Testun paragraff arferol"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
 msgctxt "info:tooltip"
 msgid ""
@@ -44932,31 +44932,45 @@ msgid ""
 "documents."
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, fuzzy, kde-format
 #| msgid "&Scale"
 msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "&Graddfa"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, fuzzy, kde-format
 #| msgid "Before:"
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "O Flaen :"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "&Graddfa"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "hidlo"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgctxt "@label:spinbox"
+msgid "Width:"
+msgstr "Lled:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:spinbox"
+msgid "Height:"
+msgstr "Taldra:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, fuzzy, kde-format

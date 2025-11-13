@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-12 02:02+0000\n"
-"PO-Revision-Date: 2025-11-06 09:47+0400\n"
+"POT-Creation-Date: 2025-11-13 02:02+0000\n"
+"PO-Revision-Date: 2025-11-12 20:23+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18603,7 +18603,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "لا يوجد كتلة"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:371
+#: libs/flake/text/KoFontGlyphModel.cpp:418
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -27042,11 +27042,9 @@ msgid "Rec 709 Linear"
 msgstr "Rec 709 خطي"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
-#, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rec 2100 PQ"
+msgstr "Rec 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #, kde-format
@@ -45368,55 +45366,55 @@ msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr "منخفض"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "العنوان:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
 msgstr "اسم الطراز:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, kde-format
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "الوصف:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "وصف النمط."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, kde-format
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "نوع الطراز:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "المحرف"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "الفقرة"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
 msgstr "النمط نسبي للبكسل"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
 msgctxt "info:tooltip"
 msgid ""
@@ -45429,29 +45427,43 @@ msgstr ""
 "دقة طباعة المستند. بدّل هذا لضمان حفاظ النمط على نفس حجم البكسل عبر المستندات "
 "المختلفة."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, kde-format
 msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "نصّ عينة:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "قبل..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "العينة..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "... بعد"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgctxt "@label:spinbox"
+msgid "Width:"
+msgstr "العرض:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:spinbox"
+msgid "Height:"
+msgstr "الارتفاع:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, kde-format
@@ -65919,103 +65931,80 @@ msgstr "غيّر أداة نصّ إس-في-جي"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "اضبط تحويلات الأحرف في النص."
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Top"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "أعلى النص"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "حجم الخطّ"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Bottom"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "أسفل النص"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Alphabetic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "أبجديّ"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "تصوري"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Hanging"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "مُعلَّق"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
-msgstr "المنتصف"
+msgstr "منتصف"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "رياضي"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Central"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "وسط"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ارتفاع السّطر"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
-#, fuzzy, kde-format
-#| msgid "Current selection"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "التحديد الحالي"
+msgstr "السطر الأساسي الحالي"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Baseline-Shift"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "إزاحة-خط-الأساس"
+msgstr "إزاحة الخط القاعدي"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
@@ -66074,11 +66063,9 @@ msgid "Remove Text"
 msgstr "أزِل النّصّ"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
-#, fuzzy
-#| msgid "Pattern Transform"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "تحويل النمط"
+msgstr "أزِل تحويلات الأحرف"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -66388,19 +66375,17 @@ msgstr "ألصق النص دون تنسيق"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "نقل التّحديد"
+msgstr "حرّك تحديد النص للأسفل"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
-msgstr ""
+msgstr "حرّك تحديد النص للأسفل بمقدار 1 بكسل"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:230
@@ -66409,23 +66394,21 @@ msgctxt "action"
 msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
-msgstr ""
+msgstr "عندما يكون وضع صف النص نشطًا، حرك بداية التحديد لأسفل بمقدار بكسل واحد."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "نقل التّحديد"
+msgstr "حرّك تحديد النص لأعلى"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up By 1 Pixel"
-msgstr ""
+msgstr "حرّك تحديد النص لأعلى بمقدار 1 بكسل"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:241
@@ -66435,22 +66418,21 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
+"عندما يكون وضع صف النص نشطًا، حرك بداية التحديد للأعلى بمقدار بكسل واحد."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "نقل التّحديد"
+msgstr "حرّك تحديد النص لليسار"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr ""
+msgstr "حرّك تحديد النص لليسار بمقدار 1 بكسل"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -66460,22 +66442,21 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
+"عندما يكون وضع صف النص نشطًا، حرك بداية التحديد لليسار بمقدار بكسل واحد."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "نقل التّحديد"
+msgstr "حرّك تحديد النص لليمين"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right By 1 Pixel"
-msgstr ""
+msgstr "حرّك تحديد النص لليمين بمقدار 1 بكسل"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
@@ -66485,6 +66466,7 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
+"عندما يكون وضع صف النص نشطًا، حرك بداية التحديد لليمين بمقدار بكسل واحد."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66492,18 +66474,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "تحويل النمط"
+msgstr "أزِل تحويلات الأحرف"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "أزِل تحويلات الأحرف من التحديد."
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -66511,19 +66492,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "تهيئة"
+msgstr "امحُ التنسيق"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgid "Smooths the edges of the selection"
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "ينعّم حواف التحديد"
+msgstr "أزل جميع خصائص النص المحددة من التحديد."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:298
 #, kde-format
@@ -66605,18 +66584,16 @@ msgid "Always paste rich text when using paste action."
 msgstr "ألصق دائمًا نصًا منسقًا عند استخدام إجراء اللصق."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
-#, fuzzy, kde-format
-#| msgid "Texturing Mode:"
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "نمط النقش:"
+msgstr "نمط صف النصوص"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "فعّل إعدادات القلم"
+msgstr "مكّن نمط صف ا لنصوص."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
 #, kde-format

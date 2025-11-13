@@ -81,7 +81,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-12 02:02+0000\n"
+"POT-Creation-Date: 2025-11-13 02:02+0000\n"
 "PO-Revision-Date: 2025-09-17 12:11+0300\n"
 "Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -18865,7 +18865,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Выравнивание по ширине"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:371
+#: libs/flake/text/KoFontGlyphModel.cpp:418
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -46249,61 +46249,61 @@ msgctxt "@label:inlistbox"
 msgid "Sub"
 msgstr "нижний"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:75
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:77
 #, fuzzy, kde-format
 #| msgid "Title:"
 msgctxt "@label:textfield"
 msgid "Title:"
 msgstr "Название:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:82
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:84
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
 msgstr "Таблица стилей"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:87
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, fuzzy, kde-format
 #| msgid "Description:"
 msgctxt "@label:textarea"
 msgid "Description:"
 msgstr "Описание:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:100
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:102
 #, fuzzy, kde-format
 #| msgid "Short Description"
 msgctxt "@info:placeholder"
 msgid "Style Description."
 msgstr "Краткое описание"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:112
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, fuzzy, kde-format
 #| msgid "Style:"
 msgctxt "label:listbox"
 msgid "Style Type:"
 msgstr "Стиль:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:120
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, fuzzy, kde-format
 #| msgid "Character"
 msgctxt "@label:inlistbox"
 msgid "Character"
 msgstr "Символ"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:121
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:123
 #, fuzzy, kde-format
 #| msgid "Paragraph"
 msgctxt "@label:inlistbox"
 msgid "Paragraph"
 msgstr "Абзац"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:133
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:135
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:134
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
 msgctxt "info:tooltip"
 msgid ""
@@ -46313,7 +46313,7 @@ msgid ""
 "documents."
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:141
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "This is a label before a combobox with different choices regarding which "
@@ -46326,14 +46326,14 @@ msgctxt "@label:textfield"
 msgid "Sample Text:"
 msgstr "Образец:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:150
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, fuzzy, kde-format
 #| msgid "Before:"
 msgctxt "@info:placeholder"
 msgid "Before..."
 msgstr "Перед:"
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:157
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:159
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Sca&le..."
@@ -46341,12 +46341,26 @@ msgctxt "@info:placeholder"
 msgid "Sample..."
 msgstr "&Изменить размер..."
 
-#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:164
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:166
 #, fuzzy, kde-format
 #| msgid "After:"
 msgctxt "@info:placeholder"
 msgid "... After"
 msgstr "После:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgctxt "@label:spinbox"
+msgid "Width:"
+msgstr "Ширина:"
+
+#: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:spinbox"
+msgid "Height:"
+msgstr "Высота:"
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, fuzzy, kde-format

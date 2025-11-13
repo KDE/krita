@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 03:45+0000\n"
-"PO-Revision-Date: 2025-11-02 21:15+0100\n"
-"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"PO-Revision-Date: 2025-11-13 02:15+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -4411,7 +4411,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "l) Ajuste Esquivar"
+msgstr "l) Ajuste Blanquear"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -9064,7 +9064,7 @@ msgstr "Suavidad del pincel: estabilizador"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Brush Size"
-msgstr "Disminuir el tamaño del pincel"
+msgstr "Reducir el tamaño del pincel"
 
 #. i18n: context: text @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -12788,7 +12788,7 @@ msgstr "&Ver"
 #: krita/krita5.xmlgui:89
 #, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr "Dirección del modo de envoltura"
+msgstr "Dirección del modo envolvente"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
@@ -13203,7 +13203,7 @@ msgstr "Guardar versión incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Backup"
-msgstr "Guar&dar copia de respaldo incremental"
+msgstr "Guar&dar copia de seguridad incremental"
 
 #. i18n: context: toolTip @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
@@ -13213,7 +13213,7 @@ msgstr "Guar&dar copia de respaldo incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Backup"
-msgstr "Guardar copia de respaldo incremental"
+msgstr "Guardar copia de seguridad incremental"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
@@ -13840,7 +13840,7 @@ msgstr "Mostrar el lienzo en una ventana separada"
 #, kde-format
 msgctxt "action"
 msgid "&Wrap Around Mode"
-msgstr "Modo de en&voltura"
+msgstr "Modo en&volvente"
 
 #. i18n: context: toolTip @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
@@ -13850,7 +13850,7 @@ msgstr "Modo de en&voltura"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Mode"
-msgstr "Modo de envoltura"
+msgstr "Modo envolvente"
 
 #. i18n: context: text @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
@@ -14566,7 +14566,7 @@ msgstr "Color del fondo y transparencia de la imagen"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr "&Convertir espacio de colores de la imagen…"
+msgstr "&Convertir espacio de color de la imagen…"
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
@@ -14576,7 +14576,7 @@ msgstr "&Convertir espacio de colores de la imagen…"
 #, kde-format
 msgctxt "action"
 msgid "Convert Image Color Space"
-msgstr "Convertir el espacio de colores de la imagen"
+msgstr "Convertir espacio de color de la imagen"
 
 #. i18n: context: text @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1185
@@ -15905,7 +15905,7 @@ msgstr "Opciones de la ruta"
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:561
 #, kde-format
 msgid "Autosmooth curve"
-msgstr ""
+msgstr "Suavizar curva"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:565
 #, kde-format
@@ -15920,12 +15920,10 @@ msgid "Precision:"
 msgstr "Precisión:"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:299
-#, fuzzy, kde-format
-#| msgctxt "list view layout mode"
-#| msgid "Row"
+#, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr "Fila"
+msgstr "Sin procesar"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:300
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
@@ -15935,10 +15933,9 @@ msgid "Curve"
 msgstr "Curva"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:301
-#, fuzzy, kde-format
-#| msgid "Portrait"
+#, kde-format
 msgid "Straight"
-msgstr "Retrato"
+msgstr "Recta"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:310
 #: libs/basicflakes/tools/KoPencilTool.cpp:316
@@ -15969,28 +15966,25 @@ msgstr "Línea"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Density recommended value 100.0"
-msgstr ""
+msgstr "Valor recomendado de densidad del pincel: 100,0"
 
 #: libs/brush/kis_auto_brush.cpp:458 libs/brush/KisBrushModel.cpp:85
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
-msgstr ""
+msgstr "Valor recomendado de aleatoriedad del pincel: 0,0"
 
 #: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Radius by Random, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
-msgstr ""
-"Radio aleatorio, considere la desactivación de la vista previa instantánea"
+msgstr "Espaciado > 0,5; considere desactivar la vista previa instantánea"
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
 #, kde-format
 msgid "Could not access brush tip metadata"
-msgstr ""
+msgstr "No se puede acceder a los metadatos de la punta del pincel"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -16113,29 +16107,19 @@ msgid "Break subpath"
 msgstr "Romper subruta"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:121
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Segment to Curve"
 msgctxt "(qtundo-format)"
 msgid "Change segments to curves"
-msgstr "Segmento a curva"
+msgstr "Cambiar segmentos a curvas"
 
 #: libs/flake/commands/KoPathSegmentTypeCommand.cpp:123
-#, fuzzy
-#| msgid "Change settings"
 msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
-msgstr "Cambiar preferencias"
+msgstr "Cambiar segmentos a líneas"
 
 #: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
-#, fuzzy
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
-#| "e)_Marker_Dry.kpp"
-#| msgid "e) Marker Dry"
 msgctxt "(qtundo-format)"
 msgid "Set marker"
-msgstr "e) Rotulador Seco"
+msgstr "Definir marcador"
 
 #: libs/flake/commands/KoShapeAlignCommand.cpp:71
 msgctxt "(qtundo-format)"
@@ -16225,12 +16209,9 @@ msgid "Resize"
 msgstr "Cambiar tamaño"
 
 #: libs/flake/commands/KoShapeRunAroundCommand.cpp:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Image Resolution"
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr "Cambiar resolución de la imagen"
+msgstr "Cambiar recorrido de la forma"
 
 #: libs/flake/commands/KoShapeShadowCommand.cpp:54
 #: libs/flake/commands/KoShapeShadowCommand.cpp:71
@@ -16240,11 +16221,9 @@ msgid "Set Shadow"
 msgstr "Definir sombra"
 
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
-#, fuzzy
-#| msgid "Star shape"
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "Forma de estrella"
+msgstr "Inclinar formas"
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -16266,18 +16245,14 @@ msgid "Set opacity"
 msgstr "Definir opacidad"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
-#, fuzzy
-#| msgid "Ellipse Shape"
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr "Forma de la elipse"
+msgstr "Deshacer recorte de la forma"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:92
-#, fuzzy
-#| msgid "Ellipse Shape"
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr "Forma de la elipse"
+msgstr "Deshacer recorte de las formas"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
@@ -16309,7 +16284,7 @@ msgstr "Todavía no se ha implementado KoShapeGroup a html"
 #: libs/flake/html/HtmlWriter.cpp:80
 #, kde-format
 msgid "saving to html failed"
-msgstr ""
+msgstr "No se ha podido guardar en HTML"
 
 #: libs/flake/html/HtmlWriter.cpp:84
 #, kde-format
@@ -16355,6 +16330,9 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
+"El documento tiene texto vectorial creado con Krita 4.x. Cuando guarde el "
+"documento, el objeto de texto se convertirá al formato de Krita 5, que ya no "
+"será compatible con Krita 4.x."
 
 #: libs/flake/text/KoSvgTextShape.cpp:268
 #, kde-format
@@ -16378,7 +16356,7 @@ msgstr "Texto SVG"
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
-msgstr ""
+msgstr "<text>Texto de referencia</text>"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
 #, kde-format
@@ -16658,7 +16636,7 @@ msgstr "No se ha podido encontrar la etiqueta XML «%1» en «%2»"
 #: libs/global/kis_dom_utils.cpp:157
 #, kde-format
 msgid "Error: incorrect type (%2) for value %1. Expected %3"
-msgstr ""
+msgstr "Error: tipo incorrecto (%2) para el valor %1. Se esperaba %3."
 
 #: libs/global/KoUnit.cpp:36
 #, kde-format
@@ -16963,15 +16941,13 @@ msgstr "Cambiar estilo de la capa"
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
-msgstr ""
+msgstr "Conmutar la hora actual"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#, fuzzy
-#| msgid "Change Clone Layer"
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
-msgstr "Cambiar capa de clonación"
+msgstr "Cambiar capas de clonación"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17034,11 +17010,9 @@ msgid "Generator"
 msgstr "Generador"
 
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
-#, fuzzy
-#| msgid "Fill Layer"
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "Capa de relleno"
+msgstr "Renderización de capa de relleno"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -17259,12 +17233,12 @@ msgstr "Convertir el espacio de color de la capa"
 #: libs/image/kis_image.cc:1344
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
-msgstr "Convertir el espacio de colores de la imagen"
+msgstr "Convertir espacio de color de la imagen"
 
 #: libs/image/kis_image.cc:1345
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
-msgstr "Convertir el espacio de colores de la proyección"
+msgstr "Convertir espacio de color de la proyección"
 
 #: libs/image/kis_image.cc:1397
 msgctxt "(qtundo-format)"
@@ -17313,16 +17287,14 @@ msgid "Scale (Y)"
 msgstr "Escala (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:32
-#, fuzzy, kde-format
-#| msgid "Shear"
+#, kde-format
 msgid "Shear (X)"
-msgstr "Proyectar"
+msgstr "Inclinar (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
-#, fuzzy, kde-format
-#| msgid "Shear"
+#, kde-format
 msgid "Shear (Y)"
-msgstr "Proyectar"
+msgstr "Inclinar (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
@@ -17412,11 +17384,9 @@ msgid "Edit Key Strokes"
 msgstr "Editar trazos clave"
 
 #: libs/image/kis_layer_properties_icons.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Coordinates"
+#, kde-format
 msgid "Show Coloring"
-msgstr "Mostrar coordenadas"
+msgstr "Mostrar coloreado"
 
 #: libs/image/kis_layer_properties_icons.cpp:32
 #, kde-format
@@ -17430,19 +17400,14 @@ msgid "Error"
 msgstr "Error"
 
 #: libs/image/kis_layer_utils.cpp:620
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Save Merged"
+#, kde-format
 msgid "Merged"
-msgstr "Guardar fusionado"
+msgstr "Fusionada"
 
 #: libs/image/kis_layer_utils.cpp:1443
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Merge points"
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
-msgstr "Mezclar puntos"
+msgstr "Fusionar hacia abajo"
 
 #: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
@@ -17460,12 +17425,9 @@ msgid "Merge Selected Nodes"
 msgstr "Fusionar nodos seleccionados"
 
 #: libs/image/kis_layer_utils.cpp:2023
-#, fuzzy
-#| msgctxt "action"
-#| msgid "&New Layer From Visible"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
-msgstr "&Nueva capa a partir de lo visible"
+msgstr "Nueva a partir de lo visible"
 
 #: libs/image/kis_layer_utils.cpp:2023
 #, kde-format
@@ -17557,17 +17519,14 @@ msgid "Invert Selection"
 msgstr "Invertir selección"
 
 #: libs/image/kis_selection_filters.cpp:930
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Display Selection"
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
-msgstr "Mostrar la selección"
+msgstr "Selección de antialias"
 
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr ""
+msgstr "Expandir selección hasta el píxel más oscuro"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -17595,15 +17554,14 @@ msgid "Mouse Speed:"
 msgstr "Velocidad del ratón:"
 
 #: libs/image/kis_update_time_monitor.cpp:193
-#, fuzzy, kde-format
-#| msgid "Updated:"
+#, kde-format
 msgid "Jobs/Update:"
-msgstr "Actualizado:"
+msgstr "Trabajos/actualización:"
 
 #: libs/image/kis_update_time_monitor.cpp:194
 #, kde-format
 msgid "Non Update Time:"
-msgstr ""
+msgstr "Tiempo sin actualizar:"
 
 #: libs/image/kis_update_time_monitor.cpp:195
 #, kde-format
@@ -17642,11 +17600,10 @@ msgid "Margins"
 msgstr "Márgenes"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:59
-#, fuzzy, kde-format
-#| msgid "Bleeds"
+#, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Bleed"
-msgstr "Sangrías"
+msgstr "Sangría"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:60
 #, kde-format
@@ -17706,7 +17663,7 @@ msgstr "Resaltar"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Flat"
-msgstr ""
+msgstr "Plano"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:70
 #, kde-format
@@ -17745,12 +17702,10 @@ msgid "Guides"
 msgstr "Guías"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/symbols/BalloonSymbols.svg"
-#| msgid "Word Balloons"
+#, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Balloons"
-msgstr "Bocadillos"
+msgstr "Globos"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:77
 #, kde-format
@@ -17762,7 +17717,7 @@ msgstr "Clonar"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "In Betweening"
-msgstr ""
+msgstr "En el intermedio"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:79
 #, kde-format
@@ -17799,25 +17754,19 @@ msgid "Overlay (style)"
 msgstr "Superposición (estilo)"
 
 #: libs/image/layerstyles/kis_ls_satin_filter.cpp:35
-#, fuzzy, kde-format
-#| msgid "Separation Style"
+#, kde-format
 msgid "Satin (style)"
-msgstr "Estilo de separación"
+msgstr "Satinado (estilo)"
 
 #: libs/image/lazybrush/kis_colorize_mask.cpp:945
-#, fuzzy
-#| msgid "Change Color H"
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
-msgstr "Cambiar color H"
+msgstr "Cambiar color de trazo clave"
 
 #: libs/image/lazybrush/kis_colorize_mask.cpp:970
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Remove Keyframe"
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
-msgstr "Eliminar fotograma clave"
+msgstr "Eliminar trazo clave"
 
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:74
 msgctxt "(qtundo-format)"
@@ -17825,11 +17774,9 @@ msgid "Colorize"
 msgstr "Colorear"
 
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:74
-#, fuzzy
-#| msgid "Colorize Mask"
 msgctxt "(qtundo-format)"
 msgid "Prefilter Colorize Mask"
-msgstr "Máscara de coloración"
+msgstr "Prefiltro de máscara de coloración"
 
 #: libs/impex/AnimationCheck.h:25
 #, kde-format
@@ -17959,10 +17906,9 @@ msgid "Filter Layer"
 msgstr "Capa de filtro"
 
 #: libs/impex/KisExportCheckRegistry.cpp:118
-#, fuzzy, kde-format
-#| msgid "Vector Layer"
+#, kde-format
 msgid "Generator Layer"
-msgstr "Capa vectorial"
+msgstr "Capa de generación"
 
 #: libs/impex/KisExportCheckRegistry.cpp:120 libs/ui/kis_mask_manager.cc:274
 #, kde-format
@@ -18061,7 +18007,7 @@ msgstr "Pincel de Gimp"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Gimp Image Hose Brush"
-msgstr ""
+msgstr "Pincel de manguera de imagen de Gimp"
 
 #: libs/koplugin/KisMimeDatabase.cpp:179
 #, kde-format
@@ -18109,13 +18055,13 @@ msgstr "Mapa de altura R8"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Spriter SCML"
-msgstr ""
+msgstr "SCML de Spriter"
 
 #: libs/koplugin/KisMimeDatabase.cpp:219
 #, kde-format
 msgctxt "description of a file type"
 msgid "Starview Metafile"
-msgstr ""
+msgstr "Metaarchivo de Starview"
 
 #: libs/koplugin/KisMimeDatabase.cpp:224
 #, kde-format
@@ -18211,7 +18157,7 @@ msgstr "Esquema de atajos de teclado de Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Camera Raw Files"
-msgstr ""
+msgstr "Archivos RAW de cámara"
 
 #: libs/koplugin/KisMimeDatabase.cpp:304
 #, kde-format
@@ -18743,11 +18689,10 @@ msgid "Divide"
 msgstr "Dividir"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:49
-#, fuzzy, kde-format
-#| msgid "Invert Saturation"
+#, kde-format
 msgctxt "Blending mode - Inverse Subtract"
 msgid "Inverse Subtract"
-msgstr "Invertir saturación"
+msgstr "Resta inversa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:51
 #, kde-format
@@ -18789,25 +18734,25 @@ msgstr "XNOR"
 #, kde-format
 msgctxt "Blending mode - IMPLICATION"
 msgid "IMPLICATION"
-msgstr ""
+msgstr "IMPLICACIÓN"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:58
 #, kde-format
 msgctxt "Blending mode - NOT IMPLICATION"
 msgid "NOT IMPLICATION"
-msgstr ""
+msgstr "NO IMPLICACIÓN"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:59
 #, kde-format
 msgctxt "Blending mode - CONVERSE"
 msgid "CONVERSE"
-msgstr ""
+msgstr "CONVERTIR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:60
 #, kde-format
 msgctxt "Blending mode - NOT CONVERSE"
 msgid "NOT CONVERSE"
-msgstr ""
+msgstr "NO CONVERTIR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:62
 #, kde-format
@@ -18816,12 +18761,10 @@ msgid "Burn"
 msgstr "Quemar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:63
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "Blending mode - Linear Burn"
 msgid "Linear Burn"
-msgstr "Lineal"
+msgstr "Quemado lineal"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
@@ -18845,36 +18788,31 @@ msgstr "Color más oscuro"
 #, kde-format
 msgctxt "Blending mode - Shade (IFS Illusions)"
 msgid "Shade (IFS Illusions)"
-msgstr ""
+msgstr "Sombrear (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:68
 #, kde-format
 msgctxt "Blending mode - Fog Darken (IFS Illusions)"
 msgid "Fog Darken (IFS Illusions)"
-msgstr ""
+msgstr "Oscurecimiento de niebla (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Burn"
+#, kde-format
 msgctxt "Blending mode - Easy Burn"
 msgid "Easy Burn"
-msgstr "Quemar"
+msgstr "Quemado sencillo"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:71
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
-msgstr "Modo de color"
+msgstr "Blanqueo de color"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
-msgstr "Lineal"
+msgstr "Blanqueo lineal"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -18973,37 +18911,34 @@ msgid "P-Norm B"
 msgstr "P-Norm B"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:89
-#, fuzzy, kde-format
-#| msgid "Swipe Right"
+#, kde-format
 msgctxt "Blending mode - Super Light"
 msgid "Super Light"
-msgstr "Deslizar hacia la derecha"
+msgstr "Superluz"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:90
 #, kde-format
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
-msgstr ""
+msgstr "Tinte (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
 msgctxt "Blending mode - Fog Lighten (IFS Illusions)"
 msgid "Fog Lighten (IFS Illusions)"
-msgstr ""
+msgstr "Aclarado de niebla (IFS Illusions)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
+#, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
-msgstr "Blanquear"
+msgstr "Blanqueo sencillo"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
 msgctxt "Blending mode - Luminosity/Shine (SAI)"
 msgid "Luminosity/Shine (SAI)"
-msgstr ""
+msgstr "Luminosidad/brillo (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:95
 #, kde-format
@@ -19081,14 +19016,13 @@ msgstr "Negación"
 #, kde-format
 msgctxt "Blending mode - Behind"
 msgid "Behind"
-msgstr ""
+msgstr "Detrás"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:111
-#, fuzzy, kde-format
-#| msgid "&Create"
+#, kde-format
 msgctxt "Blending mode - Greater"
 msgid "Greater"
-msgstr "&Crear"
+msgstr "Mayor"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
@@ -19100,27 +19034,25 @@ msgstr "Superponer"
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
-msgstr ""
+msgstr "Iluminación de Lambert (lineal)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
-msgstr ""
+msgstr "Iluminación de Lambert (gamma 2.2)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:115
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgctxt "Blending mode - Erase"
 msgid "Erase"
-msgstr "Borrador"
+msgstr "Borrar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:116
-#, fuzzy, kde-format
-#| msgid "Alpha Locked"
+#, kde-format
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
-msgstr "Alfa bloqueado"
+msgstr "Oscurecer alfa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
@@ -19138,21 +19070,19 @@ msgstr "Mezcla dura (Photoshop)"
 #, kde-format
 msgctxt "Blending mode - Hard Mix Softer (Photoshop)"
 msgid "Hard Mix Softer (Photoshop)"
-msgstr ""
+msgstr "Mezcla dura más suave (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Save Merged"
+#, kde-format
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
-msgstr "Guardar fusionado"
+msgstr "Fusión de grano"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
-msgstr ""
+msgstr "Extracción de grano"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
 #, kde-format
@@ -19164,7 +19094,7 @@ msgstr "Paralelo"
 #, kde-format
 msgctxt "Blending mode - Allanon"
 msgid "Allanon"
-msgstr ""
+msgstr "Allanon"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:124
 #, kde-format
@@ -19173,26 +19103,22 @@ msgid "Geometric Mean"
 msgstr "Media geométrica"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:125
-#, fuzzy, kde-format
-#| msgid "Desaturation method:"
+#, kde-format
 msgctxt "Blending mode - Destination Atop"
 msgid "Destination Atop"
-msgstr "Método de desaturación: "
+msgstr "Destino encima"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:126
-#, fuzzy, kde-format
-#| msgctxt "Pen tilt declination"
-#| msgid "Declination"
+#, kde-format
 msgctxt "Blending mode - Destination In"
 msgid "Destination In"
-msgstr "Declinación"
+msgstr "Destino dentro"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:127
-#, fuzzy, kde-format
-#| msgid "Pattern Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay"
 msgid "Hard Overlay"
-msgstr "Patrón de superposición"
+msgstr "Superposición dura"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
 #, kde-format
@@ -19231,19 +19157,16 @@ msgid "Penumbra D"
 msgstr "Penumbra D"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Phong Bumpmap"
+#, kde-format
 msgctxt "Blending mode - Bumpmap"
 msgid "Bumpmap"
-msgstr "Mapa de relieve Phong"
+msgstr "Mapa de relieve"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:136
-#, fuzzy, kde-format
-#| msgid "Use Normal map"
+#, kde-format
 msgctxt "Blending mode - Combine Normal Map"
 msgid "Combine Normal Map"
-msgstr "Usar mapa normal"
+msgstr "Combinar mapa normal"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:137
 #, kde-format
@@ -19276,14 +19199,10 @@ msgid "Copy"
 msgstr "Copiar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:142
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Tangent_normal_basic.kpp"
-#| msgid "Tangent normal basic"
+#, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
-msgstr "Normal de la tangente básica"
+msgstr "Mapa normal de la tangente"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:144
 #, kde-format
@@ -19340,11 +19259,10 @@ msgid "Color HSI"
 msgstr "Color HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:154
-#, fuzzy, kde-format
-#| msgid "Hue Steps"
+#, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
-msgstr "Pasos de tono"
+msgstr "Tono HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:155
 #, kde-format
@@ -19389,11 +19307,10 @@ msgid "Color HSL"
 msgstr "Color HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
-#, fuzzy, kde-format
-#| msgid "Hue Steps"
+#, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
-msgstr "Pasos de tono"
+msgstr "Tono HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
@@ -19420,20 +19337,16 @@ msgid "Increase Saturation HSL"
 msgstr "Aumentar saturación HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
-#, fuzzy, kde-format
-#| msgctxt "Name of Dither pattern value mode - Lightness"
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
-msgstr "Claridad"
+msgstr "Reducir claridad"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "Name of Dither pattern value mode - Lightness"
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
-msgstr "Claridad"
+msgstr "Aumentar claridad"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, kde-format
@@ -19442,11 +19355,10 @@ msgid "Color HSV"
 msgstr "Color HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
-#, fuzzy, kde-format
-#| msgid "Hue Steps"
+#, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
-msgstr "Pasos de tono"
+msgstr "Tono HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
@@ -19512,45 +19424,41 @@ msgstr "Calentar"
 #, kde-format
 msgctxt "Blending mode - Glow-Heat"
 msgid "Glow-Heat"
-msgstr ""
+msgstr "Resplandor-Calentar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:185
 #, kde-format
 msgctxt "Blending mode - Heat-Glow"
 msgid "Heat-Glow"
-msgstr ""
+msgstr "Calentar-Resplandor"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:186
-#, fuzzy, kde-format
-#| msgid "Reflected"
+#, kde-format
 msgctxt "Blending mode - Reflect-Freeze"
 msgid "Reflect-Freeze"
-msgstr "Reflejado"
+msgstr "Reflejar-Congelar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:187
-#, fuzzy, kde-format
-#| msgid "Reflect"
+#, kde-format
 msgctxt "Blending mode - Freeze-Reflect"
 msgid "Freeze-Reflect"
-msgstr "Reflejar"
+msgstr "Congelar-Reflejar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:188
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
-msgstr ""
+msgstr "Híbrido de Calentar-Resplandor y Congelar-Reflejar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:212
-#, fuzzy, kde-format
-#| msgid "Ink"
+#, kde-format
 msgid "In"
-msgstr "Tinta"
+msgstr "Dentro"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:214
-#, fuzzy, kde-format
-#| msgid "Output"
+#, kde-format
 msgid "Out"
-msgstr "Salida"
+msgstr "Fuera"
 
 #: libs/pigment/resources/KoColorSet.cpp:1088
 #: libs/pigment/resources/KoColorSet.cpp:1432
@@ -19675,40 +19583,42 @@ msgid ""
 "The resource database scheme has changed. Krita will backup your database "
 "and create a new database."
 msgstr ""
+"El esquema de la base de datos de recursos ha cambiado. Krita hará una copia "
+"de seguridad de la base de datos y creará una nueva."
 
 #: libs/resources/KisResourceLocator.cpp:91
 #, kde-format
 msgid "1. Could not create the resource location at %1."
-msgstr ""
+msgstr "1. No se ha podido crear la ubicación del recurso en %1."
 
 #: libs/resources/KisResourceLocator.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "@info resource folder"
-#| msgid "<b>Warning:</b> this location is not writable."
+#, kde-format
 msgid "2. The resource location at %1 is not writable."
-msgstr "<b>Advertencia:</b> no se puede escribir en esta ubicación."
+msgstr "2. No se puede escribir en la ubicación del recurso en %1."
 
 #: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
-msgstr ""
+msgstr "No se puede añadir %1 a la base de datos"
 
 #: libs/resources/KisResourceLocator.cpp:866
 #: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
-msgstr ""
+msgstr "No se puede eliminar el almacenamiento %1 de la base de datos"
 
 #: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
+"Está ejecutando Krita por primera vez. La inicialización llevará cierto "
+"tiempo."
 
 #: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
-msgstr ""
+msgstr "3. No se puede crear la ubicación del recurso en %1."
 
 #: libs/resources/KisResourceLocator.cpp:998
 #: libs/resources/KisResourceLocator.cpp:1014
@@ -19847,7 +19757,7 @@ msgstr "Miniatura grande"
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Sucio"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -20103,11 +20013,9 @@ msgid "resource folder"
 msgstr "carpeta de recursos"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
-msgstr "Mostrar la selección"
+msgstr "Preferencias de la pantalla"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, kde-format
@@ -20157,14 +20065,16 @@ msgid "Overwrite the file?"
 msgstr "¿Sobrescribir el archivo?"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:26
-#, fuzzy, kde-format
-#| msgid "This pattern already exists. Do you want to overwrite it?"
+#, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
 "This resource file already exists in the resource folder. Do you want to "
 "overwrite it?\n"
 "Resource filename: %1"
-msgstr "Este patrón ya existe. ¿Desea sobrescribirlo?"
+msgstr ""
+"Este archivo de recurso ya existe en la carpeta de recursos. ¿Desea "
+"sobrescribirlo?\n"
+"Archivo del recurso: %1"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:74
 #, kde-format
@@ -20193,6 +20103,8 @@ msgid ""
 "name for multiple resources?(If you decline now, the resource won't be "
 "renamed)."
 msgstr ""
+"Ya hay otro recurso que usa este nombre. ¿Desea usar el mismo nombre para "
+"varios recursos? (Si lo rechaza ahora, no se cambiará el nombre del recurso)."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, kde-format
@@ -20220,6 +20132,9 @@ msgid ""
 "that resource?\n"
 "(If you decline now, nothing will be done)."
 msgstr ""
+"Ya hay otro recurso que usa este nombre de archivo. ¿Desea sobrescribir "
+"dicho recurso?\n"
+"(Si lo rechaza ahora, no se hará nada)."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:133
 #, kde-format
@@ -20235,6 +20150,8 @@ msgid ""
 "name for multiple resources? (If you decline now, the resource won't be "
 "added)."
 msgstr ""
+"Ya hay otro recurso que usa este nombre. ¿Desea usar el mismo nombre en "
+"varios recursos? (Si lo rechaza ahora, no se añadirá el recurso)."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:150
 #, kde-format
@@ -20270,6 +20187,9 @@ msgid ""
 "use the same name for multiple resources?\n"
 "If you cancel, your changes won't be saved."
 msgstr ""
+"Ya hay otro recurso que usa este nombre. ¿Desea sobrescribirlo y usar el "
+"mismo nombre para varios recursos?\n"
+"Si cancela, no se guardarán los cambios."
 
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:156
 #, kde-format
@@ -20283,6 +20203,8 @@ msgid ""
 "There are no resources of type %1 available. Please enable at least one "
 "bundle."
 msgstr ""
+"\n"
+"No hay ningún recurso de tipo %1 disponible. Active al meno un paquete."
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
@@ -20329,6 +20251,10 @@ msgid ""
 "Tag to be removed: %1\n"
 "Tag's unique name: %2"
 msgstr ""
+"Ya existe una etiqueta con este nombre único. Para continuar con el cambio "
+"de nombre, se debe eliminar la etiqueta existente. ¿Desea continuar?\n"
+"Etiqueta que se va a eliminar: %1\n"
+"Nombre único de etiqueta: %2"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
@@ -20355,11 +20281,10 @@ msgstr "¿Sobrescribir etiqueta?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
-#, fuzzy, kde-format
-#| msgid "This pattern already exists. Do you want to overwrite it?"
+#, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
-msgstr "Este patrón ya existe. ¿Desea sobrescribirlo?"
+msgstr "Ya existe una etiqueta con este nombre único. ¿Desea sustituirla?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
@@ -20403,7 +20328,7 @@ msgstr "No se ha podido crear la etiqueta"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Enter search terms to filter by name</p>"
-msgstr ""
+msgstr "<p>Introduzca términos para filtrar por nombre</p>"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
@@ -20413,19 +20338,18 @@ msgid "Search"
 msgstr "Buscar"
 
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt ""
 "It appears in the checkbox next to the filter box in resources dockers; must "
 "be short."
 msgid "Filter in Tag"
-msgstr "Gestor de filtros"
+msgstr "Filtrar en etiqueta"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr ""
+msgstr "<qt>Mostrar las opciones del cuadro de etiqueta.</qt>"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
@@ -20456,11 +20380,9 @@ msgstr "Seleccionar todo"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
 #: libs/ui/KisView.cpp:792
-#, fuzzy
-#| msgid "Fill Layer"
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
-msgstr "Capa de relleno"
+msgstr "Capa de relleno por difusión"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:347
 msgctxt "(qtundo-format)"
@@ -20473,18 +20395,15 @@ msgid "Copy"
 msgstr "Copiar"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:434
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Copy merged"
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
-msgstr "Copia combinada"
+msgstr "Copiar fusionada"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:451
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
-msgstr ""
+msgstr "La selección ya está en formato vectorial "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:476
 #: libs/ui/actions/kis_selection_action_factories.cpp:496
@@ -20493,25 +20412,18 @@ msgid "Convert to Vector Selection"
 msgstr "Convertir a selección vectorial"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:491
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Selections are not used when editing transform masks "
+#, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
-msgstr ""
-"Las selecciones no se usan durante la edición de máscaras de transformación"
+msgstr "La selección ya está en formato rasterizado "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:537
-#, fuzzy, kde-format
-#| msgid "Transform a layer or a selection"
+#, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
-msgstr "Transformar una capa o una selección"
+msgstr "La forma ya pertenece a una selección"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:543
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert Shapes to Vector Selection"
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Convertir formas a selección vectorial"
@@ -20524,42 +20436,30 @@ msgid "Draw Polyline"
 msgstr "Dibujar línea poligonal"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:120
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Paste Layer"
 msgctxt "(qtundo-format)"
 msgid "Paste shapes"
-msgstr "Pegar capa"
+msgstr "Pegar formas"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
 #: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste"
+#, kde-format
 msgid "(pasted)"
-msgstr "Pegar"
+msgstr "(pegada)"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste"
+#, kde-format
 msgid "Pasted"
-msgstr "Pegar"
+msgstr "Pegada"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:452
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Paste Shape Style"
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
-msgstr "Pegar estilo de forma"
+msgstr "Estilo de pegado"
 
 #: libs/ui/actions/KisTransformToolActivationCommand.cpp:16
-#, fuzzy
-#| msgid "Activate transform tool after pasting"
 msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
-msgstr "Activar la herramienta de transformación tras pegar"
+msgstr "Activar herramienta de transformación"
 
 #: libs/ui/animation/KisAnimationRender.cpp:46
 #, kde-format
@@ -20567,19 +20467,18 @@ msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
+"%1 requiere que la anchura y la altura sean números pares. Cambie el tamaño "
+"de la imagen o recórtela antes de exportar."
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:113
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+"No se ha podido renderizar la animación.\n"
+"%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
 #, kde-format
@@ -20594,6 +20493,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Ya existe un archivo en la ruta donde quiere renderizar el vídeo [%1]… \n"
+"                                                              ¿Seguro que "
+"quiere sobrescribir el archivo existente?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -20606,6 +20508,8 @@ msgstr "Error de renderización"
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
+"La renderización de los fotogramas de la animación ha fallado. Los archivos "
+"de salida están incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
 #: libs/ui/KisMainWindow.cpp:2246
@@ -20635,7 +20539,7 @@ msgstr "lanczos3"
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
-msgstr ""
+msgstr "vecino"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
 #, kde-format
@@ -20652,13 +20556,15 @@ msgstr "N/D"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "No se ha indicado un binario válido para FFmpeg."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"La versión de FFmpeg debe ser la 4.2 o posterior para que funcione la "
+"transparencia de GIF."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:481
 #, kde-format
@@ -20667,12 +20573,14 @@ msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
+"Las imágenes GIF animadas no pueden tener una tasa de fotogramas superior a "
+"50. La tasa de fotogramas se reducirá a 50 fotogramas por segundo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1859
 #, kde-format
 msgid "Warning(s):"
-msgstr "Advertencia(s):"
+msgstr "Advertencias:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #, kde-format
@@ -20680,6 +20588,8 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"Parece que el FFmpeg que ha proporcionado está comprimido. Pruebe a extraer "
+"FFmpeg del archivador antes."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #, kde-format
@@ -20687,11 +20597,13 @@ msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
+"Parece que el FFmpeg que ha proporcionado no es válido. Seleccione la "
+"ubicación correcta de un ejecutable de FFmpeg del sistema."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #, kde-format
 msgid "Please enter a file name to render to."
-msgstr ""
+msgstr "Introduzca el nombre de archivo que se va a renderizar."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:40
 #, kde-format
@@ -20703,6 +20615,7 @@ msgstr "Importar animación de vídeo"
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
 msgstr ""
+"FFMpeg no encontrado. Añada una ruta a FFMpeg en la pestaña «Avanzado»."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
@@ -20751,6 +20664,8 @@ msgstr "Spline"
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
 msgstr ""
+"No se ha podido crear un directorio de trabajo. Asegúrese de que tiene "
+"permiso de escritura."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:183
 #, kde-format
@@ -20767,6 +20682,11 @@ msgid ""
 "If you want to edit a clip larger than 100 frames, consider using a real "
 "video editor, like Kdenlive (https://kdenlive.org)."
 msgstr ""
+"Advertencia: está intentando importar más de 100 fotogramas en Krita.\n"
+"\n"
+"Esto significa que puede sobrecargar su sistema.\n"
+"Si quiere editar un clip con más de 100 fotogramas, considere el uso de un "
+"editor de vídeo real, como Kdenlive (https://kdenlive.org)."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
 #, kde-format
@@ -20774,19 +20694,17 @@ msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
 "file suffix."
 msgid "Extracted %1 frames from %2 video."
-msgstr ""
+msgstr "Se han extraído %1 fotogramas del vídeo %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#, fuzzy, kde-format
-#| msgid "Plugin to export layers from a document."
+#, kde-format
 msgid "Failed to export frames from video"
-msgstr "Complemento para exportar las capas de un documento."
+msgstr "No se han podido exportar fotogramas del vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
-#, fuzzy, kde-format
-#| msgid "Select zoom level"
+#, kde-format
 msgid "Select your Video File"
-msgstr "Seleccionar el nivel de ampliación"
+msgstr "Seleccionar archivo de vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
 #, kde-format
@@ -20801,18 +20719,16 @@ msgid "Height: %1 px"
 msgstr "Altura: %1 px"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
-#, fuzzy, kde-format
-#| msgid "Color Patches"
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
-msgstr "Parches de color"
+msgstr "Primarios del color: %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
-#, fuzzy, kde-format
-#| msgid "Color Transfer"
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
-msgstr "Transferencia de color"
+msgstr "Transferencia de color: %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
 #, kde-format
@@ -20839,6 +20755,8 @@ msgid ""
 "*<font size='0.5em'><em>*FPS not right in file. Modified to see full "
 "duration</em></font>"
 msgstr ""
+"*<font size='0.5em'><em>*FPS no son correctos en el archivo. Se han "
+"modificado para ver la duración completa.</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
 #, kde-format
@@ -20847,12 +20765,14 @@ msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
+"<b>Advertencia:</b> Está intentando importar %1 fotogramas. El número máximo "
+"que se puede importar es %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
-msgstr ""
+msgstr "Use un <a href=\"https://kdenlive.org\">editor de vídeo</a> real."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
 #, kde-format
@@ -20861,6 +20781,8 @@ msgid ""
 "You do not have enough memory to load this many frames, the computer will be "
 "overloaded."
 msgstr ""
+"No dispone de suficiente memoria para cargar tantos fotogramas. El sistema "
+"se sobrecargará."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
 #, kde-format
@@ -20868,6 +20790,8 @@ msgctxt "part of warning in video importer."
 msgid ""
 "This will take over half the available memory, editing will be difficult."
 msgstr ""
+"Esto necesitará casi la mitad de la memoria disponible. La edición tendrá "
+"dificultades."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
 #, kde-format
@@ -20876,6 +20800,8 @@ msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
+"Krita no permite la curva de transferencia del vídeo (%1). Se cargará como "
+"lineal."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20947,7 +20873,7 @@ msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
 "arg2: progress frame number, arg3: totalFrameCount."
 msgid "Creating desired %1 file: %2/%3 frames."
-msgstr ""
+msgstr "Creando el archivo %1: %2/%3 fotogramas."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/video_export_options_dialog.ui:13
@@ -21315,12 +21241,11 @@ msgid "grain"
 msgstr "grano"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:64
-#, fuzzy, kde-format
-#| msgid "millimeter"
+#, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "stillimage"
-msgstr "milímetros"
+msgstr "imagen fija"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:65
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:73
@@ -21344,14 +21269,14 @@ msgstr "ssim"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
-msgstr ""
+msgstr "descodificación rápida"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:68
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
-msgstr "latenciacero"
+msgstr "latencia cero"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
@@ -21377,25 +21302,25 @@ msgstr "ninguno"
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr ""
+msgstr "sub"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "up"
-msgstr ""
+msgstr "arriba"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "avg"
-msgstr ""
+msgstr "media"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:82
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "paeth"
-msgstr ""
+msgstr "paeth"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:83
 #, kde-format
@@ -21458,12 +21383,10 @@ msgid "Difference"
 msgstr "Diferencia"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert Hold Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
-msgstr "Insertar fotograma fijo"
+msgstr "Por fotograma único"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, kde-format
@@ -21573,13 +21496,13 @@ msgstr "GIF"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
-msgstr ""
+msgstr "El formato de animación exportado no permite HDR"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
-msgstr ""
+msgstr "Metadatos HDR disponibles solo con el perfil «main10»"
 
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
 #, kde-format
@@ -22141,7 +22064,7 @@ msgstr "Volver a cargar preajustes originales"
 #: libs/ui/brushhud/kis_brush_hud.cpp:82
 #, kde-format
 msgid "Configure the on-canvas brush editor"
-msgstr ""
+msgstr "Configurar el editor de pincel sobre el lienzo"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
@@ -22190,24 +22113,22 @@ msgid "Down"
 msgstr "Abajo"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Horizontal Mirror Tool"
+#, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
-msgstr "Herramienta de reflejo horizontal"
+msgstr "Reflejo horizontal: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "OFF"
-msgstr ""
+msgstr "Desactivado"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "ON"
-msgstr ""
+msgstr "Activado"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:233
 #, kde-format
@@ -22221,18 +22142,18 @@ msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
+"Está activando el modo envolvente, pero no ha activado OpenGL.\n"
+"Para visualizar el modo envolvente, active OpenGL."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Instant Preview Mode"
+#, kde-format
 msgid "Instant Preview Mode: %1"
-msgstr "Modo de vista previa instantánea"
+msgstr "Modo de vista previa instantánea: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
-msgstr ""
+msgstr "La vista previa instantánea solo se permite con OpenGL activado"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:372
@@ -22248,16 +22169,20 @@ msgid ""
 " in Trilinear or High Quality filtering modes.\n"
 "Current mode is %1"
 msgstr ""
+"La vista previa instantánea es compatible\n"
+"con los modos de filtrado trilineal y de alta calidad.\n"
+"El modo actual es: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:377
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Instant Preview Mode"
+#, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
 "\n"
 "%1"
-msgstr "Modo de vista previa instantánea"
+msgstr ""
+"No se ha podido activar el modo de vista previa instantánea.\n"
+"\n"
+"%1"
 
 #: libs/ui/canvas/kis_change_guides_command.cpp:47
 msgctxt "(qtundo-format)"
@@ -22387,6 +22312,10 @@ msgid ""
 "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a></p>"
 msgstr ""
+"<p>KDE se traduce a muchos idiomas gracias al trabajo de los equipos de "
+"traducción de todo el mundo.</p><p>Para más información sobre la "
+"internacionalización de KDE, visite <a href=\"http://l10n.kde.org\">https://"
+"l10n.kde.org</a>.</p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
@@ -22402,6 +22331,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Fondo de desarrollo</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">Anteriores patrocinadores</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -22414,6 +22353,8 @@ msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
+".</p><p><i>Por apoyar el desarrollo de Krita con consejos, iconos, conjuntos "
+"de pinceles y más.</i></p></body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
@@ -22433,6 +22374,22 @@ msgid ""
 "away, in contrast to trial or educational versions of commercial software "
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\"><b>Sus derechos</b></h1><p>Krita se "
+"publica bajo las condiciones de la Licencia Pública General de GNU (versión "
+"3 o posterior).</p><p>Esta licencia garantiza cierto número de libertades:</"
+"p><ul><li>Tiene libertad usar Krita para cualquier propósito.</li><li>Tiene "
+"libertad para distribuir Krita.</li><li>Puede estudiar cómo funciona Krita y "
+"modificarlo.</li><li>Puede distribuir versiones modificadas de Krita.</li></"
+"ul><p>La Krita Foundation y sus proyectos en krita.org están "
+"<b>comprometidos</b> con la preservación de Krita como software libre.</"
+"p><h1 align=\"center\">Sus trabajos</h1><p>Todo lo que cree con Krita es "
+"únicamente de su propiedad. Tiene libertad de usar todos sus trabajos como "
+"quiera.</p><p>Esto significa que Krita se puede usar comercialmente, para "
+"cualquier propósito. No existe ningún tipo de restricción.</p><p>La licencia "
+"GPL de GNU que usa Krita le garantiza esta libertad. Nadie tiene permitido "
+"quitársela, a diferencia de las versiones de prueba o educativas del "
+"software comercial, que prohíben su uso en situaciones comerciales.</p><br/"
+"><hr/><pre>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
@@ -22441,6 +22398,9 @@ msgid ""
 "Krita</b></h1><p>Krita is built on the following free software libraries:</"
 "p><p><ul>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\"><b>Bibliotecas de terceras partes "
+"que usa Krita</b></h1><p>Krita está compilado con las siguientes bibliotecas "
+"de software libre:</p><p><ul>"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:57
 #, kde-format
@@ -22484,6 +22444,12 @@ msgid ""
 "li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
 "sharp results. May produce aerials.</li></ul></p>"
 msgstr ""
+"<p>Seleccione el modo de filtrado:\n"
+"<ul><li><b>Vecino más cercano</b> para arte de píxeles. No produce color "
+"nuevo.</li><li><b>Bilineal</b>, en áreas con color uniforme para evitar "
+"artefactos.</li><li><b>Bicúbico</b>, para un resultado más suave.</"
+"li><li><b>Lanczos3</b>, para un resultado más nítido. Puede producir "
+"artefactos de anillo.</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -22491,6 +22457,9 @@ msgid ""
 "In addition to filtering the currently visible frame, \n"
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
+"Además de filtrar el fotograma actualmente visible, \n"
+"filtrar el resto de fotogramas clave seleccionados en el panel de línea de "
+"tiempo de la animación."
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:140
 #, kde-format
@@ -22612,10 +22581,9 @@ msgid "Import Images"
 msgstr "Importar imágenes"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:166
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgid "Source fps: %1"
-msgstr "Origen:"
+msgstr "FPS de origen: %1"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
 #, kde-format
@@ -22725,7 +22693,7 @@ msgstr "Propiedades de la capa"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
 #, no-c-format, kde-format
 msgid "%"
-msgstr "%"
+msgstr " %"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:128
 #, kde-format
@@ -22777,7 +22745,7 @@ msgstr "Seleccionar archivo ASL"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:353
 #, kde-format
 msgid "Could not load layer style library %1."
-msgstr ""
+msgstr "No se ha podido cargar la biblioteca de estilos de capas %1."
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:367
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:244
@@ -22787,12 +22755,13 @@ msgid "Warning"
 msgstr "Advertencia"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:368
-#, fuzzy, kde-format
-#| msgid "This pattern already exists. Do you want to overwrite it?"
+#, kde-format
 msgid ""
 "There is already a layer style library with this name installed. Do you want "
 "to overwrite it?"
-msgstr "Este patrón ya existe. ¿Desea sobrescribirlo?"
+msgstr ""
+"Ya hay instalada una biblioteca de estilos de capas con este nombre. ¿Desea "
+"sobrescribirla?"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
@@ -22846,10 +22815,9 @@ msgid "Inner Shadow"
 msgstr "Sombra interior"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:991
-#, fuzzy, kde-format
-#| msgid "&Choke:"
+#, kde-format
 msgid "Choke:"
-msgstr "&Contraer:"
+msgstr "Contraer:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1166
@@ -22859,11 +22827,10 @@ msgid "Outer Glow"
 msgstr "Brillo exterior"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1212
-#, fuzzy, kde-format
-#| msgid "Sp&read:"
+#, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
-msgstr "Extende&r:"
+msgstr "Extender:"
 
 #: libs/ui/dialogs/kis_dlg_missing_color_profile.cpp:18
 #, kde-format
@@ -22872,11 +22839,10 @@ msgid "Missing Color Profile"
 msgstr "Falta el perfil de color"
 
 #: libs/ui/dialogs/kis_dlg_paste_format.cpp:18
-#, fuzzy, kde-format
-#| msgid "Multiple Formats Detected"
+#, kde-format
 msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
-msgstr "Se han detectado varios formatos"
+msgstr "Se han detectado múltiples fuentes de pegado"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #, kde-format
@@ -23335,12 +23301,10 @@ msgid "Restore Defaults"
 msgstr "Restablecer los valores predeterminados"
 
 #: libs/ui/dialogs/kis_dlg_stroke_selection_properties.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Stroke selection"
+#, kde-format
 msgctxt "@title:window"
 msgid "Stroke Selection Properties"
-msgstr "Trazar la selección"
+msgstr "Propiedades de la selección de trazos"
 
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
@@ -23366,6 +23330,11 @@ msgid ""
 "Directory: %1\n"
 "Files: %2"
 msgstr ""
+"Existen fotogramas con el mismo esquema de nombre en el directorio de "
+"destino. Si continúa, se borrarán. ¿Desea continuar?\n"
+"\n"
+"Directorio: %1\n"
+"Archivos: %2"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
@@ -23381,12 +23350,16 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
+"No se ha podido borrar un archivo de fotogramas antiguo:\n"
+"\n"
+"%1\n"
+"\n"
+"Renderizado cancelado."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "Esperando que se complete la operación en la imagen…"
+msgstr "Esperando que se complete el proceso de generación de fotogramas…"
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -23397,6 +23370,11 @@ msgid ""
 "The number of frames saved simultaneously is limited to %1\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"Se ha alcanzado el límite de memoria.\n"
+"El número de fotogramas guardados simultáneamente está limitado a %1\n"
+"\n"
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:352
 #, kde-format
@@ -23422,11 +23400,13 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"La cantidad de tiempo durante el que no se fusionarán los trazos. Cuando un "
+"trazo se hace lo suficientemente antiguo, Krita intentará fusionarlo."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Demora antes de fusionar trazos:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
 #, kde-format
@@ -23435,11 +23415,13 @@ msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
 msgstr ""
+"El número de últimos trazos que Krita no fusionará (incluso si son lo "
+"suficientemente antiguos)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Excluir últimos trazos de la fusión:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23448,11 +23430,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Si dos trazos tienen un intervalo de tiempo (demora) breve entre ellos, se "
+"considerarán pertenecientes al mismo grupo y se fusionarán"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Intervalo máximo de trazos agrupados:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23462,12 +23446,14 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Duración máxima permitida del grupo tras la fusión. Si el grupo va a ser "
+"mayor que este límite en el resultado de la fusión, no se llevará a cabo "
+"esta fusión."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Duración del vídeo:"
+msgstr "Duración máxima de grupo:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23485,7 +23471,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Map to entire virtual screen (%1)"
-msgstr ""
+msgstr "Mapear a la totalidad de la pantalla virtual (%1)"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgCustomTabletResolution)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:18
@@ -23637,10 +23623,9 @@ msgid "Rows of swatches in group:"
 msgstr "Filas de las muestras del grupo:"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:70
-#, fuzzy, kde-format
-#| msgid "Save New Brush Preset..."
+#, kde-format
 msgid "Save New Brush Preset"
-msgstr "Guardar preajustes del pincel…"
+msgstr "Guardar nuevo preajuste de pincel"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:79
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:75
@@ -23656,11 +23641,9 @@ msgid "Save Brush Preset"
 msgstr "Guardar preajustes del pincel"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:133
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/symbols/preset_icons.svg"
-#| msgid "Krita Brush Preset Icon Library"
+#, kde-format
 msgid "Preset Icon Library"
-msgstr "Biblioteca de iconos de pinceles predefinidos de Krita"
+msgstr "Biblioteca de iconos preajustados"
 
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.cpp:32
 #, kde-format
@@ -24544,7 +24527,7 @@ msgstr "Instalar un perfil nuevo desde un archivo."
 #: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
-msgstr "Navegador del espacio de colores"
+msgstr "Navegador del espacio de color"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
@@ -24559,7 +24542,7 @@ msgstr ""
 "<html><head/><body><p><a href=\"https://es.wikipedia.org/wiki/"
 "Espacio_de_color\"><span style=\" font-weight:600; text-decoration: "
 "underline; color:#006e28;\">Los espacios de color</span></a> determinan cómo "
-"se codifican los colores en los archivos. Los espacios de colores diferentes "
+"se codifican los colores en los archivos. Los espacios de color diferentes "
 "tienen distintas propiedades y se usan para propósitos diferentes.</p></"
 "body></html>"
 
@@ -24803,7 +24786,7 @@ msgstr "Filtración bilineal"
 #: libs/ui/forms/wdgdisplaysettings.ui:120
 #, kde-format
 msgid "Trilinear Filtering"
-msgstr "Filtración trilineal"
+msgstr "Filtrado trilineal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
@@ -25606,13 +25589,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:915
 #, kde-format
 msgid "Create a Backup File on Saving"
-msgstr "Crear un archivo de copia de respaldo al guardar"
+msgstr "Crear un archivo de copia de seguridad al guardar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:924
 #, kde-format
 msgid "Backup File Location"
-msgstr "Ubicación del archivo de copia de respaldo"
+msgstr "Ubicación del archivo de copia de seguridad"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:932
@@ -25636,7 +25619,7 @@ msgstr "En la ubicación de archivos temporales"
 #: libs/ui/forms/wdggeneralsettings.ui:950
 #, kde-format
 msgid "Backup File Suffix:"
-msgstr "Sufijo del archivo de copia de respaldo:"
+msgstr "Sufijo del archivo de copia de seguridad:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBackupFileSuffix)
 #: libs/ui/forms/wdggeneralsettings.ui:957
@@ -25648,7 +25631,7 @@ msgstr "~"
 #: libs/ui/forms/wdggeneralsettings.ui:967
 #, kde-format
 msgid "Number of Backup Files Kept:"
-msgstr "Número de archivos de copia de respaldo a mantener:"
+msgstr "Número de archivos de copia de seguridad a mantener:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdggeneralsettings.ui:987
@@ -25769,7 +25752,7 @@ msgstr "Guardar sesión cuando se cierra Krita"
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr ""
-"Al importar imágenes como capas, convertir al espacio de colores de la imagen"
+"Al importar imágenes como capas, convertir al espacio de color de la imagen"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
@@ -27125,7 +27108,7 @@ msgid ""
 "body></html>"
 msgstr ""
 "<html><head/><body><p>Krita tratará de limitar el número de actualizaciones "
-"de la pantalla por segundo al número indicado. Un número más bajo disminuirá "
+"de la pantalla por segundo al número indicado. Un número más bajo reducirá "
 "la respuesta visual, aunque aumentará la precisión de la pluma en algunos "
 "sistemas, como macOS.</p></body></html>"
 
@@ -28517,46 +28500,39 @@ msgid "Reset Exposure and Gamma"
 msgstr "Reiniciar exposición y gamma"
 
 #: libs/ui/input/kis_pan_action.cpp:40
-#, fuzzy, kde-format
-#| msgid "Canvas"
+#, kde-format
 msgid "Pan Canvas"
-msgstr "Lienzo"
+msgstr "Desplazar el lienzo"
 
 #: libs/ui/input/kis_pan_action.cpp:41
 #, kde-format
 msgid "The <i>Pan Canvas</i> action pans the canvas."
-msgstr ""
+msgstr "La acción <i>Desplazar el lienzo</i> desplaza el lienzo."
 
 #: libs/ui/input/kis_pan_action.cpp:44
-#, fuzzy, kde-format
-#| msgid "Scaling Mode:"
+#, kde-format
 msgid "Pan Mode"
-msgstr "Modo de escalado:"
+msgstr "Modo de desplazamiento"
 
 #: libs/ui/input/kis_pan_action.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Left"
+#, kde-format
 msgid "Pan Left"
-msgstr "Alinear a la izquierda"
+msgstr "Desplazar a la izquierda"
 
 #: libs/ui/input/kis_pan_action.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Right"
+#, kde-format
 msgid "Pan Right"
-msgstr "Alinear a la derecha"
+msgstr "Desplazar a la derecha"
 
 #: libs/ui/input/kis_pan_action.cpp:47
 #, kde-format
 msgid "Pan Up"
-msgstr ""
+msgstr "Desplazar hacia arriba"
 
 #: libs/ui/input/kis_pan_action.cpp:48
-#, fuzzy, kde-format
-#| msgid "Down"
+#, kde-format
 msgid "Pan Down"
-msgstr "Abajo"
+msgstr "Desplazar hacia abajo"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
@@ -29019,15 +28995,14 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:44
-#, fuzzy, kde-format
-#| msgid "Show guides"
+#, kde-format
 msgid "Show Popup Widget"
-msgstr "Mostrar guías"
+msgstr "Mostrar ventana emergente"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:45
 #, kde-format
 msgid "Show the current tool's popup widget."
-msgstr ""
+msgstr "Mostrar la ventana emergente de la herramienta actual."
 
 #: libs/ui/input/KisTouchGestureAction.cpp:17
 #, kde-format
@@ -29039,13 +29014,12 @@ msgstr "Gestos de toques"
 msgid ""
 "The Touch Gestures actions launch a single action for the specified gesture"
 msgstr ""
+"Las acciones de gestos de toques lanzan una acción para un determinado gesto"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:23
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Canvas Only"
+#, kde-format
 msgid "Toggle Canvas Only Mode"
-msgstr "Mostrar solo el lienzo"
+msgstr "Conmutar el modo de solo el lienzo"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:24
 #, kde-format
@@ -29053,9 +29027,7 @@ msgid "Toggle Eraser"
 msgstr "Conmutar el borrador"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Conmutar preajuste del borrador"
 
@@ -29206,29 +29178,24 @@ msgid "&Gradients"
 msgstr "&Degradados"
 
 #: libs/ui/kis_control_frame.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Swap foreground and background colors"
+#, kde-format
 msgid "&Choose foreground and background colors"
-msgstr "Intercambiar los colores de primer y segundo plano"
+msgstr "&Escoger los colores de primer y segundo plano"
 
 #: libs/ui/kis_control_frame.cpp:113
-#, fuzzy, kde-format
-#| msgid "Painter's Toolchest"
+#, kde-format
 msgid "&Painter's Tools"
-msgstr "Cofre de herramientas del pintor"
+msgstr "Herramientas del &pintor"
 
 #: libs/ui/kis_control_frame.cpp:118
-#, fuzzy, kde-format
-#| msgid "Foreground color"
+#, kde-format
 msgid "&Open Foreground color selector"
-msgstr "Color de primer plano"
+msgstr "&Abrir el selector del color de primer plano"
 
 #: libs/ui/kis_control_frame.cpp:123
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "&Open Background color selector"
-msgstr "Color del fondo"
+msgstr "&Abrir el selector del color de segundo plano"
 
 #: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:360
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29271,13 +29238,13 @@ msgstr "<No se ha definido ningún nombre de archivo>"
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
-msgstr ""
+msgstr "No se ha encontrado el archivo enlazado: %1"
 
 #: libs/ui/kis_file_layer.cpp:141
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
-msgstr ""
+msgstr "No se ha podido cargar el archivo enlazado: %1"
 
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
@@ -29533,20 +29500,14 @@ msgid "Duplicate Nodes"
 msgstr "Duplicar nodos"
 
 #: libs/ui/kis_node_manager.cpp:1015
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Raise"
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
-msgstr "Alzar"
+msgstr "Alzar nodos"
 
 #: libs/ui/kis_node_manager.cpp:1024
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Lower"
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
-msgstr "Bajar"
+msgstr "Bajar nodos"
 
 #: libs/ui/kis_node_manager.cpp:1044
 msgctxt "(qtundo-format)"
@@ -29879,7 +29840,7 @@ msgstr "Seleccionar opaco"
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
-msgstr ""
+msgstr "Trabajo artístico por: %1"
 
 #: libs/ui/kis_splash_screen.cpp:181
 #, kde-format
@@ -30298,10 +30259,9 @@ msgid "Do you want to clear the settings file?"
 msgstr "¿Desea guardar el documento actual?"
 
 #: libs/ui/KisApplicationArguments.cpp:69
-#, fuzzy, kde-format
-#| msgid "Open a document which was recently opened"
+#, kde-format
 msgid "Open a new document with a template"
-msgstr "Abre un documento que se había abierto recientemente"
+msgstr "Abrir un nuevo documento con una plantilla"
 
 #: libs/ui/KisApplicationArguments.cpp:70
 #, kde-format
@@ -30447,13 +30407,13 @@ msgstr ""
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr ""
+msgstr "No se ha podido crear un archivo de copia de seguridad"
 
 #: libs/ui/KisDocument.cpp:801
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "No se ha podido crear un archivo de copia de seguridad numerado"
 
 #: libs/ui/KisDocument.cpp:823
 #, kde-format
@@ -30490,14 +30450,9 @@ msgid "Error during saving %1: %2"
 msgstr "Ha ocurrido un error durante la importación:"
 
 #: libs/ui/KisDocument.cpp:997 libs/ui/KisDocument.cpp:1004
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se ha podido guardar %1."
 
 #: libs/ui/KisDocument.cpp:1026
 #, kde-format
@@ -30505,20 +30460,19 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 se ha guardado, aunque está incompleto."
 
 #: libs/ui/KisDocument.cpp:1032
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
+msgstr "Se han encontrado algunos problemas al guardar."
 
 #: libs/ui/KisDocument.cpp:1049
-#, fuzzy, kde-format
-#| msgid "Finish line:"
+#, kde-format
 msgid "Finished saving %1"
-msgstr "Línea final:"
+msgstr "Se ha terminado de guardar %1"
 
 #: libs/ui/KisDocument.cpp:1474
 #, kde-format
@@ -30543,10 +30497,9 @@ msgid "Error during autosaving %1: %2"
 msgstr "Ha ocurrido un error durante la importación:"
 
 #: libs/ui/KisDocument.cpp:1645
-#, fuzzy, kde-format
-#| msgid "Enable Autosaving"
+#, kde-format
 msgid "Finished autosaving %1"
-msgstr "Guardar automáticamente"
+msgstr "Se ha terminado de guardar automáticamente %1"
 
 #: libs/ui/KisDocument.cpp:1887
 #, kde-format
@@ -30604,61 +30557,58 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
-msgstr ""
+msgstr "Ha ocurrido un error sin especificar."
 
 #: libs/ui/KisImportExportErrorCode.cpp:24
 #: libs/ui/KisImportExportErrorCode.cpp:185
 #, kde-format
 msgid "The action has been completed successfully."
-msgstr ""
+msgstr "La acción se ha completado correctamente."
 
 #: libs/ui/KisImportExportErrorCode.cpp:26
-#, fuzzy, kde-format
-#| msgid "An exception occurred while running the script."
+#, kde-format
 msgid "An error occurred when reading from the file."
-msgstr "Ha ocurrido una excepción durante la ejecución del guion."
+msgstr "Ha ocurrido un error al leer del archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:28
-#, fuzzy, kde-format
-#| msgid "An exception occurred while running the script."
+#, kde-format
 msgid "An error occurred when writing to the file."
-msgstr "Ha ocurrido una excepción durante la ejecución del guion."
+msgstr "Ha ocurrido un error al escribir en el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:30
 #, kde-format
 msgid "A fatal error occurred."
-msgstr ""
+msgstr "Ha ocurrido un error fatal."
 
 #: libs/ui/KisImportExportErrorCode.cpp:32
 #, kde-format
 msgid "Out of resources (e.g. out of memory)."
-msgstr ""
+msgstr "Se han agotado los recursos (por ejemplo, la memoria)."
 
 #: libs/ui/KisImportExportErrorCode.cpp:34
 #, kde-format
 msgid "The file could not be opened."
-msgstr ""
+msgstr "No se ha podido abrir el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:36
 #, kde-format
 msgid "The operation was aborted."
-msgstr ""
+msgstr "Se ha interrumpido la operación."
 
 #: libs/ui/KisImportExportErrorCode.cpp:38
 #, kde-format
 msgid "A timeout occurred."
-msgstr ""
+msgstr "Se ha agotado el tiempo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:42
 #, kde-format
 msgid "The file could not be removed."
-msgstr ""
+msgstr "No se ha podido eliminar el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:44
-#, fuzzy, kde-format
-#| msgid "Error: The Python engine could not be initialized"
+#, kde-format
 msgid "The file could not be renamed."
-msgstr "Error: el motor de Python no se puede inicializar"
+msgstr "No se ha podido cambiar el nombre del archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:46
 #, kde-format
@@ -30679,110 +30629,94 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:52
 #, kde-format
 msgid "The file could not be copied."
-msgstr ""
+msgstr "No se ha podido copiar el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:65
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Cannot open file for reading. Reason: %1"
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se ha podido abrir el archivo para lectura. Motivo: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:81
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Cannot open file for writing. Reason: %1"
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se ha podido abrir el archivo para escritura. Motivo: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Error inesperado."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
 msgid "The file doesn't exist."
-msgstr ""
+msgstr "El archivo no existe."
 
 #: libs/ui/KisImportExportErrorCode.cpp:150
 #, kde-format
 msgid "Permission denied: Krita is not allowed to read the file."
-msgstr ""
+msgstr "Permiso denegado: Krita no tiene permiso para leer el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:152
-#, fuzzy, kde-format
-#| msgid "Folder cannot be used"
+#, kde-format
 msgid "The file format cannot be parsed."
-msgstr "No se puede usar la carpeta"
+msgstr "El formato del archivo no se puede analizar."
 
 #: libs/ui/KisImportExportErrorCode.cpp:154
 #, kde-format
 msgid "The file format contains unsupported features."
-msgstr ""
+msgstr "El formato del archivo contiene funcionalidad no permitida."
 
 #: libs/ui/KisImportExportErrorCode.cpp:156
-#, fuzzy, kde-format
-#| msgid "Undefined operation in the %1 color space"
+#, kde-format
 msgid "The file format contains unsupported color space."
-msgstr "Operación no definida en el espacio de color %1"
+msgstr "El formato del archivo contiene un espacio de color no permitido."
 
 #: libs/ui/KisImportExportErrorCode.cpp:158
-#, fuzzy, kde-format
-#| msgid "An exception occurred while running the script."
+#, kde-format
 msgid "Error occurred while reading from the file."
-msgstr "Ha ocurrido una excepción durante la ejecución del guion."
+msgstr "Ha ocurrido un error al leer del archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:162
-#, fuzzy, kde-format
-#| msgid "Config cannot be used"
+#, kde-format
 msgid "The file cannot be created."
-msgstr "No se puede usar la configuración"
+msgstr "No se puede crear el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:164
 #, kde-format
 msgid "Permission denied: Krita is not allowed to write to the file."
-msgstr ""
+msgstr "Permiso denegado: Krita no tiene permiso para escribir en el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:166
 #, kde-format
 msgid "There is not enough disk space left to save the file."
-msgstr ""
+msgstr "No queda suficiente espacio en el disco para guardar el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:168
-#, fuzzy, kde-format
-#| msgid "An exception occurred while running the script."
+#, kde-format
 msgid "Error occurred while writing to the file."
-msgstr "Ha ocurrido una excepción durante la ejecución del guion."
+msgstr "Ha ocurrido un error al escribir en el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:170
 #, kde-format
 msgid "Krita does not support this file format."
-msgstr ""
+msgstr "Krita no permite este formato de archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:174
 #, kde-format
 msgid "The action was cancelled by the user."
-msgstr ""
+msgstr "La acción ha sido cancelada por el usuario."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
 #: plugins/impex/libkra/kra_converter.cpp:390
 #: plugins/impex/libkra/kra_converter.cpp:419
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown error."
-msgstr "Desconocido"
+msgstr "Error desconocido."
 
 #: libs/ui/KisImportExportErrorCode.cpp:182
 #, kde-format
 msgid "Image is busy."
-msgstr ""
+msgstr "La imagen está ocupada."
 
 #: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
@@ -30882,23 +30816,20 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:323
-#, fuzzy, kde-format
-#| msgid "Include Audio"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
-msgstr "Incluir sonido"
+msgstr "Abrir sonido"
 
 #: libs/ui/KisImportExportManager.cpp:422
-#, fuzzy, kde-format
-#| msgid "This document..."
+#, kde-format
 msgid "Opening document..."
-msgstr "Este documento…"
+msgstr "Abriendo documento…"
 
 #: libs/ui/KisImportExportManager.cpp:490
-#, fuzzy, kde-format
-#| msgid "Save document"
+#, kde-format
 msgid "Saving document..."
-msgstr "Guardar el documento"
+msgstr "Guardando documento…"
 
 #: libs/ui/KisImportExportManager.cpp:584
 #, fuzzy, kde-format
@@ -30981,16 +30912,15 @@ msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:634
 #: libs/ui/KisImportExportManager.cpp:677
-#, fuzzy, kde-format
-#| msgid "Iterations:"
+#, kde-format
 msgid "Reasons:"
-msgstr "Iteraciones:"
+msgstr "Motivos:"
 
 #: libs/ui/KisImportExportManager.cpp:642
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
-msgstr ""
+msgstr "Krita: Error de exportación"
 
 #: libs/ui/KisImportExportManager.cpp:659
 #, kde-format
@@ -31006,7 +30936,7 @@ msgstr ""
 #: libs/ui/KisImportExportManager.cpp:674
 #, kde-format
 msgid "Reason:"
-msgstr ""
+msgstr "Motivo:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
@@ -31020,10 +30950,9 @@ msgid "Options"
 msgstr "Opciones"
 
 #: libs/ui/KisImportExportManager.cpp:701
-#, fuzzy, kde-format
-#| msgid "Resize:"
+#, kde-format
 msgid "Resize"
-msgstr "Cambiar tamaño:"
+msgstr "Cambiar tamaño"
 
 #: libs/ui/KisImportExportManager.cpp:707
 #, kde-format
@@ -31031,11 +30960,9 @@ msgid "Also save your image as a Krita file."
 msgstr ""
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Convertir el espacio de colores de la imagen"
+msgstr "Convertir espacio de color de la imagen al importar"
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -31046,11 +30973,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Ocultar la ventana emergente de la miniatura de la capa"
+msgstr "Actualizar miniaturas de la capa"
 
 #: libs/ui/KisMainWindow.cpp:183
 #, kde-format
@@ -31059,11 +30984,10 @@ msgid "Styles"
 msgstr "Estilos"
 
 #: libs/ui/KisMainWindow.cpp:184
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
-msgstr "&Panel"
+msgstr "&Paneles"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -31072,19 +30996,16 @@ msgid "&Window"
 msgstr "&Ventana"
 
 #: libs/ui/KisMainWindow.cpp:186
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
-msgstr "&Ver"
+msgstr "Nueva &vista"
 
 #: libs/ui/KisMainWindow.cpp:187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Workspaces"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
-msgstr "Espacios de trabajo"
+msgstr "Espacio de &trabajo"
 
 #: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
@@ -31101,21 +31022,19 @@ msgid "Hide %1 Toolbar"
 msgstr "Barra de herramientas principal"
 
 #: libs/ui/KisMainWindow.cpp:1016
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgid "Save as %1"
-msgstr "Guardar como"
+msgstr "Guardar como %1"
 
 #: libs/ui/KisMainWindow.cpp:1044
 #, kde-format
 msgid "The file %1 does not exist."
-msgstr ""
+msgstr "El archivo %1 no existe."
 
 #: libs/ui/KisMainWindow.cpp:1152
-#, fuzzy, kde-format
-#| msgid "Open Image"
+#, kde-format
 msgid "Open Images"
-msgstr "Abrir imagen"
+msgstr "Abrir imágenes"
 
 #: libs/ui/KisMainWindow.cpp:1285
 #, kde-format
@@ -31127,15 +31046,14 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:1341
-#, fuzzy, kde-format
-#| msgid "Export"
+#, kde-format
 msgid "Exporting"
-msgstr "Exportar"
+msgstr "Exportando"
 
 #: libs/ui/KisMainWindow.cpp:1341
 #, kde-format
 msgid "Saving As"
-msgstr ""
+msgstr "Guardando como"
 
 #: libs/ui/KisMainWindow.cpp:1744
 #: libs/widgetutils/config/kstandardaction_p.h:29
@@ -31144,23 +31062,19 @@ msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
 #: libs/ui/KisMainWindow.cpp:1768
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgid "Custom Document"
-msgstr "Documento"
+msgstr "Documento personalizado"
 
 #: libs/ui/KisMainWindow.cpp:1780
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste layer from clipboard"
+#, kde-format
 msgid "Create from Clipboard"
-msgstr "Pegar capa desde el portapapeles"
+msgstr "Crear desde el portapapeles"
 
 #: libs/ui/KisMainWindow.cpp:1965
-#, fuzzy, kde-format
-#| msgid "Layer/Mask"
+#, kde-format
 msgid "Layers/Masks"
-msgstr "Capa/máscara"
+msgstr "Capas/máscaras"
 
 #: libs/ui/KisMainWindow.cpp:1991
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
@@ -31204,49 +31118,32 @@ msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:2625
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
-msgstr "&Importar…"
+msgstr "&Importar espacio de trabajo…"
 
 #: libs/ui/KisMainWindow.cpp:2640
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Workspaces"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
-msgstr "Espacios de trabajo"
+msgstr "&Nuevo espacio de trabajo…"
 
 #: libs/ui/KisMainWindow.cpp:2644
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Workspaces"
+#, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
-msgstr "Espacios de trabajo"
+msgstr "Nuevo espacio de trabajo…"
 
 #: libs/ui/KisMainWindow.cpp:2688
-#, fuzzy, kde-format
-#| msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
-#| msgid ""
-#| "%1 %2\n"
-#| "%3°"
+#, kde-format
 msgid "&%1 %2"
-msgstr ""
-"%1 %2\n"
-"%3°"
+msgstr "&%1 %2"
 
 #: libs/ui/KisMainWindow.cpp:2691
-#, fuzzy, kde-format
-#| msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
-#| msgid ""
-#| "%1 %2\n"
-#| "%3°"
+#, kde-format
 msgid "%1 %2"
-msgstr ""
-"%1 %2\n"
-"%3°"
+msgstr "%1 %2"
 
 #: libs/ui/KisMainWindow.cpp:2860
 #, kde-format
@@ -31256,11 +31153,10 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:2876
-#, fuzzy, kde-format
-#| msgid "Initialization"
+#, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
-msgstr "Inicialización"
+msgstr "Error de instalación"
 
 #: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
@@ -31274,62 +31170,53 @@ msgid "Expanding Spacer"
 msgstr ""
 
 #: libs/ui/KisNodeActivationActionCreatorVisitor.cpp:26
-#, fuzzy, kde-format
-#| msgid "Activate Plugins?"
+#, kde-format
 msgctxt "A temporary action that actives a layer or mask"
 msgid "Activate %1"
-msgstr "¿Activar complementos?"
+msgstr "Activar %1"
 
 #: libs/ui/KisOpenPane.cpp:177
-#, fuzzy, kde-format
-#| msgid "Open an existing document"
+#, kde-format
 msgid "Open Existing Document"
 msgstr "Abrir un documento existente"
 
 #: libs/ui/KisPaletteEditor.cpp:100
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "Default name for a new palette"
 msgid "New Palette"
-msgstr "Paleta"
+msgstr "Nueva paleta"
 
 #: libs/ui/KisPaletteEditor.cpp:101
-#, fuzzy, kde-format
-#| msgid "Palette name:"
+#, kde-format
 msgid "New palette name:"
-msgstr "Nombre de la paleta:"
+msgstr "Nombre de la nueva paleta:"
 
 #: libs/ui/KisPaletteEditor.cpp:104
-#, fuzzy, kde-format
-#| msgid "Edit Palette Data"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "Editar los datos de la paleta"
+msgstr "Paleta de Krita (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:105
 #, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr ""
+msgstr "Paleta de GIMP (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:108
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste Layer Style into the Current Node"
+#, kde-format
 msgid "Save Palette in the Current Document"
-msgstr "Pegar estilo de la capa en el nodo actual"
+msgstr "Guardar paleta en el documento actual"
 
 #: libs/ui/KisPaletteEditor.cpp:142
-#, fuzzy, kde-format
-#| msgid "Import Image"
+#, kde-format
 msgid "Import Palette"
-msgstr "Importar imagen"
+msgstr "Importar paleta"
 
 #: libs/ui/KisPaletteEditor.cpp:153
-#, fuzzy, kde-format
-#| msgid "Do you want to save the current document?"
+#, kde-format
 msgid "Do you want to store this palette in your current image?"
-msgstr "¿Desea guardar el documento actual?"
+msgstr "¿Desea guardar esta paleta en la imagen actual?"
 
 #: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, fuzzy, kde-format
@@ -31348,18 +31235,16 @@ msgid "Removing Swatch Group"
 msgstr "Eliminar muestra o grupo"
 
 #: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
-#, fuzzy, kde-format
-#| msgid "Text Colors"
+#, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
-msgstr "Colores del texto"
+msgstr "Conservar los colores"
 
 #: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
-#, fuzzy, kde-format
-#| msgid "Color 1:"
+#, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
-msgstr "Color 1:"
+msgstr "Color %1"
 
 #: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
@@ -31445,21 +31330,14 @@ msgstr ""
 "Motivo: %1."
 
 #: libs/ui/KisReferenceImage.cpp:113
-#, fuzzy
-#| msgid "Saturation"
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
-msgstr "Saturación"
+msgstr "Definir saturación"
 
 #: libs/ui/KisReferenceImage.cpp:175
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Could not load %1."
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se ha podido cargar %1."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
@@ -31473,24 +31351,19 @@ msgstr ""
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
-msgstr ""
+msgstr "Descargando imagen de %1…"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
-msgstr ""
+msgstr "Descargando imagen de %1… (%2/%3)"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:94
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se ha podido descargar %1."
 
 #: libs/ui/KisTemplateCreateDia.cpp:87
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:91
@@ -31505,38 +31378,31 @@ msgid "Name:"
 msgstr "Nombre:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:106
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "Group:"
-msgstr "Agrupar"
+msgstr "Grupo:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "Group as Color Group in a Palette"
-#| msgid "Add Group"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
-msgstr "Añadir grupo"
+msgstr "&Añadir grupo…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgid "&Remove"
-msgstr "Eliminar"
+msgstr "&Eliminar"
 
 #: libs/ui/KisTemplateCreateDia.cpp:129
-#, fuzzy, kde-format
-#| msgid "Caricature"
+#, kde-format
 msgid "Picture"
-msgstr "Caricatura"
+msgstr "Imagen"
 
 #: libs/ui/KisTemplateCreateDia.cpp:132
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "&Preview"
-msgstr "Vista previa"
+msgstr "Vista &previa"
 
 #: libs/ui/KisTemplateCreateDia.cpp:137
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:58
@@ -31545,21 +31411,19 @@ msgid "Custom:"
 msgstr "Personalizado:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:141
-#, fuzzy, kde-format
-#| msgid "Select..."
+#, kde-format
 msgid "&Select..."
-msgstr "Seleccionar…"
+msgstr "&Seleccionar…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
-#, fuzzy, kde-format
-#| msgid "Create new Template"
+#, kde-format
 msgid "Use the new template as default"
-msgstr "Crear nueva plantilla"
+msgstr "Usar la nueva plantilla como predeterminada"
 
 #: libs/ui/KisTemplateCreateDia.cpp:153
 #, kde-format
 msgid "Use the new template every time Krita starts"
-msgstr ""
+msgstr "Usar la nueva plantilla cada vez que se inicie Krita"
 
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
@@ -31567,11 +31431,9 @@ msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr ""
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Rectangle"
+#, kde-format
 msgid "Select an image"
-msgstr "Rectángulo de selección"
+msgstr "Seleccione una imagen"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407 libs/ui/KisTemplateCreateDia.cpp:410
 #, kde-format
@@ -31580,51 +31442,43 @@ msgid "Add Group"
 msgstr "Añadir grupo"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The name for a new group layer; the generated layers will be placed in "
-#| "this group."
-#| msgid "New layer group name"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "Enter group name:"
-msgstr "Nuevo nombre de grupo de capas"
+msgstr "Introduzca nombre del grupo:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:410
 #, kde-format
 msgid "This name has already been used."
-msgstr ""
+msgstr "Este nombre ya se está usando."
 
 #: libs/ui/KisTemplateCreateDia.cpp:434
-#, fuzzy, kde-format
-#| msgid "Do you want to save the current document?"
+#, kde-format
 msgctxt "Group as in Template Group"
 msgid "Do you really want to remove that group?"
-msgstr "¿Desea guardar el documento actual?"
+msgstr "¿Realmente quiere eliminar este grupo?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Column"
+#, kde-format
 msgctxt "@title:window"
 msgid "Remove Group"
-msgstr "Eliminar columna"
+msgstr "Eliminar grupo"
 
 #: libs/ui/KisTemplateCreateDia.cpp:437
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr ""
+msgstr "¿Realmente quiere eliminar esta plantilla?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
-#, fuzzy, kde-format
-#| msgid "Create Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Remove Template"
-msgstr "Crear plantilla"
+msgstr "Eliminar plantilla"
 
 #: libs/ui/KisTemplateCreateDia.cpp:495
 #, kde-format
 msgid "Could not load picture."
-msgstr ""
+msgstr "No se ha podido cargar la imagen."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
 #, fuzzy, kde-format
@@ -31633,10 +31487,9 @@ msgid "No picture available."
 msgstr "Memoria disponible:"
 
 #: libs/ui/KisTemplatesPane.cpp:39
-#, fuzzy, kde-format
-#| msgid "Always use this template"
+#, kde-format
 msgid "Use This Template"
-msgstr "Usar siempre esta plantilla"
+msgstr "Usar esta plantilla"
 
 #: libs/ui/KisView.cpp:767
 #, fuzzy, kde-format
@@ -31667,16 +31520,14 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisView.cpp:1252
-#, fuzzy, kde-format
-#| msgid "Writer of preface"
+#, kde-format
 msgid "Write Protected"
-msgstr "Escritor del prefacio"
+msgstr "Protegido contra escritura"
 
 #: libs/ui/KisView.cpp:1256
-#, fuzzy, kde-format
-#| msgid "Record"
+#, kde-format
 msgid "Recovered"
-msgstr "Grabar"
+msgstr "Recuperado"
 
 #: libs/ui/KisView.cpp:1410
 #, kde-format
@@ -31723,11 +31574,9 @@ msgid "Active Author Profile"
 msgstr "Perfil de autor activo"
 
 #: libs/ui/KisViewManager.cpp:920
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy"
+#, kde-format
 msgid "%1 (Copy)"
-msgstr "Copiar"
+msgstr "%1 (copia)"
 
 #: libs/ui/KisViewManager.cpp:1063 libs/ui/KisViewManager.cpp:1139
 #, kde-format
@@ -31735,20 +31584,16 @@ msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
 #: libs/ui/KisViewManager.cpp:1063
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Save Incremental Version"
+#, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
-msgstr "Guardar versión incremental"
+msgstr "No se ha podido guardar la versión incremental"
 
 #: libs/ui/KisViewManager.cpp:1139
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Save Incremental Backup"
+#, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
-msgstr "Guardar copia de respaldo incremental"
+msgstr "No se ha podido guardar la copia de seguridad incremental"
 
 #: libs/ui/KisViewManager.cpp:1318
 #, kde-format
@@ -32897,6 +32742,8 @@ msgid ""
 "Shape selection does not fully support wraparound mode. Please use pixel "
 "selection instead"
 msgstr ""
+"La selección de forma no es completamente compatible con el modo envolvente. "
+"Use la selección de píxeles en su lugar."
 
 #: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, fuzzy, kde-format
@@ -33020,7 +32867,7 @@ msgstr "Aumentar el tamaño del pincel"
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:34
 #, kde-format
 msgid "Decrease Brush Size"
-msgstr "Disminuir el tamaño del pincel"
+msgstr "Reducir el tamaño del pincel"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
 #, kde-format
@@ -33043,12 +32890,10 @@ msgid "Rotate brush tip counter-clockwise (precise)"
 msgstr "Rotar la punta del pincel en sentido antihorario (preciso)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Filter"
+#, kde-format
 msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
-msgstr "Filtro"
+msgstr "Filtro «%1»"
 
 #: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
@@ -33059,24 +32904,21 @@ msgstr "Predeterminado"
 #: libs/ui/toolbox/KoToolBox.cpp:354
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1x%2"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:25
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgid "Toolbox"
-msgstr "Barras de herramientas"
+msgstr "Caja de herramientas"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:186
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:321
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgid "Icon Size"
-msgstr "Tamaño del tipo de letra"
+msgstr "Tamaño de los iconos"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:144
 #, kde-format
@@ -33085,28 +32927,22 @@ msgid "Layout"
 msgstr "Disposición"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Wide Gamut Color Selector option: Always shows full saturation and full "
-#| "brightness colors."
-#| msgid "Static"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Estático"
+msgstr "&Automática"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Left to Right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "De izquierda a derecha"
+msgstr "De i&zquierda a derecha"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:161
-#, fuzzy, kde-format
-#| msgid "Right to Left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "De derecha a izquierda"
+msgstr "De de&recha a izquierda"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -33161,11 +32997,10 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:135
-#, fuzzy, kde-format
-#| msgid "Choose brush preset"
+#, kde-format
 msgctxt "Choose a preset gradient from the button popup"
 msgid "Choose Gradient Preset"
-msgstr "Seleccionar valor predefinido del pincel"
+msgstr "Escoger preajuste de degradado"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:152
 #, kde-format
@@ -33195,116 +33030,94 @@ msgid "Show compact gradient preset chooser"
 msgstr ""
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:529
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "Convert the segment gradient to a stop gradient"
 msgid "Convert to Stop Gradient"
-msgstr "Convertir a forma"
+msgstr "Convertir a degradado de parada"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:530
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "Convert the stop gradient to a segment gradient"
 msgid "Convert to Segment Gradient"
-msgstr "Convertir a forma"
+msgstr "Convertir a degradado de segmento"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:531
-#, fuzzy, kde-format
-#| msgid "Gradient Steps"
+#, kde-format
 msgctxt "A gradient wasn't set in the generic gradient editor"
 msgid "No Gradient Set"
-msgstr "Pasos del degradado"
+msgstr "No se ha definido ningún degradado"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:78
-#, fuzzy, kde-format
-#| msgid "Custom options"
+#, kde-format
 msgid "Custom Stop Gradient"
-msgstr "Opciones personalizadas"
+msgstr "Degradado de parada personalizado"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:83
 #, kde-format
 msgid "Custom Segmented Gradient"
-msgstr ""
+msgstr "Degradado de segmento personalizado"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:178
-#, fuzzy, kde-format
-#| msgid "No Preview"
+#, kde-format
 msgctxt "Set the gradient chooser to show icons instead of a list"
 msgid "Icon view"
-msgstr "Sin vista previa"
+msgstr "Vista de iconos"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:184
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus - distance range"
-#| msgid "Distant view"
+#, kde-format
 msgctxt "Set the gradient chooser to show a list instead of icons"
 msgid "List view"
-msgstr "Vista de lejos"
+msgstr "Vista de lista"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:193
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "Set the gradient chooser to show small items"
 msgid "Small items"
-msgstr "Mosaicos pequeños"
+msgstr "Elementos pequeños"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:199
 #, kde-format
 msgctxt "Set the gradient chooser to show medium size items"
 msgid "Medium size items"
-msgstr ""
+msgstr "Elementos de tamaño medio"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:205
-#, fuzzy, kde-format
-#| msgctxt "The file will save fast but will not be compressed a lot"
-#| msgid "Large file size"
+#, kde-format
 msgctxt "Set the gradient chooser to show large items"
 msgid "Large items"
-msgstr "Tamaño de archivo grande"
+msgstr "Elementos grandes"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:211
 #, kde-format
 msgctxt "Set the gradient chooser to show custom size items"
 msgid "Custom size items"
-msgstr ""
+msgstr "Elementos de tamaño personalizado"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:238
-#, fuzzy, kde-format
-#| msgid "Advanced..."
+#, kde-format
 msgid "Add..."
-msgstr "Avanzado…"
+msgstr "Añadir…"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:243
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/gradient.png"
-#| msgid "gradient"
+#, kde-format
 msgid "Stop gradient"
-msgstr "degradado"
+msgstr "Degradado de parada"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:245
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/gradient.png"
-#| msgid "gradient"
+#, kde-format
 msgid "Segmented gradient"
-msgstr "degradado"
+msgstr "Degradado segmentado"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:252
-#, fuzzy, kde-format
-#| msgid "Edit"
+#, kde-format
 msgid "Edit..."
-msgstr "Editar"
+msgstr "Editar…"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:490
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
-#, fuzzy, kde-format
-#| msgctxt "Default gradient name for the gradient generator"
-#| msgid "Unnamed"
+#, kde-format
 msgid "unnamed"
-msgstr "Sin nombre"
+msgstr "sin nombre"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:39
 #, kde-format
@@ -33348,11 +33161,9 @@ msgstr "Opacidad: "
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:99
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:161
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position: "
-msgstr "Posición:"
+msgstr "Posición: "
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
 #, kde-format
@@ -33398,36 +33209,29 @@ msgid "Duplicate segment"
 msgstr "Duplicar segmento"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:73
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "Action to delete the selected stop in the segment gradient editor"
 msgid "Delete stop"
-msgstr "Borrar"
+msgstr "Borrar parada"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:78
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgctxt "Action to center the selected stop in the segment gradient editor"
 msgid "Center stop"
-msgstr "Centro"
+msgstr "Centrar parada"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Corner point"
+#, kde-format
 msgctxt ""
 "Action to center the selected mid point in the segment gradient editor"
 msgid "Center middle point"
-msgstr "Punto de esquina"
+msgstr "Centrar punto medio"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:88
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/gradient.png"
-#| msgid "gradient"
+#, kde-format
 msgctxt "Button to flip the gradient in the segment gradient editor"
 msgid "Flip gradient"
-msgstr "degradado"
+msgstr "Voltear degradado"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:93
 #, kde-format
@@ -33452,18 +33256,17 @@ msgid "Segment #%1"
 msgstr "Segmento #%1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:255
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
-msgstr "Detener"
+msgstr "Parada #%1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:299
 #, kde-format
 msgctxt ""
 "Text that indicates the selected mid point in the segment gradient editor"
 msgid "Mid-Point #%1"
-msgstr ""
+msgstr "Medio punto #%1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:308
 #, kde-format
@@ -33485,85 +33288,70 @@ msgid "Choose a color"
 msgstr "Escoja un color"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Move into previous group"
+#, kde-format
 msgctxt "Button to select previous stop in the stop gradient editor"
 msgid "Select previous stop"
-msgstr "Mover al grupo anterior"
+msgstr "Seleccionar parada anterior"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:40
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The 'selection extent' section label in contiguous selection tool options"
-#| msgid "Selection extent"
+#, kde-format
 msgctxt "Button to select next stop in the stop gradient editor"
 msgid "Select next stop"
-msgstr "Extensión de la selección"
+msgstr "Seleccionar parada siguiente"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:44
-#, fuzzy, kde-format
-#| msgid "Edit presets"
+#, kde-format
 msgctxt "Button to edit the selected stop color in the stop gradient editor"
 msgid "Edit stop"
-msgstr "Editar preajustes"
+msgstr "Editar parada"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:48
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "Button to delete the selected stop in the stop gradient editor"
 msgid "Delete stop"
-msgstr "Borrar"
+msgstr "Borrar parada"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:52
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/gradient.png"
-#| msgid "gradient"
+#, kde-format
 msgctxt "Button to flip the stops in the stop gradient editor"
 msgid "Flip gradient"
-msgstr "degradado"
+msgstr "Voltear degradado"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:56
 #, kde-format
 msgctxt "Button to sort the stops by value in the stop gradient editor"
 msgid "Sort stops by value"
-msgstr ""
+msgstr "Ordenar paradas por valor"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:60
 #, kde-format
 msgctxt "Button to sort the stops by hue in the stop gradient editor"
 msgid "Sort stops by hue"
-msgstr ""
+msgstr "Ordenar paradas por tono"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Distribute Top"
+#, kde-format
 msgctxt "Button to evenly distribute the stops in the stop gradient editor"
 msgid "Distribute stops evenly"
-msgstr "Distribuir arriba"
+msgstr "Distribuir paradas uniformemente"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:194
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "Text that indicates the selected stop in the stop gradient editor"
 msgid "Stop #%1"
-msgstr "Detener"
+msgstr "Parada #%1"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:232
 #, kde-format
 msgctxt "Text that indicates no stop is selected in the stop gradient editor"
 msgid "No stop selected"
-msgstr ""
+msgstr "No se ha seleccionado ninguna parada"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:453
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit Selection"
+#, kde-format
 msgctxt "Title for the gradient stop editor"
 msgid "Edit Stop"
-msgstr "Editar selección"
+msgstr "Editar parada"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:112
 #: libs/ui/widgets/kis_color_space_selector.cc:66
@@ -33572,13 +33360,13 @@ msgctxt ""
 "This is appended to the color profile which is the default for the given "
 "colorspace and bit-depth"
 msgid "(Default)"
-msgstr "(Por omisión)"
+msgstr "(predeterminado)"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:155
 #, kde-format
 msgctxt "Not Applicable, used where there's no colorants or gamma curve found"
 msgid "N/A"
-msgstr "N/D"
+msgstr "n/d"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:156
 #, kde-format
@@ -34352,10 +34140,9 @@ msgid "Insert as Reference Images"
 msgstr "Insertar como imágenes de referencia"
 
 #: libs/ui/widgets/kis_categorized_list_view.cpp:160
-#, fuzzy, kde-format
-#| msgid "Use separate settings for eraser"
+#, kde-format
 msgid "Unlock (restore settings from preset)"
-msgstr "Usar preferencias separadas para el borrador"
+msgstr "Desbloquear (restaurar preferencias del preajuste)"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnLock)
 #: libs/ui/widgets/kis_categorized_list_view.cpp:161
@@ -34365,16 +34152,14 @@ msgid "Lock"
 msgstr "Bloquear"
 
 #: libs/ui/widgets/kis_categorized_list_view.cpp:166
-#, fuzzy, kde-format
-#| msgid "Docker settings"
+#, kde-format
 msgid "Unlock (keep current settings)"
-msgstr "Preferencias del panel"
+msgstr "Desbloquear (conservar preferencias actuales)"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:658
-#, fuzzy, kde-format
-#| msgid "Set color space"
+#, kde-format
 msgid "Uncalibrated color space"
-msgstr "Definir espacio de colores"
+msgstr "Espacio de color sin calibrar"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:664
 #, kde-format
@@ -35354,7 +35139,7 @@ msgstr "Nombre del color:"
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "H:"
+msgstr "T:"
 
 #: libs/widgets/kis_color_input.cpp:420
 #, kde-format
@@ -35366,7 +35151,7 @@ msgstr "S:"
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr "L:"
+msgstr "C:"
 
 #: libs/widgets/kis_color_input.cpp:502
 #, kde-format
@@ -35573,7 +35358,7 @@ msgstr "Valor:"
 #: libs/widgets/KisSpinboxHSXSelector.cpp:77
 #, kde-format
 msgid "Lightness:"
-msgstr "Luminosidad:"
+msgstr "Claridad:"
 
 #: libs/widgets/KisSpinboxHSXSelector.cpp:80
 #, kde-format
@@ -37989,6 +37774,8 @@ msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr ""
+"La claridad va del negro al blanco, siendo el gris medio igual al color más "
+"saturado."
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
 #, kde-format
@@ -38103,7 +37890,7 @@ msgstr "Usar color personalizado para el fondo del selector."
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
 msgstr ""
-"El selector de colores usa un espacio de colores diferente al de la ima&gen"
+"El selector de colores usa un espacio de color diferente al de la ima&gen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
@@ -38390,10 +38177,9 @@ msgstr "Curvas de animación"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
-#, fuzzy, kde-format
-#| msgid "Faster"
+#, kde-format
 msgid "Frame register"
-msgstr "Más rápido"
+msgstr "Registro de fotogramas"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
@@ -38565,37 +38351,33 @@ msgid "Animation Timeline"
 msgstr "Fijar en la línea de tiempo"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "&Importar…"
+msgstr "Importar sonido…"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
-#, fuzzy, kde-format
-#| msgid "Remove Author"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
-msgstr "Eliminar autor"
+msgstr "Eliminar sonido"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
-msgstr ""
+msgstr "Silenciar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Columnas:"
+msgstr "Volumen: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Caché de animación"
+msgstr "Menú de sonido de la animación"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
@@ -38609,13 +38391,9 @@ msgid "AutoKey Duplicate"
 msgstr "Duplicar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Drop Frames, enable to preserve playback timing."
+#, kde-format
 msgid "Enable to preserve playback timing."
-msgstr ""
-"Descartar fotogramas (actívelo para preservar la sincronización de la "
-"reproducción)."
+msgstr "Activar para conservar los tiempos de reproducción."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
 #, kde-format
@@ -38639,25 +38417,21 @@ msgstr ""
 "Los fotogramas descartados no están disponibles en esta instancia de Krita"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add blank frame"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "Añadir fotograma vacío"
-msgstr[1] "Añadir fotograma vacío"
+msgstr[0] "Añadir fotograma en blanco"
+msgstr[1] "Añadir %1 fotogramas en blanco"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert Hold Frame"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
-msgstr[0] "Insertar fotograma fijo"
-msgstr[1] "Insertar fotograma fijo"
+msgstr[0] "Insertar fotograma"
+msgstr[1] "Insertar %1 fotogramas"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, kde-format
@@ -38669,6 +38443,7 @@ msgstr "Editar capas:"
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
+"Ampliar línea de tiempo. Mantenga pulsado y arrastre a izquierda o derecha."
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1504
 #, fuzzy, kde-format
@@ -38679,18 +38454,15 @@ msgid "Insert or Remove Hold Frames"
 msgstr "Eliminar fotograma fijo"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1505
-#, fuzzy, kde-format
-#| msgid "Number of Layers:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
-msgstr "Número de capas:"
+msgstr "Introduzca número de fotogramas"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1612
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "First Frame"
+#, kde-format
 msgid "Edit Frames:"
-msgstr "Primer fotograma"
+msgstr "Editar fotogramas:"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1639
 #, kde-format
@@ -39813,7 +39585,7 @@ msgstr "Exposición:"
 #: plugins/dockers/lut/wdglut.ui:152
 #, kde-format
 msgid "Input ColorSpace:"
-msgstr "Espacio de colores de entrada:"
+msgstr "Espacio de color de la entrada:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblConfig)
 #: plugins/dockers/lut/wdglut.ui:175
@@ -40767,7 +40539,7 @@ msgstr "Selector de color específico"
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44
 #, kde-format
 msgid "Set color space"
-msgstr "Definir espacio de colores"
+msgstr "Definir espacio de color"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:69
@@ -40905,28 +40677,24 @@ msgid "Export as SVG"
 msgstr "Exportar como vídeo"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Keyframe"
+#, kde-format
 msgctxt "Freeze keyframe positions and ignore storyboard adjustments"
 msgid "Freeze Keyframe Data"
-msgstr "Eliminar fotograma clave"
+msgstr "Congelar datos de fotograma clave"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:237
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:291
-#, fuzzy, kde-format
-#| msgid "Add Script"
+#, kde-format
 msgctxt "Add new scene as the last storyboard"
 msgid "Add Scene"
-msgstr "Añadir guion"
+msgstr "Añadir escena"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:253
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:310
-#, fuzzy, kde-format
-#| msgid "Remove Page"
+#, kde-format
 msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
-msgstr "Eliminar página"
+msgstr "Eliminar escena"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
@@ -40940,26 +40708,25 @@ msgstr ""
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
-msgstr ""
+msgstr "escena "
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
-msgstr ""
+msgstr "Añadir escena detrás"
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:300
 #, kde-format
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
-msgstr ""
+msgstr "Añadir escena delante"
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgctxt "Duplicate current scene from storyboard docker"
 msgid "Duplicate Scene"
-msgstr "Duplicar"
+msgstr "Duplicar escena"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:28
@@ -41521,7 +41288,7 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Aumenta el valor, la luminosidad, la intensidad o la luminancia del color "
+"Aumenta el valor, la claridad, la intensidad o la luminancia del color "
 "seleccionado, según el modelo de color seleccionado"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -41543,7 +41310,7 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
-"Disminuye el valor, la luminosidad, la intensidad o la luminancia del color "
+"Reduce el valor, la claridad, la intensidad o la luminancia del color "
 "seleccionado, según el modelo de color seleccionado"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -45206,18 +44973,14 @@ msgid "Emboss Diagonal"
 msgstr "Relieve en diagonal"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
+#, kde-format
 msgid "Dodge..."
-msgstr "Blanquear"
+msgstr "Blanquear…"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Burn"
+#, kde-format
 msgid "Burn..."
-msgstr "Quemar"
+msgstr "Quemar…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.cpp:39
 #, fuzzy, kde-format
@@ -47877,7 +47640,7 @@ msgstr "Convertir a sRGB para compatibilidad adicional"
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:70
 #, kde-format
 msgid "Unknown file type"
-msgstr ""
+msgstr "Tipo de archivo desconocido"
 
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:89
 #, fuzzy, kde-format
@@ -47886,42 +47649,41 @@ msgid "Heightmap Import Options"
 msgstr "Opciones de importación"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:27
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Error: "
-msgstr "Error"
+msgstr "Error: "
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:105
 #, kde-format
 msgid "Input does not match file size"
-msgstr ""
+msgstr "La entrada no coincide con el tamaño del archivo"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:107
 #, kde-format
 msgid "Please specify width and height"
-msgstr ""
+msgstr "Indique la anchura y la altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:110
-#, fuzzy, kde-format
-#| msgid "No file name specified"
+#, kde-format
 msgid "Please specify width"
-msgstr "No se ha especificado ningún nombre de archivo"
+msgstr "Indique la altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:113
 #, kde-format
 msgid "Please specify height"
-msgstr ""
+msgstr "Indique la altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:182
 #, kde-format
 msgid "Too many possible combinations. Input a width or height and try again."
 msgstr ""
+"Demasiadas combinaciones posibles. Introduzca una anchura o una altura y "
+"vuelva a probar."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:195
-#, fuzzy, kde-format
-#| msgid "Width of image in pixels."
+#, kde-format
 msgid "Width exceeds available pixels."
-msgstr "Anchura de la imagen en píxeles."
+msgstr "La anchura excede los píxeles disponibles."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:200
 #, kde-format
@@ -47931,10 +47693,9 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
-#, fuzzy, kde-format
-#| msgid "Height of image in pixels."
+#, kde-format
 msgid "Height exceeds available pixels."
-msgstr "Altura de la imagen en píxeles."
+msgstr "La altura excede los píxeles disponibles."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:212
 #, kde-format
@@ -48385,32 +48146,31 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
-msgstr ""
+msgstr "128"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:102
-#, fuzzy, kde-format
-#| msgid "255"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "256"
-msgstr "255"
+msgstr "256"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
-msgstr ""
+msgstr "512"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:104
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
-msgstr ""
+msgstr "Cero"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
 #, kde-format
@@ -48419,17 +48179,16 @@ msgid "Left"
 msgstr "Izquierda"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
-#, fuzzy, kde-format
-#| msgid "Top:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
-msgstr "Superior:"
+msgstr "Arriba"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
-msgstr ""
+msgstr "Avg0"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
 #, kde-format
@@ -48450,20 +48209,16 @@ msgid "Weighted"
 msgstr "Ponderada"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Move right"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
-msgstr "Mover a la derecha"
+msgstr "Superior derecha"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Move left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
-msgstr "Mover a la izquierda"
+msgstr "Superior izquierda"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
 #, fuzzy, kde-format
@@ -48476,19 +48231,19 @@ msgstr "Ángulo izquierdo:"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
-msgstr ""
+msgstr "Avg1"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
-msgstr ""
+msgstr "Avg2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
-msgstr ""
+msgstr "Avg3"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
 #, kde-format
@@ -48512,11 +48267,10 @@ msgid "Use all predictors"
 msgstr "Usar el último ajuste predefinido"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Guardar como"
+msgstr "Guardar como está"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:174
 #, kde-format
@@ -49089,7 +48843,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
-msgstr ""
+msgstr "Archivo no encontrado"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:263
 #, kde-format
@@ -49331,7 +49085,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
 #, kde-format
 msgid "Failed to open %1."
-msgstr ""
+msgstr "No se ha podido abrir %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
@@ -49585,16 +49339,14 @@ msgid "A password is required to read that pdf"
 msgstr ""
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:80
-#, fuzzy, kde-format
-#| msgid "Import Options"
+#, kde-format
 msgid "PDF Import Options"
-msgstr "Opciones de importación"
+msgstr "Opciones de importación PDF"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:107
-#, fuzzy, kde-format
-#| msgid "Page:"
+#, kde-format
 msgid "Page %1"
-msgstr "Página:"
+msgstr "Página %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, PDFImportWidgetBase)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:18
@@ -50001,37 +49753,34 @@ msgid "Bilinear"
 msgstr "Bilineal"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
-#, fuzzy, kde-format
-#| msgid "PNG"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VNG"
-msgstr "PNG"
+msgstr "VNG"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:325
-#, fuzzy, kde-format
-#| msgid "PNG"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "PPG"
-msgstr "PNG"
+msgstr "PPG"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:326
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD"
-msgstr ""
+msgstr "AHD"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:329
-#, fuzzy, kde-format
-#| msgid "CBZ"
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "DCB"
-msgstr "CBZ"
+msgstr "DCB"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:330
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD v2"
-msgstr ""
+msgstr "AHD v2"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:331
 #, kde-format
@@ -50103,6 +49852,46 @@ msgid ""
 "RawTherapee project.</li></ul></p><p>Note: some methods can be unavailable "
 "if RAW decoder have been built without extension packs.</p>"
 msgstr ""
+"<title>Calidad (interpolación)</title><p>Seleccione aquí el método de "
+"interpolación que desea usar al descodificar imágenes RAW. Un algoritmo de "
+"interpolación es un proceso de imagen digital que se usa para interpolar una "
+"imagen completa a partir de los datos RAW parciales recibidos del sensor de "
+"imagen con filtro de color, interno de muchas cámaras digitales, en forma de "
+"matriz de píxeles de color. También conocido como interpolación CFA o "
+"reconstrucción de color; otra grafía común es interpolación. Los siguientes "
+"métodos están disponibles para interpolar imágenes RAW:</"
+"p><p><ul><li><emphasis strong='true'>Bilineal</emphasis>: usa la "
+"interpolación bilineal de alta velocidad, aunque con baja calidad (opción "
+"predeterminada para ordenadores lentos). En este método, el valor rojo de un "
+"píxel que no sea rojo se calcula como el promedio de los píxeles rojos "
+"adyacentes, y de forma similar para el azul y el verde.</li><li><emphasis "
+"strong='true'>VNG</emphasis>: usa la interpolación de número variable de "
+"degradados. Este método calcula los degradados cerca del píxel de interés y "
+"usa los degradados más bajos (que representan las partes más suaves y "
+"similares de la imagen) para realizar una estimación.</li><li><emphasis "
+"strong='true'>PPG</emphasis>: usa la interpolación de agrupación de píxeles "
+"con patrón. La agrupación de píxeles se basa en supuestos sobre el paisaje "
+"natural para realizar estimaciones. Presenta menos artefactos de color en "
+"imágenes naturales que el método de número variable de degradados.</"
+"li><li><emphasis strong='true'>AHD</emphasis>: usa la interpolación "
+"adaptativa dirigida por homogeneidad. Este método selecciona la dirección de "
+"interpolación para maximizar una métrica de homogeneidad, minimizando así "
+"los artefactos de color.</li><li><emphasis strong='true'>DCB</emphasis>: "
+"interpolación DCB del proyecto linuxphoto.org.</li><li><emphasis "
+"strong='true'>AHD v2</emphasis>: interpolación AHD modificada mediante el "
+"método de varianza de diferencias de color.</li><li><emphasis "
+"strong='true'>AFD</emphasis>: interpolación de filtrado adaptativo mediante "
+"un filtro de mediana de 5 pasos del proyecto PerfectRaw.</li><li><emphasis "
+"strong='true'>VCD</emphasis>: interpolación de varianza de diferencias de "
+"color.</li><li><emphasis strong='true'>VCD y AHD</emphasis>: interpolación "
+"mixta entre VCD y AHD.</li><li><emphasis <li><emphasis strong='true'>LMMSE</"
+"emphasis>: interpolación de color mediante estimación lineal direccional del "
+"error cuadrático medio mínimo a partir de PerfectRaw.</li><li><emphasis "
+"strong='true'>AMaZE</emphasis>: interpolación de minimización de suavizado y "
+"eliminación de cremallera para aplicar la corrección de aberraciones "
+"cromáticas del proyecto RawTherapee.</li></ul></p><p>Nota: Es posible que "
+"algunos métodos no estén disponibles si el descodificador RAW se ha "
+"compilado sin paquetes de extensión.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
@@ -50144,7 +49933,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
-msgstr ""
+msgstr "Interpolación"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
@@ -50245,7 +50034,7 @@ msgstr "Mezclar"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
-msgstr ""
+msgstr "Reconstruir"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
 #, kde-format
@@ -50605,7 +50394,7 @@ msgstr "Gama amplia"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
-msgstr ""
+msgstr "Pro-Photo"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
@@ -53559,10 +53348,9 @@ msgid "Animated Mask"
 msgstr "Máscara animada"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
-#, fuzzy, kde-format
-#| msgid "Animation Renderer Image"
+#, kde-format
 msgid "Animated Image"
-msgstr "Imagen del renderizador de animación"
+msgstr "Imagen animada"
 
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
@@ -53590,22 +53378,21 @@ msgid "Sharpness"
 msgstr "Nitidez"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
-#, fuzzy, kde-format
-#| msgid "So&ften:"
+#, kde-format
 msgid "Soften edge:"
-msgstr "Sua&vizar:"
+msgstr "Suavizar borde:"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
-msgstr ""
+msgstr "Tamaño -> Difuso (sensor)"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
-msgstr ""
+msgstr "Tamaño -> Desvanecer (sensor)"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format
@@ -53667,12 +53454,12 @@ msgstr "+180°"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:87
 #, kde-format
 msgid "CCW hue"
-msgstr ""
+msgstr "Tono en sentido antihorario"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:98
 #, kde-format
 msgid "CW hue"
-msgstr ""
+msgstr "Tono en sentido horario"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:104
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
@@ -57400,7 +57187,7 @@ msgstr "No puede usar esta herramienta con el tipo de capa seleccionado"
 #: plugins/tools/basictools/kis_tool_fill.cc:249
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
-msgstr "Rellenar"
+msgstr "Rellenar por difusión"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #, kde-format
@@ -57534,7 +57321,7 @@ msgid ""
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
 "Definir la extensión de la porción opaca del relleno. Al disminuir la "
-"extensión se disminuye la opacidad de las áreas de relleno según el color de "
+"extensión se reduce la opacidad de las áreas de relleno según el color de "
 "similitud."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
@@ -58644,7 +58431,7 @@ msgstr "Caligrafía: aumentar ángulo"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease width"
-msgstr "Caligrafía: disminuir anchura"
+msgstr "Caligrafía: reducir anchura"
 
 #. i18n: context: text @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58658,7 +58445,7 @@ msgstr "Caligrafía: disminuir anchura"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease angle"
-msgstr "Caligrafía: disminuir ángulo"
+msgstr "Caligrafía: reducir ángulo"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:415
 #, kde-format
@@ -58739,8 +58526,8 @@ msgid ""
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 "Definir la extensión de la porción opaca de selección. Al disminuir la "
-"extensión se disminuye la opacidad de las áreas de selección según el color "
-"de similitud."
+"extensión se reduce la opacidad de las áreas de selección según el color de "
+"similitud."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
@@ -59334,7 +59121,7 @@ msgstr "Alinear al centro"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Font Size"
-msgstr "Disminuir el tamaño del tipo de letra"
+msgstr "Reducir el tamaño del texto"
 
 #. i18n: context: iconText @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_increase_font_size), Actions (Text Tool), ActionCollection (SVG Tools)

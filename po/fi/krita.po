@@ -16880,7 +16880,8 @@ msgstr "Suora"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:310
 #: libs/basicflakes/tools/KoPencilTool.cpp:316
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Optimize"
 msgid "Optimize"
 msgstr "Optimoi"
 
@@ -17048,6 +17049,9 @@ msgid "Reverse paths"
 msgstr "Käännä polut"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Break subpath"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Katkaise alipolku"
@@ -18411,7 +18415,8 @@ msgid "Blending Mode"
 msgstr "Sekoitustila"
 
 #: libs/image/kis_layer_properties_icons.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Locked"
 msgid "Locked"
 msgstr "Lukittu"
 
@@ -18881,7 +18886,8 @@ msgid "Drop Shadow (style)"
 msgstr "Taustavarjo (tyyli)"
 
 #: libs/image/layerstyles/kis_ls_overlay_filter.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Overlay (style)"
 msgid "Overlay (style)"
 msgstr "Kerrostus (tyyli)"
 
@@ -20306,7 +20312,9 @@ msgid "Allanon"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:124
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Geometric Mean"
+#| msgid "Geometric Mean"
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
 msgstr "Geometrinen keskiarvo"
@@ -21309,17 +21317,20 @@ msgstr "Valitse lisättävä tiedosto"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:76
 #: libs/widgets/KisTagSelectionWidget.cpp:121
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Assign to tag"
 msgid "Assign to tag"
 msgstr "Liitä tunnisteeseen"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove from this tag"
 msgid "Remove from this tag"
 msgstr "Poista tästä tunnisteesta"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove from other tag"
 msgid "Remove from other tag"
 msgstr "Poista muusta tunnisteesta"
 
@@ -21499,7 +21510,8 @@ msgstr ""
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Tag"
 msgid "Tag"
 msgstr "Tunniste"
 
@@ -23971,7 +23983,8 @@ msgid "Descending"
 msgstr "välistys"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Alphabetical"
 msgid "Alphabetical"
 msgstr "Aakkosellinen"
 
@@ -29981,7 +29994,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Normal"
 msgid "Normal"
 msgstr "Normaali"
 
@@ -30194,19 +30208,25 @@ msgid " + "
 msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Left Mouse Button"
+#| msgid "Left"
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "vasen"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Right Mouse Button"
+#| msgid "Right"
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "oikea"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Middle Mouse Button"
+#| msgid "Middle"
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "keskimmäinen"
@@ -33156,7 +33176,9 @@ msgid "Group:"
 msgstr "Ryhmä:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Group as in Template Group"
+#| msgid "&Add Group..."
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
 msgstr "Lisää &ryhmä…"
@@ -33209,7 +33231,9 @@ msgid "Select an image"
 msgstr "Valitse kuva"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407 libs/ui/KisTemplateCreateDia.cpp:410
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Group as in Template Group"
+#| msgid "Add Group"
 msgctxt "Group as in Template Group"
 msgid "Add Group"
 msgstr "Lisää ryhmä"
@@ -33244,7 +33268,9 @@ msgid "Do you really want to remove that template?"
 msgstr "Haluatko varmasti poistaa tämän pohjan?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Remove Template"
 msgctxt "@title:window"
 msgid "Remove Template"
 msgstr "Poista pohja"
@@ -36341,7 +36367,8 @@ msgstr "Tiedostonimi on jo käytössä. Tallennus korvaa alkuperäisen työtilan
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Overwrite"
 msgid "Overwrite"
 msgstr "Korvaa"
 
@@ -37373,7 +37400,8 @@ msgid "First line indent"
 msgstr "Ensimmäisen rivin sisennys"
 
 #: libs/widgets/KoRuler.cpp:1330
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Left indent"
 msgid "Left indent"
 msgstr "Vasen sisennys"
 
@@ -38063,7 +38091,8 @@ msgid "percent of animation (%)"
 msgstr "Tuo animaatio"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Font Family"
 msgid "Font Family"
 msgstr "Fonttiperhe"
 
@@ -38439,7 +38468,8 @@ msgstr "&Nykyiset toiminnot:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Filter"
 msgid "Filter"
 msgstr "Suodatin"
 
@@ -38800,7 +38830,8 @@ msgid "Please choose the language which should be used for this application:"
 msgstr "Valitse kieli, jota tämän sovelluksen tulisi käyttää:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add Fallback Language"
 msgid "Add Fallback Language"
 msgstr "Lisää varakieli"
 
@@ -38891,7 +38922,9 @@ msgid "Right"
 msgstr "Oikealla"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:300
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Alhaalla"
@@ -38963,7 +38996,8 @@ msgid "%1"
 msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:92
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Toolbars Shown"
 msgid "Toolbars Shown"
 msgstr "Näytetyt työkalurivit"
 
@@ -39599,7 +39633,8 @@ msgid "On Mouse Over"
 msgstr "Hiiren ollessa yllä"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Never"
 msgid "Never"
 msgstr "Ei koskaan"
 
@@ -40810,7 +40845,8 @@ msgid "Rename Composition"
 msgstr "Muuta komposition nimeä"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "New Name:"
 msgid "New Name:"
 msgstr "Uusi nimi:"
 
@@ -41594,7 +41630,8 @@ msgid "Configure black and white points of the view"
 msgstr ""
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:38
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Overview"
 msgid "Overview"
 msgstr "Yleiskuva"
 
@@ -42162,7 +42199,9 @@ msgid "Size"
 msgstr "Koko"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Header title for last modified date/time column"
+#| msgid "Last Modified"
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Viimeksi muutettu"
@@ -43405,7 +43444,9 @@ msgid "Wide Gamut Color Selector"
 msgstr "Piilota sävyvalitsin"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Wide Gamut Color Selector"
+#| msgid "Configure..."
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Asetukset…"
@@ -44876,7 +44917,8 @@ msgid "Number"
 msgstr "Luku"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:58
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "String"
 msgid "String"
 msgstr "Merkkijono"
 
@@ -52287,7 +52329,9 @@ msgstr ""
 "arvo tuloskuvassa.</para>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "White Balance"
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Valkotasapaino"
@@ -52468,7 +52512,9 @@ msgid "None"
 msgstr "Ei profiilia"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@item:inlistbox Camera Profile"
+#| msgid "Embedded"
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Upotettu"
@@ -52654,7 +52700,8 @@ msgid "Reset to default value"
 msgstr "Palauta oletusarvoon"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:377
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Browse..."
 msgid "Browse..."
 msgstr "Selaa…"
 
@@ -53690,7 +53737,8 @@ msgstr "Monistussivellin (väliaikaisesti ei käytössä)"
 
 #: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Painting Mode"
 msgid "Painting Mode"
 msgstr "Maalaustila"
 
@@ -54921,7 +54969,8 @@ msgstr "Pystysiirtymä:"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Auto Spacing"
 msgid "Auto Spacing"
 msgstr "Automaattinen välistys"
 
@@ -55028,19 +55077,25 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:241
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Neutral point: "
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Neutraali piste: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:249
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Brightness: "
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Kirkkaus: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:256
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@label:slider"
+#| msgid "Contrast: "
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Kontrasti: "
@@ -55199,7 +55254,8 @@ msgstr "360°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "°"
 msgid "°"
 msgstr "°"
 
@@ -55595,7 +55651,9 @@ msgid "More saturation"
 msgstr "Enemmän kylläisyyttä"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:132
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Lower HSV brightness"
+#| msgid "Lower value "
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
 msgstr "Ala-arvo "
@@ -59619,7 +59677,8 @@ msgid "Mirror"
 msgstr "Peilaa"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:421
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Translate"
 msgid "Translate"
 msgstr "Käännä"
 
@@ -60083,6 +60142,9 @@ msgstr ""
 "muodonmuutosten nollaus"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Unite Shapes"
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Yhdistä kuviot"
@@ -60333,7 +60395,8 @@ msgid "Save profile as..."
 msgstr "Tallenna profiili nimellä…"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remove profile"
 msgid "Remove profile"
 msgstr "Poista profiili"
 
@@ -60348,7 +60411,8 @@ msgid "Use tablet &pressure"
 msgstr "&Käytä piirtopöydän painetta"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Thinning:"
 msgid "Thinning:"
 msgstr "Ohennus:"
 
@@ -60498,7 +60562,8 @@ msgid "Calligraphy"
 msgstr "Kalligrafia"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Calligraphy"
 msgid "Calligraphy"
 msgstr "Kalligrafia"
 
@@ -60921,7 +60986,8 @@ msgid "Change SvgTextTool"
 msgstr "Muuta SVG-tekstityökalua"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Tool"
 msgid "Text Tool"
 msgstr "Tekstityökalu"
 
@@ -60931,7 +60997,8 @@ msgid "Conversion failed"
 msgstr "Muuntaminen epäonnistui"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Find Text"
 msgid "Find Text"
 msgstr "Etsi tekstiä"
 

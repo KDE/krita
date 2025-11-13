@@ -219,9 +219,11 @@ void KisAsyncColorSamplerHelper::activate(bool sampleCurrentLayer, bool pickFgCo
 
 void KisAsyncColorSamplerHelper::activateDelayedPreview()
 {
-    // the event may come after we have finished color
-    // picking if the user is quick
-    if (!m_d->isActive) return;
+    // the event may come after we have started or even
+    // finished color picking if the user is quick
+    if (!m_d->isActive || m_d->showPreview) {
+        return;
+    }
 
     activatePreview();
 
@@ -230,6 +232,7 @@ void KisAsyncColorSamplerHelper::activateDelayedPreview()
 
 void KisAsyncColorSamplerHelper::activatePreview()
 {
+    m_d->activationDelayTimer.stop();
     m_d->showPreview = true;
 
     const KoColor currentColor =
@@ -309,6 +312,8 @@ void KisAsyncColorSamplerHelper::startAction(const QPointF &docPoint, int radius
     connect(strategy, &KisColorSamplerStrokeStrategy::sigFinalColorSelected,
             this, &KisAsyncColorSamplerHelper::sigFinalColorSelected);
 
+    activatePreview();
+    m_d->haveSample = true;
     m_d->strokeId = m_d->strokesFacade()->startStroke(strategy);
     m_d->samplingCompressor->start(docPoint);
 }

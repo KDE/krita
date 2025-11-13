@@ -89,9 +89,8 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProper
         m_quickWidget->rootObject()->setProperty("fontStyle", QVariant::fromValue(info.slantMode));
         m_quickWidget->rootObject()->setProperty("fontAxesValues", QVariant::fromValue(map));
         m_quickWidget->rootObject()->setProperty("language", QVariant::fromValue(language));
-        if (idx.isValid()) {
-            m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.row()));
-        }
+
+        m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.isValid()? idx.row(): -1));
     }
     if (m_altPopup) {
         m_altPopup->setMarkup(info.families, info.size, info.weight, info.width, info.slantMode, map, language);

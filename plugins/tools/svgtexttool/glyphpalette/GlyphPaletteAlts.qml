@@ -38,14 +38,16 @@ Control {
     GridView {
         anchors.fill: parent;
 
+        visible: root.parentIndex >= 0;
+
         model: DelegateModel {
             id: glyphAltModel
             model: root.glyphModel;
             property alias parentIndex: root.parentIndex;
-            property var defaultIndex: modelIndex(-1);
+
             onParentIndexChanged: {
                 // This first line is necessary to reset the model to the root of the glyph model.
-                rootIndex = defaultIndex;
+                rootIndex = parentModelIndex();
                 rootIndex = modelIndex(root.parentIndex);
             }
 
@@ -76,5 +78,11 @@ Control {
         ScrollBar.vertical: ScrollBar {
             id: glyphAltScroll;
         }
+    }
+
+    Label {
+        anchors.fill: parent;
+        text: i18nc("@info", "No glyph alternates available.");
+        visible: root.parentIndex < 0;
     }
 }

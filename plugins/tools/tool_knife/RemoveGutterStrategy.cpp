@@ -361,8 +361,30 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 void RemoveGutterStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
     painter.save();
-    painter.setPen(QPen(QBrush(Qt::black), 5));
-    painter.drawLine(converter.documentToView().map(QLineF(m_startPoint, m_endPoint)));
+    painter.setPen(QPen(QBrush(Qt::darkGray), 2));
+
+    QLineF line = converter.documentToView().map(QLineF(m_startPoint, m_endPoint));
+    if (line.length() > 0) {
+        QPointF vector = line.p2() - line.p1();
+        vector = vector/line.length();
+        int arrowLength = 20;
+        int arrowThickness = 10;
+
+        QPointF before = line.p1() - vector*arrowLength;
+        QPointF after = line.p2() + vector*arrowLength;
+
+        QPointF perpendicular = QPointF(vector.y(), -vector.x());
+
+        painter.drawLine(QPointF(before + arrowThickness*perpendicular), line.p1());
+        painter.drawLine(QPointF(before - arrowThickness*perpendicular), line.p1());
+
+        painter.drawLine(QPointF(after + arrowThickness*perpendicular), line.p2());
+        painter.drawLine(QPointF(after - arrowThickness*perpendicular), line.p2());
+
+
+    }
+    painter.drawLine(line);
+
     painter.restore();
 
 }

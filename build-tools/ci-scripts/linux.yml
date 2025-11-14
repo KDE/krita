@@ -27,6 +27,13 @@ linux-build:
     - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
+
+    - python3 -m venv venv --upgrade-deps
+    - . venv/bin/activate
+    - pip install -r krita-deps-management/requirements.txt
+    # Reactivate venv to force it to use the pip version of meson
+    - . venv/bin/activate
+
     - if [ "$KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE" != "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
     - export PATH="$HOME/tools/bin:$PATH"
   script:

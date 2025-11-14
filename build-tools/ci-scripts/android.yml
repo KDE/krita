@@ -35,6 +35,13 @@
     - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
+
+    - python3 -m venv venv --upgrade-deps
+    - . venv/bin/activate
+    - pip install -r krita-deps-management/requirements.txt
+    # Reactivate venv to force it to use the pip version of meson
+    - . venv/bin/activate
+
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then pip install -r ci-notary-service/requirements.txt; fi
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR

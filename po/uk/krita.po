@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
-"PO-Revision-Date: 2025-11-12 14:56+0200\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
+"PO-Revision-Date: 2025-11-13 13:35+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -46366,15 +46366,13 @@ msgid "... After"
 msgstr "... після"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Ширина:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Висота:"
@@ -67265,6 +67263,13 @@ msgstr ""
 "Шукає символи, що відповідають першій літері рядка. Шістнадцятковий пошук "
 "можливий, якщо перед ним додати «U+» (наприклад, U+0045 призводитиме до "
 "пошуку «E»)"
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "Малюнок відсутній."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format

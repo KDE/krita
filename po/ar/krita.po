@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
 "PO-Revision-Date: 2025-11-12 20:23+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -65899,6 +65899,13 @@ msgid ""
 msgstr ""
 "ابحث عن المحارف التي تطابق الحرف الأول من السلسلة. البحث السداسي عشر ممكن "
 "عند إضافة \"U+\" قبله، (على سبيل المثال، U+0045 يبحث عن 'E')"
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "لا تتوفر صورة."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format

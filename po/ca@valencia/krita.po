@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
 "PO-Revision-Date: 2025-11-05 10:21+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -66710,6 +66710,13 @@ msgstr ""
 "Busca caràcters que coincidisquen amb la primera lletra de la cadena. La "
 "busca hexadecimal és possible quan s'anteposa amb «U+», (per exemple, U+0045 "
 "buscarà «E»)"
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "No hi ha cap imatge disponible."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format

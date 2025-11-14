@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
 "PO-Revision-Date: 2025-07-27 20:26+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -66601,6 +66601,13 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "Ez dago irudirik erabilgarri."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format

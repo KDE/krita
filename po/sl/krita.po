@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
-"PO-Revision-Date: 2025-11-07 19:48+0100\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
+"PO-Revision-Date: 2025-11-13 10:42+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -45710,15 +45710,13 @@ msgid "... After"
 msgstr "… Po"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Širina:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Višina:"
@@ -66381,6 +66379,13 @@ msgstr ""
 "Poišče znake, ki se ujemajo s prvo črko niza. Šestnajstiško iskanje je "
 "možno, če je predpona »U+« (npr. U+0045 najde »E«)"
 
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "Slika ni na voljo."
+
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
 msgctxt "@title:window"
@@ -66981,21 +66986,17 @@ msgstr "Odstrani preoblikovanje znakov iz izbora."
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgctxt "Rearrange the positions of the pixels under the cursor"
-#| msgid "Color Deformation"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Deformacija barve"
+msgstr "Počisti oblikovanje"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Odstrani preoblikovanje znakov iz izbora."
+msgstr "Odstranite vse lastnosti tipografije iz izbora."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:298
 #, kde-format

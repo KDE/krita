@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -67539,6 +67539,12 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "Disponibile"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, fuzzy, kde-format

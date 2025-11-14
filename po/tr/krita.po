@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
-"PO-Revision-Date: 2025-11-12 05:42+0300\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
+"PO-Revision-Date: 2025-11-13 05:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -45657,15 +45657,13 @@ msgid "... After"
 msgstr "… sonrası"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Genişlik:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Yükseklik:"
@@ -66316,6 +66314,13 @@ msgid ""
 msgstr ""
 "Dizinin ilk harfiyle eşleşen karakterleri arar. “U+” eklendiğinde onaltılık "
 "arama olanaklıdır (örneğin, U+0045, “E”yi arar)."
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "Kullanılabilir resim yok."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format

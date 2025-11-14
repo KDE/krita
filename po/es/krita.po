@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-13 02:02+0000\n"
-"PO-Revision-Date: 2025-11-13 02:15+0100\n"
+"POT-Creation-Date: 2025-11-14 02:03+0000\n"
+"PO-Revision-Date: 2025-11-14 00:23+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27693,6 +27693,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"La función de deshacer acumulativa permite a Krita combinar acciones de "
+"deshacer y mantiene el historial de deshacer más organizado. Krita "
+"conservará algunas de las últimas acciones sin combinar, según las opciones "
+"«Esperar antes de fusionar trazos» y «Excluir últimos trazos de la fusión». "
+"Cuando una acción se vuelve obsoleta tras superar el límite de tiempo y no "
+"se ha excluido mediante «Excluir últimos trazos de la fusión», Krita "
+"intentará agruparla. Los grupos se forman mediante las opciones «Retardo "
+"máximo de trazos del grupo» y «Duración máxima del grupo»."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -27942,6 +27950,8 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
+"Este archivo ya se ha guardado automáticamente. ¿Cómo desea proceder?\n"
+"Advertencia: Si descarta ahora dicha copia, se eliminará."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
@@ -32710,6 +32720,8 @@ msgstr "Reiniciar todos los perfiles"
 msgid ""
 "You will lose all changes to any input profiles. Do you wish to continue?"
 msgstr ""
+"Perderá todos los cambios realizados en los perfiles de entrada. ¿Quiere "
+"continuar?"
 
 #. i18n: ectx: property (text), widget (QPushButton, duplicateButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:24
@@ -32775,6 +32787,8 @@ msgstr "Borrando el último atajo de teclado para esta acción"
 #, kde-format
 msgid "It is not allowed to erase some default shortcuts. Modify it instead."
 msgstr ""
+"No está permitido borrar algunos atajos de teclado predeterminados, aunque "
+"puede modificarlos."
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:39
@@ -32862,6 +32876,9 @@ msgid ""
 "current tool. For example, using the brush tool it samples a color from the "
 "canvas."
 msgstr ""
+"La acción de <i>Invocación alternativa</i> realiza una acción alternativa "
+"con la herramienta actual. Por ejemplo, con la herramienta de pincel, toma "
+"una muestra de color del lienzo."
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:32
 #, kde-format
@@ -32879,44 +32896,36 @@ msgid "Tertiary Mode"
 msgstr "Modo terciario"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Sample a color from the image or current layer"
+#, kde-format
 msgid "Sample Foreground Color from Current Layer"
-msgstr "Toma muestras de un color de la imagen o de la capa actual"
+msgstr "Muestra del color de primer plano de la capa actual"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Sample a color from the image or current layer"
+#, kde-format
 msgid "Sample Background Color from Current Layer"
-msgstr "Toma muestras de un color de la imagen o de la capa actual"
+msgstr "Muestra del color de fondo de la capa actual"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Sample a color from the screen"
+#, kde-format
 msgid "Sample Foreground Color from Merged Image"
-msgstr "Tomar muestras de un color de la pantalla"
+msgstr "Muestra del color de primer plano de la imagen fusionada"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Sample a color from the screen"
+#, kde-format
 msgid "Sample Background Color from Merged Image"
-msgstr "Tomar muestras de un color de la pantalla"
+msgstr "Muestra del color de fondo de la imagen fusionada"
 
 #: libs/ui/input/kis_change_frame_action.cpp:26
-#, fuzzy, kde-format
-#| msgid "Switch to"
+#, kde-format
 msgid "Switch Time"
-msgstr "Cambiar a"
+msgstr "Cambiar tiempo"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
 msgid ""
 "The <i>Switch Time</i> action changes the current time of the animation."
 msgstr ""
+"La acción <i>Cambiar tiempo</i> cambia el tiempo actual de la animación."
 
 #: libs/ui/input/kis_change_frame_action.cpp:30
 #, kde-format
@@ -32929,10 +32938,9 @@ msgid "Previous Frame"
 msgstr "Fotograma anterior"
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
-#, fuzzy, kde-format
-#| msgid "Change settings"
+#, kde-format
 msgid "Change Primary Setting"
-msgstr "Cambiar preferencias"
+msgstr "Cambiar configuración principal"
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:26
 #, kde-format
@@ -32940,6 +32948,9 @@ msgid ""
 "The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
 "\", for example the brush size for the brush tool."
 msgstr ""
+"La acción <i>Cambiar configuración principal</i> modifica la «configuración "
+"principal» de una herramienta. Por ejemplo, el tamaño de pincel para la "
+"herramienta de pincel."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:28
 #, kde-format
@@ -32961,6 +32972,8 @@ msgstr "Exposición y gamma"
 msgid ""
 "The <i>Exposure and Gamma</i> action changes the display mode of the canvas."
 msgstr ""
+"La acción <i>Exposición y gamma</i> modifica el modo de visualización del "
+"lienzo."
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:66
 #, kde-format
@@ -33260,7 +33273,7 @@ msgstr "Rueda del ratón a la derecha"
 #: libs/ui/input/kis_shortcut_configuration.cpp:430
 #, kde-format
 msgid "Trackpad Pan"
-msgstr ""
+msgstr "Desplazamiento del panel táctil"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:434
 #, kde-format
@@ -33376,6 +33389,8 @@ msgid ""
 "The <i>Tool Invocation</i> action invokes the current tool, for example, "
 "using the brush tool, it will start painting."
 msgstr ""
+"La acción <i>Invocación de herramienta</i> llama a la herramienta actual. "
+"Por ejemplo, cuando esté usando la herramienta del pincel, empezará a pintar."
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
 #, kde-format
@@ -33531,6 +33546,8 @@ msgid ""
 "The Toggle Canvas Only action switches between full interface and canvas "
 "only mode"
 msgstr ""
+"La acción «Conmutar solo el lienzo» cambia entre la interfaz completa y el "
+"modo de «solo el lienzo»"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:44
 #, kde-format
@@ -34079,7 +34096,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1027
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
-msgstr ""
+msgstr "Las capas de cebolla requieren una capa con fondo transparente."
 
 #: libs/ui/kis_node_manager.cpp:1054
 msgctxt "(qtundo-format)"
@@ -34182,6 +34199,8 @@ msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
+"No se puede escribir el canal alfa de la capa padre «%1».\n"
+"La operación se cancelará."
 
 #: libs/ui/kis_node_manager.cpp:1434
 msgctxt "(qtundo-format)"
@@ -34218,13 +34237,12 @@ msgstr "Capa de máscara"
 #: libs/ui/kis_node_manager.cpp:1703
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "No se puede mover la capa «%1» al nuevo padre «%2»"
 
 #: libs/ui/kis_node_manager.cpp:1706
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Colocar cada capa en su propia capa de grupo separada"
+msgstr "No se puede mover la capa «%1» a la capa raíz"
 
 #: libs/ui/kis_node_manager.cpp:1714
 msgctxt "(qtundo-format)"
@@ -34235,13 +34253,13 @@ msgstr "Desagrupar rápidamente"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
-msgstr ""
+msgstr "Desactivada: no se permiten máscaras en grupos de tránsito."
 
 #: libs/ui/kis_node_model.cpp:561
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
-msgstr ""
+msgstr "Desactivada: no se permite la clonación de grupos de tránsito."
 
 #: libs/ui/kis_node_model.cpp:602
 #, kde-format
@@ -34381,11 +34399,10 @@ msgid "Filter"
 msgstr "Filtro"
 
 #: libs/ui/kis_paintop_options_model.cpp:37
-#, fuzzy, kde-format
-#| msgid "Ten Brushes"
+#, kde-format
 msgctxt "option category"
 msgid "Masked Brush"
-msgstr "Diez pinceles"
+msgstr "Pincel enmascarado"
 
 #: libs/ui/kis_popup_palette.cpp:156
 #, fuzzy, kde-format
@@ -34425,13 +34442,13 @@ msgid "Fit Canvas to View"
 msgstr "Ajustar el lienzo a la vista"
 
 #: libs/ui/kis_popup_palette.cpp:909
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set foreground and background colors to black and white"
+#, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
-msgstr "Definir los colores de primer y segundo plano a negro y blanco"
+msgstr ""
+"Clic para intercambiar los colores de primer plano y fondo.\n"
+"Clic con el botón derecho para definir a blanco y negro."
 
 #: libs/ui/kis_popup_palette.cpp:1047
 #, kde-format
@@ -34439,6 +34456,8 @@ msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
 "to tag them and then select the tag here."
 msgstr ""
+"No hay etiquetas disponibles para mostrar en esta ventana emergente. Para "
+"añadir preajustes, debe etiquetarlos y luego seleccionar la etiqueta aquí."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: libs/ui/kis_selection_actions_panel.cpp:67
@@ -34811,11 +34830,14 @@ msgid ""
 "This is not recommended.\n"
 "Please download and install the x64 build instead."
 msgstr ""
+"Está ejecutando una versión de 32 bits en un Windows de 64 bits.\n"
+"Esto no está recomendado.\n"
+"Descargue e instale la versión de 64 bits."
 
 #: libs/ui/KisApplication.cpp:524
 #, kde-format
 msgid "Initializing Globals..."
-msgstr ""
+msgstr "Inicializando variables globales…"
 
 #: libs/ui/KisApplication.cpp:556
 #, kde-format
@@ -34845,14 +34867,12 @@ msgstr "Lanzando…"
 #: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr ""
+msgstr "Tipo MIME no encontrado. Pruebe a usar la opción «-mimetype»."
 
 #: libs/ui/KisApplication.cpp:741
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Import animation frames"
+#, kde-format
 msgid "Failed to render animation frames!"
-msgstr "Importar fotogramas de animación"
+msgstr "Ha ocurrido un error al renderizar los fotogramas de la animación."
 
 #: libs/ui/KisApplication.cpp:769 libs/ui/KisApplication.cpp:1042
 #, kde-format
@@ -34870,7 +34890,7 @@ msgstr "Krita: Advertencia"
 #: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
-msgstr ""
+msgstr "No se puede añadir %1 como capa de archivo: el archivo no existe."
 
 #: libs/ui/KisApplication.cpp:783
 #, kde-format
@@ -34884,6 +34904,15 @@ msgid ""
 "running instance of Krita, check the \"Allow only one instance of Krita\" "
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
+"No se puede añadir la capa de archivo: no hay ningún documento abierto.\n"
+"\n"
+"Puede crear un nuevo documento usando la opción «--new-image-option» o abrir "
+"un un archivo existente.\n"
+"\n"
+"Si, por el contrario, quiere añadir la capa de archivo a un documento en una "
+"instancia de Krita que ya esté en ejecución, marque la casilla «Permitir "
+"solo una instancia de Krita» en las preferencias (Preferencias -> General -> "
+"Ventana)."
 
 #: libs/ui/KisApplication.cpp:789
 #, kde-format
@@ -34892,6 +34921,9 @@ msgid ""
 "You can either create a new file using the --new-image option, or you can "
 "open an existing file."
 msgstr ""
+"No se puede añadir la capa de archivo: no hay ningún documento abierto.\n"
+"Puede crear un nuevo archivo usando la opción «--new-image» o abrir un "
+"archivo existente."
 
 #: libs/ui/KisApplication.cpp:1037
 #, kde-format
@@ -34902,34 +34934,37 @@ msgstr "No se ha podido abrir el archivo %1"
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
+"No se puede añadir la capa de archivo: no hay ningún documento abierto."
 
 #: libs/ui/KisApplication.cpp:1184
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "No template found for: %1"
-msgstr "Carpeta de plantillas:"
+msgstr "No se ha encontrado ninguna plantilla para %1"
 
 #: libs/ui/KisApplication.cpp:1187
 #, kde-format
 msgid "Too many templates found for: %1"
-msgstr ""
+msgstr "Se han encontrado demasiadas plantillas para %1"
 
 #: libs/ui/KisApplication.cpp:1203
-#, fuzzy, kde-format
-#| msgid "Template folder:"
+#, kde-format
 msgid "Template %1 failed to load."
-msgstr "Carpeta de plantillas:"
+msgstr "No se ha podido cargar la plantilla %1"
 
 #: libs/ui/KisApplication.cpp:1235
-#, fuzzy, kde-format
-#| msgid "You will need to Restart Krita for the changes to take an effect."
+#, kde-format
 msgid ""
 "Krita configurations reset!\n"
 "\n"
 "Backup file was created at: %1\n"
 "\n"
 "Restart Krita for changes to take effect."
-msgstr "Debe reiniciar Krita para que los cambios tengan efecto."
+msgstr ""
+"Reinicio de la configuración de Krita.\n"
+"\n"
+"Se ha creado un archivo de copia de seguridad en: %1\n"
+"\n"
+"Reinicie Krita para que los cambios tengan efecto."
 
 #: libs/ui/KisApplication.cpp:1249
 #, kde-format
@@ -34938,12 +34973,15 @@ msgid ""
 "\n"
 "Please make sure no other program is using the file and try again."
 msgstr ""
+"No se ha podido borrar %1\n"
+"\n"
+"Asegúrese de que no hay otro programa usando el archivo y vuelva a "
+"intentarlo."
 
 #: libs/ui/KisApplication.cpp:1277
-#, fuzzy, kde-format
-#| msgid "Do you want to save the current document?"
+#, kde-format
 msgid "Do you want to clear the settings file?"
-msgstr "¿Desea guardar el documento actual?"
+msgstr "¿Quiere borrar el archivo de preferencias?"
 
 #: libs/ui/KisApplicationArguments.cpp:69
 #, kde-format
@@ -34984,24 +35022,22 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:84
 #, kde-format
 msgid "The name of the workspace to open Krita with"
-msgstr ""
+msgstr "El nombre del espacio de trabajo con el que se abre Krita"
 
 #: libs/ui/KisApplicationArguments.cpp:85
 #, kde-format
 msgid "The name of the window layout to open Krita with"
-msgstr ""
+msgstr "El nombre de la disposición de ventanas con la que se abre Krita"
 
 #: libs/ui/KisApplicationArguments.cpp:86
 #, kde-format
 msgid "The name of the session to open Krita with"
-msgstr ""
+msgstr "El nombre de la sesión con la que se abre Krita"
 
 #: libs/ui/KisApplicationArguments.cpp:87
-#, fuzzy, kde-format
-#| msgid "Select which parts of Krita will be hidden in canvas-only mode."
+#, kde-format
 msgid "Start Krita in canvas-only mode"
-msgstr ""
-"Seleccionar las partes de Krita que se ocultaran en el modo «solo lienzo»"
+msgstr "Iniciar Krita en el modo de «solo lienzo»"
 
 #: libs/ui/KisApplicationArguments.cpp:88
 #, kde-format
@@ -35014,35 +35050,35 @@ msgid "Start Krita in full-screen mode"
 msgstr "Iniciar Krita en modo de pantalla completa"
 
 #: libs/ui/KisApplicationArguments.cpp:91
-#, fuzzy, kde-format
-#| msgid "Override Spacing"
+#, kde-format
 msgid "Override display DPI"
-msgstr "Ignorar el espaciado"
+msgstr "Ignorar las DPI de la pantalla"
 
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
 msgid "Export to the given filename and exit"
-msgstr ""
+msgstr "Exportar al archivo indicado y salir"
 
 #: libs/ui/KisApplicationArguments.cpp:96
 #, kde-format
 msgid "Export animation to the given filename and exit"
-msgstr ""
+msgstr "Exportar animación al archivo indicado y salir"
 
 #: libs/ui/KisApplicationArguments.cpp:97
 #, kde-format
 msgid "Filename for export"
-msgstr ""
+msgstr "Nombre de archivo para exportar"
 
 #: libs/ui/KisApplicationArguments.cpp:98
 #, kde-format
 msgid "File layer to be added to existing or new file"
-msgstr ""
+msgstr "Capa de archivo que se añadirá a un archivo existente o nuevo"
 
 #: libs/ui/KisApplicationArguments.cpp:99
 #, kde-format
 msgid "A location that overrides the configured location for Krita's resources"
 msgstr ""
+"Una ubicación que anula la ubicación configurada para los recursos de Krita"
 
 #: libs/ui/KisApplicationArguments.cpp:100
 #, kde-format
@@ -35061,16 +35097,14 @@ msgid "Discard All"
 msgstr "Descartar todo"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:184
-#, fuzzy, kde-format
-#| msgid "The following plugins were imported:"
+#, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr "Se han importado los siguientes complementos:"
+msgstr "Se puede recuperar el siguiente archivo guardado automáticamente:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "The following plugins were imported:"
+#, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr "Se han importado los siguientes complementos:"
+msgstr "Se pueden recuperar los siguientes archivos guardados automáticamente:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:241
 #, kde-format
@@ -35079,6 +35113,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Pulse «Cancelar» para mantener todos los archivos recuperables.\n"
+"Pulse «Aceptar» para recuperar los archivos seleccionados y descartar los no "
+"seleccionados."
 
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
@@ -35088,7 +35125,7 @@ msgstr "Clonar documento"
 #: libs/ui/KisDocument.cpp:743
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
-msgstr ""
+msgstr "No se puede escribir en %1. Guarde con otro nombre de archivo."
 
 #: libs/ui/KisDocument.cpp:793
 #, kde-format
@@ -35118,23 +35155,24 @@ msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
+"No se puede empezar a guardar %1. Espere hasta que haya terminado la "
+"operación de guardar actual."
 
 #: libs/ui/KisDocument.cpp:853
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr ""
+msgstr "No se puede empezar a guardar %1: la imagen está ocupada."
 
 #: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
+msgstr "No se puede empezar a guardar %1: ha ocurrido un error desconocido."
 
 #: libs/ui/KisDocument.cpp:998
-#, fuzzy, kde-format
-#| msgid "Error during import:"
+#, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
-msgstr "Ha ocurrido un error durante la importación:"
+msgstr "Ha ocurrido un error al guardar %1: %2"
 
 #: libs/ui/KisDocument.cpp:1005
 #, kde-format
@@ -35174,14 +35212,13 @@ msgstr "Guardando automáticamente…"
 #: libs/ui/KisDocument.cpp:1484
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
-msgstr ""
+msgstr "Se ha pospuesto la operación de guardar: el documento está en uso."
 
 #: libs/ui/KisDocument.cpp:1627
-#, fuzzy, kde-format
-#| msgid "Error during import:"
+#, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
-msgstr "Ha ocurrido un error durante la importación:"
+msgstr "Ha ocurrido un error al guardar %1 automáticamente: %2"
 
 #: libs/ui/KisDocument.cpp:1641
 #, kde-format
@@ -35223,11 +35260,10 @@ msgid "Not Saved"
 msgstr "No guardado"
 
 #: libs/ui/KisDocument.cpp:2643
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
-msgstr "Fondo"
+msgstr "Relleno de fondo"
 
 #: libs/ui/KisDocument.cpp:2705
 #, kde-format
@@ -35239,7 +35275,7 @@ msgstr "Esperando que se complete la operación en la imagen…"
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr ""
+msgstr "Actualizar miniatura de resumen"
 
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
@@ -35300,18 +35336,18 @@ msgstr "No se ha podido cambiar el nombre del archivo."
 #: libs/ui/KisImportExportErrorCode.cpp:46
 #, kde-format
 msgid "The position in the file could not be changed."
-msgstr ""
+msgstr "No se ha podido cambiar la posición del archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:48
-#, fuzzy, kde-format
-#| msgid "Error: The Python engine could not be initialized"
+#, kde-format
 msgid "The file could not be resized."
-msgstr "Error: el motor de Python no se puede inicializar"
+msgstr "No se puede cambiar el tamaño del archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:50
 #, kde-format
 msgid "Permission denied. Krita is not allowed to read or write to the file."
 msgstr ""
+"Permiso denegado. Krita no tiene permiso para leer o escribir en el archivo."
 
 #: libs/ui/KisImportExportErrorCode.cpp:52
 #, kde-format
@@ -35411,12 +35447,13 @@ msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
 "another location."
 msgstr ""
+"%1 no existe tras la escritura. Pruebe a guardarlo otra vez con otro nombre "
+"y en otro lugar."
 
 #: libs/ui/KisImportExportFilter.cpp:170
-#, fuzzy, kde-format
-#| msgid "%1 is not a valid image file!"
+#, kde-format
 msgid "%1 is not readable"
-msgstr "¡%1 no es un archivo de imagen válido!"
+msgstr "%1 no se puede leer"
 
 #: libs/ui/KisImportExportFilter.cpp:174
 #, kde-format
@@ -35424,6 +35461,8 @@ msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
 "different name, in another location."
 msgstr ""
+"%1 es más pequeño de 10 bytes, por lo que debe estar dañado. Pruebe a "
+"guardarlo otra vez con otro nombre y en otro lugar."
 
 #: libs/ui/KisImportExportFilter.cpp:189
 #, kde-format
@@ -35431,38 +35470,28 @@ msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
 "saving again under a different name, in another location."
 msgstr ""
+"%1 tiene solo bytes cero en los primeros 1000 bytes, por lo que es probable "
+"que esté dañado. Pruebe a guardarlo otra vez con otro nombre y en otro lugar."
 
 #: libs/ui/KisImportExportFilter.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with the color model <b>%1</b> and channel "
-#| "depth <b>%2</b> which cannot be saved to this format. The layers will be "
-#| "converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
 "image will be converted."
 msgstr ""
-"La imagen contiene capas con el modelo de color <b>%1</b> y profundidad de "
-"canal <b>%2</b>, que no se pueden guardar en este formato. Las capas se "
-"convertirán."
+"%1 no puede guardar imágenes con el modelo de color <b>%2</b> y una "
+"profundidad de <b>%3</b>. Se convertirá la imagen."
 
 #: libs/ui/KisImportExportFilter.cpp:258
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with the color model <b>%1</b> and channel "
-#| "depth <b>%2</b> which cannot be saved to this format. The layers will be "
-#| "converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
 "layers will be converted or skipped."
 msgstr ""
-"La imagen contiene capas con el modelo de color <b>%1</b> y profundidad de "
-"canal <b>%2</b>, que no se pueden guardar en este formato. Las capas se "
-"convertirán."
+"%1 no puede guardar capas con el modelo de color <b>%2</b> y la profundidad "
+"<b>%3</b>. Las capas se convertirán o se omitirán."
 
 #: libs/ui/KisImportExportFilter.cpp:263
 #, kde-format
@@ -35471,22 +35500,18 @@ msgid ""
 "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
 "image will not be saved."
 msgstr ""
+"%1 no puede guardar imágenes con el modelo de color <b>%2</b> y la "
+"profundidad <b>%3</b>. No se guardará la imagen."
 
 #: libs/ui/KisImportExportFilter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with the color model <b>%1</b> and channel "
-#| "depth <b>%2</b> which cannot be saved to this format. The layers will be "
-#| "converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
 "layers will be skipped."
 msgstr ""
-"La imagen contiene capas con el modelo de color <b>%1</b> y profundidad de "
-"canal <b>%2</b>, que no se pueden guardar en este formato. Las capas se "
-"convertirán."
+"%1 no puede guardar capas con el modelo de color <b>%2</b> y la profundidad "
+"<b>%3</b>. Se omitirán las capas."
 
 #: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
@@ -35494,6 +35519,8 @@ msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr ""
+"No se puede abrir el archivo guardado %1. Pruebe a guardarlo de nuevo en "
+"otro lugar."
 
 #: libs/ui/KisImportExportFilter.cpp:291
 #, kde-format
@@ -35519,54 +35546,36 @@ msgid "Saving document..."
 msgstr "Guardando documento…"
 
 #: libs/ui/KisImportExportManager.cpp:563
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains <b>compositions</b>. The compositions will not be "
-#| "saved."
+#, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
-msgstr ""
-"La imagen contiene <b>composiciones</b>. Las composiciones no se guardarán."
+msgstr "La imagen contiene <b>asistentes</b>. Los asistentes no se guardarán."
 
 #: libs/ui/KisImportExportManager.cpp:566
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains <b>layer styles</b>. The layer styles will not be "
-#| "saved."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>reference images</b>. The reference images will not be "
 "saved."
 msgstr ""
-"La imagen contiene <b>estilos de capas</b>. Los estilos de capas no se "
-"guardarán."
+"La imagen contiene <b>imágenes de referencia</b>. Las imágenes de referencia "
+"no se guardarán."
 
 #: libs/ui/KisImportExportManager.cpp:569
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains <b>layer styles</b>. The layer styles will not be "
-#| "saved."
+#, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
-msgstr ""
-"La imagen contiene <b>estilos de capas</b>. Los estilos de capas no se "
-"guardarán."
+msgstr "La imagen contiene <b>guías</b>. Las guías no se guardarán."
 
 #: libs/ui/KisImportExportManager.cpp:572
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains <b>compositions</b>. The compositions will not be "
-#| "saved."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a <b>custom grid configuration</b>. The configuration "
 "will not be saved."
 msgstr ""
-"La imagen contiene <b>composiciones</b>. Las composiciones no se guardarán."
+"La imagen contiene una <b>configuración de cuadrícula personalizada</b>. "
+"Esta configuración no se guardará."
 
 #: libs/ui/KisImportExportManager.cpp:590
 #, kde-format
@@ -35575,6 +35584,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tratando de realizar una exportación avanzada con una imagen que contiene "
+"una <b>capa de filtrado</b>. Se <b>aplanará</b> la imagen antes de cambiar "
+"su tamaño."
 
 #: libs/ui/KisImportExportManager.cpp:594
 #, kde-format
@@ -35583,6 +35595,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tratando de realizar una exportación avanzada con una imagen que contiene "
+"una <b>máscara de filtro</b>. Se <b>aplanará</b> la imagen antes de cambiar "
+"su tamaño."
 
 #: libs/ui/KisImportExportManager.cpp:605
 #, kde-format
@@ -35591,11 +35606,14 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tratando de realizar una exportación avanzada con una imagen que contiene un "
+"<b>estilo de capa</b>. Se <b>aplanará</b> la imagen antes de cambiar su "
+"tamaño."
 
 #: libs/ui/KisImportExportManager.cpp:612
 #, kde-format
 msgid "Error: cannot save this image as a %1."
-msgstr ""
+msgstr "Error: no se ha podido guardar esta imagen como %1."
 
 #: libs/ui/KisImportExportManager.cpp:613
 #: libs/ui/KisImportExportManager.cpp:656
@@ -35613,12 +35631,12 @@ msgstr "Krita: Error de exportación"
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
-msgstr ""
+msgstr "Advertencia: al guardar como %1 se perderá información de la imagen."
 
 #: libs/ui/KisImportExportManager.cpp:650
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
-msgstr ""
+msgstr "Perderá información cuando guarde esta imagen como %1."
 
 #: libs/ui/KisImportExportManager.cpp:653
 #, kde-format
@@ -35644,7 +35662,7 @@ msgstr "Cambiar tamaño"
 #: libs/ui/KisImportExportManager.cpp:685
 #, kde-format
 msgid "Also save your image as a Krita file."
-msgstr ""
+msgstr "Guardar también la imagen como archivo de Krita."
 
 #: libs/ui/KisImportExportUtils.cpp:48
 #, kde-format
@@ -35658,6 +35676,8 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"La imagen tiene un perfil adjunto con el que Krita no puede editarla («%1»). "
+"Seleccione un espacio al que convertirla para poder editarla:\n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -35695,17 +35715,14 @@ msgid "Wor&kspace"
 msgstr "Espacio de &trabajo"
 
 #: libs/ui/KisMainWindow.cpp:589
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show File Toolbar"
+#, kde-format
 msgid "Show %1 Toolbar"
-msgstr "Mostrar la barra de herramientas de archivo"
+msgstr "Mostrar barra de herramientas %1"
 
 #: libs/ui/KisMainWindow.cpp:591
-#, fuzzy, kde-format
-#| msgid "Main Toolbar"
+#, kde-format
 msgid "Hide %1 Toolbar"
-msgstr "Barra de herramientas principal"
+msgstr "Ocultar barra de herramientas %1"
 
 #: libs/ui/KisMainWindow.cpp:1017
 #, kde-format
@@ -35730,6 +35747,10 @@ msgid ""
 "\n"
 "Please select a location where the original file will not be overridden!"
 msgstr ""
+"Está guardando un archivo mientras se está renderizando la imagen. El "
+"archivo resultante puede estar incompleto o dañado.\n"
+"\n"
+"Seleccione una ubicación para no sobrescribir el archivo original."
 
 #: libs/ui/KisMainWindow.cpp:1328
 #, kde-format
@@ -35764,14 +35785,9 @@ msgstr "Capas/máscaras"
 #: libs/ui/KisMainWindow.cpp:1992
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
-#, fuzzy, kde-format
-#| msgid ""
-#| "You don't seem to have any\n"
-#| "recently opened documents"
+#, kde-format
 msgid "You don't have any resource bundles enabled."
-msgstr ""
-"Parece que no hay documentos\n"
-"abiertos recientemente"
+msgstr "No tiene activado ningún paquete de recursos."
 
 #: libs/ui/KisMainWindow.cpp:1996
 #, kde-format
@@ -35780,6 +35796,9 @@ msgid ""
 "There are no brush presets available. Please enable a bundle that has "
 "presets before continuing.\n"
 msgstr ""
+"\n"
+"No hay disponibles preajustes de pincel. Active un paquete que contenga "
+"preajustes antes de continuar.\n"
 
 #: libs/ui/KisMainWindow.cpp:2006
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
@@ -35789,6 +35808,8 @@ msgid ""
 "\n"
 "Only your local resources are available."
 msgstr ""
+"\n"
+"Solo están disponibles sus recursos locales."
 
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
 #, kde-format
@@ -35796,11 +35817,15 @@ msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
+"No se ha podido terminar la importación de la animación:\n"
+"%1"
 
 #: libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
+"No se ha podido crear el nuevo documento. Se ha interrumpido la importación "
+"de la animación."
 
 #: libs/ui/KisMainWindow.cpp:2643
 #, kde-format
@@ -35836,6 +35861,8 @@ msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
+"El complemento de gestión de color LittleCMS de Krita no está instalado. Se "
+"saldrá de Krita ahora."
 
 #: libs/ui/KisMainWindow.cpp:2894
 #, kde-format
@@ -66645,6 +66672,13 @@ msgstr ""
 "Busca los caracteres que coincidan con la primera letra de la cadena. Se "
 "puede buscar en hexadecimal anteponiendo «U+» (por ejemplo, «U+0045» buscará "
 "«E»)."
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
+#, fuzzy, kde-format
+#| msgid "Memory available:"
+msgctxt "@info"
+msgid "No glyph alternates available."
+msgstr "Memoria disponible:"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format

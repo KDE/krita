@@ -17,7 +17,6 @@ Control {
 
     onManagerChanged: {
         if (typeof manager == "undefined") return;
-        updateTextProperties()
         textType.updateTextTypes();
         updatePresetName();
 

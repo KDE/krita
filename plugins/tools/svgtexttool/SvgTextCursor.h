@@ -105,7 +105,7 @@ public:
      * @param cursorFlash - the total time it takes for a cursor to hide reapear.
      * @param cursorFlashLimit - maximum amount of time a cursor is allowed to flash.
      */
-    void setCaretSetting(int cursorWidth = 1, int cursorFlash = 1000, int cursorFlashLimit = 5000);
+    void setCaretSetting(int cursorWidth = 1, int cursorFlash = 1000, int cursorFlashLimit = 5000, bool drawCursorInAdditionToSelection = false);
 
     /**
      * @brief setVisualMode

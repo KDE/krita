@@ -99,10 +99,12 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     , m_optionManager(new SvgTextToolOptionsManager(this))
 {
      // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
-    int cursorFlashLimit = 5000;
+    const int cursorFlashLimit = 5000;
+    const bool enableCursorWithSelection = QApplication::style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected);
     m_textCursor.setCaretSetting(QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
                                  , qApp->cursorFlashTime()
-                                 , cursorFlashLimit);
+                                 , cursorFlashLimit
+                                 , enableCursorWithSelection);
     connect(&m_textCursor, SIGNAL(updateCursorDecoration(QRectF)), this, SLOT(slotUpdateCursorDecoration(QRectF)));
 
     Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {

@@ -152,6 +152,7 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QLineF cursorCaret;
     QLineF anchorCaret;
     int cursorWidth = 1;
+    bool drawCursorInAdditionToSelection = false;
     QPainterPath selection;
     QRectF oldSelectionRect;
 
@@ -232,11 +233,12 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
     updateSelection();
 }
 
-void SvgTextCursor::setCaretSetting(int cursorWidth, int cursorFlash, int cursorFlashLimit)
+void SvgTextCursor::setCaretSetting(int cursorWidth, int cursorFlash, int cursorFlashLimit, bool drawCursorInAdditionToSelection)
 {
     d->cursorFlash.setInterval(cursorFlash/2);
     d->cursorFlashLimit.setInterval(cursorFlashLimit);
     d->cursorWidth = cursorWidth;
+    d->drawCursorInAdditionToSelection = drawCursorInAdditionToSelection;
     connect(&d->cursorFlash, SIGNAL(timeout()), this, SLOT(blinkCursor()));
     connect(&d->cursorFlashLimit, SIGNAL(timeout()), this, SLOT(stopBlinkCursor()));
 }
@@ -742,21 +744,22 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int de
             QBrush brush(selectionColor);
             gc.fillPath(d->selection, brush);
             gc.restore();
-        } else {
-            if (d->cursorVisible) {
-                QPen pen;
-                pen.setCosmetic(true);
-                QColor c = d->cursorColor.isValid()? d->cursorColor: Qt::black;
-                pen.setColor(bgColorForCaret(c));
-                pen.setWidth((d->cursorWidth + 2) * decorationThickness);
-                gc.setPen(pen);
-                gc.drawPath(d->cursorShape);
-                pen.setColor(c);
-                pen.setWidth(d->cursorWidth * decorationThickness);
-                gc.setPen(pen);
-                gc.drawPath(d->cursorShape);
+        }
 
-            }
+        if ( (d->drawCursorInAdditionToSelection || d->pos == d->anchor)
+                && d->cursorVisible) {
+            QPen pen;
+            pen.setCosmetic(true);
+            QColor c = d->cursorColor.isValid()? d->cursorColor: Qt::black;
+            pen.setColor(bgColorForCaret(c));
+            pen.setWidth((d->cursorWidth + 2) * decorationThickness);
+            gc.setPen(pen);
+            gc.drawPath(d->cursorShape);
+            pen.setColor(c);
+            pen.setWidth(d->cursorWidth * decorationThickness);
+            gc.setPen(pen);
+            gc.drawPath(d->cursorShape);
+
         }
 
         if (d->preEditCommand) {

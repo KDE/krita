@@ -1439,10 +1439,9 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
         if (action->shortcut() == testSequence) {
             event->accept();
             action->trigger();
-            break;
+            return;
         }
     }
-    if (event->isAccepted()) return;
 
     // This first set is already tested above, however, if they still
     // match, then it's one of the extra sequences for MacOs, which

@@ -219,6 +219,10 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     //previous style string is for keeping formatting proper on linebreaks and appendstyle is for specific tags
     QString previousStyleString;
     QString appendStyle;
+
+    const QStringList spanLikes = {
+        "span", "font", "b", "strong", "em", "i", "pre", "u"
+    };
     bool firstElement = true;
 
     while (!htmlReader.atEnd()) {
@@ -309,7 +313,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 textAlign = attributes.value("align").toString();
             }
 
-            if (attributes.hasAttribute("style")) {
+            if (attributes.hasAttribute("style") || !appendStyle.isEmpty()) {
                 QString filteredStyles;
                 QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction letter-spacing").split(" ");
                 QStringList styles = attributes.value("style").toString().split(";");
@@ -370,7 +374,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
         case QXmlStreamReader::EndElement:
         {
             if (htmlReader.name() == "br") break;
-            if (elementName == "p" || elementName == "span" || elementName == "body") {
+            if (elementName == "p" || spanLikes.contains(elementName) || elementName == "body") {
                 debugFlake << "\tEndElement" <<  htmlReader.name() << "(" << elementName << ")";
                 svgWriter.writeEndElement();
             }

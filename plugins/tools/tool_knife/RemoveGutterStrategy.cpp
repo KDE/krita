@@ -52,7 +52,10 @@ void RemoveGutterStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Key
     QRectF dirtyRect;
     KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);
     KisAlgebra2D::accumulateBounds(m_endPoint, &dirtyRect);
-    dirtyRect = kisGrowRect(dirtyRect, 10); // twice as much as it should need to account for lines showing the effect
+    QLineF l = QLine(QPoint(), QPoint(50, 50));
+
+    l = tool()->canvas()->viewConverter()->viewToDocument().map(l);
+    dirtyRect = kisGrowRect(dirtyRect, l.length()); // twice as much as it should need to account for lines showing the effect
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
     //dirtyRect = kisCanvas->viewManager()->
@@ -118,6 +121,9 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
     qCritical() << "vvvvvvvvvvvvvvvvvvvvvvvvv REMOVING A GUTTER vvvvvvvvvvvvvvvvvvvvvvvvv";
+
+
+    tool()->canvas()->updateCanvas(m_previousLineDirtyRect);
 
 
     KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(tool()->canvas());

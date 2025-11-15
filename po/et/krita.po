@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-14 02:03+0000\n"
+"POT-Creation-Date: 2025-11-15 02:02+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -21769,8 +21769,8 @@ msgstr "Leiti tundmatu sõlm tüübiga \"%1\"!"
 msgid "No 'text' node found!"
 msgstr "Sõlme \"text\" ei leitud!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:407
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:862
 #: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
@@ -69544,15 +69544,15 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Tekstitööriist"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Font Size"
@@ -69560,35 +69560,35 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Fondi suurus"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
 #, fuzzy, kde-format
 #| msgid "To Bottom"
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Alumiseks"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
 #, fuzzy, kde-format
 #| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Tähestikuline"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, fuzzy, kde-format
 #| msgid "Biography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Elulugu"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Angulaarne"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -69596,21 +69596,21 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Keskmine"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, fuzzy, kde-format
 #| msgid "Logical Operations"
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Loogikatehted"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, fuzzy, kde-format
 #| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Tsenter"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Line Height"
@@ -69618,7 +69618,7 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Rea kõrgus"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert current selection"
@@ -69626,7 +69626,7 @@ msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Muudab parajasti kehtiva valiku vastupidiseks"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"
@@ -70168,7 +70168,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Valiku joone laiuse määramine"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -70179,56 +70179,56 @@ msgstr "Krita - teksti muutmine"
 msgid "SVG Text Tool"
 msgstr "SVG tekstitööriist"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
 #, fuzzy, kde-format
 #| msgid "Create new Template"
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Uue malli loomine"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, fuzzy, kde-format
 #| msgid "Current properties:"
 msgctxt "@option:check"
 msgid "Current Text Properties"
 msgstr "Aktiivsed omadused:"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, fuzzy, kde-format
 #| msgid "New Style"
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Uus stiil"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, fuzzy, kde-format
 #| msgid "Text Properties"
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Teksti omadused"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, fuzzy, kde-format
 #| msgid "Options"
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Valikud"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Paste at Cursor"
@@ -70236,68 +70236,68 @@ msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Aseta kursori asukohta"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, fuzzy, kde-format
 #| msgid "Reset to default"
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Lähtesta vaikeväärtusele"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
 #, fuzzy, kde-format
 #| msgid "Texturing Mode:"
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Tekstuurimisrežiim:"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, fuzzy, kde-format
 #| msgid "Enable Pen Settings"
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Pliiatsiseadistuste lubamine"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, fuzzy, kde-format
 #| msgid "Dialog"
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Dialoog"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
 #, fuzzy, kde-format
 #| msgid "SVG Source"
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "SVG allikas"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
 #, fuzzy, kde-format
 #| msgid "Duplicate the currently selected layer or mask"
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Klooni aktiivne valitud kiht või mask"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Ava palett"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -70305,21 +70305,21 @@ msgid ""
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, fuzzy, kde-format
 #| msgid "&Convert Image Type..."
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "&Teisenda pilditüüp..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, fuzzy, kde-format
 #| msgid "Performance"
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Jõudlus"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -70327,14 +70327,14 @@ msgid ""
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, fuzzy, kde-format
 #| msgid "Sine"
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Sinusoid"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
@@ -70347,14 +70347,14 @@ msgstr ""
 "<html><head/><body><p>Kasuta graafikalaua kallet normaalide määramiseks.</"
 "p></body></html>"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Asukoht"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -70362,14 +70362,14 @@ msgid ""
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Silumine"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Snap Bounding Box"
@@ -70377,7 +70377,7 @@ msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Tõmme ümbritsevale kastile"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
 #, fuzzy, kde-format
 #| msgid "Show in Timeline"
 msgctxt "@option:check"

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-14 02:03+0000\n"
-"PO-Revision-Date: 2025-11-07 10:22+0100\n"
+"POT-Creation-Date: 2025-11-15 02:02+0000\n"
+"PO-Revision-Date: 2025-11-13 13:34+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20553,8 +20553,8 @@ msgstr "Nœud de type inconnu « %1 » trouvé !"
 msgid "No 'text' node found!"
 msgstr "Aucun nœud « Texte » trouvé !"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:407
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:862
 #: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
@@ -67138,74 +67138,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Ajuster les transformations de caractères sur le texte."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Texte en haut"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Taille de fonte"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Texte en bas"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alphabétique"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Idéographique"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Exposant"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Milieu"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Mathématique"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Hauteur de ligne"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Référence courante"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -67705,22 +67705,20 @@ msgstr "Supprimer les transformations de caractères de la sélection."
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Mise en forme"
+msgstr "Effacer la mise en forme"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Supprimer les transformations de caractères de la sélection."
+msgstr ""
+"Supprimer toutes les propriétés définies pour le texte de la sélection."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -67731,19 +67729,19 @@ msgstr "Krita - Modifier le texte"
 msgid "SVG Text Tool"
 msgstr "Texte"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
 #, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Créer de nouveaux textes avec..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
 msgstr "Propriétés courantes du texte"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67752,19 +67750,19 @@ msgstr ""
 "Utilisez les propriétés courantes dans le panneau des propriétés de texte "
 "pour créer de nouveaux textes."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Sélectionnez un pré-réglage de style"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Ouvrir les propriétés du texte"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67773,74 +67771,74 @@ msgstr ""
 "Ouvrez le panneau « Propriétés du texte » pour modifier des propriétés "
 "telles que la taille et le style de police."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Options"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Utiliser le pointeur visuel"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr "Utilisez l'ordre visuel pour le texte bidirectionnel."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Coller par défaut comme texte enrichi"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 "Toujours coller du texte enrichi lorsque vous utilisez l'action « Coller »."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Mode de réglage du type"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Activer le mode de réglage du type."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Boîtes de dialogue"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Modifier la source « SVG »"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Modifier le texte actuellement sélectionné dans un format « SVG XML »."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Palette de glyphes"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67851,19 +67849,19 @@ msgstr ""
 "« OpenType » ou « Unicode » de glyphes, ainsi qu'à une table de "
 "correspondance de caractères."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Convertir le type..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Pré-formaté"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67874,13 +67872,13 @@ msgstr ""
 "les nouvelles lignes seront préservés. Un saut de ligne est inséré afin que "
 "les lignes avec retour automatique  ou avec positionnement restent séparées."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Retour automatique intégré"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67891,13 +67889,13 @@ msgstr ""
 "et les retours à la ligne seront préservés. Les nouvelles lignes seront "
 "supprimées."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Pré-positionné"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67909,20 +67907,20 @@ msgstr ""
 "sont réduits. Il s'agit d'une rétrocompatibilité avec le format « SVG » en "
 "version 1.1."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Déboguer"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Afficher les boîtes de liaison de caractères"
 
 # Timeline laissé volontairement en anglais
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"

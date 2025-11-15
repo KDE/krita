@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-14 02:03+0000\n"
+"POT-Creation-Date: 2025-11-15 02:02+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -20294,8 +20294,8 @@ msgstr ""
 msgid "No 'text' node found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:407
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:862
 #: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
@@ -64898,74 +64898,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "&Isixhobo Somgcwalisi"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Umfanekiso"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Ukwenziwa kwemigca"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Ixabiso"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Faka ikhonkco"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Uxande"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Indlela:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Umsebenzi we Boolean"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Iikona:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "&Ubude:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Susa Ukhetho"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -65472,7 +65472,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -65483,111 +65483,111 @@ msgstr "Dibanisa Okubhaliweyo"
 msgid "SVG Text Tool"
 msgstr "&Isixhobo Somgcwalisi"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
 #, fuzzy, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "&Qala ngoxwebhu olungenanto"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
 msgstr "Ulwaleko Lwangoku Oluphezulu"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Idityanisiwe"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Izinto zobumnini Zenjongo"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, fuzzy, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Unobumba wokuqala Wesigrike"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Peyinta ngomlinganiselo"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Ulwaleko Lwangoku Oluphezulu"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Ukhetho"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Izicwangciso"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Izinto zobumnini Zolwaleko..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Ukhuphelo Lomfanekiso"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Pale Green"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65595,19 +65595,19 @@ msgid ""
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, fuzzy, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "F&aka Umfanekiso njengo Lwaleko..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Iinketho"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65615,13 +65615,13 @@ msgid ""
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Idityanisiwe"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65629,13 +65629,13 @@ msgid ""
 "lines are not removed."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
 #, fuzzy, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Ulongezo"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -65643,19 +65643,19 @@ msgid ""
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Ukhetho"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"

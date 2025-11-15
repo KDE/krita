@@ -4,25 +4,25 @@
 # --- krita_flaketools, krita_karbontools
 # --- krita_shape_vector, krita_shape_paths, krita_shape_artistictext
 #
-# Copyright (C) 2023 This_file_is_part_of_KDE
+# Copyright (C) 2025 This_file_is_part_of_KDE
 # This file is distributed under the same license as the Krita package.
 #
 #
-#
-# Marko Samastur <markos@elite.org>, 2000.
-# Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2003, 2004, 2005.
-# Andrej Vernekar <andrej.vernekar@gmail.com>, 2002,2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
-# Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
-# Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013.
-# Jure Repinc <jlp@holodeck1.com>, 2006, 2012.
+# SPDX-FileCopyrightText: 2000 Marko Samastur <markos@elite.org>.
+# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005 Gregor Rakar <gregor.rakar@kiss.si>
+# SPDX-FileCopyrightText: 2002,2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013 Andrej Vernekar <andrej.vernekar@gmail.com>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013 Andrej Vernekar <andrej.vernekar@moj.net>
+# SPDX-FileCopyrightText: 2012, 2013 Andrej Mernik <andrejm@ubuntu.si>
+# SPDX-FileCopyrightText: 2006, 2012 Jure Repinc <jlp@holodeck1.com>
 # SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2025 Matjaž Jeran <matjaz.jeran@amis.net>
-# Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022, 2023-2025.
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024, 2025 Martin Srebotnjak <miles@filmsi.net> 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: krita trunk\n"
+"Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-14 02:03+0000\n"
-"PO-Revision-Date: 2025-11-13 10:42+0100\n"
+"POT-Creation-Date: 2025-11-15 02:02+0000\n"
+"PO-Revision-Date: 2025-11-14 10:34+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -20343,8 +20343,8 @@ msgstr "Najdeno neznano vozlišče vrste »%1«!"
 msgid "No 'text' node found!"
 msgstr "Nobenega »besedilnega« vozlišča ni mogoče najti!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:403
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:858
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:407
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:862
 #: libs/psdutils/cos/psd_text_data_converter.cpp:1154
 #, kde-format
 msgid "Unknown error writing SVG text element"
@@ -66380,11 +66380,10 @@ msgstr ""
 "možno, če je predpona »U+« (npr. U+0045 najde »E«)"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Slika ni na voljo."
+msgstr "Nadomestni glifi niso na voljo."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -66419,74 +66418,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Prilagodite preoblikovanje znakov v besedilu."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:375
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Vrh besedila"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Velikost pisave"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:381
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Dno besedila"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Abecedna"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografska"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Viseča"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Sredina"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematična"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Centralna"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Višina vrstice"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Trenutna osnovnica"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -66998,7 +66997,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Odstranite vse lastnosti tipografije iz izbora."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:298
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -67009,19 +67008,19 @@ msgstr "Krita - urejanje besedila"
 msgid "SVG Text Tool"
 msgstr "Orodje za besedilo SVG"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:68
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:67
 #, kde-format
 msgctxt "@label:group"
 msgid "Create New Texts with..."
 msgstr "Ustvari nova besedila z ..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:74
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Text Properties"
 msgstr "Trenutne lastnosti besedila"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:83
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67030,19 +67029,19 @@ msgstr ""
 "Uporabite trenutne lastnosti v zloženem oknu lastnosti besedila, da "
 "ustvarite nova besedila."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:93
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
 msgstr "Izberite prednastavitev sloga"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:119
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, kde-format
 msgctxt "@label:button"
 msgid "Open Text Properties"
 msgstr "Odpri lastnosti besedila"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:131
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:130
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67051,73 +67050,73 @@ msgstr ""
 "Odprite zloženo okno Lastnosti besedila, da uredite lastnosti, kot sta "
 "velikost in slog pisave."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:141
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, kde-format
 msgctxt "@label:group"
 msgid "Options"
 msgstr "Možnosti"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:147
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, kde-format
 msgctxt "@option:check"
 msgid "Use Visual Cursor"
 msgstr "Uporabi vizualni kazalec"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:154
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
 msgstr "Uporabite vizualno zaporedje za dvosmerno besedilo."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:163
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
 msgstr "Privzeto prilepi obogateno besedilo"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:170
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:169
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
 msgstr "Ko uporabite dejanje lepljenja, vedno prilepi obogateno besedilo."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:183
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
 #, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
 msgstr "Tipografski načinn"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:193
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
 msgstr "Omogoči tipografski način."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:204
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
 msgctxt "@label:group"
 msgid "Dialogs"
 msgstr "Pogovorna okna"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:209
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "Uredi vir SVG"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:217
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
 msgstr "Uredi trenutno izbrano besedilo kot SVG XML."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:223
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:222
 #, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
 msgstr "Paleta glifov"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:231
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:230
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67127,19 +67126,19 @@ msgstr ""
 "Odprite Paleto glifov, ki omogoča dostop do alternativnih različic glifov "
 "OpenType ali Unicode ter rezpredelnice znakov."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:242
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
 msgstr "Pretvori vrsto ..."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:269
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
 msgstr "Predoblikovano"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:276
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67149,13 +67148,13 @@ msgstr ""
 "Besedilo se ne prelomi in ohrani presledke in nove vrstice. Prelom vrstice "
 "je vstavljen tako, da vrstice z ovijanjem ali umeščanjem ostanejo ločene."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:286
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
 msgstr "Znotrajvrstično prelomljeno"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:294
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67165,13 +67164,13 @@ msgstr ""
 "Besedilo se prelomi znotraj fiksne dolžine, presledki in nove vrstice se "
 "ohranijo. Nove vrstice niso odstranjene."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:301
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
 #, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
 msgstr "Vnaprej umeščeno"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:309
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -67182,19 +67181,19 @@ msgstr ""
 "Presledki in nove vrstice so strnjene. To je za povratno združljivost z SVG "
 "1.1."
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:321
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
 #, kde-format
 msgctxt "@label:group"
 msgid "Debug"
 msgstr "Razhrošči"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:327
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
 msgstr "Pokaži mejne okvire znakov"
 
-#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:337
+#: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"

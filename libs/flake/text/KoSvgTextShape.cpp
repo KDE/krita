@@ -2230,7 +2230,7 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
 
 KoShape * KoSvgTextShape::textOutline() const
 {
-    KoShape *shape;
+    KoShape *shape = nullptr;
     int currentIndex = 0;
     if (!d->result.empty()) {
         shape = d->collectPaths(this, d->result, currentIndex);

@@ -19,194 +19,206 @@
     <widget class="KisOptionButtonStrip" name="optionButtonStripToolMode" native="true"/>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Unit of width:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="unitsCombobox"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QRadioButton" name="thickGapWidthRadioButton">
-       <property name="text">
-        <string>Thick gap:</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="thickGapWidth">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="suffix">
-        <string> px</string>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>500.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>5.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>40.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QRadioButton" name="thinGapWidthRadioButton">
-       <property name="text">
-        <string>Thin gap:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="thinGapWidth">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="suffix">
-        <string> px</string>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>500.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>5.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>15.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QRadioButton" name="specialGapWidthRadioButton">
-       <property name="text">
-        <string>Special gap:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="customGapWidth">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="suffix">
-        <string> px</string>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>500.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>5.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>70.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QRadioButton" name="automaticGapWidthRadioButton">
-       <property name="text">
-        <string>Automatic</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Horizontal:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QComboBox" name="automaticHorizontalCombobox">
-       <property name="currentText">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Vertical:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QComboBox" name="automaticVerticalCombobox">
-       <property name="currentText">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Diagonal:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QComboBox" name="automaticDiagonalCombobox"/>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Angle:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="gutterWidthAngleSpinBox">
-       <property name="prefix">
-        <string/>
-       </property>
-       <property name="suffix">
-        <string>°</string>
-       </property>
-       <property name="maximum">
-        <double>45.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>2.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QLabel" name="warningLabel">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool only works on a vector layer.&lt;br/&gt;Create the first panel using any shape tool on a vector layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="gapOptionsWidget" native="true">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Unit of width:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="unitsCombobox"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="thickGapWidthRadioButton">
+        <property name="text">
+         <string>Thick gap:</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="thickGapWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="suffix">
+         <string> px</string>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>500.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>5.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>40.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="thinGapWidthRadioButton">
+        <property name="text">
+         <string>Thin gap:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="thinGapWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="suffix">
+         <string> px</string>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>500.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>5.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>15.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="specialGapWidthRadioButton">
+        <property name="text">
+         <string>Special gap:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="customGapWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="suffix">
+         <string> px</string>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>500.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>5.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>70.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QRadioButton" name="automaticGapWidthRadioButton">
+        <property name="text">
+         <string>Automatic</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="horizontalLabel">
+        <property name="text">
+         <string>Horizontal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QComboBox" name="automaticHorizontalCombobox">
+        <property name="currentText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="verticalLabel">
+        <property name="text">
+         <string>Vertical:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QComboBox" name="automaticVerticalCombobox">
+        <property name="currentText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="diagonalLabel">
+        <property name="text">
+         <string>Diagonal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QComboBox" name="automaticDiagonalCombobox"/>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="angleLabel">
+        <property name="text">
+         <string>Angle:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="gutterWidthAngleSpinBox">
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="suffix">
+         <string>°</string>
+        </property>
+        <property name="maximum">
+         <double>45.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>2.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

@@ -13,6 +13,7 @@
 
 #include "kis_types.h"
 #include "GutterWidthsConfig.h"
+#include <kis_node.h>
 
 class KisCanvasResourceProvider;
 class KoColor;
@@ -45,6 +46,9 @@ public:
 
 public Q_SLOTS:
     void unitForWidthChanged(int index);
+    void currentNodeChanged(const KisNodeSP node);
+    void modeChanged();
+    void currentWidthSystemChanged();
 
 
 private:

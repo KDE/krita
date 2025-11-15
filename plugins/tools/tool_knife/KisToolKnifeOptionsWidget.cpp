@@ -19,6 +19,9 @@
 #include <KoGroupButton.h>
 #include <KoUnit.h>
 
+#include <kis_node.h>
+#include <kis_shape_layer.h>
+
 
 Q_DECLARE_METATYPE(KisToolKnifeOptionsWidget::GapWidthType)
 
@@ -268,7 +271,7 @@ struct KisToolKnifeOptionsWidget::Private {
 
 };
 
-KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider */*provider*/, QWidget *parent, QString toolId, qreal resolution)
+KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent, QString toolId, qreal resolution)
     : QWidget(parent),
       m_d(new Private)
 {
@@ -320,6 +323,16 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
     m_d->readFromConfig(toolId);
     connect(m_d->ui->unitsCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(unitForWidthChanged(int)));
 
+    connect(provider, SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(currentNodeChanged(const KisNodeSP)));
+    connect(m_d->buttonModeAddGutter, SIGNAL(clicked()), this, SLOT(modeChanged()));
+    connect(m_d->buttonModeRemoveGutter, SIGNAL(clicked()), this, SLOT(modeChanged()));
+
+    connect(m_d->ui->automaticGapWidthRadioButton, SIGNAL(toggled(bool)), this, SLOT(currentWidthSystemChanged()));
+
+    modeChanged();
+    currentNodeChanged(provider->currentNode());
+    currentWidthSystemChanged();
+
 }
 
 
@@ -345,5 +358,66 @@ void KisToolKnifeOptionsWidget::unitForWidthChanged(int index)
 {
     QString selected = m_d->ui->unitsCombobox->itemData(index).toString();
     m_d->setUnit(selected);
+}
+
+void KisToolKnifeOptionsWidget::currentNodeChanged(const KisNodeSP node)
+{
+    ENTER_FUNCTION();
+    const KisShapeLayer *shapeLayer = qobject_cast<const KisShapeLayer*>(node.data());
+    if (!shapeLayer) {
+        m_d->ui->gapOptionsWidget->setVisible(false);
+        m_d->ui->warningLabel->setVisible(true);
+
+    } else {
+        m_d->ui->gapOptionsWidget->setVisible(true);
+        m_d->ui->warningLabel->setVisible(false);
+    }
+}
+
+void KisToolKnifeOptionsWidget::modeChanged()
+{
+    KisToolKnifeOptionsWidget::ToolMode mode = getToolMode();
+    switch(mode) {
+        case AddGutter:
+            m_d->ui->gapOptionsWidget->setEnabled(true);
+        break;
+        case RemoveGutter:
+            m_d->ui->gapOptionsWidget->setEnabled(false);
+        break;
+
+    }
+}
+
+void KisToolKnifeOptionsWidget::currentWidthSystemChanged()
+{
+
+    ENTER_FUNCTION();
+
+    GapWidthType gapConfig = m_d->getCurrentWidthType();
+    switch(gapConfig) {
+    case Thin:
+    case Thick:
+    case Special:
+        m_d->ui->automaticDiagonalCombobox->setEnabled(false);
+        m_d->ui->automaticVerticalCombobox->setEnabled(false);
+        m_d->ui->automaticHorizontalCombobox->setEnabled(false);
+        m_d->ui->gutterWidthAngleSpinBox->setEnabled(false);
+        m_d->ui->angleLabel->setEnabled(false);
+        m_d->ui->horizontalLabel->setEnabled(false);
+        m_d->ui->verticalLabel->setEnabled(false);
+        m_d->ui->diagonalLabel->setEnabled(false);
+
+        break;
+    case Automatic:
+        m_d->ui->automaticDiagonalCombobox->setEnabled(true);
+        m_d->ui->automaticVerticalCombobox->setEnabled(true);
+        m_d->ui->automaticHorizontalCombobox->setEnabled(true);
+        m_d->ui->gutterWidthAngleSpinBox->setEnabled(true);
+        m_d->ui->horizontalLabel->setEnabled(true);
+        m_d->ui->verticalLabel->setEnabled(true);
+        m_d->ui->diagonalLabel->setEnabled(true);
+        m_d->ui->angleLabel->setEnabled(true);
+        break;
+    }
 }
 

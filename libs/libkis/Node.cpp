@@ -289,10 +289,8 @@ bool Node::removeChildNode(Node *child)
 void Node::setChildNodes(QList<Node*> nodes)
 {
     if (!d->node) return;
-    KisNodeSP node = d->node->firstChild();
-    while (node) {
-        d->image->removeNode(node);
-        node = node->nextSibling();
+    while (d->node->firstChild()) {
+        d->image->removeNode(d->node->firstChild());
     }
     Q_FOREACH(Node *node, nodes) {
         d->image->addNode(node->node(), d->node);

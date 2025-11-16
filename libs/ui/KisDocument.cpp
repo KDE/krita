@@ -858,6 +858,9 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
             errorMessage = i18n("Could not start saving %1. Unknown failure has happened", job.filePath);
             errorCode = ImportExportCodes::Failure;
             break;
+        case KritaUtils::BackgroudSavingStartResult::Cancelled:
+            errorCode = ImportExportCodes::Cancelled;
+            break;
         case KritaUtils::BackgroudSavingStartResult::Success:
             // noop, not possible
             break;
@@ -1404,20 +1407,22 @@ KritaUtils::BackgroudSavingStartResult KisDocument::initiateSavingInBackground(c
     connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString, QString)),
             receiverObject, receiverMethod, Qt::UniqueConnection);
 
-    bool started =
+    KisImportExportErrorCode error =
             d->backgroundSaveDocument->startExportInBackground(actionName,
                                                                job.filePath,
                                                                job.filePath,
                                                                job.mimeType,
                                                                job.flags & KritaUtils::SaveShowWarnings,
                                                                exportConfiguration, isAdvancedExporting);
-
-    if (!started) {
+    if (!error.isOk()) {
         // the state should have been deinitialized in slotChildCompletedSavingInBackground()
         KIS_SAFE_ASSERT_RECOVER (!d->backgroundSaveDocument && !d->backgroundSaveJob.isValid()) {
             d->backgroundSaveDocument.take()->deleteLater();
             d->savingMutex.unlock();
             d->backgroundSaveJob = KritaUtils::ExportFileJob();
+        }
+        if (error.isCancelled()) {
+            return KritaUtils::BackgroudSavingStartResult::Cancelled;
         }
         return KritaUtils::BackgroudSavingStartResult::Failure;
     }
@@ -1642,7 +1647,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
     }
 }
 
-bool KisDocument::startExportInBackground(const QString &actionName,
+KisImportExportErrorCode KisDocument::startExportInBackground(const QString &actionName,
                                           const QString &location,
                                           const QString &realLocation,
                                           const QByteArray &mimeType,
@@ -1675,7 +1680,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
         }
         d->savingImage.clear();
         Q_EMIT sigBackgroundSavingFinished(initializationStatus, initializationStatus.errorMessage(), "");
-        return false;
+        return initializationStatus;
     }
 
     typedef QFutureWatcher<KisImportExportErrorCode> StatusWatcher;
@@ -1685,7 +1690,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
     connect(watcher, SIGNAL(finished()), SLOT(finishExportInBackground()));
     connect(watcher, SIGNAL(finished()), watcher, SLOT(deleteLater()));
 
-    return true;
+    return initializationStatus;
 }
 
 void KisDocument::finishExportInBackground()

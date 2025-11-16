@@ -542,7 +542,7 @@ private:
                                     const KritaUtils::ExportFileJob &job,
                                     KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting =false );
 
-    bool startExportInBackground(const QString &actionName, const QString &location,
+    KisImportExportErrorCode startExportInBackground(const QString &actionName, const QString &location,
                                  const QString &realLocation,
                                  const QByteArray &mimeType,
                                  bool showWarnings,

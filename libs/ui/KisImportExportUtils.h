@@ -32,7 +32,8 @@ enum BackgroudSavingStartResult {
     Success = 0,
     Failure = 1,
     AnotherSavingInProgress = 2,
-    ImageLockFailure = 3
+    ImageLockFailure = 3,
+    Cancelled = 4
 };
 
 Q_DECLARE_FLAGS(SaveFlags, SaveFlag)

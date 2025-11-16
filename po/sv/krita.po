@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-05 03:45+0000\n"
-"PO-Revision-Date: 2025-10-10 21:15+0200\n"
+"PO-Revision-Date: 2025-11-15 21:32+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -29002,9 +29002,7 @@ msgid "Toggle Eraser"
 msgstr "Ändra radergummi"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "Ändra förinställning av radergummi"
 

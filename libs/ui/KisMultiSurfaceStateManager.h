@@ -40,7 +40,7 @@ class KisRootSurfaceInfoProxy;
  *
  * 1) Legacy HDR mode (the one used on Windows), where the whole main
  *    window's surface is switched into the HDR space and compositing
- *    happens indide Qt
+ *    happens inside Qt
  *
  * 2) Wayland-style HDR mode, where the canvas has its own surface, which
  *    color space is managed by OS

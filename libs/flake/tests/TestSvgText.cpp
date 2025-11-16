@@ -490,7 +490,7 @@ void TestSvgText::testComplexText()
         bool dummy = false;
         QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, KoSvgTextProperties::defaultProperties(), false, dummy);
 
-        QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggresive subchunking.
+        QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggressive subchunking.
         QCOMPARE(subChunks[0].text.size(), 20);
     }
     child ++;

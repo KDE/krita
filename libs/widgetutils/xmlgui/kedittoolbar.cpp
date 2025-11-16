@@ -1592,7 +1592,7 @@ void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
         }
     });
 
-    // Optional: pre-select current icon
+    // Optional: preselect current icon
     QString currentIconName = elem.attribute(QStringLiteral("icon"));
     for (int i = 0; i < list->count(); ++i) {
         if (list->item(i)->data(Qt::UserRole).toString() == currentIconName) {

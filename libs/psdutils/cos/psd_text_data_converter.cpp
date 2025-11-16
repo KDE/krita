@@ -502,12 +502,12 @@ QString PsdTextDataConverter::stylesForPSDStyleSheet(QString &lang, QVariantHash
             continue;
         } else if (key == "/HindiNumbers") {
             // bool. Looks like this automatically selects hindi numbers for arabic. There also
-            // seems to be a more complex option to automatically have arabic numbers for hebrew, and an option for farsi numbers, but this might be a different bool alltogether.
+            // seems to be a more complex option to automatically have arabic numbers for hebrew, and an option for farsi numbers, but this might be a different bool altogether.
             unsupportedStyles << key;
             continue;
         } else if (key == "/Kashida") {
             // number, s related to drawing/inserting Kashida/Tatweel into Arabic justified text... We don't support this.
-            // options are none, short, medium, long, stylistic, indesign apparantly has a 'naskh' option, which is what toggles jalt usage.
+            // options are none, short, medium, long, stylistic, indesign apparently has a 'naskh' option, which is what toggles jalt usage.
             unsupportedStyles << key;
             continue;
         } else if (key == "/DiacriticPos") {
@@ -710,7 +710,7 @@ QString PsdTextDataConverter::stylesForPSDParagraphSheet(QVariantHash PSDParagra
             unsupportedStyles << key;
             continue;
         } else if (key == "/ConsecutiveHyphens") {
-            // maximum consequetive lines with hyphenation. 2-25
+            // maximum consecutive lines with hyphenation. 2-25
             // CSS-Text-4 hyphenate-limit-lines.
             unsupportedStyles << key;
             continue;
@@ -1705,7 +1705,7 @@ bool PsdTextDataConverter::convertToPSDTextEngineData(const QString &svgText, QR
     textFrames.append(QVariantHash({{"/Resource", newTextFrame}}));
     textObjects.append(QVariantHash({{"/Model", model}, {"/View", view}}));
 
-    // default resoure dict
+    // default resource dict
 
     textTotal = text;
 

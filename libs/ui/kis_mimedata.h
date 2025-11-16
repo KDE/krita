@@ -74,7 +74,7 @@ public:
      * clipboard or fetched from clipboard (with user selecting
      * "display" space)
      *
-     * On unmanaged compositors they should coinside with the
+     * On unmanaged compositors they should coincide with the
      * space of the display. On managed ones they should be set
      * to the default color space, e.g. sRGB.
      */

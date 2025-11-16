@@ -13,16 +13,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-15 02:02+0000\n"
-"PO-Revision-Date: 2025-11-14 05:30+0300\n"
+"POT-Creation-Date: 2025-11-16 02:00+0000\n"
+"PO-Revision-Date: 2025-11-15 14:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
-"Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2576,7 +2576,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_wires.kpp"
 msgid "Sketch wires"
-msgstr "Eskiz kabloları"
+msgstr "Eskiz telleri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20874,7 +20874,7 @@ msgstr "Seçimi Kaldır"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
+#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Katman Ekle"
@@ -21955,7 +21955,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grup"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1010
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
 #, kde-format
 msgid "File Layer"
 msgstr "Dosya Katman"
@@ -21966,7 +21966,7 @@ msgstr "Dosya Katman"
 msgid "Vector Layer"
 msgstr "Vektör Katmanı"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:725
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
 #, kde-format
 msgid "Filter Layer"
 msgstr "Süzgeç Katman"
@@ -23649,7 +23649,7 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
 #: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1183
 #: libs/ui/KisApplication.cpp:1186 libs/ui/KisApplication.cpp:1202
 #: libs/ui/KisApplication.cpp:1234 libs/ui/KisApplication.cpp:1248
@@ -33783,7 +33783,7 @@ msgstr "Süzgeç Katman Özellikleri"
 msgid "File Layer Properties"
 msgstr "Dosya Katman Özellikleri"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1018
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
 #, kde-format
 msgid "No file name specified"
 msgstr "Dosya adı belirtilmedi"
@@ -33822,23 +33822,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Dosya Katmana Dönüştür"
 
-#: libs/ui/kis_layer_manager.cc:725
+#: libs/ui/kis_layer_manager.cc:727
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Yeni Süzgeç Katman"
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
 #, kde-format
 msgid "Fill Layer"
 msgstr "Katmanı Doldur"
 
-#: libs/ui/kis_layer_manager.cc:801
+#: libs/ui/kis_layer_manager.cc:802
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Görseli Düzleştir"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:803
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -33847,7 +33847,7 @@ msgstr ""
 "Görsel, kaybedilecek gizli katmanlar içeriyor. Görseli düzleştirmek istiyor "
 "musunuz?"
 
-#: libs/ui/kis_layer_manager.cc:880
+#: libs/ui/kis_layer_manager.cc:881
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -33855,13 +33855,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Katman kilitli"
 msgstr[1] "Katmanlar kilitli"
 
-#: libs/ui/kis_layer_manager.cc:902
+#: libs/ui/kis_layer_manager.cc:903
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Katman kilitli"
 
-#: libs/ui/kis_layer_manager.cc:919
+#: libs/ui/kis_layer_manager.cc:920
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -33873,12 +33873,12 @@ msgstr ""
 "Canlandırmasız katman geçerli kareyle birleştirilir. Bunu klibin tamamıyla "
 "birleştirmek için en az bir kare oluşturun"
 
-#: libs/ui/kis_layer_manager.cc:968
+#: libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Görünmez Grupları Dönüştür"
 
-#: libs/ui/kis_layer_manager.cc:971
+#: libs/ui/kis_layer_manager.cc:972
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Yalnızca En Üst Düzey Grupları Dışa Aktar"
@@ -58635,7 +58635,7 @@ msgstr "Miktar"
 #: plugins/paintops/deform/wdgdeformoptions.ui:39
 #, kde-format
 msgid "Deform Mode"
-msgstr "Bozma Kipi"
+msgstr "Deforme Kipi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, growBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:139
@@ -58692,7 +58692,7 @@ msgstr "Mercek Uzaklaştır"
 #, kde-format
 msgctxt "Rearrange the positions of the pixels under the cursor"
 msgid "Color Deformation"
-msgstr "Renk Deformesi"
+msgstr "Renk Deformasyonu"
 
 #: plugins/paintops/deform/KisDeformOptionData.cpp:43
 #, kde-format
@@ -58710,7 +58710,7 @@ msgstr "Deforme Seçenekleri"
 #, kde-format
 msgctxt "Rearrange the pixels positions under the cursor"
 msgid "Color deformation"
-msgstr "Renk deformesi"
+msgstr "Renk deformasyonu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lensOutBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:93
@@ -60203,7 +60203,7 @@ msgstr "%1 ms"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fuzzy Dab"
-msgstr "Bulanık Sürüş"
+msgstr "Bulanık Dokunuş"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:12
 #, kde-format
@@ -60437,7 +60437,7 @@ msgstr "Eş Yönlü Boşluklandırma"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
 msgid "Update Between Dabs"
-msgstr "Sürüşler Arasında Güncelle"
+msgstr "Dokunuşlar Arasında Güncelle"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
@@ -60659,7 +60659,7 @@ msgstr "Hız"
 #, kde-format
 msgctxt "Option Category"
 msgid "Dabs"
-msgstr "Sürüşler"
+msgstr "Dokunuşlar"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
 #, kde-format
@@ -60756,12 +60756,12 @@ msgstr "Yumuşatma"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, kde-format
 msgid "Elliptical Dab Angle"
-msgstr "Eliptik Sürüş Açısı"
+msgstr "Eliptik Dokunuş Açısı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:67
 #, kde-format
 msgid "Elliptical Dab Ratio"
-msgstr "Eliptik Sürüş Oranı"
+msgstr "Eliptik Dokunuş Oranı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:77
 #, kde-format
@@ -60857,17 +60857,17 @@ msgstr "Rastgele Ofset; Anında Önizleme’yi devre dışı bırakmayı düşü
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, kde-format
 msgid "Dabs Per Basic Radius"
-msgstr "Temel Yarıçap Başına Sürüş"
+msgstr "Temel Yarıçap Başına Dokunuş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:259
 #, kde-format
 msgid "Dabs Per Actual Radius"
-msgstr "Asıl Yarıçap Başına Sürüş"
+msgstr "Asıl Yarıçap Başına Dokunuş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:268
 #, kde-format
 msgid "Dabs per Second"
-msgstr "Saniye Başına Sürüş"
+msgstr "Saniye Başına Dokunuş"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:278
 #, kde-format
@@ -60882,7 +60882,7 @@ msgstr "Matlık Çarpma"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
-msgstr "Sürüş başına yavaş izleme"
+msgstr "Dokunuş başına yavaş izleme"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
@@ -65754,7 +65754,7 @@ msgstr "Kütle:"
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
 #, kde-format
 msgid "Drag:"
-msgstr "Direnç:"
+msgstr "Sürtünme:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:190

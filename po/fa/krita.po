@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-15 02:02+0000\n"
+"POT-Creation-Date: 2025-11-16 02:00+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -21034,7 +21034,7 @@ msgstr "از گزینش خارج کردن"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
+#: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:771
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -22179,7 +22179,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "گروه:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1010
+#: libs/impex/KisExportCheckRegistry.cpp:113 libs/ui/kis_layer_manager.cc:1011
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "گالری &پالایه‌ها‌"
@@ -22190,7 +22190,7 @@ msgstr "گالری &پالایه‌ها‌"
 msgid "Vector Layer"
 msgstr "برش لایه"
 
-#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:725
+#: libs/impex/KisExportCheckRegistry.cpp:117 libs/ui/kis_layer_manager.cc:727
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "گالری &پالایه‌ها‌"
@@ -23897,7 +23897,7 @@ msgstr "پرونده‌های متن:"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
 #: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1183
 #: libs/ui/KisApplication.cpp:1186 libs/ui/KisApplication.cpp:1202
 #: libs/ui/KisApplication.cpp:1234 libs/ui/KisApplication.cpp:1248
@@ -33839,7 +33839,7 @@ msgstr "ویژگیهای لایه"
 msgid "File Layer Properties"
 msgstr "ویژگیهای لایه"
 
-#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1018
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1019
 #, kde-format
 msgid "No file name specified"
 msgstr ""
@@ -33878,30 +33878,30 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "تبدیل لایه جاری از"
 
-#: libs/ui/kis_layer_manager.cc:725
+#: libs/ui/kis_layer_manager.cc:727
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "نقاب پالایه..."
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:775 libs/ui/kis_mimedata.cpp:357
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "گالری &پالایه‌ها‌"
 
-#: libs/ui/kis_layer_manager.cc:801
+#: libs/ui/kis_layer_manager.cc:802
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "تخت کردن تصویر"
 
-#: libs/ui/kis_layer_manager.cc:802
+#: libs/ui/kis_layer_manager.cc:803
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "تصویر حاوی لایه‌های مخفی است که از دست می‌روند."
 
-#: libs/ui/kis_layer_manager.cc:880
+#: libs/ui/kis_layer_manager.cc:881
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -33909,13 +33909,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "اندازه لایه"
 msgstr[1] ""
 
-#: libs/ui/kis_layer_manager.cc:902
+#: libs/ui/kis_layer_manager.cc:903
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "اندازه لایه"
 
-#: libs/ui/kis_layer_manager.cc:919
+#: libs/ui/kis_layer_manager.cc:920
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -33925,12 +33925,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:968
+#: libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:971
+#: libs/ui/kis_layer_manager.cc:972
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""

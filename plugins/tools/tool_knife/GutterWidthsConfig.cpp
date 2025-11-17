@@ -34,8 +34,6 @@ bool inRangeWrapped(qreal value, qreal min, qreal max, qreal rangeMax) {
     min = KisAlgebra2D::wrapValue(min, 0.0, rangeMax);
     max = KisAlgebra2D::wrapValue(max, 0.0, rangeMax);
 
-    qCritical() << "in range wrapped: " << ppVar(value) << ppVar(min) << ppVar(max) << ppVar(rangeMax);
-
     if (min > max) {
         return value > min || value < max; // range is on the edges instead of in the middle
     } else {
@@ -55,23 +53,16 @@ qreal convertToPixels(KoUnit baseUnit, qreal resolution, qreal length)
 qreal GutterWidthsConfig::widthForAngleInPixels(qreal lineAngleDegrees)
 {
     qreal angleMax = 360;
-    qCritical() << "~~~ Searching for line angle: " << lineAngleDegrees;
-    qCritical() << "~~~ Values for gutters are: " << horizontal << vertical << diagonal << "with angle diff = " << angleDegrees;
 
     if (inRangeWrapped(lineAngleDegrees, -angleDegrees, angleDegrees, angleMax)) {
-        qCritical() << "horizontal 1";
         return convertToPixels(baseUnit, resolution, horizontal);
     } else if (inRangeWrapped(lineAngleDegrees, 180-angleDegrees, 180+angleDegrees, angleMax)) {
-        qCritical() << "horizontal 2";
         return convertToPixels(baseUnit, resolution, horizontal);
     } else if (inRangeWrapped(lineAngleDegrees, 90-angleDegrees, 90+angleDegrees, angleMax)) {
-        qCritical() << "vertical 1";
         return convertToPixels(baseUnit, resolution, vertical);
     } else if (inRangeWrapped(lineAngleDegrees, 270-angleDegrees, 270+angleDegrees, angleMax)) {
-        qCritical() << "vertical 2";
         return convertToPixels(baseUnit, resolution, vertical);
     } else {
-        qCritical() << "diagonal";
         return convertToPixels(baseUnit, resolution, diagonal);
     }
 }

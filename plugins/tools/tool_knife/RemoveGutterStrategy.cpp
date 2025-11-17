@@ -57,24 +57,13 @@ void RemoveGutterStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Key
     l = tool()->canvas()->viewConverter()->viewToDocument().map(l);
     dirtyRect = kisGrowRect(dirtyRect, l.length()); // twice as much as it should need to account for lines showing the effect
 
-    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
-    //dirtyRect = kisCanvas->viewManager()->
-    //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
-    //qCritical() << "And the dirty rect is: " << dirtyRect;
-
     QRectF accumulatedWithPrevious = m_previousLineDirtyRect | dirtyRect;
-
-    //KisAlgebra2D::accumulateBounds(dirtyRect, &accumulatedWithPrevious);
-    //KisAlgebra2D::accumulateBounds(dirtyRect.topLeft(), &accumulatedWithPrevious);
-    //KisAlgebra2D::accumulateBounds(dirtyRect.bottomRight(), &accumulatedWithPrevious);
-
-    //QRectF rect = dirtyRect + m_d->previousLineDirtyRect;
 
     tool()->canvas()->updateCanvas(accumulatedWithPrevious);
     m_previousLineDirtyRect = dirtyRect;
 }
 
-
+#ifdef KNIFE_DEBUG
 void convertShapeToDebugArray(const QPainterPath& shape) {
     // useful to use with Geogebra
     // TODO: to remove later
@@ -103,26 +92,10 @@ void convertShapeToDebugArray(const QLineF& line) {
     qCritical() << line.p2().x() << "\t" << line.p2().y();
 
 }
+#endif
 
 void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
-
-    // so, first find all the shapes whose bounding rect is nonempty when intersected with the line bounding rect
-    // then for every one of them find a path that's crossing the mouse line
-    // save info for later
-    // ensure you have only two paths belonging to two different shapes
-    // WAIT
-    // what about the situation o T
-    // There are three (four?) cases. Gotta look a the picture to understand it!
-    // write it down later, after implementing
-
-
-    // also: when moving the gutter or gutter end, remember about keeping the gutter of the same
-
-
-    qCritical() << "vvvvvvvvvvvvvvvvvvvvvvvvv REMOVING A GUTTER vvvvvvvvvvvvvvvvvvvvvvvvv";
-
-
     tool()->canvas()->updateCanvas(m_previousLineDirtyRect);
 
 
@@ -132,8 +105,6 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     QList<QPainterPath> srcOutlines;
     QList<QPainterPath> srcOutlinesOutside;
-
-    //QRectF outlineRect;
 
     if (m_allShapes.length() == 0) {
         qCritical() << "No shapes on the layer";
@@ -149,17 +120,13 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QLineF mouseLine = QLineF(m_startPoint, m_endPoint);
     QRectF lineRect = KisAlgebra2D::createRectFromCorners(m_startPoint, m_endPoint);
 
-    qCritical() << "Line and line rect before boolean trans: " << mouseLine << lineRect;
     mouseLine = booleanWorkaroundTransform.map(mouseLine);
-    lineRect = KisAlgebra2D::createRectFromCorners(mouseLine.p1(), mouseLine.p2());
+    lineRect = KisAlgebra2D::createRectFromCorners(mouseLine);
 
-
-    qCritical() << "Line and line rect after boolean trans: " << mouseLine << lineRect;
-    qCritical() << "Line:";
+#ifdef KNIFE_DEBUG
     convertShapeToDebugArray(mouseLine);
-    qCritical() << "Rect:";
     convertShapeToDebugArray(lineRect);
-    qCritical() << "end.";
+#endif
 
 
     QList<int> indexes;
@@ -171,10 +138,9 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             booleanWorkaroundTransform.map(
             shape->absoluteTransformation().map(
                 shape->outline()));
-
-        qCritical() << "> Selected path (in boolean): ";
+#ifdef KNIFE_DEBUG
         convertShapeToDebugArray(outlineHere);
-
+#endif
         if (outlineHere.boundingRect().intersects(lineRect)) {
             srcOutlines << outlineHere;
             indexes << i;
@@ -186,7 +152,6 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
     if (srcOutlines.isEmpty()) {
-        qCritical() << "The list of possible shapes is empty";
         return;
     }
 
@@ -213,7 +178,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
     if (shapeNewIndexes.length() != 2) {
-
+#ifdef KNIFE_DEBUG
         qCritical() << "Shape indexes count isn't correct: " << ppVar(shapeNewIndexes.length()) << ppVar(lineSegmentIndexes.length());
         qCritical() << "Mouse line in used coordinates: " << mouseLine;
         qCritical() << "Number of shapes even considered: " << srcOutlines.length();
@@ -235,9 +200,6 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             qCritical() << "Line index: " << lineSegmentIndexes[i] << " meaning it's: " << srcOutlines[index].elementAt(KisAlgebra2D::wrapValue(lineSegmentIndexes[i], 0, srcOutlines[index].elementCount()))
                         << srcOutlines[index].elementAt(KisAlgebra2D::wrapValue(lineSegmentIndexes[i] + 1, 0, srcOutlines[index].elementCount()));
         }
-
-        qCritical() << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ END OF REMOVING A GUTTER, UNSUCCESSFUL";
-
         // TODO: this if should end here; code below adds a debug line showing the mouse line
 
         QPainterPath newLineShape = QPainterPath();
@@ -257,11 +219,13 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         tool()->canvas()->shapeController()->addShapeDirect(newLineShapeToAdd, m_allShapes[0]->parent(), cmd);
         tool()->canvas()->addCommand(cmd);
 
+#endif
+
         return;
     }
 
-    // KisAlgebra2D::getLineSegmentCrossingLineIndexes(QLineF const&, QPainterPath const&)
 
+#ifdef KNIFE_DEBUG
     qCritical() << "Found two shapes.";
     qCritical() << "Shape 1:";
     convertShapeToDebugArray(srcOutlines[shapeNewIndexes[0]]);
@@ -270,27 +234,20 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     qCritical() << "Shape 2:";
     convertShapeToDebugArray(srcOutlines[shapeNewIndexes[1]]);
     qCritical() << ppVar(srcOutlines[shapeNewIndexes[1]].toFillPolygon());
-
+#endif
 
 
 
 
     QPainterPath result = KisAlgebra2D::removeGutterSmart(srcOutlines[shapeNewIndexes[0]], lineSegmentIndexes[0], srcOutlines[shapeNewIndexes[1]], lineSegmentIndexes[1], shapeNewIndexes[0]==shapeNewIndexes[1]);
 
+#ifdef KNIFE_DEBUG
     qCritical() << "Finally got a result:";
     convertShapeToDebugArray(result);
     qCritical() << ppVar(result.toFillPolygon());
+#endif
 
     QList<KoShape*> resultSelectedShapes;
-
-    qCritical() << "Indexes that are supposed to be left:";
-    Q_FOREACH(int index, indexesOutside) {
-        qCritical() << index;
-    }
-    qCritical() << "End.";
-    qCritical() << "Indexes that compose the result shape: " << shapeOrigIndexes[0] << shapeOrigIndexes[1];
-    qCritical() << "All indexes are up to: " << m_allShapes.length();
-
 
     Q_FOREACH(int index, indexesOutside) {
         if (isSelected[index]) {
@@ -340,20 +297,9 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
 
-
-
     tool()->canvas()->shapeController()->removeShapes(shapesToRemove, cmd);
-
     new KoKeepShapesSelectedCommand({}, resultSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
-
-
     tool()->canvas()->addCommand(cmd);
-
-
-
-    qCritical() << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ END OF REMOVING A GUTTER, it did happen, whether successful or not... ";
-
-
 
 
 }

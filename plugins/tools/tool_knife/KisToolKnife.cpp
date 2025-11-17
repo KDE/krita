@@ -50,10 +50,7 @@ struct KisToolKnife::Private {
     KisToolKnifeOptionsWidget *optionsWidget = nullptr;
     QPointF startPoint = QPointF(0, 0);
     QPointF endPoint = QPointF(0, 0);
-    //QPointF mousePoint = QPointF(0, 0);
     QRectF previousLineDirtyRect = QRectF();
-    //QRectF previousMouseDirtyRect = QRectF();
-
 };
 
 
@@ -62,7 +59,6 @@ KisToolKnife::KisToolKnife(KoCanvasBase * canvas)
       m_d(new Private)
 {
     setObjectName("tool_knife");
-    //useCursor(KisCursor::arrowCursor());
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
 }
@@ -71,38 +67,6 @@ KisToolKnife::~KisToolKnife()
 {
     m_d->optionsWidget = nullptr;
 }
-
-void drawCoordsStartFrom(QPainter &painter, QTransform transform, QColor color)
-{
-    painter.save();
-    QPen pen = QPen(QBrush(color), 5, Qt::SolidLine);
-    painter.setPen(pen);
-    painter.setTransform(transform * painter.transform());
-    painter.drawLine(QPointF(0, 0), QPointF(100, 0));
-    painter.drawLine(QPointF(0, 0), QPointF(0, 100));
-    painter.drawLine(QPointF(0, 100), QPointF(5, 100));
-    painter.drawLine(QPointF(100, 0), QPointF(100, 5));
-
-    painter.drawArc(QRect(-50, -50, 100, 100), 0, -16*90);
-
-    painter.restore();
-}
-
-
-void drawCoordsStart(QPainter &painter, const KoViewConverter &converter)
-{
-    //painter.drawLine(QPointF(0, 0), QPointF(100, 0));
-    //painter.drawLine(QPointF(0, 0), QPointF(0, 100));
-    //painter.drawArc(QRect(-50, -50, 100, 100), 0, -16*90);
-
-    drawCoordsStartFrom(painter, QTransform(), Qt::red);
-    drawCoordsStartFrom(painter, converter.documentToView(), Qt::blue); // < ten ma sens w painterze
-    drawCoordsStartFrom(painter, converter.viewToDocument(), Qt::green);
-
-
-
-}
-
 
 void paintSelectedEdge(QPainter &painter, const KoViewConverter &converter, const QLineF &lineSegment)
 {
@@ -188,7 +152,8 @@ void KisToolKnife::paint(QPainter &painter, const KoViewConverter &converter)
     KoInteractionTool::paint(painter, converter);
 
 
-    bool paintSelection = false;
+#ifdef KNIFE_DEBUG
+    bool paintSelection = true;
     if (paintSelection) {
 
         KIS_SAFE_ASSERT_RECOVER_RETURN(canvas());
@@ -214,55 +179,14 @@ void KisToolKnife::paint(QPainter &painter, const KoViewConverter &converter)
 
         }
     }
-
+#endif
 
 
 }
 
 void KisToolKnife::activate(const QSet<KoShape *> &shapes)
 {
-    // Questions to Dmitry or Wolthera:
-    // + 1. Which tool base should it be based on?
-    // + 2. Which functions should I reimplement: mouse events, or beingPrimaryAction, or a strategy?
-    // - 3. How to get shapes from the layer? I assume that it might happen that no shape is selected, in which case
-    //      it should use all shapes on the layer as potential input
-    // - 4. How to get points from that shape? I noticed I have KoPathShape* sometimes, and that has (protected) subpaths,
-    //      but I can access segments I think? And outline() is useful for now for debug. But how to do it properly?
-    // 5. How to get all shapes from the layer, not just selected ones? Or how to select all shapes?
-    // 6. Can I make three files out of kis_algebra_2d? also what about kis_global? -> it's a mess and it's difficult to find things
-    // 7. How to get a cursor? I knew how to in a different tool class, but not here...
-
-    //canvas()->selectedShapesProxy();
-    //this->set
-
-
-
     KoInteractionTool::activate(shapes);
-    Q_FOREACH(KoShape* shape, shapes) {
-        if (shape) {
-            qCritical() << "We've got a shape!";
-            KoPathShape* pathShape = dynamic_cast<KoPathShape *>(shape);
-            qCritical() << "Is it a path shape? " << pathShape;
-            if (pathShape) {
-                qCritical() << "Let's see the points:";
-                //qCritical() << pathShape->isClosedSubpath(0);
-                //pathShape->subpaths();
-                // ok, subpaths are protected...
-
-                //temporary:
-                QPainterPath pp = pathShape->outline();
-                //qCritical() << pp.;
-                //Q_FOREACH(QPainterPath::Element element, pp.elem)
-                for (int i = 0; i < pp.elementCount(); i++) {
-                    qCritical() << "Point at: " << pp.elementAt(i).x << pp.elementAt(i).y;
-                }
-
-                //Q_FOREACH(QPointF& p, pathShape.)
-            }
-
-        }
-    }
-
     useCursor(KisCursor::arrowCursor());
 
 }
@@ -270,12 +194,6 @@ void KisToolKnife::activate(const QSet<KoShape *> &shapes)
 void KisToolKnife::deactivate()
 {
     KoInteractionTool::deactivate();
-}
-
-void KisToolKnife::mousePressEventBackup(KoPointerEvent *event)
-{
-    m_d->startPoint = event->point;//canvas()->viewConverter()->viewToDocument(event->pos());
-    m_d->endPoint = event->point;//canvas()->viewConverter()->viewToDocument(event->pos());
 }
 
 void KisToolKnife::mousePressEvent(KoPointerEvent *event)
@@ -296,42 +214,21 @@ void KisToolKnife::mouseMoveEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseMoveEvent(event);
 
-    //qCritical() << "mouse move event button flags: " << event->buttons() << ", " << event->button();
     if (event->buttons().testFlag(Qt::MouseButton::LeftButton)) {
 
-        //m_d->endPoint = canvas()->viewConverter()->viewToDocument(event->pos());
         m_d->endPoint = event->point;
-        //qCritical() << "Now supposedly drawing a line between " << m_d->startPoint << " to " << m_d->endPoint;
         QRectF dirtyRect;
         KisAlgebra2D::accumulateBounds(m_d->startPoint, &dirtyRect);
         KisAlgebra2D::accumulateBounds(m_d->endPoint, &dirtyRect);
-        //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
-        //qCritical() << "And the dirty rect is: " << dirtyRect;
 
         QRectF accumulatedWithPrevious = m_d->previousLineDirtyRect;
         accumulatedWithPrevious |= dirtyRect;
-        //KisAlgebra2D::accumulateBounds(dirtyRect, &accumulatedWithPrevious);
-        //KisAlgebra2D::accumulateBounds(dirtyRect.topLeft(), &accumulatedWithPrevious);
-        //KisAlgebra2D::accumulateBounds(dirtyRect.bottomRight(), &accumulatedWithPrevious);
-
-        //QRectF rect = dirtyRect + m_d->previousLineDirtyRect;
 
         canvas()->updateCanvas(accumulatedWithPrevious);
         m_d->previousLineDirtyRect = dirtyRect;
 
-    } else {
-        //m_d->mousePoint = event->point;
-        //QRectF dirtyRect;
-        //KisAlgebra2D::accumulateBounds(m_d->mousePoint + QPointF(-2, -2), &dirtyRect);
-        //KisAlgebra2D::accumulateBounds(m_d->mousePoint + QPointF(2, 2), &dirtyRect);
-
-        //canvas()->updateCanvas(dirtyRect);
-        //dirtyRect = canvas()->viewConverter()->viewToD(dirtyRect);
-
-        //canvas()->updateCanvas(dirtyRect);
-
-        //qCritical() << "Changing mouse point to " << event->point << " as opposed to " << event->pos();
     }
+
     repaintDecorations();
 }
 
@@ -341,28 +238,18 @@ void KisToolKnife::mouseReleaseEvent(KoPointerEvent *event)
 
     m_d->endPoint = event->point;
 
-    //qCritical() << "Now, AFTER release, supposedly drawing a line between " << m_d->startPoint.x() <<  ", " << m_d->startPoint.y() << " to " << m_d->endPoint.x() << "," << m_d->endPoint.y();
     QRectF dirtyRect;
     KisAlgebra2D::accumulateBounds(m_d->startPoint, &dirtyRect);
     KisAlgebra2D::accumulateBounds(m_d->endPoint, &dirtyRect);
 
     QRectF accumulatedWithPrevious = m_d->previousLineDirtyRect | dirtyRect;
-    //KisAlgebra2D::accumulateBounds(dirtyRect.topLeft(), &accumulatedWithPrevious);
-    //KisAlgebra2D::accumulateBounds(dirtyRect.bottomRight(), &accumulatedWithPrevious);
-
-    //KisAlgebra2D::accumulateBounds(dirtyRect, &accumulatedWithPrevious);
 
     canvas()->updateCanvas(accumulatedWithPrevious);
     m_d->previousLineDirtyRect = dirtyRect;
-    //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
-
-    //canvas()->updateCanvas(dirtyRect);
 }
 
 KoInteractionStrategy *KisToolKnife::createStrategy(KoPointerEvent *event)
 {
-    qCritical() << "Creating a strategy for " << event->point << event->buttons();
-    //KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = canvas()->shapeManager()->shapes();
 
     if (m_d->optionsWidget->getToolMode() == KisToolKnifeOptionsWidget::ToolMode::AddGutter) {

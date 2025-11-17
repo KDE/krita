@@ -32,12 +32,8 @@ CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *
     , m_endPoint(startPoint)
     , m_width(width)
 {
-    qCritical() << "Creating a strategy";
-
     m_selectedShapes = selection->selectedEditableShapes();
-    qCritical() << "Amount of selected shapes: " << m_selectedShapes.length();
     m_allShapes = shapes;
-    qCritical() << "Amount of all shapes: " << m_allShapes.length();
 }
 
 CutThroughShapeStrategy::~CutThroughShapeStrategy()
@@ -76,24 +72,12 @@ QPointF snapEndPoint(const QPointF &startPoint, const QPointF &mouseLocation, Qt
 void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
     m_endPoint = snapEndPoint(m_startPoint, mouseLocation, modifiers);
-    //qCritical() << "Now supposedly drawing a line between " << m_d->startPoint << " to " << m_d->endPoint;
     QRectF dirtyRect;
     KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);
     KisAlgebra2D::accumulateBounds(m_endPoint, &dirtyRect);
     dirtyRect = kisGrowRect(dirtyRect, gutterWidthInDocumentCoordinates(calculateLineAngle(m_startPoint, m_endPoint))); // twice as much as it should need to account for lines showing the effect
 
-    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
-    //dirtyRect = kisCanvas->viewManager()->
-    //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
-    //qCritical() << "And the dirty rect is: " << dirtyRect;
-
     QRectF accumulatedWithPrevious = m_previousLineDirtyRect | dirtyRect;
-
-    //KisAlgebra2D::accumulateBounds(dirtyRect, &accumulatedWithPrevious);
-    //KisAlgebra2D::accumulateBounds(dirtyRect.topLeft(), &accumulatedWithPrevious);
-    //KisAlgebra2D::accumulateBounds(dirtyRect.bottomRight(), &accumulatedWithPrevious);
-
-    //QRectF rect = dirtyRect + m_d->previousLineDirtyRect;
 
     tool()->canvas()->updateCanvas(accumulatedWithPrevious);
     m_previousLineDirtyRect = dirtyRect;
@@ -129,8 +113,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
     if (outlineRect.isEmpty()) {
-
-        qCritical() << "The outline rect is empty";
+        //qCritical() << "The outline rect is empty";
         return;
     }
 
@@ -143,19 +126,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    qCritical() << "line angle = " << calculateLineAngle(m_startPoint, m_endPoint);
     qreal gutterWidth = gutterWidthInDocumentCoordinates(calculateLineAngle(m_startPoint, m_endPoint));
 
-
     QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, gutterWidth/2);
-
-    qCritical() << "############ Are those lines correct? " << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1])
-            << KisAlgebra2D::pointToLineDistSquared(gapLines[1].p1(), gapLines[0]) << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLine);
-    //qCritical() << "Should be: " << pow2(gapWidth/2) << "or" << pow2(gapWidth);
-
-
-
-    //KIS_ASSERT(qFuzzyCompare(KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1]), pow2(m_width)) && "Distance doesn't match");
 
     gapLine = booleanWorkaroundTransform.map(gapLine);
     gapLines[0] = booleanWorkaroundTransform.map(gapLines[0]);
@@ -179,9 +152,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
     if (leftLine.length() == 0 || rightLine.length() == 0) {
-        qCritical() << "No cutting at all, because one of the lines has length 0. Line is: " << leftLine << rightLine << " and the outline rect is: " << outlineRect << ppVar(outlineRectBigger);
-        qCritical() << "^ No cutting at all... line was: " << gapLine << "and the other were: " << gapLines[0] << gapLines[1];
-
         KIS_SAFE_ASSERT_RECOVER_RETURN(gapLine.length() != 0 && gapLines[0].length() != 0 && gapLines[1].length() != 0 && "Original gap lines shouldn't be empty at this point");
         // looks like *all* shapes need to be cut out
 
@@ -198,11 +168,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLineLong, leftLineLong);
     QPainterPath leftOpposite = pathsOpposite[0];
     QPainterPath rightOpposite = pathsOpposite[1];
-
-
-
-    //QPainterPath dstOutline;
-    //QList<QPainterPath> dstOutlines;
 
     QList<KoShape*> newSelectedShapes;
 
@@ -246,8 +211,8 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         bool crossesGapLine = KisAlgebra2D::getLineSegmentCrossingLineIndexes(leftLine, srcOutlines[i]).count() > 0
                 || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutlines[i]).count() > 0;
         if (!containsGapLinePoint && !crossesGapLine) {
-            //
-            qCritical() << "it doesn't cross the line!";
+
+            //qCritical() << "it doesn't cross the line!";
             if (wasSelected) {
                 newSelectedShapes << referenceShape;
             }
@@ -373,11 +338,6 @@ void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &co
     pen.setColor(semitransparentGray);
 
     painter.setPen(pen);
-
-    //QLineF gutterLineExtended1 = gutterLine1;
-    //QLineF gutterLineExtended2 = gutterLine2;
-    //KisAlgebra2D::cropLineToRect(gutterLineExtended1, painter.viewport(), true, true);
-    //KisAlgebra2D::cropLineToRect(gutterLineExtended2, painter.viewport(), true, true);
 
     painter.drawLine(gutterCenterLine);
 

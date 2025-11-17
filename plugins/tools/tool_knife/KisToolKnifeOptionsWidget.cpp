@@ -39,7 +39,6 @@ struct KisToolKnifeOptionsWidget::Private {
     qreal resolution {1.0};
 
     QString toolId {""};
-    //KoGroupButton* m_buttonModeAddGutter {nullptr};
 
 
 
@@ -362,7 +361,6 @@ void KisToolKnifeOptionsWidget::unitForWidthChanged(int index)
 
 void KisToolKnifeOptionsWidget::currentNodeChanged(const KisNodeSP node)
 {
-    ENTER_FUNCTION();
     const KisShapeLayer *shapeLayer = qobject_cast<const KisShapeLayer*>(node.data());
     if (!shapeLayer) {
         m_d->ui->gapOptionsWidget->setVisible(false);
@@ -390,8 +388,6 @@ void KisToolKnifeOptionsWidget::modeChanged()
 
 void KisToolKnifeOptionsWidget::currentWidthSystemChanged()
 {
-
-    ENTER_FUNCTION();
 
     GapWidthType gapConfig = m_d->getCurrentWidthType();
     switch(gapConfig) {

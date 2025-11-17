@@ -7,20 +7,21 @@
 # Alvin Wong <alvin@alvinhc.com>, 2020, 2021, 2022, 2023.
 # BiseChen <bise.chen@gmail.com>, 2021.
 # Yi-Jyun Pan <pan93412@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-05 03:45+0000\n"
-"PO-Revision-Date: 2023-12-07 00:36+0800\n"
-"Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"POT-Creation-Date: 2025-11-17 16:18+0000\n"
+"PO-Revision-Date: 2025-11-17 18:43+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -28766,9 +28767,7 @@ msgid "Toggle Eraser"
 msgstr "切換橡皮刷"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "切換橡皮刷預設"
 
@@ -55841,11 +55840,11 @@ msgstr "確定要儲存目前檔案嗎？"
 
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:22
 msgid "Debug"
-msgstr "調校"
+msgstr "除錯"
 
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:23
 msgid "Debug Ctrl+D"
-msgstr "調校 Ctrl+D"
+msgstr "除錯 Ctrl+D"
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:20
 msgid "New"

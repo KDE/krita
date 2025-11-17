@@ -7,21 +7,21 @@
 # Alvin Wong <alvin@alvinhc.com>, 2020, 2021, 2022, 2023.
 # BiseChen <bise.chen@gmail.com>, 2021.
 # Yi-Jyun Pan <pan93412@gmail.com>, 2022.
+# SPDX-FileCopyrightText: 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 09:00+0000\n"
-"PO-Revision-Date: 2023-11-25 10:03+0000\n"
-"Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
-"Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
-"krita/zh_Hant/>\n"
+"PO-Revision-Date: 2025-11-17 18:44+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7667,20 +7667,17 @@ msgstr "將包含多個子路徑的物件分割為多個物件"
 
 #. i18n: context: text @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:301
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Preformatted"
-msgstr "轉成形狀"
+msgstr "將文字轉為手動斷行"
 
 #. i18n: context: iconText @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:302
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgctxt "action"
 msgid "Preformatted"
-msgstr "效能"
+msgstr "手動斷行"
 
 #. i18n: context: toolTip @ Action (text_type_preformatted), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:303
@@ -7690,54 +7687,45 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
+"文字不會自動換行，並會保留文字內的空格和換行符號。會插入換行來讓自動換行或定"
+"位的行仍然維持分隔。"
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "轉成形狀"
+msgstr "將文字轉為文內斷行"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
-msgstr "正弦波紋"
+msgstr "文內斷行"
 
 #. i18n: context: toolTip @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:313
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "Text wraps inside a fixed length, spaces and new lines are preserved. New "
 "lines are not removed."
-msgstr ""
-"<html><head/><body><p>使用數位板的壓感筆傾斜度決定法線。</p></body></html>"
+msgstr "文字在固定長度自動換行，同時保留空格和換行符號。換行符號不會被移除。"
 
 #. i18n: context: text @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:321
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Pre-positioned"
-msgstr "轉成形狀"
+msgstr "將文字轉為預先決定位置"
 
 #. i18n: context: iconText @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:322
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "action"
 msgid "Pre-positioned"
-msgstr "位置"
+msgstr "預先決定位置"
 
 #. i18n: context: toolTip @ Action (text_type_pre_positioned), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:323
@@ -24307,11 +24295,10 @@ msgid "Font Families"
 msgstr "字型系列"
 
 #: libs/resources/KisResourceTypes.cpp:60
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "樣式表"
+msgstr "樣式預設檔"
 
 #: libs/resources/KisStorageModel.cpp:465
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -24423,10 +24410,9 @@ msgstr "標籤檔案名稱"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:107
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource is broken!"
-msgstr "資源檢視"
+msgstr "資源已損毀！"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:112
 #, kde-format
@@ -33610,9 +33596,7 @@ msgid "Toggle Eraser"
 msgstr "切換橡皮刷"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Eraser Preset"
 msgstr "切換橡皮刷預設"
 
@@ -34874,10 +34858,9 @@ msgid "Layer styles"
 msgstr "圖層樣式"
 
 #: libs/ui/KisApplication.cpp:457
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgid "Style Presets"
-msgstr "樣式表"
+msgstr "樣式預設檔"
 
 #: libs/ui/KisApplication.cpp:469
 #, kde-format
@@ -39462,10 +39445,9 @@ msgid "Down"
 msgstr "下移"
 
 #: libs/ui/widgets/KisDockerHud.cpp:60
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "設定 Krita"
+msgstr "設定工具面板"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
@@ -39475,11 +39457,10 @@ msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "設定 Krita"
+msgstr "設定 %1 工具面板"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, fuzzy, kde-format
@@ -45365,11 +45346,10 @@ msgid "Percentage (%)"
 msgstr "百分比 (%)"
 
 #: plugins/dockers/textproperties/CssStylePresetEditDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "編輯預設"
+msgstr "編輯樣式預設檔"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, fuzzy, kde-format
@@ -45704,11 +45684,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
-#, fuzzy, kde-format
-#| msgid "Change Text"
+#, kde-format
 msgctxt "@label:textfield"
 msgid "Sample Text:"
-msgstr "變更文字"
+msgstr "範例文字："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:152
 #, fuzzy, kde-format
@@ -45732,15 +45711,13 @@ msgid "... After"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "寬度："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "高度："
@@ -46216,12 +46193,10 @@ msgid "letter-spacing, tracking, kerning"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:14
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Linear Burn"
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Line Break"
-msgstr "線性加深"
+msgstr "行中斷"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
 #, kde-format
@@ -46330,7 +46305,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure Open Type features."
-msgstr ""
+msgstr "設定 Open Type 功能。"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
 #, kde-format
@@ -46966,33 +46941,28 @@ msgid "Paragraph"
 msgstr "西方書法"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
-#, fuzzy, kde-format
-#| msgid "Preset"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Preset"
 msgstr "預設"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:134
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr "編輯預設"
+msgstr "新增樣式預設檔"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:147
-#, fuzzy, kde-format
-#| msgid "Edit Presets"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
-msgstr "編輯預設"
+msgstr "編輯樣式預設檔"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:166
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "建立樣式"
+msgstr "建立樣式預設檔副本"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
 #, fuzzy, kde-format
@@ -47018,12 +46988,10 @@ msgid "Add Property..."
 msgstr "新增群組(&A)…"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:424
-#, fuzzy, kde-format
-#| msgctxt "Wide Gamut Color Selector"
-#| msgid "Configure..."
+#, kde-format
 msgctxt "@label:button"
 msgid "Configure"
-msgstr "設定…"
+msgstr "設定"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:39
 #, fuzzy, kde-format
@@ -47429,11 +47397,10 @@ msgid "Vertical, Left To Right"
 msgstr "從左到右"
 
 #: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
-#, fuzzy, kde-format
-#| msgid "Style Sheet"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "樣式表"
+msgstr "新樣式預設檔"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, fuzzy, kde-format
@@ -47888,11 +47855,10 @@ msgid "Wide Gamut Color Selector"
 msgstr "廣色域選色器"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:316
-#, fuzzy, kde-format
-#| msgid "&Configure %1..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "設定 %1(&C)…"
+msgstr "設定…"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, kde-format
@@ -63709,11 +63675,11 @@ msgstr "確定要儲存目前檔案嗎？"
 
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:24
 msgid "Debug"
-msgstr "調校"
+msgstr "除錯"
 
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:25
 msgid "Debug Ctrl+D"
-msgstr "調校 Ctrl+D"
+msgstr "除錯 Ctrl+D"
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
 msgid "New"
@@ -66343,9 +66309,7 @@ msgstr "文字工具"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "字型大小"
@@ -66983,12 +66947,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
-#, fuzzy, kde-format
-#| msgctxt "Default name for a new style"
-#| msgid "New Style"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "建立樣式"
+msgstr "選取樣式預設檔"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:118
 #, fuzzy, kde-format
@@ -67092,19 +67054,16 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "轉成形狀"
+msgstr "轉換模式…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgctxt "@label:button"
 msgid "Preformatted"
-msgstr "效能"
+msgstr "手動斷行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:275
 #, kde-format
@@ -67115,12 +67074,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgctxt "@label:button"
 msgid "Inline Wrapped"
-msgstr "正弦波紋"
+msgstr "文內斷行"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:293
 #, fuzzy, kde-format
@@ -67135,11 +67092,10 @@ msgstr ""
 "<html><head/><body><p>使用數位板的壓感筆傾斜度決定法線。</p></body></html>"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:300
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@label:button"
 msgid "Pre-positioned"
-msgstr "位置"
+msgstr "預先決定位置"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:308
 #, kde-format
@@ -67150,11 +67106,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:320
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgctxt "@label:group"
 msgid "Debug"
-msgstr "調校"
+msgstr "除錯"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
 #, fuzzy, kde-format
@@ -67202,10 +67157,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, fuzzy, kde-format
-#| msgid "Performance"
+#, kde-format
 msgid "Preformatted"
-msgstr "效能"
+msgstr "手動斷行"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
@@ -67221,11 +67175,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Sine Wave Lines"
-#| msgid "Sine Wave"
+#, kde-format
 msgid "Inline Wrapped"
-msgstr "正弦波紋"
+msgstr "文內斷行"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
@@ -68900,73 +68852,58 @@ msgctxt "%1 is name of a font family"
 msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
-msgstr ""
+msgstr "這台裝置上缺乏字型系列「%1」。這個樣式預設檔可能無法正常運作。"
 
 #: qmlmodules/components/qml/ResourceView.qml:141
-#, fuzzy, kde-format
-#| msgid "Tag"
+#, kde-format
 msgctxt "@label:button"
 msgid "Tag"
 msgstr "標籤"
 
 #: qmlmodules/components/qml/ResourceView.qml:184
-#, fuzzy, kde-format
-#| msgid "Assign to tag"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
 msgstr "設定標籤"
 
 #: qmlmodules/components/qml/ResourceView.qml:209
-#, fuzzy, kde-format
-#| msgid "New Name:"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
-msgstr "新名稱："
+msgstr "新標籤名稱…"
 
 #: qmlmodules/components/qml/ResourceView.qml:227
-#, fuzzy, kde-format
-#| msgid "Remove from this tag"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
 msgstr "移除出此標籤"
 
 #: qmlmodules/components/qml/ResourceView.qml:236
-#, fuzzy, kde-format
-#| msgid "Remove from other tag"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
 msgstr "移除出其他標籤"
 
 #: qmlmodules/components/qml/ResourceView.qml:305
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Search Actions"
+#, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
-msgstr "搜尋動作"
+msgstr "在標籤中搜尋"
 
 #: qmlmodules/components/qml/ResourceView.qml:324
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
-msgstr "匯入"
+msgstr "匯入 %1"
 
 #: qmlmodules/components/qml/ResourceView.qml:348
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
-msgstr "移除"
+msgstr "移除 %1"
 
 #: qmlmodules/components/qml/sliderspinbox/SliderSpinBoxContentItem.qml:154
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@info:tooltip toggle between soft and hard range in the slider spin box"
-#| msgid ""
-#| "Toggle between full range and subrange.\n"
-#| "Full range: [%1, %2]\n"
-#| "Subrange: [%3, %4]"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Toggle between full range and subrange.\n"

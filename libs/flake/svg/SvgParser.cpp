@@ -1791,11 +1791,24 @@ QDomText SvgParser::getTheOnlyTextChild(const QDomElement &e)
                 firstChild.toText() : QDomText();
 }
 
+bool SvgParser::shapeInDefs(const KoShape *shape)
+{
+    for (auto defs = m_defsShapes.begin(); defs != m_defsShapes.end(); defs++) {
+        KoShape *dShape = *defs;
+        if (!dShape) continue;
+        if (dShape->hasCommonParent(shape)) return true;
+    }
+    return false;
+}
+
 KoShape* SvgParser::getTextPath(const QDomElement &e, bool hideShapesFromDefs) {
     if (e.hasAttribute("path")) {
         QDomElement p = e.ownerDocument().createElement("path");
         p.setAttribute("d", e.attribute("path"));
         KoShape *s = createPath(p);
+        if (hideShapesFromDefs) {
+            s->setTransparency(1.0);
+        }
         return s;
     } else {
         QString pathId;
@@ -1810,7 +1823,9 @@ KoShape* SvgParser::getTextPath(const QDomElement &e, bool hideShapesFromDefs) {
                 KoShape *cloned = s->cloneShape();
                 const QTransform absTf = s->absoluteTransformation();
                 cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
-                if(cloned && m_defsShapes.contains(s) && hideShapesFromDefs) cloned->setVisible(false);
+                if(cloned && shapeInDefs(s) && hideShapesFromDefs) {
+                    cloned->setTransparency(1.0);
+                }
                 return cloned;
             }
         }
@@ -1859,10 +1874,10 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     KoSvgTextShape *rootTextShape  = 0;
 
-    bool hideShapesFromDefs = false;
+    bool hideShapesFromDefs = true;
     if (mergeIntoShape) {
         rootTextShape = mergeIntoShape;
-        hideShapesFromDefs = true;
+        hideShapesFromDefs = false;
     } else {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
         rootTextShape = dynamic_cast<KoSvgTextShape*>(factory->createDefaultShape(m_documentResourceManager));
@@ -1901,7 +1916,6 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     if (!mergeIntoShape) {
         rootTextShape->setZIndex(m_context.nextZIndex());
     }
-
 
     if (m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
         m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
@@ -1942,7 +1956,6 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     } else {
         parseTextChildren(e, textLoader, hideShapesFromDefs);
-
     }
 
     m_context.popGraphicsContext();
@@ -2290,7 +2303,9 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
             // When we have a parent, the shape is inside the defs, but when not,
             // it's in the group we're in the currently parsing.
 
-            if (cloned && m_defsShapes.contains(s) && hideShapesFromDefs) cloned->setVisible(false);
+            if (cloned && shapeInDefs(s) && hideShapesFromDefs) {
+                cloned->setTransparency(1.0);
+            }
             return cloned;
         }
     } else if (value.startsWith("circle(")) {
@@ -2334,7 +2349,7 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
 
     el.setAttribute("fill-rule", fillRule);
     KoShape *shape = createShapeFromElement(el, context);
-    if (shape) shape->setVisible(false);
+    if (shape) shape->setTransparency(1.0);
     return shape;
 }
 

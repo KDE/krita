@@ -225,6 +225,9 @@ protected:
 
     QDomText getTheOnlyTextChild(const QDomElement &e);
 
+    /// Check whether the shapes are in the defs of the SVG document.
+    bool shapeInDefs(const KoShape *shape);
+
 private:
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;

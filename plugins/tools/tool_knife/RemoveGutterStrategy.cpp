@@ -367,8 +367,8 @@ void RemoveGutterStrategy::paint(QPainter &painter, const KoViewConverter &conve
     if (line.length() > 0) {
         QPointF vector = line.p2() - line.p1();
         vector = vector/line.length();
-        int arrowLength = 20;
-        int arrowThickness = 10;
+        int arrowLength = 15;
+        int arrowThickness = 5;
 
         QPointF before = line.p1() - vector*arrowLength;
         QPointF after = line.p2() + vector*arrowLength;

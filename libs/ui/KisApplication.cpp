@@ -103,6 +103,7 @@
 #include <kis_workspace_resource.h>
 #include <KisSessionResource.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
+#include <resources/KoFontFamily.h>
 #include <resources/KoCssStylePreset.h>
 
 #include "widgets/KisScreenColorSampler.h"
@@ -454,6 +455,7 @@ bool KisApplication::registerResources()
                                                      i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
 
+    reg->add(new KisResourceLoader<KoFontFamily>(ResourceType::FontFamilies, ResourceType::FontFamilies, i18n("Font Families"), QStringList() << "application/x-font-ttf" << "application/x-font-otf"));
     reg->add(new KisResourceLoader<KoCssStylePreset>(ResourceType::CssStyles, ResourceType::CssStyles, i18n("Style Presets"), QStringList() << "image/svg+xml"));
 
     reg->registerFixup(10, new KisBrushTypeMetaDataFixup());

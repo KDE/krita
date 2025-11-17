@@ -46,10 +46,13 @@ public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void mousePressEventBackup(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event)  override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
 
     KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
+
+    bool isValidForCurrentLayer() const;
 private:
     //friend class KisToolKnifeOptionsWidget;
 private:

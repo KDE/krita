@@ -16,6 +16,7 @@
 #include "kis_cursor.h"
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
+#include "kis_shape_layer.h"
 
 #include "kundo2magicstring.h"
 #include "kundo2stack.h"
@@ -25,6 +26,7 @@
 
 #include "kis_processing_applicator.h"
 #include "kis_datamanager.h"
+#include "kis_canvas_resource_provider.h"
 
 #include "KoColorSpaceRegistry.h"
 #include <KisCursorOverrideLock.h>
@@ -276,6 +278,20 @@ void KisToolKnife::mousePressEventBackup(KoPointerEvent *event)
     m_d->endPoint = event->point;//canvas()->viewConverter()->viewToDocument(event->pos());
 }
 
+void KisToolKnife::mousePressEvent(KoPointerEvent *event)
+{
+    // this tool only works on a vector layer right now, so give a warning if another layer type is trying to use it
+    if (!isValidForCurrentLayer()) {
+        KisCanvas2 *kiscanvas = static_cast<KisCanvas2 *>(canvas());
+        kiscanvas->viewManager()->showFloatingMessage(
+                i18n("This tool only works on vector layers. You probably want to create a vector layer and a starting shape first."),
+                QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+        return;
+    }
+
+    KoInteractionTool::mousePressEvent(event);
+}
+
 void KisToolKnife::mouseMoveEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseMoveEvent(event);
@@ -356,6 +372,14 @@ KoInteractionStrategy *KisToolKnife::createStrategy(KoPointerEvent *event)
     }
 
     //return NULL;
+}
+
+bool KisToolKnife::isValidForCurrentLayer() const
+{
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    KisNodeSP node = kisCanvas->viewManager()->canvasResourceProvider()->currentNode();
+    const KisShapeLayer *shapeLayer = qobject_cast<const KisShapeLayer*>(node.data());
+    return (shapeLayer != nullptr);
 }
 
 QWidget * KisToolKnife::createOptionWidget()

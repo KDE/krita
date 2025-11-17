@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 09:00+0000\n"
+"POT-Creation-Date: 2025-11-17 14:07+0000\n"
 "PO-Revision-Date: 2025-10-17 17:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17114,8 +17114,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Työtilat"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:506
-#: libs/ui/KisApplication.cpp:788
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:790
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -25149,10 +25149,10 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1183
-#: libs/ui/KisApplication.cpp:1186 libs/ui/KisApplication.cpp:1202
-#: libs/ui/KisApplication.cpp:1234 libs/ui/KisApplication.cpp:1248
-#: libs/ui/KisApplication.cpp:1276 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
+#: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -33994,7 +33994,7 @@ msgid "HSV CCW"
 msgstr "HSV VP"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:447
 #, kde-format
 msgid "Sessions"
 msgstr "Istunnot"
@@ -35570,7 +35570,7 @@ msgstr "Taustaväri"
 msgid "&Docker Box"
 msgstr "&Telakka"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:443
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35584,8 +35584,8 @@ msgstr "Kuviot"
 msgid "Custom Pattern"
 msgstr "Oma kuvio"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:429
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -36634,22 +36634,22 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Lähennä: %1 %"
 
-#: libs/ui/KisApplication.cpp:419
+#: libs/ui/KisApplication.cpp:420
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Valmiit siveltimet"
 
-#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
-#: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
+#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
+#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "Siveltimen kärki"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -36657,7 +36657,7 @@ msgstr "Siveltimen kärki"
 msgid "Palettes"
 msgstr "Paletit"
 
-#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -36665,45 +36665,51 @@ msgstr "Paletit"
 msgid "Workspaces"
 msgstr "Työtilat"
 
-#: libs/ui/KisApplication.cpp:444
+#: libs/ui/KisApplication.cpp:445
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektoritaso"
 
-#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "Ikkunan koko"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:448
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 #| msgid "Gamut Masks"
 msgid "Gamut masks"
 msgstr "Toistoalamaskit"
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:450
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Alaindeksi"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:455
 #, fuzzy, kde-format
 #| msgid "Layer Styles"
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Tasotyylit"
 
-#: libs/ui/KisApplication.cpp:457
+#: libs/ui/KisApplication.cpp:458
+#, fuzzy, kde-format
+#| msgid "Font Family"
+msgid "Font Families"
+msgstr "Fonttiperhe"
+
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgid "Style Presets"
 msgstr "Muokkaa esiasetuksia"
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:471
 #, kde-format
 msgid ""
 "%1\n"
@@ -36714,7 +36720,7 @@ msgstr ""
 "\n"
 "Krita lopetetaan nyt."
 
-#: libs/ui/KisApplication.cpp:469 libs/ui/KisApplication.cpp:475
+#: libs/ui/KisApplication.cpp:471 libs/ui/KisApplication.cpp:477
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Krita: Internal Error"
@@ -36722,7 +36728,7 @@ msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: sisäinen virhe"
 
-#: libs/ui/KisApplication.cpp:475
+#: libs/ui/KisApplication.cpp:477
 #, fuzzy, kde-format
 #| msgid ""
 #| "%1\n"
@@ -36737,7 +36743,7 @@ msgstr ""
 "\n"
 "Krita lopetetaan nyt."
 
-#: libs/ui/KisApplication.cpp:507
+#: libs/ui/KisApplication.cpp:509
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -36748,71 +36754,71 @@ msgstr ""
 "Tätä ei suositella.\n"
 "Lataa ja asenna mieluummin x64-ohjelma."
 
-#: libs/ui/KisApplication.cpp:524
+#: libs/ui/KisApplication.cpp:526
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Initializing Globals..."
 msgstr "Hallinnoi resursseja..."
 
-#: libs/ui/KisApplication.cpp:556
+#: libs/ui/KisApplication.cpp:558
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Resurssit"
 
-#: libs/ui/KisApplication.cpp:560
+#: libs/ui/KisApplication.cpp:562
 #, fuzzy, kde-format
 #| msgid "Loading Brushes..."
 msgid "Loading plugins..."
 msgstr "Ladataan siveltimiä..."
 
-#: libs/ui/KisApplication.cpp:566
+#: libs/ui/KisApplication.cpp:568
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Lähdetiedostot:"
 
-#: libs/ui/KisApplication.cpp:575
+#: libs/ui/KisApplication.cpp:577
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Ladataan pääikkunaa...."
 
-#: libs/ui/KisApplication.cpp:607
+#: libs/ui/KisApplication.cpp:609
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "Etsitään…"
 
-#: libs/ui/KisApplication.cpp:680
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME-tyyppiä ei löytynyt, yritä käyttää -mimetype-valintaa"
 
-#: libs/ui/KisApplication.cpp:741
+#: libs/ui/KisApplication.cpp:743
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Animointikuvien hahmonnus epäonnistui!"
 
-#: libs/ui/KisApplication.cpp:769 libs/ui/KisApplication.cpp:1042
+#: libs/ui/KisApplication.cpp:771 libs/ui/KisApplication.cpp:1044
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "File Layer"
 msgid "File layer"
 msgstr "Tiedostotaso"
 
-#: libs/ui/KisApplication.cpp:777 libs/ui/KisApplication.cpp:782
-#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
-#: libs/ui/KisApplication.cpp:1055
+#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:784
+#: libs/ui/KisApplication.cpp:1038 libs/ui/KisApplication.cpp:1052
+#: libs/ui/KisApplication.cpp:1057
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Varoitus"
 
-#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:1051
+#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:1053
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Väriä ei voi poimia, koska aktiivinen taso ei ole näkyvissä."
 
-#: libs/ui/KisApplication.cpp:783
+#: libs/ui/KisApplication.cpp:785
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36825,7 +36831,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:789
+#: libs/ui/KisApplication.cpp:791
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36833,7 +36839,7 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1037
+#: libs/ui/KisApplication.cpp:1039
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -36843,28 +36849,28 @@ msgstr ""
 "Ei voitu avata tiedostoa\n"
 "%1"
 
-#: libs/ui/KisApplication.cpp:1056
+#: libs/ui/KisApplication.cpp:1058
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add the file layer: no document is open."
 msgstr "Väriä ei voi poimia, koska aktiivinen taso ei ole näkyvissä."
 
-#: libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1186
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Mallipohjaa ei löytynyt kohteelle: %1"
 
-#: libs/ui/KisApplication.cpp:1187
+#: libs/ui/KisApplication.cpp:1189
 #, fuzzy, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Löytyi liian monta mallipohjaa kohteelle: %1"
 
-#: libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1205
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallipohjan %1 lataus epäonnistui."
 
-#: libs/ui/KisApplication.cpp:1235
+#: libs/ui/KisApplication.cpp:1237
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36879,7 +36885,7 @@ msgstr ""
 "\n"
 "Käynnistä Krita uudelleen, jotta muutokset tulevat voimaan."
 
-#: libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1251
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36887,7 +36893,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1277
+#: libs/ui/KisApplication.cpp:1279
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Haluatko tyhjentää asetustiedoston?"
@@ -71774,11 +71780,6 @@ msgstr ""
 
 #~ msgid "Fonts"
 #~ msgstr "Fontit"
-
-#, fuzzy
-#~| msgid "Font Family"
-#~ msgid "Font Families"
-#~ msgstr "Fonttiperhe"
 
 #, fuzzy
 #~| msgid "Select All"

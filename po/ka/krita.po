@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 09:00+0000\n"
+"POT-Creation-Date: 2025-11-17 14:07+0000\n"
 "PO-Revision-Date: 2025-04-26 07:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -16061,8 +16061,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "სამუშაო სივრცეები"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:506
-#: libs/ui/KisApplication.cpp:788
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:790
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23647,10 +23647,10 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1183
-#: libs/ui/KisApplication.cpp:1186 libs/ui/KisApplication.cpp:1202
-#: libs/ui/KisApplication.cpp:1234 libs/ui/KisApplication.cpp:1248
-#: libs/ui/KisApplication.cpp:1276 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
+#: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -31812,7 +31812,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:447
 #, kde-format
 msgid "Sessions"
 msgstr "სესიები"
@@ -33317,7 +33317,7 @@ msgstr "ფონის ფერის ამრჩევი"
 msgid "&Docker Box"
 msgstr "&მიმაგრების ჩარჩო"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:443
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33331,8 +33331,8 @@ msgstr "შაბლონები"
 msgid "Custom Pattern"
 msgstr "მორგებული ნიმუში"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:429
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34262,20 +34262,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "გადიდება: %1 %"
 
-#: libs/ui/KisApplication.cpp:419
+#: libs/ui/KisApplication.cpp:420
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "ფუნჯის პრესეტები"
 
-#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
-#: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
+#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
+#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "ფუნჯის წვეროები"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:431
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34283,7 +34283,7 @@ msgstr "ფუნჯის წვეროები"
 msgid "Palettes"
 msgstr "პალიტრები"
 
-#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34291,41 +34291,46 @@ msgstr "პალიტრები"
 msgid "Workspaces"
 msgstr "სამუშაო სივრცეები"
 
-#: libs/ui/KisApplication.cpp:444
+#: libs/ui/KisApplication.cpp:445
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG სიმბოლოების ბიბლიოთეკები"
 
-#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "ფანრის განლაგებები"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:448
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:450
 #, fuzzy, kde-format
 #| msgid "Ten Scripts"
 msgid "SeExpr Scripts"
 msgstr "ათი სკრიპტი"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:455
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "ფენის სტილები"
 
-#: libs/ui/KisApplication.cpp:457
+#: libs/ui/KisApplication.cpp:458
+#, kde-format
+msgid "Font Families"
+msgstr "ფონტის ოჯახები"
+
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 #| msgid "Style Sheet"
 msgid "Style Presets"
 msgstr "სტილების ფურცელი"
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:471
 #, kde-format
 msgid ""
 "%1\n"
@@ -34336,13 +34341,13 @@ msgstr ""
 "\n"
 "Krita მუშაობას დაასრულებს."
 
-#: libs/ui/KisApplication.cpp:469 libs/ui/KisApplication.cpp:475
+#: libs/ui/KisApplication.cpp:471 libs/ui/KisApplication.cpp:477
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: ფატალური შეცდომა"
 
-#: libs/ui/KisApplication.cpp:475
+#: libs/ui/KisApplication.cpp:477
 #, kde-format
 msgid ""
 "\n"
@@ -34353,7 +34358,7 @@ msgstr ""
 "\n"
 "Krita მუშაობას დაასრულებს."
 
-#: libs/ui/KisApplication.cpp:507
+#: libs/ui/KisApplication.cpp:509
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34364,67 +34369,67 @@ msgstr ""
 "ეს რეკომენდებული არააა.\n"
 "გადმოწერეთ და დააყენეთ x64 ვარიანტი."
 
-#: libs/ui/KisApplication.cpp:524
+#: libs/ui/KisApplication.cpp:526
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "გლობალების ინიციალიზაცია..."
 
-#: libs/ui/KisApplication.cpp:556
+#: libs/ui/KisApplication.cpp:558
 #, kde-format
 msgid "Adding resource types..."
 msgstr "რესურსის ტიპების დამატება..."
 
-#: libs/ui/KisApplication.cpp:560
+#: libs/ui/KisApplication.cpp:562
 #, kde-format
 msgid "Loading plugins..."
 msgstr "დამატებების ჩატვირთვა..."
 
-#: libs/ui/KisApplication.cpp:566
+#: libs/ui/KisApplication.cpp:568
 #, kde-format
 msgid "Loading resources..."
 msgstr "რესურსების ჩატვირთვა..."
 
-#: libs/ui/KisApplication.cpp:575
+#: libs/ui/KisApplication.cpp:577
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "მთავარი ფანჯრის ჩატვირთვა..."
 
-#: libs/ui/KisApplication.cpp:607
+#: libs/ui/KisApplication.cpp:609
 #, kde-format
 msgid "Launching..."
 msgstr "გაშვება..."
 
-#: libs/ui/KisApplication.cpp:680
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:741
+#: libs/ui/KisApplication.cpp:743
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Import animation frames"
 msgid "Failed to render animation frames!"
 msgstr "ანიმაციის კადრების შემოტანა"
 
-#: libs/ui/KisApplication.cpp:769 libs/ui/KisApplication.cpp:1042
+#: libs/ui/KisApplication.cpp:771 libs/ui/KisApplication.cpp:1044
 #, kde-format
 msgid "File layer"
 msgstr "ფაილის ფენა"
 
-#: libs/ui/KisApplication.cpp:777 libs/ui/KisApplication.cpp:782
-#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
-#: libs/ui/KisApplication.cpp:1055
+#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:784
+#: libs/ui/KisApplication.cpp:1038 libs/ui/KisApplication.cpp:1052
+#: libs/ui/KisApplication.cpp:1057
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: გაფრთხილება"
 
-#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:1051
+#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:1053
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:783
+#: libs/ui/KisApplication.cpp:785
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34437,7 +34442,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:789
+#: libs/ui/KisApplication.cpp:791
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34445,33 +34450,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1037
+#: libs/ui/KisApplication.cpp:1039
 #, fuzzy, kde-format
 #| msgid "Could not open %1."
 msgid "Couldn't open file %1"
 msgstr "%1-ის გახნის შეცდომა."
 
-#: libs/ui/KisApplication.cpp:1056
+#: libs/ui/KisApplication.cpp:1058
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1186
 #, kde-format
 msgid "No template found for: %1"
 msgstr "%1-სთვის შაბლონი ვერ ვიპოვე"
 
-#: libs/ui/KisApplication.cpp:1187
+#: libs/ui/KisApplication.cpp:1189
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "ნაპოვნია მეტისმეტად ბევრი შაბლონი %1-სთვის"
 
-#: libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1205
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "შაბლონის ('%1') ჩატვირთვის შეცდომა."
 
-#: libs/ui/KisApplication.cpp:1235
+#: libs/ui/KisApplication.cpp:1237
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34481,7 +34486,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1251
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34489,7 +34494,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1277
+#: libs/ui/KisApplication.cpp:1279
 #, fuzzy, kde-format
 #| msgid "Do you want to save it?"
 msgid "Do you want to clear the settings file?"
@@ -68195,9 +68200,6 @@ msgstr ""
 
 #~ msgid "Fonts"
 #~ msgstr "შრიფტები"
-
-#~ msgid "Font Families"
-#~ msgstr "ფონტის ოჯახები"
 
 #, fuzzy
 #~| msgid "Select All"

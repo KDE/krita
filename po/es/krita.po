@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-16 02:00+0000\n"
-"PO-Revision-Date: 2025-11-16 02:22+0100\n"
+"PO-Revision-Date: 2025-11-17 02:28+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -21686,7 +21686,7 @@ msgstr "Colores"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Sketch"
-msgstr "Diseño"
+msgstr "Boceto"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:63
 #, kde-format
@@ -25200,7 +25200,7 @@ msgstr "Generar paleta de 8 bits automáticamente:"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
-msgstr "Entramado:"
+msgstr "Tramado:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
 #: libs/ui/animation/video_export_options_dialog.ui:320
@@ -39355,7 +39355,7 @@ msgstr "Guardar disposición de ventanas actual."
 #, kde-format
 msgctxt "Contrast enhancement section in auto levels"
 msgid "Shadows and Highlights"
-msgstr "Sombras y reflejos"
+msgstr "Sombras y luces"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:62
@@ -39392,7 +39392,7 @@ msgstr "Recorte de las sombras:"
 msgctxt ""
 "Percentage of the histogram to clip in the highlights side in auto levels"
 msgid "Highlights clipping:"
-msgstr "Recorte de los reflejos:"
+msgstr "Recorte de luces:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:97
@@ -39415,14 +39415,14 @@ msgstr "Color de las sombras:"
 #, kde-format
 msgctxt "Output color used for the highlights in auto levels"
 msgid "Highlights color:"
-msgstr "Color de los reflejos:"
+msgstr "Color de luces:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
 #, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
-msgstr "Tonos medios"
+msgstr "Medios tonos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
@@ -39436,21 +39436,21 @@ msgstr "Método:"
 #, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "No ajustar los tonos medios"
+msgstr "No ajustar los medios tonos"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
 #, kde-format
 msgctxt "Use the median point of the histogram as midtone point in auto levels"
 msgid "Use the median to adjust the midtones"
-msgstr "Usar la mediana para ajustar los tonos medios"
+msgstr "Usar la mediana para ajustar los medios tonos"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:181
 #, kde-format
 msgctxt "Use the mean value of the histogram as midtone point in auto levels"
 msgid "Use the mean value to adjust the midtones"
-msgstr "Usar el valor medio para ajustar los tonos medios"
+msgstr "Usar el valor medio para ajustar los medios tonos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:189
@@ -48170,7 +48170,7 @@ msgstr "Luces"
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:37
 #, kde-format
 msgid "Midtones"
-msgstr "Tonos medios"
+msgstr "Medios tonos"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonShadows)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -51338,13 +51338,13 @@ msgstr "Azul  "
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
 #, kde-format
 msgid "Reset Midtones  "
-msgstr "Reiniciar tonos medios  "
+msgstr "Reiniciar medios tonos  "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
 #, kde-format
 msgid "Reset Highlights"
-msgstr "Reiniciar tonos claros"
+msgstr "Reiniciar luces"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreserveLuminosity)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:362
@@ -55968,7 +55968,7 @@ msgstr "Filtros:"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:138
 #, kde-format
 msgid "Could not load embedded reference image %1 "
-msgstr ""
+msgstr "No se ha podido cargar la imagen de referencia integrada %1 "
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:143
 #, kde-format
@@ -55980,6 +55980,12 @@ msgid ""
 "\n"
 "Do you want to select another location?"
 msgstr ""
+"No se ha podido cargar una imagen de referencia enlazada a un archivo "
+"externo.\n"
+"\n"
+"Ruta: %1\n"
+"\n"
+"¿Quiere seleccionar otra ubicación?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:148
 #: plugins/impex/libkra/kis_kra_loader.cpp:697
@@ -55996,25 +56002,23 @@ msgid ""
 "Selection on layer %s couldn't be loaded. It will be replaced by an empty "
 "selection."
 msgstr ""
+"No se ha podido cargar la selección sobre la capa %s. Se sustituirá por una "
+"selección vacía."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:321
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "Loading a .kra file"
 msgid ""
 "The file contains a clone layer that has an incorrect source node id. This "
 "layer will be converted into a paint layer."
 msgstr ""
-"La imagen contiene una capa de relleno de tipo <b>%1</b>, que no está "
-"permitida. La capa se convertirá en una capa de pintura."
+"El archivo contiene una capa de clonación que tiene un id de nodo fuente "
+"incorrecto. Esta capa se convertirá a una capa de pintura."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
-msgstr ""
+msgstr "No se ha podido cargar el «id» de la máscara de transformación"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:400
 #, kde-format
@@ -56024,115 +56028,94 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:422
 #, kde-format
 msgid "Could not create transform mask params"
-msgstr ""
+msgstr "No se han podido crear los parámetros de la máscara de transformación"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:574
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
+"No se han encontrado los datos de píxeles del fotograma clave %1 en %2."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:582
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
+"No se han podido cargar los datos de píxeles del fotograma clave %1 en %2."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:611
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Could not read pixel data: %1."
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se han podido leer los datos de píxeles: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:618
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Could not load pixel data: %1."
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se han podido cargar los datos de píxeles: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:634
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Could not load profile: %1."
-msgstr "Perfil de color:"
+msgstr "No se ha podido cargar el perfil: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:689
-#, fuzzy, kde-format
-#| msgid "Filter configuration XML"
+#, kde-format
 msgid "Could not filter configuration %1."
-msgstr "XML para configuración del filtro"
+msgstr "No e ha podido filtrar la configuración %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:730
 #, kde-format
 msgid "Could not load metadata for layer %1."
-msgstr ""
+msgstr "No se han podido cargar los metadatos de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:773
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Vector Selection"
+#, kde-format
 msgid "Could not load vector selection %1."
-msgstr "Convertir a selección vectorial"
+msgstr "No se ha podido cargar la selección vectorial %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:789
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Raster Selection"
+#, kde-format
 msgid "Could not load raster selection %1."
-msgstr "Convertir a selección de mapa de bits"
+msgstr "No se ha podido cargar la selección rasterizada %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:819
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgid "Could not load keyframes from %1."
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se han podido cargar fotogramas claves de %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
-#, fuzzy, kde-format
-#| msgid ""
-#| "Parsing error in the main document at line %1, column %2\n"
-#| "Error message: %3"
+#, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"Error de análisis en el documento principal en la línea %1, columna %2\n"
-"Mensaje de error: %3"
+"Error de análisis en el archivo de fotogramas clave %1 en la línea %2, "
+"columna %3.\n"
+"Mensaje de error: %4"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:846
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
-msgstr ""
+msgstr "Tipo de canal de fotograma clave desconocido: %1 en %2"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:210
 #, kde-format
 msgid "Image does not have a name."
-msgstr ""
+msgstr "La imagen no tiene nombre."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:215
 #, kde-format
 msgid "Image does not specify a width."
-msgstr ""
+msgstr "La imagen no especifica una anchura."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:221
 #, kde-format
 msgid "Image does not specify a height."
-msgstr ""
+msgstr "La imagen no especifica una altura."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:271
 #, kde-format
 msgid "Image specifies an unsupported color model: %1."
-msgstr ""
+msgstr "La imagen especifica un modelo de color no permitido: %1."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:588
 #, kde-format
@@ -56140,18 +56123,19 @@ msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr ""
+"La paleta integrada está vacía y no se puede cargar. Nombre de la paleta: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:599
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
-msgstr ""
+msgstr "No se puede leer el recurso integrado. Archivo del recurso: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:608
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
-msgstr ""
+msgstr "No se puede importar el recurso integrado. Archivo del recurso: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:692
 #, kde-format
@@ -56164,6 +56148,12 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
+"El archivo de canal de sonido «%1» no existe.\n"
+"\n"
+"Ruta esperada:\n"
+"%2\n"
+"\n"
+"¿Desea localizarlo manualmente?"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:867
 #, kde-format
@@ -56171,26 +56161,28 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
+"Se han encontrado dos máscaras de selección global activas. «%1» se "
+"mantendrá activa, mientras que «%2» se desactivará."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
-msgstr ""
+msgstr "La capa %1 especifica un modelo de color no permitido: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:955
 #, kde-format
 msgid "Layer %1 has an unsupported type."
-msgstr ""
+msgstr "La capa %1 tiene un tipo no permitido."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:990
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
-msgstr ""
+msgstr "La capa %1 tiene un tipo no permitido: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:997
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
-msgstr ""
+msgstr "No se ha podido cargar la capa %1 de tipo %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1021
 #, kde-format
@@ -56200,6 +56192,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"La capa «%1» tiene el modo de fusión «%2», que ha cambiado el comportamiento "
+"para el color CMYK en Krita 5.2. Compruebe el resultado y considere la "
+"activación del algoritmo heredado «Aditivo» en Preferencias->Configurar "
+"Krita->General->Herramientas->Modo de fusión CMYK."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1142
 #, kde-format
@@ -56212,12 +56208,18 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
+"No se ha encontrado el archivo asociado a una capa de archivo con el nombre "
+"«%1».\n"
+"\n"
+"Ruta esperada:\n"
+"%2\n"
+"\n"
+"¿Desea localizarlo manualmente?"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
-#, fuzzy, kde-format
-#| msgid "Add a new reference image:"
+#, kde-format
 msgid "Failed to save reference image %1."
-msgstr "Añadir nueva imagen de referencia:"
+msgstr "No se ha podido guardar la imagen de referencia %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:100
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:132
@@ -56227,7 +56229,7 @@ msgstr "Añadir nueva imagen de referencia:"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
 #, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr ""
+msgstr "No se han podido guardar los metadatos de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
@@ -56238,253 +56240,242 @@ msgstr "No se ha podido abrir %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr ""
+msgstr "No se han podido guardar los datos de píxeles de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr ""
+msgstr "No se han podido guardar las anotaciones de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
 msgid "Failed to save the filter layer %1: it has no filter."
-msgstr ""
+msgstr "No se ha podido guardar la capa de filtro %1: no tiene ningún filtro."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
-#, fuzzy, kde-format
-#| msgid "Fill the active selection, or the entire canvas"
+#, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr "Rellenar la selección activa o todo el lienzo"
+msgstr "No se ha podido guardar la selección de la capa de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
 msgstr ""
+"No se ha podido guardar la configuración del filtro de la capa de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr ""
+msgstr "No se ha podido guardar la selección de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr ""
+msgstr "No se ha podido guardar la configuración del generador de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
 msgid "Failed to save filter mask %1. It has no filter."
 msgstr ""
+"No se ha podido guardar la máscara de filtro %1. No tiene ningún filtro."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
-#, fuzzy, kde-format
-#| msgid "Fill the active selection, or the entire canvas"
+#, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr "Rellenar la selección activa o todo el lienzo"
+msgstr "No se ha podido guardar la selección de la máscara de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
 msgstr ""
+"No se ha podido guardar la configuración del filtro de la máscara de filtro "
+"%1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
 msgstr ""
+"No se ha podido guardar la selección de la máscara de transparencia %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr ""
+msgstr "No se ha podido guardar la selección de la selección local %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr ""
+"No se han podido guardar los datos de selección de píxeles de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr ""
+"No se han podido guardar los datos de la selección vectorial de la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
-msgstr ""
+msgstr "El motor de metadatos no ha podido guardar los metadatos de %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, kde-format
 msgid "Could not write for %1 metadata to the file."
-msgstr ""
+msgstr "No se han podido escribir los metadatos de %1 en el archivo."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:216
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
-msgstr ""
+msgstr "No se ha podido exportar el recurso para integrar: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:231
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not open %2.\n"
-#| "Reason: %1."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr ""
-"No se ha podido abrir %2.\n"
-"Motivo: %1."
+msgstr "No se ha podido escribir el recurso: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:243
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
-msgstr ""
+msgstr "El recurso que se ha escrito está vacío: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:249
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
-msgstr ""
+msgstr "El recurso que se ha escrito está incompleto: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:266
 #: plugins/impex/libkra/kis_kra_saver.cpp:288
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
-msgstr ""
+msgstr "No se han podido guardar los guiones gráficos."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:300
 #: plugins/impex/libkra/kis_kra_saver.cpp:324
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
-msgstr ""
+msgstr "No se han podido guardar los metadatos de la animación."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:337
 #: plugins/impex/libkra/kis_kra_saver.cpp:360
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr ""
+msgstr "No se han podido guardar los metadatos de sonido."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Clone Keyframes"
+#, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
-msgstr "Clonar fotogramas clave"
+msgstr "No se han podido guardar los fotogramas clave."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:517
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
-msgstr ""
+msgstr "No se han podido guardar las anotaciones."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1 is not a valid image file!"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
-msgstr "¡%1 no es un archivo de imagen válido!"
+msgstr "No se ha podido guardar el perfil de la imagen."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:581
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr ""
+msgstr "No se ha podido guardar el perfil de color de pruebas en pantalla."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:616
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
-msgstr ""
+msgstr "No se han podido guardar las anotaciones adicionales."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:649
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
-msgstr ""
+msgstr "No se han podido guardar los estilos de las capas."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:664
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
-msgstr ""
+msgstr "No se ha podido guardar la imagen fusionada."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:765
-#, fuzzy, kde-format
-#| msgid "Ruler assistant"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
-msgstr "Asistente de reglas"
+msgstr "No se han podido guardar los asistentes."
 
 #: plugins/impex/libkra/kra_converter.cpp:73
-#, fuzzy, kde-format
-#| msgid "%1 is not a valid image file!"
+#, kde-format
 msgid "Not a valid Krita file"
-msgstr "¡%1 no es un archivo de imagen válido!"
+msgstr "No es un archivo válido de Krita"
 
 #: plugins/impex/libkra/kra_converter.cpp:91
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr ""
+msgstr "Documento no válido: no existe el archivo «maindoc.xml»."
 
 #: plugins/impex/libkra/kra_converter.cpp:147
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr ""
+msgstr "No se ha podido crear el archivo para guardar"
 
 #: plugins/impex/libkra/kra_converter.cpp:226
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr ""
+msgstr "No se puede escribir «%1». ¿Está llena la partición?"
 
 #: plugins/impex/libkra/kra_converter.cpp:318
 #, kde-format
 msgid "Could not find %1"
-msgstr ""
+msgstr "No se ha encontrado %1"
 
 #: plugins/impex/libkra/kra_converter.cpp:330
-#, fuzzy, kde-format
-#| msgid ""
-#| "Parsing error in the main document at line %1, column %2\n"
-#| "Error message: %3"
+#, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"Error de análisis en el documento principal en la línea %1, columna %2\n"
-"Mensaje de error: %3"
+"Error de análisis en %1 en la línea %2, columna %3\n"
+"Mensaje de error: %4"
 
 #: plugins/impex/libkra/kra_converter.cpp:348
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
-msgstr ""
+msgstr "El formato no se reconoce o el archivo está dañado"
 
 #: plugins/impex/libkra/kra_converter.cpp:359
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
-msgstr ""
+msgstr "El archivo es demasiado reciente para esta versión de Krita (%1)."
 
 #: plugins/impex/libkra/kra_converter.cpp:365
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "This profile has no colorants."
+#, kde-format
 msgid "The file has no layers."
-msgstr "Este perfil no tiene colorantes."
+msgstr "El archivo no contiene capas."
 
 #: plugins/impex/libkra/kra_converter.cpp:404
-#, fuzzy, kde-format
-#| msgid "There is no active image."
+#, kde-format
 msgid "The file does not contain an image."
-msgstr "No hay ninguna imagen activa."
+msgstr "El archivo no contiene una imagen."
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:77
 #: plugins/impex/pdf/kis_pdf_import.cpp:78
 #, kde-format
 msgid "A password is required to read that pdf"
-msgstr ""
+msgstr "Se necesita una contraseña para leer este PDF"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:87
 #, kde-format
@@ -56789,7 +56780,7 @@ msgstr ""
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
 msgid "Duotone Colormode Block"
-msgstr ""
+msgstr "Bloque de modo de color duotono"
 
 #: plugins/impex/psd/psd_loader.cpp:255
 #, fuzzy, kde-format
@@ -56853,11 +56844,10 @@ msgstr ""
 "que ella).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:263
-#, fuzzy, kde-format
-#| msgid "Color depth:"
+#, kde-format
 msgctxt "@option:check"
 msgid "16 bits color depth"
-msgstr "Profundidad de color:"
+msgstr "Profundidad de color de 16 bits"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
 #, kde-format
@@ -56869,13 +56859,19 @@ msgid ""
 "files will be decoded in 8-bit color depth with a BT.709 gamma curve and a "
 "99th-percentile white point. This mode is faster than 16-bit decoding.</p>"
 msgstr ""
+"<p>Si se activa, todos los archivos RAW se descodificarán con una "
+"profundidad de color de 16 bits usando una curva de gamma lineal. Para "
+"prevenir que se muestre una imagen oscura en el editor, se recomienda el uso "
+"de la gestión de color en este modo.</p><p>Si se desactiva, todos los "
+"archivos RAW se descodificarán con una profundidad de color de 8 bits con "
+"una curva de gamma BT.709 y un punto blanco de percentil 99. Este modo es "
+"más rápido que la descodificación de 16 bits.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
-#, fuzzy, kde-format
-#| msgid "Create mask from color"
+#, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
-msgstr "Crear máscara a partir del color"
+msgstr "Interpolar RGB como cuatro colores"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
 #, kde-format
@@ -56889,18 +56885,26 @@ msgid ""
 "it eliminates false 2x2 mesh patterns with VNG quality method or mazes with "
 "AHD quality method.</p>"
 msgstr ""
+"<title>Interpolar RGB como cuatro colores</title><p>Por omisión, se supone "
+"que todos los píxeles verdes son iguales. Si los píxeles verdes de las filas "
+"pares son más sensibles a la luz ultravioleta que los de las filas impares, "
+"esta diferencia provoca un patrón de malla en la salida; el uso de esta "
+"opción resuelve este problema con una mínima pérdida de detalle.</p><p>En "
+"resumen, esta opción difumina un poco la imagen, pero elimina los patrones "
+"de malla 2x2 falsos con el método de calidad VNG o los laberintos con el "
+"método de calidad AHD.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
-msgstr ""
+msgstr "Visitar el sitio web del proyecto LibRaw"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:308
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
-msgstr ""
+msgstr "No estirar ni rotar píxeles"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:310
 #, kde-format
@@ -56911,6 +56915,11 @@ msgid ""
 "stretch the image to its correct aspect ratio. In any case, this option "
 "guarantees that each output pixel corresponds to one RAW pixel.</p>"
 msgstr ""
+"<title>No estirar ni rotar píxeles</title><p>En las cámaras Fuji Super CCD, "
+"mostrar la imagen inclinada 45 grados. En las cámaras que no tienen píxeles "
+"cuadrados, no estirar la imagen hasta su aspecto correcto. En cualquier "
+"caso, esta opción garantiza que cada píxel de salida se corresponde con un "
+"píxel RAW.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:318
 #, kde-format
@@ -57083,6 +57092,13 @@ msgid ""
 "emphasis>, <emphasis strong='true'>DCB</emphasis>, and <emphasis "
 "strong='true'>VCD & AHD</emphasis>.</p>"
 msgstr ""
+"<title>Paso</title><p>Defina aquí los pasos que usa el filtro de mediana que "
+"se aplica tras la interpolación a los canales rojo-verde y azul-verde.</"
+"p><p>Este ajuste solo está disponible para determinadas opciones de calidad: "
+"<emphasis strong='true'>Bilineal</emphasis>, <emphasis strong='true'>VNG</"
+"emphasis>, <emphasis strong='true'>PPG</emphasis>, <emphasis "
+"strong='true'>AHD</emphasis>, <emphasis strong='true'>DCB</emphasis> y "
+"<emphasis strong='true'>VCD y AHD</emphasis>.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:434
 #, kde-format
@@ -57100,6 +57116,12 @@ msgid ""
 "strong='true'>VCD & AHD</emphasis>: turn on the enhanced effective color "
 "interpolation (EECI) refine to improve sharpness.</li></ul></p>"
 msgstr ""
+"<title>Refinar interpolación</title><p>Este ajuste está disponible solo para "
+"las nuevas opciones de calidad:</p><p><ul><li><emphasis strong='true'>DCB</"
+"emphasis>: activar el filtro de mejora de colores interpolados.</"
+"li><li><emphasis strong='true'>VCD y AHD</emphasis>: activar la "
+"interpolación de color efectiva mejorada (EECI) para mejorar la nitidez.</"
+"li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:452
 #, kde-format
@@ -57150,6 +57172,15 @@ msgid ""
 "averaging the entire image.</li><li><emphasis strong='true'>Manual</"
 "emphasis>: Set a custom temperature and green level values.</li></ul></p>"
 msgstr ""
+"<title>Balance de blancos</title><p>Configurar el balance de blancos para "
+"RAW</p><p><ul><li><emphasis strong='true'>D65 predeterminado</emphasis>: "
+"usar un balance de blancos estándar D65 diurno.</li><li><emphasis "
+"strong='true'>Cámara</emphasis>: usar el balance de blancos indicado por la "
+"cámara. Si no está disponible, se usa el balance de blancos neutro "
+"predeterminado.</li><li><emphasis strong='true'>Automático</emphasis>: "
+"calcula la media automática del balance de blancos de toda la imagen.</"
+"li><li><emphasis strong='true'>Manual</emphasis>: definir unos valores "
+"personalizados de temperatura y de nivel de verde.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:482
 #, kde-format
@@ -57163,6 +57194,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<title>Temperature</title><p>Set here the color temperature in Kelvin.</p>"
 msgstr ""
+"<title>Temperatura</title><p>Defina aquí la temperatura del color en grados "
+"Kelvin.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
 #, kde-format
@@ -57176,13 +57209,14 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<p>Set here the green component to set magenta color cast removal level.</p>"
 msgstr ""
+"<p>Defina aquí el componente verde para ajustar el nivel de eliminación del "
+"tono magenta.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:494
-#, fuzzy, kde-format
-#| msgid "Highlights"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
-msgstr "Luces"
+msgstr "Luces:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:496
 #, kde-format
@@ -57194,7 +57228,7 @@ msgstr "Blanco sólido"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Unclip"
-msgstr ""
+msgstr "Deshacer recorte"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
 #, kde-format
@@ -57220,6 +57254,14 @@ msgid ""
 "for a gradual fade to white</li><li><emphasis strong='true'>Rebuild</"
 "emphasis>: reconstruct highlights using a level value</li></ul></p>"
 msgstr ""
+"<title>Luces</title><p>Seleccione aquí el método de recorte de luces:</"
+"p><p><ul><li><emphasis strong='true'>Blanco sólido</emphasis>: recortar "
+"todas las luces a blanco sólido.</li><li><emphasis strong='true'>Deshacer "
+"recorte</emphasis>: dejar las luces sin cortar en varios tonos de rosa.</"
+"li><li><emphasis strong='true'>Mezclar</emphasis>: mezclar los valores "
+"recortados y no recortados para lograr un desvanecimiento gradual hacia el "
+"blanco.</li><li><emphasis strong='true'>Reconstruir</emphasis>: reconstruir "
+"las luces usando un valor de nivel.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:512
 #, kde-format
@@ -57234,6 +57276,9 @@ msgid ""
 "<title>Level</title><p>Specify the reconstruct highlight level. Low values "
 "favor whites and high values favor colors.</p>"
 msgstr ""
+"<title>Nivel</title><p>Especifique el nivel de reconstrucción de luces. Los "
+"valores bajos favorecen los blancos, mientras que los valores altos "
+"favorecen los colores.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:520
 #, kde-format
@@ -57246,6 +57291,7 @@ msgstr "Corrección de exposición (E.V)"
 msgctxt "@info:whatsthis"
 msgid "<p>Turn on the exposure correction before interpolation.</p>"
 msgstr ""
+"<p>Desactivar la corrección de la exposición antes de la interpolación.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:524
 #, kde-format
@@ -57260,12 +57306,14 @@ msgid ""
 "<title>Shift</title><p>Linear Shift of exposure correction before "
 "interpolation in E.V</p>"
 msgstr ""
+"<title>Desplazamiento</title><p>Desplazamiento lineal de la corrección de la "
+"exposición antes de la interpolación en E.V.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:532
 #, kde-format
 msgctxt "@label:slider"
 msgid "Highlight:"
-msgstr "Resaltado:"
+msgstr "Realce:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:537
 #, kde-format
@@ -57275,12 +57323,15 @@ msgid ""
 "correction before interpolation in E.V. Only take effect if Shift Correction "
 "is > 1.0 E.V</p>"
 msgstr ""
+"<title>Realce</title><p>Cantidad de conservación de realce para la "
+"corrección de la exposición antes de la interpolación en E.V. Solo tiene "
+"efecto si la corrección del desplazamiento es > 1,0 E.V.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:541
 #, kde-format
 msgctxt "@option:check"
 msgid "Correct false colors in highlights"
-msgstr ""
+msgstr "Corregir colores falsos en luces"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
@@ -57290,6 +57341,9 @@ msgid ""
 "accurately, without 'pink clouds' (and blue highlights under tungsten lamps)."
 "</p>"
 msgstr ""
+"<p>Si está activada, las imágenes con canales sobreexpuestos se procesan con "
+"mucha mayor precisión, sin «nubes rosas» (ni reflejos azules bajo lámparas "
+"de tungsteno).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:546
 #, kde-format
@@ -57304,6 +57358,8 @@ msgid ""
 "<p>If disable, use a fixed white level and ignore the image histogram to "
 "adjust brightness.</p>"
 msgstr ""
+"<p>Si se desactiva, usar un nivel de blancos fijo e ignorar el histograma de "
+"la imagen para ajustar el brillo.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:550
 #, kde-format
@@ -57318,6 +57374,8 @@ msgid ""
 "<title>Brightness</title><p>Specify the brightness level of output image. "
 "The default value is 1.0 (works in 8-bit mode only).</p>"
 msgstr ""
+"<title>Brillo</title><p>Indique el nivel de brillo de la imagen de salida. "
+"El valor predeterminado es 1,0 (funciona solo en el modo de 8 bits).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:565
 #, kde-format
@@ -57333,6 +57391,9 @@ msgid ""
 "pictures. If you set this option to off, the Black Point value will be "
 "automatically computed.</p>"
 msgstr ""
+"<title>Punto negro</title><p>Usar un determinado valor de punto negro para "
+"descodificar las imágenes RAW. Si desactiva esta opción, el valor del punto "
+"negro se calculará automáticamente.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:573
 #, kde-format
@@ -57341,6 +57402,8 @@ msgid ""
 "<title>Black point value</title><p>Specify specific black point value of the "
 "output image.</p>"
 msgstr ""
+"<title>Valor del punto negro</title><p>Indique un valor específico de punto "
+"negro de la imagen de salida.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:576
 #, kde-format
@@ -57356,6 +57419,9 @@ msgid ""
 "pictures. If you set this option to off, the White Point value will be "
 "automatically computed.</p>"
 msgstr ""
+"<title>Punto blanco</title><p>Usar un valor específico de punto blanco para "
+"descodificar imágenes RAW. Si desactiva esta opción, el valor del punto "
+"blanco se calcula automáticamente.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:584
 #, kde-format
@@ -57364,6 +57430,8 @@ msgid ""
 "<title>White point value</title><p>Specify specific white point value of the "
 "output image.</p>"
 msgstr ""
+"<title>Valor del punto blanco</title><p>Indique un valor específico de punto "
+"blanco de la imagen de salida.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:623
 #, kde-format
@@ -57399,14 +57467,13 @@ msgstr "FBDD"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
-msgstr ""
+msgstr "Eliminación de ruido de línea CFA"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
+#, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
-msgstr "Ruido símplex"
+msgstr "Reducción de ruido de impulsos"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:639
 #, kde-format
@@ -57423,12 +57490,24 @@ msgid ""
 "li><li><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse noise "
 "suppression. It's applied after interpolation.</li></ul></p>"
 msgstr ""
+"<title>Reducción de ruido</title><p>Seleccione aquí el método de reducción "
+"de ruido que se aplicará durante la descodificación RAW.</"
+"p><p><ul><li><emphasis strong='true'>Ninguno</emphasis>: sin reducción de "
+"ruido.</li><li><emphasis strong='true'>Ondículas</emphasis>: corrección de "
+"ondículas para eliminar el ruido mientras se preserva el detalle real. Se "
+"aplica tras la interpolación.</li><li><emphasis strong='true'>FBDD</"
+"emphasis>: reducción de ruido simulada antes de la interpolación. Se aplica "
+"antes de la interpolación.</li><li><emphasis strong='true'>Reducción de "
+"ruido de línea CFA</emphasis>: Supresión de ruido de bandas. Se aplica "
+"después de la interpolación.</li><li><emphasis strong='true'>Eliminación de "
+"ruido de impulsos</emphasis>: Supresión de ruido de impulsos. Se aplica "
+"después de la interpolación.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
-msgstr ""
+msgstr "Activar corrección de aberración cromática"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
@@ -57437,13 +57516,15 @@ msgid ""
 "<title>Enable Chromatic Aberration correction</title><p>Enlarge the raw red-"
 "green and blue-yellow axis by the given factors (automatic by default).</p>"
 msgstr ""
+"<title>Activar corrección de aberración cromática</title><p>Ampliar los ejes "
+"rojo-verde y azul-amarillo sin procesar según los factores indicados "
+"(automático por omisión).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
-#, fuzzy, kde-format
-#| msgid "Cross-channel color adjustment"
+#, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
-msgstr "Ajuste de color de canal cruzado"
+msgstr "Ajustes automáticos del eje de color"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:672
 #, kde-format
@@ -57455,6 +57536,11 @@ msgid ""
 "method may fail. In this case, disable this option and tune manually color "
 "factors.</p>"
 msgstr ""
+"<title>Corrección automática de la aberración cromática</title><p>Si esta "
+"opción está activada, se intentará desplazar ligeramente los canales de la "
+"imagen y evaluar el cambio en la aberración cromática. Tenga en cuenta que "
+"si disparó con un patrón azul-rojo, este método podría fallar. En tal caso, "
+"desactive esta opción y ajuste manualmente los factores de color.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:679
 #, kde-format
@@ -57469,6 +57555,8 @@ msgid ""
 "<title>Red-Green multiplier</title><p>Set here the amount of correction on "
 "red-green axis</p>"
 msgstr ""
+"<title>Multiplicador rojo-verde</title><p>Defina aquí la cantidad de "
+"corrección en el eje rojo-verde.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:687
 #, kde-format
@@ -57483,6 +57571,8 @@ msgid ""
 "<title>Blue-Yellow multiplier</title><p>Set here the amount of correction on "
 "blue-yellow axis</p>"
 msgstr ""
+"<title>Multiplicador azul-amarillo</title><p>Defina aquí la cantidad de "
+"corrección en el eje azul-amarillo.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:712
 #, kde-format
@@ -57500,7 +57590,7 @@ msgstr "Perfil de la cámara:"
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
-msgstr "Ninguna"
+msgstr "Ninguno"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
 #, kde-format
@@ -57525,6 +57615,14 @@ msgid ""
 "if it exists.</li><li><emphasis strong='true'>Custom</emphasis>: use a "
 "custom input color space profile.</li></ul></p>"
 msgstr ""
+"<title>Perfil de la cámara</title><p>Seleccione aquí el espacio de color de "
+"entrada para descodificar datos RAW.</p><p><ul><li><emphasis "
+"strong='true'>Ninguno</emphasis>: no se usa ningún perfil de color de "
+"entrada durante la descodificación RAW.</li><li><emphasis "
+"strong='true'>Integrado</emphasis>: usar el perfil de color integrado del "
+"archivo RAW, si existe.</li><li><emphasis strong='true'>Personalizado</"
+"emphasis>: usar un perfil de espacio de color de entrada personalizado.</"
+"li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
 #, kde-format
@@ -57538,11 +57636,10 @@ msgid "Workspace:"
 msgstr "Espacio de trabajo:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
-#, fuzzy, kde-format
-#| msgid "No profile"
+#, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
-msgstr "Sin perfil"
+msgstr "Sin procesar (sin perfil)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
@@ -57594,6 +57691,23 @@ msgid ""
 "in mind.</li><li><emphasis strong='true'>Custom</emphasis>: use a custom "
 "output color space profile.</li></ul></p>"
 msgstr ""
+"<title>Espacio de trabajo</title><p>Seleccione aquí el espacio de color de "
+"salida que se usa para descodificar datos RAW.</p><p><ul><li><emphasis "
+"strong='true'>Sin procesar (sin perfil)</emphasis>: en este modo, no se usa "
+"ningún espacio de color de salida durante la descodificación RAW.</"
+"li><li><emphasis strong='true'>sRGB</emphasis>: espacio de color RGB, creado "
+"cooperativamente por Hewlett-Packard y Microsoft. Es la mejor elección para "
+"imágenes destinadas a la Web y en fotografías de retratos.</li><li><emphasis "
+"strong='true'>RGB de Adobe</emphasis>: este espacio de color es una "
+"extensión de sRGB, desarrollado por Adobe. Se usa para aplicaciones "
+"fotográficas de publicidad y artes plásticas.</li><li><emphasis "
+"strong='true'>Gama amplia</emphasis>: este espacio de color es una versión "
+"expandida del espacio de color RGB de Adobe.</li><li><emphasis "
+"strong='true'>Pro-Photo</emphasis>: este espacio de color es un espacio de "
+"color RGB, desarrollado por Kodak, que ofrece una gama especialmente grande "
+"destinada al uso de salidas fotográficas.</li><li><emphasis "
+"strong='true'>Personalizado</emphasis>: usar un perfil personalizado de "
+"espacio de color de salida.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:771
 #, kde-format
@@ -57619,6 +57733,8 @@ msgid ""
 "<title>Threshold</title><p>Set here the noise reduction threshold value to "
 "use.</p>"
 msgstr ""
+"<title>Umbral</title><p>Defina aquí el valor del umbral de reducción de "
+"ruido que se usará.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1003
 #, kde-format
@@ -57632,6 +57748,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<title>Luminance</title><p>Amount of Luminance impulse noise reduction.</p>"
 msgstr ""
+"<title>Luminancia</title><p>Cantidad de reducción de ruido de impulsos de "
+"luminancia.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1006
 #, kde-format
@@ -57646,6 +57764,8 @@ msgid ""
 "<title>Chrominance</title><p>Amount of Chrominance impulse noise reduction.</"
 "p>"
 msgstr ""
+"<title>Crominancia</title><p>Cantidad de reducción de ruido de impulsos de "
+"crominancia.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rcombobox.cpp:73
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rnuminput.cpp:83
@@ -57705,20 +57825,19 @@ msgstr "Lempel-Ziv y Welch"
 #, kde-format
 msgctxt "TIFF options"
 msgid "Pixar Log"
-msgstr ""
+msgstr "Pixar Log"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:59
-#, fuzzy, kde-format
-#| msgid "Horizontal offset:"
+#, kde-format
 msgctxt "TIFF options"
 msgid "Horizontal Differencing"
-msgstr "Desplazamiento horizontal:"
+msgstr "Diferenciación horizontal"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:62
 #, kde-format
 msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
-msgstr ""
+msgstr "Diferenciación horizontal de coma flotante"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1043
 #, kde-format
@@ -57959,17 +58078,16 @@ msgid "None"
 msgstr "Ninguna"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:51
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Segment-smooth"
-msgstr "Segmentos"
+msgstr "Segmento suave"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:54
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Pseudo-random dithering"
-msgstr ""
+msgstr "Tramado pseudoaleatorio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
@@ -58014,7 +58132,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:136
 #, kde-format
 msgid "Dithering"
-msgstr "Entramado"
+msgstr "Tramado"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, targetSize)
@@ -58439,6 +58557,8 @@ msgid ""
 "This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
 "or newer."
 msgstr ""
+"Este archivo XCF es demasiado reciente. Krita no admite archivos XCF creados "
+"por GIMP 2.9 o posterior."
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
 #, kde-format
@@ -58459,38 +58579,30 @@ msgstr "Modo de manchado"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/smear_paint."
-#| "png"
-#| msgid "smear paint"
+#, kde-format
 msgid "Smearing"
-msgstr "mancha de pintura"
+msgstr "Frotar"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:45
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:107
 #, kde-format
 msgid "Dulling"
-msgstr ""
+msgstr "Sin filo"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Preserve Alpha"
+#, kde-format
 msgid "Smear Alpha"
-msgstr "Preservar el alfa"
+msgstr "Frotar alfa"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:141
-#, fuzzy, kde-format
-#| msgid "Paint Thickness"
+#, kde-format
 msgid "Paint Thickness Mode"
-msgstr "Grosor de la pintura"
+msgstr "Modo de grosor de pintura"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:145
-#, fuzzy, kde-format
-#| msgid "Paint Layer"
+#, kde-format
 msgid "Paint over"
-msgstr "Capa de pintura"
+msgstr "Pintar encima"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:45
@@ -58507,29 +58619,32 @@ msgstr "Proporción de color"
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionData.h:40
 #, kde-format
 msgid "Paint Thickness"
-msgstr "Grosor de la pintura"
+msgstr "Grosor de pintura"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:38
 #: plugins/paintops/libpaintop/KisLightnessStrengthOptionWidget.cpp:30
 #, kde-format
 msgid "Disabled: brush must be in Lightness mode for this option to apply"
 msgstr ""
+"Desactivado: el pincel debe estar en modo luminosidad para poder aplicar "
+"esta opción."
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:43
 #, kde-format
 msgid "Overwrite (Smooth out when low) existing paint thickness"
-msgstr ""
+msgstr "Sobrescribir (suavizar cuando es bajo) el grosor de pintura existente"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:44
 #, kde-format
 msgid "Paint over existing paint thickness (controlled by Smudge Length)"
 msgstr ""
+"Pintar sobre el grosor de pintura existente (controlado por la longitud de "
+"corrimiento)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Paint Thickness"
+#, kde-format
 msgid "Paint Thickness Mode:"
-msgstr "Grosor de la pintura"
+msgstr "Modo de grosor de pintura:"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:48
 #, kde-format
@@ -58537,6 +58652,8 @@ msgid ""
 "Describes how the brush's paint thickness interacts with existing thick "
 "paint, especially at low values."
 msgstr ""
+"Describe cómo interactúa el grosor de pintura del pincel con el grosor de "
+"pintura existente, especialmente en valores bajos."
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionData.h:39
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
@@ -58550,25 +58667,26 @@ msgid "Smudge mode:"
 msgstr "Modo de manchado:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
-#, fuzzy, kde-format
-#| msgid "Preserve alpha"
+#, kde-format
 msgid "Smear alpha:"
-msgstr "Preservar el alfa"
+msgstr "Frotar alfa:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr ""
+msgstr "Usar nuevo algoritmo de manchado:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
 #, kde-format
 msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
 msgstr ""
+"(necesario para los pinceles de imagen a color, mapa de luminosidad y mapa "
+"de degradado)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
 #, kde-format
 msgid " (caution, pierced brush!)"
-msgstr ""
+msgstr " (cuidado, pincel perforado)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:112
 #, kde-format
@@ -58577,6 +58695,8 @@ msgid ""
 "This brush has transparent pixels in its center. \"Dulling\" mode may give "
 "unstable results. Consider using \"Smearing\" mode instead."
 msgstr ""
+"Este pincel tiene píxeles transparentes en el centro. El modo «Sin filo» "
+"puede obtener resultados inestables. Considere el uso del modo «Frotar»."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
 #, kde-format
@@ -58596,11 +58716,16 @@ msgid ""
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
+"Pinta en la capa actual,\n"
+"aunque usa todas las capas visibles para entrada de corrimiento.\n"
+"NOTA: Este modo solo funciona correctamente con un fondo totalmente opaco."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
+"Desactivado: el modo de superposición no es compatible con el modo de "
+"luminosidad del pincel."
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
@@ -58707,10 +58832,9 @@ msgid "Healing"
 msgstr "Reparación"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:219
-#, fuzzy, kde-format
-#| msgid "Move Shortcut"
+#, kde-format
 msgid "Move Source"
-msgstr "Acceso rápido para mover"
+msgstr "Mover origen"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:64
 #, kde-format
@@ -59342,20 +59466,14 @@ msgid "Ink Depletion Curve Weight:"
 msgstr "Peso de la curva de agotamiento de la tinta:"
 
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Hatch_diag_S.kpp"
-#| msgid "Hatch diag S"
+#, kde-format
 msgid "Hatching"
-msgstr "Trama diagonal fina"
+msgstr "Rayado"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "Context: dynamic sensors"
-#| msgid "Drawing angle"
+#, kde-format
 msgid "Hatching Angle"
-msgstr "Ángulo de dibujo"
+msgstr "Ángulo de rayado"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:127
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
@@ -59373,21 +59491,17 @@ msgstr "Grosor"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Hatching Brush (heavy aliasing in preview mode)"
-msgstr ""
+msgstr "Pincel de rayado (suavizado extremo en modo de vista previa)"
 
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "The 'path options' section label in magnetic selection's tool options"
-#| msgid "Path options"
+#, kde-format
 msgid "Hatching options"
-msgstr "Opciones de la ruta"
+msgstr "Opciones de rayado"
 
 #: plugins/paintops/hatching/KisHatchingPreferencesWidget.cpp:43
-#, fuzzy, kde-format
-#| msgid "Color wheel preferences"
+#, kde-format
 msgid "Hatching preferences"
-msgstr "Preferencias de la rueda de colores"
+msgstr "Preferencias del rayado"
 
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
@@ -60040,6 +60154,11 @@ msgid ""
 "\n"
 "Optimal for very big brushes"
 msgstr ""
+"Nivel de precisión 1 (más rápido)\n"
+"Precisión de subpíxeles: desactivada\n"
+"Precisión de tamaño de pincel: 5 %\n"
+"\n"
+"Óptimo para pinceles muy grandes"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
 #, kde-format
@@ -60050,6 +60169,11 @@ msgid ""
 "\n"
 "Optimal for big brushes"
 msgstr ""
+"Nivel de precisión 2\n"
+"Precisión de subpíxeles: desactivada\n"
+"Precisión de tamaño de pincel: 1 %\n"
+"\n"
+"Óptimo para pinceles grandes"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
 #, kde-format
@@ -60058,6 +60182,9 @@ msgid ""
 "Subpixel precision: disabled\n"
 "Brush size precision: exact"
 msgstr ""
+"Nivel de precisión 3\n"
+"Precisión de subpíxeles: desactivada\n"
+"Precisión de tamaño de pincel: exacto"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
 #, kde-format
@@ -60068,6 +60195,11 @@ msgid ""
 "\n"
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
+"Nivel de precisión 4 (óptimo)\n"
+"Precisión de subpíxeles: 50 %\n"
+"Precisión de tamaño de pincel: exacto\n"
+"\n"
+"Proporciona hasta un 50 % de mejor rendimiento que el nivel 5"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
 #, kde-format
@@ -60078,6 +60210,11 @@ msgid ""
 "\n"
 "The slowest performance. Best quality."
 msgstr ""
+"Nivel de precisión 5 (mejor calidad)\n"
+"Precisión de subpíxeles: exacta\n"
+"Precisión de tamaño de pincel: exacto\n"
+"\n"
+"El menor rendimiento. Mejor calidad."
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, kde-format
@@ -60113,11 +60250,13 @@ msgid ""
 "Creates a brush tip from the current image selection.\n"
 " If no selection is present the whole image will be used."
 msgstr ""
+"Crea una punta de pincel a partir de la selección actual de la imagen.\n"
+"Si no existe ninguna selección, se usará la totalidad de la imagen."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
 #, kde-format
 msgid "Creates a brush tip from the image in the clipboard."
-msgstr ""
+msgstr "Crea una punta de pincel a partir de la imagen del portapapeles."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
 #, kde-format
@@ -60126,6 +60265,9 @@ msgid ""
 "Sets Scale to 1.0\n"
 "Sets Rotation to 0.0"
 msgstr ""
+"Vuelve a cargar el espaciado del archivo\n"
+"Define el escalado a 1,0\n"
+"Define la rotación a 0,0"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
@@ -60160,16 +60302,15 @@ msgstr ""
 " Contraste: 0 %"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgid "Makes texture lighter or darker"
-msgstr "Oscurecer el color del pincel"
+msgstr "Hace la textura más clara o más oscura"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:40
 #, kde-format
 msgid "Set gray value to be considered neutral for lightness mode"
 msgstr ""
+"Define el valor de gris que se considerará neutro para el modo de claridad"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
 #, kde-format
@@ -60208,23 +60349,19 @@ msgid "Linear Height (Photoshop)"
 msgstr "Altura lineal (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
-#| msgid "Current Brush"
+#, kde-format
 msgid "Cut Off Brush"
-msgstr "Pincel actual"
+msgstr "Pincel de corte"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Auto (Disabled)"
+#, kde-format
 msgid "Cut Off Disabled"
-msgstr "Automática (desactivada)"
+msgstr "Corte desactivado"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
-#, fuzzy, kde-format
-#| msgid "use as &Pattern"
+#, kde-format
 msgid "Cut Off Pattern"
-msgstr "Usar como &patrón"
+msgstr "Patrón de corte"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:86
 #, kde-format
@@ -60232,6 +60369,8 @@ msgid ""
 "When pattern texture values are outside the range specified by the slider, "
 "the cut-off policy will be applied."
 msgstr ""
+"Cuando los valores de la textura del patrón están fuera del intervalo "
+"especificado por el deslizador, se aplicará la política de corte."
 
 #: plugins/paintops/libpaintop/KisAirbrushOptionWidget.cpp:55
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
@@ -60250,16 +60389,14 @@ msgid "Plain color"
 msgstr "Color liso"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:18
-#, fuzzy, kde-format
-#| msgctxt "Uniform distribution in spray engine"
-#| msgid "Uniform"
+#, kde-format
 msgid "Uniform random"
-msgstr "Uniforme"
+msgstr "Uniformemente aleatorio"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:19
 #, kde-format
 msgid "Total random"
-msgstr ""
+msgstr "Totalmente aleatorio"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:21
 #, kde-format
@@ -60318,11 +60455,10 @@ msgid "Lock"
 msgstr "Bloquear"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:58
-#, fuzzy, kde-format
-#| msgid "Round Corners"
+#, kde-format
 msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
 msgid "Fan Corners"
-msgstr "Esquinas redondeadas"
+msgstr "Esquinas de abanico"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:77
 #, kde-format
@@ -60474,6 +60610,8 @@ msgid ""
 "WARNING: Dependent size of the masked brush grew too big (%1 pixels). Its "
 "value has been cropped to %2 pixels."
 msgstr ""
+"Advertencia: El tamaño dependiente del pincel enmascarado ha crecido "
+"demasiado (%1 píxeles). Su valor se ha recortado a %2 píxeles."
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
@@ -60499,7 +60637,7 @@ msgstr "Verticalmente"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
-msgstr ""
+msgstr "Solo el modo de lavado es posible cuando se usa un pincel enmascarado."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
@@ -60507,6 +60645,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Luminosity of the brush tip image is used as alpha channel for the stroke"
 msgstr ""
+"La luminosidad de la imagen de la punta del pincel se usa como canal alfa "
+"para el trazo"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, fuzzy, kde-format
@@ -60518,7 +60658,7 @@ msgstr "Intervalo de colores"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The brush tip image is painted as it is"
-msgstr ""
+msgstr "La imagen de la punta del pincel se pinta tal cual"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, fuzzy, kde-format
@@ -60534,6 +60674,9 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
+"La luminosidad de la punta del pincel se usa como corrección de claridad "
+"para el color de la pintura. El canal alfa de la imagen de la punta del "
+"pincel se usa como alfa para el trazo final."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, fuzzy, kde-format
@@ -60548,6 +60691,8 @@ msgid ""
 "The brush tip maps its value to the currently selected gradient. Alpha "
 "channel of the brush tip image is used as alpha for the final stroke"
 msgstr ""
+"La punta del pincel mapea su valor al degradado seleccionado. El canal alfa "
+"de la imagen de la punta del pincel se usa como alfa para el trazo final."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, fuzzy, kde-format
@@ -60605,7 +60750,7 @@ msgstr "Espaciado isótropo"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
 msgid "Update Between Dabs"
-msgstr ""
+msgstr "Actualizar entre pinceladas"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
@@ -60756,7 +60901,7 @@ msgstr "Fuerza de la claridad"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
-msgstr ""
+msgstr "Textura->Patrón (vista previa de baja calidad)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRepeat)
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39
@@ -60788,13 +60933,12 @@ msgid "X max: "
 msgstr "X máx: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:23
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Radius by Random, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Radio aleatorio, considere la desactivación de la vista previa instantánea"
+"Sensor aleatorio activo en la opción %1, considere la desactivación de la "
+"vista previa instantánea"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
 #, kde-format
@@ -60828,7 +60972,7 @@ msgstr "Velocidad"
 #, kde-format
 msgctxt "Option Category"
 msgid "Dabs"
-msgstr ""
+msgstr "Pinceladas"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
 #, kde-format
@@ -61208,7 +61352,7 @@ msgstr "Pincel rápido"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Sketch brush (differences in connecting lines are possible)"
-msgstr ""
+msgstr "Pincel de boceto (las diferencias de conexión de líneas son posibles)"
 
 #: plugins/paintops/sketch/KisSketchStandardOptionData.h:15
 #, kde-format
@@ -61274,6 +61418,8 @@ msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
+"Seleccione cómo se distribuyen las partículas como una función del ángulo "
+"hasta el centro del área de pulverización."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:67
 #, kde-format
@@ -61285,6 +61431,12 @@ msgid ""
 "The higher the curve at a given angle, the more particles will end at that "
 "angle."
 msgstr ""
+"Definir una distribución personalizada de las partículas.\n"
+"El eje horizontal representa el ángulo de 0 a 360 grados.\n"
+"El eje vertical representa la probabilidad de que una partícula acabe en "
+"dicho ángulo.\n"
+"Cuanto mayor sea la curva en un determinado ángulo, más partículas acabarán "
+"en dicho ángulo."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
@@ -61304,6 +61456,7 @@ msgstr "x"
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
 msgstr ""
+"Definir el número de veces que se debe repetir la curva de 0 a 360 grados."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:79
 #, kde-format
@@ -61311,6 +61464,8 @@ msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
+"Seleccionar cómo se distribuyen las partículas como una función de la "
+"distancia desde el centro del área de pulverización."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:82
 #, kde-format
@@ -61318,6 +61473,8 @@ msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
+"Activa el anterior comportamiento en el que las partículas se acumulan más "
+"hacia el centro del área de pulverización."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
 #, kde-format
@@ -61331,12 +61488,14 @@ msgid ""
 "Lower values will make the particles concentrate towards the center of the "
 "spray area."
 msgstr ""
+"Definir la desviación estándar para la distribución gaussiana.\n"
+"Los valores más bajos harán que las partículas se concentren hacia el centro "
+"del área de pulverización."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "Deform amount:"
+#, kde-format
 msgid "Clustering amount: "
-msgstr "Cantidad de deformación:"
+msgstr "Cantidad de acumulación: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
@@ -61348,6 +61507,13 @@ msgid ""
 "the spray area.\n"
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
+"Definir cómo se distribuyen las partículas en el área de pulverización.\n"
+"Los valores positivos harán que las partículas se concentren hacia el centro "
+"del área de pulverización.\n"
+"Los valores negativos harán que las partículas se concentren hacia el borde "
+"del área de pulverización.\n"
+"Los valores cercanos a 0 harán que las partículas se distribuyan más "
+"uniformemente."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:103
 #, kde-format
@@ -61360,6 +61526,13 @@ msgid ""
 "The higher the curve at a given distance, the more particles will end at "
 "that distance."
 msgstr ""
+"Definir una distribución personalizada de las partículas.\n"
+"El eje horizontal representa la distancia desde el centro hasta el borde del "
+"área de pulverización.\n"
+"El eje vertical representa la probabilidad de que una partícula acabe a "
+"dicha distancia.\n"
+"Cuando mayor sea la curva a una determinada distancia, más partículas "
+"acabarán a dicha distancia."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:112
 #, kde-format
@@ -65905,10 +66078,9 @@ msgid "Use tablet &pressure"
 msgstr "Usar presión de la tableta"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Touch Painting:"
+#, kde-format
 msgid "Thinning:"
-msgstr "Pintura al tacto:"
+msgstr "Pérdida de grosor:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
@@ -67884,13 +68056,15 @@ msgstr "Lazo"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:554
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr ""
+msgstr "Activar para rellenar las regiones opuestas en su lugar"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
+"Activar también el relleno de formas que toquen el contorno de la región "
+"circundante"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:589
 #, kde-format
@@ -67947,50 +68121,46 @@ msgid "Transparency"
 msgstr "Transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:915
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "Selector de color específico"
+msgstr "Especificar color o transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:918
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr ""
+msgstr "Todo, excluyendo un determinado color"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:921
-#, fuzzy, kde-format
-#| msgid "Smudge Transparency"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "Transparencia de manchado"
+msgstr "Todo, excluyendo la transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:924
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr ""
+msgstr "Todo, excluyendo un determinado color o la transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:927
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr ""
+msgstr "Todo lo rodeado por un determinado color"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:930
-#, fuzzy, kde-format
-#| msgctxt "memory/gradients/Foreground to Transparent.svg"
-#| msgid "1. Foreground to Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "1. Primer plano a transparente"
+msgstr "Todo lo rodeado por transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:933
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr ""
+msgstr "Todo lo rodeado por un determinado color o por transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format
@@ -67998,12 +68168,9 @@ msgid "Enclose and Fill Tool"
 msgstr "Herramienta de cierre y relleno"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Colorize Mask Tool"
 msgctxt "(qtundo-format)"
 msgid "Colorize Mask Key Stroke"
-msgstr "Herramienta de máscara de coloración"
+msgstr "Tecla de máscara de coloración"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
 #, kde-format
@@ -68022,11 +68189,13 @@ msgid ""
 "Activate for images with vast solid areas. Set the value to the width of the "
 "thinnest lines on the image"
 msgstr ""
+"Activar para imágenes con grandes áreas sólidas. Definir el valor a la "
+"anchura de las líneas más finas de la imagen."
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
 msgid "Gap close hint: "
-msgstr ""
+msgstr "Sugerencia para cerrar huecos: "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
 #, kde-format
@@ -68035,6 +68204,8 @@ msgid ""
 "The mask will try to close non-closed contours if the gap is smaller than "
 "\"Gap close hint\" value"
 msgstr ""
+"La máscara tratará de cerrar los contornos sin cerrar si el hueco es menor "
+"que el valor «Sugerencia para cerrar huecos»."
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
 #, kde-format
@@ -68049,6 +68220,8 @@ msgid ""
 "The mask will try to remove parts of the key strokes that are placed outside "
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
+"La máscara tratará de eliminar partes de los trazos clave situados fuera de "
+"los contornos cerrados. 0 %: sin efecto; 100 %: máximo efecto."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
@@ -68324,23 +68497,19 @@ msgid "Transform a layer or a selection"
 msgstr "Transformar una capa o una selección"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "This is appended to the color profile which is the default for the given "
-#| "colorspace and bit-depth"
-#| msgid "(Default)"
+#, kde-format
 msgid "Default (Affine)"
-msgstr "(Por omisión)"
+msgstr "Predeterminado (afín)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:89
 #, kde-format
 msgid "Strong (Rigid)"
-msgstr ""
+msgstr "Fuerte (rígido)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:90
 #, kde-format
 msgid "Strongest (Similitude)"
-msgstr ""
+msgstr "El más fuerte (similitud)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:218
 #, kde-format
@@ -68360,6 +68529,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "When in non-buildup mode, shows how fast the deformation limit is reached."
 msgstr ""
+"En el modo no acumulativo, muestra la rapidez con que se alcanza el límite "
+"de deformación."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:237
 #, kde-format
@@ -68369,6 +68540,10 @@ msgid ""
 "deformations one on top of the other without any limits. Wash mode gradually "
 "deforms the piece to the selected deformation level."
 msgstr ""
+"Cambiar entre los modos de pintura acumulativo y de lavado. El modo "
+"acumulativo añade deformaciones una encima de otra sin límite. El modo de "
+"lavado deforma gradualmente la pieza hasta el nivel de deformación "
+"seleccionado."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:245
 #, kde-format
@@ -68380,13 +68555,13 @@ msgstr "Espacio entre dos aplicaciones secuenciales de la deformación"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Size</b> value according to current stylus pressure"
-msgstr ""
+msgstr "Escalar el valor del <b>Tamaño</b> según la presión actual del lápiz"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:255
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Amount</b> value according to current stylus pressure"
-msgstr ""
+msgstr "Escalar el valor de <b>Cantidad</b> según la presión actual del lápiz"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:260
 #, kde-format
@@ -68427,7 +68602,7 @@ msgstr "Deshacer: borrar acciones de otras herramientas"
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:621
 #, kde-format
 msgid "Switch between editing and deforming cage"
-msgstr ""
+msgstr "Cambiar entre edición y jaula de deformación"
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:682

@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-16 02:00+0000\n"
-"PO-Revision-Date: 2025-11-09 10:30+0100\n"
+"PO-Revision-Date: 2025-11-15 22:14+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -45928,15 +45928,13 @@ msgid "... After"
 msgstr "...Dopo"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:177
-#, fuzzy, kde-format
-#| msgid "Width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
 msgstr "Larghezza:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Altezza:"
@@ -66762,11 +66760,10 @@ msgstr ""
 "ricerca «E»)."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Nessuna immagine disponibile."
+msgstr "Nessun glifo alternativo disponibile."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -67365,20 +67362,17 @@ msgstr "Rimuove le trasformazioni del carattere dalla selezione."
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:282
 #: plugins/tools/svgtexttool/SvgTextTool.action:283
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Formato"
+msgstr "Rimuovi formattazione"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
+#, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "Rimuove le trasformazioni del carattere dalla selezione."
+msgstr "Rimuove dalla selezione tutte le proprietà del testo impostate."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format

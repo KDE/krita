@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-16 02:00+0000\n"
-"PO-Revision-Date: 2025-11-14 09:05+0100\n"
+"PO-Revision-Date: 2025-11-15 14:50+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -67097,11 +67097,10 @@ msgstr ""
 "exemple, U +0045 recherchera « E »)"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "No picture available."
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Aucune image disponible"
+msgstr "Aucune alternative aux glyphes disponible."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format

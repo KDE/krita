@@ -45110,13 +45110,13 @@ msgstr "...之后"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Width:"
-msgstr ""
+msgstr "宽度："
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
-msgstr ""
+msgstr "高度："
 
 #: plugins/dockers/textproperties/qml/Direction.qml:13
 #, kde-format
@@ -65414,7 +65414,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr ""
+msgstr "没有可用的字型。"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -66008,14 +66008,14 @@ msgstr "移除选中文本的字符变换。"
 #, kde-format
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr ""
+msgstr "清除格式"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
 #, kde-format
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr ""
+msgstr "移除选中对象的所有文本属性。"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format

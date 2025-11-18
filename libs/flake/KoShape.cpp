@@ -409,16 +409,22 @@ void KoShape::applyAbsoluteTransformation(const QTransform &matrix)
 
 void KoShape::applyTransformation(const QTransform &matrix)
 {
-    s->localMatrix = matrix * s->localMatrix;
-    notifyChanged();
-    shapeChangedPriv(GenericMatrixChange);
+    const QTransform newLocalMatrix = matrix * s->localMatrix;
+
+    if (s->localMatrix != newLocalMatrix) {
+        s->localMatrix = newLocalMatrix;
+        notifyChanged();
+        shapeChangedPriv(GenericMatrixChange);
+    }
 }
 
 void KoShape::setTransformation(const QTransform &matrix)
 {
-    s->localMatrix = matrix;
-    notifyChanged();
-    shapeChangedPriv(GenericMatrixChange);
+    if (s->localMatrix != matrix) {
+        s->localMatrix = matrix;
+        notifyChanged();
+        shapeChangedPriv(GenericMatrixChange);
+    }
 }
 
 QTransform KoShape::transformation() const

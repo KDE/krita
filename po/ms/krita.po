@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 14:07+0000\n"
+"POT-Creation-Date: 2025-11-18 02:40+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -21246,7 +21246,7 @@ msgstr "Import Imej"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2636 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2641 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -23774,9 +23774,9 @@ msgstr "&Alih Keluar Lapisan"
 #: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
 #: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
 #: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
-#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1004
-#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
-#: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
+#: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
 #: libs/ui/KisMainWindow.cpp:1174 libs/ui/KisMainWindow.cpp:1271
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
@@ -34825,19 +34825,19 @@ msgstr "Tidak dapat tambah lapisan ke imej."
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "Tidak dapat tambah lapisan ke imej."
 
-#: libs/ui/KisDocument.cpp:998
+#: libs/ui/KisDocument.cpp:1001
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Ralat semasa autosimpan! Penyekat penuh?"
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1008
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Tidak dapat tambah lapisan ke imej."
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1025
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -34845,47 +34845,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1028
+#: libs/ui/KisDocument.cpp:1031
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1045
+#: libs/ui/KisDocument.cpp:1048
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "Poligaris"
 
-#: libs/ui/KisDocument.cpp:1470
+#: libs/ui/KisDocument.cpp:1475
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Autopenyimpanan..."
 
-#: libs/ui/KisDocument.cpp:1478
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving..."
 msgstr "Autopenyimpanan..."
 
-#: libs/ui/KisDocument.cpp:1484
+#: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1627
+#: libs/ui/KisDocument.cpp:1632
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Ralat semasa autosimpan! Penyekat penuh?"
 
-#: libs/ui/KisDocument.cpp:1641
+#: libs/ui/KisDocument.cpp:1646
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "Poligaris"
 
-#: libs/ui/KisDocument.cpp:1898
+#: libs/ui/KisDocument.cpp:1903
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -34897,39 +34897,39 @@ msgstr ""
 "URL Cacat\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1964
+#: libs/ui/KisDocument.cpp:1969
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Fail%1 tidak wujud."
 
-#: libs/ui/KisDocument.cpp:1993
+#: libs/ui/KisDocument.cpp:1998
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Buka dalam Dokumen Baru"
 
-#: libs/ui/KisDocument.cpp:2008
+#: libs/ui/KisDocument.cpp:2013
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Tidak dapat tambah lapisan ke imej."
 
-#: libs/ui/KisDocument.cpp:2019
+#: libs/ui/KisDocument.cpp:2024
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2157
+#: libs/ui/KisDocument.cpp:2162
 #, fuzzy, kde-format
 msgid "Not Saved"
 msgstr "Tidak diisi"
 
-#: libs/ui/KisDocument.cpp:2643
+#: libs/ui/KisDocument.cpp:2648
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "latar belakang"
 
-#: libs/ui/KisDocument.cpp:2705
+#: libs/ui/KisDocument.cpp:2710
 #, fuzzy, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

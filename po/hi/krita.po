@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 14:07+0000\n"
+"POT-Creation-Date: 2025-11-18 02:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -21506,7 +21506,7 @@ msgstr "आयात किया हुआ चित्र"
 
 #. i18n.
 #: libs/image/kis_image.cc:736 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2636 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2641 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -24001,9 +24001,9 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
 #: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
 #: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
-#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1004
-#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
-#: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
+#: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
 #: libs/ui/KisMainWindow.cpp:1174 libs/ui/KisMainWindow.cpp:1271
 #: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
@@ -35241,19 +35241,19 @@ msgstr "एसवीजी में सहेजा नहीं जा सक�
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "एसवीजी में सहेजा नहीं जा सका : %1"
 
-#: libs/ui/KisDocument.cpp:998
+#: libs/ui/KisDocument.cpp:1001
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "सहेजते समय त्रुटि %1: %2"
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1008
 #, fuzzy, kde-format
 #| msgid "Could not save %1"
 msgid "Could not save %1."
 msgstr "%1 को सहेज नहीं सका"
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1025
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -35261,45 +35261,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1028
+#: libs/ui/KisDocument.cpp:1031
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1045
+#: libs/ui/KisDocument.cpp:1048
 #, kde-format
 msgid "Finished saving %1"
 msgstr "सहेजना संपूर्ण %1"
 
-#: libs/ui/KisDocument.cpp:1470
+#: libs/ui/KisDocument.cpp:1475
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "स्वचालित सहेजा जा रहा है... %1"
 
-#: libs/ui/KisDocument.cpp:1478
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving..."
 msgstr "स्वचालित सहेजा जा रहा है..."
 
-#: libs/ui/KisDocument.cpp:1484
+#: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1627
+#: libs/ui/KisDocument.cpp:1632
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "स्वचालित सहेजने के दौरान त्रुटि %1: %2"
 
-#: libs/ui/KisDocument.cpp:1641
+#: libs/ui/KisDocument.cpp:1646
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "स्वचालित सहेजना संपूर्ण %1"
 
-#: libs/ui/KisDocument.cpp:1898
+#: libs/ui/KisDocument.cpp:1903
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -35308,39 +35308,39 @@ msgstr ""
 "विकृत पथ \n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1964
+#: libs/ui/KisDocument.cpp:1969
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "फ़ाइल %1 अस्तित्व में नहीं है."
 
-#: libs/ui/KisDocument.cpp:1993
+#: libs/ui/KisDocument.cpp:1998
 #, kde-format
 msgid "Opening document"
 msgstr "दस्तावेज़ खोला जा रहा है"
 
-#: libs/ui/KisDocument.cpp:2008
+#: libs/ui/KisDocument.cpp:2013
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "'%1' को खोल नहीं सकते।"
 
-#: libs/ui/KisDocument.cpp:2019
+#: libs/ui/KisDocument.cpp:2024
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2157
+#: libs/ui/KisDocument.cpp:2162
 #, kde-format
 msgid "Not Saved"
 msgstr "सहेजा नहीं है"
 
-#: libs/ui/KisDocument.cpp:2643
+#: libs/ui/KisDocument.cpp:2648
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "पृष्ठभूमि फिल"
 
-#: libs/ui/KisDocument.cpp:2705
+#: libs/ui/KisDocument.cpp:2710
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

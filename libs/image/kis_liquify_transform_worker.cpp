@@ -524,11 +524,20 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
 
     GridIterationTools::QImagePolygonOp polygonOp(srcImage, dstImage, srcImageOffset, dstQImageOffset);
     GridIterationTools::RegularGridIndexesOp indexesOp(m_d->gridSize);
-    GridIterationTools::iterateThroughGrid
-        <GridIterationTools::AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
-                                                          m_d->gridSize,
-                                                          originalPointsLocal,
-                                                          transformedPointsLocal);
+
+
+    QRect correctSubGrid = GridIterationTools::calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, m_d->accumulatedBrushStrokes, m_d->gridSize);
+    GridIterationTools::iterateThroughGrid<GridIterationTools::AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
+                                                    m_d->gridSize,
+                                                    originalPointsLocal,
+                                                    transformedPointsLocal,
+                                                    correctSubGrid);
+
+
+    QList<QRectF> areasToCopy = GridIterationTools::cutOutSubgridFromBounds(correctSubGrid, m_d->srcBounds, m_d->gridSize, m_d->originalPoints);
+    for (int i = 0; i < areasToCopy.length(); i++) {
+        polygonOp.fastCopyArea(imageToThumbTransform.map(QPolygonF(areasToCopy[i])));
+    }
     return dstImage;
 }
 

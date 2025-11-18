@@ -573,7 +573,7 @@ void DefaultTool::slotAddShapesToFlow()
         KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
         if (text && !textShape) {
             textShape = text;
-        } else {
+        } else if (dynamic_cast<KoPathShape*>(shape)) {
             shapes.append(shape);
         }
     }
@@ -658,7 +658,7 @@ void DefaultTool::slotSubtractShapesFromFlow()
         KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
         if (text && !textShape) {
             textShape = text;
-        } else {
+        } else if (dynamic_cast<KoPathShape*>(shape)) {
             shapes.append(shape);
         }
     }

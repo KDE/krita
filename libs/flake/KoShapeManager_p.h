@@ -57,7 +57,6 @@ public:
     KoCanvasBase *canvas;
     KoRTree<KoShape *> tree;
     QSet<KoShape *> aggregate4update;
-    QHash<KoShape*, int> shapeIndexesBeforeUpdate;
     KoShapeManager *q;
     KoShapeManager::ShapeInterface shapeInterface;
     QMutex shapesMutex;

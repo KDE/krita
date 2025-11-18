@@ -76,12 +76,39 @@ public:
 
 class KoShape::Private
 {
+private:
+    /**
+     * A special listener class to track the lifetime of the dependees
+     * and remove them from the notification list when they are deleted
+     */
+    struct DependeesLifetimeListener : KoShape::ShapeChangeListener
+    {
+        DependeesLifetimeListener(QList<KoShape*> &dependees)
+            : m_dependees(dependees)
+        {
+        }
+
+        void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override {
+            if (type == KoShape::Deleted && m_dependees.contains(shape)) {
+                m_dependees.removeOne(shape);
+                // the listener will be unlinked on destruction automatically
+            }
+        }
+
+    private:
+        QList<KoShape*> &m_dependees;
+    };
+
 public:
-    KoShapeContainer *parent;
+    Private() : dependeesLifetimeListener(dependees) {}
+    Private(const Private &rhs) = delete;
+
+    KoShapeContainer *parent = nullptr;
     QSet<KoShapeManager *> shapeManagers;
     QSet<KoShape *> toolDelegates;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     QList<KoShape::ShapeChangeListener*> listeners;
+    DependeesLifetimeListener dependeesLifetimeListener;
 };
 
 #endif

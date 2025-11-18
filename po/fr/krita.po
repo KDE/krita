@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 16:18+0000\n"
+"POT-Creation-Date: 2025-11-18 04:10+0000\n"
 "PO-Revision-Date: 2025-11-04 13:27+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -16983,7 +16983,7 @@ msgstr "Désélectionner"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:733
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Ajout d'un calque"
@@ -17998,7 +17998,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Calque de groupe"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:973
 #, kde-format
 msgid "File Layer"
 msgstr "Calque de fichier"
@@ -18009,7 +18009,7 @@ msgstr "Calque de fichier"
 msgid "Vector Layer"
 msgstr "Calque vectoriel"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "Filter Layer"
 msgstr "Calque de filtrage"
@@ -19629,7 +19629,7 @@ msgstr "Ressources locales"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_layer_manager.cc:981 libs/ui/kis_node_manager.cpp:1240
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
 #: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
 #: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
@@ -29505,7 +29505,7 @@ msgstr "Propriétés du calque de remplissage"
 msgid "File Layer Properties"
 msgstr "Propriétés du calque de fichier"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:981
 #, kde-format
 msgid "No file name specified"
 msgstr "Aucun nom de fichier spécifié"
@@ -29539,23 +29539,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Convertir en calque de fichier"
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nouveau calque de filtrage"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:327
+#: libs/ui/kis_layer_manager.cc:737 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr "Calque de remplissage"
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Aplatir l'image"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:765
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29564,7 +29564,7 @@ msgstr ""
 "L'image contient des calques cachés qui seront perdus. Voulez-vous aplatir "
 "l'image ?"
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:843
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29572,13 +29572,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Le calque est verrouillé."
 msgstr[1] "Les calques sont verrouillés."
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:865
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Le calque est verrouillé."
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:882
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29590,12 +29590,12 @@ msgstr ""
 "Le calque non animé est fusionné dans la trame actuelle. Pour le fusionner "
 "dans l'élément entier, veuillez créer au moins une trame."
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Convertir les groupes invisibles"
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:934
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exporter uniquement les groupes du plus haut niveau"

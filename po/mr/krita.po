@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 16:18+0000\n"
+"POT-Creation-Date: 2025-11-18 04:10+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17310,7 +17310,7 @@ msgstr "निवड काढून टाका"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:733
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "स्तर वाढवा"
@@ -18394,7 +18394,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "समूह :"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:973
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "गाळणी स्तर (&F)..."
@@ -18405,7 +18405,7 @@ msgstr "गाळणी स्तर (&F)..."
 msgid "Vector Layer"
 msgstr "व्हेक्टर स्तर"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:689
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "गाळणी स्तर (&F)..."
@@ -20106,7 +20106,7 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_layer_manager.cc:981 libs/ui/kis_node_manager.cpp:1240
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
 #: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
 #: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
@@ -29928,7 +29928,7 @@ msgstr "गाळणी स्तराचे गुणधर्म"
 msgid "File Layer Properties"
 msgstr "गाळणी स्तराचे गुणधर्म"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:981
 #, kde-format
 msgid "No file name specified"
 msgstr ""
@@ -29964,30 +29964,30 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "पासून वर्तमान स्तर बदला"
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "New Filter Layer"
 msgstr "नवीन गाळणी स्तर"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:327
+#: libs/ui/kis_layer_manager.cc:737 libs/ui/kis_mimedata.cpp:327
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "गाळणी स्तर (&F)..."
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:764
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "प्रतिमा सपाट करा"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:765
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "प्रतिमेत लपलेले स्तर असून ते नष्ट होतील."
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:843
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager"
@@ -29996,14 +29996,14 @@ msgid_plural "Layers are locked"
 msgstr[0] "स्तर कुलूपबंद आहे."
 msgstr[1] "स्तर कुलूपबंद आहे."
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:865
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "स्तर कुलूपबंद आहे."
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:882
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -30013,12 +30013,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "न दिसणारे समूह रूपांतरित करा"
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:934
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "वरच्या पातळीवरील समूहच फक्त निर्यात करा"

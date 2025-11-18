@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 16:18+0000\n"
+"POT-Creation-Date: 2025-11-18 04:10+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -16849,7 +16849,7 @@ msgstr "Zrušit výběr"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:733
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Přidat vrstvu"
@@ -17835,7 +17835,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Skupina"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:973
 #, kde-format
 msgid "File Layer"
 msgstr "Vrstva souborů"
@@ -17846,7 +17846,7 @@ msgstr "Vrstva souborů"
 msgid "Vector Layer"
 msgstr "Vektorová vrstva"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "Filter Layer"
 msgstr "Vrstva &filtrů"
@@ -19446,7 +19446,7 @@ msgstr ""
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_layer_manager.cc:981 libs/ui/kis_node_manager.cpp:1240
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
 #: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
 #: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
@@ -28834,7 +28834,7 @@ msgstr ""
 msgid "File Layer Properties"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:981
 #, kde-format
 msgid "No file name specified"
 msgstr "Nebyl zadán název souboru"
@@ -28866,23 +28866,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nová vrstva filtrů"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:327
+#: libs/ui/kis_layer_manager.cc:737 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr "Vyplnit vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Sloučit obraz"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:765
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -28891,7 +28891,7 @@ msgstr ""
 "Obrázek obsahuje skryté vrstvy, které budou ztraceny. Chcete tento obrázek "
 "zploštit?"
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:843
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -28900,13 +28900,13 @@ msgstr[0] "Vrstva je uzamčena"
 msgstr[1] "Vrstvy jsou uzamčeny."
 msgstr[2] "Vrstvy jsou uzamčeny."
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:865
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Vrstva je uzamčena"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:882
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -28916,12 +28916,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:934
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 16:18+0000\n"
+"POT-Creation-Date: 2025-11-18 04:10+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17750,7 +17750,7 @@ msgstr "선택 해제"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:733
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "레이어 추가"
@@ -18782,7 +18782,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "그룹"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:973
 #, kde-format
 msgid "File Layer"
 msgstr "파일 레이어"
@@ -18793,7 +18793,7 @@ msgstr "파일 레이어"
 msgid "Vector Layer"
 msgstr "벡터 레이어"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "Filter Layer"
 msgstr "필터 레이어"
@@ -20412,7 +20412,7 @@ msgstr "로컬 리소스"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_layer_manager.cc:981 libs/ui/kis_node_manager.cpp:1240
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
 #: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
 #: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
@@ -30354,7 +30354,7 @@ msgstr "채우기 레이어 속성"
 msgid "File Layer Properties"
 msgstr "파일 레이어 속성"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:981
 #, kde-format
 msgid "No file name specified"
 msgstr "파일 이름을 지정하지 않았음"
@@ -30387,23 +30387,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "파일 레이어로 변환"
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "New Filter Layer"
 msgstr "새 필터 레이어"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:327
+#: libs/ui/kis_layer_manager.cc:737 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr "채우기 레이어"
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "이미지 병합"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:765
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -30412,20 +30412,20 @@ msgstr ""
 "이미지에 숨겨진 레이어가 들어 있으며 해당 레이어는 손실됩니다. 레이어를 병합"
 "하시겠습니까?"
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:843
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "레이어가 잠겨 있습니다"
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:865
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "레이어가 잠겨 있습니다"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:882
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -30435,12 +30435,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "보이지 않는 그룹 변환"
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:934
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "최상위 단계 그룹만 내보내기"

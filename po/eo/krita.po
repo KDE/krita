@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 16:18+0000\n"
+"POT-Creation-Date: 2025-11-18 04:10+0000\n"
 "PO-Revision-Date: 2025-01-03 21:16+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16886,7 +16886,7 @@ msgstr "Malelekti"
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:733
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Aldoni Tavolon"
@@ -17902,7 +17902,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grupo"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:973
 #, kde-format
 msgid "File Layer"
 msgstr "Dosiera Tavolo"
@@ -17913,7 +17913,7 @@ msgstr "Dosiera Tavolo"
 msgid "Vector Layer"
 msgstr "Vektora Tavolo"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "Filter Layer"
 msgstr "Filtrila Tavolo"
@@ -19528,7 +19528,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_layer_manager.cc:981 libs/ui/kis_node_manager.cpp:1240
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
 #: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
 #: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
@@ -29275,7 +29275,7 @@ msgstr "Plenig-Tavolaj Trajtoj"
 msgid "File Layer Properties"
 msgstr "Propraecj de Dosiera Tavolo"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:981
 #, kde-format
 msgid "No file name specified"
 msgstr "Neniu dosiernomo specifita"
@@ -29309,23 +29309,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Konverti al dosiera tavolo"
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:689
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nova Filtrila Tavolo"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:327
+#: libs/ui/kis_layer_manager.cc:737 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr "Plenigi Tavolon"
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Platigi Bildon"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:765
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29334,7 +29334,7 @@ msgstr ""
 "La bildo enhavas kaŝitajn tavolojn, kiuj estos perditaj. Ĉu vi volas platigi "
 "la bildon?"
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:843
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29342,13 +29342,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Tavolo estas ŝlosita"
 msgstr[1] "Tavoloj estas ŝlositaj"
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:865
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Tavolo estas ŝlosita"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:882
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29360,12 +29360,12 @@ msgstr ""
 "Neanimaciita tavolo estas kunfandita en la nunan kadron. Por kunfandi ĝin en "
 "la tutan tondaĵon, kreu almenaŭ unu kadron"
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:931
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Konverti Nevideblajn Grupojn"
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:934
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Eksporti Nur Supernivelajn Grupojn"

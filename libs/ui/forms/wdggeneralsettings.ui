@@ -823,6 +823,9 @@
                 </item>
                 <item>
                  <widget class="QCheckBox" name="m_changeEraserBrushOutline">
+                  <property name="toolTip">
+                   <string>Dynamically adjust outline to match the effective size of the brush. (For example, as brush size changes due to pen pressure.)</string>
+                  </property>
                   <property name="text">
                    <string>Use effective outline size</string>
                   </property>

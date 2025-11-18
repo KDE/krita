@@ -59,7 +59,7 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
 
     QMouseEvent event(QEvent::MouseMove, originalWidgetPoint, Qt::LeftButton, Qt::LeftButton, QFlags<Qt::KeyboardModifier>());
     KoPointerEvent ev(&event, widgetScrollPointDoc);
-    activeTool->mouseMoveEvent(&ev);
+    //activeTool->mouseMoveEvent(&ev);
 }
 
 void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)

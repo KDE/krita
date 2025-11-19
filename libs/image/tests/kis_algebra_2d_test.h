@@ -62,6 +62,10 @@ private Q_SLOTS:
 
     void testMultiplyWrappedRectVertical_data();
     void testMultiplyWrappedRectVertical();
+
+    void testIsPolygonTrulyConvex_data();
+    void testIsPolygonTrulyConvex();
+
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

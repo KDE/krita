@@ -835,6 +835,44 @@ bool isPolygonRect(const Polygon &poly, Difference tolerance) {
 
 }
 
+
+template <class T>
+bool isPolygonTrulyConvex(const QVector<T> &polygon) {
+    const int numPoints = polygon.size();
+    if (numPoints < 3)
+        return true;
+
+    qreal baseAngle = std::atan2(polygon[1].y() - polygon[0].y(), polygon[1].x() - polygon[0].x());
+    qreal secondAngle = std::atan2(polygon[2].y() - polygon[1].y(), polygon[2].x() - polygon[1].x());
+
+
+    qreal prevAngle = secondAngle;
+    secondAngle -= baseAngle;
+
+    qreal sign = signZZ(secondAngle);
+    for (int i = 2; i < numPoints; i++) {
+        int next = i == (numPoints - 1) ? 0 : i + 1;
+        if (next == 0 && fuzzyPointCompare(polygon[next], polygon[i])) {
+            break;
+        }
+        qreal nextAngle = std::atan2(polygon[next].y() - polygon[i].y(), polygon[next].x() - polygon[i].x());
+
+        qreal newPrevAngle = nextAngle;
+        nextAngle -= baseAngle;
+        nextAngle -= prevAngle;
+        prevAngle = newPrevAngle;
+        if (nextAngle < -M_PI) {
+            nextAngle += 2*M_PI;
+        } else if (nextAngle > M_PI) {
+            nextAngle -= 2*M_PI;
+        }
+        if (int(signZZ(nextAngle)) != sign) {
+            return false;
+        }
+    }
+    return true;
+}
+
 struct KRITAGLOBAL_EXPORT DecomposedMatrix {
     DecomposedMatrix();
 

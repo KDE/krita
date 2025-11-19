@@ -1885,4 +1885,24 @@ void KisAlgebra2DTest::testMultiplyWrappedRectVertical()
 #endif
 }
 
+void KisAlgebra2DTest::testIsPolygonTrulyConvex_data()
+{
+    QTest::addColumn<QPolygonF>("polygon");
+    QTest::addColumn<bool>("isConvex");
+
+    QTest::addRow("nearly rectangle") << QPolygonF(QVector<QPointF> {QPointF(0,64), QPointF(8.00001,64), QPointF(8.00001,72), QPointF(0,72)}) << true;
+
+}
+
+
+void KisAlgebra2DTest::testIsPolygonTrulyConvex()
+{
+
+    QFETCH(QPolygonF, polygon);
+    QFETCH(bool, isConvex);
+
+    QCOMPARE(isConvex, KisAlgebra2D::isPolygonTrulyConvex(polygon));
+
+}
+
 SIMPLE_TEST_MAIN(KisAlgebra2DTest)

@@ -1306,6 +1306,9 @@ void cropLineToConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendF
 
 int lineSideForPoint(const QLineF &line, const QPointF &point)
 {
+    // TODO: do we really neede these explicit checks? Do they help with
+    //       precision?
+
     if (fuzzyPointCompare(point, line.p1())) {
         return 0;
     }
@@ -1668,6 +1671,8 @@ QList<QPainterPath> getPathsFromRectangleCutThrough(const QRectF &rect, const QL
 
 QPointF findNearestPointOnLine(const QPointF &point, const QLineF &line, bool unbounded)
 {
+    // TODO: can we reuse (or deduplicate with) KisBezierUtils.cpp:nearestPoint()?
+
     if (line.length() == 0) {
         return point;
     }

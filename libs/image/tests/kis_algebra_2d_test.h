@@ -35,6 +35,17 @@ private Q_SLOTS:
 
     void testLinePolygonIntersectionsManual();
 
+    void testCalculateConvexHull();
+    void testGetPathsFromRectangleCutThrough();
+    void testGetParallelLines();
+    void testGetParallelLines2();
+
+
+    void testVectorPathReversed();
+    void testRemoveGutter();
+    void testMergingPainterPaths();
+
+
 
     void testFindTrianglePoint();
     void testTriangularMotion();

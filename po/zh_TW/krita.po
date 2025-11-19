@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-18 02:40+0000\n"
+"POT-Creation-Date: 2025-11-19 01:58+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -29421,7 +29421,7 @@ msgstr "覆蓋不透明度："
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:513
-#: libs/ui/forms/wdggeneralsettings.ui:1188
+#: libs/ui/forms/wdggeneralsettings.ui:1194
 #, kde-format
 msgid "Miscellaneous"
 msgstr "其他"
@@ -29968,7 +29968,7 @@ msgstr "啟用非整數縮放比例"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:598
-#: libs/ui/forms/wdggeneralsettings.ui:1632
+#: libs/ui/forms/wdggeneralsettings.ui:1638
 #, kde-format
 msgid "(needs restart)"
 msgstr "(需要重啟程式)"
@@ -30000,131 +30000,141 @@ msgstr "在繪畫時…"
 #. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
 #. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
 #: libs/ui/forms/wdggeneralsettings.ui:711
-#: libs/ui/forms/wdggeneralsettings.ui:817
+#: libs/ui/forms/wdggeneralsettings.ui:820
 #, kde-format
 msgid "Show outline"
 msgstr "顯示輪廓"
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_changeBrushOutline)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_changeEraserBrushOutline)
+#: libs/ui/forms/wdggeneralsettings.ui:718
+#: libs/ui/forms/wdggeneralsettings.ui:827
+#, kde-format
+msgid ""
+"Dynamically adjust outline to match the effective size of the brush. (For "
+"example, as brush size changes due to pen pressure.)"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
-#: libs/ui/forms/wdggeneralsettings.ui:718
-#: libs/ui/forms/wdggeneralsettings.ui:824
+#: libs/ui/forms/wdggeneralsettings.ui:721
+#: libs/ui/forms/wdggeneralsettings.ui:830
 #, kde-format
 msgid "Use effective outline size"
 msgstr "使用有效輪廓大小"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkSeparateEraserCursor)
-#: libs/ui/forms/wdggeneralsettings.ui:731
+#: libs/ui/forms/wdggeneralsettings.ui:734
 #, kde-format
 msgid "Use separate settings for eraser"
 msgstr "為橡皮擦選用個別設定"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
-#: libs/ui/forms/wdggeneralsettings.ui:752
+#: libs/ui/forms/wdggeneralsettings.ui:755
 #, kde-format
 msgid "Eraser Cursor Icon:"
 msgstr "橡皮擦游標圖示："
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdggeneralsettings.ui:765
+#: libs/ui/forms/wdggeneralsettings.ui:768
 #, kde-format
 msgid "Eraser Outline Shape:"
 msgstr "橡皮擦輪廓形狀："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/forms/wdggeneralsettings.ui:802
+#: libs/ui/forms/wdggeneralsettings.ui:805
 #, kde-format
 msgid "While painting with an eraser..."
 msgstr "在使用橡皮擦時…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
-#: libs/ui/forms/wdggeneralsettings.ui:837
+#: libs/ui/forms/wdggeneralsettings.ui:843
 #, kde-format
 msgid "Eraser Outline Color:"
 msgstr "橡皮擦輪廓色彩："
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/forms/wdggeneralsettings.ui:873
+#: libs/ui/forms/wdggeneralsettings.ui:879
 #, kde-format
 msgid "Brush Outline Color:"
 msgstr "筆刷輪廓色彩："
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
-#: libs/ui/forms/wdggeneralsettings.ui:894
+#: libs/ui/forms/wdggeneralsettings.ui:900
 #: plugins/dockers/logdocker/LogDockerDock.cpp:139
 #, kde-format
 msgid "Tools"
 msgstr "工具"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: libs/ui/forms/wdggeneralsettings.ui:900
+#: libs/ui/forms/wdggeneralsettings.ui:906
 #, kde-format
 msgid "Tool Options Location (needs restart)"
 msgstr "工具選項位置 (需要重啟程式)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInDocker)
-#: libs/ui/forms/wdggeneralsettings.ui:906
+#: libs/ui/forms/wdggeneralsettings.ui:912
 #, kde-format
 msgid "In Doc&ker"
 msgstr "在工具面板中(&K)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
-#: libs/ui/forms/wdggeneralsettings.ui:913
+#: libs/ui/forms/wdggeneralsettings.ui:919
 #, kde-format
 msgid "I&n Toolbar"
 msgstr "在工具列內(&N)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:926
+#: libs/ui/forms/wdggeneralsettings.ui:932
 #, kde-format
 msgid "Brush Flow Mode (needs restart):"
 msgstr "筆刷流量模式 (需要重啟程式)："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:934
+#: libs/ui/forms/wdggeneralsettings.ui:940
 #, kde-format
 msgid "Creamy (Krita 4.2+)"
 msgstr "軟滑 (Krita 4.2 以及之後版本)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
-#: libs/ui/forms/wdggeneralsettings.ui:939
+#: libs/ui/forms/wdggeneralsettings.ui:945
 #, kde-format
 msgid "Hard (Krita 4.1 and earlier versions)"
 msgstr "堅硬 (Krita 4.1 以及之前版本)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:947
+#: libs/ui/forms/wdggeneralsettings.ui:953
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
 msgstr "CMYK 混色模式 (需要重啟程式)："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:955
+#: libs/ui/forms/wdggeneralsettings.ui:961
 #, kde-format
 msgid "Subtractive (Krita 5.2+)"
 msgstr "減色法 (Krita 5.2 以及之後版本)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
-#: libs/ui/forms/wdggeneralsettings.ui:960
+#: libs/ui/forms/wdggeneralsettings.ui:966
 #, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
 msgstr "加色法 (Krita 5.1 以及之前版本)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkSwitchSelectionCtrlAlt)
-#: libs/ui/forms/wdggeneralsettings.ui:968
+#: libs/ui/forms/wdggeneralsettings.ui:974
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
 msgstr "在使用選取區域工具時交換 Ctrl 與 Alt 組合鍵的作用"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTouchPainting)
-#: libs/ui/forms/wdggeneralsettings.ui:975
+#: libs/ui/forms/wdggeneralsettings.ui:981
 #, fuzzy, kde-format
 #| msgid "Enable Touch Painting"
 msgid "Touch Painting:"
 msgstr "啟用以手指在觸控螢幕上繪畫"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:982
+#: libs/ui/forms/wdggeneralsettings.ui:988
 #, kde-format
 msgid ""
 "Enable reading of pressure state for touch events. This data may be broken "
@@ -30133,38 +30143,38 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:985
+#: libs/ui/forms/wdggeneralsettings.ui:991
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
-#: libs/ui/forms/wdggeneralsettings.ui:992
+#: libs/ui/forms/wdggeneralsettings.ui:998
 #, kde-format
 msgid "Activate transform tool after pasting"
 msgstr "在貼上後自動切換到變形工具"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomSteps)
-#: libs/ui/forms/wdggeneralsettings.ui:999
+#: libs/ui/forms/wdggeneralsettings.ui:1005
 #, kde-format
 msgid "Zoom steps between powers of 2"
 msgstr "縮放階級在 2 的次方數之間的分級數目"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
-#: libs/ui/forms/wdggeneralsettings.ui:1016
+#: libs/ui/forms/wdggeneralsettings.ui:1022
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1036
+#: libs/ui/forms/wdggeneralsettings.ui:1042
 #, fuzzy, kde-format
 #| msgid "Selection Actions"
 msgid "Selection Actions Bar"
 msgstr "選取動作"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1043
+#: libs/ui/forms/wdggeneralsettings.ui:1049
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -30172,27 +30182,27 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
-#: libs/ui/forms/wdggeneralsettings.ui:1046
+#: libs/ui/forms/wdggeneralsettings.ui:1052
 #, fuzzy, kde-format
 #| msgid "Selection Actions"
 msgid "Enable Selection Actions Bar"
 msgstr "選取動作"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1060
+#: libs/ui/forms/wdggeneralsettings.ui:1066
 #, kde-format
 msgid "Animation"
 msgstr "動畫"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
-#: libs/ui/forms/wdggeneralsettings.ui:1066
+#: libs/ui/forms/wdggeneralsettings.ui:1072
 #, fuzzy, kde-format
 #| msgid "Animation settings menu"
 msgid "Animation Settings"
 msgstr "動畫設定選單"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1072
+#: libs/ui/forms/wdggeneralsettings.ui:1078
 #, kde-format
 msgid ""
 "When this option is checked newly created layers will be automatically "
@@ -30202,13 +30212,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1075
+#: libs/ui/forms/wdggeneralsettings.ui:1081
 #, kde-format
 msgid "Automatically pin new layers to timeline"
 msgstr "自動釘選新圖層至時間軸"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1082
+#: libs/ui/forms/wdggeneralsettings.ui:1088
 #, kde-format
 msgid ""
 "When checked, this option automatically adjusts the document's \"start\" and "
@@ -30218,14 +30228,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1085
+#: libs/ui/forms/wdggeneralsettings.ui:1091
 #, fuzzy, kde-format
 #| msgid "Adapt playback range to keyframes"
 msgid "Automatically adapt playback range to keyframes"
 msgstr "將重播範圍調整至關鍵影格"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1092
+#: libs/ui/forms/wdggeneralsettings.ui:1098
 #, kde-format
 msgid ""
 "When checked, this option will automatically scale the Animation Timeline "
@@ -30235,83 +30245,83 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoZoom)
-#: libs/ui/forms/wdggeneralsettings.ui:1095
+#: libs/ui/forms/wdggeneralsettings.ui:1101
 #, kde-format
 msgid "Automatically zoom timeline to fit playback range"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Resources)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1132
+#: libs/ui/forms/wdggeneralsettings.ui:1138
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "資源"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1138
+#: libs/ui/forms/wdggeneralsettings.ui:1144
 #, kde-format
 msgid "Resource Folder:"
 msgstr "資源目錄："
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1242
+#: libs/ui/forms/wdggeneralsettings.ui:1248
 #, kde-format
 msgid "When Krita starts:"
 msgstr "當 Krita 啟動時："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1259
+#: libs/ui/forms/wdggeneralsettings.ui:1265
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "關閉 Krita 時儲存工作階段"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1266
+#: libs/ui/forms/wdggeneralsettings.ui:1272
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr "匯入影像為圖層時，將其轉換成目標影像的色彩空間"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1279
-#: libs/ui/forms/wdggeneralsettings.ui:1289
+#: libs/ui/forms/wdggeneralsettings.ui:1285
+#: libs/ui/forms/wdggeneralsettings.ui:1295
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "僅套用於新建立或者新開啟的影像。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1282
+#: libs/ui/forms/wdggeneralsettings.ui:1288
 #, kde-format
 msgid "Undo stack size:"
 msgstr "復原次數上限："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1310
+#: libs/ui/forms/wdggeneralsettings.ui:1316
 #, kde-format
 msgid "Use cumulative undo"
 msgstr "使用合併復原"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1330
+#: libs/ui/forms/wdggeneralsettings.ui:1336
 #, kde-format
 msgid "Advanced..."
 msgstr "進階…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1339
+#: libs/ui/forms/wdggeneralsettings.ui:1345
 #, kde-format
 msgid "Show root layer"
 msgstr "顯示根圖層"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1346
+#: libs/ui/forms/wdggeneralsettings.ui:1352
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "啟用供錯誤報告用的紀錄"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1377
+#: libs/ui/forms/wdggeneralsettings.ui:1383
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -30320,50 +30330,50 @@ msgstr ""
 "警告：如果啟用此選項後開啟/儲存檔案對話框不能正常運作，請勿為此提交錯誤報告。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1380
+#: libs/ui/forms/wdggeneralsettings.ui:1386
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr "使用系統原生開啟/儲存檔案對話框"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1403
+#: libs/ui/forms/wdggeneralsettings.ui:1409
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(警告：在某些系統上可能會出錯)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1413
+#: libs/ui/forms/wdggeneralsettings.ui:1419
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "筆刷最大大小："
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1441
+#: libs/ui/forms/wdggeneralsettings.ui:1447
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "筆刷的最大直徑，以像素為單位。"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1444
+#: libs/ui/forms/wdggeneralsettings.ui:1450
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "px"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1479
+#: libs/ui/forms/wdggeneralsettings.ui:1485
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(需要重啟程式)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1489
+#: libs/ui/forms/wdggeneralsettings.ui:1495
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "字型 DPI 應急修正方法"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1504
+#: libs/ui/forms/wdggeneralsettings.ui:1510
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -30391,7 +30401,7 @@ msgstr ""
 "檔案以 Krita 5.0 儲存後，將無需再次作出轉換。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1507
+#: libs/ui/forms/wdggeneralsettings.ui:1513
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -30399,7 +30409,7 @@ msgid "DPI:"
 msgstr "DPI："
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1516
+#: libs/ui/forms/wdggeneralsettings.ui:1522
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -30417,59 +30427,59 @@ msgstr ""
 "用此 DPI 解析度作文字顯示。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1529
+#: libs/ui/forms/wdggeneralsettings.ui:1535
 #, fuzzy, kde-format
 #| msgid "Automatic layer suffixes"
 msgid "Automatic layer naming"
 msgstr "自動附加圖層名後綴"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1535
+#: libs/ui/forms/wdggeneralsettings.ui:1541
 #, fuzzy, kde-format
 #| msgid "Add \"Merged\" to merged group layers"
 msgid "Append \"Merged\" to merged group layers"
 msgstr "在合併群組圖層後加上「已合併」後綴"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1542
+#: libs/ui/forms/wdggeneralsettings.ui:1548
 #, fuzzy, kde-format
 #| msgid "Add \"(pasted)\" to pasted layers"
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "在貼上圖層後加上「(已貼上)」後綴"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1549
+#: libs/ui/forms/wdggeneralsettings.ui:1555
 #, fuzzy, kde-format
 #| msgid "Add \"(pasted)\" to pasted layers"
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "在貼上圖層後加上「(已貼上)」後綴"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
-#: libs/ui/forms/wdggeneralsettings.ui:1559
+#: libs/ui/forms/wdggeneralsettings.ui:1565
 #, kde-format
 msgid "Long-press to open context menus"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1566
+#: libs/ui/forms/wdggeneralsettings.ui:1572
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "拖曳捲動 (需要重啟程式)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1581
+#: libs/ui/forms/wdggeneralsettings.ui:1587
 #, kde-format
 msgid "Sensitivity:"
 msgstr "靈敏度："
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1606
+#: libs/ui/forms/wdggeneralsettings.ui:1612
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "啟用拖曳捲動時，隱藏工具面板的捲動軸"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1658
+#: libs/ui/forms/wdggeneralsettings.ui:1664
 #, kde-format
 msgid ""
 "Some applications may emulate presses of function keys with high numbers (e."
@@ -30480,7 +30490,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1661
+#: libs/ui/forms/wdggeneralsettings.ui:1667
 #, kde-format
 msgid "Ignore high function keys (F13-F24)"
 msgstr ""

@@ -619,7 +619,6 @@ public:
 public:
     VectorPath(const QPainterPath& path);
     VectorPath(const QList<VectorPathPoint> path);
-    //VectorPath(const QList<VectorPathPoint> path);
 
 
     int pointsCount() const;

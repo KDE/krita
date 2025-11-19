@@ -122,7 +122,6 @@ qreal directionBetweenPoints(const QPointF &p1, const QPointF &p2, qreal default
     }
 
     const QVector2D diff(p2 - p1);
-    //qCritical() << ""
     return std::atan2(diff.y(), diff.x());
 }
 
@@ -1360,10 +1359,6 @@ QPolygonF calculateConvexHullFromPointsOverTheLine(const QPolygonF &points, cons
     }
     if (points.count() == 1) {
         QList<QPointF> list = points.toList();
-        qCritical() << list.length() << list.count() << list.empty() << list.first();
-        //qCritical() << points << points.count() << points.length();
-        //qCritical() << points[0];
-        //QPointF p = points[0];
 
         QPolygonF result;
         result << line.p1();
@@ -1371,7 +1366,6 @@ QPolygonF calculateConvexHullFromPointsOverTheLine(const QPolygonF &points, cons
         result << line.p2();
         result << line.p1();
 
-        //result << line.p1() << points[0] << line.p2() << line.p1();
         return result;
     }
 
@@ -1634,7 +1628,6 @@ QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, con
                 // usually would add, unless it's the ending
                 if (onTheLine(availablePoints[index], line.p1())) {
                     path.lineTo(availablePoints[index]);
-                    //path.lineTo();
                     break;
                 }
                 path.lineTo(availablePoints[index]);

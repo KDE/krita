@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testRegularGridIndexesOp();
     */
 
+    void testCanProcessPolygonsInRandomOrder();
     void testQImagePolygonOpStructFastAreaCopy();
 
 

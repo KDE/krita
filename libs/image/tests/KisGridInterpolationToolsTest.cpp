@@ -306,6 +306,25 @@ void KisGridInterpolationToolsTest::testCutOutSubgridFromBounds()
 
 }
 
+void KisGridInterpolationToolsTest::testCanProcessPolygonsInRandomOrder()
+{
+    QRect srcBounds = QRect(0, 0, 16, 24);
+    int pixelPrecision = 8;
+    QSize gridSize = GridIterationTools::calcGridSize(srcBounds, pixelPrecision);
+    AllPointsFetcherOp pointsOp(srcBounds);
+    GridIterationTools::processGrid(pointsOp, srcBounds, pixelPrecision);
+    QVector<QPointF> transformedPoints = pointsOp.m_points;
+    QRectF acc = QRectF(10, 10, 20, 20);
+    QRect correctSubGrid = GridIterationTools::calculateCorrectSubGrid(srcBounds, pixelPrecision, acc, gridSize);
+
+
+    GridIterationTools::RegularGridIndexesOp indexesOp(gridSize);
+
+    bool canMergeRects = GridIterationTools::canProcessRectsInRandomOrder(indexesOp, transformedPoints, correctSubGrid);
+    QVERIFY(canMergeRects);
+
+}
+
 void KisGridInterpolationToolsTest::testQImagePolygonOpStructFastAreaCopy()
 {
     QImage srcImage(TestUtil::fetchDataFileLazy("test_grid_iteration_tools_qimage_fast_area_copy.png"));

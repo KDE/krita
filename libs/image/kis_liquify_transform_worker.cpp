@@ -420,6 +420,10 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP
 
     PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);
     RegularGridIndexesOp indexesOp(m_d->gridSize);
+
+    bool canMergeRects = GridIterationTools::canProcessRectsInRandomOrder(indexesOp, m_d->transformedPoints, correctSubGrid);
+    polygonOp.setCanMergeRects(canMergeRects);
+
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
                                                     m_d->originalPoints,
@@ -427,7 +431,7 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP
                                                     correctSubGrid);
     QList<QRectF> areasToCopy = cutOutSubgridFromBounds(correctSubGrid, m_d->srcBounds, m_d->gridSize, m_d->originalPoints);
     for (int i = 0; i < areasToCopy.length(); i++) {
-        polygonOp.fastCopyArea(areasToCopy[i]);
+        polygonOp.fastCopyArea(areasToCopy[i].toRect(), false);
     }
 }
 
@@ -527,6 +531,10 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
 
 
     QRect correctSubGrid = GridIterationTools::calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, m_d->accumulatedBrushStrokes, m_d->gridSize);
+    bool canMergeRects = GridIterationTools::canProcessRectsInRandomOrder(indexesOp, m_d->transformedPoints, correctSubGrid);
+    polygonOp.setCanMergeRects(canMergeRects);
+
+
     GridIterationTools::iterateThroughGrid<GridIterationTools::AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
                                                     originalPointsLocal,
@@ -535,6 +543,7 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
 
 
     QList<QRectF> areasToCopy = GridIterationTools::cutOutSubgridFromBounds(correctSubGrid, m_d->srcBounds, m_d->gridSize, m_d->originalPoints);
+    polygonOp.setCanMergeRects(false);
     for (int i = 0; i < areasToCopy.length(); i++) {
         polygonOp.fastCopyArea(imageToThumbTransform.map(QPolygonF(areasToCopy[i])));
     }

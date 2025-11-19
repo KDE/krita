@@ -16,6 +16,7 @@
 #include <testutil.h>
 #include <kis_liquify_transform_worker.h>
 #include <kis_algebra_2d.h>
+#include <kis_grid_interpolation_tools.h>
 
 
 #include <quazip.h>
@@ -465,6 +466,24 @@ void KisLiquifyTransformWorkerBenchmark::checkMath()
     int randValuesCount = 100;
 
     prepareRandData(randGen, sigmas, flows, scales, randValuesCount);
+}
+
+void KisLiquifyTransformWorkerBenchmark::testCheckingIfPolygonsAreConvex()
+{
+
+    QScopedPointer<KisLiquifyTransformWorker> liquifyWorker;
+    liquifyWorker.reset(getWorkerFromXml("liquify_mask_typical_config.zip"));
+    QVERIFY(liquifyWorker);
+    GridIterationTools::RegularGridIndexesOp indexesOp = GridIterationTools::RegularGridIndexesOp(liquifyWorker->gridSize());
+
+    bool isConvex;
+    QBENCHMARK {
+        isConvex = GridIterationTools::canProcessRectsInRandomOrder(indexesOp, liquifyWorker->transformedPoints(), liquifyWorker->gridSize());
+    }
+
+    QVERIFY(isConvex);
+
+
 }
 
 SIMPLE_TEST_MAIN(KisLiquifyTransformWorkerBenchmark)

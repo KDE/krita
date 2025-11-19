@@ -59,6 +59,8 @@ struct QImageGradientOp
         }
     }
 
+    void finalize() {}
+
     const std::array<QColor, 4> &m_colors;
     QImage &m_dstImage;
     QPointF m_dstImageOffset;

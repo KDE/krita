@@ -56,8 +56,9 @@ private Q_SLOTS:
     void testCopyConstructor();
     void testMovePointsOutsideOfTheGrid();
 
-
     void checkMath();
+
+    void testCheckingIfPolygonsAreConvex();
 
 };
 

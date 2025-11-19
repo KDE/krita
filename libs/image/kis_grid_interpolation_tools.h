@@ -20,6 +20,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_painter.h"
+#include "KisRegion.h"
 
 //#define DEBUG_PAINTING_POLYGONS
 
@@ -197,7 +198,15 @@ struct PaintDevicePolygonOp
     }
 
     void fastCopyArea(QRect areaToCopy) {
-        KisPainter::copyAreaOptimized(areaToCopy.topLeft(), m_srcDev, m_dstDev, areaToCopy);
+        fastCopyArea(areaToCopy, m_canMergeRects);
+    }
+
+    void fastCopyArea(QRect areaToCopy, bool lazy) {
+        if (lazy) {
+            m_rectsToCopy.append(areaToCopy.adjusted(0, 0, -1, -1));
+        } else {
+            KisPainter::copyAreaOptimized(areaToCopy.topLeft(), m_srcDev, m_dstDev, areaToCopy);
+        }
     }
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
@@ -274,9 +283,28 @@ struct PaintDevicePolygonOp
 
     }
 
+    void finalize() {
+
+        QVector<QRect>::iterator end = KisRegion::mergeSparseRects(m_rectsToCopy.begin(), m_rectsToCopy.end());
+
+        for (QVector<QRect>::iterator it = m_rectsToCopy.begin(); it < end; it++) {
+            QRect areaToCopy = *it;
+            fastCopyArea(areaToCopy.adjusted(0, 0, 1, 1), false);
+        }
+        m_rectsToCopy = QVector<QRect>();
+    }
+
+    inline void setCanMergeRects(bool newCanMergeRects) {
+        m_canMergeRects = newCanMergeRects;
+    }
+
     KisPaintDeviceSP m_srcDev;
     KisPaintDeviceSP m_dstDev;
     const qreal m_epsilon {0.1};
+
+private:
+    bool m_canMergeRects {true};
+    QVector<QRect> m_rectsToCopy;
 
 };
 
@@ -337,6 +365,14 @@ struct QImagePolygonOp
     }
 
     void fastCopyArea(QRect areaToCopy) {
+        fastCopyArea(areaToCopy, m_canMergeRects);
+    }
+
+    void fastCopyArea(QRect areaToCopy, bool lazy) {
+        if (lazy) {
+            m_rectsToCopy.append(areaToCopy.adjusted(0, 0, -1, -1));
+            return;
+        }
 
         // only handling saved offsets
         QRect srcArea = areaToCopy.translated(-m_srcImageOffset.toPoint());
@@ -430,6 +466,23 @@ struct QImagePolygonOp
 
     }
 
+    void finalize() {
+
+        QVector<QRect>::iterator end = KisRegion::mergeSparseRects(m_rectsToCopy.begin(), m_rectsToCopy.end());
+
+        for (QVector<QRect>::iterator it = m_rectsToCopy.begin(); it < end; it++) {
+            QRect areaToCopy = *it;
+            fastCopyArea(areaToCopy.adjusted(0, 0, 1, 1), false);
+        }
+
+        m_rectsToCopy = QVector<QRect>();
+    }
+
+    inline void setCanMergeRects(bool canMergeRects) {
+        m_canMergeRects = canMergeRects;
+    }
+
+
     const QImage &m_srcImage;
     QImage &m_dstImage;
     QPointF m_srcImageOffset;
@@ -439,6 +492,10 @@ struct QImagePolygonOp
     QRect m_dstImageRect;
 
     const qreal m_epsilon {0.1};
+
+private:
+    bool m_canMergeRects {true};
+    QVector<QRect> m_rectsToCopy;
 };
 
 /*************************************************************/
@@ -801,6 +858,48 @@ inline void adjustAlignedPolygon(QPolygonF &polygon)
     polygon[3] += p3;
 }
 
+template <class IndexesOp>
+bool canProcessRectsInRandomOrder(IndexesOp &indexesOp, const QVector<QPointF> &transformedPoints, QSize grid) {
+    return canProcessRectsInRandomOrder(indexesOp, transformedPoints, QRect(QPoint(0, 0), grid));
+}
+
+template <class IndexesOp>
+bool canProcessRectsInRandomOrder(IndexesOp &indexesOp, const QVector<QPointF> &transformedPoints, QRect subgrid) {
+    QVector<int> polygonPoints(4);
+    QPoint startPoint = subgrid.topLeft();
+    QPoint endPoint = subgrid.bottomRight();
+
+
+    int polygonsChecked = 0;
+
+    for (int row = startPoint.y(); row < endPoint.y(); row++) {
+        for (int col = startPoint.x(); col < endPoint.x(); col++) {
+            int numExistingPoints = 0;
+
+            polygonPoints = indexesOp.calculateMappedIndexes(col, row, &numExistingPoints);
+
+            QPolygonF dstPolygon;
+
+            for (int i = 0; i < polygonPoints.count(); i++) {
+                const int index = polygonPoints[i];
+                dstPolygon << transformedPoints[index];
+            }
+
+
+            adjustAlignedPolygon(dstPolygon);
+
+
+            if (!KisAlgebra2D::isPolygonTrulyConvex(dstPolygon)) {
+                return false;
+            }
+
+        }
+    }
+    return true;
+}
+
+
+
 template <template <class PolygonOp, class IndexesOp> class IncompletePolygonPolicy,
           class PolygonOp,
           class IndexesOp>
@@ -865,6 +964,8 @@ void iterateThroughGrid(PolygonOp &polygonOp,
             }
         }
     }
+
+    polygonOp.finalize();
 }
 
 }

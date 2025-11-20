@@ -763,10 +763,32 @@ void iterateThroughGrid(PolygonOp &polygonOp,
                         const QVector<QPointF> &originalPoints,
                         const QVector<QPointF> &transformedPoints)
 {
-    QVector<int> polygonPoints(4);
+    iterateThroughGrid<IncompletePolygonPolicy, PolygonOp, IndexesOp>(polygonOp, indexesOp, gridSize, originalPoints, transformedPoints, QRect(QPoint(0, 0), gridSize));
+}
 
-    for (int row = 0; row < gridSize.height() - 1; row++) {
-        for (int col = 0; col < gridSize.width() - 1; col++) {
+template <template <class PolygonOp, class IndexesOp> class IncompletePolygonPolicy,
+          class PolygonOp,
+          class IndexesOp>
+void iterateThroughGrid(PolygonOp &polygonOp,
+                        IndexesOp &indexesOp,
+                        const QSize &gridSize,
+                        const QVector<QPointF> &originalPoints,
+                        const QVector<QPointF> &transformedPoints,
+                        const QRect subGrid)
+{
+    QVector<int> polygonPoints(4);
+    QPoint startPoint = subGrid.topLeft();
+    QPoint endPoint = subGrid.bottomRight(); // it's weird but bottomRight on QRect point does give us one unit of margin on both x and y
+    // when start is on (0, 0), and size is (500, 500), bottomRight is on (499, 499)
+    // but remember that it also only needs a top left corner of the polygon
+
+    KIS_SAFE_ASSERT_RECOVER(startPoint.x() >= 0 && startPoint.y() >= 0 && endPoint.x() <= gridSize.width() - 1 && endPoint.y() <= gridSize.height() - 1) {
+        startPoint = QPoint(qMax(startPoint.x(), 0), qMax(startPoint.y(), 0));
+        endPoint = QPoint(qMin(endPoint.x(), gridSize.width() - 1), qMin(startPoint.y(), gridSize.height() - 1));
+    }
+
+    for (int row = startPoint.y(); row < endPoint.y(); row++) {
+        for (int col = startPoint.x(); col < endPoint.x(); col++) {
             int numExistingPoints = 0;
 
             polygonPoints = indexesOp.calculateMappedIndexes(col, row, &numExistingPoints);

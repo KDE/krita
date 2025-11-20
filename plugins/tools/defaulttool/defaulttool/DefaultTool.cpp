@@ -68,6 +68,7 @@
 #include <QAction>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QActionGroup>
 #include <KisSignalMapper.h>
 #include <KoResourcePaths.h>
 

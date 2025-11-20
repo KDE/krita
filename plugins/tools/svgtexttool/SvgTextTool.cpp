@@ -34,6 +34,7 @@
 #include <QStyle>
 #include <QDockWidget>
 #include <QQuickItem>
+#include <QActionGroup>
 
 #include <klocalizedstring.h>
 

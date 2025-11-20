@@ -230,8 +230,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
             }
         } else if (transformationTypes.contains(type) || type == ParentChanged) {
             d->shapeGroup->setTransformation(this->absoluteTransformation());
-        } else if (type == TextRunAroundChanged) {
-            // Hack: we don't use runaround else where, so we're using it for padding and margin.
+        } else if (type == TextContourMarginChanged) {
             if (d->bulkActionState) {
                 d->bulkActionState->contourHasChanged = true;
             } else {
@@ -1072,7 +1071,7 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
                 || properties.hasProperty(KoSvgTextProperties::ShapeMarginId)
                 || removeProperties.contains(KoSvgTextProperties::ShapePaddingId)
                 || removeProperties.contains(KoSvgTextProperties::ShapeMarginId)) {
-            shapeChangedPriv(TextRunAroundChanged);
+            shapeChangedPriv(TextContourMarginChanged);
         } else {
             shapeChangedPriv(ContentChanged);
         }

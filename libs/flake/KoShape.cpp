@@ -63,13 +63,6 @@ KoShape::SharedData::SharedData()
     , keepAspect(false)
     , selectable(true)
     , protectContent(false)
-    , textRunAroundSide(KoShape::BiggestRunAroundSide)
-    , textRunAroundDistanceLeft(0.0)
-    , textRunAroundDistanceTop(0.0)
-    , textRunAroundDistanceRight(0.0)
-    , textRunAroundDistanceBottom(0.0)
-    , textRunAroundThreshold(0.0)
-    , textRunAroundContour(KoShape::ContourFull)
     , paintOrder(defaultPaintOrder())
     , inheritPaintOrder(true)
 { }
@@ -100,14 +93,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
     , keepAspect(rhs.keepAspect)
     , selectable(rhs.selectable)
     , protectContent(rhs.protectContent)
-
-    , textRunAroundSide(rhs.textRunAroundSide)
-    , textRunAroundDistanceLeft(rhs.textRunAroundDistanceLeft)
-    , textRunAroundDistanceTop(rhs.textRunAroundDistanceTop)
-    , textRunAroundDistanceRight(rhs.textRunAroundDistanceRight)
-    , textRunAroundDistanceBottom(rhs.textRunAroundDistanceBottom)
-    , textRunAroundThreshold(rhs.textRunAroundThreshold)
-    , textRunAroundContour(rhs.textRunAroundContour)
 
     , paintOrder(rhs.paintOrder)
     , inheritPaintOrder(rhs.inheritPaintOrder)
@@ -793,93 +778,6 @@ QPointF KoShape::position() const
 {
     QPointF center = outlineRect().center();
     return s->localMatrix.map(center) - center;
-}
-
-KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
-{
-    return s->textRunAroundSide;
-}
-
-void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough)
-{
-
-    if (side == RunThrough) {
-        if (runThrough == Background) {
-            setRunThrough(-1);
-        } else {
-            setRunThrough(1);
-        }
-    } else {
-        setRunThrough(0);
-    }
-
-    if ( s->textRunAroundSide == side) {
-        return;
-    }
-
-    s->textRunAroundSide = side;
-    notifyChanged();
-    shapeChangedPriv(TextRunAroundChanged);
-}
-
-qreal KoShape::textRunAroundDistanceTop() const
-{
-    return s->textRunAroundDistanceTop;
-}
-
-void KoShape::setTextRunAroundDistanceTop(qreal distance)
-{
-    s->textRunAroundDistanceTop = distance;
-}
-
-qreal KoShape::textRunAroundDistanceLeft() const
-{
-    return s->textRunAroundDistanceLeft;
-}
-
-void KoShape::setTextRunAroundDistanceLeft(qreal distance)
-{
-    s->textRunAroundDistanceLeft = distance;
-}
-
-qreal KoShape::textRunAroundDistanceRight() const
-{
-    return s->textRunAroundDistanceRight;
-}
-
-void KoShape::setTextRunAroundDistanceRight(qreal distance)
-{
-    s->textRunAroundDistanceRight = distance;
-}
-
-qreal KoShape::textRunAroundDistanceBottom() const
-{
-    return s->textRunAroundDistanceBottom;
-}
-
-void KoShape::setTextRunAroundDistanceBottom(qreal distance)
-{
-    s->textRunAroundDistanceBottom = distance;
-}
-
-qreal KoShape::textRunAroundThreshold() const
-{
-    return s->textRunAroundThreshold;
-}
-
-void KoShape::setTextRunAroundThreshold(qreal threshold)
-{
-    s->textRunAroundThreshold = threshold;
-}
-
-KoShape::TextRunAroundContour KoShape::textRunAroundContour() const
-{
-    return s->textRunAroundContour;
-}
-
-void KoShape::setTextRunAroundContour(KoShape::TextRunAroundContour contour)
-{
-    s->textRunAroundContour = contour;
 }
 
 void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)

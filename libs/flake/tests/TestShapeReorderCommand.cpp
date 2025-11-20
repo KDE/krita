@@ -49,39 +49,6 @@ void TestShapeReorderCommand::testZIndexSorting()
     QCOMPARE(shapes.indexOf(&shape5), 0);
 }
 
-void TestShapeReorderCommand::testRunThroughSorting()
-{
-    MockShape shape1;
-    MockShape shape2;
-    MockShape shape3;
-    MockShape shape4;
-    MockShape shape5;
-
-    shape1.setZIndex(-2);
-    shape2.setZIndex(5);
-    shape3.setZIndex(0);
-    shape4.setZIndex(9999);
-    shape5.setZIndex(-9999);
-
-    shape2.setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
-    shape3.setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
-
-    QList<KoShape*> shapes;
-    shapes.append(&shape1);
-    shapes.append(&shape2);
-    shapes.append(&shape3);
-    shapes.append(&shape4);
-    shapes.append(&shape5);
-
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-
-    QCOMPARE(shapes.indexOf(&shape1), 2);
-    QCOMPARE(shapes.indexOf(&shape2), 0);
-    QCOMPARE(shapes.indexOf(&shape3), 4);
-    QCOMPARE(shapes.indexOf(&shape4), 3);
-    QCOMPARE(shapes.indexOf(&shape5), 1);
-}
-
 void TestShapeReorderCommand::testParentChildSorting()
 {
     MockShape *shape1 = new MockShape();
@@ -105,12 +72,7 @@ void TestShapeReorderCommand::testParentChildSorting()
     container1->setZIndex(-55);
     container2->setZIndex(57);
 
-    shape2->setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
-    shape3->setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
-    container1->setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
-
     container1->addShape(shape1);
-    //container1.addShape(&shape2); //we shouldn't parent combine fg and bg
     container2->addShape(shape4);
     container2->addShape(shape5);
     container1->addShape(container2);
@@ -131,30 +93,28 @@ void TestShapeReorderCommand::testParentChildSorting()
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
 /* This is the expected result
-s3  0 fg
-  s4  9999
-  s5 -9999
- c2  57
- c3  0
- s1 -2
-c1 -55 fg
-
-s7  7
-s6  3
-
-s2  5 bg
+c1 -55
+    s1 -2
+    c3 0
+    c2 57
+        s5 -9999
+        s4 9999
+s3 0
+s6 3
+s2 5
+s7 7
 */
 
-    QCOMPARE(shapes.indexOf(shape1), 4);
-    QCOMPARE(shapes.indexOf(shape2), 0);
-    QCOMPARE(shapes.indexOf(shape3), 9);
-    QCOMPARE(shapes.indexOf(shape4), 8);
-    QCOMPARE(shapes.indexOf(shape5), 7);
-    QCOMPARE(shapes.indexOf(shape6), 1);
-    QCOMPARE(shapes.indexOf(shape7), 2);
-    QCOMPARE(shapes.indexOf(container1), 3);
-    QCOMPARE(shapes.indexOf(container2), 6);
-    QCOMPARE(shapes.indexOf(container3), 5);
+    QCOMPARE(shapes.indexOf(shape1), 1);
+    QCOMPARE(shapes.indexOf(shape2), 8);
+    QCOMPARE(shapes.indexOf(shape3), 6);
+    QCOMPARE(shapes.indexOf(shape4), 5);
+    QCOMPARE(shapes.indexOf(shape5), 4);
+    QCOMPARE(shapes.indexOf(shape6), 7);
+    QCOMPARE(shapes.indexOf(shape7), 9);
+    QCOMPARE(shapes.indexOf(container1), 0);
+    QCOMPARE(shapes.indexOf(container2), 3);
+    QCOMPARE(shapes.indexOf(container3), 2);
 
     delete container1;
     delete shape2;

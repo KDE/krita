@@ -17,7 +17,6 @@ public:
     ~TestShapeReorderCommand() override;
 private Q_SLOTS:
     void testZIndexSorting();
-    void testRunThroughSorting();
     void testParentChildSorting();
 
     void testBringToFront();

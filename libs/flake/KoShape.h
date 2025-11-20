@@ -104,38 +104,12 @@ public:
         BorderChanged, ///< the shapes border has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
-        TextRunAroundChanged, ///< used after a setTextRunAroundSide()
+        TextContourMarginChanged, ///< used after text properties changed and modified the contour margin in the text shape
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
         ConnectionPointChanged, ///< a connection point has changed
         ClipPathChanged, ///< the shapes clip path has changed
         ClipMaskChanged, ///< the shapes clip path has changed
         TransparencyChanged ///< the shapetransparency value has changed
-    };
-
-    /// The behavior text should do when intersecting this shape.
-    enum TextRunAroundSide {
-        BiggestRunAroundSide,   ///< Run other text around the side that has the most space
-        LeftRunAroundSide,      ///< Run other text around the left side of the frame
-        RightRunAroundSide,     ///< Run other text around the right side of the frame
-        EnoughRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
-        BothRunAroundSide,      ///< Run other text around both sides of the shape
-        NoRunAround,            ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
-        RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
-    };
-
-    /// The behavior text should do when intersecting this shape.
-    enum TextRunAroundContour {
-        ContourBox,     /// Run other text around a bounding rect of the outline
-        ContourFull,   ///< Run other text around also on the inside
-        ContourOutside   ///< Run other text around only on the outside
-    };
-
-    /**
-     * TODO
-     */
-    enum RunThroughLevel {
-        Background,
-        Foreground
     };
 
     enum PaintOrder {
@@ -300,95 +274,6 @@ public:
      * united rect.
      */
     static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes);
-
-    /**
-     * Return the side text should flow around this shape. This implements the ODF style:wrap
-     * attribute that specifies how text is displayed around a frame or graphic object.
-     */
-    TextRunAroundSide textRunAroundSide() const;
-
-    /**
-     * Set the side text should flow around this shape.
-     * @param side the requested side
-     * @param runThrough run through the foreground or background or...
-     */
-    void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
-
-    /**
-     * The space between this shape's left edge and text that runs around this shape.
-     * @return the space around this shape to keep free from text
-     */
-    qreal textRunAroundDistanceLeft() const;
-
-    /**
-     * Set the space between this shape's left edge and the text that run around this shape.
-     * @param distance the space around this shape to keep free from text
-     */
-    void setTextRunAroundDistanceLeft(qreal distance);
-
-    /**
-     * The space between this shape's top edge and text that runs around this shape.
-     * @return the space around this shape to keep free from text
-     */
-    qreal textRunAroundDistanceTop() const;
-
-    /**
-     * Set the space between this shape's top edge and the text that run around this shape.
-     * @param distance the space around this shape to keep free from text
-     */
-    void setTextRunAroundDistanceTop(qreal distance);
-
-    /**
-     * The space between this shape's right edge and text that runs around this shape.
-     * @return the space around this shape to keep free from text
-     */
-    qreal textRunAroundDistanceRight() const;
-
-    /**
-     * Set the space between this shape's right edge and the text that run around this shape.
-     * @param distance the space around this shape to keep free from text
-     */
-    void setTextRunAroundDistanceRight(qreal distance);
-
-    /**
-     * The space between this shape's bottom edge and text that runs around this shape.
-     * @return the space around this shape to keep free from text
-     */
-    qreal textRunAroundDistanceBottom() const;
-
-    /**
-     * Set the space between this shape's bottom edge and the text that run around this shape.
-     * @param distance the space around this shape to keep free from text
-     */
-    void setTextRunAroundDistanceBottom(qreal distance);
-
-    /**
-     * Return the threshold above which text should flow around this shape.
-     * The text will not flow around the shape on a side unless the space available on that side
-     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
-     * @return threshold the threshold
-     */
-    qreal textRunAroundThreshold() const;
-
-    /**
-     * Set the threshold above which text should flow around this shape.
-     * The text will not flow around the shape on a side unless the space available on that side
-     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
-     * @param threshold the new threshold
-     */
-    void setTextRunAroundThreshold(qreal threshold);
-
-    /**
-     * Return the how tight text run around is done around this shape.
-     * @return the contour
-     */
-    TextRunAroundContour textRunAroundContour() const;
-
-    /**
-     * Set how tight text run around is done around this shape.
-     * @param contour the new contour
-     */
-    void setTextRunAroundContour(TextRunAroundContour contour);
 
     /**
      * Set the KoShapeAnchor

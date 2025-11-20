@@ -60,14 +60,6 @@ public:
     int selectable : 1;
     int protectContent : 1;
 
-    KoShape::TextRunAroundSide textRunAroundSide;
-    qreal textRunAroundDistanceLeft;
-    qreal textRunAroundDistanceTop;
-    qreal textRunAroundDistanceRight;
-    qreal textRunAroundDistanceBottom;
-    qreal textRunAroundThreshold;
-    KoShape::TextRunAroundContour textRunAroundContour;
-
     QVector<PaintOrder> paintOrder {Fill, Stroke, Markers};
     bool inheritPaintOrder = true;
 };

@@ -12,7 +12,6 @@
 #include "rectangle/RectangleShapeFactory.h"
 #include "ellipse/EllipseShapeFactory.h"
 #include "spiral/SpiralShapeFactory.h"
-#include "enhancedpath/EnhancedPathShapeFactory.h"
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PathShapesPluginFactory, "calligra_shape_paths.json", registerPlugin<PathShapesPlugin>();)
@@ -23,7 +22,6 @@ PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList &)
     KoShapeRegistry::instance()->add(new StarShapeFactory());
     KoShapeRegistry::instance()->add(new RectangleShapeFactory());
     KoShapeRegistry::instance()->add(new SpiralShapeFactory());
-    KoShapeRegistry::instance()->add(new EnhancedPathShapeFactory());
     KoShapeRegistry::instance()->add(new EllipseShapeFactory());
 
 }

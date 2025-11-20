@@ -15,12 +15,6 @@ set(pathshapes_SOURCES
     rectangle/RectangleShapeFactory.cpp
     rectangle/RectangleShapeConfigWidget.cpp
     rectangle/RectangleShapeConfigCommand.cpp
-    enhancedpath/EnhancedPathShape.cpp
-    enhancedpath/EnhancedPathShapeFactory.cpp
-    enhancedpath/EnhancedPathCommand.cpp
-    enhancedpath/EnhancedPathParameter.cpp
-    enhancedpath/EnhancedPathFormula.cpp
-    enhancedpath/EnhancedPathHandle.cpp
     PathShapesPlugin.cpp
 )
 

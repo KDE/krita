@@ -180,7 +180,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 
     KisCanvas2 *canvas2 = qobject_cast<KisCanvas2 *>(this->canvas());
     if (canvas2) {
-        canvas2->setTextShapeManagerEnabled(nullptr);
+        canvas2->setCurrentShapeManagerOwnerShape(nullptr);
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(m_textCursor.textPropertyInterface());
         QDockWidget *docker = canvas2->viewManager()->mainWindow()->dockWidget("TextProperties");
         if (docker && m_optionManager) {

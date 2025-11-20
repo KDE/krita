@@ -111,6 +111,36 @@
 #include <KisCanvasState.h>
 
 
+namespace {
+    struct ShapeLifetimeWrapper : KoShape::ShapeChangeListener
+    {
+        ShapeLifetimeWrapper(KoShape *shape, std::function<void()> destructionHandler)
+            : m_shape(shape),
+              m_destructionHandler(destructionHandler)
+        {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(destructionHandler);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+
+            shape->addShapeChangeListener(this);
+        }
+
+        void notifyShapeChanged(KoShape::ChangeType type, KoShape *) override {
+            if (type == KoShape::Deleted) {
+                m_destructionHandler();
+                m_shape = nullptr;
+            }
+        }
+
+        KoShape* shape() const {
+            return m_shape;
+        }
+
+    private:
+        KoShape *m_shape = nullptr;
+        std::function<void()> m_destructionHandler;
+    };
+}
+
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
     /**
@@ -190,7 +220,8 @@ public:
     KoShapeManager shapeManager;
     KisSelectedShapesProxy selectedShapesProxy;
     bool currentCanvasIsOpenGL = true;
-    KoSvgTextShape *textShape = nullptr;
+    std::optional<ShapeLifetimeWrapper> groupModeShapeWrapper;
+
     int openGLFilterMode = 0;
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
@@ -576,16 +607,28 @@ KoShapeManager* KisCanvas2::globalShapeManager() const
     return &m_d->shapeManager;
 }
 
-KoSvgTextShape *KisCanvas2::textShapeManagerEnabled() const
+KoShape *KisCanvas2::currentShapeManagerOwnerShape() const
 {
-    return m_d->textShape;
+    return m_d->groupModeShapeWrapper ? m_d->groupModeShapeWrapper->shape() : nullptr;
 }
 
-void KisCanvas2::setTextShapeManagerEnabled(KoSvgTextShape *source)
+void KisCanvas2::setCurrentShapeManagerOwnerShape(KoShape *source)
 {
-    if (m_d->textShape == source) return;
-    m_d->textShape = source;
-    slotTrySwitchShapeManager();
+    if (currentShapeManagerOwnerShape() == source) return;
+
+    m_d->groupModeShapeWrapper = std::nullopt;
+
+    // we currently support entering text shapes only
+    if (source && dynamic_cast<KoSvgTextShape*>(source)) {
+        m_d->groupModeShapeWrapper.emplace(source, [this] () {
+            this->setCurrentShapeManagerOwnerShape(nullptr);
+        });
+    }
+
+    /// recalculate the local shape manager and make sure
+    /// that selected shapes proxy emits all the necessary
+    /// signals
+    (void) localShapeManager();
 }
 
 KoShapeManager *KisCanvas2::localShapeManager() const
@@ -593,11 +636,28 @@ KoShapeManager *KisCanvas2::localShapeManager() const
     KisNodeSP node = m_d->view->currentNode();
     KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
 
-    if (m_d->textShape) {
-        if (localShapeManager && localShapeManager->shapes().contains(m_d->textShape)) {
-            localShapeManager = m_d->textShape->internalShapeManager();
-        } else {
-            m_d->textShape = nullptr;
+    /**
+     * The group shape should be manually reset by the external code
+     * when the active layer is switched.
+     */
+    KIS_SAFE_ASSERT_RECOVER(
+        !m_d->groupModeShapeWrapper ||
+        !localShapeManager ||
+        localShapeManager->shapes().contains(m_d->groupModeShapeWrapper->shape())) {
+
+        m_d->groupModeShapeWrapper = std::nullopt;
+    }
+
+    if (m_d->groupModeShapeWrapper) {
+        auto textShape = dynamic_cast<KoSvgTextShape*>(m_d->groupModeShapeWrapper->shape());
+
+        // we currently support entering text shapes only
+        KIS_SAFE_ASSERT_RECOVER(textShape) {
+            m_d->groupModeShapeWrapper = std::nullopt;
+        }
+
+        if (textShape) {
+            localShapeManager = textShape->internalShapeManager();
         }
     }
 
@@ -1314,16 +1374,7 @@ KisPopupPalette *KisCanvas2::popupPalette()
 
 void KisCanvas2::slotTrySwitchShapeManager()
 {
-    // Just call localShapeManager to sync the shape manager.
-    localShapeManager();
-    /*
-    KisNodeSP node = m_d->view->currentNode();
-
-    QPointer<KoShapeManager> newManager;
-    newManager = fetchShapeManagerFromNode(node);
-
-    m_d->setActiveShapeManager(newManager);
-    */
+    // noop, the shape manager is recalculated lazily on the fly
 }
 
 void KisCanvas2::notifyLevelOfDetailChange()

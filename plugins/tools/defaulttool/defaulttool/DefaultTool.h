@@ -93,6 +93,8 @@ public:
 
     bool updateTextContourMode();
 
+    KoSvgTextShape* tryFetchCurrentShapeManagerOwnerTextShape() const;
+
 public Q_SLOTS:
     void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;

@@ -683,9 +683,14 @@ void DefaultTool::slotSubtractShapesFromFlow()
     selection->select(textShape);
 }
 
+KoSvgTextShape* DefaultTool::tryFetchCurrentShapeManagerOwnerTextShape() const
+{
+    return dynamic_cast<KoSvgTextShape*>(canvas()->currentShapeManagerOwnerShape());
+}
+
 void DefaultTool::slotRemoveShapesFromFlow()
 {
-    KoSvgTextShape *textShape = canvas()->textShapeManagerEnabled();
+    KoSvgTextShape *textShape = tryFetchCurrentShapeManagerOwnerTextShape();
     if (!textShape) return;
     KoSelection *selection = koSelection();
     if (!selection) return;
@@ -707,7 +712,7 @@ void DefaultTool::slotRemoveShapesFromFlow()
 
 void DefaultTool::slotToggleFlowShapeType()
 {
-    KoSvgTextShape *textShape = canvas()->textShapeManagerEnabled();
+    KoSvgTextShape *textShape = tryFetchCurrentShapeManagerOwnerTextShape();
     if (!textShape) return;
     KoSelection *selection = koSelection();
     if (!selection) return;
@@ -730,7 +735,7 @@ void DefaultTool::slotToggleFlowShapeType()
 
 void DefaultTool::slotReorderFlowShapes(int type)
 {
-    KoSvgTextShape *textShape = canvas()->textShapeManagerEnabled();
+    KoSvgTextShape *textShape = tryFetchCurrentShapeManagerOwnerTextShape();
     if (!textShape) return;
     KoSelection *selection = koSelection();
     if (!selection) return;
@@ -2128,7 +2133,8 @@ void DefaultTool::updateActions()
     bool textShape = false;
     bool otherShapes = false;
     bool shapesInside = false;
-    const bool editFlowShapes = (canvas()->textShapeManagerEnabled());
+    KoSvgTextShape *currentTextShapeGroup = tryFetchCurrentShapeManagerOwnerTextShape();
+    const bool editFlowShapes = bool(currentTextShapeGroup);
     Q_FOREACH(KoShape *shape, editableShapes) {
         KoSvgTextShape *text = dynamic_cast<KoSvgTextShape *>(shape);
         if (text && !textShape) {
@@ -2136,7 +2142,7 @@ void DefaultTool::updateActions()
         } else {
             otherShapes = true;
             if (editFlowShapes) {
-                if (!shapesInside && canvas()->textShapeManagerEnabled()->shapesInside().contains(shape)) {
+                if (!shapesInside && currentTextShapeGroup->shapesInside().contains(shape)) {
                     shapesInside = true;
                 }
             }
@@ -2413,8 +2419,11 @@ void DefaultToolTextPropertiesInterface::slotSelectionChanged()
         if (!shape) continue;
         shape->removeShapeChangeListener(this);
     }
-    if (d->parent->canvas()->textShapeManagerEnabled()) {
-        d->shapes = {d->parent->canvas()->textShapeManagerEnabled()};
+
+    auto *textShapeGroup = d->parent->tryFetchCurrentShapeManagerOwnerTextShape();
+
+    if (textShapeGroup) {
+        d->shapes = {textShapeGroup};
     } else {
         d->shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedEditableShapes();
     }

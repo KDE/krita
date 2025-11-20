@@ -35,7 +35,7 @@ struct KoSvgTextShapeOutlineHelper::Private {
     bool textWrappingAreasHovered = false;
 
     KoSvgTextShape *getTextModeShape() {
-        return canvas->textShapeManagerEnabled();
+        return dynamic_cast<KoSvgTextShape*>(canvas->currentShapeManagerOwnerShape());
     }
 
     KoSvgTextShape *getPotentialTextShape(const QPointF &point) {
@@ -269,10 +269,10 @@ bool KoSvgTextShapeOutlineHelper::updateTextContourMode()
 void KoSvgTextShapeOutlineHelper::toggleTextContourMode(KoSvgTextShape *shape)
 {
     if (d->canvas) {
-        if (shape == d->canvas->textShapeManagerEnabled()) {
-            d->canvas->setTextShapeManagerEnabled(nullptr);
+        if (shape == d->canvas->currentShapeManagerOwnerShape()) {
+            d->canvas->setCurrentShapeManagerOwnerShape(nullptr);
         } else {
-            d->canvas->setTextShapeManagerEnabled(shape);
+            d->canvas->setCurrentShapeManagerOwnerShape(shape);
         }
     }
 }

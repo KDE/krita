@@ -60,8 +60,9 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
 
     connect(dlgWidget.btnBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(dlgWidget.btnBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(this, SIGNAL(accepted()), this, SLOT(saveLayer()));
-    connect(this, SIGNAL(rejected()), this, SLOT(restoreLayer()));
+    // Call these in the destructor instead to avoid a crash where the object was deleted mid `saveLayer()` call
+    // connect(this, SIGNAL(accepted()), this, SLOT(saveLayer()));
+    // connect(this, SIGNAL(rejected()), this, SLOT(restoreLayer()));
 
     if (layer && !isEditing) {
         slotDelayedPreviewGenerator();
@@ -98,6 +99,7 @@ void KisDlgGeneratorLayer::saveLayer()
         KIS_ASSERT_RECOVER_RETURN(layer);
         layer->setFilter(configuration()->cloneWithResourcesSnapshot());
     }
+
 }
 
 void KisDlgGeneratorLayer::restoreLayer()
@@ -110,6 +112,14 @@ void KisDlgGeneratorLayer::restoreLayer()
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
 {
+    //Qt doc says not to use `result()` if `WA_DeleteOnClose` flag is set, but since we're doing this inside the dialog, before it is being deleted, it's fine
+    if (result() == QDialog:: Accepted) {
+        saveLayer();
+    }
+    else{
+        restoreLayer();
+    }
+
     KisConfig(false).writeEntry("generatordialog/geometry", saveGeometry());
 }
 

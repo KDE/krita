@@ -281,6 +281,10 @@ ColumnLayout {
                     dpi: canvasDPI;
                     properties: propertiesModel;
                 }
+                TextAreaOptions {
+                    dpi: canvasDPI;
+                    properties: propertiesModel;
+                }
             }
         }
     }

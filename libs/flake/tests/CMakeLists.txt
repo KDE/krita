@@ -29,6 +29,8 @@ kis_add_tests(
     TestSvgSavingContext.cpp
     TestXsimdPainting.cpp
     TestFontLibraryResourceUtils.cpp
+    TestSvgTextShape.cpp
+    TestDependentShapes.cpp
 
     LINK_LIBRARIES kritaflake kritatestsdk
     NAME_PREFIX "libs-flake-"

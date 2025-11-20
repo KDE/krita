@@ -10,11 +10,13 @@
 
 #include <QList>
 #include <QRectF>
+#include <QScopedPointer>
 #include "kritaflake_export.h"
 
 class KoShape;
 class QPainter;
 class QImage;
+class KoShapeManager;
 
 /**
  * A utility class to paint a subset of shapes onto a QPainter.
@@ -61,9 +63,18 @@ public:
     /// Returns the bounding rect of the shapes to paint
     QRectF contentRect() const;
 
+    /**
+     * @brief internalShapeManager
+     * KoShapePainter has an internal shape manager that is used to paint the shapes.
+     * @return the internal shape manager.
+     */
+    KoShapeManager *internalShapeManager() const;
+
+    void setUpdateFunction(std::function<void(const QRectF&)> function);
+
 private:
     class Private;
-    Private * const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // KOSHAPEPAINTER_H

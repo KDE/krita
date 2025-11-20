@@ -9,6 +9,8 @@
 #include "KoMarker.h"
 #include "KoPathShape.h"
 #include <QExplicitlySharedDataPointer>
+#include <KoShapeBulkActionLock.h>
+#include <kis_pointer_utils.h>
 
 #include "kis_command_ids.h"
 
@@ -45,30 +47,35 @@ KoPathShapeMarkerCommand::~KoPathShapeMarkerCommand()
 void KoPathShapeMarkerCommand::redo()
 {
     KUndo2Command::redo();
+
+    KoShapeBulkActionLock lock(implicitCastList<KoShape*>(m_d->shapes));
+
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setMarker(m_d->marker.data(), m_d->position);
 
         // we have no GUI for selection auto-filling yet! So just enable it!
         shape->setAutoFillMarkers(true);
-
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
+
+    KoShapeBulkActionLock lock(implicitCastList<KoShape*>(m_d->shapes));
+
     auto markerIt = m_d->oldMarkers.begin();
     auto autoFillIt = m_d->oldAutoFillMarkers.begin();
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
-        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setMarker((*markerIt).data(), m_d->position);
         shape->setAutoFillMarkers(*autoFillIt);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         ++markerIt;
         ++autoFillIt;
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int KoPathShapeMarkerCommand::id() const

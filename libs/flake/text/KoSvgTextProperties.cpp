@@ -597,9 +597,11 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "tab-size") {
         setProperty(TabSizeId, QVariant::fromValue(KoSvgText::parseTabSize(value, context)));
     } else if (command == "shape-padding") {
-        setProperty(ShapePaddingId, SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), value));
+        const KoSvgText::CssLengthPercentage size = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
+        setProperty(ShapePaddingId, QVariant::fromValue(size));
     } else if (command == "shape-margin") {
-        setProperty(ShapeMarginId, SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), value));
+        const KoSvgText::CssLengthPercentage size = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
+        setProperty(ShapeMarginId, QVariant::fromValue(size));
     } else if (command == "font-synthesis") {
         setProperty(FontSynthesisBoldId, false);
         setProperty(FontSynthesisItalicId, false);
@@ -1009,10 +1011,10 @@ QMap<QString, QString> KoSvgTextProperties::convertParagraphProperties() const
         }
     }
     if (hasProperty(ShapePaddingId)) {
-        result.insert("shape-padding", QString::number(property(ShapePaddingId).toReal()));
+        result.insert("shape-padding", writeLengthPercentage(property(ShapePaddingId).value<CssLengthPercentage>()));
     }
     if (hasProperty(ShapeMarginId)) {
-        result.insert("shape-margin", QString::number(property(ShapeMarginId).toReal()));
+        result.insert("shape-margin", writeLengthPercentage(property(ShapeMarginId).value<CssLengthPercentage>()));
     }
     return result;
 }

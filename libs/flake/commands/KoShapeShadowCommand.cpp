@@ -7,6 +7,7 @@
 #include "KoShapeShadowCommand.h"
 #include "KoShape.h"
 #include "KoShapeShadow.h"
+#include <KoShapeBulkActionLock.h>
 
 #include <klocalizedstring.h>
 
@@ -90,6 +91,9 @@ KoShapeShadowCommand::~KoShapeShadowCommand()
 void KoShapeShadowCommand::redo()
 {
     KUndo2Command::redo();
+
+    KoShapeBulkActionLock lock(d->shapes);
+
     int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape *shape = d->shapes[i];
@@ -97,16 +101,19 @@ void KoShapeShadowCommand::redo()
         // TODO: implement comparison operator for KoShapeShadow
         //       (or just deprecate it entirely)
         if (shape->shadow() || d->newShadows[i]) {
-            const QRectF oldBoundingRect = shape->boundingRect();
             shape->setShadow(d->newShadows[i]);
-            shape->updateAbsolute(oldBoundingRect | shape->boundingRect());
         }
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoShapeShadowCommand::undo()
 {
     KUndo2Command::undo();
+
+    KoShapeBulkActionLock lock(d->shapes);
+
     int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape *shape = d->shapes[i];
@@ -114,9 +121,9 @@ void KoShapeShadowCommand::undo()
         // TODO: implement comparison operator for KoShapeShadow
         //       (or just deprecate it entirely)
         if (shape->shadow() || d->oldShadows[i]) {
-            const QRectF oldBoundingRect = shape->boundingRect();
             shape->setShadow(d->oldShadows[i]);
-            shape->updateAbsolute(oldBoundingRect | shape->boundingRect());
         }
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }

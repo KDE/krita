@@ -41,7 +41,7 @@ namespace KritaUtils
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 
     qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue);
-    QPainterPath KRITAIMAGE_EXPORT trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
+
 
     /**
      * Split a path \p path into a set of disjoint (non-intersectable)

@@ -52,6 +52,7 @@ set(kritaflake_SRCS
     KoSelectedShapesProxySimple.cpp
     KoShape.cpp
     KoShapeAnchor.cpp
+    KoShapeBulkActionLock.cpp
     KoShapeControllerBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
@@ -172,6 +173,9 @@ set(kritaflake_SRCS
     commands/KoShapePaintOrderCommand.cpp
     commands/KoShapeMergeTextPropertiesCommand.cpp
     commands/KoSvgConvertTextTypeCommand.cpp
+    commands/KoSvgTextAddRemoveShapeCommands.cpp
+    commands/KoSvgTextReorderShapeInsideCommand.cpp
+    commands/KoSvgTextFlipShapeContourTypeCommand.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
@@ -247,6 +251,7 @@ set(kritaflake_SRCS
     text/KoFontGlyphModel.cpp
     text/KoOpenTypeFeatureInfoFactory.cpp
     text/data/KoUnicodeBlockData.cpp
+    text/KoSvgTextShapeOutlineHelper.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp

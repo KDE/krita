@@ -1561,6 +1561,90 @@ qreal pointToLineDistSquared(const QPointF &pt, const QLineF &line)
     return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
 }
 
+bool tryMergePoints(QPainterPath &path,
+                    const QPointF &startPoint,
+                    const QPointF &endPoint,
+                    qreal &distance,
+                    qreal distanceThreshold,
+                    bool lastSegment)
+{
+    qreal length = (endPoint - startPoint).manhattanLength();
+
+    if (lastSegment || length > distanceThreshold) {
+        if (lastSegment) {
+            qreal wrappedLength =
+                (endPoint - QPointF(path.elementAt(0))).manhattanLength();
+
+            if (length < distanceThreshold ||
+                wrappedLength < distanceThreshold) {
+
+                return true;
+            }
+        }
+
+        distance = 0;
+        return false;
+    }
+
+    distance += length;
+
+    if (distance > distanceThreshold) {
+        path.lineTo(endPoint);
+        distance = 0;
+    }
+
+    return true;
+}
+
+QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
+{
+    QPainterPath newPath;
+    QPointF startPoint;
+    qreal distance = 0;
+
+    int count = path.elementCount();
+    for (int i = 0; i < count; i++) {
+        QPainterPath::Element e = path.elementAt(i);
+        QPointF endPoint = QPointF(e.x, e.y);
+
+        switch (e.type) {
+        case QPainterPath::MoveToElement:
+            newPath.moveTo(endPoint);
+            break;
+        case QPainterPath::LineToElement:
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                newPath.lineTo(endPoint);
+            }
+            break;
+        case QPainterPath::CurveToElement: {
+            Q_ASSERT(i + 2 < count);
+
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                e = path.elementAt(i + 1);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl1 = QPointF(e.x, e.y);
+                e = path.elementAt(i + 2);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl2 = QPointF(e.x, e.y);
+                newPath.cubicTo(ctrl1, ctrl2, endPoint);
+            }
+
+            i += 2;
+        }
+        default:
+            ;
+        }
+        startPoint = endPoint;
+    }
+
+    return newPath;
+}
+
+
 QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
 
     QPointF lineNormalVector = QPointF(line.dy(), -line.dx());
@@ -1572,8 +1656,6 @@ QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
     }
     return {line1, line2};
 }
-
-
 
 QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, const QLineF &line, bool left) {
 

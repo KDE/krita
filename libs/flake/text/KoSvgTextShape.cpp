@@ -42,6 +42,7 @@
 #include <QtMath>
 
 #include <FlakeDebug.h>
+#include <functional>
 
 // Memento pointer to hold data for Undo commands.
 
@@ -68,7 +69,8 @@ public:
     {
     }
 
-    ~KoSvgTextShapeMementoImpl() {}
+    ~KoSvgTextShapeMementoImpl() {
+    }
 
 private:
     friend class KoSvgTextShape;
@@ -85,9 +87,12 @@ private:
 };
 
 struct KoSvgTextNodeIndex::Private {
-    Private(KisForest<KoSvgTextContentElement>::child_iterator _textElement)
-        :textElement(_textElement) {}
+    Private(KisForest<KoSvgTextContentElement>::child_iterator _textElement, KoShape *_textPath)
+        :textElement(_textElement)
+        , textPath(_textPath){}
     KisForest<KoSvgTextContentElement>::child_iterator textElement;
+    // textPath is owned by its textshape.
+    KoShape *textPath = nullptr;
 };
 
 // for the use in KoSvgTextShape::Private::createTextNodeIndex() only
@@ -96,16 +101,16 @@ KoSvgTextNodeIndex::KoSvgTextNodeIndex()
 {
 }
 
-KoSvgTextNodeIndex KoSvgTextShape::Private::createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement)
+KoSvgTextNodeIndex KoSvgTextShape::Private::createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement) const
 {
     KoSvgTextNodeIndex index;
-    index.d.reset(new KoSvgTextNodeIndex::Private(textElement));
+    index.d.reset(new KoSvgTextNodeIndex::Private(textElement, Private::textPathByName(textElement->textPathId, textPaths)));
     return index;
 }
 
 KoSvgTextNodeIndex::KoSvgTextNodeIndex(const KoSvgTextNodeIndex &rhs)
 {
-    d->textElement = rhs.d->textElement;
+    d.reset(new KoSvgTextNodeIndex::Private(rhs.d->textElement, rhs.d->textPath));
 }
 
 KoSvgTextNodeIndex::~KoSvgTextNodeIndex() {
@@ -113,25 +118,31 @@ KoSvgTextNodeIndex::~KoSvgTextNodeIndex() {
 }
 
 KoSvgTextProperties *KoSvgTextNodeIndex::properties(){
+    if (!d) { return nullptr;}
     return &d->textElement->properties;
 }
 
 KoSvgText::TextOnPathInfo *KoSvgTextNodeIndex::textPathInfo() {
+    if (!d) {
+        qDebug() << "d not initialized...";
+        return nullptr;
+    }
     return &d->textElement->textPathInfo;
 }
 
 KoShape *KoSvgTextNodeIndex::textPath() {
-    // TODO: implement this properly in the text-in-shape branch.
-    return nullptr;
+    if (!d) { qDebug() << "d not initialized...";return nullptr;}
+    return d->textPath;
 }
-
 
 KoSvgTextShape::KoSvgTextShape()
     : KoShape()
     , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
+    d->shapeGroup->setTransformation(this->transformation());
     d->textData.insert(d->textData.childBegin(), KoSvgTextContentElement());
+    d->internalShapesPainter->setUpdateFunction(std::bind(&KoSvgTextShape::updateAbsolute, this, std::placeholders::_1));
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
@@ -139,10 +150,18 @@ KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     , d(new Private(*rhs.d))
 {
     setShapeId(KoSvgTextShape_SHAPEID);
+    d->shapeGroup->setTransformation(this->transformation());
+    d->internalShapesPainter->setUpdateFunction(std::bind(&KoSvgTextShape::updateAbsolute, this, std::placeholders::_1));
+    Q_FOREACH(KoShape *shape, d->shapeGroup->shapes()) {
+        shape->addDependee(this);
+    }
 }
 
 KoSvgTextShape::~KoSvgTextShape()
 {
+    Q_FOREACH(KoShape *shape, internalShapeManager()->shapes()) {
+        shape->removeDependee(this);
+    }
 }
 
 const QString &KoSvgTextShape::defaultPlaceholderText()
@@ -158,13 +177,71 @@ KoShape *KoSvgTextShape::cloneShape() const
 
 void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
+    KoShape::shapeChanged(type, shape);
+
     if (d->isLoading) {
         return;
     }
-    KoShape::shapeChanged(type, shape);
 
-    if (type == ContentChanged) {
-        relayout();
+    const QVector<ChangeType> transformationTypes = {PositionChanged, RotationChanged, ScaleChanged, ShearChanged, SizeChanged, GenericMatrixChange};
+
+    if ((d->shapesInside.contains(shape) || d->shapesSubtract.contains(shape) || d->textPaths.contains(shape))
+            && (transformationTypes.contains(type)
+                || type == ParameterChanged
+                || type == ParentChanged
+                || type == ContentChanged // for KoPathShape modifications
+                || type == Deleted)) {
+        if (type == Deleted) {
+            if (d->shapesInside.contains(shape)) {
+                d->shapesInside.removeAll(shape);
+            }
+            if (d->shapesSubtract.contains(shape)) {
+                d->shapesSubtract.removeAll(shape);
+            }
+            if (d->textPaths.contains(shape)) {
+                d->textPaths.removeAll(shape);
+                // TODO: remove ID from relevant text content element.
+            }
+            if (d->shapeGroup && d->shapeGroup->shapes().contains(shape)) {
+                d->shapeGroup->removeShape(shape);
+            }
+            d->updateInternalShapesList();
+        }
+
+        // Updates the contours and calls relayout.
+        // Would be great if we could compress the updates here somehow...
+        if (d->bulkActionState) {
+            d->bulkActionState->contourHasChanged = true;
+        } else {
+            d->updateTextWrappingAreas();
+        }
+
+        // NotifyChanged ensures that boundingRect() is called on this shape;
+        // it is NOT compressed by the bulk action, since boundingRect() is
+        // guaranteed to be valid during the whole bulk action
+        this->notifyChanged();
+    }
+    if ((!shape || shape == this)) {
+        if (type == ContentChanged) {
+            if (d->bulkActionState) {
+                d->bulkActionState->layoutHasChanged = true;
+            } else {
+                relayout();
+            }
+        } else if (transformationTypes.contains(type) || type == ParentChanged) {
+            d->shapeGroup->setTransformation(this->absoluteTransformation());
+        } else if (type == TextRunAroundChanged) {
+            // Hack: we don't use runaround else where, so we're using it for padding and margin.
+            if (d->bulkActionState) {
+                d->bulkActionState->contourHasChanged = true;
+            } else {
+                d->updateTextWrappingAreas();
+            }
+        }
+
+        // when calling shapeChangedImpl() on `this` shape, we call
+        // notifyChanged() manually at the calling site, so we shouldn't
+        // do that again here
     }
 }
 
@@ -991,7 +1068,20 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
             }
         }
         notifyChanged();
-        shapeChangedPriv(ContentChanged);
+        if (properties.hasProperty(KoSvgTextProperties::ShapePaddingId)
+                || properties.hasProperty(KoSvgTextProperties::ShapeMarginId)
+                || removeProperties.contains(KoSvgTextProperties::ShapePaddingId)
+                || removeProperties.contains(KoSvgTextProperties::ShapeMarginId)) {
+            shapeChangedPriv(TextRunAroundChanged);
+        } else {
+            shapeChangedPriv(ContentChanged);
+        }
+        if (properties.hasProperty(KoSvgTextProperties::FillId)) {
+            shapeChangedPriv(BackgroundChanged);
+        }
+        if (properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            shapeChangedPriv(StrokeChanged);
+        }
         return;
     }
     const int startIndex = d->cursorPos.at(startPos).index;
@@ -1355,15 +1445,15 @@ KoSvgTextNodeIndex KoSvgTextShape::findNodeIndexForPropertyId(KoSvgTextPropertie
 {
     for (auto it = d->textData.childBegin(); it != d->textData.childEnd(); it++) {
         if (it->properties.hasProperty(propertyId)) {
-            return Private::createTextNodeIndex(it);
+            return d->createTextNodeIndex(it);
         } else if (KisForestDetail::childBegin(it) != KisForestDetail::childEnd(it)) {
             auto found = findNodeIndexForPropertyIdImpl(it, propertyId);
             if (found != it) {
-                return Private::createTextNodeIndex(found);
+                return d->createTextNodeIndex(found);
             }
         }
     }
-    return Private::createTextNodeIndex(d->textData.childBegin());
+    return d->createTextNodeIndex(d->textData.childBegin());
 }
 
 QPair<int, int> KoSvgTextShape::findRangeForNodeIndex(const KoSvgTextNodeIndex &node) const
@@ -1376,6 +1466,42 @@ QPair<int, int> KoSvgTextShape::findRangeForNodeIndex(const KoSvgTextNodeIndex &
         endIndex = d->numChars(node.d->textElement) + startIndex;
     }
     return qMakePair(posForIndex(startIndex), posForIndex(endIndex));
+}
+
+KoSvgTextNodeIndex KoSvgTextShape::topLevelNodeForPos(int pos) const
+{
+    auto candidate = d->textData.childBegin();
+    if (d->isLoading || d->cursorPos.isEmpty()) return d->createTextNodeIndex(candidate);
+    if (childBegin(d->textData.childBegin()) != childEnd(d->textData.childBegin())) {
+        candidate = childBegin(d->textData.childBegin());
+    }
+    const int finalPos = d->cursorPos.size() - 1;
+    const int index = d->cursorPos.at(qBound(0, pos, finalPos)).index;
+    int currentIndex = 0;
+
+    auto e = Private::findTextContentElementForIndex(d->textData, currentIndex, index, true);
+    if (e == d->textData.depthFirstTailEnd()) {
+        return d->createTextNodeIndex(candidate);
+    }
+
+    auto element = KisForestDetail::siblingCurrent(e);
+    auto parent = Private::findTopLevelParent(d->textData.childBegin(), element);
+    if (parent == childEnd(d->textData.childBegin())) return d->createTextNodeIndex(candidate);
+
+    return d->createTextNodeIndex(parent);
+}
+
+KoSvgTextNodeIndex KoSvgTextShape::nodeForTextPath(KoShape *textPath) const
+{
+    auto root = d->textData.childBegin();
+    if (d->isLoading || d->cursorPos.isEmpty()) return d->createTextNodeIndex(root);
+
+    for (auto child = childBegin(root); child != childEnd(root); child++) {
+        if (child->textPathId == textPath->name()) {
+            return d->createTextNodeIndex(child);
+        }
+    }
+    return d->createTextNodeIndex(root);
 }
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const
@@ -1533,14 +1659,32 @@ void KoSvgTextShape::setCharacterTransformsFromLayout()
 }
 
 #include "KoXmlWriter.h"
+#include "SvgWriter.h"
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {
     bool success = false;
+
+    QList<KoShape*> visibleShapes;
+    Q_FOREACH(KoShape *shape, d->internalShapes()) {
+        if (shape->isVisible(false)) {
+            visibleShapes.append(shape);
+        }
+    }
+    const bool writeGroup = !(visibleShapes.isEmpty() || context.strippedTextMode());
+    if (writeGroup) {
+        context.shapeWriter().startElement("g", false);
+        context.shapeWriter().addAttribute("id", context.createUID("group"));
+        context.shapeWriter().addAttribute(KoSvgTextShape_TEXTCONTOURGROUP, "true");
+
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+        SvgWriter writer(visibleShapes);
+        writer.saveDetached(context);
+    }
     for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
         if (it.state() == KisForestDetail::Enter) {
             bool isTextPath = false;
             QMap<QString, QString> shapeSpecificStyles;
-            if (it->textPath) {
+            if (!it->textPathId.isEmpty()) {
                 isTextPath = true;
             }
             if (it == d->textData.compositionBegin()) {
@@ -1554,7 +1698,9 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                     // 3: Wrong font-size-adjust.
                     context.shapeWriter().addAttribute("krita:textVersion", 3);
 
-                    SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+                    if (visibleShapes.isEmpty()) {
+                        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+                    }
                     SvgStyleWriter::saveSvgStyle(this, context);
                 } else {
                     SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
@@ -1578,16 +1724,21 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 
             }
 
+            KoShape *textPath = KoSvgTextShape::Private::textPathByName(it->textPathId, d->textPaths);
             success = it->saveSvg(context,
                                   it == d->textData.compositionBegin(),
                                   d->childCount(siblingCurrent(it)) == 0,
-                                  shapeSpecificStyles);
+                                  shapeSpecificStyles,
+                                  textPath);
         } else {
             if (it == d->textData.compositionBegin()) {
                 SvgStyleWriter::saveMetadata(this, context);
             }
             context.shapeWriter().endElement();
         }
+    }
+    if (writeGroup) {
+        context.shapeWriter().endElement();
     }
     return success;
 }
@@ -1696,6 +1847,10 @@ KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
 
 void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
 {
+    // TODO: add an assert that all linked shpaes in memento are present in
+    // the current state of d->textPaths. That is the responsibility of
+    // KoSvgTextAddRemoveShapeCommandImpl to prepare the shapes for us
+
     KoSvgTextShapeMementoImpl *impl = dynamic_cast<KoSvgTextShapeMementoImpl*>(memento.data());
     if (impl) {
         d->textData = impl->textData;
@@ -1706,6 +1861,17 @@ void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
         d->plainText = impl->plainText;
         d->isBidi = impl->isBidi;
         d->initialTextPosition = impl->initialTextPosition;
+
+        // Ensure that any text paths exist.
+        auto root = d->textData.childBegin();
+        for (auto child = childBegin(root); child != childEnd(root); child++) {
+            if (!child->textPathId.isEmpty()) {
+                KIS_SAFE_ASSERT_RECOVER(Private::textPathByName(child->textPathId, d->textPaths)) {
+                    qDebug() << "missing path is" << child->textPathId;
+                    child->textPathId = QString();
+                }
+            }
+        }
     }
 }
 
@@ -1718,7 +1884,14 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
 
 void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento, int pos, int anchor)
 {
+    const bool shapeOffsetBefore = (textProperties().hasProperty(KoSvgTextProperties::ShapeMarginId)
+                                    || textProperties().hasProperty(KoSvgTextProperties::ShapePaddingId));
     setMementoImpl(memento);
+    const bool shapeOffsetAfter = (textProperties().hasProperty(KoSvgTextProperties::ShapeMarginId)
+                                   || textProperties().hasProperty(KoSvgTextProperties::ShapePaddingId));
+    if (shapeOffsetBefore || shapeOffsetAfter) {
+        d->updateTextWrappingAreas();
+    }
     notifyCursorPosChanged(pos, anchor);
     notifyMarkupChanged();
 }
@@ -1738,7 +1911,7 @@ void KoSvgTextShape::debugParsing()
             qDebug() << QString(spaces + "| Opacity: ") << it->properties.property(KoSvgTextProperties::Opacity);
             qDebug() << QString(spaces + "| PaintOrder: ") << it->properties.hasProperty(KoSvgTextProperties::PaintOrder);
             qDebug() << QString(spaces + "| Visibility set: ") << it->properties.hasProperty(KoSvgTextProperties::Visibility);
-            qDebug() << QString(spaces + "| TextPath set: ") << (!it->textPath.isNull());
+            qDebug() << QString(spaces + "| TextPath set: ") << it->textPathId;
             qDebug() << QString(spaces + "| Transforms set: ") << it->localTransformations;
             spaces.append(" ");
         }
@@ -1769,8 +1942,46 @@ bool KoSvgTextShape::fontMatchingDisabled() const
     return d->disableFontMatching;
 }
 
+QList<QPainterPath> KoSvgTextShape::generateTextAreas(const QList<KoShape *> shapesInside, const QList<KoShape *> shapesSubtract, const KoSvgTextProperties &props)
+{
+    return Private::generateShapes(shapesInside, shapesSubtract, props);
+}
+
+void KoSvgTextShape::startBulkAction()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->bulkActionState);
+    d->bulkActionState.emplace(boundingRect());
+}
+
+QRectF KoSvgTextShape::endBulkAction()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->bulkActionState, boundingRect());
+
+    QRectF updateRect;
+
+    if (d->bulkActionState->changed()) {
+        if (d->bulkActionState->contourHasChanged) {
+            d->updateTextWrappingAreas();
+        } else if (d->bulkActionState->layoutHasChanged) {
+            // updateTextWrappingAreas() already includes a call to relayout()
+            relayout();
+        }
+
+        updateRect = d->bulkActionState->originalBoundingRect | boundingRect();
+    }
+
+    d->bulkActionState = std::nullopt;
+    return updateRect;
+}
+
 void KoSvgTextShape::paint(QPainter &painter) const
 {
+    painter.save();
+
+    painter.setTransform(d->shapeGroup->absoluteTransformation().inverted()*painter.transform());
+    d->internalShapesPainter->paint(painter);
+    painter.restore();
+
     painter.save();
     KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(textProperties().propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
     if (textRendering == KoSvgText::RenderingOptimizeSpeed || !painter.testRenderHint(QPainter::Antialiasing)) {
@@ -1792,37 +2003,6 @@ void KoSvgTextShape::paint(QPainter &painter) const
         d->paintPaths(painter, rootBounds, this, d->result, textRendering, chunk, currentIndex);
         d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationLineThrough, textRendering);
     }
-#if 0 // Debug
-    Q_FOREACH (KoShape *child, this->shapes()) {
-        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape *>(child);
-        if (textPathChunk) {
-            painter.save();
-            painter.setPen(Qt::magenta);
-            painter.setOpacity(0.5);
-            if (textPathChunk->layoutInterface()->textPath()) {
-                QPainterPath p = textPathChunk->layoutInterface()->textPath()->outline();
-                p = textPathChunk->layoutInterface()->textPath()->transformation().map(p);
-                painter.strokePath(p, QPen(Qt::green));
-                painter.drawPoint(p.pointAtPercent(0));
-                painter.drawPoint(p.pointAtPercent(p.percentAtLength(p.length() * 0.5)));
-                painter.drawPoint(p.pointAtPercent(1.0));
-            }
-            painter.restore();
-        }
-    }
-#endif
-#if 0 // Debug
-    Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
-        QPainterPath p = shapeInside->outline();
-        p = shapeInside->transformation().map(p);
-        painter.strokePath(p, QPen(Qt::green));
-    }
-    Q_FOREACH (KoShape *shapeInside, d->shapesSubtract) {
-        QPainterPath p = shapeInside->outline();
-        p = shapeInside->transformation().map(p);
-        painter.strokePath(p, QPen(Qt::red));
-    }
-#endif
 
     painter.restore();
 }
@@ -1835,13 +2015,21 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 
 QPainterPath KoSvgTextShape::outline() const {
     QPainterPath result;
-    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
-        result.addPath(it->associatedOutline);
-        for (int i = 0; i < it->textDecorations.values().size(); ++i) {
-            result.addPath(it->textDecorations.values().at(i));
+    if (!d->internalShapes().isEmpty()) {
+        Q_FOREACH(KoShape *shape, d->internalShapes()) {
+            result.addPath(shape->transformation().map(shape->outline()));
         }
-
     }
+
+    if ((d->shapesInside.isEmpty() && d->shapesSubtract.isEmpty())) {
+        for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+            result.addPath(it->associatedOutline);
+            for (int i = 0; i < it->textDecorations.values().size(); ++i) {
+                result.addPath(it->textDecorations.values().at(i));
+            }
+        }
+    }
+
     return result;
 }
 QRectF KoSvgTextShape::outlineRect() const
@@ -1851,7 +2039,15 @@ QRectF KoSvgTextShape::outlineRect() const
 
 QRectF KoSvgTextShape::boundingRect() const
 {
+    QRectF shapesRect;
+    if (d->internalShapesPainter->contentRect().isValid()) {
+        shapesRect = d->internalShapesPainter->contentRect();
+        if (!(d->shapesInside.isEmpty() && d->shapesSubtract.isEmpty())) {
+            return shapesRect;
+        }
+    }
     QRectF result;
+
     QList<KoShapeStrokeModelSP> parentStrokes;
     for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
         if (it.state() == KisForestDetail::Enter) {
@@ -1880,7 +2076,134 @@ QRectF KoSvgTextShape::boundingRect() const
             }
         }
     }
-    return this->absoluteTransformation().mapRect(result);
+
+    return (this->absoluteTransformation().mapRect(result) | shapesRect);
+}
+
+QSizeF KoSvgTextShape::size() const
+{
+    // TODO: check if KoShape::m_d->size is consistent, check cache in KoShapeGroup::size()
+    return outlineRect().size();
+}
+
+void KoSvgTextShape::setSize(const QSizeF &size)
+{
+    const QRectF oRect = this->outlineRect();
+    const QSizeF oldSize = oRect.size();
+
+    if (size == oldSize) return;
+
+    // don't try to divide by zero
+    if (oldSize.isEmpty()) return;
+
+    const qreal scaleX = size.width() / oldSize.width();
+    const qreal scaleY = size.height() / oldSize.height();
+
+    if (d->internalShapes().isEmpty()) {
+        /**
+         * We don't have any contours, just scale (and distort) the text,
+         * as if "Scale Styles" were activated
+         */
+
+        const qreal scaleX = size.width() / oldSize.width();
+        const qreal scaleY = size.height() / oldSize.height();
+
+        this->scale(scaleX, scaleY);
+        // TODO: use scaling function for kosvgtextproperties when styles presets are merged.
+        notifyChanged();
+        shapeChangedPriv(ScaleChanged);
+    } else {
+        if (!d->textPaths.isEmpty()) return;
+
+        const bool allInternalShapeAreTranslatedOnly = [this] () {
+            Q_FOREACH(KoShape *shape, d->internalShapes()) {
+                if (shape->transformation().type() > QTransform::TxTranslate) {
+                    return false;
+                }
+            }
+            return true;
+        }();
+
+        if (allInternalShapeAreTranslatedOnly) {
+            /**
+             * We have only one contour that has no transformations, so we can just pass
+             * the resize to it and preserve all the contours intact
+             */
+            Q_FOREACH (KoShape *internalShape, d->internalShapes()) {
+                /**
+                 * When resizing the shapes via setSize() we expect the method to
+                 * scale the shapes bluntly in the parent's coordinate system. So,
+                 * when resizing embedded shapes we should just anchor them to the
+                 * origin of the text-shape's coordinate system.
+                 */
+                const QPointF stillPoint = this->absoluteTransformation().map(QPointF());
+                const bool useGlobalMode = false;
+                const bool usePostScaling = false;
+                KoFlake::resizeShapeCommon(internalShape,
+                                           scaleX,
+                                           scaleY,
+                                           stillPoint,
+                                           useGlobalMode,
+                                           usePostScaling,
+                                           QTransform());
+            }
+
+            const QSizeF realNewSize = outlineRect().size();
+            KoShape::setSize(realNewSize);
+        } else {
+            /**
+             * When we have transformed (scaled, rotated and etc.) shapes
+             * internally, we cannot pass resize action to them, because
+             * it is impossible to mimic the parent resize by mere resizing
+             * the child shapes. We would have to add shear to them [1].
+             *
+             * That is why we just add a scaling transform to every contour
+             * shape while **keeping the text unscaled**. Keeping the text
+             * unscaled covers the case when the user want to simply
+             * transform a text balloon without contours.
+             *
+             * [1] Proof of the "impossible to pass the resize" claim
+             *
+             * That comes from the matrix equation to the child-parent
+             * transformation. Here is an example for a rotated child:
+             *
+             * Original transformation is:
+             *
+             * parentPoint = childPoint * ChildRotate,
+             *
+             * now apply Scale to both sides, to simulate scale in the parent's
+             * coordinate system:
+             *
+             * parentPoint * Scale = childPoint * ChildRotate * Scale,
+             *
+             * now we need to preserve the original child's transformation
+             * to be intact, which was `ChildRotate`. To achieve that,
+             * add (ChildRotate.inverted() * ChildRotate) at the end of the
+             * equation:
+             *
+             * parentPoint * Scale = childPoint * ChildRotate * Scale * (ChildRotate.inverted() * ChildRotate),
+             *
+             * now regroup the matrices:
+             *
+             * parentPoint * Scale = childPoint * (ChildRotate * Scale * ChildRotate.inverted()) * ChildRotate,
+             *
+             * notice matrix (ChildRotate * Scale * ChildRotate.inverted()) is the one
+             * that we should apply to the child shape in setSize() to preserve
+             * its transform. This matrix can not be a scale matrix, it will
+             * always recieve shear components for any non-trivial ChildRotate
+             * values.
+             */
+
+            const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+
+            Q_FOREACH (KoShape *shape, d->internalShapes()) {
+                shape->setTransformation(shape->transformation() * scale);
+            }
+
+            const QSizeF realNewSize = outlineRect().size();
+            KoShape::setSize(realNewSize);
+        }
+    }
 }
 
 void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements) const
@@ -1891,6 +2214,18 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
             QPainterPath rootBounds;
             rootBounds.addRect(this->outline().boundingRect());
             d->paintDebug(painter, d->result, currentIndex);
+        }
+
+        //Debug shape outlines.
+        Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
+            QPainterPath p = shapeInside->outline();
+            p = shapeInside->transformation().map(p);
+            painter.strokePath(p, QPen(Qt::green));
+        }
+        Q_FOREACH (KoShape *shapeInside, d->shapesSubtract) {
+            QPainterPath p = shapeInside->outline();
+            p = shapeInside->transformation().map(p);
+            painter.strokePath(p, QPen(Qt::red));
         }
     }
 
@@ -1923,7 +2258,7 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
 
 KoShape * KoSvgTextShape::textOutline() const
 {
-    KoShape *shape;
+    KoShape *shape = nullptr;
     int currentIndex = 0;
     if (!d->result.empty()) {
         shape = d->collectPaths(this, d->result, currentIndex);
@@ -1959,7 +2294,213 @@ KoSvgTextShape::TextType KoSvgTextShape::textType() const
 
 void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
 {
-    d->shapesInside = shapesInside;
+    removeShapesFromContours(d->shapesInside, false);
+    addShapeContours(shapesInside, true);
+}
+
+void KoSvgTextShape::addShapeContours(QList<KoShape *> shapes, const bool inside)
+{
+    Q_FOREACH(KoShape *shape, shapes) {
+        if (d->textPaths.contains(shape)) {
+            d->removeTextPathId(d->textData.childBegin(), shape->name());
+            d->cleanUp(d->textData);
+            d->textPaths.removeAll(shape);
+        }
+
+        if (inside) {
+            if (d->shapesSubtract.contains(shape)) {
+                d->shapesSubtract.removeAll(shape);
+            }
+            d->shapesInside.append(shape);
+        } else {
+            if (d->shapesInside.contains(shape)) {
+                d->shapesInside.removeAll(shape);
+            }
+            d->shapesSubtract.append(shape);
+        }
+        if (!d->shapeGroup->shapes().contains(shape)) {
+            d->shapeGroup->addShape(shape);
+            shape->addDependee(this);
+        }
+    }
+
+    notifyChanged(); // notify shape manager that our geometry has changed
+
+    if (!d->isLoading) {
+        d->updateTextWrappingAreas();
+    }
+
+    d->updateInternalShapesList();
+    shapeChangedPriv(ContentChanged);
+    update();
+}
+
+bool KoSvgTextShape::shapeInContours(KoShape *shape)
+{
+    return (shape->parent() == d->shapeGroup.data());
+}
+
+void KoSvgTextShape::removeShapesFromContours(QList<KoShape *> shapes, bool callUpdate, bool cleanup)
+{
+    Q_FOREACH(KoShape *shape, shapes) {
+        if (shape) {
+            d->removeTextPathId(d->textData.childBegin(), shape->name());
+            shape->removeDependee(this);
+            d->shapesInside.removeAll(shape);
+            d->shapesSubtract.removeAll(shape);
+            d->textPaths.removeAll(shape);
+
+        }
+        d->shapeGroup->removeShape(shape);
+    }
+    if (cleanup) {
+        d->cleanUp(d->textData);
+    }
+    if (callUpdate) {
+        notifyChanged(); // notify shape manager that our geometry has changed
+        if (!d->isLoading) {
+            d->updateTextWrappingAreas();
+        }
+        d->updateInternalShapesList();
+        shapeChangedPriv(ContentChanged);
+        update();
+    }
+}
+
+void KoSvgTextShape::moveShapeInsideToIndex(KoShape *shapeInside, const int index)
+{
+    const int oldIndex = d->shapesInside.indexOf(shapeInside);
+    if (oldIndex < 0) return;
+
+    // Update.
+    d->shapesInside.move(oldIndex, index);
+    if (!d->isLoading) {
+        d->updateTextWrappingAreas();
+    }
+    d->updateInternalShapesList();
+    shapeChangedPriv(ContentChanged);
+    update();
+}
+
+bool KoSvgTextShape::setTextPathOnRange(KoShape *textPath, const int startPos, const int endPos)
+{
+    const int finalPos = d->cursorPos.size() - 1;
+    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->cursorPos.at(qBound(0, startPos, finalPos)).index;
+    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->cursorPos.at(qBound(0, endPos, finalPos)).index;
+
+    Private::splitTree(d->textData, startIndex, false);
+    Private::splitTree(d->textData, endIndex, true);
+    int currentIndex = 0;
+
+    Private::makeTextPathNameUnique(d->textPaths, textPath);
+    KoSvgTextContentElement textPathElement;
+    textPathElement.textPathId = textPath->name();
+    d->shapeGroup->addShape(textPath);
+    d->textPaths.append(textPath);
+    textPath->addDependee(this);
+
+
+    if (KisForestDetail::depth(d->textData) == 1) {
+        textPathElement.text = d->textData.childBegin()->text;
+        QList<KoSvgTextProperties::PropertyId> copyIds = {KoSvgTextProperties::TextDecorationLineId,
+                                                          KoSvgTextProperties::TextDecorationColorId,
+                                                          KoSvgTextProperties::TextDecorationStyleId};
+        Q_FOREACH(KoSvgTextProperties::PropertyId p, copyIds) {
+            if (d->textData.childBegin()->properties.hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
+                textPathElement.properties.setProperty(p, d->textData.childBegin()->properties.property(p));
+                d->textData.childBegin()->properties.removeProperty(p);
+            }
+        }
+
+        d->textData.childBegin()->text = QString();
+        d->textData.insert(childEnd(d->textData.childBegin()), textPathElement);
+    } else {
+        // find nodes
+        auto startElement = Private::findTextContentElementForIndex(d->textData, currentIndex, startIndex, true);
+        currentIndex = 0;
+        auto endElement = Private::findTextContentElementForIndex(d->textData, currentIndex, endIndex, true);
+
+        auto first = startElement.node()?Private::findTopLevelParent(d->textData.childBegin(), KisForestDetail::siblingCurrent(startElement))
+                                         : childEnd(d->textData.childBegin());
+        auto last = endElement.node()? Private::findTopLevelParent(d->textData.childBegin(), KisForestDetail::siblingCurrent(endElement))
+                                     : childEnd(d->textData.childBegin());
+
+        // move children. we collect them before inserting the text path,
+        // so we don't get iterator issues.
+        KisForest<KoSvgTextContentElement> textPathTree;
+        auto textPathIt = textPathTree.insert(
+                    textPathTree.childEnd(),
+                    textPathElement);
+        QVector<KisForest<KoSvgTextContentElement>::child_iterator> movableChildren;
+        for (auto child = first;
+             (child != last && child != childEnd(d->textData.childBegin()));
+             child++) {
+            if (!child->textPathId.isEmpty()) {
+                Q_FOREACH(KoShape *shape, d->textPaths) {
+                    if (shape->name() == child->textPathId) {
+                        removeShapesFromContours({shape}, false, false);
+                        break;
+                    }
+                }
+                child->textPathId = QString();
+            }
+            movableChildren.append(child);
+        }
+        while (!movableChildren.isEmpty()) {
+            auto child = movableChildren.takeLast();
+            textPathTree.move(child, KisForestDetail::childBegin(textPathIt));
+        }
+        d->textData.move(textPathIt, last);
+    }
+    Private::cleanUp(d->textData);
+
+    d->updateInternalShapesList();
+    notifyChanged();
+    shapeChangedPriv(ContentChanged);
+    update();
+    return true;
+}
+
+QList<KoShape *> KoSvgTextShape::textPathsAtRange(const int startPos, const int endPos)
+{
+    const int finalPos = d->cursorPos.size() - 1;
+    const int startIndex = (startPos == endPos && startPos < 0)? 0: d->cursorPos.at(qBound(0, startPos, finalPos)).index;
+    const int endIndex = (startPos == endPos && startPos < 0)? finalPos: d->cursorPos.at(qBound(0, endPos, finalPos)).index;
+    QList<KoShape*> textPaths;
+    int currentIndex = 0;
+    auto startElement = Private::findTextContentElementForIndex(d->textData, currentIndex, startIndex, true);
+    currentIndex = 0;
+    auto endElement = Private::findTextContentElementForIndex(d->textData, currentIndex, endIndex, true);
+
+    auto first = startElement.node()? Private::findTopLevelParent(d->textData.childBegin(), KisForestDetail::siblingCurrent(startElement))
+                                     : childEnd(d->textData.childBegin());
+    auto last = endElement.node()? Private::findTopLevelParent(d->textData.childBegin(), KisForestDetail::siblingCurrent(endElement))
+                                 : childEnd(d->textData.childBegin());
+    if (last != childEnd(d->textData.childBegin())) {
+        last++;
+    }
+    for (auto child = first; (child != last && child != KisForestDetail::siblingEnd(first)); child++) {
+        if (KoShape *path = Private::textPathByName(child->textPathId, d->textPaths)) {
+            textPaths.append(path);
+        }
+    }
+    return textPaths;
+}
+
+void KoSvgTextShape::addTextPathAtEnd(KoShape *textPath)
+{
+    auto root = d->textData.childBegin();
+    if (root == d->textData.childEnd()) return;
+    if (d->textPaths.contains(textPath)) return;
+
+    Private::makeTextPathNameUnique(d->textPaths, textPath);
+    KoSvgTextContentElement textPathElement;
+    textPathElement.textPathId = textPath->name();
+    d->shapeGroup->addShape(textPath);
+    d->textPaths.append(textPath);
+    textPath->addDependee(this);
+
+    d->textData.insert(childEnd(root), textPathElement);
 }
 
 QList<KoShape *> KoSvgTextShape::shapesInside() const
@@ -1969,12 +2510,23 @@ QList<KoShape *> KoSvgTextShape::shapesInside() const
 
 void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
 {
-    d->shapesSubtract = shapesSubtract;
+    removeShapesFromContours(d->shapesSubtract, false);
+    addShapeContours(shapesSubtract, false);
+}
+
+QList<QPainterPath> KoSvgTextShape::textWrappingAreas() const
+{
+    return d->currentTextWrappingAreas;
 }
 
 QList<KoShape *> KoSvgTextShape::shapesSubtract() const
 {
     return d->shapesSubtract;
+}
+
+KoShapeManager *KoSvgTextShape::internalShapeManager() const
+{
+    return d->internalShapesPainter->internalShapeManager();
 }
 
 QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext &context) const
@@ -1983,15 +2535,18 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
     if (!d->shapesInside.isEmpty()) {
         QStringList shapesInsideList;
         Q_FOREACH(KoShape* shape, d->shapesInside) {
-            QString id = SvgStyleWriter::embedShape(shape, context);
+            QString id = (shape->isVisible(false) && !context.strippedTextMode())? context.getID(shape): SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-inside", shapesInsideList.join(" "));
+        /// Right now we don't support showing glyphs outside the shape. Nor does Inkscape.
+        /// Therefore being excplit about clipping these glyphs is preferable.
+        map.insert("overflow", "clip");
     }
     if (!d->shapesSubtract.isEmpty()) {
         QStringList shapesInsideList;
         Q_FOREACH(KoShape* shape, d->shapesSubtract) {
-            QString id = SvgStyleWriter::embedShape(shape, context);
+            QString id = shape->isVisible(false)? context.getID(shape): SvgStyleWriter::embedShape(shape, context);
             shapesInsideList.append(QString("url(#%1)").arg(id));
         }
         map.insert("shape-subtract", shapesInsideList.join(" "));

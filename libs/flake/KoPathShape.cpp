@@ -32,6 +32,7 @@
 #include <QPainterPath>
 
 #include "kis_global.h"
+#include <kis_algebra_2d.h>
 
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {
@@ -1335,6 +1336,38 @@ bool KoPathShape::autoFillMarkers() const
 void KoPathShape::setAutoFillMarkers(bool value)
 {
     d->autoFillMarkers = value;
+}
+
+KoPathSegment KoPathShape::segmentAtPoint(const QPointF &point, const QRectF &grabRoi) const
+{
+    const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);
+    KoPathSegment segment;
+
+    // convert document point to shape coordinates
+    const QPointF p = documentToShape(point);
+    // our region of interest, i.e. a region around our mouse position
+    const QRectF roi = documentToShape(grabRoi);
+
+    qreal minDistance = std::numeric_limits<qreal>::max();
+
+    // check all segments of this shape which intersect the region of interest
+    const QList<KoPathSegment> segments = segmentsAt(roi);
+
+    foreach (KoPathSegment s, segments) {
+        const qreal nearestPointParam = s.nearestPoint(p);
+        const QPointF nearestPoint = s.pointAt(nearestPointParam);
+        const qreal distance = kisDistance(p, nearestPoint);
+
+        // are we within the allowed distance ?
+        if (distance > distanceThreshold)
+            continue;
+        // are we closer to the last closest point ?
+        if (distance < minDistance) {
+            segment = s;
+        }
+    }
+
+    return segment;
 }
 
 void KoPathShape::recommendPointSelectionChange(const QList<KoPathPointIndex> &newSelection)

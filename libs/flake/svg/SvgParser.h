@@ -95,10 +95,10 @@ protected:
     KoShape* parseGroup(const QDomElement &e, const QDomElement &overrideChildrenFrom = QDomElement(), bool createContext = true);
 
     /// Get the path for the gives textPath element.
-    KoShape* getTextPath(const QDomElement &e);
+    KoShape* getTextPath(const QDomElement &e, bool hideShapesFromDefs = true);
 
     /// parse children of a <text /> element into the root shape.
-    void parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader);
+    void parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader, bool hideShapesFromDefs = true);
     
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const QDomElement &);
@@ -182,10 +182,10 @@ protected:
     KoShape * createShapeFromElement(const QDomElement &element, SvgLoadingContext &context);
 
     /// Creates a shape from a CSS shapes definition.
-    KoShape * createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context);
+    KoShape * createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context, bool hideShapesFromDefs = true);
 
     /// Create a list of shapes from a CSS shapes definition with potentially multiple shapes.
-    QList<KoShape*> createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context);
+    QList<KoShape*> createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context, bool hideShapesFromDefs = true);
 
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
@@ -224,6 +224,9 @@ protected:
     void applyViewBoxTransform(const QDomElement &element);
 
     QDomText getTheOnlyTextChild(const QDomElement &e);
+
+    /// Check whether the shapes are in the defs of the SVG document.
+    bool shapeInDefs(const KoShape *shape);
 
 private:
     SvgLoadingContext m_context;

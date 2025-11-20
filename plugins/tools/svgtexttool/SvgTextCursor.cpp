@@ -223,8 +223,7 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
         d->shape->addShapeChangeListener(this);
         updateInputMethodItemTransform();
         d->pos = d->shape->posForIndex(d->shape->plainText().size());
-        d->typeSettingDecor.handlesEnabled = (d->shape->textType() == KoSvgTextShape::PreformattedText
-                                              || d->shape->textType() == KoSvgTextShape::PrePositionedText);
+        updateTypeSettingDecorFromShape();
     } else {
         d->pos = 0;
     }
@@ -355,6 +354,14 @@ void SvgTextCursor::setTypeSettingHandleHovered(TypeSettingModeHandle hovered)
 void SvgTextCursor::setDrawTypeSettingHandle(bool draw)
 {
     d->drawTypeSettingHandle = draw;
+}
+
+void SvgTextCursor::updateTypeSettingDecorFromShape()
+{
+    if (d->shape) {
+        d->typeSettingDecor.handlesEnabled = (d->shape->textType() == KoSvgTextShape::PreformattedText
+                                              || d->shape->textType() == KoSvgTextShape::PrePositionedText);
+    }
 }
 
 QCursor SvgTextCursor::cursorTypeForTypeSetting() const
@@ -1135,6 +1142,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     d->blockQueryUpdates = false;
     qApp->inputMethod()->update(Qt::ImQueryInput);
     updateRect |= d->shape->boundingRect();
+    // TODO: replace with KoShapeBulkActionLock
     d->shape->updateAbsolute(updateRect);
     d->styleMap = styleMap;
     updateIMEDecoration();

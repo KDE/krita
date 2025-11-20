@@ -15,6 +15,7 @@
 #include <KoShapeManager.h>
 #include <KoCanvasResourceProvider.h>
 #include <commands/KoShapeTransformCommand.h>
+#include <KoShapeBulkActionLock.h>
 
 #include <QPointF>
 #include <math.h>
@@ -73,12 +74,14 @@ void ShapeRotateStrategy::rotateBy(qreal angle)
 
     QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
+
+    KoShapeBulkActionLock lock(m_transformedShapesAndSelection);
+
     Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
-        QRectF dirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
-        dirtyRect |= shape->boundingRect();
-        shape->updateAbsolute(dirtyRect);
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void ShapeRotateStrategy::paint(QPainter &painter, const KoViewConverter &converter)

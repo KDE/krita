@@ -20,13 +20,20 @@
 #include "KoViewConverter.h"
 #include "KoSnapGuide.h"
 #include "commands/KoKeepShapesSelectedCommand.h"
+#include "commands/KoShapeMoveCommand.h"
+#include "commands/KoSvgTextAddRemoveShapeCommands.h"
+#include "SvgTextPathInfoChangeCommand.h"
 #include "kis_global.h"
 #include "kundo2command.h"
 
-SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked)
+#include <KoPathShape.h>
+#include <KoPathSegment.h>
+
+SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked, KoShape *shape)
     : KoInteractionStrategy(tool)
     , m_dragStart(clicked)
     , m_dragEnd(clicked)
+    , m_flowShape(shape)
 {
     KoSvgTextProperties properties = tool->propertiesForNewText();
     properties.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
@@ -131,7 +138,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     params->setProperty("shapeRect", QVariant(rectangle));
     params->setProperty("origin", QVariant(origin));
 
-    KoShape *textShape = factory->createShape( params, tool->canvas()->shapeController()->resourceManager());
+    KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape *>(factory->createShape( params, tool->canvas()->shapeController()->resourceManager()));
 
     KUndo2Command *parentCommand = new KUndo2Command();
 
@@ -139,6 +146,36 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     KUndo2Command *cmd = tool->canvas()->shapeController()->addShape(textShape, 0, parentCommand);
     parentCommand->setText(cmd->text());
+
+    if (m_flowShape) {
+        textShape->setPosition(m_flowShape->absolutePosition(KoFlake::TopLeft));
+
+        KoPathShape *path = dynamic_cast<KoPathShape*>(m_flowShape);
+        KoPathSegment segment;
+        if(path) {
+            segment = path->segmentAtPoint(m_dragStart, tool->handleGrabRect(m_dragStart));
+        }
+        if (segment.isValid()) {
+            int pos = textShape->posForIndex(textShape->plainText().size());
+            new KoSvgTextSetTextPathOnRangeCommand(textShape, m_flowShape, 0, pos, parentCommand);
+
+            KoSvgText::TextOnPathInfo info;
+            const qreal grab = tool->grabSensitivityInPt();
+            QList<KoPathSegment> segments = path->segmentsAt(path->outlineRect().adjusted(-grab, -grab, grab, grab));
+            Q_FOREACH(KoPathSegment s, segments) {
+                if (s == segment) {
+                    info.startOffset += (segment.nearestPoint(path->documentToShape(m_dragStart))*segment.length());
+                    break;
+                }
+                info.startOffset += s.length();
+                qDebug() << info.startOffset << s.length();
+            }
+            qDebug() << "setting path at..." << info.startOffset << segments.size();
+            new SvgTextPathInfoChangeCommand(textShape, 2, info, parentCommand);
+        } else {
+            new KoSvgTextAddShapeCommand(textShape, m_flowShape, true, parentCommand);
+        }
+    }
 
     new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);
     tool->canvas()->snapGuide()->reset();
@@ -162,4 +199,9 @@ bool SvgCreateTextStrategy::draggingInlineSize()
 {
     QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
     return (rectangle.width() >= m_minSizeInline.width() || rectangle.height() >= m_minSizeInline.height()) && !m_modifiers.testFlag(Qt::ControlModifier);
+}
+
+bool SvgCreateTextStrategy::hasWrappingShape()
+{
+    return (m_flowShape)? true: false;
 }

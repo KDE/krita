@@ -42,6 +42,10 @@
 #include <commands/KoKeepShapesSelectedCommand.h>
 #include <commands/KoShapeMergeTextPropertiesCommand.h>
 #include <commands/KoSvgConvertTextTypeCommand.h>
+#include <commands/KoSvgTextAddRemoveShapeCommands.h>
+#include <commands/KoSvgTextFlipShapeContourTypeCommand.h>
+#include <commands/KoSvgTextReorderShapeInsideCommand.h>
+
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
@@ -53,6 +57,7 @@
 #include "KisTextPropertiesManager.h"
 #include <kis_signal_compressor.h>
 #include <KoInteractionStrategyFactory.h>
+#include <KisHandlePainterHelper.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
 
@@ -417,6 +422,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
+    , m_textOutlineHelper(new KoSvgTextShapeOutlineHelper(canvas))
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
     , m_textPropertyInterface(new DefaultToolTextPropertiesInterface(this))
@@ -471,6 +477,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), m_textPropertyInterface, SLOT(slotSelectionChanged()));
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     }
+
+    m_textOutlineHelper->setDrawBoundingRect(false);
+    m_textOutlineHelper->setDrawShapeOutlines(true);
 }
 
 DefaultTool::~DefaultTool()
@@ -539,6 +548,7 @@ void DefaultTool::slotChangeTextType(int index)
                 convertableShape = true;
                 parentCommand->setText(cmd->text());
             }
+            KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, textShape->textType() == KoSvgTextShape::TextInShape, type == KoSvgTextShape::InlineWrap);
         }
     }
 
@@ -546,6 +556,219 @@ void DefaultTool::slotChangeTextType(int index)
     if (convertableShape) {
         canvas()->addCommand(parentCommand);
     }
+}
+
+void DefaultTool::slotAddShapesToFlow()
+{
+    KoSvgTextShape *textShape = nullptr;
+    QList<KoShape*> shapes;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    if (selectedShapes.isEmpty()) return;
+
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+        if (text && !textShape) {
+            textShape = text;
+        } else if (dynamic_cast<KoPathShape*>(shape)) {
+            shapes.append(shape);
+        }
+    }
+    if (!textShape) return;
+    if (shapes.isEmpty()) return;
+
+   KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Add shapes to text flow."));
+
+   if (textShape->textType() != KoSvgTextShape::InlineWrap) {
+       new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
+   }
+   KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, false, true);
+
+    new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
+    Q_FOREACH(KoShape *shape, shapes) {
+        new KoSvgTextAddShapeCommand(textShape, shape, true, parentCommand);
+    }
+    new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
+
+    canvas()->addCommand(parentCommand);
+    selection->deselectAll();
+    selection->select(textShape);
+}
+
+void DefaultTool::slotPutTextOnPath()
+{
+    KoSvgTextShape *textShape = nullptr;
+    KoPathShape *textPath = nullptr;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    if (selectedShapes.isEmpty()) return;
+
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+        if (text && !textShape) {
+            textShape = text;
+        } else if (KoPathShape *path = dynamic_cast<KoPathShape*>(shape)){
+            textPath = path;
+        }
+        if (textShape && textPath) {
+            break;
+        }
+    }
+    if (!(textShape && textPath)) return;
+
+   KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Put Text On Path"));
+
+   new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
+   if (textShape->textType() != KoSvgTextShape::InlineWrap) {
+       new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
+   }
+
+   /// This will always remove all previous text paths.
+   /// While Krita's layout engine can handle multiple of them, the interaction
+   /// hasn't been fully verified yet. So if someone implements multiple textpaths,
+   /// they will also need to check if the cursor interaction makes sense.
+   KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, true, true);
+   new KoSvgTextSetTextPathOnRangeCommand(textShape, textPath, 0, textShape->posForIndex(textShape->plainText().size()), parentCommand);
+
+   new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
+
+   canvas()->addCommand(parentCommand);
+   selection->deselectAll();
+   selection->select(textShape);
+}
+
+void DefaultTool::slotSubtractShapesFromFlow()
+{
+    KoSvgTextShape *textShape = nullptr;
+    QList<KoShape*> shapes;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    if (selectedShapes.isEmpty()) return;
+
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape);
+        if (text && !textShape) {
+            textShape = text;
+        } else if (dynamic_cast<KoPathShape*>(shape)) {
+            shapes.append(shape);
+        }
+    }
+    if (!textShape) return;
+    if (shapes.isEmpty()) return;
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Subtract shapes from text flow."));
+
+    if (textShape->textType() == KoSvgTextShape::InlineWrap) {
+        new KoSvgConvertTextTypeCommand(textShape, KoSvgTextShape::PreformattedText, 0, parentCommand);
+    }
+    KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(textShape, parentCommand, false, true);
+
+    new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
+    Q_FOREACH(KoShape *shape, shapes) {
+        new KoSvgTextAddShapeCommand(textShape, shape, false, parentCommand);
+    }
+    new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
+
+    canvas()->addCommand(parentCommand);
+    selection->deselectAll();
+    selection->select(textShape);
+}
+
+KoSvgTextShape* DefaultTool::tryFetchCurrentShapeManagerOwnerTextShape() const
+{
+    return dynamic_cast<KoSvgTextShape*>(canvas()->currentShapeManagerOwnerShape());
+}
+
+void DefaultTool::slotRemoveShapesFromFlow()
+{
+    KoSvgTextShape *textShape = tryFetchCurrentShapeManagerOwnerTextShape();
+    if (!textShape) return;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    if (selectedShapes.isEmpty()) return;
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Remove shapes from text flow."));
+
+    new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, parentCommand);
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        if (!textShape->shapeInContours(shape)) continue;
+        new KoSvgTextRemoveShapeCommand(textShape, shape, parentCommand);
+    }
+    new KoKeepShapesSelectedCommand({}, {selectedShapes}, canvas()->selectedShapesProxy(), true, parentCommand);
+
+    canvas()->addCommand(parentCommand);
+}
+
+void DefaultTool::slotToggleFlowShapeType()
+{
+    KoSvgTextShape *textShape = tryFetchCurrentShapeManagerOwnerTextShape();
+    if (!textShape) return;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    if (selectedShapes.isEmpty()) return;
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Toggle Flow Shape Type"));
+
+    bool addToCanvas = false;
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        if (!textShape->shapesInside().contains(shape)
+                && !textShape->shapesSubtract().contains(shape)) continue;
+        addToCanvas = true;
+        new KoSvgTextFlipShapeContourTypeCommand(textShape, shape, parentCommand);
+    }
+    if (addToCanvas) {
+        canvas()->addCommand(parentCommand);
+    }
+}
+
+void DefaultTool::slotReorderFlowShapes(int type)
+{
+    KoSvgTextShape *textShape = tryFetchCurrentShapeManagerOwnerTextShape();
+    if (!textShape) return;
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    if (selectedShapes.isEmpty()) return;
+
+    KUndo2Command *parentCommand = new KUndo2Command();
+    if (type == KoSvgTextReorderShapeInsideCommand::BringToFront) {
+        parentCommand->setText(kundo2_i18n("Set Flow Shape as First"));
+    } else if (type == KoSvgTextReorderShapeInsideCommand::MoveEarlier) {
+        parentCommand->setText(kundo2_i18n("Decrease Flow Shape Index"));
+    } else if (type == KoSvgTextReorderShapeInsideCommand::MoveLater) {
+        parentCommand->setText(kundo2_i18n("Increase Flow Shape Index"));
+    } else {
+        parentCommand->setText(kundo2_i18n("Set Flow Shape as Last"));
+    }
+
+    QList<KoShape *> shapesInside;
+    Q_FOREACH(KoShape *shape, selectedShapes) {
+        if (!textShape->shapesInside().contains(shape)) continue;
+        shapesInside.append(shape);
+    }
+
+    if (!shapesInside.isEmpty()) {
+        new KoSvgTextReorderShapeInsideCommand(textShape, shapesInside, KoSvgTextReorderShapeInsideCommand::MoveShapeType(type), parentCommand);
+        canvas()->addCommand(parentCommand);
+    }
+}
+
+bool DefaultTool::updateTextContourMode()
+{
+    return m_textOutlineHelper->updateTextContourMode();
 }
 
 bool DefaultTool::wantsAutoScroll() const
@@ -602,6 +825,21 @@ void DefaultTool::setupActions()
     addMappedAction(m_textTypeSignalsMapper, "text_type_preformatted", KoSvgTextShape::PreformattedText);
     addMappedAction(m_textTypeSignalsMapper, "text_type_inline_wrap", KoSvgTextShape::InlineWrap);
     addMappedAction(m_textTypeSignalsMapper, "text_type_pre_positioned", KoSvgTextShape::PrePositionedText);
+
+    if (!action("text_type_preformatted")->actionGroup()) {
+        QActionGroup *textTypeActions = new QActionGroup(this);
+        textTypeActions->addAction(action("text_type_preformatted"));
+        textTypeActions->addAction(action("text_type_inline_wrap"));
+        textTypeActions->addAction(action("text_type_pre_positioned"));
+        textTypeActions->setExclusive(true);
+    }
+
+    m_textFlowSignalsMapper  = new KisSignalMapper(this);
+
+    addMappedAction(m_textFlowSignalsMapper, "flow_shape_order_back", KoSvgTextReorderShapeInsideCommand::SendToBack);
+    addMappedAction(m_textFlowSignalsMapper, "flow_shape_order_earlier", KoSvgTextReorderShapeInsideCommand::MoveEarlier);
+    addMappedAction(m_textFlowSignalsMapper, "flow_shape_order_later", KoSvgTextReorderShapeInsideCommand::MoveLater);
+    addMappedAction(m_textFlowSignalsMapper, "flow_shape_order_front", KoSvgTextReorderShapeInsideCommand::BringToFront);
 
     m_contextMenu.reset(new QMenu());
 }
@@ -859,6 +1097,8 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
             KisNodeSP node = kisCanvas->viewManager()->nodeManager()->activeNode();
             const bool isSelectionMask = node && node->inherits("KisSelectionMask");
             m_decorator->setForceShapeOutlines(isSelectionMask);
+
+
         }
 
         m_decorator->setSelection(selection);
@@ -870,6 +1110,10 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         m_decorator->setCurrentMeshGradientHandles(m_selectedMeshHandle, m_hoveredMeshHandle);
         m_decorator->paint(painter, converter);
     }
+
+    m_textOutlineHelper->setHandleRadius(handleRadius());
+    m_textOutlineHelper->setDecorationThickness(decorationThickness());
+    m_textOutlineHelper->paint(&painter, converter);
 
     KoInteractionTool::paint(painter, converter);
 
@@ -903,6 +1147,13 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
         return;
     }
 
+    if (KoSvgTextShape *shape = m_textOutlineHelper->contourModeButtonHovered(event->point)) {
+        m_textOutlineHelper->toggleTextContourMode(shape);
+        updateActions();
+        event->accept();
+        updateCursor();
+        return;
+    }
     KoInteractionTool::mousePressEvent(event);
     updateCursor();
 }
@@ -1046,6 +1297,7 @@ QRectF DefaultTool::decorationsRect() const
     if (canvas()->snapGuide()->isSnapping()) {
         dirtyRect |= canvas()->snapGuide()->boundingRect();
     }
+    dirtyRect |= m_textOutlineHelper->decorationRect();
 
     return dirtyRect;
 }
@@ -1228,6 +1480,22 @@ void DefaultTool::activate(const QSet<KoShape *> &shapes)
     connect(m_transformSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionTransform(int)));
     connect(m_booleanSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionBooleanOp(int)));
     connect(m_textTypeSignalsMapper, SIGNAL(mapped(int)), SLOT(slotChangeTextType(int)));
+    connect(m_textFlowSignalsMapper, SIGNAL(mapped(int)), SLOT(slotReorderFlowShapes(int)));
+
+    QAction *actionTextInside = action("add_shape_to_flow_area");
+    connect(actionTextInside, SIGNAL(triggered()), this, SLOT(slotAddShapesToFlow()), Qt::UniqueConnection);
+
+    QAction *actionTextSubtract = action("subtract_shape_from_flow_area");
+    connect(actionTextSubtract, SIGNAL(triggered()), this, SLOT(slotSubtractShapesFromFlow()), Qt::UniqueConnection);
+
+    QAction *actionTextOnPath = action("put_text_on_path");
+    connect(actionTextOnPath, SIGNAL(triggered()), this, SLOT(slotPutTextOnPath()), Qt::UniqueConnection);
+
+    QAction *actionTextRemoveFlow = action("remove_shapes_from_text_flow");
+    connect(actionTextRemoveFlow, SIGNAL(triggered()), this, SLOT(slotRemoveShapesFromFlow()), Qt::UniqueConnection);
+
+    QAction *actionTextFlowToggle = action("flow_shape_type_toggle");
+    connect(actionTextFlowToggle, SIGNAL(triggered()), this, SLOT(slotToggleFlowShapeType()), Qt::UniqueConnection);
 
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
@@ -1276,6 +1544,18 @@ void DefaultTool::deactivate()
     disconnect(m_transformSignalsMapper, 0, this, 0);
     disconnect(m_booleanSignalsMapper, 0, this, 0);
     disconnect(m_textTypeSignalsMapper, 0, this, 0);
+    disconnect(m_textFlowSignalsMapper, 0, this, 0);
+
+    QAction *actionTextInside = action("add_shape_to_flow_area");
+    disconnect(actionTextInside, 0, this, 0);
+    QAction *actionTextSubtract = action("subtract_shape_from_flow_area");
+    disconnect(actionTextSubtract, 0, this, 0);
+    QAction *actionTextOnPath = action("put_text_on_path");
+    disconnect(actionTextOnPath, 0, this, 0);
+    QAction *actionTextRemoveFlow = action("remove_shapes_from_text_flow");
+    disconnect(actionTextRemoveFlow, 0, this, 0);
+    QAction *actionTextFlowToggle = action("flow_shape_type_toggle");
+    disconnect(actionTextFlowToggle, 0, this, 0);
 
     const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
     if (canvas2) {
@@ -1849,6 +2129,38 @@ void DefaultTool::updateActions()
     action("object_distribute_vertical_bottom")->setEnabled(distributionEnabled);
     action("object_distribute_vertical_gaps")->setEnabled(distributionEnabled);
 
+    /* Handling the text actions */
+    bool textShape = false;
+    bool otherShapes = false;
+    bool shapesInside = false;
+    KoSvgTextShape *currentTextShapeGroup = tryFetchCurrentShapeManagerOwnerTextShape();
+    const bool editFlowShapes = bool(currentTextShapeGroup);
+    Q_FOREACH(KoShape *shape, editableShapes) {
+        KoSvgTextShape *text = dynamic_cast<KoSvgTextShape *>(shape);
+        if (text && !textShape) {
+            textShape = true;
+        } else {
+            otherShapes = true;
+            if (editFlowShapes) {
+                if (!shapesInside && currentTextShapeGroup->shapesInside().contains(shape)) {
+                    shapesInside = true;
+                }
+            }
+        }
+        if (textShape && otherShapes) break;
+    }
+    const bool editContours = textShape && otherShapes;
+
+    action("add_shape_to_flow_area")->setEnabled(editContours);
+    action("subtract_shape_from_flow_area")->setEnabled(editContours);
+    action("put_text_on_path")->setEnabled(editContours);
+    action("remove_shapes_from_text_flow")->setEnabled(editFlowShapes);
+    action("flow_shape_type_toggle")->setEnabled(editFlowShapes);
+    action("flow_shape_order_back")->setEnabled(shapesInside);
+    action("flow_shape_order_earlier")->setEnabled(shapesInside);
+    action("flow_shape_order_later")->setEnabled(shapesInside);
+    action("flow_shape_order_front")->setEnabled(shapesInside);
+
     updateDistinctiveActions(editableShapes);
 
     Q_EMIT selectionChanged(editableShapes.size());
@@ -1886,20 +2198,29 @@ void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes
     bool enablePreformatted = false;
     bool enablePrePositioned = false;
     bool enableInlineWrapped = false;
+    bool text = false;
     Q_FOREACH (KoShape *shape, editableShapes) {
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape *>(shape);
         if (textShape) {
+            text = true;
             if (textShape->textType() != KoSvgTextShape::PreformattedText && !enablePreformatted) {
                 enablePreformatted = true;
             }
             if (textShape && textShape->textType() != KoSvgTextShape::PrePositionedText && !enablePrePositioned) {
                 enablePrePositioned = true;
             }
-            if (textShape && textShape->textType() != KoSvgTextShape::PrePositionedText && !enableInlineWrapped) {
+            if (textShape && textShape->textType() != KoSvgTextShape::InlineWrap && !enableInlineWrapped) {
                 enableInlineWrapped = true;
             }
         }
     }
+    QActionGroup *group = action("text_type_preformatted")->actionGroup();
+    group->setEnabled(true);
+    group->setExclusive(false);
+    Q_FOREACH (QAction *a, group->actions()) {
+        a->setCheckable(false);
+    }
+
     action("text_type_preformatted")->setEnabled(enablePreformatted);
     action("text_type_pre_positioned")->setEnabled(enablePrePositioned);
     action("text_type_inline_wrap")->setEnabled(enableInlineWrapped);
@@ -1963,6 +2284,24 @@ QMenu* DefaultTool::popupActionsMenu()
         }
         m_contextMenu->addSeparator();
         m_contextMenu->addAction(action("convert_shapes_to_vector_selection"));
+
+        m_contextMenu->addSeparator();
+        QMenu *text = m_contextMenu->addMenu(i18n("Text"));
+        text->addAction(action("add_shape_to_flow_area"));
+        text->addAction(action("subtract_shape_from_flow_area"));
+        text->addAction(action("put_text_on_path"));
+        text->addSeparator();
+        text->addAction(action("text_type_preformatted"));
+        text->addAction(action("text_type_inline_wrap"));
+        text->addAction(action("text_type_pre_positioned"));
+        text->addSeparator();
+        text->addAction(action("remove_shapes_from_text_flow"));
+        text->addAction(action("flow_shape_type_toggle"));
+        text->addSeparator();
+        text->addAction(action("flow_shape_order_back"));
+        text->addAction(action("flow_shape_order_earlier"));
+        text->addAction(action("flow_shape_order_later"));
+        text->addAction(action("flow_shape_order_front"));
     }
 
     return m_contextMenu.data();
@@ -2016,7 +2355,8 @@ QList<KoSvgTextProperties> DefaultToolTextPropertiesInterface::getSelectedProper
     QList<KoSvgTextProperties> props = QList<KoSvgTextProperties>();
     if (!d->parent->selection()->hasSelection()) return props;
 
-    for (auto it = d->shapes.begin(); it != d->shapes.end(); it++) {
+    QList<KoShape*> shapes = d->shapes;
+    for (auto it = shapes.begin(); it != shapes.end(); it++) {
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*it);
         if (!textShape) continue;
         KoSvgTextProperties p = textShape->textProperties();
@@ -2074,13 +2414,22 @@ void DefaultToolTextPropertiesInterface::clearSelection()
 
 void DefaultToolTextPropertiesInterface::slotSelectionChanged()
 {
+    if (d->parent->updateTextContourMode()) return;
     Q_FOREACH(KoShape *shape, d->shapes) {
+        if (!shape) continue;
         shape->removeShapeChangeListener(this);
     }
-    QList<KoShape*> shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedEditableShapes();
-    d->shapes = shapes;
+
+    auto *textShapeGroup = d->parent->tryFetchCurrentShapeManagerOwnerTextShape();
+
+    if (textShapeGroup) {
+        d->shapes = {textShapeGroup};
+    } else {
+        d->shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedEditableShapes();
+    }
 
     Q_FOREACH(KoShape *shape, d->shapes) {
+        if (!shape) continue;
         shape->addShapeChangeListener(this);
     }
     d->compressor.start();

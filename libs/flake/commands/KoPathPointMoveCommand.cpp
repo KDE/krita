@@ -11,6 +11,7 @@
 #include <klocalizedstring.h>
 #include "kis_command_ids.h"
 #include "krita_container_utils.h"
+#include <KoShapeBulkActionLock.h>
 
 class KoPathPointMoveCommandPrivate
 {
@@ -99,11 +100,10 @@ bool KoPathPointMoveCommand::mergeWith(const KUndo2Command *command)
 
 void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
 {
-    QMap<KoShape*, QRectF> oldDirtyRects;
+    QList<KoShape*> shapes;
+    std::copy(paths.begin(), paths.end(), std::back_inserter(shapes));
 
-    foreach (KoPathShape *path, paths) {
-        oldDirtyRects[path] = path->boundingRect();
-    }
+    KoShapeBulkActionLock lock(shapes);
 
     QMap<KoPathPointData, QPointF>::iterator it(points.begin());
     for (; it != points.end(); ++it) {
@@ -120,7 +120,7 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
 
     foreach (KoPathShape *path, paths) {
         path->normalize();
-        // repaint new bounding rect
-        path->updateAbsolute(oldDirtyRects[path] | path->boundingRect());
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }

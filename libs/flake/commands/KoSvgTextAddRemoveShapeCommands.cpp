@@ -1,0 +1,195 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+#include "KoSvgTextAddRemoveShapeCommands.h"
+#include "kis_assert.h"
+#include <optional>
+#include "kis_debug.h"
+
+#include <KoShapeBulkActionLock.h>
+#include <KoSvgTextShape.h>
+#include <KoShapeContainer.h>
+
+struct KoSvgTextAddRemoveShapeCommandImpl::Private {
+    Private(KoSvgTextShape *_text, KoShape *_shape, int _startPos, int _endPos)
+        : textShape(_text)
+        , shape(_shape)
+        , startPos(_startPos)
+        , endPos(_endPos)
+    {
+
+    }
+
+    ~Private() {}
+    KoSvgTextShape *textShape = nullptr;
+    KoShape* shape = nullptr;
+    QList<KoShape*> oldTextPaths;
+    std::optional<KoShapeContainer*> originalShapeParent;
+    KoSvgTextShapeMementoSP memento;
+    int startPos = -1;
+    int endPos = -1;
+    KoSvgTextAddRemoveShapeCommandImpl::ContourType type;
+    bool removeCommand;
+};
+
+KoSvgTextAddRemoveShapeCommandImpl::KoSvgTextAddRemoveShapeCommandImpl(KoSvgTextShape *textShape, KoShape* shape, ContourType type, State state, int startPos, int endPos, KUndo2Command *parent)
+    : KisCommandUtils::FlipFlopCommand(state, parent)
+    , d(new Private(textShape, shape, startPos, endPos))
+{
+    d->removeCommand = state == FINALIZING;
+
+    if (type == Unknown) {
+        if (d->textShape->shapesInside().contains(shape)) {
+            d->type = Inside;
+        } else if (d->textShape->shapesSubtract().contains(shape)) {
+            d->type = Subtract;
+        } else if (d->textShape->shapeInContours(shape)){
+            d->type = TextPath;
+            KoSvgTextNodeIndex idx = textShape->nodeForTextPath(shape);
+            QPair<int, int> range = textShape->findRangeForNodeIndex(idx);
+            d->startPos = range.first;
+            d->endPos = range.second;
+        } else {
+            d->type = Unknown;
+        }
+    } else {
+        d->type = type;
+    }
+}
+
+KoSvgTextAddRemoveShapeCommandImpl::~KoSvgTextAddRemoveShapeCommandImpl()
+{
+
+}
+
+// Remove shape from text.
+void KoSvgTextAddRemoveShapeCommandImpl::partB()
+{
+    if (d->removeCommand) {
+        d->memento = d->textShape->getMemento();
+        d->oldTextPaths = d->textShape->textPathsAtRange(d->startPos, d->endPos);
+    }
+
+    KoShapeBulkActionLock lock(QList<KoShape*>({d->textShape, d->shape}));
+
+    KoShapeContainer *newParent = d->originalShapeParent.has_value() ? d->originalShapeParent.value() : d->textShape->parent();
+    const QTransform newParentTransform = newParent ? newParent->absoluteTransformation() : QTransform();
+    const QTransform absoluteTf = newParentTransform.inverted() * d->textShape->absoluteTransformation();
+
+    d->textShape->removeShapesFromContours({d->shape}, true);
+    // by this time d->shape->parent() is set to nullptr
+
+    if (newParent) {
+        // set new parent if exists
+        d->shape->setParent(newParent);
+    }
+
+    if (!d->removeCommand) {
+        Q_FOREACH(KoShape *path, d->oldTextPaths) {
+            if (!d->textShape->shapeInContours(path)) {
+                d->textShape->addTextPathAtEnd(path);
+            }
+        }
+        d->textShape->setMemento(d->memento);
+    } else {
+        d->textShape->relayout();
+    }
+    d->shape->applyAbsoluteTransformation(absoluteTf);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
+}
+
+// Add shape to text.
+void KoSvgTextAddRemoveShapeCommandImpl::partA()
+{
+    if (!d->removeCommand) {
+        d->memento = d->textShape->getMemento();
+        d->oldTextPaths = d->textShape->textPathsAtRange(d->startPos, d->endPos);
+        d->originalShapeParent = d->shape->parent();
+    }
+
+    KoShapeBulkActionLock lock(QList<KoShape*>({d->textShape, d->shape}));
+
+    KoShapeContainer *oldParent = d->shape->parent();
+    const QTransform oldParentTransform = oldParent ? oldParent->absoluteTransformation() : QTransform();
+    const QTransform absoluteTf = d->textShape->absoluteTransformation().inverted() * oldParentTransform;
+
+    if (d->type == Inside) {
+        d->textShape->addShapeContours({d->shape}, true);
+    } else if (d->type == Subtract) {
+        d->textShape->addShapeContours({d->shape}, false);
+    } else if (d->type == TextPath) {
+        d->textShape->setTextPathOnRange(d->shape, d->startPos, d->endPos);
+    }
+
+    if (d->removeCommand) {
+        Q_FOREACH(KoShape *path, d->oldTextPaths) {
+            if (!d->textShape->shapeInContours(path)) {
+                d->textShape->addTextPathAtEnd(path);
+            }
+        }
+        d->textShape->setMemento(d->memento);
+    } else {
+        d->textShape->relayout();
+    }
+    d->shape->applyAbsoluteTransformation(absoluteTf);
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
+}
+
+KoSvgTextAddShapeCommand::KoSvgTextAddShapeCommand(KoSvgTextShape *textShape, KoShape *shape, bool inside, KUndo2Command *parentCommand)
+    : KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, (inside? Inside: Subtract), INITIALIZING, -1, -1, parentCommand)
+{
+    /**
+     * 1) The shapes should belong to the same parent or have no parent at all.
+     * 2) The parent of the text shape is always preserved (null or non-null)
+     * 3) The parent of the contour shape is dropped, since it is put into
+     *    a virtual group created by the text shape
+     */
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!textShape->parent() || !shape->parent() || textShape->parent() == shape->parent());
+}
+
+KoSvgTextAddShapeCommand::~KoSvgTextAddShapeCommand()
+{
+
+}
+
+KoSvgTextRemoveShapeCommand::KoSvgTextRemoveShapeCommand(KoSvgTextShape *textShape, KoShape *shape, KUndo2Command *parentCommand)
+: KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, Unknown, FINALIZING, -1, -1, parentCommand)
+{
+    // the \p shape will be ungrouped into the parent of \p textShape
+    KIS_SAFE_ASSERT_RECOVER_NOOP(textShape->shapeInContours(shape));
+}
+
+KoSvgTextRemoveShapeCommand::~KoSvgTextRemoveShapeCommand()
+{
+
+}
+
+void KoSvgTextRemoveShapeCommand::removeContourShapesFromFlow(KoSvgTextShape *textShape, KUndo2Command *parent, bool textInShape, bool textPaths)
+{
+   QList<KoShape*> shapes;
+   if (textInShape) {
+       shapes.append(textShape->shapesInside());
+       shapes.append(textShape->shapesSubtract());
+   }
+   if (textPaths) {
+       shapes.append(textShape->textPathsAtRange(0, textShape->posForIndex(textShape->plainText().size())));
+   }
+   Q_FOREACH(KoShape *shape, shapes) {
+       new KoSvgTextRemoveShapeCommand(textShape, shape, parent);
+   }
+}
+
+KoSvgTextSetTextPathOnRangeCommand::KoSvgTextSetTextPathOnRangeCommand(KoSvgTextShape *textShape, KoShape *shape, int startPos, int endPos, KUndo2Command *parentCommand)
+: KoSvgTextAddRemoveShapeCommandImpl(textShape, shape, TextPath, INITIALIZING, startPos, endPos, parentCommand)
+{
+
+}
+
+KoSvgTextSetTextPathOnRangeCommand::~KoSvgTextSetTextPathOnRangeCommand()
+{
+
+}

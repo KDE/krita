@@ -9,6 +9,7 @@
 #include <klocalizedstring.h>
 #include <math.h>
 #include "kis_command_ids.h"
+#include <KoShapeBulkActionLock.h>
 
 KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
     const KoPathPointData &pointData,
@@ -35,7 +36,7 @@ void KoPathControlPointMoveCommand::redo()
     KoPathShape * pathShape = m_pointData.pathShape;
     KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {
-        const QRectF oldDirtyRect = pathShape->boundingRect();
+        KoShapeBulkActionLock lock(pathShape);
 
         if (m_pointType == KoPathPoint::ControlPoint1) {
             point->setControlPoint1(point->controlPoint1() + m_offset);
@@ -70,7 +71,8 @@ void KoPathControlPointMoveCommand::redo()
         }
 
         pathShape->normalize();
-        pathShape->updateAbsolute(oldDirtyRect | pathShape->boundingRect());
+
+        KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
     }
 }
 

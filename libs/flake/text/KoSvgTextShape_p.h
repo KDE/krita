@@ -12,8 +12,11 @@
 
 #include "KoSvgText.h"
 #include "KoSvgTextContentElement.h"
+#include <KoShapePainter.h>
+#include <KoShapeManager.h>
 
 #include "KoCssTextUtils.h"
+#include <KoShapeGroup.h>
 
 #include <kis_assert.h>
 #include <KisForest.h>
@@ -438,22 +441,33 @@ public:
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
 
-    Private() = default;
+    Private()
+        : internalShapesPainter(new KoShapePainter)
+        , shapeGroup(new KoShapeGroup)
+    {
+        shapeGroup->setSelectable(false);
+    }
+
+    enum InternalShapeState {
+        Decorative,
+        ShapeInside,
+        ShapeSubtract,
+        TextPath
+    };
 
     Private(const Private &rhs)
-        : textData(rhs.textData) {
-        Q_FOREACH (KoShape *shape, rhs.shapesInside) {
-            KoShape *clonedShape = shape->cloneShape();
-            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+        : internalShapesPainter(new KoShapePainter)
+        , textData(rhs.textData)
+    {
 
-            shapesInside.append(clonedShape);
-        }
-        Q_FOREACH (KoShape *shape, rhs.shapesSubtract) {
-            KoShape *clonedShape = shape->cloneShape();
-            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+        KoShapeGroup *g = dynamic_cast<KoShapeGroup*>(rhs.shapeGroup.data()->cloneShape());
+        shapeGroup.reset(g);
+        shapeGroup->setSelectable(false);
+        handleShapes(shapeGroup->shapes(), rhs.shapeGroup->shapes(), rhs.shapesInside, shapesInside);
+        handleShapes(shapeGroup->shapes(), rhs.shapeGroup->shapes(), rhs.shapesSubtract, shapesSubtract);
+        handleShapes(shapeGroup->shapes(), rhs.shapeGroup->shapes(), rhs.textPaths, textPaths);
+        updateInternalShapesList();
 
-            shapesSubtract.append(clonedShape);
-        }
         yRes = rhs.yRes;
         xRes = rhs.xRes;
         result = rhs.result;
@@ -467,17 +481,97 @@ public:
 
         isLoading = rhs.isLoading;
         disableFontMatching = rhs.disableFontMatching;
+
+        currentTextWrappingAreas = rhs.currentTextWrappingAreas;
+    }
+
+    void handleShapes(const QList<KoShape*> &sourceShapeList, const QList<KoShape*> referenceList2, const QList<KoShape*> referenceShapeList, QList<KoShape*> &destinationShapeList) {
+        for (int i = 0; i<sourceShapeList.size(); i++) {
+            if (referenceShapeList.contains(referenceList2.at(i))) {
+                destinationShapeList.append(sourceShapeList.at(i));
+            }
+        }
     }
 
     ~Private() {
+
+        internalShapesPainter.reset();
+        Q_FOREACH(KoShape *shape, shapeGroup->shapes()) {
+            shapeGroup->removeShape(shape);
+        }
+        shapeGroup.reset();
         qDeleteAll(shapesInside);
+        shapesInside.clear();
         qDeleteAll(shapesSubtract);
+        shapesSubtract.clear();
+        qDeleteAll(textPaths);
+        textPaths.clear();
     }
 
     int xRes = 72;
     int yRes = 72;
+
+    QScopedPointer<KoShapePainter> internalShapesPainter;
+    QScopedPointer<KoShapeGroup> shapeGroup;
+
+    QList<KoShape*> internalShapes() const {
+        return internalShapesPainter->internalShapeManager()->shapes();
+    }
+
+    void updateShapeGroup() {
+        Q_FOREACH(KoShape *shape, shapeGroup->shapes()) {
+            shapeGroup->removeShape(shape);
+        }
+        Q_FOREACH(KoShape *shape, shapesInside) {
+            shapeGroup->addShape(shape);
+        }
+        Q_FOREACH(KoShape *shape, shapesSubtract) {
+            shapeGroup->addShape(shape);
+        }
+        Q_FOREACH(KoShape *shape, textPaths) {
+            shapeGroup->addShape(shape);
+        }
+        updateTextWrappingAreas();
+        updateInternalShapesList();
+    }
+    void updateInternalShapesList() {
+        if (shapeGroup) {
+            internalShapesPainter->setShapes(shapeGroup->shapes());
+        }
+    }
+
+    struct BulkActionState {
+        BulkActionState(QRectF originalBoundingRectArg) : originalBoundingRect(originalBoundingRectArg) {}
+
+        QRectF originalBoundingRect;
+        bool contourHasChanged = false;
+        bool layoutHasChanged = false;
+
+        bool changed() const {
+            return contourHasChanged || layoutHasChanged;
+        }
+    };
+
+    std::optional<BulkActionState> bulkActionState;
+
     QList<KoShape*> shapesInside;
     QList<KoShape*> shapesSubtract;
+    QList<KoShape*> textPaths;
+
+    QList<QPainterPath> currentTextWrappingAreas;
+
+    /**
+     * @brief updateShapeContours
+     * The current shape contours can be slow to compute, so this function
+     * calls computing them, and then calls relayout();
+     */
+    void updateTextWrappingAreas();
+    static QList<QPainterPath> generateShapes(const QList<KoShape*> shapesInside, const QList<KoShape*> shapesSubtract, const KoSvgTextProperties &properties);
+
+    static KoShape *textPathByName(QString name, QList<KoShape*> textPaths) {
+        auto it = std::find_if(textPaths.begin(), textPaths.end(), [&name](const KoShape *s) -> bool {return s->name() == name;});
+        return it != textPaths.end()? *it: nullptr;
+    }
 
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.
@@ -505,6 +599,10 @@ public:
                    CharacterResult &charResult,
                    QPointF &totalAdvanceFTFontCoordinates);
 
+    static QVector<QPointF> getLigatureCarets(const KoSvgText::ResolutionHandler &resHandler,
+                                  const bool isHorizontal,
+                                  raqm_glyph_t &currentGlyph);
+
     static std::pair<QTransform, qreal> loadGlyphOnly(const QTransform &ftTF,
                                                FT_Int32 faceLoadFlags,
                                                bool isHorizontal,
@@ -528,7 +626,7 @@ public:
                                            bool isHorizontal,
                                            qreal offset,
                                            bool isClosed);
-    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps);
+    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps, QList<KoShape*> textPaths);
     static void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
                             const KoSvgText::FontMetrics &parentBaselineTable, const KoSvgText::Baseline parentBaseline,
                             const QPointF superScript,
@@ -553,7 +651,7 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping,
-                                const KoSvgTextProperties resolvedProps);
+                                const KoSvgTextProperties resolvedProps, QList<KoShape*> textPaths);
     QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const int &start, const int &end,
                                                                           const KoSvgText::ResolutionHandler resHandler,
                                                                           const QVector<CharacterResult> &result,
@@ -652,9 +750,11 @@ public:
      * split the contentElement in tree at index into two nodes.
      * @param tree -- tree to work on.
      * @param index -- index
+     * @param allowEmptyText -- when false, will return true without splitting
+     * the text content element, if the split text would be empty.
      * @return whether it was successful.
      */
-    static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index) {
+    static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index, bool allowEmptyText = true) {
         int currentIndex = 0;
 
         // If there's only a single root element, don't bother searching.
@@ -672,10 +772,14 @@ public:
             int zero = 0;
             duplicate.removeText(start, length);
 
+            if (!allowEmptyText && (duplicate.text.isEmpty() || length == 0)) {
+                return true;
+            }
+
             // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
 
             if (siblingCurrent(contentElement) != tree.childBegin()
-                    && !contentElement->textPath
+                    && contentElement->textPathId.isEmpty()
                     && contentElement->textLength.isAuto
                     && contentElement->localTransformations.isEmpty()) {
                 contentElement->removeText(zero, start);
@@ -692,6 +796,83 @@ public:
             return true;
         }
         return false;
+    }
+
+    /**
+     * @brief splitTree
+     * Split the whole hierarchy of nodes at the given index.
+     * @param tree - tree to split.
+     * @param index - index to split at.
+     * @param textPathAfterSplit - whether to put any found textPaths before or after the split.
+     */
+    static void splitTree(KisForest<KoSvgTextContentElement> &tree, int index, bool textPathAfterSplit) {
+        splitContentElement(tree, index, false);
+        int currentIndex = 0;
+        auto contentElement = depth(tree) == 1? tree.depthFirstTailBegin(): findTextContentElementForIndex(tree, currentIndex, index, true);
+
+        // We're either at the start or end.
+        if (contentElement == tree.depthFirstTailEnd()) return;
+        if (siblingCurrent(contentElement) == tree.childBegin()) return;
+
+        auto lastNode = siblingCurrent(contentElement);
+        for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(contentElement));
+             parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(contentElement)); parentIt++) {
+            if (lastNode == siblingCurrent(parentIt)) continue;
+            if (siblingCurrent(parentIt) == tree.childBegin()) {
+                break;
+            }
+
+            if (lastNode != childBegin(siblingCurrent(parentIt))) {
+                KoSvgTextContentElement duplicate = KoSvgTextContentElement();
+                duplicate.properties = parentIt->properties;
+                if (textPathAfterSplit) {
+                    duplicate.textPathId = parentIt->textPathId;
+                    duplicate.textPathInfo = parentIt->textPathInfo;
+                    parentIt->textPathId = QString();
+                    parentIt->textPathInfo = KoSvgText::TextOnPathInfo();
+                }
+                auto insert = siblingCurrent(parentIt);
+                insert ++;
+                auto it = tree.insert(insert, duplicate);
+
+                QVector<KisForest<KoSvgTextContentElement>::child_iterator> movableChildren;
+                for (auto child = lastNode; child != childEnd(siblingCurrent(parentIt)); child++) {
+                    movableChildren.append(child);
+                }
+                while(!movableChildren.isEmpty()) {
+                    auto child = movableChildren.takeLast();
+                    tree.move(child, childBegin(it));
+                }
+                lastNode = it;
+            } else {
+                lastNode = siblingCurrent(parentIt);
+            }
+        }
+    }
+
+    /**
+     * @brief findTopLevelParent
+     * Returns the toplevel parent of child that is not root.
+     * @param root -- root under which the toplevel item is.
+     * @param child -- child for which to search the parent for.
+     * @return toplevel parent of child that is itself a child of root,
+     * will return childEnd(root) if the child isn't inside root.
+     */
+    static KisForest<KoSvgTextContentElement>::child_iterator findTopLevelParent(KisForest<KoSvgTextContentElement>::child_iterator root,
+                                                                                 KisForest<KoSvgTextContentElement>::child_iterator child) {
+        // An earlier version of the code used Hierarchy iterator,
+        // but that had too many exceptions when the child was not in the root.
+        if (!child.node()) return childEnd(root);
+        if (KisForestDetail::parent(child) == root) return child;
+        for (auto rootChild = childBegin(root); rootChild != childEnd(root); rootChild++) {
+            for (auto leaf = KisForestDetail::tailSubtreeBegin(rootChild);
+                 leaf != KisForestDetail::tailSubtreeEnd(rootChild); leaf++) {
+                if (siblingCurrent(leaf) == child) {
+                    return rootChild;
+                }
+            }
+        }
+        return childEnd(root);
     }
 
     /**
@@ -968,7 +1149,7 @@ public:
                                             QVector<KoSvgText::CharTransformation> &resolvedTransforms,
                                             bool &inTextPath) {
 
-        inTextPath = (!current->textPath.isNull());
+        inTextPath = (!current->textPathId.isEmpty());
         auto base = current.base();
         base--;
         if(base != siblingEnd(base)) {
@@ -1032,7 +1213,7 @@ public:
                                      int &globalIndex, bool isHorizontal) {
         KoSvgTextProperties props = current->properties;
         props.inheritFrom(parentProps);
-        if (current->textPath) return; // When we're doing text-on-path, we're already in preformatted mode.
+        if (!current->textPathId.isEmpty()) return; // When we're doing text-on-path, we're already in preformatted mode.
         for (auto it = childBegin(current); it!= childEnd(current); it++) {
             setTransformsFromLayoutImpl(it, props, layout, globalIndex, isHorizontal);
         }
@@ -1090,7 +1271,7 @@ public:
 
                 // Remove empty leafs that are not the root or text paths.
                 const int length = it->numChars(false);
-                if (length == 0 && siblingCurrent(it) != tree.childBegin() && !it->textPath) {
+                if (length == 0 && siblingCurrent(it) != tree.childBegin() && it->textPathId.isEmpty()) {
                     tree.erase(siblingCurrent(it));
                 } else {
                     // check if siblings are similar.
@@ -1101,7 +1282,7 @@ public:
                     if (!isEnd(siblingPrev)
                             && siblingPrev != siblingCurrent(it)
                             && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                            && (!siblingPrev->textPath && !it->textPath)
+                            && (siblingPrev->textPathId.isEmpty() && it->textPathId.isEmpty())
                             && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
                             && (siblingPrev->properties == it->properties)
                             && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)) {
@@ -1114,7 +1295,7 @@ public:
                 // merge single children into parents if possible.
                 auto child = childBegin(siblingCurrent(it));
                 if ((child->localTransformations.isEmpty() && it->localTransformations.isEmpty())
-                        && (!child->textPath && !it->textPath)
+                        && (child->textPathId.isEmpty() && it->textPathId.isEmpty())
                         && (child->textLength.isAuto && it->textLength.isAuto)
                         && (!child->properties.hasNonInheritableProperties() || !it->properties.hasNonInheritableProperties())) {
                     if (it->properties.hasNonInheritableProperties()) {
@@ -1163,7 +1344,42 @@ public:
         return false;
     }
 
-    static KoSvgTextNodeIndex createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement);
+    KoSvgTextNodeIndex createTextNodeIndex(KisForest<KoSvgTextContentElement>::child_iterator textElement) const;
+
+    /**
+     * @brief removeTextPathId
+     * Remove the text path id with the given name from the toplevel elements.
+     */
+    static void removeTextPathId(KisForest<KoSvgTextContentElement>::child_iterator parent, const QString &name) {
+        for (auto it = childBegin(parent); it != childEnd(parent); it++) {
+            if (it->textPathId == name) {
+                it->textPathId = QString();
+                break;
+            }
+        }
+    }
+
+    static void makeTextPathNameUnique(QList<KoShape*> textPaths, KoShape *textPath) {
+        bool textPathNameUnique = false;
+        int textPathNumber = textPaths.size();
+        QString newTextPathName = textPath->name();
+        while(!textPathNameUnique) {
+            textPathNameUnique = true;
+            Q_FOREACH(KoShape *shape, textPaths) {
+                if (shape->name() == newTextPathName) {
+                    textPathNameUnique = false;
+                    textPathNumber += 1;
+                    break;
+                }
+            }
+            if (textPathNameUnique && !newTextPathName.isEmpty()) {
+                textPath->setName(newTextPathName);
+            } else {
+                textPathNameUnique = false;
+            }
+            newTextPathName = QString("textPath"+QString::number(textPathNumber));
+        }
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

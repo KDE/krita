@@ -42,6 +42,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_signals_blocker.h"
 #include "kis_icon.h"
+#include <kis_canvas2.h>
 
 
 DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent)
@@ -111,7 +112,6 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-marker-fill-stroke"), i18n("Markers, Fill, Stroke"));
     cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-marker-stroke-fill"), i18n("Markers, Stroke, Fill"));
     connect(cmbPaintOrder, SIGNAL(currentIndexChanged(int)), SLOT(slotPaintOrderChanged()));
-
 
     dblOpacity->setRange(0.0, 1.0, 2);
     dblOpacity->setSingleStep(0.01);

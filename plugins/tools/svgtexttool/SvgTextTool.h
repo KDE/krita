@@ -13,11 +13,14 @@
 #include <KoToolBase.h>
 #include <QPointer>
 
+#include <KoSvgTextShapeOutlineHelper.h>
+
 #include <kis_signal_auto_connection.h>
 #include <KisSignalMapper.h>
 
 #include "SvgTextCursor.h"
 #include "SvgTextToolOptionsManager.h"
+#include "SvgTextOnPathDecorationHelper.h"
 #include "glyphpalette/GlyphPaletteDialog.h"
 
 #include <memory>
@@ -25,15 +28,16 @@
 class KoSelection;
 class SvgTextEditor;
 class KoSvgTextShape;
-class SvgTextCursor;
 class KoInteractionStrategy;
 class KUndo2Command;
+class QActionGroup;
 
 class SvgTextTool : public KoToolBase
 {
     Q_OBJECT
 
     friend class SvgCreateTextStrategy;
+    friend class SvgChangeTextPathInfoStrategy;
 
 public:
     explicit SvgTextTool(KoCanvasBase *canvas);
@@ -99,7 +103,7 @@ private:
 
     KoSvgText::WritingMode writingMode() const;
 
-    void addMappedAction(KisSignalMapper* mapper, const QString &actionName, const int value);
+    void addMappedAction(KisSignalMapper* mapper, const QString &actionName, const int value, QActionGroup *group = nullptr);
 
 private Q_SLOTS:
 
@@ -117,6 +121,8 @@ private Q_SLOTS:
      * update the glyph palette dialog from the current selection.
      */
     void updateGlyphPalette();
+
+    void updateTextPathHelper();
     /**
      * @brief insertRichText
      * Insert a rich text shape, used by the glyph palette..
@@ -195,6 +201,8 @@ private:
         Select,
         InlineSizeHandle,
         Move,
+        TextPathHandle,
+        InShapeOffset,
     };
     enum class HighlightItem {
         None = 0,
@@ -218,6 +226,8 @@ private:
 
 
     SvgTextCursor m_textCursor;
+    SvgTextOnPathDecorationHelper m_textOnPathHelper;
+    QScopedPointer<KoSvgTextShapeOutlineHelper> m_textOutlineHelper;
     KisSignalAutoConnectionsStore m_canvasConnections;
 
     QPainterPath m_hoveredShapeHighlightRect;

@@ -50,6 +50,7 @@ void SvgTextTypeSettingStrategy::handleMouseMove(const QPointF &mouseLocation, Q
 
     if (m_editingType != int(SvgTextCursor::NoHandle)) {
         SvgTextShapeManagerBlocker blocker(tool()->canvas()->shapeManager());
+        // TODO: replace with KoShapeBulkActionLock (recursive locking is not supported right now)
         QRectF updateRect = m_shape->boundingRect();
         if (m_previousCmd) {
             m_previousCmd->undo();

@@ -13,6 +13,7 @@
 #include <KoShapeFactoryBase.h>
 #include <SvgShape.h>
 #include <KoShape.h>
+#include <KoShapeBulkActionInterface.h>
 #include <KoSvgText.h>
 #include "html/HtmlSavingContext.h"
 #include <QFlags>
@@ -20,13 +21,15 @@
 class KoSvgTextShapeMemento;
 class KoSvgTextNodeIndex;
 struct KoSvgTextCharacterInfo;
+class KoPathShape;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
+#define KoSvgTextShape_TEXTCONTOURGROUP "krita:textContourGroup"
 /**
  * KoSvgTextShape is a root chunk of the \<text\> element subtree.
  */
-class KRITAFLAKE_EXPORT KoSvgTextShape : public KoShape, public SvgShape
+class KRITAFLAKE_EXPORT KoSvgTextShape : public KoShape, public SvgShape, public KoShapeBulkActionInterface
 {
 public:
     KoSvgTextShape();
@@ -43,6 +46,9 @@ public:
     QPainterPath outline() const override;
     QRectF outlineRect() const override;
     QRectF boundingRect() const override;
+
+    QSizeF size() const override;
+    void setSize(const QSizeF &size) override;
 
     enum class DebugElement {
         CharBbox = 1 << 0,
@@ -94,6 +100,70 @@ public:
     void setShapesInside(QList<KoShape*> shapesInside);
 
     /**
+     * @brief addShapesContours
+     * Add shapes to the contours that make up the wrapping area.
+     * @param shapes -- shapes to add.
+     * @param inside -- whether to add to shapesInside or shapesSubtract.
+     * If a shape is already in one list, adding them will cause them to be
+     * moved to the other list.
+     */
+    void addShapeContours(QList<KoShape*> shapes, const bool inside = true);
+    /**
+     * @brief shapeInContours
+     * @param shape
+     * @return whether a shape is in any contour.
+     */
+    bool shapeInContours(KoShape *shape);
+
+    /**
+     * @brief removeShapesFromContours
+     * Remove list of shapes from any of the internal lists.
+     * @param shapes -- shapes to remove.
+     * @param update -- whether to call an update.
+     * @param cleanup -- whether to cleanup the textdata.
+     */
+    void removeShapesFromContours(QList<KoShape*> shapes, bool callUpdate = true, bool cleanup = true);
+
+    /**
+     * @brief moveShapeInsideToIndex
+     * Because the order of shapes inside shape-inside affects the text layout,
+     * it can be useful to be able to reorder them.
+     * @param shapeInside -- shape from the shapesInside list. This function will do nothing
+     * @param index -- new index to move the shape inside to. Will be bound to the list size.
+     *
+     * @seealso shapesInside();
+     */
+    void moveShapeInsideToIndex(KoShape* shapeInside, const int index);
+
+    /**
+     * @brief setTextPathOnRange
+     * Set a text path on the specified range.
+     * In SVG text paths are always at the first child.
+     * @param textPath -- TextPath to set.
+     * @param posStart -- Start of the range, as cursor pos.
+     * @param posEnd --  End of the range, as cursor pos.
+     * @return whether successfull.
+     */
+    bool setTextPathOnRange(KoShape *textPath, const int startPos = -1, const int endPos = -1);
+
+    /**
+     * @brief textPathsAtRange
+     * Get a list of textPaths at the given range. This includes textPaths whose
+     * node is only partially overlapped by the range.
+     * @param posStart -- Start of the range, as cursor pos.
+     * @param posEnd --  End of the range, as cursor pos.
+     * @return list of KoShapes that are text paths.
+     */
+    QList<KoShape*> textPathsAtRange(const int startPos = -1, const int endPos = -1);
+
+    /**
+     * @brief addTextPathAtEnd
+     * add a textpath node at the end of the text.
+     * @param textPath -- text path to add.
+     */
+    void addTextPathAtEnd(KoShape *textPath);
+
+    /**
      * @brief shapesInside
      * @return the list of shapes that make up the content area.
      */
@@ -106,10 +176,28 @@ public:
     void setShapesSubtract(QList<KoShape*> shapesSubtract);
 
     /**
+     * @brief textWrappingAreas
+     * The text wrapping areas are computed from shapesInside()
+     * and shapesSubtract(), as well as the text properties
+     * ShapeMargin and ShapePadding. This returns the computed
+     * wrapping areas, in the local coordinates of the shape.
+     *
+     * @seealso outline()
+     * @return a list of computed text wrapping areas.
+     */
+    QList<QPainterPath> textWrappingAreas() const;
+
+    /**
      * @brief shapesSubtract
      * @return list of subtract shapes.
      */
     QList<KoShape*> shapesSubtract() const;
+
+    /**
+     * @brief internalShapeManager
+     * @return access the internal shapes manager for the contour shapes.
+     */
+    KoShapeManager *internalShapeManager() const;
 
     QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const;
 
@@ -428,6 +516,27 @@ public:
      */
     QPair<int, int> findRangeForNodeIndex(const KoSvgTextNodeIndex &node) const;
 
+    /**
+     * @brief topLevelNodeForPos
+     * Get, if possible, an index for the child element of the root at pos.
+     * If not possible, returns an index for the root. This is used primarily for text-on-path.
+     * @param pos -- cursor position at which to find the index.
+     * @return if the text only has a root, it will still return the index for the root,
+     * but otherwise it will return a child element of root at pos.
+     */
+    KoSvgTextNodeIndex topLevelNodeForPos(int pos) const;
+
+    /**
+     * @brief nodeForTextPath
+     * TextPaths are set on toplevel content elements. This function
+     * allows for searching which node has said textPath, which should be
+     * less clunky than running topLevelNodeForPos for every pos.
+     * @param textPath -- the text path to find the node for.
+     * @return toplevel node that has the given shape set at it's text path.
+     * Returns the root node when none is found.
+     */
+    KoSvgTextNodeIndex nodeForTextPath(KoShape *textPath) const;
+
     /*--------------- Properties ---------------*/
 
     KoSvgTextProperties textProperties() const;
@@ -537,10 +646,23 @@ public:
      */
     bool fontMatchingDisabled() const;
 
+    /**
+     * @brief generateTextAreas
+     * Generates text areas with the given shapes and properties.
+     * This is used to paint previews in the PaddingMargin strategy.
+     * @param shapesInside -- the shapes inside to compute the text areas from.
+     * @param shapesSubtract -- the subtract shapes to remove from the text areas.
+     * @param props -- the properties to use. ShapePadding and ShapeMargin id will be taken from this.
+     * @return list of QPainterPaths.
+     */
+    static QList<QPainterPath> generateTextAreas(const QList<KoShape*> shapesInside, const QList<KoShape*> shapesSubtract, const KoSvgTextProperties &props);
+
+    void startBulkAction() override;
+    QRectF endBulkAction() override;
+
 protected:
 
     void shapeChanged(ChangeType type, KoShape *shape) override;
-
 private:
     friend class TestSvgText;
     friend class KoSvgTextLoader;

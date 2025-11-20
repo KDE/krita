@@ -2998,7 +2998,7 @@ void TestSvgText::testTextSplit()
     // test split text path
     forest.erase(forest.childBegin(), forest.childEnd());
     KoSvgTextContentElement textPath = el;
-    textPath.textPath.reset(new KoPathShape());
+    textPath.textPathId = "textPath";
     auto root = forest.insert(forest.childEnd(), KoSvgTextContentElement());
     forest.insert(childEnd(root), textPath);
     KoSvgTextShape::Private::splitContentElement(forest, 10);

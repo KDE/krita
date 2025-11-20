@@ -368,6 +368,19 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
 
     QList<KoShape *> shapes;
 
+    if (!internalShapes().isEmpty()) {
+        QList<KoShape *> internalS = internalShapes();
+        std::sort(internalS.begin(), internalS.end(), KoShape::compareShapeZIndex);
+        Q_FOREACH(KoShape *shape, internalS) {
+            KoShape *clone = shape->cloneShape();
+            clone->setZIndex(shapes.size());
+            if (clone->paintOrder() != rootShape->paintOrder()) {
+                clone->setInheritPaintOrder(false);
+            }
+            shapes.append(clone);
+        }
+    }
+
     KoShapeFactoryBase *imageFactory = KoShapeRegistry::instance()->value("ImageShape");
     const QString imageProp = "image";
     const QString imageViewTransformProp = "viewboxTransform";

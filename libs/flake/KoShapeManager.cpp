@@ -278,7 +278,6 @@ void KoShapeManager::Private::updateTree()
         }
 
         aggregate4update.clear();
-        shapeIndexesBeforeUpdate.clear();
     }
 
     if (selectionModified) {
@@ -376,7 +375,6 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
         d->compressedUpdate = QRect();
         d->compressedUpdatedShapes.clear();
         d->aggregate4update.clear();
-        d->shapeIndexesBeforeUpdate.clear();
         d->tree.clear();
         d->shapes.clear();
     }
@@ -729,7 +727,6 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
         }
 
         d->aggregate4update.insert(shape);
-        d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
     }
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);

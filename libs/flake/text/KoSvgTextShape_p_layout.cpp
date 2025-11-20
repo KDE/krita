@@ -109,6 +109,18 @@ QString langToLibUnibreakLang(const QString lang) {
     return lang;
 }
 
+
+void KoSvgTextShape::Private::updateTextWrappingAreas()
+{
+    KoSvgTextProperties rootProperties = textData.empty()? KoSvgTextProperties::defaultProperties(): textData.childBegin()->properties;
+    currentTextWrappingAreas = getShapes(shapesInside, shapesSubtract, rootProperties);
+    relayout();
+}
+
+QList<QPainterPath> KoSvgTextShape::Private::generateShapes(const QList<KoShape *> shapesInside, const QList<KoShape *> shapesSubtract, const KoSvgTextProperties &properties)
+{
+    return getShapes(shapesInside, shapesSubtract, properties);
+}
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::relayout()
 {
@@ -522,6 +534,10 @@ void KoSvgTextShape::Private::relayout()
 
     KIS_ASSERT(count <= INT32_MAX);
 
+    // For detecting ligatures.
+    int previousGlyph = -1;
+    int previousCluster = -1;
+
     for (int i = 0; i < static_cast<int>(count); i++) {
         raqm_glyph_t currentGlyph = glyphs[i];
         KIS_ASSERT(currentGlyph.cluster <= INT32_MAX);
@@ -553,12 +569,28 @@ void KoSvgTextShape::Private::relayout()
             continue;
         }
 
+        /// Ligature caret testing. We try to test when there's a gap between clusters and glyphs.
+        /// This gap happens because a single glyph covers multiple clusters.
+        /// We do this because testing for caret positions is surprisingly heavy.
+        if (((cluster - previousCluster) > (i-previousGlyph)) && previousCluster >= 0) {
+            raqm_glyph_t previousGlyph = glyphs[i];
+            result[previousCluster].cursorInfo.offsets = getLigatureCarets(resHandler, isHorizontal, previousGlyph);
+        }
+        // Always test last one.
+        if (i+1 == count) {
+            charResult.cursorInfo.offsets = getLigatureCarets(resHandler, isHorizontal, currentGlyph);
+        }
+
         charResult.visualIndex = i;
         logicalToVisual.insert(cluster, i);
 
         charResult.middle = false;
 
         result[cluster] = charResult;
+        if (previousCluster != cluster) {
+            previousGlyph = i;
+            previousCluster = cluster;
+        }
     }
 
     // fix it so that characters that are in the 'middle' due to either being
@@ -644,9 +676,8 @@ void KoSvgTextShape::Private::relayout()
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
-    if (!this->shapesInside.isEmpty()) {
-        QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, rootProperties);
-        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos, resHandler);
+    if (!this->currentTextWrappingAreas.isEmpty()) {
+        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, this->currentTextWrappingAreas, startPos, resHandler);
     } else {
         this->lineBoxes = breakLines(rootProperties, logicalToVisual, result, startPos, resHandler);
     }
@@ -739,12 +770,12 @@ void KoSvgTextShape::Private::relayout()
                                   globalIndex,
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
-                                  false, KoSvgTextProperties::defaultProperties());
+                                  false, KoSvgTextProperties::defaultProperties(), this->textPaths);
 
         // 8. Position on path
 
         debugFlake << "8. Position on path";
-        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos, KoSvgTextProperties::defaultProperties());
+        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos, KoSvgTextProperties::defaultProperties(), this->textPaths);
     } else {
         globalIndex = 0;
         debugFlake << "Computing text-decorationsfor inline-size";
@@ -758,7 +789,7 @@ void KoSvgTextShape::Private::relayout()
                                   globalIndex,
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
-                                  true, KoSvgTextProperties::defaultProperties());
+                                  true, KoSvgTextProperties::defaultProperties(), this->textPaths);
     }
 
     // 9. return result.
@@ -866,7 +897,7 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
     int index = currentIndex;
     int j = index + numChars(currentTextElement, withControls, resolvedProps);
 
-    if (currentTextElement->textPath) {
+    if (!currentTextElement->textPathId.isEmpty()) {
         textInPath = true;
     } else {
         int i = 0;
@@ -911,7 +942,7 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
 
     }
 
-    if (currentTextElement->textPath) {
+    if (!currentTextElement->textPathId.isEmpty()) {
         bool first = true;
         for (int k = index; k < j; k++ ) {
 
@@ -1251,7 +1282,8 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     bool isHorizontal,
     bool ltr,
     bool wrapping,
-    const KoSvgTextProperties resolvedProps)
+    const KoSvgTextProperties resolvedProps,
+                                                     QList<KoShape *> textPaths)
 {
 
     const int i = currentIndex;
@@ -1262,9 +1294,10 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     qreal currentTextPathOffset = textPathoffset;
     bool textPathSide = side;
     if (!wrapping) {
-        currentTextPath = textPath ? textPath : dynamic_cast<KoPathShape *>(currentTextElement->textPath.data());
+        KoShape *cTextPath = KoSvgTextShape::Private::textPathByName(currentTextElement->textPathId, textPaths);
+        currentTextPath = textPath ? textPath : dynamic_cast<KoPathShape *>(cTextPath);
 
-        if (currentTextElement->textPath) {
+        if (cTextPath) {
             textPathSide = currentTextElement->textPathInfo.side == TextPathSideRight;
             if (currentTextElement->textPathInfo.startOffsetIsPercentage) {
                 KIS_ASSERT(currentTextPath);
@@ -1293,7 +1326,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                                isHorizontal,
                                ltr,
                                wrapping,
-                               properties
+                               properties, textPaths
                                );
     }
 
@@ -1824,7 +1857,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
                                             QVector<CharacterResult> &result,
                                             bool isHorizontal,
                                             QPointF &startPos,
-                                            const KoSvgTextProperties resolvedProps)
+                                            const KoSvgTextProperties resolvedProps, QList<KoShape *> textPaths)
 {
     // Unlike all the other applying functions, this one only iterates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
@@ -1836,7 +1869,8 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
     for (auto textShapeElement = KisForestDetail::childBegin(root); textShapeElement != KisForestDetail::childEnd(root); textShapeElement++) {
         int endIndex = currentIndex + numChars(textShapeElement, true, resolvedProps);
 
-        KoPathShape *shape = dynamic_cast<KoPathShape *>(textShapeElement->textPath.data());
+        KoShape *cTextPath = KoSvgTextShape::Private::textPathByName(textShapeElement->textPathId, textPaths);
+        KoPathShape *shape = dynamic_cast<KoPathShape *>(cTextPath);
         if (shape) {
             QPainterPath path = shape->outline();
             path = shape->transformation().map(path);
@@ -1927,7 +1961,8 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
 QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, KoSvgTextProperties parentProps, bool textInPath, bool &firstTextInPath)
 {
     QVector<SubChunk> result;
-    if (it->textPath) {
+
+    if (!it->textPathId.isEmpty()) {
         textInPath = true;
         firstTextInPath = true;
     }
@@ -1974,7 +2009,7 @@ QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextC
         firstTextInPath = false;
     }
 
-    if (it->textPath) {
+    if (!it->textPathId.isEmpty()) {
         textInPath = false;
         firstTextInPath = false;
     }

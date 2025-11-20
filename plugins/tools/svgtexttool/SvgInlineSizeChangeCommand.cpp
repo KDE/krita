@@ -15,6 +15,7 @@
 #include "KoSvgTextProperties.h"
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
+#include <KoShapeBulkActionLock.h>
 
 #include "kis_assert.h"
 #include "kis_command_ids.h"
@@ -46,7 +47,7 @@ SvgInlineSizeChangeCommand::SvgInlineSizeChangeCommand(KoSvgTextShape *shape,
 
 void SvgInlineSizeChangeCommand::applyInlineSize(double inlineSize, int anchor, QPointF pos, bool undo)
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
 
     KoSvgTextProperties properties = m_shape->propertiesForPos(-1);
     KoSvgText::AutoValue inlineSizeProp = properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
@@ -63,7 +64,7 @@ void SvgInlineSizeChangeCommand::applyInlineSize(double inlineSize, int anchor, 
         m_shape->setPropertiesAtPos(-1, properties);
     }
 
-    m_shape->updateAbsolute(updateRect | m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void SvgInlineSizeChangeCommand::redo()

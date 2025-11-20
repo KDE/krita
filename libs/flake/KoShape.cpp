@@ -409,16 +409,22 @@ void KoShape::applyAbsoluteTransformation(const QTransform &matrix)
 
 void KoShape::applyTransformation(const QTransform &matrix)
 {
-    s->localMatrix = matrix * s->localMatrix;
-    notifyChanged();
-    shapeChangedPriv(GenericMatrixChange);
+    const QTransform newLocalMatrix = matrix * s->localMatrix;
+
+    if (s->localMatrix != newLocalMatrix) {
+        s->localMatrix = newLocalMatrix;
+        notifyChanged();
+        shapeChangedPriv(GenericMatrixChange);
+    }
 }
 
 void KoShape::setTransformation(const QTransform &matrix)
 {
-    s->localMatrix = matrix;
-    notifyChanged();
-    shapeChangedPriv(GenericMatrixChange);
+    if (s->localMatrix != matrix) {
+        s->localMatrix = matrix;
+        notifyChanged();
+        shapeChangedPriv(GenericMatrixChange);
+    }
 }
 
 QTransform KoShape::transformation() const
@@ -1227,17 +1233,18 @@ bool KoShape::addDependee(KoShape *shape)
     if (shape->hasDependee(this))
         return false;
 
-    if (! d->dependees.contains(shape))
+    if (! d->dependees.contains(shape)) {
         d->dependees.append(shape);
+        shape->addShapeChangeListener(&d->dependeesLifetimeListener);
+    }
 
     return true;
 }
 
 void KoShape::removeDependee(KoShape *shape)
 {
-    int index = d->dependees.indexOf(shape);
-    if (index >= 0)
-        d->dependees.removeAt(index);
+    d->dependees.removeOne(shape);
+    shape->removeShapeChangeListener(&d->dependeesLifetimeListener);
 }
 
 bool KoShape::hasDependee(KoShape *shape) const
@@ -1254,6 +1261,13 @@ void KoShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(type);
     Q_UNUSED(shape);
+
+    /**
+     * NOTE: we don't need to handle Deleted type for the shapes
+     * in d->dependees list here, becasue this function is called
+     * on the other side of the relation, i.e. in the actual
+     * "dependee". We handle that in Private::DependeesLifetimeListener.
+     */
 }
 
 KoSnapData KoShape::snapData() const

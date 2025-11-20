@@ -1088,6 +1088,14 @@ QPainterPath KRITAGLOBAL_EXPORT removeGutterSmart(const QPainterPath& shape1, in
 /// \return
 ///
 VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& shape2, const VectorPath& oneEnd, const VectorPath& otherEnd, int index1, int index2, bool reverseSecondPoly, bool isSameShape);
+/**
+ * @brief trySimplifyPath
+ * Tries to simplify a QPainterPath
+ * @param path -- path to simplify.
+ * @param lengthThreshold -- length at which points get merged.
+ * @return path with less nodes.
+ */
+QPainterPath KRITAGLOBAL_EXPORT trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
 
 }
 

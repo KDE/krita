@@ -149,6 +149,9 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     Q_ASSERT(selection);
     selection->deselectAll();
 
+    // Disable all enter-group modes that were active
+    view->canvasBase()->setCurrentShapeManagerOwnerShape(nullptr);
+
     if (!node) {
         selection->setActiveLayer(0);
         imageView->setCurrentNode(0);

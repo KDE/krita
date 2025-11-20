@@ -60,8 +60,9 @@ public:
         return m_selectedShapesProxy.data();
     }
 
-    void updateCanvas(const QRectF&) override
+    void updateCanvas(const QRectF&rect) override
     {
+        m_updateFunc(rect);
     }
 
     KoToolProxy *toolProxy() const override
@@ -96,9 +97,14 @@ public:
 
     void setCursor(const QCursor &) override {}
 
+    void setUpdateFunction(std::function<void(const QRectF&)> function) {
+        m_updateFunc = function;
+    }
+
 private:
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxySimple> m_selectedShapesProxy;
+    std::function<void(const QRectF&)> m_updateFunc;
 };
 
 class Q_DECL_HIDDEN KoShapePainter::Private
@@ -120,7 +126,6 @@ KoShapePainter::KoShapePainter()
 
 KoShapePainter::~KoShapePainter()
 {
-    delete d;
 }
 
 void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
@@ -204,4 +209,14 @@ QRectF KoShapePainter::contentRect() const
             bound = bound.united(shapeRect);
     }
     return bound;
+}
+
+KoShapeManager *KoShapePainter::internalShapeManager() const
+{
+    return d->canvas->shapeManager();
+}
+
+void KoShapePainter::setUpdateFunction(std::function<void (const QRectF &)> function)
+{
+    d->canvas->setUpdateFunction(function);
 }

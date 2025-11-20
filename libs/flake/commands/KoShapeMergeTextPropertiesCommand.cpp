@@ -9,6 +9,7 @@
 #include <KoSvgTextProperties.h>
 #include <kis_command_ids.h>
 #include <krita_container_utils.h>
+#include <KoShapeBulkActionLock.h>
 
 struct KoShapeMergeTextPropertiesCommand::Private {
     Private(const QList<KoShape*> &list) : shapes(list) { }
@@ -30,28 +31,32 @@ KoShapeMergeTextPropertiesCommand::KoShapeMergeTextPropertiesCommand(const QList
 
 void KoShapeMergeTextPropertiesCommand::redo()
 {
+    KoShapeBulkActionLock lock(d->shapes);
+
     for(auto it = d->shapes.begin(); it!= d->shapes.end(); it++) {
         KoSvgTextShape *shape = dynamic_cast<KoSvgTextShape*>(*it);
         if (shape) {
             d->mementos.insert(*it, shape->getMemento());
-            const QRectF oldDirtyRect = shape->boundingRect();
             shape->mergePropertiesIntoRange(-1, -1, d->newProperties, d->removeProperties);
-            shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         }
     }
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void KoShapeMergeTextPropertiesCommand::undo()
 {
+    KoShapeBulkActionLock lock(d->shapes);
+
     for(auto it = d->shapes.begin(); it!= d->shapes.end(); it++) {
         KoSvgTextShape *shape = dynamic_cast<KoSvgTextShape*>(*it);
         if (shape && d->mementos.contains(*it)) {
-            const QRectF oldDirtyRect = shape->boundingRect();
             shape->setMemento(d->mementos.value(*it));
-            shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         }
     }
     d->mementos.clear();
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int KoShapeMergeTextPropertiesCommand::id() const

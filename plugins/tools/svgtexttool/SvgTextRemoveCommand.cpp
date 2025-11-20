@@ -10,6 +10,8 @@
 
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
+#include <KoShapeBulkActionLock.h>
+
 SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
                                            int endIndex, int pos,
                                            int anchor,
@@ -30,7 +32,7 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
 
 void SvgTextRemoveCommand::redo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
 
     m_textData = m_shape->getMemento();
 
@@ -41,7 +43,8 @@ void SvgTextRemoveCommand::redo()
     if (m_allowCleanUp) {
         m_shape->cleanUp();
     }
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 
     int pos = qMax(0, m_shape->posForIndex(idx, false, false));
     m_shape->notifyCursorPosChanged(pos, pos);
@@ -49,9 +52,9 @@ void SvgTextRemoveCommand::redo()
 
 void SvgTextRemoveCommand::undo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     m_shape->setMemento(m_textData, m_originalPos, m_anchor);
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int SvgTextRemoveCommand::id() const

@@ -53,7 +53,16 @@ void KoToolProxyPrivate::timeout() // Auto scroll the canvas
     QRectF mouseArea(widgetScrollPointDoc, QSizeF(10, 10));
     mouseArea.setTopLeft(mouseArea.center());
 
+    const QPointF oldPreferredCenter = controller->preferredCenter();
+
     controller->ensureVisibleDoc(mouseArea, true);
+
+    const QPointF newPreferredCenter = controller->preferredCenter();
+
+    // if scrolling has happened, then just return!
+    if (oldPreferredCenter == newPreferredCenter) {
+        return;
+    }
 
     widgetScrollPointDoc = parent->widgetToDocument(originalWidgetPoint);
 

@@ -31,8 +31,14 @@ KoSvgTextLoader::KoSvgTextLoader(KoSvgTextShape *shape)
 KoSvgTextLoader::~KoSvgTextLoader()
 {
     // run clean-up after parsing to remove empty spans and the like.
+    d->shape->d->updateShapeGroup();
     d->shape->cleanUp();
     d->shape->d->isLoading = false;
+
+    // finish loading by synchronizing the internal group
+    d->shape->d->shapeGroup->setTransformation(d->shape->absoluteTransformation());
+    d->shape->d->updateTextWrappingAreas();
+    d->shape->notifyChanged();
 }
 
 void KoSvgTextLoader::enterNodeSubtree()
@@ -115,8 +121,11 @@ void KoSvgTextLoader::setStyleInfo(KoShape *s)
 
 void KoSvgTextLoader::setTextPathOnCurrentNode(KoShape *s)
 {
-    if (!KisForestDetail::isEnd(d->currentNode)) {
-        d->currentNode->textPath.reset(s);
+    if (!KisForestDetail::isEnd(d->currentNode) && s) {
+        d->shape->d->makeTextPathNameUnique(d->shape->d->textPaths, s);
+        d->currentNode->textPathId = s->name();
+        s->addDependee(d->shape);
+        d->shape->d->textPaths.append(s);
     }
 }
 

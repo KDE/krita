@@ -5,6 +5,7 @@
  */
 #include "SvgTextChangeTransformsOnRange.h"
 #include "kis_command_ids.h"
+#include <KoShapeBulkActionLock.h>
 
 SvgTextChangeTransformsOnRange::SvgTextChangeTransformsOnRange(KoSvgTextShape *shape, int startPos, int endPos, QVector<QPointF> positions, QVector<qreal> rotations, bool calculateDeltaPositions, KUndo2Command *parentCommand)
     : KUndo2Command(parentCommand)
@@ -70,27 +71,28 @@ SvgTextChangeTransformsOnRange::SvgTextChangeTransformsOnRange(KoSvgTextShape *s
 
 void SvgTextChangeTransformsOnRange::undo()
 {
-    QRectF updateRect = m_textShape->boundingRect();
+    KoShapeBulkActionLock lock(m_textShape);
 
     m_textShape->setMemento(m_textData);
 
-    updateRect |= m_textShape->boundingRect();
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
+
     m_textShape->notifyCursorPosChanged(m_startPos, m_endPos);
-    m_textShape->updateAbsolute(updateRect);
+
 }
 
 void SvgTextChangeTransformsOnRange::redo()
 {
-    QRectF updateRect = m_textShape->boundingRect();
+    KoShapeBulkActionLock lock(m_textShape);
 
     const int posIndex = m_textShape->indexForPos(m_startPos);
     const int posAnchor = m_textShape->indexForPos(m_endPos);
 
     m_textShape->setCharacterTransformsOnRange(m_startPos, m_endPos, m_positions, m_rotations, m_calculateDeltaPositions);
 
-    updateRect |= m_textShape->boundingRect();
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
+
     m_textShape->notifyCursorPosChanged(m_textShape->posForIndex(posIndex), m_textShape->posForIndex(posAnchor));
-    m_textShape->updateAbsolute(updateRect);
 }
 
 int SvgTextChangeTransformsOnRange::id() const

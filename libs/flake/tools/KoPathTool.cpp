@@ -86,6 +86,7 @@ struct KoPathTool::PathSegment {
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
+    , m_textOutlineHelper(new KoSvgTextShapeOutlineHelper(canvas))
 {
     m_actionPathPointCorner = action("pathpoint-corner");
     m_actionPathPointSmooth = action("pathpoint-smooth");
@@ -104,6 +105,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m_actionConvertToPath = action("convert-to-path");
 
     m_contextMenu.reset(new QMenu());
+    m_textOutlineHelper->setDrawBoundingRect(true);
+    m_textOutlineHelper->setDrawShapeOutlines(false);
 
     m_selectCursor = QCursor(QIcon(":/cursor-needle.svg").pixmap(32), 0, 0);
     m_moveCursor = QCursor(QIcon(":/cursor-needle-move.svg").pixmap(32), 0, 0);
@@ -437,6 +440,9 @@ void KoPathTool::breakAtSegment()
 void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoToolBase);
+    m_textOutlineHelper->setDecorationThickness(decorationThickness());
+    m_textOutlineHelper->setHandleRadius(handleRadius());
+    m_textOutlineHelper->paint(&painter, converter);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KisHandlePainterHelper helper =
@@ -533,6 +539,8 @@ QRectF KoPathTool::decorationsRect() const
         newDecorationsRect |= kisGrowRect(rect, handleDocRadius());
     }
 
+    newDecorationsRect |= m_textOutlineHelper->decorationRect();
+
     return newDecorationsRect;
 }
 
@@ -551,10 +559,15 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
         mouseMoveEvent(event);
     }
 
+    if (KoSvgTextShape *shape = m_textOutlineHelper->contourModeButtonHovered(event->point)) {
+        m_textOutlineHelper->toggleTextContourMode(shape);
+        event->accept();
+    }
     // we are moving if we hit a point and use the left mouse button
     if (m_activeHandle) {
         m_currentStrategy.reset(m_activeHandle->handleMousePress(event));
     } else {
+
         if (event->button() & Qt::LeftButton) {
 
             // check if we hit a path segment
@@ -822,8 +835,6 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
     // the max allowed distance from a segment
     const QRectF grabRoi = handleGrabRect(point);
-    const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);
-
     QScopedPointer<PathSegment> segment(new PathSegment);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
@@ -831,30 +842,11 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
         if (parameterShape && parameterShape->isParametricShape())
             continue;
 
-        // convert document point to shape coordinates
-        const QPointF p = shape->documentToShape(point);
-        // our region of interest, i.e. a region around our mouse position
-        const QRectF roi = shape->documentToShape(grabRoi);
-
-        qreal minDistance = std::numeric_limits<qreal>::max();
-
-        // check all segments of this shape which intersect the region of interest
-        const QList<KoPathSegment> segments = shape->segmentsAt(roi);
-
-        foreach (const KoPathSegment &s, segments) {
-            const qreal nearestPointParam = s.nearestPoint(p);
-            const QPointF nearestPoint = s.pointAt(nearestPointParam);
-            const qreal distance = kisDistance(p, nearestPoint);
-
-            // are we within the allowed distance ?
-            if (distance > distanceThreshold)
-                continue;
-            // are we closer to the last closest point ?
-            if (distance < minDistance) {
-                segment->path = shape;
-                segment->segmentStart = s.first();
-                segment->positionOnSegment = nearestPointParam;
-            }
+        const KoPathSegment s = shape->segmentAtPoint(point, grabRoi);
+        if (s.isValid()) {
+            segment->path = shape;
+            segment->segmentStart = s.first();
+            segment->positionOnSegment = s.nearestPoint(shape->documentToShape(point));
         }
     }
 

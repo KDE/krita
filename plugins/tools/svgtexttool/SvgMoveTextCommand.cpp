@@ -10,6 +10,7 @@
 
 #include "KoSvgTextShape.h"
 #include "kis_command_ids.h"
+#include <KoShapeBulkActionLock.h>
 
 SvgMoveTextCommand::SvgMoveTextCommand(KoSvgTextShape *shape,
                                        const QPointF &newPosition,
@@ -25,10 +26,9 @@ SvgMoveTextCommand::SvgMoveTextCommand(KoSvgTextShape *shape,
 
 static void moveShape(KoSvgTextShape *shape, const QPointF &position)
 {
-    QRectF updateRect = shape->boundingRect();
+    KoShapeBulkActionLock lock(shape);
     shape->setAbsolutePosition(position);
-    updateRect |= shape->boundingRect();
-    shape->updateAbsolute(updateRect);
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 void SvgMoveTextCommand::redo()

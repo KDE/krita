@@ -109,6 +109,9 @@ public: // KoCanvasBase implementation
      */
     KoShapeManager *globalShapeManager() const;
 
+    KoShape *currentShapeManagerOwnerShape() const override;
+    void setCurrentShapeManagerOwnerShape(KoShape *source) override;
+
     /**
      * Return shape manager associated with the currently active node.
      * If current node has no internal shape manager, return null.

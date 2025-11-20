@@ -377,12 +377,14 @@ void finalizeLine(QVector<CharacterResult> &result,
 
             int justificationCount = before.size()+after.size();
             if (justificationCount > 0) {
+                const QPointF indent = currentChunk == currentLine.chunks.begin()? currentLine.textIndent: QPointF();
+                const QLineF modified = QLineF(currentChunk->length.p1()+indent, currentChunk->length.p2());
                 if (isHorizontal) {
-                    double val = currentChunk->length.length() + hangingGlyphLength - advanceLength.x();
+                    double val = modified.length() + hangingGlyphLength - advanceLength.x();
                     val = val / justificationCount;
                     justifyOffset = QPointF(val, 0);
                 } else {
-                    double val = currentChunk->length.length() + hangingGlyphLength - advanceLength.y();
+                    double val = modified.length() + hangingGlyphLength - advanceLength.y();
                     val = val / justificationCount;
                     justifyOffset = QPointF(0, val);
                 }

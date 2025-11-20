@@ -45,6 +45,7 @@ set(kritaglobal_LIB_SRCS
     KisCursorOverrideLock.cpp
     kis_random_source.cpp
     KisMessageBoxWrapper.cpp
+    KisTransformComponents.cpp
 )
 
 if(WIN32)

@@ -6,6 +6,7 @@
 #include "SvgTextInsertCommand.h"
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
+#include <KoShapeBulkActionLock.h>
 
 #include <QRegExp>
 
@@ -40,14 +41,14 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
 
 void SvgTextInsertCommand::redo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     // Index defaults to -1 when there's no text in the shape.
     int oldIndex = qMax(0, m_shape->indexForPos(m_pos));
 
     m_textData = m_shape->getMemento();
     m_shape->insertText(m_pos, m_text);
     m_shape->cleanUp();
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 
     int pos = m_shape->posForIndex(oldIndex + m_text.size(), false, false);
     m_shape->notifyCursorPosChanged(pos, pos);
@@ -56,9 +57,9 @@ void SvgTextInsertCommand::redo()
 
 void SvgTextInsertCommand::undo()
 {
-    QRectF updateRect = m_shape->boundingRect();
+    KoShapeBulkActionLock lock(m_shape);
     m_shape->setMemento(m_textData, m_pos, m_anchor);
-    m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+    KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 }
 
 int SvgTextInsertCommand::id() const

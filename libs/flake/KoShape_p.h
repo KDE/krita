@@ -52,7 +52,6 @@ public:
     QString hyperLink; //hyperlink for this shape
 
     int zIndex : 16; // keep maxZIndex in sync!
-    int runThrough : 16;
     int visible : 1;
     int printable : 1;
     int geometryProtected : 1;

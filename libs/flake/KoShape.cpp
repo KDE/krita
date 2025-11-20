@@ -56,7 +56,6 @@ KoShape::SharedData::SharedData()
     , size(50, 50)
     , transparency(0.0)
     , zIndex(0)
-    , runThrough(0)
     , visible(true)
     , printable(true)
     , geometryProtected(false)
@@ -86,7 +85,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
     , hyperLink(rhs.hyperLink)
 
     , zIndex(rhs.zIndex)
-    , runThrough(rhs.runThrough)
     , visible(rhs.visible)
     , printable(rhs.visible)
     , geometryProtected(rhs.geometryProtected)
@@ -414,39 +412,9 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
      */
     if (s1 == s2) return false;
 
-
-    // First sort according to runThrough which is sort of a master level
     KoShape *parentShapeS1 = s1->parent();
     KoShape *parentShapeS2 = s2->parent();
-    int runThrough1 = s1->runThrough();
-    int runThrough2 = s2->runThrough();
-    while (parentShapeS1) {
-        if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
-            runThrough1 = parentShapeS1->runThrough();
-        } else {
-            runThrough1 = runThrough1 + parentShapeS1->runThrough();
-        }
-        parentShapeS1 = parentShapeS1->parent();
-    }
 
-    while (parentShapeS2) {
-        if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
-            runThrough2 = parentShapeS2->runThrough();
-        } else {
-            runThrough2 = runThrough2 + parentShapeS2->runThrough();
-        }
-        parentShapeS2 = parentShapeS2->parent();
-    }
-
-    if (runThrough1 > runThrough2) {
-        return false;
-    }
-    if (runThrough1 < runThrough2) {
-        return true;
-    }
-
-    // If on the same runThrough level then the zIndex is all that matters.
-    //
     // We basically walk up through the parents until we find a common base parent
     // To do that we need two loops where the inner loop walks up through the parents
     // of s2 every time we step up one parent level on s1
@@ -822,16 +790,6 @@ void KoShape::setZIndex(qint16 zIndex)
         return;
     s->zIndex = zIndex;
     notifyChanged();
-}
-
-int KoShape::runThrough() const
-{
-    return s->runThrough;
-}
-
-void KoShape::setRunThrough(short int runThrough)
-{
-    s->runThrough = runThrough;
 }
 
 void KoShape::setVisible(bool on)

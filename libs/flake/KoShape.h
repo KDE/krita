@@ -388,20 +388,6 @@ public:
     static const qint16 minZIndex;
 
     /**
-     * Retrieve the run through property of this shape.
-     * The run through property is used to determine if the shape is behind, inside or before text.
-     * @return the run through of this shape.
-     */
-    int runThrough() const;
-
-    /**
-     * Set the run through property of this shape.
-     * The run through property is used to determine if the shape is behind, inside or before text.
-     * @param runThrough the new run through;
-     */
-    virtual void setRunThrough(short int runThrough);
-
-    /**
      * Changes the Shape to be visible or invisible.
      * Being visible means being painted, as well as being used for
      *   things like guidelines or searches.

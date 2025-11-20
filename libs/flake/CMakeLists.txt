@@ -106,7 +106,6 @@ set(kritaflake_SRCS
     KoSharedSavingData.cpp
     KoViewConverter.cpp
     KoViewTransformStillPoint.cpp
-    KoTextShapeDataBase.cpp
     KoClipMaskApplicatorBase.cpp
     ${__per_arch_alpha_applicator_factory_objs}
     KoClipMaskPainter.cpp

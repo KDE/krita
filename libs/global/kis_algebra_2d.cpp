@@ -1615,7 +1615,7 @@ QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, con
     };
 
     for (int i = startValue; !stopFor(i, 2*availablePoints.length(), left); i += increment) {
-        int index = KisAlgebra2D::wrapValue(i, 0, availablePoints.length());
+        int index = KisAlgebra2D::wrapValue(i, 0, (int)availablePoints.length());
 
         if (onTheLine(availablePoints[index], path.currentPosition())) {
             if (!started) {

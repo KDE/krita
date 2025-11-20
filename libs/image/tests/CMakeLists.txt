@@ -128,6 +128,7 @@ kis_add_tests(
     KisOverlayPaintDeviceWrapperTest.cpp
     KisPaintOpPresetTest.cpp
     KisFourPointInterpolatorTest.cpp
+    KisSpatialContainerTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
     NAME_PREFIX "libs-image-"
     )

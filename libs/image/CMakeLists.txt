@@ -357,6 +357,7 @@ set(kritaimage_LIB_SRCS
    KisLockFrameGenerationLock.cpp
 
    kis_convex_hull.cpp
+   KisSpatialContainer.cpp
 )
 
 set(einspline_SRCS

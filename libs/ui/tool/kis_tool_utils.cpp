@@ -345,15 +345,17 @@ namespace KisToolUtils {
             if (shape && !(currentShapes.contains(shape) && skipCurrentShapes)) {
                 shapeType = shape->shapeId();
                 KoSvgTextShape *t = dynamic_cast<KoSvgTextShape *>(shape);
-                if (t && isHorizontal) {
+                if (t) {
                     p.addRect(t->boundingRect());
-                    *isHorizontal = t->writingMode() == KoSvgText::HorizontalTB;
+                    if (isHorizontal) {
+                        *isHorizontal = t->writingMode() == KoSvgText::HorizontalTB;
+                    }
                     if (!t->shapesInside().isEmpty()) {
                         QPainterPath paths;
                         Q_FOREACH(KoShape *s, t->shapesInside()) {
                             KoPathShape *path = dynamic_cast<KoPathShape *>(s);
                             if (path) {
-                                paths.addPath(t->absoluteTransformation().map(path->absoluteTransformation().map(path->outline())));
+                                paths.addPath(path->absoluteTransformation().map(path->outline()));
                             }
                         }
                         if (!paths.isEmpty()) {

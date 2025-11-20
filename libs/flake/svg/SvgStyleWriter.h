@@ -53,8 +53,6 @@ public:
     static void saveMetadata(const KoShape *shape, SvgSavingContext &context);
 
 protected:
-    /// Saves effects of specified shape
-    static void saveSvgEffects(KoShape *shape, SvgSavingContext &context);
     /// Saves clipping of specified shape
     static void saveSvgClipping(KoShape *shape, SvgSavingContext &context);
     /// Saves masking of specified shape

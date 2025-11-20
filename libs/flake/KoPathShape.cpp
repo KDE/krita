@@ -18,7 +18,6 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
-#include "KoFilterEffectStack.h"
 #include "KoMarker.h"
 #include "KoShapeStroke.h"
 #include "KoInsets.h"
@@ -291,13 +290,7 @@ QRectF KoPathShape::boundingRect() const
 #endif
 
     // add 10% extra update area around the doubled insets
-    QRectF bb = transform.mapRect(kisGrowRect(outline().boundingRect(), 1.1 * 0.5 * outlineSweepWidth));
-
-    if (filterEffectStack()) {
-        QRectF clipRect = filterEffectStack()->clipRectForBoundingRect(QRectF(QPointF(), size()));
-        bb |= transform.mapRect(clipRect);
-    }
-    return bb;
+    return transform.mapRect(kisGrowRect(outline().boundingRect(), 1.1 * 0.5 * outlineSweepWidth));
 }
 
 QSizeF KoPathShape::size() const

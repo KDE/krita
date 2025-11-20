@@ -17,7 +17,6 @@
 
 #include "kritaflake_export.h"
 #include "SvgGradientHelper.h"
-#include "SvgFilterHelper.h"
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
 #include "SvgStyleParser.h"
@@ -166,9 +165,6 @@ protected:
     /// find pattern with given id in pattern map
     QSharedPointer<KoVectorPatternBackground> findPattern(const QString &id, const KoShape *shape);
 
-    /// find filter with given id in filter map
-    SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
-
     /// find clip path with given id in clip path map
     SvgClipPathHelper* findClipPath(const QString &id);
 
@@ -206,9 +202,6 @@ protected:
     /// Applies the current stroke style to the object
     void applyStrokeStyle(KoShape * shape);
 
-    /// Applies the current filter to the object
-    void applyFilter(KoShape * shape);
-
     /// Applies the current clip path to the object
     void applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
     void applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
@@ -231,7 +224,6 @@ protected:
 private:
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
-    QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
     QMap<QString, QSharedPointer<KoClipMask>> m_clipMasks;
     QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;

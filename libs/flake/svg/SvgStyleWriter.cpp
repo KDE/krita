@@ -27,8 +27,6 @@
 #include <KoShape.h>
 #include <KoPathShape.h>
 #include <KoPathSegment.h>
-#include <KoFilterEffect.h>
-#include <KoFilterEffectStack.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoMeshGradientBackground.h>
@@ -64,7 +62,6 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
         saveSvgStroke(shape->stroke(), context);
     }
 
-    saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
     saveSvgMasking(shape, context);
     saveSvgMarkers(shape, context);
@@ -193,23 +190,6 @@ void SvgStyleWriter::saveSvgStroke(KoShapeStrokeModelSP stroke, SvgSavingContext
         }
         context.shapeWriter().addAttribute("stroke-dasharray", dashStr);
     }
-}
-
-void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
-{
-    KoFilterEffectStack * filterStack = shape->filterEffectStack();
-    if (!filterStack)
-        return;
-
-    QList<KoFilterEffect*> filterEffects = filterStack->filterEffects();
-    if (!filterEffects.count())
-        return;
-
-    const QString uid = context.createUID("filter");
-
-    filterStack->save(context.styleWriter(), uid);
-
-    context.shapeWriter().addAttribute("filter", "url(#" + uid + ")");
 }
 
 void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)

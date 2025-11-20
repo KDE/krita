@@ -378,7 +378,6 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addAssetType("kis_actions", "data", "/pykrita");
     KoResourcePaths::addAssetType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addAssetType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addAssetType(ResourceType::FilterEffects, "data", "/effects/");
     KoResourcePaths::addAssetType("tags", "data", "/tags/");
     KoResourcePaths::addAssetType("templates", "data", "/templates");
     KoResourcePaths::addAssetType("pythonscripts", "data", "/pykrita");

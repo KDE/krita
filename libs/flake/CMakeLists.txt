@@ -106,13 +106,6 @@ set(kritaflake_SRCS
     KoSharedSavingData.cpp
     KoViewConverter.cpp
     KoViewTransformStillPoint.cpp
-    KoFilterEffect.cpp
-    KoFilterEffectStack.cpp
-    KoFilterEffectFactoryBase.cpp
-    KoFilterEffectRegistry.cpp
-    KoFilterEffectConfigWidgetBase.cpp
-    KoFilterEffectRenderContext.cpp
-    KoFilterEffectLoadingContext.cpp
     KoTextShapeDataBase.cpp
     KoTosContainer.cpp
     KoTosContainerModel.cpp
@@ -206,7 +199,6 @@ set(kritaflake_SRCS
     svg/SvgParser.cpp
     svg/SvgStyleParser.cpp
     svg/SvgGradientHelper.cpp
-    svg/SvgFilterHelper.cpp
     svg/SvgCssHelper.cpp
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp

@@ -20,9 +20,6 @@
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
 #include "KoShapeLayer.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectRenderContext.h"
 #include "KoShapeBackground.h"
 #include <KoRTree.h>
 #include "KoClipPath.h"
@@ -64,7 +61,6 @@ inline bool shapeUsedInRenderingTree(KoShape *shape)
  */
 inline bool shapeHasGroupEffects(KoShape *shape) {
     return shape->clipPath() ||
-        (shape->filterEffectStack() && !shape->filterEffectStack()->isEmpty()) ||
         shape->clipMask();
 }
 

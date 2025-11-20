@@ -25,7 +25,6 @@ namespace ResourceType {
     KRITARESOURCES_EXPORT extern const QString Sessions;
     KRITARESOURCES_EXPORT extern const QString GamutMasks;
     KRITARESOURCES_EXPORT extern const QString SeExprScripts;
-    KRITARESOURCES_EXPORT extern const QString FilterEffects;
     KRITARESOURCES_EXPORT extern const QString TaskSets;
     KRITARESOURCES_EXPORT extern const QString LayerStyles;
     KRITARESOURCES_EXPORT extern const QString FontFamilies;
@@ -56,7 +55,6 @@ namespace ResourceName {
     KRITARESOURCES_EXPORT extern const KLocalizedString Sessions;
     KRITARESOURCES_EXPORT extern const KLocalizedString GamutMasks;
     KRITARESOURCES_EXPORT extern const KLocalizedString SeExprScripts;
-    KRITARESOURCES_EXPORT extern const KLocalizedString FilterEffects;
     KRITARESOURCES_EXPORT extern const KLocalizedString TaskSets;
     KRITARESOURCES_EXPORT extern const KLocalizedString LayerStyles;
     KRITARESOURCES_EXPORT extern const KLocalizedString FontFamilies;

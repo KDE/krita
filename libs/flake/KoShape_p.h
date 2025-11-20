@@ -48,7 +48,6 @@ public:
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
-    KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
     qreal transparency; ///< the shapes transparency
     QString hyperLink; //hyperlink for this shape
 

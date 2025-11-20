@@ -22,7 +22,6 @@ namespace ResourceType {
     const QString Sessions {QStringLiteral("sessions")};
     const QString GamutMasks {QStringLiteral("gamutmasks")};
     const QString SeExprScripts {QStringLiteral("seexpr_scripts")};
-    const QString FilterEffects {QStringLiteral("ko_effects")};
     const QString TaskSets {QStringLiteral("tasksets")};
     const QString LayerStyles {QStringLiteral("layerstyles")};
     const QString FontFamilies {QStringLiteral("fontfamilies")};
@@ -53,7 +52,6 @@ namespace ResourceName {
     const KLocalizedString Sessions = ki18nc("resource type", "Sessions");
     const KLocalizedString GamutMasks = ki18nc("resource type", "Gamut Masks");
     const KLocalizedString SeExprScripts = ki18nc("resource type", "SeExpr Scripts");
-    const KLocalizedString FilterEffects = ki18nc("resource type", "Filter Effects");
     const KLocalizedString TaskSets = ki18nc("resource type", "Task Sets");
     const KLocalizedString LayerStyles = ki18nc("resource type", "Layer Styles");
     const KLocalizedString FontFamilies = ki18nc("resource type", "Font Families");
@@ -78,7 +76,6 @@ QString ResourceName::resourceTypeToName(const QString &resourceType)
         typeMap[ResourceType::Sessions] = ResourceName::Sessions.toString();
         typeMap[ResourceType::GamutMasks] = ResourceName::GamutMasks.toString();
         typeMap[ResourceType::SeExprScripts] = ResourceName::SeExprScripts.toString();
-        typeMap[ResourceType::FilterEffects] = ResourceName::FilterEffects.toString();
         typeMap[ResourceType::TaskSets] = ResourceName::TaskSets.toString();
         typeMap[ResourceType::LayerStyles] = ResourceName::LayerStyles.toString();
         typeMap[ResourceType::FontFamilies] = ResourceName::FontFamilies.toString();

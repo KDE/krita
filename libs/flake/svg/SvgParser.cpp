@@ -35,10 +35,6 @@
 #include <KoGradientBackground.h>
 #include <KoMeshGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoFilterEffectRegistry.h>
-#include <KoFilterEffect.h>
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectLoadingContext.h"
 #include <KoClipPath.h>
 #include <KoClipMask.h>
 #include <KoXmlNS.h>
@@ -49,7 +45,6 @@
 #include "SvgUtil.h"
 #include "SvgShape.h"
 #include "SvgGraphicContext.h"
-#include "SvgFilterHelper.h"
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
 #include "parsers/SvgTransformParser.h"
@@ -263,43 +258,6 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::findPattern(const QString &
     }
 
     return result;
-}
-
-SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
-{
-    // check if filter was already parsed, and return it
-    if (m_filters.contains(id))
-        return &m_filters[ id ];
-
-    // check if filter was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    const QDomElement &e = m_context.definition(id);
-    if (e.childNodes().count() == 0) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-
-        if (m_context.hasDefinition(mhref))
-            return findFilter(mhref, id);
-        else
-            return 0;
-    } else {
-        // ok parse filter now
-        if (! parseFilter(m_context.definition(id), m_context.definition(href)))
-            return 0;
-    }
-
-    // return successfully parsed filter or 0
-    QString n;
-    if (href.isEmpty())
-        n = id;
-    else
-        n = href;
-
-    if (m_filters.contains(n))
-        return &m_filters[ n ];
-    else
-        return 0;
 }
 
 SvgClipPathHelper* SvgParser::findClipPath(const QString &id)
@@ -721,55 +679,6 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const QDomElem
     return pattHelper;
 }
 
-bool SvgParser::parseFilter(const QDomElement &e, const QDomElement &referencedBy)
-{
-    SvgFilterHelper filter;
-
-    // Use the filter that is referencing, or if there isn't one, the original filter
-    QDomElement b;
-    if (!referencedBy.isNull())
-        b = referencedBy;
-    else
-        b = e;
-
-    // check if we are referencing another filter
-    if (e.hasAttribute("xlink:href")) {
-        QString href = e.attribute("xlink:href").mid(1);
-        if (! href.isEmpty()) {
-            // copy the referenced filter if found
-            SvgFilterHelper *refFilter = findFilter(href);
-            if (refFilter)
-                filter = *refFilter;
-        }
-    } else {
-        filter.setContent(b);
-    }
-
-    if (b.attribute("filterUnits") == "userSpaceOnUse")
-        filter.setFilterUnits(KoFlake::UserSpaceOnUse);
-    if (b.attribute("primitiveUnits") == "objectBoundingBox")
-        filter.setPrimitiveUnits(KoFlake::ObjectBoundingBox);
-
-    // parse filter region rectangle
-    if (filter.filterUnits() == KoFlake::UserSpaceOnUse) {
-        filter.setPosition(QPointF(parseUnitX(b.attribute("x")),
-                                   parseUnitY(b.attribute("y"))));
-        filter.setSize(QSizeF(parseUnitX(b.attribute("width")),
-                              parseUnitY(b.attribute("height"))));
-    } else {
-        // x, y, width, height are in percentages of the object referencing the filter
-        // so we just parse the percentages
-        filter.setPosition(QPointF(SvgUtil::fromPercentage(b.attribute("x", "-0.1")),
-                                   SvgUtil::fromPercentage(b.attribute("y", "-0.1"))));
-        filter.setSize(QSizeF(SvgUtil::fromPercentage(b.attribute("width", "1.2")),
-                              SvgUtil::fromPercentage(b.attribute("height", "1.2"))));
-    }
-
-    m_filters.insert(b.attribute("id"), filter);
-
-    return true;
-}
-
 bool SvgParser::parseMarker(const QDomElement &e)
 {
     const QString id = e.attribute("id");
@@ -963,7 +872,6 @@ void SvgParser::applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginal
         applyMarkers(pathShape);
     }
 
-    applyFilter(shape);
     applyClipping(shape, shapeToOriginalUserCoordinates);
     applyMaskClipping(shape, shapeToOriginalUserCoordinates);
 
@@ -1025,7 +933,6 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF 
         applyMarkers(pathShape);
     }
 
-    applyFilter(obj);
     applyClipping(obj, shapeToOriginalUserCoordinates);
     applyMaskClipping(obj, shapeToOriginalUserCoordinates);
 
@@ -1280,134 +1187,6 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
         }
     } else if (gc->strokeType == SvgGraphicsContext::Inherit) {
         shape->setInheritStroke(true);
-    }
-}
-
-void SvgParser::applyFilter(KoShape *shape)
-{
-    SvgGraphicsContext *gc = m_context.currentGC();
-    if (! gc)
-        return;
-
-    if (gc->filterId.isEmpty())
-        return;
-
-    SvgFilterHelper *filter = findFilter(gc->filterId);
-    if (! filter)
-        return;
-
-    QDomElement content = filter->content();
-
-    // parse filter region
-    QRectF bound(shape->position(), shape->size());
-    // work on bounding box without viewbox transformation applied
-    // so user space coordinates of bounding box and filter region match up
-    bound = gc->viewboxTransform.inverted().mapRect(bound);
-
-    QRectF filterRegion(filter->position(bound), filter->size(bound));
-
-    // convert filter region to boundingbox units
-    QRectF objectFilterRegion;
-    objectFilterRegion.setTopLeft(SvgUtil::userSpaceToObject(filterRegion.topLeft(), bound));
-    objectFilterRegion.setSize(SvgUtil::userSpaceToObject(filterRegion.size(), bound));
-
-    KoFilterEffectLoadingContext context(m_context.xmlBaseDir());
-    context.setShapeBoundingBox(bound);
-    // enable units conversion
-    context.enableFilterUnitsConversion(filter->filterUnits() == KoFlake::UserSpaceOnUse);
-    context.enableFilterPrimitiveUnitsConversion(filter->primitiveUnits() == KoFlake::UserSpaceOnUse);
-
-    KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
-
-    KoFilterEffectStack *filterStack = 0;
-
-    QSet<QString> stdInputs;
-    stdInputs << "SourceGraphic" << "SourceAlpha";
-    stdInputs << "BackgroundImage" << "BackgroundAlpha";
-    stdInputs << "FillPaint" << "StrokePaint";
-
-    QMap<QString, KoFilterEffect*> inputs;
-
-    // create the filter effects and add them to the shape
-    for (QDomNode n = content.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        QDomElement primitive = n.toElement();
-        KoFilterEffect *filterEffect = registry->createFilterEffectFromXml(primitive, context);
-        if (!filterEffect) {
-            debugFlake << "filter effect" << primitive.tagName() << "is not implemented yet";
-            continue;
-        }
-
-        const QString input = primitive.attribute("in");
-        if (!input.isEmpty()) {
-            filterEffect->setInput(0, input);
-        }
-        const QString output = primitive.attribute("result");
-        if (!output.isEmpty()) {
-            filterEffect->setOutput(output);
-        }
-
-        QRectF subRegion;
-        // parse subregion
-        if (filter->primitiveUnits() == KoFlake::UserSpaceOnUse) {
-            const QString xa = primitive.attribute("x");
-            const QString ya = primitive.attribute("y");
-            const QString wa = primitive.attribute("width");
-            const QString ha = primitive.attribute("height");
-
-            if (xa.isEmpty() || ya.isEmpty() || wa.isEmpty() || ha.isEmpty()) {
-                bool hasStdInput = false;
-                bool isFirstEffect = filterStack == 0;
-                // check if one of the inputs is a standard input
-                Q_FOREACH (const QString &input, filterEffect->inputs()) {
-                    if ((isFirstEffect && input.isEmpty()) || stdInputs.contains(input)) {
-                        hasStdInput = true;
-                        break;
-                    }
-                }
-                if (hasStdInput || primitive.tagName() == "feImage") {
-                    // default to 0%, 0%, 100%, 100%
-                    subRegion.setTopLeft(QPointF(0, 0));
-                    subRegion.setSize(QSizeF(1, 1));
-                } else {
-                    // defaults to bounding rect of all referenced nodes
-                    Q_FOREACH (const QString &input, filterEffect->inputs()) {
-                        if (!inputs.contains(input))
-                            continue;
-
-                        KoFilterEffect *inputFilter = inputs[input];
-                        if (inputFilter)
-                            subRegion |= inputFilter->filterRect();
-                    }
-                }
-            } else {
-                const qreal x = parseUnitX(xa);
-                const qreal y = parseUnitY(ya);
-                const qreal w = parseUnitX(wa);
-                const qreal h = parseUnitY(ha);
-                subRegion.setTopLeft(SvgUtil::userSpaceToObject(QPointF(x, y), bound));
-                subRegion.setSize(SvgUtil::userSpaceToObject(QSizeF(w, h), bound));
-            }
-        } else {
-            // x, y, width, height are in percentages of the object referencing the filter
-            // so we just parse the percentages
-            const qreal x = SvgUtil::fromPercentage(primitive.attribute("x", "0"));
-            const qreal y = SvgUtil::fromPercentage(primitive.attribute("y", "0"));
-            const qreal w = SvgUtil::fromPercentage(primitive.attribute("width", "1"));
-            const qreal h = SvgUtil::fromPercentage(primitive.attribute("height", "1"));
-            subRegion = QRectF(QPointF(x, y), QSizeF(w, h));
-        }
-
-        filterEffect->setFilterRect(subRegion);
-
-        if (!filterStack)
-            filterStack = new KoFilterEffectStack();
-
-        filterStack->appendFilterEffect(filterEffect);
-        inputs[filterEffect->output()] = filterEffect;
-    }
-    if (filterStack) {
-        filterStack->setClipRect(objectFilterRegion);
-        shape->setFilterEffectStack(filterStack);
     }
 }
 
@@ -2051,7 +1830,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
     } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
     } else if (b.tagName() == "pattern") {
     } else if (b.tagName() == "filter") {
-        parseFilter(b);
+        // not supported!
     } else if (b.tagName() == "clipPath") {
         parseClipPath(b);
     } else if (b.tagName() == "mask") {

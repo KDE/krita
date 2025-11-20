@@ -32,7 +32,6 @@
 #include "KoShapeStroke.h"
 #include "KoClipPath.h"
 #include "KoPathShape.h"
-#include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
 
 #include <KoXmlWriter.h>
@@ -55,7 +54,6 @@
 KoShape::SharedData::SharedData()
     : QSharedData()
     , size(50, 50)
-    , filterEffectStack(0)
     , transparency(0.0)
     , zIndex(0)
     , runThrough(0)
@@ -91,7 +89,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
     , clipMask(rhs.clipMask ? rhs.clipMask->clone() : 0)
     , additionalAttributes(rhs.additionalAttributes)
     , additionalStyleAttributes(rhs.additionalStyleAttributes)
-    , filterEffectStack(0) // WARNING: not implemented in Krita
     , transparency(rhs.transparency)
     , hyperLink(rhs.hyperLink)
 
@@ -119,8 +116,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
 
 KoShape::SharedData::~SharedData()
 {
-    if (filterEffectStack && !filterEffectStack->deref())
-        delete filterEffectStack;
 }
 
 void KoShape::shapeChangedPriv(KoShape::ChangeType type)
@@ -328,11 +323,6 @@ QRectF KoShape::boundingRect() const
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     bb = transform.mapRect(bb);
-    if (s->filterEffectStack) {
-        QRectF clipRect = s->filterEffectStack->clipRectForBoundingRect(outlineRect());
-        bb |= transform.mapRect(clipRect);
-    }
-
     return bb;
 }
 
@@ -1256,22 +1246,6 @@ void KoShape::setAdditionalStyleAttribute(const char *name, const QString &value
 void KoShape::removeAdditionalStyleAttribute(const char *name)
 {
     s->additionalStyleAttributes.remove(name);
-}
-
-KoFilterEffectStack *KoShape::filterEffectStack() const
-{
-    return s->filterEffectStack;
-}
-
-void KoShape::setFilterEffectStack(KoFilterEffectStack *filterEffectStack)
-{
-    if (s->filterEffectStack)
-        s->filterEffectStack->deref();
-    s->filterEffectStack = filterEffectStack;
-    if (s->filterEffectStack) {
-        s->filterEffectStack->ref();
-    }
-    notifyChanged();
 }
 
 QSet<KoShape*> KoShape::toolDelegates() const

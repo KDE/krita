@@ -34,7 +34,6 @@ class KoShapeUserData;
 class KoViewConverter;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
-class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
 class KoClipMask;
@@ -1021,16 +1020,6 @@ public:
     void setAdditionalStyleAttribute(const char *name, const QString &value);
 
     void removeAdditionalStyleAttribute(const char *name);
-
-    /**
-     * Returns the filter effect stack of the shape
-     *
-     * @return the list of filter effects applied on the shape when rendering.
-     */
-    KoFilterEffectStack *filterEffectStack() const;
-
-    /// Sets the new filter effect stack, removing the old one
-    void setFilterEffectStack(KoFilterEffectStack *filterEffectStack);
 
     /**
      * Return the tool delegates for this shape.

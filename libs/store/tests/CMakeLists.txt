@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 ########### manual test for file contents ###############
 
 add_executable(storedroptest storedroptest.cpp)

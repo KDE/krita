@@ -1,6 +1,3 @@
-
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(KisSignalAutoConnectionTest.cpp
     KisSignalCompressorTest.cpp
     KisForestTest.cpp

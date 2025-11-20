@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 #add_subdirectory(filedialogtester)
 
 kis_add_tests(

@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     TestPerspectiveBasedAssistantHelper.cpp
     TestAssistants.cpp

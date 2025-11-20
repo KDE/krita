@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 if(APPLE)
     krita_add_broken_unit_test(
         KisHeifTest.cpp

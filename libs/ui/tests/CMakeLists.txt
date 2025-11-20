@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     kis_image_view_converter_test.cpp
     kis_shape_selection_test.cpp

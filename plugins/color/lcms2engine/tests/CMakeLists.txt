@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 if(OpenEXR_FOUND)
     include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
 endif()

@@ -1,6 +1,3 @@
-
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     #TestKrita.cpp
     TestChannel.cpp

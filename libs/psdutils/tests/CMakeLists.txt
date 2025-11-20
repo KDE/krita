@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 set(PSD_TEST_LIBS kritapsdutils kritatestsdk)
 
 kis_add_tests(

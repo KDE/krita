@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 add_executable(CCSGraph CCSGraph.cpp)
 target_link_libraries(CCSGraph kritapigment KF${KF_MAJOR}::I18n)
 ecm_mark_as_test(CCSGraph)

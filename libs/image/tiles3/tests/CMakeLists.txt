@@ -1,6 +1,3 @@
-
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     kis_tiled_data_manager_test.cpp
     kis_low_memory_tests.cpp

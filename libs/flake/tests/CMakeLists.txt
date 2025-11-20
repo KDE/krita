@@ -1,6 +1,3 @@
-
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     TestPosition.cpp
     TestSelection.cpp

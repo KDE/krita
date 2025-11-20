@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 # on macOS cannot link to a MH_LIBRARY, see bug 417391
 kis_add_test(KisDabRenderingQueueTest.cpp
     TEST_NAME KisDabRenderingQueueTest

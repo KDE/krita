@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 ########### next target ###############
 
 kis_add_test_maybe_broken(SvgTextCursorTest.cpp

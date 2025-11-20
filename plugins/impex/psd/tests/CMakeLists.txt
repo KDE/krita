@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 set(PSD_TEST_LIBS kritapsd kritapsd_static kritatestsdk)
 
 kis_add_test(psd_header_test.cpp

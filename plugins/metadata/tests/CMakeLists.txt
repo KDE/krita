@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 ##### Tests that currently fail and should be fixed #####
 
 # Works under Linux but does not work under Windows

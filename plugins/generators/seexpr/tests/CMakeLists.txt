@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     kis_seexpr_generator_test.cpp
 

@@ -11,8 +11,6 @@ else()
     set (HAVE_FAILING_CMAKE FALSE)
 endif()
 
-include(KritaAddBrokenUnitTest)
-
 set(KisRandomGenerator2DDemoSources KisRandomGenerator2DDemo.cpp kimageframe.cpp)
 ki18n_wrap_ui(KisRandomGenerator2DDemoSources KisRandomGenerator2DDemo.ui)
 add_executable(KisRandomGenerator2DDemo ${KisRandomGenerator2DDemoSources})

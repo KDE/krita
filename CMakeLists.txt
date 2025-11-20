@@ -1515,6 +1515,7 @@ include(CheckAtomic)
 #############################
 ############################
 
+include(KritaAddBrokenUnitTest)
 include(MacroKritaAddBenchmark)
 
  ####################

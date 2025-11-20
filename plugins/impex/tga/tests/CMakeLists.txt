@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_test(
     KisTgaTest.cpp
     TEST_NAME KisTgaTest

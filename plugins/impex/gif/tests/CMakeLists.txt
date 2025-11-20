@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_test(
     KisGifTest.cpp
     TEST_NAME KisGifTest

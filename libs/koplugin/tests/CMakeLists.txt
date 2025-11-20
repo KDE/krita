@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_library(dummytrivialinterface SHARED DummyTrivialInterface.cpp)
 target_link_libraries(dummytrivialinterface PRIVATE Qt::Core)
 generate_export_header(dummytrivialinterface BASE_NAME dummytrivialinterface)

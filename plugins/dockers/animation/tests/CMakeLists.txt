@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_tests(
     kis_animation_utils_test.cpp
     timeline_model_test.cpp

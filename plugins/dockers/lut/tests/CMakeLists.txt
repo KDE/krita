@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 ########### next target ###############
 
 if (HAVE_OCIO_V2)

@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_test(
     KisBrushTest.cpp
     TEST_NAME KisBrushTest

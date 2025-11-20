@@ -1,5 +1,3 @@
-include(KritaAddBrokenUnitTest)
-
 kis_add_test(
     KisQmlTest.cpp
     TEST_NAME KisQmlTest

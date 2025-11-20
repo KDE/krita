@@ -35,7 +35,7 @@ private Q_SLOTS:
     void testUngrouping();
 
 private:
-    KoShapeGroup *toplevelGroup, *sublevelGroup, *strokeGroup;
+    KoShapeGroup *toplevelGroup, *sublevelGroup;
     KUndo2Command *cmd1, *cmd2, *strokeCmd;
     MockShape *toplevelShape1, *toplevelShape2, *toplevelShape3, *toplevelShape4;
     MockShape *sublevelShape1, *sublevelShape2;

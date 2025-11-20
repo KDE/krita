@@ -44,8 +44,6 @@
 #include <KoSelection.h>
 #include <KoShapeMoveCommand.h>
 #include <KoShapeTransformCommand.h>
-#include <KoShapeShadow.h>
-#include <KoShapeShadowCommand.h>
 
 #include "SvgWriter.h"
 #include "SvgParser.h"

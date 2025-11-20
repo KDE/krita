@@ -35,7 +35,6 @@ set(kritawidgets_LIB_SRCS
 
     KoToolDocker.cpp
     
-    KoShadowConfigWidget.cpp
     KoMarkerSelector.cpp
     KoMarkerModel.cpp
     KoMarkerItemDelegate.cpp
@@ -88,7 +87,6 @@ set(kritawidgets_LIB_SRCS
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     wdg_file_name_requester.ui
-    KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
     WdgPaletteListWidget.ui
 )

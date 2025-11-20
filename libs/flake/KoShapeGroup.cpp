@@ -15,7 +15,6 @@
 #include "KoXmlWriter.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeStrokeModel.h"
-#include "KoShapeShadow.h"
 #include "KoInsets.h"
 
 #include <FlakeDebug.h>
@@ -168,14 +167,7 @@ QRectF KoShapeGroup::outlineRect() const
 
 QRectF KoShapeGroup::boundingRect() const
 {
-    QRectF groupBound = KoShape::boundingRect(shapes());
-
-    if (shadow()) {
-        KoInsets insets;
-        shadow()->insets(insets);
-        groupBound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
-    return groupBound;
+    return KoShape::boundingRect(shapes());
 }
 
 void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)

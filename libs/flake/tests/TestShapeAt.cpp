@@ -9,7 +9,6 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShapeStroke.h>
-#include <KoShapeShadow.h>
 #include <KoInsets.h>
 
 #include <simpletest.h>
@@ -104,14 +103,6 @@ void TestShapeAt::testShadow()
     KoInsets strokeInsets;
     stroke->strokeInsets(&shape, strokeInsets);
     bbox.adjust(-strokeInsets.left, -strokeInsets.top, strokeInsets.right, strokeInsets.bottom);
-    QCOMPARE(shape.boundingRect(), bbox);
-
-    KoShapeShadow *shadow = new KoShapeShadow();
-    shadow->setOffset(QPointF(5, 9));
-    shape.setShadow(shadow);
-    KoInsets shadowInsets;
-    shadow->insets(shadowInsets);
-    bbox.adjust(-shadowInsets.left, -shadowInsets.top, shadowInsets.right, shadowInsets.bottom);
     QCOMPARE(shape.boundingRect(), bbox);
 }
 

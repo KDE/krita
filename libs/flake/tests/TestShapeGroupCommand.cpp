@@ -10,7 +10,6 @@
 #include <KoShapeGroupCommand.h>
 #include <KoShapeUngroupCommand.h>
 #include <KoShapeStroke.h>
-#include <KoShapeShadow.h>
 #include <kundo2command.h>
 
 #include <KoShapeReorderCommand.h>
@@ -22,7 +21,7 @@
 #include <simpletest.h>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
-        : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
+        : toplevelGroup(0), sublevelGroup(0)
         , cmd1(0), cmd2(0), strokeCmd(0)
         , toplevelShape1(0), toplevelShape2(0), toplevelShape3(0), toplevelShape4(0)
         , sublevelShape1(0), sublevelShape2(0)
@@ -69,10 +68,6 @@ void TestShapeGroupCommand::init()
 
     strokeShape1 = createMockShape(QRectF(0, 0, 50, 50));
     strokeShape2 = createMockShape(QRectF(25, 25, 50, 50));
-
-    strokeGroup = new KoShapeGroup();
-    strokeGroup->setStroke(toQShared(new KoShapeStroke(2.0f)));
-    strokeGroup->setShadow(new KoShapeShadow());
 }
 
 void TestShapeGroupCommand::cleanup()

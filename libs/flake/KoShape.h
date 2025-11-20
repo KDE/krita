@@ -34,7 +34,6 @@ class KoShapeUserData;
 class KoViewConverter;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
-class KoShapeShadow;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
@@ -103,7 +102,6 @@ public:
         Deleted, ///< the shape was deleted
         StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
-        ShadowChanged, ///< the shapes shadow has changed
         BorderChanged, ///< the shapes border has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
@@ -278,7 +276,7 @@ public:
     /**
      * @brief Get the bounding box of the shape
      *
-     * This includes the line width and the shadow of the shape
+     * This includes the line width of the shape
      *
      * @return the bounding box of the shape
      */
@@ -696,18 +694,6 @@ public:
     virtual QRectF outlineRect() const;
 
     /**
-     * returns the outline of the shape in the form of a path for the use of painting a shadow.
-     *
-     * Normally this would be the same as outline() if there is a fill (background) set on the
-     * shape and empty if not.  However, a shape could reimplement this to return an outline
-     * even if no fill is defined. A typical example of this would be the picture shape
-     * which has a picture but almost never a background.
-     *
-     * @returns the outline of the shape in the form of a path.
-     */
-    virtual QPainterPath shadowOutline() const;
-
-    /**
      * Returns the currently set stroke, or 0 if there is no stroke.
      * @return the currently set stroke, or 0 if there is no stroke.
      */
@@ -772,12 +758,6 @@ public:
      * @return whether the paint order is inherited. By default it is.
      */
     bool inheritPaintOrder() const;
-
-    /// Sets the new shadow, removing the old one
-    void setShadow(KoShapeShadow *shadow);
-
-    /// Returns the currently set shadow or 0 if there is no shadow set
-    KoShapeShadow *shadow() const;
 
     /// Sets a new clip path, removing the old one
     void setClipPath(KoClipPath *clipPath);

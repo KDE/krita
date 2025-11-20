@@ -30,7 +30,6 @@
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
 #include "KoShapeStroke.h"
-#include "KoShapeShadow.h"
 #include "KoClipPath.h"
 #include "KoPathShape.h"
 #include "KoFilterEffectStack.h"
@@ -56,7 +55,6 @@
 KoShape::SharedData::SharedData()
     : QSharedData()
     , size(50, 50)
-    , shadow(0)
     , filterEffectStack(0)
     , transparency(0.0)
     , zIndex(0)
@@ -89,7 +87,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
     , fill(rhs.fill)
     , inheritBackground(rhs.inheritBackground)
     , inheritStroke(rhs.inheritStroke)
-    , shadow(0) // WARNING: not implemented in Krita
     , clipPath(rhs.clipPath ? rhs.clipPath->clone() : 0)
     , clipMask(rhs.clipMask ? rhs.clipMask->clone() : 0)
     , additionalAttributes(rhs.additionalAttributes)
@@ -122,8 +119,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
 
 KoShape::SharedData::~SharedData()
 {
-    if (shadow && !shadow->deref())
-        delete shadow;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
 }
@@ -320,20 +315,11 @@ bool KoShape::hitTest(const QPointF &position) const
     if (bb.contains(point))
         return true;
 
-    // if there is no shadow we can as well just leave
-    if (! s->shadow)
-        return false;
-
-    // the shadow has an offset to the shape, so we simply
-    // check if the position minus the shadow offset hits the shape
-    point = absoluteTransformation().inverted().map(position - s->shadow->offset());
-
-    return bb.contains(point);
+    return false;
 }
 
 QRectF KoShape::boundingRect() const
 {
-
     QTransform transform = absoluteTransformation();
     QRectF bb = outlineRect();
     if (s->stroke) {
@@ -342,11 +328,6 @@ QRectF KoShape::boundingRect() const
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     bb = transform.mapRect(bb);
-    if (s->shadow) {
-        KoInsets insets;
-        s->shadow->insets(insets);
-        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
     if (s->filterEffectStack) {
         QRectF clipRect = s->filterEffectStack->clipRectForBoundingRect(outlineRect());
         bb |= transform.mapRect(clipRect);
@@ -644,15 +625,6 @@ QRectF KoShape::outlineRect() const
     const QSizeF s = size();
     return QRectF(QPointF(0, 0), QSizeF(qMax(s.width(),  qreal(0.0001)),
                                         qMax(s.height(), qreal(0.0001))));
-}
-
-QPainterPath KoShape::shadowOutline() const
-{
-    if (background()) {
-        return outline();
-    }
-
-    return QPainterPath();
 }
 
 QPointF KoShape::absolutePosition(KoFlake::AnchorPosition anchor) const
@@ -1103,24 +1075,6 @@ void KoShape::setInheritStroke(bool value)
 bool KoShape::inheritStroke() const
 {
     return s->inheritStroke;
-}
-
-void KoShape::setShadow(KoShapeShadow *shadow)
-{
-    if (s->shadow)
-        s->shadow->deref();
-    s->shadow = shadow;
-    if (s->shadow) {
-        s->shadow->ref();
-        // TODO update changed area
-    }
-    shapeChangedPriv(ShadowChanged);
-    notifyChanged();
-}
-
-KoShapeShadow *KoShape::shadow() const
-{
-    return s->shadow;
 }
 
 void KoShape::setClipPath(KoClipPath *clipPath)

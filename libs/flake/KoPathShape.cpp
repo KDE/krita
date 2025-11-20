@@ -16,7 +16,6 @@
 #include "KoPathShapeLoader.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
-#include "KoShapeShadow.h"
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
@@ -294,11 +293,6 @@ QRectF KoPathShape::boundingRect() const
     // add 10% extra update area around the doubled insets
     QRectF bb = transform.mapRect(kisGrowRect(outline().boundingRect(), 1.1 * 0.5 * outlineSweepWidth));
 
-    if (shadow()) {
-        KoInsets insets;
-        shadow()->insets(insets);
-        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
     if (filterEffectStack()) {
         QRectF clipRect = filterEffectStack()->clipRectForBoundingRect(QRectF(QPointF(), size()));
         bb |= transform.mapRect(clipRect);
@@ -1295,15 +1289,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
             return true;
     }
 
-    // if there is no shadow we can as well just leave
-    if (! shadow())
-        return false;
-
-    // the shadow has an offset to the shape, so we simply
-    // check if the position minus the shadow offset hits the shape
-    point = absoluteTransformation().inverted().map(position - shadow()->offset());
-
-    return outlinePath.contains(point);
+    return false;
 }
 
 void KoPathShape::setMarker(KoMarker *marker, KoFlake::MarkerPosition pos)

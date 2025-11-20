@@ -19,7 +19,6 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
-#include "KoShapeShadow.h"
 #include "KoShapeLayer.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
@@ -198,11 +197,6 @@ void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
         qreal transparency = shape->transparency(true);
         if (transparency > 0.0) {
             painter.setOpacity(1.0-transparency);
-        }
-
-        if (shape->shadow()) {
-            KisQPainterStateSaver saver(&painter);
-            shape->shadow()->paint(shape, painter);
         }
 
         QScopedPointer<KoClipMaskPainter> clipMaskPainter;

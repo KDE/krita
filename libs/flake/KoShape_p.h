@@ -43,7 +43,6 @@ public:
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
     bool inheritBackground = false;
     bool inheritStroke = false;
-    KoShapeShadow * shadow; ///< the current shape shadow
     // XXX: change this to instance instead of pointer
     QScopedPointer<KoClipPath> clipPath; ///< the current clip path
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask

@@ -102,7 +102,6 @@ set(kritaflake_SRCS
     KoSnapProxy.cpp
     KoSnapStrategy.cpp
     KoSnapData.cpp
-    KoShapeShadow.cpp
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
@@ -155,7 +154,6 @@ set(kritaflake_SRCS
     commands/KoParameterToPathCommand.cpp
     commands/KoShapeTransformCommand.cpp
     commands/KoPathFillRuleCommand.cpp
-    commands/KoShapeShadowCommand.cpp
     commands/KoPathReverseCommand.cpp
     commands/KoShapeRenameCommand.cpp
     commands/KoShapeRunAroundCommand.cpp

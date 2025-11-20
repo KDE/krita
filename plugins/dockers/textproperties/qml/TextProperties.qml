@@ -61,10 +61,10 @@ Control {
         anchors.left: parent.left;
         anchors.top: parent.top;
         Kis.TabButtonBase {
-            text: i18nc("@title:tab", "Character")
+            text: i18nc("@title:tab", "Paragraph")
         }
         Kis.TabButtonBase {
-            text: i18nc("@title:tab", "Paragraph")
+            text: i18nc("@title:tab", "Character")
         }
         Kis.TabButtonBase {
             text: i18nc("@title:tab", "Preset")
@@ -79,6 +79,17 @@ Control {
         anchors.top: tabs.bottom;
 
         TextPropertyBaseList {
+            id: paragraphPropertyList;
+            propertyType: TextPropertyConfigModel.Paragraph;
+            configModel: root.configModel;
+            canvasDPI: root.canvasDPI;
+            locales: canvasObserver.locales;
+            propertiesModel: canvasObserver.textProperties;
+
+            onCallPropertyVisibilityConfig: canvasObserver.callModalTextPropertyConfigDialog();
+        }
+
+        TextPropertyBaseList {
             id: characterPropertyList;
             propertyType: TextPropertyConfigModel.Character;
             configModel: root.configModel;
@@ -86,17 +97,6 @@ Control {
             locales: canvasObserver.locales;
             enabled: canvasObserver.characterProperties.enabled;
             propertiesModel: canvasObserver.characterProperties;
-
-            onCallPropertyVisibilityConfig: canvasObserver.callModalTextPropertyConfigDialog();
-        }
-
-        TextPropertyBaseList {
-            id: paragraphPropertyList;
-            propertyType: TextPropertyConfigModel.Paragraph;
-            configModel: root.configModel;
-            canvasDPI: root.canvasDPI;
-            locales: canvasObserver.locales;
-            propertiesModel: canvasObserver.textProperties;
 
             onCallPropertyVisibilityConfig: canvasObserver.callModalTextPropertyConfigDialog();
         }

@@ -10,7 +10,7 @@
 #include <QSharedDataPointer>
 
 #include <KoColor.h>
-#include <KoTosContainer.h>
+#include <KoShape.h>
 #include <kis_types.h>
 #include <kritaui_export.h>
 #include <kundo2command.h>
@@ -26,7 +26,7 @@ class KisCanvas2;
 /**
  * @brief The KisReferenceImage class represents a single reference image
  */
-class KRITAUI_EXPORT KisReferenceImage : public KoTosContainer
+class KRITAUI_EXPORT KisReferenceImage : public KoShape
 {
 public:
     struct KRITAUI_EXPORT SetSaturationCommand : public KUndo2Command {

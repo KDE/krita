@@ -57,13 +57,13 @@ QRectF KoPathShape::Private::handleRect(const QPointF &p, qreal radius) const
 
 
 KoPathShape::KoPathShape()
-    : KoTosContainer()
+    : KoShape()
     , d(new Private)
 {
 }
 
 KoPathShape::KoPathShape(const KoPathShape &rhs)
-    : KoTosContainer(rhs)
+    : KoShape(rhs)
     , d(new Private(*rhs.d))
 {
     // local data cannot be shared via QSharedData because

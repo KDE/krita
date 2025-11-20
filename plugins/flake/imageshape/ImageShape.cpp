@@ -4,8 +4,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <KoTosContainer_p.h>
-
 #include "ImageShape.h"
 #include "kis_debug.h"
 
@@ -45,7 +43,7 @@ ImageShape::ImageShape()
 }
 
 ImageShape::ImageShape(const ImageShape &rhs)
-    : KoTosContainer(rhs),
+    : KoShape(rhs),
       m_d(rhs.m_d)
 {
 }
@@ -73,7 +71,7 @@ void ImageShape::paint(QPainter &painter) const
 
 void ImageShape::setSize(const QSizeF &size)
 {
-    KoTosContainer::setSize(size);
+    KoShape::setSize(size);
 }
 
 bool ImageShape::saveSvg(SvgSavingContext &context)

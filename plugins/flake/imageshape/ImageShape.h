@@ -9,13 +9,13 @@
 
 #include <QSharedDataPointer>
 
-#include "KoTosContainer.h"
+#include "KoShape.h"
 #include <SvgShape.h>
 
 #define ImageShapeId "ImageShape"
 
 
-class ImageShape : public KoTosContainer, public SvgShape
+class ImageShape : public KoShape, public SvgShape
 {
 public:
     ImageShape();

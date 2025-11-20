@@ -22,7 +22,6 @@
 #include <kundo2command.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KoTosContainer_p.h>
 #include <krita_utils.h>
 #include <kis_coordinates_converter.h>
 #include <kis_dom_utils.h>
@@ -152,7 +151,7 @@ KisReferenceImage::KisReferenceImage()
 }
 
 KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
-    : KoTosContainer(rhs)
+    : KoShape(rhs)
     , d(rhs.d)
 {}
 

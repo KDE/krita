@@ -517,7 +517,6 @@ void EnhancedPathShape::updateTextArea()
         r.setRight(evaluateConstantOrReference(m_textArea[2]));
         r.setBottom(evaluateConstantOrReference(m_textArea[3]));
         r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
-        setPreferredTextRect(r);
     }
 }
 

@@ -26,7 +26,6 @@
 #include "KoPatternBackground.h"
 #include "KoShapeManager.h"
 #include "KoShapeUserData.h"
-#include "KoShapeApplicationData.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"

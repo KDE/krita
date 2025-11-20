@@ -54,7 +54,6 @@ set(kritaflake_SRCS
     KoShapeAnchor.cpp
     KoShapeBulkActionLock.cpp
     KoShapeControllerBase.cpp
-    KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
     KoShapeGroup.cpp

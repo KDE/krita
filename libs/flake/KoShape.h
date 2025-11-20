@@ -32,7 +32,6 @@ class KoShapeContainer;
 class KoShapeStrokeModel;
 class KoShapeUserData;
 class KoViewConverter;
-class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoShapeShadow;

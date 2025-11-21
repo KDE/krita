@@ -31,6 +31,8 @@
     KDECI_WORKDIR_PATH: /tmp/wd
   interruptible: true
   before_script:
+    - . /var/lib/ci-files/setup-environment.sh
+
     - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_ANDROID --depth=1
     - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1

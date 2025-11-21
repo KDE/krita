@@ -3,10 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		110986392ED0DE3F00C1ECC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110986352ED0DE3F00C1ECC8 /* ContentView.swift */; };
+		1109863A2ED0DE3F00C1ECC8 /* previewHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110986372ED0DE3F00C1ECC8 /* previewHelperApp.swift */; };
+		1109863B2ED0DE3F00C1ECC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 110986342ED0DE3F00C1ECC8 /* Assets.xcassets */; };
+		110986432ED0DE4400C1ECC8 /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109863E2ED0DE4400C1ECC8 /* PreviewProvider.swift */; };
+		110986442ED0DE4400C1ECC8 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109863F2ED0DE4400C1ECC8 /* PreviewViewController.swift */; };
+		110986452ED0DE4400C1ECC8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1109863D2ED0DE4400C1ECC8 /* Info.plist */; };
+		110986462ED0DE4400C1ECC8 /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 110986412ED0DE4400C1ECC8 /* PreviewViewController.xib */; };
+		110986472ED0DE4400C1ECC8 /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109863E2ED0DE4400C1ECC8 /* PreviewProvider.swift */; };
+		110986482ED0DE4400C1ECC8 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109863F2ED0DE4400C1ECC8 /* PreviewViewController.swift */; };
+		1109864A2ED0DE4400C1ECC8 /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 110986412ED0DE4400C1ECC8 /* PreviewViewController.xib */; };
 		114946422EA3FACB00515C4C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114946412EA3FACB00515C4C /* AppKit.framework */; };
 		1149465C2EA6B34D00515C4C /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7B62D25619404003662DB /* ThumbnailProvider.swift */; };
 		1149465E2EA6B34D00515C4C /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B7B62825619404003662DB /* QuickLookThumbnailing.framework */; };
@@ -135,13 +145,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		110986342ED0DE3F00C1ECC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		110986352ED0DE3F00C1ECC8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		110986362ED0DE3F00C1ECC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		110986372ED0DE3F00C1ECC8 /* previewHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = previewHelperApp.swift; sourceTree = "<group>"; };
+		1109863D2ED0DE4400C1ECC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1109863E2ED0DE4400C1ECC8 /* PreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
+		1109863F2ED0DE4400C1ECC8 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		110986402ED0DE4400C1ECC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
 		114946412EA3FACB00515C4C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		114946472EA5593D00515C4C /* previewHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = previewHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946662EA6B34D00515C4C /* krita-thumbnailer_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-thumbnailer_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		114946672EA6B34E00515C4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-thumbnailer_helper/Info.plist"; sourceTree = "<absolute>"; };
+		114946672EA6B34E00515C4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		114946852EA6C47200515C4C /* krita-preview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-preview.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		114946A82EA7079600515C4C /* krita-preview_helper.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "krita-preview_helper.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		114946AA2EA7079600515C4C /* krita-preview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "krita-preview-Info.plist"; path = "/Users/daedalus/developer/krita/repos/cibuild/krita/krita/integration/krita-preview_helper/krita-preview-Info.plist"; sourceTree = "<absolute>"; };
+		114946AA2EA7079600515C4C /* krita-preview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "krita-preview-Info.plist"; sourceTree = "<group>"; };
 		114946C42EA85C7800515C4C /* base.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = base.entitlements; sourceTree = "<group>"; };
 		84A059912560A72500E4EAFD /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		84A059942560A75000E4EAFD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -169,28 +187,6 @@
 		84D65139256043A000CC2E75 /* UnzipTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnzipTask.m; sourceTree = "<group>"; };
 		84D6513A256043A000CC2E75 /* UnzipTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnzipTask.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		114946C72EA873D200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 114946462EA5593D00515C4C /* previewHelper */;
-		};
-		114946C82EA873DE00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 114946842EA6C47200515C4C /* krita-preview */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		114946482EA5593D00515C4C /* previewHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946C72EA873D200515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = previewHelper; sourceTree = "<group>"; };
-		114946872EA6C47200515C4C /* krita-preview */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (114946C82EA873DE00515C4C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "krita-preview"; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		114946442EA5593D00515C4C /* Frameworks */ = {
@@ -268,6 +264,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		110986382ED0DE3F00C1ECC8 /* previewHelper */ = {
+			isa = PBXGroup;
+			children = (
+				110986342ED0DE3F00C1ECC8 /* Assets.xcassets */,
+				110986352ED0DE3F00C1ECC8 /* ContentView.swift */,
+				110986362ED0DE3F00C1ECC8 /* Info.plist */,
+				110986372ED0DE3F00C1ECC8 /* previewHelperApp.swift */,
+			);
+			path = previewHelper;
+			sourceTree = "<group>";
+		};
+		110986422ED0DE4400C1ECC8 /* krita-preview */ = {
+			isa = PBXGroup;
+			children = (
+				1109863D2ED0DE4400C1ECC8 /* Info.plist */,
+				1109863E2ED0DE4400C1ECC8 /* PreviewProvider.swift */,
+				1109863F2ED0DE4400C1ECC8 /* PreviewViewController.swift */,
+				110986412ED0DE4400C1ECC8 /* PreviewViewController.xib */,
+			);
+			path = "krita-preview";
+			sourceTree = "<group>";
+		};
 		114946682EA6B42B00515C4C /* krita-thumbnailer_helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,8 +353,8 @@
 				84D651082560370B00CC2E75 /* quicklook */,
 				84D651182560371600CC2E75 /* spotlight */,
 				84B7B62C25619404003662DB /* krita-thumbnailer */,
-				114946482EA5593D00515C4C /* previewHelper */,
-				114946872EA6C47200515C4C /* krita-preview */,
+				110986382ED0DE3F00C1ECC8 /* previewHelper */,
+				110986422ED0DE4400C1ECC8 /* krita-preview */,
 				84D650F9256036F000CC2E75 /* Products */,
 				84A059902560A72500E4EAFD /* Frameworks */,
 			);
@@ -450,9 +468,6 @@
 				114946552EA561DD00515C4C /* PBXTargetDependency */,
 				114946912EA6C47200515C4C /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				114946482EA5593D00515C4C /* previewHelper */,
-			);
 			name = previewHelper;
 			packageProductDependencies = (
 			);
@@ -491,9 +506,6 @@
 			dependencies = (
 				114946992EA6C49700515C4C /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				114946872EA6C47200515C4C /* krita-preview */,
-			);
 			name = "krita-preview";
 			packageProductDependencies = (
 			);
@@ -513,9 +525,6 @@
 			);
 			dependencies = (
 				1149469D2EA7079600515C4C /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				114946872EA6C47200515C4C /* krita-preview */,
 			);
 			name = "krita-preview_helper";
 			packageProductDependencies = (
@@ -661,6 +670,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1109863B2ED0DE3F00C1ECC8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -675,6 +685,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1109864A2ED0DE4400C1ECC8 /* PreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -682,6 +693,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110986452ED0DE4400C1ECC8 /* Info.plist in Resources */,
+				110986462ED0DE4400C1ECC8 /* PreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +726,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110986392ED0DE3F00C1ECC8 /* ContentView.swift in Sources */,
+				1109863A2ED0DE3F00C1ECC8 /* previewHelperApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -728,6 +743,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110986472ED0DE4400C1ECC8 /* PreviewProvider.swift in Sources */,
+				110986482ED0DE4400C1ECC8 /* PreviewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,6 +752,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110986432ED0DE4400C1ECC8 /* PreviewProvider.swift in Sources */,
+				110986442ED0DE4400C1ECC8 /* PreviewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -819,6 +838,17 @@
 			targetProxy = 84D505E6256086D0005AFC55 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		110986412ED0DE4400C1ECC8 /* PreviewViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				110986402ED0DE4400C1ECC8 /* Base */,
+			);
+			name = PreviewViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		114946502EA5594000515C4C /* Debug */ = {

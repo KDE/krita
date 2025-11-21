@@ -17,6 +17,8 @@ set(krita_SRCS main.cc)
 if (NOT APPLE)
 	file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/*-apps-krita.png")
 else()
+    # XCode below 26 cannot work with .icon format
+    if(${XCODE_VERSION} VERSION_GREATER_EQUAL "26.0")
         find_program(XCRUN_EXECUTABLE NAMES xcrun)
         set(KRITA_ASSETS_ICON "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/krita.icon")
         cmake_path(SET ASSETS_PATH "${CMAKE_CURRENT_BINARY_DIR}/assets")
@@ -35,6 +37,17 @@ else()
             "${KRITA_ASSETS_ICON}"
           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+    else()
+        set(ICON_SRCS
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/16-apps-krita.png"
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/32-apps-krita.png"
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/48-apps-krita.png"
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/128-apps-krita.png"
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/256-apps-krita.png"
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/512-apps-krita.png"
+             "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/1024-apps-krita.png"
+        )
+    endif() # XCode version
 endif()
 
 if (WIN32)
@@ -65,7 +78,11 @@ if (WIN32)
         DESTINATION ${CMAKE_INSTALL_PREFIX}/installer
     )
 elseif(APPLE)
-    set_source_files_properties(${ASSETS_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    if(${XCODE_VERSION} VERSION_GREATER_EQUAL "26.0")
+      set_source_files_properties(${ASSETS_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    else()
+      ecm_add_app_icon(krita_SRCS OUTFILE_BASENAME krita ICONS ${ICON_SRCS})
+    endif()
 else()
     ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 endif()
@@ -153,7 +170,6 @@ if (APPLE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING ${KRITA_VERSION_NUMBER_STRING})
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION ${KRITA_VERSION_NUMBER_STRING})
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_COPYRIGHT "GNU Public License, V2 or, at your option, any later version.")
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 endif ()
 
 if (NOT ANDROID)
@@ -186,8 +202,12 @@ if(APPLE)
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
     set_source_files_properties(${KRITA_ASSET_KRZ_ICNS} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
     # make krita depend on assets icons
-    target_sources(krita PRIVATE ${ASSETS_FILES} ${KRITA_ASSET_KRZ_ICNS})
+    if(${XCODE_VERSION} VERSION_GREATER_EQUAL "26.0")
+      target_sources(krita PRIVATE ${ASSETS_FILES})
+    endif()
+    target_sources(krita PRIVATE ${KRITA_ASSET_KRZ_ICNS})
 
     install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS} BUNDLE DESTINATION bin)
 else()

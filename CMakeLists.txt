@@ -86,6 +86,13 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 if (APPLE)
     add_subdirectory(packaging/macos)
+
+    if(NOT CMAKE_GENERATOR MATCHES "Xcode")
+      execute_process(COMMAND
+        xcodebuild -version -sdk macosx ProductVersion
+        OUTPUT_VARIABLE XCODE_VERSION)
+    endif()
+    message(STATUS "XCode version: ${XCODE_VERSION}")
     set(MACOSX_RPATH TRUE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)

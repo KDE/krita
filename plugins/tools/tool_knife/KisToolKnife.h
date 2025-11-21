@@ -68,7 +68,7 @@ public:
         : KisToolPaintFactoryBase("KritaShape/KisToolKnife")
     {
 
-        setToolTip(i18n("Knife Tool"));
+        setToolTip(i18n("Comic Panel Editing Tool"));
 
         setSection(ToolBoxSection::Main);
         setIconName(koIconNameCStr("tool_comic_panel"));

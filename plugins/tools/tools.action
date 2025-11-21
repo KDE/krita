@@ -189,5 +189,15 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+	<Action name="KritaShape/KisToolKnife">
+      <icon>tool_comic_panel</icon>
+      <text>Comic Panel Editing Tool</text>
+      <whatsThis/>
+      <toolTip>Comic Panel Editing Tool</toolTip>
+      <iconText>Comic Panel Editing Tool</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
   </Actions>
 </ActionCollection>

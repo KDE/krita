@@ -271,6 +271,26 @@ The usage of timers, compressors and QTimer::singleShot()
        ones, if their timeout is less or equal 20. Which can also consume all
        the available precise timers.
 
+Class template argument deduction (CTAD) (since C++17)
+
+    C++17 allows automatical deduction of class template arguments for the class
+    constructors. I.e. you can write
+
+    QList list({QPointF(), QPointF(), QPointF()});
+
+    and template arguments for the QList template will be deduced automatically.
+
+    You can use this feature in new code, given the style of the whole file is
+    consistent.
+
+    WARNING for Qt6 and QVector:
+
+        Do **NOT** use CTAD for QVector until we switch to C++20! In Qt6 QVector is
+        declared as an alias for QList, and CTAD for aliases is a C++20 feature!
+
+        The code **will** compile with GCC on Linux even with `--std=c++17`, but
+        will fail to compile with Clang on Windows, Android and MacOS.
+
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.
 

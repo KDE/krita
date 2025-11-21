@@ -604,10 +604,10 @@ inline QList<QRectF> cutOutSubgridFromBounds(QRect subGrid, QRect srcBounds, con
     // *-----------*
 
 
-    QRectF top = QRectF(srcBounds.topLeft(), QPointF(srcBounds.right(), topLeftReal.y()));
-    QRectF bottom = QRectF(QPointF(srcBounds.left(), bottomRightReal.y()), srcBounds.bottomRight());
+    QRectF top = QRectF(srcBounds.topLeft(), QPointF(srcBounds.right() + 1, topLeftReal.y()));
+    QRectF bottom = QRectF(QPointF(srcBounds.left(), bottomRightReal.y()), srcBounds.bottomRight() + QPointF(1, 1));
     QRectF left = QRectF(QPointF(srcBounds.left(), cutOut.top()), QPointF(cutOut.left(), cutOut.bottom()));
-    QRectF right = QRectF(QPointF(cutOut.right(), cutOut.top()), QPointF(srcBounds.right(), cutOut.bottom()));
+    QRectF right = QRectF(QPointF(cutOut.right(), cutOut.top()), QPointF(srcBounds.right() + 1, cutOut.bottom()));
     QList<QRectF> rects = {top, left, right, bottom};
     for (int i = 0; i < rects.length(); i++) {
         if (!rects[i].isEmpty()) {

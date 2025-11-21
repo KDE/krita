@@ -193,4 +193,16 @@ void KisGridInterpolationToolsTest::testGetOrthogonalPointApproximation()
 
 
 
+void KisGridInterpolationToolsTest::testQImagePolygonOpStructFastAreaCopy()
+{
+    QImage srcImage(TestUtil::fetchDataFileLazy("test_grid_iteration_tools_qimage_fast_area_copy.png"));
+    QImage dstImage(srcImage.size(), srcImage.format());
+
+    GridIterationTools::QImagePolygonOp op(srcImage, dstImage, QPointF(), QPointF(-100, 100));
+    op.fastCopyArea(QRectF(QPointF(), srcImage.size()));
+
+    //dstImage.save("fast_area_copy_result.png");
+}
+
+
 SIMPLE_TEST_MAIN(KisGridInterpolationToolsTest)

@@ -293,12 +293,99 @@ struct QImagePolygonOp
     {
     }
 
+    void fastCopyArea(QPolygonF areaToCopy) {
+        QRect boundRect = areaToCopy.boundingRect().toAlignedRect();
+
+        if (boundRect.isEmpty()) return;
+
+        bool isItRect = KisAlgebra2D::isPolygonRect(areaToCopy, m_epsilon); // no need for lower tolerance
+        if (isItRect) {
+            fastCopyArea(boundRect);
+            return;
+        }
+
+        // this can possibly be optimized with scanlining the polygon
+        // (use intersectLineConvexPolygon to get a line at every height)
+        // but it doesn't matter much because in the vast majority of cases
+        // it should go straight to the rect area copying
+
+        for (int y = boundRect.top(); y <= boundRect.bottom(); y++) {
+            for (int x = boundRect.left(); x <= boundRect.right(); x++) {
+                QPointF dstPoint = QPointF(x, y);
+                QPointF srcPoint = dstPoint;
+
+                if (areaToCopy.containsPoint(srcPoint, Qt::OddEvenFill)) {
+
+                    // about srcPoint/dstPoint hell please see a
+                    // comment in PaintDevicePolygonOp::operator() ()
+
+                    srcPoint -= m_dstImageOffset;
+                    dstPoint -= m_srcImageOffset;
+
+                    QPoint srcPointI = srcPoint.toPoint();
+                    QPoint dstPointI = dstPoint.toPoint();
+
+                    if (!m_dstImageRect.contains(srcPointI)) continue;
+                    if (!m_srcImageRect.contains(dstPointI)) continue;
+
+                    m_dstImage.setPixel(srcPointI, m_srcImage.pixel(dstPointI));
+                }
+
+            }
+        }
+
+    }
+
+    void fastCopyArea(QRect areaToCopy) {
+
+        // only handling saved offsets
+        QRect srcArea = areaToCopy.translated(-m_srcImageOffset.toPoint());
+        QRect dstArea = areaToCopy.translated(-m_dstImageOffset.toPoint());
+
+        srcArea = srcArea.intersected(m_srcImageRect);
+        dstArea = dstArea.intersected(m_dstImageRect);
+
+        // it might look pointless but it cuts off unneeded areas on both rects based on where they end up
+        // since *I know* they are the same rectangle before translation
+        // TODO: I'm pretty sure this logic is correct, but let's check it when I'm less sleepy
+        QRect srcAreaUntranslated = srcArea.translated(m_srcImageOffset.toPoint());
+        QRect dstAreaUntranslated = dstArea.translated(m_dstImageOffset.toPoint());
+
+        QRect actualCopyArea = srcAreaUntranslated.intersected(dstAreaUntranslated);
+        srcArea = actualCopyArea.translated(-m_srcImageOffset.toPoint());
+        dstArea = actualCopyArea.translated(-m_dstImageOffset.toPoint());
+
+        int bytesPerPixel = m_srcImage.sizeInBytes()/m_srcImage.height()/m_srcImage.width();
+
+        int srcX = srcArea.left()*bytesPerPixel;
+        int dstX = dstArea.left()*bytesPerPixel;
+
+        for (int srcY = srcArea.top(); srcY <= srcArea.bottom(); ++srcY) {
+
+            int dstY = dstArea.top() + srcY - srcArea.top();
+            const uchar *srcLine = m_srcImage.constScanLine(srcY);
+            uchar *dstLine = m_dstImage.scanLine(dstY);
+            memcpy(dstLine + dstX, srcLine + srcX, srcArea.width()*bytesPerPixel);
+
+        }
+    }
+
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
         this->operator() (srcPolygon, dstPolygon, dstPolygon);
     }
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
+
+        bool samePolygon = m_dstImage.format() == m_srcImage.format() && KisAlgebra2D::fuzzyPointCompare(srcPolygon, dstPolygon, m_epsilon);
+
+        if (samePolygon) {
+            // we can use clipDstPolygon here, because it will be smaller than dstPolygon and srcPolygon, because of how IncompletePolicy works
+            // we could also calculate intersection here if we're worried whether that fact is always true
+            fastCopyArea(clipDstPolygon);
+            return;
+        }
+
         KisFourPointInterpolatorBackward interp(srcPolygon, dstPolygon);
 
         for (int y = boundRect.top(); y <= boundRect.bottom(); y++) {
@@ -350,6 +437,8 @@ struct QImagePolygonOp
 
     QRect m_srcImageRect;
     QRect m_dstImageRect;
+
+    const qreal m_epsilon {0.1};
 };
 
 /*************************************************************/

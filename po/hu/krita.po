@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-20 02:00+0000\n"
+"POT-Creation-Date: 2025-11-21 02:04+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -8032,6 +8032,159 @@ msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+
+#. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:332
+#, fuzzy, kde-format
+#| msgid "Text Shape"
+msgctxt "action"
+msgid "Flow Text in Shape"
+msgstr "Szöveg alakzat"
+
+#. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:333
+#, fuzzy, kde-format
+#| msgid "Click to select text shape."
+msgctxt "action"
+msgid "Make the first selected text flow in shape."
+msgstr "Kattintson a szöveges alakzat kiválasztásához."
+
+#. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:342
+#, kde-format
+msgctxt "action"
+msgid "Subtract Shape from Text Flow Area"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:343
+#, kde-format
+msgctxt "action"
+msgid "Make shapes part of the subtracted shapes of the first selected text."
+msgstr ""
+
+#. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:352
+#, fuzzy, kde-format
+#| msgid "Text On Path"
+msgctxt "action"
+msgid "Put Text On Path"
+msgstr "Szöveg nyomvonalon"
+
+#. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:353
+#, kde-format
+msgctxt "action"
+msgid "Make the first selected text flow onto the first selected path."
+msgstr ""
+
+#. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:362
+#, fuzzy, kde-format
+#| msgid "Remove Shape Collection"
+msgctxt "action"
+msgid "Remove Shapes from Text Flow"
+msgstr "Forma gyűjtemény eltávolítása"
+
+#. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:363
+#, kde-format
+msgctxt "action"
+msgid "Remove shapes from text flow and add them to the layer."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:372
+#: krita/data/actions/InteractionTool.action:378
+#, fuzzy, kde-format
+#| msgid "Layer is invisible."
+msgctxt "action"
+msgid "Toggle Flow Shape Type"
+msgstr "A réteg láthatatlan."
+
+#. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:373
+#, kde-format
+msgctxt "action"
+msgid "Switch the current Flow Shape between Inside or Subtract mode"
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:382
+#: krita/data/actions/InteractionTool.action:388
+#, kde-format
+msgctxt "action"
+msgid "Set Flow Shape as Last"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:383
+#, kde-format
+msgctxt "action"
+msgid ""
+"Make this flow shape the last in the flow shape order as used by text layout."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:391
+#: krita/data/actions/InteractionTool.action:397
+#, fuzzy, kde-format
+#| msgid "Decrease Value"
+msgctxt "action"
+msgid "Decrease Flow Shape Index"
+msgstr "Érték csökkentése"
+
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:392
+#: krita/data/actions/InteractionTool.action:401
+#, kde-format
+msgctxt "action"
+msgid "Make this flow shape be evaluated later."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:400
+#: krita/data/actions/InteractionTool.action:406
+#, fuzzy, kde-format
+#| msgid "Increase Value"
+msgctxt "action"
+msgid "Increase Flow Shape Index"
+msgstr "Érték növelése"
+
+#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:409
+#: krita/data/actions/InteractionTool.action:415
+#, kde-format
+msgctxt "action"
+msgid "Set Flow Shape as First"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:410
+#, kde-format
+msgctxt "action"
+msgid ""
+"Make this flow shape the first in the flow shape order as used by text "
+"layout."
 msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16523,8 +16676,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:508
-#: libs/ui/KisApplication.cpp:790
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:507
+#: libs/ui/KisApplication.cpp:789
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16697,7 +16850,7 @@ msgstr "Paraméter módosítása"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:311
+#: libs/flake/tools/KoPathTool.cpp:314
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Átalakítás útvonallá"
@@ -16712,7 +16865,7 @@ msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "Útvonalak kombinálása"
 
-#: libs/flake/commands/KoPathControlPointMoveCommand.cpp:29
+#: libs/flake/commands/KoPathControlPointMoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr "Vezérlőpont mozgatása"
@@ -16727,8 +16880,8 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "Pontok beszúrása"
 
-#: libs/flake/commands/KoPathPointMoveCommand.cpp:30
-#: libs/flake/commands/KoPathPointMoveCommand.cpp:46
+#: libs/flake/commands/KoPathPointMoveCommand.cpp:31
+#: libs/flake/commands/KoPathPointMoveCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr "Pontok mozgatása"
@@ -16767,7 +16920,7 @@ msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Szegmensek átalakítása vonalakká"
 
-#: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
+#: libs/flake/commands/KoPathShapeMarkerCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "Jelölő beállítása"
@@ -16823,7 +16976,7 @@ msgstr "Alakzatok felosztása"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Alakzatok csoportosítása"
@@ -16843,14 +16996,14 @@ msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Alakzatok zárolása"
 
-#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:27
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
 msgstr "Új réteg tulajdonságok"
 
-#: libs/flake/commands/KoShapeMoveCommand.cpp:24
-#: libs/flake/commands/KoShapeMoveCommand.cpp:36
+#: libs/flake/commands/KoShapeMoveCommand.cpp:26
+#: libs/flake/commands/KoShapeMoveCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr "Alakzatok mozgatása"
@@ -16879,18 +17032,6 @@ msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr "Átméretezés"
 
-#: libs/flake/commands/KoShapeRunAroundCommand.cpp:58
-msgctxt "(qtundo-format)"
-msgid "Change Shape RunAround"
-msgstr "Alakzat körbefuttatásának módosítása"
-
-#: libs/flake/commands/KoShapeShadowCommand.cpp:54
-#: libs/flake/commands/KoShapeShadowCommand.cpp:71
-#: libs/flake/commands/KoShapeShadowCommand.cpp:82
-msgctxt "(qtundo-format)"
-msgid "Set Shadow"
-msgstr "Árnyék beállítása"
-
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
@@ -16901,9 +17042,9 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Alakzatok átméretezése"
 
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:54
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:73
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:84
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:55
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:74
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Körvonal beállítása"
@@ -16926,7 +17067,7 @@ msgid "Unclip Shapes"
 msgstr "Alakzatok kivágásának visszavonása"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Alakzatcsoport felbontása"
@@ -16941,7 +17082,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Részútvonal törlése"
 
-#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:15
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Image Type"
@@ -16972,7 +17113,7 @@ msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:579
+#: libs/ui/flake/kis_shape_layer.cc:577
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -17025,7 +17166,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Stílus"
 
-#: libs/flake/svg/SvgParser.cpp:1896
+#: libs/flake/svg/SvgParser.cpp:1704
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -20911,35 +21052,35 @@ msgctxt "@title"
 msgid "Character Variant %1"
 msgstr "Változat (%1)"
 
-#: libs/flake/text/KoSvgTextShape.cpp:150
-#: libs/flake/text/KoSvgTextShape.cpp:2030
+#: libs/flake/text/KoSvgTextShape.cpp:169
+#: libs/flake/text/KoSvgTextShape.cpp:2584
 #, fuzzy, kde-format
 #| msgid "Find Text"
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Keresés"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2009
+#: libs/flake/text/KoSvgTextShape.cpp:2563
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2011
-#: libs/flake/text/KoSvgTextShape.cpp:2019
+#: libs/flake/text/KoSvgTextShape.cpp:2565
+#: libs/flake/text/KoSvgTextShape.cpp:2573
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Szöveg alakzat"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2017
+#: libs/flake/text/KoSvgTextShape.cpp:2571
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Szöveg:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2040
+#: libs/flake/text/KoSvgTextShape.cpp:2594
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20972,42 +21113,42 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Szegmens módosítása"
 
-#: libs/flake/tools/KoPathTool.cpp:127
+#: libs/flake/tools/KoPathTool.cpp:130
 #, fuzzy, kde-format
 #| msgid "Add Shape"
 msgid "Edit Shape"
 msgstr "Forma hozzáadása"
 
-#: libs/flake/tools/KoPathTool.cpp:620
+#: libs/flake/tools/KoPathTool.cpp:633
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Húzza a fogópont mozgatásához."
 
-#: libs/flake/tools/KoPathTool.cpp:674
+#: libs/flake/tools/KoPathTool.cpp:687
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Húzza a pont mozgatásához. Shift+kattintás: a ponttípus módosítása."
 
-#: libs/flake/tools/KoPathTool.cpp:676
+#: libs/flake/tools/KoPathTool.cpp:689
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Húzza a vezérlési pont mozgatásához."
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:712
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Húzza a görbe közvetlen módosításához. Dupla kattintással új útpontot "
 "szúrhat be."
 
-#: libs/flake/tools/KoPathTool.cpp:709
+#: libs/flake/tools/KoPathTool.cpp:722
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "A B-billentyűvel megtörhető az útvonal a kijelölt ponton."
 
-#: libs/flake/tools/KoPathTool.cpp:711
+#: libs/flake/tools/KoPathTool.cpp:724
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"
@@ -22107,7 +22248,7 @@ msgstr "A &réteg színterének átalakítása…"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:339
+#: libs/ui/flake/kis_shape_layer.cc:337
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -22492,13 +22633,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "Oldalelrendezés"
 
-#: libs/image/krita_utils.cpp:359
+#: libs/image/krita_utils.cpp:276
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "ki"
 
-#: libs/image/krita_utils.cpp:359
+#: libs/image/krita_utils.cpp:276
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"
@@ -22644,7 +22785,7 @@ msgid "Clone Layer"
 msgstr "Réteg &klónozása"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1627
+#: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22690,7 +22831,7 @@ msgid "Transform Mask"
 msgstr "Átalakítás"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1389
+#: libs/ui/kis_node_manager.cpp:1392
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24476,11 +24617,11 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
-#: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
-#: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
-#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1187 libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1235 libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1277 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -24489,7 +24630,7 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
-#: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
+#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
@@ -24814,100 +24955,94 @@ msgstr "Sarok összekapcsolás"
 msgid "Invalid"
 msgstr "Érvénytelen"
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:44
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr "Előre beállított ecsetek"
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:45
 #, fuzzy, kde-format
 #| msgid "Brush Tip"
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr "Ecset hegye"
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "Színátmenetek"
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:47
 #, kde-format
 msgctxt "resource type"
 msgid "Palettes"
 msgstr "Paletták"
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:48
 #, kde-format
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "Minták"
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:49
 #, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:50
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr "Szimbólumkönyvtárak"
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:51
 #, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr "Ablakelrendezések"
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
 msgctxt "resource type"
 msgid "Sessions"
 msgstr "Munkamenetek"
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:53
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr "Skálamaszkok"
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:54
 #, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr "SeExpr szkriptek"
 
-#: libs/resources/KisResourceTypes.cpp:56
-#, kde-format
-msgctxt "resource type"
-msgid "Filter Effects"
-msgstr "Szűrőeffektusok"
-
-#: libs/resources/KisResourceTypes.cpp:57
+#: libs/resources/KisResourceTypes.cpp:55
 #, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr "Feladatkészletek"
 
-#: libs/resources/KisResourceTypes.cpp:58
+#: libs/resources/KisResourceTypes.cpp:56
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "Rétegstílusok"
 
-#: libs/resources/KisResourceTypes.cpp:59
+#: libs/resources/KisResourceTypes.cpp:57
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgctxt "resource type"
 msgid "Font Families"
 msgstr "Betűcsalád"
 
-#: libs/resources/KisResourceTypes.cpp:60
+#: libs/resources/KisResourceTypes.cpp:58
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "resource type"
@@ -27121,7 +27256,7 @@ msgstr "Verzió"
 msgid "None"
 msgstr "Nincs"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1457
+#: libs/ui/canvas/kis_canvas2.cpp:1534
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -27751,10 +27886,6 @@ msgid "Tool Icon"
 msgstr "Eszközikon"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:220
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:289
 #, kde-format
 msgid "Arrow"
 msgstr "Nyíl"
@@ -33048,7 +33179,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:447
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
 #, kde-format
 msgid "Sessions"
 msgstr "Munkamenetek"
@@ -34610,7 +34741,7 @@ msgstr "Háttérszín"
 msgid "&Docker Box"
 msgstr "&Dokkoló"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:443
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34624,8 +34755,8 @@ msgstr "Minták"
 msgid "Custom Pattern"
 msgstr "Egyéni minta"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:428
-#: libs/ui/KisApplication.cpp:429
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34923,90 +35054,90 @@ msgstr "Nézet tükrözése"
 msgid "Mirror View Around Canvas"
 msgstr "Nézet tükrözése"
 
-#: libs/ui/kis_node_manager.cpp:485
+#: libs/ui/kis_node_manager.cpp:488
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked"
 msgstr "A réteg zárolt."
 
-#: libs/ui/kis_node_manager.cpp:487 libs/ui/kis_node_manager.cpp:512
+#: libs/ui/kis_node_manager.cpp:490 libs/ui/kis_node_manager.cpp:515
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer \"%1\" is locked"
 msgstr "A réteg zárolt."
 
-#: libs/ui/kis_node_manager.cpp:540
+#: libs/ui/kis_node_manager.cpp:543
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Elmozgatás"
 
-#: libs/ui/kis_node_manager.cpp:547
+#: libs/ui/kis_node_manager.cpp:550
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "%1 másolata"
 
-#: libs/ui/kis_node_manager.cpp:554
+#: libs/ui/kis_node_manager.cpp:557
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Erőforrások hozzáadása"
 
-#: libs/ui/kis_node_manager.cpp:726
+#: libs/ui/kis_node_manager.cpp:729
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Átalakítás kijelölési maszkká"
 
-#: libs/ui/kis_node_manager.cpp:772
+#: libs/ui/kis_node_manager.cpp:775
 #, fuzzy, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:776
 #, fuzzy, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/kis_node_manager.cpp:1027
+#: libs/ui/kis_node_manager.cpp:1030
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1057
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplikáló"
 
-#: libs/ui/kis_node_manager.cpp:1079
+#: libs/ui/kis_node_manager.cpp:1082
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Elmozgatás"
 
-#: libs/ui/kis_node_manager.cpp:1088
+#: libs/ui/kis_node_manager.cpp:1091
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Elmozgatás"
 
-#: libs/ui/kis_node_manager.cpp:1108
+#: libs/ui/kis_node_manager.cpp:1111
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Elmozgatás"
 
-#: libs/ui/kis_node_manager.cpp:1124
+#: libs/ui/kis_node_manager.cpp:1127
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Réteg tükrözése vízszintesen"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1130
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -35014,13 +35145,13 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Réteg tükrözése vízszintesen"
 msgstr[1] "Réteg tükrözése vízszintesen"
 
-#: libs/ui/kis_node_manager.cpp:1138
+#: libs/ui/kis_node_manager.cpp:1141
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Réteg tükrözése függőlegesen"
 
-#: libs/ui/kis_node_manager.cpp:1141
+#: libs/ui/kis_node_manager.cpp:1144
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -35028,105 +35159,105 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Réteg tükrözése függőlegesen"
 msgstr[1] "Réteg tükrözése függőlegesen"
 
-#: libs/ui/kis_node_manager.cpp:1149
+#: libs/ui/kis_node_manager.cpp:1152
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Réteg tükrözése vízszintesen"
 
-#: libs/ui/kis_node_manager.cpp:1156
+#: libs/ui/kis_node_manager.cpp:1159
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Réteg tükrözése függőlegesen"
 
-#: libs/ui/kis_node_manager.cpp:1288
+#: libs/ui/kis_node_manager.cpp:1291
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Exportálás"
 
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1318
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/kis_node_manager.cpp:1333
+#: libs/ui/kis_node_manager.cpp:1336
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "A csoport nem szerkeszthető."
 
-#: libs/ui/kis_node_manager.cpp:1357
+#: libs/ui/kis_node_manager.cpp:1360
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportálás"
 
-#: libs/ui/kis_node_manager.cpp:1377
+#: libs/ui/kis_node_manager.cpp:1380
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/kis_node_manager.cpp:1402
+#: libs/ui/kis_node_manager.cpp:1405
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "A csoport nem szerkeszthető."
 
-#: libs/ui/kis_node_manager.cpp:1403
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1434
+#: libs/ui/kis_node_manager.cpp:1437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Új masz vagy réteg létrehozása"
 
-#: libs/ui/kis_node_manager.cpp:1574
+#: libs/ui/kis_node_manager.cpp:1577
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Duplikáló"
 
-#: libs/ui/kis_node_manager.cpp:1657
+#: libs/ui/kis_node_manager.cpp:1660
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Csoport felbontása"
 
-#: libs/ui/kis_node_manager.cpp:1668
+#: libs/ui/kis_node_manager.cpp:1671
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Csoport felbontása"
 
-#: libs/ui/kis_node_manager.cpp:1675
+#: libs/ui/kis_node_manager.cpp:1678
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Csoport felbontása"
 
-#: libs/ui/kis_node_manager.cpp:1676
+#: libs/ui/kis_node_manager.cpp:1679
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Festőréteg"
 
-#: libs/ui/kis_node_manager.cpp:1703
+#: libs/ui/kis_node_manager.cpp:1706
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1706
+#: libs/ui/kis_node_manager.cpp:1709
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1714
+#: libs/ui/kis_node_manager.cpp:1717
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -35584,22 +35715,22 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Nagyítás: %1 %"
 
-#: libs/ui/KisApplication.cpp:420
+#: libs/ui/KisApplication.cpp:419
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Előre beállított ecsetek"
 
-#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
-#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
+#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "Ecset hegye"
 
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -35607,7 +35738,7 @@ msgstr "Ecset hegye"
 msgid "Palettes"
 msgstr "Paletták"
 
-#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -35615,48 +35746,48 @@ msgstr "Paletták"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: libs/ui/KisApplication.cpp:445
+#: libs/ui/KisApplication.cpp:444
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektor réteg"
 
-#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Ablakelrendezések"
 
-#: libs/ui/KisApplication.cpp:448
+#: libs/ui/KisApplication.cpp:447
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Kráterek"
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:449
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Alsó index"
 
-#: libs/ui/KisApplication.cpp:455
+#: libs/ui/KisApplication.cpp:454
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Rétegméret"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:457
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Betűcsalád"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:458
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgid "Style Presets"
 msgstr "Előre beállítottak szerkesztése"
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:470
 #, kde-format
 msgid ""
 "%1\n"
@@ -35667,13 +35798,13 @@ msgstr ""
 "\n"
 "A Krita kilép."
 
-#: libs/ui/KisApplication.cpp:471 libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:470 libs/ui/KisApplication.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Végzetes hiba"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:476
 #, kde-format
 msgid ""
 "\n"
@@ -35684,7 +35815,7 @@ msgstr ""
 "\n"
 "A Krita kilép."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:508
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35695,67 +35826,67 @@ msgstr ""
 "Ez nem javasolt.\n"
 "Kérjük töltse le és telepítse helyette az x64-es verziót."
 
-#: libs/ui/KisApplication.cpp:526
+#: libs/ui/KisApplication.cpp:525
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "Erőforrások kezelése"
 
-#: libs/ui/KisApplication.cpp:558
+#: libs/ui/KisApplication.cpp:557
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Erőforrások hozzáadása"
 
-#: libs/ui/KisApplication.cpp:562
+#: libs/ui/KisApplication.cpp:561
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Előre definiált ecsetek"
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:567
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Erőforráscsomagok kezelése…"
 
-#: libs/ui/KisApplication.cpp:577
+#: libs/ui/KisApplication.cpp:576
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Követési beállítások módosítása"
 
-#: libs/ui/KisApplication.cpp:609
+#: libs/ui/KisApplication.cpp:608
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "A ké&p nyírása..."
 
-#: libs/ui/KisApplication.cpp:682
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:743
+#: libs/ui/KisApplication.cpp:742
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisApplication.cpp:771 libs/ui/KisApplication.cpp:1044
+#: libs/ui/KisApplication.cpp:770 libs/ui/KisApplication.cpp:1043
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Fájlréteg…"
 
-#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:784
-#: libs/ui/KisApplication.cpp:1038 libs/ui/KisApplication.cpp:1052
-#: libs/ui/KisApplication.cpp:1057
+#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:783
+#: libs/ui/KisApplication.cpp:1037 libs/ui/KisApplication.cpp:1051
+#: libs/ui/KisApplication.cpp:1056
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Figyelmeztetés"
 
-#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:1053
+#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:1052
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Nem vehető fel szín, ha az aktív réteg nem látható."
 
-#: libs/ui/KisApplication.cpp:785
+#: libs/ui/KisApplication.cpp:784
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35768,7 +35899,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:791
+#: libs/ui/KisApplication.cpp:790
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35776,33 +35907,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1038
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Nem sikerült megnyitni a fájlt: %1"
 
-#: libs/ui/KisApplication.cpp:1058
+#: libs/ui/KisApplication.cpp:1057
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add the file layer: no document is open."
 msgstr "Nem vehető fel szín, ha az aktív réteg nem látható."
 
-#: libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1185
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "%1 tulajdonságai"
 
-#: libs/ui/KisApplication.cpp:1189
+#: libs/ui/KisApplication.cpp:1188
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Túl sok sablon található ehhez: %1"
 
-#: libs/ui/KisApplication.cpp:1205
+#: libs/ui/KisApplication.cpp:1204
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "LUT fájl kiválasztása"
 
-#: libs/ui/KisApplication.cpp:1237
+#: libs/ui/KisApplication.cpp:1236
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35812,7 +35943,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1251
+#: libs/ui/KisApplication.cpp:1250
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35820,7 +35951,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1279
+#: libs/ui/KisApplication.cpp:1278
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -36884,14 +37015,14 @@ msgid ""
 "Reason: %2"
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/KisReferenceImage.cpp:114
+#: libs/ui/KisReferenceImage.cpp:113
 #, fuzzy
 #| msgid "Saturation"
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
 msgstr "Telítettség"
 
-#: libs/ui/KisReferenceImage.cpp:176
+#: libs/ui/KisReferenceImage.cpp:175
 #, fuzzy, kde-format
 msgid "Could not load %1."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
@@ -38295,7 +38426,7 @@ msgstr "Kijelölés díszítés"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -41052,26 +41183,6 @@ msgstr "Bal oldali behúzás"
 #, kde-format
 msgid "Right indent"
 msgstr "Jobb oldali behúzás"
-
-#: libs/widgets/KoShadowConfigWidget.cpp:55
-#, kde-format
-msgid "Change the color of the shadow"
-msgstr "Az árnyék színének módosítása"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/widgets/KoShadowConfigWidget.ui:71
-#, kde-format
-msgid "Blur:"
-msgstr "Elmosás:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/widgets/KoShadowConfigWidget.ui:88
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
-#: plugins/tools/basictools/kis_tool_measure.cc:47
-#, kde-format
-msgid "Distance:"
-msgstr "Távolság:"
 
 #: libs/widgets/KoToolDocker.cpp:148
 #, kde-format
@@ -47813,6 +47924,41 @@ msgctxt "@label:listbox"
 msgid "Text Anchor:"
 msgstr "Szövegszín:"
 
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
+#, fuzzy, kde-format
+#| msgid "Texture"
+msgctxt "@label:title"
+msgid "Text Area"
+msgstr "Mintázat"
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Options for modifying the text area padding and margins."
+msgstr ""
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
+#, kde-format
+msgctxt ""
+"comma separated search terms for the text-area property, matching is case-"
+"insensitive"
+msgid "text-in-shape, padding, margin"
+msgstr ""
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
+#, fuzzy, kde-format
+#| msgid "Shape creation:"
+msgctxt "@label:spinbox"
+msgid "Shape Padding: "
+msgstr "Alakzat létrehozás:"
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
+#, fuzzy, kde-format
+#| msgid "Shape creation:"
+msgctxt "@label:spinbox"
+msgid "Shape Margin: "
+msgstr "Alakzat létrehozás:"
+
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, fuzzy, kde-format
 #| msgid "Decoration:"
@@ -47985,27 +48131,27 @@ msgctxt "@label:button"
 msgid "Clone Style Preset"
 msgstr "Új stílus"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:303
 #, fuzzy, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Szűrő:"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:325
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:329
 #, fuzzy, kde-format
 #| msgid "Add sort key"
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "Gyorsbillentyű hozzáadása"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:343
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:347
 #, fuzzy, kde-format
 #| msgid "Properties..."
 msgctxt "@info:placeholder"
 msgid "Add Property..."
 msgstr "Tulajdonságok…"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:424
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:428
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@label:button"
@@ -54067,70 +54213,6 @@ msgstr "Ellipszis bezárása"
 msgid "An ellipse"
 msgstr "Egy ellipszis"
 
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:26
-#, kde-format
-msgid "An enhanced path shape"
-msgstr "Egy kiterjesztett útvonal alakzat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:28
-#, kde-format
-msgid "An enhanced path"
-msgstr "Egy kiterjesztett útvonal"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:151
-#, kde-format
-msgid "Cross"
-msgstr "Kereszt"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:153
-#, kde-format
-msgid "A cross"
-msgstr "Egy kereszt"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:189
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:223
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:257
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:291
-#, kde-format
-msgid "An arrow"
-msgstr "Egy nyíl"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:368
-#, kde-format
-msgid "Callout"
-msgstr "Kihívás"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:370
-#, kde-format
-msgid "A callout"
-msgstr "Egy kihívás"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:414
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:416
-#, kde-format
-msgid "Smiley"
-msgstr "Mosoly"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:494
-#, kde-format
-msgid "Circular Arrow"
-msgstr "Körkörös nyíl"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:496
-#, kde-format
-msgid "A circular-arrow"
-msgstr "Egy körkörös-nyíl"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:539
-#, kde-format
-msgid "Gearhead"
-msgstr "Sebességfej"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:541
-#, kde-format
-msgid "A gearhead"
-msgstr "Egy sebességfej"
-
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
@@ -54475,6 +54557,13 @@ msgstr "Színek előzményei"
 #, fuzzy, kde-format
 msgid "Polar Coordinates"
 msgstr "Színek előzményei"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
+#: plugins/tools/basictools/kis_tool_measure.cc:47
+#, kde-format
+msgid "Distance:"
+msgstr "Távolság:"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:36
 #, fuzzy, kde-format
@@ -67058,7 +67147,66 @@ msgstr "Belső"
 msgid "Interval Y:"
 msgstr "Belső"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Add shapes to group"
+msgctxt "(qtundo-format)"
+msgid "Add shapes to text flow."
+msgstr "Alakzatok hozzáadása a csoporthoz"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#, fuzzy
+#| msgid "Text On Path"
+msgctxt "(qtundo-format)"
+msgid "Put Text On Path"
+msgstr "Szöveg nyomvonalon"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Subtract shapes from text flow."
+msgstr "Alakzatok körberajzolása"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
+#, fuzzy
+#| msgid "Remove Shape Collection"
+msgctxt "(qtundo-format)"
+msgid "Remove shapes from text flow."
+msgstr "Forma gyűjtemény eltávolítása"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+#, fuzzy
+#| msgid "Toggle Rotate Mode"
+msgctxt "(qtundo-format)"
+msgid "Toggle Flow Shape Type"
+msgstr "Forgatási mód váltása"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+msgctxt "(qtundo-format)"
+msgid "Set Flow Shape as First"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#, fuzzy
+#| msgid "Decrease Value"
+msgctxt "(qtundo-format)"
+msgid "Decrease Flow Shape Index"
+msgstr "Érték csökkentése"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#, fuzzy
+#| msgid "Increase Value"
+msgctxt "(qtundo-format)"
+msgid "Increase Flow Shape Index"
+msgstr "Érték növelése"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+msgctxt "(qtundo-format)"
+msgid "Set Flow Shape as Last"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -67066,22 +67214,22 @@ msgstr ""
 "Bal kattintás a középpont körüli, jobb kattintás a kijelölt pozíció körüli "
 "forgatáshoz."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Kattintson és húzza az egeret a kijelölés nyírásához."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Kattintson és húzza az egeret a kijelölés átméretezéséhez."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Kattintson és húzza az egeret a kijelölés mozgatásához."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -67089,12 +67237,12 @@ msgstr ""
 "Kattintson és húzza az egeret a kijelölés átméretezéséhez. Középső kattintás "
 "a kijelölt pozíció beállításához."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -67102,31 +67250,31 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Kép forgatása 90°-kal balra"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "A kép elforgatása"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Réteg forgatása 180°-kal"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Kép tükrözése vízszintesen"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Kép tükrözése függőlegesen"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reset Transformations"
@@ -67134,7 +67282,7 @@ msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Transzformációk alaphelyzetbe állítása"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -67142,35 +67290,41 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Alakzatok kivágásának visszavonása"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Invertálás"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Alakzatok körberajzolása"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
 #, fuzzy
 #| msgid "Spiral Shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Spirál alak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "Vektor kijelölés"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "Követési beállítások módosítása"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#, fuzzy, kde-format
+#| msgid "Text"
+msgid "Text"
+msgstr "Szöveg"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, fuzzy, kde-format
@@ -67178,32 +67332,32 @@ msgstr "Követési beállítások módosítása"
 msgid "Select Shapes Tool"
 msgstr "Hasonló színek kijelölése"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:107
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Markers, Stroke"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Stroke, Fill, Markers"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Markers, Fill"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Markers, Fill, Stroke"
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Stroke, Fill"
 msgstr ""
@@ -67273,7 +67427,7 @@ msgstr "Geometria"
 msgid "Fill"
 msgstr "Kitöltés"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
+#: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:48
 #, fuzzy, kde-format
 #| msgid "Press ALT to hold x- or y-position."
 msgid "Press Shift to hold x- or y-position."
@@ -67284,18 +67438,18 @@ msgstr "Nyomja meg az ALT billentyűt az x- vagy y-pozíció tartásához."
 msgid "Press CTRL to resize from center."
 msgstr "Nyomja meg a CTRL billentyűt a középről történő átméretezéshez."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:44
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:45
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
 "Nyomja meg az ALT billentyűt a 45 fokos lépésekben történő forgatáshoz."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:106
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "Forgatás"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
+#: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Nyírás"
@@ -68147,12 +68301,18 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "&Minden oldal"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
+#: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Position"
+msgstr "Képfelbontás módosítása"
+
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:24
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move text"
@@ -68164,20 +68324,20 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "A lista módosítása"
 
-#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:19
-#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:20
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:384
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Szöveg eszköz"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Font Size"
@@ -68185,34 +68345,34 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Betűméret"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Medencefenék"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:395
 #, fuzzy, kde-format
 #| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Betűrendben"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:397
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Irodalomjegyzék"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:399
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Szögletes"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -68220,33 +68380,33 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Középre"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Követési beállítások módosítása"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, fuzzy, kde-format
 #| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Középre"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:407
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Nyomtatási magasság:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:410
 #, fuzzy, kde-format
 #| msgid "&Add to current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "&Hozzáadás a jelenlegi kijelöléshez"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:412
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"
@@ -68292,33 +68452,39 @@ msgstr "Csere:"
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:20
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:21
 #, fuzzy
 #| msgid "Invert Texture:"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "Mintázat megfordítása:"
 
-#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:17
 #, fuzzy
 #| msgid "Invert Texture:"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "Mintázat megfordítása:"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:26
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "Új réteg tulajdonságok"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
+#: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Properties"
+msgstr "Új réteg tulajdonságok"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "Címke eltávolítása"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
+#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 #, fuzzy
 #| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
@@ -68769,7 +68935,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Az aktuális kijelölés vonalvastagságának beállítása"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -70913,6 +71079,60 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Shape RunAround"
+#~ msgstr "Alakzat körbefuttatásának módosítása"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Shadow"
+#~ msgstr "Árnyék beállítása"
+
+#~ msgctxt "resource type"
+#~ msgid "Filter Effects"
+#~ msgstr "Szűrőeffektusok"
+
+#~ msgid "Change the color of the shadow"
+#~ msgstr "Az árnyék színének módosítása"
+
+#~ msgid "Blur:"
+#~ msgstr "Elmosás:"
+
+#~ msgid "An enhanced path shape"
+#~ msgstr "Egy kiterjesztett útvonal alakzat"
+
+#~ msgid "An enhanced path"
+#~ msgstr "Egy kiterjesztett útvonal"
+
+#~ msgid "Cross"
+#~ msgstr "Kereszt"
+
+#~ msgid "A cross"
+#~ msgstr "Egy kereszt"
+
+#~ msgid "An arrow"
+#~ msgstr "Egy nyíl"
+
+#~ msgid "Callout"
+#~ msgstr "Kihívás"
+
+#~ msgid "A callout"
+#~ msgstr "Egy kihívás"
+
+#~ msgid "Smiley"
+#~ msgstr "Mosoly"
+
+#~ msgid "Circular Arrow"
+#~ msgstr "Körkörös nyíl"
+
+#~ msgid "A circular-arrow"
+#~ msgstr "Egy körkörös-nyíl"
+
+#~ msgid "Gearhead"
+#~ msgstr "Sebességfej"
+
+#~ msgid "A gearhead"
+#~ msgstr "Egy sebességfej"
 
 #, fuzzy
 #~| msgid "Free Transform"
@@ -74442,9 +74662,6 @@ msgstr ""
 #~ msgid "Click to change cursor position."
 #~ msgstr "Kattintson a kurzor pozíciójának módosításához."
 
-#~ msgid "Click to select text shape."
-#~ msgstr "Kattintson a szöveges alakzat kiválasztásához."
-
 #~ msgid "Double click to put text on path."
 #~ msgstr "Kattintson duplán a szöveg nyomvonalra helyezéséhez."
 
@@ -74456,9 +74673,6 @@ msgstr ""
 
 #~ msgid "Press return to finish editing."
 #~ msgstr "Nyomja meg az Entert a szerkesztés befejezéséhez."
-
-#~ msgid "Text On Path"
-#~ msgstr "Szöveg nyomvonalon"
 
 #~ msgid "Artistic text editing"
 #~ msgstr "Művészi szöveg szerkesztés"
@@ -77552,9 +77766,6 @@ msgstr ""
 
 #~ msgid "Open Shape Collection"
 #~ msgstr "Forma gyűjtemény megnyitása"
-
-#~ msgid "Remove Shape Collection"
-#~ msgstr "Forma gyűjtemény eltávolítása"
 
 #~ msgid "Funny"
 #~ msgstr "Vicces"
@@ -86403,11 +86614,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Settings"
 #~ msgstr "Beállítások"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Change text direction"
-#~ msgstr "Képfelbontás módosítása"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
@@ -99928,12 +100134,6 @@ msgstr ""
 #~ msgstr "Egy olyan forma, ami megjeleníti a szöveget"
 
 #, fuzzy
-#~| msgid "Text Shape"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text Shape"
-#~ msgstr "Szöveg alakzat"
-
-#, fuzzy
 #~| msgid "Font Family"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Font Family"
@@ -104900,9 +105100,6 @@ msgstr ""
 
 #~ msgid "Expand into Infinity Decoration"
 #~ msgstr "Kibővítés végtelen díszítéssé"
-
-#~ msgid "Toggle Rotate Mode"
-#~ msgstr "Forgatási mód váltása"
 
 #~ msgid "Generator Layer Properties"
 #~ msgstr "Leképző réteg tulajdonságai"

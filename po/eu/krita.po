@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-20 02:00+0000\n"
+"POT-Creation-Date: 2025-11-21 02:04+0000\n"
 "PO-Revision-Date: 2025-07-27 20:26+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -7834,6 +7834,164 @@ msgctxt "action"
 msgid ""
 "Text uses SVG 1.1 character transforms to position each line. Spaces and new "
 "lines are collapsed. This is for backward compatibility with SVG 1.1."
+msgstr ""
+
+#. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:332
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Flow Text in Shape"
+msgstr "Mota eta forma"
+
+#. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:333
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Make the first selected text flow in shape."
+msgstr "trazu-atalasea"
+
+#. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:342
+#, kde-format
+msgctxt "action"
+msgid "Subtract Shape from Text Flow Area"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:343
+#, kde-format
+msgctxt "action"
+msgid "Make shapes part of the subtracted shapes of the first selected text."
+msgstr ""
+
+#. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:352
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Put Text On Path"
+msgstr "Testua"
+
+#. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:353
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid ""
+#| "Force the color selector to only select colors in the currently selected "
+#| "palette."
+msgctxt "action"
+msgid "Make the first selected text flow onto the first selected path."
+msgstr ""
+"Behartu kolore-hautatzailea unean hautatutako paletako koloreak bakarrik "
+"hautatzera."
+
+#. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:362
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Remove Shapes from Text Flow"
+msgstr "Ez dago hautapenik"
+
+#. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:363
+#, kde-format
+msgctxt "action"
+msgid "Remove shapes from text flow and add them to the layer."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:372
+#: krita/data/actions/InteractionTool.action:378
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Toggle layer alpha"
+msgctxt "action"
+msgid "Toggle Flow Shape Type"
+msgstr "Txandakatu geruzaren alfa"
+
+#. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:373
+#, kde-format
+msgctxt "action"
+msgid "Switch the current Flow Shape between Inside or Subtract mode"
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:382
+#: krita/data/actions/InteractionTool.action:388
+#, kde-format
+msgctxt "action"
+msgid "Set Flow Shape as Last"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:383
+#, kde-format
+msgctxt "action"
+msgid ""
+"Make this flow shape the last in the flow shape order as used by text layout."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:391
+#: krita/data/actions/InteractionTool.action:397
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Decrease Flow"
+msgctxt "action"
+msgid "Decrease Flow Shape Index"
+msgstr "Txikiagotu isuria"
+
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:392
+#: krita/data/actions/InteractionTool.action:401
+#, kde-format
+msgctxt "action"
+msgid "Make this flow shape be evaluated later."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:400
+#: krita/data/actions/InteractionTool.action:406
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Increase Flow"
+msgctxt "action"
+msgid "Increase Flow Shape Index"
+msgstr "Handiagotu isuria"
+
+#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:409
+#: krita/data/actions/InteractionTool.action:415
+#, kde-format
+msgctxt "action"
+msgid "Set Flow Shape as First"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:410
+#, kde-format
+msgctxt "action"
+msgid ""
+"Make this flow shape the first in the flow shape order as used by text "
+"layout."
 msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16210,8 +16368,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Languneak"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:508
-#: libs/ui/KisApplication.cpp:790
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:507
+#: libs/ui/KisApplication.cpp:789
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16385,7 +16543,7 @@ msgstr "Aldatu parametroa"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:311
+#: libs/flake/tools/KoPathTool.cpp:314
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Bihurtu bide"
@@ -16400,7 +16558,7 @@ msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "Konbinatu bideak"
 
-#: libs/flake/commands/KoPathControlPointMoveCommand.cpp:29
+#: libs/flake/commands/KoPathControlPointMoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr "Lekuz aldatu kontrol-puntua"
@@ -16415,8 +16573,8 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "Txertatu puntuak"
 
-#: libs/flake/commands/KoPathPointMoveCommand.cpp:30
-#: libs/flake/commands/KoPathPointMoveCommand.cpp:46
+#: libs/flake/commands/KoPathPointMoveCommand.cpp:31
+#: libs/flake/commands/KoPathPointMoveCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr "Lekuz aldatu puntuak"
@@ -16455,7 +16613,7 @@ msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "Bihurtu segmentuak lerro"
 
-#: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
+#: libs/flake/commands/KoPathShapeMarkerCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "Ezarri markatzailea"
@@ -16505,7 +16663,7 @@ msgstr "Banatu formak"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Taldekatu formak"
@@ -16525,13 +16683,13 @@ msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Giltzatu formak"
 
-#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
 msgstr "Aldatu testu-formaren propietateak"
 
-#: libs/flake/commands/KoShapeMoveCommand.cpp:24
-#: libs/flake/commands/KoShapeMoveCommand.cpp:36
+#: libs/flake/commands/KoShapeMoveCommand.cpp:26
+#: libs/flake/commands/KoShapeMoveCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr "Lekuz aldatu formak"
@@ -16560,18 +16718,6 @@ msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr "Neurria aldatu"
 
-#: libs/flake/commands/KoShapeRunAroundCommand.cpp:58
-msgctxt "(qtundo-format)"
-msgid "Change Shape RunAround"
-msgstr "Aldatu forma inguratzeko modua"
-
-#: libs/flake/commands/KoShapeShadowCommand.cpp:54
-#: libs/flake/commands/KoShapeShadowCommand.cpp:71
-#: libs/flake/commands/KoShapeShadowCommand.cpp:82
-msgctxt "(qtundo-format)"
-msgid "Set Shadow"
-msgstr "Ezarri itzala"
-
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
@@ -16582,9 +16728,9 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "Aldatu formen tamaina"
 
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:54
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:73
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:84
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:55
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:74
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "Ezarri trazua"
@@ -16607,7 +16753,7 @@ msgid "Unclip Shapes"
 msgstr "Askatu formak"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Formak talde-banandu"
@@ -16622,7 +16768,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Kendu azpibideak"
 
-#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:15
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Image Type"
@@ -16652,7 +16798,7 @@ msgstr "Ezin da gorde %1 «html»ra"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:579
+#: libs/ui/flake/kis_shape_layer.cc:577
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16703,7 +16849,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Estilo-orria"
 
-#: libs/flake/svg/SvgParser.cpp:1896
+#: libs/flake/svg/SvgParser.cpp:1704
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -20591,8 +20737,8 @@ msgctxt "@title"
 msgid "Character Variant %1"
 msgstr "Aldagaia (%1)"
 
-#: libs/flake/text/KoSvgTextShape.cpp:150
-#: libs/flake/text/KoSvgTextShape.cpp:2030
+#: libs/flake/text/KoSvgTextShape.cpp:169
+#: libs/flake/text/KoSvgTextShape.cpp:2584
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -20600,24 +20746,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>Leku-markako testua</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2009
+#: libs/flake/text/KoSvgTextShape.cpp:2563
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2011
-#: libs/flake/text/KoSvgTextShape.cpp:2019
+#: libs/flake/text/KoSvgTextShape.cpp:2565
+#: libs/flake/text/KoSvgTextShape.cpp:2573
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG testu forma"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2017
+#: libs/flake/text/KoSvgTextShape.cpp:2571
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2040
+#: libs/flake/text/KoSvgTextShape.cpp:2594
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20650,42 +20796,42 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Aldatu segmentua"
 
-#: libs/flake/tools/KoPathTool.cpp:127
+#: libs/flake/tools/KoPathTool.cpp:130
 #, kde-format
 msgid "Edit Shape"
 msgstr "Editatu forma"
 
-#: libs/flake/tools/KoPathTool.cpp:620
+#: libs/flake/tools/KoPathTool.cpp:633
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Arrastatu heldulekua lekuz aldatzeko."
 
-#: libs/flake/tools/KoPathTool.cpp:674
+#: libs/flake/tools/KoPathTool.cpp:687
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Arrastatu puntua lekuz aldatzeko. Maiuskula + klik egin puntu mota aldatzeko."
 
-#: libs/flake/tools/KoPathTool.cpp:676
+#: libs/flake/tools/KoPathTool.cpp:689
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Arrastatu kontrol-puntua lekuz aldatzeko."
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:712
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Arrastatu kurba zuzenean aldatzeko. Egin klik bikoitza bide-puntu berria "
 "txertatzeko."
 
-#: libs/flake/tools/KoPathTool.cpp:709
+#: libs/flake/tools/KoPathTool.cpp:722
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Sakatu B bidea hautatutako puntuan eteteko."
 
-#: libs/flake/tools/KoPathTool.cpp:711
+#: libs/flake/tools/KoPathTool.cpp:724
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"
@@ -21742,7 +21888,7 @@ msgstr "Bihurtu geruzaren kolore-eremua"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:339
+#: libs/ui/flake/kis_shape_layer.cc:337
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -22084,13 +22230,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "Antolamendua"
 
-#: libs/image/krita_utils.cpp:359
+#: libs/image/krita_utils.cpp:276
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "itzalita"
 
-#: libs/image/krita_utils.cpp:359
+#: libs/image/krita_utils.cpp:276
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"
@@ -22236,7 +22382,7 @@ msgid "Clone Layer"
 msgstr "Klon-geruza"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1627
+#: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22280,7 +22426,7 @@ msgid "Transform Mask"
 msgstr "Eraldatze maskara"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1389
+#: libs/ui/kis_node_manager.cpp:1392
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23954,11 +24100,11 @@ msgstr "Baliabide lokalak"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
-#: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
-#: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
-#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1187 libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1235 libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1277 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -23967,7 +24113,7 @@ msgstr "Baliabide lokalak"
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
-#: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
+#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
@@ -24283,97 +24429,91 @@ msgstr "Memoria"
 msgid "Invalid"
 msgstr "Baliogabea"
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:44
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr "Pintzelen aurrehautaketa"
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:45
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr "Pintzelaren muturrak"
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "Gradienteak"
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:47
 #, kde-format
 msgctxt "resource type"
 msgid "Palettes"
 msgstr "Paletak"
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:48
 #, kde-format
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "Ereduak"
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:49
 #, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "Languneak"
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:50
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr "Ikurren liburutegiak"
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:51
 #, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr "Leiho-antolaerak"
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
 msgctxt "resource type"
 msgid "Sessions"
 msgstr "Saioak"
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:53
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr "Gamako maskarak"
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:54
 #, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr "SeExpr gidoiak"
 
-#: libs/resources/KisResourceTypes.cpp:56
-#, kde-format
-msgctxt "resource type"
-msgid "Filter Effects"
-msgstr "Iragazki-efektuak"
-
-#: libs/resources/KisResourceTypes.cpp:57
+#: libs/resources/KisResourceTypes.cpp:55
 #, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr "Ataza multzoak"
 
-#: libs/resources/KisResourceTypes.cpp:58
+#: libs/resources/KisResourceTypes.cpp:56
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "Geruzen estiloak"
 
-#: libs/resources/KisResourceTypes.cpp:59
+#: libs/resources/KisResourceTypes.cpp:57
 #, kde-format
 msgctxt "resource type"
 msgid "Font Families"
 msgstr "Letra-tipo familiak"
 
-#: libs/resources/KisResourceTypes.cpp:60
+#: libs/resources/KisResourceTypes.cpp:58
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "resource type"
@@ -26543,7 +26683,7 @@ msgstr "«FFmpeg»ren bertsioa:"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1457
+#: libs/ui/canvas/kis_canvas2.cpp:1534
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -27208,10 +27348,6 @@ msgid "Tool Icon"
 msgstr "Tresnaren ikonoa"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:220
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:289
 #, kde-format
 msgid "Arrow"
 msgstr "Gezia"
@@ -32521,7 +32657,7 @@ msgid "HSV CCW"
 msgstr "ÑSB erloju-orratzen kontrako noranzkoan"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:447
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
 #, kde-format
 msgid "Sessions"
 msgstr "Saioak"
@@ -34076,7 +34212,7 @@ msgstr "Atzeko planoko kolore-hautatzailea"
 msgid "&Docker Box"
 msgstr "&Zamaketaria"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:443
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34090,8 +34226,8 @@ msgstr "Ereduak"
 msgid "Custom Pattern"
 msgstr "Eredu pertsonalizatua"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:428
-#: libs/ui/KisApplication.cpp:429
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -34377,76 +34513,76 @@ msgstr "Islatu kurtsorearen inguruko ikuspegia"
 msgid "Mirror View Around Canvas"
 msgstr "Islatu kurtsorearen inguruko ikuspegia"
 
-#: libs/ui/kis_node_manager.cpp:485
+#: libs/ui/kis_node_manager.cpp:488
 #, kde-format
 msgid "Layer is locked"
 msgstr "Geruza giltzatuta dago"
 
-#: libs/ui/kis_node_manager.cpp:487 libs/ui/kis_node_manager.cpp:512
+#: libs/ui/kis_node_manager.cpp:490 libs/ui/kis_node_manager.cpp:515
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "«%1» geruza giltzatuta dago"
 
-#: libs/ui/kis_node_manager.cpp:540
+#: libs/ui/kis_node_manager.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Mugitu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:547
+#: libs/ui/kis_node_manager.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopiatu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:554
+#: libs/ui/kis_node_manager.cpp:557
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Gehitu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:726
+#: libs/ui/kis_node_manager.cpp:729
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Bihurtu hautapen-maskara"
 
-#: libs/ui/kis_node_manager.cpp:772
+#: libs/ui/kis_node_manager.cpp:775
 #, fuzzy, kde-format
 #| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Ezin izan da erreferentzia-irudia arbeletik zamatu"
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:776
 #, fuzzy, kde-format
 #| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Ezin izan da erreferentzia-irudia arbeletik zamatu"
 
-#: libs/ui/kis_node_manager.cpp:1027
+#: libs/ui/kis_node_manager.cpp:1030
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Tipula-paperek atzeko plano gardeneko geruza bat behar dute."
 
-#: libs/ui/kis_node_manager.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1057
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Bikoiztu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1079
+#: libs/ui/kis_node_manager.cpp:1082
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Goratu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1088
+#: libs/ui/kis_node_manager.cpp:1091
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Beheratu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1108
+#: libs/ui/kis_node_manager.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Kendu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1124
+#: libs/ui/kis_node_manager.cpp:1127
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -34454,7 +34590,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Ispilatu horizontalki"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1130
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -34462,7 +34598,7 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Ispilatu geruza horizontalki"
 msgstr[1] "Ispilatu %1 geruza horizontalki"
 
-#: libs/ui/kis_node_manager.cpp:1138
+#: libs/ui/kis_node_manager.cpp:1141
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -34470,7 +34606,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Ispilatu bertikalki"
 
-#: libs/ui/kis_node_manager.cpp:1141
+#: libs/ui/kis_node_manager.cpp:1144
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -34478,50 +34614,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Ispilatu geruza bertikalki"
 msgstr[1] "Ispilatu %1 geruza bertikalki"
 
-#: libs/ui/kis_node_manager.cpp:1149
+#: libs/ui/kis_node_manager.cpp:1152
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Ispilatu geruza guztiak horizontalki"
 
-#: libs/ui/kis_node_manager.cpp:1156
+#: libs/ui/kis_node_manager.cpp:1159
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Ispilatu geruza guztiak bertikalki"
 
-#: libs/ui/kis_node_manager.cpp:1288
+#: libs/ui/kis_node_manager.cpp:1291
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Esportatu «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1318
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Ezin izan du geruza gorde. %1"
 
-#: libs/ui/kis_node_manager.cpp:1333
+#: libs/ui/kis_node_manager.cpp:1336
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Geruzak ez du pixelen daturik"
 
-#: libs/ui/kis_node_manager.cpp:1357
+#: libs/ui/kis_node_manager.cpp:1360
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Esportatu SVG gisa"
 
-#: libs/ui/kis_node_manager.cpp:1377
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Ezin izan du SVG gisa gorde: %1"
 
-#: libs/ui/kis_node_manager.cpp:1402
+#: libs/ui/kis_node_manager.cpp:1405
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "%1 geruza ezin da editatu"
 
-#: libs/ui/kis_node_manager.cpp:1403
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -34530,51 +34666,51 @@ msgstr ""
 "Ezin du idatzi «%1» guraso geruzako alfa kanala.\n"
 "Eragiketa utzi egingo du."
 
-#: libs/ui/kis_node_manager.cpp:1434
+#: libs/ui/kis_node_manager.cpp:1437
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Idatzi alfa geruza batean"
 
-#: libs/ui/kis_node_manager.cpp:1574
+#: libs/ui/kis_node_manager.cpp:1577
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Ebaki nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1657
+#: libs/ui/kis_node_manager.cpp:1660
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Taldekatze azkarra"
 
-#: libs/ui/kis_node_manager.cpp:1668
+#: libs/ui/kis_node_manager.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Mozketa azkarreko taldea"
 
-#: libs/ui/kis_node_manager.cpp:1675
+#: libs/ui/kis_node_manager.cpp:1678
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Mozketa taldea"
 
-#: libs/ui/kis_node_manager.cpp:1676
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskara geruza"
 
-#: libs/ui/kis_node_manager.cpp:1703
+#: libs/ui/kis_node_manager.cpp:1706
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Ipini geruza bakoitza bere geruza-talde bereizi propioan"
 
-#: libs/ui/kis_node_manager.cpp:1706
+#: libs/ui/kis_node_manager.cpp:1709
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Ipini geruza bakoitza bere geruza-talde bereizi propioan"
 
-#: libs/ui/kis_node_manager.cpp:1714
+#: libs/ui/kis_node_manager.cpp:1717
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Talde-banatze azkarra"
@@ -35133,20 +35269,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zooma: %%1"
 
-#: libs/ui/KisApplication.cpp:420
+#: libs/ui/KisApplication.cpp:419
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Pintzelen aurrezarpenak"
 
-#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
-#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
+#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Pintzelaren puntak"
 
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -35154,7 +35290,7 @@ msgstr "Pintzelaren puntak"
 msgid "Palettes"
 msgstr "Paletak"
 
-#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -35162,46 +35298,46 @@ msgstr "Paletak"
 msgid "Workspaces"
 msgstr "Laneko areak"
 
-#: libs/ui/KisApplication.cpp:445
+#: libs/ui/KisApplication.cpp:444
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG ikur liburutegiak"
 
-#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Leiho-antolaerak"
 
-#: libs/ui/KisApplication.cpp:448
+#: libs/ui/KisApplication.cpp:447
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Gamako maskarak"
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:449
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr gidoiak"
 
-#: libs/ui/KisApplication.cpp:455
+#: libs/ui/KisApplication.cpp:454
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Geruzen estiloak"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:457
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Letra-tipoen familia"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:458
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgid "Style Presets"
 msgstr "Aurrezarpenak editatu"
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:470
 #, kde-format
 msgid ""
 "%1\n"
@@ -35212,13 +35348,13 @@ msgstr ""
 "\n"
 "Krita orain itxi egingo da."
 
-#: libs/ui/KisApplication.cpp:471 libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:470 libs/ui/KisApplication.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Errore larria"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:476
 #, kde-format
 msgid ""
 "\n"
@@ -35229,7 +35365,7 @@ msgstr ""
 "\n"
 "Krita orain itxiko da."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:508
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35240,66 +35376,66 @@ msgstr ""
 "Ez da halakorik gomendatzen.\n"
 "Mesedez, horren ordez zama-jaitsi eta instalatu 64 biteko eraikina."
 
-#: libs/ui/KisApplication.cpp:526
+#: libs/ui/KisApplication.cpp:525
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Globalak hasieratzen..."
 
-#: libs/ui/KisApplication.cpp:558
+#: libs/ui/KisApplication.cpp:557
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Baliabide motak gehitzen..."
 
-#: libs/ui/KisApplication.cpp:562
+#: libs/ui/KisApplication.cpp:561
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Pluginak zamatzen..."
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:567
 #, kde-format
 msgid "Loading resources..."
 msgstr "Baliabideak zamatzen..."
 
-#: libs/ui/KisApplication.cpp:577
+#: libs/ui/KisApplication.cpp:576
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Leiho nagusia zamatzen..."
 
-#: libs/ui/KisApplication.cpp:609
+#: libs/ui/KisApplication.cpp:608
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "Aztertzen..."
 
-#: libs/ui/KisApplication.cpp:682
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME-mota ez du aurkitu, saia zaitez «-mimetype» aukera erabiltzen"
 
-#: libs/ui/KisApplication.cpp:743
+#: libs/ui/KisApplication.cpp:742
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Animazioko fotogramak errendatzea huts egin du!"
 
-#: libs/ui/KisApplication.cpp:771 libs/ui/KisApplication.cpp:1044
+#: libs/ui/KisApplication.cpp:770 libs/ui/KisApplication.cpp:1043
 #, kde-format
 msgid "File layer"
 msgstr "Fitxategi geruza"
 
-#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:784
-#: libs/ui/KisApplication.cpp:1038 libs/ui/KisApplication.cpp:1052
-#: libs/ui/KisApplication.cpp:1057
+#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:783
+#: libs/ui/KisApplication.cpp:1037 libs/ui/KisApplication.cpp:1051
+#: libs/ui/KisApplication.cpp:1056
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Abisua"
 
-#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:1053
+#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:1052
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ezin da gehitu %1 fitxategi-geruza gisa: fitxategia ez da existitzen."
 
-#: libs/ui/KisApplication.cpp:785
+#: libs/ui/KisApplication.cpp:784
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35321,7 +35457,7 @@ msgstr ""
 "-> Orokorra -> Leihoa) \"Baimendu Kritaren instantzia bakarra\" kontrol-"
 "laukia."
 
-#: libs/ui/KisApplication.cpp:791
+#: libs/ui/KisApplication.cpp:790
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35332,32 +35468,32 @@ msgstr ""
 "Dokumentu berri bat sor dezakezu « --new-image » aukera erabiliz, edo "
 "existitzen den fitxategi bat ireki dezakezu."
 
-#: libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1038
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Ezin izan du %1 fitxategia ireki"
 
-#: libs/ui/KisApplication.cpp:1058
+#: libs/ui/KisApplication.cpp:1057
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ezin du fitxategi geruza gehitu: ez dago irekitako dokumenturik."
 
-#: libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1185
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ez da txantiloirik aurkitu honentzat: %1"
 
-#: libs/ui/KisApplication.cpp:1189
+#: libs/ui/KisApplication.cpp:1188
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Txantiloi gehiegi aurkitu dira honentzat: %1"
 
-#: libs/ui/KisApplication.cpp:1205
+#: libs/ui/KisApplication.cpp:1204
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "%1 txantiloia zamatzea huts egin du."
 
-#: libs/ui/KisApplication.cpp:1237
+#: libs/ui/KisApplication.cpp:1236
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35372,7 +35508,7 @@ msgstr ""
 "\n"
 "Berrabiarazi Krita aldaketak indarrean sar daitezen."
 
-#: libs/ui/KisApplication.cpp:1251
+#: libs/ui/KisApplication.cpp:1250
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35384,7 +35520,7 @@ msgstr ""
 "Mesedez, ziurtatu beste programarik ez duela fitxategia erabiltzen eta "
 "berriz saiatu."
 
-#: libs/ui/KisApplication.cpp:1279
+#: libs/ui/KisApplication.cpp:1278
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ezarpenen fitxategia garbitu nahi duzu?"
@@ -36464,12 +36600,12 @@ msgstr ""
 "%1\n"
 "Arrazoia: %2"
 
-#: libs/ui/KisReferenceImage.cpp:114
+#: libs/ui/KisReferenceImage.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
 msgstr "Ezarri asetasuna"
 
-#: libs/ui/KisReferenceImage.cpp:176
+#: libs/ui/KisReferenceImage.cpp:175
 #, kde-format
 msgid "Could not load %1."
 msgstr "Ezin izan da %1 zamatu."
@@ -37862,7 +37998,7 @@ msgstr "Hautapen-ekintzak"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -40587,26 +40723,6 @@ msgstr "Ezkerreko koska"
 #, kde-format
 msgid "Right indent"
 msgstr "Eskuineko koska"
-
-#: libs/widgets/KoShadowConfigWidget.cpp:55
-#, kde-format
-msgid "Change the color of the shadow"
-msgstr "Aldatu itzalaren kolorea"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/widgets/KoShadowConfigWidget.ui:71
-#, kde-format
-msgid "Blur:"
-msgstr "Lausotu:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/widgets/KoShadowConfigWidget.ui:88
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
-#: plugins/tools/basictools/kis_tool_measure.cc:47
-#, kde-format
-msgid "Distance:"
-msgstr "Distanzia:"
 
 #: libs/widgets/KoToolDocker.cpp:148
 #, kde-format
@@ -47219,6 +47335,41 @@ msgctxt "@label:listbox"
 msgid "Text Anchor:"
 msgstr "Testu-tresna"
 
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
+#, fuzzy, kde-format
+#| msgid "Texture"
+msgctxt "@label:title"
+msgid "Text Area"
+msgstr "Ehundura"
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Options for modifying the text area padding and margins."
+msgstr ""
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
+#, kde-format
+msgctxt ""
+"comma separated search terms for the text-area property, matching is case-"
+"insensitive"
+msgid "text-in-shape, padding, margin"
+msgstr ""
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
+#, fuzzy, kde-format
+#| msgid "Shape creation:"
+msgctxt "@label:spinbox"
+msgid "Shape Padding: "
+msgstr "Formen sorrera:"
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
+#, fuzzy, kde-format
+#| msgid "Shape creation:"
+msgctxt "@label:spinbox"
+msgid "Shape Margin: "
+msgstr "Formen sorrera:"
+
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, fuzzy, kde-format
 #| msgid "Decoration:"
@@ -47389,20 +47540,20 @@ msgctxt "@label:button"
 msgid "Clone Style Preset"
 msgstr "Estiloa"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:303
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Iragazi"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:325
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:329
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "Gehitu script-fitxategia"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:343
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:347
 #, fuzzy, kde-format
 #| msgctxt "Group as in Template Group"
 #| msgid "&Add Group..."
@@ -47410,7 +47561,7 @@ msgctxt "@info:placeholder"
 msgid "Add Property..."
 msgstr "&Gehitu taldea..."
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:424
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:428
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@label:button"
@@ -53257,70 +53408,6 @@ msgstr "Itxi elipsea"
 msgid "An ellipse"
 msgstr "Elipse bat"
 
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:26
-#, kde-format
-msgid "An enhanced path shape"
-msgstr "Bide areagotuko forma bat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:28
-#, kde-format
-msgid "An enhanced path"
-msgstr "Bide areagotu bat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:151
-#, kde-format
-msgid "Cross"
-msgstr "Gurutzea"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:153
-#, kde-format
-msgid "A cross"
-msgstr "Gurutze bat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:189
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:223
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:257
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:291
-#, kde-format
-msgid "An arrow"
-msgstr "Gezi bat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:368
-#, kde-format
-msgid "Callout"
-msgstr "Bunbuiloa"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:370
-#, kde-format
-msgid "A callout"
-msgstr "Bunbuilo bat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:414
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:416
-#, kde-format
-msgid "Smiley"
-msgstr "Aurpegiera"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:494
-#, kde-format
-msgid "Circular Arrow"
-msgstr "Gezi zirkularra"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:496
-#, kde-format
-msgid "A circular-arrow"
-msgstr "Gezi zirkular bat"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:539
-#, kde-format
-msgid "Gearhead"
-msgstr "Engranajea"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:541
-#, kde-format
-msgid "A gearhead"
-msgstr "Engranaje bat"
-
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
@@ -53653,6 +53740,13 @@ msgstr "Koordenatu kartesiarrak"
 #, kde-format
 msgid "Polar Coordinates"
 msgstr "Koordenatu polarrak"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
+#: plugins/tools/basictools/kis_tool_measure.cc:47
+#, kde-format
+msgid "Distance:"
+msgstr "Distanzia:"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:36
 #, kde-format
@@ -65688,7 +65782,66 @@ msgstr "X tartea:"
 msgid "Interval Y:"
 msgstr "Y tartea:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Add shapes to group"
+msgctxt "(qtundo-format)"
+msgid "Add shapes to text flow."
+msgstr "Gehitu formak taldera"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Put Text On Path"
+msgstr "Testua"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Subtract Shapes"
+msgctxt "(qtundo-format)"
+msgid "Subtract shapes from text flow."
+msgstr "Kendu formak"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove shapes from text flow."
+msgstr "Ez dago hautapenik"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+msgctxt "(qtundo-format)"
+msgid "Toggle Flow Shape Type"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+msgctxt "(qtundo-format)"
+msgid "Set Flow Shape as First"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Decrease Flow"
+msgctxt "(qtundo-format)"
+msgid "Decrease Flow Shape Index"
+msgstr "Txikiagotu isuria"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Increase Flow"
+msgctxt "(qtundo-format)"
+msgid "Increase Flow Shape Index"
+msgstr "Handiagotu isuria"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+msgctxt "(qtundo-format)"
+msgid "Set Flow Shape as Last"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -65696,22 +65849,22 @@ msgstr ""
 "Ezkerreko klikak erdigunearekiko biratzen du, eskuineko klikak "
 "nabarmendutako kokapenarekiko."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klikatu eta arrastatu hautapena zizailatzeko."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Egin klik eta arrastatu hautapenaren neurria aldatzeko."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Egin klik eta arrastatu hautapena mugitzeko."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -65719,44 +65872,44 @@ msgstr ""
 "Egin klik eta arrastatu hautapenaren neurria aldatzeko. Erdiko klik "
 "nabarmendutako kokapena ezartzeko."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Tresna hau, bakarrik, bektore-geruzekin dabil. Ziur aski mugitzeko tresna "
 "nahi duzu."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Biratu irudia 90° erloju-orratzen noranzkoan"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Biratu objektua 90° erloju-orratzen aurkako noranzkoan"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Biratu objektua 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Ispilatu objektua horizontalki"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Ispilatu objektua bertikalki"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Berrezarri objektuen eraldaketak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -65764,62 +65917,69 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Askatu formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Ebaki formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Kendu formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Zatitu formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Bektore-formen ekintzak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
 #, kde-format
 msgid "Logical Operations"
 msgstr "Eragiketa logikoak"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#, fuzzy, kde-format
+#| msgctxt "Text label in SVG Text Tool"
+#| msgid "Text"
+msgid "Text"
+msgstr "Testua"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, kde-format
 msgid "Select Shapes Tool"
 msgstr "Hautatu formak tresna"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:107
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
 msgstr "Betegarria, Trazua, Markatzaileak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Markers, Stroke"
 msgstr "Betegarria, Markatzaileak, Trazua"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Stroke, Fill, Markers"
 msgstr "Trazua, Betegarria, Markatzaileak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Markers, Fill"
 msgstr "Trazua, Markatzaileak, Betegarria"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Markers, Fill, Stroke"
 msgstr "Markatzaileak, Betegarria, Trazua"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Stroke, Fill"
 msgstr "Markatzaileak, Trazua, Betegarria"
@@ -65899,7 +66059,7 @@ msgstr "Geometria"
 msgid "Fill"
 msgstr "Bete"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
+#: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:48
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
 msgstr "Sakatu Maius x edo y posizioari eusteko."
@@ -65909,17 +66069,17 @@ msgstr "Sakatu Maius x edo y posizioari eusteko."
 msgid "Press CTRL to resize from center."
 msgstr "Sakatu KTRL erdigunetik neurria aldatzeko."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:44
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:45
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Sakatu ALT 45 graduko urratsetan biratzeko."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:106
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "Biratu"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
+#: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Zizailatu"
@@ -66732,12 +66892,18 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "Orri &guztiak"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
+#: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Position"
+msgstr "Ezarri irudi-bereizmena"
+
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr "Doitu testua automatikoki egokitzea"
 
-#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Move text"
 msgstr "Mugitu testua"
@@ -66747,21 +66913,21 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Aldatu SvgTextTool"
 
-#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:19
-#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:20
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:384
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Testu-tresna"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Font Size"
@@ -66769,7 +66935,7 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Letra-tamaina"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, fuzzy, kde-format
 #| msgctxt "toolbar position string"
 #| msgid "Bottom"
@@ -66777,28 +66943,28 @@ msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Behean"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:395
 #, fuzzy, kde-format
 #| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabetikoa"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:397
 #, fuzzy, kde-format
 #| msgid "Biography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Biografia"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:399
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Angeluarra"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -66806,7 +66972,7 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Erdikoa"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Mathematical Operators"
@@ -66814,14 +66980,14 @@ msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Eragile matematikoak"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, fuzzy, kde-format
 #| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Erdian"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:407
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Line Height"
@@ -66829,14 +66995,14 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Lerroaren altuera"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:410
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Uneko hautapena"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:412
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"
@@ -66884,27 +67050,35 @@ msgstr "Ordezkatu:"
 msgid "You have modified the text. Discard changes?"
 msgstr "Testua aldatu duzu. Aldaketak baztertu?"
 
-#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:20
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "Txertatu testua"
 
-#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "Txertatu testu aberastua"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "Aldatu testuaren propietateak"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
+#: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Properties"
+msgstr "Aldatu testuaren propietateak"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "Kendu testua"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
+#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 #, fuzzy
 #| msgid "Pattern Transform"
 msgctxt "(qtundo-format)"
@@ -67364,7 +67538,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Ezarri uneko hautapenaren marra-zabalera"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -69516,6 +69690,60 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Shape RunAround"
+#~ msgstr "Aldatu forma inguratzeko modua"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Shadow"
+#~ msgstr "Ezarri itzala"
+
+#~ msgctxt "resource type"
+#~ msgid "Filter Effects"
+#~ msgstr "Iragazki-efektuak"
+
+#~ msgid "Change the color of the shadow"
+#~ msgstr "Aldatu itzalaren kolorea"
+
+#~ msgid "Blur:"
+#~ msgstr "Lausotu:"
+
+#~ msgid "An enhanced path shape"
+#~ msgstr "Bide areagotuko forma bat"
+
+#~ msgid "An enhanced path"
+#~ msgstr "Bide areagotu bat"
+
+#~ msgid "Cross"
+#~ msgstr "Gurutzea"
+
+#~ msgid "A cross"
+#~ msgstr "Gurutze bat"
+
+#~ msgid "An arrow"
+#~ msgstr "Gezi bat"
+
+#~ msgid "Callout"
+#~ msgstr "Bunbuiloa"
+
+#~ msgid "A callout"
+#~ msgstr "Bunbuilo bat"
+
+#~ msgid "Smiley"
+#~ msgstr "Aurpegiera"
+
+#~ msgid "Circular Arrow"
+#~ msgstr "Gezi zirkularra"
+
+#~ msgid "A circular-arrow"
+#~ msgstr "Gezi zirkular bat"
+
+#~ msgid "Gearhead"
+#~ msgstr "Engranajea"
+
+#~ msgid "A gearhead"
+#~ msgstr "Engranaje bat"
 
 #, fuzzy
 #~| msgid "Pattern Transform"
@@ -73055,16 +73283,8 @@ msgstr ""
 #~ msgstr "Pintatu konexio-marra"
 
 #, fuzzy
-#~ msgid "Click to select text shape."
-#~ msgstr "trazu-atalasea"
-
-#, fuzzy
 #~ msgid "Double click to put text on path."
 #~ msgstr "Pintatu konexio-marra"
-
-#, fuzzy
-#~ msgid "Text On Path"
-#~ msgstr "Testua"
 
 #, fuzzy
 #~ msgid "Artistic text editing"
@@ -76092,10 +76312,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Open Shape Collection"
 #~ msgstr "Bilduma aurrezarria"
-
-#, fuzzy
-#~ msgid "Remove Shape Collection"
-#~ msgstr "Ez dago hautapenik"
 
 #, fuzzy
 #~ msgid "Favorite Presets"
@@ -83839,11 +84055,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Settings"
 #~ msgstr "Ezarpenak"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Change text direction"
-#~ msgstr "Ezarri irudi-bereizmena"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
@@ -96481,11 +96692,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Image"
 #~ msgstr "Irudia"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text Shape"
-#~ msgstr "Mota eta forma"
 
 #, fuzzy
 #~| msgid "Font Family"

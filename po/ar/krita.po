@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-20 02:00+0000\n"
-"PO-Revision-Date: 2025-11-19 20:31+0400\n"
+"POT-Creation-Date: 2025-11-21 02:04+0000\n"
+"PO-Revision-Date: 2025-11-20 18:39+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7741,6 +7741,166 @@ msgid ""
 msgstr ""
 "النّصّ استخدم تحويلات حروف إس-في-جي 1.1 لوضع كلّ سطر. أدمجت المسافات والأسطر "
 "الجديدة. هذا للتّوافق الرّجعيّ مع إس-في-جي 1.1."
+
+#. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:332
+#, fuzzy, kde-format
+#| msgid "SVG Text Shape"
+msgctxt "action"
+msgid "Flow Text in Shape"
+msgstr "شكل SVG نصّيّ"
+
+#. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:333
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Make the first selected text flow in shape."
+msgstr "انقر لتحديد شكل النّصّ"
+
+#. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:342
+#, kde-format
+msgctxt "action"
+msgid "Subtract Shape from Text Flow Area"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:343
+#, kde-format
+msgctxt "action"
+msgid "Make shapes part of the subtracted shapes of the first selected text."
+msgstr ""
+
+#. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:352
+#, fuzzy, kde-format
+#| msgid "Text On Path"
+msgctxt "action"
+msgid "Put Text On Path"
+msgstr "نصّ على مسار"
+
+#. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:353
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid ""
+#| "Force the color selector to only select colors in the currently selected "
+#| "palette."
+msgctxt "action"
+msgid "Make the first selected text flow onto the first selected path."
+msgstr ""
+"أجبِر محدّد الألوان على اختيار الألوان ضمن لوح الألوان المختار حاليًا فقط."
+
+#. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:362
+#, fuzzy, kde-format
+#| msgid "Remove from tag"
+msgctxt "action"
+msgid "Remove Shapes from Text Flow"
+msgstr "أزل من الوسم"
+
+#. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:363
+#, kde-format
+msgctxt "action"
+msgid "Remove shapes from text flow and add them to the layer."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:372
+#: krita/data/actions/InteractionTool.action:378
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Toggle layer alpha"
+msgctxt "action"
+msgid "Toggle Flow Shape Type"
+msgstr "بدّل ألفا الطّبقة"
+
+#. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:373
+#, kde-format
+msgctxt "action"
+msgid "Switch the current Flow Shape between Inside or Subtract mode"
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:382
+#: krita/data/actions/InteractionTool.action:388
+#, kde-format
+msgctxt "action"
+msgid "Set Flow Shape as Last"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:383
+#, kde-format
+msgctxt "action"
+msgid ""
+"Make this flow shape the last in the flow shape order as used by text layout."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:391
+#: krita/data/actions/InteractionTool.action:397
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Decrease Flow"
+msgctxt "action"
+msgid "Decrease Flow Shape Index"
+msgstr "قلّل الانسياب"
+
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:392
+#: krita/data/actions/InteractionTool.action:401
+#, kde-format
+msgctxt "action"
+msgid "Make this flow shape be evaluated later."
+msgstr ""
+
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:400
+#: krita/data/actions/InteractionTool.action:406
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Increase Flow"
+msgctxt "action"
+msgid "Increase Flow Shape Index"
+msgstr "زد الانسياب"
+
+#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:409
+#: krita/data/actions/InteractionTool.action:415
+#, kde-format
+msgctxt "action"
+msgid "Set Flow Shape as First"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:410
+#, kde-format
+msgctxt "action"
+msgid ""
+"Make this flow shape the first in the flow shape order as used by text "
+"layout."
+msgstr ""
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16072,8 +16232,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "مساحات العمل"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:508
-#: libs/ui/KisApplication.cpp:790
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:507
+#: libs/ui/KisApplication.cpp:789
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16242,7 +16402,7 @@ msgstr "تغيير المعامل"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:311
+#: libs/flake/tools/KoPathTool.cpp:314
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "التّحويل إلى مسار"
@@ -16257,7 +16417,7 @@ msgctxt "(qtundo-format)"
 msgid "Combine paths"
 msgstr "جمع المسارات"
 
-#: libs/flake/commands/KoPathControlPointMoveCommand.cpp:29
+#: libs/flake/commands/KoPathControlPointMoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Move control point"
 msgstr "تحريك نقطة التّحكّم"
@@ -16272,8 +16432,8 @@ msgctxt "(qtundo-format)"
 msgid "Insert points"
 msgstr "إدراج النّقاط"
 
-#: libs/flake/commands/KoPathPointMoveCommand.cpp:30
-#: libs/flake/commands/KoPathPointMoveCommand.cpp:46
+#: libs/flake/commands/KoPathPointMoveCommand.cpp:31
+#: libs/flake/commands/KoPathPointMoveCommand.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Move points"
 msgstr "تحريك النّقاط"
@@ -16309,7 +16469,7 @@ msgctxt "(qtundo-format)"
 msgid "Change segments to lines"
 msgstr "تحويل القطع إلى خطوط"
 
-#: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
+#: libs/flake/commands/KoPathShapeMarkerCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Set marker"
 msgstr "عيّن علامة"
@@ -16367,7 +16527,7 @@ msgstr "توزيع الأشكال"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1305
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1586
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "تجميع الأشكال"
@@ -16387,13 +16547,13 @@ msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "قفل الأشكال"
 
-#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
 msgstr "غيِّر خصائص شكل النص"
 
-#: libs/flake/commands/KoShapeMoveCommand.cpp:24
-#: libs/flake/commands/KoShapeMoveCommand.cpp:36
+#: libs/flake/commands/KoShapeMoveCommand.cpp:26
+#: libs/flake/commands/KoShapeMoveCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr "تحريك الأشكال"
@@ -16419,18 +16579,6 @@ msgctxt "(qtundo-format)"
 msgid "Resize"
 msgstr "تغيير المقاس"
 
-#: libs/flake/commands/KoShapeRunAroundCommand.cpp:58
-msgctxt "(qtundo-format)"
-msgid "Change Shape RunAround"
-msgstr "غيِّر التفاف الشكل"
-
-#: libs/flake/commands/KoShapeShadowCommand.cpp:54
-#: libs/flake/commands/KoShapeShadowCommand.cpp:71
-#: libs/flake/commands/KoShapeShadowCommand.cpp:82
-msgctxt "(qtundo-format)"
-msgid "Set Shadow"
-msgstr "ضبط الظّلّ"
-
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
@@ -16441,9 +16589,9 @@ msgctxt "(qtundo-format)"
 msgid "Resize shapes"
 msgstr "تغيير مقاس الأشكال"
 
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:54
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:73
-#: libs/flake/commands/KoShapeStrokeCommand.cpp:84
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:55
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:74
+#: libs/flake/commands/KoShapeStrokeCommand.cpp:85
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
 msgstr "اضبِط الحد"
@@ -16466,7 +16614,7 @@ msgid "Unclip Shapes"
 msgstr "فك مقطع الأشكال"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "فك تجميع الأشكال"
@@ -16481,7 +16629,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "إزالة المسار الفرعيّ"
 
-#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:14
+#: libs/flake/commands/KoSvgConvertTextTypeCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Convert Text Type"
 msgstr "حوّل نوع النص"
@@ -16508,7 +16656,7 @@ msgstr "تعذّر حفظ %1 بِ‍ HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:579
+#: libs/ui/flake/kis_shape_layer.cc:577
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16558,7 +16706,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "عينة الطراز"
 
-#: libs/flake/svg/SvgParser.cpp:1896
+#: libs/flake/svg/SvgParser.cpp:1704
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -20211,31 +20359,31 @@ msgctxt "@title"
 msgid "Character Variant %1"
 msgstr "تنويعة المحرف %1"
 
-#: libs/flake/text/KoSvgTextShape.cpp:150
-#: libs/flake/text/KoSvgTextShape.cpp:2030
+#: libs/flake/text/KoSvgTextShape.cpp:169
+#: libs/flake/text/KoSvgTextShape.cpp:2584
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "نص مبدئي"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2009
+#: libs/flake/text/KoSvgTextShape.cpp:2563
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "نص"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2011
-#: libs/flake/text/KoSvgTextShape.cpp:2019
+#: libs/flake/text/KoSvgTextShape.cpp:2565
+#: libs/flake/text/KoSvgTextShape.cpp:2573
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "شكل SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2017
+#: libs/flake/text/KoSvgTextShape.cpp:2571
 #, kde-format
 msgid "SVG Text"
 msgstr "‏SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2040
+#: libs/flake/text/KoSvgTextShape.cpp:2594
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20268,38 +20416,38 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "تغيير القطعة"
 
-#: libs/flake/tools/KoPathTool.cpp:127
+#: libs/flake/tools/KoPathTool.cpp:130
 #, kde-format
 msgid "Edit Shape"
 msgstr "تحرير الكائن"
 
-#: libs/flake/tools/KoPathTool.cpp:620
+#: libs/flake/tools/KoPathTool.cpp:633
 #, kde-format
 msgid "Drag to move handle."
 msgstr "اسحب لتحريك المقبض."
 
-#: libs/flake/tools/KoPathTool.cpp:674
+#: libs/flake/tools/KoPathTool.cpp:687
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "اسحب لتحريك النّقطة. انقر مع Shift لتغيير نوع النّقطة"
 
-#: libs/flake/tools/KoPathTool.cpp:676
+#: libs/flake/tools/KoPathTool.cpp:689
 #, kde-format
 msgid "Drag to move control point."
 msgstr "اسحب لتحريك نقطة التحكم."
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:712
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr "اسحب لتغيير المنحنى مباشرة. انقر نقراً مزدوجاً لإدراج نقطة مسار جديدة."
 
-#: libs/flake/tools/KoPathTool.cpp:709
+#: libs/flake/tools/KoPathTool.cpp:722
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "اضغط %1 لكسر المسار عند النقطة المحددة."
 
-#: libs/flake/tools/KoPathTool.cpp:711
+#: libs/flake/tools/KoPathTool.cpp:724
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -21358,7 +21506,7 @@ msgstr "عدم توافق فضاء لون الطبقة"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:339
+#: libs/ui/flake/kis_shape_layer.cc:337
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21707,13 +21855,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "التخطيط"
 
-#: libs/image/krita_utils.cpp:359
+#: libs/image/krita_utils.cpp:276
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "إيقاف"
 
-#: libs/image/krita_utils.cpp:359
+#: libs/image/krita_utils.cpp:276
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"
@@ -21858,7 +22006,7 @@ msgid "Clone Layer"
 msgstr "طبقة مستنسخة"
 
 #: libs/impex/KisExportCheckRegistry.cpp:111 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1627
+#: libs/ui/kis_node_manager.cpp:1630
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -21902,7 +22050,7 @@ msgid "Transform Mask"
 msgstr "قناع تحويل"
 
 #: libs/impex/KisExportCheckRegistry.cpp:127 libs/ui/kis_mask_manager.cc:216
-#: libs/ui/kis_node_manager.cpp:1389
+#: libs/ui/kis_node_manager.cpp:1392
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:593
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -23552,11 +23700,11 @@ msgstr "الموارد المحلية"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1185
-#: libs/ui/KisApplication.cpp:1188 libs/ui/KisApplication.cpp:1204
-#: libs/ui/KisApplication.cpp:1236 libs/ui/KisApplication.cpp:1250
-#: libs/ui/KisApplication.cpp:1278 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1187 libs/ui/KisApplication.cpp:1203
+#: libs/ui/KisApplication.cpp:1235 libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1277 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -23565,7 +23713,7 @@ msgstr "الموارد المحلية"
 #: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
 #: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2855
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
-#: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:40
+#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
@@ -23877,97 +24025,91 @@ msgstr "الذاكرة"
 msgid "Invalid"
 msgstr "غير صالح"
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:44
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr "الفُرش مسبقة الضّبط"
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:45
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr "رؤوس الفرشاة"
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "التّدرّجات"
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:47
 #, kde-format
 msgctxt "resource type"
 msgid "Palettes"
 msgstr "اللوحات"
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:48
 #, kde-format
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "النّقوش"
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:49
 #, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "مساحات العمل"
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:50
 #, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr "مكتبات الرموز"
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:51
 #, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr "تخطيطات النافذة"
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
 msgctxt "resource type"
 msgid "Sessions"
 msgstr "الجلسات"
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:53
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr "أقنعة السلسلة اللونية"
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:54
 #, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr "سكربتات SeExpr"
 
-#: libs/resources/KisResourceTypes.cpp:56
-#, kde-format
-msgctxt "resource type"
-msgid "Filter Effects"
-msgstr "تأثيرات المرشح"
-
-#: libs/resources/KisResourceTypes.cpp:57
+#: libs/resources/KisResourceTypes.cpp:55
 #, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr "مجموعات المهامّ"
 
-#: libs/resources/KisResourceTypes.cpp:58
+#: libs/resources/KisResourceTypes.cpp:56
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "أنماط الطّبقة"
 
-#: libs/resources/KisResourceTypes.cpp:59
+#: libs/resources/KisResourceTypes.cpp:57
 #, kde-format
 msgctxt "resource type"
 msgid "Font Families"
 msgstr "مجموعات الخطوط"
 
-#: libs/resources/KisResourceTypes.cpp:60
+#: libs/resources/KisResourceTypes.cpp:58
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
@@ -26120,7 +26262,7 @@ msgstr "إصدار FFmpeg:"
 msgid "None"
 msgstr "بلا"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1457
+#: libs/ui/canvas/kis_canvas2.cpp:1534
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -26794,10 +26936,6 @@ msgid "Tool Icon"
 msgstr "أيقونة الأداء"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:220
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:289
 #, kde-format
 msgid "Arrow"
 msgstr "سهم"
@@ -26974,39 +27112,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
-msgstr "بلا"
+msgstr "لا شيء"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1070
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "دائرة"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1071
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "مستطيل"
+msgstr "يسار مستطيل"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1072
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "مستطيل"
+msgstr "يمين مستطيل"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1073
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "أداة المستطيل"
+msgstr "أعلى المستطيل"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1105
 #, kde-format
@@ -29815,10 +29948,9 @@ msgstr "لون مخطط الممحاة:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:886
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "جامع عينات الألوان:"
+msgstr "شكل جامع عينات الألوان:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -29846,17 +29978,15 @@ msgstr "السّمك:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:961
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "مخطط دائرة"
+msgstr "مكّن المحيط"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "فراغ موسع"
+msgstr "مساحة إضافية للمقارنة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
@@ -32093,7 +32223,7 @@ msgid "HSV CCW"
 msgstr "HSV عكس عقارب ألساعة"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:447
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
 #, kde-format
 msgid "Sessions"
 msgstr "الجلسات"
@@ -33218,10 +33348,9 @@ msgid "Five Finger Drag"
 msgstr "سحب بخمسة أصابع"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:505
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "نقر بإصبع واحد"
+msgstr "إمساك بإصبع واحد"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:508
 #, kde-format
@@ -33603,7 +33732,7 @@ msgstr "&افتح محدد لون الخلفية"
 msgid "&Docker Box"
 msgstr "&صندوق الإرساء"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:443
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -33617,8 +33746,8 @@ msgstr "النّقوش"
 msgid "Custom Pattern"
 msgstr "اللوحة الحاليّة"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:428
-#: libs/ui/KisApplication.cpp:429
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -33897,79 +34026,79 @@ msgstr "اعكس العرض حول المؤشر"
 msgid "Mirror View Around Canvas"
 msgstr "اعكس العرض حول لوحة الرسم"
 
-#: libs/ui/kis_node_manager.cpp:485
+#: libs/ui/kis_node_manager.cpp:488
 #, kde-format
 msgid "Layer is locked"
 msgstr "الطّبقة مقفلة"
 
-#: libs/ui/kis_node_manager.cpp:487 libs/ui/kis_node_manager.cpp:512
+#: libs/ui/kis_node_manager.cpp:490 libs/ui/kis_node_manager.cpp:515
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "الطّبقة \"%1\" مقفلة"
 
-#: libs/ui/kis_node_manager.cpp:540
+#: libs/ui/kis_node_manager.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "تحريك العقد"
 
-#: libs/ui/kis_node_manager.cpp:547
+#: libs/ui/kis_node_manager.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "نسخ العقد"
 
-#: libs/ui/kis_node_manager.cpp:554
+#: libs/ui/kis_node_manager.cpp:557
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "إضافة العقد"
 
-#: libs/ui/kis_node_manager.cpp:726
+#: libs/ui/kis_node_manager.cpp:729
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "التّحويل إلى قناع تحديد"
 
-#: libs/ui/kis_node_manager.cpp:772
+#: libs/ui/kis_node_manager.cpp:775
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "لا أستطيع إنشاء صورة مرجعية من الطبقة النشطة."
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:776
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "لا أستطيع إنشاء صورة مرجعية من لوحة الرسم الظاهرة."
 
-#: libs/ui/kis_node_manager.cpp:1027
+#: libs/ui/kis_node_manager.cpp:1030
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "تتطلب شفافية الجلد طبقة ذات خلفية شفافة."
 
-#: libs/ui/kis_node_manager.cpp:1054
+#: libs/ui/kis_node_manager.cpp:1057
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "تكرار العقد"
 
-#: libs/ui/kis_node_manager.cpp:1079
+#: libs/ui/kis_node_manager.cpp:1082
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "رفع العقد"
 
-#: libs/ui/kis_node_manager.cpp:1088
+#: libs/ui/kis_node_manager.cpp:1091
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "إنزال العقد"
 
-#: libs/ui/kis_node_manager.cpp:1108
+#: libs/ui/kis_node_manager.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "إزالة العقد"
 
-#: libs/ui/kis_node_manager.cpp:1124
+#: libs/ui/kis_node_manager.cpp:1127
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "اعكس القناع أفقياً"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1130
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -33981,12 +34110,12 @@ msgstr[3] "اعكس %1 طبقات أفقياً"
 msgstr[4] "اعكس %1 طبقة أفقياً"
 msgstr[5] "اعكس %1 طبقة أفقياً"
 
-#: libs/ui/kis_node_manager.cpp:1138
+#: libs/ui/kis_node_manager.cpp:1141
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "اعكس القناع عمودياً"
 
-#: libs/ui/kis_node_manager.cpp:1141
+#: libs/ui/kis_node_manager.cpp:1144
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -33998,50 +34127,50 @@ msgstr[3] "اعكس %1 طبقات عمودياً"
 msgstr[4] "اعكس %1 طبقة عمودياً"
 msgstr[5] "اعكس %1 طبقة عمودياً"
 
-#: libs/ui/kis_node_manager.cpp:1149
+#: libs/ui/kis_node_manager.cpp:1152
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "اعكس جميع الطبقات أفقياً"
 
-#: libs/ui/kis_node_manager.cpp:1156
+#: libs/ui/kis_node_manager.cpp:1159
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "اعكس جميع الطبقات عمودياً"
 
-#: libs/ui/kis_node_manager.cpp:1288
+#: libs/ui/kis_node_manager.cpp:1291
 #, kde-format
 msgid "Export \"%1\""
 msgstr "صدّر ”%1“"
 
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1318
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "لا أستطيع حفظ الطبقة. %1"
 
-#: libs/ui/kis_node_manager.cpp:1333
+#: libs/ui/kis_node_manager.cpp:1336
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "لا تملك الطبقة بيانات بكسل"
 
-#: libs/ui/kis_node_manager.cpp:1357
+#: libs/ui/kis_node_manager.cpp:1360
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "التّصدير إلى SVG"
 
-#: libs/ui/kis_node_manager.cpp:1377
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "لا أستطيع الحفظ إلى svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1402
+#: libs/ui/kis_node_manager.cpp:1405
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "لا تقبل الطّبقة %1 التّحرير"
 
-#: libs/ui/kis_node_manager.cpp:1403
+#: libs/ui/kis_node_manager.cpp:1406
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -34050,49 +34179,49 @@ msgstr ""
 "لا أستطيع الكتابة إلى قناة ألفا للطبقة الأب \"%1\".\n"
 "الإجراء سيلغى."
 
-#: libs/ui/kis_node_manager.cpp:1434
+#: libs/ui/kis_node_manager.cpp:1437
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "كتابة ألفا في الطّبقة"
 
-#: libs/ui/kis_node_manager.cpp:1574
+#: libs/ui/kis_node_manager.cpp:1577
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "قصّ العقد"
 
-#: libs/ui/kis_node_manager.cpp:1657
+#: libs/ui/kis_node_manager.cpp:1660
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "التّجميع السّريع"
 
-#: libs/ui/kis_node_manager.cpp:1668
+#: libs/ui/kis_node_manager.cpp:1671
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "مجموعة قص سريعة"
 
-#: libs/ui/kis_node_manager.cpp:1675
+#: libs/ui/kis_node_manager.cpp:1678
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "مجموعة قص"
 
-#: libs/ui/kis_node_manager.cpp:1676
+#: libs/ui/kis_node_manager.cpp:1679
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "طبقة قناع"
 
-#: libs/ui/kis_node_manager.cpp:1703
+#: libs/ui/kis_node_manager.cpp:1706
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "لا أستطيع نقل الطبقة \"%1\" إلى الأب الجديد \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1706
+#: libs/ui/kis_node_manager.cpp:1709
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "لا أستطيع نقل الطبقة \"%1\" إلى الطبقة الجذر"
 
-#: libs/ui/kis_node_manager.cpp:1714
+#: libs/ui/kis_node_manager.cpp:1717
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "فك التّجميع السّريع"
@@ -34574,20 +34703,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "مستوى التّقريب: %1 ٪"
 
-#: libs/ui/KisApplication.cpp:420
+#: libs/ui/KisApplication.cpp:419
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "الفُرش مسبقة الضّبط"
 
-#: libs/ui/KisApplication.cpp:423 libs/ui/KisApplication.cpp:424
-#: libs/ui/KisApplication.cpp:425 libs/ui/KisApplication.cpp:426
+#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "رؤوس الفرشاة"
 
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -34595,7 +34724,7 @@ msgstr "رؤوس الفرشاة"
 msgid "Palettes"
 msgstr "اللوحات"
 
-#: libs/ui/KisApplication.cpp:444 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -34603,44 +34732,44 @@ msgstr "اللوحات"
 msgid "Workspaces"
 msgstr "مساحات العمل"
 
-#: libs/ui/KisApplication.cpp:445
+#: libs/ui/KisApplication.cpp:444
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "مكتبات رموز SVG"
 
-#: libs/ui/KisApplication.cpp:446 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "تخطيطات النافذة"
 
-#: libs/ui/KisApplication.cpp:448
+#: libs/ui/KisApplication.cpp:447
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "أقنعة الانتشار اللوني"
 
-#: libs/ui/KisApplication.cpp:450
+#: libs/ui/KisApplication.cpp:449
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "سكربتات SeExpr"
 
-#: libs/ui/KisApplication.cpp:455
+#: libs/ui/KisApplication.cpp:454
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "أنماط الطّبقة"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:457
 #, kde-format
 msgid "Font Families"
 msgstr "مجموعات الخطوط"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:458
 #, kde-format
 msgid "Style Presets"
 msgstr "الطُرُز المعرّفة مسبقًا"
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:470
 #, kde-format
 msgid ""
 "%1\n"
@@ -34651,13 +34780,13 @@ msgstr ""
 "\n"
 "كريتا سيغلق الآن."
 
-#: libs/ui/KisApplication.cpp:471 libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:470 libs/ui/KisApplication.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "كريتا: خطأ فادح"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:476
 #, kde-format
 msgid ""
 "\n"
@@ -34668,7 +34797,7 @@ msgstr ""
 "\n"
 "كريتا سيغلق الآن."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:508
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -34679,65 +34808,65 @@ msgstr ""
 "هذا غير مستحسن.\n"
 "رجاءً نزّل إصدارة 64 بتّ وثبّتها."
 
-#: libs/ui/KisApplication.cpp:526
+#: libs/ui/KisApplication.cpp:525
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "أهِّل العموميات..."
 
-#: libs/ui/KisApplication.cpp:558
+#: libs/ui/KisApplication.cpp:557
 #, kde-format
 msgid "Adding resource types..."
 msgstr "أضف أنواع الموارد..."
 
-#: libs/ui/KisApplication.cpp:562
+#: libs/ui/KisApplication.cpp:561
 #, kde-format
 msgid "Loading plugins..."
 msgstr "حمّل الملحقات..."
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:567
 #, kde-format
 msgid "Loading resources..."
 msgstr "حمّل الموارد..."
 
-#: libs/ui/KisApplication.cpp:577
+#: libs/ui/KisApplication.cpp:576
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "يحمّل النّافذة الرّئيسيّة..."
 
-#: libs/ui/KisApplication.cpp:609
+#: libs/ui/KisApplication.cpp:608
 #, kde-format
 msgid "Launching..."
 msgstr "شغّل..."
 
-#: libs/ui/KisApplication.cpp:682
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "لم يعثر على نوع MIME، حاول استعمال الخيار -mimetype"
 
-#: libs/ui/KisApplication.cpp:743
+#: libs/ui/KisApplication.cpp:742
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "فشل تصيير إطارات الحركة!"
 
-#: libs/ui/KisApplication.cpp:771 libs/ui/KisApplication.cpp:1044
+#: libs/ui/KisApplication.cpp:770 libs/ui/KisApplication.cpp:1043
 #, kde-format
 msgid "File layer"
 msgstr "طبقة ملفّ"
 
-#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:784
-#: libs/ui/KisApplication.cpp:1038 libs/ui/KisApplication.cpp:1052
-#: libs/ui/KisApplication.cpp:1057
+#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:783
+#: libs/ui/KisApplication.cpp:1037 libs/ui/KisApplication.cpp:1051
+#: libs/ui/KisApplication.cpp:1056
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "كريتا: تحذير"
 
-#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:1053
+#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:1052
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "لا أستطيع إضافة %1 كطبقة ملف: الملف غير موجود."
 
-#: libs/ui/KisApplication.cpp:785
+#: libs/ui/KisApplication.cpp:784
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34757,7 +34886,7 @@ msgstr ""
 "علامة على خانة الاختيار \"اسمح بنسخة واحدة فقط من كريتا\" في الإعدادات "
 "(الإعدادات -> عام -> نافذة)."
 
-#: libs/ui/KisApplication.cpp:791
+#: libs/ui/KisApplication.cpp:790
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34767,32 +34896,32 @@ msgstr ""
 "لا أستطيع إضافة طبقة الملف: لا يوجد مستند مفتوح.\n"
 "يمكنك إما إنشاء ملف جديد باستعمال الخيار --new-image، أو يمكنك فتح ملف موجود."
 
-#: libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1038
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "لا أستطيع فتح الملف %1"
 
-#: libs/ui/KisApplication.cpp:1058
+#: libs/ui/KisApplication.cpp:1057
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "لا أستطيع إضافة طبقة الملف: لا يوجد مستند مفتوح."
 
-#: libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1185
 #, kde-format
 msgid "No template found for: %1"
 msgstr "لم يُعثر على قالب ل‍: %1"
 
-#: libs/ui/KisApplication.cpp:1189
+#: libs/ui/KisApplication.cpp:1188
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "عُُثر على العديد من القوالب ل‍: %1"
 
-#: libs/ui/KisApplication.cpp:1205
+#: libs/ui/KisApplication.cpp:1204
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "فشل تحميل القالب %1."
 
-#: libs/ui/KisApplication.cpp:1237
+#: libs/ui/KisApplication.cpp:1236
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34807,7 +34936,7 @@ msgstr ""
 "\n"
 "أعد تشغيل كريتا لسريان التغييرات."
 
-#: libs/ui/KisApplication.cpp:1251
+#: libs/ui/KisApplication.cpp:1250
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34818,7 +34947,7 @@ msgstr ""
 "\n"
 "رجاءً تحقّق من عدم استخدام أيّ برنامج آخر للملفّ وجرّب مجدّدًا."
 
-#: libs/ui/KisApplication.cpp:1279
+#: libs/ui/KisApplication.cpp:1278
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "أتريد مسح ملفّ الإعدادات؟"
@@ -35846,12 +35975,12 @@ msgstr ""
 "%1\n"
 "السّبب: %2"
 
-#: libs/ui/KisReferenceImage.cpp:114
+#: libs/ui/KisReferenceImage.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
 msgstr "اضبط التشبع"
 
-#: libs/ui/KisReferenceImage.cpp:176
+#: libs/ui/KisReferenceImage.cpp:175
 #, kde-format
 msgid "Could not load %1."
 msgstr "لا يمكن تحميل %1."
@@ -37263,7 +37392,7 @@ msgstr "إجراءات التحديد"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1922
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2244
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:338
 #, kde-format
 msgid "Transform"
@@ -40060,26 +40189,6 @@ msgstr "المسافة البادئة اليسرى"
 #, kde-format
 msgid "Right indent"
 msgstr "المسافة البادئة اليمنى"
-
-#: libs/widgets/KoShadowConfigWidget.cpp:55
-#, kde-format
-msgid "Change the color of the shadow"
-msgstr "غيّر لون الظّلّ"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/widgets/KoShadowConfigWidget.ui:71
-#, kde-format
-msgid "Blur:"
-msgstr "الغشاوة:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/widgets/KoShadowConfigWidget.ui:88
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
-#: plugins/tools/basictools/kis_tool_measure.cc:47
-#, kde-format
-msgid "Distance:"
-msgstr "المسافة:"
 
 #: libs/widgets/KoToolDocker.cpp:148
 #, kde-format
@@ -46577,6 +46686,41 @@ msgctxt "@label:listbox"
 msgid "Text Anchor:"
 msgstr "مربط النص:"
 
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
+#, fuzzy, kde-format
+#| msgid "Texture"
+msgctxt "@label:title"
+msgid "Text Area"
+msgstr "نسيج"
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Options for modifying the text area padding and margins."
+msgstr ""
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
+#, kde-format
+msgctxt ""
+"comma separated search terms for the text-area property, matching is case-"
+"insensitive"
+msgid "text-in-shape, padding, margin"
+msgstr ""
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
+#, fuzzy, kde-format
+#| msgid "Shape creation:"
+msgctxt "@label:spinbox"
+msgid "Shape Padding: "
+msgstr "إنشاء الشكل:"
+
+#: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
+#, fuzzy, kde-format
+#| msgid "Shape creation:"
+msgctxt "@label:spinbox"
+msgid "Shape Margin: "
+msgstr "إنشاء الشكل:"
+
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
 msgctxt "@title:group"
@@ -46731,25 +46875,25 @@ msgctxt "@label:button"
 msgid "Clone Style Preset"
 msgstr "انسخ النمط المبدئي"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:299
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:303
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "رشّح..."
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:325
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:329
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "أضف خاصية"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:343
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:347
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Add Property..."
 msgstr "أضف خاصية..."
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:424
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:428
 #, kde-format
 msgctxt "@label:button"
 msgid "Configure"
@@ -52507,70 +52651,6 @@ msgstr "أغلق الشّكل الإهليجيّ"
 msgid "An ellipse"
 msgstr "قطع ناقص"
 
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:26
-#, kde-format
-msgid "An enhanced path shape"
-msgstr "شكل مسار مُحسَّن"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:28
-#, kde-format
-msgid "An enhanced path"
-msgstr "مسار مُحسَّن"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:151
-#, kde-format
-msgid "Cross"
-msgstr "صليب"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:153
-#, kde-format
-msgid "A cross"
-msgstr "صليب"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:189
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:223
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:257
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:291
-#, kde-format
-msgid "An arrow"
-msgstr "سهم"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:368
-#, kde-format
-msgid "Callout"
-msgstr "تعليق تفسيري"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:370
-#, kde-format
-msgid "A callout"
-msgstr "تسمية توضيحية"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:414
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:416
-#, kde-format
-msgid "Smiley"
-msgstr "ابتسامة"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:494
-#, kde-format
-msgid "Circular Arrow"
-msgstr "سهم دائري"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:496
-#, kde-format
-msgid "A circular-arrow"
-msgstr "سهم دائري"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:539
-#, kde-format
-msgid "Gearhead"
-msgstr "ترس"
-
-#: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:541
-#, kde-format
-msgid "A gearhead"
-msgstr "ترس"
-
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
@@ -52903,6 +52983,13 @@ msgstr "الإحداثيات الديكارتية"
 #, kde-format
 msgid "Polar Coordinates"
 msgstr "تزييغ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
+#: plugins/tools/basictools/kis_tool_measure.cc:47
+#, kde-format
+msgid "Distance:"
+msgstr "المسافة:"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:36
 #, kde-format
@@ -64803,7 +64890,7 @@ msgstr "حدّث اللون"
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "نمط النافذة المنبثقة على اللوحة لمقارنة الألوان المأخوذة كعينات"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:42
@@ -65003,129 +65090,198 @@ msgstr "فاصل س:"
 msgid "Interval Y:"
 msgstr "فاصل ص:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:784
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Add shapes to group"
+msgctxt "(qtundo-format)"
+msgid "Add shapes to text flow."
+msgstr "إضافة الأشكال إلى مجموع"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#, fuzzy
+#| msgid "Text On Path"
+msgctxt "(qtundo-format)"
+msgid "Put Text On Path"
+msgstr "نصّ على مسار"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Subtract Shapes"
+msgctxt "(qtundo-format)"
+msgid "Subtract shapes from text flow."
+msgstr "طرح الأشكال"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Remove Character Transforms from the selection."
+msgctxt "(qtundo-format)"
+msgid "Remove shapes from text flow."
+msgstr "أزِل تحويلات الأحرف من التحديد."
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+msgctxt "(qtundo-format)"
+msgid "Toggle Flow Shape Type"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+msgctxt "(qtundo-format)"
+msgid "Set Flow Shape as First"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Decrease Flow"
+msgctxt "(qtundo-format)"
+msgid "Decrease Flow Shape Index"
+msgstr "قلّل الانسياب"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Increase Flow"
+msgctxt "(qtundo-format)"
+msgid "Increase Flow Shape Index"
+msgstr "زد الانسياب"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+msgctxt "(qtundo-format)"
+msgid "Set Flow Shape as Last"
+msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "نقرة باليسار تدور حول المركز، نقرة باليمين تدور حول الموضع المظلل."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1026
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "انقر واسحب لتجريف التحديد."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1031
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "انقر واسحب لتغيير حجم التحديد."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:827
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1066
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "انقر واسحب لتحريك التحديد."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1070
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "انقر واسحب لتغيير حجم التحديد. نقرة وسطى لتعيين الموضع المظلل."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:901
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1146
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "تعمل هذه الأداة فقط على الطبقات الاتجاهية. ربما رغبت بأداة التحريك."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1367
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1648
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "تدوير الكائن 90° مع عقارب السّاعة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1371
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1652
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "تدوير الكائن 90° عكس عقارب السّاعة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1375
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1656
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "تدوير الكائن 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1379
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1660
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "عكس الكائن أفقيًّا"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1383
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "عكس الكائن رأسيًّا"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1387
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1668
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "تصفير تحويلات الكائن"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1461
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1742
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "توحيد الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1475
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1756
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "تقاطع الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1485
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1766
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "طرح الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1530
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1811
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "تقسيم الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1919
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2241
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "إجراءات الأشكال الاتجاهية"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1938
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2260
 #, kde-format
 msgid "Logical Operations"
 msgstr "العمليات المنطقية"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
+#, fuzzy, kde-format
+#| msgctxt "Text label in SVG Text Tool"
+#| msgid "Text"
+msgid "Text"
+msgstr "نص"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, kde-format
 msgid "Select Shapes Tool"
 msgstr "أداة تحديد الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:107
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
 #, kde-format
 msgid "Fill, Stroke, Markers"
 msgstr "ملء، تمريرة، علامات"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:108
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Markers, Stroke"
 msgstr "ملء، علامات، تمريرة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Stroke, Fill, Markers"
 msgstr "تمريرة، ملء، علامات"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Markers, Fill"
 msgstr "تمريرة، علامات، ملء"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Markers, Fill, Stroke"
 msgstr "علامات، ملء، تمريرة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Stroke, Fill"
 msgstr "علامات، تمريرة، ملء"
@@ -65202,7 +65358,7 @@ msgstr "الهندسة"
 msgid "Fill"
 msgstr "الملء"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
+#: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:48
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
 msgstr "اضغط Shift للإمساك بموضع س أو ص."
@@ -65212,17 +65368,17 @@ msgstr "اضغط Shift للإمساك بموضع س أو ص."
 msgid "Press CTRL to resize from center."
 msgstr "اضغط CTRL لتغيير الحجم من المركز."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:44
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:45
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "اضغط ALT للتدوير بخطوات 45 درجة."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:106
 msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "التّدوير"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
+#: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "قص"
@@ -66026,12 +66182,20 @@ msgctxt "@title"
 msgid "All glyphs"
 msgstr "كلّ الرموز"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
+#: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Offset"
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Position"
+msgstr "تغيير إزاحة النّصّ"
+
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr "اضبط الالتفاف الآليّ للنّصّ"
 
-#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Move text"
 msgstr "حرّك النّصّ"
@@ -66041,80 +66205,80 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "غيّر أداة نصّ إس-في-جي"
 
-#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:19
-#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:30
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:20
+#: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "اضبط تحويلات الأحرف في النص."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:377
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:384
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "أعلى النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:379
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "حجم الخطّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:383
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "أسفل النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:388
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:395
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "أبجديّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:397
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "تصوري"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:399
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "مُعلَّق"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:394
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "منتصف"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "رياضي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "وسط"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:407
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ارتفاع السّطر"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:410
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "السطر الأساسي الحالي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:412
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -66156,27 +66320,35 @@ msgstr "استبدل بِ‍:"
 msgid "You have modified the text. Discard changes?"
 msgstr "عدّلت النّصّ. تخلَّص من التّغييرات؟"
 
-#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:20
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "أدرِج نصًّا"
 
-#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "أدرِج نصًّا منسّقًا"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "غيّر خصائص النّصّ"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
+#: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text On Path Properties"
+msgstr "غيّر خصائص النّصّ"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "أزِل النّصّ"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:16
+#: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
 msgstr "أزِل تحويلات الأحرف"
@@ -66618,7 +66790,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "أزل جميع خصائص النص المحددة من التحديد."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -67418,122 +67590,104 @@ msgstr "أداة الإحاطة والمَلء"
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Knife tool: cut through shapes"
-msgstr ""
+msgstr "أداة السكين: قطع خلال الأشكال"
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "This tool only works on vector layers. You probably want the move tool."
+#, kde-format
 msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
-msgstr "تعمل هذه الأداة فقط على الطبقات الاتجاهية. ربما رغبت بأداة التحريك."
+msgstr ""
+"هذه الأداة تعمل فقط على الطبقات المتجهة. ربما تريد إنشاء طبقة متجهة وشكل "
+"ابتدائي أولاً."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Line Tool"
+#, kde-format
 msgid "Knife Tool"
-msgstr "أداة رسم الخطوط"
+msgstr "أداة السكين"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
-#, fuzzy, kde-format
-#| msgid "millimeter"
+#, kde-format
 msgid "Millimeters"
-msgstr "ملليمتر"
+msgstr "ملمترات"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
-#, fuzzy, kde-format
-#| msgid "Thickness"
+#, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
-msgstr "السّمك"
+msgstr "ثخين"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
-msgstr "التنحيف:"
+msgstr "رقيق"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Special"
-msgstr "خاصة"
+msgstr "خاص"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The display brightness in nits. By default this is "
-#| "set to 1000 for converting to display linear.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>سطوع العرض بالنت. مبدئيًا عُيِّن هذا على 1000 للتحويل إلى "
-"خطية العرض.</p></body></html>"
+"<html><head/><body><p>هذه الأداة تعمل فقط على طبقة متجهة.<br/>أنشئ اللوحة "
+"الأولى باستخدام أي أداة شكل على طبقة متجهة.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "عرض مبدئيّ:"
+msgstr "وحدة العرض:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap:"
-msgstr "السّمك:"
+msgstr "فجوة سميكة:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thin gap:"
-msgstr "التنحيف:"
+msgstr "فجوة رقيقة:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgid "Special gap:"
-msgstr "خاصة"
+msgstr "فجوة خاصة:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set while balance automatically"
-#| msgid "Automatic"
+#, kde-format
 msgid "Automatic"
 msgstr "آليّ"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Diagonal"
+#, kde-format
 msgid "Diagonal:"
-msgstr "قطري"
+msgstr "قطري:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
 msgctxt "(qtundo-format)"
 msgid "Knife tool: remove a gutter"
-msgstr ""
+msgstr "أداة السكين: إزالة الحواف"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:48
 msgctxt "(qtundo-format)"
@@ -68718,6 +68872,60 @@ msgstr ""
 "بدّل بين النطاق الكامل والنطاق الفرعي.\n"
 "النطاق الكامل: [%1, %2]\n"
 "النطاق الفرعي: [%3, %4]"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Shape RunAround"
+#~ msgstr "غيِّر التفاف الشكل"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Shadow"
+#~ msgstr "ضبط الظّلّ"
+
+#~ msgctxt "resource type"
+#~ msgid "Filter Effects"
+#~ msgstr "تأثيرات المرشح"
+
+#~ msgid "Change the color of the shadow"
+#~ msgstr "غيّر لون الظّلّ"
+
+#~ msgid "Blur:"
+#~ msgstr "الغشاوة:"
+
+#~ msgid "An enhanced path shape"
+#~ msgstr "شكل مسار مُحسَّن"
+
+#~ msgid "An enhanced path"
+#~ msgstr "مسار مُحسَّن"
+
+#~ msgid "Cross"
+#~ msgstr "صليب"
+
+#~ msgid "A cross"
+#~ msgstr "صليب"
+
+#~ msgid "An arrow"
+#~ msgstr "سهم"
+
+#~ msgid "Callout"
+#~ msgstr "تعليق تفسيري"
+
+#~ msgid "A callout"
+#~ msgstr "تسمية توضيحية"
+
+#~ msgid "Smiley"
+#~ msgstr "ابتسامة"
+
+#~ msgid "Circular Arrow"
+#~ msgstr "سهم دائري"
+
+#~ msgid "A circular-arrow"
+#~ msgstr "سهم دائري"
+
+#~ msgid "Gearhead"
+#~ msgstr "ترس"
+
+#~ msgid "A gearhead"
+#~ msgstr "ترس"
 
 #~ msgid "Proofing transform"
 #~ msgstr "تحويل التدقيق"
@@ -72107,10 +72315,6 @@ msgstr ""
 #~ msgid "Click to change cursor position."
 #~ msgstr "انقر لتغيير مكان المؤشّر."
 
-#, fuzzy
-#~ msgid "Click to select text shape."
-#~ msgstr "انقر لتحديد شكل النّصّ"
-
 #~ msgid "Double click to put text on path."
 #~ msgstr "انقر مزدوجًا لوضع النّصّ على مسار."
 
@@ -72119,9 +72323,6 @@ msgstr ""
 
 #~ msgid "Press return to finish editing."
 #~ msgstr "اضغط Enter لإنهاء التّحرير."
-
-#~ msgid "Text On Path"
-#~ msgstr "نصّ على مسار"
 
 #~ msgid "Artistic text editing"
 #~ msgstr "تحرير النّصوص الفنّيّة"
@@ -72133,10 +72334,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change text anchor"
 #~ msgstr "تغيير مربط النّصّ"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Text Offset"
-#~ msgstr "تغيير إزاحة النّصّ"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Detach Path"

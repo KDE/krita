@@ -52,6 +52,7 @@ Comment[eu]=Tindatzeko pintzelaren aurrezarpenak
 Comment[fi]=Mustesivellinesiasetukset
 Comment[fr]=Préréglages des brosses d'encrage
 Comment[gl]=Predefinicións de pinceis de tinta.
+Comment[he]=ערכות מברשות דיו
 Comment[hi]=इंकिंग ब्रश के नमूने
 Comment[hu]=Tinta ecsetsablonok
 Comment[id]=Prasetel Kuas Tinta

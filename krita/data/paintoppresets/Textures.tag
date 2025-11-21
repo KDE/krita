@@ -52,6 +52,7 @@ Comment[eu]=Ehunduradun pintzelaren aurrezarpenak
 Comment[fi]=Pintakuviosivellinesiasetukset
 Comment[fr]=Préréglages des brosses texturées
 Comment[gl]=Predefinicións de pinceis texturizados.
+Comment[he]=ערכות מברשות מרקם
 Comment[hi]=टेक्श्चर ब्रश ब्रश के नमूने
 Comment[hu]=Textúrázott ecsetsablonok
 Comment[id]=Prasetel Kuas Bertekstur

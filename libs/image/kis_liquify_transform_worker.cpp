@@ -416,13 +416,19 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP
     dstDevice->clear();
 
     using namespace GridIterationTools;
+    QRect correctSubGrid = calculateCorrectSubGrid(m_d->srcBounds, m_d->pixelPrecision, m_d->accumulatedBrushStrokes, m_d->gridSize);
 
     PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);
     RegularGridIndexesOp indexesOp(m_d->gridSize);
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
                                                     m_d->originalPoints,
-                                                    m_d->transformedPoints);
+                                                    m_d->transformedPoints,
+                                                    correctSubGrid);
+    QList<QRectF> areasToCopy = cutOutSubgridFromBounds(correctSubGrid, m_d->srcBounds, m_d->gridSize, m_d->originalPoints);
+    for (int i = 0; i < areasToCopy.length(); i++) {
+        polygonOp.fastCopyArea(areasToCopy[i]);
+    }
 }
 
 QRect KisLiquifyTransformWorker::approxChangeRect(const QRect &rc)

@@ -260,7 +260,51 @@ QVector<QPointF> getPoints(QRect srcBounds, int pixelPrecision) {
     return pointsOp.m_points;
 }
 
+void KisGridInterpolationToolsTest::testCutOutSubgridFromBounds_data()
+{
+    QTest::addColumn<QRect>("correctSubgrid");
+    QTest::addColumn<QRect>("srcBounds");
+    QTest::addColumn<QSize>("gridSize");
+    QTest::addColumn<QVector<QPointF>>("originalPoints");
+    QTest::addColumn<QList<QRectF>>("expected");
 
+    int pixelPrecision = 8;
+    QRect originalBounds = QRect(20, 20, 100, 200);
+
+    QRect srcBounds = QRect(0, 0, 1240, 1754);
+    QRect srcBoundsSmall = QRect(0, 0, 100, 100);
+
+    QTest::addRow("out-of-bounds") << QRect(122, 18, 34, 31) << srcBounds << GridIterationTools::calcGridSize(srcBounds, pixelPrecision)
+                                   << getPoints(srcBounds, pixelPrecision) << QList<QRectF> {QRectF(0,0, 1239,144), QRectF(0,144, 976,240), QRectF(0,384, 1239,1369)};
+    QTest::addRow("out-of-bounds") << QRect(10, 5, 4, 7) << srcBoundsSmall << GridIterationTools::calcGridSize(srcBoundsSmall, pixelPrecision)
+                                   << getPoints(srcBoundsSmall, pixelPrecision) << QList<QRectF> {QRectF(0,0, 99,40), QRectF(0,40, 80,48), QRectF(0,88, 99,11)};
+
+    // this happened after an issue in calculateCorrectSubgrid, but it's still weird how it calculates it
+    //  GridIterationTools::calcGridSize(QRect(QPoint(824,30), QSize(393,330)), 4)
+    QRect srcBounds2 = QRect(QPoint(824,30), QSize(393,330));
+
+    QTest::addRow("out-of-bounds-0-width-case") << QRect(QPoint(100,0),QSize(0,84)) << srcBounds2 << QSize(100, 84)
+                                   << getPoints(srcBounds2, 4) << QList<QRectF> {srcBounds2};
+
+}
+
+void KisGridInterpolationToolsTest::testCutOutSubgridFromBounds()
+{
+    QFETCH(QRect, correctSubgrid);
+    QFETCH(QRect, srcBounds);
+    QFETCH(QSize, gridSize);
+    QFETCH(QVector<QPointF>, originalPoints);
+    QFETCH(QList<QRectF>, expected);
+
+    ENTER_FUNCTION() << ppVar(correctSubgrid) << ppVar(srcBounds) << ppVar(gridSize);
+
+    QList<QRectF> result = GridIterationTools::cutOutSubgridFromBounds(correctSubgrid, srcBounds, gridSize, originalPoints);
+    if (result != expected) {
+        qCritical() << result << expected;// << "for data: " << ppVar(column) << ppVar(row) << ppVar(gridSize);
+    }
+    QCOMPARE(result, expected);
+
+}
 
 void KisGridInterpolationToolsTest::testQImagePolygonOpStructFastAreaCopy()
 {

@@ -516,6 +516,53 @@ inline QRect calculateCorrectSubGrid(QRect originalBoundsForGrid, int pixelPreci
     return QRect(startPointG, QSize(size.x(), size.y()));
 }
 
+inline QList<QRectF> cutOutSubgridFromBounds(QRect subGrid, QRect srcBounds, const QSize &gridSize, const QVector<QPointF> &originalPoints) {
+    if (subGrid.width() == 0 || subGrid.height() == 0) {
+        return QList<QRectF> {srcBounds};
+    }
+    QPoint topLeft = subGrid.topLeft();
+    QPoint bottomRight = subGrid.topLeft() + QPoint(subGrid.width() - 1, subGrid.height() - 1);
+
+    int topLeftIndex = pointToIndex(topLeft, gridSize);
+    int bottomRightIndex = pointToIndex(bottomRight, gridSize);
+
+    topLeftIndex = qMax(0, qMin(topLeftIndex, originalPoints.length() - 1));
+    bottomRightIndex = qMax(0, qMin(bottomRightIndex, originalPoints.length() - 1));
+
+    QPointF topLeftReal = originalPoints[topLeftIndex];
+    QPointF bottomRightReal = originalPoints[bottomRightIndex];
+    QRectF cutOut = QRectF(topLeftReal, bottomRightReal);
+
+    QList<QRectF> response;
+    // *-----------*
+    // |    top    |
+    // |-----------|
+    // | l |xxx| r |
+    // | e |xxx| i |
+    // | f |xxx| g |
+    // | t |xxx| h |
+    // |   |xxx| t |
+    // |-----------|
+    // |   bottom  |
+    // *-----------*
+
+
+    QRectF top = QRectF(srcBounds.topLeft(), QPointF(srcBounds.right(), topLeftReal.y()));
+    QRectF bottom = QRectF(QPointF(srcBounds.left(), bottomRightReal.y()), srcBounds.bottomRight());
+    QRectF left = QRectF(QPointF(srcBounds.left(), cutOut.top()), QPointF(cutOut.left(), cutOut.bottom()));
+    QRectF right = QRectF(QPointF(cutOut.right(), cutOut.top()), QPointF(srcBounds.right(), cutOut.bottom()));
+    QList<QRectF> rects = {top, left, right, bottom};
+    for (int i = 0; i < rects.length(); i++) {
+        if (!rects[i].isEmpty()) {
+            response << rects[i];
+        }
+    }
+    return response;
+
+}
+
+
+
 
 template <class IndexesOp>
 bool getOrthogonalPointApproximation(const QPoint &cellPt,

@@ -26,6 +26,8 @@ private Q_SLOTS:
     void testGetOrthogonalPointApproximation();
     void testCalculateCorrectSubGrid_data();
     void testCalculateCorrectSubGrid();
+    void testCutOutSubgridFromBounds_data();
+    void testCutOutSubgridFromBounds();
     /*
     void testAdjustAlignedPolygon();
     void testRestoreOriginalPolygonFromAligned();
@@ -40,7 +42,6 @@ private Q_SLOTS:
     */
 
     void testQImagePolygonOpStructFastAreaCopy();
-
 
 
 };

@@ -24,6 +24,8 @@ private Q_SLOTS:
     void testPointPolygonIndexToColRow_data();
     void testPointPolygonIndexToColRow();
     void testGetOrthogonalPointApproximation();
+    void testCalculateCorrectSubGrid_data();
+    void testCalculateCorrectSubGrid();
     /*
     void testAdjustAlignedPolygon();
     void testRestoreOriginalPolygonFromAligned();

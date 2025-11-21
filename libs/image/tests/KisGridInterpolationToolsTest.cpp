@@ -22,6 +22,31 @@
 #include <kis_liquify_transform_worker.h>
 #include <kis_algebra_2d.h>
 
+// NOTE: copied from Liquify Transform Worker cpp file
+struct AllPointsFetcherOp
+{
+    AllPointsFetcherOp(QRectF srcRect) : m_srcRect(srcRect) {}
+
+    inline void processPoint(int col, int row,
+                             int prevCol, int prevRow,
+                             int colIndex, int rowIndex) {
+
+        Q_UNUSED(prevCol);
+        Q_UNUSED(prevRow);
+        Q_UNUSED(colIndex);
+        Q_UNUSED(rowIndex);
+
+        QPointF pt(col, row);
+        m_points << pt;
+    }
+
+    inline void nextLine() {
+    }
+
+    QVector<QPointF> m_points;
+    QRectF m_srcRect;
+};
+
 
 QVector<QVector<int>> getCalcGridDimensionsExpectedValues()
 {
@@ -190,6 +215,50 @@ void KisGridInterpolationToolsTest::testGetOrthogonalPointApproximation()
 
 
 
+void KisGridInterpolationToolsTest::testCalculateCorrectSubGrid_data()
+{
+    QTest::addColumn<QRect>("originalBoundsForGrid");
+    QTest::addColumn<int>("pixelPrecision");
+    QTest::addColumn<QRectF>("currentBounds"); // accumulated brush strokes
+    QTest::addColumn<QSize>("gridSize");
+    QTest::addColumn<QRect>("expected");
+
+    int pixelPrecision = 8;
+    QRect originalBounds = QRect(20, 20, 100, 200);
+    QTest::addRow("a") << originalBounds << 8 << QRectF(-1000, -1000, 100, 200) << GridIterationTools::calcGridSize(originalBounds, pixelPrecision) << QRect();
+    QTest::addRow("real-test-case") << QRect(QPoint(824,30), QSize(393,330)) << 4 << QRectF(QPointF(2519.65,-391.596), QSizeF(385.124, 1269.36)) << QSize(100, 84) << QRect();
+    QRect easyBounds = QRect(8, 8, 64+8, 64+8);
+
+    QTest::addRow("top side") << easyBounds << 8 << QRectF(-100, -100, 200, 20) << QSize(8, 8) << QRect();
+    QTest::addRow("left side") << easyBounds << 8 << QRectF(-100, -100, 20, 200) << QSize(8, 8) << QRect();
+    QTest::addRow("right side") << easyBounds << 8 << QRectF(80, -100, 20, 100) << QSize(8, 8) << QRect();
+    QTest::addRow("bottom side") << easyBounds << 8 << QRectF(-100, 80, 100, 20) << QSize(8, 8) << QRect();
+
+    QTest::addRow("tiny change") << QRect(0, 0, 8, 8) << 8 << QRectF(2.1, 2.1, 0.6, 0.6) << QSize(1, 1) << QRect(0, 0, 1, 1);
+
+}
+
+void KisGridInterpolationToolsTest::testCalculateCorrectSubGrid()
+{
+    QFETCH(QRect, originalBoundsForGrid);
+    QFETCH(int, pixelPrecision);
+    QFETCH(QRectF, currentBounds);
+    QFETCH(QSize, gridSize);
+    QFETCH(QRect, expected);
+
+    QRect result = GridIterationTools::calculateCorrectSubGrid(originalBoundsForGrid, pixelPrecision, currentBounds, gridSize);
+    if (result != expected) {
+        qCritical() << result << expected;// << "for data: " << ppVar(column) << ppVar(row) << ppVar(gridSize);
+    }
+    QCOMPARE(result, expected);
+
+}
+
+QVector<QPointF> getPoints(QRect srcBounds, int pixelPrecision) {
+    AllPointsFetcherOp pointsOp(srcBounds);
+    GridIterationTools::processGrid(pointsOp, srcBounds, pixelPrecision);
+    return pointsOp.m_points;
+}
 
 
 

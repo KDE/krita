@@ -493,6 +493,30 @@ namespace Private {
     };
 }
 
+inline QRect calculateCorrectSubGrid(QRect originalBoundsForGrid, int pixelPrecision, QRectF currentBounds, QSize gridSize) {
+
+    if (!QRectF(originalBoundsForGrid).intersects(currentBounds)) {
+        return QRect();
+    }
+
+    QPoint offsetB = originalBoundsForGrid.topLeft();
+
+    QPointF startPointB = currentBounds.topLeft() - offsetB;
+    QPoint startPointG = QPoint(startPointB.x()/pixelPrecision, startPointB.y()/pixelPrecision);
+    startPointG = QPoint(kisBoundFast(0, startPointG.x(), gridSize.width()), kisBoundFast(0, startPointG.y(), gridSize.height()));
+
+    QPointF endPointB = currentBounds.bottomRight() + QPoint(1, 1) - offsetB; // *true* bottomRight
+    QPoint endPointG = QPoint(std::ceil(endPointB.x()/pixelPrecision), std::ceil(endPointB.y()/pixelPrecision));
+    QPoint endPointPotential = endPointG;
+
+    QPoint trueEndPoint = QPoint(kisBoundFast(0, endPointPotential.x(), gridSize.width()), kisBoundFast(0, endPointPotential.y(), gridSize.height()));
+
+    QPoint size = trueEndPoint - startPointG;
+
+    return QRect(startPointG, QSize(size.x(), size.y()));
+}
+
+
 template <class IndexesOp>
 bool getOrthogonalPointApproximation(const QPoint &cellPt,
                                 const QVector<QPointF> &originalPoints,

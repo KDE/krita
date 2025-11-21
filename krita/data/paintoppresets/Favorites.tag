@@ -51,6 +51,7 @@ Comment[eu]=Zure gogoko pintzel aurrezarpenak
 Comment[fi]=Sivellinesiasetussuosikkisi
 Comment[fr]=Vos préréglages préférés de brosse
 Comment[gl]=As súas predefinicións de pinceis favoritas.
+Comment[he]=ערכות המברשות המועדפות עליך
 Comment[hi]=आपके पसंदीदा ब्रश नमूने
 Comment[hu]=Az Ön kedvenc ecsetsablonjai
 Comment[id]=Prasetel kuas favorit Anda

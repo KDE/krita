@@ -1,5 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2025 Agata Cacko <cacko.azh@gmail.com>
+ *
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -17,6 +19,7 @@
 #include "kis_four_point_interpolator_backward.h"
 #include "kis_iterator_ng.h"
 #include "kis_random_sub_accessor.h"
+#include "kis_painter.h"
 
 //#define DEBUG_PAINTING_POLYGONS
 
@@ -167,13 +170,53 @@ struct PaintDevicePolygonOp
     PaintDevicePolygonOp(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev)
         : m_srcDev(srcDev), m_dstDev(dstDev) {}
 
+
+    void fastCopyArea(QPolygonF areaToCopy) {
+        QRect boundRect = areaToCopy.boundingRect().toAlignedRect();
+        if (boundRect.isEmpty()) return;
+
+        bool isItRect = KisAlgebra2D::isPolygonRect(areaToCopy, m_epsilon); // no need for lower tolerance
+        if (isItRect) {
+            fastCopyArea(boundRect);
+            return;
+        }
+
+        KisSequentialIterator dstIt(m_dstDev, boundRect);
+        KisSequentialIterator srcIt(m_srcDev, boundRect);
+
+        // this can possibly be optimized with scanlining the polygon
+        // (use intersectLineConvexPolygon to get a line at every height)
+        // but it doesn't matter much because in the vast majority of cases
+        // it should go straight to the rect area copying
+
+        while (dstIt.nextPixel()  && srcIt.nextPixel()) {
+            if (areaToCopy.containsPoint(QPoint(dstIt.x(), dstIt.y()), Qt::OddEvenFill)) {
+                memcpy(dstIt.rawData(), srcIt.oldRawData(), m_dstDev->pixelSize());
+            }
+        }
+    }
+
+    void fastCopyArea(QRect areaToCopy) {
+        KisPainter::copyAreaOptimized(areaToCopy.topLeft(), m_srcDev, m_dstDev, areaToCopy);
+    }
+
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
-        this->operator() (srcPolygon, dstPolygon, dstPolygon);
+        operator() (srcPolygon, dstPolygon, dstPolygon);
     }
 
     void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
         if (boundRect.isEmpty()) return;
+
+        bool samePolygon = (m_dstDev->colorSpace() == m_srcDev->colorSpace()) && KisAlgebra2D::fuzzyPointCompare(srcPolygon, dstPolygon, m_epsilon);
+
+        if (samePolygon) {
+            // we can use clipDstPolygon here, because it will be smaller than dstPolygon and srcPolygon, because of how IncompletePolicy works
+            // we could also calculate intersection here if we're worried whether that fact is always true
+            fastCopyArea(clipDstPolygon);
+            return;
+        }
+
 
         KisSequentialIterator dstIt(m_dstDev, boundRect);
         KisRandomSubAccessorSP srcAcc = m_srcDev->createRandomSubAccessor();
@@ -212,7 +255,8 @@ struct PaintDevicePolygonOp
                     // "srcPoint" (which is transformed position)
 
                     srcAcc->moveTo(dstPoint);
-                    srcAcc->sampledOldRawData(dstIt.rawData());
+                    quint8* rawData = dstIt.rawData();
+                    srcAcc->sampledOldRawData(rawData);
                 }
             }
 
@@ -232,6 +276,8 @@ struct PaintDevicePolygonOp
 
     KisPaintDeviceSP m_srcDev;
     KisPaintDeviceSP m_dstDev;
+    const qreal m_epsilon {0.1};
+
 };
 
 struct QImagePolygonOp

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 03:23+0000\n"
-"PO-Revision-Date: 2025-11-04 11:53+0100\n"
+"PO-Revision-Date: 2025-11-20 09:30+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23047,39 +23047,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1000
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Cap"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1001
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Cercle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "Rectangle"
+msgstr "Rectangle esquerre"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1003
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "Rectangle"
+msgstr "Rectangle dret"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1004
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "Eina de rectangles"
+msgstr "Rectangle a sobre"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1031
 #, kde-format
@@ -25373,10 +25368,9 @@ msgstr "Color del contorn d'esborrador:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:310
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Color de mostra:"
+msgstr "Forma de la mostra de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -25404,17 +25398,15 @@ msgstr "Gruix:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:378
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Contorn de cercle"
+msgstr "Activa el contorn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:385
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "Espaiador expansible"
+msgstr "Espai extra de comparació"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:396
@@ -28922,10 +28914,9 @@ msgid "Five Finger Drag"
 msgstr "Arrossegar amb cinc dits"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:500
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "Toc amb un dit"
+msgstr "Mantenir un dit premut"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:503
 #, kde-format
@@ -44577,7 +44568,7 @@ msgstr "Llindar:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Color de mostra:"
+msgstr "Mostra de color:"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -57271,7 +57262,7 @@ msgstr "No es pot escriure al fitxer de paleta %1. Potser només és de lectura.
 #: plugins/tools/basictools/kis_tool_colorsampler.h:125
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Eina del color de mostra"
+msgstr "Eina de mostra de color"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:63
 msgctxt "(qtundo-format)"
@@ -57749,7 +57740,7 @@ msgstr "Mou selecció"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Color de mostra"
+msgstr "Mostra de color"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:67
@@ -57875,6 +57866,7 @@ msgstr "Actualitza el color"
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
 msgstr ""
+"Estil per a la finestra emergent sobre el llenç per comparar colors de mostra"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:27
@@ -59413,7 +59405,7 @@ msgstr "Configuració..."
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Color de mostra"
+msgstr "Mostra de color"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)

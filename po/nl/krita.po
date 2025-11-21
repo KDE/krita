@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 03:23+0000\n"
-"PO-Revision-Date: 2025-11-04 13:53+0100\n"
+"PO-Revision-Date: 2025-11-20 13:40+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -23089,39 +23089,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1000
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Geen"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1001
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Cirkel"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "Rechthoek"
+msgstr "Rechthoek links"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1003
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "Rechthoek"
+msgstr "Rechthoek rechts"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1004
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "Gereedschap voor rechthoek"
+msgstr "Rechthoek boven"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1031
 #, kde-format
@@ -25421,10 +25416,9 @@ msgstr "Gumomrandingskleur:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:310
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Monsternemer van kleur:"
+msgstr "Vorm van monsternemer van kleur:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -25452,17 +25446,15 @@ msgstr "Dikte:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:378
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Cirkel omlijning"
+msgstr "Omlijning inschakelen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:385
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "Scheiding uitbreiden"
+msgstr "Extra ruimt voor vergelijken"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:396
@@ -28976,10 +28968,9 @@ msgid "Five Finger Drag"
 msgstr "Slepen met vijf vingers"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:500
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "Tik met één vinger"
+msgstr "Met één vinger houden"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:503
 #, kde-format
@@ -57907,7 +57898,7 @@ msgstr "Kleur bijwerken"
 #: plugins/tools/basictools/wdgcolorsampler.ui:281
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
-msgstr ""
+msgstr "Stijl voor de op-werkveld pop-up om bemonsterde kleuren te vergelijken"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:27

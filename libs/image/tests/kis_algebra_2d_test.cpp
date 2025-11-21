@@ -1293,7 +1293,7 @@ void KisAlgebra2DTest::testRemoveGutter()
 
     QPainterPath special1 = makeSpecialShape(true);
     QPainterPath special2 = makeSpecialShape(false);
-    QPainterPath specialResult = fromPolygon(QVector({QPointF(100, 100), QPointF(900, 100), QPointF(850, 125), QPointF(900, 150), QPointF(850, 175), QPointF(900, 200), QPointF(100, 200), QPointF(150, 175),
+    QPainterPath specialResult = fromPolygon(QVector<QPointF>({QPointF(100, 100), QPointF(900, 100), QPointF(850, 125), QPointF(900, 150), QPointF(850, 175), QPointF(900, 200), QPointF(100, 200), QPointF(150, 175),
                                              QPointF(100, 150), QPointF(150, 125), QPointF(100, 100)}));
 
 
@@ -1310,7 +1310,7 @@ void KisAlgebra2DTest::testRemoveGutter()
 
     testRemoveGutterOneCase(special1, special2.toReversed(), QLineF(QPointF(300, 150), QPointF(700, 150)), false, 11, specialResult);
 
-    //QPainterPath bigOnTop = fromPolygon(QPolygonF(QVector({QPointF(0, 0), QPointF(100, 0)})));
+    //QPainterPath bigOnTop = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(0, 0), QPointF(100, 0)})));
     QPainterPath bigOnTop = fromPolygon(QRectF(0, 3, 10, 3));
     QPainterPath smallRight = fromPolygon(QRectF(7, 0, 3, 2));
     QPainterPath smallMiddle = fromPolygon(QRectF(3, 0, 3, 2));
@@ -1319,24 +1319,24 @@ void KisAlgebra2DTest::testRemoveGutter()
 
     qCritical() << "############################### CASE [5] ####################################";
 
-    testRemoveGutterOneCase(bigOnTop, smallRight, QLineF(QPointF(8, 1), QPointF(8, 5)), false, -1, fromPolygon(QVector({QPointF(0, 3), QPointF(7, 3), QPointF(7, 0), QPointF(10, 0), QPointF(10, 6), QPointF(0, 6), QPointF(0, 3)})));
+    testRemoveGutterOneCase(bigOnTop, smallRight, QLineF(QPointF(8, 1), QPointF(8, 5)), false, -1, fromPolygon(QVector<QPointF>({QPointF(0, 3), QPointF(7, 3), QPointF(7, 0), QPointF(10, 0), QPointF(10, 6), QPointF(0, 6), QPointF(0, 3)})));
 
 
     qCritical() << "############################### CASE [6] ####################################";
 
-    testRemoveGutterOneCase(bigOnTop, smallMiddle, QLineF(QPointF(5, 1), QPointF(5, 5)), false, -1, fromPolygon(QVector({QPointF(0,3), QPointF(3,3), QPointF(3,0), QPointF(6,0), QPointF(6,3), QPointF(10,3), QPointF(10,6), QPointF(0,6), QPointF(0,3)})));
+    testRemoveGutterOneCase(bigOnTop, smallMiddle, QLineF(QPointF(5, 1), QPointF(5, 5)), false, -1, fromPolygon(QVector<QPointF>({QPointF(0,3), QPointF(3,3), QPointF(3,0), QPointF(6,0), QPointF(6,3), QPointF(10,3), QPointF(10,6), QPointF(0,6), QPointF(0,3)})));
 
 
     qCritical() << "############################### CASE [7] ####################################";
 
-    testRemoveGutterOneCase(bigOnTop, smallLeft, QLineF(QPointF(1, 1), QPointF(1, 5)), false,-1, fromPolygon(QVector({QPointF(0,0), QPointF(2,0), QPointF(2,3), QPointF(2,3), QPointF(10,3), QPointF(10,6), QPointF(0,6)})));
+    testRemoveGutterOneCase(bigOnTop, smallLeft, QLineF(QPointF(1, 1), QPointF(1, 5)), false,-1, fromPolygon(QVector<QPointF>({QPointF(0,0), QPointF(2,0), QPointF(2,3), QPointF(2,3), QPointF(10,3), QPointF(10,6), QPointF(0,6)})));
 
 
     //testRemoveGutterOneCase(fromPolygon({QPointF(1134.24,823.696), QPointF(1777.95,819.542), QPointF(2109.36,1598.84), QPointF(1143.4,1625.02)}));
-    QPainterPath onePoly = fromPolygon(QVector({QPointF(2275.28,763.721), QPointF(3270,757.3), QPointF(3270,210), QPointF(1127.23,210),
+    QPainterPath onePoly = fromPolygon(QVector<QPointF>({QPointF(2275.28,763.721), QPointF(3270,757.3), QPointF(3270,210), QPointF(1127.23,210),
                                        QPointF(1133.64,771.092), QPointF(2236.91,763.971), QPointF(2275.28,763.721)}));
 
-    QPainterPath otherPoly = fromPolygon(QVector({QPointF(1794.87,819.433), QPointF(2264.27,816.404), QPointF(2664.69,1583.79), QPointF(2126.14,1598.38),
+    QPainterPath otherPoly = fromPolygon(QVector<QPointF>({QPointF(1794.87,819.433), QPointF(2264.27,816.404), QPointF(2664.69,1583.79), QPointF(2126.14,1598.38),
                                          QPointF(1794.87,819.433)}));
 
 
@@ -1351,8 +1351,8 @@ void KisAlgebra2DTest::testRemoveGutter()
     testRemoveGutterOneCase(onePoly, otherPoly, QLineF(QPointF(2010,662),QPointF(2006,938)));
 
 
-    QPainterPath disappearingOne = fromPolygon(QVector({QPointF(2302.64, 816.154), QPointF(3270, 809.908), QPointF(3270, 1567.38), QPointF(2702.65, 1582.76), QPointF(2302.64, 816.154)}));
-    QPainterPath disappearingTwo = fromPolygon(QVector({QPointF(3077.96, 2307), QPointF(2427.5, 2307), QPointF(2148.5, 1650.95), QPointF(3073.03, 1625.89), QPointF(3077.96, 2307)}));
+    QPainterPath disappearingOne = fromPolygon(QVector<QPointF>({QPointF(2302.64, 816.154), QPointF(3270, 809.908), QPointF(3270, 1567.38), QPointF(2702.65, 1582.76), QPointF(2302.64, 816.154)}));
+    QPainterPath disappearingTwo = fromPolygon(QVector<QPointF>({QPointF(3077.96, 2307), QPointF(2427.5, 2307), QPointF(2148.5, 1650.95), QPointF(3073.03, 1625.89), QPointF(3077.96, 2307)}));
 
 
 
@@ -1368,15 +1368,15 @@ void KisAlgebra2DTest::testRemoveGutter()
 
 
 
-    QPainterPath shape1 = fromPolygon(QPolygonF(QVector({QPointF(1794.87,819.433), QPointF(2264.27,816.404), QPointF(2664.69,1583.79), QPointF(2126.14,1598.38), QPointF(1794.87,819.433)})));
-    QPainterPath shape2 = fromPolygon(QPolygonF(QVector({QPointF(2302.64,816.154), QPointF(3270,809.908), QPointF(3270,1567.38), QPointF(2702.65,1582.76), QPointF(2302.64,816.154)})));
+    QPainterPath shape1 = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(1794.87,819.433), QPointF(2264.27,816.404), QPointF(2664.69,1583.79), QPointF(2126.14,1598.38), QPointF(1794.87,819.433)})));
+    QPainterPath shape2 = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(2302.64,816.154), QPointF(3270,809.908), QPointF(3270,1567.38), QPointF(2702.65,1582.76), QPointF(2302.64,816.154)})));
     //QPainterPath expected =
 
     testRemoveGutterOneCase(shape1, shape2, QLineF(QPointF(2606,1028),QPointF(2164,1134)), false);
 
     qCritical() << "############################### CASE [11] ####################################";
 
-    shape1 = fromPolygon(QPolygonF(QVector({QPointF(1134.24,823.696),QPointF(2302.64,816.155),QPointF(2275.28,763.723),QPointF(1133.64,771.092),QPointF(1127.23,210),QPointF(3270,210),QPointF(3270,1567.38),
+    shape1 = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(1134.24,823.696),QPointF(2302.64,816.155),QPointF(2275.28,763.723),QPointF(1133.64,771.092),QPointF(1127.23,210),QPointF(3270,210),QPointF(3270,1567.38),
                                                          QPointF(1143.4,1625.02),QPointF(1134.24,823.696)})));
 
     testRemoveGutterOneCase(shape1, shape1, QLineF(QPointF(1512,526), QPointF(1666,1178)), true);
@@ -1384,7 +1384,7 @@ void KisAlgebra2DTest::testRemoveGutter()
 
     qCritical() << "############################### CASE [12] ####################################";
 
-    shape1 = fromPolygon(QPolygonF(QVector({QPointF(1, 0),QPointF(3, 0),QPointF(3, 3),QPointF(0, 3),QPointF(0, 2),QPointF(2, 2),QPointF(2, 1),
+    shape1 = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(1, 0),QPointF(3, 0),QPointF(3, 3),QPointF(0, 3),QPointF(0, 2),QPointF(2, 2),QPointF(2, 1),
                                                          QPointF(1, 1),QPointF(1, 0)})));
 
     testRemoveGutterOneCase(shape1, shape1, QLineF(QPointF(1.5, 0.5), QPointF(1.5, 2.5)), true);
@@ -1467,9 +1467,10 @@ void KisAlgebra2DTest::testMergingPainterPaths()
 
     qCritical() << Qt::fixed << qSetRealNumberPrecision(10) << ppVar(shape1 | shape2 | gutter);
 
-    QPainterPath toUnite1 = fromPolygon(QPolygonF(QVector({QPointF(3077.96,2307), QPointF(2427.5,2307), QPointF(2148.5,1650.95), QPointF(3073.03,1625.89), QPointF(3077.96,2307)})));
-    QPainterPath toUnite2 = fromPolygon(QPolygonF(QVector({QPointF(2302.64,816.154), QPointF(3270,809.908), QPointF(3270,1567.38), QPointF(2702.65,1582.76), QPointF(2302.64,816.154)})));
-    QPainterPath toUniteGutter = fromPolygon(QPolygonF(QVector({QPointF(2148.5,1650.95), QPointF(2730.01,1635.19), QPointF(2702.65,1582.76), QPointF(3270,1567.38), QPointF(3072.64,1572.73), QPointF(3073.03,1625.89), QPointF(2148.5,1650.95)})));
+    // TODO: check if we could skip QVector entirely
+    QPainterPath toUnite1 = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(3077.96,2307), QPointF(2427.5,2307), QPointF(2148.5,1650.95), QPointF(3073.03,1625.89), QPointF(3077.96,2307)})));
+    QPainterPath toUnite2 = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(2302.64,816.154), QPointF(3270,809.908), QPointF(3270,1567.38), QPointF(2702.65,1582.76), QPointF(2302.64,816.154)})));
+    QPainterPath toUniteGutter = fromPolygon(QPolygonF(QVector<QPointF>({QPointF(2148.5,1650.95), QPointF(2730.01,1635.19), QPointF(2702.65,1582.76), QPointF(3270,1567.38), QPointF(3072.64,1572.73), QPointF(3073.03,1625.89), QPointF(2148.5,1650.95)})));
 
     qCritical() << "Is it really so incorrect>? " << (toUnite1 | toUnite2 | toUniteGutter);
 

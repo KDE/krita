@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
 "PO-Revision-Date: 2025-11-20 13:40+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -68406,9 +68406,9 @@ msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, fuzzy, kde-format
-#| msgid "Line Tool"
-msgid "Knife Tool"
-msgstr "Lijnhulpmiddel"
+#| msgid "Colorize Mask Editing Tool"
+msgid "Comic Panel Editing Tool"
+msgstr "Bewerkingshulpmiddel voor inkleurmasker"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, fuzzy, kde-format
@@ -69638,6 +69638,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentie-afbeeldingen"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "Bewerkingshulpmiddel voor inkleurmasker"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -69707,6 +69721,11 @@ msgstr ""
 "Schakelen tussen volledige reeks en subreeks.\n"
 "Volledige reeks: [%1, %2]\n"
 "Subreeks: [%3, %4]"
+
+#, fuzzy
+#~| msgid "Line Tool"
+#~ msgid "Knife Tool"
+#~ msgstr "Lijnhulpmiddel"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

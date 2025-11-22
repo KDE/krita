@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -69725,8 +69725,8 @@ msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, fuzzy, kde-format
-msgid "Knife Tool"
-msgstr "&Суретшінің құралдары"
+msgid "Comic Panel Editing Tool"
+msgstr "Градиенттер"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, fuzzy, kde-format
@@ -70961,6 +70961,19 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталон кескіндері"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "Градиенттер"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -71030,6 +71043,10 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Knife Tool"
+#~ msgstr "&Суретшінің құралдары"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

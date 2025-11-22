@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
 "PO-Revision-Date: 2025-11-15 22:14+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -68492,9 +68492,9 @@ msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, fuzzy, kde-format
-#| msgid "Line Tool"
-msgid "Knife Tool"
-msgstr "Strumento Linea"
+#| msgid "Colorize Mask Editing Tool"
+msgid "Comic Panel Editing Tool"
+msgstr "Strumento di modifica maschera Colorizza"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, fuzzy, kde-format
@@ -69725,6 +69725,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "Strumento di modifica maschera Colorizza"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -69794,6 +69808,11 @@ msgstr ""
 "Alterna tra intervallo intero e subintervallo.\n"
 "Intervallo intero: [%1, %2]\n"
 "Subintervallo: [%3, %4]"
+
+#, fuzzy
+#~| msgid "Line Tool"
+#~ msgid "Knife Tool"
+#~ msgstr "Strumento Linea"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

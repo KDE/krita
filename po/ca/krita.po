@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
-"PO-Revision-Date: 2025-11-20 16:34+0100\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
+"PO-Revision-Date: 2025-11-21 15:03+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7752,25 +7752,24 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "SVG Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Forma de text SVG"
+msgstr "Flux de text en una forma"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr ""
+msgstr "Fa que el primer text seleccionat flueixi en una forma."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "Sostreu la forma de l'àrea de flux de text"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7778,41 +7777,37 @@ msgstr ""
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
 msgstr ""
+"Fa que les formes formin part de les formes sostretes del primer text "
+"seleccionat."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Posa text en un camí"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
 msgstr ""
-"Força el selector de color a seleccionar només els colors en la paleta "
-"actualment seleccionada."
+"Fa que el primer text seleccionat flueixi en el primer camí seleccionat."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove from tag"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "Elimina de l'etiqueta"
+msgstr "Elimina les formes del flux de text"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr ""
+msgstr "Elimina les formes del flux de text i les afegeix a la capa."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7820,19 +7815,17 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Commuta l'alfa de la capa"
+msgstr "Commuta el tipus de forma de flux"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Canvia la forma de flux actual entre el mode interior o sostracció"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7843,7 +7836,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Estableix la forma de flux com a darrer"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7852,6 +7845,8 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
 msgstr ""
+"Fa que aquesta forma de flux sigui l'última en l'ordre de forma de flux "
+"utilitzada per la disposició de text."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7859,12 +7854,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #: krita/data/actions/InteractionTool.action:397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Flow"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow Shape Index"
-msgstr "Disminueix el flux"
+msgstr "Disminueix l'índex de forma de flux"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7875,7 +7868,7 @@ msgstr "Disminueix el flux"
 #, kde-format
 msgctxt "action"
 msgid "Make this flow shape be evaluated later."
-msgstr ""
+msgstr "Fa que aquest flux de forma s'avaluï més tard."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7883,12 +7876,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #: krita/data/actions/InteractionTool.action:406
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Flow"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow Shape Index"
-msgstr "Augmenta el flux"
+msgstr "Augmenta l'índex de forma de flux"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7899,7 +7890,7 @@ msgstr "Augmenta el flux"
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Estableix la forma de flux com a primer"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7909,6 +7900,8 @@ msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
 msgstr ""
+"Fa que aquesta forma de flux sigui la primera en l'ordre de forma de flux "
+"utilitzada per la disposició de text."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -47178,17 +47171,16 @@ msgid "Text Anchor:"
 msgstr "Àncora del text:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "Textura"
+msgstr "Àrea de text"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Options for modifying the text area padding and margins."
-msgstr ""
+msgstr "Opcions per a modificar el farciment i els marges de l'àrea de text."
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
 #, kde-format
@@ -47196,21 +47188,19 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "text en forma, farciment, marge"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "Creació de forma:"
+msgstr "Farciment de forma:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "Creació de forma:"
+msgstr "Marge de forma: "
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -65889,64 +65879,49 @@ msgid "Interval Y:"
 msgstr "Interval Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Afegeix les formes al grup"
+msgstr "Afegeix formes al flux de text."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Posa text en un camí"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "Sostreu les formes"
+msgstr "Sostreu formes del flux de text."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Elimina la transformació de caràcters de la selecció."
+msgstr "Elimina formes del flux de text."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr ""
+msgstr "Commuta el tipus de forma de flux"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Estableix la forma de flux com a primer"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Disminueix el flux"
+msgstr "Disminueix l'índex de forma de flux"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Augmenta el flux"
+msgstr "Augmenta l'índex de forma de flux"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Estableix la forma de flux com a darrer"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
@@ -66047,9 +66022,7 @@ msgid "Logical Operations"
 msgstr "Operacions lògiques"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
 msgstr "Text"
 
@@ -66994,12 +66967,9 @@ msgid "All glyphs"
 msgstr "Tots els glifs"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Shape Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "Canvi de les propietats del text de la forma"
+msgstr "Canvia el text a la posició del camí"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -67147,12 +67117,9 @@ msgid "Change Text Properties"
 msgstr "Canvi de les propietats del text"
 
 #: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Canvi de les propietats del text"
+msgstr "Canvi del text a les propietats del camí"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -68428,9 +68395,10 @@ msgstr ""
 "crear una capa vectorial i una forma de començament."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, kde-format
-msgid "Knife Tool"
-msgstr "Eina de ganivet"
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgid "Comic Panel Editing Tool"
+msgstr "Eina d'edició de la màscara d'acoloriment"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -69645,6 +69613,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "Eina d'edició de la màscara d'acoloriment"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -69714,6 +69696,9 @@ msgstr ""
 "Commuta entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
+
+#~ msgid "Knife Tool"
+#~ msgstr "Eina de ganivet"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

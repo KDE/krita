@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
-"PO-Revision-Date: 2025-11-20 21:13+0300\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
+"PO-Revision-Date: 2025-11-21 22:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7743,25 +7743,24 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "SVG Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "SVG Metin Şekli"
+msgstr "Metni Şekilde Akıt"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr ""
+msgstr "Şekildeki ilk metni akışkan yapın."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "Metin Akış Alanından Şekli Çıkar"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7769,41 +7768,36 @@ msgstr ""
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
 msgstr ""
+"Şekilleri, ilk seçilen metnin çıkarılan şekillerinin bir parçası haline "
+"getirin."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Metni Yola Koy"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr ""
-"Renk seçicisini, yalnızca şu anda seçili paletteki renkleri seçmesi için "
-"zorlayın."
+msgstr "İlk seçilen metnin ilk seçilen yola akmasını sağlayın."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove from tag"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "Künyeden çıkar"
+msgstr "Metin Akışından Şekilleri Çıkar"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr ""
+msgstr "Şekilleri metin akışından kaldırın ve katmana ekleyin."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7811,19 +7805,17 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Katman Alfasını Aç/Kapat"
+msgstr "Akış Şekli Türünü Aç/Kapat"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Geçerli akış şeklini içeri veya çıkarma kipi arasında değiştirin."
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7834,7 +7826,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Akış Şeklini Sonuncu Yap"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7843,6 +7835,8 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
 msgstr ""
+"Bu akış şeklini, metin yerleşimi tarafından kullanılan akış şekli "
+"sıralamasında sonuncu yapın."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7850,12 +7844,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #: krita/data/actions/InteractionTool.action:397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Flow"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow Shape Index"
-msgstr "Akışı Azalt"
+msgstr "Akış Şekli İndeksini Azalt"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7866,7 +7858,7 @@ msgstr "Akışı Azalt"
 #, kde-format
 msgctxt "action"
 msgid "Make this flow shape be evaluated later."
-msgstr ""
+msgstr "Bu akış şeklinin daha sonra değerlendirilmesini sağlayın."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7874,12 +7866,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #: krita/data/actions/InteractionTool.action:406
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Flow"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow Shape Index"
-msgstr "Akışı Artır"
+msgstr "Akış Şekli İndeksini Artır"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7890,7 +7880,7 @@ msgstr "Akışı Artır"
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Akış Şeklini Birinci Yap"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7900,6 +7890,8 @@ msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
 msgstr ""
+"Bu akış şeklini, metin yerleşimi tarafından kullanılan akış şekli "
+"sıralamasında birinci yapın."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -46909,17 +46901,16 @@ msgid "Text Anchor:"
 msgstr "Metin sabitleyicisi:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "Doku"
+msgstr "Metin Alanı"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Options for modifying the text area padding and margins."
-msgstr ""
+msgstr "Metin alanı dolgusunu ve kenar boşluklarını değiştirme seçenekleri."
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
 #, kde-format
@@ -46927,21 +46918,19 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "şekilde metin, dolgu, kenar boşluğu"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "Şekil oluşturma:"
+msgstr "Şekil dolgusu: "
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "Şekil oluşturma:"
+msgstr "Şekil kenar boşluğu: "
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -65498,64 +65487,49 @@ msgid "Interval Y:"
 msgstr "Y aralığı:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Gruba Şekiller Ekle"
+msgstr "Metin Akışına Şekiller Ekle"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Metni Yola Koy"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "Şekilleri Çıkar"
+msgstr "Metin Akışından Şekiller Çıkar"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Seçimden karakter dönüşümlerini kaldırın."
+msgstr "Metin Akışından Şekiller Kaldır"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr ""
+msgstr "Akış Şekli Türünü Aç/Kapat"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Akış Şeklini Birinci Yap"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Akışı Azalt"
+msgstr "Akış Şekli İndeksini Azalt"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Akışı Artır"
+msgstr "Akış Şekli İndeksini Artır"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Akış Şeklini Sonuncu Yap"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
@@ -65656,9 +65630,7 @@ msgid "Logical Operations"
 msgstr "Mantıksal İşlemler"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
 msgstr "Metin"
 
@@ -66601,12 +66573,9 @@ msgid "All glyphs"
 msgstr "Tüm Glifler"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Shape Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "Metin Şekli Özelliklerini Değiştir"
+msgstr "Yol Konumundaki Metni Değiştir"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -66754,12 +66723,9 @@ msgid "Change Text Properties"
 msgstr "Metin Özelliklerini Değiştir"
 
 #: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Metin Özelliklerini Değiştir"
+msgstr "Yol Özelliklerindeki Metni Değiştir"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -68025,9 +67991,10 @@ msgstr ""
 "katman yaratıp bir şekil başlatmak istiyorsunuz."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, kde-format
-msgid "Knife Tool"
-msgstr "Bıçak Aracı"
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgid "Comic Panel Editing Tool"
+msgstr "Renklendirme Maskesi Düzenleme Aracı"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -69237,6 +69204,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "Renklendirme Maskesi Düzenleme Aracı"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -69305,6 +69286,9 @@ msgstr ""
 "Tam erim ve alt erim arasında geçiş yapın.\n"
 "Tam erim: [%1, %2]\n"
 "Alt erim: [%3, %4]"
+
+#~ msgid "Knife Tool"
+#~ msgstr "Bıçak Aracı"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

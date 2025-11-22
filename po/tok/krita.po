@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -66219,11 +66219,9 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Tool"
-msgid "Knife Tool"
-msgstr "ilo linja"
+#, kde-format
+msgid "Comic Panel Editing Tool"
+msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -67408,6 +67406,19 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, kde-format
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr ""
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -67473,6 +67484,12 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "Line Tool"
+#~ msgid "Knife Tool"
+#~ msgstr "ilo linja"
 
 #, fuzzy
 #~| msgid "Properties"

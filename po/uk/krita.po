@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
-"PO-Revision-Date: 2025-11-20 21:20+0200\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
+"PO-Revision-Date: 2025-11-21 13:18+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7743,67 +7743,59 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "SVG Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Форма-текст SVG"
+msgstr "Вписаний у форму текст"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr ""
+msgstr "Розподілити перший позначений текст за формою."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "Відняти форму з області тексту за контуром"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
 #, kde-format
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
-msgstr ""
+msgstr "Зробити форми частиною віднятих форм першого позначеного тексту."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Розмістити текст за контуром"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr ""
-"Примусово встановлювати у засобі вибору кольорів лише кольори у поточній "
-"вибраній палітрі."
+msgstr "Розподілити перший позначений текст за першою позначеною формою."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove from tag"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "Вилучити з мітки"
+msgstr "Вилучити форми з тексту за контуром"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr ""
+msgstr "Вилучити форми з тексту за контуром і додати їх до шару."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7811,12 +7803,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Перемкнути прозорість шару"
+msgstr "Перемкнути тип тексту за формою"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
@@ -7824,6 +7814,8 @@ msgstr "Перемкнути прозорість шару"
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
 msgstr ""
+"Перемкнути поточний текст за формою між режимами тексту всередині і "
+"віднімання"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7834,7 +7826,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Встановити текст за формою як останній"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7843,6 +7835,8 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
 msgstr ""
+"Зробити цей текст за контуром останнім у порядку текстів за формою, як "
+"використану у компонуванні тексту."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7850,12 +7844,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #: krita/data/actions/InteractionTool.action:397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Flow"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow Shape Index"
-msgstr "Зменшити потік"
+msgstr "Зменшити індекс тексту за формою"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7866,7 +7858,7 @@ msgstr "Зменшити потік"
 #, kde-format
 msgctxt "action"
 msgid "Make this flow shape be evaluated later."
-msgstr ""
+msgstr "Відкласти обчислення цього тексту за контуром."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7874,12 +7866,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #: krita/data/actions/InteractionTool.action:406
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Flow"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow Shape Index"
-msgstr "Збільшити потік"
+msgstr "Збільшити індекс тексту за формою"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7890,7 +7880,7 @@ msgstr "Збільшити потік"
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Встановити текст за формою як перший"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7900,6 +7890,8 @@ msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
 msgstr ""
+"Зробити цей текст за контуром першим у порядку текстів за формою, як "
+"використану у компонуванні тексту."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -47636,17 +47628,16 @@ msgid "Text Anchor:"
 msgstr "Прив'язка тексту:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "Текстура"
+msgstr "Область тексту"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Options for modifying the text area padding and margins."
-msgstr ""
+msgstr "Пункти для зміни фаски області тексту та полів."
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
 #, kde-format
@@ -47654,21 +47645,19 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "текст за контуром, фаски, поле"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "Створення форми:"
+msgstr "Фаска форми: "
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "Створення форми:"
+msgstr "Поле форми: "
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -66408,68 +66397,67 @@ msgid "Interval Y:"
 msgstr "Інтервал за Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
 msgstr ""
-"Додати форми до групи\n"
-"додавання форм до групи"
+"Додати форми до тексту за контуром\n"
+"додавання форми до тексту за контуром"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
 msgstr ""
+"Розмістити текст за контуром\n"
+"розміщення тексту за контуром"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
 msgstr ""
-"Відняти форми\n"
-"віднімання форм"
+"Відняти форми з тексту за контуром\n"
+"віднімання форм з тексту за контуром"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Вилучити перетворення символів з позначеного фрагмента."
+msgstr ""
+"Вилучити форми з тексту за контуром\n"
+"вилучення форми з тексту за контуром"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
 msgstr ""
+"Перемкнути тип тексту за формою\n"
+"перемикання типу тексту за формою"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
 msgstr ""
+"Встановити текст за формою як перший\n"
+"встановлення тексту за формою першим"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Зменшити потік"
+msgstr ""
+"Зменшити індекс тексту за формою\n"
+"зменшення індексу тексту за формою"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Збільшити потік"
+msgstr ""
+"Збільшити індекс тексту за формою\n"
+"збільшення індексу тексту за формою"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
 msgstr ""
+"Встановити текст за формою як останній\n"
+"встановлення тексту за формою останнім"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
@@ -66584,9 +66572,7 @@ msgid "Logical Operations"
 msgstr "Логічні операції"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
 msgstr "Текст"
 
@@ -67548,14 +67534,11 @@ msgid "All glyphs"
 msgstr "Усі гліфи"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Shape Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
 msgstr ""
-"Змінити властивості форми тексту\n"
-"зміну властивостей форми тексту"
+"Змінити позицію тексту за контуром\n"
+"зміну позиції тексту за контуром"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -67715,14 +67698,11 @@ msgstr ""
 "зміну властивостей тексту"
 
 #: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
 msgstr ""
-"Змінити властивості тексту\n"
-"зміну властивостей тексту"
+"Змінити властивості тексту за контуром\n"
+"зміну властивостей тексту за контуром"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -69006,9 +68986,10 @@ msgstr ""
 "створити векторний шар і почати створення форми."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, kde-format
-msgid "Knife Tool"
-msgstr "Інструмент «Ніж»"
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgid "Comic Panel Editing Tool"
+msgstr "Інструмент редагування «Маска розфарбовування»"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -70235,6 +70216,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "Інструмент редагування «Маска розфарбовування»"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -70304,6 +70299,9 @@ msgstr ""
 "Перемикання між повним діапазоном і піддіапазоном.\n"
 "Повний діапазон: [%1, %2]\n"
 "Піддіапазон: [%3, %4]"
+
+#~ msgid "Knife Tool"
+#~ msgstr "Інструмент «Ніж»"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

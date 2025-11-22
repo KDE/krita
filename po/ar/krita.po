@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-21 02:04+0000\n"
+"POT-Creation-Date: 2025-11-22 02:00+0000\n"
 "PO-Revision-Date: 2025-11-20 18:39+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -67602,9 +67602,10 @@ msgstr ""
 "ابتدائي أولاً."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, kde-format
-msgid "Knife Tool"
-msgstr "أداة السكين"
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgid "Comic Panel Editing Tool"
+msgstr "أداة تحرير قناع التّلوين"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -68803,6 +68804,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "أداة الصّور المرجعيّة"
 
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: text @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
+#: plugins/tools/tools.action:194 plugins/tools/tools.action:196
+#: plugins/tools/tools.action:197
+#, fuzzy, kde-format
+#| msgid "Colorize Mask Editing Tool"
+msgctxt "action"
+msgid "Comic Panel Editing Tool"
+msgstr "أداة تحرير قناع التّلوين"
+
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
 msgctxt "%1 is name of a font family"
@@ -68872,6 +68887,9 @@ msgstr ""
 "بدّل بين النطاق الكامل والنطاق الفرعي.\n"
 "النطاق الكامل: [%1, %2]\n"
 "النطاق الفرعي: [%3, %4]"
+
+#~ msgid "Knife Tool"
+#~ msgstr "أداة السكين"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

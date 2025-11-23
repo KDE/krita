@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-21 15:03+0100\n"
+"PO-Revision-Date: 2025-11-22 09:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -68394,10 +68394,9 @@ msgstr ""
 "crear una capa vectorial i una forma de començament."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Eina d'edició de la màscara d'acoloriment"
+msgstr "Eina d'edició de quadros de còmics"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -69619,11 +69618,10 @@ msgstr "Eina d'imatges de referència"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Eina d'edició de la màscara d'acoloriment"
+msgstr "Eina d'edició de quadros de còmics"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
@@ -69694,6 +69692,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid "Knife Tool"
-#~ msgstr "Eina de ganivet"

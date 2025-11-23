@@ -7734,65 +7734,59 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "SVG Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "SVG 文本形状"
+msgstr "在形状内部编排文本流"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr ""
+msgstr "使选中的第一条文本流在形状内部编排。"
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "从文本编排区域中减去形状"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
 #, kde-format
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
-msgstr ""
+msgstr "使形状成为被选中的第一条文本流减去形状的一部份。"
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "在路径上编排文本流"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr "强制拾色器仅拾取当前色板包含的颜色。"
+msgstr "使选中的第一条文本流在选中的第一条路径上编排。"
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove from tag"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "移除出此标签"
+msgstr "从文本流移除形状"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr ""
+msgstr "从文本流中移除形状并将它们添加到此图层。"
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7800,19 +7794,17 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "打开/关闭 - 锁定透明度"
+msgstr "切换文本流形状类型"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "切换当前文本编流模式：内部/减去"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7823,7 +7815,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "将文本流形状设置为最后一个"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7831,7 +7823,7 @@ msgstr ""
 msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
-msgstr ""
+msgstr "使这个文本流形状成为被文本布局使用的文本流序列中的最后一个。"
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7839,12 +7831,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #: krita/data/actions/InteractionTool.action:397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Flow"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow Shape Index"
-msgstr "降低流量"
+msgstr "降低文本流形状索引"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7855,7 +7845,7 @@ msgstr "降低流量"
 #, kde-format
 msgctxt "action"
 msgid "Make this flow shape be evaluated later."
-msgstr ""
+msgstr "使这个文本流形状之后才进行评估。"
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7863,12 +7853,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #: krita/data/actions/InteractionTool.action:406
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Flow"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow Shape Index"
-msgstr "提高流量"
+msgstr "提升文本流形状索引"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7879,7 +7867,7 @@ msgstr "提高流量"
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "将文本流形状设置为第一个"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7888,7 +7876,7 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
-msgstr ""
+msgstr "使这个文本流形状成为被文本布局使用的文本流序列中的第一个。"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -27006,39 +26994,34 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "无"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1070
-#, fuzzy, kde-format
-#| msgid "Circle"
+#, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "圆形"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1071
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
-msgstr "矩形"
+msgstr "矩形 (左侧)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1072
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
-msgstr "矩形"
+msgstr "矩形 (右侧)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1073
-#, fuzzy, kde-format
-#| msgid "Rectangle Tool"
+#, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
-msgstr "矩形工具：可圆角"
+msgstr "矩形 (上方)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1105
 #, kde-format
@@ -29805,10 +29788,9 @@ msgstr "橡皮擦轮廓颜色："
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:886
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "拾色器："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -29836,17 +29818,15 @@ msgstr "线条粗细："
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:961
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "圆形轮廓"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgid "Extra Comparison Space"
-msgstr "<<--- 空白占位符 (自动伸展) --->>"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:979
@@ -33162,10 +33142,9 @@ msgid "Five Finger Drag"
 msgstr "五指拖动"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:505
-#, fuzzy, kde-format
-#| msgid "One Finger Tap"
+#, kde-format
 msgid "One Finger Hold"
-msgstr "单指点击"
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:508
 #, kde-format
@@ -34553,11 +34532,9 @@ msgid "Layer styles"
 msgstr "图层样式"
 
 #: libs/ui/KisApplication.cpp:457
-#, fuzzy, kde-format
-#| msgctxt "resource type"
-#| msgid "Font Families"
+#, kde-format
 msgid "Font Families"
-msgstr "字体系列"
+msgstr ""
 
 #: libs/ui/KisApplication.cpp:458
 #, kde-format
@@ -46373,11 +46350,10 @@ msgid "Text Anchor:"
 msgstr "文本锚点："
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "纹理"
+msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
@@ -46394,18 +46370,16 @@ msgid "text-in-shape, padding, margin"
 msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "形状生成："
+msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "形状生成："
+msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -64613,12 +64587,9 @@ msgid "Interval Y:"
 msgstr "间隔 Y："
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "添加形状到编组"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
 msgctxt "(qtundo-format)"
@@ -64626,20 +64597,14 @@ msgid "Put Text On Path"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "形状差集"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "移除选中文本的字符变换。"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 msgctxt "(qtundo-format)"
@@ -64652,20 +64617,14 @@ msgid "Set Flow Shape as First"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "降低流量"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "提高流量"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
 msgctxt "(qtundo-format)"
@@ -64765,11 +64724,9 @@ msgid "Logical Operations"
 msgstr "布尔逻辑操作"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
-msgstr "文本"
+msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, kde-format
@@ -65700,12 +65657,9 @@ msgid "All glyphs"
 msgstr "所有字形"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Shape Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "更改文本形状属性"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -65853,12 +65807,9 @@ msgid "Change Text Properties"
 msgstr "更改文本属性"
 
 #: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "更改文本属性"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -67104,114 +67055,92 @@ msgid "Knife tool: cut through shapes"
 msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "This tool only works on vector layers. You probably want the move tool."
+#, kde-format
 msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
-msgstr "此工具只适用于矢量图层。要移动颜料图层，请使用移动工具。"
+msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "智能填色蒙版工具"
+msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
-#, fuzzy, kde-format
-#| msgid "millimeter"
+#, kde-format
 msgid "Millimeters"
 msgstr "毫米"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
-#, fuzzy, kde-format
-#| msgid "Thickness"
+#, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
-msgstr "粗细"
+msgstr "宽"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
-msgstr "快线收窄："
+msgstr "窄"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Special"
-msgstr "特殊字符区"
+msgstr "特殊"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>The display brightness in nits. By default this is "
-#| "set to 1000 for converting to display linear.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This tool only works on a vector layer.<br/>Create the "
 "first panel using any shape tool on a vector layer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>显示器亮度，单位为烛光每平方米 (nit, cd/m²)。用于转换到"
-"显示器线性时的默认值为 1000。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "初始宽度："
+msgstr "宽度单位："
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap:"
-msgstr "线条粗细："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgid "Thin gap:"
-msgstr "快线收窄："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:120
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgid "Special gap:"
-msgstr "特殊字符区"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set while balance automatically"
-#| msgid "Automatic"
+#, kde-format
 msgid "Automatic"
-msgstr "自动"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Diagonal"
+#, kde-format
 msgid "Diagonal:"
-msgstr "斜线分数"
+msgstr ""
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
 msgctxt "(qtundo-format)"
@@ -68332,11 +68261,10 @@ msgstr "参考图像工具"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "智能填色蒙版工具"
+msgstr ""
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
@@ -68405,62 +68333,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#, fuzzy
-#~| msgid "Line Tool"
-#~ msgid "Knife Tool"
-#~ msgstr "直线工具"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Shape RunAround"
-#~ msgstr "更改形状环绕方式"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Shadow"
-#~ msgstr "设置阴影"
-
-#~ msgctxt "resource type"
-#~ msgid "Filter Effects"
-#~ msgstr "滤镜效果"
-
-#~ msgid "Change the color of the shadow"
-#~ msgstr "更改阴影颜色"
-
-#~ msgid "Blur:"
-#~ msgstr "模糊："
-
-#~ msgid "An enhanced path shape"
-#~ msgstr "增强路径形状"
-
-#~ msgid "An enhanced path"
-#~ msgstr "增强路径"
-
-#~ msgid "Cross"
-#~ msgstr "交叉"
-
-#~ msgid "A cross"
-#~ msgstr "交叉"
-
-#~ msgid "An arrow"
-#~ msgstr "箭头"
-
-#~ msgid "Callout"
-#~ msgstr "文本框"
-
-#~ msgid "A callout"
-#~ msgstr "文本框"
-
-#~ msgid "Smiley"
-#~ msgstr "表情符号"
-
-#~ msgid "Circular Arrow"
-#~ msgstr "圆形箭头"
-
-#~ msgid "A circular-arrow"
-#~ msgstr "圆形箭头"
-
-#~ msgid "Gearhead"
-#~ msgstr "齿轮"
-
-#~ msgid "A gearhead"
-#~ msgstr "齿轮"

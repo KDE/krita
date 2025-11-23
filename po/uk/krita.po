@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-21 13:18+0200\n"
+"PO-Revision-Date: 2025-11-22 10:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -68986,10 +68986,9 @@ msgstr ""
 "створити векторний шар і почати створення форми."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Інструмент редагування «Маска розфарбовування»"
+msgstr "Інструмент редагування «Панель коміксів»"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -70224,11 +70223,10 @@ msgstr "Інструмент еталонних зображень"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Інструмент редагування «Маска розфарбовування»"
+msgstr "Інструмент редагування «Панель коміксів»"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format

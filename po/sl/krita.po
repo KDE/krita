@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-20 09:03+0100\n"
+"PO-Revision-Date: 2025-11-22 20:58+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7756,64 +7756,58 @@ msgstr ""
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
 #, fuzzy, kde-format
-#| msgid "SVG Text Shape"
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Besedilni lik SVG"
+msgstr "Tekoče besedilo v liku"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr ""
+msgstr "Naj prvo izbrano besedilo teče v liku."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "Odštej lik od območja tekočega besedila"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
-msgstr ""
+msgstr "Liki naj bodo del odštetih likov prvega izbranega besedila."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Postavi besedilo na pot"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr "Izbirniku barv vsili, da izbere samo barve v trenutno izbrani paleti."
+msgstr "Naj prvo izbrano besedilo teče po prvi izbrani poti."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, fuzzy, kde-format
-#| msgid "Remove from tag"
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "Odstrani iz značke"
+msgstr "Odstrani like iz tekočega besedila"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr ""
+msgstr "Odstrani like iz tekočega besedila in jih doda v plast."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7822,18 +7816,16 @@ msgstr ""
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Preklopi alfo plasti"
+msgstr "Preklopi vrsto teka po liku"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Zamenjajte trenutni način tekočega besedila med Znotraj ali Odštej"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7841,18 +7833,20 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:382
 #: krita/data/actions/InteractionTool.action:388
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Lik toka nastavi kot zadnjega"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
 msgstr ""
+"Naj bo ta lik tekočega besedila zadnji v vrstnem redu likov tokov, kot se "
+"uporablja pri postavitvi besedila."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7873,10 +7867,10 @@ msgstr "Zmanjšaj tok"
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #: krita/data/actions/InteractionTool.action:401
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Make this flow shape be evaluated later."
-msgstr ""
+msgstr "Ta lik toka naj se ovrednoti kasneje."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7897,19 +7891,21 @@ msgstr "Povečaj tok"
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
 #: krita/data/actions/InteractionTool.action:415
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Lik toka nastavi kot prvega"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
 msgstr ""
+"Naj bo ta lik toka prvi v zaporedju tokov, kot se uporablja pri postavitvi "
+"besedila."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -46963,17 +46959,16 @@ msgid "Text Anchor:"
 msgstr "Sidro besedila:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "Tekstura"
+msgstr "Prostor za besedilo"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Options for modifying the text area padding and margins."
-msgstr ""
+msgstr "Možnosti za spreminjanje polnjenja besedilnih polj in robov."
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:20
 #, kde-format
@@ -46981,21 +46976,19 @@ msgctxt ""
 "comma separated search terms for the text-area property, matching is case-"
 "insensitive"
 msgid "text-in-shape, padding, margin"
-msgstr ""
+msgstr "besedilo-v-liku,blazinjenje,robovi"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:127
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Padding: "
-msgstr "Ustvarjanje oblik:"
+msgstr "Oblazinjenje lika: "
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:159
-#, fuzzy, kde-format
-#| msgid "Shape creation:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Shape Margin: "
-msgstr "Ustvarjanje oblik:"
+msgstr "Rob lika: "
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:12
 #, kde-format
@@ -65561,64 +65554,57 @@ msgid "Interval Y:"
 msgstr "Interval Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:584
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add shapes to group"
 msgctxt "(qtundo-format)"
 msgid "Add shapes to text flow."
-msgstr "Dodaj like v skupino"
+msgstr "Dodajte like v potek besedila."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:626
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Postavi besedilo na pot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
 msgctxt "(qtundo-format)"
 msgid "Subtract shapes from text flow."
-msgstr "Odštej like"
+msgstr "Odštejte like od toka besedila."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
 #, fuzzy
-#| msgctxt "action"
-#| msgid "Remove Character Transforms from the selection."
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "Odstrani preoblikovanje znakov iz izbora."
+msgstr "Odstranite like iz poteka besedila."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr ""
+msgstr "Preklopi vrsto teka po liku"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Lik toka nastavi kot prvega"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, fuzzy
-#| msgctxt "action"
-#| msgid "Decrease Flow"
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr "Zmanjšaj tok"
+msgstr "Zmanjšaj indeks poteka lika"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
 #, fuzzy
-#| msgctxt "action"
-#| msgid "Increase Flow"
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr "Povečaj tok"
+msgstr "Povečaj indeks poteka lika"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Lik toka nastavi kot zadnjega"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
@@ -65718,9 +65704,7 @@ msgid "Logical Operations"
 msgstr "Logične operacije"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
 msgstr "Besedilo"
 
@@ -66661,11 +66645,9 @@ msgstr "Vsi glifi"
 
 #: plugins/tools/svgtexttool/SvgChangeTextPathInfoStrategy.cpp:88
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Shape Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Position"
-msgstr "Spremeni lastnosti besedila lika"
+msgstr "Spremeni položaj besedila na poti"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
@@ -66814,11 +66796,9 @@ msgstr "Spremeni lastnosti besedila"
 
 #: plugins/tools/svgtexttool/SvgTextPathInfoChangeCommand.cpp:17
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text On Path Properties"
-msgstr "Spremeni lastnosti besedila"
+msgstr "Spremeni lastnosti besedila na poti"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -68096,9 +68076,8 @@ msgstr ""
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
 msgid "Comic Panel Editing Tool"
-msgstr "Orodje za urejanje maske barvanja"
+msgstr "Orodje za urejanje stripovskih panelov"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -69315,10 +69294,9 @@ msgstr "Orodje za referenčne slike"
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
 #, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Orodje za urejanje maske barvanja"
+msgstr "Orodje za urejanje stripovskih panelov"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
@@ -69389,60 +69367,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Knife Tool"
-#~ msgstr "Orodje Nož"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Shape RunAround"
-#~ msgstr "Spremeni lik RunAround"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Shadow"
-#~ msgstr "Nastavi senco"
-
-#~ msgctxt "resource type"
-#~ msgid "Filter Effects"
-#~ msgstr "Učinki filtrov"
-
-#~ msgid "Change the color of the shadow"
-#~ msgstr "Spremeni barvo sence"
-
-#~ msgid "Blur:"
-#~ msgstr "Zabrisanost:"
-
-#~ msgid "An enhanced path shape"
-#~ msgstr "Lik z izboljšano potjo"
-
-#~ msgid "An enhanced path"
-#~ msgstr "Izboljšana pot"
-
-#~ msgid "Cross"
-#~ msgstr "Križec"
-
-#~ msgid "A cross"
-#~ msgstr "Navzkriž"
-
-#~ msgid "An arrow"
-#~ msgstr "Puščica"
-
-#~ msgid "Callout"
-#~ msgstr "Oblaček"
-
-#~ msgid "A callout"
-#~ msgstr "Oblaček"
-
-#~ msgid "Smiley"
-#~ msgstr "Smeško"
-
-#~ msgid "Circular Arrow"
-#~ msgstr "Krožna puščica"
-
-#~ msgid "A circular-arrow"
-#~ msgstr "Krožna puščica"
-
-#~ msgid "Gearhead"
-#~ msgstr "Zobnik"
-
-#~ msgid "A gearhead"
-#~ msgstr "Zobnik"

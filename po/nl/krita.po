@@ -56,14 +56,14 @@
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2016.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
-# Ronald Stroethoff <stroet43@zonnet.nl>, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2019, 2020, 2021, 2022, 2023, 2025 Ronald Stroethoff <stroet43@zonnet.nl>
 # Luc Castermans <luc.castermans@kde.nl>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-20 13:40+0100\n"
+"PO-Revision-Date: 2025-11-23 16:56+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7770,8 +7770,8 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"De tekst zal niet doorlopen naar de volgende regel en behoudt spaties en "
-"nieuwe regels. Een regelafbreking wordt ingevoegd zodat de regels uit "
+"De tekst zal niet doorlopen naar de volgende regel en spaties en nieuwe "
+"regels behouden. Een regelafbreking wordt ingevoegd zodat de regels die "
 "doorlopen naar de volgende regel of positionering gescheiden blijven."
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7827,27 +7827,24 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Tekstvorm"
+msgstr "Tekst in vorm vloeien"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
-#, fuzzy, kde-format
-#| msgid "Click to select text shape."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr "Klik om de tekstvorm te kiezen."
+msgstr "Laak de eerst geselecteerde tekst in vorm vloeien."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "Trek de vorm af van het gebied waarin de tekst vloeide"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7855,14 +7852,15 @@ msgstr ""
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
 msgstr ""
+"Maak vormen onderdeel van de afgetrokken vormen van de eerst geselecteerde "
+"tekst."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
-#, fuzzy, kde-format
-#| msgid "Text On Path"
+#, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr "Tekst op een pad"
+msgstr "Zet tekst op pad"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
@@ -13279,7 +13277,7 @@ msgstr "Beel&d"
 #: krita/krita5.xmlgui:92
 #, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr "Richting van Wrap Around Mode"
+msgstr "Richting van Doorloop Mode"
 
 #: krita/krita5.xmlgui:102
 #, kde-format
@@ -14341,7 +14339,7 @@ msgstr "Het werkveld in een apart venster tonen"
 #, kde-format
 msgctxt "action"
 msgid "&Wrap Around Mode"
-msgstr "&Wrap Around Mode"
+msgstr "&Doorloop Mode"
 
 #. i18n: context: toolTip @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
@@ -14351,7 +14349,7 @@ msgstr "&Wrap Around Mode"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Mode"
-msgstr "Wrap Around Mode"
+msgstr "Doorloop Mode"
 
 #. i18n: context: text @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
@@ -14364,7 +14362,7 @@ msgstr "Wrap Around Mode"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Beide richtingen Wrap Around Mode"
+msgstr "Beide richtingen Doorloop Mode"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -14377,7 +14375,7 @@ msgstr "Beide richtingen Wrap Around Mode"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Horizontaal Wrap Around"
+msgstr "Horizontaal Doorlopen"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -14390,7 +14388,7 @@ msgstr "Horizontaal Wrap Around"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Verticaal Wrap Around"
+msgstr "Verticaal Doorlopen"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -27354,7 +27352,8 @@ msgstr ""
 "%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1069
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "None"
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Geen"
@@ -27461,11 +27460,9 @@ msgid "Rec 709 Linear"
 msgstr "Rec 709 Lineair"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1339
-#, fuzzy, kde-format
-#| msgctxt "Color space name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgid "Rec 2020 PQ"
-msgstr "Rec 2100 PQ"
+msgstr "Rec 2020 PQ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1340
 #, kde-format
@@ -30227,10 +30224,9 @@ msgstr "Gumomrandingskleur:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewStyle)
 #: libs/ui/forms/wdggeneralsettings.ui:886
-#, fuzzy, kde-format
-#| msgid "Color Sampler:"
+#, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Kleuren-sampler:"
+msgstr "Vorm van monsternemer van kleur:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -30258,10 +30254,9 @@ msgstr "Dikte:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewOutlineEnabled)
 #: libs/ui/forms/wdggeneralsettings.ui:961
-#, fuzzy, kde-format
-#| msgid "Circle Outline"
+#, kde-format
 msgid "Enable Outline"
-msgstr "Cirkelomranding"
+msgstr "Omlijning inschakelen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkColorSamplerPreviewExtraCircles)
 #: libs/ui/forms/wdggeneralsettings.ui:968
@@ -46129,8 +46124,7 @@ msgid "Width:"
 msgstr "Breedte:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:190
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Height:"
 msgstr "Hoogte:"
@@ -47041,7 +47035,7 @@ msgctxt ""
 "comma separated search terms for the font-variant-position property, "
 "matching is case-insensitive"
 msgid "font-variant-position, superscript, subscript"
-msgstr ""
+msgstr "font-variant-positie, superscript, subscript"
 
 #: plugins/dockers/textproperties/qml/OverflowWrap.qml:28
 #, kde-format
@@ -47069,13 +47063,13 @@ msgstr "Eigenschap terugzetten."
 #, kde-format
 msgctxt "@title:group"
 msgid "Tab Size"
-msgstr "Tabgrootte"
+msgstr "Tab-grootte"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab Size allows defining the size of tabulation characters."
-msgstr ""
+msgstr "Met de tab-grootte stelt men het aantal  tab-karakters in."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -47096,6 +47090,7 @@ msgstr "Uitlijnen van tekst"
 msgctxt "@info:tooltip"
 msgid "Text Align sets the alignment for the given block of characters."
 msgstr ""
+"Tekst-uitlijning regelt de uitlijning van het geselecteerde blok tekst."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, kde-format
@@ -47167,11 +47162,10 @@ msgid "Text Anchor:"
 msgstr "Tekstanker:"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:14
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt "@label:title"
 msgid "Text Area"
-msgstr "Textuur"
+msgstr "Tekstgebied"
 
 #: plugins/dockers/textproperties/qml/TextAreaOptions.qml:18
 #, kde-format
@@ -47214,6 +47208,8 @@ msgid ""
 "Text Decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
+"Met tekstdecoratie kunnen onderstrepen, bovenstrepen en doorstrepen gemaakt "
+"worden."
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -47221,7 +47217,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration property, matching is "
 "case-insensitive"
 msgid "underline, overline, strikethrough, line-through"
-msgstr ""
+msgstr "onderstrepen, bovenstrepen, doorstrepen doorhalen"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:167
 #, kde-format
@@ -47296,6 +47292,8 @@ msgid ""
 "Text Indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"Met tekst-inspringing kan bij het beging van de regel de tekst wat verder "
+"begingen. Werkt alleen als de tekst op de volgende regel doorloopt."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -47428,8 +47426,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text Rendering controls the hinting and rendering style for the property"
 msgstr ""
-"Tekstweergave bestuurt de aanwijzing en stijl van weergeven voor de "
-"eigenschap"
+"Tekstweergave bestuurt de 'hinting' en stijl van weergeven voor de eigenschap"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -47437,7 +47434,7 @@ msgctxt ""
 "comma separated search terms for the text-rendering property, matching is "
 "case-insensitive"
 msgid "text-rendering, hinting, anti-aliasing"
-msgstr "tekst-weergave, aanwijzen, anti-aliasing"
+msgstr "tekst-weergave, 'hinting', anti-aliasing"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:82
 #, kde-format
@@ -47446,7 +47443,7 @@ msgid ""
 "Same as geometric precision, uses no hinting and avoid loading internal "
 "bitmaps."
 msgstr ""
-"Hetzelfde als geometrische precisie, gebruikt geen aanwijzing en vermijdt "
+"Hetzelfde als geometrische precisie, gebruikt geen 'hinting' en vermijdt "
 "laden van interne bitmaps."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:83
@@ -47472,6 +47469,8 @@ msgstr "Leesbaarheid optimaliseren"
 msgctxt "@info:tooltip"
 msgid "Uses 'light' hinting in horizontal and 'full' hinting in vertical."
 msgstr ""
+"Gebruikt 'licht' hinting voor horizontaal en 'compleet' hinting voor "
+"verticaal."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:87
 #, kde-format
@@ -47479,12 +47478,20 @@ msgctxt "@label:inlistbox"
 msgid "Geometric Precision"
 msgstr "Geometrische precisie"
 
+# zie:
+# https://graphicdesign.stackexchange.com/questions/54932/editing-glyphs-in-fontforge-and-related-software-has-no-effect-depending-on-wh
+# en
+# https://en.wikipedia.org/wiki/Font_hinting
+# en
+# https://fonts.google.com/knowledge/glossary/hinting
 #: plugins/dockers/textproperties/qml/TextRendering.qml:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "No hinting and avoids loading bitmap strikes unless the font has no paths."
 msgstr ""
+"Geen hinting en vermijd het laden van 'bitmap strikes' tenzij het lettertype "
+"geen paden heeft."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:12
 #, kde-format
@@ -47501,8 +47508,8 @@ msgid ""
 "full-width forms."
 msgstr ""
 "Teksttransformatie biedt het transformeren van de gegeven reeks tekens, "
-"bijvoorbeeld, door ze hoofdletters te maken of halve-breedteformulieren "
-"vervangen door volledige-breedteformulieren."
+"bijvoorbeeld, door ze hoofdletters te maken of halve-breedte karakters "
+"vervangen door volle breedte karakters."
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -47513,6 +47520,8 @@ msgid ""
 "text-transform, uppercase, capitalization, lowercase, full-width, full-size "
 "kana"
 msgstr ""
+"Teksttransformatie , hoofdletters, eerste letter hoofdletter, kleine "
+"letters,  halve breedte karakters, volle breedte kana"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:98
 #, kde-format
@@ -47568,7 +47577,7 @@ msgctxt ""
 "comma separated search terms for the text-decoration-position property, "
 "matching is case-insensitive"
 msgid "text-decoration-position, underline, left, right, under"
-msgstr ""
+msgstr "positie tekst-decoratie, onderstrepen, links, rechts, onder"
 
 #: plugins/dockers/textproperties/qml/UnderlinePosition.qml:93
 #, kde-format
@@ -47601,6 +47610,8 @@ msgid ""
 "The CSS white space rule controls how multiples of spaces are handled, and "
 "whether the text can wrap."
 msgstr ""
+"De CSS wit ruimte regelt hoe met meerdere spaties word omgegaan, en of de "
+"tekst naar de volgende regel doorloopt."
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:17
 #, kde-format
@@ -47608,7 +47619,7 @@ msgctxt ""
 "comma separated search terms for the white-space property, matching is case-"
 "insensitive"
 msgid "white-space, collapse, pre-formatted"
-msgstr ""
+msgstr "witruimte, inklappen, voorgeformateerd"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:123
 #, kde-format
@@ -47620,7 +47631,7 @@ msgstr "Vooraan"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Wrap"
-msgstr "Niet van voren af verder gaan"
+msgstr "Geen regelafbreking"
 
 #: plugins/dockers/textproperties/qml/WhiteSpace.qml:125
 #, kde-format
@@ -47654,6 +47665,10 @@ msgid ""
 "break at words or also allow breaking at characters. Useful for Korean or "
 "Ethiopian."
 msgstr ""
+"Bij woordafbreking is de nauwkeurige afstelling van de regelafbreking "
+"mogelijk waarbij alleen tussen twee woorden wordt afgebroken of dat er  "
+"tussen twee karakters kan worden afgebroken. Dit is handig bij Koreaans en "
+"bij Ethiopisch."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:18
 #, kde-format
@@ -47661,19 +47676,21 @@ msgctxt ""
 "comma separated search terms for the word-break property, matching is case-"
 "insensitive"
 msgid "word-break, line breaking"
-msgstr ""
+msgstr "Woordafbreking, regelafbreking"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "No additional adjustments are made to the regular line break algorithm."
 msgstr ""
+"Geen extra aanpassingen zijn aan het standaard algoritme voor regelafbreking "
+"gedaan."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:79
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Keep-all"
-msgstr ""
+msgstr "Alles behouden"
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:80
 #, kde-format
@@ -47681,12 +47698,14 @@ msgctxt "@info:tooltip"
 msgid ""
 "Soft breaks will only be allowed inside words, typically delimited by spaces."
 msgstr ""
+"Soft breaks zullen alleen toegestaan zijn in woorden, normaal gesproken  "
+"begrensd door spaties."
 
 #: plugins/dockers/textproperties/qml/WordBreak.qml:81
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Break-all"
-msgstr ""
+msgstr "Alles afbreken"
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:14
 #, kde-format
@@ -47701,6 +47720,8 @@ msgid ""
 "Word spacing controls the size of word-break characters, such as the space "
 "character."
 msgstr ""
+"De spatiëring tussen de woorden regelt het aantal woordafbreek-karakters, "
+"zoals de spatie-karakter."
 
 #: plugins/dockers/textproperties/qml/WordSpacing.qml:20
 #, kde-format
@@ -47723,6 +47744,9 @@ msgid ""
 "Writing Mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"De schrijfmodus bepaalt of de tekst horizontaal of verticaal loopt, en in "
+"het eerste geval of het blok  van rechts naar links rechts dan wel  links "
+"naar rechts loopt."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -56968,6 +56992,9 @@ msgid ""
 "While text shapes can be saved to psd, only basic features are supported. "
 "Advanced features, like text-on-path and opentype features will not be saved."
 msgstr ""
+"Ofschoon tekstobjecten in een psd kunnen worden opgeslagen, zijn alleen de "
+"basis-mogelijkheden mogelijk. Geavanceerde mogelijkheden, zoals tekst op pad "
+"en opentype-functionaliteiten worden niet opgeslagen."
 
 #: plugins/impex/psd/psd_loader.cpp:184
 #, kde-format
@@ -56988,6 +57015,9 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
+"Tekstobjecten gevonden, wilt u ze laden als bewerkbare tekstvormen? Indien "
+"niet, dan zullen ze worden geladen als pixel data, die visueel meer accuraat "
+"zal overeenkomen met het originele bestand."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
@@ -65841,7 +65871,7 @@ msgstr "Vormen aan groep toevoegen"
 #| msgid "Text On Path"
 msgctxt "(qtundo-format)"
 msgid "Put Text On Path"
-msgstr "Tekst op een pad"
+msgstr "Tekst op een pad zetten"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:669
 #, fuzzy
@@ -65990,9 +66020,7 @@ msgid "Logical Operations"
 msgstr "Logische bewerkingen"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:2290
-#, fuzzy, kde-format
-#| msgctxt "Text label in SVG Text Tool"
-#| msgid "Text"
+#, kde-format
 msgid "Text"
 msgstr "Tekst"
 
@@ -66916,6 +66944,9 @@ msgid ""
 "search is possible when prepended with \"U+\", (for example, U+0045 will "
 "search for 'E')"
 msgstr ""
+"Zoekt naar karakters die overeenkomen met de eerste letter van de zin. Hex "
+"zoeken is mogelijk als het vooraf wordt gegaan door \"U+\", (bijvoorbeeld, U"
+"+0045 zal naar 'E')"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
 #, fuzzy, kde-format
@@ -66947,7 +66978,7 @@ msgstr "Tekstrichting wijzigen"
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
-msgstr "Tekst van automatische tekstomloop aanpassen"
+msgstr "Automatische tekstomloop aanpassen"
 
 #: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -66963,103 +66994,80 @@ msgstr "SvgTextTool wijzigen"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "Karaktertransformatie op tekst toepassen."
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:384
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Top"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Bovenkant van tekst"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Tekengrootte"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Text Bottom"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Onderkant van tekst"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Alphabetic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabetisch"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:397
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Ideographic"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografisch"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:399
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Hanging"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Hangend"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
-#, fuzzy, kde-format
-#| msgctxt "Middle Mouse Button"
-#| msgid "Middle"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Midden"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Mathematical"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
-msgstr "Mathematisch"
+msgstr "Wiskundig"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Central"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
-msgstr "Midden"
+msgstr "Centraal"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:407
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Line Height"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Lijnhoogte"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:410
-#, fuzzy, kde-format
-#| msgid "Current selection"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
-msgstr "Huidige selectie"
+msgstr "Huidige basislijn"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:412
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Baseline-Shift"
+#, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
-msgstr "basisregel-verschuiving"
+msgstr "basislijnverschuiving"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:94
 #, kde-format
@@ -67126,11 +67134,9 @@ msgid "Remove Text"
 msgstr "Tekst verwijderen"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveTransformsFromRange.cpp:17
-#, fuzzy
-#| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
 msgid "Remove Character Transforms"
-msgstr "Werkbladtransformaties herstellen"
+msgstr "Verwijder karaktertransformatie"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -67422,7 +67428,7 @@ msgstr "Opgemaakte tekst plakken"
 #, kde-format
 msgctxt "action"
 msgid "Try to paste styled text if possible."
-msgstr ""
+msgstr "Probeert indien mogelijk de tekststijl te plakken."
 
 #. i18n: context: iconText @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_paste_plain_text), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67444,20 +67450,17 @@ msgstr "Tekst zonder stilering plakken"
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:227
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down"
-msgstr "Selectie verplaatsen"
+msgstr "Tekstselectie omlaag verplaatsen"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
-#, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Down By 1 Pixel"
-msgstr "Geselecteerde streek verplaatsen"
+msgstr "Tekstselectie 1 pixel omlaag verplaatsen"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_down_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:230
@@ -67467,22 +67470,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
 msgstr ""
+"Verplaats het startpunt  van de selectie met 1 pixel omlaag als de letterzet "
+"modus actief is."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up"
-msgstr "Selectie verplaatsen"
+msgstr "Tekstselectie omhoog verplaatsen"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:239
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Up By 1 Pixel"
-msgstr ""
+msgstr "Tekstselectie 1 pixel omhoog verplaatsen"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:241
@@ -67492,23 +67495,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
+"Verplaats het startpunt  van de selectie met 1 pixel omhoog als de letterzet "
+"modus actief is."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left"
-msgstr "Selectie verplaatsen"
+msgstr "Tekstselectie naar links verplaatsen"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:250
-#, fuzzy, kde-format
-#| msgid "Move Selection Stroke"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Left By 1 Pixel"
-msgstr "Geselecteerde streek verplaatsen"
+msgstr "Tekstselectie 1 pixel naar links verplaatsen"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:252
@@ -67518,22 +67520,22 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
+"Verplaats het startpunt  van de selectie met 1 pixel naar links als de "
+"letterzet modus actief is."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right"
-msgstr "Selectie verplaatsen"
+msgstr "Tekstselectie naar rechts verplaatsen"
 
 #. i18n: context: text @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:261
 #, kde-format
 msgctxt "action"
 msgid "Move Text Selection Right By 1 Pixel"
-msgstr ""
+msgstr "Tekstselectie 1 pixel naar rechts verplaatsen"
 
 #. i18n: context: toolTip @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
@@ -67543,6 +67545,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
+"Verplaats het startpunt  van de selectie met 1 pixel naar rechts als de "
+"letterzet modus actief is."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67550,18 +67554,17 @@ msgstr ""
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:271
 #: plugins/tools/svgtexttool/SvgTextTool.action:272
-#, fuzzy, kde-format
-#| msgid "Reset Canvas Transformations"
+#, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms"
-msgstr "Werkbladtransformaties herstellen"
+msgstr "Verwijder karaktertransformatie"
 
 #. i18n: context: toolTip @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:274
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "Verwijdert karaktertransformatie van de selectie."
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67573,15 +67576,16 @@ msgstr ""
 #| msgid "Formatting"
 msgctxt "action"
 msgid "Clear Formatting"
-msgstr "Opmaak"
+msgstr "Formattering &wissen"
 
 #. i18n: context: toolTip @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:285
 #, fuzzy, kde-format
-#| msgid "Smooths the edges of the selection"
+#| msgctxt "action"
+#| msgid "Remove Character Transforms from the selection."
 msgctxt "action"
 msgid "Remove all set text properties from the selection."
-msgstr "De randen van de selectie gladstrijken"
+msgstr "Verwijdert karaktertransformatie van de selectie."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:312
 #, kde-format
@@ -67612,6 +67616,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Use the current properties in the text properties docker to create new texts."
 msgstr ""
+"Gebruikt de huidige teksteigenschappen in het vastzet-paneel voor  "
+"teksteigenschappen bij de creatie van nieuwe teksten."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:92
 #, kde-format
@@ -67631,6 +67637,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
+"Opent vastzet-paneel voor  teksteigenschappen om  de eigenschappen zoals "
+"lettertype en grootte te bewerken."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
 #, kde-format
@@ -67648,7 +67656,7 @@ msgstr "Huidige visuele cursor"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use the visual order for bidirectional text."
-msgstr ""
+msgstr "Gebruik de visuele volgorde voor bidirectionele tekst"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:162
 #, kde-format
@@ -67660,21 +67668,19 @@ msgstr "Opgemaakte tekst plakken is standaard"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Always paste rich text when using paste action."
-msgstr ""
+msgstr "Altijd opgemaakte tekst plakken bij het plakken."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:182
-#, fuzzy, kde-format
-#| msgid "Texturing Mode:"
+#, kde-format
 msgctxt "@label:button"
 msgid "Type Setting Mode"
-msgstr "Modus textuur aanbrengen:"
+msgstr "Letterzet modus:"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:192
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable type setting mode."
-msgstr "Pen-instellingen inschakelen"
+msgstr "Letterzet modus inschakelen"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:203
 #, kde-format
@@ -67707,6 +67713,8 @@ msgid ""
 "Open the Glyph Palette, which provides access to alternative OpenType or "
 "Unicode Variations of glyphs, as well as a Character Map."
 msgstr ""
+"Opent het Glyph-palet, dat toegang geeft tot alternatieve OpenType of "
+"Unicode-variaties van glyphs, maar ook als een karakter-map."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
 #, kde-format
@@ -67727,9 +67735,9 @@ msgid ""
 "The text will not wrap and preserves spaces and new lines. A line break is "
 "inserted so the lines from wrapping or positioning remain separated."
 msgstr ""
-"De tekst zal niet doorlopen naar de volgende regel en behoudt spaties en "
-"nieuwe regels. Een regelafbreking wordt ingevoegd zodat de regels uit "
-"doorlopen naar de volgende regel of positionering gescheiden blijven."
+"De tekst zal niet doorlopen naar de volgende regel en de spaties en nieuwe "
+"regels blijven behouden. Een regelafbreking wordt ingevoegd zodat de regels "
+"uit doorlopen naar de volgende regel of positionering gescheiden blijven."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:285
 #, kde-format
@@ -68411,41 +68419,36 @@ msgid "Comic Panel Editing Tool"
 msgstr "Bewerkingshulpmiddel voor inkleurmasker"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
-#, fuzzy, kde-format
-#| msgid "millimeter"
+#, kde-format
 msgid "Millimeters"
-msgstr "millimeter"
+msgstr "Millimeters"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
-#, fuzzy, kde-format
-#| msgid "Thickness"
+#, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
-msgstr "Dikte"
+msgstr "Dik"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
-#, fuzzy, kde-format
-#| msgid "Thinning:"
+#, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
-msgstr "Verdunnen:"
+msgstr "Dun"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Specials"
+#, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Special"
-msgstr "Specials"
+msgstr "Speciaal"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
@@ -68491,9 +68494,7 @@ msgstr "Specials"
 
 #. i18n: ectx: property (text), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox set while balance automatically"
-#| msgid "Automatic"
+#, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -68538,7 +68539,7 @@ msgstr ""
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
 msgid "Gap close hint: "
-msgstr "Tip voor gat sluiten: "
+msgstr "Gat sluiten 'hint': "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
 #, kde-format
@@ -68547,8 +68548,8 @@ msgid ""
 "The mask will try to close non-closed contours if the gap is smaller than "
 "\"Gap close hint\" value"
 msgstr ""
-"Het masker zal proberen om niet gesloten contouren te sluiten als de kloof "
-"kleiner is dan de waarde van \"Hint voor kloof sluiten\" waarde"
+"Het masker zal proberen om niet gesloten contouren te sluiten als het gat "
+"kleiner is dan de waarde van \"Gat sluiten 'hint'\" waarde"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
 #, kde-format
@@ -69721,11 +69722,6 @@ msgstr ""
 "Schakelen tussen volledige reeks en subreeks.\n"
 "Volledige reeks: [%1, %2]\n"
 "Subreeks: [%3, %4]"
-
-#, fuzzy
-#~| msgid "Line Tool"
-#~ msgid "Knife Tool"
-#~ msgstr "Lijnhulpmiddel"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Shape RunAround"

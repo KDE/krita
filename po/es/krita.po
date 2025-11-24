@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-21 01:50+0100\n"
+"PO-Revision-Date: 2025-11-24 01:13+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -7696,17 +7696,14 @@ msgstr ""
 
 #. i18n: context: text @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:311
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Text Type"
+#, kde-format
 msgctxt "action"
 msgid "Convert Text To Inline Wrapped"
-msgstr "Convertir tipo de texto"
+msgstr "Convertir texto a ajustado en línea"
 
 #. i18n: context: iconText @ Action (text_type_inline_wrap), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:312
-#, fuzzy, kde-format
-#| msgid "Inline Wrapped"
+#, kde-format
 msgctxt "action"
 msgid "Inline Wrapped"
 msgstr "Ajustado en línea"
@@ -7751,25 +7748,24 @@ msgstr ""
 
 #. i18n: context: text @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:332
-#, fuzzy, kde-format
-#| msgid "SVG Text Shape"
+#, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "Forma de texto SVG"
+msgstr "Texto fluido en forma"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr ""
+msgstr "Hacer que el primer texto seleccionado sea fluido en la forma."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Flow Area"
-msgstr ""
+msgstr "Sustraer la forma del área de texto fluido"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
@@ -7777,41 +7773,37 @@ msgstr ""
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
 msgstr ""
+"Hacer que las formas formen parte de las formas sustraídas del primer texto "
+"seleccionado."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
 #, kde-format
 msgctxt "action"
 msgid "Put Text On Path"
-msgstr ""
+msgstr "Poner texto en una ruta"
 
 #. i18n: context: toolTip @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Force the color selector to only select colors in the currently selected "
-#| "palette."
+#, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
 msgstr ""
-"Forzar que el selector de color solo pueda seleccionar los colores de la "
-"paleta seleccionada actualmente."
+"Hacer que el primer texto seleccionado fluya en la primera ruta seleccionada."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgid "Remove from tag"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "Eliminar de la etiqueta"
+msgstr "Eliminar formas del flujo de texto"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr ""
+msgstr "Eliminar formas del flujo de texto y añadirlas a la capa."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7819,19 +7811,17 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:372
 #: krita/data/actions/InteractionTool.action:378
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle layer alpha"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Flow Shape Type"
-msgstr "Conmutar el alfa de la capa"
+msgstr "Conmutar el tipo de forma de flujo"
 
 #. i18n: context: toolTip @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:373
 #, kde-format
 msgctxt "action"
 msgid "Switch the current Flow Shape between Inside or Subtract mode"
-msgstr ""
+msgstr "Cambiar la forma de flujo actual entre el modo interior y sustraer"
 
 #. i18n: context: iconText @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7842,7 +7832,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Definir forma de flujo como última"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
@@ -7851,6 +7841,8 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
 msgstr ""
+"Hacer que esta forma de flujo sea la última en el orden de formas de flujo "
+"como se usa en el diseño de texto."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7858,12 +7850,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #: krita/data/actions/InteractionTool.action:397
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Flow"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow Shape Index"
-msgstr "Reducir el flujo"
+msgstr "Reducir el índice de la forma de flujo"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7874,7 +7864,7 @@ msgstr "Reducir el flujo"
 #, kde-format
 msgctxt "action"
 msgid "Make this flow shape be evaluated later."
-msgstr ""
+msgstr "Hacer que esta forma de flujo se evalúe más tarde."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7882,12 +7872,10 @@ msgstr ""
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #: krita/data/actions/InteractionTool.action:406
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Flow"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow Shape Index"
-msgstr "Aumentar el flujo"
+msgstr "Aumentar el índice de la forma de flujo"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7898,7 +7886,7 @@ msgstr "Aumentar el flujo"
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Definir forma de flujo como primera"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
@@ -7908,6 +7896,8 @@ msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
 msgstr ""
+"Hacer que esta forma de flujo sea la primera en el orden de formas de flujo "
+"como se usa en el diseño de texto."
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -16760,25 +16750,25 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr "Latín básico"
+msgstr "Latino básico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
 #, kde-format
 msgctxt "@title"
 msgid "Latin-1 Supplement"
-msgstr "Latín-1 (suplemento)"
+msgstr "Latino-1 (suplemento)"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:23
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-A"
-msgstr "Latín extendido A"
+msgstr "Latino extendido A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:24
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-B"
-msgstr "Latín extendido B"
+msgstr "Latino extendido B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:25
 #, kde-format
@@ -17180,7 +17170,7 @@ msgstr "Signos diacríticos para combinar (suplemento)"
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended Additional"
-msgstr "Latín extendido adicional"
+msgstr "Latino extendido adicional"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
 #, kde-format
@@ -17342,7 +17332,7 @@ msgstr "Glagolítico"
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-C"
-msgstr "Latín extendido C"
+msgstr "Latino extendido C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:119
 #, kde-format
@@ -17528,7 +17518,7 @@ msgstr "Letras modificadoras de la entonación"
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-D"
-msgstr "Latín extendido D"
+msgstr "Latino extendido D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:150
 #, kde-format
@@ -17540,7 +17530,7 @@ msgstr "Syloti Nagri"
 #, kde-format
 msgctxt "@title"
 msgid "Common Indic Number Forms"
-msgstr ""
+msgstr "Formas comunes de números índicos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:152
 #, kde-format
@@ -17552,7 +17542,7 @@ msgstr "Phags-pa"
 #, kde-format
 msgctxt "@title"
 msgid "Saurashtra"
-msgstr ""
+msgstr "Saurastra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:154
 #, kde-format
@@ -17564,7 +17554,7 @@ msgstr "Devanagari extendido"
 #, kde-format
 msgctxt "@title"
 msgid "Kayah Li"
-msgstr ""
+msgstr "Kayah li"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:156
 #, kde-format
@@ -17606,13 +17596,13 @@ msgstr "Birmano extendido A"
 #, kde-format
 msgctxt "@title"
 msgid "Tai Viet"
-msgstr ""
+msgstr "Tai viet"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:163
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek Extensions"
-msgstr ""
+msgstr "Extensiones meetei mayek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:164
 #, kde-format
@@ -17624,19 +17614,19 @@ msgstr "Etíope extendido A"
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-E"
-msgstr "Latín extendido E"
+msgstr "Latino extendido E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
 #, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr ""
+msgstr "Suplemento cheroqui"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "Meetei mayek"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:168
 #, kde-format
@@ -17732,7 +17722,7 @@ msgstr "Formas de presentación árabes B"
 #, kde-format
 msgctxt "@title"
 msgid "Halfwidth and Fullwidth Forms"
-msgstr ""
+msgstr "Formas de ancho medio y de ancho completo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
 #, kde-format
@@ -17756,7 +17746,7 @@ msgstr "Ideogramas lineales B"
 #, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr ""
+msgstr "Números egeos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
@@ -17774,45 +17764,43 @@ msgstr "Símbolos antiguos"
 #, kde-format
 msgctxt "@title"
 msgid "Phaistos Disc"
-msgstr ""
+msgstr "Disco de Festo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:191
 #, kde-format
 msgctxt "@title"
 msgid "Lycian"
-msgstr ""
+msgstr "Licio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Variant:"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "Variante:"
+msgstr "Cario"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
 msgctxt "@title"
 msgid "Coptic Epact Numbers"
-msgstr ""
+msgstr "Números coptos de epacta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
 #, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "Cursiva antigua"
+msgstr "Itálico antiguo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
 msgctxt "@title"
 msgid "Gothic"
-msgstr "Gótica"
+msgstr "Gótico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
 #, kde-format
 msgctxt "@title"
 msgid "Old Permic"
-msgstr ""
+msgstr "Pérmico antiguo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
 #, kde-format
@@ -17836,7 +17824,7 @@ msgstr "Deseret"
 #, kde-format
 msgctxt "@title"
 msgid "Shavian"
-msgstr "Shavian"
+msgstr "Shaviano"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:201
 #, kde-format
@@ -17848,7 +17836,7 @@ msgstr "Osmanya"
 #, kde-format
 msgctxt "@title"
 msgid "Osage"
-msgstr ""
+msgstr "Osage"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:203
 #, kde-format
@@ -17860,19 +17848,19 @@ msgstr "Elbasan"
 #, kde-format
 msgctxt "@title"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Albanés caucásico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Vithkuqi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:206
 #, kde-format
 msgctxt "@title"
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
 #, kde-format
@@ -17884,7 +17872,7 @@ msgstr "Lineal A"
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr "Latín extendido F"
+msgstr "Latino extendido F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
 #, kde-format
@@ -17896,13 +17884,13 @@ msgstr "Sílabas chipriotas"
 #, kde-format
 msgctxt "@title"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Arameo imperial"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmireno"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:212
 #, kde-format
@@ -17914,7 +17902,7 @@ msgstr "Nabateo"
 #, kde-format
 msgctxt "@title"
 msgid "Hatran"
-msgstr ""
+msgstr "Hatreo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:214
 #, kde-format
@@ -17926,74 +17914,73 @@ msgstr "Fenicio"
 #, kde-format
 msgctxt "@title"
 msgid "Lydian"
-msgstr ""
+msgstr "Lidio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:216
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Jeroglíficos meroíticos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:217
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Cursiva meroítica"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:218
 #, kde-format
 msgctxt "@title"
 msgid "Kharoshthi"
-msgstr "Kharoshthi"
+msgstr "Karosti"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Sudarábigo antiguo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:220
 #, kde-format
 msgctxt "@title"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Norarábigo antiguo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:221
 #, kde-format
 msgctxt "@title"
 msgid "Manichaean"
-msgstr ""
+msgstr "Maniqueo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:222
 #, kde-format
 msgctxt "@title"
 msgid "Avestan"
-msgstr ""
+msgstr "Avéstico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
-#, fuzzy, kde-format
-#| msgid "Initialization"
+#, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr "Inicialización"
+msgstr "Inscripciones partas"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Inscripciones pahlaví"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:225
 #, kde-format
 msgctxt "@title"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Salterio pahlaví"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
 #, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Turco antiguo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
@@ -18005,31 +17992,31 @@ msgstr "Húngaro antiguo"
 #, kde-format
 msgctxt "@title"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Rohinyá hanifi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:229
 #, kde-format
 msgctxt "@title"
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:230
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "Símbolos numéricos rumi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Yezidi"
-msgstr ""
+msgstr "Yazidí"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:232
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-C"
-msgstr ""
+msgstr "Árabe extendido C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:233
 #, kde-format
@@ -18537,13 +18524,13 @@ msgstr "Símbolos matemáticos alfanuméricos"
 #, kde-format
 msgctxt "@title"
 msgid "Sutton SignWriting"
-msgstr ""
+msgstr "Escritura de signos de Sutton"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:316
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-G"
-msgstr "Latín extendido G"
+msgstr "Latino extendido G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
 #, kde-format
@@ -18561,32 +18548,31 @@ msgstr "Cirílico extendido D"
 #, kde-format
 msgctxt "@title"
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng puachue hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:320
 #, kde-format
 msgctxt "@title"
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "Anclaje:"
+msgstr "Wancho"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
 msgctxt "@title"
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag mundari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
 #, kde-format
 msgctxt "@title"
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol onal"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:324
 #, kde-format
@@ -18598,13 +18584,13 @@ msgstr "Etíope extendido B"
 #, kde-format
 msgctxt "@title"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mendé ki-ka-ku"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:326
 #, kde-format
 msgctxt "@title"
 msgid "Adlam"
-msgstr ""
+msgstr "Ádlam"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:327
 #, kde-format
@@ -18622,7 +18608,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "Símbolos alfabéticos matemáticos árabes"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
 #, kde-format
@@ -18811,11 +18797,10 @@ msgid "%1 glyph variants."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "Alternativo"
+msgstr "Acceder a todos los alternativos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
@@ -18824,11 +18809,10 @@ msgid "Access any possible substitutions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "Alternativo"
+msgstr "Alternativos contextuales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
@@ -18920,7 +18904,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Alternativos de justificación"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
@@ -19827,11 +19811,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "Líneas horizontales"
+msgstr "Alternativos de kanas horizontales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19892,7 +19875,7 @@ msgstr "Cursiva"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces Latin glyphs in a CJK font with their italic forms."
-msgstr ""
+msgstr "Sustituye glifos latinos en una fuente CJK con sus formas cursivas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
 #, kde-format
@@ -20131,11 +20114,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "Líneas verticales"
+msgstr "Alternativos verticales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -20170,11 +20152,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr "Traslación vertical"
+msgstr "Alternativos de kanas verticales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -20226,11 +20207,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
-#, fuzzy, kde-format
-#| msgid "Vertical Position"
+#, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "Posición vertical"
+msgstr "Posicionamiento de cursiva"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
@@ -20304,17 +20284,16 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr "Alternativo"
+msgstr "Alternativos de izquierda a derecha"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right alternates."
-msgstr ""
+msgstr "Sustituye glifos con sus alternativos de izquierda a derecha."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
 #, kde-format
@@ -20360,7 +20339,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "mset"
-msgstr ""
+msgstr "mset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
 #, kde-format
@@ -20369,19 +20348,20 @@ msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
 msgstr ""
+"Posiciones de marcas de combinación árabes en fuentes para Windows 95 que "
+"usan sustitución de glifos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left glyph alternates"
-msgstr "Alternativo"
+msgstr "Alternativos de derecha a izquierda"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left alternates."
-msgstr ""
+msgstr "Sustituye glifos con sus alternativos de derecha a izquierda."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
 #, kde-format
@@ -20418,7 +20398,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
-msgstr ""
+msgstr "Sustituye glifos con alternativos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
 #, fuzzy, kde-format
@@ -46828,7 +46808,7 @@ msgstr "Glifos: Ligaduras"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable ligatures and contextual alternates on the text."
-msgstr ""
+msgstr "Activar o desactivar ligaduras y suplentes contextuales en el texto."
 
 #: plugins/dockers/textproperties/qml/OTLigatures.qml:18
 #, kde-format
@@ -66852,11 +66832,10 @@ msgid "Similar Color Selection Tool"
 msgstr "Herramienta de selección de color similar"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:44
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Glyph Alternates"
-msgstr "Alternativo"
+msgstr "Alternativos de glifos"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPalette.qml:47
 #, kde-format
@@ -66877,11 +66856,10 @@ msgstr ""
 "«E»)."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteAlts.qml:85
-#, fuzzy, kde-format
-#| msgid "Memory available:"
+#, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "Memoria disponible:"
+msgstr "No hay alternativos de glifos disponibles."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -69635,60 +69613,3 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
-
-#~ msgid "Knife Tool"
-#~ msgstr "Herramientas de cuchillo"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Shape RunAround"
-#~ msgstr "Cambiar recorrido de la forma"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Set Shadow"
-#~ msgstr "Definir sombra"
-
-#~ msgctxt "resource type"
-#~ msgid "Filter Effects"
-#~ msgstr "Efectos de filtros"
-
-#~ msgid "Change the color of the shadow"
-#~ msgstr "Cambiar el color de la sombra"
-
-#~ msgid "Blur:"
-#~ msgstr "Desenfoque:"
-
-#~ msgid "An enhanced path shape"
-#~ msgstr "Una forma de ruta avanzada"
-
-#~ msgid "An enhanced path"
-#~ msgstr "Una forma de ruta"
-
-#~ msgid "Cross"
-#~ msgstr "Cruz"
-
-#~ msgid "A cross"
-#~ msgstr "Una cruz"
-
-#~ msgid "An arrow"
-#~ msgstr "Una flecha"
-
-#~ msgid "Callout"
-#~ msgstr "Señal"
-
-#~ msgid "A callout"
-#~ msgstr "Una señal"
-
-#~ msgid "Smiley"
-#~ msgstr "Emoticono"
-
-#~ msgid "Circular Arrow"
-#~ msgstr "Flecha circular"
-
-#~ msgid "A circular-arrow"
-#~ msgstr "Una flecha circular"
-
-#~ msgid "Gearhead"
-#~ msgstr "Engranaje"
-
-#~ msgid "A gearhead"
-#~ msgstr "Un engranaje"

@@ -15,13 +15,12 @@
 #include <QDebug>
 #include <cmath>
 #include <kis_global.h>
-#include <kritaglobal_export.h>
-#include <functional>
+#include <kritaimage_export.h>
 #include <boost/optional.hpp>
 #include <optional>
 
 
-class KRITAGLOBAL_EXPORT KisSpatialContainer
+class KRITAIMAGE_EXPORT KisSpatialContainer
 {
     // right now it's just a standard Quadtree, since it seemed like it would work well
     // for points that are mostly uniformly located
@@ -29,7 +28,7 @@ class KRITAGLOBAL_EXPORT KisSpatialContainer
 
 
 public:
-    class SpatialNode;
+    struct SpatialNode;
 
 public:
 

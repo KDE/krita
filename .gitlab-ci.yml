@@ -23,7 +23,7 @@ variables:
   # The name of python executable that will be used for initializing
   # the initial virtual envioronment. After venv is initialized, the chosen
   # python can be addressed via plain 'python' or 'python3'
-  BOOTSTRAP_PYTHON_EXE_WINDOWS: 'C:\tools\Python-3.10\python.exe'
+  BOOTSTRAP_PYTHON_EXE_WINDOWS: 'C:\tools\Python-3.13\python.exe'
 
 .nightly-job-mixin:
   rules:

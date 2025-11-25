@@ -31,7 +31,8 @@ windows-build:
     - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
-    - python -m venv venv --upgrade-deps
+    - >
+      & $BOOTSTRAP_PYTHON_EXE_WINDOWS -m venv venv --upgrade-deps
     - . venv\Scripts\Activate.ps1
     - pip install -r krita-deps-management/requirements.txt
     - pip install -r ci-notary-service/requirements.txt

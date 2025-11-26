@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-22 18:32+0300\n"
+"PO-Revision-Date: 2025-11-24 19:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -10425,7 +10425,7 @@ msgstr "Normal Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Dissolve Blending Mode"
-msgstr "Çözülme Harmanlama Kipini Seç"
+msgstr "Çözündür Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10629,7 +10629,7 @@ msgstr "Doğrusal Ișık Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Pin Light Blending Mode"
-msgstr "Sabitleme Ișığı Kipini Seç"
+msgstr "Işığı Sabitle Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -23083,7 +23083,7 @@ msgstr "Ekran"
 #, kde-format
 msgctxt "Blending mode - Pin Light"
 msgid "Pin Light"
-msgstr "Pim Işığı"
+msgstr "Işığı Sabitle"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
@@ -23443,25 +23443,25 @@ msgstr "Normal Eşlemi Birleştir"
 #, kde-format
 msgctxt "Blending mode - Dissolve"
 msgid "Dissolve"
-msgstr "Çözünme"
+msgstr "Çözündür"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:142
 #, kde-format
 msgctxt "Blending mode - Copy Red"
 msgid "Copy Red"
-msgstr "Kırmızı Kopyala"
+msgstr "Kırmızıyı Kopyala"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:143
 #, kde-format
 msgctxt "Blending mode - Copy Green"
 msgid "Copy Green"
-msgstr "Yeşil Kopyala"
+msgstr "Yeşili Kopyala"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:144
 #, kde-format
 msgctxt "Blending mode - Copy Blue"
 msgid "Copy Blue"
-msgstr "Mavi Kopyala"
+msgstr "Maviyi Kopyala"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
 #, kde-format

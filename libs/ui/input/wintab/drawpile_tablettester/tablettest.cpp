@@ -72,7 +72,7 @@ void TabletTester::mousePressEvent(QMouseEvent *e)
 void TabletTester::mouseMoveEvent(QMouseEvent *e)
 {
     const qreal speed = m_tabletSpeedSmoother.getNextSpeed(e->pos(), e->timestamp());
-    Q_EMIT eventReport(QString("Mouse move X=%1 Y=%2 B=%3 S=%4").arg(e->x()).arg(e->y()).arg(e->buttons()).arg(speed));
+    Q_EMIT eventReport(QString("Mouse move X=%1 Y=%2 B=%3 S=%4").arg(e->x()).arg(e->y()).arg(static_cast<int>(e->buttons())).arg(speed));
     m_mousePath << e->pos();
     update();
 }
@@ -123,7 +123,7 @@ void TabletTester::tabletEvent(QTabletEvent *e)
     msg += QString(" X=%1 Y=%2 B=%3 P=%4% TX=%6 TY=%7 S=%9")
         .arg(e->posF().x(), 0, 'f', 2)
         .arg(e->posF().y(), 0, 'f', 2)
-        .arg(e->buttons())
+        .arg(static_cast<int>(e->buttons()))
         .arg(e->pressure()*100, 0, 'f', 1)
         .arg(e->xTilt())
         .arg(e->yTilt())

@@ -162,16 +162,16 @@ PyObject* Python::functionCall(
 {
     if (!arguments) {
         errScript << "Missing arguments for" << moduleName << functionName;
-        return 0;
+        return nullptr;
     }
     PyObject* const func = itemString(functionName, moduleName);
     if (!func) {
         errScript << "Failed to resolve" << moduleName << functionName;
-        return 0;
+        return nullptr;
     }
     if (!PyCallable_Check(func)) {
         traceback(QString("Not callable %1.%2").arg(moduleName).arg(functionName));
-        return 0;
+        return nullptr;
     }
     PyObject* const result = PyObject_CallObject(func, arguments);
     if (!result)

@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-24 19:36+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"PO-Revision-Date: 2025-11-27 13:39+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -10713,7 +10713,7 @@ msgstr "Renk Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Luminosity Blending Mode"
-msgstr "Parlaklık Harmanlama Kipini Seç"
+msgstr "Parlaklık Gücü Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1905
@@ -23191,7 +23191,7 @@ msgstr "Basit Soldurma"
 #, kde-format
 msgctxt "Blending mode - Luminosity/Shine (SAI)"
 msgid "Luminosity/Shine (SAI)"
-msgstr "Parlaklık/Parla (SAI)"
+msgstr "Parlaklık Gücü/Parla (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:96
 #, kde-format
@@ -23503,7 +23503,7 @@ msgstr "Doygunluk"
 #, kde-format
 msgctxt "Blending mode - Luminosity HSY"
 msgid "Luminosity"
-msgstr "Parlaklık"
+msgstr "Parlaklık Gücü"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
@@ -23521,31 +23521,31 @@ msgstr "Doygunluğu Artır"
 #, kde-format
 msgctxt "Blending mode - Decrease Luminosity HSY"
 msgid "Decrease Luminosity"
-msgstr "Parlaklığı Azalt"
+msgstr "Parlaklık Gücünü Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
-msgstr "Parlaklığı Artır"
+msgstr "Parlaklık Gücünü Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
-msgstr "Renk HSI"
+msgstr "Renk HSI Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
-msgstr "Ton HSI"
+msgstr "Ton HSI Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:160
 #, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
-msgstr "Doygunluk HSI"
+msgstr "Doygunluk HSI Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:161
 #, kde-format
@@ -23557,13 +23557,13 @@ msgstr "Yoğunluk"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
-msgstr "Doygunluk HSI Azalt"
+msgstr "Doygunluk HSI Modelini Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
-msgstr "Doygunluk HSI Artır"
+msgstr "Doygunluk HSI Modelini Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
@@ -23581,19 +23581,19 @@ msgstr "Yoğunluğu Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
-msgstr "Renk HSL"
+msgstr "Renk HSL Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
-msgstr "Renk HSL"
+msgstr "Renk HSL Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
-msgstr "Doygunluk HSL"
+msgstr "Doygunluk HSL Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:170
 #, kde-format
@@ -23605,13 +23605,13 @@ msgstr "Açıklık"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
-msgstr "Doygunluk HSL Azalt"
+msgstr "Doygunluk HSL Modelini Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
-msgstr "Doygunluk HSL Artır"
+msgstr "Doygunluk HSL Modelini Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
@@ -23629,19 +23629,19 @@ msgstr "Açıklığı Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
-msgstr "Renk HSV"
+msgstr "Renk HSV Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
-msgstr "Renk HSV"
+msgstr "Renk HSV Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:178
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
-msgstr "Doygunluk HSV"
+msgstr "Doygunluk HSV Modeli"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:179
 #, kde-format
@@ -23653,13 +23653,13 @@ msgstr "Değer"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
-msgstr "Doygunluk HSV Azalt"
+msgstr "Doygunluk HSV Modelini Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:181
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
-msgstr "Doygunluk HSV Artır"
+msgstr "Doygunluk HSV Modelini Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:182
 #, kde-format
@@ -42249,7 +42249,7 @@ msgid ""
 "Luminosity is crunched with. 1 makes the selector fully linear, 2.2 is a "
 "practical default value.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Bu, doğrusal hale getirilmiş HSY Parlaklığı ile "
+"<html><head/><body><p>Bu, doğrusal hale getirilmiş HSY Parlaklık Gücü ile "
 "birlikte gama değerini ayarlar. 1 seçiciyi tamamen doğrusal yapar, 2,2 de "
 "pratik bir öntanımlı değerdir.</p></body></html>"
 
@@ -51357,7 +51357,7 @@ msgstr "Vurguları Sıfırla"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:362
 #, kde-format
 msgid "Preserve Luminosity"
-msgstr "Parlaklılığı Koru"
+msgstr "Parlaklık Gücünü Koru"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupType)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:39
@@ -51375,13 +51375,13 @@ msgstr "&Açıklık"
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:61
 #, kde-format
 msgid "Luminosity (ITU-R BT.&709)"
-msgstr "Parlaklık (ITU-R BT.&709)"
+msgstr "Parlaklık Gücü (ITU-R BT.&709)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLuminosityBT601)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:68
 #, kde-format
 msgid "Luminosity (ITU-R BT.&601)"
-msgstr "Parlaklık (ITU-R BT.&601)"
+msgstr "Parlaklık Gücü (ITU-R BT.&601)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAverage)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
@@ -60514,7 +60514,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Luminosity of the brush tip image is used as alpha channel for the stroke"
 msgstr ""
-"Fırça ucu görüntüsünün parlaklığı, vuruş için alfa kanalı olarak kullanılır"
+"Fırça ucu görüntüsünün parlaklık gücü, vuruş için alfa kanalı olarak "
+"kullanılır."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, kde-format
@@ -60540,9 +60541,9 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
-"Fırça ucu görüntüsünün parlaklığı, boyama rengi için açıklık düzeltmesi "
+"Fırça ucu görüntüsünün parlaklık gücü, boyama rengi için açıklık düzeltmesi "
 "olarak kullanılır. Fırça ucu görüntüsünün alfa kanalı, son vuruş için alfa "
-"olarak kullanılır"
+"olarak kullanılır."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
@@ -60973,12 +60974,12 @@ msgstr "Renk V Değiştir"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, kde-format
 msgid "Change Color HSL S"
-msgstr "Renk HSL S Değiştir"
+msgstr "Renk HSL S Modelini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:142
 #, kde-format
 msgid "Change Color HSV S"
-msgstr "Renk HSV S Değiştir"
+msgstr "Renk HSV S Modelini Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
 #, kde-format

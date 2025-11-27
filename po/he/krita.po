@@ -42,14 +42,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-20 03:23+0000\n"
-"PO-Revision-Date: 2025-11-09 11:14+0200\n"
+"PO-Revision-Date: 2025-11-26 15:32+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -15930,7 +15930,7 @@ msgstr "הסר ערוץ"
 #: libs/basicflakes/tools/KoPencilTool.cpp:322
 #, kde-format
 msgid "Exactness:"
-msgstr "שטיחות:"
+msgstr ""
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:355
 #: libs/basicflakes/tools/KoPencilTool.cpp:356
@@ -18366,7 +18366,7 @@ msgstr "&תמונה"
 #: plugins/filters/palettize/palettize.ui:155
 #, kde-format
 msgid "Alpha"
-msgstr "אלפא"
+msgstr "שקיפות"
 
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:35
 #, kde-format
@@ -23248,7 +23248,7 @@ msgstr "מחבר"
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
-msgstr "מחבר"
+msgstr "יצירה"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2300
 #, fuzzy, kde-format
@@ -23938,7 +23938,7 @@ msgstr "ערוך נתיב"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:197
 #, kde-format
 msgid "&Reset"
-msgstr "&שחזר"
+msgstr "&איפוס"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:228
@@ -28925,7 +28925,7 @@ msgstr "תבניות"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
 msgid "Gradients"
-msgstr "עירובים"
+msgstr "מדרגים"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, fuzzy, kde-format
@@ -28981,7 +28981,7 @@ msgstr "מאפייני שכבה..."
 #: libs/ui/kis_image_manager.cc:106
 #, kde-format
 msgid "Import Image"
-msgstr "ייצוא תמונה"
+msgstr "ייבוא תמונה"
 
 #: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
 #, fuzzy, kde-format
@@ -29999,7 +29999,7 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:91
 #, kde-format
 msgid "Override display DPI"
-msgstr "עקוף את הגדרת הנקודות לאינץ' של התצוגה"
+msgstr "מעקף הגדרת הנקודות לאינץ׳ של התצוגה"
 
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
@@ -30151,7 +30151,7 @@ msgstr "מבצע שמירה אוטומטית..."
 #: libs/ui/KisDocument.cpp:1482
 #, kde-format
 msgid "Autosaving..."
-msgstr "מבצע שמירה אוטומטית..."
+msgstr "מבצע שמירה אוטומטית…"
 
 #: libs/ui/KisDocument.cpp:1488
 #, kde-format
@@ -31043,7 +31043,7 @@ msgstr "זוויות:"
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "האם אתה בטוח שברצונך לכתוב על התבנית הקיימת \"%1\"?"
+msgstr "לכתוב על התבנית ‚%1’ הקיימת?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, fuzzy, kde-format
@@ -31086,7 +31086,7 @@ msgstr "הסר שכבה"
 #: libs/ui/KisTemplateCreateDia.cpp:437
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr "האם אתה בטוח שברצונך להסיר תבנית זו?"
+msgstr "להסיר את התבנית הזאת?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
 #, fuzzy, kde-format
@@ -31134,7 +31134,7 @@ msgstr "&תמונה"
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
-msgstr "<p>המסמך <b>\"%1\"</b> שונה.</p><p>האם ברצונך לשמור אותו?</p>"
+msgstr "<p>המסמך <b>‚%1’</b> השתנה.</p><p>לשמור אותו?</p>"
 
 #: libs/ui/KisView.cpp:1252
 #, fuzzy, kde-format
@@ -31306,7 +31306,7 @@ msgstr ""
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
 msgid "Document Information"
-msgstr "מידע מסמך"
+msgstr "פרטי מסמך"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:115
 #, fuzzy, kde-format
@@ -34710,7 +34710,7 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Email"
-msgstr "דוא\"ל"
+msgstr "דוא״ל"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #, fuzzy, kde-format
@@ -35561,7 +35561,7 @@ msgstr "מיקום"
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
-msgstr "גופן"
+msgstr "משפחת גופנים"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, fuzzy, kde-format
@@ -38244,7 +38244,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:505
 #, kde-format
 msgid "Rectangle"
-msgstr "מלבן"
+msgstr "מרובע"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:53
 #: plugins/dockers/griddocker/grid_config_widget.cpp:346
@@ -42822,7 +42822,7 @@ msgstr "אלפא"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:210
 #, kde-format
 msgid "Email:"
-msgstr "דוא\"ל:"
+msgstr "דוא״ל:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
@@ -44717,7 +44717,7 @@ msgstr "העתק בחירה לשכבה חדשה"
 #: plugins/filters/palettize/palettize.ui:186
 #, kde-format
 msgid "Index"
-msgstr "אינדקס"
+msgstr "מפתח"
 
 #: plugins/filters/phongbumpmap/kis_phong_bumpmap_filter.cpp:25
 #, kde-format
@@ -44956,7 +44956,7 @@ msgstr "מצבע הקידמה לשקוף"
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
-msgstr "&עגל פינות..."
+msgstr "&עיגול פינות…"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
 #, fuzzy, kde-format
@@ -48070,7 +48070,7 @@ msgstr "&תמונה"
 #: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr "מסמך לא תקף: אין קובץ \"maindoc.xml\"."
+msgstr "מסמך לא תקף: אין קובץ „maindoc.xml”."
 
 #: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
@@ -48080,7 +48080,7 @@ msgstr "אין אפשרות ליצור את הקובץ לשמירה"
 #: plugins/impex/libkra/kra_converter.cpp:228
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "אין אפשרות לכתוב את \"%1\". האם המחיצה מלאה?"
+msgstr "אין אפשרות לכתוב את „%1”. האם המחיצה מלאה?"
 
 #: plugins/impex/libkra/kra_converter.cpp:320
 #, fuzzy, kde-format
@@ -48093,7 +48093,7 @@ msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"שגיאת פירוק ב־%1, בשורה %2, טור %3\n"
+"שגיאת פענוח ב־%1, בשורה %2, עמודה %3\n"
 "הודעת שגיאה: %4"
 
 #: plugins/impex/libkra/kra_converter.cpp:350
@@ -57487,7 +57487,7 @@ msgstr "אפשרויות נתיב"
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
 msgid "Magnetic Selection Tool"
-msgstr "בלי בחירה מגנטי"
+msgstr "כלי בחירה מגנטי"
 
 #. i18n: context: text @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectOutline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -57501,7 +57501,7 @@ msgstr "בלי בחירה מגנטי"
 #, kde-format
 msgctxt "action"
 msgid "Freehand Selection Tool"
-msgstr "בלי בחירה ביד חופשית"
+msgstr "כלי בחירה ביד חופשית"
 
 #. i18n: context: text @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59009,14 +59009,14 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1618
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lock Points"
-msgstr "אלפא"
+msgstr "נעילת נקודות"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:680
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unlock Points"
-msgstr "אלפא"
+msgstr "שחרור נקודות"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
@@ -59027,10 +59027,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_transform2/KisToolTransform.action:7
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Transform Tool"
-msgstr "שינוי"
+msgstr "כלי התמרה"
 
 #. i18n: context: toolTip @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59058,23 +59058,23 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Accurate with Instant Preview"
-msgstr "שינוי גודל תמונה"
+msgstr "מדויק עם תצוגה מקדימה מהירה"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Free"
-msgstr "בחירה"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, freeTransformButton)
 #. i18n: ectx: property (text), widget (QLabel, lblTransformType)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:127
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:292
-#, fuzzy, kde-format
+#, kde-format
 msgid "Free Transform"
-msgstr "שינוי"
+msgstr "התמרה חופשית"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, warpButton)
 #. i18n: ectx: property (text), widget (QToolButton, warpButton)
@@ -59110,9 +59110,9 @@ msgstr "מברשות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:358
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Filter:"
-msgstr "&לבן"
+msgstr "&סינון:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, btnTransformAroundPivotPoint)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:377
@@ -59122,67 +59122,67 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:630
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Position"
-msgstr "מיקום"
+msgstr "מקום"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeRotationRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:643
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Rotate"
-msgstr "סובב &90"
+msgstr "סיבוב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeScaleRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:653
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Scale"
-msgstr "גוו&ני אפור"
+msgstr "קנה מידה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeShearRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:663
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
-msgstr "תמונה חדשה"
+msgstr "חיתוך"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
-#, fuzzy, kde-format
+#, kde-format
 msgid "off canvas"
-msgstr "&תבנית"
+msgstr "מחוץ למשטח הציור"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:766
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:782
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate around X-Axis"
-msgstr "שינוי שם התמונה"
+msgstr "הטייה סביב ציר X"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:801
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:817
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate around Y-Axis"
-msgstr "שינוי שם התמונה"
+msgstr "הטייה סביב ציר Y"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:836
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:861
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate around Z-Axis"
-msgstr "שינוי שם התמונה"
+msgstr "הטייה סביב ציר Z"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:842
-#, fuzzy, kde-format
+#, kde-format
 msgid "&z:"
-msgstr "מקושר"
+msgstr "&z:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCameraHeight)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, cameraHeightBox)
@@ -59194,9 +59194,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:886
-#, fuzzy, kde-format
+#, kde-format
 msgid "Camera height:"
-msgstr "גובה:"
+msgstr "גובה מצלמה:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
@@ -59218,64 +59218,63 @@ msgstr "גל משולש"
 #. i18n: ectx: property (text), widget (QLabel, label_shearX)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1077
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1175
-#, fuzzy, kde-format
-#| msgid "Fax:"
+#, kde-format
 msgid "x:"
-msgstr "פקס:"
+msgstr "x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_shearY)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1125
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1216
-#, fuzzy, kde-format
+#, kde-format
 msgid "y:"
-msgstr "מקושר"
+msgstr "y:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shear"
-msgstr "תמונה חדשה"
+msgstr "חיתוך"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1235
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Shear"
-msgstr "גל משולש"
+msgstr "חיתוך אופקי"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1194
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1213
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Shear"
-msgstr "גל משולש"
+msgstr "חיתוך אנכי"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flip selection horizontally"
-msgstr "בחירה אליפ&טית"
+msgstr "היפוך הבחירה אופקית"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1293
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flip selection vertically"
-msgstr "בחירה"
+msgstr "היפוך הבחירה אנכית"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1334
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate selection counter-clockwise 90 degrees"
-msgstr "ה&סר שכבה"
+msgstr "הטיית הבחירה ב־90 מעלות נגד כיוון השעון"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1359
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotate the selection clockwise 90 degrees"
-msgstr "ה&סר שכבה"
+msgstr "הטיית הבחירה ב־90 מעלות עם כיוון השעון"
 
 #. i18n: ectx: property (text), widget (QLabel, flexibilityLabel)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1438
@@ -59285,58 +59284,58 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, warpTypeLabel)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1467
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anc&hor Strength:"
-msgstr "הבא %1 נוכחי קדימה"
+msgstr "עו&צמת עוגנים:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1485
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anchor Points"
-msgstr "אלפא"
+msgstr "נקודות עוגן"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subdi&vide"
-msgstr "הזז בחירה"
+msgstr "&תת־חלוקה"
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1577
-#, fuzzy, kde-format
+#, kde-format
 msgid "Draw"
-msgstr "מאתחל..."
+msgstr "ציור"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetPointsButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1611
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear Points"
-msgstr "אלפא"
+msgstr "פינוי נקודות"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1663
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add/Ed&it Anchor Points"
-msgstr "אלפא"
+msgstr "הוספת/ע&ריכת נקודות עוגן"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1679
-#, fuzzy, kde-format
+#, kde-format
 msgid "Defor&m Selection"
-msgstr "הזז בחירה"
+msgstr "&עיוות בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
-#, fuzzy, kde-format
+#, kde-format
 msgid "Adjust Granularity :"
-msgstr "מצב צבעים"
+msgstr "כוונון גרגריות:"
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1720
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
-msgstr "שינוי גודל תמונה"
+msgstr "תצוגה מקדימה"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1737
@@ -59353,10 +59352,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
-msgstr "זוויות:"
+msgstr "כמות:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
@@ -59372,15 +59371,15 @@ msgstr "מברשות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show handles"
-msgstr "כחול"
+msgstr "הצגת ידיות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lock handles symmetrically"
-msgstr "&בוחר צבעים"
+msgstr "נעילת הידיות באופן סימטרי"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196
@@ -59396,10 +59395,10 @@ msgstr "בחירה אליפ&טית"
 #. i18n: context: iconText @ Action (KritaShape/KisToolDyna), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:7 plugins/tools/tools.action:9
 #: plugins/tools/tools.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Dynamic Brush Tool"
-msgstr "כלי &מברשת"
+msgstr "כלי מברשת דינמית"
 
 #. i18n: context: text @ Action (KritaShape/KisToolRectangle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolRectangle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59409,10 +59408,10 @@ msgstr "כלי &מברשת"
 #. i18n: context: iconText @ Action (KritaShape/KisToolRectangle), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:17 plugins/tools/tools.action:19
 #: plugins/tools/tools.action:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rectangle Tool"
-msgstr "כלי מלב&ן"
+msgstr "כלי מרובע"
 
 #. i18n: context: text @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59422,10 +59421,10 @@ msgstr "כלי מלב&ן"
 #. i18n: context: iconText @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:27 plugins/tools/tools.action:29
 #: plugins/tools/tools.action:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Multibrush Tool"
-msgstr "כלי &מברשת"
+msgstr "כלי ריבוי מברשות"
 
 #. i18n: context: text @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59435,10 +59434,10 @@ msgstr "כלי &מברשת"
 #. i18n: context: iconText @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:37 plugins/tools/tools.action:39
 #: plugins/tools/tools.action:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Colorize Mask Tool"
-msgstr "&צבע"
+msgstr "כלי מסכת צביעה"
 
 #. i18n: context: text @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59448,10 +59447,10 @@ msgstr "&צבע"
 #. i18n: context: iconText @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:46 plugins/tools/tools.action:48
 #: plugins/tools/tools.action:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Smart Patch Tool"
-msgstr "כלי מי&לוי"
+msgstr "כלי טלאי חכם"
 
 #. i18n: context: text @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59461,10 +59460,10 @@ msgstr "כלי מי&לוי"
 #. i18n: context: iconText @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:55 plugins/tools/tools.action:57
 #: plugins/tools/tools.action:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Pan Tool"
-msgstr "כלי מי&לוי"
+msgstr "כלי סקירה"
 
 #. i18n: context: text @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59474,27 +59473,27 @@ msgstr "כלי מי&לוי"
 #. i18n: context: iconText @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:64 plugins/tools/tools.action:66
 #: plugins/tools/tools.action:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Shapes Tool"
-msgstr "כלי בחירה"
+msgstr "כלי בחירת צורות"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Sample a color from the image or current layer"
-msgstr "כלי בחירה"
+msgstr "דגימת צבע מהתמונה או מהשכבה הנוכחית"
 
 #. i18n: context: text @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: text @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:84 plugins/tools/tools.action:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fill Tool"
-msgstr "כלי אלי&פסה"
+msgstr "כלי מילוי"
 
 #. i18n: context: toolTip @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:86
@@ -59511,10 +59510,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (KritaShape/KisToolLine), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:94 plugins/tools/tools.action:96
 #: plugins/tools/tools.action:97
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Line Tool"
-msgstr "כלי &קו"
+msgstr "כלי קווים"
 
 #. i18n: context: text @ Action (KritaShape/KisToolEllipse), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolEllipse), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59524,10 +59523,10 @@ msgstr "כלי &קו"
 #. i18n: context: iconText @ Action (KritaShape/KisToolEllipse), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:104 plugins/tools/tools.action:106
 #: plugins/tools/tools.action:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ellipse Tool"
-msgstr "כלי אלי&פסה"
+msgstr "כלי אליפסות"
 
 #. i18n: context: text @ Action (KritaShape/KisToolBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59537,37 +59536,37 @@ msgstr "כלי אלי&פסה"
 #. i18n: context: iconText @ Action (KritaShape/KisToolBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:114 plugins/tools/tools.action:116
 #: plugins/tools/tools.action:117
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Freehand Brush Tool"
-msgstr "כלי &מברשת"
+msgstr "כלי מברשת יד חופשית"
 
 #. i18n: context: text @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: text @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:124 plugins/tools/tools.action:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Gradient Tool"
-msgstr "עירובים"
+msgstr "כלי מדרגים"
 
 #. i18n: context: toolTip @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:126
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Draw a gradient."
-msgstr "עירובים"
+msgstr "ציור מדרג."
 
 #. i18n: context: text @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: text @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:134 plugins/tools/tools.action:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Measurement Tool"
-msgstr "מאפייני שכבה..."
+msgstr "כלי מדידה"
 
 #. i18n: context: toolTip @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:136
@@ -59581,17 +59580,17 @@ msgstr ""
 #. i18n: context: text @ Action (KritaTransform/KisToolMove), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaTransform/KisToolMove), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:144 plugins/tools/tools.action:147
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move Tool"
-msgstr "הזז בחירה"
+msgstr "העברת כלי"
 
 #. i18n: context: toolTip @ Action (KritaTransform/KisToolMove), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move a layer"
-msgstr "הסר שכבה"
+msgstr "העברת שכבה"
 
 #. i18n: context: text @ Action (KarbonCalligraphyTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KarbonCalligraphyTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59640,10 +59639,10 @@ msgstr "כלי תקריב"
 #. i18n: context: iconText @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:184 plugins/tools/tools.action:186
 #: plugins/tools/tools.action:187
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Reference Images Tool"
-msgstr "שינוי שם התמונה"
+msgstr "כלי תמונות סימוכין"
 
 #, fuzzy
 #~ msgid "Support Krita!"

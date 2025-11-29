@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-11-27 13:39+0300\n"
+"PO-Revision-Date: 2025-11-28 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23239,7 +23239,7 @@ msgstr "Fark"
 #, kde-format
 msgctxt "Blending mode - Equivalence"
 msgid "Equivalence"
-msgstr "Eşitlik"
+msgstr "Eşdeğerlik"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
@@ -23263,7 +23263,7 @@ msgstr "Ark Tanjant"
 #, kde-format
 msgctxt "Blending mode - Negation"
 msgid "Negation"
-msgstr "Negatiflik"
+msgstr "Olumsuzlama"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:111
 #, kde-format
@@ -23683,7 +23683,7 @@ msgstr "Yansıt"
 #, kde-format
 msgctxt "Blending mode - Glow"
 msgid "Glow"
-msgstr "Parıltı"
+msgstr "Parılda"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:187
 #, kde-format
@@ -23695,19 +23695,19 @@ msgstr "Dondur"
 #, kde-format
 msgctxt "Blending mode - Heat"
 msgid "Heat"
-msgstr "Sıcaklık"
+msgstr "Isıt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:189
 #, kde-format
 msgctxt "Blending mode - Glow-Heat"
 msgid "Glow-Heat"
-msgstr "Parıltı–Sıcaklık"
+msgstr "Parılda-Isıt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:190
 #, kde-format
 msgctxt "Blending mode - Heat-Glow"
 msgid "Heat-Glow"
-msgstr "Sıcaklık–Parıltı"
+msgstr "Isıt-Parılda"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:191
 #, kde-format
@@ -23725,7 +23725,7 @@ msgstr "Dondur–Yansıt"
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
-msgstr "Sıcaklık–Parıltı ve Dondur–Yansıt Hibrit"
+msgstr "Isıt–Parılda ve Dondur–Yansıt Hibriti"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:217
 #, kde-format
@@ -36911,8 +36911,8 @@ msgid ""
 "Blend inner glow, satin, and overlay with layer before blending with "
 "document."
 msgstr ""
-"Belgeyle harmanlamadan önce, iç parlaklık, saten ve kaplamayı katmanla "
-"harmanla."
+"Belgeyle harmanlamadan önce, iç parıltı, saten ve kaplamayı katmanla "
+"harmanlayın."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_7)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:241

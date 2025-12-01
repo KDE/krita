@@ -42,6 +42,8 @@ macos-build:
 
     - python3 -m venv venv --upgrade-deps
     - . venv/bin/activate
+    # make sure venv doesn't take precedence over normal PATH search
+    - unset VIRTUAL_ENV
     - pip install -r krita-deps-management/requirements.txt
 
     # framework for signing, notarization and package upload

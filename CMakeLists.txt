@@ -391,6 +391,17 @@ int main(int argc, char *argv[]) {
 }" ${OUTPUT_VARNAME})
 endfunction()
 
+if(NOT WIN32)
+    # On Unix systems we ship our own version of Python and manually set PATH
+    # pointing to that. This version of Python may differ from the one installed
+    # in the system, so we should make sure that the version of Python mentioned
+    # in VIRTUAL_ENV does **not** take precedence over the one we ship ourselves.
+    if(DEFINED ENV{VIRTUAL_ENV})
+        message(WARNING "VIRTUAL_ENV environment variable is set! It may cause clashes with our own Python version. Instructing CMake to ignore the virtual environment...")
+        set (Python_FIND_VIRTUALENV STANDARD)
+    endif()
+endif()
+
 if(WIN32)
     set(Python_FIND_STRATEGY LOCATION)
     find_package(Python 3.8 COMPONENTS Development Interpreter)

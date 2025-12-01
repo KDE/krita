@@ -43,6 +43,8 @@
     - pip install -r krita-deps-management/requirements.txt
     # Reactivate venv to force it to use the pip version of meson
     - . venv/bin/activate
+    # make sure venv doesn't take precedence over normal PATH search
+    - unset VIRTUAL_ENV
 
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then pip install -r ci-notary-service/requirements.txt; fi
   script:

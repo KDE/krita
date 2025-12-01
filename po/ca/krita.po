@@ -61072,6 +61072,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Commuta a pantalla completa"

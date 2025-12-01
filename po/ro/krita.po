@@ -16262,6 +16262,9 @@ msgid "Reverse paths"
 msgstr "Inversează căi"
 
 #: libs/flake/commands/KoPathSegmentBreakCommand.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Break subpath"
 msgctxt "(qtundo-format)"
 msgid "Break subpath"
 msgstr "Întrerupe cale eferentă"
@@ -28535,7 +28538,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Normal"
 msgid "Normal"
 msgstr "Normal"
 
@@ -35411,7 +35415,8 @@ msgid "First line indent"
 msgstr "Identare prima linie"
 
 #: libs/widgets/KoRuler.cpp:1330
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Left indent"
 msgid "Left indent"
 msgstr "Ident stânga"
 

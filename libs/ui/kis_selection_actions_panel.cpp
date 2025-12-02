@@ -219,13 +219,25 @@ QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget
     const int ACTION_BAR_WIDTH = d->m_actionBarWidth;
     const int ACTION_BAR_HEIGHT = BUTTON_SIZE;
 
-    position.setX(qBound(canvasBounds.left() + BUFFER_SPACE,
-                         position.x(),
-                         canvasBounds.right() - ACTION_BAR_WIDTH - BUFFER_SPACE));
+    int pos_x_min = canvasBounds.left() + BUFFER_SPACE;
+    int pos_x_max = canvasBounds.right() - ACTION_BAR_WIDTH - BUFFER_SPACE;
 
-    position.setY(qBound(canvasBounds.top() + BUFFER_SPACE,
-                         position.y(),
-                         canvasBounds.bottom() - ACTION_BAR_HEIGHT - BUFFER_SPACE));
+    int pos_y_min = canvasBounds.top() + BUFFER_SPACE;
+    int pos_y_max = canvasBounds.bottom() - ACTION_BAR_HEIGHT - BUFFER_SPACE;
+
+    //Ensure that max is always bigger than min
+    //If the window is small enough max could be smaller than min
+    if (pos_x_max < pos_x_min) {
+        pos_x_max = pos_x_min;
+    }
+
+    //It is pretty implausible for it to happen vertically but better safe than sorry
+    if (pos_y_max < pos_y_min) {
+        pos_y_max = pos_y_min;
+    }
+
+    position.setX(qBound(pos_x_min, position.x(), pos_x_max));
+    position.setY(qBound(pos_y_min, position.y(), pos_y_max));
 
     return position;
 }

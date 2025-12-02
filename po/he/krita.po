@@ -42,14 +42,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-22 02:00+0000\n"
-"PO-Revision-Date: 2025-08-12 14:37+0300\n"
+"PO-Revision-Date: 2025-12-01 22:15+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20722,7 +20722,7 @@ msgstr "דצימטרים (ד״מ)"
 #: libs/global/KoUnit.cpp:42
 #, kde-format
 msgid "Inches (in)"
-msgstr "אינצ'ים (in)"
+msgstr "אינצ׳ים (in)"
 
 #: libs/global/KoUnit.cpp:44
 #, kde-format
@@ -64713,10 +64713,10 @@ msgid "Select Contiguous Area"
 msgstr "בחירה"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
-msgstr "סף ציור:"
+msgstr "סף: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, fuzzy, kde-format
@@ -65822,10 +65822,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:140
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:group"
 msgid "Options"
-msgstr "אלפא"
+msgstr "אפשרויות"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:146
 #, fuzzy, kde-format
@@ -65870,8 +65870,7 @@ msgid "Dialogs"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:208
-#, fuzzy, kde-format
-#| msgid "Edit SVG Source"
+#, kde-format
 msgctxt "@label:button"
 msgid "Edit SVG Source"
 msgstr "עריכת מקור SVG"
@@ -65898,10 +65897,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:241
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:group"
 msgid "Convert Type..."
-msgstr "הוס&פת תמונה בתור שכבה..."
+msgstr "המרת סוג…"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:268
 #, fuzzy, kde-format
@@ -66576,37 +66575,36 @@ msgid "Comic Panel Editing Tool"
 msgstr "עירובים"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
-#, fuzzy, kde-format
-#| msgid "Millimeters (mm)"
+#, kde-format
 msgid "Millimeters"
-msgstr "מילימטרים (מ\"מ)"
+msgstr "מילימטרים"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:312
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Thick type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thick"
-msgstr "חדות:"
+msgstr "עבה"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:308
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:313
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:318
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Thin type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Thin"
-msgstr "הגדרות"
+msgstr "דק"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:309
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:314
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:319
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Special type of gutter (in comics); keep consistent with the label in the GUI"
 msgid "Special"
-msgstr "אטימות:"
+msgstr "מיוחד"
 
 #. i18n: ectx: property (text), widget (QLabel, warningLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:24
@@ -66618,10 +66616,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "רוחב התחלתי:"
+msgstr "יחידת רוחב:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
@@ -66649,9 +66646,9 @@ msgstr "&מברשת"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "Diagonal:"
-msgstr "אלכסוני הפוך"
+msgstr "אלכסוני:"
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
 msgctxt "(qtundo-format)"
@@ -67788,52 +67785,52 @@ msgid ""
 msgstr ""
 
 #: qmlmodules/components/qml/ResourceView.qml:141
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:button"
 msgid "Tag"
-msgstr "Tab"
+msgstr "תגית"
 
 #: qmlmodules/components/qml/ResourceView.qml:184
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:menu"
 msgid "Assign to Tag"
-msgstr "יישור אוטומטי"
+msgstr "הקצאה לתגית"
 
 #: qmlmodules/components/qml/ResourceView.qml:209
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "New Tag Name..."
-msgstr "שם:"
+msgstr "שם תגית חדש…"
 
 #: qmlmodules/components/qml/ResourceView.qml:227
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from this tag"
-msgstr "הסר קישור"
+msgstr "הסרה מהתגית הזאת"
 
 #: qmlmodules/components/qml/ResourceView.qml:236
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:menu"
 msgid "Remove from other tag"
-msgstr "הסר הערה"
+msgstr "הסרה מתגית אחרת"
 
 #: qmlmodules/components/qml/ResourceView.qml:305
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Search in tag"
-msgstr "בחירה"
+msgstr "חיפוש בתגית"
 
 #: qmlmodules/components/qml/ResourceView.qml:324
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Import %1"
-msgstr "ייצוא תמונה"
+msgstr "ייבוא %1"
 
 #: qmlmodules/components/qml/ResourceView.qml:348
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip, %1 is resource type name"
 msgid "Remove %1"
-msgstr "ה&סר שכבה"
+msgstr "הסרת %1"
 
 #: qmlmodules/components/qml/sliderspinbox/SliderSpinBoxContentItem.qml:154
 #, kde-format

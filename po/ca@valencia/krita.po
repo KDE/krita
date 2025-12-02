@@ -16292,7 +16292,7 @@ msgstr "El KoShapeLayer a HTML encara no està implementat!"
 #: libs/flake/html/HtmlWriter.cpp:80
 #, kde-format
 msgid "saving to html failed"
-msgstr "No s'ha pogut guardar a HTML"
+msgstr "Ha fallat mentre es guardava a HTML"
 
 #: libs/flake/html/HtmlWriter.cpp:84
 #, kde-format
@@ -20088,13 +20088,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
-msgstr "No s'ha pogut importar el recurs"
+msgstr "Ha fallat mentre s'importava el recurs"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:74
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
-msgstr "No s'ha pogut importar el recurs."
+msgstr "Ha fallat mentre s'importava el recurs."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:86
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:213
@@ -20167,13 +20167,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
-msgstr "No s'ha pogut afegir el recurs"
+msgstr "Ha fallat mentre s'afegia el recurs"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:150
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
-msgstr "No s'ha pogut afegir el recurs."
+msgstr "Ha fallat mentre s'afegia el recurs."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:193
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:226
@@ -20514,13 +20514,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
-msgstr "S'ha produït un error en renderitzar"
+msgstr "S'ha produït un error mentre es renderitzava"
 
 #: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
-"No s'han pogut renderitzar els fotogrames de l'animació! Els fitxers "
+"Ha fallat mentre es renderitzaven els fotogrames de l'animació! Els fitxers "
 "d'eixida estan incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
@@ -20712,7 +20712,7 @@ msgstr "S'han extret %1 fotogrames des del vídeo %2."
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
 #, kde-format
 msgid "Failed to export frames from video"
-msgstr "No s'han pogut exportar els fotogrames des del vídeo"
+msgstr "Ha fallat mentre s'exportaven els fotogrames des del vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
 #, kde-format
@@ -20857,7 +20857,7 @@ msgstr "No s'ha trobat cap flux de vídeo!"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #, kde-format
 msgid "Failed to load video information"
-msgstr "No s'ha pogut carregar la informació del vídeo"
+msgstr "Ha fallat mentre es carregava la informació del vídeo"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, kde-format
@@ -23387,7 +23387,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
 msgid "Failed to delete"
-msgstr "No s'ha pogut suprimir"
+msgstr "Ha fallat mentre se suprimia"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
@@ -23398,7 +23398,7 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
-"No s'ha pogut suprimir un fitxer de fotograma antic:\n"
+"Ha fallat mentre se suprimia un fitxer de fotograma antic:\n"
 "\n"
 "%1\n"
 "\n"
@@ -23711,7 +23711,7 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
-"Ja existix un guardada automàtica per a este fitxer. Com voleu continuar?\n"
+"Ja existix una guardada automàtica per a este fitxer. Com voleu continuar?\n"
 "Avís: Si ara descarteu la guardada automàtica, este s'eliminarà."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
@@ -29342,7 +29342,7 @@ msgstr "No s'ha trobat el fitxer enllaçat: %1"
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
-msgstr "No s'ha pogut carregar el fitxer enllaçat: %1"
+msgstr "Ha fallat mentre es carregava el fitxer enllaçat: %1"
 
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
@@ -30271,7 +30271,7 @@ msgstr "No s'ha trobat el tipus MIME, prova utilitzant l'opció -mimetype"
 #: libs/ui/KisApplication.cpp:652
 #, kde-format
 msgid "Failed to render animation frames!"
-msgstr "No s'han pogut renderitzar els fotogrames de l'animació!"
+msgstr "Ha fallat mentre es renderitzaven els fotogrames de l'animació!"
 
 #: libs/ui/KisApplication.cpp:679 libs/ui/KisApplication.cpp:898
 #, kde-format
@@ -30371,7 +30371,7 @@ msgid ""
 "\n"
 "Please make sure no other program is using the file and try again."
 msgstr ""
-"No s'ha pogut netejar %1\n"
+"Ha fallat mentre es netejava %1\n"
 "\n"
 "Assegureu-vos que cap altre programa estiga utilitzant el fitxer i torneu-ho "
 "a provar."
@@ -30529,13 +30529,13 @@ msgstr "No es pot escriure a %1. Guardeu-ho amb un nom diferent."
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "No s'ha pogut crear un fitxer de còpia de seguretat"
+msgstr "Ha fallat mentre es creava un fitxer de còpia de seguretat"
 
 #: libs/ui/KisDocument.cpp:801
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "No s'ha pogut crear un fitxer de còpia de seguretat numerat"
+msgstr "Ha fallat mentre es creava un fitxer de còpia de seguretat numerat"
 
 #: libs/ui/KisDocument.cpp:823
 #, kde-format
@@ -30571,7 +30571,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
-msgstr "S'ha produït un error en guardar %1: %2"
+msgstr "S'ha produït un error mentre es guardava %1: %2"
 
 #: libs/ui/KisDocument.cpp:997 libs/ui/KisDocument.cpp:1004
 #, kde-format
@@ -30617,7 +30617,7 @@ msgstr "La guardada automàtica es posposa: el document està ocupat…"
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
-msgstr "Error durant en guardar automàticament %1: %2"
+msgstr "S'ha produït un error durant en guardar automàticament %1: %2"
 
 #: libs/ui/KisDocument.cpp:1645
 #, kde-format
@@ -30690,12 +30690,12 @@ msgstr "L'acció s'ha completat amb èxit."
 #: libs/ui/KisImportExportErrorCode.cpp:26
 #, kde-format
 msgid "An error occurred when reading from the file."
-msgstr "S'ha produït un error en llegir des del fitxer."
+msgstr "S'ha produït un error mentre es llegia des del fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:28
 #, kde-format
 msgid "An error occurred when writing to the file."
-msgstr "S'ha produït un error en escriure en el fitxer."
+msgstr "S'ha produït un error mentre s'escrivia al fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:30
 #, kde-format
@@ -30797,7 +30797,7 @@ msgstr "El format del fitxer conté un espai de color no implementat."
 #: libs/ui/KisImportExportErrorCode.cpp:158
 #, kde-format
 msgid "Error occurred while reading from the file."
-msgstr "S'ha produït un error en llegir del fitxer."
+msgstr "S'ha produït un error mentre es llegia des del fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:162
 #, kde-format
@@ -30818,7 +30818,7 @@ msgstr "No hi ha prou espai en el disc per a guardar el fitxer."
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
 msgid "Error occurred while writing to the file."
-msgstr "S'ha produït un error en escriure en el fitxer."
+msgstr "S'ha produït un error mentre s'escrivia al fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:170
 #, kde-format
@@ -31230,8 +31230,8 @@ msgstr ""
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
-"No s'ha pogut crear un document nou. S'ha interromput la importació de "
-"l'animació."
+"Ha fallat mentre es creava un document nou. S'ha interromput la importació "
+"de l'animació."
 
 #: libs/ui/KisMainWindow.cpp:2625
 #, kde-format
@@ -31274,7 +31274,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
-msgstr "S'ha produït un error en la instal·lació"
+msgstr "S'ha produït un error durant la instal·lació"
 
 #: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
@@ -43425,9 +43425,9 @@ msgid ""
 "Module do not have PEP396 <code>__version__</code> attribute. It is not "
 "disabled, but behaviour is unpredictable...</p>"
 msgstr ""
-"<p>No s'ha pogut comprovar la versió de la dependència <application>%1</"
-"application>: El mòdul no té l'atribut <code>__version__</code> del PEP396. "
-"No es desactiva, però el comportament pot ser impredictible…</p>"
+"<p>Ha fallat mentre es comprovava la versió de la dependència <application>"
+"%1</application>: El mòdul no té l'atribut <code>__version__</code> del "
+"PEP396. No es desactiva, però el comportament pot ser impredictible…</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:226
 #, kde-format
@@ -43452,8 +43452,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
-"<p>No s'ha pogut carregar el mòdul <application>%1</application>:</p><pre>"
-"%2</pre>"
+"<p>Ha fallat mentre es carregava el mòdul <application>%1</application>:</"
+"p><pre>%2</pre>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:365
 #, kde-format
@@ -48996,7 +48996,7 @@ msgstr "La capa %1 té un tipus no admés: %2."
 #: plugins/impex/libkra/kis_kra_loader.cpp:970
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
-msgstr "No s'ha pogut carregar la capa %1 del tipus: %2."
+msgstr "Ha fallat mentre es carregava la capa %1 del tipus: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:994
 #, kde-format
@@ -49032,7 +49032,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
 msgid "Failed to save reference image %1."
-msgstr "No s'ha pogut guardar la imatge de referència %1."
+msgstr "Ha fallat mentre es guardava la imatge de referència %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:100
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:132
@@ -49042,7 +49042,7 @@ msgstr "No s'ha pogut guardar la imatge de referència %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
 #, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr "No s'han pogut guardar les metadades per a la capa %1."
+msgstr "Ha fallat mentre es guardaven les metadades per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
@@ -49053,82 +49053,91 @@ msgstr "No es pot obrir %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr "No s'han pogut guardar les dades dels píxels per a la capa %1."
+msgstr "Ha fallat mentre es guardaven les dades dels píxels per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "No s'han pogut guardar les anotacions per a la capa %1."
+msgstr "Ha fallat mentre es guardaven les anotacions per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
 msgid "Failed to save the filter layer %1: it has no filter."
-msgstr "No s'ha pogut guardar la capa de filtratge %1: no té cap filtre."
+msgstr ""
+"Ha fallat mentre es guardava la capa de filtratge %1: no té cap filtre."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
 #, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr "No s'ha pogut guardar la selecció de la capa de filtratge %1."
+msgstr "Ha fallat mentre es guardava la selecció de la capa de filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
 msgstr ""
-"No s'ha pogut guardar la configuració del filtre de la capa de filtratge %1."
+"Ha fallat mentre es guardava la configuració del filtre de la capa de "
+"filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr "No s'ha pogut guardar la selecció per a la capa %1."
+msgstr "Ha fallat mentre es guardava la selecció per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr "No s'ha pogut guardar la configuració del generador per a la capa %1."
+msgstr ""
+"Ha fallat mentre es guardava la configuració del generador per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
 msgid "Failed to save filter mask %1. It has no filter."
-msgstr "No s'ha pogut guardar la màscara de filtratge %1. No té cap filtre."
+msgstr ""
+"Ha fallat mentre es guardava la màscara de filtratge %1. No té cap filtre."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr "No s'ha pogut guardar la selecció de la màscara de filtratge %1."
+msgstr ""
+"Ha fallat mentre es guardava la selecció de la màscara de filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
 msgstr ""
-"No s'ha pogut guardar la configuració del filtre de la màscara de filtratge "
-"%1."
+"Ha fallat mentre es guardava la configuració del filtre de la màscara de "
+"filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr "No s'ha pogut guardar la selecció de la màscara de transparència %1."
+msgstr ""
+"Ha fallat mentre es guardava la selecció de la màscara de transparència %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr "No s'ha pogut guardar la selecció de la selecció local %1."
+msgstr "Ha fallat mentre es guardava la selecció de la selecció local %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr ""
-"No s'han pogut guardar les dades de selecció amb píxels per a la capa %1."
+"Ha fallat mentre es guardaven les dades de selecció amb píxels per a la capa "
+"%1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr ""
-"No s'han pogut guardar les dades de selecció amb vectors per a la capa %1."
+"Ha fallat mentre es guardaven les dades de selecció amb vectors per a la "
+"capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
-msgstr "El dorsal de metadades ha fallat en guardar les metadades de %1"
+msgstr ""
+"El dorsal de metadades ha fallat mentre es guardaven les metadades de %1"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
 #, kde-format
@@ -56706,7 +56715,7 @@ msgstr "Voleu activar els connectors?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:75
 msgid "Error during import:"
-msgstr "Error durant la importació:"
+msgstr "S'ha produït un error durant la importació:"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:94
 msgid ""
@@ -56863,7 +56872,7 @@ msgstr "Avança per damunt"
 
 #: plugins/python/scripter/uicontroller.py:165
 msgid "Error Running Script"
-msgstr "S'ha produït un error en executar un script"
+msgstr "S'ha produït un error mentre s'executava un script"
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:20
 msgid "Selections Bag"
@@ -58305,7 +58314,7 @@ msgstr "Guarda les imatges de referència"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
 #, kde-format
 msgid "Failed to save reference images."
-msgstr "No s'han pogut guardar les imatges de referència."
+msgstr "Ha fallat mentre es guardaven les imatges de referència."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:305
 #, kde-format

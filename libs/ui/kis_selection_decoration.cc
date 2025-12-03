@@ -199,12 +199,14 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
 
+    // render Selection Action Bar first, so that it doesn't blink when making a new selection
+    m_selectionActionsPanel->draw(gc);
+
     if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
         (m_mode == Mask && m_thumbnailImage.isNull())) return;
 
     QTransform transform = converter->imageToWidgetTransform();
 
-    gc.save();
     gc.setTransform(transform, false);
 
     if (m_mode == Mask) {
@@ -240,10 +242,6 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
         gc.setPen(m_antsPen);
         gc.drawPath(m_outlinePath);
     }
-    gc.restore();
-
-    // render Selection Action Bar
-    m_selectionActionsPanel->draw(gc);
 }
 
 void KisSelectionDecoration::setVisible(bool v)

@@ -41,6 +41,9 @@
 
 namespace xsimd
 {
+# if XSIMD_VERSION_MAJOR >= 14
+using generic = common;
+# endif
 #if defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
 using current_arch = generic;
 #elif !defined(XSIMD_IMPL)

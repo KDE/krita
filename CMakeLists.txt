@@ -1355,7 +1355,7 @@ endif()
 ## set_package_properties report the lowest one if no
 ## xsimd is found
 ##
-foreach(xsimd_version 13 12 11 10 9 8.1.0)
+foreach(xsimd_version 14 13 12 11 10 9 8.1.0)
     if(NOT xsimd_FOUND)
         find_package(xsimd ${xsimd_version})
     endif()

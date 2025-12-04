@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 02:00+0000\n"
+"POT-Creation-Date: 2025-12-04 02:05+0000\n"
 "PO-Revision-Date: 2025-07-27 20:26+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16368,8 +16368,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Languneak"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:507
-#: libs/ui/KisApplication.cpp:789
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:791
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -24101,10 +24101,10 @@ msgstr "Baliabide lokalak"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
-#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1184
-#: libs/ui/KisApplication.cpp:1187 libs/ui/KisApplication.cpp:1203
-#: libs/ui/KisApplication.cpp:1235 libs/ui/KisApplication.cpp:1249
-#: libs/ui/KisApplication.cpp:1277 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1189 libs/ui/KisApplication.cpp:1205
+#: libs/ui/KisApplication.cpp:1237 libs/ui/KisApplication.cpp:1251
+#: libs/ui/KisApplication.cpp:1279 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -32657,7 +32657,7 @@ msgid "HSV CCW"
 msgstr "ÑSB erloju-orratzen kontrako noranzkoan"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:448
 #, kde-format
 msgid "Sessions"
 msgstr "Saioak"
@@ -34212,7 +34212,7 @@ msgstr "Atzeko planoko kolore-hautatzailea"
 msgid "&Docker Box"
 msgstr "&Zamaketaria"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:444
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34226,8 +34226,8 @@ msgstr "Ereduak"
 msgid "Custom Pattern"
 msgstr "Eredu pertsonalizatua"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:429
+#: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -35004,13 +35004,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Hautatu opakua"
 
-#: libs/ui/kis_splash_screen.cpp:156
+#: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr "Honen artelana: %1"
 
-#: libs/ui/kis_splash_screen.cpp:180
+#: libs/ui/kis_splash_screen.cpp:182
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
@@ -35019,7 +35019,7 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Azken fitxategiak</"
 "span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:223
+#: libs/ui/kis_splash_screen.cpp:225
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
@@ -35029,7 +35029,7 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Azken fitxategiak</"
 "span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:230
+#: libs/ui/kis_splash_screen.cpp:232
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35045,7 +35045,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:233
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35061,7 +35061,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:237
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35078,7 +35078,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:238
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35094,7 +35094,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:238
+#: libs/ui/kis_splash_screen.cpp:240
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
@@ -35104,7 +35104,7 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Azken fitxategiak</"
 "span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:241
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35120,7 +35120,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:240
+#: libs/ui/kis_splash_screen.cpp:242
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35136,7 +35136,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:241
+#: libs/ui/kis_splash_screen.cpp:243
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35152,7 +35152,7 @@ msgstr ""
 "text-decoration: underline; color:#2980b9;\">Krita gidoien eskola</span></a>!"
 "</p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:242
+#: libs/ui/kis_splash_screen.cpp:244
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -35269,20 +35269,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zooma: %%1"
 
-#: libs/ui/KisApplication.cpp:419
+#: libs/ui/KisApplication.cpp:421
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, kde-format
 msgid "Brush presets"
 msgstr "Pintzelen aurrezarpenak"
 
-#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
 #: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
+#: libs/ui/KisApplication.cpp:426 libs/ui/KisApplication.cpp:427
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, kde-format
 msgid "Brush tips"
 msgstr "Pintzelaren puntak"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:432
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -35290,7 +35290,7 @@ msgstr "Pintzelaren puntak"
 msgid "Palettes"
 msgstr "Paletak"
 
-#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -35298,46 +35298,46 @@ msgstr "Paletak"
 msgid "Workspaces"
 msgstr "Laneko areak"
 
-#: libs/ui/KisApplication.cpp:444
+#: libs/ui/KisApplication.cpp:446
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG ikur liburutegiak"
 
-#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:447 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Leiho-antolaerak"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:449
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Gamut masks"
 msgstr "Gamako maskarak"
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:451
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr gidoiak"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:456
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Geruzen estiloak"
 
-#: libs/ui/KisApplication.cpp:457
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Letra-tipoen familia"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:460
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgid "Style Presets"
 msgstr "Aurrezarpenak editatu"
 
-#: libs/ui/KisApplication.cpp:470
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid ""
 "%1\n"
@@ -35348,13 +35348,13 @@ msgstr ""
 "\n"
 "Krita orain itxi egingo da."
 
-#: libs/ui/KisApplication.cpp:470 libs/ui/KisApplication.cpp:476
+#: libs/ui/KisApplication.cpp:472 libs/ui/KisApplication.cpp:478
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Errore larria"
 
-#: libs/ui/KisApplication.cpp:476
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid ""
 "\n"
@@ -35365,7 +35365,7 @@ msgstr ""
 "\n"
 "Krita orain itxiko da."
 
-#: libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:510
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35376,66 +35376,66 @@ msgstr ""
 "Ez da halakorik gomendatzen.\n"
 "Mesedez, horren ordez zama-jaitsi eta instalatu 64 biteko eraikina."
 
-#: libs/ui/KisApplication.cpp:525
+#: libs/ui/KisApplication.cpp:527
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Globalak hasieratzen..."
 
-#: libs/ui/KisApplication.cpp:557
+#: libs/ui/KisApplication.cpp:559
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Baliabide motak gehitzen..."
 
-#: libs/ui/KisApplication.cpp:561
+#: libs/ui/KisApplication.cpp:563
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Pluginak zamatzen..."
 
-#: libs/ui/KisApplication.cpp:567
+#: libs/ui/KisApplication.cpp:569
 #, kde-format
 msgid "Loading resources..."
 msgstr "Baliabideak zamatzen..."
 
-#: libs/ui/KisApplication.cpp:576
+#: libs/ui/KisApplication.cpp:578
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Leiho nagusia zamatzen..."
 
-#: libs/ui/KisApplication.cpp:608
+#: libs/ui/KisApplication.cpp:610
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "Aztertzen..."
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME-mota ez du aurkitu, saia zaitez «-mimetype» aukera erabiltzen"
 
-#: libs/ui/KisApplication.cpp:742
+#: libs/ui/KisApplication.cpp:744
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Animazioko fotogramak errendatzea huts egin du!"
 
-#: libs/ui/KisApplication.cpp:770 libs/ui/KisApplication.cpp:1043
+#: libs/ui/KisApplication.cpp:772 libs/ui/KisApplication.cpp:1045
 #, kde-format
 msgid "File layer"
 msgstr "Fitxategi geruza"
 
-#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:783
-#: libs/ui/KisApplication.cpp:1037 libs/ui/KisApplication.cpp:1051
-#: libs/ui/KisApplication.cpp:1056
+#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:785
+#: libs/ui/KisApplication.cpp:1039 libs/ui/KisApplication.cpp:1053
+#: libs/ui/KisApplication.cpp:1058
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Abisua"
 
-#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:1052
+#: libs/ui/KisApplication.cpp:781 libs/ui/KisApplication.cpp:1054
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ezin da gehitu %1 fitxategi-geruza gisa: fitxategia ez da existitzen."
 
-#: libs/ui/KisApplication.cpp:784
+#: libs/ui/KisApplication.cpp:786
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35457,7 +35457,7 @@ msgstr ""
 "-> Orokorra -> Leihoa) \"Baimendu Kritaren instantzia bakarra\" kontrol-"
 "laukia."
 
-#: libs/ui/KisApplication.cpp:790
+#: libs/ui/KisApplication.cpp:792
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35468,32 +35468,32 @@ msgstr ""
 "Dokumentu berri bat sor dezakezu « --new-image » aukera erabiliz, edo "
 "existitzen den fitxategi bat ireki dezakezu."
 
-#: libs/ui/KisApplication.cpp:1038
+#: libs/ui/KisApplication.cpp:1040
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Ezin izan du %1 fitxategia ireki"
 
-#: libs/ui/KisApplication.cpp:1057
+#: libs/ui/KisApplication.cpp:1059
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ezin du fitxategi geruza gehitu: ez dago irekitako dokumenturik."
 
-#: libs/ui/KisApplication.cpp:1185
+#: libs/ui/KisApplication.cpp:1187
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ez da txantiloirik aurkitu honentzat: %1"
 
-#: libs/ui/KisApplication.cpp:1188
+#: libs/ui/KisApplication.cpp:1190
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Txantiloi gehiegi aurkitu dira honentzat: %1"
 
-#: libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1206
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "%1 txantiloia zamatzea huts egin du."
 
-#: libs/ui/KisApplication.cpp:1236
+#: libs/ui/KisApplication.cpp:1238
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35508,7 +35508,7 @@ msgstr ""
 "\n"
 "Berrabiarazi Krita aldaketak indarrean sar daitezen."
 
-#: libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1252
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35520,7 +35520,7 @@ msgstr ""
 "Mesedez, ziurtatu beste programarik ez duela fitxategia erabiltzen eta "
 "berriz saiatu."
 
-#: libs/ui/KisApplication.cpp:1278
+#: libs/ui/KisApplication.cpp:1280
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ezarpenen fitxategia garbitu nahi duzu?"

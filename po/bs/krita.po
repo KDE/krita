@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-22 02:00+0000\n"
+"POT-Creation-Date: 2025-12-04 02:05+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -16743,8 +16743,8 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Radne površine"
 
-#: krita/main.cc:729 libs/ui/KisApplication.cpp:507
-#: libs/ui/KisApplication.cpp:789
+#: krita/main.cc:729 libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:791
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -24662,10 +24662,10 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1019 libs/ui/kis_node_manager.cpp:1317
-#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1184
-#: libs/ui/KisApplication.cpp:1187 libs/ui/KisApplication.cpp:1203
-#: libs/ui/KisApplication.cpp:1235 libs/ui/KisApplication.cpp:1249
-#: libs/ui/KisApplication.cpp:1277 libs/ui/KisDocument.cpp:1007
+#: libs/ui/kis_node_manager.cpp:1380 libs/ui/KisApplication.cpp:1186
+#: libs/ui/KisApplication.cpp:1189 libs/ui/KisApplication.cpp:1205
+#: libs/ui/KisApplication.cpp:1237 libs/ui/KisApplication.cpp:1251
+#: libs/ui/KisApplication.cpp:1279 libs/ui/KisDocument.cpp:1007
 #: libs/ui/KisDocument.cpp:1022 libs/ui/KisDocument.cpp:1969
 #: libs/ui/KisDocument.cpp:2012 libs/ui/KisDocument.cpp:2023
 #: libs/ui/KisMainWindow.cpp:975 libs/ui/KisMainWindow.cpp:1045
@@ -33437,7 +33437,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:446
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:448
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -35039,7 +35039,7 @@ msgstr "Boja pozadine"
 msgid "&Docker Box"
 msgstr "&Sidrišta"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:442
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:444
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35053,8 +35053,8 @@ msgstr "Uzorci"
 msgid "Custom Pattern"
 msgstr "Posebna šema"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:427
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:429
+#: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
@@ -35881,13 +35881,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Izaberi neprozirno"
 
-#: libs/ui/kis_splash_screen.cpp:156
+#: libs/ui/kis_splash_screen.cpp:158
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:180
+#: libs/ui/kis_splash_screen.cpp:182
 #, fuzzy, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
@@ -35896,28 +35896,28 @@ msgstr ""
 "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
 "\">Nedavne datoteke</span></p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:223
+#: libs/ui/kis_splash_screen.cpp:225
 #, fuzzy, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr ""
 "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
 "\">Nedavne datoteke</span></p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:230
+#: libs/ui/kis_splash_screen.cpp:232
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:233
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -35925,42 +35925,42 @@ msgid ""
 "span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:238
+#: libs/ui/kis_splash_screen.cpp:240
 #, fuzzy, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr ""
 "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
 "\">Nedavne datoteke</span></p></body></html>"
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:240
+#: libs/ui/kis_splash_screen.cpp:242
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:241
+#: libs/ui/kis_splash_screen.cpp:243
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:242
+#: libs/ui/kis_splash_screen.cpp:244
 #, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
@@ -36054,22 +36054,22 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Resetuj zumiranje na 100%"
 
-#: libs/ui/KisApplication.cpp:419
+#: libs/ui/KisApplication.cpp:421
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:254
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Dostupne četke"
 
-#: libs/ui/KisApplication.cpp:422 libs/ui/KisApplication.cpp:423
 #: libs/ui/KisApplication.cpp:424 libs/ui/KisApplication.cpp:425
+#: libs/ui/KisApplication.cpp:426 libs/ui/KisApplication.cpp:427
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:255
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "Savjet o četki"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:432
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
@@ -36077,7 +36077,7 @@ msgstr "Savjet o četki"
 msgid "Palettes"
 msgstr "Palete"
 
-#: libs/ui/KisApplication.cpp:443 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:256
@@ -36085,50 +36085,50 @@ msgstr "Palete"
 msgid "Workspaces"
 msgstr "Radne površine"
 
-#: libs/ui/KisApplication.cpp:444
+#: libs/ui/KisApplication.cpp:446
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektor sloj"
 
-#: libs/ui/KisApplication.cpp:445 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:447 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "Veličina prozora"
 
-#: libs/ui/KisApplication.cpp:447
+#: libs/ui/KisApplication.cpp:449
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 #| msgid "Rotate Canvas"
 msgid "Gamut masks"
 msgstr "Okreni platno"
 
-#: libs/ui/KisApplication.cpp:449
+#: libs/ui/KisApplication.cpp:451
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Indeks"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:456
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Veličina sloja"
 
-#: libs/ui/KisApplication.cpp:457
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 #| msgid "Font Family"
 msgid "Font Families"
 msgstr "Familija fontova"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:460
 #, fuzzy, kde-format
 #| msgid "Style"
 msgid "Style Presets"
 msgstr "Stil"
 
-#: libs/ui/KisApplication.cpp:470
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid ""
 "%1\n"
@@ -36136,7 +36136,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:470 libs/ui/KisApplication.cpp:476
+#: libs/ui/KisApplication.cpp:472 libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Krita: Internal Error"
@@ -36144,7 +36144,7 @@ msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Interna greška programa Krita"
 
-#: libs/ui/KisApplication.cpp:476
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid ""
 "\n"
@@ -36152,7 +36152,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:508
+#: libs/ui/KisApplication.cpp:510
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -36163,68 +36163,68 @@ msgstr ""
 "To nije preporučljivo.\n"
 "Molim preuzmite i instalirajte x64 gradnju umjesto toga."
 
-#: libs/ui/KisApplication.cpp:525
+#: libs/ui/KisApplication.cpp:527
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Initializing Globals..."
 msgstr "Upravljaj Resursima"
 
-#: libs/ui/KisApplication.cpp:557
+#: libs/ui/KisApplication.cpp:559
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Dodaj resurse"
 
-#: libs/ui/KisApplication.cpp:561
+#: libs/ui/KisApplication.cpp:563
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Predefinisane četkice"
 
-#: libs/ui/KisApplication.cpp:567
+#: libs/ui/KisApplication.cpp:569
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Upravljane Resurs Bundlima"
 
-#: libs/ui/KisApplication.cpp:576
+#: libs/ui/KisApplication.cpp:578
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Promijeni opcije praćenja"
 
-#: libs/ui/KisApplication.cpp:608
+#: libs/ui/KisApplication.cpp:610
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "Snimam..."
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mimevrsta nije nađena, pokušaj koristiti -mimetype opciju"
 
-#: libs/ui/KisApplication.cpp:742
+#: libs/ui/KisApplication.cpp:744
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Bezuspješno kreiranje akcije."
 
-#: libs/ui/KisApplication.cpp:770 libs/ui/KisApplication.cpp:1043
+#: libs/ui/KisApplication.cpp:772 libs/ui/KisApplication.cpp:1045
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Datoteka sloj"
 
-#: libs/ui/KisApplication.cpp:778 libs/ui/KisApplication.cpp:783
-#: libs/ui/KisApplication.cpp:1037 libs/ui/KisApplication.cpp:1051
-#: libs/ui/KisApplication.cpp:1056
+#: libs/ui/KisApplication.cpp:780 libs/ui/KisApplication.cpp:785
+#: libs/ui/KisApplication.cpp:1039 libs/ui/KisApplication.cpp:1053
+#: libs/ui/KisApplication.cpp:1058
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Upozorenje"
 
-#: libs/ui/KisApplication.cpp:779 libs/ui/KisApplication.cpp:1052
+#: libs/ui/KisApplication.cpp:781 libs/ui/KisApplication.cpp:1054
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ne mogu da izaberem boju jer aktivan sloj nije vidljiv."
 
-#: libs/ui/KisApplication.cpp:784
+#: libs/ui/KisApplication.cpp:786
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36237,7 +36237,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:790
+#: libs/ui/KisApplication.cpp:792
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -36245,7 +36245,7 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1038
+#: libs/ui/KisApplication.cpp:1040
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -36255,28 +36255,28 @@ msgstr ""
 "Ne mogu otvoriti\n"
 "%1"
 
-#: libs/ui/KisApplication.cpp:1057
+#: libs/ui/KisApplication.cpp:1059
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ne mogu da izaberem boju jer aktivan sloj nije vidljiv."
 
-#: libs/ui/KisApplication.cpp:1185
+#: libs/ui/KisApplication.cpp:1187
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Predložak nije pronađen za:%1"
 
-#: libs/ui/KisApplication.cpp:1188
+#: libs/ui/KisApplication.cpp:1190
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Pronađeno je previše šablona za: %1"
 
-#: libs/ui/KisApplication.cpp:1204
+#: libs/ui/KisApplication.cpp:1206
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Šablon %1 nije mogao da se učita."
 
-#: libs/ui/KisApplication.cpp:1236
+#: libs/ui/KisApplication.cpp:1238
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36286,7 +36286,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1252
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36294,7 +36294,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1278
+#: libs/ui/KisApplication.cpp:1280
 #, fuzzy, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Da li zaista želite pisati preko postojećeg šablona '%1'?"

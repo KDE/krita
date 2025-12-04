@@ -31,8 +31,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
-const int BUTTON_SIZE = 25;
-const int BUFFER_SPACE = 5;
+static constexpr int BUTTON_SIZE = 25;
+static constexpr int BUFFER_SPACE = 5;
 
 class KisSelectionManager;
 

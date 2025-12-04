@@ -47,6 +47,16 @@ private:
     QPoint initialDragHandlePosition() const;
     void drawActionBarBackground(QPainter &gc) const;
 
+    bool handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button = Qt::LeftButton);
+    bool handleMove(QEvent *event, const QPoint &pos, QObject *obj);
+    bool handleRelease(QEvent *event, const QPoint &pos, QObject *obj);
+
+    static QPoint mouseEventPos(const QMouseEvent *mouseEvent);
+    static QPoint tabletEventPos(const QTabletEvent *tabletEvent);
+    // Touch events can have zero touch points when pressing an entire palm on
+    // the screen on Android, so this returns false if this is a non-touch.
+    static bool touchEventPos(const QTouchEvent *touchEvent, QPoint &outPos);
+
     struct Private;
     QScopedPointer<Private> d;
 

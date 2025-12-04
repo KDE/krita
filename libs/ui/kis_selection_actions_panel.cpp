@@ -16,8 +16,11 @@
 #include "kis_selection_manager.h"
 #include <KoCompositeOpRegistry.h>
 #include <QList>
+#include <QMouseEvent>
 #include <QPointF>
 #include <QPushButton>
+#include <QTabletEvent>
+#include <QTouchEvent>
 #include <QTransform>
 #include <kactioncollection.h>
 #include <kis_algebra_2d.h>
@@ -49,7 +52,8 @@ struct KisSelectionActionsPanel::Private {
     KisSelectionManager *m_selectionManager = nullptr;
     KisViewManager *m_viewManager = nullptr;
 
-    bool m_dragging = false;
+    int m_pressedIndex = -1;
+    bool m_pressed = false;
     bool m_visible = false;
     bool m_enabled = true;
 
@@ -146,6 +150,7 @@ void KisSelectionActionsPanel::setVisible(bool p_visible)
             button->hide();
         }
 
+        d->m_pressed = false;
         d->m_dragHandle.reset();
     }
 
@@ -164,52 +169,70 @@ void KisSelectionActionsPanel::setEnabled(bool enabled)
 
 bool KisSelectionActionsPanel::eventFilter(QObject *obj, QEvent *event)
 {
-    bool eventHandled = false;
+    switch (event->type()) {
+    case QEvent::FocusIn:
+        event->accept();
+        return true;
 
-    bool focusInEvent = event->type() == QEvent::FocusIn;
-    if (focusInEvent && !eventHandled) {
-        eventHandled = true;
+    case QEvent::MouseButtonPress: {
+        const QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        return handlePress(event, mouseEventPos(mouseEvent), mouseEvent->button());
     }
-
-    // Clicks...
-    bool clickEvent = event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress || event->type() == QEvent::TouchBegin;
-    if (clickEvent && !eventHandled ) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        QRect dragHandleRect(d->m_dragHandle->position, QSize(25 * (d->m_buttonCount), 25));
-        if (dragHandleRect.contains(mouseEvent->pos())) {
-            d->m_dragging = true;
-            d->m_dragHandle->dragOrigin = mouseEvent->pos() - d->m_dragHandle->position;
-
-            eventHandled = true;
+    case QEvent::TabletPress: {
+        const QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
+        return handlePress(event, tabletEventPos(tabletEvent));
+    }
+    case QEvent::TouchBegin: {
+        const QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+        QPoint pos;
+        if (touchEventPos(touchEvent, pos)) {
+            return handlePress(event, pos);
         }
+        break;
     }
 
-    // Drags...
-    bool dragEvent = d->m_dragging && (event->type() == QEvent::MouseMove || event->type() == QEvent::TouchUpdate);
-
-    if (dragEvent && !eventHandled) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        QPoint newPos = mouseEvent->pos() - d->m_dragHandle->dragOrigin;
-
-        // bound actionBar to stay within canvas space
-        QWidget *canvasWidget = dynamic_cast<QWidget *>(d->m_viewManager->canvas());
-
-        if (obj == canvasWidget) {
-            d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
-            canvasWidget->update();
-            eventHandled = true;
+    case QEvent::MouseMove:
+        if (d->m_pressed) {
+            const QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            return handleMove(event, mouseEventPos(mouseEvent), obj);
         }
+        break;
+    case QEvent::TabletMove:
+        if (d->m_pressed) {
+            const QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
+            return handleMove(event, tabletEventPos(tabletEvent), obj);
+        }
+        break;
+    case QEvent::TouchUpdate:
+        if (d->m_pressed) {
+            const QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+            QPoint pos;
+            if (touchEventPos(touchEvent, pos)) {
+                return handleMove(event, pos, obj);
+            }
+        }
+        break;
+
+    case QEvent::MouseButtonRelease:
+    case QEvent::TabletRelease:
+    case QEvent::TouchEnd:
+    case QEvent::TouchCancel:
+        if (d->m_pressed) {
+            if (d->m_pressedIndex >= 0 && d->m_pressedIndex < d->m_buttons.size()) {
+                // A button was pressed, trigger it on the next event loop.
+                QTimer::singleShot(0, d->m_buttons[d->m_pressedIndex], &QPushButton::click);
+            }
+            d->m_pressed = false;
+            d->m_pressedIndex = -1;
+            event->accept();
+            return true;
+        }
+        break;
+
+    default:
+        break;
     }
-
-    // Releases...
-    bool releaseEvent = d->m_dragging && (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease || event->type() == QEvent::TouchEnd);
-
-    if (releaseEvent && d->m_dragging) {
-        d->m_dragging = false;
-        eventHandled = true;
-    }
-
-    return eventHandled;
+    return false;
 }
 
 QPoint KisSelectionActionsPanel::updateCanvasBoundaries(QPoint position, QWidget *canvasWidget) const
@@ -316,4 +339,92 @@ void KisSelectionActionsPanel::drawActionBarBackground(QPainter &painter) const
 
     dragHandleRectDots.translate(dragHandleRect.topLeft() + DRAG_HANDLE_RECT_DOTS_OFFSET);
     painter.fillPath(dragHandleRectDots, DOT_COLOR);
+}
+
+bool KisSelectionActionsPanel::handlePress(QEvent *event, const QPoint &pos, Qt::MouseButton button)
+{
+    if (d->m_pressed) {
+        event->accept();
+        return true;
+    }
+
+    if (button == Qt::LeftButton) {
+        QRect targetRect(d->m_dragHandle->position, QSize(BUTTON_SIZE * d->m_buttonCount, BUTTON_SIZE));
+        if (targetRect.contains(pos)) {
+            d->m_pressed = true;
+
+            d->m_pressedIndex = (pos.x() - targetRect.left()) / BUTTON_SIZE;
+            if (d->m_pressedIndex < 0 || d->m_pressedIndex >= d->m_buttons.size()) {
+                d->m_dragHandle->dragOrigin = pos - d->m_dragHandle->position;
+            }
+
+            event->accept();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KisSelectionActionsPanel::handleMove(QEvent *event, const QPoint &pos, QObject *obj)
+{
+    // Are we dragging the bar or was a button pressed?
+    if (d->m_pressedIndex < 0 || d->m_pressedIndex >= d->m_buttons.size()) {
+        // bound actionBar to stay within canvas space
+        QWidget *canvasWidget = d->m_viewManager->canvas();
+
+        // Explicitly casting just in case inheritance adjusts the pointer weirdly
+        // (MSVC does spicy things like that sometimes to keep you on your toes.)
+        if (obj == static_cast<QObject *>(canvasWidget)) {
+            QPoint newPos = pos - d->m_dragHandle->dragOrigin;
+            d->m_dragHandle->position = updateCanvasBoundaries(newPos, canvasWidget);
+            canvasWidget->update();
+            event->accept();
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        // Button was pressed, we're just waiting for a release.
+        event->accept();
+        return true;
+    }
+}
+
+QPoint KisSelectionActionsPanel::mouseEventPos(const QMouseEvent *mouseEvent)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return mouseEvent->position().toPoint();
+#else
+    return mouseEvent->pos();
+#endif
+}
+
+QPoint KisSelectionActionsPanel::tabletEventPos(const QTabletEvent *tabletEvent)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return tabletEvent->position().toPoint();
+#else
+    return tabletEvent->pos();
+#endif
+}
+
+bool KisSelectionActionsPanel::touchEventPos(const QTouchEvent *touchEvent, QPoint &outPos)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (touchEvent->pointCount() < 1) {
+        return false;
+    } else {
+        outPos = touchEvent->points().first().position().toPoint();
+        return true;
+    }
+#else
+    const QList<QTouchEvent::TouchPoint> &touchPoints = touchEvent->touchPoints();
+    if (touchPoints.isEmpty()) {
+        return false;
+    } else {
+        outPos = touchPoints.first().pos().toPoint();
+        return true;
+    }
+#endif
 }

@@ -147,7 +147,9 @@ bool Python::prependStringToList(PyObject* const list, const QString& value)
 
 bool Python::functionCall(const char* const functionName, const char* const moduleName)
 {
-    PyObject* const result = functionCall(functionName, moduleName, PyTuple_New(0));
+    auto arguments = PyTuple_New(0);
+    PyObject* const result = functionCall(functionName, moduleName, arguments);
+    Py_DECREF(arguments);
     if (result)
         Py_DECREF(result);
     return bool(result);
@@ -173,7 +175,6 @@ PyObject* Python::functionCall(
         return 0;
     }
     PyObject* const result = PyObject_CallObject(func, arguments);
-    Py_DECREF(arguments);
     if (!result)
         traceback(QString("No result from %1.%2").arg(moduleName).arg(functionName));
 
@@ -218,8 +219,12 @@ bool Python::itemStringSet(const char* const item, PyObject* const value, const 
 
 PyObject* Python::kritaHandler(const char* const moduleName, const char* const handler)
 {
-    if (PyObject* const module = moduleImport(moduleName))
-        return functionCall(handler, "krita", Py_BuildValue("(O)", module));
+    if (PyObject* const module = moduleImport(moduleName)) {
+        PyObject* args = Py_BuildValue("(O)", module);
+        PyObject* ret = functionCall(handler, "krita", args);
+        Py_DECREF(args);
+        return ret;
+    }
     return 0;
 }
 
@@ -525,6 +530,7 @@ void Python::traceback(const QString& description)
         PyObject* const arguments = PyTuple_New(1);
         PyTuple_SetItem(arguments, 0, exc_tb);
         PyObject* const result = functionCall("format_tb", "traceback", arguments);
+        Py_DECREF(arguments);
         if (result) {
             for (int i = 0, j = PyList_Size(result); i < j; i++) {
                 PyObject* const tt = PyList_GetItem(result, i);

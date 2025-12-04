@@ -67,6 +67,7 @@ void CssStylePresetEditDialog::setCurrentResource(KoCssStylePresetSP resource)
     KoSvgTextPropertyData textData;
     textData.inheritedProperties = KoSvgTextProperties();
     textData.commonProperties = properties;
+    textData.enabled = true;
     m_model->textData.set(textData);
     if (m_quickWidget->rootObject()) {
         m_quickWidget->rootObject()->setProperty("presetTitle", m_currentResource->name());

@@ -823,7 +823,10 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int de
             QString name = handleName(d->hoveredTypeSettingHandle);
             if (!name.isEmpty()) {
                 QPainterPath textP;
-                textP.addText(painterTf.map(d->typeSettingDecor.closestBaselinePoint), gc.font(), name);
+                // When we're drawing on opengl, there's no anti-aliasing, so we should have full hinting for readabiltiy.
+                QFont font = gc.font();
+                font.setHintingPreference(QFont::PreferFullHinting);
+                textP.addText(painterTf.map(d->typeSettingDecor.closestBaselinePoint).toPoint(), font, name);
                 gc.save();
                 QPen pen(bgColorForCaret(selectionColor, 255));
                 pen.setCosmetic(true);

@@ -264,22 +264,35 @@ public:
     /// Register an action.
     bool registerPropertyAction(QAction *action, const QString &name);
 
+    /// The text properties interface. This is how the text properties docker
+    /// communicates with the text tool.
     KoSvgTextPropertiesInterface *textPropertyInterface();
 
 Q_SIGNALS:
 
+    /// Sents an update to the parent tool to update it's decorations.
     void updateCursorDecoration(QRectF updateRect);
+    /// Sents an update selection was changed.
     void selectionChanged();
 
+    /// Called by actions, tells the parent tool to open the glyph palette.
     void sigOpenGlyphPalette();
 private Q_SLOTS:
+    /// Called by timer, toggles the text cursor visible or invisible.
     void blinkCursor();
+    /// Called by timer, stops the text blinking animation.
     void stopBlinkCursor();
 
+    /*
+     *  Called when the canvas view navigation changes,
+     *  so we can ensure the input method widgets get aligned.
+     */
     void updateInputMethodItemTransform();
+    /// Called when the canvas resources (foreground/background) change.
     void canvasResourceChanged(int key, const QVariant &value);
-    void toggleProperty(KoSvgTextProperties::PropertyId property);
+    /// Called by the actions to execute a property change based on their data.
     void propertyAction();
+    /// Called by the clear formatting action.
     void clearFormattingAction();
 
     /**

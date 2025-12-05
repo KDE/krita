@@ -1232,53 +1232,12 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
     }
 }
 
-void SvgTextCursor::toggleProperty(KoSvgTextProperties::PropertyId property)
-{
-    if (d->shape) {
-        QVariant newVal;
-        QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
-        for(auto it = p.begin(); it != p.end(); it++) {
-            if (property == KoSvgTextProperties::FontWeightId) {
-                int value = it->property(property, QVariant(400)).toInt();
-                newVal = value == 400? QVariant(700): QVariant(400);
-                if (value == 400) break;
-            } else if (property == KoSvgTextProperties::FontStyleId) {
-                KoSvgText::CssFontStyleData value = it->property(property, QVariant(QFont::StyleNormal)).value<KoSvgText::CssFontStyleData>();
-                KoSvgText::CssFontStyleData newSlant = value;
-                if (value.style == QFont::StyleNormal) {
-                    newSlant.style = QFont::StyleItalic;
-                } else {
-                    newSlant.style = QFont::StyleNormal;
-                    newSlant.slantValue.customValue = 0;
-                    newSlant.slantValue.isAuto = true;
-                }
-                newVal = QVariant::fromValue(newSlant);
-                if (value.style == QFont::StyleNormal) break;
-            } else if (property == KoSvgTextProperties::TextDecorationLineId) {
-                KoSvgText::TextDecorations decor = it->propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<KoSvgText::TextDecorations>();
-                KoSvgText::TextDecorations newDecor;
-                if (decor.testFlag(KoSvgText::DecorationUnderline)) {
-                    newDecor.setFlag(KoSvgText::DecorationUnderline, false);
-                    newVal = QVariant::fromValue(newDecor);
-                } else {
-                    newDecor.setFlag(KoSvgText::DecorationUnderline, true);
-                    newVal = QVariant::fromValue(newDecor);
-                    break;
-                }
-            }
-        }
-        KoSvgTextProperties properties;
-        properties.setProperty(property, newVal);
-        mergePropertiesIntoSelection(properties);
-    }
-}
-
 void SvgTextCursor::propertyAction()
 {
     QAction *action = dynamic_cast<QAction*>(QObject::sender());
     if (!action || !d->shape) return;
 
-    QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
+    const QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
     KoSvgTextProperties properties = SvgTextShortCuts::getModifiedProperties(action, p);
     if (properties.isEmpty()) return;
     mergePropertiesIntoSelection(properties);
@@ -1939,10 +1898,18 @@ void SvgTextCursor::updateCanvasResources()
                 d->canvas->resourceManager()->setBackgroundColor(c);
             }
         }
+
         Q_FOREACH (QAction *action, d->actions) {
-            if (action->isCheckable()) {
-                action->setChecked(SvgTextShortCuts::actionEnabled(action, {props}));
+            // Blocking signals so that we don't get a toggle action while evaluating the checked-ness.
+            action->blockSignals(true);
+            const QList<KoSvgTextProperties> r = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor), true);
+            if (action->isCheckable() && SvgTextShortCuts::possibleActions().contains(action->objectName())) {
+                const bool checked = SvgTextShortCuts::actionEnabled(action, r);
+                if (action->isChecked() != checked) {
+                    action->setChecked(checked);
+                }
             }
+            action->blockSignals(false);
         }
     }
 }

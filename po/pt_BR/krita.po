@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-04 02:05+0000\n"
+"POT-Creation-Date: 2025-12-05 01:59+0000\n"
 "PO-Revision-Date: 2025-11-22 07:05-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -20483,30 +20483,30 @@ msgid "Character Variant %1"
 msgstr "Variante de caractere %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2584
+#: libs/flake/text/KoSvgTextShape.cpp:2590
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Texto de substituição"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2563
+#: libs/flake/text/KoSvgTextShape.cpp:2569
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2565
-#: libs/flake/text/KoSvgTextShape.cpp:2573
+#: libs/flake/text/KoSvgTextShape.cpp:2571
+#: libs/flake/text/KoSvgTextShape.cpp:2579
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2571
+#: libs/flake/text/KoSvgTextShape.cpp:2577
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2594
+#: libs/flake/text/KoSvgTextShape.cpp:2600
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -46032,25 +46032,25 @@ msgstr ""
 "direita para esquerda, rtl, direção, bidirecional, isolar, embutido, "
 "substituir"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:122
+#: plugins/dockers/textproperties/qml/Direction.qml:107
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Left to Right"
 msgstr "Esquerda para direita"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:123
+#: plugins/dockers/textproperties/qml/Direction.qml:108
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Right to Left"
 msgstr "Direita para esquerda"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:144
+#: plugins/dockers/textproperties/qml/Direction.qml:125
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
 msgstr "Bidi unicode"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:156
+#: plugins/dockers/textproperties/qml/Direction.qml:136
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
 #: plugins/dockers/textproperties/qml/LineBreak.qml:81
 #: plugins/dockers/textproperties/qml/OTCaps.qml:77
@@ -46067,31 +46067,31 @@ msgctxt "@label:inlistbox"
 msgid "Normal"
 msgstr "Normal"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:157
+#: plugins/dockers/textproperties/qml/Direction.qml:137
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Embed"
 msgstr "Embutido"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:158
+#: plugins/dockers/textproperties/qml/Direction.qml:138
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Override"
 msgstr "Substituir"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:159
+#: plugins/dockers/textproperties/qml/Direction.qml:139
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate"
 msgstr "Isolar"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:160
+#: plugins/dockers/textproperties/qml/Direction.qml:140
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
 msgstr "Isolar-Substituir"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:161
+#: plugins/dockers/textproperties/qml/Direction.qml:141
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Plain Text"
@@ -47198,14 +47198,14 @@ msgstr "Recuo após quebras bruscas"
 #: plugins/dockers/textproperties/qml/TextProperties.qml:64
 #, kde-format
 msgctxt "@title:tab"
-msgid "Character"
-msgstr "Caractere"
+msgid "Paragraph"
+msgstr "Parágrafo"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:67
 #, kde-format
 msgctxt "@title:tab"
-msgid "Paragraph"
-msgstr "Parágrafo"
+msgid "Character"
+msgstr "Caractere"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
 #, kde-format
@@ -47213,43 +47213,43 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Predefinições"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:134
+#: plugins/dockers/textproperties/qml/TextProperties.qml:135
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Adicionar predefinição de estilo"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:147
+#: plugins/dockers/textproperties/qml/TextProperties.qml:148
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Editar predefinição de estilo"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:166
+#: plugins/dockers/textproperties/qml/TextProperties.qml:167
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
 msgstr "Clonar predefinição de estilo"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:303
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filtro..."
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:329
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:334
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "Adicionar propriedade"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:347
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:352
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Add Property..."
 msgstr "Adicionar propriedade..."
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:428
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
 #, kde-format
 msgctxt "@label:button"
 msgid "Configure"
@@ -47645,7 +47645,7 @@ msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
 msgstr "Vertical, Esquerda para direita"
 
-#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:222
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
@@ -66812,74 +66812,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Ajustar transformações de caracteres no texto."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Topo do texto"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Tamanho da fonte"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Base do texto"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:395
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabético"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:397
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideográfico"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Pendurado"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Meio"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matemático"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:407
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Altura da linha"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:410
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Linha base atual"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:412
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

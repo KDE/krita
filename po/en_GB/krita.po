@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-04 02:05+0000\n"
+"POT-Creation-Date: 2025-12-05 01:59+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -20793,30 +20793,30 @@ msgid "Character Variant %1"
 msgstr "Variant (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2584
+#: libs/flake/text/KoSvgTextShape.cpp:2590
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Placeholder Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2563
+#: libs/flake/text/KoSvgTextShape.cpp:2569
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2565
-#: libs/flake/text/KoSvgTextShape.cpp:2573
+#: libs/flake/text/KoSvgTextShape.cpp:2571
+#: libs/flake/text/KoSvgTextShape.cpp:2579
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Text Shape"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2571
+#: libs/flake/text/KoSvgTextShape.cpp:2577
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2594
+#: libs/flake/text/KoSvgTextShape.cpp:2600
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -46380,27 +46380,27 @@ msgctxt ""
 msgid "right to left, rtl, direction, bidirectional, isolate, embed, override"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/Direction.qml:122
+#: plugins/dockers/textproperties/qml/Direction.qml:107
 #, fuzzy, kde-format
 #| msgid "Left to Right"
 msgctxt "@label:inlistbox"
 msgid "Left to Right"
 msgstr "Left to Right"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:123
+#: plugins/dockers/textproperties/qml/Direction.qml:108
 #, fuzzy, kde-format
 #| msgid "Right to Left"
 msgctxt "@label:inlistbox"
 msgid "Right to Left"
 msgstr "Right to Left"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:144
+#: plugins/dockers/textproperties/qml/Direction.qml:125
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Unicode-Bidi"
 msgstr ""
 
-#: plugins/dockers/textproperties/qml/Direction.qml:156
+#: plugins/dockers/textproperties/qml/Direction.qml:136
 #: plugins/dockers/textproperties/qml/FontStyle.qml:339
 #: plugins/dockers/textproperties/qml/LineBreak.qml:81
 #: plugins/dockers/textproperties/qml/OTCaps.qml:77
@@ -46418,7 +46418,7 @@ msgctxt "@label:inlistbox"
 msgid "Normal"
 msgstr "Normal"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:157
+#: plugins/dockers/textproperties/qml/Direction.qml:137
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Camera Profile"
 #| msgid "Embedded"
@@ -46426,14 +46426,14 @@ msgctxt "@label:inlistbox"
 msgid "Embed"
 msgstr "Embedded"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:158
+#: plugins/dockers/textproperties/qml/Direction.qml:138
 #, fuzzy, kde-format
 #| msgid "Overwrite"
 msgctxt "@label:inlistbox"
 msgid "Override"
 msgstr "Overwrite"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:159
+#: plugins/dockers/textproperties/qml/Direction.qml:139
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Isolate Layer"
@@ -46441,7 +46441,7 @@ msgctxt "@label:inlistbox"
 msgid "Isolate"
 msgstr "Isolate Layer"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:160
+#: plugins/dockers/textproperties/qml/Direction.qml:140
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Isolate Layer"
@@ -46449,7 +46449,7 @@ msgctxt "@label:inlistbox"
 msgid "Isolate-Override"
 msgstr "Isolate Layer"
 
-#: plugins/dockers/textproperties/qml/Direction.qml:161
+#: plugins/dockers/textproperties/qml/Direction.qml:141
 #, fuzzy, kde-format
 #| msgid "Find Text"
 msgctxt "@label:inlistbox"
@@ -47610,17 +47610,17 @@ msgstr ""
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:64
 #, fuzzy, kde-format
-#| msgid "Character"
-msgctxt "@title:tab"
-msgid "Character"
-msgstr "Character"
-
-#: plugins/dockers/textproperties/qml/TextProperties.qml:67
-#, fuzzy, kde-format
 #| msgid "Paragraph"
 msgctxt "@title:tab"
 msgid "Paragraph"
 msgstr "Paragraph"
+
+#: plugins/dockers/textproperties/qml/TextProperties.qml:67
+#, fuzzy, kde-format
+#| msgid "Character"
+msgctxt "@title:tab"
+msgid "Character"
+msgstr "Character"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:70
 #, fuzzy, kde-format
@@ -47629,49 +47629,49 @@ msgctxt "@title:tab"
 msgid "Preset"
 msgstr "Preset"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:134
+#: plugins/dockers/textproperties/qml/TextProperties.qml:135
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@label:button"
 msgid "Add Style Preset"
 msgstr "Edit Presets"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:147
+#: plugins/dockers/textproperties/qml/TextProperties.qml:148
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@label:button"
 msgid "Edit Style Preset"
 msgstr "Edit Presets"
 
-#: plugins/dockers/textproperties/qml/TextProperties.qml:166
+#: plugins/dockers/textproperties/qml/TextProperties.qml:167
 #, fuzzy, kde-format
 #| msgid "New Style"
 msgctxt "@label:button"
 msgid "Clone Style Preset"
 msgstr "New Style"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:303
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Filter"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:329
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:334
 #, fuzzy, kde-format
 #| msgid "Add sort key"
 msgctxt "@label:listbox"
 msgid "Add Property"
 msgstr "Add sort key"
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:347
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:352
 #, fuzzy, kde-format
 #| msgid "Properties..."
 msgctxt "@info:placeholder"
 msgid "Add Property..."
 msgstr "Properties..."
 
-#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:428
+#: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:433
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@label:button"
@@ -48084,7 +48084,7 @@ msgctxt "@label:inlistbox"
 msgid "Vertical, Left To Right"
 msgstr "Left to Right"
 
-#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:183
+#: plugins/dockers/textproperties/TextPropertiesCanvasObserver.cpp:222
 #, fuzzy, kde-format
 #| msgid "Edit Presets"
 msgctxt "@info:placeholder"
@@ -67177,15 +67177,15 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Text Tool"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:386
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:392
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Font Size"
@@ -67193,35 +67193,35 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Font Size"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:390
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
 #, fuzzy, kde-format
 #| msgid "To Bottom"
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "To Bottom"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:395
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
 #, fuzzy, kde-format
 #| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alphabetical"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:397
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
 #, fuzzy, kde-format
 #| msgid "Biography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Biography"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Angular"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:401
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -67229,21 +67229,21 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Middle"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:403
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
 #, fuzzy, kde-format
 #| msgid "Logical Operations"
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Logical Operations"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:405
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
 #, fuzzy, kde-format
 #| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Centre"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:407
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Line Height"
@@ -67251,14 +67251,14 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Line Height"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:410
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Current selection"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:412
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"

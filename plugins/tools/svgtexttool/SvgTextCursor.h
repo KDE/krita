@@ -66,6 +66,7 @@ public:
         ParagraphEnd,
     };
 
+    /// Handles used by type setting mode.
     enum TypeSettingModeHandle {
         NoHandle,
         StartPos,
@@ -121,6 +122,7 @@ public:
      */
     void setPasteRichTextByDefault(const bool pasteRichText = true);
 
+    /// Set type setting mode active.
     void setTypeSettingModeActive(bool activate);
 
     /// Get the current position.
@@ -145,6 +147,7 @@ public:
     /// Turned off when the typesetting strategy is active to give artists more control.
     void setDrawTypeSettingHandle(bool draw);
 
+    /// Update the type setting decorations.
     void updateTypeSettingDecorFromShape();
 
     /// Return appropriate typeSetting cursor;
@@ -191,6 +194,13 @@ public:
      */
     void removeText(MoveMode first, MoveMode second);
 
+    /**
+     * @brief removeLastCodePoint
+     * Special function to remove the last code point. Triggered by backspace.
+     * This is distinct from remove text, as some clusters have multiple code
+     * points, but it is generally expected backspace deletes the codepoints
+     * while delete with selection deletes the whole cluster.
+     */
     void removeLastCodePoint();
 
     /**
@@ -199,9 +209,28 @@ public:
      */
     QPair<KoSvgTextProperties, KoSvgTextProperties> currentTextProperties() const;
 
+    /**
+     * @brief propertiesForRange
+     * @return properties for the current range defined by the cursor pos and anchor.
+     */
     QList<KoSvgTextProperties> propertiesForRange() const;
+    /**
+     * @brief propertiesForShape
+     * @return properties for the current shape.
+     */
     QList<KoSvgTextProperties> propertiesForShape() const;
 
+    /**
+     * @brief mergePropertiesIntoSelection
+     * Within Krita's SVG/CSS text system, it is possible to apply incomplete
+     * properties to a whole range. In that case, only the existing properties
+     * are applied. Properties can also be removed this way.
+     *
+     * @param props -- properties to apply.
+     * @param removeProperties -- properties to be removed.
+     * @param paragraphOnly -- whether to apply to the paragraph.
+     * @param selectWord -- whether to select the word if there's no selection.
+     */
     void mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>(), bool paragraphOnly = false, bool selectWord = false);
 
     /**
@@ -226,12 +255,15 @@ public:
      */
     bool paste();
 
-
+    /// Deselect all text. This effectively makes anchor the same as pos.
     void deselectText();
 
+    /// Paint all decorations and blinkingcursors.
     void paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness = 1, qreal handleRadius = 5.0);
 
+    /// Process an input method query and return the requested result.
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    /// Process an input method event. This is used by IME like virtual keyboards.
     void inputMethodEvent(QInputMethodEvent *event);
 
     // Reimplemented.
@@ -308,6 +340,10 @@ private Q_SLOTS:
      */
     bool pastePlainText();
 
+    /**
+     * @brief removeTransformsFromRange
+     * Called by actions to remove svg character transforms from range.
+     */
     void removeTransformsFromRange();
 
 private:
@@ -326,13 +362,23 @@ private:
     void updateSelection();
     void updateIMEDecoration();
     void updateTypeSettingDecoration();
+
+    /// Adds a command to the canvas of the parent tool.
     void addCommandToUndoAdapter(KUndo2Command *cmd);
 
+    /// Processes a move action, returns the input.
     int moveModeResult(const MoveMode mode, int &pos, bool visual = false) const;
+
+    /// Tests whether the current keyboard input can be printed as text, or is
+    /// probably a shortcut. This is so that various keyboard events,
+    /// like print don't get inserted as text.
     bool acceptableInput(const QKeyEvent *event) const;
 
+    /// This applies any running IME interactions, used when the shape is
+    /// deselected halfways through an IME interaction.
     void commitIMEPreEdit();
 
+    /// Update the canvas resources with fore and background color.
     void updateCanvasResources();
 
     struct Private;

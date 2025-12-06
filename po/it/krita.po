@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-20 03:23+0000\n"
+"POT-Creation-Date: 2025-12-06 03:23+0000\n"
 "PO-Revision-Date: 2025-11-23 18:03+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -15891,8 +15891,8 @@ msgstr ""
 "Krita non supporta la piattaforma Wayland. Usa XWayland per eseguire Krita "
 "su Wayland. Krita verrà ora chiuso."
 
-#: krita/main.cc:673 libs/ui/KisApplication.cpp:422
-#: libs/ui/KisApplication.cpp:698
+#: krita/main.cc:673 libs/ui/KisApplication.cpp:424
+#: libs/ui/KisApplication.cpp:700
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -19555,10 +19555,10 @@ msgstr "Risorse locali"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:981 libs/ui/kis_node_manager.cpp:1240
-#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1038
-#: libs/ui/KisApplication.cpp:1041 libs/ui/KisApplication.cpp:1057
-#: libs/ui/KisApplication.cpp:1089 libs/ui/KisApplication.cpp:1103
-#: libs/ui/KisApplication.cpp:1131 libs/ui/KisDocument.cpp:996
+#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1040
+#: libs/ui/KisApplication.cpp:1043 libs/ui/KisApplication.cpp:1059
+#: libs/ui/KisApplication.cpp:1091 libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:1133 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
 #: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
 #: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
@@ -27831,7 +27831,7 @@ msgid "HSV CCW"
 msgstr "HSV antiorario"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:364
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:366
 #, kde-format
 msgid "Sessions"
 msgstr "Sessioni"
@@ -29335,7 +29335,7 @@ msgstr "&Apri selettore colore di primo piano"
 msgid "&Open Background color selector"
 msgstr "&Apri selettore colore di sfondo"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:360
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:362
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29348,8 +29348,8 @@ msgstr "Motivi"
 msgid "Custom Pattern"
 msgstr "Motivo configurabile"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:345
-#: libs/ui/KisApplication.cpp:346
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:347
+#: libs/ui/KisApplication.cpp:348
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29979,13 +29979,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Seleziona opacità"
 
-#: libs/ui/kis_splash_screen.cpp:157
+#: libs/ui/kis_splash_screen.cpp:159
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr "Opera d'arte di: %1"
 
-#: libs/ui/kis_splash_screen.cpp:181
+#: libs/ui/kis_splash_screen.cpp:183
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
@@ -29994,12 +29994,12 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">File recenti</span></b></"
 "p>"
 
-#: libs/ui/kis_splash_screen.cpp:224
+#: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Uso di Krita</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:233
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
@@ -30008,7 +30008,7 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Sostieni lo sviluppo di Krita!</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:232
+#: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
@@ -30017,7 +30017,7 @@ msgstr ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Sito web di Krita</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30028,7 +30028,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Primi passi</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -30037,12 +30037,12 @@ msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manuale</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Programmare per Krita</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:240
+#: libs/ui/kis_splash_screen.cpp:242
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
@@ -30051,7 +30051,7 @@ msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">Comunità utenti</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:241
+#: libs/ui/kis_splash_screen.cpp:243
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
@@ -30060,7 +30060,7 @@ msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Codice sorgente</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:242
+#: libs/ui/kis_splash_screen.cpp:244
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
@@ -30069,7 +30069,7 @@ msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">API degli script</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:243
+#: libs/ui/kis_splash_screen.cpp:245
 #, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
@@ -30178,61 +30178,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Ingrandimento:  %1 %"
 
-#: libs/ui/KisApplication.cpp:337
+#: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr "Preimpostazioni del pennello"
 
-#: libs/ui/KisApplication.cpp:340 libs/ui/KisApplication.cpp:341
 #: libs/ui/KisApplication.cpp:342 libs/ui/KisApplication.cpp:343
+#: libs/ui/KisApplication.cpp:344 libs/ui/KisApplication.cpp:345
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr "Punte del pennello"
 
-#: libs/ui/KisApplication.cpp:348
+#: libs/ui/KisApplication.cpp:350
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Tavolozze"
 
-#: libs/ui/KisApplication.cpp:361 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:363 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Spazi di lavoro"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:364
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "Raccolte di simboli SVG"
 
-#: libs/ui/KisApplication.cpp:363 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:365 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Schemi delle finestre"
 
-#: libs/ui/KisApplication.cpp:365
+#: libs/ui/KisApplication.cpp:367
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr "Maschere del gamut"
 
-#: libs/ui/KisApplication.cpp:367
+#: libs/ui/KisApplication.cpp:369
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "Script SeExpr"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:374
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Stili del livello"
 
-#: libs/ui/KisApplication.cpp:385
+#: libs/ui/KisApplication.cpp:387
 #, kde-format
 msgid ""
 "%1\n"
@@ -30243,13 +30243,13 @@ msgstr ""
 "\n"
 "Krita ora verrà chiuso."
 
-#: libs/ui/KisApplication.cpp:385 libs/ui/KisApplication.cpp:391
+#: libs/ui/KisApplication.cpp:387 libs/ui/KisApplication.cpp:393
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: errore irreversibile"
 
-#: libs/ui/KisApplication.cpp:391
+#: libs/ui/KisApplication.cpp:393
 #, kde-format
 msgid ""
 "\n"
@@ -30260,7 +30260,7 @@ msgstr ""
 "\n"
 "Krita ora verrà chiuso."
 
-#: libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:425
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30271,65 +30271,65 @@ msgstr ""
 "Ciò non è consigliato.\n"
 "Scarica e installa invece la versione x64."
 
-#: libs/ui/KisApplication.cpp:440
+#: libs/ui/KisApplication.cpp:442
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Inizializzazione delle impostazioni globali..."
 
-#: libs/ui/KisApplication.cpp:472
+#: libs/ui/KisApplication.cpp:474
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Aggiunta dei tipi di risorse..."
 
-#: libs/ui/KisApplication.cpp:476
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Caricamento delle estensioni..."
 
-#: libs/ui/KisApplication.cpp:482
+#: libs/ui/KisApplication.cpp:484
 #, kde-format
 msgid "Loading resources..."
 msgstr "Caricamento delle risorse..."
 
-#: libs/ui/KisApplication.cpp:491
+#: libs/ui/KisApplication.cpp:493
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Caricamento della finestra principale..."
 
-#: libs/ui/KisApplication.cpp:523
+#: libs/ui/KisApplication.cpp:525
 #, kde-format
 msgid "Launching..."
 msgstr "Avvio in corso..."
 
-#: libs/ui/KisApplication.cpp:596
+#: libs/ui/KisApplication.cpp:598
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Tipo MIME non trovato, prova a usare l'opzione -mimetype"
 
-#: libs/ui/KisApplication.cpp:652
+#: libs/ui/KisApplication.cpp:654
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Resa animazione dei fotogrammi non riuscita."
 
-#: libs/ui/KisApplication.cpp:679 libs/ui/KisApplication.cpp:898
+#: libs/ui/KisApplication.cpp:681 libs/ui/KisApplication.cpp:900
 #, kde-format
 msgid "File layer"
 msgstr "Livello file"
 
-#: libs/ui/KisApplication.cpp:687 libs/ui/KisApplication.cpp:692
-#: libs/ui/KisApplication.cpp:892 libs/ui/KisApplication.cpp:906
-#: libs/ui/KisApplication.cpp:911
+#: libs/ui/KisApplication.cpp:689 libs/ui/KisApplication.cpp:694
+#: libs/ui/KisApplication.cpp:894 libs/ui/KisApplication.cpp:908
+#: libs/ui/KisApplication.cpp:913
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Attenzione"
 
-#: libs/ui/KisApplication.cpp:688 libs/ui/KisApplication.cpp:907
+#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:909
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Impossibile aggiungere %1 come livello file: il file non esiste."
 
-#: libs/ui/KisApplication.cpp:693
+#: libs/ui/KisApplication.cpp:695
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30351,7 +30351,7 @@ msgstr ""
 "un'istanza di Krita» nelle impostazioni (Impostazioni -> Generale -> "
 "Finestra)."
 
-#: libs/ui/KisApplication.cpp:699
+#: libs/ui/KisApplication.cpp:701
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30362,32 +30362,32 @@ msgstr ""
 "Puoi creare un nuovo documento sia utilizzando l'opzione --new-image, sia "
 "aprendo un file esistente."
 
-#: libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:895
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Impossibile aprire il file %1"
 
-#: libs/ui/KisApplication.cpp:912
+#: libs/ui/KisApplication.cpp:914
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Impossibile aggiungere il livello file: nessun documento aperto."
 
-#: libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1041
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Nessun modello trovato per: %1"
 
-#: libs/ui/KisApplication.cpp:1042
+#: libs/ui/KisApplication.cpp:1044
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Troppi modelli trovati per: %1"
 
-#: libs/ui/KisApplication.cpp:1058
+#: libs/ui/KisApplication.cpp:1060
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Caricamento del modello %1 non riuscito."
 
-#: libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1092
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30402,7 +30402,7 @@ msgstr ""
 "\n"
 "Riavvia Krita affinché le modiche abbiano effetto."
 
-#: libs/ui/KisApplication.cpp:1104
+#: libs/ui/KisApplication.cpp:1106
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30413,7 +30413,7 @@ msgstr ""
 "\n"
 "Assicurati che altri programmi non stiano usando il file e riprova."
 
-#: libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1134
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Vuoi azzerare il file delle impostazioni?"

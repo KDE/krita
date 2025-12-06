@@ -449,15 +449,10 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
           << "Formats: " << event->mimeData()->formats()
           << "Urls: " << event->mimeData()->urls()
           << "Has images: " << event->mimeData()->hasImage();
-    if (event->mimeData()->hasImage()
-            || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")
-            || event->mimeData()->hasFormat("krita/x-colorsetentry")
-            || event->mimeData()->hasColor()) {
-        event->accept();
 
-        // activate view if it should accept the drop
-        this->setFocus();
+    if (shouldAcceptDrag(event->mimeData())) {
+        event->accept();
+        setFocus(); // activate view if it should accept the drop
     } else {
         event->ignore();
     }
@@ -465,6 +460,15 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView::dropEvent(QDropEvent *event)
 {
+    dbgUI << Q_FUNC_INFO;
+    dbgUI << "\t Formats: " << event->mimeData()->formats();
+    dbgUI << "\t Urls: " << event->mimeData()->urls();
+    dbgUI << "\t Has images: " << event->mimeData()->hasImage();
+
+    if (!shouldAcceptDrag(event->mimeData())) {
+        return;
+    }
+
     KisImageWSP kisimage = image();
     Q_ASSERT(kisimage);
 
@@ -475,11 +479,6 @@ void KisView::dropEvent(QDropEvent *event)
     if (event->keyboardModifiers() & Qt::ShiftModifier && imageBounds.contains(imgCursorPos)) {
         forcedCenter = imgCursorPos;
     }
-
-    dbgUI << Q_FUNC_INFO;
-    dbgUI << "\t Formats: " << event->mimeData()->formats();
-    dbgUI << "\t Urls: " << event->mimeData()->urls();
-    dbgUI << "\t Has images: " << event->mimeData()->hasImage();
 
     if (event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")) {
         KisShapeController *kritaShapeController =
@@ -1066,15 +1065,12 @@ void KisView::dragMoveEvent(QDragMoveEvent *event)
           << "Formats: " << event->mimeData()->formats()
           << "Urls: " << event->mimeData()->urls()
           << "Has images: " << event->mimeData()->hasImage();
-    if (event->mimeData()->hasImage()
-            || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")
-            || event->mimeData()->hasFormat("krita/x-colorsetentry")
-            || event->mimeData()->hasColor()) {
-        return event->accept();
-    }
 
-    return event->ignore();
+    if (shouldAcceptDrag(event->mimeData())) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
 KisDocument *KisView::document() const
@@ -1441,4 +1437,20 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
 void KisView::closeView()
 {
     d->subWindow->close();
+}
+
+bool KisView::shouldAcceptDrag(const QMimeData *data) const
+{
+    if (data->hasFormat(QStringLiteral("application/x-krita-node-internal-pointer"))) {
+        // Don't allow dragging layers onto their own canvas, that really only
+        // gets triggered accidentally if you're a bit sloppy about selecting
+        // or reordering layers and then you're left confused about the layer
+        // duplicates that seem to show up at random.
+        return !KisMimeData::isNodeMimeDataFromSameImage(data, image());
+    } else {
+        return data->hasImage()
+            || data->hasUrls()
+            || data->hasFormat("krita/x-colorsetentry")
+            || data->hasColor();
+    }
 }

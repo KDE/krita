@@ -41,7 +41,6 @@ set (SvgTextTool_SRCS
 
 ki18n_wrap_ui(SvgTextTool_SRCS 
     WdgSvgTextEditor.ui
-    WdgSvgTextOptionWidget.ui
     WdgSvgTextSettings.ui
 )
 

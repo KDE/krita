@@ -450,7 +450,7 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
           << "Urls: " << event->mimeData()->urls()
           << "Has images: " << event->mimeData()->hasImage();
 
-    if (shouldAcceptDrag(event->mimeData())) {
+    if (shouldAcceptDrag(event)) {
         event->accept();
         setFocus(); // activate view if it should accept the drop
     } else {
@@ -465,7 +465,7 @@ void KisView::dropEvent(QDropEvent *event)
     dbgUI << "\t Urls: " << event->mimeData()->urls();
     dbgUI << "\t Has images: " << event->mimeData()->hasImage();
 
-    if (!shouldAcceptDrag(event->mimeData())) {
+    if (!shouldAcceptDrag(event)) {
         return;
     }
 
@@ -1066,7 +1066,7 @@ void KisView::dragMoveEvent(QDragMoveEvent *event)
           << "Urls: " << event->mimeData()->urls()
           << "Has images: " << event->mimeData()->hasImage();
 
-    if (shouldAcceptDrag(event->mimeData())) {
+    if (shouldAcceptDrag(event)) {
         event->accept();
     } else {
         event->ignore();
@@ -1439,14 +1439,20 @@ void KisView::closeView()
     d->subWindow->close();
 }
 
-bool KisView::shouldAcceptDrag(const QMimeData *data) const
+bool KisView::shouldAcceptDrag(const QDropEvent *event) const
 {
+    const QMimeData *data = event->mimeData();
     if (data->hasFormat(QStringLiteral("application/x-krita-node-internal-pointer"))) {
         // Don't allow dragging layers onto their own canvas, that really only
         // gets triggered accidentally if you're a bit sloppy about selecting
         // or reordering layers and then you're left confused about the layer
-        // duplicates that seem to show up at random.
-        return !KisMimeData::isNodeMimeDataFromSameImage(data, image());
+        // duplicates that seem to show up at random. The user can override
+        // this by explicitly holding down Ctrl if necessary. We always accept
+        // the enter event so that this works properly, otherwise we don't get
+        // any further drag events unless Ctrl was held to begin with.
+        return event->type() == QEvent::DragEnter
+            || event->keyboardModifiers().testFlag(Qt::ControlModifier)
+            || !KisMimeData::isNodeMimeDataFromSameImage(data, image());
     } else {
         return data->hasImage()
             || data->hasUrls()

@@ -809,9 +809,28 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 // 02-24-2022 update: Added macOS since QSaveFile does not work on sandboxed krita
 //                    It can work if user gives access to the container dir, but
 //                    we cannot guarantee the user gave us permission.
-#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS))
+// 12-05-2025 update: Also Android because we gotta play in the sandbox.
+#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_ANDROID))
 #define USE_QSAVEFILE
 #endif
+
+namespace {
+QFileDevice::FileError getFileOpenError(const QFile &file)
+{
+    QFileDevice::FileError error = file.error();
+    /**
+     * On Android Qt's AndroidContentFileEngine::open may be not very
+     * accurate with setting a proper error code when requesting file
+     * descriptor from JNI and getting a refusal. We should handle this
+     * condition gracefully.
+     */
+    if (error == QFileDevice::NoError) {
+        return QFileDevice::OpenError;
+    } else {
+        return error;
+    }
+}
+}
 
 KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
 {
@@ -824,17 +843,7 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
     QTemporaryFile file(QDir::tempPath() + "/.XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
-        QFileDevice::FileError error = file.error();
-        if (file.error() == QFileDevice::NoError) {
-            /**
-             * On Android Qt's AndroidContentFileEngine::open may be not very
-             * accurate with setting a proper error code when requesting file
-             * descriptor from JNI and getting a refusal. We should handle this
-             * condition gracefully.
-             */
-            error = QFileDevice::OpenError;
-        }
-        KisImportExportErrorCannotWrite result(error);
+        KisImportExportErrorCannotWrite result(getFileOpenError(file));
 #ifdef USE_QSAVEFILE
         file.cancelWriting();
 #endif
@@ -853,6 +862,75 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
             if (!file.commit()) {
                 qWarning() << "Could not commit QSaveFile";
                 status = KisImportExportErrorCannotWrite(file.error());
+            }
+#elif defined(Q_OS_ANDROID)
+            // The Android file system is bananas, so it needs special handling.
+
+            // If the temporary file is still open, ensure it's fully written.
+            // If it got closed, open it again so that we can read from it.
+            if(file.isOpen()) {
+                if (!file.flush()) {
+                    return KisImportExportErrorCannotWrite(file.error());
+                }
+            } else if (!file.open()) {
+                return KisImportExportErrorCannotWrite(getFileOpenError(file));
+            }
+
+            // Grab the size we're expecting to write for later verification.
+            qint64 expectedSize = file.size();
+            if (expectedSize < 0 || !file.seek(0)) {
+                return KisImportExportErrorCannotWrite(file.error());
+            }
+
+            // Open the target file. We have to explicitly tell the file to
+            // truncate itself because unlike on every other system it doesn't
+            // do that on its own when opening a file for writing, it just
+            // leaves the old content laying around and you start overwriting
+            // it, potentially leaving old garbage at the end of the file.
+            QFile target(location);
+            if (!target.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                return KisImportExportErrorCannotWrite(getFileOpenError(target));
+            }
+
+            // QFile::copy also doesn't work, so we gotta do it manually by
+            // alternately reading and writing BUFSIZ-sized chunks.
+            QByteArray buf;
+            buf.resize(BUFSIZ);
+            qint64 totalWritten = 0;
+            while (true) {
+                qint64 read = file.read(buf.data(), BUFSIZ);
+                if (read < 0) {
+                    // Read error.
+                    return KisImportExportErrorCannotWrite(file.error());
+                } else if (read == 0) {
+                    // End of file.
+                    break;
+                } else {
+                    // Successful read, try to write it.
+                    qint64 written = target.write(buf.constData(), read);
+                    if (written < 0) {
+                        // Write error.
+                        return KisImportExportErrorCannotWrite(target.error());
+                    }
+                    // We may not have written as much as we read, but we handle
+                    // that at the end.
+                    totalWritten += written;
+                }
+            }
+
+            // Finish up and make sure what we wrote is out to storage.
+            file.close();
+            if (!target.flush()) {
+                return KisImportExportErrorCannotWrite(target.error());
+            }
+            target.close();
+
+            // Now check if we actually wrote as much as we wanted to. If not,
+            // raise an error. There's not much we can do about it though, since
+            // we already truncated the original file at this point and don't
+            // have permissions to create backup files in the sandbox.
+            if (totalWritten != expectedSize) {
+                return KisImportExportErrorCannotWrite(QFileDevice::CopyError);
             }
 #else
             file.flush();

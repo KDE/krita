@@ -793,7 +793,7 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 #endif
 
 namespace {
-QFileDevice::FileError getFileOpenError(const QFile &file)
+QFileDevice::FileError getFileOpenError(const QFileDevice &file)
 {
     QFileDevice::FileError error = file.error();
     /**

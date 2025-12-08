@@ -967,7 +967,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 cursor = m_ibeam_vertical;
             }
-        } else if (hoveredShape) {
+        } else if (hoveredShape && m_highlightItem == HighlightItem::None) {
             if (!hoveredShape->textWrappingAreas().isEmpty()) {
                 Q_FOREACH(QPainterPath path, hoveredShape->textWrappingAreas()) {
                     m_hoveredShapeHighlightRect.addPath(hoveredShape->absoluteTransformation().map(path));

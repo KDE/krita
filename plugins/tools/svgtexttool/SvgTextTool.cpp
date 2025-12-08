@@ -829,7 +829,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             canvas()->shapeManager()->selection()->select(hoveredShape);
             m_hoveredShapeHighlightRect = QPainterPath();
         }
-        m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
+        m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point, event->modifiers()));
         m_dragging = DragMode::Select;
         event->accept();
     } else if (hoveredFlowShape) {
@@ -839,7 +839,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         event->accept();
     } else if (crossLayerPossible) {
         if (KisToolUtils::selectShapeCrossLayer(canvas(), event->point, KoSvgTextShape_SHAPEID)) {
-            m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
+            m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point, event->modifiers()));
             m_dragging = DragMode::Select;
             m_hoveredShapeHighlightRect = QPainterPath();
         } else {

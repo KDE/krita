@@ -14,7 +14,7 @@ class SvgTextCursor;
 class SvgSelectTextStrategy : public KoInteractionStrategy
 {
 public:
-    SvgSelectTextStrategy(KoToolBase *tool, SvgTextCursor *cursor, const QPointF &clicked);
+    SvgSelectTextStrategy(KoToolBase *tool, SvgTextCursor *cursor, const QPointF &clicked, Qt::KeyboardModifiers modifiers);
     ~SvgSelectTextStrategy() override = default;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;

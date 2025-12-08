@@ -232,11 +232,7 @@ void KisKKeySequenceWidgetPrivate::init()
     clearButton = new QToolButton(q);
     layout->addWidget(clearButton);
 
-    if (qApp->isLeftToRight()) {
-        clearButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-clear-locationbar-rtl")));
-    } else {
-        clearButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-clear-locationbar-ltr")));
-    }
+    clearButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-clear")));
 }
 
 KisKKeySequenceWidget::~KisKKeySequenceWidget()

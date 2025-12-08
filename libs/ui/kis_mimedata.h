@@ -56,6 +56,8 @@ public:
      */
     QStringList formats() const override;
 
+    static bool isNodeMimeDataFromSameImage(const QMimeData *data, KisImageSP image);
+
     static KisNodeList loadNodesFast(
         const QMimeData *data,
         KisImageSP image,

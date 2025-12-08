@@ -46,6 +46,7 @@ class QPrintDialog;
 class QCloseEvent;
 class QStatusBar;
 class QMdiSubWindow;
+class QMimeData;
 
 /**
  * This class is used to display a @ref KisDocument.
@@ -268,6 +269,7 @@ public Q_SLOTS:
 
 
 private:
+    bool shouldAcceptDrag(const QMimeData *data) const;
 
     class Private;
     Private * const d;

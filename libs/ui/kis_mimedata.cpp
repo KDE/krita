@@ -415,6 +415,12 @@ bool correctNewNodeLocation(KisNodeList nodes,
     return result;
 }
 
+bool KisMimeData::isNodeMimeDataFromSameImage(const QMimeData *data, KisImageSP image)
+{
+    const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
+    return mimedata && mimedata->m_image == image;
+}
+
 KisNodeList KisMimeData::loadNodesFast(
     const QMimeData *data,
     KisImageSP image,

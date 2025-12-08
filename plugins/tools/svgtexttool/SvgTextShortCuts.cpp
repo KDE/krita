@@ -242,7 +242,7 @@ bool testPropertyEnabled(const SvgTextShortcutInfo &info, const QList<KoSvgTextP
                 return currentVal.length.value == testValue.toDouble();
             }
         }
-        return (testValue <= oldValue);
+        return (testValue.toDouble() <= oldValue.toDouble());
     }
     return false;
 }

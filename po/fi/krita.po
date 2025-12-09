@@ -86,7 +86,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-06 03:23+0000\n"
+"POT-Creation-Date: 2025-12-09 03:24+0000\n"
 "PO-Revision-Date: 2025-10-17 17:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -20701,7 +20701,7 @@ msgstr "Ulos"
 #: libs/pigment/resources/KoColorSet.cpp:1512
 #: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20772,8 +20772,8 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:696
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -21700,7 +21700,7 @@ msgstr ""
 "kaikkien valinta"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:791
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -21777,7 +21777,7 @@ msgstr ""
 "muotojen liittäminen"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:605
 #, kde-format
 msgid "(pasted)"
 msgstr "(liitetty)"
@@ -30852,7 +30852,7 @@ msgstr ""
 "Vaihda suodinta\n"
 "suotimen vaihto"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:697
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %2.\n"
@@ -33376,28 +33376,28 @@ msgstr "Ei kuvaa."
 msgid "Use This Template"
 msgstr "Käytä tätä pohjaa"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:766
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Tätä työkalua ei voi käyttää valitun tason tyypin kanssa"
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:774 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Taso on lukittu ja näkymätön."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "Taso on lukittu."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Taso on näkymätön."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -33405,53 +33405,53 @@ msgid ""
 msgstr ""
 "<p>Tiedostoa <b>”%1”</b> on muutettu.</p><p>Haluatko tallentaa muutokset?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1248
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(kirjoitussuojattu)"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1252
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Recover Files"
 msgid "Recovered"
 msgstr "Tiedostojen palautus"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1406
 #, fuzzy, kde-format
 #| msgid "Soft Proofing turned on."
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Näyttövedostus päällä."
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1411
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Näyttövedostus päällä."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1413
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Näyttövedostus pois päältä."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Gamut Warnings turned on."
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Toistoalavaroitus päällä."
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1431
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Toistoalavaroitus päällä."
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1433
 #, fuzzy, kde-format
 #| msgid "Soft Proofing turned off."
 msgid "But Soft Proofing is still off."
 msgstr "Näyttövedostus pois päältä."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1436
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Toistoalavaroitus pois päältä."
@@ -38633,7 +38633,7 @@ msgstr "Oletus"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:591
 #, fuzzy, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -38754,7 +38754,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:541
 #, kde-format
 msgid "Reassign"
 msgstr "Sijoita uudelleen"
@@ -38782,12 +38782,12 @@ msgstr ""
 "Napsauta painiketta ja paina sitten haluamaasi pikanäppäintä.\n"
 "Esim. Ctrl+A: pidä Ctrl pohjassa ja paina A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:535
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Ristiriita sovelluksen vakiopikanäppäimen kanssa"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -38798,18 +38798,18 @@ msgstr ""
 "”%2” käytössä.\n"
 "Haluatko varmasti käyttää sitä myös työpöydänlaajuisena pikanäppäimenä?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:584
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Yhdistelmä"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:638
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Qt ei tue painamaasi näppäintä."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Ei-tuettu näppäin"

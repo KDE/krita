@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-06 03:23+0000\n"
+"POT-Creation-Date: 2025-12-09 03:24+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Jun Shiozawa <haresecret@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -19487,7 +19487,7 @@ msgstr "アウト"
 #: libs/pigment/resources/KoColorSet.cpp:1512
 #: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19557,8 +19557,8 @@ msgstr "ローカルリソース"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:696
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20399,7 +20399,7 @@ msgid "Select All"
 msgstr "すべて選択"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:791
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "塗りつぶし"
@@ -20461,7 +20461,7 @@ msgid "Paste shapes"
 msgstr "シェイプを貼り付け"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:605
 #, kde-format
 msgid "(pasted)"
 msgstr "(貼り付け)"
@@ -29206,7 +29206,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "フィルタレイヤーを変更"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:697
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31556,27 +31556,27 @@ msgstr "利用可能な写真はありません。"
 msgid "Use This Template"
 msgstr "このテンプレートを使用する"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:766
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "選択されたレイヤーではドラッグ＆ドロップで色を指定できません。"
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:774 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "レイヤーはロックされていてかつ非表示です"
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "レイヤーはロックされています"
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "レイヤーは非表示です。"
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31584,47 +31584,47 @@ msgid ""
 msgstr ""
 "<p>ドキュメント<b>'%1'</b>は内容変更されました。</p><p>保存しますか？</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1248
 #, kde-format
 msgid "Write Protected"
 msgstr "(書き込み保護)"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1252
 #, kde-format
 msgid "Recovered"
 msgstr "復元"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1406
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "浮動小数点ではソフトプルーフは働きません。"
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1411
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "ソフトプルーフ有効"
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1413
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "ソフトプルーフ無効"
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1425
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域警告は浮動小数点"
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1431
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "色域警告有効"
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1433
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "ですがまだソフトプルーフは有効ではありません。"
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1436
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "色域警告無効"
@@ -36726,7 +36726,7 @@ msgstr "デフォルト:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:591
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36843,7 +36843,7 @@ msgstr[0] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:541
 #, kde-format
 msgid "Reassign"
 msgstr "再割り当て"
@@ -36872,12 +36872,12 @@ msgstr ""
 "い。\n"
 "Ctrl+A で例: Ctrl キーを押したまま A を押す。"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:535
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "通常のアプリケーションショートカットと干渉しています"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36887,18 +36887,18 @@ msgstr ""
 "%1のキーの組み合わせは通常操作%2でも使用されています。\n"
 "本当にこれをグローバルショートカットとして使いますか？"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:584
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "入力"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:638
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "今押されたキーは Qt でサポートされていません"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
 #, kde-format
 msgid "Unsupported Key"
 msgstr "サポートされていないキー"

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-06 03:23+0000\n"
+"POT-Creation-Date: 2025-12-09 03:24+0000\n"
 "PO-Revision-Date: 2025-11-20 07:05-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -19464,7 +19464,7 @@ msgstr "Saída"
 #: libs/pigment/resources/KoColorSet.cpp:1512
 #: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19534,8 +19534,8 @@ msgstr "Recursos locais"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:696
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20378,7 +20378,7 @@ msgid "Select All"
 msgstr "Selecionar tudo"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:791
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Preencher a camada"
@@ -20440,7 +20440,7 @@ msgid "Paste shapes"
 msgstr "Colar Formas"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:605
 #, kde-format
 msgid "(pasted)"
 msgstr "(colado)"
@@ -29212,7 +29212,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Alterar arquivo de camada"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:697
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31563,74 +31563,74 @@ msgstr "Figura indisponível."
 msgid "Use This Template"
 msgstr "Usar este modelo"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:766
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Você não pode arrastar e soltar cores no tipo de camada selecionada."
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:774 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "A camada está bloqueada e invisível."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "A camada está bloqueada."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "A camada está invisível."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>O documento <b>'%1'</b> foi modificado.</p><p>Deseja salvá-lo?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1248
 #, kde-format
 msgid "Write Protected"
 msgstr "Com proteção de escrita"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1252
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperado"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1406
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "A simulação de tela (Soft Proofing) não funciona em ponto flutuante."
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1411
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Simulação de tela (Soft Proofing) ligada."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1413
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Simulação de tela (Soft Proofing) desligada."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1425
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Avisos de cores fora do gamute não funciona em ponto flutuante."
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1431
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Avisos de cores fora do gamute ligados."
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1433
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mas a simulação de tela continua desligada."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1436
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Avisos de cores fora do gamute desligados."
@@ -36802,7 +36802,7 @@ msgstr "Padrão:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:591
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36924,7 +36924,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:541
 #, kde-format
 msgid "Reassign"
 msgstr "Reatribuir"
@@ -36953,12 +36953,12 @@ msgstr ""
 "Exemplo para o Ctrl+A: Mantenha pressionada a tecla Ctrl e pressione a tecla "
 "A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:535
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Conflito com o atalho padrão do aplicativo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36969,18 +36969,18 @@ msgstr ""
 "por alguns aplicativos.\n"
 "Deseja realmente usá-la como um atalho global?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:584
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Entrada"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:638
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "A tecla que você pressionou não é suportada pelo Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Tecla não suportada"

@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-06 03:23+0000\n"
+"POT-Creation-Date: 2025-12-09 03:24+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -20088,7 +20088,7 @@ msgstr "Ki"
 #: libs/pigment/resources/KoColorSet.cpp:1512
 #: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20158,8 +20158,8 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:696
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -21017,7 +21017,7 @@ msgid "Select All"
 msgstr "Összes kijelölése"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:791
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -21084,7 +21084,7 @@ msgid "Paste shapes"
 msgstr "Alakzatok beillesztése"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:605
 #, kde-format
 msgid "(pasted)"
 msgstr "(beillesztett)"
@@ -29867,7 +29867,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Szűrő módosítása"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:697
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -32227,27 +32227,27 @@ msgstr "Bell: nincs elérhető tanácsadás"
 msgid "Use This Template"
 msgstr "A sablon használata"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:766
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:774 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "A réteg zárolt és láthatatlan."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "A réteg zárolt."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "A réteg láthatatlan."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -32255,52 +32255,52 @@ msgid ""
 msgstr ""
 "<p>A(z) <b>„%1”</b> dokumentum megváltozott.</p><p>El szeretné menteni?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1248
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(írásvédett)"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1252
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Recover Files"
 msgid "Recovered"
 msgstr "Fájlok helyreállítása"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1406
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Eszközbeállítások"
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1411
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Egyszerű ellenőrzés bekapcsolva."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1413
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Egyszerű ellenőrzés kikapcsolva."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Figyelem"
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1431
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Figyelem"
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1433
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Az egyszerű ellenőrzés még mindig ki van kapcsolva."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1436
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."
@@ -37330,7 +37330,7 @@ msgstr "Alapértelmezett"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:591
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -37439,7 +37439,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:541
 #, fuzzy, kde-format
 #| msgid "Ruler assistant"
 msgid "Reassign"
@@ -37464,12 +37464,12 @@ msgid ""
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:535
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -37477,18 +37477,18 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:584
 #, fuzzy, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Bemenet"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:638
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
 #, fuzzy, kde-format
 msgid "Unsupported Key"
 msgstr "Nem támogatott egység"

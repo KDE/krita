@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-06 03:23+0000\n"
+"POT-Creation-Date: 2025-12-09 03:24+0000\n"
 "PO-Revision-Date: 2023-11-23 10:49+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -19881,7 +19881,7 @@ msgstr "Fora"
 #: libs/pigment/resources/KoColorSet.cpp:1512
 #: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19951,8 +19951,8 @@ msgstr "Crea insimul de Ressources"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:696
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20832,7 +20832,7 @@ msgid "Select All"
 msgstr "Selige toto"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:791
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Reimple con inundation"
@@ -20897,7 +20897,7 @@ msgid "Paste shapes"
 msgstr "Formas de collar"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:605
 #, kde-format
 msgid "(pasted)"
 msgstr "(collate)"
@@ -29585,7 +29585,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Cambia filtro"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:697
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31952,30 +31952,30 @@ msgstr "Disponibile"
 msgid "Use This Template"
 msgstr "Usa iste patrono"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:766
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:774 libs/ui/tool/kis_tool.cc:678
 #, fuzzy, kde-format
 #| msgid "All invisibles"
 msgid "Layer is locked and invisible."
 msgstr "Omnes invisibile"
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:680
 #, fuzzy, kde-format
 #| msgid "Layer Style"
 msgid "Layer is locked."
 msgstr "Stilo de strato (Layer)"
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:682
 #, fuzzy, kde-format
 #| msgid "All invisibles"
 msgid "Layer is invisible."
 msgstr "Omnes invisibile"
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31984,49 +31984,49 @@ msgstr ""
 "<p>Le documento <b>'%1'</b> ha essite modificate </p><p>Tu vole salveguardar "
 "lo? </p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1248
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "Proprietates de Mascara de filtro"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1252
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperate"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1406
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1411
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1413
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Aviso"
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1431
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Aviso"
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1433
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1436
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."
@@ -37011,7 +37011,7 @@ msgstr "Predefinite:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:591
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -37133,7 +37133,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:541
 #, kde-format
 msgid "Reassign"
 msgstr "Reassigna"
@@ -37162,14 +37162,14 @@ msgstr ""
 "programma\n"
 "Exemplo per CTRL+A: tu pressa le clave CTRL e pressa A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:535
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 "Conflicto con Standard Application Shortcut (Via Breve de application "
 "standard)"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -37180,18 +37180,18 @@ msgstr ""
 "que alicun applicationes usa.\n"
 "Etiam tu vole realmente usar lo como via breve global?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:584
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Ingresso"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:638
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Le clave que tu tosto pressava non es supportate per Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Clave non supportate"

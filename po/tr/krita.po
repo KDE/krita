@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-06 03:23+0000\n"
+"POT-Creation-Date: 2025-12-09 03:24+0000\n"
 "PO-Revision-Date: 2025-04-04 19:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -19451,7 +19451,7 @@ msgstr "Dış"
 #: libs/pigment/resources/KoColorSet.cpp:1512
 #: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19521,8 +19521,8 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:706
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:696
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:706
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20369,7 +20369,7 @@ msgid "Select All"
 msgstr "Tümünü Seç"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:791
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Taşkın Dolgu Katman"
@@ -20431,7 +20431,7 @@ msgid "Paste shapes"
 msgstr "Şekilleri Yapıştır"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:605
 #, kde-format
 msgid "(pasted)"
 msgstr "(yapıştırılmış)"
@@ -29183,7 +29183,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Dosya Katmanı Değiştir"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:697
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31524,27 +31524,27 @@ msgstr "Kullanılabilir resim yok."
 msgid "Use This Template"
 msgstr "Bu Şablonu Kullan"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:766
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seçili katman türüne renkleri sürükleyip bırakamazsınız."
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:774 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Katman kilitlendi ve görünmez."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:776 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "Katman kilitli."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:778 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Katman görünmez."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31552,47 +31552,47 @@ msgid ""
 msgstr ""
 "<p><b>“%1”</b> adlı belge değiştirildi. </p><p>Kaydetmek istiyor musunuz?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1248
 #, kde-format
 msgid "Write Protected"
 msgstr "Yazma Korumalı"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1252
 #, kde-format
 msgid "Recovered"
 msgstr "Kurtarılmış"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1406
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Ekran Provası, kayan noktalı sayılarda çalışmaz."
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1411
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Ekran Provası açık."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1413
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Ekran Provası kapalı."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1425
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gam Uyarıları kayan noktalı sayılarda çalışmaz."
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1431
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gam Uyarıları açık."
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1433
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Ancak Ekran Provası hâlâ kapalı."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1436
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gam Uyarıları kapalı."
@@ -36720,7 +36720,7 @@ msgstr "Öntanımlı:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:591
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36842,7 +36842,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:541
 #, kde-format
 msgid "Reassign"
 msgstr "Yeniden Ata"
@@ -36871,12 +36871,12 @@ msgstr ""
 "basın.\n"
 "Kontrol+A için örnek: Kontrol düğmesine basılı tutup A düğmesine basın."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:535
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Standart Uygulama Kısayolu ile Çakışma"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36887,18 +36887,18 @@ msgstr ""
 "standart eylemi için de kullanılıyor.\n"
 "Onu bir global kısayol olarak da kullanmak istiyor musunuz?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:584
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Girdi"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:638
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Şimdi bastığınız düğme Qt tarafından desteklenmiyor."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Desteklenmeyen Düğme"

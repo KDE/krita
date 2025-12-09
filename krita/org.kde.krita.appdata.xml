@@ -600,7 +600,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2099-01-01" version="5.2.14"/>
+    <release date="2025-09-14" version="5.2.14"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

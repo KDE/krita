@@ -136,6 +136,48 @@ struct TypeSettingDecorInfo {
 };
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
+    class InputQueryUpdateBlocker final
+    {
+    public:
+        InputQueryUpdateBlocker(SvgTextCursor::Private *d)
+            : m_d(d)
+            // Only unblock updates if they were blocked to begin with.
+            , m_unblockQueryUpdates(!std::exchange(d->blockQueryUpdates, true))
+        {
+        }
+
+        InputQueryUpdateBlocker(const QScopedPointer<Private> &d)
+            : InputQueryUpdateBlocker(d.get())
+        {
+        }
+
+        ~InputQueryUpdateBlocker()
+        {
+            if (m_d) {
+                QInputMethod *inputMethod = QGuiApplication::inputMethod();
+
+                if (m_unblockQueryUpdates) {
+                    m_d->blockQueryUpdates = false;
+                    inputMethod->update(Qt::ImQueryInput);
+                }
+
+                if (m_changeVisibility) {
+                    inputMethod->setVisible(m_d->shape != nullptr);
+                }
+            }
+        }
+
+        void setChangeVisibility(bool changeVisibility)
+        {
+            m_changeVisibility = changeVisibility;
+        }
+
+    private:
+        Private *m_d;
+        bool m_unblockQueryUpdates;
+        bool m_changeVisibility = false;
+    };
+
     KoCanvasBase *canvas;
     bool isAddingCommand = false;
     int pos = 0;
@@ -145,6 +187,7 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QTimer cursorFlash;
     QTimer cursorFlashLimit;
     bool cursorVisible = false;
+    bool hasFocus = false;
 
     QPainterPath cursorShape;
     QColor cursorColor;
@@ -193,6 +236,22 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
     if (d->canvas->canvasController()) {
         // Mockcanvas in the tests has no canvas controller.
         connect(d->canvas->canvasController()->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateInputMethodItemTransform()));
+        connect(d->canvas->canvasController()->proxyObject,
+                SIGNAL(moveDocumentOffset(QPointF, QPointF)),
+                this,
+                SLOT(updateInputMethodItemTransform()));
+        connect(d->canvas->canvasController()->proxyObject,
+                SIGNAL(effectiveZoomChanged(qreal)),
+                this,
+                SLOT(updateInputMethodItemTransform()));
+        connect(d->canvas->canvasController()->proxyObject,
+                SIGNAL(documentRotationChanged(qreal)),
+                this,
+                SLOT(updateInputMethodItemTransform()));
+        connect(d->canvas->canvasController()->proxyObject,
+                SIGNAL(documentMirrorStatusChanged(bool, bool)),
+                this,
+                SLOT(updateInputMethodItemTransform()));
         connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(canvasResourceChanged(int,QVariant)));
     }
@@ -214,6 +273,9 @@ KoSvgTextShape *SvgTextCursor::shape() const
 
 void SvgTextCursor::setShape(KoSvgTextShape *textShape)
 {
+    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
+    inputQueryUpdateBlocker.setChangeVisibility(true);
+
     if (d->shape) {
         commitIMEPreEdit();
         d->shape->removeShapeChangeListener(this);
@@ -271,6 +333,7 @@ int SvgTextCursor::getAnchor()
 
 void SvgTextCursor::setPos(int pos, int anchor)
 {
+    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
     d->pos = pos;
     d->anchor = anchor;
     updateCursor();
@@ -280,6 +343,7 @@ void SvgTextCursor::setPos(int pos, int anchor)
 void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 {
     if (d->shape) {
+        Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
         int pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
         if (d->preEditCommand) {
             int start = d->shape->indexForPos(d->preEditStart);
@@ -965,7 +1029,6 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     dbgTools << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
     QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
-    d->blockQueryUpdates = true;
     SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
 
     bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
@@ -987,6 +1050,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         return;
     }
 
+    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
 
     // remove the selection if any.
     addCommandToUndoAdapter(removeSelectionImpl(false));
@@ -1152,8 +1216,6 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     }
 
     blocker.unlock();
-    d->blockQueryUpdates = false;
-    qApp->inputMethod()->update(Qt::ImQueryInput);
     updateRect |= d->shape->boundingRect();
     // TODO: replace with KoShapeBulkActionLock
     d->shape->updateAbsolute(updateRect);
@@ -1198,11 +1260,15 @@ void SvgTextCursor::updateInputMethodItemTransform()
         QTransform docToView = d->canvas->viewConverter()->documentToView();
         QTransform viewToWidget = d->canvas->viewConverter()->viewToWidget();
         inputItemTransform = shapeTransform * docToView * viewToWidget * widgetToWindow;
-    }
-    qApp->inputMethod()->setInputItemTransform(inputItemTransform);
-    qApp->inputMethod()->setInputItemRectangle(inputRect);
-    if (!d->blockQueryUpdates) {
-        qApp->inputMethod()->update(Qt::ImQueryInput);
+        // Only mess with IME if we're actually the thing being typed at.
+        if (d->hasFocus) {
+            QInputMethod *inputMethod = QGuiApplication::inputMethod();
+            inputMethod->setInputItemTransform(inputItemTransform);
+            inputMethod->setInputItemRectangle(inputRect);
+            if (!d->blockQueryUpdates) {
+                inputMethod->update(Qt::ImQueryInput);
+            }
+        }
     }
 }
 
@@ -1268,6 +1334,7 @@ void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
     Q_UNUSED(type);
     Q_UNUSED(shape);
+    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
     d->pos = d->shape->posForIndex(d->posIndex);
     d->anchor = d->shape->posForIndex(d->anchorIndex);
     updateCursor(true);
@@ -1278,6 +1345,7 @@ void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 
 void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
 {
+    Private::InputQueryUpdateBlocker inputQueryUpdateBlocker(d);
     d->pos = pos;
     d->anchor = anchor;
     updateCursor();
@@ -1544,11 +1612,13 @@ void SvgTextCursor::focusIn()
     d->cursorFlash.start();
     d->cursorFlashLimit.start();
     d->cursorVisible = false;
+    d->hasFocus = true;
     blinkCursor();
 }
 
 void SvgTextCursor::focusOut()
 {
+    d->hasFocus = false;
     stopBlinkCursor();
 }
 
@@ -1630,6 +1700,10 @@ void SvgTextCursor::updateSelection()
         d->shape->cursorForPos(d->anchor, d->anchorCaret, d->cursorColor);
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
         Q_EMIT updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
+
+        if (!d->blockQueryUpdates) {
+            QGuiApplication::inputMethod()->update(Qt::ImQueryInput);
+        }
     }
 }
 

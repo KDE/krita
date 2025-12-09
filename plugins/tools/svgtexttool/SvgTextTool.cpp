@@ -762,6 +762,13 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
 void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 {
+    // When using touch drawing, we only ever receive move events after the
+    // finger has pressed down. We have to issue an artificial move here so that
+    // the tool's state is updated properly to handle the press.
+    if (event->isTouchEvent()) {
+        mouseMoveEvent(event);
+    }
+
     KoSvgTextShape *selectedShape = this->selectedShape();
 
     if (selectedShape) {

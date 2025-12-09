@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
 "PO-Revision-Date: 2025-11-22 09:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -23851,7 +23851,7 @@ msgstr "Allunya"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23920,7 +23920,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24812,7 +24812,7 @@ msgid "Select All"
 msgstr "Selecciona-ho tot"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Capa d'emplenat per flux"
@@ -24874,7 +24874,7 @@ msgid "Paste shapes"
 msgstr "Apega les formes"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, kde-format
 msgid "(pasted)"
 msgstr "(apegat)"
@@ -33912,7 +33912,7 @@ msgid "Color Sampler"
 msgstr "Mostra de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, kde-format
 msgid "Deselect"
 msgstr "Desselecciona"
@@ -33996,7 +33996,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Canvia la capa de fitxer"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34747,34 +34747,34 @@ msgstr ""
 "predefinits cal etiquetar-los i després seleccionar ací l'etiqueta."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Selecciona-ho tot"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, kde-format
 msgid "Invert Selection"
 msgstr "Invertix la selecció"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "Òmpliga la selecció amb color"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Clear Selection"
 msgstr "Neteja la selecció"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "Copia a una capa nova"
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Crop to Selection"
 msgstr "Escapça a la selecció"
@@ -36488,28 +36488,28 @@ msgstr "No hi ha cap imatge disponible."
 msgid "Use This Template"
 msgstr "Utilitza esta plantilla"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 "No podeu arrossegar i deixar anar colors sobre el tipus de capa seleccionat."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "La capa està bloquejada i és invisible."
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "La capa està bloquejada."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "La capa és invisible."
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -36517,47 +36517,47 @@ msgid ""
 msgstr ""
 "<p>El document <b>«%1»</b> ha sigut modificat.</p><p>Voleu guardar-lo?</p>"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, kde-format
 msgid "Write Protected"
 msgstr "Protegit contra escriptura"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperat"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "La provatura suau no funciona amb coma flotant."
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "S'ha activat la provatura suau."
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "S'ha desactivat la provatura suau."
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Els avisos de gamma no funcionen amb coma flotant."
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "S'han activat els avisos de gamma."
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Però la provatura suau encara està desactivada."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "S'han desactivat els avisos de gamma."
@@ -41240,7 +41240,7 @@ msgstr "Predeterminat:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -41364,7 +41364,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Reassign"
 msgstr "Torna a assignar"
@@ -41394,12 +41394,12 @@ msgstr ""
 "Exemple per a «Ctrl+A»: manteniu premuda la tecla «Ctrl» mentre premeu la "
 "«A»."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Conflicte amb una drecera estàndard d'aplicació"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -41410,18 +41410,18 @@ msgstr ""
 "utilitzen algunes aplicacions.\n"
 "Esteu segur/a que també voleu utilitzar-la com a drecera global?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Entrada"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "La tecla que heu premut no està admesa a les Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Tecla no admesa"
@@ -67781,137 +67781,6 @@ msgstr "Mostra els quadros de línies"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "Edita el codi font de SVG"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, kde-format
-msgid "Text Type"
-msgstr "Tipus de text"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>El text no ajustarà i conservarà espais i línies "
-"noves. S'inserix un salt de línia de manera que les línies ajustades o "
-"posicionades es mantenen separades.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, kde-format
-msgid "Preformatted"
-msgstr "Amb format previ"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Es conserven els ajustos de text dins d'una llargària "
-"fixa, espais i línies noves. No s'han eliminat les línies noves.</p></body></"
-"html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, kde-format
-msgid "Inline Wrapped"
-msgstr "Ajustat en línia"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>El text utilitza transformacions de caràcters SVG 1.1 "
-"per a posicionar cada línia. Els espais i les línies noves estan reduïts. "
-"Açò és per a la compatibilitat amb SVG 1.1.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, kde-format
-msgid "Prepositioned"
-msgstr "Amb preposició"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, kde-format
-msgid "Glyph Palette"
-msgstr "Paleta de glifs"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, kde-format
-msgid "Create new texts with..."
-msgstr "Crea textos nous amb…"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "Ancora el text a l'esquerra."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "Ancora el text al mig."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "Ancora el text a la dreta."
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, kde-format
-msgid "Letter Spacing"
-msgstr "Espaiat de les lletres"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr "El text està en horitzontal, de dalt a baix."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr "El text està en vertical, de dreta a esquerra."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr "El text està en vertical, d'esquerra a dreta."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, kde-format
-msgid "Left to right text direction."
-msgstr "Direcció del text d'esquerra a dreta."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, kde-format
-msgid "Right to left text direction."
-msgstr "Direcció del text de dreta a esquerra."
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
@@ -69692,3 +69561,77 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
+
+#~ msgid "Edit SVG Source"
+#~ msgstr "Edita el codi font de SVG"
+
+#~ msgid "Text Type"
+#~ msgstr "Tipus de text"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#~ "lines. A line break is inserted so the lines from wrapping or positioning "
+#~ "remain separated.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>El text no ajustarà i conservarà espais i línies "
+#~ "noves. S'inserix un salt de línia de manera que les línies ajustades o "
+#~ "posicionades es mantenen separades.</p></body></html>"
+
+#~ msgid "Preformatted"
+#~ msgstr "Amb format previ"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#~ "lines are preserved. New lines are not removed.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Es conserven els ajustos de text dins d'una "
+#~ "llargària fixa, espais i línies noves. No s'han eliminat les línies noves."
+#~ "</p></body></html>"
+
+#~ msgid "Inline Wrapped"
+#~ msgstr "Ajustat en línia"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#~ "each line. Spaces and new lines are collapsed. This is for backward "
+#~ "compatibility with SVG 1.1.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>El text utilitza transformacions de caràcters SVG "
+#~ "1.1 per a posicionar cada línia. Els espais i les línies noves estan "
+#~ "reduïts. Açò és per a la compatibilitat amb SVG 1.1.</p></body></html>"
+
+#~ msgid "Prepositioned"
+#~ msgstr "Amb preposició"
+
+#~ msgid "Glyph Palette"
+#~ msgstr "Paleta de glifs"
+
+#~ msgid "Create new texts with..."
+#~ msgstr "Crea textos nous amb…"
+
+#~ msgid "Anchor text to the left."
+#~ msgstr "Ancora el text a l'esquerra."
+
+#~ msgid "Anchor text to the middle."
+#~ msgstr "Ancora el text al mig."
+
+#~ msgid "Anchor text to the right."
+#~ msgstr "Ancora el text a la dreta."
+
+#~ msgid "Letter Spacing"
+#~ msgstr "Espaiat de les lletres"
+
+#~ msgid "Text flows horizontal, top to bottom."
+#~ msgstr "El text està en horitzontal, de dalt a baix."
+
+#~ msgid "Text flows vertical, right to left."
+#~ msgstr "El text està en vertical, de dreta a esquerra."
+
+#~ msgid "Text flows vertical, left to right."
+#~ msgstr "El text està en vertical, d'esquerra a dreta."
+
+#~ msgid "Left to right text direction."
+#~ msgstr "Direcció del text d'esquerra a dreta."
+
+#~ msgid "Right to left text direction."
+#~ msgstr "Direcció del text de dreta a esquerra."

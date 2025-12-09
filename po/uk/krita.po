@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
 "PO-Revision-Date: 2025-11-22 10:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -24014,7 +24014,7 @@ msgstr "Вихідний"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24083,7 +24083,7 @@ msgstr "Локальні ресурси"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24971,7 +24971,7 @@ msgstr ""
 "позначення усього"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -25049,7 +25049,7 @@ msgstr ""
 "вставлення форм"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, kde-format
 msgid "(pasted)"
 msgstr "(вставлено)"
@@ -34118,7 +34118,7 @@ msgid "Color Sampler"
 msgstr "Вибір кольору"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, kde-format
 msgid "Deselect"
 msgstr "Зняти позначення"
@@ -34206,7 +34206,7 @@ msgstr ""
 "Змінити шар з файла\n"
 "зміну шару з файла"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35032,34 +35032,34 @@ msgstr ""
 "слід визначити для них мітку, а потім вибрати її тут."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Позначити усе"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, kde-format
 msgid "Invert Selection"
 msgstr "Інвертувати позначення"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "Заповнити позначене кольором"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Clear Selection"
 msgstr "Очистити позначене"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "Копіювати у новий шар"
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Crop to Selection"
 msgstr "Обрізати до позначеного"
@@ -36788,76 +36788,76 @@ msgstr "Малюнок відсутній."
 msgid "Use This Template"
 msgstr "Використати цей шаблон"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Ви не можете перетягувати і скидати кольори на шар вибраного типу."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Шар заблоковано, його не видно."
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Шар заблоковано."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Шар не видно."
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Документ <b>«%1»</b> було змінено.</p><p>Зберегти зміни?</p>"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, kde-format
 msgid "Write Protected"
 msgstr "Захищено від запису"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Recovered"
 msgstr "Відновлено"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Проба кольорів не працює у режимі значень кольорів із рухомою крапкою."
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Пробу кольорів увімкнено."
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Пробу кольорів вимкнено."
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr ""
 "Попередження щодо гами не працюють у режимі значень кольорів із рухомою "
 "крапкою."
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Попередження щодо гами увімкнено."
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Але пробу кольорів усе ще вимкнено."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Попередження щодо гами вимкнено."
@@ -41572,7 +41572,7 @@ msgstr "Типове:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -41709,7 +41709,7 @@ msgstr[3] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Reassign"
 msgstr "Перепризначити"
@@ -41738,12 +41738,12 @@ msgstr ""
 "використовувати у програмі.\n"
 "Наприклад, для Ctrl+A: натисніть клавішу Ctrl, а потім клавішу «A»."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Конфлікт зі скороченнями стандартних програм"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -41754,18 +41754,18 @@ msgstr ""
 "використовують багато інших програм.\n"
 "Ви дійсно хочете використовувати її також як загальне скорочення?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Ввід"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Клавіша, яку ви тільки-но використали, не підтримується Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Непідтримувана клавіша"
@@ -68368,138 +68368,6 @@ msgstr "Показувати рамки рядків"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "Редагувати код SVG"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, kde-format
-msgid "Text Type"
-msgstr "Тип тексту"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Текст не переноситиметься за рядками, а пробіли і "
-"розриви рядків буде збережено. Розрив рядка буде вставлено так, щоб "
-"відокремити ці рядки від блоків з перенесенням та позиціюванням.</p></body></"
-"html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, kde-format
-msgid "Preformatted"
-msgstr "Попереднє форматування"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Текст переноситиметься з фіксованою шириною, пробіли і "
-"розриви рядків буде збережено. Розриви рядків не вилучатимуться.</p></body></"
-"html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, kde-format
-msgid "Inline Wrapped"
-msgstr "Вбудоване перенесення"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Текст використовує перетворення символів SVG 1.1 для "
-"розташовування окремих рядків. Пробіли і розриви рядків буде згорнуто. Це "
-"для зворотної сумісності з SVG 1.1.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, kde-format
-msgid "Prepositioned"
-msgstr "Попереднє позиціювання"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, kde-format
-msgid "Glyph Palette"
-msgstr "Палітра гліфів"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, kde-format
-msgid "Create new texts with..."
-msgstr "Створити текст з такими параметрами…"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "Прив'язати текст ліворуч."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "Прив'язати текст посередині."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "Прив'язати текст праворуч."
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, kde-format
-msgid "Letter Spacing"
-msgstr "Інтервал між літерами"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr "Текст розташовується горизонтально, згори вниз."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr "Текст розташовується вертикально, справа ліворуч."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr "Текст розташовується вертикально, зліва праворуч."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, kde-format
-msgid "Left to right text direction."
-msgstr "Напрямок тексту зліва праворуч."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, kde-format
-msgid "Right to left text direction."
-msgstr "Напрямок тексту справа ліворуч."
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
@@ -70297,6 +70165,81 @@ msgstr ""
 "Перемикання між повним діапазоном і піддіапазоном.\n"
 "Повний діапазон: [%1, %2]\n"
 "Піддіапазон: [%3, %4]"
+
+#~ msgid "Edit SVG Source"
+#~ msgstr "Редагувати код SVG"
+
+#~ msgid "Text Type"
+#~ msgstr "Тип тексту"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#~ "lines. A line break is inserted so the lines from wrapping or positioning "
+#~ "remain separated.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Текст не переноситиметься за рядками, а пробіли і "
+#~ "розриви рядків буде збережено. Розрив рядка буде вставлено так, щоб "
+#~ "відокремити ці рядки від блоків з перенесенням та позиціюванням.</p></"
+#~ "body></html>"
+
+#~ msgid "Preformatted"
+#~ msgstr "Попереднє форматування"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#~ "lines are preserved. New lines are not removed.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Текст переноситиметься з фіксованою шириною, "
+#~ "пробіли і розриви рядків буде збережено. Розриви рядків не вилучатимуться."
+#~ "</p></body></html>"
+
+#~ msgid "Inline Wrapped"
+#~ msgstr "Вбудоване перенесення"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#~ "each line. Spaces and new lines are collapsed. This is for backward "
+#~ "compatibility with SVG 1.1.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Текст використовує перетворення символів SVG 1.1 "
+#~ "для розташовування окремих рядків. Пробіли і розриви рядків буде "
+#~ "згорнуто. Це для зворотної сумісності з SVG 1.1.</p></body></html>"
+
+#~ msgid "Prepositioned"
+#~ msgstr "Попереднє позиціювання"
+
+#~ msgid "Glyph Palette"
+#~ msgstr "Палітра гліфів"
+
+#~ msgid "Create new texts with..."
+#~ msgstr "Створити текст з такими параметрами…"
+
+#~ msgid "Anchor text to the left."
+#~ msgstr "Прив'язати текст ліворуч."
+
+#~ msgid "Anchor text to the middle."
+#~ msgstr "Прив'язати текст посередині."
+
+#~ msgid "Anchor text to the right."
+#~ msgstr "Прив'язати текст праворуч."
+
+#~ msgid "Letter Spacing"
+#~ msgstr "Інтервал між літерами"
+
+#~ msgid "Text flows horizontal, top to bottom."
+#~ msgstr "Текст розташовується горизонтально, згори вниз."
+
+#~ msgid "Text flows vertical, right to left."
+#~ msgstr "Текст розташовується вертикально, справа ліворуч."
+
+#~ msgid "Text flows vertical, left to right."
+#~ msgstr "Текст розташовується вертикально, зліва праворуч."
+
+#~ msgid "Left to right text direction."
+#~ msgstr "Напрямок тексту зліва праворуч."
+
+#~ msgid "Right to left text direction."
+#~ msgstr "Напрямок тексту справа ліворуч."
 
 #~ msgid "Knife Tool"
 #~ msgstr "Інструмент «Ніж»"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
 "PO-Revision-Date: 2025-11-17 18:44+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -23972,7 +23972,7 @@ msgstr "輸出"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24041,7 +24041,7 @@ msgstr "本機資源"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24934,7 +24934,7 @@ msgid "Select All"
 msgstr "全部選取"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充圖層"
@@ -24996,7 +24996,7 @@ msgid "Paste shapes"
 msgstr "貼上形狀"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, kde-format
 msgid "(pasted)"
 msgstr "(已貼上)"
@@ -33856,7 +33856,7 @@ msgid "Color Sampler"
 msgstr "色彩取樣器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, kde-format
 msgid "Deselect"
 msgstr "取消選取"
@@ -33941,7 +33941,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "變更檔案圖層"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34700,40 +34700,40 @@ msgstr ""
 "標籤，然後在此處選取該標籤。"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "全部選擇"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Invert Selection"
 msgid "Invert Selection"
 msgstr "反轉選取"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 #| msgid "Select a Color"
 msgid "Fill Selection with Color"
 msgstr "選取一種色彩"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, fuzzy, kde-format
 #| msgid "Feather Selection"
 msgid "Clear Selection"
 msgstr "羽化選取區域"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Copy Layer"
 msgid "Copy To New Layer"
 msgstr "複製圖層"
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Crop Selections"
@@ -36481,74 +36481,74 @@ msgstr "無可用圖片。"
 msgid "Use This Template"
 msgstr "使用此範本"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "不能將色塊拖放到選定的圖層類型上。"
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "圖層已鎖定且不可見。"
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "圖層已鎖定。"
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "圖層不可見。"
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>檔案 <b>「%1」</b> 已被修改。</p><p>要儲存它嗎？</p>"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, kde-format
 msgid "Write Protected"
 msgstr "防寫"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Recovered"
 msgstr "已復原"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "螢幕校樣不支援浮點位深度。"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "已啟用螢幕校樣。"
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "已關閉螢幕校樣。"
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域警告不支援浮點色深。"
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "已啟用色域警告。"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "但螢幕校樣仍然關閉。"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "已關閉色域警告。"
@@ -41076,7 +41076,7 @@ msgstr "設定："
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -41191,7 +41191,7 @@ msgstr[0] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Reassign"
 msgstr "重新指派"
@@ -41217,12 +41217,12 @@ msgstr ""
 "點選本按鈕，然後輸入您要為此程式設定的捷徑。\n"
 "比如 Ctrl+A 就是按住 Ctrl 鍵再按下 A。"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "和標準程式快捷鍵衝突"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -41232,18 +41232,18 @@ msgstr ""
 "組合鍵「%1」已被其它一些程式使用的標準動作「%2」佔用。\n"
 "您真的想要將它也作為全域快捷鍵使用嗎？"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "輸入"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Qt 尚不支持您剛才按下的鍵。"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, kde-format
 msgid "Unsupported Key"
 msgstr "不支援的鍵"
@@ -67417,135 +67417,6 @@ msgstr "在資料夾顯示"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "編輯 SVG 原始碼"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, fuzzy, kde-format
-#| msgid "Text Tool"
-msgid "Text Type"
-msgstr "文字工具"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, kde-format
-msgid "Preformatted"
-msgstr "手動斷行"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>使用數位板的壓感筆傾斜度決定法線。</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, kde-format
-msgid "Inline Wrapped"
-msgstr "文內斷行"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Prepositioned"
-msgstr "位置"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, fuzzy, kde-format
-#| msgid "Palette"
-msgid "Glyph Palette"
-msgstr "調色板"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, kde-format
-msgid "Create new texts with..."
-msgstr "建立新文字自…"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "將文字錨定到左側。"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "將文字錨定到中間。"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "將文字錨定到右側。"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, kde-format
-msgid "Letter Spacing"
-msgstr "字距"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr "橫式書寫文字，由上至下排列。"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr "直式書寫文字，由右至左排行。"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr "直式書寫文字，由左至右排行。"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, kde-format
-msgid "Left to right text direction."
-msgstr "左至右書寫方向。"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, kde-format
-msgid "Right to left text direction."
-msgstr "右至左書寫方向。"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
@@ -69329,6 +69200,70 @@ msgstr ""
 "在全範圍與子範圍之間切換。\n"
 "全範圍：[%1, %2]\n"
 "子範圍：[%3, %4]"
+
+#~ msgid "Edit SVG Source"
+#~ msgstr "編輯 SVG 原始碼"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Text Type"
+#~ msgstr "文字工具"
+
+#~ msgid "Preformatted"
+#~ msgstr "手動斷行"
+
+#, fuzzy
+#~| msgid ""
+#~| "<html><head/><body><p>Use the tilt of the tablet to determine the "
+#~| "normals.</p></body></html>"
+#~ msgid ""
+#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#~ "lines are preserved. New lines are not removed.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>使用數位板的壓感筆傾斜度決定法線。</p></body></html>"
+
+#~ msgid "Inline Wrapped"
+#~ msgstr "文內斷行"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgid "Prepositioned"
+#~ msgstr "位置"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgid "Glyph Palette"
+#~ msgstr "調色板"
+
+#~ msgid "Create new texts with..."
+#~ msgstr "建立新文字自…"
+
+#~ msgid "Anchor text to the left."
+#~ msgstr "將文字錨定到左側。"
+
+#~ msgid "Anchor text to the middle."
+#~ msgstr "將文字錨定到中間。"
+
+#~ msgid "Anchor text to the right."
+#~ msgstr "將文字錨定到右側。"
+
+#~ msgid "Letter Spacing"
+#~ msgstr "字距"
+
+#~ msgid "Text flows horizontal, top to bottom."
+#~ msgstr "橫式書寫文字，由上至下排列。"
+
+#~ msgid "Text flows vertical, right to left."
+#~ msgstr "直式書寫文字，由右至左排行。"
+
+#~ msgid "Text flows vertical, left to right."
+#~ msgstr "直式書寫文字，由左至右排行。"
+
+#~ msgid "Left to right text direction."
+#~ msgstr "左至右書寫方向。"
+
+#~ msgid "Right to left text direction."
+#~ msgstr "右至左書寫方向。"
 
 #, fuzzy
 #~| msgid "Line Tool"

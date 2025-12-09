@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -23868,7 +23868,7 @@ msgstr "Personalizat"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23938,7 +23938,7 @@ msgstr "Sorga"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24813,7 +24813,7 @@ msgid "Select All"
 msgstr "Tot seleccionar"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -24883,7 +24883,7 @@ msgid "Paste shapes"
 msgstr "Suprimir pagina"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "Motiu"
@@ -33550,7 +33550,7 @@ msgid "Color Sampler"
 msgstr "Seleccion"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "Seleccionar"
@@ -33637,7 +33637,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Filtre"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34406,34 +34406,34 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "Tot seleccionar"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, fuzzy, kde-format
 msgid "Invert Selection"
 msgstr "Seleccion"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 msgid "Fill Selection with Color"
 msgstr "Seleccion"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, fuzzy, kde-format
 msgid "Clear Selection"
 msgstr "Seleccion"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 msgid "Copy To New Layer"
 msgstr "Filtre"
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "Paramètres"
@@ -36017,77 +36017,77 @@ msgstr "Paleta"
 msgid "Use This Template"
 msgstr "Crear"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Crear"
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "Seleccion"
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "Crear"
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "Propietas de l'imatge"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, fuzzy, kde-format
 #| msgid "Average"
 msgid "Recovered"
 msgstr "Mejana"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Seleccion"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Seleccion"
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Seleccion"
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Alèrta"
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Alèrta"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Seleccion"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."
@@ -40453,7 +40453,7 @@ msgstr "Defaut"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, fuzzy, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -40563,7 +40563,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, fuzzy, kde-format
 msgid "Reassign"
 msgstr "Ellipsa"
@@ -40587,12 +40587,12 @@ msgid ""
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -40600,18 +40600,18 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, fuzzy, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Sortida"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, kde-format
 msgid "Unsupported Key"
 msgstr ""
@@ -66555,131 +66555,6 @@ msgstr "Largor :"
 msgid "SVG"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Source"
-msgid "Edit SVG Source"
-msgstr "Sorga"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, fuzzy, kde-format
-msgid "Text Type"
-msgstr "Tèxt"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, fuzzy, kde-format
-msgid "Preformatted"
-msgstr "OpenGL"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, fuzzy, kde-format
-#| msgid "Sine"
-msgid "Inline Wrapped"
-msgstr "Sinus"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, fuzzy, kde-format
-msgid "Prepositioned"
-msgstr "parcial"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, fuzzy, kde-format
-msgid "Glyph Palette"
-msgstr "Paleta"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, fuzzy, kde-format
-msgid "Create new texts with..."
-msgstr "Documents recents"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, fuzzy, kde-format
-msgid "Anchor text to the left."
-msgstr "Longor :"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, fuzzy, kde-format
-msgid "Anchor text to the middle."
-msgstr "Longor :"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, fuzzy, kde-format
-msgid "Anchor text to the right."
-msgstr "Longor :"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, fuzzy, kde-format
-#| msgid "Line Spacing"
-msgid "Letter Spacing"
-msgstr "Espaciament de linhas"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, fuzzy, kde-format
-msgid "Left to right text direction."
-msgstr "Saturacion :"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, fuzzy, kde-format
-msgid "Right to left text direction."
-msgstr "Resolucion :"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, fuzzy, kde-format
@@ -68444,6 +68319,61 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Source"
+#~ msgid "Edit SVG Source"
+#~ msgstr "Sorga"
+
+#, fuzzy
+#~ msgid "Text Type"
+#~ msgstr "Tèxt"
+
+#, fuzzy
+#~ msgid "Preformatted"
+#~ msgstr "OpenGL"
+
+#, fuzzy
+#~| msgid "Sine"
+#~ msgid "Inline Wrapped"
+#~ msgstr "Sinus"
+
+#, fuzzy
+#~ msgid "Prepositioned"
+#~ msgstr "parcial"
+
+#, fuzzy
+#~ msgid "Glyph Palette"
+#~ msgstr "Paleta"
+
+#, fuzzy
+#~ msgid "Create new texts with..."
+#~ msgstr "Documents recents"
+
+#, fuzzy
+#~ msgid "Anchor text to the left."
+#~ msgstr "Longor :"
+
+#, fuzzy
+#~ msgid "Anchor text to the middle."
+#~ msgstr "Longor :"
+
+#, fuzzy
+#~ msgid "Anchor text to the right."
+#~ msgstr "Longor :"
+
+#, fuzzy
+#~| msgid "Line Spacing"
+#~ msgid "Letter Spacing"
+#~ msgstr "Espaciament de linhas"
+
+#, fuzzy
+#~ msgid "Left to right text direction."
+#~ msgstr "Saturacion :"
+
+#, fuzzy
+#~ msgid "Right to left text direction."
+#~ msgstr "Resolucion :"
 
 #, fuzzy
 #~ msgid "Knife Tool"

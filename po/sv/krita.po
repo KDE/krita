@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -23798,7 +23798,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23867,7 +23867,7 @@ msgstr "Lokala resurser"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24750,7 +24750,7 @@ msgid "Select All"
 msgstr "Markera alla"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Fyll ut lager"
@@ -24812,7 +24812,7 @@ msgid "Paste shapes"
 msgstr "Klistra in former"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, kde-format
 msgid "(pasted)"
 msgstr "(inklistrad)"
@@ -33790,7 +33790,7 @@ msgid "Color Sampler"
 msgstr "Färghämtare"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, kde-format
 msgid "Deselect"
 msgstr "Avmarkera"
@@ -33874,7 +33874,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ändra arkivlager"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34627,34 +34627,34 @@ msgstr ""
 "måste etiketten markeras här."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Markera alla"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, kde-format
 msgid "Invert Selection"
 msgstr "Invertera markering"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "Fyll markering med färg"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Clear Selection"
 msgstr "Rensa markering"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "Kopiera till nytt lager"
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, kde-format
 msgid "Crop to Selection"
 msgstr "Beskär till markering"
@@ -36352,27 +36352,27 @@ msgstr "Ingen bild tillgänglig."
 msgid "Use This Template"
 msgstr "Använd den här mallen"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Det går inte att dra och släppa färger på den valda lagertypen."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Lagret är låst och osynligt."
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Lagret är låst."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Lagret är osynligt."
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -36380,47 +36380,47 @@ msgid ""
 msgstr ""
 "<p>Dokumentet <b>\"%1\"</b> har blivit ändrat.</p><p>Vill du spara det?</p>"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, kde-format
 msgid "Write Protected"
 msgstr "Skrivskyddad"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Recovered"
 msgstr "Återställd"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Bildskärmskorrektur fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Bildskärmskorrektur på."
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Bildskärmskorrektur av."
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Färgomfångsvarningar fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Färgomfångsvarningar på."
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Men bildskärmskorrektur är fortfarande av."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Färgomfångsvarningar av."
@@ -41068,7 +41068,7 @@ msgstr "Förval:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -41190,7 +41190,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Reassign"
 msgstr "Ändra tilldelning"
@@ -41219,12 +41219,12 @@ msgstr ""
 "programmet.\n"
 "Exempel för Ctrl+A: Håll nere Ctrl-tangenten och tryck på A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikt med standardsnabbtangenter för program"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -41235,18 +41235,18 @@ msgstr ""
 "vissa program använder.\n"
 "Vill du verkligen också använda den som global snabbtangent?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Indata"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Tangenten du just tryckte ner stöds inte av Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Tangent som inte stöds"
@@ -67457,136 +67457,6 @@ msgstr "Visa radrutor"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "Redigera SVG-källa"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, kde-format
-msgid "Text Type"
-msgstr "Texttyp"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Texten radbryts inte och behåller mellanslag och "
-"nyrader. En radbrytning infogas så att raderna förblir separerade efter "
-"radbrytning eller positionering.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, kde-format
-msgid "Preformatted"
-msgstr "Förformaterad"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Text radbryts inom en fast längd, mellanslag och "
-"nyrader bevaras. Nyrader tas inte bort.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, kde-format
-msgid "Inline Wrapped"
-msgstr "Radbruten på plats"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Text använder teckentransformeringar i SVG 1.1 för att "
-"placera varje rad. Mellanslag och nyrader är dras ihop. Det är till för "
-"bakåtkompatibilitet med SVG 1.1.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, kde-format
-msgid "Prepositioned"
-msgstr "Förplacerad"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, kde-format
-msgid "Glyph Palette"
-msgstr "Glyfpalett"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, kde-format
-msgid "Create new texts with..."
-msgstr "Skapa nya texter med..."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "Ankra text till vänster."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "Ankra text i mitten."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "Ankra text till höger."
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, kde-format
-msgid "Letter Spacing"
-msgstr "Bokstavsmellanrum"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr "Text flödar horisontellt, uppifrån och ner."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr "Text flödar vertikalt, från höger till vänster."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr "Text flödar vertikalt, från vänster till höger."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, kde-format
-msgid "Left to right text direction."
-msgstr "Vänster till höger textriktning."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, kde-format
-msgid "Right to left text direction."
-msgstr "Höger till vänster textriktning."
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
@@ -69386,6 +69256,79 @@ msgstr ""
 "Byt mellan helt intervall och delintervall.\n"
 "Helt intervall: [%1, %2]\n"
 "Delintervall: [%3, %4]"
+
+#~ msgid "Edit SVG Source"
+#~ msgstr "Redigera SVG-källa"
+
+#~ msgid "Text Type"
+#~ msgstr "Texttyp"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#~ "lines. A line break is inserted so the lines from wrapping or positioning "
+#~ "remain separated.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Texten radbryts inte och behåller mellanslag och "
+#~ "nyrader. En radbrytning infogas så att raderna förblir separerade efter "
+#~ "radbrytning eller positionering.</p></body></html>"
+
+#~ msgid "Preformatted"
+#~ msgstr "Förformaterad"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#~ "lines are preserved. New lines are not removed.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Text radbryts inom en fast längd, mellanslag och "
+#~ "nyrader bevaras. Nyrader tas inte bort.</p></body></html>"
+
+#~ msgid "Inline Wrapped"
+#~ msgstr "Radbruten på plats"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#~ "each line. Spaces and new lines are collapsed. This is for backward "
+#~ "compatibility with SVG 1.1.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Text använder teckentransformeringar i SVG 1.1 för "
+#~ "att placera varje rad. Mellanslag och nyrader är dras ihop. Det är till "
+#~ "för bakåtkompatibilitet med SVG 1.1.</p></body></html>"
+
+#~ msgid "Prepositioned"
+#~ msgstr "Förplacerad"
+
+#~ msgid "Glyph Palette"
+#~ msgstr "Glyfpalett"
+
+#~ msgid "Create new texts with..."
+#~ msgstr "Skapa nya texter med..."
+
+#~ msgid "Anchor text to the left."
+#~ msgstr "Ankra text till vänster."
+
+#~ msgid "Anchor text to the middle."
+#~ msgstr "Ankra text i mitten."
+
+#~ msgid "Anchor text to the right."
+#~ msgstr "Ankra text till höger."
+
+#~ msgid "Letter Spacing"
+#~ msgstr "Bokstavsmellanrum"
+
+#~ msgid "Text flows horizontal, top to bottom."
+#~ msgstr "Text flödar horisontellt, uppifrån och ner."
+
+#~ msgid "Text flows vertical, right to left."
+#~ msgstr "Text flödar vertikalt, från höger till vänster."
+
+#~ msgid "Text flows vertical, left to right."
+#~ msgstr "Text flödar vertikalt, från vänster till höger."
+
+#~ msgid "Left to right text direction."
+#~ msgstr "Vänster till höger textriktning."
+
+#~ msgid "Right to left text direction."
+#~ msgstr "Höger till vänster textriktning."
 
 #, fuzzy
 #~| msgid "Line Tool"

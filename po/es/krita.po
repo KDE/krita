@@ -7,7 +7,7 @@
 # SPDX-FileCopyrightText: 2006 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018. 2019. 2020, 2021, 2024, 2025 Sofía Priego <spriego@darksylvania.net>
@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
-"PO-Revision-Date: 2025-11-30 01:37+0100\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
+"PO-Revision-Date: 2025-12-08 12:38+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19060,6 +19060,8 @@ msgid ""
 "This controls the positioning of mark glyphs on base glyphs. Commonly used "
 "for diacritics."
 msgstr ""
+"Controla la posición de los glifos de marcas sobre los glifos base. Se suele "
+"usar para diacríticos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
 #, kde-format
@@ -19068,12 +19070,14 @@ msgid ""
 "This controls the positioning of mark glyphs onto other mark glyphs. "
 "Commonly used for diacritics."
 msgstr ""
+"Esto controla la posición de los glifos de marcas sobre otros glifos de "
+"marcas. Se suele usar para diacríticos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Alternativas contextuales requeridas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
@@ -19081,24 +19085,26 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
+"Sustituye glifos contextualmente con alternativas, requeridas para que la "
+"fuente funcione."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
 msgctxt "@title"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Ligaduras requeridas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs with required ligatures."
-msgstr ""
+msgstr "Sustituye secuencias de glifos con ligadura requeridas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
 #, kde-format
 msgctxt "@title"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Alternativas de variaciones requeridas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:124
 #, kde-format
@@ -19107,6 +19113,8 @@ msgid ""
 "Replaces glyphs in a variable font with ones suited for the current "
 "variation."
 msgstr ""
+"Sustituye glifos de una fuente variable con otros adecuados para la "
+"variación actual."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
 #, kde-format
@@ -19121,6 +19129,8 @@ msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
 msgstr ""
+"Indica en qué medida la fuente es adecuada para su tamaño actual. No hace "
+"nada en Krita."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
 #, kde-format
@@ -19135,17 +19145,18 @@ msgid "This controls vertical kerning on the font."
 msgstr "Esto controla el interletraje vertical de la fuente."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
-#| msgid "Alternative"
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "Alternativo"
+msgstr "Fracciones alternativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
+"Sustituye las cifras separadas por una barra con una fracción en forma de "
+"nuez."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
 #, kde-format
@@ -19160,6 +19171,8 @@ msgid ""
 "Replaces figures with forms that are suited to represent the denominator in "
 "a fraction."
 msgstr ""
+"Sustituye las cifras con formas adecuadas para representar el denominador de "
+"una fracción."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:145
 #, kde-format
@@ -19178,17 +19191,16 @@ msgstr ""
 "usarlas en fórmulas matemáticas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
-#, fuzzy, kde-format
-#| msgid "Flattened image"
+#, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "Imagen aplanada"
+msgstr "Formas de acento aplanadas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
-msgstr ""
+msgstr "Sustituye los acentos de las letras mayúsculas con formas aplanadas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
 #, kde-format
@@ -19205,6 +19217,11 @@ msgid ""
 "separated by a 'fraction slash' (U+2044), then this will replace the figures "
 "with numerators before the slash and denominators after the slash."
 msgstr ""
+"Sustituye las cifras separadas por una barra diagonal con una fracción "
+"diagonal apropiada. Si una fuente tiene las características de numerador y "
+"denominador, y los números están separados por una «barra de fracción» (U"
+"+2044), se sustituirán las cifras con numeradores delante de la barra "
+"diagonal y con denominadores detrás de ella."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
 #, fuzzy, kde-format
@@ -19261,12 +19278,14 @@ msgid ""
 "Replaces figures with forms that are suited to represent the numerator in a "
 "fraction."
 msgstr ""
+"Sustituye cifras con formas adecuadas para representar el numerador de una "
+"fracción."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "Figuras de estilo antiguo"
+msgstr "Cifras de estilo antiguo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19292,7 +19311,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "Figuras proporcionales"
+msgstr "Cifras proporcionales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
@@ -19351,12 +19370,10 @@ msgid "Replaces glyphs with ones more suited for superscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Tabular"
+#, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr "Tabular"
+msgstr "Cifras tabulares"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
@@ -23043,11 +23060,10 @@ msgid "Color Dodge"
 msgstr "Blanqueo de color"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:71
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Modo de color"
+msgstr "Blanqueo HDR de color"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -23089,7 +23105,7 @@ msgstr "Luz vívida"
 #, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr ""
+msgstr "Luz HDR vívida"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
@@ -23302,13 +23318,10 @@ msgid "Alpha Darken"
 msgstr "Oscurecer alfa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
-#| msgid "Markers"
+#, kde-format
 msgctxt "Blending mode - Marker"
 msgid "Marker"
-msgstr "Marcadores"
+msgstr "Marcador"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
@@ -23320,7 +23333,7 @@ msgstr "Mezcla dura"
 #, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr ""
+msgstr "Mezcla HDR dura"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -23383,11 +23396,10 @@ msgid "Hard Overlay"
 msgstr "Superposición dura"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Pattern Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Patrón de superposición"
+msgstr "Superposición HDR dura"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -23740,7 +23752,7 @@ msgstr "Fuera"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23809,7 +23821,7 @@ msgstr "Recursos locales"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -23887,6 +23899,8 @@ msgstr "No se puede eliminar el almacenamiento %1 de la base de datos"
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
+"No se puede sincronizar el registro de fuentes actualizado con la base de "
+"datos"
 
 #: libs/resources/KisResourceLocator.cpp:981
 #, kde-format
@@ -24697,7 +24711,7 @@ msgid "Select All"
 msgstr "Seleccionar todo"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Capa de relleno por difusión"
@@ -24759,7 +24773,7 @@ msgid "Paste shapes"
 msgstr "Pegar formas"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, kde-format
 msgid "(pasted)"
 msgstr "(pegada)"
@@ -27355,10 +27369,9 @@ msgstr ""
 "p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1350
-#, fuzzy, kde-format
-#| msgid "CMYK blending mode (needs restart):"
+#, kde-format
 msgid "Canvas surface bit depth (needs restart):"
-msgstr "Modo de fusión CMYK (necesita reiniciar):"
+msgstr "Profundidad de bits de la superficie del lienzo (necesita reiniciar):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
@@ -27390,12 +27403,14 @@ msgid ""
 "should switch into 10-bit mode if you want to use HDR capabilities of your "
 "display</p>"
 msgstr ""
+"<p>La profundidad de bits de color que se pasa al compositor de ventanas. "
+"Debe cambiar al modo de 10 bits si desea aprovechar las capacidades HDR de "
+"su pantalla.</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1363
-#, fuzzy, kde-format
-#| msgid "Canvas surface color space:"
+#, kde-format
 msgid "Current canvas surface bit depth:"
-msgstr "Espacio de color de la superficie del lienzo:"
+msgstr "Profundidad de bits de la superficie del lienzo actual:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1370
 #, kde-format
@@ -30058,6 +30073,9 @@ msgid ""
 "Dynamically adjust outline to match the effective size of the brush. (For "
 "example, as brush size changes due to pen pressure.)"
 msgstr ""
+"Ajustar dinámicamente el contorno para que coincida con el tamaño efectivo "
+"del pincel (por ejemplo, mientras cambia el tamaño del pincel debido a la "
+"presión del lápiz)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -33689,15 +33707,14 @@ msgid "Zoom Out"
 msgstr "Alejar"
 
 #: libs/ui/input/kis_zoom_action.cpp:78
-#, fuzzy, kde-format
-#| msgid "No Cursor"
+#, kde-format
 msgid "Zoom In To Cursor"
-msgstr "Sin cursor"
+msgstr "Acercar hasta el cursor"
 
 #: libs/ui/input/kis_zoom_action.cpp:79
 #, kde-format
 msgid "Zoom Out From Cursor"
-msgstr ""
+msgstr "Alejar desde el cursor"
 
 #: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
@@ -33793,7 +33810,7 @@ msgid "Color Sampler"
 msgstr "Toma de muestras de color"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, kde-format
 msgid "Deselect"
 msgstr "Deseleccionar"
@@ -33877,7 +33894,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Cambiar capa de archivo"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34297,12 +34314,9 @@ msgid "Remove Nodes"
 msgstr "Eliminar nodos"
 
 #: libs/ui/kis_node_manager.cpp:1127
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Reflejar horizontalmente"
+msgstr "Reflejar máscara horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1130
 #, kde-format
@@ -34313,12 +34327,9 @@ msgstr[0] "Reflejar capa horizontalmente"
 msgstr[1] "Reflejar %1 capas horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1141
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Reflejar verticalmente"
+msgstr "Reflejar máscara verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1144
 #, kde-format
@@ -34637,39 +34648,37 @@ msgstr ""
 "añadir preajustes, debe etiquetarlos y luego seleccionar la etiqueta aquí."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, kde-format
 msgid "Invert Selection"
 msgstr "Invertir selección"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, kde-format
 msgid "Fill Selection with Color"
 msgstr "Rellenar selección con color"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, kde-format
 msgid "Clear Selection"
 msgstr "Borrar selección"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, kde-format
 msgid "Copy To New Layer"
 msgstr "Copiar a nueva capa"
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#: libs/ui/kis_selection_actions_panel.cpp:77
+#, kde-format
 msgid "Crop to Selection"
-msgstr "Recortar la selección"
+msgstr "Recortar a la selección"
 
 #: libs/ui/kis_selection_manager.cc:612
 #, kde-format
@@ -35704,6 +35713,7 @@ msgid ""
 "Component %1 is missing in %2. Please try to save again in a different "
 "location."
 msgstr ""
+"El componente %1 falta en %2. Pruebe a guardar de nuevo en otra ubicación."
 
 #: libs/ui/KisImportExportManager.cpp:302
 #, kde-format
@@ -36368,27 +36378,27 @@ msgstr "No hay ninguna imagen disponible."
 msgid "Use This Template"
 msgstr "Usar esta plantilla"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "No puede arrastrar y soltar colores en el tipo de capa seleccionado."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "La capa está bloqueada y es invisible."
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "La capa está bloqueada."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "La capa es invisible."
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -36396,47 +36406,47 @@ msgid ""
 msgstr ""
 "<p>El documento <b>«%1»</b> ha sido modificado.</p><p>¿Quiere guardarlo?</p>"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, kde-format
 msgid "Write Protected"
 msgstr "Protegido contra escritura"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperado"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "La prueba de color en pantalla no funciona en coma flotante."
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Prueba de color en pantalla activada."
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Prueba de color en pantalla desactivada."
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Las advertencias de gama no funcionan en coma flotante."
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Advertencias de gama activadas."
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Aunque la prueba de color en pantalla sigue desactivada."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Advertencias de gama desactivadas."
@@ -39720,37 +39730,32 @@ msgid "Down"
 msgstr "Abajo"
 
 #: libs/ui/widgets/KisDockerHud.cpp:60
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Configurar Krita"
+msgstr "Configurar panel"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
+msgstr "El panel está abierto en %1. Cierre %1 para mostrarlo aquí."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure Toolbars"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Configurar las barras de herramientas"
+msgstr "Configurar paneles de %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Propiedades disponibles:"
+msgstr "Paneles disponibles"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Capa actual"
+msgstr "Paneles actuales"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
@@ -41138,7 +41143,7 @@ msgstr "Predeterminado:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -41262,7 +41267,7 @@ msgstr[1] ""
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Reassign"
 msgstr "Reasignar"
@@ -41291,12 +41296,12 @@ msgstr ""
 "desee para el programa.\n"
 "Ejemplo para «Ctrl+A»: mantenga pulsada la tecla «Ctrl» y luego pulse «A»."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Conflicto con atajo de teclado estándar de aplicación"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -41307,18 +41312,18 @@ msgstr ""
 "que utilizan algunas aplicaciones.\n"
 "¿Realmente quiere usarla también como atajo de teclado global?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Entrada"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "La tecla que acaba de pulsar no es compatible con Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Tecla no compatible"
@@ -43558,7 +43563,7 @@ msgstr "Rectángulo"
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
 #, kde-format
 msgid "Isometric (Legacy)"
-msgstr ""
+msgstr "Isométrica (heredada)"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:65
 #, kde-format
@@ -43568,7 +43573,7 @@ msgstr "Isométrica"
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
 #, kde-format
 msgid "Isometric (Legacy - requires OpenGL)"
-msgstr ""
+msgstr "Isométrica (heredada, requiere OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -67648,138 +67653,6 @@ msgstr "Mostrar en la carpeta"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, kde-format
-msgid "Edit SVG Source"
-msgstr "Editar fuente SVG"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, kde-format
-msgid "Text Type"
-msgstr "Tipo de texto"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>El texto no se ajustará de forma dinámica y se "
-"conservarán los espacios y los saltos de línea. Se inserta un salto de línea "
-"para que las líneas del ajuste y del posicionamiento permanezcan separadas.</"
-"p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, kde-format
-msgid "Preformatted"
-msgstr "Preformateado"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>El texto se ajusta de forma dinámica dentro de una "
-"longitud fija, conservando los espacios y los saltos de línea. Los saltos de "
-"línea no se eliminan.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, kde-format
-msgid "Inline Wrapped"
-msgstr "Ajustado en línea"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>El texto usa transformaciones de caracteres SVG 1.1 "
-"para posicionar las líneas. Los espacios y los saltos de línea se contraen. "
-"Permite compatibilidad con SVG 1.1.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, kde-format
-msgid "Prepositioned"
-msgstr "Preposicionado"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, kde-format
-msgid "Glyph Palette"
-msgstr "Paleta de glifos"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, kde-format
-msgid "Create new texts with..."
-msgstr "Crear nuevos textos con…"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "Anclar el texto a la izquierda."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "Anclar el texto en el centro."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "Anclar el texto a la derecha."
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, kde-format
-msgid "Letter Spacing"
-msgstr "Espacio entre letras"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr "El texto fluye horizontalmente, de arriba a abajo."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr "El texto fluye verticalmente, de derecha a izquierda."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr "El texto fluye verticalmente, de izquierda a derecha."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, kde-format
-msgid "Left to right text direction."
-msgstr "Dirección del texto de izquierda a derecha."
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, kde-format
-msgid "Right to left text direction."
-msgstr "Dirección del texto de derecha a izquierda."
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, kde-format
@@ -69564,3 +69437,78 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
+
+#~ msgid "Edit SVG Source"
+#~ msgstr "Editar fuente SVG"
+
+#~ msgid "Text Type"
+#~ msgstr "Tipo de texto"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
+#~ "lines. A line break is inserted so the lines from wrapping or positioning "
+#~ "remain separated.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>El texto no se ajustará de forma dinámica y se "
+#~ "conservarán los espacios y los saltos de línea. Se inserta un salto de "
+#~ "línea para que las líneas del ajuste y del posicionamiento permanezcan "
+#~ "separadas.</p></body></html>"
+
+#~ msgid "Preformatted"
+#~ msgstr "Preformateado"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
+#~ "lines are preserved. New lines are not removed.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>El texto se ajusta de forma dinámica dentro de una "
+#~ "longitud fija, conservando los espacios y los saltos de línea. Los saltos "
+#~ "de línea no se eliminan.</p></body></html>"
+
+#~ msgid "Inline Wrapped"
+#~ msgstr "Ajustado en línea"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
+#~ "each line. Spaces and new lines are collapsed. This is for backward "
+#~ "compatibility with SVG 1.1.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>El texto usa transformaciones de caracteres SVG 1.1 "
+#~ "para posicionar las líneas. Los espacios y los saltos de línea se "
+#~ "contraen. Permite compatibilidad con SVG 1.1.</p></body></html>"
+
+#~ msgid "Prepositioned"
+#~ msgstr "Preposicionado"
+
+#~ msgid "Glyph Palette"
+#~ msgstr "Paleta de glifos"
+
+#~ msgid "Create new texts with..."
+#~ msgstr "Crear nuevos textos con…"
+
+#~ msgid "Anchor text to the left."
+#~ msgstr "Anclar el texto a la izquierda."
+
+#~ msgid "Anchor text to the middle."
+#~ msgstr "Anclar el texto en el centro."
+
+#~ msgid "Anchor text to the right."
+#~ msgstr "Anclar el texto a la derecha."
+
+#~ msgid "Letter Spacing"
+#~ msgstr "Espacio entre letras"
+
+#~ msgid "Text flows horizontal, top to bottom."
+#~ msgstr "El texto fluye horizontalmente, de arriba a abajo."
+
+#~ msgid "Text flows vertical, right to left."
+#~ msgstr "El texto fluye verticalmente, de derecha a izquierda."
+
+#~ msgid "Text flows vertical, left to right."
+#~ msgstr "El texto fluye verticalmente, de izquierda a derecha."
+
+#~ msgid "Left to right text direction."
+#~ msgstr "Dirección del texto de izquierda a derecha."
+
+#~ msgid "Right to left text direction."
+#~ msgstr "Dirección del texto de derecha a izquierda."

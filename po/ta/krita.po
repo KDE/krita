@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 01:59+0000\n"
+"POT-Creation-Date: 2025-12-09 02:01+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -23743,7 +23743,7 @@ msgstr "வெளியே"
 #: libs/pigment/resources/KoColorSet.cpp:1524
 #: libs/pigment/resources/KoColorSet.cpp:1933
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23813,7 +23813,7 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:684 libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:704 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:333
 #: libs/ui/widgets/kis_custom_image_widget.cc:291
@@ -24702,7 +24702,7 @@ msgid "Select All"
 msgstr "தேர்வு"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:779
+#: libs/ui/KisView.cpp:778
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -24772,7 +24772,7 @@ msgid "Paste shapes"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:592
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "உருவகைகள்"
@@ -33361,7 +33361,7 @@ msgid "Color Sampler"
 msgstr "தேர்வை அளவுமாற்று"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#: libs/ui/kis_selection_actions_panel.cpp:69
+#: libs/ui/kis_selection_actions_panel.cpp:73
 #, fuzzy, kde-format
 msgid "Deselect"
 msgstr "&திரும்ப தேர்ந்தெடு"
@@ -33447,7 +33447,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:685
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:684
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34211,34 +34211,34 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: libs/ui/kis_selection_actions_panel.cpp:67
+#: libs/ui/kis_selection_actions_panel.cpp:71
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "தேர்வு"
 
-#: libs/ui/kis_selection_actions_panel.cpp:68
+#: libs/ui/kis_selection_actions_panel.cpp:72
 #, fuzzy, kde-format
 msgid "Invert Selection"
 msgstr "தேர்வை அளவுமாற்று"
 
-#: libs/ui/kis_selection_actions_panel.cpp:70
+#: libs/ui/kis_selection_actions_panel.cpp:74
 #, fuzzy, kde-format
 msgid "Fill Selection with Color"
 msgstr "தேர்வு கருவிகள்"
 
-#: libs/ui/kis_selection_actions_panel.cpp:71
+#: libs/ui/kis_selection_actions_panel.cpp:75
 #, fuzzy, kde-format
 msgid "Clear Selection"
 msgstr "தேர்வு"
 
-#: libs/ui/kis_selection_actions_panel.cpp:72
+#: libs/ui/kis_selection_actions_panel.cpp:76
 #, fuzzy, kde-format
 msgid "Copy To New Layer"
 msgstr "&அடுக்கை வெட்டு..."
 
-#: libs/ui/kis_selection_actions_panel.cpp:73
+#: libs/ui/kis_selection_actions_panel.cpp:77
 #, fuzzy, kde-format
 msgid "Crop to Selection"
 msgstr "தேர்வு இல்லை"
@@ -35836,27 +35836,27 @@ msgstr "படம் எதுவும் கிடைக்கவில்ல�
 msgid "Use This Template"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: libs/ui/KisView.cpp:754
+#: libs/ui/KisView.cpp:753
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:681
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:683
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool.cc:685
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -35865,47 +35865,47 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1245
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "திருத்தப் பாதுகாப்பு"
 
-#: libs/ui/KisView.cpp:1253
+#: libs/ui/KisView.cpp:1249
 #, fuzzy, kde-format
 msgid "Recovered"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1351
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1356
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1358
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1374
+#: libs/ui/KisView.cpp:1370
 #, fuzzy, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "கரும் ஆரஞ்சு"
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1376
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "கரும் ஆரஞ்சு"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1378
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Alpha"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1381
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "கரும் ஆரஞ்சு"
@@ -40237,7 +40237,7 @@ msgstr "நிகழ்விலுள்ள அடுக்கை மாற்�
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:593
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:589
 #, fuzzy, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -40347,7 +40347,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:187
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:543
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, fuzzy, kde-format
 msgid "Reassign"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
@@ -40371,12 +40371,12 @@ msgid ""
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:533
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:534
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -40384,18 +40384,18 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:586
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:582
 #, fuzzy, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "வெளியே"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:837
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:833
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:834
 #, fuzzy, kde-format
 msgid "Unsupported Key"
 msgstr "க்ரிட்டா"
@@ -66146,129 +66146,6 @@ msgstr "புள்ளிகள்/அங்குலம்"
 msgid "SVG"
 msgstr "&YUV"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:34
-#, fuzzy, kde-format
-msgid "Edit SVG Source"
-msgstr "சதுரம்"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBoxConvert)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:41
-#, fuzzy, kde-format
-msgid "Text Type"
-msgstr "வடிவம்:"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>The text will not wrap and preserves spaces and new "
-"lines. A line break is inserted so the lines from wrapping or positioning "
-"remain separated.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertPreFormatBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:50
-#, fuzzy, kde-format
-msgid "Preformatted"
-msgstr "செயல்திறன் சோதனை"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:60
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text wraps inside a fixed length, spaces and new lines "
-"are preserved. New lines are not removed.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertInlineBtn)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:63
-#, fuzzy, kde-format
-#| msgid "Sine"
-msgid "Inline Wrapped"
-msgstr "சைன்"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:73
-#, kde-format
-msgid ""
-"<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-"each line. Spaces and new lines are collapsed. This is for backward "
-"compatibility with SVG 1.1.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, convertToSvg1_1)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:76
-#, fuzzy, kde-format
-msgid "Prepositioned"
-msgstr "நிலை இல்லை"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:89
-#, fuzzy, kde-format
-msgid "Glyph Palette"
-msgstr "வெளிர் பச்சை"
-
-#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:96
-#, fuzzy, kde-format
-msgid "Create new texts with..."
-msgstr "காலியான ஆவணத்தை உருவாக்கு"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:110
-#, fuzzy, kde-format
-msgid "Anchor text to the left."
-msgstr "&விகிதம்:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:133
-#, fuzzy, kde-format
-msgid "Anchor text to the middle."
-msgstr "&விகிதம்:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:156
-#, fuzzy, kde-format
-msgid "Anchor text to the right."
-msgstr "&விகிதம்:"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:179
-#, fuzzy, kde-format
-msgid "Letter Spacing"
-msgstr "இடைவெளியாக்கம்:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:199
-#, kde-format
-msgid "Text flows horizontal, top to bottom."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:225
-#, kde-format
-msgid "Text flows vertical, right to left."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:251
-#, kde-format
-msgid "Text flows vertical, left to right."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:284
-#, fuzzy, kde-format
-msgid "Left to right text direction."
-msgstr "குறுக்கீடு:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:310
-#, fuzzy, kde-format
-msgid "Right to left text direction."
-msgstr "பிம்பத்  தெளிவுத்திறன்"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:23
 #, fuzzy, kde-format
@@ -68022,6 +67899,59 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Edit SVG Source"
+#~ msgstr "சதுரம்"
+
+#, fuzzy
+#~ msgid "Text Type"
+#~ msgstr "வடிவம்:"
+
+#, fuzzy
+#~ msgid "Preformatted"
+#~ msgstr "செயல்திறன் சோதனை"
+
+#, fuzzy
+#~| msgid "Sine"
+#~ msgid "Inline Wrapped"
+#~ msgstr "சைன்"
+
+#, fuzzy
+#~ msgid "Prepositioned"
+#~ msgstr "நிலை இல்லை"
+
+#, fuzzy
+#~ msgid "Glyph Palette"
+#~ msgstr "வெளிர் பச்சை"
+
+#, fuzzy
+#~ msgid "Create new texts with..."
+#~ msgstr "காலியான ஆவணத்தை உருவாக்கு"
+
+#, fuzzy
+#~ msgid "Anchor text to the left."
+#~ msgstr "&விகிதம்:"
+
+#, fuzzy
+#~ msgid "Anchor text to the middle."
+#~ msgstr "&விகிதம்:"
+
+#, fuzzy
+#~ msgid "Anchor text to the right."
+#~ msgstr "&விகிதம்:"
+
+#, fuzzy
+#~ msgid "Letter Spacing"
+#~ msgstr "இடைவெளியாக்கம்:"
+
+#, fuzzy
+#~ msgid "Left to right text direction."
+#~ msgstr "குறுக்கீடு:"
+
+#, fuzzy
+#~ msgid "Right to left text direction."
+#~ msgstr "பிம்பத்  தெளிவுத்திறன்"
 
 #, fuzzy
 #~ msgid "Knife Tool"

@@ -38,7 +38,11 @@
 #include <KoClipPath.h>
 #include <KoClipMask.h>
 #include <KoXmlNS.h>
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QXmlSimpleReader>
+#include <QXmlInputSource>
+#endif
 
 #include "SvgMeshGradient.h"
 #include "SvgMeshPatch.h"
@@ -133,29 +137,66 @@ SvgParser::~SvgParser()
     qDeleteAll(m_defsShapes);
 }
 
+/*
+ * Qt 5.15 deprecated this way of setting the document content, however,
+ * they forgot to address reading text nodes with only white spaces, which
+ * results in bugs for SVG text parsing.
+ *
+ * See bug 513085
+ *
+ */
+QDomDocument createDocumentFromXmlInputSource(QXmlInputSource *source, QString *errorMsg, int *errorLine, int *errorColumn) {
+    QDomDocument doc;
+    QXmlSimpleReader simpleReader;
+    simpleReader.setFeature("http://qt-project.org/xml/features/report-whitespace-only-CharData", true);
+    simpleReader.setFeature("http://xml.org/sax/features/namespaces", false);
+    simpleReader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
+    if (!doc.setContent(source, &simpleReader, errorMsg, errorLine, errorColumn)) {
+        return {};
+    }
+    return doc;
+}
+
 QDomDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QXmlInputSource source(device);
+    return createDocumentFromXmlInputSource(&source, errorMsg, errorLine, errorColumn);
+#else
     return createDocumentFromSvg(QXmlStreamReader(device), errorMsg, errorLine, errorColumn);
+#endif
 }
 
 QDomDocument SvgParser::createDocumentFromSvg(const QByteArray &data, QString *errorMsg, int *errorLine, int *errorColumn)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QXmlInputSource source;
+    source.setData(data);
+    return createDocumentFromXmlInputSource(&source, errorMsg, errorLine, errorColumn);
+#else
     return createDocumentFromSvg(QXmlStreamReader(data), errorMsg, errorLine, errorColumn);
+#endif
 }
 
 QDomDocument SvgParser::createDocumentFromSvg(const QString &data, QString *errorMsg, int *errorLine, int *errorColumn)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QXmlInputSource source;
+    source.setData(data);
+    return createDocumentFromXmlInputSource(&source, errorMsg, errorLine, errorColumn);
+#else
     return createDocumentFromSvg(QXmlStreamReader(data), errorMsg, errorLine, errorColumn);
+#endif
 }
 
 QDomDocument SvgParser::createDocumentFromSvg(QXmlStreamReader reader, QString *errorMsg, int *errorLine, int *errorColumn)
 {
     QDomDocument doc;
+
     reader.setNamespaceProcessing(false);
     if (!doc.setContent(&reader, false, errorMsg, errorLine, errorColumn)) {
         return {};
     }
-
     return doc;
 }
 

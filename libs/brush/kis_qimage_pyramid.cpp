@@ -112,6 +112,19 @@ inline QRect roundRect(const QRectF &rc)
         rect.setTop(0.0);
     }
 
+    qreal w_rounded = qRound(rect.width());
+    qreal h_rounded = qRound(rect.height());
+
+    //Take care of the float precision errors
+    if (qAbs(rect.width() - w_rounded) < 0.000001) {
+        rect.setWidth(w_rounded);
+    }
+
+    if (qAbs(rect.height() - h_rounded) < 0.000001) {
+        rect.setHeight(h_rounded);
+    }
+
+
     return rect.toAlignedRect();
 }
 

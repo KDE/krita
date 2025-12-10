@@ -1285,7 +1285,8 @@ public:
                             && (siblingPrev->textPathId.isEmpty() && it->textPathId.isEmpty())
                             && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
                             && (siblingPrev->properties == it->properties)
-                            && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)) {
+                            && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)
+                            && childCount(siblingPrev) == 0) {
                         // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
                         siblingPrev->text += it->text;
                         tree.erase(siblingCurrent(it));

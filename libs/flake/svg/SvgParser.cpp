@@ -195,10 +195,21 @@ QDomDocument SvgParser::createDocumentFromSvg(QXmlStreamReader reader, QString *
 {
     QDomDocument doc;
 
+
     reader.setNamespaceProcessing(false);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 5, 0))
     if (!doc.setContent(&reader, false, errorMsg, errorLine, errorColumn)) {
         return {};
     }
+#else
+    QDomDocument::ParseResult result = doc.setContent(&reader, QDomDocument::ParseOption::PreserveSpacingOnlyNodes);
+    if (!result) {
+        //*errorMsg = result.errorMessage;
+        //*errorLine = result.errorLine;
+        //*errorColumn = result.errorColumn;
+        return {};
+    }
+#endif
     return doc;
 }
 

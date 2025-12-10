@@ -145,6 +145,7 @@ SvgParser::~SvgParser()
  * See bug 513085
  *
  */
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 QDomDocument createDocumentFromXmlInputSource(QXmlInputSource *source, QString *errorMsg, int *errorLine, int *errorColumn) {
     QDomDocument doc;
     QXmlSimpleReader simpleReader;
@@ -156,6 +157,7 @@ QDomDocument createDocumentFromXmlInputSource(QXmlInputSource *source, QString *
     }
     return doc;
 }
+#endif
 
 QDomDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
 {

@@ -18,6 +18,7 @@
 #include <kritaglobal_export.h>
 #include <functional>
 #include <boost/optional.hpp>
+#include <optional>
 
 class QPainterPath;
 class QTransform;
@@ -600,7 +601,8 @@ public:
 
         Type type {MoveTo};
 
-
+        VectorPathPoint() {
+        }
 
         VectorPathPoint(Type _type, QPointF _endPoint, QPointF c1 = QPointF(), QPointF c2 = QPointF()) {
             type = _type;
@@ -622,6 +624,32 @@ public:
         }
     };
 
+    struct Segment
+    {
+        VectorPathPoint start;
+        VectorPathPoint end;
+
+        QPointF startPoint {QPointF()};
+        QPointF endPoint {QPointF()};
+        QPointF controlPoint1 {QPointF()};
+        QPointF controlPoint2 {QPointF()};
+
+        VectorPathPoint::Type type {VectorPathPoint::MoveTo};
+
+        Segment(VectorPathPoint _start, VectorPathPoint _end)
+            : start(_start)
+            , end(_end)
+            , startPoint(_start.endPoint)
+            , endPoint(_end.endPoint)
+            , controlPoint1(_end.controlPoint1)
+            , controlPoint2(_end.controlPoint2)
+            , type(_end.type)
+        {
+
+        }
+
+    };
+
 public:
     VectorPath(const QPainterPath& path);
     VectorPath(const QList<VectorPathPoint> path);
@@ -631,7 +659,14 @@ public:
     VectorPathPoint pointAt(int i) const;
     int segmentsCount() const;
     QList<VectorPathPoint> segmentAt(int i) const;
+    std::optional<Segment> segmentAtAsSegment(int i) const;
+
     QLineF segmentAtAsLine(int i) const;
+
+
+    int pathIndexToSegmentIndex(int index);
+    int segmentIndexToPathIndex(int index);
+
 
     VectorPath trulySimplified(qreal epsDegrees = 0.5) const;
     // not open-path friendly

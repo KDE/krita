@@ -2073,6 +2073,15 @@ QList<VectorPath::VectorPathPoint> VectorPath::segmentAt(int i) const
     return response;
 }
 
+std::optional<VectorPath::Segment> VectorPath::segmentAtAsSegment(int i) const
+{
+    QList<VectorPath::VectorPathPoint> segment = segmentAt(i);
+    if (segment.count() == 2) {
+        return VectorPath::Segment(segment[0], segment[1]);
+    }
+    return std::nullopt;
+}
+
 QLineF VectorPath::segmentAtAsLine(int i) const
 {
     QList<VectorPath::VectorPathPoint> points = segmentAt(i);
@@ -2080,6 +2089,48 @@ QLineF VectorPath::segmentAtAsLine(int i) const
         return QLineF();
     }
     return QLineF(points[0].endPoint, points[1].endPoint);
+}
+
+int VectorPath::pathIndexToSegmentIndex(int index)
+{
+    // first should be MoveTo
+    int pathIndex = 0;
+    for (int i = 1; i < m_points.length(); i++) {
+        if (index < pathIndex) {
+            // it was the previous segment, it's just a control point
+            return i - 1;
+        }
+        if (index == pathIndex) {
+            return i - 1;
+        }
+        if (m_points[i].type == VectorPathPoint::BezierTo) {
+            pathIndex += 2; // add space for control points
+        }
+        pathIndex++;
+    }
+    return m_points.length() - 1;
+}
+
+int VectorPath::segmentIndexToPathIndex(int index)
+{
+    // first should be MoveTo
+    int pathIndex = 0;
+    for (int i = 1; i < m_points.length(); i++) {
+        if (i - 1 == index) {
+            if (m_points[i - 1].type == VectorPathPoint::BezierTo) {
+                return pathIndex - 2;
+            }
+            return pathIndex;
+        }
+        if (m_points[i].type == VectorPathPoint::BezierTo) {
+            pathIndex += 2; // add space for control points
+        }
+        pathIndex++;
+    }
+    if (m_points.length() > 0 && m_points[m_points.length() - 1].type == VectorPathPoint::BezierTo) {
+        return pathIndex - 2;
+    }
+    return pathIndex;
 }
 
 VectorPath VectorPath::trulySimplified(qreal epsDegrees) const

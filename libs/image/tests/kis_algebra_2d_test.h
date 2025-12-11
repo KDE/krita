@@ -42,6 +42,9 @@ private Q_SLOTS:
 
 
     void testVectorPathReversed();
+    void testVectorPathIndexes_data();
+    void testVectorPathIndexes();
+
     void testRemoveGutter();
     void testMergingPainterPaths();
 

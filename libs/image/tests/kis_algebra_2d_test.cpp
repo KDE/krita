@@ -13,6 +13,9 @@
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
 
+Q_DECLARE_METATYPE(KisAlgebra2D::VectorPath::VectorPathPoint);
+
+
 namespace KisAlgebra2D {
 
 }
@@ -1142,6 +1145,66 @@ void KisAlgebra2DTest::testVectorPathReversed()
 
 }
 
+void KisAlgebra2DTest::testVectorPathIndexes_data()
+{
+
+    using VPoint = KisAlgebra2D::VectorPath::VectorPathPoint;
+    QTest::addColumn<QList<VPoint>>("path");
+
+    QList<VPoint> path;
+    path << VPoint::moveTo(QPointF(0, 0));
+    path << VPoint::lineTo(QPointF(-10, 20));
+    path << VPoint::bezierTo(QPointF(5, 20), QPointF(-5, 30), QPointF(5, 30));
+    path << VPoint::lineTo(QPointF(10, 20));
+    path << VPoint::bezierTo(QPointF(5, 20), QPointF(-5, 30), QPointF(5, 30));
+    path << VPoint::lineTo(QPointF(0, 0));
+
+
+    QTest::addRow("path1") << path;
+
+    QList<VPoint> path2;
+    path2 << VPoint::moveTo(QPointF(0, 0));
+    path2 << VPoint::bezierTo(QPointF(5, 20), QPointF(-5, 30), QPointF(5, 30));
+    path2 << VPoint::lineTo(QPointF(10, 20));
+    path2 << VPoint::bezierTo(QPointF(0, 0), QPointF(-5, 30), QPointF(5, 30));
+
+    QTest::addRow("path2") << path2;
+
+}
+
+
+
+void KisAlgebra2DTest::testVectorPathIndexes()
+{
+    using VPoint = KisAlgebra2D::VectorPath::VectorPathPoint;
+
+    QFETCH(QList<VPoint>, path);
+
+    KisAlgebra2D::VectorPath vpath(path);
+
+    QPainterPath ppath = vpath.asPainterPath();
+    //ENTER_FUNCTION() << ppath;
+
+    for (int i = 0; i < ppath.elementCount(); i++) {
+        int pathIndex = i;
+        int segmentIndex = vpath.pathIndexToSegmentIndex(pathIndex);
+        int pathIndexRev = vpath.segmentIndexToPathIndex(segmentIndex);
+        //ENTER_FUNCTION() << ppVar(pathIndex) << ppVar(segmentIndex) << ppVar(pathIndexRev) << ppVar(ppath.elementAt(i));
+        if (ppath.elementAt(i).type != QPainterPath::CurveToDataElement) {
+            // if it is, then the reversed path index won't match, because it will point to the actual curve point
+            QCOMPARE(pathIndex, pathIndexRev);
+        }
+    }
+
+    for (int i = 0; i < vpath.segmentsCount(); i++) {
+        int segmentIndex = i;
+        int pathIndex = vpath.segmentIndexToPathIndex(segmentIndex);
+        int segmentIndexRev = vpath.pathIndexToSegmentIndex(pathIndex);
+        //ENTER_FUNCTION() << ppVar(segmentIndex) << ppVar(pathIndex) << ppVar(segmentIndexRev);
+        QCOMPARE(segmentIndex, segmentIndexRev);
+    }
+
+}
 QPainterPath makeSpecialShape(bool left)
 {
     // left has teeth on the left

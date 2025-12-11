@@ -2321,6 +2321,32 @@ QPainterPath VectorPath::asPainterPath() const
     return response;
 }
 
+QDebug operator<<(QDebug debug, const VectorPath &path)
+{
+    debug << path.asPainterPath();
+    return debug;
+}
+
+
+
+
+QDebug operator<<(QDebug debug, const VectorPath::VectorPathPoint &point)
+{
+    bool autoInsertSpaces = debug.autoInsertSpaces();
+    debug.setAutoInsertSpaces(false);
+    debug << (point.type == VectorPath::VectorPathPoint::MoveTo ? "(move " : (point.type == VectorPath::VectorPathPoint::BezierTo ? "(curve " : "(line "));
+    debug << "(" << point.endPoint.x() << ", " << point.endPoint.y() << ")";
+    if (point.type == VectorPath::VectorPathPoint::BezierTo) {
+        debug << ": (";
+        debug << "(" << point.controlPoint1.x() << ", " << point.controlPoint1.y() << ")";
+        debug << ", ";
+        debug << "(" << point.controlPoint2.x() << ", " << point.controlPoint2.y() << ")";
+        debug << ")";
+    }
+    debug << ")";
+    debug.setAutoInsertSpaces(autoInsertSpaces);
+    return debug;
+}
 
 
 } // namespace

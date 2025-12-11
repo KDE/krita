@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 02:01+0000\n"
+"POT-Creation-Date: 2025-12-11 02:03+0000\n"
 "PO-Revision-Date: 2025-11-26 11:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -66174,74 +66174,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "اضبط تحويلات الأحرف في النص."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "أعلى النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "حجم الخطّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "أسفل النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "أبجديّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "تصوري"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "مُعلَّق"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "منتصف"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "رياضي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "وسط"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ارتفاع السّطر"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "السطر الأساسي الحالي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

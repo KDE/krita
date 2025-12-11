@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 02:01+0000\n"
-"PO-Revision-Date: 2025-11-22 07:05-0300\n"
+"POT-Creation-Date: 2025-12-11 02:03+0000\n"
+"PO-Revision-Date: 2025-12-10 05:25-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -16023,7 +16023,7 @@ msgstr "Manual do Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
-msgstr "&Relatar erro..."
+msgstr "&Relatar bug..."
 
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
@@ -16033,7 +16033,7 @@ msgstr "&Relatar erro..."
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
-msgstr "Relatar erro"
+msgstr "Relatar bug"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1917
@@ -40802,7 +40802,7 @@ msgstr ""
 "empenhada nisso. Entretanto, você - o usuário - precisa nos dizer quando "
 "algo não funciona como esperado ou poderia ser melhorado.<br /><br />O KDE "
 "possui um sistema de detecção de erros de programação. Visite <a href=\"%1\">"
-"%1</a> ou use o diálogo \"Relatar erro\" no menu \"Ajuda\", para relatar "
+"%1</a> ou use o diálogo \"Relatar bug\" no menu \"Ajuda\", para relatar "
 "erros.<br /><br />Se você tiver uma sugestão de melhoria, seja bem-vindo "
 "para usar o sistema de detecção de erros para registrar seu pedido. "
 "Certifique-se de usar o nível de 'severidade' chamado \"Wishlist\" (Lista de "
@@ -40874,7 +40874,7 @@ msgstr "&Sobre"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:135
 #, kde-format
 msgid "&Report Bugs or Wishes"
-msgstr "&Relatar erros ou desejos"
+msgstr "&Relatar bugs ou desejos"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
@@ -40899,7 +40899,7 @@ msgid ""
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 "O aplicativo do qual você deseja mandar um relatório de erros - se "
-"incorreto, acesse o item de menu Relatar erro, do menu do aplicativo em "
+"incorreto, acesse o item de menu Relatar bug, do menu do aplicativo em "
 "questão"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
@@ -66812,74 +66812,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Ajustar transformações de caracteres no texto."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Topo do texto"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Tamanho da fonte"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Base do texto"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabético"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideográfico"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Pendurado"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Meio"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matemático"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Altura da linha"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Linha base atual"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

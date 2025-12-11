@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 02:01+0000\n"
-"PO-Revision-Date: 2025-11-22 09:06+0100\n"
+"POT-Creation-Date: 2025-12-11 02:03+0000\n"
+"PO-Revision-Date: 2025-12-10 10:04+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -16688,7 +16688,7 @@ msgstr "El KoShapeLayer a HTML encara no està implementat!"
 #: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
-msgstr "No s'ha pogut guardar a HTML"
+msgstr "Ha fallat mentre es guardava a HTML"
 
 #: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
@@ -24509,13 +24509,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
-msgstr "No s'ha pogut importar el recurs"
+msgstr "Ha fallat mentre s'importava el recurs"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
-msgstr "No s'ha pogut importar el recurs."
+msgstr "Ha fallat mentre s'importava el recurs."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:90
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:217
@@ -24588,13 +24588,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
-msgstr "No s'ha pogut afegir el recurs"
+msgstr "Ha fallat mentre s'afegia el recurs"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
-msgstr "No s'ha pogut afegir el recurs."
+msgstr "Ha fallat mentre s'afegia el recurs."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:197
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:230
@@ -24935,13 +24935,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
-msgstr "S'ha produït un error en renderitzar"
+msgstr "S'ha produït un error mentre es renderitzava"
 
 #: libs/ui/animation/KisAnimationRender.cpp:153
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
-"No s'han pogut renderitzar els fotogrames de l'animació! Els fitxers "
+"Ha fallat mentre es renderitzaven els fotogrames de l'animació! Els fitxers "
 "d'eixida estan incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
@@ -25134,7 +25134,7 @@ msgstr "S'han extret %1 fotogrames des del vídeo %2."
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
 #, kde-format
 msgid "Failed to export frames from video"
-msgstr "No s'han pogut exportar els fotogrames des del vídeo"
+msgstr "Ha fallat mentre s'exportaven els fotogrames des del vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:353
 #, kde-format
@@ -25279,7 +25279,7 @@ msgstr "No s'ha trobat cap flux de vídeo!"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #, kde-format
 msgid "Failed to load video information"
-msgstr "No s'ha pogut carregar la informació del vídeo"
+msgstr "Ha fallat mentre es carregava la informació del vídeo"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:359
 #, kde-format
@@ -27826,7 +27826,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid "Failed to delete"
-msgstr "No s'ha pogut suprimir"
+msgstr "Ha fallat mentre se suprimia"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
 #, kde-format
@@ -27837,7 +27837,7 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
-"No s'ha pogut suprimir un fitxer de fotograma antic:\n"
+"Ha fallat mentre se suprimia un fitxer de fotograma antic:\n"
 "\n"
 "%1\n"
 "\n"
@@ -28210,7 +28210,7 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
-"Ja existix un guardada automàtica per a este fitxer. Com voleu continuar?\n"
+"Ja existix una guardada automàtica per a este fitxer. Com voleu continuar?\n"
 "Avís: Si ara descarteu la guardada automàtica, este s'eliminarà."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
@@ -34114,7 +34114,7 @@ msgstr "No s'ha trobat el fitxer enllaçat: %1"
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
-msgstr "No s'ha pogut carregar el fitxer enllaçat: %1"
+msgstr "Ha fallat mentre es carregava el fitxer enllaçat: %1"
 
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
@@ -35161,7 +35161,7 @@ msgstr "No s'ha trobat el tipus MIME, prova utilitzant l'opció -mimetype"
 #: libs/ui/KisApplication.cpp:744
 #, kde-format
 msgid "Failed to render animation frames!"
-msgstr "No s'han pogut renderitzar els fotogrames de l'animació!"
+msgstr "Ha fallat mentre es renderitzaven els fotogrames de l'animació!"
 
 #: libs/ui/KisApplication.cpp:772 libs/ui/KisApplication.cpp:1045
 #, kde-format
@@ -35261,7 +35261,7 @@ msgid ""
 "\n"
 "Please make sure no other program is using the file and try again."
 msgstr ""
-"No s'ha pogut netejar %1\n"
+"Ha fallat mentre es netejava %1\n"
 "\n"
 "Assegureu-vos que cap altre programa estiga utilitzant el fitxer i torneu-ho "
 "a provar."
@@ -35419,13 +35419,13 @@ msgstr "No es pot escriure a %1. Guardeu-ho amb un nom diferent."
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "No s'ha pogut crear un fitxer de còpia de seguretat"
+msgstr "Ha fallat mentre es creava un fitxer de còpia de seguretat"
 
 #: libs/ui/KisDocument.cpp:810
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "No s'ha pogut crear un fitxer de còpia de seguretat numerat"
+msgstr "Ha fallat mentre es creava un fitxer de còpia de seguretat numerat"
 
 #: libs/ui/KisDocument.cpp:832
 #, kde-format
@@ -35461,7 +35461,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
-msgstr "S'ha produït un error en guardar %1: %2"
+msgstr "S'ha produït un error mentre es guardava %1: %2"
 
 #: libs/ui/KisDocument.cpp:1008
 #, kde-format
@@ -35481,7 +35481,7 @@ msgstr "%1 s'ha guardat, però està incomplet."
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr "S'han trobat diversos problemes en guardar."
+msgstr "S'han trobat diversos problemes mentre es guardava."
 
 #: libs/ui/KisDocument.cpp:1048
 #, kde-format
@@ -35507,7 +35507,7 @@ msgstr "La guardada automàtica es posposa: el document està ocupat…"
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
-msgstr "Error durant en guardar automàticament %1: %2"
+msgstr "S'ha produït un error durant en guardar automàticament %1: %2"
 
 #: libs/ui/KisDocument.cpp:1646
 #, kde-format
@@ -35541,7 +35541,7 @@ msgstr "No s'ha pogut obrir %1."
 #: libs/ui/KisDocument.cpp:2024
 #, kde-format
 msgid "There were problems opening %1."
-msgstr "Hi ha hagut problemes en obrir %1."
+msgstr "Hi ha hagut problemes mentre s'obria %1."
 
 #: libs/ui/KisDocument.cpp:2162
 #, kde-format
@@ -35580,12 +35580,12 @@ msgstr "L'acció s'ha completat amb èxit."
 #: libs/ui/KisImportExportErrorCode.cpp:26
 #, kde-format
 msgid "An error occurred when reading from the file."
-msgstr "S'ha produït un error en llegir des del fitxer."
+msgstr "S'ha produït un error mentre es llegia des del fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:28
 #, kde-format
 msgid "An error occurred when writing to the file."
-msgstr "S'ha produït un error en escriure en el fitxer."
+msgstr "S'ha produït un error mentre s'escrivia al fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:30
 #, kde-format
@@ -35687,7 +35687,7 @@ msgstr "El format del fitxer conté un espai de color no implementat."
 #: libs/ui/KisImportExportErrorCode.cpp:158
 #, kde-format
 msgid "Error occurred while reading from the file."
-msgstr "S'ha produït un error en llegir del fitxer."
+msgstr "S'ha produït un error mentre es llegia des del fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:162
 #, kde-format
@@ -35708,7 +35708,7 @@ msgstr "No hi ha prou espai en el disc per a guardar el fitxer."
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
 msgid "Error occurred while writing to the file."
-msgstr "S'ha produït un error en escriure en el fitxer."
+msgstr "S'ha produït un error mentre s'escrivia al fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:170
 #, kde-format
@@ -36117,8 +36117,8 @@ msgstr ""
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
-"No s'ha pogut crear un document nou. S'ha interromput la importació de "
-"l'animació."
+"Ha fallat mentre es creava un document nou. S'ha interromput la importació "
+"de l'animació."
 
 #: libs/ui/KisMainWindow.cpp:2643
 #, kde-format
@@ -36161,7 +36161,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
-msgstr "S'ha produït un error en la instal·lació"
+msgstr "S'ha produït un error durant la instal·lació"
 
 #: libs/ui/KisMainWindow.cpp:3004
 #, kde-format
@@ -44874,7 +44874,7 @@ msgstr "S'està explorant…"
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
 #, kde-format
 msgid "Select None"
-msgstr "Tria res"
+msgstr "No selecciones res"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
@@ -50165,9 +50165,9 @@ msgid ""
 "Module do not have PEP396 <code>__version__</code> attribute. It is not "
 "disabled, but behaviour is unpredictable...</p>"
 msgstr ""
-"<p>No s'ha pogut comprovar la versió de la dependència <application>%1</"
-"application>: El mòdul no té l'atribut <code>__version__</code> del PEP396. "
-"No es desactiva, però el comportament pot ser impredictible…</p>"
+"<p>Ha fallat mentre es comprovava la versió de la dependència <application>"
+"%1</application>: El mòdul no té l'atribut <code>__version__</code> del "
+"PEP396. No es desactiva, però el comportament pot ser impredictible…</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
 #, kde-format
@@ -50192,8 +50192,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
-"<p>No s'ha pogut carregar el mòdul <application>%1</application>:</p><pre>"
-"%2</pre>"
+"<p>Ha fallat mentre es carregava el mòdul <application>%1</application>:</"
+"p><pre>%2</pre>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:357
 #, kde-format
@@ -56420,7 +56420,7 @@ msgstr "La capa %1 té un tipus no admés: %2."
 #: plugins/impex/libkra/kis_kra_loader.cpp:997
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
-msgstr "No s'ha pogut carregar la capa %1 del tipus: %2."
+msgstr "Ha fallat mentre es carregava la capa %1 del tipus: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1021
 #, kde-format
@@ -56456,7 +56456,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
 msgid "Failed to save reference image %1."
-msgstr "No s'ha pogut guardar la imatge de referència %1."
+msgstr "Ha fallat mentre es guardava la imatge de referència %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:100
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:132
@@ -56466,7 +56466,7 @@ msgstr "No s'ha pogut guardar la imatge de referència %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
 #, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr "No s'han pogut guardar les metadades per a la capa %1."
+msgstr "Ha fallat mentre es guardaven les metadades per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
@@ -56477,82 +56477,91 @@ msgstr "No es pot obrir %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr "No s'han pogut guardar les dades dels píxels per a la capa %1."
+msgstr "Ha fallat mentre es guardaven les dades dels píxels per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "No s'han pogut guardar les anotacions per a la capa %1."
+msgstr "Ha fallat mentre es guardaven les anotacions per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
 msgid "Failed to save the filter layer %1: it has no filter."
-msgstr "No s'ha pogut guardar la capa de filtratge %1: no té cap filtre."
+msgstr ""
+"Ha fallat mentre es guardava la capa de filtratge %1: no té cap filtre."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
 #, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr "No s'ha pogut guardar la selecció de la capa de filtratge %1."
+msgstr "Ha fallat mentre es guardava la selecció de la capa de filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
 msgstr ""
-"No s'ha pogut guardar la configuració del filtre de la capa de filtratge %1."
+"Ha fallat mentre es guardava la configuració del filtre de la capa de "
+"filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr "No s'ha pogut guardar la selecció per a la capa %1."
+msgstr "Ha fallat mentre es guardava la selecció per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr "No s'ha pogut guardar la configuració del generador per a la capa %1."
+msgstr ""
+"Ha fallat mentre es guardava la configuració del generador per a la capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
 msgid "Failed to save filter mask %1. It has no filter."
-msgstr "No s'ha pogut guardar la màscara de filtratge %1. No té cap filtre."
+msgstr ""
+"Ha fallat mentre es guardava la màscara de filtratge %1. No té cap filtre."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr "No s'ha pogut guardar la selecció de la màscara de filtratge %1."
+msgstr ""
+"Ha fallat mentre es guardava la selecció de la màscara de filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
 msgstr ""
-"No s'ha pogut guardar la configuració del filtre de la màscara de filtratge "
-"%1."
+"Ha fallat mentre es guardava la configuració del filtre de la màscara de "
+"filtratge %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr "No s'ha pogut guardar la selecció de la màscara de transparència %1."
+msgstr ""
+"Ha fallat mentre es guardava la selecció de la màscara de transparència %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr "No s'ha pogut guardar la selecció de la selecció local %1."
+msgstr "Ha fallat mentre es guardava la selecció de la selecció local %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr ""
-"No s'han pogut guardar les dades de selecció amb píxels per a la capa %1."
+"Ha fallat mentre es guardaven les dades de selecció amb píxels per a la capa "
+"%1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr ""
-"No s'han pogut guardar les dades de selecció amb vectors per a la capa %1."
+"Ha fallat mentre es guardaven les dades de selecció amb vectors per a la "
+"capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
-msgstr "El dorsal de metadades ha fallat en guardar les metadades de %1"
+msgstr ""
+"El dorsal de metadades ha fallat mentre es guardaven les metadades de %1"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, kde-format
@@ -64301,7 +64310,7 @@ msgstr "Voleu activar els connectors?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:78
 msgid "Error during import:"
-msgstr "Error durant la importació:"
+msgstr "S'ha produït un error durant la importació:"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:97
 msgid ""
@@ -64455,7 +64464,7 @@ msgstr "Avança per damunt"
 
 #: plugins/python/scripter/uicontroller.py:175
 msgid "Error Running Script"
-msgstr "S'ha produït un error en executar un script"
+msgstr "S'ha produït un error mentre s'executava un script"
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:26
 msgid "Selections Bag"
@@ -66201,7 +66210,7 @@ msgstr "Guarda les imatges de referència"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:260
 #, kde-format
 msgid "Failed to save reference images."
-msgstr "No s'han pogut guardar les imatges de referència."
+msgstr "Ha fallat mentre es guardaven les imatges de referència."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:335
 #, kde-format
@@ -66991,74 +67000,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Ajusta la transformació de caràcters al text."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Text superior"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Mida de la lletra"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Text inferior"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabètic"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideogràfic"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Hanging"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Mig"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matemàtic"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Alçària de la línia"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Línia base actual"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -69561,77 +69570,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid "Edit SVG Source"
-#~ msgstr "Edita el codi font de SVG"
-
-#~ msgid "Text Type"
-#~ msgstr "Tipus de text"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#~ "lines. A line break is inserted so the lines from wrapping or positioning "
-#~ "remain separated.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El text no ajustarà i conservarà espais i línies "
-#~ "noves. S'inserix un salt de línia de manera que les línies ajustades o "
-#~ "posicionades es mantenen separades.</p></body></html>"
-
-#~ msgid "Preformatted"
-#~ msgstr "Amb format previ"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#~ "lines are preserved. New lines are not removed.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Es conserven els ajustos de text dins d'una "
-#~ "llargària fixa, espais i línies noves. No s'han eliminat les línies noves."
-#~ "</p></body></html>"
-
-#~ msgid "Inline Wrapped"
-#~ msgstr "Ajustat en línia"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#~ "each line. Spaces and new lines are collapsed. This is for backward "
-#~ "compatibility with SVG 1.1.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El text utilitza transformacions de caràcters SVG "
-#~ "1.1 per a posicionar cada línia. Els espais i les línies noves estan "
-#~ "reduïts. Açò és per a la compatibilitat amb SVG 1.1.</p></body></html>"
-
-#~ msgid "Prepositioned"
-#~ msgstr "Amb preposició"
-
-#~ msgid "Glyph Palette"
-#~ msgstr "Paleta de glifs"
-
-#~ msgid "Create new texts with..."
-#~ msgstr "Crea textos nous amb…"
-
-#~ msgid "Anchor text to the left."
-#~ msgstr "Ancora el text a l'esquerra."
-
-#~ msgid "Anchor text to the middle."
-#~ msgstr "Ancora el text al mig."
-
-#~ msgid "Anchor text to the right."
-#~ msgstr "Ancora el text a la dreta."
-
-#~ msgid "Letter Spacing"
-#~ msgstr "Espaiat de les lletres"
-
-#~ msgid "Text flows horizontal, top to bottom."
-#~ msgstr "El text està en horitzontal, de dalt a baix."
-
-#~ msgid "Text flows vertical, right to left."
-#~ msgstr "El text està en vertical, de dreta a esquerra."
-
-#~ msgid "Text flows vertical, left to right."
-#~ msgstr "El text està en vertical, d'esquerra a dreta."
-
-#~ msgid "Left to right text direction."
-#~ msgstr "Direcció del text d'esquerra a dreta."
-
-#~ msgid "Right to left text direction."
-#~ msgstr "Direcció del text de dreta a esquerra."

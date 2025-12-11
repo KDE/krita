@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 02:01+0000\n"
+"POT-Creation-Date: 2025-12-11 02:03+0000\n"
 "PO-Revision-Date: 2025-11-22 10:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -67567,74 +67567,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Скоригувати перетворення тексту."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Верх тексту"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Розмір шрифту"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Низ тексту"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Абеткове"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ідеографічне"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Підвішене"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Середнє"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Математичне"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Центральне"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Висота рядка"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Поточна базова лінія"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 02:01+0000\n"
+"POT-Creation-Date: 2025-12-11 02:03+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -68723,15 +68723,15 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "텍스트 도구"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Font Size"
@@ -68739,7 +68739,7 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "글꼴 크기"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
 #, fuzzy, kde-format
 #| msgctxt "toolbar position string"
 #| msgid "Bottom"
@@ -68747,28 +68747,28 @@ msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "아래"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
 #, fuzzy, kde-format
 #| msgid "Alphabetical"
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "이름 순서"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, fuzzy, kde-format
 #| msgid "Biography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "전기, 일대기"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "각짐"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -68776,21 +68776,21 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "가운데"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 #| msgid "Logical Operations"
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "논리 연산"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, fuzzy, kde-format
 #| msgid "Center"
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "중앙"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Line Height"
@@ -68798,14 +68798,14 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "줄 높이"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "현재 선택"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"

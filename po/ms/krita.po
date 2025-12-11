@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-09 02:01+0000\n"
+"POT-Creation-Date: 2025-12-11 02:03+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -65675,75 +65675,75 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Alat teks"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:387
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:393
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Saiz Cetak"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:391
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Dasar Kolam"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:396
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "&Skala"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Selitkan Pemisah Baris"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:400
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Langkah sudut:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:402
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Mod"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:404
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Operasi Boolean"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:406
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Kontras:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:408
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ketinggian kertas"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:411
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, fuzzy, kde-format
 #| msgid "&Add to current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "&Tambahkan ke dalam pemilihan semasa"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:413
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"

@@ -182,7 +182,7 @@ public:
     void insertText(QString text);
 
     /// Insert rich text at getPos();
-    void insertRichText(KoSvgTextShape *insert);
+    void insertRichText(KoSvgTextShape *insert, bool inheritPropertiesIfPossible = false);
 
     /**
      * @brief removeText

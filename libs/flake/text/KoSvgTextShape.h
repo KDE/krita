@@ -454,10 +454,11 @@ public:
      * @brief insertRichText
      * Insert rich text at the given cursor pos. This will first split contents at the given pos before inserting the new rich text.
      * @param pos -- cursor pos to insert at.
-     * @param richText -- KoSvgTextShape with rich text data. TODO: make this const once KisForest constness issues have been fixed.
+     * @param richText -- KoSvgTextShape with rich text data.
+     * @param inheritPropertiesIfPossible -- toggle whether to inherit rich text if possible.
      * @return whether insertion happened successfully.
      */
-    bool insertRichText(int pos, const KoSvgTextShape *richText);
+    bool insertRichText(int pos, const KoSvgTextShape *richText, bool inheritPropertiesIfPossible = false);
 
     /// Cleans up the internal text data. Used by undo commands.
     void cleanUp();

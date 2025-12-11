@@ -1144,7 +1144,7 @@ std::unique_ptr<KoSvgTextShape> KoSvgTextShape::copyRange(int index, int length)
     return std::unique_ptr<KoSvgTextShape>(clone);
 }
 
-bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
+bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText, bool inheritPropertiesIfPossible)
 {
     bool success = false;
     int currentIndex = 0;
@@ -1167,15 +1167,34 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
     KoSvgTextShape::Private::splitContentElement(this->d->textData, insertionIndex);
 
     auto it = d->findTextContentElementForIndex(d->textData, currentIndex, insertionIndex);
+    auto richTextIt = d->textData.childEnd();
     if (it != d->textData.depthFirstTailEnd()) {
-        d->textData.move(richText->d->textData.childBegin(), siblingCurrent(it));
+        richTextIt = d->textData.move(richText->d->textData.childBegin(), siblingCurrent(it));
         success = true;
     } else {
         currentIndex = 0;
         it = d->findTextContentElementForIndex(d->textData, currentIndex, elementIndex);
         if (it != d->textData.depthFirstTailEnd()) {
-            d->textData.move(richText->d->textData.childBegin(), siblingEnd(siblingCurrent(it)));
+            richTextIt = d->textData.move(richText->d->textData.childBegin(), siblingEnd(siblingCurrent(it)));
             success = true;
+        }
+    }
+
+    if (richTextIt != d->textData.childEnd()) {
+        for (auto p = richTextIt->properties.properties().begin(); p != richTextIt->properties.properties().end(); p++) {
+            if (KoSvgTextProperties::propertyIsBlockOnly(*p)) {
+                richTextIt->properties.removeProperty(*p);
+            }
+        }
+        auto parentIt = KisForestDetail::hierarchyBegin(richTextIt);
+        auto parentEnd = KisForestDetail::hierarchyEnd(richTextIt);
+        parentIt++;
+        if (inheritPropertiesIfPossible && parentIt!= parentEnd) {
+            for (auto p = richTextIt->properties.properties().begin(); p != richTextIt->properties.properties().end(); p++) {
+                if (richTextIt->properties.inheritsProperty(*p, parentIt->properties)) {
+                    richTextIt->properties.removeProperty(*p);
+                }
+            }
         }
     }
 

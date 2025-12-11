@@ -7,12 +7,13 @@
 #include "KoSvgTextShapeMarkupConverter.h"
 #include <KoShapeBulkActionLock.h>
 
-SvgTextInsertRichCommand::SvgTextInsertRichCommand(KoSvgTextShape *shape, KoSvgTextShape *insert, int pos, int anchor, KUndo2Command *parent)
+SvgTextInsertRichCommand::SvgTextInsertRichCommand(KoSvgTextShape *shape, KoSvgTextShape *insert, int pos, int anchor, bool inheritPropertiesIfPossible, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_insert(insert)
     , m_pos(pos)
     , m_anchor(anchor)
+    , m_inheritPropertiesIfPossible(inheritPropertiesIfPossible)
 {
     setText(kundo2_i18n("Insert Rich Text"));
 }
@@ -24,7 +25,7 @@ void SvgTextInsertRichCommand::redo()
     int oldIndex = qMax(0, m_shape->indexForPos(m_pos));
 
     m_textData = m_shape->getMemento();
-    m_shape->insertRichText(m_pos, m_insert);
+    m_shape->insertRichText(m_pos, m_insert, m_inheritPropertiesIfPossible);
     m_shape->cleanUp();
     KoShapeBulkActionLock::bulkShapesUpdate(lock.unlock());
 

@@ -378,7 +378,7 @@ void SvgTextTool::insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph
         m_textCursor.setPos(m_textCursor.getPos(), m_textCursor.getPos());
         m_textCursor.moveCursor(m_textCursor.getPos() == 0? SvgTextCursor::MoveNextChar : SvgTextCursor::MovePreviousChar, false);
     }
-    m_textCursor.insertRichText(richText);
+    m_textCursor.insertRichText(richText, true);
 }
 
 void SvgTextTool::slotTextEditorClosed()

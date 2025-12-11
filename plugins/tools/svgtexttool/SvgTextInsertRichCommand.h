@@ -13,7 +13,7 @@
 class KRITATOOLSVGTEXT_EXPORT SvgTextInsertRichCommand : public KUndo2Command
 {
 public:
-    SvgTextInsertRichCommand(KoSvgTextShape *shape, KoSvgTextShape *insert, int pos, int anchor, KUndo2Command *parent = 0);
+    SvgTextInsertRichCommand(KoSvgTextShape *shape, KoSvgTextShape *insert, int pos, int anchor, bool inheritPropertiesIfPossible = false, KUndo2Command *parent = 0);
     ~SvgTextInsertRichCommand() override = default;
 
     void redo() override;
@@ -29,6 +29,7 @@ private:
 
     int m_pos;
     int m_anchor;
+    bool m_inheritPropertiesIfPossible;
     KoSvgTextShapeMementoSP m_textData;
 };
 

@@ -597,7 +597,7 @@ void SvgTextCursor::insertText(QString text)
     }
 }
 
-void SvgTextCursor::insertRichText(KoSvgTextShape *insert)
+void SvgTextCursor::insertRichText(KoSvgTextShape *insert, bool inheritPropertiesIfPossible)
 {
     if (d->shape) {
         //KUndo2Command *parentCmd = new KUndo2Command;

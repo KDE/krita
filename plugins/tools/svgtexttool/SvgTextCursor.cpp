@@ -424,8 +424,9 @@ void SvgTextCursor::setDrawTypeSettingHandle(bool draw)
 void SvgTextCursor::updateTypeSettingDecorFromShape()
 {
     if (d->shape) {
-        d->typeSettingDecor.handlesEnabled = (d->shape->textType() == KoSvgTextShape::PreformattedText
-                                              || d->shape->textType() == KoSvgTextShape::PrePositionedText);
+        d->typeSettingDecor.handlesEnabled = ((d->shape->textType() == KoSvgTextShape::PreformattedText
+                                              || d->shape->textType() == KoSvgTextShape::PrePositionedText)
+                                              && !(d->shape->topLevelNodeForPos(d->pos).textPath()));
     }
 }
 
@@ -1817,6 +1818,7 @@ void SvgTextCursor::updateTypeSettingDecoration()
 
         updateRect = d->shape->shapeToDocument(d->typeSettingDecor.boundingRect(d->handleRadius));
     }
+    updateTypeSettingDecorFromShape(); // To remove the text-in-path nodes..
     Q_EMIT updateCursorDecoration(updateRect | d->oldTypeSettingRect);
     d->oldTypeSettingRect = updateRect;
 }

@@ -1272,9 +1272,8 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
     int currentIndex = 0;
     QPointF accumulatedOffset;
     for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
-        if (KoSvgTextShape::Private::childCount(siblingCurrent(it)) > 0) {
+        if (KoSvgTextShape::Private::childCount(siblingCurrent(it)) > 0 || !it->textPathId.isEmpty()) {
             continue;
-            // TODO: also skip textpaths, their transforms aren't read.
         }
 
         int endContentElement = it->finalResultIndex;

@@ -552,19 +552,28 @@ int KoSvgTextShape::previousLine(int pos)
 
 int KoSvgTextShape::wordEnd(int pos)
 {
-    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
-        return pos;
-    }
-    int currentLineEnd = lineEnd(pos);
-    if (pos == lineStart(pos) || pos == currentLineEnd) {
+    if (pos < 0 || pos >= d->cursorPos.size() || d->result.isEmpty() || d->cursorPos.isEmpty()) {
         return pos;
     }
 
     int wordEnd = pos;
-    for (int i = pos; i<= currentLineEnd; i++) {
+    for (int i = pos; i < d->cursorPos.size(); i++) {
         wordEnd = i;
         CursorPos cursorPos = d->cursorPos.at(i);
-        if (d->result.at(cursorPos.cluster).cursorInfo.isWordBoundary && cursorPos.offset == 0) {
+        bool isWhiteSpace = false;
+        const CharacterResult res = d->result.at(cursorPos.cluster);
+        const int pIndex = res.plaintTextIndex;
+        if (pIndex >= 0 && pIndex < d->plainText.size()) {
+            QChar c = d->plainText.at(pIndex);
+            isWhiteSpace = KoCssTextUtils::IsCssWordSeparator(QString(c)) || c.isSpace();
+        }
+        if (res.breakType != BreakType::NoBreak
+                && (cursorPos.offset == 0 || cursorPos.offset+1 == res.cursorInfo.offsets.size())
+                && i > pos) {
+
+            if (isWhiteSpace) {
+                wordEnd = qMax(pos, wordEnd-1);
+            }
             break;
         }
 
@@ -575,23 +584,20 @@ int KoSvgTextShape::wordEnd(int pos)
 
 int KoSvgTextShape::wordStart(int pos)
 {
-    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
-        return pos;
-    }
-    int currentLineStart = lineStart(pos);
-    if (pos == currentLineStart || pos == lineEnd(pos)) {
+    if (pos <= 0 || pos > d->cursorPos.size() || d->result.isEmpty() || d->cursorPos.isEmpty()) {
         return pos;
     }
 
     int wordStart = pos;
-    bool breakNext = false;
-    for (int i = pos; i >= currentLineStart; i--) {
-        if (breakNext) break;
-        CursorPos cursorPos = d->cursorPos.at(i);
-        if (d->result.at(cursorPos.cluster).cursorInfo.isWordBoundary && cursorPos.offset == 0) {
-            breakNext = true;
-        }
+    for (int i = pos; i >= 0; i--) {
         wordStart = i;
+        CursorPos cursorPos = d->cursorPos.at(i);
+        const CharacterResult res = d->result.at(cursorPos.cluster);
+        if (res.breakType != BreakType::NoBreak
+                && (cursorPos.offset == 0 || cursorPos.offset+1 == res.cursorInfo.offsets.size())
+                && i < pos) {
+            break;
+        }
     }
 
     return wordStart;

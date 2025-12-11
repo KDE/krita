@@ -28,6 +28,7 @@
 #endif /*HAVE_GSL*/
 
 #include <Eigen/Eigenvalues>
+#include <KisBezierUtils.h>
 
 #define SANITY_CHECKS
 
@@ -2091,6 +2092,40 @@ QLineF VectorPath::segmentAtAsLine(int i) const
     return QLineF(points[0].endPoint, points[1].endPoint);
 }
 
+QList<QPointF> VectorPath::intersectSegmentWithLineBounded(const QLineF &line, const Segment &segment)
+{
+    qreal eps = 1e-5;
+    if (segment.type != VectorPath::VectorPathPoint::BezierTo) {
+        QLineF segLine = QLineF(segment.startPoint, segment.endPoint);
+        QPointF intersection;
+        if (segLine.intersects(line, &intersection) == QLineF::BoundedIntersection) {
+            return QList<QPointF> {intersection};
+        } else {
+            return QList<QPointF>();
+        }
+
+    } else {
+        QList<QPointF> result;
+        // check for intersections
+        QVector<qreal> intersections = KisBezierUtils::intersectWithLine(segment.startPoint, segment.controlPoint1, segment.controlPoint2, segment.endPoint, line, eps);
+        for (int i = 0; i < intersections.count(); i++) {
+            QPointF p = KisBezierUtils::bezierCurve(segment.startPoint, segment.controlPoint1, segment.controlPoint2, segment.endPoint, intersections[i]);
+            bool onLine = isOnLine(line, p, eps, true, true, true);
+            if (onLine) {
+                result << p;
+            }
+        }
+
+        return result;
+    }
+
+}
+
+QList<QPointF> VectorPath::intersectSegmentWithLineBounded(const QLineF &line, const VectorPathPoint &p1, const VectorPathPoint &p2)
+{
+    return intersectSegmentWithLineBounded(line, VectorPath::Segment(p1, p2));
+}
+
 int VectorPath::pathIndexToSegmentIndex(int index)
 {
     // first should be MoveTo
@@ -2327,9 +2362,6 @@ QDebug operator<<(QDebug debug, const VectorPath &path)
     return debug;
 }
 
-
-
-
 QDebug operator<<(QDebug debug, const VectorPath::VectorPathPoint &point)
 {
     bool autoInsertSpaces = debug.autoInsertSpaces();
@@ -2346,6 +2378,132 @@ QDebug operator<<(QDebug debug, const VectorPath::VectorPathPoint &point)
     debug << ")";
     debug.setAutoInsertSpaces(autoInsertSpaces);
     return debug;
+}
+
+bool isInsideShape(const VectorPath &path, const QPointF &point)
+{
+    if (path.pointsCount() == 0) {
+        return false;
+    }
+
+    QRectF boundRect;
+    accumulateBounds(path.pointAt(0).endPoint, &boundRect);
+
+    bool isPolygon = true;
+
+    for (int i = 0; i < path.segmentsCount(); i++) {
+        QList<VectorPath::VectorPathPoint> points = path.segmentAt(i);
+        accumulateBounds(points[0].endPoint, &boundRect);
+        accumulateBounds(points[1].endPoint, &boundRect);
+
+        if (points[1].type == VectorPath::VectorPathPoint::BezierTo) {
+            accumulateBounds(points[1].controlPoint1, &boundRect);
+            accumulateBounds(points[1].controlPoint2, &boundRect);
+            isPolygon = false;
+        }
+    }
+
+    if (!boundRect.contains(point)) {
+        return false;
+    }
+
+    if (isPolygon) {
+        return path.asPainterPath().toFillPolygon().containsPoint(point, Qt::WindingFill);
+    }
+
+    boundRect = kisGrowRect(boundRect, 5); // just safety margins
+
+    // NOTE: it would be way faster to do it taking into account the fact that the lines are vertical and horizontal
+    // except for the last one maybe
+    // but let's wait until it proves to be a problem
+    QList<QLineF> lines;
+    lines << QLineF(point, QPointF(boundRect.left(), point.y()));
+    lines << QLineF(point, QPointF(boundRect.right(), point.y()));
+    lines << QLineF(point, QPointF(point.x(), boundRect.top()));
+    lines << QLineF(point, QPointF(point.x(), boundRect.bottom()));
+    lines << QLineF(point, boundRect.topLeft()); // last resort, diagonal
+
+    int intersectionsCount = 0;
+
+    for (int k = 0; k < lines.length(); k++) {
+        int intersections = 0;
+        QLineF line = lines[k];
+        bool checkNext = false;
+
+        for (int i = 0; i < path.segmentsCount(); i++) {
+            std::optional<VectorPath::Segment> segmentOpt = path.segmentAtAsSegment(i);
+            KIS_SAFE_ASSERT_RECOVER(segmentOpt.has_value()) {continue;}
+            VectorPath::Segment segment = segmentOpt.value();
+
+            QList<QPointF> intersectionsHere = VectorPath::intersectSegmentWithLineBounded(line, segment);
+            qreal eps = 1e-4;
+
+            for (int i = 0; i < intersectionsHere.count(); i++) {
+                if (fuzzyPointCompare(intersectionsHere[i], segment.startPoint, eps) || fuzzyPointCompare(intersectionsHere[i], segment.endPoint, eps)) {
+                    checkNext = true;
+                    break;
+                }
+            }
+
+            if (checkNext) {
+                break;
+            }
+
+            intersections += intersectionsHere.count();
+        }
+
+        intersectionsCount = intersections;
+        if (!checkNext) {
+            break;
+        }
+    }
+
+    return intersectionsCount%2 == 1;
+}
+
+bool isInsideShape(const QPainterPath &path, const QPointF &point)
+{
+    for (int i = 0; i < path.elementCount(); i++) {
+        if (path.elementAt(i).type == QPainterPath::CurveToDataElement) {
+            // contains control points
+            return isInsideShape(VectorPath(path), point);
+        }
+    }
+
+    return path.toFillPolygon().containsPoint(point, Qt::WindingFill);
+}
+
+bool isOnLine(const QLineF &line, const QPointF &point, const qreal eps, bool boundedStart, bool boundedEnd, bool includeEnds)
+{
+    if (fuzzyPointCompare(point, line.p1(), eps)) {
+        return includeEnds || !boundedStart;
+    }
+    if (fuzzyPointCompare(point, line.p2(), eps)) {
+        return includeEnds || !boundedEnd;
+    }
+
+    if (kisDistanceToLine(point, line) > eps) {
+        return false;
+    }
+
+    QPointF lineVector = line.p2() - line.p1();
+    QPointF pointVector = point - line.p1();
+    qreal t = -1;
+    if (qAbs(pointVector.x()) < eps) {
+        // use y
+        t = pointVector.y()/lineVector.y();
+    } else {
+        t = pointVector.x()/lineVector.x();
+    }
+
+    if (t < 0) {
+        return !boundedStart;
+    }
+    if (t > 1.0) {
+        return !boundedEnd;
+    }
+
+    return true;
 }
 
 

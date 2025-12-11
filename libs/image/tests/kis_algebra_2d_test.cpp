@@ -1205,6 +1205,63 @@ void KisAlgebra2DTest::testVectorPathIndexes()
     }
 
 }
+
+void KisAlgebra2DTest::testIsInsideShape_data()
+{
+
+    using VPoint = KisAlgebra2D::VectorPath::VectorPathPoint;
+    QTest::addColumn<QList<VPoint>>("path");
+    QTest::addColumn<QPointF>("point");
+    QTest::addColumn<bool>("result");
+
+
+    qreal optimalDistanceMagicNumber = 4*(sqrt(2) - 1)/3;
+
+    QList<VPoint> squareDiag = QList<VPoint> {
+            VPoint(VPoint::MoveTo, QPointF(1, 0)),
+            VPoint(VPoint::LineTo, QPointF(0, 1)),
+            VPoint(VPoint::LineTo, QPointF(-1, 0)),
+            VPoint(VPoint::LineTo, QPointF(0, -1)),
+            VPoint(VPoint::LineTo, QPointF(1, 0)),
+    };
+
+
+    QList<VPoint> circle = QList<VPoint> {
+            VPoint(VPoint::MoveTo, QPointF(1, 0)),
+            VPoint(VPoint::BezierTo, QPointF(0, 1), QPointF(1, optimalDistanceMagicNumber), QPointF(optimalDistanceMagicNumber, 1)),
+            VPoint(VPoint::BezierTo, QPointF(-1, 0), QPointF(-optimalDistanceMagicNumber, 1), QPointF(-1, optimalDistanceMagicNumber)),
+            VPoint(VPoint::BezierTo, QPointF(0, -1), QPointF(-1, -optimalDistanceMagicNumber), QPointF(-optimalDistanceMagicNumber, -1)),
+            VPoint(VPoint::BezierTo, QPointF(1, 0), QPointF(optimalDistanceMagicNumber, -1), QPointF(1, -optimalDistanceMagicNumber)),
+    };
+
+    QTest::addRow("perfect circle and center") << circle << QPointF(0, 0) << true;
+    QTest::addRow("perfect circle, not center") << circle << QPointF(0.5, 0.5) << true;
+    QTest::addRow("perfect circle, outside") << circle << QPointF(1, 1) << false;
+
+    QTest::addRow("square diag, perfect center") << squareDiag << QPointF(0, 0) << true;
+    QTest::addRow("square diag, not center") << squareDiag << QPointF(0.2, 0.2) << true;
+    QTest::addRow("square diag, outside") << squareDiag << QPointF(1, 1) << false;
+
+
+
+}
+
+
+void KisAlgebra2DTest::testIsInsideShape()
+{
+
+    using VPoint = KisAlgebra2D::VectorPath::VectorPathPoint;
+    QFETCH(QList<VPoint>, path);
+    QFETCH(QPointF, point);
+    QFETCH(bool, result);
+
+    bool res = KisAlgebra2D::isInsideShape(path, point);
+    QCOMPARE(res, result);
+
+
+}
+
+
 QPainterPath makeSpecialShape(bool left)
 {
     // left has teeth on the left

@@ -45,6 +45,10 @@ private Q_SLOTS:
     void testVectorPathIndexes_data();
     void testVectorPathIndexes();
 
+
+    void testIsInsideShape_data();
+    void testIsInsideShape();
+
     void testRemoveGutter();
     void testMergingPainterPaths();
 

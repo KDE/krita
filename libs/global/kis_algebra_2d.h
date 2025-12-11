@@ -664,6 +664,11 @@ public:
     QLineF segmentAtAsLine(int i) const;
 
 
+    static QList<QPointF> intersectSegmentWithLineBounded(const QLineF &line, const Segment &segment);
+    static QList<QPointF> intersectSegmentWithLineBounded(const QLineF &line, const VectorPathPoint &p1, const VectorPathPoint &p2);
+
+
+
     int pathIndexToSegmentIndex(int index);
     int segmentIndexToPathIndex(int index);
 
@@ -1024,6 +1029,9 @@ QVector<QPointF> KRITAGLOBAL_EXPORT findTrianglePoint(const QPointF &p1, const Q
  */
 boost::optional<QPointF> KRITAGLOBAL_EXPORT findTrianglePointNearest(const QPointF &p1, const QPointF &p2, qreal a, qreal b, const QPointF &nearest);
 
+bool isOnLine(const QLineF &line, const QPointF &point, const qreal eps, bool boundedStart, bool boundedEnd, bool includeEnds);
+
+
 /**
  * @brief moveElasticPoint moves point \p pt based on the model of elasticity
  * @param pt point in question, tied to points \p base, \p wingA and \p wingB
@@ -1210,7 +1218,13 @@ VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& sha
  */
 QPainterPath KRITAGLOBAL_EXPORT trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
 
-}
 
+bool KRITAGLOBAL_EXPORT isInsideShape(const VectorPath &path, const QPointF &point);
+bool KRITAGLOBAL_EXPORT isInsideShape(const QPainterPath &path, const QPointF &point);
+
+
+
+
+}
 
 #endif /* __KIS_ALGEBRA_2D_H */

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-11-20 09:30+0100\n"
+"PO-Revision-Date: 2025-12-10 10:04+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -30591,7 +30591,7 @@ msgstr "%1 s'ha guardat, però està incomplet."
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr "S'han trobat diversos problemes en guardar."
+msgstr "S'han trobat diversos problemes mentre es guardava."
 
 #: libs/ui/KisDocument.cpp:1049
 #, kde-format
@@ -30651,7 +30651,7 @@ msgstr "No s'ha pogut obrir %1."
 #: libs/ui/KisDocument.cpp:2017 libs/ui/KisDocument.cpp:2021
 #, kde-format
 msgid "There were problems opening %1."
-msgstr "Hi ha hagut problemes en obrir %1."
+msgstr "Hi ha hagut problemes mentre s'obria %1."
 
 #: libs/ui/KisDocument.cpp:2156
 #, kde-format
@@ -40334,7 +40334,7 @@ msgstr "Selecciona-ho tot"
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
-msgstr "Tria res"
+msgstr "No selecciones res"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format

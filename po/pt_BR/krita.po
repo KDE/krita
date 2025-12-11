@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-11-20 07:05-0300\n"
+"PO-Revision-Date: 2025-12-10 05:22-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -36452,7 +36452,7 @@ msgstr ""
 "empenhada nisso. Entretanto, você - o usuário - precisa nos dizer quando "
 "algo não funciona como esperado ou poderia ser melhorado.<br /><br />O KDE "
 "possui um sistema de detecção de erros de programação. Visite <a href=\"%1\">"
-"%1</a> ou use o diálogo \"Relatar erro\" no menu \"Ajuda\", para relatar "
+"%1</a> ou use o diálogo \"Relatar bug\" no menu \"Ajuda\", para relatar "
 "erros.<br /><br />Se você tiver uma sugestão de melhoria, seja bem-vindo "
 "para usar o sistema de detecção de erros para registrar seu pedido. "
 "Certifique-se de usar o nível de 'severidade' chamado \"Wishlist\" (Lista de "
@@ -36524,7 +36524,7 @@ msgstr "&Sobre"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:136
 #, kde-format
 msgid "&Report Bugs or Wishes"
-msgstr "&Relatar erros ou desejos"
+msgstr "&Relatar bugs ou desejos"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:137
 #, kde-format
@@ -36549,7 +36549,7 @@ msgid ""
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 "O aplicativo do qual você deseja mandar um relatório de erros - se "
-"incorreto, acesse o item de menu Relatar erro, do menu do aplicativo em "
+"incorreto, acesse o item de menu Relatar bug, do menu do aplicativo em "
 "questão"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118

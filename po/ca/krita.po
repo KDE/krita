@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-11-20 09:30+0100\n"
+"PO-Revision-Date: 2025-12-10 10:04+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -40326,7 +40326,7 @@ msgstr "Selecciona-ho tot"
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
-msgstr "Selecciona res"
+msgstr "No seleccionis res"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format

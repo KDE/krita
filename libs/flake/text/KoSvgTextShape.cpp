@@ -1187,18 +1187,20 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText, boo
     }
 
     if (richTextIt != d->textData.childEnd()) {
-        for (auto p = richTextIt->properties.properties().begin(); p != richTextIt->properties.properties().end(); p++) {
-            if (KoSvgTextProperties::propertyIsBlockOnly(*p)) {
-                richTextIt->properties.removeProperty(*p);
+        Q_FOREACH (const KoSvgTextProperties::PropertyId p, richTextIt->properties.properties()) {
+            if (KoSvgTextProperties::propertyIsBlockOnly(p)) {
+                richTextIt->properties.removeProperty(p);
             }
         }
         auto parentIt = KisForestDetail::hierarchyBegin(richTextIt);
         auto parentEnd = KisForestDetail::hierarchyEnd(richTextIt);
-        parentIt++;
-        if (inheritPropertiesIfPossible && parentIt!= parentEnd) {
-            for (auto p = richTextIt->properties.properties().begin(); p != richTextIt->properties.properties().end(); p++) {
-                if (richTextIt->properties.inheritsProperty(*p, parentIt->properties)) {
-                    richTextIt->properties.removeProperty(*p);
+        if (parentIt != parentEnd) {
+            parentIt++;
+            if (inheritPropertiesIfPossible && parentIt != parentEnd) {
+                Q_FOREACH (const KoSvgTextProperties::PropertyId p, richTextIt->properties.properties()) {
+                    if (richTextIt->properties.inheritsProperty(p, parentIt->properties)) {
+                        richTextIt->properties.removeProperty(p);
+                    }
                 }
             }
         }

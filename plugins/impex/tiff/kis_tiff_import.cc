@@ -1114,7 +1114,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             QVector<tsize_t> lineSizes(nbchannels);
             for (uint32_t i = 0; i < nbchannels; i++) {
                 const unsigned long uncompressedTileSize =
-                    tjPlaneSizeYUV(i, width, 0, height, jpegColorspace);
+                    tjPlaneSizeYUV(i, width, 0, height, jpegSubsamp);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
                     uncompressedTileSize != (unsigned long)-1,
                     ImportExportCodes::FileFormatIncorrect);
@@ -1303,7 +1303,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             QVector<tsize_t> lineSizes(nbchannels);
             for (uint32_t i = 0; i < nbchannels; i++) {
                 const unsigned long uncompressedStripsize =
-                    tjPlaneSizeYUV(i, width, 0, height, jpegColorspace);
+                    tjPlaneSizeYUV(i, width, 0, height, jpegSubsamp);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
                     uncompressedStripsize != (unsigned long)-1,
                     ImportExportCodes::FileFormatIncorrect);

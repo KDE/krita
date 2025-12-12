@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-11 02:03+0000\n"
+"POT-Creation-Date: 2025-12-12 02:04+0000\n"
 "PO-Revision-Date: 2025-11-26 11:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -20348,30 +20348,30 @@ msgid "Character Variant %1"
 msgstr "تنويعة المحرف %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2590
+#: libs/flake/text/KoSvgTextShape.cpp:2616
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "نص مبدئي"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2569
+#: libs/flake/text/KoSvgTextShape.cpp:2595
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "نص"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2571
-#: libs/flake/text/KoSvgTextShape.cpp:2579
+#: libs/flake/text/KoSvgTextShape.cpp:2597
+#: libs/flake/text/KoSvgTextShape.cpp:2605
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "شكل SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2577
+#: libs/flake/text/KoSvgTextShape.cpp:2603
 #, kde-format
 msgid "SVG Text"
 msgstr "‏SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2626
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -66174,74 +66174,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "اضبط تحويلات الأحرف في النص."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "أعلى النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "حجم الخطّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "أسفل النص"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "أبجديّ"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "تصوري"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "مُعلَّق"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "منتصف"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "رياضي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "وسط"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "ارتفاع السّطر"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "السطر الأساسي الحالي"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -66288,7 +66288,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "أدرِج نصًّا"
 
-#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:17
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "أدرِج نصًّا منسّقًا"

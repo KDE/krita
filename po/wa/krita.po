@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-11 02:03+0000\n"
+"POT-Creation-Date: 2025-12-12 02:04+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -20761,32 +20761,32 @@ msgid "Character Variant %1"
 msgstr "Variante (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2590
+#: libs/flake/text/KoSvgTextShape.cpp:2616
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Radjouter tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2569
+#: libs/flake/text/KoSvgTextShape.cpp:2595
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2571
-#: libs/flake/text/KoSvgTextShape.cpp:2579
+#: libs/flake/text/KoSvgTextShape.cpp:2597
+#: libs/flake/text/KoSvgTextShape.cpp:2605
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Fôme tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2577
+#: libs/flake/text/KoSvgTextShape.cpp:2603
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Tecse"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2626
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -67034,77 +67034,77 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Usteye roye"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Grandeu d' imprimaedje"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
 #, fuzzy, kde-format
 #| msgid "To Bottom"
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Al valêye"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "E &bole"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Sititchî on djocaedje di roye"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Ingulaire"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Moyén"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Usteye di shuvaedje des candjmints"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Mitan:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Hôteur d' imprimaedje:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, fuzzy, kde-format
 #| msgid "&Add to current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "&Radjouter å tchoes do moumint"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -67153,7 +67153,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "Tecsteure"
 
-#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:17
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:18
 #, fuzzy
 #| msgid "Texture"
 msgctxt "(qtundo-format)"

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-11 02:03+0000\n"
+"POT-Creation-Date: 2025-12-12 02:04+0000\n"
 "PO-Revision-Date: 2025-10-26 23:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -20515,30 +20515,30 @@ msgid "Character Variant %1"
 msgstr "Teckenvariant %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2590
+#: libs/flake/text/KoSvgTextShape.cpp:2616
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Platsmarkeringstext"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2569
+#: libs/flake/text/KoSvgTextShape.cpp:2595
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2571
-#: libs/flake/text/KoSvgTextShape.cpp:2579
+#: libs/flake/text/KoSvgTextShape.cpp:2597
+#: libs/flake/text/KoSvgTextShape.cpp:2605
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-textform"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2577
+#: libs/flake/text/KoSvgTextShape.cpp:2603
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2626
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -66594,15 +66594,15 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:449
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
 #, fuzzy, kde-format
 #| msgid "Text Tool"
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Textverktyg"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:451
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:457
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
 #, fuzzy, kde-format
 #| msgctxt "@label:spinbox"
 #| msgid "Font Size"
@@ -66610,7 +66610,7 @@ msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Teckenstorlek"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:455
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
 #, fuzzy, kde-format
 #| msgctxt "toolbar position string"
 #| msgid "Bottom"
@@ -66618,7 +66618,7 @@ msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Längst ner"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:460
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Alphabetic"
@@ -66626,7 +66626,7 @@ msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Alfabetisk"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Ideographic"
@@ -66634,7 +66634,7 @@ msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografisk"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Hanging"
@@ -66642,7 +66642,7 @@ msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Hängande"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:466
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
 #, fuzzy, kde-format
 #| msgctxt "Middle Mouse Button"
 #| msgid "Middle"
@@ -66650,7 +66650,7 @@ msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Mitten"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Mathematical"
@@ -66658,7 +66658,7 @@ msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematisk"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Central"
@@ -66666,7 +66666,7 @@ msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Central"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:472
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Line Height"
@@ -66674,14 +66674,14 @@ msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Radhöjd"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Aktuell markering"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
 #, fuzzy, kde-format
 #| msgctxt "@label:inlistbox"
 #| msgid "Baseline"
@@ -66730,7 +66730,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "Infoga text"
 
-#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:17
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "Infoga Rich text"

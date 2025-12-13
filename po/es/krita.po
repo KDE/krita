@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-12 02:04+0000\n"
-"PO-Revision-Date: 2025-12-12 02:08+0100\n"
+"PO-Revision-Date: 2025-12-13 00:24+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19436,7 +19436,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Mayúsculas a versalitas pequeñas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
 #, kde-format
@@ -19445,18 +19445,20 @@ msgid ""
 "Replaces uppercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Sustituye letras en mayúsculas con formas en versalitas pequeñas, que están "
+"más próximas a la altura de x de una fuente que las formas en versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Mayúsculas a versalitas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uppercase letters with small capital forms."
-msgstr ""
+msgstr "Sustituye letras en mayúsculas con formas en versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
 #, kde-format
@@ -19471,6 +19473,8 @@ msgid ""
 "Replaces lowercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Sustituye letras en minúsculas con formas en versalitas pequeñas, que están "
+"más próximas a la altura de x de una fuente que las formas en versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
 #, kde-format
@@ -19646,31 +19650,31 @@ msgstr "Controla distancias en alfabetos índicos para evitar colisiones."
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr ""
+msgstr "Formas medias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr ""
+msgstr "Sustituye consonantes de los alfabetos índicos con sus formas medias."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Formas halant"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr ""
+msgstr "Sustituye consonantes de los alfabetos índicos con sus formas halant."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Formas nukta"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
 #, kde-format
@@ -19679,6 +19683,8 @@ msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
 msgstr ""
+"Sustituye consonantes combinadas con nukta en alfabetos índicos con sus "
+"formas nukta."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
 #, kde-format
@@ -19693,6 +19699,8 @@ msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
 "situation occurs."
 msgstr ""
+"Sustituye la forma prebase de una consonante del alfabeto jemer cuando "
+"ocurre una situación «coeng ra»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
 #, kde-format
@@ -19872,13 +19880,13 @@ msgstr "Hangul"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
-msgstr ""
+msgstr "Sustituye hanja del coreano con el correspondiente hangul. Obsoleto."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:355
 #, kde-format
 msgctxt "@title"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Formas kanji hojo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:356
 #, kde-format
@@ -19887,6 +19895,8 @@ msgid ""
 "Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
 "X 0212-1990') forms."
 msgstr ""
+"Sustituye la forma kanji «JIS X 0213:2004» de las fuentes japonesas con las "
+"formas hojo («JIS X 0212-1990»)."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
 #, kde-format
@@ -20134,26 +20144,29 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Métricas verticales alternativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
+"Reposiciona los glifos para que se vean de forma más apropiada en la "
+"escritura vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Alternativo"
+msgstr "Anchuras medias alternativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in horizontal layout."
 msgstr ""
+"Reposiciona los glifos para que se vean de forma más apropiada en la "
+"escritura horizontal."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
 #, kde-format
@@ -20421,13 +20434,13 @@ msgstr "Sustituye glifos con sus alternativos de derecha a izquierda."
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr ""
+msgstr "Formas reflejadas de derecha a izquierda"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr ""
+msgstr "Sustituye glifos con sus formas reflejadas de derecha a izquierda."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
@@ -66841,7 +66854,7 @@ msgstr "Cambiar SvgTextTool"
 #: plugins/tools/svgtexttool/SvgTextChangeTransformsOnRange.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
-msgstr ""
+msgstr "Ajustar transformaciones de caracteres del texto"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
 #, kde-format
@@ -67312,6 +67325,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection down by "
 "one pixel."
 msgstr ""
+"Cuando el modo de composición tipográfica está activo, mover el inicio de la "
+"selección un píxel hacia abajo."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_up_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
@@ -67335,6 +67350,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection up by one "
 "pixel."
 msgstr ""
+"Cuando el modo de composición tipográfica está activo, mover el inicio de la "
+"selección un píxel hacia arriba."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_left_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:249
@@ -67358,6 +67375,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection left by "
 "one pixel."
 msgstr ""
+"Cuando el modo de composición tipográfica está activo, mover el inicio de la "
+"selección un píxel a la izquierda."
 
 #. i18n: context: iconText @ Action (svg_type_setting_move_selection_start_right_1_px), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:260
@@ -67381,6 +67400,8 @@ msgid ""
 "When type setting mode is active, move the start of the selection right by "
 "one pixel."
 msgstr ""
+"Cuando el modo de composición tipográfica está activo, mover el inicio de la "
+"selección un píxel a la derecha."
 
 #. i18n: context: iconText @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_remove_transforms_from_range), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -67398,7 +67419,7 @@ msgstr "Eliminar transformaciones de caracteres"
 #, kde-format
 msgctxt "action"
 msgid "Remove Character Transforms from the selection."
-msgstr ""
+msgstr "Eliminar transformaciones de caracteres de la selección."
 
 #. i18n: context: iconText @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_clear_formatting), Actions (Text Tool), ActionCollection (SVG Tools)

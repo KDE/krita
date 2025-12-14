@@ -7737,14 +7737,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "文本置于形状内"
+msgstr "文本在形状内流动"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow in shape."
-msgstr "使选中的第一条文本在形状内部编排。"
+msgstr "使选中的第一条文本在形状内部流动。"
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
@@ -7758,7 +7758,7 @@ msgstr "从文本编排区域中减去形状"
 #, kde-format
 msgctxt "action"
 msgid "Make shapes part of the subtracted shapes of the first selected text."
-msgstr "使形状成为被选中的第一条文本减去的形状的一部份。"
+msgstr "使形状成为被选中的第一条文本的减去形状的一部份。"
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7772,21 +7772,21 @@ msgstr "文本跟随路径"
 #, kde-format
 msgctxt "action"
 msgid "Make the first selected text flow onto the first selected path."
-msgstr "使选中的第一条文本沿着选中的第一条路径编排。"
+msgstr "使选中的第一条文本沿着选中的第一条路径流动。"
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Flow"
-msgstr "从文本流移除形状"
+msgstr "从文本流移除子轮廓形状"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, kde-format
 msgctxt "action"
 msgid "Remove shapes from text flow and add them to the layer."
-msgstr "从文本流中移除形状并将它们添加到此图层。"
+msgstr "从文本流中移除子轮廓形状并将它们添加到此图层。"
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7823,7 +7823,7 @@ msgstr "设置文本流形状为最后一个"
 msgctxt "action"
 msgid ""
 "Make this flow shape the last in the flow shape order as used by text layout."
-msgstr "将此文本流形状设置为文本布局的文本流序列中的最后一个。"
+msgstr "将此文本流形状设置为文本布局的文本流形状序列中的最后一个形状。"
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7876,7 +7876,7 @@ msgctxt "action"
 msgid ""
 "Make this flow shape the first in the flow shape order as used by text "
 "layout."
-msgstr "将此文本流形状设置为文本布局的文本流序列中的第一个。"
+msgstr "将此文本流形状设置为文本布局的文本流形状序列中的第一个形状。"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -64607,7 +64607,7 @@ msgstr "从文本流减去形状。"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:702
 msgctxt "(qtundo-format)"
 msgid "Remove shapes from text flow."
-msgstr "从文本流移除形状。"
+msgstr "从文本流移除子轮廓形状。"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 msgctxt "(qtundo-format)"

@@ -2061,6 +2061,9 @@ VectorPath::VectorPath(const QPainterPath &path)
             case QPainterPath::LineToElement:
                 m_points.append(VPoint(VPoint::LineTo, el));
             break;
+            case QPainterPath::CurveToDataElement:
+            KIS_SAFE_ASSERT_RECOVER_BREAK(false);
+            break;
             case QPainterPath::CurveToElement:
                 KIS_SAFE_ASSERT_RECOVER(i + 2 < path.elementCount()) { continue; }
                 KIS_SAFE_ASSERT_RECOVER(path.elementAt(i + 1).type == QPainterPath::CurveToDataElement) { continue; }

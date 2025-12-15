@@ -1952,10 +1952,9 @@ VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& sha
         VectorPath result1Vec(result1);
         VectorPath result2Vec(result2);
 
-        QPolygonF result2Poly = result2Vec.asPainterPath().toFillPolygon();
 
         // TODO: assumes winding fill
-        if (result2Poly.containsPoint(shape1.segmentAt(minIndex)[1].endPoint, Qt::WindingFill)) {
+        if (isInsideShape(result2Vec, shape1.segmentAt(minIndex)[1].endPoint)) {
             // could check all
             return result2Vec;
         }

@@ -1903,6 +1903,9 @@ VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& sha
     result.append(shape1.pointAt(0));
 
     auto appendFrom = [] (QList<VPoint>& res, int start, int end, const VectorPath& shape) {
+        start = qBound(0, start, shape.segmentsCount() - 1);
+        end = qBound(0, end, shape.segmentsCount() - 1);
+
         for (int i = start; i < end; i++) {
             QList<VPoint> segment = shape.segmentAt(i);
             KIS_SAFE_ASSERT_RECOVER_RETURN(segment.length() == 2);
@@ -1927,6 +1930,10 @@ VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& sha
 
         QList<VPoint> result1;
         // min index to max index
+        if (minIndex < 0 || maxIndex >= shape1.segmentsCount()) {
+            return shape1;
+        }
+
         result1 << VPoint::moveTo(shape1.segmentAt(minIndex)[1].endPoint);
         appendFrom(result1, minIndex + 1, maxIndex, shape1);
 
@@ -1996,7 +2003,7 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
     VectorPath vectorOneEnd = VectorPath(oneEnd);
     VectorPath vectorOtherEnd = VectorPath(otherEnd);
 
-    VectorPath vectorResultHere = mergeShapesWithGutter(vectorShape1, vectorShape2, vectorOneEnd, vectorOtherEnd, index1, index2, reverseSecondPoly, isSameShape);
+    VectorPath vectorResultHere = mergeShapesWithGutter(vectorShape1, vectorShape2, vectorOneEnd, vectorOtherEnd, vectorShape1.pathIndexToSegmentIndex(index1), vectorShape2.pathIndexToSegmentIndex(index2), reverseSecondPoly, isSameShape);
     return vectorResultHere.trulySimplified(1e-02).asPainterPath();
 
 
@@ -2006,13 +2013,36 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
 
 QList<int> getLineSegmentCrossingLineIndexes(const QLineF &line, const QPainterPath &shape)
 {
+    VectorPath path(shape);
     QList<int> indexes;
-    for (int i = 0; i < shape.elementCount() - 1; i++) { // last element would wrap around to be the first segment again
-        QLineF lineSegment = getLineFromElements(shape, i);
-        QPointF intersection;
-        QLineF::IntersectionType type = lineSegment.intersects(line, &intersection);
-        if (type == QLineF::IntersectionType::BoundedIntersection) {
-            indexes << i;
+
+    for (int i = 0; i < path.segmentsCount(); i++) {
+        QList<VectorPath::VectorPathPoint> points = path.segmentAt(i);
+        if (points.count() < 2)
+            continue;
+        if (points[1].type == VectorPath::VectorPathPoint::BezierTo) {
+
+            qreal eps = 1e-5;
+            QVector<qreal> intersections = KisBezierUtils::intersectWithLine(points[0].endPoint, points[1].controlPoint1, points[1].controlPoint2, points[1].endPoint, line, eps);
+            for (int i = 0; i < intersections.length(); i++) {
+                //
+                QPointF p = KisBezierUtils::bezierCurve(points[0].endPoint, points[1].controlPoint1, points[1].controlPoint2, points[1].endPoint, intersections[i]);
+
+                bool onLine = isOnLine(line, p, eps, true, true, true);
+                if (onLine) {
+                    indexes << path.segmentIndexToPathIndex(i);
+                    break; // we need just one
+                }
+            }
+
+        } else {
+
+            QLineF lineSegment = path.segmentAtAsLine(i);
+            QPointF intersection;
+            QLineF::IntersectionType type = lineSegment.intersects(line, &intersection);
+            if (type == QLineF::IntersectionType::BoundedIntersection) {
+                indexes << path.segmentIndexToPathIndex(i);
+            }
         }
     }
     return indexes;

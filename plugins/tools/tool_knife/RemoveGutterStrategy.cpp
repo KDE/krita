@@ -236,6 +236,16 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     qCritical() << ppVar(srcOutlines[shapeNewIndexes[1]].toFillPolygon());
 #endif
 
+    if (shapeNewIndexes[0] == shapeNewIndexes[1]) {
+        // the same shape
+        // gotta ensure the mouseline starts and ends inside
+        bool insideP1 = KisAlgebra2D::isInsideShape(srcOutlines[shapeNewIndexes[0]], mouseLine.p1());
+        bool insideP2 = KisAlgebra2D::isInsideShape(srcOutlines[shapeNewIndexes[0]], mouseLine.p2());
+        if (!insideP1 || !insideP2) {
+            // it's from outside, it doesn't go over a gutter, then
+            return;
+        }
+    }
 
 
 

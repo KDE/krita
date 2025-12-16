@@ -607,7 +607,7 @@ void SvgTextCursor::insertRichText(KoSvgTextShape *insert, bool inheritPropertie
             addCommandToUndoAdapter(removeCmd);
         }
 
-        SvgTextInsertRichCommand *cmd = new SvgTextInsertRichCommand(d->shape, insert, d->pos, d->anchor);
+        SvgTextInsertRichCommand *cmd = new SvgTextInsertRichCommand(d->shape, insert, d->pos, d->anchor, inheritPropertiesIfPossible);
         addCommandToUndoAdapter(cmd);
 
     }

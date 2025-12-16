@@ -57,6 +57,7 @@
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
+#include "dialogs/KisDlgCreateNewDocument.h"
 #include "kis_selection_manager.h"
 #include "kis_icon_utils.h"
 #include <krecentfilesaction.h>
@@ -1761,56 +1762,9 @@ void KisMainWindow::showWelcomeScreen(bool show)
 
 void KisMainWindow::slotFileNew()
 {
-    const QStringList mimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
-
-    KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
-    startupWidget->setWindowModality(Qt::WindowModal);
-    startupWidget->setWindowTitle(i18n("Create new document"));
-
-
-    KisConfig cfg(true);
-
-    int w = cfg.defImageWidth();
-    int h = cfg.defImageHeight();
-    const double resolution = cfg.defImageResolution();
-    const QString colorModel = cfg.defColorModel();
-    const QString colorDepth = cfg.defaultColorDepth();
-    const QString colorProfile = cfg.defColorProfile();
-
-
-    CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(startupWidget,
-                                           w,
-                                           h,
-                                           resolution,
-                                           colorModel,
-                                           colorDepth,
-                                           colorProfile,
-                                           i18n("Unnamed"));
-
-    item.icon = "document-new";
-    item.title = i18n("Custom Document");
-    startupWidget->addCustomDocumentWidget(item.widget, item.title, "Custom Document", item.icon);
-
-    item.widget = new KisImageFromClipboardWidget(startupWidget,
-                                            0,
-                                            0,
-                                            resolution,
-                                            colorModel,
-                                            colorDepth,
-                                            colorProfile,
-                                            i18n("Unnamed"));
-
-    item.title = i18n("Create from Clipboard");
-    item.icon = "tab-new";
-
-    startupWidget->addCustomDocumentWidget(item.widget, item.title, "Create from ClipBoard", item.icon);
-
-    connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
-    connect(startupWidget, SIGNAL(openTemplate(QUrl)), KisPart::instance(), SLOT(openTemplate(QUrl)));
-
-    startupWidget->exec();
-    startupWidget->deleteLater();
+    KisDlgCreateNewDocument* dlg = new KisDlgCreateNewDocument(this);
+    dlg->exec();
+    dlg->deleteLater();
 }
 
 void KisMainWindow::slotImportFile()

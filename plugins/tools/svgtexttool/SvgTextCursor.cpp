@@ -27,6 +27,7 @@
 #include "KoCanvasResourceProvider.h"
 #include <kis_signal_compressor.h>
 #include <KisHandlePainterHelper.h>
+#include <kis_acyclic_signal_connector.h>
 
 #include "kundo2command.h"
 #include <QTimer>
@@ -239,12 +240,15 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     SvgTextCursorPropertyInterface *interface{nullptr};
 
     QList<QAction*> actions;
+
+    KisAcyclicSignalConnector resourceManagerAcyclicConnector;
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
     d(new Private)
 {
     d->canvas = canvas;
+    d->interface = new SvgTextCursorPropertyInterface(this);
     if (d->canvas->canvasController()) {
         // Mockcanvas in the tests has no canvas controller.
         connect(d->canvas->canvasController()->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateInputMethodItemTransform()));
@@ -264,10 +268,12 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
                 SIGNAL(documentMirrorStatusChanged(bool, bool)),
                 this,
                 SLOT(updateInputMethodItemTransform()));
-        connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-                this, SLOT(canvasResourceChanged(int,QVariant)));
+        d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
+                    d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                    this, SLOT(canvasResourceChanged(int,QVariant)));
+        d->resourceManagerAcyclicConnector.connectForwardVoid(d->interface, SIGNAL(textCharacterSelectionChanged()), this, SLOT(updateCanvasResources()));
     }
-    d->interface = new SvgTextCursorPropertyInterface(this);
+
 }
 
 SvgTextCursor::~SvgTextCursor()
@@ -1303,17 +1309,21 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
     KoSvgTextProperties shapeProps = hasSelection()? d->shape->propertiesForPos(d->pos, true): d->shape->textProperties();
     if (key == KoCanvasResource::ForegroundColor) {
         QSharedPointer<KoShapeBackground> bg(new KoColorBackground(value.value<KoColor>().toQColor()));
-        if (bg != shapeProps.background()) {
+        if (!bg->compareTo(shapeProps.background().data())
+                || !shapeProps.hasProperty(KoSvgTextProperties::FillId)) {
             props.setProperty(KoSvgTextProperties::FillId,
                               QVariant::fromValue(KoSvgText::BackgroundProperty(bg)));
         }
     } else if (key == KoCanvasResource::BackgroundColor) {
         QSharedPointer<KoShapeStroke> stroke(new KoShapeStroke());
-        if (shapeProps.stroke()) {
-            stroke = qSharedPointerDynamicCast<KoShapeStroke>(shapeProps.stroke());
+        if (shapeProps.hasProperty(KoSvgTextProperties::StrokeId)) {
+            KoShapeStrokeSP shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shapeProps.stroke());
+            if (shapeStroke->isVisible()) {
+                stroke.reset(new KoShapeStroke(*shapeStroke));
+            }
         }
         stroke->setColor(value.value<KoColor>().toQColor());
-        if (stroke != shapeProps.stroke()) {
+        if (!stroke->compareFillTo(shapeProps.stroke().data()) || !shapeProps.hasProperty(KoSvgTextProperties::StrokeId)) {
             props.setProperty(KoSvgTextProperties::StrokeId,
                               QVariant::fromValue(KoSvgText::StrokeProperty(stroke)));
         }
@@ -1697,7 +1707,6 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
     if (!d->blockQueryUpdates) {
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
-    updateCanvasResources();
     d->interface->emitCharacterSelectionChange();
     if (!(d->canvas->canvasWidget() && d->canvas->canvasController())) {
         // Mockcanvas in the tests has neither.
@@ -2114,7 +2123,7 @@ void SvgTextCursor::updateCanvasResources()
     if (d->shape && d->canvas->resourceManager() && d->pos == d->anchor) {
         KoSvgTextProperties props = hasSelection()? d->shape->propertiesForPos(d->pos, true): d->shape->textProperties();
         KoColorBackground *bg = dynamic_cast<KoColorBackground *>(props.background().data());
-        if (bg) {
+        if (bg && props.hasProperty(KoSvgTextProperties::FillId)) {
             KoColor c;
             c.fromQColor(bg->color());
             c.setOpacity(1.0);
@@ -2123,7 +2132,7 @@ void SvgTextCursor::updateCanvasResources()
             }
         }
         KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(props.stroke().data());
-        if (stroke && stroke->color().isValid()) {
+        if (stroke && stroke->isVisible() && stroke->color().isValid() && props.hasProperty(KoSvgTextProperties::StrokeId)) {
             KoColor c;
             c.fromQColor(stroke->color());
             c.setOpacity(1.0);

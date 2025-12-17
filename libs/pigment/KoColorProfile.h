@@ -102,10 +102,17 @@ public:
         return QString();
     };
     /**
-     * @return true if you can use this profile can be used to convert color from a different
-     * profile to this one
+     * @return true if this profile can be used to convert color from a different profile to this one
      */
     virtual bool isSuitableForOutput() const = 0;
+    /**
+     * @return true if this profile can be used to convert color from this one to a different one
+     */
+    virtual bool isSuitableForInput() const = 0;
+    /**
+     * @return true if you can use this profile can be used in Krita
+     */
+    virtual bool isSuitableForWorkspace() const = 0;
     /**
      * @return true if this profile is suitable to use for printing
      */

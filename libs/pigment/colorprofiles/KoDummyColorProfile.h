@@ -18,6 +18,8 @@ public:
     bool valid() const override;
     float version() const override;
     bool isSuitableForOutput() const override;
+    bool isSuitableForInput() const override;
+    bool isSuitableForWorkspace() const override;
     bool isSuitableForPrinting() const override;
     bool isSuitableForDisplay() const override;
     bool supportsPerceptual() const override;

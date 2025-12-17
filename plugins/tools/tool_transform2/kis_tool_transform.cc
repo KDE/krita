@@ -857,7 +857,7 @@ void KisToolTransform::deactivate()
 
 void KisToolTransform::requestUndoDuringStroke()
 {
-    if (!m_strokeId || m_transaction.rootNodes().isEmpty()) return;
+    if (!m_strokeId || m_transaction.rootNodes().isEmpty() || mode() != HOVER_MODE) return;
 
     if (!m_changesTracker.canUndo()) {
         cancelStroke();

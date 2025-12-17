@@ -23,6 +23,7 @@
 
 #include <KisLazyStorage.h>
 #include <KisLazyValueWrapper.h>
+#include <lcms2.h>
 
 namespace {
 struct ReverseCurveWrapper
@@ -71,6 +72,7 @@ public:
     IccColorProfile::Data *data {0};
     bool valid {false};
     bool suitableForOutput {false};
+    bool suitableForInput {false};
     bool hasColorants;
 
     using LazyBool = KisLazyStorage<KisLazyValueWrapper<bool>, std::function<bool()>>;
@@ -297,9 +299,8 @@ bool LcmsColorProfileContainer::init()
         }
 
         // Check if the profile can convert (something->this)
-        d->suitableForOutput = cmsIsIntentSupported(d->profile,
-                                                    INTENT_PERCEPTUAL,
-                                                    LCMS_USED_AS_OUTPUT);
+        d->suitableForOutput = cmsIsIntentSupported(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT);
+        d->suitableForInput  = cmsIsIntentSupported(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT);
 
         d->version = cmsGetProfileVersion(d->profile);
         d->defaultIntent = cmsGetHeaderRenderingIntent(d->profile);
@@ -353,6 +354,14 @@ float LcmsColorProfileContainer::version() const
 bool LcmsColorProfileContainer::isSuitableForOutput() const
 {
     return d->suitableForOutput;
+}
+bool LcmsColorProfileContainer::isSuitableForInput() const
+{
+    return d->suitableForInput;
+}
+bool LcmsColorProfileContainer::isSuitableForWorkspace() const
+{
+    return d->suitableForOutput && d->suitableForInput;
 }
 
 bool LcmsColorProfileContainer::isSuitableForPrinting() const

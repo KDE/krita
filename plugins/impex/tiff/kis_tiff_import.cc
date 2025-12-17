@@ -1731,15 +1731,15 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         basicInfo.colorSpaceIdTag.second);
 
     // Check that the profile is used by the color space
-    if (profile
-        && !KoColorSpaceRegistry::instance()->profileIsCompatible(
-            profile,
-            colorSpaceId)) {
-        dbgFile << "The profile " << profile->name()
-                << " is not compatible with the color space model "
-                << basicInfo.colorSpaceIdTag.first << " "
-                << basicInfo.colorSpaceIdTag.second;
-        profile = nullptr;
+    if (profile) {
+            if (!KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)
+            ||  !(profile->isSuitableForInput() || profile->isSuitableForOutput())) {
+            dbgFile << "The profile " << profile->name()
+                    << " is not compatible with the color space model "
+                    << basicInfo.colorSpaceIdTag.first << " "
+                    << basicInfo.colorSpaceIdTag.second;
+            profile = nullptr;
+        }
     }
 
     // Do not use the linear gamma profile for 16 bits/channel by default, tiff
@@ -1769,7 +1769,7 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
     }
 
     // Retrieve a pointer to the colorspace
-    if (profile && profile->isSuitableForOutput()) {
+    if (profile && profile->isSuitableForWorkspace()) {
         dbgFile << "image has embedded profile:" << profile->name() << "";
         basicInfo.cs = KoColorSpaceRegistry::instance()->colorSpace(
             basicInfo.colorSpaceIdTag.first,
@@ -1790,18 +1790,18 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         return ImportExportCodes::FormatColorSpaceUnsupported;
     }
 
-    // Create the cmsTransform if needed
-    if (profile && !profile->isSuitableForOutput()) {
-        dbgFile << "The profile can't be used in krita, need conversion";
-        basicInfo.transform =
-            KoColorSpaceRegistry::instance()
-                ->colorSpace(basicInfo.colorSpaceIdTag.first,
-                             basicInfo.colorSpaceIdTag.second,
-                             profile)
-                ->createColorConverter(
-                    basicInfo.cs,
-                    KoColorConversionTransformation::internalRenderingIntent(),
-                    KoColorConversionTransformation::internalConversionFlags());
+  // Create the cmsTransform if needed
+  if (profile && !profile->isSuitableForWorkspace() && profile->isSuitableForInput()) {
+      dbgFile << "The profile can't be used in krita, need conversion";
+      basicInfo.transform =
+          KoColorSpaceRegistry::instance()
+              ->colorSpace(basicInfo.colorSpaceIdTag.first,
+                           basicInfo.colorSpaceIdTag.second,
+                           profile)
+              ->createColorConverter(
+                  basicInfo.cs,
+                  KoColorConversionTransformation::internalRenderingIntent(),
+                  KoColorConversionTransformation::internalConversionFlags());
     }
 
     KisImportExportErrorCode result = readImageFromPsd(m_doc, image, basicInfo);

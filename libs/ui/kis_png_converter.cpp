@@ -566,37 +566,33 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 
     bool loadedImageIsHDR = false;
     const KoColorProfile* profile = 0;
+
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
-        QByteArray profile_rawdata;
-        // XXX: Hardcoded for icc type -- is that correct for us?
-        profile_rawdata.resize(proflen);
-        memcpy(profile_rawdata.data(), profile_data, proflen);
+        QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), proflen);
         profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
-        Q_CHECK_PTR(profile);
         if (profile) {
-            //                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
-            if (!profile->isSuitableForOutput()) {
-                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
+            if (!profile->isSuitableForWorkspace()) {
+                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile";
             }
         }
 
         loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
     }
-    else {
-        dbgFile << "no embedded profile, will use the default profile";
-        if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
-            KisConfig cfg(true);
-            quint32 behaviour = cfg.pasteBehaviour();
-            if (behaviour == KisClipboard::PASTE_ASK) {
-                KisDlgPngImport dlg(m_path, csName.first, csName.second);
-                KisCursorOverrideHijacker hijacker;
-                Q_UNUSED(hijacker);
-                dlg.exec();
-                if (!dlg.profile().isEmpty()) {
-                    profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
-                }
+    else if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
+        // Ask the user which color profile to use
+        KisConfig cfg(true);
+        quint32 behaviour = cfg.pasteBehaviour();
+        if (behaviour == KisClipboard::PASTE_ASK) {
+            KisDlgPngImport dlg(m_path, csName.first, csName.second);
+            KisCursorOverrideHijacker hijacker;
+            Q_UNUSED(hijacker);
+            dlg.exec();
+            if (!dlg.profile().isEmpty()) {
+                profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
             }
         }
+    }
+    else {
         dbgFile << "no embedded profile, will use the default profile";
     }
 
@@ -604,7 +600,9 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         KoColorSpaceRegistry::instance()->colorSpaceId(csName.first, csName.second);
 
     // Check that the profile is used by the color space
-    if (profile && !KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)) {
+    if (profile 
+        && (!KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId) 
+        ||  !(profile->isSuitableForOutput() || profile->isSuitableForInput()))) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
         profile = 0;
     }
@@ -625,24 +623,18 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 
         cs = p2020PQCS;
 
-    } else if (profile && profile->isSuitableForOutput()) {
+    } else if (profile && profile->isSuitableForWorkspace()) {
         dbgFile << "image has embedded profile: " << profile->name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile);
     }
     else {
-        if (csName.first == RGBAColorModelID.id()) {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "sRGB-elle-V2-srgbtrc.icc");
-        } else if (csName.first == GrayAColorModelID.id()) {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "Gray-D50-elle-V2-srgbtrc.icc");
-        } else {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
-        }
+        // Loading a backup colorspace
+        cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "");
+    }
 
-        //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
-        // Create the cmsTransform if needed
-        if (profile) {
-            transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-        }
+    // Create the cmsTransform if needed
+    if (profile  && !profile->isSuitableForWorkspace() && profile->isSuitableForInput()) {
+      transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     if (cs == 0) {

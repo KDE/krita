@@ -254,6 +254,21 @@ bool IccColorProfile::isSuitableForOutput() const
     }
     return false;
 }
+bool IccColorProfile::isSuitableForInput() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->isSuitableForInput() && d->shared->profileInfo->value.canCreateCyclicTransform;
+    }
+    return false;
+}
+bool IccColorProfile::isSuitableForWorkspace() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->isSuitableForWorkspace() && d->shared->profileInfo->value.canCreateCyclicTransform;
+    }
+    return false;
+}
+
 
 bool IccColorProfile::isSuitableForPrinting() const
 {

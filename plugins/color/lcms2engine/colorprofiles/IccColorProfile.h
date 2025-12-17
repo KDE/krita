@@ -54,6 +54,8 @@ public:
         virtual QString copyright() const = 0;
         virtual bool valid() const = 0;
         virtual bool isSuitableForOutput() const = 0;
+        virtual bool isSuitableForInput() const = 0;
+        virtual bool isSuitableForWorkspace() const = 0;
         virtual bool isSuitableForPrinting() const = 0;
         virtual bool isSuitableForDisplay() const = 0;
         virtual bool hasColorants() const = 0;
@@ -88,6 +90,8 @@ public:
     float version() const override;
     QString colorModelID() const override;
     bool isSuitableForOutput() const override;
+    bool isSuitableForInput() const override;
+    bool isSuitableForWorkspace() const override;
     bool isSuitableForPrinting() const override;
     bool isSuitableForDisplay() const override;
     bool supportsPerceptual() const override;

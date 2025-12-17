@@ -67,6 +67,8 @@ public:
     virtual float version() const;
 
     bool isSuitableForOutput() const override;
+    bool isSuitableForInput() const override;
+    bool isSuitableForWorkspace() const override;
 
     bool isSuitableForPrinting() const override;
 

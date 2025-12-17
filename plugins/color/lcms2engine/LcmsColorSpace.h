@@ -227,7 +227,7 @@ protected:
                                                TYPE_BGR_8,
                                                KoColorConversionTransformation::internalRenderingIntent(),
                                                conversionFlags);
-            KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->toRGB);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->toRGB || !d->colorProfile->isSuitableForInput());
 
             d->defaultTransformations->toRGB16 = cmsCreateTransform(d->profile->lcmsProfile(),
                                                  this->colorSpaceType(),
@@ -235,7 +235,7 @@ protected:
                                                  TYPE_BGR_16,
                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                  conversionFlags);
-            KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->toRGB16);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->toRGB16 || !d->colorProfile->isSuitableForInput());
 
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }

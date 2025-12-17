@@ -5,7 +5,6 @@
  */
 #include "kis_jpeg_converter.h"
 
-#include <stdio.h>
 #include <stdint.h>
 
 #include <KoConfig.h>
@@ -165,39 +164,38 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             return ImportExportCodes::FormatColorSpaceUnsupported;
         }
 
-        uchar* profile_data = 0;
-        uint profile_len = 0;
-        const KoColorProfile* profile = 0;
-        QByteArray profile_rawdata;
+        uint8_t* profile_data = nullptr;
+        uint32_t profile_len = 0;
+
+        const KoColorProfile* profile = nullptr;
+
         if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
-            profile_rawdata.resize(profile_len);
-            memcpy(profile_rawdata.data(), profile_data, profile_len);
-            cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
-
-            if (hProfile != (cmsHPROFILE) 0) {
-                profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
-                Q_CHECK_PTR(profile);
-                dbgFile <<"profile name:" << profile->name() <<" product information:" << profile->info();
-                if (!profile->isSuitableForOutput()) {
-                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
-                }
-            }
-
+            QByteArray profile_rawdata(reinterpret_cast<char*>(profile_data), static_cast<int>(profile_len));
+            // read_icc_profile allocates memory, and we need to free it
             free(profile_data);
+
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
+            dbgFile <<"profile name:" << profile->name() <<" product information:" << profile->info();
+            //This is stadard for profiles like this
+            if (!profile->isSuitableForWorkspace()) {
+              dbgFile << "the profile is not suitable for workspace and therefore cannot be used in krita, we need to convert the image to a standard profile";
+            }
         }
 
         const QString colorSpaceId =
             KoColorSpaceRegistry::instance()->colorSpaceId(modelId, Integer8BitsColorDepthID.id());
 
         // Check that the profile is used by the color space
-        if (profile && !KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)) {
+        if (profile
+            && (!KoColorSpaceRegistry::instance()->profileIsCompatible(profile, colorSpaceId)
+            ||  !(profile->isSuitableForInput() || profile->isSuitableForOutput()))) {
             warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << modelId;
             profile = 0;
         }
 
         // Retrieve a pointer to the colorspace
-        const KoColorSpace* cs;
-        if (profile && profile->isSuitableForOutput()) {
+        const KoColorSpace* cs = nullptr;
+        if (profile && profile->isSuitableForWorkspace()) {
             dbgFile << "image has embedded profile:" << profile -> name() << "";
             cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile);
         } else
@@ -208,13 +206,15 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             jpeg_destroy_decompress(&cinfo);
             return ImportExportCodes::FormatColorSpaceUnsupported;
         }
-        // TODO fixit
-        // Create the cmsTransform if needed
 
+        // Create the cmsTransform if needed
         KoColorTransformation* transform = 0;
-        if (profile && !profile->isSuitableForOutput()) {
-            transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        if (profile && !profile->isSuitableForWorkspace() && profile->isSuitableForInput()) {
+            transform = KoColorSpaceRegistry::instance()
+                ->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)
+                ->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         }
+
         // Apparently an invalid transform was created from the profile. See bug https://bugs.kde.org/show_bug.cgi?id=255451.
         // After 2.3: warn the user!
         if (transform && !transform->isValid()) {

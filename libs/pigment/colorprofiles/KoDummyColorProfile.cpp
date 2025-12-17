@@ -32,6 +32,14 @@ bool KoDummyColorProfile::isSuitableForOutput() const
 {
     return true;
 }
+bool KoDummyColorProfile::isSuitableForInput() const
+{
+    return true;
+}
+bool KoDummyColorProfile::isSuitableForWorkspace() const
+{
+    return true;
+}
 
 bool KoDummyColorProfile::isSuitableForPrinting() const
 {

@@ -578,21 +578,27 @@ void SvgTextTool::slotTextTypeUpdated()
 {
     KoSvgTextShape *shape = selectedShape();
     QActionGroup *typeConvertGroup = action("text_type_preformatted")->actionGroup();
-    typeConvertGroup->setExclusive(true);
+    if (typeConvertGroup) {
+        typeConvertGroup->setExclusive(true);
+    }
     Q_FOREACH (QAction *a, typeConvertGroup->actions()) {
         a->setCheckable(true);
     }
     if (m_optionManager) {
         if (shape) {
             m_optionManager->convertToTextType(int(shape->textType()));
-            typeConvertGroup->setEnabled(true);
+            if (typeConvertGroup) {
+                typeConvertGroup->setEnabled(true);
+            }
             action("text_type_preformatted")->setChecked(shape->textType() == KoSvgTextShape::PreformattedText);
             action("text_type_pre_positioned")->setChecked(shape->textType() == KoSvgTextShape::PrePositionedText);
             action("text_type_inline_wrap")->setChecked(shape->textType() == KoSvgTextShape::InlineWrap);
 
         } else {
             m_optionManager->convertToTextType(-1);
-            typeConvertGroup->setEnabled(false);
+            if (typeConvertGroup) {
+                typeConvertGroup->setEnabled(false);
+            }
         }
         const bool enableTypeSetting = (m_optionManager->typeSettingMode() && shape && (shape->textType() == KoSvgTextShape::PreformattedText ||shape->textType() == KoSvgTextShape::PrePositionedText));
         action("svg_type_setting_move_selection_start_down_1_px")->actionGroup()->setEnabled(enableTypeSetting);

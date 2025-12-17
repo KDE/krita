@@ -92,12 +92,20 @@ class KisOpenPanePrivate : public Ui_KisOpenPaneBase
 public:
     KisOpenPanePrivate() :
         Ui_KisOpenPaneBase()
-    { }
+    {
+        m_itemMap = new QMap<QString, QTreeWidgetItem *>();
+    }
+
+    ~KisOpenPanePrivate()
+    {
+        delete m_itemMap;
+    }
 
     int m_freeCustomWidgetIndex {0};
     KoSectionListItem* m_templatesSeparator {nullptr};
 
-
+    //Stores pointers to items in the pane, accessible by their untranslated name
+    QMap<QString, QTreeWidgetItem *> *m_itemMap;
 };
 
 KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath)
@@ -282,6 +290,15 @@ void KisOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title,
     }
 }
 
+bool KisOpenPane::selectItem(const QString name)
+{
+    QTreeWidgetItem* item =  d->m_itemMap->value(name, nullptr);
+    if (!item) return false;
+
+    d->m_sectionList->setCurrentItem(item);
+    return true;
+}
+
 
 QTreeWidgetItem* KisOpenPane::addPane(const QString &title, const QString &untranslatedName, const QString &iconName, QWidget *widget, int sortWeight)
 {
@@ -291,6 +308,8 @@ QTreeWidgetItem* KisOpenPane::addPane(const QString &title, const QString &untra
 
     int id = d->m_widgetStack->addWidget(widget);
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, untranslatedName, sortWeight, id);
+
+    d->m_itemMap->insert(untranslatedName,  (QTreeWidgetItem*)listItem);
 
     // resizes icons so they are a bit smaller
     QIcon icon = KisIconUtils::loadIcon(iconName);
@@ -313,6 +332,8 @@ QTreeWidgetItem* KisOpenPane::addPane(const QString &title, const QString &untra
     int iconSize = 32;
 
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, untranslatedName, sortWeight, id);
+
+    d->m_itemMap->insert(untranslatedName,  listItem);
 
     if (!icon.isNull()) {
         QImage image = icon.toImage();

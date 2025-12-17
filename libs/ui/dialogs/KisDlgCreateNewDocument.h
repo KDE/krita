@@ -9,9 +9,17 @@
 
 #include "KisOpenPane.h"
 
-class KisDlgCreateNewDocument : public KisOpenPane {
+class KisDlgCreateNewDocument : public KisOpenPane
+{
 public:
-    KisDlgCreateNewDocument(QWidget* parent);
+    KisDlgCreateNewDocument(QWidget *parent);
+
+    enum Page {
+        CreateNewDocument,
+        CreateFromClipboard,
+    };
+
+    void SelectPage(Page page);
 };
 
 #endif

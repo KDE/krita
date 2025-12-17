@@ -123,6 +123,7 @@ public:
     const QMimeData* layersMimeData() const;
 
     bool hasUrls() const;
+    bool hasImage() const;
 
 Q_SIGNALS:
     void clipChanged();

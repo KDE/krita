@@ -43,3 +43,15 @@ KisDlgCreateNewDocument::KisDlgCreateNewDocument(QWidget* parent)
     connect(this, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
     connect(this, SIGNAL(openTemplate(QUrl)), KisPart::instance(), SLOT(openTemplate(QUrl)));
 }
+
+void KisDlgCreateNewDocument::SelectPage(Page page)
+{
+    switch (page) {
+    case CreateNewDocument:
+        selectItem("Custom Document");
+        break;
+    case CreateFromClipboard:
+        selectItem("Create from ClipBoard");
+        break;
+    }
+}

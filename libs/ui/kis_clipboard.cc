@@ -704,6 +704,12 @@ bool KisClipboard::hasUrls() const
     return d->clipboard->mimeData()->hasUrls();
 }
 
+
+bool KisClipboard::hasImage() const
+{
+    return d->clipboard->mimeData()->hasImage();
+}
+
 QImage KisClipboard::getImageFromMimeData(const QMimeData *cbData) const
 {
     static const QList<ClipboardImageFormat> supportedFormats = {

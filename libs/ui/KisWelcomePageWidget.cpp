@@ -22,6 +22,7 @@
 #include "kactioncollection.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "dialogs/KisDlgCreateNewDocument.h"
 #include <KisMimeDatabase.h>
 #include <KisApplication.h>
 
@@ -33,6 +34,7 @@
 #include <QMenu>
 #include <QScrollBar>
 
+#include "kis_clipboard.h"
 #include "kis_icon_utils.h"
 #include <kis_painting_tweaks.h>
 #include "KoStore.h"
@@ -264,6 +266,9 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
         connect(openFileLink, SIGNAL(clicked(bool)), this, SLOT(slotOpenFileClicked()));
         connect(clearRecentFilesLink, SIGNAL(clicked(bool)), mainWin, SLOT(clearRecentFiles()));
+
+        KisAction *pasteAction = mainWin->viewManager()->actionManager()->actionByName("edit_paste");
+        connect(pasteAction, SIGNAL(triggered()), this, SLOT(slotPaste()));
 
         slotUpdateThemeColors();
 
@@ -652,6 +657,22 @@ void KisWelcomePageWidget::slotNewFileClicked()
 void KisWelcomePageWidget::slotOpenFileClicked()
 {
     m_mainWindow->slotFileOpen();
+}
+
+void KisWelcomePageWidget::slotPaste()
+{
+    if (!this->isVisible())
+        return;
+
+    // Don't do anything if there's no image in the clipboard
+    if (!KisClipboard::instance()->hasImage())
+        return;
+
+    KisDlgCreateNewDocument *dlg = new KisDlgCreateNewDocument(this);
+
+    dlg->SelectPage(KisDlgCreateNewDocument::Page::CreateFromClipboard);
+    dlg->exec();
+    dlg->deleteLater();
 }
 
 void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()

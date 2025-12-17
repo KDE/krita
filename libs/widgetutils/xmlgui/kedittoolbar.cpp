@@ -589,6 +589,8 @@ public:
     KisKEditToolBarWidget *m_widget {nullptr};
     QVBoxLayout *m_layout {nullptr};
     QDialogButtonBox *m_buttonBox {nullptr};
+
+
 };
 
 Q_GLOBAL_STATIC(QString, s_defaultToolBarName)
@@ -1537,6 +1539,26 @@ void KisKEditToolBarWidgetPrivate::slotChangeIconButton()
 
     QDomElement elem = findElementForToolBarItem(toolitem);
     KIS_SAFE_ASSERT_RECOVER_RETURN(!elem.isNull());
+
+    static bool iconsLoaded {false};
+
+    // Load all icons, also the icons that only get loaded when an image is created
+    if (!iconsLoaded) {
+
+        QFileInfoList entryList = QDir(":/").entryInfoList(QDir::Files);
+        entryList += QDir(":/pics/").entryInfoList(QDir::Files);
+        const QStringList suffixes {"png", "svg", "svgz"};
+
+        foreach (const QFileInfo info, entryList) {
+            if (suffixes.contains(info.suffix())) {
+                QString basename = info.baseName();
+                int i = basename.indexOf('_', 5);
+                basename = basename.mid(i + 1);
+                KisIconUtils::loadIcon(basename);
+            }
+        }
+        iconsLoaded = true;
+    }
 
     QStringList loadedIcons = KisIconUtils::allUniqueLoadedIconNames();
 

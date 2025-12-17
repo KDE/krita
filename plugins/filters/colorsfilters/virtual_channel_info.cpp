@@ -8,6 +8,7 @@
 #include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 
 
 VirtualChannelInfo::VirtualChannelInfo()
@@ -34,13 +35,25 @@ VirtualChannelInfo::VirtualChannelInfo(Type type,
         m_valueTypeOverride = KoChannelInfo::FLOAT32;
         m_channelSizeOverride = 4;
     } else if (m_type == LIGHTNESS) {
-        m_nameOverride = i18nc("Lightness HSI", "Lightness");
+        m_nameOverride = i18nc("Lightness L*a*b*", "Lightness");
         m_valueTypeOverride = KoChannelInfo::FLOAT32;
         m_channelSizeOverride = 4;
     } else if (m_type == ALL_COLORS) {
         const QList<KoChannelInfo*> channels = cs->channels();
 
-        m_nameOverride = cs->colorModelId().id();
+        if (cs->colorModelId() == RGBAColorModelID) {
+            m_nameOverride = "RGB";
+        } else if (cs->colorModelId() == CMYKAColorModelID) {
+            m_nameOverride = "CMYK";
+        } else if (cs->colorModelId() == XYZAColorModelID) {
+            m_nameOverride = "XYZ";
+        } else if (cs->colorModelId() == LABAColorModelID) {
+            m_nameOverride = "L*a*b*";
+        } else if (cs->colorModelId() == YCbCrAColorModelID) {
+            m_nameOverride = "YCbCr";
+        } else {
+            m_nameOverride = cs->colorModelId().id();
+        }
         m_valueTypeOverride = channels.first()->channelValueType();
         m_channelSizeOverride = channels.first()->size();
     }

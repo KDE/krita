@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-12 02:04+0000\n"
+"POT-Creation-Date: 2025-12-18 02:00+0000\n"
 "PO-Revision-Date: 2025-11-23 16:56+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -16816,7 +16816,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Stijlvoorbeeld"
 
-#: libs/flake/svg/SvgParser.cpp:1704
+#: libs/flake/svg/SvgParser.cpp:1760
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -51509,7 +51509,7 @@ msgid "Desaturate"
 msgstr "Verzadiging verminderen"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:30
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
@@ -51517,7 +51517,7 @@ msgstr "Tint"
 
 #. i18n: ectx: property (text), widget (QCheckBox, saturationCBox)
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:227
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:34
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:93
@@ -51589,11 +51589,12 @@ msgstr "&Kleurbijstellingkrommen..."
 msgid "Color Adjustment"
 msgstr "Kleurbijstelling"
 
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:37
-#, kde-format
-msgctxt "Lightness HSI"
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
+#, fuzzy, kde-format
+#| msgid "Lightness"
+msgctxt "Lightness L*a*b*"
 msgid "Lightness"
-msgstr "Helderheid"
+msgstr "Lichtheid"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetShadows)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:75
@@ -69590,6 +69591,10 @@ msgstr ""
 "Schakelen tussen volledige reeks en subreeks.\n"
 "Volledige reeks: [%1, %2]\n"
 "Subreeks: [%3, %4]"
+
+#~ msgctxt "Lightness HSI"
+#~ msgid "Lightness"
+#~ msgstr "Helderheid"
 
 #~ msgid "Edit SVG Source"
 #~ msgstr "SVG-bron bewerken"

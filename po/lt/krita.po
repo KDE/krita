@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-12 02:04+0000\n"
+"POT-Creation-Date: 2025-12-18 02:00+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -17081,7 +17081,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Stilius"
 
-#: libs/flake/svg/SvgParser.cpp:1704
+#: libs/flake/svg/SvgParser.cpp:1760
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -51812,7 +51812,7 @@ msgid "Desaturate"
 msgstr "Mažiau sodrumo"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:30
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
@@ -51820,7 +51820,7 @@ msgstr "Atspalvis (hue)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, saturationCBox)
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:227
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:34
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:93
@@ -51891,9 +51891,9 @@ msgstr "Mažiau sodrumo"
 msgid "Color Adjustment"
 msgstr "Mažiau sodrumo"
 
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:37
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
 #, fuzzy, kde-format
-msgctxt "Lightness HSI"
+msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "Šviesumas"
 
@@ -69967,6 +69967,11 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgctxt "Lightness HSI"
+#~ msgid "Lightness"
+#~ msgstr "Šviesumas"
 
 #, fuzzy
 #~| msgid "Source"

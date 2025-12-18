@@ -81,7 +81,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-12 02:04+0000\n"
+"POT-Creation-Date: 2025-12-18 02:00+0000\n"
 "PO-Revision-Date: 2025-09-17 12:11+0300\n"
 "Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -16933,7 +16933,7 @@ msgctxt "info:placeholder"
 msgid "Style Sample"
 msgstr "Таблица стилей"
 
-#: libs/flake/svg/SvgParser.cpp:1704
+#: libs/flake/svg/SvgParser.cpp:1760
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -52044,7 +52044,7 @@ msgid "Desaturate"
 msgstr "Обесцвечивание"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:30
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
@@ -52052,7 +52052,7 @@ msgstr "Тон"
 
 #. i18n: ectx: property (text), widget (QCheckBox, saturationCBox)
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:227
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:34
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:93
@@ -52124,9 +52124,10 @@ msgstr "&Коррекция цвета кривыми..."
 msgid "Color Adjustment"
 msgstr "коррекцию цвета"
 
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:37
-#, kde-format
-msgctxt "Lightness HSI"
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
+#, fuzzy, kde-format
+#| msgid "Lightness"
+msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "Светлота"
 
@@ -70219,6 +70220,10 @@ msgstr ""
 "Переключение между полным диапазоном и поддиапазоном.\n"
 "Полный диапазон: [%1, %2]\n"
 "Поддиапазон: [%3, %4]"
+
+#~ msgctxt "Lightness HSI"
+#~ msgid "Lightness"
+#~ msgstr "Светлота"
 
 #, fuzzy
 #~ msgid "Edit SVG Source"

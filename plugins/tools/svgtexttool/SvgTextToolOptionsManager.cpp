@@ -7,7 +7,7 @@
 
 struct SvgTextToolOptionsManager::Private
 {
-    SvgTextToolOptionsModel *model{new SvgTextToolOptionsModel()};
+    SvgTextToolOptionsModel *model {new SvgTextToolOptionsModel()};
 
     bool showDebug = false;
     bool showCharacterDebug = true;
@@ -23,9 +23,8 @@ struct SvgTextToolOptionsManager::Private
 
 SvgTextToolOptionsManager::SvgTextToolOptionsManager(QObject *parent)
     : QObject(parent)
-    , d(new Private)
+    , d(new Private())
 {
-
 }
 
 SvgTextToolOptionsManager::~SvgTextToolOptionsManager()

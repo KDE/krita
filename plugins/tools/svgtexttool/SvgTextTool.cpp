@@ -99,8 +99,8 @@ static bool debugEnabled()
 
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_textCursor(canvas)
     , m_optionManager(new SvgTextToolOptionsManager(this))
+    , m_textCursor(canvas)
     , m_textOutlineHelper(new KoSvgTextShapeOutlineHelper(canvas))
 {
      // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
@@ -244,6 +244,7 @@ QWidget *SvgTextTool::createOptionWidget()
     optionWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     optionWidget->setSource(QUrl("qrc:/SvgTextToolOptions.qml"));
 
+    m_optionManager->optionsModel()->setConfigName(this->toolId());
     m_optionManager->setShowDebug(debugEnabled());
     if (optionWidget->errors().isEmpty()) {
         optionWidget->rootObject()->setProperty("manager", QVariant::fromValue(m_optionManager.data()));

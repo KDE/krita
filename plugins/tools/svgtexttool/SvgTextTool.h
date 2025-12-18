@@ -203,6 +203,7 @@ private:
         Move,
         TextPathHandle,
         InShapeOffset,
+        TypeSetting,
     };
     enum class HighlightItem {
         None = 0,

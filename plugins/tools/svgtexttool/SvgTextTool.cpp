@@ -684,13 +684,12 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         KisHandlePainterHelper handlePainter =
             KoShape::createHandlePainterHelperView(&gc, shape, converter, handleRadius(), decorationThickness());
 
-        if (m_dragging != DragMode::InlineSizeHandle && m_dragging != DragMode::Move) {
+        if (m_dragging != DragMode::InlineSizeHandle && m_dragging != DragMode::Move && m_dragging != DragMode::TypeSetting) {
             handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
             QPainterPath path;
             path.addRect(shape->outlineRect());
             handlePainter.drawPath(path);
         }
-
 
         qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
         qreal length = (INLINE_SIZE_DASHES_PATTERN_A + INLINE_SIZE_DASHES_PATTERN_B) * INLINE_SIZE_DASHES_PATTERN_LENGTH;
@@ -790,6 +789,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             if (handle != SvgTextCursor::NoHandle) {
                 if (!m_textCursor.setDominantBaselineFromHandle(handle)) {
                     m_interactionStrategy.reset(new SvgTextTypeSettingStrategy(this, selectedShape, &m_textCursor, handleGrabRect(event->point), event->modifiers()));
+                    m_dragging = DragMode::TypeSetting;
                     m_textCursor.setDrawTypeSettingHandle(false);
                 }
                 event->accept();

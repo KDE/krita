@@ -71,12 +71,15 @@ public:
         NoHandle,
         StartPos,
         EndPos,
-        Ascender,
+
+        /// The text properties handles.
         BaselineShift,
+        Ascender,
         Descender,
         LineHeightTop,
         LineHeightBottom,
 
+        /// Baselines.
         BaselineAlphabetic,
         BaselineIdeographic,
         BaselineMiddle,

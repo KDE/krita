@@ -975,8 +975,9 @@ public:
                 }
             }
             if (transformOffset < currentTextElement->localTransformations.size()) {
+                int length = qBound(0, transformOffsetEnd-transformOffset, qMax(0, currentTextElement->localTransformations.size()-transformOffset));
                 currentTextElement->localTransformations.remove(transformOffset,
-                                                                qBound(0, transformOffsetEnd-transformOffset, currentTextElement->localTransformations.size()));
+                                                                length);
             }
 
         }

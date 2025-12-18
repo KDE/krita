@@ -95,12 +95,31 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
         KoSvgTextProperties props;
         KoSvgTextProperties oldProps = m_shape->propertiesForPos(closestPos, true);
 
+        /// Used to synchronise the offsets when changing fontsize...
+        QVector<QPointF> newPositions;
+        QVector<qreal> newRotations;
+
         if (m_editingType == int(SvgTextCursor::Ascender) || m_editingType == int(SvgTextCursor::Descender)) {
             const qreal distOld = kisDistanceToLine(dragStart, line);
-            const qreal scale = distNew/distOld;
+            const qreal scale = qMax(0.000001, distNew/distOld);
             KoSvgText::CssLengthPercentage length = oldProps.fontSize();
             length.value *= scale;
             props.setFontSize(length);
+
+            if (m_shape->textType() == KoSvgTextShape::PreformattedText || m_shape->textType() == KoSvgTextShape::PrePositionedText) {
+                // When we change font size, we need to correct the offset for the scaled advances.
+                // Technically, we need to test against the laid out text to get the correct advance, but that's really complicated...
+                QPointF diff = QPointF();
+
+                Q_FOREACH(const KoSvgTextCharacterInfo originalInfo, originalTf) {
+                    const QTransform rotate = QTransform().rotate(originalInfo.rotateDeg);
+                    const QPointF newPos = originalInfo.finalPos + diff;
+                    const QTransform oTf = QTransform::fromTranslate(originalInfo.finalPos.x(), originalInfo.finalPos.y()) * rotate;
+                    diff += (oTf.map(originalInfo.advance*scale) - oTf.map(originalInfo.advance));
+                    newPositions.append(newPos);
+                    newRotations.append(originalInfo.rotateDeg);
+                }
+            }
         } else if (m_editingType == int(SvgTextCursor::BaselineShift)) {
             KoSvgText::CssLengthPercentage length;
 
@@ -125,7 +144,14 @@ KUndo2Command *SvgTextTypeSettingStrategy::createCommand()
         if (!props.isEmpty()) {
             int pos = m_cursorPos == m_cursorAnchor? -1: m_cursorPos;
             int anchor = m_cursorPos == m_cursorAnchor? -1: m_cursorAnchor;
-            cmd = new SvgTextMergePropertiesRangeCommand(m_shape, props, pos, anchor);
+            if (!newPositions.isEmpty()) {
+                cmd = new KUndo2Command();
+                KUndo2Command *cmd2 = new SvgTextMergePropertiesRangeCommand(m_shape, props, pos, anchor, QSet<KoSvgTextProperties::PropertyId>(), cmd);
+                new SvgTextChangeTransformsOnRange(m_shape, m_cursorPos, m_cursorAnchor, newPositions, newRotations, m_deltaCalc, cmd);
+                cmd->setText(cmd2->text());
+            } else {
+                cmd = new SvgTextMergePropertiesRangeCommand(m_shape, props, pos, anchor);
+            }
         }
     }
     return cmd;

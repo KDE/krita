@@ -1339,6 +1339,9 @@ bool KoSvgTextShape::setCharacterTransformsOnRange(const int startPos, const int
                             tf.xPos = p.x();
                             tf.yPos = p.y();
                         }
+                        if (!tf.rotate) {
+                            tf.rotate = 0.0;
+                        }
                     }
                     transforms << tf;
                     continue;

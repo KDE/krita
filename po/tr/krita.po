@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 02:00+0000\n"
+"POT-Creation-Date: 2025-12-19 02:03+0000\n"
 "PO-Revision-Date: 2025-11-28 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -20456,30 +20456,30 @@ msgid "Character Variant %1"
 msgstr "Karakter Varyantı %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2616
+#: libs/flake/text/KoSvgTextShape.cpp:2619
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Yer Tutucu Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2595
+#: libs/flake/text/KoSvgTextShape.cpp:2598
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2597
-#: libs/flake/text/KoSvgTextShape.cpp:2605
+#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2608
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2603
+#: libs/flake/text/KoSvgTextShape.cpp:2606
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2626
+#: libs/flake/text/KoSvgTextShape.cpp:2629
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -66600,74 +66600,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Metinde Karakter Dönüşümlerini Ayarla"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Metin Üstü"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Yazıtipi Puntosu"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Metin Altı"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Abecesel"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "İdeografik"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Asılı"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Orta"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematiksel"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Merkezî"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Satır Yüksekliği"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Geçerli Taban Çizgisi"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -67173,7 +67173,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Seçimden tüm metin özelliklerini kaldırın."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

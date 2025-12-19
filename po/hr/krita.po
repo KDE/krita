@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 02:00+0000\n"
+"POT-Creation-Date: 2025-12-19 02:03+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -20379,31 +20379,31 @@ msgid "Character Variant %1"
 msgstr "Uzdigni trenutni %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2616
+#: libs/flake/text/KoSvgTextShape.cpp:2619
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Dodaj tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2595
+#: libs/flake/text/KoSvgTextShape.cpp:2598
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2597
-#: libs/flake/text/KoSvgTextShape.cpp:2605
+#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2608
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Oštrina:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2603
+#: libs/flake/text/KoSvgTextShape.cpp:2606
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2626
+#: libs/flake/text/KoSvgTextShape.cpp:2629
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -65265,74 +65265,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "&Bijela"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "&Slika"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Poravnaj lijevo"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Razmjer"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Umetni dio"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Pravokutnik"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Način:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Odsječak"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Uglovi:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Visina:"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Umetni odabrano"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -65847,7 +65847,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

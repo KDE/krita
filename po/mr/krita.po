@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 02:00+0000\n"
+"POT-Creation-Date: 2025-12-19 02:03+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20930,33 +20930,33 @@ msgid "Character Variant %1"
 msgstr "व्हेरियंट (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2616
+#: libs/flake/text/KoSvgTextShape.cpp:2619
 #, fuzzy, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2595
+#: libs/flake/text/KoSvgTextShape.cpp:2598
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2597
-#: libs/flake/text/KoSvgTextShape.cpp:2605
+#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2608
 #, fuzzy, kde-format
 #| msgid "Type and Shape"
 msgid "SVG Text Shape"
 msgstr "प्रकार व आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2603
+#: libs/flake/text/KoSvgTextShape.cpp:2606
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " मजकूर :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2626
+#: libs/flake/text/KoSvgTextShape.cpp:2629
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -67809,78 +67809,78 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "मजकुराचे साधन"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "छपाई आकार"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "खाली"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "उभा"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, fuzzy, kde-format
 #| msgid "Bibliography"
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "ग्रंथ सूची"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, fuzzy, kde-format
 #| msgid "Angular"
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "कोनीय"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "नाव घाला"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "क्रिया"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "प्रतिशत"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "छपाई उंची :"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
 #, fuzzy, kde-format
 #| msgid "&Add to current selection"
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "वर्तमान निवडीत जोडा (&A)"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
 #, fuzzy, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -68414,7 +68414,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 02:00+0000\n"
-"PO-Revision-Date: 2025-11-24 09:53+0100\n"
+"POT-Creation-Date: 2025-12-19 02:03+0000\n"
+"PO-Revision-Date: 2025-12-18 10:42+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -20437,30 +20437,30 @@ msgid "Character Variant %1"
 msgstr "Različica znakov %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
-#: libs/flake/text/KoSvgTextShape.cpp:2616
+#: libs/flake/text/KoSvgTextShape.cpp:2619
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Besedilo ograde"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2595
+#: libs/flake/text/KoSvgTextShape.cpp:2598
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Besedilo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2597
-#: libs/flake/text/KoSvgTextShape.cpp:2605
+#: libs/flake/text/KoSvgTextShape.cpp:2600
+#: libs/flake/text/KoSvgTextShape.cpp:2608
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Besedilni lik SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2603
+#: libs/flake/text/KoSvgTextShape.cpp:2606
 #, kde-format
 msgid "SVG Text"
 msgstr "Besedilo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2626
+#: libs/flake/text/KoSvgTextShape.cpp:2629
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -51378,8 +51378,7 @@ msgid "Color Adjustment"
 msgstr "Prilagoditev barve"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "Svetlost"
@@ -66658,74 +66657,74 @@ msgctxt "(qtundo-format)"
 msgid "Adjust character transforms on text."
 msgstr "Prilagodite preoblikovanje znakov v besedilu."
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:450
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:462
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Top"
 msgstr "Vrh besedila"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:452
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:458
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:464
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:470
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Font Size"
 msgstr "Velikost pisave"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:456
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:468
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Text Bottom"
 msgstr "Dno besedila"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:461
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Alphabetic"
 msgstr "Abecedna"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:463
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:475
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Ideographic"
 msgstr "Ideografska"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:465
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:477
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
 msgstr "Viseča"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:467
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:479
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Middle"
 msgstr "Sredina"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:469
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:481
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Mathematical"
 msgstr "Matematična"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:471
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:483
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Central"
 msgstr "Centralna"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:473
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:485
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Line Height"
 msgstr "Višina vrstice"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:476
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:488
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Current Baseline"
 msgstr "Trenutna osnovnica"
 
-#: plugins/tools/svgtexttool/SvgTextCursor.cpp:478
+#: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Baseline Shift"
@@ -67242,7 +67241,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Odstranite vse lastnosti tipografije iz izbora."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:312
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:313
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -69224,81 +69223,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgctxt "Lightness HSI"
-#~ msgid "Lightness"
-#~ msgstr "Svetlost"
-
-#~ msgid "Edit SVG Source"
-#~ msgstr "Uredi vir SVG"
-
-#~ msgid "Text Type"
-#~ msgstr "Vrsta besedila"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The text will not wrap and preserves spaces and new "
-#~ "lines. A line break is inserted so the lines from wrapping or positioning "
-#~ "remain separated.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Besedilo se ne prelomi in ohrani presledke in nove "
-#~ "vrstice. Prelom vrstice je vstavljen tako, da vrstice z ovijanjem ali "
-#~ "umeščanjem ostanejo ločene.</p></body></html>"
-
-#~ msgid "Preformatted"
-#~ msgstr "Predoblikovano"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Text wraps inside a fixed length, spaces and new "
-#~ "lines are preserved. New lines are not removed.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Besedilo se prelomi znotraj fiksne dolžine, "
-#~ "presledki in nove vrstice se ohranijo. Nove vrstice niso odstranjene.</"
-#~ "p></body></html>"
-
-#~ msgid "Inline Wrapped"
-#~ msgstr "Znotrajvrstično prelomljeno"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Text uses SVG 1.1 character transforms to position "
-#~ "each line. Spaces and new lines are collapsed. This is for backward "
-#~ "compatibility with SVG 1.1.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Besedilo uporablja pretvorbe znakov SVG 1.1 za "
-#~ "postavitev vsake vrstice. Presledki in nove vrstice so strnjene. To je za "
-#~ "povratno združljivost z SVG 1.1.</p></body></html>"
-
-#~ msgid "Prepositioned"
-#~ msgstr "Vnaprej umeščeno"
-
-#~ msgid "Glyph Palette"
-#~ msgstr "Paleta glifov"
-
-#~ msgid "Create new texts with..."
-#~ msgstr "Ustvarite nova besedila z ..."
-
-#~ msgid "Anchor text to the left."
-#~ msgstr "Sidraj besedilo na levo."
-
-#~ msgid "Anchor text to the middle."
-#~ msgstr "Zasidra besedilo na sredino."
-
-#~ msgid "Anchor text to the right."
-#~ msgstr "Sidraj besedilo na desno."
-
-#~ msgid "Letter Spacing"
-#~ msgstr "Razmik med črkami"
-
-#~ msgid "Text flows horizontal, top to bottom."
-#~ msgstr "Besedilo je zapisano vodoravno, z vrha proti dnu."
-
-#~ msgid "Text flows vertical, right to left."
-#~ msgstr "Besedilo je zapisano navpično, z desne proti levi."
-
-#~ msgid "Text flows vertical, left to right."
-#~ msgstr "Besedilo je zapisano navpično, z leve proti desni."
-
-#~ msgid "Left to right text direction."
-#~ msgstr "Besedilo je zapisano z leve proti desni."
-
-#~ msgid "Right to left text direction."
-#~ msgstr "Besedilo je zapisano z desne proti levi."

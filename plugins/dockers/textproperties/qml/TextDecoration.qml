@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "text-decoration";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
-                   "Text Decoration allows drawing underlines, overlines and striking through text.");
+                   "Text decoration allows drawing underlines, overlines and striking through text.");
     searchTerms: i18nc("comma separated search terms for the text-decoration property, matching is case-insensitive",
                        "underline, overline, strikethrough, line-through");
 

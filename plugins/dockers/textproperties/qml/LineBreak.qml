@@ -14,7 +14,7 @@ TextPropertyBase {
     propertyTitle: i18nc("@label:listbox", "Line Break");
     propertyName: "line-break";
     toolTip: i18nc("@info:tooltip",
-                   "Line Break allows choosing a strictness for the line breaking algorithm. Mostly used for CJK scripts, requires language being set.");
+                   "Line break allows choosing a strictness for the line breaking algorithm. Mostly used for CJK scripts, requires language being set.");
     searchTerms: i18nc("comma separated search terms for the line-break property, matching is case-insensitive",
                        "line-break, line breaking, strictness, kinsoku");
     propertyType: TextPropertyConfigModel.Character;

@@ -11,7 +11,7 @@ import org.krita.components 1.0 as Kis
 
 TextPropertyBase {
     id: baselineShiftBase;
-    propertyTitle: i18nc("@label", "Baseline-Shift");
+    propertyTitle: i18nc("@label", "Baseline Shift");
     propertyName: "baseline-shift";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",

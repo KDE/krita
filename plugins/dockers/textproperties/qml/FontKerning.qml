@@ -17,7 +17,7 @@ TextPropertyBase {
     propertyName: "font-kerning";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
-                   "Turn font kerning on or off. Font kerning enables per-glyph spacing adjustments.");
+                   "Turn font kerning on or off. Font kerning enables per-glyph spacing adjustments as determined by the font.");
     searchTerms: i18nc("comma separated search terms for the font-kerning property, matching is case-insensitive",
                        "font-kerning, tracking");
 

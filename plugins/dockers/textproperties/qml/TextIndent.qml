@@ -15,7 +15,7 @@ CollapsibleGroupProperty {
     propertyName: "text-indent";
     propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
-                   "Text Indent allows setting indentation at the line start. Only works when the text is wrapping.");
+                   "Text indent allows setting indentation at the line start. Only works when the text is wrapping.");
     searchTerms: i18nc("comma separated search terms for the text-indent property, matching is case-insensitive",
                        "text-indent");
 

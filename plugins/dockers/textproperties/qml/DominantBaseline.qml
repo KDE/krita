@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "dominant-baseline";
     propertyType: TextPropertyConfigModel.Mixed;
     toolTip: i18nc("@info:tooltip",
-                   "Dominant Baseline specifies how stretches of text of different sizes are aligned, it is also the default for Alignment Baseline.");
+                   "Dominant baseline specifies how stretches of text of different sizes are aligned, it is also the default for Alignment Baseline.");
     searchTerms: i18nc("comma separated search terms for the dominant-baseline property, matching is case-insensitive",
                        "dominant-baseline, mojisoroe");
     property int baselineSelection

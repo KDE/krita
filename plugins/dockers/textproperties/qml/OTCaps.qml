@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "ot-capitals";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
-                   "Enable opentype features related to capitals");
+                   "Enable OpenType features related to capitals.");
     searchTerms: i18nc("comma separated search terms for the font-variant-caps property, matching is case-insensitive",
                        "font-variant-caps, Small caps, Petite Caps, Unicase, Titling, Capitals");
 

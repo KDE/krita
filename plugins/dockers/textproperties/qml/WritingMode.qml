@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "writing-mode";
     propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
-                   "Writing Mode sets whether the text flows horizontally or vertically, and in the latter case, whether the block flows right to left or left to right.");
+                   "Writing mode sets whether the text flows horizontally or vertically, and in the latter case, whether the block flows right to left or left to right.");
     searchTerms: i18nc("comma separated search terms for the writing-mode property, matching is case-insensitive",
                        "writing-mode, horizontal, vertical, top-to-bottom");
     property int writingMode;

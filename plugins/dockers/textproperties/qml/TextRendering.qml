@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "text-rendering";
     propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
-                   "Text Rendering controls the hinting and rendering style for the property");
+                   "Text rendering controls the hinting and rendering style for the property");
     searchTerms: i18nc("comma separated search terms for the text-rendering property, matching is case-insensitive",
                        "text-rendering, hinting, anti-aliasing");
     property int textRendering;

@@ -15,7 +15,7 @@ TextPropertyBase {
     propertyName: "tab-size";
     propertyType: TextPropertyConfigModel.Paragraph;
     toolTip: i18nc("@info:tooltip",
-                   "Tab Size allows defining the size of tabulation characters.");
+                   "Tab size allows defining the size of tabulation characters.");
     searchTerms: i18nc("comma separated search terms for the tab-size property, matching is case-insensitive",
                        "tab-size");
     property alias tabSize: converter.dataValue;

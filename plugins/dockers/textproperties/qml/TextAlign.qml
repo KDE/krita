@@ -15,8 +15,8 @@ CollapsibleGroupProperty {
     propertyType: TextPropertyConfigModel.Paragraph;
     visibilityState: TextPropertyConfigModel.AlwaysVisible;
     toolTip: i18nc("@info:tooltip",
-                   "Text Align sets the alignment for the given block of characters.");
-    searchTerms: i18nc("comma separated search terms for the text-anchor property, matching is case-insensitive",
+                   "Text align sets the alignment for the given block of characters.");
+    searchTerms: i18nc("comma separated search terms for the text-align property, matching is case-insensitive",
                        "text-align, justification, text-anchor");
 
     property int textAlignAll: 1;

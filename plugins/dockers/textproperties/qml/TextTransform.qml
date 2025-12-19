@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "text-transform";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
-                   "Text Transform allows transforming the given range of characters, for example, by setting them uppercase, or switching out half-width forms for full-width forms.");
+                   "Text transform allows transforming the given range of characters, for example, by setting them uppercase, or switching out half-width forms for full-width forms.");
     searchTerms: i18nc("comma separated search terms for the text-transform property, matching is case-insensitive",
                        "text-transform, uppercase, capitalization, lowercase, full-width, full-size kana");
     property alias fullWidth: fullWidthChk.checked;

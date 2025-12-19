@@ -15,7 +15,7 @@ TextPropertyBase {
     propertyName: "ot-features";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
-                   "Configure Open Type features.");
+                   "Configure OpenType features.");
     searchTerms: i18nc("comma separated search terms for the font-feature-settings property, matching is case-insensitive",
                        "font-feature-settings, OpenType");
 

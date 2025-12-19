@@ -13,7 +13,7 @@ TextPropertyBase {
     propertyName: "alignment-baseline";
     propertyType: TextPropertyConfigModel.Character;
     toolTip: i18nc("@info:tooltip",
-                   "Alignment Baseline allows controlling how this range of text is aligned to the parent text.");
+                   "Alignment baseline allows controlling how this range of text is aligned to the parent text.");
     searchTerms: i18nc("comma separated search terms for the alignment-baseline property, matching is case-insensitive",
                        "alignment-baseline, mojisoroe");
     property int baselineSelection;

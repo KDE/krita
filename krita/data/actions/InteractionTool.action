@@ -330,7 +330,7 @@
 
 <Action name="add_shape_to_flow_area">
   <text>Flow Text in Shape</text>
-  <toolTip>Make the first selected text flow in shape.</toolTip>
+  <toolTip>Make the first selected text flow in shape. If there were already shapes it was flowing into, will add the shape to the chain.</toolTip>
   <shortcut></shortcut>
   <icon></icon>
   <whatsThis></whatsThis>
@@ -339,8 +339,8 @@
 </Action>
 
 <Action name="subtract_shape_from_flow_area">
-  <text>Subtract Shape from Text Flow Area</text>
-  <toolTip>Make shapes part of the subtracted shapes of the first selected text.</toolTip>
+  <text>Subtract Shape from Text Chain</text>
+  <toolTip>Make shapes part of the subtracted shape-areas of the first selected text.</toolTip>
   <shortcut></shortcut>
   <icon></icon>
   <whatsThis></whatsThis>
@@ -359,8 +359,8 @@
 </Action>
 
 <Action name="remove_shapes_from_text_flow">
-  <text>Remove Shapes from Text Flow</text>
-  <toolTip>Remove shapes from text flow and add them to the layer.</toolTip>
+  <text>Remove Shapes from Text Chain</text>
+  <toolTip>Remove shapes from text chain and add them to the layer.</toolTip>
   <shortcut></shortcut>
   <icon></icon>
   <whatsThis></whatsThis>
@@ -380,7 +380,7 @@
 
 <Action name="flow_shape_order_back">
   <iconText>Set Flow Shape as Last</iconText>
-  <toolTip>Make this flow shape the last in the flow shape order as used by text layout.</toolTip>
+  <toolTip>Make this flow shape the last in the text chain as used by text layout.</toolTip>
   <icon>object-order-back-calligra</icon>
   <whatsThis></whatsThis>
   <statusTip></statusTip>
@@ -388,31 +388,31 @@
   <text>Set Flow Shape as Last</text>
 </Action>
 <Action name="flow_shape_order_earlier">
-  <iconText>Decrease Flow Shape Index</iconText>
-  <toolTip>Make this flow shape be evaluated later.</toolTip>
+  <iconText>Earlier In Chain.</iconText>
+  <toolTip>Move this shape earlier in the text chain.</toolTip>
   <icon>object-order-raise-calligra</icon>
   <whatsThis></whatsThis>
   <statusTip></statusTip>
   <isCheckable>false</isCheckable>
-  <text>Decrease Flow Shape Index</text>
+  <text>Move Shape Earlier In Chain.</text>
 </Action>
 <Action name="flow_shape_order_later">
-  <iconText>Increase Flow Shape Index</iconText>
-  <toolTip>Make this flow shape be evaluated later.</toolTip>
+  <iconText>Later In Chain</iconText>
+  <toolTip>Move this shape later in the text chain.</toolTip>
   <icon>object-order-lower-calligra</icon>
   <whatsThis></whatsThis>
   <statusTip></statusTip>
   <isCheckable>false</isCheckable>
-  <text>Increase Flow Shape Index</text>
+  <text>Move Shape Later In Chain.</text>
 </Action>
 <Action name="flow_shape_order_front">
-  <iconText>Set Flow Shape as First</iconText>
-  <toolTip>Make this flow shape the first in the flow shape order as used by text layout.</toolTip>
+  <iconText>First In Chain</iconText>
+  <toolTip>Make this flow shape the first in the text chain as used by text layout.</toolTip>
   <icon>object-order-front-calligra</icon>
   <whatsThis></whatsThis>
   <statusTip></statusTip>
   <isCheckable>false</isCheckable>
-  <text>Set Flow Shape as First</text>
+  <text>Set Shape As First In Chain</text>
 </Action>
 
   </Actions>

@@ -55,7 +55,7 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
         m_closeIconLabel = new QPushButton(parent);
         m_closeIconLabel->setFlat(true);
         m_closeIconLabel->setIcon(KisIconUtils::loadIcon("docker_close"));
-        m_closeIconLabel->setToolTip(i18n("Remove from tag"));
+        m_closeIconLabel->setToolTip(i18n("Remove tag"));
         m_closeIconLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
 

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-19 02:03+0000\n"
+"POT-Creation-Date: 2025-12-20 02:02+0000\n"
 "PO-Revision-Date: 2025-12-18 10:42+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -7764,21 +7764,29 @@ msgstr "Tekoče besedilo v liku"
 #: krita/data/actions/InteractionTool.action:333
 #, kde-format
 msgctxt "action"
-msgid "Make the first selected text flow in shape."
-msgstr "Naj prvo izbrano besedilo teče v liku."
+msgid ""
+"Make the first selected text flow in shape. If there were already shapes it "
+"was flowing into, will add the shape to the chain."
+msgstr ""
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Subtract Shape from Text Flow Area"
 msgctxt "action"
-msgid "Subtract Shape from Text Flow Area"
+msgid "Subtract Shape from Text Chain"
 msgstr "Odštej lik od območja tekočega besedila"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid ""
+#| "Make shapes part of the subtracted shapes of the first selected text."
 msgctxt "action"
-msgid "Make shapes part of the subtracted shapes of the first selected text."
+msgid ""
+"Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr "Liki naj bodo del odštetih likov prvega izbranega besedila."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7797,16 +7805,20 @@ msgstr "Naj prvo izbrano besedilo teče po prvi izbrani poti."
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Remove Shapes from Text Flow"
 msgctxt "action"
-msgid "Remove Shapes from Text Flow"
+msgid "Remove Shapes from Text Chain"
 msgstr "Odstrani like iz tekočega besedila"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Remove shapes from text flow and add them to the layer."
 msgctxt "action"
-msgid "Remove shapes from text flow and add them to the layer."
+msgid "Remove shapes from text chain and add them to the layer."
 msgstr "Odstrani like iz tekočega besedila in jih doda v plast."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7840,68 +7852,89 @@ msgstr "Lik poteka nastavi kot zadnjega"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid ""
+#| "Make this flow shape the last in the flow shape order as used by text "
+#| "layout."
 msgctxt "action"
-msgid ""
-"Make this flow shape the last in the flow shape order as used by text layout."
+msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
 "Naj bo ta lik poteka tekočega besedila zadnji v zaporedju likov poteka, kot "
 "se uporablja pri postavitvi besedila."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
+#, kde-format
+msgctxt "action"
+msgid "Earlier In Chain."
+msgstr ""
+
+#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:392
+#, kde-format
+msgctxt "action"
+msgid "Move this shape earlier in the text chain."
+msgstr ""
+
+#. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
-msgid "Decrease Flow Shape Index"
-msgstr "Zmanjšaj indeks lika poteka"
+msgid "Move Shape Earlier In Chain."
+msgstr ""
 
-#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:400
+#, kde-format
+msgctxt "action"
+msgid "Later In Chain"
+msgstr ""
+
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
-#: krita/data/actions/InteractionTool.action:392
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
-msgid "Make this flow shape be evaluated later."
-msgstr "Ta lik poteka naj se ovrednoti kasneje."
+msgid "Move this shape later in the text chain."
+msgstr ""
 
-#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
-#: krita/data/actions/InteractionTool.action:400
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
-msgid "Increase Flow Shape Index"
-msgstr "Povečaj indeks lika poteka"
+msgid "Move Shape Later In Chain."
+msgstr ""
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#: krita/data/actions/InteractionTool.action:415
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "First line indent"
 msgctxt "action"
-msgid "Set Flow Shape as First"
-msgstr "Lik poteka nastavi kot prvega"
+msgid "First In Chain"
+msgstr "Zamik prve vrstice"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid ""
+#| "Make this flow shape the first in the flow shape order as used by text "
+#| "layout."
 msgctxt "action"
 msgid ""
-"Make this flow shape the first in the flow shape order as used by text "
-"layout."
+"Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
 "Naj bo ta lik poteka tekočega besedila prvi v zaporedju likov poteka, kot se "
 "uporablja pri postavitvi besedila."
+
+#. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
+#: krita/data/actions/InteractionTool.action:415
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Set Flow Shape as First"
+msgctxt "action"
+msgid "Set Shape As First In Chain"
+msgstr "Lik poteka nastavi kot prvega"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -45623,10 +45656,14 @@ msgid "Alignment Baseline"
 msgstr "Osnovnica poravnave"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Alignment Baseline allows controlling how this range of text is aligned "
+#| "to the parent text."
 msgctxt "@info:tooltip"
 msgid ""
-"Alignment Baseline allows controlling how this range of text is aligned to "
+"Alignment baseline allows controlling how this range of text is aligned to "
 "the parent text."
 msgstr ""
 "Osnovnica poravnave omogoča nadzor nad tem, kako je ta obseg besedila "
@@ -45772,9 +45809,11 @@ msgid "Align to the descender."
 msgstr "Poravnajte z repkom."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Type setting mode line name"
+#| msgid "Baseline Shift"
 msgctxt "@label"
-msgid "Baseline-Shift"
+msgid "Baseline Shift"
 msgstr "Zamik osnovnice"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:18
@@ -46015,10 +46054,14 @@ msgid "Dominant Baseline"
 msgstr "Prevladujoča osnovnica"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Dominant Baseline specifies how stretches of text of different sizes are "
+#| "aligned, it is also the default for Alignment Baseline."
 msgctxt "@info:tooltip"
 msgid ""
-"Dominant Baseline specifies how stretches of text of different sizes are "
+"Dominant baseline specifies how stretches of text of different sizes are "
 "aligned, it is also the default for Alignment Baseline."
 msgstr ""
 "Prevladujoča osnovnica določa, kako so poravnani odseki besedila različnih "
@@ -46102,11 +46145,15 @@ msgid "Font Kerning"
 msgstr "Spodsekavanje pisave"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
+#| "adjustments."
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-"adjustments."
+"adjustments as determined by the font."
 msgstr ""
 "Vklopite ali izklopite spodsekavanje pisav. Spodsekavanje pisave omogoča "
 "prilagajanje razmika med posameznimi glifi."
@@ -46389,10 +46436,14 @@ msgid "Line Break"
 msgstr "Prelom vrstice"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Line Break allows choosing a strictness for the line breaking algorithm. "
+#| "Mostly used for CJK scripts, requires language being set."
 msgctxt "@info:tooltip"
 msgid ""
-"Line Break allows choosing a strictness for the line breaking algorithm. "
+"Line break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
 "Prelom vrstice omogoča izbor strogosti za algoritem preloma vrstice. "
@@ -46468,9 +46519,11 @@ msgid "Line Height"
 msgstr "Višina vrstice"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Line Height controls the line height used for the range of text."
 msgctxt "@info:tooltip"
-msgid "Line Height controls the line height used for the range of text."
+msgid "Line height controls the line height used for the range of text."
 msgstr ""
 "Višina vrstice nadzoruje višino vrstice, ki se uporablja za obseg besedila."
 
@@ -46495,9 +46548,11 @@ msgid "OpenType Features"
 msgstr "Funkcije OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Configure Open Type features."
 msgctxt "@info:tooltip"
-msgid "Configure Open Type features."
+msgid "Configure OpenType features."
 msgstr "Prilagodite funkcije Open Type."
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:20
@@ -46533,9 +46588,11 @@ msgid "Glyphs: Capitals"
 msgstr "Glifi: velike začetnice"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Enable opentype features related to capitals"
 msgctxt "@info:tooltip"
-msgid "Enable opentype features related to capitals"
+msgid "Enable OpenType features related to capitals."
 msgstr "Omogočite funkcionalnosti Open Type, povezane z velikimi črkami"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
@@ -46860,9 +46917,11 @@ msgid "Tab Size"
 msgstr "Velikost zamika tabulatorja"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Tab Size allows defining the size of tabulation characters."
 msgctxt "@info:tooltip"
-msgid "Tab Size allows defining the size of tabulation characters."
+msgid "Tab size allows defining the size of tabulation characters."
 msgstr "Velikost tabulatorja omogoča določanje velikosti tabulatorskih znakov."
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
@@ -46880,15 +46939,21 @@ msgid "Text Align"
 msgstr "Poravnava besedila"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Text Align sets the alignment for the given block of characters."
 msgctxt "@info:tooltip"
-msgid "Text Align sets the alignment for the given block of characters."
+msgid "Text align sets the alignment for the given block of characters."
 msgstr "Poravnava besedila nastavi poravnavo za dani blok znakov."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "comma separated search terms for the text-anchor property, matching is "
+#| "case-insensitive"
+#| msgid "text-align, justification, text-anchor"
 msgctxt ""
-"comma separated search terms for the text-anchor property, matching is case-"
+"comma separated search terms for the text-align property, matching is case-"
 "insensitive"
 msgid "text-align, justification, text-anchor"
 msgstr "poravnava besedila, poravnava, obojestransko, sidro besedila"
@@ -46993,10 +47058,14 @@ msgid "Text Decoration"
 msgstr "Okrasitev besedila"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text Decoration allows drawing underlines, overlines and striking through "
+#| "text."
 msgctxt "@info:tooltip"
 msgid ""
-"Text Decoration allows drawing underlines, overlines and striking through "
+"Text decoration allows drawing underlines, overlines and striking through "
 "text."
 msgstr ""
 "Okrasitev besedila omogoča risanje podčrt, nadčrt in prečrtovanje besedila."
@@ -47078,10 +47147,14 @@ msgid "Text Indent"
 msgstr "Zamik besedila"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text Indent allows setting indentation at the line start. Only works when "
+#| "the text is wrapping."
 msgctxt "@info:tooltip"
 msgid ""
-"Text Indent allows setting indentation at the line start. Only works when "
+"Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
 "Zamik besedila omogoča nastavitev zamika na začetku vrstice. Deluje samo, ko "
@@ -47213,10 +47286,13 @@ msgid "Text Rendering"
 msgstr "Izrisovanje besedila"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text Rendering controls the hinting and rendering style for the property"
 msgctxt "@info:tooltip"
 msgid ""
-"Text Rendering controls the hinting and rendering style for the property"
+"Text rendering controls the hinting and rendering style for the property"
 msgstr "Izrisovanje besedila nadzoruje slog namigov in izrisovanja za lastnost"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
@@ -47283,10 +47359,15 @@ msgid "Text Transform"
 msgstr "Preoblikovanje besedila"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Text Transform allows transforming the given range of characters, for "
+#| "example, by setting them uppercase, or switching out half-width forms for "
+#| "full-width forms."
 msgctxt "@info:tooltip"
 msgid ""
-"Text Transform allows transforming the given range of characters, for "
+"Text transform allows transforming the given range of characters, for "
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
@@ -47518,10 +47599,15 @@ msgid "Writing Mode"
 msgstr "Način pisanja"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "Writing Mode sets whether the text flows horizontally or vertically, and "
+#| "in the latter case, whether the block flows right to left or left to "
+#| "right."
 msgctxt "@info:tooltip"
 msgid ""
-"Writing Mode sets whether the text flows horizontally or vertically, and in "
+"Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
 "Način pisanja nastavlja, ali besedilo poteka vodoravno ali navpično, v "
@@ -69223,3 +69309,23 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
+
+#~ msgctxt "action"
+#~ msgid "Make the first selected text flow in shape."
+#~ msgstr "Naj prvo izbrano besedilo teče v liku."
+
+#~ msgctxt "action"
+#~ msgid "Decrease Flow Shape Index"
+#~ msgstr "Zmanjšaj indeks lika poteka"
+
+#~ msgctxt "action"
+#~ msgid "Make this flow shape be evaluated later."
+#~ msgstr "Ta lik poteka naj se ovrednoti kasneje."
+
+#~ msgctxt "action"
+#~ msgid "Increase Flow Shape Index"
+#~ msgstr "Povečaj indeks lika poteka"
+
+#~ msgctxt "@label"
+#~ msgid "Baseline-Shift"
+#~ msgstr "Zamik osnovnice"

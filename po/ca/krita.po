@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-20 02:02+0000\n"
-"PO-Revision-Date: 2025-12-18 09:20+0100\n"
+"PO-Revision-Date: 2025-12-20 10:33+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7765,28 +7765,25 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"Fes que el primer text seleccionat flueixi en una forma. Si ja hi havia "
+"formes en què fluïa, afegirà la forma a la cadena."
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subtract Shape from Text Flow Area"
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "Sostreu la forma de l'àrea de flux de text"
+msgstr "Sostreu la forma de l'àrea de la cadena de text"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make shapes part of the subtracted shapes of the first selected text."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
-"Fa que les formes formin part de les formes sostretes del primer text "
-"seleccionat."
+"Fa que les formes formin part de les àrees de formes sostretes del primer "
+"text seleccionat."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7805,21 +7802,17 @@ msgstr ""
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Shapes from Text Flow"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Elimina les formes del flux de text"
+msgstr "Elimina les formes de la cadena de text"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove shapes from text flow and add them to the layer."
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "Elimina les formes del flux de text i les afegeix a la capa."
+msgstr "Elimina les formes de la cadena de text i les afegeix a la capa."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7852,89 +7845,78 @@ msgstr "Estableix la forma de flux com a darrer"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the last in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
-"Fa que aquesta forma de flux sigui l'última en l'ordre de forma de flux "
-"utilitzada per la disposició de text."
+"Fa que aquesta forma de flux sigui l'última en la cadena de text utilitzada "
+"per la disposició de text."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "Abans a la cadena."
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "Mou aquesta forma abans a la cadena de text."
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "Mou la forma abans a la cadena."
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "Després a la cadena"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "Mou aquesta forma després a la cadena de text."
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "Mou la forma després a la cadena."
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Sagnat de la primera línia"
+msgstr "Primera a la cadena"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the first in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
-"Fa que aquesta forma de flux sigui la primera en l'ordre de forma de flux "
-"utilitzada per la disposició de text."
+"Fa que aquesta forma de flux sigui la primera a la cadena de text utilitzada "
+"per la disposició de text."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set Flow Shape as First"
+#, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr "Estableix la forma de flux com a primer"
+msgstr "Defineix la forma com a primera a la cadena"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -45868,11 +45850,7 @@ msgid "Alignment Baseline"
 msgstr "Línia base d'alineació"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controlling how this range of text is aligned "
-#| "to the parent text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
@@ -46022,9 +46000,7 @@ msgid "Align to the descender."
 msgstr "Alinea al descensor."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt "Type setting mode line name"
-#| msgid "Baseline Shift"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
 msgstr "Desplaçament de la línia base"
@@ -46267,11 +46243,7 @@ msgid "Dominant Baseline"
 msgstr "Línia base dominant"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Dominant Baseline specifies how stretches of text of different sizes are "
-#| "aligned, it is also the default for Alignment Baseline."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -46357,18 +46329,14 @@ msgid "Font Kerning"
 msgstr "Interlletratge de lletra"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
 "Activa o desactiva l'interlletratge de lletra. L'interlletratge de lletra "
-"permet ajustar l'espaiat per cada glif."
+"permet ajustar l'espaiat per cada glif com a determinat per la lletra."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46650,11 +46618,7 @@ msgid "Line Break"
 msgstr "Salt de línia"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Line Break allows choosing a strictness for the line breaking algorithm. "
-#| "Mostly used for CJK scripts, requires language being set."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
@@ -46734,9 +46698,7 @@ msgid "Line Height"
 msgstr "Alçada de la línia"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Line Height controls the line height used for the range of text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr ""
@@ -46764,9 +46726,7 @@ msgid "OpenType Features"
 msgstr "Característiques d'OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "Configura les característiques d'OpenType."
@@ -46804,12 +46764,11 @@ msgid "Glyphs: Capitals"
 msgstr "Glifs: Majúscules"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Enable opentype features related to capitals"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr "Activa les característiques d'OpenType relacionades amb majúscules"
+msgstr ""
+"Activa les característiques d'OpenType relacionades amb les majúscules."
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -47132,9 +47091,7 @@ msgid "Tab Size"
 msgstr "Mida de tabulació"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Tab Size allows defining the size of tabulation characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
 msgstr ""
@@ -47155,19 +47112,13 @@ msgid "Text Align"
 msgstr "Alineació de text"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr "Alineació de text estableix l'alineació del bloc indicat de caràcters."
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the text-anchor property, matching is "
-#| "case-insensitive"
-#| msgid "text-align, justification, text-anchor"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
@@ -47274,11 +47225,7 @@ msgid "Text Decoration"
 msgstr "Decoració del text"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Decoration allows drawing underlines, overlines and striking through "
-#| "text."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
@@ -47362,11 +47309,7 @@ msgid "Text Indent"
 msgstr "Sagnat de text"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Indent allows setting indentation at the line start. Only works when "
-#| "the text is wrapping."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
@@ -47501,10 +47444,7 @@ msgid "Text Rendering"
 msgstr "Renderització del text"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Rendering controls the hinting and rendering style for the property"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
@@ -47578,12 +47518,7 @@ msgid "Text Transform"
 msgstr "Transformació de text"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Transform allows transforming the given range of characters, for "
-#| "example, by setting them uppercase, or switching out half-width forms for "
-#| "full-width forms."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
@@ -47818,12 +47753,7 @@ msgid "Writing Mode"
 msgstr "Mode d'escriptura"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Writing Mode sets whether the text flows horizontally or vertically, and "
-#| "in the latter case, whether the block flows right to left or left to "
-#| "right."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "

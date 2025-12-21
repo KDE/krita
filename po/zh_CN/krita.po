@@ -7751,8 +7751,6 @@ msgstr ""
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subtract Shape from Text Flow Area"
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
 msgstr "从文本编排区域中减去形状"
@@ -7760,9 +7758,6 @@ msgstr "从文本编排区域中减去形状"
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make shapes part of the subtracted shapes of the first selected text."
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
@@ -7785,8 +7780,6 @@ msgstr "使选中的第一条文本沿着选中的第一条路径流动。"
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Shapes from Text Flow"
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
 msgstr "从文本流移除子轮廓形状"
@@ -7794,8 +7787,6 @@ msgstr "从文本流移除子轮廓形状"
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove shapes from text flow and add them to the layer."
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
 msgstr "从文本流中移除子轮廓形状并将它们添加到此图层。"
@@ -7832,10 +7823,6 @@ msgstr "设置文本流形状为最后一个"
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the last in the flow shape order as used by text "
-#| "layout."
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr "将此文本流形状设置为文本布局的文本流形状序列中的最后一个形状。"
@@ -7885,7 +7872,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
 #, fuzzy, kde-format
-#| msgid "First line indent"
 msgctxt "action"
 msgid "First In Chain"
 msgstr "首行缩进"
@@ -7893,10 +7879,6 @@ msgstr "首行缩进"
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the first in the flow shape order as used by text "
-#| "layout."
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
@@ -7905,8 +7887,6 @@ msgstr "将此文本流形状设置为文本布局的文本流形状序列中的
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set Flow Shape as First"
 msgctxt "action"
 msgid "Set Shape As First In Chain"
 msgstr "设置文本流形状为第一个"
@@ -45042,10 +45022,6 @@ msgstr "对齐基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Alignment Baseline allows controlling how this range of text is aligned "
-#| "to the parent text."
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
@@ -45203,8 +45179,6 @@ msgstr "文本底部 (Text Bottom)：对齐下行字母 (如“g”尾部) 的�
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
 #, fuzzy, kde-format
-#| msgctxt "Type setting mode line name"
-#| msgid "Baseline Shift"
 msgctxt "@label"
 msgid "Baseline Shift"
 msgstr "基线偏移"
@@ -45448,10 +45422,6 @@ msgstr "主导基线"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Dominant Baseline specifies how stretches of text of different sizes are "
-#| "aligned, it is also the default for Alignment Baseline."
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -45539,10 +45509,6 @@ msgstr "字距微调"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
@@ -45831,10 +45797,6 @@ msgstr "换行规则"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Line Break allows choosing a strictness for the line breaking algorithm. "
-#| "Mostly used for CJK scripts, requires language being set."
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
@@ -45913,8 +45875,6 @@ msgstr "行高"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Line Height controls the line height used for the range of text."
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
 msgstr "行高用于控制所选范围内文本的行高。"
@@ -45942,8 +45902,6 @@ msgstr "OpenType 特性"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "配置 OpenType 特性。"
@@ -45982,8 +45940,6 @@ msgstr "字形：大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Enable opentype features related to capitals"
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
 msgstr "启用与大写字母相关的 OpenType 特性"
@@ -46311,8 +46267,6 @@ msgstr "制表符宽度"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Tab Size allows defining the size of tabulation characters."
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
 msgstr "制表符宽度定义了按下 Tab 键所插入的制表符的视觉宽度。"
@@ -46333,18 +46287,12 @@ msgstr "文本对齐方式"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr "文本对齐方式用于设置字符块的水平对齐方式。"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "comma separated search terms for the text-anchor property, matching is "
-#| "case-insensitive"
-#| msgid "text-align, justification, text-anchor"
 msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
@@ -46457,10 +46405,6 @@ msgstr "文本装饰"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Decoration allows drawing underlines, overlines and striking through "
-#| "text."
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
@@ -46545,10 +46489,6 @@ msgstr "文本缩进"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Indent allows setting indentation at the line start. Only works when "
-#| "the text is wrapping."
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
@@ -46682,9 +46622,6 @@ msgstr "文本渲染方式"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Rendering controls the hinting and rendering style for the property"
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
@@ -46757,11 +46694,6 @@ msgstr "文本变换"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Text Transform allows transforming the given range of characters, for "
-#| "example, by setting them uppercase, or switching out half-width forms for "
-#| "full-width forms."
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
@@ -46997,11 +46929,6 @@ msgstr "书写模式"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Writing Mode sets whether the text flows horizontally or vertically, and "
-#| "in the latter case, whether the block flows right to left or left to "
-#| "right."
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
@@ -50813,8 +50740,7 @@ msgid "Color Adjustment"
 msgstr "颜色调整"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
 msgstr "亮度"
@@ -67105,7 +67031,7 @@ msgstr "自动"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:190
 #, kde-format
 msgid "Diagonal:"
-msgstr "对角线："
+msgstr "斜线："
 
 #: plugins/tools/tool_knife/RemoveGutterStrategy.cpp:269
 msgctxt "(qtundo-format)"
@@ -68318,7 +68244,3 @@ msgstr ""
 #~ msgctxt "@label"
 #~ msgid "Baseline-Shift"
 #~ msgstr "基线偏移"
-
-#~ msgctxt "Lightness HSI"
-#~ msgid "Lightness"
-#~ msgstr "亮度"

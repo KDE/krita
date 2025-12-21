@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-20 02:02+0000\n"
-"PO-Revision-Date: 2025-11-26 11:59+0400\n"
+"PO-Revision-Date: 2025-12-20 11:14+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -51153,11 +51153,10 @@ msgid "Color Adjustment"
 msgstr "تعديل الألوان"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
-msgstr "الإضاءة"
+msgstr "إضاءة"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetShadows)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:75

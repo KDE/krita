@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-20 02:02+0000\n"
-"PO-Revision-Date: 2025-12-13 00:24+0100\n"
+"PO-Revision-Date: 2025-12-22 01:30+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7764,25 +7764,20 @@ msgstr ""
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subtract Shape from Text Flow Area"
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "Sustraer la forma del área de texto fluido"
+msgstr "Sustraer la forma de la cadena de texto"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make shapes part of the subtracted shapes of the first selected text."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
 msgstr ""
-"Hacer que las formas formen parte de las formas sustraídas del primer texto "
-"seleccionado."
+"Hacer que las formas formen parte de las áreas de formas sustraídas del "
+"primer texto seleccionado."
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7801,21 +7796,17 @@ msgstr ""
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Shapes from Text Flow"
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "Eliminar formas del flujo de texto"
+msgstr "Eliminar formas de la cadena de texto"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove shapes from text flow and add them to the layer."
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "Eliminar formas del flujo de texto y añadirlas a la capa."
+msgstr "Eliminar formas de la cadena de texto y añadirlas a la capa."
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7848,16 +7839,12 @@ msgstr "Definir forma de flujo como última"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the last in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
 msgstr ""
-"Hacer que esta forma de flujo sea la última en el orden de formas de flujo "
-"como se usa en el diseño de texto."
+"Hacer que esta forma de flujo sea la última en la cadena de texto como se "
+"usa en el diseño de texto."
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
@@ -7903,34 +7890,27 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
-#| msgid "First line indent"
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "Sangría de la primera línea"
+msgstr "Primera de la cadena"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Make this flow shape the first in the flow shape order as used by text "
-#| "layout."
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
 msgstr ""
-"Hacer que esta forma de flujo sea la primera en el orden de formas de flujo "
-"como se usa en el diseño de texto."
+"Hacer que esta forma de flujo sea la primera en la cadena de texto como se "
+"usa en el diseño de texto."
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set Flow Shape as First"
+#, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr "Definir forma de flujo como primera"
+msgstr "Definir forma como primera de la cadena"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -19647,25 +19627,25 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Forma conjunta después de ro"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr ""
+msgstr "Controla los glifos que siguen a ro conjunta en el alfabeto jemer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Formas conjuntas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr ""
+msgstr "Controla las formas conjuntas en los alfabetos índicos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
@@ -19825,7 +19805,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Half-width Spacing"
-msgstr ""
+msgstr "Espaciado de media anchura contextual"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:328
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:440
@@ -19835,6 +19815,9 @@ msgid ""
 "Respaces full-width glyphs to be half-width depending on the context, common "
 "examples include CJK full-width brackets and other punctuation marks."
 msgstr ""
+"Cambia el espaciado de los glifos de anchura completa para que tengan media "
+"anchura dependiendo del contexto. Los ejemplos comunes incluyen corchetes y "
+"otros signos de puntuación CJK de anchura completa."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
 #, kde-format
@@ -19884,7 +19867,7 @@ msgid ""
 "full-width brackets and other punctuation marks."
 msgstr ""
 "Modifica el espacio de glifos de anchura completa para que sean de media "
-"anchura. Los ejemplos comunes incluyen corchetes y otras marcas de "
+"anchura. Los ejemplos comunes incluyen corchetes y otros signos de "
 "puntuación de anchura completa."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
@@ -20019,7 +20002,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Formas jamo iniciales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
 #, kde-format
@@ -20027,6 +20010,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of leading class Hangul Jamo with a combined leading form."
 msgstr ""
+"Sustituye secuencias de la clase inicial hangul jamo con una forma inicial "
+"combinada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
 #, kde-format
@@ -20046,13 +20031,15 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Anchuras alternativas proporcionales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
 msgctxt "@tooltip"
 msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
+"Cambia el espaciado de glifos de anchura completa para que se ajusten a un "
+"contexto proporcional."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
 #, kde-format
@@ -20065,6 +20052,8 @@ msgstr "Kana proporcional"
 msgctxt "@tooltip"
 msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
+"Sustituye kanas de anchura completa de las fuentes japonesas con kanas "
+"proporcionales."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
 #, kde-format
@@ -20122,7 +20111,7 @@ msgstr "Sustituye glifos de fuentes CJK con formas «simplificadas»."
 #, kde-format
 msgctxt "@title"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Formas jamo finales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
 #, kde-format
@@ -20131,6 +20120,8 @@ msgid ""
 "Replaces sequences of trailing class Hangul Jamo with a combined trailing "
 "form."
 msgstr ""
+"Sustituye secuencias de la clase final hangul jamo con una forma final "
+"combinada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
 #, kde-format
@@ -20161,23 +20152,22 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr "Sustituye glifos de las fuentes CJK con formas «tradicionales»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Thirds"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "Tercios"
+msgstr "Anchuras de un tercio"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with third-width glyphs."
-msgstr ""
+msgstr "Sustituye glifos con otros glifos de un tercio de anchura."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Métricas verticales alternativas"
+msgstr "Métrica vertical alternativa"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -20205,7 +20195,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Contextual Half-width Spacing"
-msgstr ""
+msgstr "Espaciado de media anchura contextual vertical"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
 #, kde-format
@@ -20225,7 +20215,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Métrica medias verticales alternativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -20233,12 +20223,14 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are half-width in a vertical writing context."
 msgstr ""
+"Reposiciona glifos para que tengan media anchura en un contexto de escritura "
+"vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Formas jamo de vocales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -20246,6 +20238,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
 msgstr ""
+"Sustituye secuencias de la clase de vocales hangul jamo con una forma de "
+"vocales combinadas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
 #, kde-format
@@ -20267,7 +20261,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Métrica vertical alternativa proporcional"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -20275,6 +20269,8 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are proportional in a vertical writing context."
 msgstr ""
+"Reposiciona glifos para que sean proporcionales en un contexto de escritura "
+"vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
 #, kde-format
@@ -20331,6 +20327,8 @@ msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
 "end form."
 msgstr ""
+"Sustituye el glifo final de una secuencia de glifos de una escritura unida "
+"con su forma final."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
 #, kde-format
@@ -20345,6 +20343,8 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form."
 msgstr ""
+"Sustituye el glifo alaph al final de palabras siriacas con su forma "
+"apropiada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
 #, kde-format
@@ -20359,6 +20359,8 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form, when neither Terminal forms or Terminal forms 2 are applicable."
 msgstr ""
+"Sustituye el glifo alaph al final de palabras siriacas con su forma "
+"apropiada si no se aplican las formas terminal ni terminal 2."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
@@ -20374,6 +20376,8 @@ msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
 msgstr ""
+"Sustituye el primer glifo de una secuencia de glifos de una escritura unida "
+"con su forma inicial."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
 #, kde-format
@@ -20382,6 +20386,8 @@ msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
 msgstr ""
+"Sustituye un glifo de una secuencia de glifos de una escritura unida con su "
+"forma aislada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, kde-format
@@ -20399,19 +20405,19 @@ msgstr "Sustituye glifos con sus alternativos de izquierda a derecha."
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr ""
+msgstr "Formas reflejadas de izquierda a derecha"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr ""
+msgstr "Sustituye glifos con sus formas reflejadas de izquierda a derecha."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Formas intermedias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -20420,12 +20426,14 @@ msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
 msgstr ""
+"Sustituye glifos en el centro de una secuencia de glifos de una escritura "
+"unida con sus formas intermedias."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Formas intermedias #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20434,6 +20442,8 @@ msgid ""
 "Replaces the Alaph glyph in the middle of Syriac words with its appropriate "
 "form."
 msgstr ""
+"Sustituye el glifo alaph en el centro de palabras siriacas con su forma "
+"apropiada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
 #, kde-format
@@ -20479,19 +20489,20 @@ msgstr "Sustituye glifos con sus formas reflejadas de derecha a izquierda."
 #, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Descomposición de glifos estirados"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
 msgstr ""
+"Sustituye glifos que necesitan estirarse con glifos que se pueden estirar."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
-msgstr ""
+msgstr "Conjunto estilístico %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
@@ -20501,12 +20512,10 @@ msgid "Replaces glyphs with alternates."
 msgstr "Sustituye glifos con alternativos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Character Map"
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "Mapa de caracteres"
+msgstr "Variante de carácter %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:169
 #: libs/flake/text/KoSvgTextShape.cpp:2619
@@ -21150,12 +21159,9 @@ msgid "Switch current time"
 msgstr "Conmutar la hora actual"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:59
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Change time to next keyframe"
 msgctxt "(qtundo-format)"
 msgid "Switch current time to keyframe"
-msgstr "Cambiar tiempo al fotograma clave siguiente"
+msgstr "Cambiar tiempo actual al del fotograma clave"
 
 #: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
 #: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
@@ -21643,11 +21649,9 @@ msgid "Error"
 msgstr "Error"
 
 #: libs/image/kis_layer_properties_icons.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Unify Layers Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Unificar espacio de color de las capas"
+msgstr "Sin coincidencia del espacio de color de las capas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -21800,7 +21804,7 @@ msgstr "Expandir selección hasta el píxel más oscuro"
 #: libs/image/kis_switch_time_stroke_strategy.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Switch Frames"
-msgstr "Intercambiar fotograma"
+msgstr "Intercambiar fotogramas"
 
 #: libs/image/kis_sync_lod_cache_stroke_strategy.cpp:22
 msgctxt "(qtundo-format)"
@@ -22257,32 +22261,24 @@ msgstr ""
 "guardarán."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will not be saved."
 msgstr ""
-"La imagen contiene una capa de relleno de tipo <b>%1</b>, que no está "
-"permitida. La capa se convertirá en una capa de pintura."
+"La imagen contiene una capa vectorial con formas de tipo <b>%1</b>, que no "
+"están permitidas, por lo que no se guardarán."
 
 #: libs/impex/ShapeLayerTypeCheck.h:120
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains a Fill Layer of type <b>%1</b>, which is not "
-#| "supported, the layer will be converted to a paintlayer"
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Vector Layer with Shapes of type <b>%1</b>, which is "
 "not supported, these will be saved as paths"
 msgstr ""
-"La imagen contiene una capa de relleno de tipo <b>%1</b>, que no está "
-"permitida. La capa se convertirá en una capa de pintura."
+"La imagen contiene una capa vectorial con formas de tipo <b>%1</b>, que no "
+"están permitidas, por lo que se guardarán como rutas."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -22514,7 +22510,7 @@ msgstr "Documento CSV"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr ""
+msgstr "Imagen RGBE Radiance"
 
 #: libs/libkis/Document.cpp:988 libs/ui/KisMainWindow.cpp:2137
 #: libs/ui/KisMainWindow.cpp:2216
@@ -23562,7 +23558,7 @@ msgstr "Tono"
 #, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr ""
+msgstr "Tinte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
@@ -24136,16 +24132,14 @@ msgid "Metadata"
 msgstr "Metadatos"
 
 #: libs/resources/KisResourceModel.cpp:130
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Stroke Shapes"
+#, kde-format
 msgid "Broken Status"
-msgstr "Trazar formas"
+msgstr "Estado estropeado"
 
 #: libs/resources/KisResourceModel.cpp:132
 #, kde-format
 msgid "Broken Status Message"
-msgstr ""
+msgstr "Mensaje de estado estropeado"
 
 #: libs/resources/KisResourceQueryMapper.cpp:288
 #, kde-format
@@ -26456,6 +26450,10 @@ msgid ""
 "Please activate 10-bit mode in Krita's Preferences dialog and restart Krita "
 "to avoid color banding!"
 msgstr ""
+"ADVERTENCIA: Se ha activado el modo HDR en una superficie que trabaja en "
+"modo de 8 bits.\n"
+"Active el modo de 10 bits en el diálogo de preferencias de Krita y reinicie "
+"el programa para evitar bandas de colores."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:223
 #, kde-format
@@ -31463,7 +31461,7 @@ msgstr "El modo de borrado Usará un tamaño de pincel independiente"
 #: libs/ui/forms/wdgpaintopsettings.ui:646
 #, kde-format
 msgid "Eraser switch size"
-msgstr "Cambiar tamaño del borrador"
+msgstr "Tamaño de cambio del borrador"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushOpacityCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:662
@@ -31475,7 +31473,7 @@ msgstr "El modo de borrado usará una opacidad de pincel independiente"
 #: libs/ui/forms/wdgpaintopsettings.ui:665
 #, kde-format
 msgid "Eraser switch opacity"
-msgstr "Cambiar opacidad del borrador"
+msgstr "Opacidad de cambio del borrador"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dirtyPresetCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:681
@@ -32272,12 +32270,17 @@ msgid ""
 "was printed on a paper and viewed with the monitor as the only light source. "
 "This is standard behaviour for a ICC v4 workflow.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Activa la adaptación cromática para el propósito de "
+"renderización absoluta. Esto mostrará de forma efectiva cómo se mostrarían "
+"los colores si la imagen se imprimiera en papel y se viera con el monitor "
+"como única fuente de luz. Este es el comportamiento estándar para un flujo "
+"de trabajo ICC v4.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoChromaticAdaptation)
 #: libs/ui/forms/wdgproofingoptions.ui:99
 #, kde-format
 msgid "Absolute Intent Chromatic Adaptation"
-msgstr ""
+msgstr "Adaptación cromática de propósito absoluto"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgproofingoptions.ui:111
@@ -41453,6 +41456,9 @@ msgid ""
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
+"¿Realmente quiere borrar el esquema %1?\n"
+"                                             Tenga en cuenta que esto no "
+"eliminará ningún esquema de atajos del sistema."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -42774,10 +42780,9 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Tablet Tester"
+#, kde-format
 msgid "Value register"
-msgstr "Probador de tableta"
+msgstr "Registro de valores"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
 #, kde-format
@@ -45121,7 +45126,7 @@ msgstr "REC"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:314
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
-msgstr ""
+msgstr "Grabación activa con %1 de %2 hilos disponibles"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:314
 #, kde-format
@@ -45136,6 +45141,11 @@ msgid ""
 "Please be aware, that a number greater than %1 probably won't give you any "
 "performance boost."
 msgstr ""
+"Definir el número de hilos de grabación.\n"
+"El número de hilos excede el número máximo ideal de su configuración de "
+"hardware.\n"
+"Tenga presente que es probable que un número mayor de %1 no mejore el "
+"rendimiento."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:349
 #, kde-format
@@ -45146,6 +45156,10 @@ msgid ""
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."
 msgstr ""
+"Definir el número de hilos de grabación.\n"
+"Según su configuración de hardware, no debería grabar con más de %1 hilos.\n"
+"Puede probar con uno o dos hilos más, pero debería vigilar el rendimiento "
+"general del sistema."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:354
 #, kde-format
@@ -45200,6 +45214,11 @@ msgid ""
 "Try to reduce the frame rate for the ffmpeg export or reduce the scaling "
 "filtering in the canvas acceleration settings."
 msgstr ""
+"Advertencia de bajo rendimiento. La grabadora no puede escribir todos los "
+"fotogramas a tiempo durante el modo de captura en tiempo real.\n"
+"Pruebe a reducir la velocidad de los fotogramas para la exportación de "
+"ffmpeg o el filtrado del escalado en los ajustes de la aceleración del "
+"lienzo."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:719
 #, kde-format
@@ -45209,6 +45228,10 @@ msgid ""
 "Try to increase the capture interval or reduce the scaling filtering in the "
 "canvas acceleration settings."
 msgstr ""
+"Advertencia de bajo rendimiento. La grabadora no puede escribir todos los "
+"fotogramas a tiempo.\n"
+"Pruebe a aumentar el intervalo de captura o a reducir el filtrado de "
+"escalado en los ajustes de aceleración del lienzo."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -45921,9 +45944,7 @@ msgid "Align to the descender."
 msgstr "Alinear al descendente."
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
-#| msgctxt "Type setting mode line name"
-#| msgid "Baseline Shift"
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
 msgstr "Desplazamiento de línea base"
@@ -46248,18 +46269,14 @@ msgid "Font Kerning"
 msgstr "Interletraje de la fuente"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Turn font kerning on or off. Font kerning enables per-glyph spacing "
-#| "adjustments."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
 msgstr ""
 "Activa o desactiva el interletraje de la fuente. El interletraje de la "
-"fuente permite ajustes de espaciado por glifo."
+"fuente permite ajustes de espaciado por glifo como determina la fuente."
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -46637,9 +46654,7 @@ msgid "OpenType Features"
 msgstr "Funciones de OpenType"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Configure Open Type features."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "Configurar las funciones de OpenType."
@@ -46677,9 +46692,7 @@ msgid "Glyphs: Capitals"
 msgstr "Glifos: Mayúsculas"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Enable opentype features related to capitals"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
 msgstr "Activar funciones de OpenType relacionadas con las mayúsculas"
@@ -46998,9 +47011,7 @@ msgid "Tab Size"
 msgstr "Tamaño del tabulador"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Tab Size allows defining the size of tabulation characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
 msgstr ""
@@ -47022,9 +47033,7 @@ msgid "Text Align"
 msgstr "Alinear texto"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Text Align sets the alignment for the given block of characters."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
 msgstr ""
@@ -47226,15 +47235,16 @@ msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
 msgstr ""
+"El sangrado del texto permite definir una sangría al principio de la línea. "
+"Solo funciona cuando se ajusta el texto."
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-indent property, matching is case-"
 "insensitive"
 msgid "text-indent"
-msgstr "Sangrar por la izquierda"
+msgstr "sangrado, sangría, indentación"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:140
 #, kde-format
@@ -47656,6 +47666,9 @@ msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
+"El modo de escritura define si el texto fluye horizontal o verticalmente y, "
+"en este último caso, si el bloque fluye de derecha a izquierda o de "
+"izquierda a derecha."
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -51504,11 +51517,10 @@ msgid "Color Adjustment"
 msgstr "Ajuste de color"
 
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:38
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Lightness L*a*b*"
 msgid "Lightness"
-msgstr "Claridad"
+msgstr "Luminosidad"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetShadows)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:75
@@ -65808,27 +65820,27 @@ msgstr "Eliminar formas del flujo de texto."
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Toggle Flow Shape Type"
-msgstr ""
+msgstr "Conmutar tipo de forma de flujo"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:749
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as First"
-msgstr ""
+msgstr "Definir forma de flujo como la primera"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 msgctxt "(qtundo-format)"
 msgid "Decrease Flow Shape Index"
-msgstr ""
+msgstr "Disminuir índice de forma de flujo"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
 msgctxt "(qtundo-format)"
 msgid "Increase Flow Shape Index"
-msgstr ""
+msgstr "Aumentar índice de forma de flujo"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:755
 msgctxt "(qtundo-format)"
 msgid "Set Flow Shape as Last"
-msgstr ""
+msgstr "Definir forma de flujo como la última"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1023
 #, kde-format
@@ -67677,20 +67689,16 @@ msgid "Debug"
 msgstr "Depuración"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:326
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Bounding Box"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Char Bounding Boxes"
-msgstr "Ajustar cuadro de contorno"
+msgstr "Mostrar cuadros delimitadores de caracteres"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:336
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Line Boxes"
-msgstr "Mostrar en la carpeta"
+msgstr "Mostrar cuadros de línea"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSvgTextEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:25
@@ -68181,10 +68189,9 @@ msgstr ""
 "crear primero una capa vectorial y una forma inicial."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgid "Comic Panel Editing Tool"
-msgstr "Herramienta de edición de la máscara de coloración"
+msgstr "Herramienta de edición de paneles de cómic"
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:305
 #, kde-format
@@ -69407,11 +69414,10 @@ msgstr "Herramienta de imágenes de referencia"
 #. i18n: context: iconText @ Action (KritaShape/KisToolKnife), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:194 plugins/tools/tools.action:196
 #: plugins/tools/tools.action:197
-#, fuzzy, kde-format
-#| msgid "Colorize Mask Editing Tool"
+#, kde-format
 msgctxt "action"
 msgid "Comic Panel Editing Tool"
-msgstr "Herramienta de edición de la máscara de coloración"
+msgstr "Herramienta de edición de paneles de cómic"
 
 #: qmlmodules/components/qml/resourceDelegates/CssStylePresetDelegate.qml:98
 #, kde-format
@@ -69482,31 +69488,3 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "Make the first selected text flow in shape."
-#~ msgstr "Hacer que el primer texto seleccionado sea fluido en la forma."
-
-#~ msgctxt "action"
-#~ msgid "Decrease Flow Shape Index"
-#~ msgstr "Reducir el índice de la forma de flujo"
-
-#~ msgctxt "action"
-#~ msgid "Make this flow shape be evaluated later."
-#~ msgstr "Hacer que esta forma de flujo se evalúe más tarde."
-
-#~ msgctxt "action"
-#~ msgid "Increase Flow Shape Index"
-#~ msgstr "Aumentar el índice de la forma de flujo"
-
-#, fuzzy
-#~| msgctxt ""
-#~| "h264 profile name, check simplescreenrecorder for standard translations"
-#~| msgid "baseline"
-#~ msgctxt "@label"
-#~ msgid "Baseline-Shift"
-#~ msgstr "base"
-
-#~ msgctxt "Lightness HSI"
-#~ msgid "Lightness"
-#~ msgstr "Claridad"

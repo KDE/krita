@@ -7737,7 +7737,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flow Text in Shape"
-msgstr "文本在形状内流动"
+msgstr "文本流动到此形状"
 
 #. i18n: context: toolTip @ Action (add_shape_to_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:333
@@ -7747,21 +7747,23 @@ msgid ""
 "Make the first selected text flow in shape. If there were already shapes it "
 "was flowing into, will add the shape to the chain."
 msgstr ""
+"使第一条选中的文本在此形状内流动。如果文本已在其他形状中流动，则将此形状加入"
+"它的文本链。"
 
 #. i18n: context: text @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:342
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Subtract Shape from Text Chain"
-msgstr "从文本编排区域中减去形状"
+msgstr "从文本链减去此形状。"
 
 #. i18n: context: toolTip @ Action (subtract_shape_from_flow_area), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:343
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make shapes part of the subtracted shape-areas of the first selected text."
-msgstr "使形状成为被选中的第一条文本的减去形状的一部份。"
+msgstr "使此形状成为被选中的第一条文本的减去形状区域的一部份。"
 
 #. i18n: context: text @ Action (put_text_on_path), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:352
@@ -7779,17 +7781,17 @@ msgstr "使选中的第一条文本沿着选中的第一条路径流动。"
 
 #. i18n: context: text @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:362
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove Shapes from Text Chain"
-msgstr "从文本流移除子轮廓形状"
+msgstr "从文本链移除此子轮廓形状"
 
 #. i18n: context: toolTip @ Action (remove_shapes_from_text_flow), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:363
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Remove shapes from text chain and add them to the layer."
-msgstr "从文本流中移除子轮廓形状并将它们添加到此图层。"
+msgstr "从文本链中移除此子轮廓形状并将它们添加到此图层。"
 
 #. i18n: context: iconText @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (flow_shape_type_toggle), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7818,78 +7820,78 @@ msgstr "切换当前文本流形状模式 (内部/减去)"
 #, kde-format
 msgctxt "action"
 msgid "Set Flow Shape as Last"
-msgstr "设置文本流形状为最后一个"
+msgstr "在文本链中置于最后"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:383
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Make this flow shape the last in the text chain as used by text layout."
-msgstr "将此文本流形状设置为文本布局的文本流形状序列中的最后一个形状。"
+msgstr "将此文本流形状设置为文本布局的文本链中的最后一个形状。"
 
 #. i18n: context: iconText @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:391
 #, kde-format
 msgctxt "action"
 msgid "Earlier In Chain."
-msgstr ""
+msgstr "在文本链中前移"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:392
 #, kde-format
 msgctxt "action"
 msgid "Move this shape earlier in the text chain."
-msgstr ""
+msgstr "在文本链中前移此形状。"
 
 #. i18n: context: text @ Action (flow_shape_order_earlier), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:397
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Earlier In Chain."
-msgstr ""
+msgstr "在文本链中前移。"
 
 #. i18n: context: iconText @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:400
 #, kde-format
 msgctxt "action"
 msgid "Later In Chain"
-msgstr ""
+msgstr "在文本链中后移"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:401
 #, kde-format
 msgctxt "action"
 msgid "Move this shape later in the text chain."
-msgstr ""
+msgstr "在文本链中向后移动此形状。"
 
 #. i18n: context: text @ Action (flow_shape_order_later), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:406
 #, kde-format
 msgctxt "action"
 msgid "Move Shape Later In Chain."
-msgstr ""
+msgstr "在文本链中后移。"
 
 #. i18n: context: iconText @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:409
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "First In Chain"
-msgstr "首行缩进"
+msgstr "在文本链中前置"
 
 #. i18n: context: toolTip @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:410
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid ""
 "Make this flow shape the first in the text chain as used by text layout."
-msgstr "将此文本流形状设置为文本布局的文本流形状序列中的第一个形状。"
+msgstr "将此文本流形状设置为文本布局的文本链中的第一个形状。"
 
 #. i18n: context: text @ Action (flow_shape_order_front), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:415
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Set Shape As First In Chain"
-msgstr "设置文本流形状为第一个"
+msgstr "在文本链中置于最前"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -45021,7 +45023,7 @@ msgid "Alignment Baseline"
 msgstr "对齐基线"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Alignment baseline allows controlling how this range of text is aligned to "
@@ -45178,7 +45180,7 @@ msgid "Align to the descender."
 msgstr "文本底部 (Text Bottom)：对齐下行字母 (如“g”尾部) 的最低点。"
 
 #: plugins/dockers/textproperties/qml/BaselineShift.qml:14
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Baseline Shift"
 msgstr "基线偏移"
@@ -45421,7 +45423,7 @@ msgid "Dominant Baseline"
 msgstr "主导基线"
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Dominant baseline specifies how stretches of text of different sizes are "
@@ -45508,12 +45510,13 @@ msgid "Font Kerning"
 msgstr "字距微调"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Turn font kerning on or off. Font kerning enables per-glyph spacing "
 "adjustments as determined by the font."
-msgstr "开启/关闭字距微调。字距微调可针对特定字形组合进行间距调整。"
+msgstr ""
+"开启/关闭字距微调。字距微调功可以根据字体设置对特定字形组合进行间距调整。"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:22
 #, kde-format
@@ -45796,14 +45799,14 @@ msgid "Line Break"
 msgstr "换行规则"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:17
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Line break allows choosing a strictness for the line breaking algorithm. "
 "Mostly used for CJK scripts, requires language being set."
 msgstr ""
-"换行规则属性用于选择换行算法的严格程度，主要应用于中日韩 (CJK) 文本排版，需预"
-"先设置语言属性。"
+"换行 (Link Break) 规则属性用于选择换行算法的严格程度，主要应用于中日韩 (CJK) "
+"文本排版，需预先设置语言属性。"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:19
 #, kde-format
@@ -45874,10 +45877,10 @@ msgid "Line Height"
 msgstr "行高"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Line height controls the line height used for the range of text."
-msgstr "行高用于控制所选范围内文本的行高。"
+msgstr "行高 (Line Height) 用于控制所选范围内文本的行高。"
 
 #: plugins/dockers/textproperties/qml/LineHeight.qml:20
 #, kde-format
@@ -45901,7 +45904,7 @@ msgid "OpenType Features"
 msgstr "OpenType 特性"
 
 #: plugins/dockers/textproperties/qml/OpenTypeFeatureSettings.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure OpenType features."
 msgstr "配置 OpenType 特性。"
@@ -45939,10 +45942,10 @@ msgid "Glyphs: Capitals"
 msgstr "字形：大写字母"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable OpenType features related to capitals."
-msgstr "启用与大写字母相关的 OpenType 特性"
+msgstr "启用与大写字母相关的 OpenType 特性。"
 
 #: plugins/dockers/textproperties/qml/OTCaps.qml:18
 #, kde-format
@@ -46266,10 +46269,10 @@ msgid "Tab Size"
 msgstr "制表符宽度"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Tab size allows defining the size of tabulation characters."
-msgstr "制表符宽度定义了按下 Tab 键所插入的制表符的视觉宽度。"
+msgstr "制表符宽度 (Tab Size) 定义了按下 Tab 键所插入的制表符的视觉宽度。"
 
 #: plugins/dockers/textproperties/qml/TabSize.qml:20
 #, kde-format
@@ -46286,13 +46289,13 @@ msgid "Text Align"
 msgstr "文本对齐方式"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Text align sets the alignment for the given block of characters."
-msgstr "文本对齐方式用于设置字符块的水平对齐方式。"
+msgstr "文本对齐方式 (Text Align) 用于设置字符块的水平对齐方式。"
 
 #: plugins/dockers/textproperties/qml/TextAlign.qml:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "comma separated search terms for the text-align property, matching is case-"
 "insensitive"
@@ -46404,12 +46407,12 @@ msgid "Text Decoration"
 msgstr "文本装饰"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text decoration allows drawing underlines, overlines and striking through "
 "text."
-msgstr "文本装饰属性允许绘制下划线、上划线和删除线。"
+msgstr "文本装饰 (Text Decoration) 允许绘制下划线、上划线和删除线。"
 
 #: plugins/dockers/textproperties/qml/TextDecoration.qml:18
 #, kde-format
@@ -46488,12 +46491,13 @@ msgid "Text Indent"
 msgstr "文本缩进"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:18
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text indent allows setting indentation at the line start. Only works when "
 "the text is wrapping."
-msgstr "文本缩进允许在行首设置缩进，且该缩进仅在文本自动换行时生效。"
+msgstr ""
+"文本缩进 (Text Indent) 允许在行首设置缩进，且该缩进仅在文本自动换行时生效。"
 
 #: plugins/dockers/textproperties/qml/TextIndent.qml:20
 #, kde-format
@@ -46621,11 +46625,13 @@ msgid "Text Rendering"
 msgstr "文本渲染方式"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
-msgstr "控制字体轮廓微调 (hinting) 和渲染样式的属性设置。"
+msgstr ""
+"文字渲染方式 (Text Rendering) 控制字体轮廓微调 (hinting) 和渲染样式的属性设"
+"置。"
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
 #, kde-format
@@ -46693,14 +46699,15 @@ msgid "Text Transform"
 msgstr "文本变换"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Text transform allows transforming the given range of characters, for "
 "example, by setting them uppercase, or switching out half-width forms for "
 "full-width forms."
 msgstr ""
-"文本变换用于描述字符的转换功能，例如将字母转为大写或切换半角/全角形式。"
+"文本变换 (Text Transform) 用于描述字符的转换功能，例如将字母转为大写或切换半"
+"角/全角形式。"
 
 #: plugins/dockers/textproperties/qml/TextTransform.qml:18
 #, kde-format
@@ -46928,14 +46935,14 @@ msgid "Writing Mode"
 msgstr "书写模式"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
-"书写模式决定文本是水平流动还是垂直流动；在垂直流动时，控制文本块是从右向左还"
-"是从左向右排列。"
+"书写模式 (Writing Mode) 决定文本是水平流动还是垂直流动；在垂直流动时，控制文"
+"本块是从右向左还是从左向右排列。"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:18
 #, kde-format
@@ -68224,23 +68231,3 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "Make the first selected text flow in shape."
-#~ msgstr "使选中的第一条文本在形状内部流动。"
-
-#~ msgctxt "action"
-#~ msgid "Decrease Flow Shape Index"
-#~ msgstr "降低文本流形状索引"
-
-#~ msgctxt "action"
-#~ msgid "Make this flow shape be evaluated later."
-#~ msgstr "将这个文本流形状设置为在后面评估。"
-
-#~ msgctxt "action"
-#~ msgid "Increase Flow Shape Index"
-#~ msgstr "提高文本流形状索引"
-
-#~ msgctxt "@label"
-#~ msgid "Baseline-Shift"
-#~ msgstr "基线偏移"

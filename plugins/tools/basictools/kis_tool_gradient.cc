@@ -154,15 +154,6 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
 
     if (image && resources->currentNode()->paintDevice()) {
-        // TODO: refactor out local variables when we switch to C++14
-        QPointF startPos = m_startPos;
-        QPointF endPos = m_endPos;
-        KisGradientPainter::enumGradientShape shape = m_shape;
-        KisGradientPainter::enumGradientRepeat repeat = m_repeat;
-        bool reverse = m_reverse;
-        double antiAliasThreshold = m_antiAliasThreshold;
-        bool dither = m_dither;
-
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
         KisProcessingApplicator applicator(image, resources->currentNode(),
                                            KisProcessingApplicator::NONE,
@@ -171,8 +162,9 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
 
         applicator.applyCommand(
             new KisCommandUtils::LambdaCommand(
-                [resources, startPos, endPos,
-                 shape, repeat, reverse, antiAliasThreshold, dither] () mutable {
+                [resources, startPos = m_startPos, endPos = m_endPos,
+                 shape = m_shape, repeat = m_repeat, reverse = m_reverse,
+                 antiAliasThreshold = m_antiAliasThreshold, dither = m_dither] () mutable {
 
                     KisNodeSP node = resources->currentNode();
                     KisPaintDeviceSP device = node->paintDevice();

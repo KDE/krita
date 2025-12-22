@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-09 03:24+0000\n"
-"PO-Revision-Date: 2025-11-24 01:13+0100\n"
+"PO-Revision-Date: 2025-12-20 12:34+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -17531,7 +17531,7 @@ msgstr "Expandir selección hasta el píxel más oscuro"
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Switch Frames"
-msgstr "Intercambiar fotograma"
+msgstr "Intercambiar fotogramas"
 
 #: libs/image/kis_sync_lod_cache_stroke_strategy.cpp:22
 msgctxt "(qtundo-format)"
@@ -26880,7 +26880,7 @@ msgstr "El modo de borrado Usará un tamaño de pincel independiente"
 #: libs/ui/forms/wdgpaintopsettings.ui:618
 #, kde-format
 msgid "Eraser switch size"
-msgstr "Cambiar tamaño del borrador"
+msgstr "Tamaño de cambio del borrador"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushOpacityCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:634
@@ -26892,7 +26892,7 @@ msgstr "El modo de borrado usará una opacidad de pincel independiente"
 #: libs/ui/forms/wdgpaintopsettings.ui:637
 #, kde-format
 msgid "Eraser switch opacity"
-msgstr "Cambiar opacidad del borrador"
+msgstr "Opacidad de cambio del borrador"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dirtyPresetCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:653
@@ -44707,7 +44707,7 @@ msgstr "Ajuste de color"
 #, kde-format
 msgctxt "Lightness HSI"
 msgid "Lightness"
-msgstr "Claridad"
+msgstr "Luminosidad"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetShadows)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:75

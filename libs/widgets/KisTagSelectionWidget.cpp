@@ -43,7 +43,7 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
     , m_tag(tag)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(8, 0, 0, 0);
+    layout->setContentsMargins(4, 0, 1, 0);
     layout->setSpacing(2);
 
     m_textLabel = new QLabel(parent);
@@ -57,13 +57,16 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
         m_closeIconLabel->setIcon(KisIconUtils::loadIcon("docker_close"));
         m_closeIconLabel->setToolTip(i18n("Remove from tag"));
         m_closeIconLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        m_closeIconLabel->setEnabled(m_editable);
         m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
 
         connect(m_closeIconLabel, &QAbstractButton::clicked, this, [&]() {
             Q_EMIT sigRemoveTagFromSelection(m_tag);
         });
         layout->addWidget(m_closeIconLabel);
+    }
+    else {
+        //Add a margin to the right when there's no delete button
+        layout->setContentsMargins(4, 2, 4, 2);
     }
     setLayout(layout);
 }
@@ -224,15 +227,17 @@ void WdgAddTagButton::paintEvent(QPaintEvent *event)
     QPainterPath path;
     path.addRoundedRect(this->rect(), 6, 6);
     painter.fillPath(path, qApp->palette().light());
+
+    //Draw icon
     painter.setPen(QPen(qApp->palette().windowText(), painter.pen().widthF()));
     QIcon icon = this->icon();
-    QSize size = this->rect().size()*0.6;
+    QSize size = this->rect().size()*0.65;
 
     QSize iconSize = icon.actualSize(size);
     QPixmap pix = icon.pixmap(iconSize);
     QSize realSize = iconSize.scaled(iconSize, Qt::KeepAspectRatio);//pix.rect().size();
-    qreal hack = 0.5;
-    QPointF p = this->rect().topLeft() + QPointF(this->rect().width()/2 - realSize.width()/2 - hack, this->rect().height()/2 - realSize.height()/2 - hack);
+    QPointF p = this->rect().topLeft() + QPointF(this->rect().width() - realSize.width(), this->rect().height() - realSize.height()) / 2;
+
     painter.setOpacity(!isEnabled() ? 0.3 : 1.0);
     painter.drawPixmap(p, pix);
     painter.setOpacity(1.0);

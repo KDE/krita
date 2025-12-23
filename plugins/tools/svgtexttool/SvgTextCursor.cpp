@@ -1813,6 +1813,12 @@ void processEdges(QTransform t, QMap<SvgTextCursor::TypeSettingModeHandle, int> 
     path.lineTo(t.map(p2+advance));
 }
 
+QTransform posAndRotateTransform(const QPointF pos, const qreal rotateDeg) {
+    QTransform t = QTransform::fromTranslate(pos.x(), pos.y());
+    t.rotate(rotateDeg);
+    return t;
+}
+
 void SvgTextCursor::updateTypeSettingDecoration()
 {
     QRectF updateRect;
@@ -1876,47 +1882,53 @@ void SvgTextCursor::updateTypeSettingDecoration()
                     = typeSettingBaselinesFromMetrics(metrics, lineGap, isHorizontal);
 
             QList<KoSvgTextCharacterInfo> parentInfos;
-            if (minPos > 0) {
-                QList<KoSvgTextCharacterInfo> info =
-                        d->shape->getPositionsAndRotationsForRange(0, minPos);
-                parentInfos.append(info.first());
-                parentInfos.append(info.last());
+            QList<int> positions;
+            positions << 0;
+            positions << qMax(0, minPos-1);
+            positions << maxPos;
+            positions << endPos;
 
-            }
-            if (maxPos < endPos) {
+            Q_FOREACH(const int pos, positions) {
                 QList<KoSvgTextCharacterInfo> info =
-                        d->shape->getPositionsAndRotationsForRange(maxPos, endPos);
+                        d->shape->getPositionsAndRotationsForRange(pos, pos);
                 parentInfos.append(info.first());
-                parentInfos.append(info.last());
             }
-            QPointF drawOffset = isHorizontal? QPointF(d->handleRadius, 0): QPointF(0, d->handleRadius);
+
+            QPointF drawOffset = isHorizontal? QPointF(d->handleRadius*2, 0): QPointF(0, d->handleRadius*2);
             if (d->canvas) {
                 drawOffset = d->canvas->viewConverter()->viewToDocument().map(drawOffset);
             }
-            bool toggleOffset = false;
+            bool toggleOffset = rtl;
 
             for (auto it = parentInfos.begin(); it != parentInfos.end(); it++) {
-                QPointF finalPos = toggleOffset? it->finalPos + (it->advance - drawOffset): it->finalPos;
-                QPointF advance = drawOffset;
+                const bool currentIsMin = (d->shape->posForIndex(it->logicalIndex) == minPos);
+                const QPointF finalPos = toggleOffset? it->finalPos + (it->advance - drawOffset): it->finalPos;
+                const QPointF advance = drawOffset;
 
-                QTransform t = QTransform::fromTranslate(finalPos.x(), finalPos.y());
-                t.rotate(it->rotateDeg);
+                const QTransform t = posAndRotateTransform(finalPos, it->rotateDeg);
+
                 Q_FOREACH(SvgTextCursor::TypeSettingModeHandle handle, types.keys()) {
                     const int metric = types.value(handle);
                     processBaseline(handle, metric, isHorizontal, t, scaleMetrics, advance, d->typeSettingDecor.parentBaselines);
                 }
-                const int currentPos = d->shape->posForIndex(it->logicalIndex);
-                if (currentPos <= minPos || currentPos+1 >= maxPos) {
+
+                {
+
+                    if (currentIsMin && minPos == maxPos && !toggleOffset) {
+                        toggleOffset = !toggleOffset;
+                        continue;
+                    }
                     const QPointF advance = toggleOffset? it->advance: QPointF();
-                    QTransform t = QTransform::fromTranslate(it->finalPos.x(), it->finalPos.y());
-                    t.rotate(it->rotateDeg);
+                    const QTransform t = posAndRotateTransform(it->finalPos, it->rotateDeg);
                     processEdges(t, types, isHorizontal, scaleMetrics, advance, d->typeSettingDecor.edges);
                 }
+
                 toggleOffset = !toggleOffset;
             }
         }
 
         /// This could be better but requires better nodeindex retrieval...
+        bool toggleOffset = false; // MetricInfos are visually-ordered.
         for (auto it = metricInfos.begin(); it != metricInfos.end(); it++) {
             const int currentPos = (d->pos == d->anchor)? -1 :d->shape->posForIndex(it->logicalIndex);
 
@@ -1929,20 +1941,18 @@ void SvgTextCursor::updateTypeSettingDecoration()
             const qreal scaleMetrics = props.fontSize().value/qreal(metrics.fontSize);
             const int lineGap = calcLineHeight(lineHeight, metrics, scaleMetrics);
 
-            QTransform t = QTransform::fromTranslate(it->finalPos.x(), it->finalPos.y());
-            t.rotate(it->rotateDeg);
+            const QTransform t = posAndRotateTransform(it->finalPos, it->rotateDeg);
 
             const QMap<SvgTextCursor::TypeSettingModeHandle, int> types
-                    = typeSettingBaselinesFromMetrics(metrics, lineGap, !metrics.isVertical);
+                    = typeSettingBaselinesFromMetrics(metrics, lineGap, isHorizontal);
 
             Q_FOREACH(SvgTextCursor::TypeSettingModeHandle handle, types.keys()) {
                 const int metric = types.value(handle);
-                processBaseline(handle, metric, !metrics.isVertical, t, scaleMetrics, it->advance, d->typeSettingDecor.baselines);
+                processBaseline(handle, metric, isHorizontal, t, scaleMetrics, it->advance, d->typeSettingDecor.baselines);
             }
-            if (currentPos == minPos || currentPos+1 == maxPos) {
-                const QPointF advance = currentPos == minPos? QPointF(): it->advance;
-                QTransform t = QTransform::fromTranslate(it->finalPos.x(), it->finalPos.y());
-                t.rotate(it->rotateDeg);
+            if ((currentPos == minPos || currentPos+1 == maxPos) && minPos != maxPos) {
+                const QPointF advance = toggleOffset? it->advance: QPointF();
+                toggleOffset = !toggleOffset;
                 processEdges(t, types, isHorizontal, scaleMetrics, advance, d->typeSettingDecor.edges);
             }
         }

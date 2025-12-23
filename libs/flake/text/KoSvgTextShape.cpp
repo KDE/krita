@@ -1430,7 +1430,8 @@ QList<KoSvgTextCharacterInfo> KoSvgTextShape::getPositionsAndRotationsForRange(c
     }
 
     if (endIndex == startIndex) {
-        CharacterResult resFinal = d->result.value(startIndex);
+        bool final = qMax(startPos, endPos) == finalPos;
+        CharacterResult resFinal = final? d->result.last(): d->result.value(startIndex);
         if (resFinal.addressable) {
             infos << infoFromCharacterResult(resFinal, startIndex);
         }

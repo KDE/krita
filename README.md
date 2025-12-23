@@ -16,10 +16,10 @@ If you are reading this on GitHub, be aware that this is just a mirror. Our real
 
 For branch: `master`
 
-| Freeze type    | Status                      |
-|----------------|-----------------------------|
-| Feature Freeze | no freeze, features allowed |
-| String Freeze  | no freeze, strings allowed  |
+| Freeze type    | Status                                                               |
+|----------------|----------------------------------------------------------------------|
+| Feature Freeze | freeze, features are not allowed                                     |
+| String Freeze  | soft-freeze, strings are still allowed but are not welcome anymore   |
 
 
 ### User Manual

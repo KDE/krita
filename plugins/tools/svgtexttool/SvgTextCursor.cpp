@@ -1306,7 +1306,7 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
         return;
 
     KoSvgTextProperties props;
-    KoSvgTextProperties shapeProps = hasSelection()? d->shape->propertiesForPos(d->pos, true): d->shape->textProperties();
+    KoSvgTextProperties shapeProps = hasSelection()? d->shape->propertiesForPos(qMin(d->pos, d->anchor), true): d->shape->textProperties();
     if (key == KoCanvasResource::ForegroundColor) {
         QSharedPointer<KoShapeBackground> bg(new KoColorBackground(value.value<KoColor>().toQColor()));
         if (!bg->compareTo(shapeProps.background().data())
@@ -2121,7 +2121,7 @@ void SvgTextCursor::updateCanvasResources()
     // Only update canvas resources when there's no selection.
     // This relies on Krita not setting anything on the text when there's no selection.
     if (d->shape && d->canvas->resourceManager() && d->pos == d->anchor) {
-        KoSvgTextProperties props = hasSelection()? d->shape->propertiesForPos(d->pos, true): d->shape->textProperties();
+        KoSvgTextProperties props = hasSelection()? d->shape->propertiesForPos(qMin(d->pos, d->anchor), true): d->shape->textProperties();
         KoColorBackground *bg = dynamic_cast<KoColorBackground *>(props.background().data());
         if (bg && props.hasProperty(KoSvgTextProperties::FillId)) {
             KoColor c;

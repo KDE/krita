@@ -50,7 +50,7 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
     m_textLabel->setText(tag.name());
     m_textLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addWidget(m_textLabel);
-    layout->insertStretch(2, 1);
+
     if (m_editable) {
         m_closeIconLabel = new QPushButton(parent);
         m_closeIconLabel->setFlat(true);

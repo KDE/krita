@@ -95,7 +95,7 @@ kis_add_tests(
     kis_marker_painter_test.cpp
     kis_lazy_brush_test.cpp
     kis_mask_similarity_test.cpp
-    KisMaskGeneratorTest.cpp
+    KisMaskGeneratorBenchmark.cpp
     kis_layer_style_filter_environment_test.cpp
     kis_asl_parser_test.cpp
     KisPerStrokeRandomSourceTest.cpp

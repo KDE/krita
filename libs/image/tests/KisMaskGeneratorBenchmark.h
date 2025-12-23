@@ -9,7 +9,7 @@
 
 #include <simpletest.h>
 
-class KisMaskGeneratorTest : public QObject
+class KisMaskGeneratorBenchmark : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
